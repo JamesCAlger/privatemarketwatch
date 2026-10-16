@@ -1,0 +1,21 @@
+[
+ {
+  "quarter": "2025-12-31",
+  "identifier": "High Tech Industries Warrants",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Chartbeat",
+   "instrument_description": "Warrants"
+  },
+  "reason": "The 10-K member names the industry and the instrument only ('High Tech Industries Warrants', context C_d03565a1-fa18-4369-b1f1-9311e8f151a7, fair value 532,000); the page prints the line under Chartbeat: 'Chartbeat (10)(12)(17) Warrants - - - - 2 - 532' (0001193125-26-104390). The other quarters name the same warrants Chartbeat."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Legacy Corporate Lending HoldCo, LLC Preferred Equity",
+  "exact": true,
+  "fields": {
+   "shares_held": "4000"
+  },
+  "reason": "The 10-K schedule is headed '(In thousands)' and prints 4 in the Principal/Shares column: 'Legacy Corporate Lending HoldCo, LLC (7)(10)(11)(12)(17 ) Preferred Equity - - - - 4 3,875 3,875' (0000950170-24-037134); the context tags InvestmentOwnedBalanceShares = 4 (C_58710a6c-59e3-449f-9693-a218ed9ade2e). The build replaced the count with 1,125 carried from 2023-09-30 (shares_held:pow10_shares, derived_proxy). 4 thousand at the schedule's scale, as the next filings tag it (4,000 at 2024-03-31)."
+ }
+]

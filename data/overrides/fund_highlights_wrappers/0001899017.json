@@ -1,0 +1,21 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001899017",
+ "entity_name": "Bain Capital Private Credit",
+ "version": 1,
+ "notes": "Fund-clearing loop 2026-10-16 (bnx sandboxes). Before operations began (net assets negative until 2023-12-31) the balance sheet prints net asset value per share in brackets, negative; the build published it positive (5,444.70, 20.16, 29.53, 19.75), against negative net assets. Each figure below is the printed one with its sign. 2022-09-30 (published 1,787.2) has no cached filing that prints it and is left.",
+ "figure_corrections": [
+  {"report_date": "2022-12-31", "field": "nav_per_share", "value": -5444.70,
+   "evidence": "0001104659-23-040212 (10-K 2022): 'Total liabilities and total net assets $ 1,282,157 $ - Net asset value per share $ (5,444.70 ) $ -'."},
+  {"report_date": "2023-03-31", "field": "nav_per_share", "value": -20.16,
+   "evidence": "0001104659-23-060706 (10-Q 2023-03-31): 'Total Net Assets $ ( 810,452 ) $ ( 1,088,939 ) Total liabilities and total net assets $ 2,336,085 $ 1,282,157 Net asset value per share ( 20.16 )'."},
+  {"report_date": "2023-06-30", "field": "nav_per_share", "value": -29.53,
+   "evidence": "0000950170-23-041723 (10-Q 2023-06-30): 'Total Net Assets $ ( 1,187,213 ) $ ( 1,088,939 ) Total Liabilities and Total Net Assets $ 5,600,339 $ 1,282,157 Net asset value per share ( 29.53 )'."},
+  {"report_date": "2023-09-30", "field": "nav_per_share", "value": -19.75,
+   "evidence": "0000950170-23-062818 (10-Q 2023-09-30): 'Total Net Assets $ ( 1,188,729 ) $ ( 1,088,939 ) Total Liabilities and Total Net Assets $ 31,021,803 $ 1,282,157 Net asset value per share ( 19.75 )'."},
+  {"report_date": "2023-06-30", "field": "investments_at_fair_value", "value": 646250,
+   "evidence": "0000950170-23-041723 (10-Q 2023-06-30), balance sheet in dollars: 'Assets Investments at fair value: Controlled affiliate investment (amortized cost of $ 646,250 and $ 0 , respectively) $ 646,250 $ -'. The build published no investments figure for the quarter."},
+  {"report_date": "2023-09-30", "field": "investments_at_fair_value", "value": 1215000,
+   "evidence": "0000950170-23-062818 (10-Q 2023-09-30), balance sheet in dollars: 'Assets Investments at fair value: Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ -'. The build published no investments figure for the quarter."}
+ ]
+}

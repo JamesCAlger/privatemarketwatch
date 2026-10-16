@@ -988,6 +988,15 @@ if BAIN in held:
             fields = {name: "%d" % round(current[name] * 1000) for name in columns if current[name] is not None and abs(current[name]) < 100000}
             SPECS.append((BAIN, quarter, identifier, fields, "Filed unscaled (context " + context + "); " + printed, "D-127"))
             EXACT.add(identifier)
+# Bain Capital Private Credit, fund-clearing loop (2026-10-16): a member that names no company. One spec per row, each
+# with its printed line, in row_correction_specs/0001899017.json.
+BAIN_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001899017.json"
+if BAIN in held and BAIN_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(BAIN_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((BAIN, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1899017-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
 # decision D-153: two rows of the first five funds read on the page while clearing rule X11
 ARES_MURCHISON = "Murchison Oil and Gas, LLC and Murchison Holdings, LLC, First lien senior secured loan"
 APOLLO_VERSION1_EUR = ("IT Services Version 1 Investment Company 24 Bidco Limited Investment Type First Lien Secured Debt - Term Loan "

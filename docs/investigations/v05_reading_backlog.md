@@ -171,3 +171,4 @@ Manulife 0001988280.
 | 2026-10-16 | 0002049733 Blackstone Private Real Estate Credit & Income | brxb | PASS | 4 findings, 1 outstanding, 1 proposed; class of every row parked (owner question 13) | D-188 |
 | 2026-10-16 | 0001634452 AB Private Credit Investors | abxf | PASS | 90 findings, 43 outstanding, 43 proposed; second sample 1 error (warrant as preferred, shared) | D-189 |
 | 2026-10-16 | 0001975736 KKR FS Income Trust Select | ksxf | INCOMPLETE (gate PASS) | 34 findings, 13 outstanding, 13 proposed; PIK range missing on 309 rows (owner question) | D-190 |
+| 2026-10-16 | 0001899017 Bain Capital Private Credit | bnxd | INCOMPLETE | 74 findings, 42 outstanding, 39 proposed, 3 parked (2022-09-30 NAV sign) | D-191 |

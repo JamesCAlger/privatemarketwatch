@@ -82,7 +82,8 @@
     "canonical_strip_re": "(?i)(?:^\\s*(?:(?:non[-\\s]*controlled/)+(?:non[-\\s]*affiliat(?:e|ed))|controlled\\s+affiliate)\\s+investments\\s+|\\s*interest\\s+rate\\s+\\d+(?:\\.\\d+)?%?|\\s+one\\s*$)",
     "category_marker_re": "(?i)^\\s*(?:total\\s+)?(?:investments?|debt\\s+investments|equity\\s+investments|subtotal|sub-total|investments\\s+(?:after|before)\\s+cash\\s+equivalents)\\s*$",
     "issuer_name_strip_re": "(?i)\\s+(?:(?:First|Second)\\s+Lien\\s+(?:Senior\\s+Secured\\s+)?Loan|Subordinated\\s+Debt|Preferred\\s+Equity|Common\\s+Equity|Equity\\s+Interest|Warrants?)\\b.*$",
-    "issuer_name_strip_to_instrument": true
+    "issuer_name_strip_to_instrument": true,
+    "industry_from_identifier_re": "(?i)^\\s*(?:(?:(?:non[-\\s]*controlled/)+(?:non[-\\s]*)?affiliat(?:e|ed)|controlled\\s+affiliate)\\s+investments\\s+)?(Banking,\\s+Finance,\\s+Insurance\\s+\\&\\s+Real\\s+Estate|Media:\\s+Advertising,\\s+Printing\\s+\\&\\s+Publishing|Media:\\s+Broadcasting\\s+\\&\\s+Subscription|Media:\\s+Diversified\\s+\\&\\s+Production|Containers,\\s+Packaging,\\s+\\&\\s+Glass|Chemicals,\\s+Plastics,\\s+\\&\\s+Rubber|Containers,\\s+Packaging\\s+\\&\\s+Glass|Chemicals,\\s+Plastics\\s+\\&\\s+Rubber|Healthcare\\s+\\&\\s+Pharmaceuticals|Consumer\\s+Goods:\\s+Non\\-Durable|Sovereign\\s+\\&\\s+Public\\s+Finance|Beverage,\\s+Food\\s+\\&\\s+Tobacco|Environmental\\s+Industries|Hotel,\\s+Gaming,\\s+\\&\\s+Leisure|Transportation:\\s+Consumer|Construction\\s+\\&\\s+Building|Consumer\\s+Goods:\\s+Durable|Forest\\s+Products\\s+\\&\\s+Paper|Hotel,\\s+Gaming\\s+\\&\\s+Leisure|Transportation:\\s+Cargo|High\\s+Tech\\s+Industries|Transportation:Cargo|Transportation\\s+Cargo|Utilities:\\s+Oil\\s+\\&\\s+Gas|Aerospace\\s+\\&\\s+Defense|Energy:\\s+Electricity|Investment\\s+Vehicles|Utilities:\\s+Electric|Services:\\s+Business|Services:\\s+Consumer|Telecommunications|Capital\\s+Equipment|Energy:\\s+Oil\\s+\\&\\s+Gas|FIRE:\\s+Real\\s+Estate|Media:\\s+Publishing|Media\\s+Publishing|Utilities:\\s+Water|FIRE:\\s+Insurance|Metals\\s+\\&\\s+Mining|FIRE:\\s+Finance|Automotive|Wholesale|Retail)\\s"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -100,7 +101,7 @@
   },
   "staging": {
     "strategy": "prefix_strip",
-    "hierarchy_prefix_re": "(?i)^\\s*(?:(?:non[-\\s]*controlled/)+(?:non[-\\s]*affiliat(?:e|ed))|controlled\\s+affiliate)\\s+investments\\s+(?:(?:MSD_INDUSTRY_LABELS)\\s+)?",
+    "hierarchy_prefix_re": "(?i)^\\s*(?:(?:(?:non[-\\s]*controlled/)+(?:non[-\\s]*)?affiliat(?:e|ed)|controlled\\s+affiliate)\\s+investments\\s+(?:(?:Banking,\\s+Finance,\\s+Insurance\\s+\\&\\s+Real\\s+Estate|Media:\\s+Advertising,\\s+Printing\\s+\\&\\s+Publishing|Media:\\s+Broadcasting\\s+\\&\\s+Subscription|Media:\\s+Diversified\\s+\\&\\s+Production|Containers,\\s+Packaging,\\s+\\&\\s+Glass|Chemicals,\\s+Plastics,\\s+\\&\\s+Rubber|Containers,\\s+Packaging\\s+\\&\\s+Glass|Chemicals,\\s+Plastics\\s+\\&\\s+Rubber|Healthcare\\s+\\&\\s+Pharmaceuticals|Consumer\\s+Goods:\\s+Non\\-Durable|Sovereign\\s+\\&\\s+Public\\s+Finance|Beverage,\\s+Food\\s+\\&\\s+Tobacco|Environmental\\s+Industries|Hotel,\\s+Gaming,\\s+\\&\\s+Leisure|Transportation:\\s+Consumer|Construction\\s+\\&\\s+Building|Consumer\\s+Goods:\\s+Durable|Forest\\s+Products\\s+\\&\\s+Paper|Hotel,\\s+Gaming\\s+\\&\\s+Leisure|Transportation:\\s+Cargo|High\\s+Tech\\s+Industries|Transportation:Cargo|Transportation\\s+Cargo|Utilities:\\s+Oil\\s+\\&\\s+Gas|Aerospace\\s+\\&\\s+Defense|Energy:\\s+Electricity|Investment\\s+Vehicles|Utilities:\\s+Electric|Services:\\s+Business|Services:\\s+Consumer|Telecommunications|Capital\\s+Equipment|Energy:\\s+Oil\\s+\\&\\s+Gas|FIRE:\\s+Real\\s+Estate|Media:\\s+Publishing|Media\\s+Publishing|Utilities:\\s+Water|FIRE:\\s+Insurance|Metals\\s+\\&\\s+Mining|FIRE:\\s+Finance|Automotive|Wholesale|Retail)\\s+)?|(?:Banking,\\s+Finance,\\s+Insurance\\s+\\&\\s+Real\\s+Estate|Media:\\s+Advertising,\\s+Printing\\s+\\&\\s+Publishing|Media:\\s+Broadcasting\\s+\\&\\s+Subscription|Media:\\s+Diversified\\s+\\&\\s+Production|Containers,\\s+Packaging,\\s+\\&\\s+Glass|Chemicals,\\s+Plastics,\\s+\\&\\s+Rubber|Containers,\\s+Packaging\\s+\\&\\s+Glass|Chemicals,\\s+Plastics\\s+\\&\\s+Rubber|Healthcare\\s+\\&\\s+Pharmaceuticals|Consumer\\s+Goods:\\s+Non\\-Durable|Sovereign\\s+\\&\\s+Public\\s+Finance|Beverage,\\s+Food\\s+\\&\\s+Tobacco|Environmental\\s+Industries|Hotel,\\s+Gaming,\\s+\\&\\s+Leisure|Transportation:\\s+Consumer|Construction\\s+\\&\\s+Building|Consumer\\s+Goods:\\s+Durable|Forest\\s+Products\\s+\\&\\s+Paper|Hotel,\\s+Gaming\\s+\\&\\s+Leisure|Transportation:\\s+Cargo|High\\s+Tech\\s+Industries|Transportation:Cargo|Transportation\\s+Cargo|Utilities:\\s+Oil\\s+\\&\\s+Gas|Aerospace\\s+\\&\\s+Defense|Energy:\\s+Electricity|Investment\\s+Vehicles|Utilities:\\s+Electric|Services:\\s+Business|Services:\\s+Consumer|Telecommunications|Capital\\s+Equipment|Energy:\\s+Oil\\s+\\&\\s+Gas|FIRE:\\s+Real\\s+Estate|Media:\\s+Publishing|Media\\s+Publishing|Utilities:\\s+Water|FIRE:\\s+Insurance|Metals\\s+\\&\\s+Mining|FIRE:\\s+Finance|Automotive|Wholesale|Retail)\\s+)",
     "extra_industry_labels": [
       "Beverage, Food & Tobacco",
       "Capital Equipment",
@@ -225,6 +226,21 @@
     ],
     "foreign_unit_values": [
       "reported_in_usd"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
+    ],
+    "units_tagged_as_par": [
+      "0000950170-24-060419",
+      "0000950170-24-097161",
+      "0000950170-24-127117",
+      "0000950170-25-039445",
+      "0000950170-25-072747",
+      "0000950170-25-109036",
+      "0001193125-25-283129",
+      "0001193125-26-104390",
+      "0001193125-26-224183",
+      "0001193125-26-349812"
     ],
     "misdated_contexts": [
       "0001193125-26-104390 C_b74d456f-411a-43f1-b25b-0821de90802a 2025-09-30 -> 2025-12-31",

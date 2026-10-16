@@ -4777,3 +4777,37 @@ Compared with `spoff3`. One round; six builds (the limit).
   common equity (shared warrant class fault, as D-180, D-189); sterling commitment currencies
   ambiguous; CSafe sterling tranche printed with the SOFR code at 2024-03-31.
 - The agent ran a bare `python -` twice (PIDs 20752, 21528, killed). Wrapper tests 681 passed.
+
+### D-191 Bain Capital Private Credit through the fund-clearing skill (sandbox `bnxd`, with 2026-06-30), verdict INCOMPLETE
+
+Compared with `spoff3`. One round; four builds.
+
+- **Ledger:** 74 findings, 42 outstanding (76 in the first build), 39 proposed, 3 parked; totals tie
+  in 13 of 13 quarters (11 of 13 before).
+- **Fixed (wrapper):** 1,324 of 2,516 rows (52.6 pct) had the industry heading in the issuer name;
+  `hierarchy_prefix_re` strips it using this fund's own labels (2,383 of 2,392 names, none over-cut);
+  `industry_from_identifier_re` (rows without industry 360 to 0, 359 gained a GICS label, none lost);
+  `units_tagged_as_par` for 10 filings 2024-03-31 to 2026-06-30 (C04 10 to 1);
+  `investments_total_excludes: cash_rows` (4 fv_conservation and the GAV/F20 findings tied to them).
+- **Pulled:** `exclude_2025q4_duplicate_bcslp_ii_member_axis_rows.json` (moved to
+  `_pulled_lookthrough_plug_2026-10-16/`): the 18 rows are SLP II's own schedule, now kept as
+  `underlying_schedule`; published fair value unchanged.
+- **Fixed (new highlights wrapper):** NAV per share 2022-12-31 to 2023-09-30 printed negative in
+  brackets, published positive (E04 5 to 1, nav_identity 5 to 1); investments 2023-06-30 and
+  2023-09-30 from the printed balance sheet. Row corrections: Chartbeat warrants 2025-12-31 (member
+  names no company); Legacy Corporate Lending preferred units 1,125 (a carried proxy) to 4,000.
+- **Proposed (19 entries):** B01, B02 (Galanthus GBP and USD undrawn lines), X11, X07 (SLP II
+  preferred), SRC_BDC03 and scale (D-127 rows), pre-operations F30, F22, strategy; ramp-up D01, D02,
+  CNT01, F24, F25; A04, E01, cost_conservation 2023-12-31 (money-market row against the ex-cash
+  total); C04 2023-12-31; F20 2023-09-30. Four earlier real-error verdicts answered.
+- **Parked:** E04, nav_identity, F30 2022-09-30: likely the same NAV sign error, but no cached filing
+  prints that quarter.
+- **Page sample:** 20 cards, 0 published errors. One card was a SLP II schedule row (unpublished): the
+  sampler drew from all rows; fixed in 99e8174 (published rows only). Share counts scaled x1,000 as
+  the filer tags them under '(In thousands)', which the footnote does not confirm for units (the
+  unit-scale owner question). Twenty cards can miss a problem on under about 15 pct of rows.
+- **Left:** the shared unit step replaces a tagged count with a carried proxy; asset class
+  REAL_ESTATE set from industry words left in the name; canonical_name keeps the industry prefix;
+  BBSY/BKBM/P codes published as SOFR (not checked); -360K residual at 2025-03-31.
+- The agent ran an empty heredoc into `python -` once (stopped by its id) and staged a rename with
+  `git mv`, unstaged at once. Wrapper tests 681 passed.
