@@ -4942,3 +4942,38 @@ RE2 does not support).
   names check under-counts (9 of about 20 rows; also D-193); class REAL_ESTATE from 'REITs' left in a
   name.
 - The agent ran an empty heredoc into `python -` once (stopped by its id).
+
+### D-196 Fidelity Private Credit Co through the fund-clearing skill (sandbox `fcxe`, no 2026-06-30 filing), verdict PASS
+
+Compared with `spoff3`. Two rounds; five builds.
+
+- **Ledger:** 50 findings, 21 outstanding (68 / 42 in the first build), all 21 proposed; totals tie in
+  12 of 12 quarters (2023-06-30 was 1.4M short).
+- **Fixed (wrapper):** money-market positions at 2023-06-30 (1,353,796, inside the filed total) and
+  2023-09-30 published; issuer read from the member and strips (about 80 names: Cadence -
+  Southwick, 2023 'Investment Companies, X', money-market funds, Pave America, undrawn lines); equity
+  units tagged as principal in 8 filings (172 rows had none); 'Class A/B' and 'Class A Interest(s)'
+  published as loans, now equity; 209 values from the page, 198 dash rows at 0 (B01 x4) and untagged
+  cost or par (Double E, VIP Medical, Perimeter, USW Buyer). 200 rows added against `spoff3`.
+- **Fixed (137 specs, 359 lines):** 25 2023 equity rows published as loans with units as par; Pave
+  America 2024-09-30 (members join two lines); Dynamic Connections CAD par tagged USD and CORRA guessed
+  SOFR (6 quarters); 22 unit counts swapped by the shared share-count proxy; about 40 issuer names;
+  spreads tagged 0.06; rates or spreads on dash undrawn lines; 8 undrawn costs tagged positive; 5
+  unclassified undrawn lines and CareRing 2023-12-31. Round 2: the reference rate PRIME withdrawn on
+  22 CCI Prime rows (2023-12-31 to 2026-03-31; 10 undrawn loans, 12 preferred) where nothing prints a
+  benchmark; Dragonfly Pond Works 2025-06-30 instrument.
+- **Proposed:** F27 x12, B01 x5 (new key `b01-restricted-holdings-acquisition-table-contexts`), A01
+  2023-06-30 (new key `a01-parent-key-matches-issuer-name-text`: 'Fidelity Investments' in the
+  money-market fund's name), nav_identity and F11 2022-12-31 (new key
+  `nav-identity-comparative-year-end-before-units-issued`), F16 2024-12-31. Earlier B01 verdicts
+  (2025-12-31, 2026-03-31) cleared by publishing the dash rows.
+- **Page sample (`fcxd`):** 1 error of 20: CCI Prime unfunded revolver 2024-06-30 published PRIME
+  (cause pipeline). Shared cause: `pipeline/staging_bdc.py` CTE 10b `with_enrichment`
+  (`_text_ref_rate`) sets the benchmark from the bare word 'prime' anywhere in the member text,
+  issuer name included (also 10 rows on the sister fund, D-179). Fixed here by row correction; the
+  step is unchanged. Not re-sampled. Twenty cards can miss a problem on under about 15 pct of rows.
+- **Left:** GICS name cache gives Lake Air Products 'Industrial Gases' (2023); the 198 dash rows have
+  no industry; NAV per share 9.93 published for 2022-12-31 (0 units printed); stray member words in
+  about 20 undrawn instruments; Q4-2024 distribution per share 0.59 vs monthly table 0.76 not read.
+- The agent ran a bare `python -` twice (stopped by PID and task id) and one medium `python -c`.
+  Wrapper tests 681 passed.

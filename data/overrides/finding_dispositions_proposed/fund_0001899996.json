@@ -1,0 +1,285 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "fcxe",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F27-1899996-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "ciks": [
+    "0001899996"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "statement": "The yield the check compares is the filer's printed ratio of net investment income to average net assets (12.09 to 14.43), published as printed. The fund is levered: investments are 194 to 210 pct of net assets in every flagged quarter, so income over net assets runs above the holdings' weighted coupon plus 200bp by design (excess 2.24 to 4.11 points). No published value is wrong; no fix applies because the figure is the filer's own ratio, read as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041853",
+     "verbatim": "Net investment income (loss) C 14.33 % 7.60 %",
+     "quote": "Net investment income (loss) C 14.33 % 7.60 % -- 2023-06-30 financial highlights; published income_yield_pct 14.33; investments 1216.9M on net assets 625.8M (194 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-063075",
+     "verbatim": "Net investment income (loss) C 13.97 % 5.04 %",
+     "quote": "Net investment income (loss) C 13.97 % 5.04 % -- 2023-09-30 financial highlights; published income_yield_pct 13.97; investments 1289.6M on net assets 659.9M (195 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035352",
+     "verbatim": "Net investment income (loss) 13.93 % 9.34 % 5.74 %",
+     "quote": "Net investment income (loss) 13.93 % 9.34 % 5.74 % -- 2023-12-31 financial highlights; published income_yield_pct 13.93; investments 1379.7M on net assets 675.1M (204 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057681",
+     "verbatim": "Net investment income (loss) C 13.77 % 14.40 %",
+     "quote": "Net investment income (loss) C 13.77 % 14.40 % -- 2024-03-31 financial highlights; published income_yield_pct 13.77; investments 1345.6M on net assets 693.6M (194 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-094714",
+     "verbatim": "Net investment income (loss) C 14.11 % 14.33 %",
+     "quote": "Net investment income (loss) C 14.11 % 14.33 % -- 2024-06-30 financial highlights; published income_yield_pct 14.11; investments 1438.3M on net assets 714.1M (201 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125367",
+     "verbatim": "Net investment income (loss) D 14.32 % 13.97 %",
+     "quote": "Net investment income (loss) D 14.32 % 13.97 % -- 2024-09-30 financial highlights; published income_yield_pct 14.32; investments 1441.0M on net assets 694.5M (207 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-041961",
+     "verbatim": "Net investment income (loss) 14.43 % 13.93 % 9.34 %",
+     "quote": "Net investment income (loss) 14.43 % 13.93 % 9.34 % -- 2024-12-31 financial highlights; published income_yield_pct 14.43; investments 1583.9M on net assets 755.5M (210 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070235",
+     "verbatim": "Net investment income (loss) to average net assets B 13.66 % 13.77 %",
+     "quote": "Net investment income (loss) to average net assets B 13.66 % 13.77 % -- 2025-03-31 financial highlights; published income_yield_pct 13.66; investments 1650.6M on net assets 795.5M (207 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108878",
+     "verbatim": "Net investment income (loss) to average net assets B 13.23 % 14.11 %",
+     "quote": "Net investment income (loss) to average net assets B 13.23 % 14.11 % -- 2025-06-30 financial highlights; published income_yield_pct 13.23; investments 1612.7M on net assets 805.6M (200 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277220",
+     "verbatim": "Net investment income (loss) to average net assets B 13.51 % 14.32 %",
+     "quote": "Net investment income (loss) to average net assets B 13.51 % 14.32 % -- 2025-09-30 financial highlights; published income_yield_pct 13.51; investments 1546.4M on net assets 785.1M (197 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-119504",
+     "verbatim": "Net investment income (loss) to average net assets 12.98 % 14.43 % 13.93 %",
+     "quote": "Net investment income (loss) to average net assets 12.98 % 14.43 % 13.93 % -- 2025-12-31 financial highlights; published income_yield_pct 12.98; investments 1639.7M on net assets 782.7M (209 pct)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214221",
+     "verbatim": "Net investment income (loss) to average net assets B 12.09 % 13.66 %",
+     "quote": "Net investment income (loss) to average net assets B 12.09 % 13.66 % -- 2026-03-31 financial highlights; published income_yield_pct 12.09; investments 1662.5M on net assets 797.3M (209 pct)"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/left.py fcxe F27",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-B01-1899996-2",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001899996"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "reason_key": "b01-restricted-holdings-acquisition-table-contexts",
+   "statement": "Every context B01 counts without a fair value in these quarters belongs to the note table 'Additional information on each restricted holding' (columns Investment, Type, Acquisition Date, Acquisition Cost), which the filer tags with InvestmentOwnedAtCost and InvestmentAcquisitionDate on contexts of their own (58, 80, 95, 102 and 109 contexts), plus three single rate-only twin contexts of published rows. They are not positions; each equity line is published once from the schedule, and the quarter totals tie to the filed total. Every schedule line printed with a dash for fair value is now published at 0 (untagged_values). No fix applies: these contexts must not be published.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-094714",
+     "verbatim": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)",
+     "quote": "2024-06-30: 58 acquisition-table contexts without a fair value; 'Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125367",
+     "verbatim": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)",
+     "quote": "2024-09-30: 80 acquisition-table contexts without a fair value; 'Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-041961",
+     "verbatim": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)",
+     "quote": "2024-12-31: 95 acquisition-table contexts without a fair value; 'Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070235",
+     "verbatim": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)",
+     "quote": "2025-03-31: 102 acquisition-table contexts without a fair value; 'Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108878",
+     "verbatim": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)",
+     "quote": "2025-06-30: 109 acquisition-table contexts without a fair value; 'Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)'"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/left.py fcxe B01",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-A01-1899996-3",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001899996"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "reason_key": "a01-parent-key-matches-issuer-name-text",
+   "statement": "The failing rollup is the whole 'Investments' total (1,216,949,424, printed 'Total Investment Portfolio'). The check takes as its children the leaves whose parent key contains the text 'investments'; the only such leaf is the money-market position 'Fidelity Investments Money Market Government Portfolio Class I' (1,353,796), because the fund manager's name holds the word. Before this run that position was not published (excluded as non-private), so the rollup had no children and was skipped. The published rows of the quarter sum to the printed total exactly. No fix in the data applies: the match is the check's substring test.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041853",
+     "verbatim": "Fidelity Investments Money Market Government Portfolio Class I 4.99 % (g)(i)(k) 1,353,796 1,353,796 1,353,796",
+     "quote": "The money-market position whose name holds 'Investments'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041853",
+     "verbatim": "Total Investment Portfolio 1,221,635,082 1,216,949,424 194.51 %",
+     "quote": "The rollup: 1,215,595,628 non-affiliated plus 1,353,796 affiliated money-market fund"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/left.py fcxe A01",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-nav_identity-1899996-4",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "nav_identity",
+   "ciks": [
+    "0001899996"
+   ],
+   "quarters": [
+    "2022-12-31"
+   ],
+   "reason_key": "nav-identity-comparative-year-end-before-units-issued",
+   "statement": "2022-12-31 is a comparative year-end before the fund issued units: the balance sheet prints 0 units outstanding and a dash for the value per unit beside net assets of 462,571,059. The 9.93 per unit published for that date is the value at the first issue on 2023-01-31 (company facts date it to the year-end). Units times value cannot equal net assets when no units exist. No wrapper setting withdraws a fund-level figure (figure_corrections set numbers only), so the published 9.93 is left and listed as an observation.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041853",
+     "verbatim": "Net Asset Value per unit ( 62,554,536 and 0 units issued and outstanding as of June 30, 2023 and December 31, 2022, respectively) $ 10.00 -",
+     "quote": "0 units outstanding at 2022-12-31 and a dash for the net asset value per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035352",
+     "verbatim": "Period January 31, 2023 through December 31, 2023 A Per Unit Activity Net asset value per unit, beginning of period $ 9.93",
+     "quote": "The 9.93 published for 2022-12-31 is the value per unit at the first issue, 2023-01-31"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/left.py fcxe nav_identity",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F11-1899996-5",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F11",
+   "ciks": [
+    "0001899996"
+   ],
+   "quarters": [
+    "2022-12-31"
+   ],
+   "reason_key": "nav-identity-comparative-year-end-before-units-issued",
+   "statement": "2022-12-31 is a comparative year-end before the fund issued units: the balance sheet prints 0 units outstanding and a dash for the value per unit beside net assets of 462,571,059. The 9.93 per unit published for that date is the value at the first issue on 2023-01-31 (company facts date it to the year-end). Units times value cannot equal net assets when no units exist. No wrapper setting withdraws a fund-level figure (figure_corrections set numbers only), so the published 9.93 is left and listed as an observation.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041853",
+     "verbatim": "Net Asset Value per unit ( 62,554,536 and 0 units issued and outstanding as of June 30, 2023 and December 31, 2022, respectively) $ 10.00 -",
+     "quote": "0 units outstanding at 2022-12-31 and a dash for the net asset value per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035352",
+     "verbatim": "Period January 31, 2023 through December 31, 2023 A Per Unit Activity Net asset value per unit, beginning of period $ 9.93",
+     "quote": "The 9.93 published for 2022-12-31 is the value per unit at the first issue, 2023-01-31"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/left.py fcxe F11",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F16-1899996-6",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": [
+    "0001899996"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "reason_key": "f16-quarter-distribution-includes-catch-up-declaration",
+   "statement": "The fourth quarter of 2024 carries the December declaration of 0.53 a unit (40,168,766) beside 0.12 and 0.11 in October and November, against 0.09 to 0.13 in every other month of the year: a year-end distribution, so the quarter's annualised rate exceeds 1.5 times the income yield. The other quarters pass. As printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-041961",
+     "verbatim": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095",
+     "quote": "Distributions declared by month in 2024; December 0.53"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/left.py fcxe F16",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  }
+ ]
+}

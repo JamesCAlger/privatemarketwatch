@@ -218,5 +218,10 @@
   "label": "foxd",
   "accepted_on": "2026-10-16",
   "basis": "D-195, gate PASS; page sample 1 marked error, a reader misreading (seed-quarter percent is right); config scale override removed"
+ },
+ "0001899996": {
+  "label": "fcxe",
+  "accepted_on": "2026-10-16",
+  "basis": "D-196, gate PASS in round 2; page sample 1 error (PRIME read from the issuer name), fixed on 22 rows"
  }
 }
