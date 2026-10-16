@@ -892,6 +892,18 @@ if NMPC_LOOP in held and NMPC_LOOP_FILE.exists():
     for spec in json.loads(NMPC_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((NMPC_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-2037804-fundloop"))
         EXACT.add(spec["identifier"])
+# AB Private Credit Investors, fund-clearing loop (2026-10-16): Prime loans of 2023-09-30 published with a reference rate
+# guessed from the date, one cost fact without an identifier member (8x8), three members whose section heads defeat the
+# issuer reading. One spec per row, each with its printed line, in row_correction_specs/0001634452.json. Identifiers are
+# phrases that each match one row of the quarter (not exact: some members hold a replacement character).
+ABPCI_LOOP = "0001634452"
+ABPCI_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001634452.json"
+if ABPCI_LOOP in held and ABPCI_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(ABPCI_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((ABPCI_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1634452-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
 # decision D-112: Stepstone Private Credit, 10-Q 2026-03-31. Five position contexts are tagged decimals="0" with the printed
 # thousands figure as the value, in a schedule whose other facts are decimals="-3": fair value, cost and principal are a
 # thousand times too small. Built from the rows the sandbox still shows unscaled (fair value under 10,000).

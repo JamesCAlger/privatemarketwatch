@@ -4710,3 +4710,39 @@ Compared with `spoff3`. One round; two builds.
   notional as principal, as printed; property names respelled between quarters.
 - The agent ran an empty heredoc into `python -` once (stopped by its id) and used `sed -i` on a
   scratch SQL file. Wrapper tests 681 passed.
+
+### D-189 AB Private Credit Investors through the fund-clearing skill (sandbox `abxf`, with 2026-06-30), verdict PASS
+
+Compared with `spoff2`. Two rounds; six builds (the limit).
+
+- **Ledger:** 90 findings, 43 outstanding, all 43 proposed; totals tie in 14 of 14 quarters. The
+  names check went from 3.9 pct bad rows to ok.
+- **Fixed (wrapper):** row-number words cut from 2023 names ('Galway Borrower Llc One'; 325 of 986
+  names, dry-run); instrument text carrying 'industry | facility | rate | maturity' (about 97 pct of
+  rows) now the facility or class; Medical Management revolver 2025-06-30 (223,073) on a context
+  dated 2025-03-31; 15 dash-valued rows with a tagged cost dropped, now fair value 0 (cost ties at
+  2023-09-30, 2025-06-30, 2025-12-31).
+- **Fixed (new highlights wrapper):** total cost 2023-09-30 was one row's cost (170,890), now the
+  printed 1,269,400,998; borrowings now notes plus the facility in 15 quarters (F26 x11); shares
+  outstanding for the last three quarters.
+- **Fixed (row corrections, 5,880 rows for this fund; the loader now accepts `"exact": true` for this
+  fund's specs):** the 2023 Q1/Q2 10-Qs tag no rate, spread, PIK or maturity: 781 loans read from
+  their printed lines (X02, C01, dl_rate_fill); 13 Prime loans published with a guessed SOFR; 8x8
+  cost; 7 issuer names (C201 x2). Round 2: 1,078 rows printing a dash for the rate (2023-09-30 to
+  2026-06-30) published 0.0, now blank (five Delaware Valley / RCP Encore rows print 0.00 % and keep
+  it); 13 rows whose floor or another issuer's PIK was tagged as PIK, withdrawn; Saviynt and Zendesk
+  undrawn revolvers at 2024-03-31 tagged on Datacor and Kaseya members, renamed with the cost sign.
+  Earlier X05 verdicts (RevauAdvanced, Syntax spread 0) already fixed.
+- **Proposed:** F21 x11, financial_convention_unresolved x12 (`convention-dash-printed-rate-published-blank`,
+  `convention-printed-pik-above-printed-rate`), X05 x5, X02 x5 (non-accrual and FirstDigital lines
+  print a dash), C117 x3 and fmt_pik_rate x3 (`pik-rate-above-20-as-printed`), A01 x2, X07, D06.
+- **Page sample (`abxd`):** 3 errors of 20 (Versaterm floor as PIK; PDI TA and MyKaarma dash as 0.0),
+  causes fixed fund-wide in round 2. **Second sample (`abxf`, seed 20261016, `samples/0001634452_r2`):**
+  1 error of 20: GlobalWebIndex 2023-12-31 warrants on preferred units published as EQUITY_PREFERRED
+  (shared classifier; same cause as D-180), expiry on another context. Left: one card, builds used up.
+  Twenty cards can miss a problem on under about 15 pct of rows.
+- **Left:** fund-level net investment income holds total income or a cash-flow line in 7 quarters
+  (no highlights field to correct it); maturity status is set before row corrections (781 rows read
+  'unresolved'); two dash-cost rows publish no cost; cost gaps +65,742 (2024-03-31) and +8,561
+  (2024-12-31) not traced; GICS labels depend on the build's composition (33 rows).
+- The agent ran a bare `python -` twice (PIDs 20012, 9992, killed). Wrapper tests 681 passed.

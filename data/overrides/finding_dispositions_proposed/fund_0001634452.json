@@ -1,0 +1,419 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "abxf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F21-1634452-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F21",
+   "reason_key": "f21-holdings-over-net-assets-of-a-levered-fund",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "statement": "Investments at fair value are 2.5 to 2.7 times net assets in every flagged quarter, as the schedule's own total line prints (254 to 267 pct of net assets). The fund is levered with a credit facility and unsecured notes (about 1.25B of debt on 742M of net assets at 2026-06-30). Published fair value equals the filed total in every quarter. No fix applies: the ratio is the fund's, not an extraction error.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-23-145163",
+     "verbatim": "TOTAL INVESTMENTS - 254.06% (14) $ 1,198,535,419 $ 1,179,343",
+     "quote": "'TOTAL INVESTMENTS - 254.06% (14) $ 1,198,535,419 $ 1,179,343': 2023-03-31, investments 254.06 pct of net assets as printed (published ratio 2.54)."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108839",
+     "verbatim": "Total Investments - ( 267.17 %) $ 1,748,732,749 $ 1,735,894,",
+     "quote": "'Total Investments - ( 267.17 %) $ 1,748,732,749 $ 1,735,894,': 2025-06-30, 267.17 pct as printed (published 2.67)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-352137",
+     "verbatim": "Total Investments - ( 262.09 %) 1,984,633,170 1,943,637,816",
+     "quote": "'Total Investments - ( 262.09 %) 1,984,633,170 1,943,637,816': 2026-06-30, 262.09 pct as printed (published 2.62)."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-financial_convention_unresolved-1634452-2",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "reason_key": "convention-dash-printed-rate-published-blank",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The unresolved rows are loans the page prints with a dash for the interest rate and a PIK margin (American Physician Partners on non-accrual in every quarter, Single Digits on non-accrual, undrawn lines such as Sauce Labs, NC Topco, CHV Holdings). The filer tags the rate as 0 and the PIK separately. The published rate on these rows is blank, which is what the page prints: the re-verifier reports the tagged 0 as unreconciled because a 0 all-in coupon cannot carry a PIK part. Every other dash-printed row of the fund that published the tagged 0.0 was blanked by row correction in this run (1,076 rows), so the fund now publishes a dash-printed rate as blank throughout. No further fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-23-277031",
+     "verbatim": "American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/29/2023 1,171,910 1,082,011 -",
+     "quote": "'American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/29/2023 1,171,910 1,082,011 -': 2023-09-30, rate printed as a dash, PIK 3.50, tagged rate 0."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-352137",
+     "verbatim": "Single Digits, Inc. Technology Hardware, Storage & Peripherals Term Loan - ( S + 4.25 %; 1.00 % Floor; 3.00 % PIK) 9/30/2026 3,162,179 2,580,446 512,273",
+     "quote": "'Single Digits, Inc. Technology Hardware, Storage & Peripherals Term Loan - ( S + 4.25 %; 1.00 % Floor; 3.00 % PIK) 9/30/2026 3,162,179 2,580,446 512,273': 2026-06-30, rate printed as a dash on a non-accrual loan with a 3.00 PIK part."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-352137",
+     "verbatim": "American Physician Partners, LLC Health Care Providers & Services Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 12/31/2026 6,791,604 5,733,816 -",
+     "quote": "'American Physician Partners, LLC Health Care Providers & Services Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 12/31/2026 6,791,604 5,733,816 -': 2026-06-30, same loan, rate and value printed as dashes."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-financial_convention_unresolved-1634452-3",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "reason_key": "convention-printed-pik-above-printed-rate",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2026-03-31"
+   ],
+   "statement": "In these two quarters some funded loans print an interest rate below their own PIK part or below the margin: CHV Holdings' PIK bridge loan 14.18 with 16.50 PIK (2024-03-31); Penn TRGRP 1.44, Gryphon-Redwood 3.78, Smile Brands 5.76 and Magaya 1.5 with PIK parts of 4.75 to 6.00 (2026-03-31; the 10-K a quarter earlier prints 11.42 and 13.78 for Penn and Gryphon). The tags carry the printed figures. A printed rate below its PIK part cannot be read under the fund's all-in convention, so the build withholds it. No fix applies: the page itself prints a figure that is not the coupon.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-24-138418",
+     "verbatim": "CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840",
+     "quote": "'CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840': 2024-03-31, printed rate 14.18 below the 16.50 PIK part."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "verbatim": "Penn TRGRP Holdings LLC Software & Tech Services Term Loan 1.44 % ( S + 1.75 %; 0.75 % Floor; 6.00 % PIK) 9/27/2030 7,281,745 7,165,664 6,717,410",
+     "quote": "'Penn TRGRP Holdings LLC Software & Tech Services Term Loan 1.44 % ( S + 1.75 %; 0.75 % Floor; 6.00 % PIK) 9/27/2030 7,281,745 7,165,664 6,717,410': 2026-03-31, printed rate 1.44 below the margin and the 6.00 PIK."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "verbatim": "Gryphon-Redwood Acquisition LLC Software & Tech Services Term Loan 3.78 % (S + 5.00 %; 1.00 % Floor; 5.00 % PIK) 9/18/2028 4,050,567 4,013,122 3,888,544",
+     "quote": "'Gryphon-Redwood Acquisition LLC Software & Tech Services Term Loan 3.78 % (S + 5.00 %; 1.00 % Floor; 5.00 % PIK) 9/18/2028 4,050,567 4,013,122 3,888,544': 2026-03-31, printed rate 3.78 below the 5.00 margin."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-X05-1634452-4",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X05",
+   "reason_key": "x05-zero-spread-printed-on-the-row",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "statement": "The rows with a zero spread are loans the page prints with 'S + 0.00 %': whole-margin PIK loans (Mavenlink 2023-12-31 and 2024-03-31, Bonterra, CHV Holdings' PIK bridge, Magaya 2025-12-31) and Delaware Valley's non-accrual lines (2025-09-30 onward), plus FirstDigital's third term loan printed '( S + .%' . The published zero spread is the printed one. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-24-081951",
+     "verbatim": "Mavenlink, Inc. (1) (3) (4) Software & Tech Services Term Loan 11.77 % (S + 0.00 %; 6.25 % PIK; 0.75 % Floor) 06/03/2027 15,264,979 15,074,764 14,959,680",
+     "quote": "'Mavenlink, Inc. (1) (3) (4) Software & Tech Services Term Loan 11.77 % (S + 0.00 %; 6.25 % PIK; 0.75 % Floor) 06/03/2027 15,264,979 15,074,764 14,959,680': 2023-12-31, whole margin paid in kind, cash spread printed 0.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-138418",
+     "verbatim": "Bonterra, LLC (1) (4) (5) Software & Tech Services Term Loan 13.30 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 9/8/2027 2,804,652 2,769,309 2,804,652",
+     "quote": "'Bonterra, LLC (1) (4) (5) Software & Tech Services Term Loan 13.30 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 9/8/2027 2,804,652 2,769,309 2,804,652': 2024-03-31, spread printed 0.00 with 8.00 PIK."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277881",
+     "verbatim": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S + 0.00 %; 1.00 % Floor) 1/30/2026 509,836 120,253 106,148",
+     "quote": "'Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S + 0.00 %; 1.00 % Floor) 1/30/2026 509,836 120,253 106,148': 2025-09-30, non-accrual line printed S + 0.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "verbatim": "Magaya Corporation Software & Tech Services Term Loan 9.42 % ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 3,739,718 3,709,431 3,664,924",
+     "quote": "'Magaya Corporation Software & Tech Services Term Loan 9.42 % ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 3,739,718 3,709,431 3,664,924': 2025-12-31, spread printed 0.00 with 5.75 PIK."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "verbatim": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - % ( S + 0.00 %; 1.00 % Floor) 6/30/2026 423,599 233,153 83,534",
+     "quote": "'Delaware Valley Management Holdings, Inc. Healthcare Revolver - % ( S + 0.00 %; 1.00 % Floor) 6/30/2026 423,599 233,153 83,534': 2026-03-31, non-accrual revolver printed S + 0.00."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "verbatim": "RevauAdvanced Underwriting Inc. Financials Term Loan 8.46 % ( S + 4.75 %; 0.75 % Floor) 5/10/2032 9,635,703 9,546,142 9,539,346",
+     "quote": "'RevauAdvanced Underwriting Inc. Financials Term Loan 8.46 % ( S + 4.75 %; 0.75 % Floor) 5/10/2032 9,635,703 9,546,142 9,539,346': 2025-12-31, the row of the earlier verdict; published spread 4.75 in this build."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-224298",
+     "verbatim": "RevauAdvanced Underwriting Inc. Financials Term Loan 8.66 % ( S + 5.00 %; 0.75 % Floor) 5/10/2032 9,611,493 9,524,787 9,371,206",
+     "quote": "'RevauAdvanced Underwriting Inc. Financials Term Loan 8.66 % ( S + 5.00 %; 0.75 % Floor) 5/10/2032 9,611,493 9,524,787 9,371,206': 2026-03-31, the row of the earlier verdict; published spread 5.00 in this build."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16",
+   "addresses_verdict": {
+    "2025-12-31": "The earlier reviewer found RevauAdvanced Underwriting (two loans, S + 4.75 %) and Syntax Systems published with spread 0. In this build both publish 4.75 and 5.00 as printed (RevauAdvanced 8.46 / 4.75, Syntax 8.81 / 5.00); the rows X05 still flags are Magaya (printed S + 0.00 %, PIK 5.75 / 4.75) and Delaware Valley (printed S + 0.00 %, non-accrual).",
+    "2026-03-31": "The earlier reviewer found RevauAdvanced (S + 5.00 %) and Syntax Systems (S + 5.00 %) published with spread 0. In this build they publish 5.00 as printed (RevauAdvanced 8.66 / 5.00, Syntax 8.76 and 8.77 / 5.00); the rows X05 still flags are Delaware Valley's three lines printed 'S + 0.00 %' and FirstDigital's line printed 'S + .%'."
+   }
+  },
+  {
+   "disposition_id": "PD-X02-1634452-5",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "statement": "The rows flagged are Delaware Valley Management's non-accrual lines (2024-09-30 onward) and FirstDigital's small third term loan (2026-06-30). The page prints a dash for the rate and no spread ('- (S; 1.00 % Floor)', '- % ( 1.00 % Floor)', '- % ( 0.75 % Floor)'). The filer tags a rate of 0, which this run withdrew as a dash, as on every other dash-printed row of the fund (it was published as a 0.0 coupon before). No rate or spread is printed, so none is published. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126944",
+     "verbatim": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - (S; 1.00 % Floor) 12/31/2024 398,650 265,722 120,300",
+     "quote": "'Delaware Valley Management Holdings, Inc. Healthcare Revolver - (S; 1.00 % Floor) 12/31/2024 398,650 265,722 120,300': 2024-09-30, rate a dash, no spread printed."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-352137",
+     "verbatim": "Delaware Valley Management Holdings, Inc. Health Care Providers & Services Delayed Draw Term Loan - % ( 1.00 % Floor) 12/31/2026 550,380 120,253 105,8",
+     "quote": "'Delaware Valley Management Holdings, Inc. Health Care Providers & Services Delayed Draw Term Loan - % ( 1.00 % Floor) 12/31/2026 550,380 120,253 105,8': 2026-06-30, rate a dash, no spread printed."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-352137",
+     "verbatim": "FirstDigital Communications, LLC Diversified Telecommunication Services Term Loan - % ( 0.75 % Floor) 12/17/2026 34,453",
+     "quote": "'FirstDigital Communications, LLC Diversified Telecommunication Services Term Loan - % ( 0.75 % Floor) 12/17/2026 34,453': 2026-06-30, rate a dash, no spread printed."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-C117-1634452-6",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C117",
+   "reason_key": "pik-rate-above-20-as-printed",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "statement": "The one row flagged is Colo Holdings' term loan, printed as paying its whole coupon in kind at 20.50 % (2024-12-31, 2025-03-31) and 21.5 % (2025-06-30). The published PIK rate is the printed one. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047686",
+     "verbatim": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 673,703 643,498 673,703",
+     "quote": "'Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 673,703 643,498 673,703': 2024-12-31, PIK 20.50 printed."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108839",
+     "verbatim": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PIK) 3/27/2026 177,369 147,559 177,369",
+     "quote": "'Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PIK) 3/27/2026 177,369 147,559 177,369': 2025-06-30, PIK 21.5 printed."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-fmt_pik_rate-1634452-7",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_pik_rate",
+   "reason_key": "pik-rate-above-20-as-printed",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "statement": "Same row as C117: Colo Holdings' term loan prints a PIK rate of 20.50 % (2024-12-31, 2025-03-31) and 21.5 % (2025-06-30). Published as printed. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-072549",
+     "verbatim": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 284,880 261,736 284,880",
+     "quote": "'Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 284,880 261,736 284,880': 2025-03-31, PIK 20.50 printed."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108839",
+     "verbatim": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PIK) 3/27/2026 177,369 147,559 177,369",
+     "quote": "'Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PIK) 3/27/2026 177,369 147,559 177,369': 2025-06-30, PIK 21.5 printed."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-A01-1634452-8",
+   "class": "false_alarm",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "reason_key": "a01-subtotal-of-the-comparative-schedule",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-12-31"
+   ],
+   "statement": "The rollups the check compares with the current rows are figures of the 10-Ks' comparative (prior year-end) schedules. 2023-12-31: 1,948,384 is the December 2022 line of a Community Based Care delayed-draw loan (the current lines print 2,095,814 and 942,256). 2024-12-31: 23,923,702 is the December 2023 'Total Canadian 1st Lien/Senior Secured Debt' and 8,619,561 a December 2023 Syntax line; the current Canadian rows sum to the printed current total 24,184,759. No published row is wrong.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-24-081951",
+     "verbatim": "Community Based Care Acquisition, Inc. (2) (3) Healthcare & HCIT Delayed Draw Term Loan 9.93 % (S + 5.25 %; 1.00 % Floor) 09/16/2027 2,034,120 2,003,449 1,948,384",
+     "quote": "'Community Based Care Acquisition, Inc. (2) (3) Healthcare & HCIT Delayed Draw Term Loan 9.93 % (S + 5.25 %; 1.00 % Floor) 09/16/2027 2,034,120 2,003,449 1,948,384': comparative schedule (2022-12-31) line in the 10-K for 2023."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047686",
+     "verbatim": "Total Canadian 1st Lien/Senior Secured Debt 24,027,560 23,923,702",
+     "quote": "'Total Canadian 1st Lien/Senior Secured Debt 24,027,560 23,923,702': comparative schedule (2023-12-31) subtotal in the 10-K for 2024."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047686",
+     "verbatim": "Total Canadian 1st Lien/Senior Secured Debt 24,028,199 24,184,759",
+     "quote": "'Total Canadian 1st Lien/Senior Secured Debt 24,028,199 24,184,759': current 2024-12-31 subtotal; the published Canadian debt rows sum to 24,184,759."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-X07-1634452-9",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X07",
+   "reason_key": "x07-value-above-cost-as-printed",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Sandstone Care's revolver at 2026-06-30 prints par 5,961, cost 39 and fair value 5,961: a small draw whose cost is net of fees. Published as printed. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-352137",
+     "verbatim": "Sandstone Care Holdings, LLC Health Care Providers & Services Revolver - % (S + 5.50 %; 1.00 % Floor) 6/28/2028 5,961 39 5,961",
+     "quote": "'Sandstone Care Holdings, LLC Health Care Providers & Services Revolver - % (S + 5.50 %; 1.00 % Floor) 6/28/2028 5,961 39 5,961': 2026-06-30, value 5,961 on cost 39 as printed."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-D06-1634452-10",
+   "class": "false_alarm",
+   "engine": "oracle",
+   "rule_name": "D06",
+   "reason_key": "d06-issuer-spelling-differs-between-filings",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "Issuer continuity 2023-09-30 to 2023-12-31 is 19.5 pct by exact issuer name because the two filings' members spell the same companies differently: the 10-Q for 2023-09-30 drops the comma before the legal form ('Galway Borrower LLC'), the 10-K for 2023 keeps it ('Galway Borrower, LLC'). The page prints the same names in both. Positions continue (published fair value ties in both quarters and continuity by issuer is 70 to 98 pct in every other quarter). No published value is wrong beyond the punctuation of the 2023-09-30 names, recorded as an observation.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-23-277031",
+     "verbatim": "Galway Borrower, LLC Financials Delayed Draw Term Loan 10.74 % (S + 5.25 %; 0.75 % Floor) 09/29/2028 39,209 38,926 38,621",
+     "quote": "'Galway Borrower, LLC Financials Delayed Draw Term Loan 10.74 % (S + 5.25 %; 0.75 % Floor) 09/29/2028 39,209 38,926 38,621': 2023-09-30, the page prints the comma; the member and the published name ('Galway Borrower LLC') omit it."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-081951",
+     "verbatim": "Galway Borrower, LLC (2) (6) Financials Revolver 10.70 % (S + 5.25 %; 0.75 % Floor) 09/30/2027 - ( 3,432 ) ( 3,380 )",
+     "quote": "'Galway Borrower, LLC (2) (6) Financials Revolver 10.70 % (S + 5.25 %; 0.75 % Floor) 09/30/2027 - ( 3,432 ) ( 3,380 )': 2023-12-31, the same company printed and published as 'Galway Borrower, LLC'."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  }
+ ]
+}

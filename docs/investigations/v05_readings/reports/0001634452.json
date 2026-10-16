@@ -1,0 +1,574 @@
+{
+ "cik": "0001634452",
+ "label": "abxf",
+ "before": "spoff2",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 672,
+   "why": "trailing row-number words cut from the 2023-03-31 / 2023-06-30 names (wrapper issuer_name_strip_re, 621 rows) plus 7 names corrected from the page (NI Topco, Honor HN Buyer, Saviynt, Activ Software, BSI2 Hold Nettle, CHV Holdings, Admiral Buyer); the rest is the shared name step on a single-fund build (39 rows changed in abxa with no edit); round 2: Saviynt and Zendesk revolvers tagged on Datacor / Kaseya members renamed"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 6700,
+   "why": "wrapper instrument_description_strip_re keeps the facility ('Term Loan', 'Class A Units') and drops the industry, rate text, maturity and section labels the member carried; 7 rows set by row correction"
+  },
+  {
+   "column": "cost",
+   "rows": 3,
+   "why": "8x8, Inc. 2023-09-30 cost 170,890 from the page (its cost fact has no identifier member); round 2: two undrawn revolvers tagged on another issuer's member with the cost unsigned (Saviynt, Zendesk 2024-03-31)"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 3,
+   "why": "same 8x8 row; round 2: same two rows"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 1700,
+   "why": "2023-03-31 / 2023-06-30 loans: rate read from each row's printed line (the two 10-Qs tag no rate); round 2: 1,078 rows whose rate cell is printed as a dash and tagged 0 no longer publish 0.0 (blank)"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 1700,
+   "why": "same rows; round 2: same dash rows"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 1700,
+   "why": "same rows: all_in (the fund's filed_rate_reading); round 2: same dash rows (unresolved: no rate)"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 110,
+   "why": "same rows with a printed PIK part: cash leg derived; round 2: cash leg withdrawn with the rate or the floor-as-PIK"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 780,
+   "why": "same 2023 loans, spread from the printed line"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 790,
+   "why": "same 2023 loans (SOFR / LIBOR / PRIME as printed) plus 13 Prime loans of 2023-09-30 published as a date-guessed SOFR"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 790,
+   "why": "printed_schedule on the same rows"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 780,
+   "why": "Floating on the 2023 loans read from the page"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 130,
+   "why": "printed PIK part on 2023 loans (incl. Delaware Valley non-accrual lines 11.10 / 11.50); round 2: 13 rows where the filer tagged the floor as PIK and the page prints no PIK part, withdrawn"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 785,
+   "why": "2023 loans: maturity from the printed line"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 785,
+   "why": "the shared step marks these rows 'unresolved' (it runs before row corrections; see observations)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 1760,
+   "why": "rows carrying a row correction"
+  },
+  {
+   "column": "position_id",
+   "rows": 700,
+   "why": "instrument texts and names changed; positions 1,923 -> 1,916 (abxa -> abxb), 16 rows added"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 45,
+   "why": "33 rows lost a label with no edit (abxa vs spoff2: GICS depends on build composition); 15 gained from cleaned names; NI Topco no longer labelled from 'U.S. Corporate Debt'"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 45,
+   "why": "same rows"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 8,
+   "why": "present in abxa with no edit (single-fund build); round 2: two rows renamed (Saviynt, Zendesk)"
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 6,
+   "why": "present in abxa with no edit (single-fund build)"
+  }
+ ],
+ "rows_added": 609,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Issuer names of 2023-03-31 and 2023-06-30 carried the filer's row-number word ('Galway Borrower Llc One', 'Saviynt Inc.One'): cut by dispatch.issuer_name_strip_re (trailing One..Twenty after a space or a full stop). Dry run on all 986 names: 325 changed, no false positive. Gate names check: 286 rows (3.9 pct) -> ok.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-12-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-23-145163",
+     "text": "Galway Borrower, LLC (1) (3) Financials Term Loan 10.41% (L + 5.25%; 0.75% Floor) 09/29/2028 4,240,250 4,186,071 4,102,442"
+    }
+   ]
+  },
+  {
+   "what": "instrument_description held the member tail ('Software & Tech Services | Term Loan | 12.39% (S + 7.00%; 1.00% Floor) | 09-01-2028 One') on about 97 pct of rows from 2023-09-30, and section labels in 2023 Q1/Q2 ('First Lien Senior Secured Debt At 241.34 - Term Loan - Us Corporate Debt'): dispatch.instrument_description_strip_re keeps the facility or share class.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-124450",
+     "text": "RevauAdvanced Underwriting Inc. Financials Term Loan 8.46 % ( S + 4.75 %; 0.75 % Floor) 5/10/2032 9,635,703 9,546,142 9,539,346"
+    }
+   ]
+  },
+  {
+   "what": "Medical Management Resource Group revolver (223,073) tagged on a context dated 2025-03-31 in the 10-Q for 2025-06-30: source_encodings.misdated_contexts. Published cost and value at 2025-06-30 now equal the printed totals.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Medical Management Resource Group, L.L.C. Healthcare Revolver 10.14 % (S + 5.75 %; 0.75 % Floor) 9/30/2026 227,819 226,193 223,073"
+    }
+   ]
+  },
+  {
+   "what": "Rows printed with a dash for fair value and a cost (American Physician Partners x6 and four undrawn lines at 2025-12-31, GHP-EIP at 2025-06-30, four undrawn lines at 2023-09-30) were dropped: fair value 0 declared per context (source_encodings.untagged_values, 15 rows). Published cost now equals the printed total cost in 2023-09-30 (1,269,400,998), 2025-06-30 (1,748,732,749) and 2025-12-31 (1,876,212,627).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-09-30",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-124450",
+     "text": "American Physician Partners, LLC Healthcare Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 3/31/2026 6,791,604 5,733,816 -"
+    },
+    {
+     "accession": "0000950170-25-108839",
+     "text": "GHP-EIP Aggregator, LLC Common Units Digital Infrastructure & Services 50,957 174,608 -"
+    },
+    {
+     "accession": "0001193125-23-277031",
+     "text": "Avalara, Inc. (2) (6) Software & Tech Services Revolver 12.64 % (S + 7.25 %; 0.75 % Floor) 10/19/2028 - ( 22,576 ) -"
+    }
+   ]
+  },
+  {
+   "what": "2023-03-31 and 2023-06-30: the 10-Qs tag no rate, spread, PIK or maturity; 781 loans had none (X02, C01, dl_rate_fill). Each loan's printed line located by its printed par, cost and fair value and read for rate, reference, spread, PIK and maturity (766 by generator scratch/fund_runs/0001634452/gen_2023_rates.py, 15 by hand); 4,742 field corrections, each with its printed line.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-23-145163",
+     "text": "Coretelligent Intermediate LLC (4) Digital Infrastructure & Services Revolver 12.00% (P + 4.00%; 1.00% Floor) 10/21/2027 94,982 80,431 69,653"
+    },
+    {
+     "accession": "0001193125-23-212335",
+     "text": "Delaware Valley Management Holdings, Inc. (8) Healthcare & HCIT Term Loan - (11.50% PIK; 1.00% Floor) 03/21/2024 3,726,832 3,446,462 2,351,631"
+    }
+   ]
+  },
+  {
+   "what": "13 Prime loans at 2023-09-30 published SOFR (guessed from the date); set to PRIME from the printed line. Rep Tec's term loan left SOFR: its member says P + 6.50 % but the page prints S + 6.50 %.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "OMH-HealthEdge Holdings, LLC (1) Healthcare Term Loan 12.75 % (P + 4.25 %) 10/24/2025 3,633,067 3,600,700 3,633,067"
+    },
+    {
+     "accession": "0001193125-23-277031",
+     "text": "Rep Tec Intermediate Holdings, Inc. (1) (3) (5) Services Term Loan 12.04 % (S + 6.50 %; 1.00 % Floor) 12/01/2027 14,458,172 14,331,624 14,241,299"
+    }
+   ]
+  },
+  {
+   "what": "8x8, Inc. 2023-09-30 published no cost; the cost fact has no identifier member and was read as the fund's total cost (cost_conservation). Row cost 170,890 from the page; fund-level investments_at_cost 1,269,400,998 from the balance sheet (highlights wrapper figure_corrections).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "8x8, Inc. (11) (13) Common Units Digital Infrastructure & Services 7,886 170,890 19,873"
+    },
+    {
+     "accession": "0001193125-23-277031",
+     "text": "Total investments, at fair value (amortized cost of $ 1,269,400,998 and $ 1,146,231,264 ) 1,249,718,283 1,122,517,095"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names wrong or missing on 7 rows (C201 x2): members that repeat section heads, misspell 'Debts', put a rate fragment first, misspell the issuer or run issuer, industry and facility together. Set from the page.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-24-138418",
+     "text": "Honor HN Buyer, Inc (4) (5) Healthcare Delayed Draw Term Loan 11.21 % (S + 5.75 %; 1.00 % Floor) 10/15/2027 $ 1,633,891 $ 1,614,236 $ 1,633,891"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Saviynt, Inc. Software & Tech Services Revolver - % (S + 3.00 %; 1.00 % Floor) 2/18/2030 - ( 4,653 ) ( 4,573 )"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Activ Software Holdings, LLC (2) (6) Software & Tech Services Revolver 11.94 % (S + 6.25 %; 1.00 % Floor) 05/04/2027 - ( 7,370 ) ( 3,244 )"
+    }
+   ]
+  },
+  {
+   "what": "Fund-level borrowings were the credit facility alone; the fund also has about 535 to 545M of unsecured notes (F26 x11). borrowings = notes payable + credit facility (+ secured borrowings where printed) for 15 quarters, and shares outstanding for 2025-12-31, 2026-03-31, 2026-06-30 (untagged), in a new highlights wrapper.",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Liabilities Notes payable (net of unamortized discount of $ 0 and $ 0 , respectively, and debt issuance costs of $ 2,189,305 and $ 2,359,715 , respectively) $ 535,810,695 $ 535,640,285 Credit facility payable 696,000,000 680,000,000"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "200,000,000 shares authorized, 81,022,158 and 77,076,615 shares issued and outstanding as of June 30, 2026"
+    }
+   ]
+  },
+  {
+   "what": "Page sample round 2 (C013 PDI TA 2024-12-31, C019 MyKaarma 2026-03-31): rows whose rate cell is printed as a dash and tagged 0 published a 0.0 coupon. Every loan of every quarter publishing 0.0 was located on its printed line (par, cost, value; scratch/fund_runs/0001634452/gen_dash.py) and, where the cell is a dash, the rate blanked: 1,078 rows (1,074 by generator, Mastery x2 by hand, Dorado and Einstein whose rate was held back by the floor-as-PIK). Left at 0.0: five 2024-03-31 rows printed '0.00 %' (Delaware Valley x4, RCP Encore).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "PDI TA Holdings, Inc Software & Tech Services Revolver - (S + 5.25 %; 0.75 % Floor) 2/3/2031 - ( 8,224 ) ( 4,718 )"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "MyKaarma Acquisition LLC Software & Tech Services Revolver - % ( S + 4.50 %; 0.75 % Floor) 12/24/2030 - ( 7,890 ) ( 8,912 )"
+    }
+   ]
+  },
+  {
+   "what": "Page sample round 2 (C012 Versaterm revolver 2024-09-30): the 1.00 % floor is tagged as PIK. Every loan publishing a PIK rate was checked against its printed line; 13 rows print no PIK part (Versaterm x3, Syntax x2, SumUp, Dorado, Evolveip, Firebird x2, Center for Orthopedic 2024-09-30; Einstein 2025-03-31; Zendesk 2024-03-31): PIK withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-09-30",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Versaterm Public Safety Inc. Software & Tech Services Revolver 13.5 % (S + 6.50 %; 1.00 % Floor) 12/4/2025 119,558 111,280 108,349"
+    }
+   ]
+  },
+  {
+   "what": "Two undrawn revolvers at 2024-03-31 tagged on another issuer's member with the cost unsigned: Saviynt's revolver on a Datacor member, Zendesk's on a Kaseya member (carrying Kaseya's PIK). Renamed, cost signed as printed, PIK withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-24-138418",
+     "text": "Saviynt, Inc. (2) (6) Software & Tech Services Revolver 9.46 % (S + 4.00 %; 3.50 % PIK; 1.00 % Floor) 12/22/2027 - ( 11,479 ) ( 10,671 )"
+    },
+    {
+     "accession": "0001193125-24-138418",
+     "text": "Zendesk, Inc. (2) (6) Software & Tech Services Revolver 6.25 % (S + 6.25 %; 0.75 % Floor) 11/22/2028 - ( 21,392 ) -"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "2023-09-30 issuer names are built from members that drop the comma before the legal form ('Galway Borrower LLC'); 2023-03-31 / 2023-06-30 names are title-cased from members ('Businessolver.com Inc.' for 'BusinesSolver.com, Inc.', 'Amer Care Royal Llc'). The page prints the proper names. Causes D06 2023-12-31 (19.5 pct issuer continuity by exact name). Left: about 650 rows of name spelling, canonical_name groups most of them.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 3656.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "issuer continuity computed on a punctuation- and case-folded name",
+   "quote": {
+    "accession": "0001193125-23-277031",
+    "text": "Galway Borrower, LLC Financials Delayed Draw Term Loan 10.74 % (S + 5.25 %; 0.75 % Floor) 09/29/2028 39,209 38,926 38,621"
+   }
+  },
+  {
+   "observation_key": "zero-rate-tag-on-dash-printed-row-published-as-coupon",
+   "what": "Undrawn and non-accrual lines printed with '-' or '- %' in the rate cell, tagged 0, published a 0.0 coupon (1,078 rows, every quarter from 2023-09-30; page sample C013, C019). Where a PIK part is printed the build already withheld the 0. Fixed for this fund by row corrections; any filer that tags a dash as 0 has the same problem.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 12.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a published rate of exactly 0 on a loan whose printed rate cell is a dash",
+   "quote": {
+    "accession": "0000950170-25-047686",
+    "text": "Race Finco, LLC Digital Infrastructure & Services Revolver - (S + 5.75 %; 1.00 % Floor) 8/16/2029 - ( 11,235 ) ( 13,720 )"
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "what": "fund_financials.net_investment_income 2023-03-31 to 2024-03-31 (32.8M to 41.3M) is total investment income; printed NII after tax is 11.0M at 2023-03-31. At 2026-03-31 it holds 1,271,321, the cash-flow line 'Amortization of premium and accretion of discount, net' (printed NII 15,676,027); total_investment_income is null from 2025-06-30. Not a correctable figure field in the highlights wrapper.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "net investment income above total investment income less total expenses",
+   "quote": {
+    "accession": "0001193125-23-145163",
+    "text": "Net investment income after tax 11,021,846 8,245,373"
+   }
+  },
+  {
+   "observation_key": "maturity-status-not-recomputed-after-row-correction",
+   "what": "maturity_status reads 'unresolved' on the 781 2023 loans whose maturity_date is now set by row correction (it was 'not_disclosed'): the status is computed before row corrections are applied.",
+   "field": "maturity_status",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "fair_value_m": 2340.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "maturity_status recomputed after row corrections, or 'corrected' where maturity_date is a corrected field",
+   "quote": {
+    "accession": "0001193125-23-145163",
+    "text": "Zendesk, Inc. (2) (3) Software & Tech Services Term Loan 11.88% (S + 3.50%; 3.50% PIK; 0.75% Floor) 11/22/2028 13,334,101 13,082,937 13,200,760"
+   }
+  },
+  {
+   "observation_key": "cost-printed-dash-published-null",
+   "what": "Degreed Series D warrants and ORCP III Triton units (2025-06-30) print a dash for cost and publish cost null. Cost totals still tie because the dash is zero.",
+   "field": "cost",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 0.2,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "null cost on a row whose printed cost cell is a dash",
+   "quote": {
+    "accession": "0000950170-25-108839",
+    "text": "Degreed, Inc. Series D Warrants Software & Tech Services 4/11/2021 7,624 - 3,086"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed-from-date",
+   "what": "2023-09-30 members print 'P + 6.00%' in their own pipe segment, but the identifier-text reader did not take it and 14 loans got a SOFR guessed from the date (13 Prime by the page; Rep Tec's term loan member says P where the page prints S). Fixed by row correction for this fund.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "fair_value_m": 22.6,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "a guessed reference rate on a row whose member text names another code",
+   "quote": {
+    "accession": "0001193125-23-277031",
+    "text": "Thrive Buyer, Inc. (2) Digital Infrastructure & Services Revolver 13.50 % (P + 5.00 %; 1.00 % Floor) 01/22/2027 369,907 356,788 369,907"
+   }
+  },
+  {
+   "observation_key": "borrowings-exclude-securitization-and-notes",
+   "what": "fund_financials.borrowings held only the credit facility (e.g. 716.25M at 2026-06-30) and left out the unsecured notes (536M); F26 flagged the gap 11 times. Fixed for this fund by highlights-wrapper figure corrections.",
+   "field": "borrowings",
+   "quarters": [
+    "2023-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "borrowings below total liabilities less accrued items by more than 20 pct",
+   "quote": {
+    "accession": "0001193125-26-352137",
+    "text": "Liabilities Notes payable (net of unamortized discount of $ 0 and $ 0 , respectively, and debt issuance costs of $ 2,017,002 and $ 2,359,715 , respectively) $ 535,982,998 $ 535,640,285 Credit facility payable 716,250,000 680,000,000"
+   }
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "what": "Schedule rows printed with a dash for fair value but tagged with a cost were dropped (excluded_no_fair_value): 10 rows / 11.48M cost at 2025-12-31, GHP-EIP at 2025-06-30, 4 undrawn lines at 2023-09-30. Fixed for this fund with untagged_values.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-09-30",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "published cost against the printed total cost every quarter",
+   "quote": {
+    "accession": "0001193125-26-124450",
+    "text": "American Physician Partners, LLC Healthcare Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 3/31/2026 6,791,604 5,733,816 -"
+   }
+  },
+  {
+   "observation_key": "gics-label-depends-on-build-composition",
+   "what": "With no edit, the single-fund build abxa gives 39 rows a different GICS label than the multi-fund spoff2 (33 lose one). None of the losses is caused by this run's edits (checked row by row against abxa).",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "GICS label stable across sandboxes for an unchanged row",
+   "quote": {
+    "accession": "0001193125-23-145163",
+    "text": "Coretelligent Intermediate LLC (4) Digital Infrastructure & Services Revolver 12.00% (P + 4.00%; 1.00% Floor) 10/21/2027 94,982 80,431 69,653"
+   }
+  },
+  {
+   "observation_key": "floor-tagged-as-pik",
+   "what": "The filer tags the floor figure with InvestmentInterestRatePaidInKind on loans that print no PIK part (13 rows, mostly 2024-09-30; page sample C012), so a PIK rate of 1.00 or 0.75 was published. Fixed by row correction.",
+   "field": "pik_rate",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31"
+   ],
+   "fair_value_m": 77.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a published PIK rate equal to the row's floor where the printed line has no 'PIK'",
+   "quote": {
+    "accession": "0000950170-24-126944",
+    "text": "Versaterm Public Safety Inc. Software & Tech Services Revolver 13.5 % (S + 6.50 %; 1.00 % Floor) 12/4/2025 119,558 111,280 108,349"
+   }
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "what": "2024-03-31: Saviynt's and Zendesk's undrawn revolvers are tagged on Datacor and Kaseya members, with the cost unsigned; published under the wrong issuer. Fixed by row correction.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 0.01,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "a row whose rate and spread differ from every printed line of its member's issuer",
+   "quote": {
+    "accession": "0001193125-24-138418",
+    "text": "Saviynt, Inc. (2) (6) Software & Tech Services Revolver 9.46 % (S + 4.00 %; 3.50 % PIK; 1.00 % Floor) 12/22/2027 - ( 11,479 ) ( 10,671 )"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_source_encodings.py tests/test_fund_highlights_wrapper.py tests/test_bdc_xbrl_wrapper_oracle.py tests/test_audit_wrapper_cohort.py tests/test_v05_fund_gate.py: 267 passed",
+  "fund_gate.py check on abxf (no snapshot): all ok except files (expected)"
+ ],
+ "not_done": [
+  "Cost residuals not traced: 2024-03-31 published 1,399,017,867 vs printed 1,398,952,125 (+65,742); 2024-12-31 1,636,606,314 vs 1,636,597,753 (+8,561). Fair value ties in all 14 quarters.",
+  "Fund-level income lines (NII / TII) not corrected: no correctable figure field; recorded as an observation.",
+  "Non-accrual flags, floors, acquisition dates, share counts and industries not read row by row beyond the sample.",
+  "Full pytest suite and cohort semantic diff not run (no shared code changed).",
+  "'All findings proposed' is not 'data correct': the 2023 Q1/Q2 rates come from a page reading matched by printed figures; a row whose figures appear twice with different text was skipped and done by hand.",
+  "pct_of_net_assets is null on every row: the schedule prints no percent column (section headings only); not changed.",
+  "Round 2 located rows by printed par, cost and value; 7 rows printed with a PIK part (West Dermatology, Visionary) were not located and needed no change."
+ ]
+}

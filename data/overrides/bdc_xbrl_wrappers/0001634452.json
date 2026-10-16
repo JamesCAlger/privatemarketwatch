@@ -111,7 +111,9 @@
     "category_marker_re": "(?i)^\\s*(?:INVESTMENTS|Investment|NET\\s+ASSETS.*|LIABILITIES\\s+IN\\s+EXCESS\\s+OF\\s+OTHER\\s+ASSETS.*|(?:Total\\s+)?(?:Cash|Cash\\s+Equivalents|Cash\\s+and\\s+Cash\\s+Equivalents)(?:\\s*-\\s*\\d+(?:\\.\\d+)?%)?(?:\\s*\\|\\s*(?:Total\\s+Cash(?:\\s+and\\s+Cash\\s+Equivalents|\\s+Equivalents)?|US\\s+Dollar|US\\s+DOLLAR|LIABILITIES\\s+IN\\s+EXCESS\\s+OF\\s+OTHER\\s+ASSETS.*|NET\\s+ASSETS.*))?|(?:Total\\s+)?(?:(?:U\\.?\\s*S\\.?|US|U\\s*S|S|\\.S\\.|U\\.U\\.S\\.|Canadian|France|French|Luxembourg|United\\s+Kingdom|U\\.S\\.\\s+Canada|U\\.S\\.\\s+Canadian|U\\.S\\.\\s+Luxembourg)?\\s*)?(?:Corporate\\s+Debt|(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt|Common\\s+Stock|Preferred\\s+Stock|Warrants?|Investment\\s+Companies)(?:\\s*-\\s*\\d+(?:\\.\\d+)?%)?(?:\\s*\\|\\s*(?:(?:1st|First|2nd|Second)\\s+Lien\\s*/?\\s*(?:Senior|Junior)?\\s*Secured\\s+Debt\\s*\\|\\s*)?Total\\b.*)?|(?:Investment|INVESTMENTS)\\s*\\|\\s*Total\\s+Investments?)\\s*$",
     "category_marker_before_total": true,
     "canonical_strip_re": "(?i)^\\s*(?:U\\.?\\s*S\\.?|US)\\.?\\s*|\\s*-\\s*\\d+(?:\\.\\d+)?%|\\s*\\|\\s*(?:\\u2014|-|\\d+(?:\\.\\d+)?%)?\\s*\\([^|)]*(?:\\+|floor|pik)[^|)]*\\)\\s*|\\s*\\|\\s*(?:[A-Z]\\s*\\+\\s*)?\\d+(?:\\.\\d+)?%\\s*(?:PIK|Floor)?\\s*|\\s*\\|\\s*(?:\\u2014|-)\\s*%\\s*",
-    "industry_from_identifier_re": "(?i)Secured\\s+Debts?\\s*\\|\\s*[^|]+\\|\\s*([^|]+?)\\s*\\|"
+    "industry_from_identifier_re": "(?i)Secured\\s+Debts?\\s*\\|\\s*[^|]+\\|\\s*([^|]+?)\\s*\\|",
+    "issuer_name_strip_re": "(?i)(?:\\s+|(?<=\\.))(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|Eleven|Twelve|Thirteen|Fourteen|Fifteen|Sixteen|Seventeen|Eighteen|Nineteen|Twenty)$",
+    "instrument_description_strip_re": "(?i)^(?:[^|]*\\|[\\s|]*){1,2}?(?=[^|]*?\\b(?:Loans?|Revolver|Revolving|Delayed Draw|Notes?|Facility|Bridge)\\b)|\\s*(?:\\||[\\s-]+[^\\sA-Za-z|]*%|\\s\\((?=\\s*[SLP]\\b)).*$|^[^|]*?(?:Secured Debt|Stock|Warrants|Companies)\\s+(?:At\\s+[^|-]*?|[\\d.]+)\\s+-\\s+|(?:(?<=- )|\\s+-\\s+)[A-Za-z.]+\\s*Corporate Debt$"
   },
   "identifier_format": {
     "delimiter": "|",
@@ -193,6 +195,26 @@
   "source_encodings": {
     "filed_rate_reading": [
       "all_in"
+    ],
+    "misdated_contexts": [
+      "0000950170-25-108839 C_6fda8701-6ac1-4aac-9f92-658b9207598a 2025-03-31 -> 2025-06-30"
+    ],
+    "untagged_values": [
+      "0001193125-23-277031 PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAdmiralBuyerIncSoftwareTechServicesDelayedDrawTermLoan1089S550075Floor05082028TypedMemberusgaapInvestmentIdentifierAxis fair_value 0",
+      "0001193125-23-277031 PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAdmiralBuyerIncSoftwareTechServicesRevolver1089S550075Floor05082028TypedMemberusgaapInvestmentIdentifierAxis fair_value 0",
+      "0001193125-23-277031 PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAvalaraIncSoftwareTechServicesRevolver1264S725075Floor10192028TypedMemberusgaapInvestmentIdentifierAxis fair_value 0",
+      "0001193125-23-277031 PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtCoupaHoldingsLLCSoftwareTechServicesDelayedDrawTermLoan1282S750075Floor02272030TypedMemberusgaapInvestmentIdentifierAxis fair_value 0",
+      "0000950170-25-108839 C_a54a9376-ffd8-44fa-abdf-c46d53fd7f62 fair_value 0",
+      "0001193125-26-124450 C_1e8b571b-6243-4f49-90bd-92bddb403897 fair_value 0",
+      "0001193125-26-124450 C_2251df64-817f-41ea-9183-ba6a7eafea0c fair_value 0",
+      "0001193125-26-124450 C_28cc7a58-05ed-4eda-95c5-3f2c6a1cafe2 fair_value 0",
+      "0001193125-26-124450 C_3db20c28-6ac3-457b-843d-1bb233cd3a02 fair_value 0",
+      "0001193125-26-124450 C_4f58a687-f7e4-472e-86a0-5e55aad7e45c fair_value 0",
+      "0001193125-26-124450 C_77f4be3d-ac69-4df8-b53e-de1752d47574 fair_value 0",
+      "0001193125-26-124450 C_832450bc-7c40-42d8-8696-d497d0c6495c fair_value 0",
+      "0001193125-26-124450 C_d3b64c6e-3fe8-4c0b-a2cb-6f508cbb380d fair_value 0",
+      "0001193125-26-124450 C_eb59ce18-7035-4d17-ad62-2c64c8c8d608 fair_value 0",
+      "0001193125-26-124450 C_f6ef90da-207e-4cbd-a0a1-b5d882edd9d4 fair_value 0"
     ]
   }
 }

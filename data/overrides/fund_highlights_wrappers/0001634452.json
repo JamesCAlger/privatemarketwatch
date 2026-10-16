@@ -1,0 +1,123 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001634452",
+ "entity_name": "AB Private Credit Investors Corp",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-09-30",
+   "field": "investments_at_cost",
+   "value": 1269400998,
+   "evidence": "0001193125-23-277031 (10-Q, 2023-09-30) balance sheet: 'Total investments, at fair value (amortized cost of $ 1,269,400,998 and $ 1,146,231,264 ) 1,249,718,283 1,122,517,095'. The build took 170,890, the cost of the 8x8, Inc. common units, whose cost fact has no identifier member ('8x8, Inc. (11) (13) Common Units Digital Infrastructure & Services 7,886 170,890 19,873')."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "shares_outstanding",
+   "value": 77076615,
+   "evidence": "0001193125-26-124450 (10-K, 2025-12-31) balance sheet: '( 200,000,000 shares authorized, 77,076,615 and 63,702,963 shares issued and outstanding at December 31, 2025 and Decem'. No undimensioned share-count fact was read for the date."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "shares_outstanding",
+   "value": 77788164,
+   "evidence": "0001193125-26-224298 (10-Q, 2026-03-31) balance sheet: '( 200,000,000 shares authorized, 77,788,164 and 77,076,615 shares issued and outstanding as of March 31, 2026 and Decem'."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "shares_outstanding",
+   "value": 81022158,
+   "evidence": "0001193125-26-352137 (10-Q, 2026-06-30) balance sheet: '( 200,000,000 shares authorized, 81,022,158 and 77,076,615 shares issued and outstanding as of June 30, 2026 and Decemb'."
+  },
+  {
+   "report_date": "2022-12-31",
+   "field": "borrowings",
+   "value": 693105567,
+   "evidence": "0001193125-23-145163 (10-Q 2023-03-31, comparative column) balance sheet liabilities: 'Credit facility payable ... 448,000,000'; 'Notes payable ... 245,105,567'. Borrowings are the sum (693,105,567); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2023-03-31",
+   "field": "borrowings",
+   "value": 765254335,
+   "evidence": "0001193125-23-145163 (10-Q) balance sheet liabilities: 'Credit facility payable ... 520,000,000'; 'Notes payable ... 245,254,335'. Borrowings are the sum (765,254,335); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "borrowings",
+   "value": 795341323,
+   "evidence": "0001193125-23-212335 (10-Q) balance sheet liabilities: 'Notes payable ... 541,941,323'; 'Credit facility payable ... 253,400,000'. Borrowings are the sum (795,341,323); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "borrowings",
+   "value": 825709941,
+   "evidence": "0001193125-23-277031 (10-Q) balance sheet liabilities: 'Notes payable ... 542,309,941'; 'Credit facility payable ... 283,400,000'. Borrowings are the sum (825,709,941); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "borrowings",
+   "value": 854178575,
+   "evidence": "0001193125-24-081951 (10-K) balance sheet liabilities: 'Notes payable ... 542,678,575'; 'Credit facility payable ... 311,500,000'. Borrowings are the sum (854,178,575); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "borrowings",
+   "value": 888137157,
+   "evidence": "0001193125-24-138418 (10-Q) balance sheet liabilities: 'Notes payable ... 543,043,406'; 'Credit facility payable ... 342,950,000'; 'Secured borrowings ... 2,143,751'. Borrowings are the sum (888,137,157); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "borrowings",
+   "value": 961669795,
+   "evidence": "0001193125-24-200574 (10-Q) balance sheet liabilities: 'Notes payable ... 543,408,239'; 'Credit facility payable ... 400,250,000'; 'Secured Borrowings ... 18,011,556'. Borrowings are the sum (961,669,795); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "borrowings",
+   "value": 1025791351,
+   "evidence": "0000950170-24-126944 (10-Q) balance sheet liabilities: 'Notes payable ... 543,777,202'; 'Credit facility payable ... 463,800,000'; 'Secured borrowings ... 18,214,149'. Borrowings are the sum (1,025,791,351); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "borrowings",
+   "value": 1046395969,
+   "evidence": "0000950170-25-047686 (10-K) balance sheet liabilities: 'Notes payable ... 544,145,969'; 'Credit facility payable ... 502,250,000'. Borrowings are the sum (1,046,395,969); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "borrowings",
+   "value": 1081390109,
+   "evidence": "0000950170-25-072549 (10-Q) balance sheet liabilities: 'Notes payable ... 534,640,109'; 'Credit facility payable ... 546,750,000'. Borrowings are the sum (1,081,390,109); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "borrowings",
+   "value": 1118797948,
+   "evidence": "0000950170-25-108839 (10-Q) balance sheet liabilities: 'Notes payable ... 534,997,948'; 'Credit facility payable ... 583,800,000'. Borrowings are the sum (1,118,797,948); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "borrowings",
+   "value": 1162120131,
+   "evidence": "0001193125-25-277881 (10-Q) balance sheet liabilities: 'Notes payable ... 535,320,131'; 'Credit facility payable ... 626,800,000'. Borrowings are the sum (1,162,120,131); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "borrowings",
+   "value": 1215640285,
+   "evidence": "0001193125-26-124450 (10-K) balance sheet liabilities: 'Notes payable ... 535,640,285'; 'Credit facility payable ... 680,000,000'. Borrowings are the sum (1,215,640,285); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "borrowings",
+   "value": 1231810695,
+   "evidence": "0001193125-26-224298 (10-Q) balance sheet liabilities: 'Notes payable ... 535,810,695'; 'Credit facility payable ... 696,000,000'. Borrowings are the sum (1,231,810,695); the build published the credit facility alone, leaving out the unsecured notes."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "borrowings",
+   "value": 1252232998,
+   "evidence": "0001193125-26-352137 (10-Q) balance sheet liabilities: 'Notes payable ... 535,982,998'; 'Credit facility payable ... 716,250,000'. Borrowings are the sum (1,252,232,998); the build published the credit facility alone, leaving out the unsecured notes."
+  }
+ ],
+ "notes": "Fund-level figures corrected from the printed balance sheets (fund-clearing loop, 2026-10-16): total cost at 2023-09-30, shares outstanding where untagged, and borrowings as notes payable plus the credit facility."
+}
