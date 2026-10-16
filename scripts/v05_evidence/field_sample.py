@@ -89,6 +89,8 @@ def draw(per_fund: int, seed: int, only: dict[str, str] | None = None) -> None:
         rows = con.execute(
             "SELECT %s, CAST(report_date AS VARCHAR) AS report_date, accession_number, src_context_id FROM read_parquet(?) "
             "WHERE cik = ? AND src_context_id IS NOT NULL "
+            # published basis only: a joint venture's own schedule is kept but not published
+            "AND coalesce(accounting_record_class, '') <> 'underlying_schedule' "
             "ORDER BY md5(cik || src_context_id || CAST(report_date AS VARCHAR) || CAST(fair_value AS VARCHAR) || ?) LIMIT ?"
             % ", ".join("CAST(%s AS VARCHAR) AS %s" % (c, c) for c in PUBLISHED),
             [path, cik, str(seed), per_fund * 4]).fetchdf()
