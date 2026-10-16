@@ -1,0 +1,74 @@
+{
+ "cik": "0001950976",
+ "label": "tnxc",
+ "before": "spoff3",
+ "shared_code": false,
+ "declared_changes": [
+  {"column": "cost", "rows": 31, "why": "2025-06-30: 31 undrawn-line costs tagged positive, set to the printed bracketed value by row correction"},
+  {"column": "cost_reported", "rows": 31, "why": "follows cost on the same 31 rows"},
+  {"column": "instrument_description", "rows": 6, "why": "row corrections from the printed line: Unlimited Technology revolver (2025-03-31, 2025-06-30) and Mindbody revolver (2026-06-30) named term loan by the member; Coding Solutions 5/15/2025 delayed draw named term loan (2025-06-30); Coding Solutions term loan 'First Lien Secured' (2025-03-31, 2025-06-30); Zone & Company 'Delayed Payment Draw' (2024-09-30). 2026-06-30 Mindbody is a new-quarter row, so 6 rows against spoff3"},
+  {"column": "shares_held", "rows": 18, "why": "equity unit counts tagged with the face-amount concept now published (units_tagged_as_par, 7 filings; 15 rows in common with spoff3) plus FH DMI 400,429,000 at 2024-12-31 to 2025-06-30 by row correction"},
+  {"column": "src_transforms", "rows": 18, "why": "shares_held:from_principal_tag added on the same equity rows (and shares_held:pow10_shares on the three FH DMI rows)"},
+  {"column": "shares_held_source", "rows": 3, "why": "FH DMI 2024-12-31 to 2025-06-30: the shared share-count step labels them derived_proxy; the value is then set to the printed count by row correction (label not reset, see observation)"},
+  {"column": "corrected_fields", "rows": 38, "why": "the 31 cost rows, the instrument rows and the 3 FH DMI unit counts"},
+  {"column": "pct_of_net_assets", "rows": 38, "why": "0.0 to -0.0 on undrawn lines whose tagged percent is a negative zero; present in the untouched build tnxa, no edit of mine, value unchanged"},
+  {"column": "position_id", "rows": 106, "why": "97 already in the untouched build tnxa against spoff3 (new 2026-06-30 quarter links chains; spoff3 resolved names across 77 funds); the rest from the 4 restored Coding Solutions delayed-draw rows and the instrument corrections re-pairing chains"}
+ ],
+ "rows_added": 148,
+ "rows_removed": 0,
+ "fixes": [
+  {"what": "Equity unit counts: the filer tags the Par Amount/Shares cell of every equity row with InvestmentOwnedUnderlyingFaceAmountAtMarketValue (value = printed x 1,000, schedule in thousands), so no unit count was published (C04 at every equity quarter). Wrapper source_encodings.units_tagged_as_par lists the 7 filings with equity rows; 22 equity rows now publish the tagged count. C04 x7 cleared, including the two with real-error verdicts (2025-12-31, 2026-03-31), which this fixes.", "kind": "wrapper",
+   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "quotes": [
+    {"accession": "0001193125-26-214004", "text": "Excalibur Parent Holdings LP Common Stock IT Services 7/2/2024 519 $ - $ - - FH DMI Buyer Inc (11) Common Stock Health Care Equipment & Supplies 10/11/2024 593 612 614 0.08 %"},
+    {"accession": "0001193125-26-214004", "text": "Consolidated Schedule of Investments as of March 31, 2026 (in thousands) (Unaudited)"},
+    {"accession": "0001193125-25-272386", "text": "Philz Coffee, Inc. (11) Common Stock Hotels, Restaurants & Leisure 8/5/2025 25,831 2,583 2,583 0.43 %"}
+   ]},
+  {"what": "Coding Solutions 8/7/2024 delayed draw line (fair value 0, par 0, cost -36) dropped in 2025-09-30 to 2026-06-30 by the unified dimension-path dedup, whose key leaves cost out and so folded it into the 5/15/2025 delayed draw line. Wrapper staging.distinct_member_suffix_re '(?s)^.*$' (whole member) keeps the two apart; source reconciliation showed these 4 rows as the fund's only dedup exclusions. Published cost now ties to the filed total in those quarters (was +36).", "kind": "wrapper",
+   "quarters": ["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "quotes": [
+    {"accession": "0001193125-26-214004", "text": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%"},
+    {"accession": "0001193125-26-214004", "text": "Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 25 ) - ( 0.00 )%"}
+   ]},
+  {"what": "10-Q 2025-06-30 tags 31 undrawn-line costs positive while the page prints them in brackets (published cost was 3,036 above the filed total, 2 x 1,518). Row correction per row with its printed line; cost now ties. The 2024-09-30 United Flow delayed draw cost 42 is printed positive and was left.", "kind": "row_correction",
+   "quarters": ["2025-06-30"],
+   "quotes": [
+    {"accession": "0000950170-25-104137", "text": "Four Winds Interactive LLC (3)(7)(10) First Lien Senior Secured Revolving Loan Interactive Media & Services SOFR + 6.500 % 2/20/2025 2/20/2030 - ( 90 ) ( 97 ) ( 0.02 )%"},
+    {"accession": "0000950170-25-104137", "text": "Total Investments $ 979,701 $ 980,694 206.47 %"}
+   ]},
+  {"what": "Member names another instrument than the printed line found by the row's own figures: Unlimited Technology revolver as term loan (2025-03-31, 2025-06-30), Mindbody revolver as term loan with LogRhythm's dates (2026-06-30), Coding Solutions 5/15/2025 delayed draw as term loan (2025-06-30), Coding Solutions term loan without 'Senior' (2025-03-31, 2025-06-30), Zone & Company 'Delayed Payment Draw' (2024-09-30). instrument_description set from the page by row correction.", "kind": "row_correction",
+   "quarters": ["2024-09-30", "2025-03-31", "2025-06-30", "2026-06-30"],
+   "quotes": [
+    {"accession": "0000950170-25-065764", "text": "Unlimited Technology Holdings, LLC (3)(7)(11) First Lien Senior Secured Revolving Loan Health Care Technology SOFR + 4.750 % 3/12/2025 3/12/2032 - ( 11 ) ( 11 ) 0.00 %"},
+    {"accession": "0001193125-26-340235", "text": "Mindbody, Inc. (3)(7)(11) First Lien Senior Secured Revolving Loan Hotels, Restaurants & Leisure SOFR + 6.000 % 3/26/2026 3/30/2033 - ( 167 ) ( 173 ) ( 0.02 )%"}
+   ]},
+  {"what": "FH DMI Buyer common stock 2024-12-31 to 2025-06-30: tagged and printed unit count 400,429 (thousands) was replaced by the shared share-count step with the 400,000 of 2025-09-30 (derived_proxy). Set to the printed count by row correction.", "kind": "row_correction",
+   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30"],
+   "quotes": [
+    {"accession": "0000950170-25-104137", "text": "FH DMI Buyer Inc (10) Common Stock Health Care Equipment & Supplies 10/11/2024 400,429 400 372 0.08 %"}
+   ]}
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {"observation_key": "undrawn-line-cost-sign-dropped-by-filer", "what": "10-Q 2025-06-30 tags 31 undrawn-line costs positive; the page prints them negative. Corrected by row correction. The accepted C107 check (values as filed) compares with the tag, so the corrected quarter stays outstanding until the owner rules.", "field": "cost", "quarters": ["2025-06-30"], "fair_value_m": -1.4, "cause": "fund", "action": "fixed", "suggested_check": "Sum of published cost against the filed total cost, per quarter, with the sign-flip test (residual = 2 x sum of positive costs on rows with non-positive value).", "quote": {"accession": "0000950170-25-104137", "text": "LogRhythm Inc (3)(7)(10) First Lien Senior Secured Revolving Loan IT Services SOFR + 7.500 % 7/2/2024 7/2/2029 - ( 150 ) ( 164 ) ( 0.03 )%"}},
+  {"observation_key": "twin-lines-collapsed-by-dimension-dedup", "what": "Shared step pipeline/unified_holdings.py bdc_dim_ranked keys on issuer, instrument, fair value, par and units, not cost: two undrawn lines of one issuer with value 0 and par 0 fold into one. Here the Coding Solutions delayed draws (cost -36 and -28/-27/-25/-24). Fixed for this fund with the wrapper's distinct_member_suffix_re; any fund with two undrawn zero-value lines of one instrument type is exposed.", "field": "rows", "quarters": ["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed", "suggested_check": "Source reconciliation: count excluded_affiliation_dedup rows whose cost differs from the kept row; each is a real line dropped.", "quote": {"accession": "0001193125-25-272386", "text": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%"}},
+  {"observation_key": "unit-count-printed-not-published", "what": "Every equity row's printed unit count was tagged with the face-amount concept (InvestmentOwnedUnderlyingFaceAmountAtMarketValue, unit USD) and so dropped for equity; 22 rows now publish it via units_tagged_as_par.", "field": "shares_held", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 24.7, "cause": "fund", "action": "fixed", "suggested_check": "C04 already flags it; read the equity contexts for a face-amount fact when C04 fails.", "quote": {"accession": "0001193125-26-340235", "text": "Philz Coffee, Inc. (11) Common Stock Hotels, Restaurants & Leisure 8/5/2025 25,831 2,583 2,653 0.27 %"}},
+  {"observation_key": "unit-count-replaced-by-issuer-proxy", "what": "The shared share-count step (unified_holdings with_shares_fix, by cik and issuer_name) replaced FH DMI's printed and tagged 400,429 thousand units with 400,000 from 2025-09-30 (the filer's count changes to 400 then 593 thousand; 400,429 looks like a filer slip but is what the page prints). Set back to the printed count by row correction; shares_held_source stays 'derived_proxy' after the correction (the label is not reset).", "field": "shares_held", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30"], "fair_value_m": 0.4, "cause": "shared", "action": "fixed", "suggested_check": "A row correction of shares_held should reset shares_held_source; and a proxy should not replace a count that equals the tag and the page.", "quote": {"accession": "0000950170-25-065764", "text": "FH DMI Buyer Inc Common Stock Health Care Equipment & Supplies 10/11/2024 400,429 400 348 0.07 %"}},
+  {"observation_key": "member-names-another-tranche", "what": "Six rows whose member names another instrument than the printed line (Unlimited Technology and Mindbody revolvers as term loans; Mindbody's member also carries LogRhythm's dates; Coding Solutions delayed draw as term loan). Fixed by row correction of instrument_description; instrument_type stays 'Term Loan' on the corrected revolvers and delayed draw because the row correction does not re-derive it (not a correctable field).", "field": "instrument_description", "quarters": ["2025-03-31", "2025-06-30", "2026-06-30"], "fair_value_m": -0.2, "cause": "row", "action": "fixed", "suggested_check": "Row with no par and non-positive value whose instrument is a plain term loan: compare with the printed line; and re-derive instrument_type after an instrument correction.", "quote": {"accession": "0000950170-25-104137", "text": "Unlimited Technology Holdings, LLC (3)(7)(10) First Lien Senior Secured Revolving Loan Health Care Technology SOFR + 4.750 % 3/12/2025 3/12/2032 - ( 11 ) ( 11 ) ( 0.00 )%"}},
+  {"observation_key": "issuer-name-from-member-differs-from-page", "what": "Excalibur Parent Holdings published 'Excalibur Parent Holdings, L.P., LLC' (2024-12-31 to 2025-12-31) from the member text; the page prints 'Excalibur Parent Holdings, L.P.' (2024-12-31) and 'Excalibur Parent Holdings LP' (later). Fair value 0 in every quarter. Left: one zero-value row, and the name is stable across those quarters for matching.", "field": "issuer_name", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"], "fair_value_m": 0.0, "cause": "row", "action": "left", "suggested_check": "Issuer name ending ', LLC' after an 'L.P.' form.", "quote": {"accession": "0000950170-25-030258", "text": "Excalibur Parent Holdings, L.P. Common Stock IT Services 7/2/2024 519 $ - $ - -"}},
+  {"observation_key": "promoted-row-add-rule-superseded", "what": "agent_investigate_rules/1950976/add_2025_short_term_investment.json (row add, 2025-12-31, Dreyfus money market fund) is superseded: the Dreyfus row is extracted from the filing in 2025-12-31, 2026-03-31 and 2026-06-30 and the rule adds no second row (one Dreyfus row per quarter in tnxc). Left in place: retiring a promoted rule is not this agent's to do.", "field": "rows", "quarters": ["2025-12-31"], "fair_value_m": 65.1, "cause": "fund", "action": "left", "suggested_check": "A row_add rule whose row is also extracted from the filing should fail the build.", "quote": {"accession": "0001193125-26-340235", "text": "Short-Term Investments Dreyfus Treasury Obligations Cash Management Money Market Fund 3.52 % 37,381 37,381 3.82 %"}},
+  {"observation_key": "position-key-changes-with-member-format", "what": "From 2026-03-31 the filer's member puts spaces around every pipe, and the canonical key then keeps the industry ('... term loan commercial services supplies') where earlier quarters' keys end at the instrument; the same position has two keys across the format change (Alert SRC, Coding Solutions). Position chains may break at 2026-03-31; not measured.", "field": "position_key", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "fund", "action": "left", "suggested_check": "Count positions with a chain ending at 2025-12-31 and a new chain at 2026-03-31 with the same issuer, instrument and maturity.", "quote": {"accession": "0001193125-26-214004", "text": "Coding Solutions Acquisition Inc First Lien Senior Secured Term Loan Health Care Technology SOFR + 5.000 % 8.668 % 8/7/2024 8/7/2031 34,285 33,853 34,285 4.20 %"}}
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": ["tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper_oracle.py: 206 passed"],
+ "not_done": [
+  "Full pytest suite not run (no shared code changed).",
+  "Position-chain continuity across the 2026-03-31 member format change not measured.",
+  "Rates, maturities and industry read against the page only for six issuers at 2026-06-30 (all matched) and the rows named above; the rest of the 837 rows not read.",
+  "Fund-level figures (income, NAV, shares) read only where a finding pointed.",
+  "The two pre-2024 quarters (2022-12-31, 2023-12-31) have no holdings; not examined.",
+  "All findings cleared or proposed is not data correct: 7 outstanding findings carry proposals awaiting the owner."
+ ]
+}

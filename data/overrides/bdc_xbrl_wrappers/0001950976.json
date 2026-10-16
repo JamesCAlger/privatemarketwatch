@@ -74,6 +74,7 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
+    "distinct_member_suffix_re": "(?s)^.*$",
     "hierarchy_issuer_re": "(?i)^\\s*(?:Debt\\s+Investments|Common\\s+Equity|Equity)\\s*\\|\\s*([^|]+?)\\s*\\|",
     "hierarchy_instrument_re": "(?i)^\\s*(?:Debt\\s+Investments|Common\\s+Equity|Equity)\\s*\\|\\s*[^|]+?\\s*\\|\\s*([^|]+?)\\s*(?:\\||$)",
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt\\s+Investments|Common\\s+Equity|Equity)\\s*\\|') AND regexp_matches(_clean, '\\|')"
@@ -157,6 +158,15 @@
       "SONIA=SONIA",
       "EURIBOR=EURIBOR",
       "PRIME=PRIME"
+    ],
+    "units_tagged_as_par": [
+      "0000950170-25-030258",
+      "0000950170-25-065764",
+      "0000950170-25-104137",
+      "0001193125-25-272386",
+      "0001193125-26-091756",
+      "0001193125-26-214004",
+      "0001193125-26-340235"
     ]
   }
 }

@@ -4977,3 +4977,32 @@ Compared with `spoff3`. Two rounds; five builds.
   about 20 undrawn instruments; Q4-2024 distribution per share 0.59 vs monthly table 0.76 not read.
 - The agent ran a bare `python -` twice (stopped by PID and task id) and one medium `python -c`.
   Wrapper tests 681 passed.
+
+### D-197 26North BDC through the fund-clearing skill (sandbox `tnxc`, with 2026-06-30), verdict PASS
+
+Compared with `spoff3`. One round; three builds.
+
+- **Untouched reading (`tnxa`):** 14 outstanding against 12 in `spoff3`; new: C04 2026-06-30; C107
+  2026-06-30 accepted by check.
+- **Ledger (`tnxc`):** 20 findings, 9 outstanding, all 9 proposed; totals tie in 10 of 10 quarters.
+- **Fixed (wrapper):** `units_tagged_as_par` for 7 filings (22 equity rows had no unit count; C04 x7;
+  earlier real-error verdicts 2025-12-31 and 2026-03-31 cleared); `distinct_member_suffix_re` keeps two
+  undrawn A Coding Solutions lines that the shared dedup folded into one (2025-09-30 to 2026-06-30;
+  cost now ties, was 36 thousand over).
+- **Fixed (41 row corrections):** 31 undrawn costs at 2025-06-30 tagged positive, printed in brackets
+  (cost was 3,036 thousand over); 6 instrument names from member text (Unlimited Technology and
+  Mindbody revolvers as term loans, Coding Solutions delayed draw, 'Senior' missing, 'Delayed Payment
+  Draw'); FH DMI unit count 400,429 replaced by a neighbouring quarter's 400,000 by the shared share
+  step.
+- **Proposed:** B02 x2 (answers the Alert SRC verdict: all four lines published as printed), C107
+  2025-06-30, F24 2024-06-30 (new key `f24-ramp-up-fund-position-count-doubles`), F25, F26 x2, F33,
+  income_identity 2025-12-31 (expense recoupment 3,450 thousand).
+- **Page sample:** 20 cards, 0 published errors. Twenty cards can miss a problem on under about 15
+  pct of rows.
+- **Shared causes seen:** the dedup step folds undrawn zero-value twins (fixed here by wrapper); the
+  share step overwrites a count that matches page and tag, and a corrected instrument description
+  does not re-derive instrument_type ('Term Loan' stays on the corrected revolvers).
+- **Left:** Excalibur issuer published as ', L.P., LLC' (fair value 0); the Dreyfus money-market add
+  rule is superseded (adds no second row; retirement not done); member format changes from
+  2026-03-31, chains not measured.
+- No rule breaks reported. Wrapper tests 681 passed.
