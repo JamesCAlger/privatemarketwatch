@@ -4746,3 +4746,34 @@ Compared with `spoff2`. Two rounds; six builds (the limit).
   'unresolved'); two dash-cost rows publish no cost; cost gaps +65,742 (2024-03-31) and +8,561
   (2024-12-31) not traced; GICS labels depend on the build's composition (33 rows).
 - The agent ran a bare `python -` twice (PIDs 20012, 9992, killed). Wrapper tests 681 passed.
+
+### D-190 KKR FS Income Trust Select through the fund-clearing skill (sandbox `ksxf`, with 2026-06-30), verdict INCOMPLETE (gate PASS)
+
+Compared with `spoff3`. One round; six builds (the limit).
+
+- **Ledger:** 34 findings, 13 outstanding, all 13 proposed; totals tie in 10 of 10 quarters (5 of 10
+  in the first build).
+- **Fixed (wrapper):** `schedule_row_tags: cost_or_percent_unrounded` drops 6 rows from the affiliate
+  roll-forward note; `industry_columns: ["Industry"]`; rate code C = CDOR to 2025-09-30, CORRA from
+  2025-12-31; `pik_only_tag_reading: coupon`; `par_tagged_as_units: rows_near_cost` (Bond Aviation
+  2025-12-31). New highlights wrapper: NII 2026-03-31 was the per-share 0.52, now 18,443K; income
+  ratio 2024-06-30 6.19 against a printed 9.59.
+- **Fixed (125 specs, 550 lines):** 6 unfunded commitments the D-091 netting missed (tagged on another
+  issuer, or 1K off cost); 6 ABF Equity rows with units tagged as principal published as loans;
+  about 50 fixed coupons tagged as spreads published floating; Homeward RMBS note classed as a fund
+  by name (par dropped in 8 quarters); 8 plain coupons tagged as PIK; 41 rows printing equal PIK
+  figures '(x % PIK / x % PIK)' with no PIK published; 10 par currencies.
+- **Proposed:** netted-commitment-tagged-on-another-member (SRC_BDC03 x3 and 3 source-recon), F10 and
+  balance_sheet_identity 2024-03-31 (preferred printed between liabilities and equity), F33, F18
+  (new key `f18-printed-coverage-100-pct-no-senior-securities`), F24, F25, C04.
+- **Page sample:** 4 published errors of 20, all pik_rate missing: rows printing a range
+  '( 0.0 % PIK / 2.5 % PIK)' (BCA Marketplace, Turnpoint, Cambrex, Service Express), the PIK facts
+  tagged on separate Minimum/Maximum contexts. The same field on 4 cards is a fund-level cause: 309
+  rows (1,832M fair value summed over five quarters). Left for the owner's ruling on which figure of
+  a PIK range to publish (the D-171 question on the sister fund), so recorded INCOMPLETE. Twenty
+  cards can miss a problem on under about 15 pct of rows.
+- **Left:** the printed industry group replaced a more specific name-based GICS sub-industry on about
+  150 rows (391M; no label lost); Auxilior preferred face not published; Powin warrants published as
+  common equity (shared warrant class fault, as D-180, D-189); sterling commitment currencies
+  ambiguous; CSafe sterling tranche printed with the SOFR code at 2024-03-31.
+- The agent ran a bare `python -` twice (PIDs 20752, 21528, killed). Wrapper tests 681 passed.

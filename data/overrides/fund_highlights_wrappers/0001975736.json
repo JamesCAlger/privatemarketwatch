@@ -1,0 +1,18 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001975736",
+ "entity_name": "KKR FS Income Trust Select",
+ "version": 1,
+ "notes": "Fund-clearing loop 2026-10-16 (ksx sandboxes). The 10-Q for 2026-03-31 files its own per-share concept kfits:InvestmentCompanyDistributionToShareholderFromNetInvestmentIncome (0.52, unit usdPerShare) beside the dollar net investment income (us-gaap:InvestmentIncomeOperatingAfterExpenseAndTax 18,443,000); the income extractor read 0.52 as the quarter's net investment income (same filer behaviour as KKR FS Income Trust, 0001930679). The 2024-06-30 income ratio was published as 6.19 against a printed 9.59.",
+ "income_concept_suppress": [
+  "investmentcompanydistributiontoshareholderfromnetinvestmentincome"
+ ],
+ "figure_corrections": [
+  {
+   "report_date": "2024-06-30",
+   "field": "income_yield_pct",
+   "value": 9.59,
+   "evidence": "0001975736-24-000009 (10-Q, 2024-06-30) financial highlights: 'Ratio of net investment income to average net assets (6) 9.59 %', repeated as the comparative column of the 10-Q for 2025-06-30 ('9.75 % 9.59 %'). The published 6.19 is not a printed ratio."
+  }
+ ]
+}

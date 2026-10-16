@@ -258,6 +258,12 @@
     "unfunded_rows": [
       "net_of_tagged_commitment"
     ],
+    "schedule_row_tags": [
+      "cost_or_percent_unrounded"
+    ],
+    "industry_columns": [
+      "Industry"
+    ],
     "reference_rate_columns": [
       "Rate"
     ],
@@ -265,7 +271,15 @@
       "SF=SOFR",
       "SA=SONIA",
       "E=EURIBOR",
-      "P=PRIME"
+      "P=PRIME",
+      "C=CDOR to 2025-09-30",
+      "C=CORRA from 2025-12-31"
+    ],
+    "pik_only_tag_reading": [
+      "coupon"
+    ],
+    "par_tagged_as_units": [
+      "rows_near_cost"
     ]
   }
 }

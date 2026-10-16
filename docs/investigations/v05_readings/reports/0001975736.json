@@ -1,0 +1,647 @@
+{
+ "cik": "0001975736",
+ "label": "ksxf",
+ "before": "spoff3",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "fair_value",
+   "rows": 6,
+   "why": "six undrawn commitment rows the D-091 netting missed, netted by row correction (Community Brands x2 2024-09-30, Discover 7 and EW Scripps 5,697 2025-06-30, BGB 1,959 and Bond Aviation 7,093 2026-03-31)"
+  },
+  {
+   "column": "cost",
+   "rows": 6,
+   "why": "same six rows, cost 0"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 6,
+   "why": "follows cost"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 6,
+   "why": "follows fair_value"
+  },
+  {
+   "column": "src_facts",
+   "rows": 6,
+   "why": "fact trail of the six netted rows"
+  },
+  {
+   "column": "shares_held",
+   "rows": 7,
+   "why": "six ABF Equity rows whose unit count was tagged as principal get the printed count; Bond Aviation term loan 2025-12-31 loses the share count its par was tagged with (par_tagged_as_units)"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 15,
+   "why": "six ABF Equity rows lose the count published as par (x1000); Homeward RMBS note gets its par 4,726 in eight quarters (was dropped as a fund interest); Bond Aviation 2025-12-31 par 3,084 from the share tag"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 25,
+   "why": "follows principal_amount, plus FX fixes: 4 dollar pars tagged GBP (CSafe 2025-09-30, Conservice x2, SAMBA 2026-03-31), 6 euro pars tagged USD (Carrier x5, Flexera 2025-09-30)"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 10,
+   "why": "the same 10 FX rows (GBP -> USD, USD -> EUR)"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 12,
+   "why": "same FX rows"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 12,
+   "why": "same FX rows"
+  },
+  {
+   "column": "principal_amount_source",
+   "rows": 2,
+   "why": "Bond Aviation 2025-12-31 par read from the share tag"
+  },
+  {
+   "column": "asset_category",
+   "rows": 14,
+   "why": "six ABF Equity rows LOAN -> EQUITY_COMMON; Homeward RMBS note FUND -> LOAN (7 or 8 rows)"
+  },
+  {
+   "column": "index_classification",
+   "rows": 14,
+   "why": "same rows"
+  },
+  {
+   "column": "issuer_category",
+   "rows": 8,
+   "why": "Homeward FUND -> CORPORATE"
+  },
+  {
+   "column": "exposure_type",
+   "rows": 8,
+   "why": "Homeward FUND -> DIRECT"
+  },
+  {
+   "column": "asset_class",
+   "rows": 8,
+   "why": "six ABF Equity rows PRIVATE_CREDIT -> PRIVATE_EQUITY (Homeward stays REAL_ESTATE)"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 75,
+   "why": "fixed coupons tagged as spreads (about 37 structured/ABS rows 2024-06-30..2024-12-31, Laurel Road 3, Homeward 7, Pretium 3, Auxilior preferred 9), plain coupons tagged PIK-only (Philippine 4, Morgan Stanley RMBS 4), 'x % PIK' coupons read by pik_only_tag_reading (Global Lending, Powin, Galaxy, Newday, Affordable Care), Pretium 8.0 kept where its PIK was added"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 62,
+   "why": "follows interest_rate"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 75,
+   "why": "unresolved -> all_in / cash on the rows above"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 22,
+   "why": "cash leg on Pretium (2.8, 2.7) and Auxilior (5.0) and PIK coupons"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 55,
+   "why": "spread withdrawn from the fixed-coupon rows above"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 55,
+   "why": "Floating -> Fixed on the same rows"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 46,
+   "why": "SOFR (guessed) withdrawn from the fixed-coupon rows; Service Express 2024-12-31 'C+' -> CDOR (reference_rate_codes)"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 46,
+   "why": "same rows"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 48,
+   "why": "41 rows printing '( x % PIK / x % PIK)' (equal current and maximum) get the PIK in effect (2025-06-30 on); plain coupons tagged PIK-only withdrawn (8); Auxilior 9.5"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 22,
+   "why": "transform trail of the pik_only coupon reading and corrected rates"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 120,
+   "why": "trail of the row corrections"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 320,
+   "why": "the filer's printed industry column read (industry_columns 'Industry'): filled where the build had none, 'Insurance 1' -> 'Insurance', 'Beverage & Tobacco' -> 'Food, Beverage & Tobacco'"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 180,
+   "why": "follows the printed industry group; no row lost a label (see observation filer-industry-coarser-than-gics)"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 90,
+   "why": "follows gics_sub_industry"
+  },
+  {
+   "column": "position_id",
+   "rows": 240,
+   "why": "follows issuer/class changes and the shared issuer/instrument split of D-166 (209 rows already differed in ksxa, which had no edit)"
+  }
+ ],
+ "rows_added": 413,
+ "rows_removed": 6,
+ "fixes": [
+  {
+   "what": "Affiliate roll-forward note reuses schedule members ('Discover Financial Services, ABF Equity', '..., Subordinated Loan'): fair value only, no cost, published as duplicate positions (0.19M to 4.2M a quarter, 2024-09-30 to 2025-06-30). source_encodings.schedule_row_tags cost_or_percent_unrounded drops them: 6 rows removed.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-040144",
+     "text": "Discover Financial Services, Subordinated Loan 2,912 - ( 428 ) - - 2,484 202 - - -"
+    },
+    {
+     "accession": "0001628280-25-040144",
+     "text": "Discover Financial Services, ABF Equity $ 1,621 $ - $ ( 213 ) $ - $ ( 16 ) $ 1,392"
+    }
+   ]
+  },
+  {
+   "what": "Six undrawn commitment rows the D-091 netting missed (commitment tagged on another member, or 1 thousand off the row's cost): netted by row correction (cost 0, value = mark less commitment). With the roll-forward fix published equals filed in 10 of 10 quarters (was 1.7M to 9.7M over in five).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-047589",
+     "text": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 568 567 566"
+    },
+    {
+     "accession": "0001628280-25-040144",
+     "text": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697"
+    },
+    {
+     "accession": "0001628280-26-034547",
+     "text": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093"
+    },
+    {
+     "accession": "0001628280-26-034547",
+     "text": "BGB Group LLC (i) Media & Entertainment SF + 5.3 % 1.0 % 02/30 1,959 1,959 1,959"
+    }
+   ]
+  },
+  {
+   "what": "Six ABF Equity rows whose unit count was tagged with the principal concept were published as loans with the count x1000 as par (2024-09-30 x4, Global Lending 2025-06-30, Slate Venture 2025-09-30): EQUITY_COMMON, printed unit count, no par.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-24-047589",
+     "text": "Lennar Corp, ABF Equity (h) Consumer Durables & Apparel 2,173,102 2,173 2,167"
+    },
+    {
+     "accession": "0001628280-25-051537",
+     "text": "Slate Venture Holdings LP, ABF Equity (f)(j) Consumer Durables & Apparel 3,313,819 3,314 4,353"
+    }
+   ]
+  },
+  {
+   "what": "Fixed coupons tagged with the spread concept published as SOFR spreads (benchmark guessed from the date): structured/ABS/RMBS notes, Discover and Lennar loans, Powin toggles (2024-06-30 to 2024-12-31), Laurel Road (2025-09-30 to 2026-03-31), Homeward (to 2026-03-31), Pretium 2.8 % cash + 5.3 % PIK, Auxilior preferred (all quarters). Set to the printed fixed coupon.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-012551",
+     "text": "CAFL 2024-RTL1 Issuer LLC, ABS (e)(f)(j) Real Estate Management & Development 10.2 % 11/28/31 $ 1,500 1,500 1,503"
+    },
+    {
+     "accession": "0001628280-24-047589",
+     "text": "Pretium Partners LLC P1, Structured Mezzanine (h) Equity Real Estate Investment Trusts (REITs) 2.8 %, 5.3 % PIK ( 5.3 % Max PIK) 10/22/26 $ 6,203 5,958 6,203"
+    },
+    {
+     "accession": "0001628280-25-025414",
+     "text": "Auxilior Capital Partners Inc, Preferred Equity (f) Financial Services 14.5 % ( 9.5 % PIK / 9.5 % PIK) 04/30 $ 870 870 870"
+    }
+   ]
+  },
+  {
+   "what": "Homeward Opportunities Fund Trust 2024-RRTL2, an RMBS note, classed as a fund interest from 'Fund' in its name, so its par was dropped (eight quarters): classed as the fund's other securitisation notes (LOAN, REAL_ESTATE) with the printed par 4,726.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-012551",
+     "text": "Homeward Opportunities Fund Trust 2024-RRTL2, ABS (e)(f)(j) Real Estate Management & Development 9.1 % 9/25/39 $ 4,726 4,726 4,717"
+    }
+   ]
+  },
+  {
+   "what": "Coupons tagged only with the PIK concept: 'x % PIK' coupons read as the coupon (existing setting pik_only_tag_reading coupon: Global Lending bonds, Powin revolver, Galaxy, Newday, Affordable Care subordinated); plain coupons tagged PIK-only with no PIK printed (Philippine Airlines 2025-09-30 x4, four Morgan Stanley RMBS 2026-03-31) set to the coupon with no PIK by row correction; Pretium 2025-03-31 8.0 % of which 5.3 PIK.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-025414",
+     "text": "Global Lending Services LLC, Bond (f)(j) Financial Services 12.5 % PIK 12/32 $ 2,811 2,811 2,811"
+    },
+    {
+     "accession": "0001628280-25-051537",
+     "text": "Philippine Airlines 777, Term Loan (f)(j) Transportation 6.5 % 10/27 $ 3,285 3,285 3,304"
+    },
+    {
+     "accession": "0001628280-26-034547",
+     "text": "Morgan Stanley Residential Mortgage Loan Trust 2025-NQM6, ABS (e)(f)(k) Real Estate Management & Development 6.6 % 07/70 $ 1,542 1,521 1,532"
+    }
+   ]
+  },
+  {
+   "what": "PIK in effect printed as '( x % PIK / x % PIK)' with equal current and maximum figures, tagged only on min/max axis contexts from 2025-06-30, so no PIK was published: 41 rows set to the printed figure (only where every printed line of the row's name, par and cost agrees).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-040144",
+     "text": "Affordable Care Inc (f)(g) Health Care Equipment & Services SF + 6.0 % ( 3.3 % PIK / 3.3 % PIK) 0.8 % 08/28 8,426 8,440 8,248"
+    }
+   ]
+  },
+  {
+   "what": "Par currency taken from the unit tag: four dollar pars tagged GBP (converted as sterling) set to USD; six euro pars (E code, printed after a EUR amount with no new mark, or 'EUR') tagged in dollars set to EUR at the build's own H.10 rate for the date.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-051537",
+     "text": "CSafe Global (f) Transportation SF + 5.8 % 0.8 % 03/29 $ 576 576 576"
+    },
+    {
+     "accession": "0001628280-26-034547",
+     "text": "Conservice LLC (f) Software & Services SF + 4.5 % 0.8 % 02/33 10,296 10,271 10,142"
+    },
+    {
+     "accession": "0001628280-25-051537",
+     "text": "Flexera Software LLC (f) Software & Services E + 4.8 % ( 0.0 % PIK / 2.5 % PIK) 0.5 % 08/32 EUR 5,711 6,676 6,695"
+    }
+   ]
+  },
+  {
+   "what": "Printed code 'C' (CDOR, later CORRA by the legends) not in the wrapper's code list: Service Express 2024-12-31 C$ loan published with a guessed SOFR. reference_rate_codes C=CDOR to 2025-09-30, C=CORRA from 2025-12-31 (as the sister fund).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-25-012551",
+     "text": "Service Express Inc (f) Commercial & Professional Services C+ 475 0.5 % 8/15/31 C$ 413 292 285"
+    },
+    {
+     "accession": "0001628280-25-012551",
+     "text": "the Canadian Dollar Offered Rate, or CDOR or C, was 4.97 %"
+    }
+   ]
+  },
+  {
+   "what": "Industry: the member segment gave no industry on about 300 rows; the page prints an Industry column. source_encodings.industry_columns ['Industry'].",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-26-056136",
+     "text": "Portfolio Company (a) Footnotes Industry Rate (b) Floor (b) Maturity Principal Amount (c) /Shares Amortized Cost Fair Value (d)"
+    }
+   ]
+  },
+  {
+   "what": "Bond Aviation term loan 2025-12-31: par tagged with the share-count concept (no par published, X11). par_tagged_as_units rows_near_cost; it converts this one row only (the only LOAN with a share count and no par).",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-26-017328",
+     "text": "Bond Aviation Holdings LLC, Term Loan (f)(l) Transportation 9.0 % 10/33 $ 3,084 3,084 3,084"
+    }
+   ]
+  },
+  {
+   "what": "New highlights wrapper: net investment income 2026-03-31 was the per-share kfits concept 0.52 (income_concept_suppress; now 18,443K); income ratio 2024-06-30 published 6.19 against a printed 9.59 (figure_corrections).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-06-30",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-26-034547",
+     "text": "Net expenses 16,495 3,473 Net investment income 18,443 11,409"
+    },
+    {
+     "accession": "0001975736-24-000009",
+     "text": "Ratio of net investment income to average net assets (6) 9.59 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "pik-range-tagged-on-min-max-axis-contexts-not-published",
+   "what": "From 2025-06-30 the filer prints PIK toggles as '( current % PIK / maximum % PIK)' and tags them only on min/max axis contexts. 41 rows with equal figures (PIK in effect) were fixed by row correction; 309 rows printing '( 0.0 % PIK / x % PIK)' publish no PIK (current 0, maximum x; 1,832M fair value summed over the five quarters). Which figure to publish is an owner question; same as KKR FS Income Trust (D-171).",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1832.1,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A row whose printed line carries '% PIK' and publishes no PIK rate is a finding.",
+   "quote": {
+    "accession": "0001628280-25-040144",
+    "text": "Avetta LLC (f)(g) Software & Services SF + 4.3 % ( 0.0 % PIK / 2.6 % PIK) 0.5 % 07/31 4,215 4,178 4,257"
+   }
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "what": "Reading the printed industry group (industry_columns) replaces a name-based GICS sub-industry with the group default on about 150 rows (391M): CSafe Air Freight & Logistics -> Cargo Ground Transportation, J S Held Research & Consulting -> Property & Casualty Insurance, NEFCO Construction & Engineering -> Industrial Machinery. The group is the filer's; the finer sub-industry is lost. No row lost a label.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2024-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 391.3,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Where a printed industry group agrees with the GICS group of a name-based sub-industry, keep the finer label.",
+   "quote": {
+    "accession": "0001628280-26-034547",
+    "text": "CSafe Global (f)(g)(h) Transportation SF + 5.8 % 0.8 % 12/28 8,936"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "Par currency is taken from the unit tag: four dollar pars tagged GBP and converted as sterling (Conservice 10,296 and 1,402, SAMBA 252 at 2026-03-31; CSafe 576 at 2025-09-30) and six euro pars tagged in dollars (Carrier x5, Flexera 5,711). Fixed by row correction.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 25.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A par tagged in a foreign unit on a SOFR row (or in dollars on an E/SA row) whose printed currency mark disagrees is a finding.",
+   "quote": {
+    "accession": "0001628280-26-034547",
+    "text": "Conservice LLC (i) Software & Services SF + 4.5 % 0.8 % 02/33 1,402 1,402 1,381"
+   }
+  },
+  {
+   "observation_key": "undrawn-foreign-benchmark-commitment-currency-not-printed",
+   "what": "Undrawn SONIA commitments printed with no currency mark and cost equal to par (Cambrex 1,615 at 2025-03-31, NeoGov 340 at 2025-09-30 and 2025-12-31, NAVEX 183 at 2025-12-31) and Carrier 'E + 4.5 % ... 16 16 18' at 2025-09-30 publish a dollar par; the currency of the commitment cannot be read from the page. Left.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0001628280-25-025414",
+    "text": "Cambrex Corp (h) Pharmaceuticals, Biotechnology & Life Sciences SA + 4.8 % 0.8 % 03/32 1,615 1,615 1,615"
+   }
+  },
+  {
+   "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
+   "what": "About 50 fixed coupons (structured/ABS/RMBS notes 2024, Laurel Road, Homeward, Pretium, Auxilior preferred) tagged with InvestmentBasisSpreadVariableRate and published as a floating spread with a guessed SOFR. Fixed by row correction; the tag pattern stops in 2025 for most notes.",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 120.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A row published with a spread whose printed line has no benchmark code before the rate is a finding.",
+   "quote": {
+    "accession": "0001628280-24-047589",
+    "text": "LHOME Mortgage Trust 2024-RTL4 (e)(h) Real Estate Management & Development 9.3 % 7/25/39 $ 4,507 4,507 4,570"
+   }
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "what": "Six ABF Equity rows (units tagged with the principal concept) published as first-lien-style loans with the unit count x1000 as par (1.77bn for Global Lending 2024-09-30). Fixed by row correction.",
+   "field": "asset_category",
+   "quarters": [
+    "2024-09-30",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 12.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A row whose member names 'ABF Equity' or another equity class and that is published as LOAN is a finding.",
+   "quote": {
+    "accession": "0001628280-24-047589",
+    "text": "Global Lending Services LLC, ABF Equity (h)(i) Financial Services 1,765,150 1,765 1,884"
+   }
+  },
+  {
+   "observation_key": "securitisation-trust-classed-fund-from-name",
+   "what": "Homeward Opportunities Fund Trust 2024-RRTL2, an RMBS note, was classed FUND / REAL_ESTATE_FUND from 'Fund' in its name, and its printed par 4,726 was dropped as for a fund interest. Fixed by row correction; the classifier's name rule would do the same to any 'Opportunities Fund Trust' note.",
+   "field": "asset_category",
+   "quarters": [
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 4.7,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A row classed FUND whose name contains 'Trust 20xx-' and that prints a par and a coupon is a finding.",
+   "quote": {
+    "accession": "0001628280-25-051537",
+    "text": "Homeward Opportunities Fund Trust 2024-RRTL2, ABS (e)(f)(j) Real Estate Management & Development 9.1 % 09/39 $ 4,726 4,726 4,721"
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-a-per-share-figure",
+   "what": "Net investment income 2026-03-31 published 0.52, the per-share kfits concept; fixed by highlights wrapper (income_concept_suppress), now 18,443K. Same filer behaviour as the sister fund.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Net investment income below 1,000 dollars for a fund with investments is a finding.",
+   "quote": {
+    "accession": "0001628280-26-034547",
+    "text": "Net expenses 16,495 3,473 Net investment income 18,443 11,409"
+   }
+  },
+  {
+   "observation_key": "fund-income-ratio-published-is-not-the-printed-ratio",
+   "what": "income_yield_pct 2024-06-30 published 6.19 against a printed 9.59; fixed by highlights figure_corrections. Other quarters match the printed ratio.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Compare the published ratio with the printed 'Ratio of net investment income to average net assets'.",
+   "quote": {
+    "accession": "0001975736-24-000009",
+    "text": "Ratio of net investment income to average net assets (6) 9.59 %"
+   }
+  },
+  {
+   "observation_key": "preferred-equity-printed-par-not-published",
+   "what": "Auxilior Capital Partners preferred equity prints a dollar face in the Principal Amount/Shares column ('$ 870') from 2024-09-30; the build publishes no principal and no unit count for it (EQUITY_PREFERRED). Left: whether a preferred face is published as principal is a convention question.",
+   "field": "principal_amount",
+   "quarters": [
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0001628280-25-025414",
+    "text": "Auxilior Capital Partners Inc, Preferred Equity (f) Financial Services 14.5 % ( 9.5 % PIK / 9.5 % PIK) 04/30 $ 870 870 870"
+   }
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "what": "Powin Energy warrants (four lines at 2024-12-31 to 2025-06-30, one from 2025-09-30, valued 0) are published as EQUITY_COMMON, not as warrants.",
+   "field": "asset_category",
+   "quarters": [
+    "2024-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A row whose member names 'Warrants' published with a non-warrant category is a finding.",
+   "quote": {
+    "accession": "0001628280-25-040144",
+    "text": "Powin Energy Corp/NV, Warrants (k) Capital Goods 205,753 - -"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-misprinted-by-filer",
+   "what": "CSafe Global's sterling tranche at 2024-03-31 is printed with the SOFR code ('SF+ 575 ... GBP 211'); later quarters print 'SA+'. Published SOFR as printed. Left.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 0.3,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0001628280-24-023526",
+    "text": "CSafe Global Transportation SF+ 575 0.8 % 3/8/30 GBP 211 271 267"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_bdc_xbrl_wrapper.py tests/test_fund_highlights_wrapper.py tests/test_source_encodings.py tests/test_schedule_row_tags.py tests/test_unfunded_commitments.py tests/test_wrapper_content_signatures.py tests/test_wrapper_v1_quality_gate.py: 741 passed"
+ ],
+ "not_done": [
+  "rows_added 413 are the 2026-06-30 quarter, not in spoff3; rows_removed 6 are the roll-forward duplicates",
+  "about 300 '( 0.0 % PIK / x % PIK)' toggle rows publish no PIK (owner question, see observation)",
+  "lien is blank on most loans (printed only as the section heading); instrument text is mostly the industry label; not read",
+  "maturity, floor and unit counts were not compared row by row against the page; margins and coupons were (2,202 printed lines, mismatches all comparative-period matches of the scanner or the Pretium all-in)",
+  "the X02 real-error verdict at 2025-06-30 (floating loans with spread and no rate) is closed by the owner-accepted check, not re-read: the page prints 'SF + x %' and no coupon",
+  "two bare 'python -' invocations (PIDs 20752, 21528), both mine, killed by PID"
+ ]
+}

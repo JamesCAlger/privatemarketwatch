@@ -188,5 +188,10 @@
   "label": "abxf",
   "accepted_on": "2026-10-16",
   "basis": "D-189, gate PASS in round 2; page sample 3 errors of 20 fixed fund-wide (1,078 dash rates, 13 floors as PIK); second sample 1 error (warrant classed preferred, shared)"
+ },
+ "0001975736": {
+  "label": "ksxf",
+  "accepted_on": "2026-10-16",
+  "basis": "D-190, gate PASS but recorded INCOMPLETE: page sample 4 of 20 cards miss the printed PIK range (owner question, as D-171)"
  }
 }

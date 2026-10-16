@@ -723,6 +723,18 @@ if KKR_FS_LOOP in held and KKR_FS_LOOP_FILE.exists():
     for spec in json.loads(KKR_FS_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((KKR_FS_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1930679-fundloop"))
         EXACT.add(spec["identifier"])
+# KKR FS Income Trust Select, fund-clearing loop (2026-10-16): fixed coupons tagged as spreads, plain coupons tagged as PIK,
+# equity unit counts tagged as principal, undrawn commitments tagged on another member (D-091 netting missed them), par
+# currencies tagged with the wrong unit, and an RMBS note classed as a fund. One spec per row, each with its printed line,
+# in row_correction_specs/0001975736.json (exact identifiers).
+KKR_FS_SELECT_LOOP = "0001975736"
+KKR_FS_SELECT_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001975736.json"
+if KKR_FS_SELECT_LOOP in held and KKR_FS_SELECT_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(KKR_FS_SELECT_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((KKR_FS_SELECT_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"],
+                      "D-1975736-fundloop"))
+        EXACT.add(spec["identifier"])
 # Goldman Sachs BDC, fund-clearing loop (2026-10-15): undrawn-line costs tagged positive where the page prints them in brackets
 # (2025-06-30 mostly), the AI Titan fair values cross-tagged at 2026-03-31, and an AQ Helios line tagged on a stale AI Titan
 # member. One spec per row, each with its printed line, in row_correction_specs/0001572694.json (exact identifiers).

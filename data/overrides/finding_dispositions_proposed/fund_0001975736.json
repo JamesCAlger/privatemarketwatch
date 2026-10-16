@@ -1,0 +1,365 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "ksxf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-SRC_BDC03-1975736-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "reason_key": "netted-commitment-tagged-on-another-member",
+   "statement": "Undrawn commitment rows netted by row correction as the owner ruled (D-091, 'net each loan'): the filer tagged the commitment on another issuer's member (2025-06-30: Discover 7 on a Powin member, EW Scripps 5,697 on a Trinseo member; 2026-03-31: BGB Group 1,959 and Bond Aviation 7,093 on other members) or at an amount 1 thousand off the row's cost (Community Brands 568 and 1,455 at 2024-09-30), so the shared netting did not match them. With them netted, published equals the filed total in these quarters (it was 2.0M, 5.7M and 9.05M over). The source checks compare with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047589",
+     "verbatim": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452",
+     "quote": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452 -- footnote (f) 'Security is an unfunded commitment'; the note lists 'Community Brands Inc 1,455'; netted cost 0, value -3"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697",
+     "quote": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697 -- footnote (h) 'Security is an unfunded commitment'; netted to 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697",
+     "quote": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697 -- the commitments note lists both rows; the tags sit on Powin and Trinseo members"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034547",
+     "verbatim": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093",
+     "quote": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093 -- footnote (i) undrawn; the note lists 'Bond Aviation Holdings LLC, Term Loan 7,093'; netted to 0"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-blocking_fair_value_disagreement-1975736-2",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "reason_key": "netted-commitment-tagged-on-another-member",
+   "statement": "Undrawn commitment rows netted by row correction as the owner ruled (D-091, 'net each loan'): the filer tagged the commitment on another issuer's member (2025-06-30: Discover 7 on a Powin member, EW Scripps 5,697 on a Trinseo member; 2026-03-31: BGB Group 1,959 and Bond Aviation 7,093 on other members) or at an amount 1 thousand off the row's cost (Community Brands 568 and 1,455 at 2024-09-30), so the shared netting did not match them. With them netted, published equals the filed total in these quarters (it was 2.0M, 5.7M and 9.05M over). The source checks compare with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047589",
+     "verbatim": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452",
+     "quote": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452 -- footnote (f) 'Security is an unfunded commitment'; the note lists 'Community Brands Inc 1,455'; netted cost 0, value -3"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697",
+     "quote": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697 -- footnote (h) 'Security is an unfunded commitment'; netted to 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697",
+     "quote": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697 -- the commitments note lists both rows; the tags sit on Powin and Trinseo members"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034547",
+     "verbatim": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093",
+     "quote": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093 -- footnote (i) undrawn; the note lists 'Bond Aviation Holdings LLC, Term Loan 7,093'; netted to 0"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-blocking_fair_value_scale_or_unit_candidate-1975736-3",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "reason_key": "netted-commitment-tagged-on-another-member",
+   "statement": "Undrawn commitment rows netted by row correction as the owner ruled (D-091, 'net each loan'): the filer tagged the commitment on another issuer's member (2025-06-30: Discover 7 on a Powin member, EW Scripps 5,697 on a Trinseo member; 2026-03-31: BGB Group 1,959 and Bond Aviation 7,093 on other members) or at an amount 1 thousand off the row's cost (Community Brands 568 and 1,455 at 2024-09-30), so the shared netting did not match them. With them netted, published equals the filed total in these quarters (it was 2.0M, 5.7M and 9.05M over). The source checks compare with the gross tag.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047589",
+     "verbatim": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452",
+     "quote": "Community Brands Inc (f) Software & Services SF+ 525 0.8 % 7/1/31 1,456 1,456 1,452 -- footnote (f) 'Security is an unfunded commitment'; the note lists 'Community Brands Inc 1,455'; netted cost 0, value -3"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697",
+     "quote": "EW Scripps Co/The, Revolver (h)(j) Media & Entertainment SF + 5.5 % 0.8 % 03/28 $ 5,697 $ 5,697 $ 5,697 -- footnote (h) 'Security is an unfunded commitment'; netted to 0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-25-040144",
+     "verbatim": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697",
+     "quote": "Asset Based Finance Discover Financial Services, Subordinated Loan 7 EW Scripps Co/The, Revolver 5,697 -- the commitments note lists both rows; the tags sit on Powin and Trinseo members"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034547",
+     "verbatim": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093",
+     "quote": "Bond Aviation Holdings LLC, Term Loan (i)(n) Transportation 9.0 % 10/33 $ 7,093 7,093 7,093 -- footnote (i) undrawn; the note lists 'Bond Aviation Holdings LLC, Term Loan 7,093'; netted to 0"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F10-1975736-4",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F10",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "reason_key": "balance-identity-preferred-shares-between-liabilities-and-net-assets",
+   "statement": "Total assets 87,531 less liabilities 40,936 less common net assets 45,156 leaves 1,439: the Series A preferred shares (515 shares) printed between liabilities and shareholders' equity. The identity has no term for them. No published figure is wrong.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023526",
+     "verbatim": "Total assets $ 87,531 $ 1",
+     "quote": "Total assets $ 87,531 $ 1 -- total assets 87,531"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023526",
+     "verbatim": "Total liabilities $ 40,936 $ -",
+     "quote": "Total liabilities $ 40,936 $ - -- liabilities 40,936"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023526",
+     "verbatim": "Series A Preferred Shares, $ 0.001 par value, unlimited shares authorized, 515 and 0 shares issued and outstanding, respectively; liquidation preference of $ 1,545 and $ 0 , respectively $ 1,439 $ -",
+     "quote": "Series A Preferred Shares, $ 0.001 par value, unlimited shares authorized, 515 and 0 shares issued and outstanding, respectively; liquidation preference of $ 1,545 and $ 0 , respectively $ 1,439 $ - -- 1,439 of preferred shares printed between liabilities and shareholders' equity (45,156): 87,531 - 40,936 - 45,156 = 1,439"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-balance_sheet_identity-1975736-5",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "balance_sheet_identity",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "reason_key": "balance-identity-preferred-shares-between-liabilities-and-net-assets",
+   "statement": "The same 1,439 of Series A preferred shares printed between liabilities and net assets at 2024-03-31, reported by the identity engine.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023526",
+     "verbatim": "Total assets $ 87,531 $ 1",
+     "quote": "Total assets $ 87,531 $ 1 -- total assets 87,531"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023526",
+     "verbatim": "Total liabilities $ 40,936 $ -",
+     "quote": "Total liabilities $ 40,936 $ - -- liabilities 40,936"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023526",
+     "verbatim": "Series A Preferred Shares, $ 0.001 par value, unlimited shares authorized, 515 and 0 shares issued and outstanding, respectively; liquidation preference of $ 1,545 and $ 0 , respectively $ 1,439 $ -",
+     "quote": "Series A Preferred Shares, $ 0.001 par value, unlimited shares authorized, 515 and 0 shares issued and outstanding, respectively; liquidation preference of $ 1,545 and $ 0 , respectively $ 1,439 $ - -- 1,439 of preferred shares printed between liabilities and shareholders' equity (45,156): 87,531 - 40,936 - 45,156 = 1,439"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F33-1975736-6",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "reason_key": "start-up-quarter-no-distribution-declared",
+   "statement": "2024-03-31 is the fund's first quarter of operations (net assets 1 at the start); it declared no distribution on its common shares, only 1 on the preferred shares. A common distribution rate of 0 is the printed fact.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023526",
+     "verbatim": "Distributions to preferred shareholders ( 1 ) Net decrease in net assets resulting from shareholder distributions ( 1 )",
+     "quote": "Distributions to preferred shareholders ( 1 ) Net decrease in net assets resulting from shareholder distributions ( 1 ) -- no common distribution in the quarter"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F18-1975736-7",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F18",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "reason_key": "f18-printed-coverage-100-pct-no-senior-securities",
+   "statement": "At 2024-09-30 the fund had no senior securities outstanding (published borrowings start at 2024-12-31) and the page prints an asset coverage of 100 %. The published 1.0 is that printed figure; it is not a regulatory breach.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047589",
+     "verbatim": "the aggregate amount outstanding of the senior securities issued by the Company was $ 0 . As of September 30, 2024 , the Companys asset coverage was 100 %.",
+     "quote": "the aggregate amount outstanding of the senior securities issued by the Company was $ 0 . As of September 30, 2024 , the Companys asset coverage was 100 %. -- no senior securities, coverage printed as 100 %"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F24-1975736-8",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F24",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "reason_key": "growth-heuristics-while-fund-ramps",
+   "statement": "Second quarter of operations: investments grew from 49,206 to 120,049 and published positions from 28 to 65 (2.3x) as the cash raised was invested. Published investments equal the printed total in both quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-24-023526",
+     "verbatim": "Total investments, at fair value (amortized cost-$ 49,100 and $ 0 , respectively) 49,206 - Cash and cash equivalents 38,269",
+     "quote": "Total investments, at fair value (amortized cost-$ 49,100 and $ 0 , respectively) 49,206 - Cash and cash equivalents 38,269 -- 2024-03-31: investments 49,206, cash 38,269"
+    },
+    {
+     "source": "filing",
+     "accession": "0001975736-24-000009",
+     "verbatim": "Total investments, at fair value (amortized cost-$ 119,830 and $ 0 , respectively) 120,049 - Cash and cash equivalents 72,034",
+     "quote": "Total investments, at fair value (amortized cost-$ 119,830 and $ 0 , respectively) 120,049 - Cash and cash equivalents 72,034 -- 2024-06-30: investments 120,049"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F25-1975736-9",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F25",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "reason_key": "f25-ramp-up-fund-deploys-cash-into-investments",
+   "statement": "Third quarter of operations: investments grew from 120,049 to 277,474 (131 pct) while total assets grew from 193,641 to 310,177 (60 pct), because cash fell from 72,034 to 28,198 as it was invested. Published investments equal the printed totals.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001975736-24-000009",
+     "verbatim": "Total assets $ 193,641 $ 1",
+     "quote": "Total assets $ 193,641 $ 1 -- total assets 2024-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047589",
+     "verbatim": "Total investments, at fair value (amortized cost-$ 276,265 and $ 0 , respectively) 277,474 - Cash and cash equivalents 28,198",
+     "quote": "Total investments, at fair value (amortized cost-$ 276,265 and $ 0 , respectively) 277,474 - Cash and cash equivalents 28,198 -- investments 277,474, cash 28,198"
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-047589",
+     "verbatim": "Total assets $ 310,177 $ 1",
+     "quote": "Total assets $ 310,177 $ 1 -- total assets 2024-09-30"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-C04-1975736-10",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "ciks": [
+    "0001975736"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "reason_key": "c04-share-cell-printed-as-dash",
+   "statement": "The one equity row of 2024-06-30 is Auxilior Capital Partners preferred equity, whose Principal Amount/Shares cell the page prints as a dash; no unit count is tagged. Nothing to publish.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001975736-24-000009",
+     "verbatim": "Auxilior Capital Partners Inc, Preferred Equity Financial Services 5.0 %, 9.5 % PIK ( 9.5 % Max PIK) 4/30/30 - 800 800",
+     "quote": "Auxilior Capital Partners Inc, Preferred Equity Financial Services 5.0 %, 9.5 % PIK ( 9.5 % Max PIK) 4/30/30 - 800 800 -- units cell printed as '-'"
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001975736/notes.md",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop ksx, sandbox ksxf); not accepted by the owner",
+   "decided_on": "2026-10-16"
+  }
+ ]
+}
