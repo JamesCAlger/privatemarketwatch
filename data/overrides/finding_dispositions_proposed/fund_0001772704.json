@@ -1,0 +1,445 @@
+{
+ "status": "PROPOSED, not accepted. Findings remain outstanding.",
+ "sandbox": "gpyf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-A04-1772704-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A04",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "Published non-cash FV equals filed investments exactly in every quarter. Separate printed money-market amounts explain the entire flagged excess. Cash positions are real; removing them or adding cash to the investments line would misrepresent the disclosed basis. No data fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277541",
+     "verbatim": "Total investments, at fair value (cost of $ 1,695,459 and $ 2,124,410 ) $ 1,643,780 $ 2,087,081 Investments in affiliated money market fund (cost of $ 148,322 and $ 84,647 ) 148,322 84,647",
+     "quote": "Total investments, at fair value (cost of $ 1,695,459 and $ 2,124,410 ) $ 1,643,780 $ 2,087,081 Investments in affiliated money market fund (cost of $ 148,322 and $ 84,647 ) 148,322 84,647"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088646",
+     "verbatim": "Total investments, at fair value (cost of $ 1,596,478 and $ 2,124,410 ) $ 1,534,345 $ 2,087,081 Investments in affiliated money market fund (cost of $ 124,974 and $ 84,647 ) 124,974 84,647",
+     "quote": "Total investments, at fair value (cost of $ 1,596,478 and $ 2,124,410 ) $ 1,534,345 $ 2,087,081 Investments in affiliated money market fund (cost of $ 124,974 and $ 84,647 ) 124,974 84,647"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219875",
+     "verbatim": "Total investments, at fair value (cost of $ 1,557,384 and $ 1,596,478 ) $ 1,469,243 $ 1,534,345 Investments in affiliated money market fund (cost of $ 122,393 and $ 124,974 ) 122,393 124,974",
+     "quote": "Total investments, at fair value (cost of $ 1,557,384 and $ 1,596,478 ) $ 1,469,243 $ 1,534,345 Investments in affiliated money market fund (cost of $ 122,393 and $ 124,974 ) 122,393 124,974"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344590",
+     "verbatim": "Total investments, at fair value (cost of $ 1,467,586 and $ 1,596,478 ) $ 1,369,235 $ 1,534,345 Investments in affiliated money market fund (cost of $ 91,664 and $ 124,974 ) 91,664 124,974",
+     "quote": "Total investments, at fair value (cost of $ 1,467,586 and $ 1,596,478 ) $ 1,369,235 $ 1,534,345 Investments in affiliated money market fund (cost of $ 91,664 and $ 124,974 ) 91,664 124,974"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-E01-1772704-2",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "E01",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "Published non-cash FV equals filed investments exactly in every quarter. Separate printed money-market amounts explain the entire flagged excess. Cash positions are real; removing them or adding cash to the investments line would misrepresent the disclosed basis. No data fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277541",
+     "verbatim": "Total investments, at fair value (cost of $ 1,695,459 and $ 2,124,410 ) $ 1,643,780 $ 2,087,081 Investments in affiliated money market fund (cost of $ 148,322 and $ 84,647 ) 148,322 84,647",
+     "quote": "Total investments, at fair value (cost of $ 1,695,459 and $ 2,124,410 ) $ 1,643,780 $ 2,087,081 Investments in affiliated money market fund (cost of $ 148,322 and $ 84,647 ) 148,322 84,647"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088646",
+     "verbatim": "Total investments, at fair value (cost of $ 1,596,478 and $ 2,124,410 ) $ 1,534,345 $ 2,087,081 Investments in affiliated money market fund (cost of $ 124,974 and $ 84,647 ) 124,974 84,647",
+     "quote": "Total investments, at fair value (cost of $ 1,596,478 and $ 2,124,410 ) $ 1,534,345 $ 2,087,081 Investments in affiliated money market fund (cost of $ 124,974 and $ 84,647 ) 124,974 84,647"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219875",
+     "verbatim": "Total investments, at fair value (cost of $ 1,557,384 and $ 1,596,478 ) $ 1,469,243 $ 1,534,345 Investments in affiliated money market fund (cost of $ 122,393 and $ 124,974 ) 122,393 124,974",
+     "quote": "Total investments, at fair value (cost of $ 1,557,384 and $ 1,596,478 ) $ 1,469,243 $ 1,534,345 Investments in affiliated money market fund (cost of $ 122,393 and $ 124,974 ) 122,393 124,974"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344590",
+     "verbatim": "Total investments, at fair value (cost of $ 1,467,586 and $ 1,596,478 ) $ 1,369,235 $ 1,534,345 Investments in affiliated money market fund (cost of $ 91,664 and $ 124,974 ) 91,664 124,974",
+     "quote": "Total investments, at fair value (cost of $ 1,467,586 and $ 1,596,478 ) $ 1,369,235 $ 1,534,345 Investments in affiliated money market fund (cost of $ 91,664 and $ 124,974 ) 91,664 124,974"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-cost_conservation-1772704-3",
+   "class": "as_filed",
+   "engine": "conservation",
+   "rule_name": "cost_conservation",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "cost-conservation-cash-rows-against-ex-cash-cost-total",
+   "statement": "After restoring zero-FV equity positions, March/June26 non-cash cost equals filed investment cost exactly. The residual equals separately printed money-market cost. No cost correction applies to these two quarters; earlier residuals are left open.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219875",
+     "verbatim": "Total investments, at fair value (cost of $ 1,557,384 and $ 1,596,478 ) $ 1,469,243 $ 1,534,345 Investments in affiliated money market fund (cost of $ 122,393 and $ 124,974 ) 122,393 124,974",
+     "quote": "Total investments, at fair value (cost of $ 1,557,384 and $ 1,596,478 ) $ 1,469,243 $ 1,534,345 Investments in affiliated money market fund (cost of $ 122,393 and $ 124,974 ) 122,393 124,974"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344590",
+     "verbatim": "Total investments, at fair value (cost of $ 1,467,586 and $ 1,596,478 ) $ 1,369,235 $ 1,534,345 Investments in affiliated money market fund (cost of $ 91,664 and $ 124,974 ) 91,664 124,974",
+     "quote": "Total investments, at fair value (cost of $ 1,467,586 and $ 1,596,478 ) $ 1,369,235 $ 1,534,345 Investments in affiliated money market fund (cost of $ 91,664 and $ 124,974 ) 91,664 124,974"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-F27-1772704-4",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "statement": "Printed income yield is NII over average members capital of a levered fund, not yield over gross loan assets. Published13.96% and13.90% equal the source. Comparing these ratios with unlevered holdings coupon does not establish a wrong value; no correction applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019617",
+     "verbatim": "Ratio of net investment income to average Members Capital 13.96 % 11.76 %",
+     "quote": "Ratio of net investment income to average Members Capital 13.96 % 11.76 %"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039902",
+     "verbatim": "Ratio of net investment income to average Members Capital 13.90 % 11.58 %",
+     "quote": "Ratio of net investment income to average Members Capital 13.90 % 11.58 %"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1772704-5",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "reason_key": "maturity-not-past-loan-held-past-printed-maturity",
+   "statement": "All four CFS loans print07/15/24 while held atSeptember30. These are source-faithful maturities; do not advance a date to satisfy the check.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125352",
+     "verbatim": "CFS Management, LLC (dba Center for Sight Management) Health Care Providers & Services 13.87 % S + 9.00 % (Incl. 2.75 % PIK) 07/15/24 17,990 17,990 16,191",
+     "quote": "CFS Management, LLC (dba Center for Sight Management) Health Care Providers & Services 13.87 % S + 9.00 % (Incl. 2.75 % PIK) 07/15/24 17,990 17,990 16,191"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16",
+   "addresses_verdict": {
+    "2024-09-30": "Prior reviewer correctly located four printed CFS07/15/24 maturities but called being past maturity a genuine value defect. All four printed lines were re-read; the build preserves them, so changing a date would contradict the source."
+   }
+  },
+  {
+   "disposition_id": "PD-C103-1772704-6",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "reason_key": "c103-negative-mark-on-undrawn-line-printed-at-zero-cost",
+   "statement": "The incorrect positive costs were corrected individually to printed negative values. Remaining HumanState100/270 lines and iCIMS8999 line print cost dash/+1/dash and negative FV; values faithfully reflect disclosure. Do not apply a blanket negative-cost rule.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "HumanState Limited (dba PayProp) Diversified Consumer Services SN + 6.00 % 11/23/28 GBP 100 - ( 2 )",
+     "quote": "HumanState Limited (dba PayProp) Diversified Consumer Services SN + 6.00 % 11/23/28 GBP 100 - ( 2 )"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "HumanState Limited (dba PayProp) Diversified Consumer Services SN + 6.00 % 11/23/28 GBP 270 1 ( 5 )",
+     "quote": "HumanState Limited (dba PayProp) Diversified Consumer Services SN + 6.00 % 11/23/28 GBP 270 1 ( 5 )"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "iCIMS, Inc. Professional Services S + 6.75 % 08/18/28 8,999 - ( 292 )",
+     "quote": "iCIMS, Inc. Professional Services S + 6.75 % 08/18/28 8,999 - ( 292 )"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16",
+   "addresses_verdict": {
+    "2023-09-30": "Prior reviewer cited Admiral cost+36 versus printed(36); fixed to-36000, together with other source-matched sign errors. HumanState prints a positive1 cost and negative5 FV, so it was correctly left positive. Remaining flagged lines are source-faithful."
+   }
+  },
+  {
+   "disposition_id": "PD-SRC_BDC03-1772704-7",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "reason_key": "src-value-tagged-in-thousands-corrected-from-the-page",
+   "statement": "GHA and Helios tags omit thousand scale; published values now follow printed schedule units. Their corrected fair values-70000/-27000 close the97k excess exactly. Retain disagreement with erroneous tags; no further data correction applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749 ( 18 ) ( 70 )",
+     "quote": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749 ( 18 ) ( 70 )"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199 ( 24 ) ( 27 )",
+     "quote": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199 ( 24 ) ( 27 )"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC03-1772704-8",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "reason_key": "fv-digit-split-corrected-from-page",
+   "statement": "BSI3 printed FV(13 5) was tagged13 instead of135 thousands. Corrected published FV-135000 closes122k excess exactly. No further correction applies; source tag remains defective.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026141",
+     "verbatim": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924 ( 23 ) ( 13 5 )",
+     "quote": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924 ( 23 ) ( 13 5 )"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-blocking_fair_value_scale_or_unit_candidate-1772704-9",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "reason_key": "src-value-tagged-in-thousands-corrected-from-the-page",
+   "statement": "GHA and Helios tags omit thousand scale; published values now follow printed schedule units. Their corrected fair values-70000/-27000 close the97k excess exactly. Retain disagreement with erroneous tags; no further data correction applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749 ( 18 ) ( 70 )",
+     "quote": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749 ( 18 ) ( 70 )"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060342",
+     "verbatim": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199 ( 24 ) ( 27 )",
+     "quote": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199 ( 24 ) ( 27 )"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-blocking_fair_value_scale_or_unit_candidate-1772704-10",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "reason_key": "fv-digit-split-corrected-from-page",
+   "statement": "BSI3 printed FV(13 5) was tagged13 instead of135 thousands. Corrected published FV-135000 closes122k excess exactly. No further correction applies; source tag remains defective.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026141",
+     "verbatim": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924 ( 23 ) ( 13 5 )",
+     "quote": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924 ( 23 ) ( 13 5 )"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-X02-1772704-11",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001772704"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "statement": "Sweep and mPulse remaining rows print no cash/all-in coupon or benchmark spread. MedeAnalytics states3%PIK, retained as pik_rate, without a separately disclosed coupon. Earlier reviewer-cited spread gaps no longer exist: Streamland6.50, Admiral5.50, BSI3 6.00 and Charger4.75 are now published. No invented coupon applies to remaining source-faithful blanks.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056976",
+     "verbatim": "Sweep Midco LLC Commercial Services & Supplies 06/30/27 5,052 3,789 3,789",
+     "quote": "Sweep Midco LLC Commercial Services & Supplies 06/30/27 5,052 3,789 3,789"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096216",
+     "verbatim": "Sweep Midco LLC Commercial Services & Supplies 06/30/27 5,052 3,789 3,801",
+     "quote": "Sweep Midco LLC Commercial Services & Supplies 06/30/27 5,052 3,789 3,801"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125352",
+     "verbatim": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,569 $ 6,559",
+     "quote": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,569 $ 6,559"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032221",
+     "verbatim": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,559 $ 6,559",
+     "quote": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,559 $ 6,559"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070313",
+     "verbatim": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,559 $ 6,654",
+     "quote": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,559 $ 6,654"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107341",
+     "verbatim": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,559 $ 6,654",
+     "quote": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,559 $ 6,654"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088646",
+     "verbatim": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 $ 7,649 $ 6,558 $ 6,654",
+     "quote": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 $ 7,649 $ 6,558 $ 6,654"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219875",
+     "verbatim": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 $ 7,649 $ 6,559 $ 6,654",
+     "quote": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 $ 7,649 $ 6,559 $ 6,654"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344590",
+     "verbatim": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 $ 7,649 $ 6,559 $ 6,654",
+     "quote": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 $ 7,649 $ 6,559 $ 6,654"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344590",
+     "verbatim": "MedeAnalytics Parent, Inc. Health Care Technology 3.00 % PIK 10/23/28 10,282 6,057 5,186",
+     "quote": "MedeAnalytics Parent, Inc. Health Care Technology 3.00 % PIK 10/23/28 10,282 6,057 5,186"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001772704.json",
+   "decided_by": "PROPOSED by agent; not owner accepted",
+   "decided_on": "2026-10-16",
+   "addresses_verdict": {
+    "2024-12-31": "Prior reviewer cited missing Admiral5.50/BSI3 6.00/Charger4.75 spreads. Those spreads are now published and their source lines were re-read. Remaining Sweep/mPulse rows have blank rate columns and need no imputation.",
+    "2025-12-31": "Prior reviewer cited Streamland6.50 spread including5.50PIK. Current row publishes both6.50 spread and5.50PIK; coupon remains blank as printed. Remaining Sweep/mPulse rows print no rates.",
+    "2026-03-31": "Prior reviewer cited Streamland6.50 spread including5.50PIK. Current row publishes both6.50 spread and5.50PIK; printed coupon is blank. Remaining Sweep/mPulse source rows are blank-rate positions."
+   }
+  }
+ ]
+}

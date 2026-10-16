@@ -1,0 +1,10 @@
+{
+ "schema_version":"fund-highlights-wrapper.v1",
+ "cik":"0001772704",
+ "entity_name":"Goldman Sachs Private Middle Market Credit II LLC",
+ "version":1,
+ "concept_overrides":[{"xbrl_concept_substring":"investmentincomenet","target_field":"total_investment_income","action":"map","evidence":"0001193125-26-219875: Total investment income $ 37,870 $ 56,406; Net investment income $ 23,280 $ 29,136. Companyfacts tags the former InvestmentIncomeNet and the latter NetInvestmentIncome."}],
+ "income_concept_suppress":["investmentincomenet"],
+ "figure_corrections":[{"report_date":"2024-09-30","field":"nav_per_share","value":82.21,"evidence":"0000950170-24-125352: Net asset value per unit $ 82.21 $ 85.41. Current quarter 82.21, prior year 85.41; extracted 90.58 is not current NAV."}],
+ "notes":"Fund clearing 2026-10-16: correct total versus net investment income mapping and one source-declared NAV. No inferred amount."
+}

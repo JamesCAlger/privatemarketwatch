@@ -1100,6 +1100,16 @@ SPECS += [
      "Floor 7/11/2029 EUR 4,029 3,994 4,711'. Dollar amount at 1.1736, the reference rate the build applies to the fund's other "
      "euro pars on that date (JOA Joker)", "D-153"),
 ]
+# Goldman PMMC II: explicit source-backed costs, mis-scaled rows and one wrong issuer member.
+GPMMC_LOOP = "0001772704"
+GPMMC_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001772704.json"
+if GPMMC_LOOP in held and GPMMC_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(GPMMC_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((GPMMC_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1772704-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue

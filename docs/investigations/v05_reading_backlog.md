@@ -179,3 +179,4 @@ Manulife 0001988280.
 | 2026-10-16 | 0001899996 Fidelity Private Credit Co | fcxe | PASS | 50 findings, 21 outstanding, 21 proposed; benchmark read from issuer name (shared) | D-196 |
 | 2026-10-16 | 0001950976 26North BDC | tnxc | PASS | 20 findings, 9 outstanding, 9 proposed | D-197 |
 | 2026-10-16 | 0001919369 VISTA Credit Strategic Lending | viya | INCOMPLETE | 23 findings, 14 outstanding, 13 proposed; income_identity parked; sample 1/20 preferred-par gap parked | D-198 |
+| 2026-10-16 | 0001772704 Goldman Sachs Private Middle Market Credit II | gpyf | INCOMPLETE | 102 findings, 38 outstanding, 27 proposed; 11 ledger items and two principal-key gaps parked; final sample 0/20 errors | D-199 |
