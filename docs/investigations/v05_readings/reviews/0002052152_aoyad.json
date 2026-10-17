@@ -1,0 +1,355 @@
+{
+  "reviewer_id": "/root/apollo_investigation_reviewer",
+  "report_digest": "0c4cb46dbe059cfcaa559cd08135fdbd593fb6e9c17c21db43acf5490aacc7a8",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_REV_06eac4c6e54e",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed complete equity population using oracle_checks.C04 predicate: 2 rows, exact agreement with affected/reviewed keys (C_adcc71bc-d5e3-4322-a8ae-b5ecc54f5d51, C_feec53e1-68ff-4f23-a1d3-0c936ddb7a49). Read each matching cached HTML context row and numeric tags. HIG has USD principal rather than share tags: 34 at scale3 in March/June/September 2025; 34,000 at scale3 in December/March; June2026 explicitly prints 34 Units. Same-period column is mixed Par/Shares, and September explicitly dollar-marks preferred par. No reliable count can be inferred from stable FV or later units. Common rows have the precise printed 1,788,576 and 2,549,659 counts where applicable. Source-ambiguity conclusion and request for authoritative preferred unit basis are supported; this does not close C04 or establish a corrected preferred count.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Preferred Equity - Cumulative Preferred N/A 12/10/2124 34,000 $ 34 $ 34"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Common Equity/Partnership Interests - Membership Interest N/A N/A 1,788,576 1,789 1,789 (12)(14)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_25c8252401c5",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed complete equity population using oracle_checks.C04 predicate: 3 rows, exact agreement with affected/reviewed keys (C_5f2895f1-d236-42cf-b690-6b7efeb3d3ea, C_f5af6c9a-a609-462a-b57b-58c215f067b6, C_3d2a66fa-89e0-4ec5-8f5c-6b47c46a3775). Read each matching cached HTML context row and numeric tags. HIG has USD principal rather than share tags: 34 at scale3 in March/June/September 2025; 34,000 at scale3 in December/March; June2026 explicitly prints 34 Units. Same-period column is mixed Par/Shares, and September explicitly dollar-marks preferred par. No reliable count can be inferred from stable FV or later units. Common rows have the precise printed 1,788,576 and 2,549,659 counts where applicable. Source-ambiguity conclusion and request for authoritative preferred unit basis are supported; this does not close C04 or establish a corrected preferred count.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34,000 33 34"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Intermediate Topco 1 LLC Common Equity - Membership Interest N/A N/A 1,788,576 1,789 1,806 (13)(15)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Intermediate TopCo 2 LLC Common Equity - Membership Interest N/A N/A 2,549,659 2,549 2,576 (13)(15)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_47d165bc0c84",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed single flagged Vantage context C_402269ef-bf73-4b16-9ab4-94c411ee80ed; cached row prints cash margin675bps plus8.99percentPIK, giving15.74percent total spread. Final field agrees. Decimal rescaling or deleting PIK would contradict the page. Exact as-filed proposal is supported without endorsing economic correctness or relaxing the bound.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_509b000aa387",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed single flagged Vantage context C_402269ef-bf73-4b16-9ab4-94c411ee80ed; cached row prints cash margin675bps plus8.99percentPIK, giving15.74percent total spread. Final field agrees. Decimal rescaling or deleting PIK would contradict the page. Exact as-filed proposal is supported without endorsing economic correctness or relaxing the bound.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_5753d0d24b36",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed complete equity population using oracle_checks.C04 predicate: 1 rows, exact agreement with affected/reviewed keys (C_ed82eb46-ca2d-4d01-97e8-b96e492a1f0d). Read each matching cached HTML context row and numeric tags. HIG has USD principal rather than share tags: 34 at scale3 in March/June/September 2025; 34,000 at scale3 in December/March; June2026 explicitly prints 34 Units. Same-period column is mixed Par/Shares, and September explicitly dollar-marks preferred par. No reliable count can be inferred from stable FV or later units. Common rows have the precise printed 1,788,576 and 2,549,659 counts where applicable. Source-ambiguity conclusion and request for authoritative preferred unit basis are supported; this does not close C04 or establish a corrected preferred count.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-278006",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 $ 34 $ 33 $ 34"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_73785c4413c2",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Matched both emitted investment-identifier values to final holdings and separate source contexts C_ce3f3f4e-b0c5-43d2-8ccd-026bd5315683, C_dcd7dda3-2875-4835-adb4-0eb4cdfd8327. Cached rows have the same issuer/maturity/zero values but independently print500bps with0.75floor and550bps with4.50floor. These are separately disclosed commitments, not grounds for deleting a duplicate. Exact-pair false-alarm proposal supported.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 - - - (8)(11)(15)(17)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_7d8625d17374",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently matched all 2 issue row_ids to contexts C_5347953e-993a-4e9d-90ff-e6170146f861, C_7230905e-0140-4f59-920b-930ada5b1a23; each corresponding HTML line has dash par and the reported positive FV. Same-period footnote15 describes undrawn committed revolvers/DDTs. Missing funded par is as filed, not evidence to substitute FV or commitment principal. Exact scoped proposal supported.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 - $ ( 13 ) $ 13 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Databricks, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/19/2031 - 44 65 (4)(7)(15)(17)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_8a5214a87d1b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed complete equity population using oracle_checks.C04 predicate: 1 rows, exact agreement with affected/reviewed keys (C_ae5014cf-f872-40fd-bfcf-697c83f9ec62). Read each matching cached HTML context row and numeric tags. HIG has USD principal rather than share tags: 34 at scale3 in March/June/September 2025; 34,000 at scale3 in December/March; June2026 explicitly prints 34 Units. Same-period column is mixed Par/Shares, and September explicitly dollar-marks preferred par. No reliable count can be inferred from stable FV or later units. Common rows have the precise printed 1,788,576 and 2,549,659 counts where applicable. Source-ambiguity conclusion and request for authoritative preferred unit basis are supported; this does not close C04 or establish a corrected preferred count.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "HIG Intermediate, Inc. Preferred Equity - Cumulative Preferred Equity N/A 34 33 33"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_b196c658ccfc",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed complete equity population using oracle_checks.C04 predicate: 1 rows, exact agreement with affected/reviewed keys (C_82145907-56b7-465c-ba2f-6d2e4982e282). Read each matching cached HTML context row and numeric tags. HIG has USD principal rather than share tags: 34 at scale3 in March/June/September 2025; 34,000 at scale3 in December/March; June2026 explicitly prints 34 Units. Same-period column is mixed Par/Shares, and September explicitly dollar-marks preferred par. No reliable count can be inferred from stable FV or later units. Common rows have the precise printed 1,788,576 and 2,549,659 counts where applicable. Source-ambiguity conclusion and request for authoritative preferred unit basis are supported; this does not close C04 or establish a corrected preferred count.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-107411",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 34 33 34"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_c767ba0c7600",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Recomputed March2025 WAC from the rule's three positive-coupon/positive-FV rows (C_bea0ad16-5c46-41fe-978a-4482fdab0468, C_ebb1f0ad-6d65-4c33-945c-9cdf205acc3a, C_5195ca1d-a07b-4e27-9bd3-6809830ce6b9):11.4977183986percent, only1.92071895percent of total FV. Read all three printed coupons and the annualized18.83percent NII/average-net-assets line; final financials agree. Read cited floating MRO row with benchmark+spread rather than all-in coupon. Heuristic mixes sparse asset-coupon coverage with net-asset income denominator; source-backed false-alarm proposal supported, not a conclusion that all floating coupons were audited.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Commscope, LLC First Lien Secured Debt - Corporate Bond 9.50 % 12/15/2031 $ 3,434 $ 3,573 $ 3,536 (4)(5)(11)(13)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Gannett Co., Inc. First Lien Secured Debt - Convertible Bond 6.00 % 12/1/2031 10 13 11 (11)(13)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Wolfspeed, Inc. First Lien Secured Debt - Corporate Bond 11.9 % 6/23/2030 $ 17,799 $ 17,336 $ 17,710 (5)(13)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Annualized ratio of net investment income to average net assets (4) 18.83 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_d235f61d6440",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently matched all 4 issue row_ids to contexts C_203ca493-9b09-425f-8cf4-2f797f5bfe61, C_ea46fedc-a03e-435e-bd0d-b3ec69f329c7, C_96cc9a88-9946-434a-ab78-db305a869c01, C_f0e0e331-1b09-4233-b92a-3648bda8aa59; each corresponding HTML line has dash par and the reported positive FV. Same-period footnote15 describes undrawn committed revolvers/DDTs. Missing funded par is as filed, not evidence to substitute FV or commitment principal. Exact scoped proposal supported.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 - ( 12 ) 26 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 3/31/2032 - ( 15 ) 20 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/3/2031 - 45 87 (7)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 24 (8)(11)(15)(17)"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "missing-cost-does-not-trigger-cost-conservation",
+      "outcome": "supported",
+      "rationale": "Matched Datavant March2026 source context: printed37,442(thousands), final cost37,442,000. A presence/scale comparison is independent of aggregate FV and would catch this. Proposed exclusions for dash/non-USD are appropriate; implementation must locate cost column and context independently, not reuse extractor output as truth.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "CT Technologies Intermediate Holdings (Topco), Inc. First Lien Secured Debt - Bank Debt Term Loan S + 475 , 0.75 % Floor 9/2/2031 37,787 37,442 36,842 (5)(8)(13)"
+        }
+      ]
+    },
+    {
+      "observation_key": "fixed-coupon-percent-tag-scale-disagrees-with-page",
+      "outcome": "supported",
+      "rationale": "Read printed Valor10percent and Wolfspeed9.88percent against corrected final coupons. Proposed percent-versus-decoded comparison catches100x errors; explicit fixed-coupon classification and exclusions of PIK/floor/spread are necessary to avoid false positives. Support proposal, not a claim every percentage convention has been implemented.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Wolfspeed Inc First Lien Secured Debt - Corporate Bond 9.88 % 6/23/2030 $ 6,578 $ 5,550 $ 7,244 (5)(4)(15)"
+        }
+      ]
+    },
+    {
+      "observation_key": "margin-tagged-as-plain-rate-published-as-coupon",
+      "outcome": "supported",
+      "rationale": "Printed Higginbotham S+450 and foreign Vantive benchmark-plus-margin support withdrawal of false fixed coupons. Detector is concrete if it independently parses the rate cell; allow independently printed all-in rates even if numerically equal to a component. No automatic deletion from equality alone.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Higginbotham Insurance Agency, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 450 , 1.00 % Floor 6/11/2031 $ 2,486 $ 2,536 $ 2,436 (8)"
+        }
+      ]
+    },
+    {
+      "observation_key": "pik-printed-on-the-row-and-not-tagged",
+      "outcome": "supported",
+      "rationale": "Read final Vantage2.75, Saber2.25 and Zeus3.00 PIK against explicit cash-plus-PIK source rows and fields. Comparing explicit PIK token separately from floors and aggregate spread catches the stated recurrence. Keep terms evidence separate from current accrual/payment.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Saber Parent Holdings Corp First Lien Secured Debt - Bank Debt Term Loan S+ 475 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 20,032 19,824 19,931 (5)(8)(13)"
+        }
+      ]
+    },
+    {
+      "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+      "outcome": "supported",
+      "rationale": "Verified quoted December row explicitly prints JPY251,096; USD default conflicts with visible currency. Proposed same-context symbol/field comparison is valid; currency of cost/FV must not overwrite principal currency. Source-conformity support does not independently attest the external FX dataset.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Term Loan T + 500 , 0.75 % Floor 1/30/2032 JPY 251,096 1,596 1,598 (8)(12)"
+        }
+      ]
+    },
+    {
+      "observation_key": "issuer-name-from-member-differs-from-page",
+      "outcome": "supported",
+      "rationale": "MRO evidence and source group/legal-name headings establish plausible extra group labels evade shape checks. Source legal-cell comparison with bounded heading carry and alias controls is a suitable proposed detector. Residual Wolfspeed Wolfspeed, Inc. (June2025) and Datavant CT Technologies Intermediate Holdings (September/December2025) are group-plus-same-company labels; the reader contract tolerates same-company member/legal-name differences. They are not independently established wrong-company assignments and this review does not certify complete textual cleanup of all754names.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "MRO Holdings, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.50 % Floor 12/17/2030 $ 48,082 $ 48,283 $ 48,082 (5)(8)(11)"
+        }
+      ]
+    },
+    {
+      "observation_key": "instrument-text-keeps-member-words",
+      "outcome": "supported",
+      "rationale": "Printed June2026 Datavant DDT separately places S+475/0.75floor and maturity after the tranche description. Comparing header/rate contamination against independently identified source columns is defensible. Do not flag valid convertible/exchangeable instrument names solely because they contain date/rate-like text; this remains a proposal requiring negative cases.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-347350",
+          "text": "First Lien Secured Debt - Delayed Draw S + 475 , 0.75 % Floor 9/2/2031 3,740 3,697 3,601 (7)(8)(15)(17)(19)(20)"
+        }
+      ]
+    },
+    {
+      "observation_key": "fund-income-ratio-published-is-not-the-printed-ratio",
+      "outcome": "supported",
+      "rationale": "Read December2025 Annualized ratio line9.96 and final fund_financials9.96; dividing annualized ratio by four is not source conformity. Proposed label-aware financial-highlights check would catch it. Distinguish ratio percentages from per-share period flows and comparative columns.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Annualized ratio of net investment income to average net assets (4) 9.96 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "unit-count-basis-changes-between-filings",
+      "outcome": "supported",
+      "rationale": "Read HIG preferred and VCI common presentations including June2026 explicit34,1789,2550 Units versus earlier34000,1788576,2549659. Proposed large count-change/stable-value flag is useful but cannot infer whether source changed basis or a corporate action occurred. Matching must be tranche/class specific and zero/missing counts handled; never smooth units automatically.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-347350",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34 Units $ 33 $ 34"
+        }
+      ]
+    },
+    {
+      "observation_key": "seed-financials-suppressed-without-published-reason",
+      "outcome": "supported",
+      "rationale": "Read prior-period assets2, liabilities88, netassets(86), all thousands; identity balances. Final2024-12-31 financials are null. Inspected no_seed CTE and dropped_is_seed flag in fund_financials.py. Source-present-to-null provenance warning is warranted; changing publication of seed figures remains a separate policy decision. No claim seed balances were successfully published.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Total Assets $ 1,173,025 $ 2"
+        }
+      ]
+    },
+    {
+      "observation_key": "reference-rate-code-misprinted-by-filer",
+      "outcome": "supported",
+      "rationale": "Verified same-period quoted footnotes state2025TORF versus2026TONAR or I. Date-bounded code/linked-legend comparison avoids global T substitution; code text alone cannot decide the benchmark. Proposal properly requires same-period source evidence and does not promise to resolve contradictory disclosures automatically.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "The interest rate on these loans is subject to 3 months Japan Tokyo Overnight Average Rate (TONAR or I), which as of March 31, 2026 was 0.73 %."
+        }
+      ]
+    },
+    {
+      "observation_key": "member-carries-another-rows-name",
+      "outcome": "rejected",
+      "rationale": "The three source-backed issuer/industry corrections and seven changed term-loan IDs are supported, but investigation of identity consequences is incomplete. Independently inspected printed headings and final holdings: unchanged PID682b1ff2-6661-51e9-b3f2-d439819fa646 still links December2025 Victors DDT context C_b29a37d7-568d-40af-bbc6-ba22636872fc (maturity2032-12-23) to Elk DDTs including March2026 C_6c6a9dce-bf7f-4563-a9fa-4c475cd44cc4 (maturity2032-06-14). Unchanged PID6bed4dcd-69cb-5e82-862f-aa5509ba5287 links December2025 Elk DDT C_3f64477f-725a-428e-aa1d-e853404e0c67 (2032-06-14) to March2026 Victors DDT C_a0210a59-d4ad-4b9b-8fc4-203837d8d1d9 (2032-12-23). Source group/legal headings independently prove different issuers, not a rename. Auditing only changed PIDs missed these surviving wrong chains. The proposed independent-source chain detector is sound, but fixed status/chain-repair account needs a complete affected-family audit, explicit residuals and repair or reasoned escalation. Do not infer resolution from zero within-quarter merges or consistent term-loan chains alone.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Transportation Infrastructure Eagle Railcar Elk Bidco, Inc First Lien Secured Debt - Bank Debt Term Loan S + 450 , 0.50 % Floor 6/14/2032 $ 11,262 $ 11,209 $ 11,205 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 12/23/2032 - ( 19 ) ( 16 ) (8)(15)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 12/23/2032 - ( 18 ) ( 144 ) (8)(16)(17)(19)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) ( 35 ) (8)(13)(16)(17)(19)"
+        }
+      ]
+    },
+    {
+      "observation_key": "floor-rate-tag-scale-disagrees-with-page",
+      "outcome": "supported",
+      "rationale": "Independently scanned source facts for all754published contexts:17nonzero December2025 floor facts have scale-4 on visible0.75/0.50percent; an additional0.00floor with scale-4 is a valid zero negative control. Listed17contexts agree. No other published-quarter context has a nonzero-4floor discrepancy. Proposed decoded-value versus explicit-percent comparison catches this source-only defect; preserve source tags and exclude basis-point-labelled cells. No published floor field is certified.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 475 , 0.75 % Floor 10/1/2029 - ( 11 ) - (8)(12)(16)(18)"
+        }
+      ]
+    }
+  ],
+  "request_reviews": []
+}

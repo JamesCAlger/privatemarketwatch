@@ -8788,6 +8788,40 @@ class TestApplyRowCorrections:
                 w.writerows([full])
         return path
 
+    def test_extracted_industry_correction_drives_printed_gics(self, tmp_path):
+        from pipeline.unified_holdings import _apply_printed_industry
+        key = {"cik": "0002052152", "report_date": "2026-03-31",
+               "accession_number": "0001193125-26-221801",
+               "bdc_investment_identifier": "Victors Bank Debt Term Loan"}
+        df = self._make_holdings_df([dict(key, source="bdc",
+            extracted_industry="Technology Hardware, Storage & Peripherals",
+            gics_sub_industry="Technology Hardware, Storage & Peripherals")])
+        path = self._write_corrections(tmp_path, [dict(key, field="extracted_industry",
+            value="Transportation Infrastructure", reason="Printed Elk heading",
+            source_evidence="cached filing", author="test", date_added="2026-10-16")])
+        result = _apply_printed_industry(_apply_row_corrections(df, corrections_path=path))
+        assert result.iloc[0]["extracted_industry"] == "Transportation Infrastructure"
+        assert result.iloc[0]["gics_sub_industry"] == "Highways & Railtracks"
+        assert "extracted_industry" in result.iloc[0]["corrected_fields"]
+
+    @pytest.mark.parametrize("different", [
+        {"cik": "0002052153"}, {"report_date": "2025-12-31"},
+        {"accession_number": "0001193125-26-221802"},
+        {"bdc_investment_identifier": "Victors Term Loan"},
+    ])
+    def test_extracted_industry_correction_leaves_other_keys_unchanged(self, tmp_path, different):
+        key = {"cik": "0002052152", "report_date": "2026-03-31",
+               "accession_number": "0001193125-26-221801",
+               "bdc_investment_identifier": "Victors Bank Debt Term Loan"}
+        df = self._make_holdings_df([dict(key | different, source="bdc",
+            issuer_name="Victors Purchaser, LLC",
+            extracted_industry="Technology Hardware, Storage & Peripherals")])
+        before = df.copy(deep=True)
+        path = self._write_corrections(tmp_path, [dict(key, field="extracted_industry",
+            value="Transportation Infrastructure", reason="Printed Elk heading")])
+        result = _apply_row_corrections(df, corrections_path=path)
+        pd.testing.assert_frame_equal(result, before)
+
     def test_correction_applied(self, tmp_path):
         """Matching correction row updates the target field."""
         df = self._make_holdings_df([{

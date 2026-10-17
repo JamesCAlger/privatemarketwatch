@@ -2087,6 +2087,10 @@ _CORRECTABLE_FIELDS = frozenset({
     # A class correction has to move the category with the index class (2026-10-06, decision D-021).
     "asset_category", "issuer_category",
     "issuer_name", "instrument_description",
+    # An exact-key correction may restore the printed industry when a filer attaches
+    # another company's member to the row. The existing downstream GICS mapping
+    # consumes this source label; no derived GICS label is directly overridden.
+    "extracted_industry",
     # A cost corrected from the printed page needs its unit corrected with it: a cost whose
     # unit is not the dollar is withheld downstream (2026-10-08, Blue Owl KWOR, decision D-046).
     "cost_currency",

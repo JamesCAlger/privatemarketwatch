@@ -6,10 +6,11 @@
   "source": "bdc_xbrl",
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "^(?:Investments\\s+.+?\\s+)?(?:Debt|Equity)\\s+Investments\\s+(?:CRESCENT_INDUSTRY_LABELS)\\s+(.+?)\\s+(?:(?:Investment\\s*(?:One|Two|Three|Four|Five)?\\s*Type)\\s+|Unitranche|First\\s+Lien|Second\\s+Lien|Unsecured(?:\\s+Debt)?|Subordinated|Common\\s+Stock|Preferred\\s+Stock|Partnership\\s+Interest|Warrants?)",
-    "hierarchy_instrument_re": "^(?:Investments\\s+.+?\\s+)?(?:Debt|Equity)\\s+Investments\\s+(?:CRESCENT_INDUSTRY_LABELS)\\s+.+?\\s+(?:(?:Investment\\s*(?:One|Two|Three|Four|Five)?\\s*Type)\\s+)?(Unitranche.+?|First\\s+Lien.+?|Second\\s+Lien.+?|Unsecured(?:\\s+Debt)?.*?|Subordinated.+?|Common\\s+Stock.*?|Preferred\\s+Stock.*?|Partnership\\s+Interest.*?|Warrants?.*?)(?:\\s+Interest\\s+Term\\b|\\s+Interest\\s+Rate\\b|\\s+Maturity\\s*/\\s*Dissolution\\s+Date\\b|\\s+Maturity\\b|$)",
+    "hierarchy_issuer_re": "^(?:Investments\\s+.+?\\s+)?(?:Debt|Equity)\\s+Investments\\s+(?:Pharmaceuticals, Biotechnology (?:and|&) Life Sciences|Commercial (?:and|&) Professional(?: Services\\b)?|Health Care Equipment & Services|Consumer Durables & Apparel|Telecommunication Services|Automobiles? & Components|Diversified Financials|Diversified|Consumer Services|Financial Services|Software & Services|Capital Goods|Transportation|Food & Staples(?: Retailing)?|Retailing|Energy|Insurance|Materials|Food, Beverage & Tobacco|Technology,? Hardware & Equipment|Household & Personal(?: Products)?|Semiconductors? and Semiconductor Equipment)\\s*,?\\s*(.+?)\\s+(?:(?:Investment\\s*(?:One|Two|Three|Four|Five)?\\s*Type)\\s+|Unitranche|First\\s+Lien|Second\\s+Lien|Unsecured(?:\\s+Debt)?|Subordinated|Common\\s+Stock|Preferred\\s+Stock|Partnership\\s+Interest|Warrants?)",
+    "hierarchy_instrument_re": "^(?:Investments\\s+.+?\\s+)?(?:Debt|Equity)\\s+Investments\\s+(?:Pharmaceuticals, Biotechnology (?:and|&) Life Sciences|Commercial (?:and|&) Professional(?: Services\\b)?|Health Care Equipment & Services|Consumer Durables & Apparel|Telecommunication Services|Automobiles? & Components|Diversified Financials|Diversified|Consumer Services|Financial Services|Software & Services|Capital Goods|Transportation|Food & Staples(?: Retailing)?|Retailing|Energy|Insurance|Materials|Food, Beverage & Tobacco|Technology,? Hardware & Equipment|Household & Personal(?: Products)?|Semiconductors? and Semiconductor Equipment)\\s*,?\\s*.+?\\s+(?:(?:Investment\\s*(?:One|Two|Three|Four|Five)?\\s*Type)\\s+)?(Unitranche.+?|First\\s+Lien.+?|Second\\s+Lien.+?|Unsecured(?:\\s+Debt)?.*?|Subordinated.+?|Common\\s+Stock.*?|Preferred\\s+Stock.*?|Partnership\\s+Interest.*?|Warrants?.*?)(?:\\s+Interest\\s+Term\\b|\\s+Interest\\s+Rate\\b|\\s+Maturity\\s*/\\s*Dissolution\\s+Date\\b|\\s+Maturity\\b|$)",
     "hierarchy_trailing_re": "Maturity\\s*/\\s*Dissolution\\s+Date\\s+\\d{1,2}/\\d{4}\\s+(.+)$",
-    "hierarchy_condition_extra": "(starts_with(lower(_clean), 'investments ') OR starts_with(lower(_clean), 'debt investments ') OR starts_with(lower(_clean), 'equity investments ')) AND regexp_matches(lower(_clean), '\\b(?:debt|equity)\\s+investments\\b') AND regexp_matches(lower(_clean), '\\b(unitranche|first\\s+lien|second\\s+lien|term\\s+loan|delayed\\s+draw|revolver|revolving|senior\\s+secured|unsecured|subordinated|notes?|bonds?|common\\s+(stock|equity)|preferred\\s+stock|partnership\\s+interest|warrants?|equity)\\b') AND (regexp_matches(lower(_clean), '\\binvestment\\s*(?:one|two|three|four|five)?\\s*type\\b') OR regexp_matches(lower(_clean), '\\b(common\\s+stock|preferred\\s+stock|partnership\\s+interest|warrants?)\\b'))"
+    "hierarchy_condition_extra": "(starts_with(lower(_clean), 'investments ') OR starts_with(lower(_clean), 'debt investments ') OR starts_with(lower(_clean), 'equity investments ')) AND regexp_matches(lower(_clean), '\\b(?:debt|equity)\\s+investments\\b') AND regexp_matches(lower(_clean), '\\b(unitranche|first\\s+lien|second\\s+lien|term\\s+loan|delayed\\s+draw|revolver|revolving|senior\\s+secured|unsecured|subordinated|notes?|bonds?|common\\s+(stock|equity)|preferred\\s+stock|partnership\\s+interest|warrants?|equity)\\b') AND (regexp_matches(lower(_clean), '\\binvestment\\s*(?:one|two|three|four|five)?\\s*type\\b') OR regexp_matches(lower(_clean), '\\b(common\\s+stock|preferred\\s+stock|partnership\\s+interest|warrants?)\\b'))",
+    "distinct_member_suffix_re": "MHS Acquisition Holdings, LLC.*?Interest Term S \\+ (?:625|650)"
   },
   "archetypes": {
     "debt": {
@@ -114,7 +115,31 @@
       "0000950170-24-095458 C_39edae4c-0211-4511-92e4-b36b56517a0b 2023-06-30 -> 2024-06-30"
     ],
     "untagged_values": [
-      "0001193125-26-221936 C_9353616c-0789-4125-8009-a9a566189fdb fair_value 1234000"
+      "0001193125-26-221936 C_9353616c-0789-4125-8009-a9a566189fdb fair_value 1234000",
+      "0000950170-23-020540 C_ef83d14f-5c2b-4c4e-bc7f-d4fad1fda4df principal_amount 536000",
+      "0000950170-23-020540 C_ef83d14f-5c2b-4c4e-bc7f-d4fad1fda4df cost 525000",
+      "0000950170-23-040555 C_73092134-fa36-4b88-82c1-a78075b43c89 principal_amount 298000",
+      "0000950170-23-040555 C_73092134-fa36-4b88-82c1-a78075b43c89 cost 298000",
+      "0000950170-24-017903 C_c77c9003-a9fb-4465-94ab-9a8fed7e1c57 principal_amount 20878000",
+      "0000950170-24-017903 C_c77c9003-a9fb-4465-94ab-9a8fed7e1c57 cost 1557000",
+      "0000950170-24-017903 C_05fbf51f-3610-434b-9277-c556c658b83e principal_amount 4762000",
+      "0000950170-24-017903 C_05fbf51f-3610-434b-9277-c556c658b83e cost 4688000"
+    ],
+    "reference_rate_columns": [
+      "InterestTerm *",
+      "Interest Term *"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "L=LIBOR",
+      "E=EURIBOR",
+      "SN=SONIA",
+      "P=PRIME",
+      "B=BBSY",
+      "C=CDOR"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
     ]
   }
 }

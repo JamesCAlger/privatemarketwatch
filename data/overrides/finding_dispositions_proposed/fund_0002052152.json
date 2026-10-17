@@ -1,0 +1,316 @@
+{
+  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+  "sandbox": "aoyae",
+  "dispositions": [
+    {
+      "disposition_id": "PD-AOYA-RVQ_REV_47d165bc0c84",
+      "class": "as_filed",
+      "engine": "row_validation",
+      "rule_name": "C115",
+      "ciks": [
+        "0002052152"
+      ],
+      "quarters": [
+        "2025-12-31"
+      ],
+      "reason_key": "c115-spread-above-15-is-the-printed-spread",
+      "statement": "Reconstructed flagged population: one Vantage December2025 loan; basis_spread15.74 equals printed675bps cash margin plus8.99percent PIK. Tested decimal error and omitted PIK hypotheses: source explicitly prints8.99percent, so reducing it to0.899 or omitting it would contradict source. This is source conformity only; the unusually high PIK may itself be a filing error. No economic correctness claim. Propose as-filed disposition for the printed total spread15.74; retain both cash-margin and PIK source evidence, no threshold widening.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)",
+          "quote": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)"
+        }
+      ],
+      "rerun": "see docs/investigations/v05_readings/reports/0002052152.json",
+      "decided_by": "PROPOSED by /root/apollo_origination_ii; not accepted",
+      "decided_on": "2026-10-16"
+    },
+    {
+      "disposition_id": "PD-AOYA-RVQ_REV_509b000aa387",
+      "class": "as_filed",
+      "engine": "weak",
+      "rule_name": "fmt_basis_spread",
+      "ciks": [
+        "0002052152"
+      ],
+      "quarters": [
+        "2025-12-31"
+      ],
+      "reason_key": "fmt-basis-spread-above-15-is-the-printed-spread",
+      "statement": "Reconstructed flagged population: one Vantage December2025 loan; basis_spread15.74 equals printed675bps cash margin plus8.99percent PIK. Tested decimal error and omitted PIK hypotheses: source explicitly prints8.99percent, so reducing it to0.899 or omitting it would contradict source. This is source conformity only; the unusually high PIK may itself be a filing error. No economic correctness claim. Propose as-filed disposition for the printed total spread15.74; retain both cash-margin and PIK source evidence, no threshold widening.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)",
+          "quote": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)"
+        }
+      ],
+      "rerun": "see docs/investigations/v05_readings/reports/0002052152.json",
+      "decided_by": "PROPOSED by /root/apollo_origination_ii; not accepted",
+      "decided_on": "2026-10-16"
+    },
+    {
+      "disposition_id": "PD-AOYA-RVQ_REV_73785c4413c2",
+      "class": "false_alarm",
+      "engine": "row_validation",
+      "rule_name": "PP02",
+      "ciks": [
+        "0002052152"
+      ],
+      "quarters": [
+        "2025-03-31"
+      ],
+      "reason_key": "pp02-distinct-zero-valued-commitments-have-different-rate-terms",
+      "statement": "Reconstructed both PP02 issue rows using value=investment_identifier because this rule emits blank row_id; both source context IDs matched. Both Heritage revolvers have same issuer/maturity and zero par/cost/FV, but source separately prints500bps/.75floor and550bps/4.50floor. Rejected duplicate removal: same amounts are not a position identity; distinct rate terms and separate source rows prove separate tranches. Propose false-alarm disposition for this exact pair; retain both positions. A future PP02 repair should include rate/floor or source-line identity before treating zero-valued rows as duplicates.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 - - - (8)(11)(15)(17)",
+          "quote": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 - - - (8)(11)(15)(17)"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 - - - (8)(11)(15)(17)",
+          "quote": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 - - - (8)(11)(15)(17)"
+        }
+      ],
+      "rerun": "see docs/investigations/v05_readings/reports/0002052152.json",
+      "decided_by": "PROPOSED by /root/apollo_origination_ii; not accepted",
+      "decided_on": "2026-10-16"
+    },
+    {
+      "disposition_id": "PD-AOYA-RVQ_REV_7d8625d17374",
+      "class": "as_filed",
+      "engine": "row_validation",
+      "rule_name": "X11",
+      "ciks": [
+        "0002052152"
+      ],
+      "quarters": [
+        "2025-03-31"
+      ],
+      "reason_key": "x11-undrawn-line-par-printed-as-dash",
+      "statement": "Reconstructed every X11 issue row by row_id: 2 matches, no missing or extra rows. Each printed revolver/delayed-draw line has dash principal but positive FV; commitment footnote explains undrawn status. Positive FV on an undrawn commitment does not imply funded principal. Rejected filling principal from FV, commitment amount or prior period: none is printed funded par on these rows. Submit as-filed proposal for these exact fund-quarter rows; preserve null principal and positive FV. Owner/check must accept reason before ledger closure.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "Advarra Holdings, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 - $ ( 13 ) $ 13 (8)(11)(15)(17)",
+          "quote": "Advarra Holdings, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 - $ ( 13 ) $ 13 (8)(11)(15)(17)"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "Databricks, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/19/2031 - 44 65 (4)(7)(15)(17)",
+          "quote": "Databricks, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/19/2031 - 44 65 (4)(7)(15)(17)"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "e commitment being valued below par. (15) The undrawn portion of these committed revolvers and delayed draw term loans includes a commitment and unused fee rate. (16",
+          "quote": "e commitment being valued below par. (15) The undrawn portion of these committed revolvers and delayed draw term loans includes a commitment and unused fee rate. (16"
+        }
+      ],
+      "rerun": "see docs/investigations/v05_readings/reports/0002052152.json",
+      "decided_by": "PROPOSED by /root/apollo_origination_ii; not accepted",
+      "decided_on": "2026-10-16"
+    },
+    {
+      "disposition_id": "PD-AOYA-RVQ_REV_c767ba0c7600",
+      "class": "false_alarm",
+      "engine": "fund_financials",
+      "rule_name": "F27",
+      "ciks": [
+        "0002052152"
+      ],
+      "quarters": [
+        "2025-03-31"
+      ],
+      "reason_key": "f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed",
+      "statement": "Reproduced F27 WAC from its exact interest_rate>0,FV>0 predicate: three rows, FV21257000 of1106721000 (1.92percent), WAC11.4977184. Printed annualized NII/average-net-assets ratio is18.83percent; source and published ratio agree. Floating-rate positions print benchmark plus spread rather than an all-in coupon, so they are absent from WAC. Rejected changing18.83 to fit WAC: different denominators and tiny coupon-coverage sample make the heuristic unsuitable as an error verdict; no missing printed all-in coupon found on checked floating row. Propose false-alarm disposition under existing sparse-fixed-coupon WAC reason; keep source18.83. A future heuristic should require WAC coverage and consistent asset/net-asset denominator before flagging.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "Annualized ratio of net investment income to average net assets (4) 18.83 %",
+          "quote": "Annualized ratio of net investment income to average net assets (4) 18.83 %"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "Commscope, LLC First Lien Secured Debt - Corporate Bond 9.50 % 12/15/2031 $ 3,434 $ 3,573 $ 3,536 (4)(5)(11)(13)",
+          "quote": "Commscope, LLC First Lien Secured Debt - Corporate Bond 9.50 % 12/15/2031 $ 3,434 $ 3,573 $ 3,536 (4)(5)(11)(13)"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "Gannett Co., Inc. First Lien Secured Debt - Convertible Bond 6.00 % 12/1/2031 10 13 11 (11)(13)",
+          "quote": "Gannett Co., Inc. First Lien Secured Debt - Convertible Bond 6.00 % 12/1/2031 10 13 11 (11)(13)"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "Wolfspeed, Inc. First Lien Secured Debt - Corporate Bond 11.9 % 6/23/2030 $ 17,799 $ 17,336 $ 17,710 (5)(13)",
+          "quote": "Wolfspeed, Inc. First Lien Secured Debt - Corporate Bond 11.9 % 6/23/2030 $ 17,799 $ 17,336 $ 17,710 (5)(13)"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "MRO Holdings, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.50 % Floor 12/17/2030 $ 48,082 $ 48,283 $ 48,082 (5)(8)(11)",
+          "quote": "MRO Holdings, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.50 % Floor 12/17/2030 $ 48,082 $ 48,283 $ 48,082 (5)(8)(11)"
+        }
+      ],
+      "rerun": "see docs/investigations/v05_readings/reports/0002052152.json",
+      "decided_by": "PROPOSED by /root/apollo_origination_ii; not accepted",
+      "decided_on": "2026-10-16"
+    },
+    {
+      "disposition_id": "PD-AOYA-RVQ_REV_d235f61d6440",
+      "class": "as_filed",
+      "engine": "row_validation",
+      "rule_name": "X11",
+      "ciks": [
+        "0002052152"
+      ],
+      "quarters": [
+        "2025-09-30"
+      ],
+      "reason_key": "x11-undrawn-line-par-printed-as-dash",
+      "statement": "Reconstructed every X11 issue row by row_id: 4 matches, no missing or extra rows. Each printed revolver/delayed-draw line has dash principal but positive FV; commitment footnote explains undrawn status. Positive FV on an undrawn commitment does not imply funded principal. Rejected filling principal from FV, commitment amount or prior period: none is printed funded par on these rows. Submit as-filed proposal for these exact fund-quarter rows; preserve null principal and positive FV. Owner/check must accept reason before ledger closure.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001193125-25-278006",
+          "verbatim": "First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 - ( 12 ) 26 (8)(11)(15)(17)",
+          "quote": "First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 - ( 12 ) 26 (8)(11)(15)(17)"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-25-278006",
+          "verbatim": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 3/31/2032 - ( 15 ) 20 (8)(11)(15)(17)",
+          "quote": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 3/31/2032 - ( 15 ) 20 (8)(11)(15)(17)"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-25-278006",
+          "verbatim": "First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/3/2031 - 45 87 (7)(15)(17)",
+          "quote": "First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/3/2031 - 45 87 (7)(15)(17)"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-25-278006",
+          "verbatim": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 24 (8)(11)(15)(17)",
+          "quote": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 24 (8)(11)(15)(17)"
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-070628",
+          "verbatim": "e commitment being valued below par. (15) The undrawn portion of these committed revolvers and delayed draw term loans includes a commitment and unused fee rate. (16",
+          "quote": "e commitment being valued below par. (15) The undrawn portion of these committed revolvers and delayed draw term loans includes a commitment and unused fee rate. (16"
+        }
+      ],
+      "rerun": "see docs/investigations/v05_readings/reports/0002052152.json",
+      "decided_by": "PROPOSED by /root/apollo_origination_ii; not accepted",
+      "decided_on": "2026-10-16"
+    },
+    {
+      "disposition_id": "PD-AOYA-BDCSRC_0002052152_2025-12-31_BLOCKING_FAIR_VALUE_DISAGREEMENT_77f8ab5b01",
+      "class": "false_alarm",
+      "engine": "source_recon",
+      "rule_name": "blocking_fair_value_disagreement",
+      "ciks": [
+        "0002052152"
+      ],
+      "quarters": [
+        "2025-12-31"
+      ],
+      "reason_key": "printed-positive-fv-supported-by-two-subtotals",
+      "statement": "The only flagged row is December Elk DDT: raw inline fact sign=- gives -18,000; printed row gives +18,000. Independent Elk subtotal 11,375+18+0=11,393 and Transportation subtotal 11,393+22,029=33,422 both prove the positive sign. The correction also eliminates the entire -36,000 quarter residual: 1,517,931,000 becomes filed 1,517,967,000. Cost remains -11,000. Source/output disagreement is real, but it is caused by a source sign defect; reverting the correction would corrupt the printed values and totals.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)",
+          "quote": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18) 11,216 11,393",
+          "quote": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18) 11,216 11,393"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 10/15/2031 590 568 584 (8)(12)(16)(18) 21,855 22,029",
+          "quote": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 10/15/2031 590 568 584 (8)(12)(16)(18) 21,855 22,029"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "Total Transportation Infrastructure $ 33,071 $ 33,422",
+          "quote": "Total Transportation Infrastructure $ 33,071 $ 33,422"
+        }
+      ],
+      "rerun": "docs/investigations/v05_readings/reports/0002052152.json",
+      "decided_by": "PROPOSED by /root/apollo_origination_ii; not accepted",
+      "decided_on": "2026-10-16"
+    },
+    {
+      "disposition_id": "PD-AOYA-RVQ_BLK_1ac45f504f25",
+      "class": "false_alarm",
+      "engine": "row_validation",
+      "rule_name": "SRC_BDC03",
+      "ciks": [
+        "0002052152"
+      ],
+      "quarters": [
+        "2025-12-31"
+      ],
+      "reason_key": "printed-positive-fv-supported-by-two-subtotals",
+      "statement": "The only flagged row is December Elk DDT: raw inline fact sign=- gives -18,000; printed row gives +18,000. Independent Elk subtotal 11,375+18+0=11,393 and Transportation subtotal 11,393+22,029=33,422 both prove the positive sign. The correction also eliminates the entire -36,000 quarter residual: 1,517,931,000 becomes filed 1,517,967,000. Cost remains -11,000. Source/output disagreement is real, but it is caused by a source sign defect; reverting the correction would corrupt the printed values and totals.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)",
+          "quote": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18) 11,216 11,393",
+          "quote": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18) 11,216 11,393"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 10/15/2031 590 568 584 (8)(12)(16)(18) 21,855 22,029",
+          "quote": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 10/15/2031 590 568 584 (8)(12)(16)(18) 21,855 22,029"
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-104533",
+          "verbatim": "Total Transportation Infrastructure $ 33,071 $ 33,422",
+          "quote": "Total Transportation Infrastructure $ 33,071 $ 33,422"
+        }
+      ],
+      "rerun": "docs/investigations/v05_readings/reports/0002052152.json",
+      "decided_by": "PROPOSED by /root/apollo_origination_ii; not accepted",
+      "decided_on": "2026-10-16"
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+[
+  {
+    "quarter": "2025-06-30",
+    "identifier": "Personal Care Products PDC Brands Parfums Holding Company, Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate S+525, 1.00% Floor Maturity Date 6/27/2030",
+    "exact": true,
+    "fields": {
+      "basis_spread": "5.25"
+    },
+    "reason": "Split tagged digits 52 then untagged 5 form printed 525 bps. Printed: First Lien Secured Debt - Term Loan S + 52 5, 1.00 % Floor 6/27/2030 $ 32,015 $ 31,715 $ 31,695 (8)(11)"
+  },
+  {
+    "quarter": "2026-03-31",
+    "identifier": "Chemicals Vantage Specialty Chemicals Vantage Specialty Chemicals Holdings, Inc. Investment Type First Lien Secured Debt - Bank Debt Term Loan Interest Rate S+675 Cash plus 2.75% PIK, 1.00% Floor Maturity Date 8/29/2029",
+    "exact": true,
+    "fields": {
+      "interest_rate": "",
+      "basis_spread": "9.5",
+      "pik_rate": "2.75"
+    },
+    "reason": "Printed cash margin 675bps plus2.75PIK; tags confuse PIK and floor. No all-in rate printed. Printed: Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 15,946 $ 15,387 $ 14,511 (5)(8)(13)"
+  },
+  {
+    "quarter": "2026-03-31",
+    "identifier": "Commercial Services & Supplies Service Logic Saber Parent Holdings Corp Investment Type First Lien Secured Debt - Bank Debt Term Loan Interest Rate S+475 Cash plus 2.25% PIK 0.00% Floor Maturity Date 12/16/2032",
+    "exact": true,
+    "fields": {
+      "basis_spread": "7",
+      "pik_rate": "2.25"
+    },
+    "reason": "Printed cash margin475bps plus2.25PIK; floor/PIK tags swapped. Printed: Saber Parent Holdings Corp First Lien Secured Debt - Bank Debt Term Loan S+ 475 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 20,032 19,824 19,931 (5)(8)(13)"
+  },
+  {
+    "quarter": "2026-03-31",
+    "identifier": "Health Care Equipment & Supplies Zeus Zeus Company LLC Investment Type First Lien Secured Debt - Bank Debt Term Loan Interest Rate S+600 Cash plus 3.00% PIK, 0.75% Floor Maturity Date 2/28/2031",
+    "exact": true,
+    "fields": {
+      "basis_spread": "9",
+      "pik_rate": "3"
+    },
+    "reason": "Printed cash margin600bps plus3PIK; PIK tag wrongly scaled. Printed: Zeus Company LLC First Lien Secured Debt - Bank Debt Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031 8,272 8,238 7,301 (5)(8)(13)"
+  },
+  {
+    "quarter": "2026-03-31",
+    "identifier": "Insurance Higginbotham Higginbotham Insurance Agency, Inc. Investment Type First Lien Secured Debt - Bank Debt Term Loan Interest Rate S+450, 1.00% Floor Maturity Date 6/11/2031",
+    "exact": true,
+    "fields": {
+      "interest_rate": ""
+    },
+    "reason": "450bps is margin, not total coupon; preserve existing4.5spread. Printed: Higginbotham Insurance Agency, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 450 , 1.00 % Floor 6/11/2031 $ 2,486 $ 2,536 $ 2,436 (8)"
+  },
+  {
+    "quarter": "2025-12-31",
+    "identifier": "Technology Hardware, Storage & Peripherals Valor VCI Asset Holdings 1 LLC Investment Type First Lien Secured Debt - Term Loan Interest Rate 10% Floor Maturity Date 11/20/2030.",
+    "exact": true,
+    "fields": {
+      "interest_rate": "10"
+    },
+    "reason": "Fixed rate printed10percent; tag has incorrect scale. Printed: First Lien Secured Debt - Term Loan 10 % 11/20/2030 $ 39,887 $ 39,496 $ 39,488 (12)"
+  },
+  {
+    "quarter": "2026-03-31",
+    "identifier": "Electronic Equipment, Instruments & Components Wolfspeed Wolfspeed Inc Investment Type First Lien Secured Debt - Corporate Bond Interest Rate 9.88% Maturity Date 6/23/2030",
+    "exact": true,
+    "fields": {
+      "interest_rate": "9.88"
+    },
+    "reason": "Fixed rate printed9.88percent; tag has incorrect scale. Printed: Wolfspeed Inc First Lien Secured Debt - Corporate Bond 9.88 % 6/23/2030 $ 6,578 $ 5,550 $ 7,244 (5)(4)(15)"
+  },
+  {
+    "quarter": "2025-06-30",
+    "identifier": "Health Care Equipment & Supplies Vantive Spruce Bidco II Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate C+500, 0.75% Floor Maturity Date 1/30/2032",
+    "exact": true,
+    "fields": {
+      "interest_rate": "",
+      "basis_spread": "5",
+      "coupon_type": "Floating"
+    },
+    "reason": "C+500 is margin, not fixed coupon; preserve printedCORRA code through existingwrapper. Printed: First Lien Secured Debt - Term Loan C + 500 , 0.75 % Floor 1/30/2032 C$ 2,360 1,617 1,708 (3)(9)(11)"
+  },
+  {
+    "quarter": "2025-06-30",
+    "identifier": "Health Care Equipment & Supplies Vantive Spruce Bidco II Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate T+525, 0.75% Floor Maturity Date 1/30/2032",
+    "exact": true,
+    "fields": {
+      "interest_rate": "",
+      "basis_spread": "5.25",
+      "coupon_type": "Floating"
+    },
+    "reason": "T+525 is margin, not fixed coupon. Footnote10 identifies TORF; dated wrapper code supplies benchmark. Printed: First Lien Secured Debt - Term Loan T + 525 , 0.75 % Floor 1/30/2032 JPY 252,358 1,659 1,726 (3)(10)(11)"
+  },
+  {
+    "quarter": "2025-12-31",
+    "identifier": "Health Care Equipment & Supplies Vantive Spruce Bidco II Inc. Investment Type First Lien Secured Debt - Term Loan Interest Rate T+500, 0.75% Floor Maturity Date 1/30/2032",
+    "exact": true,
+    "fields": {
+      "principal_amount_currency": "JPY",
+      "principal_amount_usd": "1601377.551020408163265306122",
+      "principal_fx_rate_to_usd": "0.006377551020408163265306122449",
+      "principal_fx_status": "reference_converted"
+    },
+    "reason": "Printed JPY principal is mis-tagged USD. USD conversion uses cached FRED H10 DEXJPUS at2025-12-31, not filed dollars. Printed: First Lien Secured Debt - Term Loan T + 500 , 0.75 % Floor 1/30/2032 JPY 251,096 1,596 1,598 (8)(12)"
+  },
+  {
+    "quarter": "2025-12-31",
+    "identifier": "Technology Hardware, Storage & Peripherals Valor VCI Asset Holdings 1 LLC Common Equity/Partnership Interests - Membership Interest Equity",
+    "exact": true,
+    "fields": {
+      "shares_held": "1788576"
+    },
+    "reason": "Common membership unit count printed in unscaled share column; tagged incorrectly as USD principal x1000. Printed: Common Equity/Partnership Interests - Membership Interest N/A N/A 1,788,576 1,789 1,789 (12)(14)"
+  },
+  {
+    "quarter": "2026-03-31",
+    "identifier": "Technology Hardware, Storage & Peripherals Valor VCI Intermediate Topco 1 LLC Investment Type Common Equity - Membership Interest",
+    "exact": true,
+    "fields": {
+      "shares_held": "1788576"
+    },
+    "reason": "Common membership unit count printed in unscaled share column; tagged incorrectly as USD principal x1000. Printed: VCI Intermediate Topco 1 LLC Common Equity - Membership Interest N/A N/A 1,788,576 1,789 1,806 (13)(15)"
+  },
+  {
+    "quarter": "2026-03-31",
+    "identifier": "Technology Hardware, Storage & Peripherals Valor VCI Intermediate Topco 2 LLC Investment Type Common Equity - Membership Interest",
+    "exact": true,
+    "fields": {
+      "shares_held": "2549659"
+    },
+    "reason": "Common membership unit count printed in unscaled share column; tagged incorrectly as USD principal x1000. Printed: VCI Intermediate TopCo 2 LLC Common Equity - Membership Interest N/A N/A 2,549,659 2,549 2,576 (13)(15)"
+  },
+  {
+    "quarter": "2026-03-31",
+    "identifier": "Technology Hardware, Storage & Peripherals Service Express Victors Purchaser, LLC Investment Type First Lien Secured Debt \u2013 Bank Debt Term Loan Interest Rate S+450, 0.50% Floor Maturity Date 12/23/2032",
+    "exact": true,
+    "fields": {
+      "issuer_name": "Elk Bidco, Inc",
+      "extracted_industry": "Transportation Infrastructure"
+    },
+    "reason": "Source heading and line contradict the member assigned to this context; correct issuer and source industry, leaving correctly published maturity and amounts unchanged. Printed: Transportation Infrastructure Eagle Railcar Elk Bidco, Inc First Lien Secured Debt - Bank Debt Term Loan S + 450 , 0.50 % Floor 6/14/2032 $ 11,262 $ 11,209 $ 11,205 (5)(8)(13)"
+  },
+  {
+    "quarter": "2025-12-31",
+    "identifier": "Technology Hardware, Storage & Peripherals Service Express Victors Purchaser, LLC Investment Type First Lien Secured Debt \u2013 Delayed Draw Interest Rate S+450, 0.50% Floor Maturity Date 12/23/2032",
+    "exact": true,
+    "fields": {
+      "issuer_name": "Elk Bidco, Inc",
+      "extracted_industry": "Transportation Infrastructure",
+      "fair_value": "18000"
+    },
+    "reason": "Printed heading identifies Elk; source industry is Transportation Infrastructure. FV sign tag is wrong: printed DDT is positive 18 and term 11,375 + DDT 18 + revolver zero equals printed Elk FV subtotal 11,393. Adding GSI 22,029 equals printed Transportation FV total 33,422. Cost -11 unchanged. Printed: First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+  },
+  {
+    "quarter": "2025-12-31",
+    "identifier": "Transportation Infrastructure Eagle Railcar Elk Bidco, Inc Investment Type First Lien Secured Debt - Delayed Draw Interest Rate S+450, 0.50% Floor Maturity Date 6/14/2032",
+    "exact": true,
+    "fields": {
+      "issuer_name": "Victors Purchaser, LLC",
+      "extracted_industry": "Technology Hardware, Storage & Peripherals"
+    },
+    "reason": "Source heading and line contradict the member assigned to this context; correct issuer and source industry, leaving correctly published maturity and amounts unchanged. Printed: Service Express Victors Purchaser, LLC First Lien Secured Debt - Term Loan S + 450 , 0.50 % Floor 12/23/2032 43,794 43,745 43,685 (8) First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 12/23/2032 - ( 19 ) ( 16 ) (8)(15)(16)(18)"
+  }
+]

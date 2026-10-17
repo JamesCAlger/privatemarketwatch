@@ -1,0 +1,21 @@
+{
+  "schema_version": "fund-highlights-wrapper.v1",
+  "cik": "0002052152",
+  "entity_name": "Apollo Origination II (Levered) Capital Trust",
+  "version": 1,
+  "scale_fix_exempt_dates": [
+    {
+      "report_date": "2024-12-31",
+      "evidence": "0000950170-25-070628 comparative balance sheet: Total Assets $ 1,173,025 $ 2; Total Liabilities $ 599,728 $ 88; Total Net Assets $ 573,297 $ ( 86 ). Prelaunch assets 2000 and liabilities 88000 reconcile to net assets -86000; median-ratio scaling is invalid."
+    }
+  ],
+  "notes": "Source-read seed-period balance sheet. NAV N/A needs separate investigation; no invented NAV or tolerance change.",
+  "figure_corrections": [
+    {
+      "report_date": "2025-12-31",
+      "field": "income_yield_pct",
+      "value": 9.96,
+      "evidence": "0001193125-26-104533: Annualized ratio of net investment income to average net assets (4) 9.96 %. Existing companyfacts duration normalization divides this annualized ratio by4 to2.49; restore the printed ratio."
+    }
+  ]
+}

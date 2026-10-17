@@ -1110,6 +1110,24 @@ if GPMMC_LOOP in held and GPMMC_LOOP_FILE.exists():
         if spec.get("exact"):
             EXACT.add(spec["identifier"])
 
+CRESCENT_LOOP = "0001633336"
+CRESCENT_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001633336.json"
+if CRESCENT_LOOP in held and CRESCENT_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(CRESCENT_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((CRESCENT_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1633336-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
+
+APOLLO_II_L_LOOP = "0002052152"
+APOLLO_II_L_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0002052152.json"
+if APOLLO_II_L_LOOP in held and APOLLO_II_L_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(APOLLO_II_L_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((APOLLO_II_L_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-2052152-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue

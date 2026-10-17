@@ -1,0 +1,70 @@
+{
+  "schema_version": "position-match-override.v1",
+  "cik": "0002052152",
+  "overrides": [
+    {
+      "begin_report_date": "2025-09-30",
+      "end_report_date": "2025-12-31",
+      "begin_issuer_name": "Elk Bidco, Inc",
+      "end_issuer_name": "Victors Purchaser, LLC",
+      "begin_fair_value": 24000.0,
+      "end_fair_value": -16000.0,
+      "match_method": "B1b_position_key",
+      "action": "reject",
+      "mechanism": "Reject member-derived B1b pair contradicted by independent printed issuer headings and source maturities; remove cross-issuer links without asserting complete same-issuer continuity.",
+      "evidence": "Cached filing 0001193125-26-104533 December Elk DDT C_3f64477f-725a-428e-aa1d-e853404e0c67; Victors DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc. March 0001193125-26-221801 Elk and Victors printed headings establish distinct issuers. Whole 33-row source audit and corrected-FV 754-row replay: scratch/fund_runs/0002052152/replay_rejects.json.",
+      "confidence": 1.0,
+      "residual_risk": "Reject uses dates/names/FV tolerance; replay proves exactly one matching pair per directive and no collateral. Victors December 2025 DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc remains a singleton (PID 7b87b151-9d16-5650-ae8c-d445bfe0300e), separate from March/June 2026 DDTs (PID ddb63e20-fd74-5d00-95da-620cd3b53757), although all print maturity 2032-12-23. Elk revolvers also remain fragmented: June, September and December 2025 singletons, plus a March/June 2026 chain. All rows remain retained and distinct; no forced continuity repair.",
+      "created_by": "/root/apollo_origination_ii",
+      "review_id": "OBS-2052152-member-chain-1"
+    },
+    {
+      "begin_report_date": "2025-12-31",
+      "end_report_date": "2026-03-31",
+      "begin_issuer_name": "Elk Bidco, Inc",
+      "end_issuer_name": "Victors Purchaser, LLC",
+      "begin_fair_value": 18000.0,
+      "end_fair_value": -144000.0,
+      "match_method": "B1b_position_key",
+      "action": "reject",
+      "mechanism": "Reject member-derived B1b pair contradicted by independent printed issuer headings and source maturities; remove cross-issuer links without asserting complete same-issuer continuity.",
+      "evidence": "Cached filing 0001193125-26-104533 December Elk DDT C_3f64477f-725a-428e-aa1d-e853404e0c67; Victors DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc. March 0001193125-26-221801 Elk and Victors printed headings establish distinct issuers. Whole 33-row source audit and corrected-FV 754-row replay: scratch/fund_runs/0002052152/replay_rejects.json.",
+      "confidence": 1.0,
+      "residual_risk": "Reject uses dates/names/FV tolerance; replay proves exactly one matching pair per directive and no collateral. Victors December 2025 DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc remains a singleton (PID 7b87b151-9d16-5650-ae8c-d445bfe0300e), separate from March/June 2026 DDTs (PID ddb63e20-fd74-5d00-95da-620cd3b53757), although all print maturity 2032-12-23. Elk revolvers also remain fragmented: June, September and December 2025 singletons, plus a March/June 2026 chain. All rows remain retained and distinct; no forced continuity repair.",
+      "created_by": "/root/apollo_origination_ii",
+      "review_id": "OBS-2052152-member-chain-2"
+    },
+    {
+      "begin_report_date": "2025-12-31",
+      "end_report_date": "2026-03-31",
+      "begin_issuer_name": "Victors Purchaser, LLC",
+      "end_issuer_name": "Elk Bidco, Inc",
+      "begin_fair_value": -16000.0,
+      "end_fair_value": -35000.0,
+      "match_method": "B1b_position_key",
+      "action": "reject",
+      "mechanism": "Reject member-derived B1b pair contradicted by independent printed issuer headings and source maturities; remove cross-issuer links without asserting complete same-issuer continuity.",
+      "evidence": "Cached filing 0001193125-26-104533 December Elk DDT C_3f64477f-725a-428e-aa1d-e853404e0c67; Victors DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc. March 0001193125-26-221801 Elk and Victors printed headings establish distinct issuers. Whole 33-row source audit and corrected-FV 754-row replay: scratch/fund_runs/0002052152/replay_rejects.json.",
+      "confidence": 1.0,
+      "residual_risk": "Reject uses dates/names/FV tolerance; replay proves exactly one matching pair per directive and no collateral. Victors December 2025 DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc remains a singleton (PID 7b87b151-9d16-5650-ae8c-d445bfe0300e), separate from March/June 2026 DDTs (PID ddb63e20-fd74-5d00-95da-620cd3b53757), although all print maturity 2032-12-23. Elk revolvers also remain fragmented: June, September and December 2025 singletons, plus a March/June 2026 chain. All rows remain retained and distinct; no forced continuity repair.",
+      "created_by": "/root/apollo_origination_ii",
+      "review_id": "OBS-2052152-member-chain-3"
+    },
+    {
+      "begin_report_date": "2026-03-31",
+      "end_report_date": "2026-06-30",
+      "begin_issuer_name": "Elk Bidco, Inc",
+      "end_issuer_name": "Victors Purchaser, LLC",
+      "begin_fair_value": 11205000.0,
+      "end_fair_value": 43461000.0,
+      "match_method": "B1b_position_key",
+      "action": "reject",
+      "mechanism": "Reject March Elk 11.205m to June Victors 43.461m erroneous raw B1b pair; published match annotation subsequently rewrote March amount to genuine Victors 42.808m. Genuine Victors term continuity is retained by supplementary matching.",
+      "evidence": "Cached filing 0001193125-26-104533 December Elk DDT C_3f64477f-725a-428e-aa1d-e853404e0c67; Victors DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc. March 0001193125-26-221801 Elk and Victors printed headings establish distinct issuers. Whole 33-row source audit and corrected-FV 754-row replay: scratch/fund_runs/0002052152/replay_rejects.json.",
+      "confidence": 1.0,
+      "residual_risk": "Reject uses dates/names/FV tolerance; replay proves exactly one matching pair per directive and no collateral. Victors December 2025 DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc remains a singleton (PID 7b87b151-9d16-5650-ae8c-d445bfe0300e), separate from March/June 2026 DDTs (PID ddb63e20-fd74-5d00-95da-620cd3b53757), although all print maturity 2032-12-23. Elk revolvers also remain fragmented: June, September and December 2025 singletons, plus a March/June 2026 chain. All rows remain retained and distinct; no forced continuity repair.",
+      "created_by": "/root/apollo_origination_ii",
+      "review_id": "OBS-2052152-member-chain-4"
+    }
+  ]
+}

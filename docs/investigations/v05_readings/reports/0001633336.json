@@ -1,0 +1,595 @@
+{
+ "cik": "0001633336",
+ "label": "ccye",
+ "before": "spon2",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 928,
+   "why": "Fund-local hierarchy alternatives recover missing names; Service Logic identifier corrected from printed common-equity line."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 925,
+   "why": "Fund-local hierarchy parsing retains printed instrument after issuer stripping; Service Logic common stock restored."
+  },
+  {
+   "column": "cost",
+   "rows": 6,
+   "why": "Printed untagged costs and parenthesized undrawn costs restored; all affected rows source-read."
+  },
+  {
+   "column": "shares_held",
+   "rows": 12,
+   "why": "Integrity common units restored287484 after name normalization mistakenly borrowed preferred1247; Doxa257116 source-verified."
+  },
+  {
+   "column": "principal_amount",
+   "rows": 4,
+   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 4,
+   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 4,
+   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 4,
+   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
+  },
+  {
+   "column": "interest_rate",
+   "rows": 2,
+   "why": "Printed Omni12.70, Ingenio12.53, TSX9.91 restored; iLending unsupported8.5 withdrawn."
+  },
+  {
+   "column": "basis_spread",
+   "rows": 1,
+   "why": "Unsupported iLending spread withdrawn because current source rate/terms cells are blank."
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 261,
+   "why": "Exact printed Interest Term header and current/historical legend codes mapped in this fund wrapper."
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 274,
+   "why": "Reference rate provenance follows source-header/code decoding."
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "iLending unsupported fixed-rate inference withdrawn alongside its rate."
+  },
+  {
+   "column": "maturity_date",
+   "rows": 4,
+   "why": "Marlin two rows corrected to printedJuly2026; Matilda two staleDecember2022 dates withdrawn where current page blank."
+  },
+  {
+   "column": "src_transforms",
+   "rows": 8,
+   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 7,
+   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
+  },
+  {
+   "column": "principal_amount_source",
+   "rows": 4,
+   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
+  },
+  {
+   "column": "src_facts",
+   "rows": 4,
+   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 23,
+   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
+  },
+  {
+   "column": "position_key",
+   "rows": 928,
+   "why": "Issuer-name corrections recompute name-based position keys."
+  },
+  {
+   "column": "position_id",
+   "rows": 1169,
+   "why": "Fresh fund-only identity allocation already changed403 IDs in untouched carry-forward; name repairs and MHS twin separation add identity changes. IDs not used as comparison keys."
+  },
+  {
+   "column": "cost_reported",
+   "rows": 6,
+   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 2,
+   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 1,
+   "why": "Omni printed numeric rate restored from unresolved to all_in."
+  },
+  {
+   "column": "maturity_status",
+   "rows": 2,
+   "why": "Matilda stale dates withdrawn, status now not_disclosed."
+  }
+ ],
+ "rows_added": 604,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Expand this fund hierarchy parsing; retain distinct MHS625/650 loan keys. Restores20 previously collapsed unnamed instruments and11MHS twins.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-342351",
+     "text": "APC Bidco Limited (11) Unitranche First Lien Term Loan SN + 636.93 10.22 % 10/2030 GBP 4,339 $ 5,238 0.9 % $ 5,756"
+    },
+    {
+     "accession": "0001193125-26-342351",
+     "text": "en Revolver S + 600 , 100 Floor 9.81 % 07/2027 90 90 0.0 90 MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 , 100 Floor 10.06 % 07/2027 39 39 0.0 39 MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 650 , 100 Floor 10.31 % 07/2027 39 39 0.0 39 Minuteman Security Technologies, Inc. (4)(5) Senior Secured First Lien Delayed Draw Term Loan 02/2029 - ( 10 ) 0.0 ( 14 ) Minuteman Security Technologies, Inc. Senior Secured First Lien Term Loan S + "
+    }
+   ]
+  },
+  {
+   "what": "Decode only printed reference-rate columns using filer legends.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-040555",
+     "text": "London Interbank Offered Rate (LIBOR or L), Prime (P), SOFR (S), CDOR (C), EURIBOR (E), SONIA (SN), or BBSY (\"B\")"
+    }
+   ]
+  },
+  {
+   "what": "Declare four untagged printed principals/costs for Alpine, Omni, Loadmaster and Ingenio.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Alpine SG, LLC Senior Secured First Lien Term Loan S + 600 ( 100 Floor) 10.83 % 11/2027 536 525 0.1 520"
+    },
+    {
+     "accession": "0000950170-24-017903",
+     "text": "Loadmaster Derrick & Equipment, Inc. (5)(7)(9) Senior Secured First Lien Revolver 20,878 1,557 0.8 6,287"
+    }
+   ]
+  },
+  {
+   "what": "Restore14Integrity common-unit counts; correct cost signs, rates, Marlin maturities, Service Logic name/instrument; withdraw unsupported iLending rate and Matilda dates. Each row correction spec records its printed source.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Integrity Marketing Acquisition, LLC Common Stock 287,484 533 0.1 937"
+    },
+    {
+     "accession": "0001193125-26-342351",
+     "text": "TSX Fiber Senior Secured First Lien Term Loan S + 600 ( 400 PIK), 100 Floor 9.91 % 11/2030 872 872 0.1 872"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 17 ) 0.0 21"
+    },
+    {
+     "accession": "0000950170-23-040555",
+     "text": "Omni Ophthalmic Management Consultants, LLC Senior Secured First Lien Term Loan S + 750 ( 100 Floor) 12.70 % 09/2025 6,703 6,619 0.9 6,615"
+    },
+    {
+     "accession": "0000950170-23-040555",
+     "text": "Matilda Jane Holdings, Inc. (9) Senior Secured First Lien Term Loan 11,961 - 0.0 291"
+    }
+   ]
+  },
+  {
+   "what": "Existing investments_total_excludes cash_rows setting aligns schedule investment boundary: do not add entire balance-sheet cash39422000 to investment1598857000; schedule money-market is2110000.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Total Investments $ 1,623,906 213.5 % $ 1,598,857 Cash Equivalents Goldman Sachs Financial Square Government Fund 4.41 % $ 2,110 0.3 $ 2,110 Cash Equivalents Total $ 2,110 0.3 % $ 2,110 Investments and Cash Equivalents Total $ 1,626,016 213.8 % $ 1,600,967"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "row_validation X02 2023-03-31",
+   "status": "unfinished_review",
+   "hypotheses": [
+    "Read current 2023-03-31 line: OEM Group, LLC (7)(9) Senior Secured First Lien Term Loan 09/2025 9,385 9,011 1.3 9,314. Rate cell is blank, so this sample does not support a dropped numeric coupon.",
+    "Tested benchmark legend mapping fund-wide; it resolves codes but cannot create undisclosed rates."
+   ],
+   "remaining_uncertainty": "Remaining flagged rows in this quarter have not all been source-read. The reviewed sample cannot establish that every null rate is as filed. Earlier real-error verdicts for 2024Q3 and2025Q4 cite genuinely blank source cells, but that does not settle other rows.",
+   "next_action": "Read each remaining flagged row, comparing current rate and spread cells; correct dropped printed values, then propose only the fully reviewed as-filed group.",
+   "quotes": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "OEM Group, LLC (7)(9) Senior Secured First Lien Term Loan 09/2025 9,385 9,011 1.3 9,314"
+    }
+   ]
+  },
+  {
+   "finding": "row_validation X02 2024-06-30",
+   "status": "unfinished_review",
+   "hypotheses": [
+    "Read current 2024-06-30 line: Seko Global Logistics Network, LLC (9)(11) Senior Secured First Lien Term Loan 07/2027 4,924 4,883 0.5 3,501. Rate cell is blank, so this sample does not support a dropped numeric coupon.",
+    "Tested benchmark legend mapping fund-wide; it resolves codes but cannot create undisclosed rates."
+   ],
+   "remaining_uncertainty": "Remaining flagged rows in this quarter have not all been source-read. The reviewed sample cannot establish that every null rate is as filed. Earlier real-error verdicts for 2024Q3 and2025Q4 cite genuinely blank source cells, but that does not settle other rows.",
+   "next_action": "Read each remaining flagged row, comparing current rate and spread cells; correct dropped printed values, then propose only the fully reviewed as-filed group.",
+   "quotes": [
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Seko Global Logistics Network, LLC (9)(11) Senior Secured First Lien Term Loan 07/2027 4,924 4,883 0.5 3,501"
+    }
+   ]
+  },
+  {
+   "finding": "row_validation X02 2024-09-30",
+   "status": "unfinished_review",
+   "hypotheses": [
+    "Read current 2024-09-30 line: Envocore Holding, LLC (7)(8)(9) Senior Secured Second Lien Term Loan 12/2026 9,146 7,053 0.2 1,194. Rate cell is blank, so this sample does not support a dropped numeric coupon.",
+    "Tested benchmark legend mapping fund-wide; it resolves codes but cannot create undisclosed rates."
+   ],
+   "remaining_uncertainty": "Remaining flagged rows in this quarter have not all been source-read. The reviewed sample cannot establish that every null rate is as filed. Earlier real-error verdicts for 2024Q3 and2025Q4 cite genuinely blank source cells, but that does not settle other rows.",
+   "next_action": "Read each remaining flagged row, comparing current rate and spread cells; correct dropped printed values, then propose only the fully reviewed as-filed group.",
+   "quotes": [
+    {
+     "accession": "0000950170-24-124474",
+     "text": "Envocore Holding, LLC (7)(8)(9) Senior Secured Second Lien Term Loan 12/2026 9,146 7,053 0.2 1,194"
+    }
+   ]
+  },
+  {
+   "finding": "row_validation X02 2024-12-31",
+   "status": "unfinished_review",
+   "hypotheses": [
+    "Read current 2024-12-31 line: iLending LLC (9) Senior Secured First Lien Term Loan 06/2026 4,385 4,385 0.3 2,407. Rate cell is blank, so this sample does not support a dropped numeric coupon.",
+    "Tested benchmark legend mapping fund-wide; it resolves codes but cannot create undisclosed rates."
+   ],
+   "remaining_uncertainty": "Remaining flagged rows in this quarter have not all been source-read. The reviewed sample cannot establish that every null rate is as filed. Earlier real-error verdicts for 2024Q3 and2025Q4 cite genuinely blank source cells, but that does not settle other rows.",
+   "next_action": "Read each remaining flagged row, comparing current rate and spread cells; correct dropped printed values, then propose only the fully reviewed as-filed group.",
+   "quotes": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "iLending LLC (9) Senior Secured First Lien Term Loan 06/2026 4,385 4,385 0.3 2,407"
+    }
+   ]
+  },
+  {
+   "finding": "row_validation X02 2025-03-31",
+   "status": "unfinished_review",
+   "hypotheses": [
+    "Read current 2025-03-31 line: Action Signature Acquisition, Inc. (9) Unitranche First Lien Term Loan 1140 PIK 12/2027 3,200 3,188 0.1 646. Rate cell is blank, so this sample does not support a dropped numeric coupon.",
+    "Tested benchmark legend mapping fund-wide; it resolves codes but cannot create undisclosed rates."
+   ],
+   "remaining_uncertainty": "Remaining flagged rows in this quarter have not all been source-read. The reviewed sample cannot establish that every null rate is as filed. Earlier real-error verdicts for 2024Q3 and2025Q4 cite genuinely blank source cells, but that does not settle other rows.",
+   "next_action": "Read each remaining flagged row, comparing current rate and spread cells; correct dropped printed values, then propose only the fully reviewed as-filed group.",
+   "quotes": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Action Signature Acquisition, Inc. (9) Unitranche First Lien Term Loan 1140 PIK 12/2027 3,200 3,188 0.1 646"
+    }
+   ]
+  },
+  {
+   "finding": "row_validation X02 2025-09-30",
+   "status": "unfinished_review",
+   "hypotheses": [
+    "Read current 2025-09-30 line: Omni Ophthalmic Management Consultants, LLC (9) Senior Secured First Lien Term Loan 01/2026 7,014 6,811 0.7 4,851. Rate cell is blank, so this sample does not support a dropped numeric coupon.",
+    "Tested benchmark legend mapping fund-wide; it resolves codes but cannot create undisclosed rates."
+   ],
+   "remaining_uncertainty": "Remaining flagged rows in this quarter have not all been source-read. The reviewed sample cannot establish that every null rate is as filed. Earlier real-error verdicts for 2024Q3 and2025Q4 cite genuinely blank source cells, but that does not settle other rows.",
+   "next_action": "Read each remaining flagged row, comparing current rate and spread cells; correct dropped printed values, then propose only the fully reviewed as-filed group.",
+   "quotes": [
+    {
+     "accession": "0001193125-25-277533",
+     "text": "Omni Ophthalmic Management Consultants, LLC (9) Senior Secured First Lien Term Loan 01/2026 7,014 6,811 0.7 4,851"
+    }
+   ]
+  },
+  {
+   "finding": "row_validation X02 2025-12-31",
+   "status": "unfinished_review",
+   "hypotheses": [
+    "Read current 2025-12-31 line: Continental Battery Company (9) Unitranche First Lien Term Loan 07/2028 8,428 7,469 0.6 3,884. Rate cell is blank, so this sample does not support a dropped numeric coupon.",
+    "Tested benchmark legend mapping fund-wide; it resolves codes but cannot create undisclosed rates."
+   ],
+   "remaining_uncertainty": "Remaining flagged rows in this quarter have not all been source-read. The reviewed sample cannot establish that every null rate is as filed. Earlier real-error verdicts for 2024Q3 and2025Q4 cite genuinely blank source cells, but that does not settle other rows.",
+   "next_action": "Read each remaining flagged row, comparing current rate and spread cells; correct dropped printed values, then propose only the fully reviewed as-filed group.",
+   "quotes": [
+    {
+     "accession": "0001193125-26-071922",
+     "text": "Continental Battery Company (9) Unitranche First Lien Term Loan 07/2028 8,428 7,469 0.6 3,884"
+    }
+   ]
+  },
+  {
+   "finding": "provenance_reverify financial_convention_unresolved 2023-03-31",
+   "status": "source_contradiction",
+   "hypotheses": [
+    "PPV two loans print0.00 all-in but1300PIK; comparative13.00 is not authority to replace the current0.00.",
+    "Read the printed rate/PIK terms; simple cash=all-in-minus-PIK would be negative. No evidence supports adding PIK to the printed all-in column."
+   ],
+   "remaining_uncertainty": "Published all-in remains unresolved despite a printed numeric rate; this is not an as-filed published value. Correct rate convention cannot be established from these contradictory columns.",
+   "next_action": "Inspect the relevant footnotes/amendment evidence and obtain an explicit per-row convention decision; preserve reported source numbers and unresolved status until supported.",
+   "quotes": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "PPV Intermediate Holdings LLC (Vetcor) (8) Unsecured Debt 1300 PIK 0.00 % 08/2030 758 741 0.1 646"
+    }
+   ]
+  },
+  {
+   "finding": "provenance_reverify financial_convention_unresolved 2025-06-30",
+   "status": "source_contradiction",
+   "hypotheses": [
+    "Mario revolver prints10.18rate and1079PIK, so PIK10.79 exceeds disclosed rate.",
+    "Read the printed rate/PIK terms; simple cash=all-in-minus-PIK would be negative. No evidence supports adding PIK to the printed all-in column."
+   ],
+   "remaining_uncertainty": "Published all-in remains unresolved despite a printed numeric rate; this is not an as-filed published value. Correct rate convention cannot be established from these contradictory columns.",
+   "next_action": "Inspect the relevant footnotes/amendment evidence and obtain an explicit per-row convention decision; preserve reported source numbers and unresolved status until supported.",
+   "quotes": [
+    {
+     "accession": "0000950170-25-108024",
+     "text": "Mario Purchaser, LLC Unitranche First Lien Revolver S + 1079 PIK 10.18 % 04/2028 174 162 0.0 144"
+    }
+   ]
+  },
+  {
+   "finding": "provenance_reverify financial_convention_unresolved 2026-06-30",
+   "status": "source_contradiction",
+   "hypotheses": [
+    "Three Eagle loans print8.58/10.49/10.32 versus PIK9.53/11.39/11.39; Mario prints14.58 versusPIK14.60. TSX separate100x scale bug was corrected9.91.",
+    "Read the printed rate/PIK terms; simple cash=all-in-minus-PIK would be negative. No evidence supports adding PIK to the printed all-in column."
+   ],
+   "remaining_uncertainty": "Published all-in remains unresolved despite a printed numeric rate; this is not an as-filed published value. Correct rate convention cannot be established from these contradictory columns.",
+   "next_action": "Inspect the relevant footnotes/amendment evidence and obtain an explicit per-row convention decision; preserve reported source numbers and unresolved status until supported.",
+   "quotes": [
+    {
+     "accession": "0001193125-26-342351",
+     "text": "Eagle Midco B.V. (Avania) (11) Unitranche First Lien Term Loan E + 750 ( 953 PIK) 8.58 % 07/2029 EUR 2,439 $ 2,533 0.3 % $ 1,656"
+    }
+   ]
+  },
+  {
+   "finding": "row_validation SRC_BDC01 2026-03-31",
+   "status": "confirmed_missing_position",
+   "hypotheses": [
+    "Current source context C_3fe4568f-09b0-420a-83ad-1601efcdcc49 prints revolver with -2000cost/-17000FV; absent from holdings.",
+    "Tried context_identifiers: helper skips this already-labelled investment context; no row recovered, declaration withdrawn.",
+    "Tried narrow dispatch leaf marker: this fund lacks complete dispatch configuration; schema required rule_prefix, incomplete experiment withdrawn before build."
+   ],
+   "remaining_uncertainty": "Missing real position persists because its member text has issuer/maturity but lacks instrument. Gate total tolerance does not detect this small omission.",
+   "next_action": "Implement and test a fund-opt-in short-member extraction path or source-declared row addition carrying the printed instrument, then rebuild and verify no duplicate.",
+   "quotes": [
+    {
+     "accession": "0001193125-26-221936",
+     "text": "Painters Supply & Equipment Company (4)(5) Unitranche First Lien Revolver 08/2027 - ( 2 ) 0.0 ( 17 )"
+    }
+   ]
+  },
+  {
+   "finding": "source_recon blocking_source_pct_leaf_parser_mismatch 2026-03-31",
+   "status": "confirmed_missing_position",
+   "hypotheses": [
+    "Current source context C_3fe4568f-09b0-420a-83ad-1601efcdcc49 prints revolver with -2000cost/-17000FV; absent from holdings.",
+    "Tried context_identifiers: helper skips this already-labelled investment context; no row recovered, declaration withdrawn.",
+    "Tried narrow dispatch leaf marker: this fund lacks complete dispatch configuration; schema required rule_prefix, incomplete experiment withdrawn before build."
+   ],
+   "remaining_uncertainty": "Missing real position persists because its member text has issuer/maturity but lacks instrument. Gate total tolerance does not detect this small omission.",
+   "next_action": "Implement and test a fund-opt-in short-member extraction path or source-declared row addition carrying the printed instrument, then rebuild and verify no duplicate.",
+   "quotes": [
+    {
+     "accession": "0001193125-26-221936",
+     "text": "Painters Supply & Equipment Company (4)(5) Unitranche First Lien Revolver 08/2027 - ( 2 ) 0.0 ( 17 )"
+    }
+   ]
+  },
+  {
+   "finding": "html_extract html_carry 2022-03-31",
+   "status": "unfinished_historical_review",
+   "hypotheses": [
+    "Cached HTML has current total1288601000 and comparative1270366000. Validation artifact has416rows/FV2363790000, carry_rate0.351, NO_DATA filed anchor.",
+    "No XBRL cache available for accession0000950170-22-008487; no2022published holdings in this sandbox."
+   ],
+   "remaining_uncertainty": "Company carry and current/comparative membership have not been fully reviewed. Sum discrepancy is evidence requiring investigation, not proof of one specific mechanism.",
+   "next_action": "Inspect carried company cells and schedule date boundaries in the historical template; rerun bounded HTML extraction and establish an independent current total.",
+   "quotes": [
+    {
+     "accession": "0000950170-22-008487",
+     "text": "Total Investments $ 1,267,678 196.9 % $ 1,288,601"
+    }
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "Name repair caused shared normalizer to replace Integrity common287484units with neighboring preferred1247; restored14quarters from pages. Doxa257116 gain separately source-verified. Other funds not audited.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Verify equity unit counts against the same printed instrument, not merely normalized issuer.",
+   "quote": {
+    "accession": "0000950170-23-020540",
+    "text": "Integrity Marketing Acquisition, LLC Common Stock 287,484 533 0.1 937"
+   }
+  },
+  {
+   "observation_key": "distinct-equal-value-loans-collapsed",
+   "what": "MHS625/650spread loans were collapsed despite distinct printed coupons; restored11rows with fund opt-in distinct-member suffix.",
+   "field": "row_presence",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Require instrument/terms agreement before treating equal-value positions as duplicates.",
+   "quote": {
+    "accession": "0001193125-26-342351",
+    "text": "en Revolver S + 600 , 100 Floor 9.81 % 07/2027 90 90 0.0 90 MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 , 100 Floor 10.06 % 07/2027 39 39 0.0 39 MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 650 , 100 Floor 10.31 % 07/2027 39 39 0.0 39 Minuteman Security Technologies, Inc. (4)(5) Senior Secured First Lien Delayed Draw Term Loan 02/2029 - ( 10 ) 0.0 ( 14 ) Minuteman Security Technologies, Inc. Senior Secured First Lien Term Loan S + "
+   }
+  },
+  {
+   "observation_key": "printed-percent-rate-scaled-down-100x",
+   "what": "TSX printed9.91 percent became0.0991, incorrectly creating unresolved PIK convention; restored9.91, cash5.91 andPIK4.",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Compare reported rate with the printed percent cell before resolving PIK convention.",
+   "quote": {
+    "accession": "0001193125-26-342351",
+    "text": "TSX Fiber Senior Secured First Lien Term Loan S + 600 ( 400 PIK), 100 Floor 9.91 % 11/2030 872 872 0.1 872"
+   }
+  },
+  {
+   "observation_key": "source-negative-cost-sign-lost",
+   "what": "Seniorlink undrawn cost published+17000 versus printed(17); corrected-17000.",
+   "field": "cost",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Check sign against printed parentheses on undrawn costs.",
+   "quote": {
+    "accession": "0000950170-23-020540",
+    "text": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 17 ) 0.0 21"
+   }
+  },
+  {
+   "observation_key": "printed-rate-lost-during-context-merge",
+   "what": "Omni FV6615000rate was blank despite printed12.70; corrected.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-06-30"
+   ],
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Merged-context nulls must be compared with current printed numeric cells.",
+   "quote": {
+    "accession": "0000950170-23-040555",
+    "text": "Omni Ophthalmic Management Consultants, LLC Senior Secured First Lien Term Loan S + 750 ( 100 Floor) 12.70 % 09/2025 6,703 6,619 0.9 6,615"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_crescent_wrapper_reading.py and tests/test_source_encodings.py:100passed initially; final focused wrapper file4passed before ccye; protected-output checks passed.",
+  "Five cached single-fund builds; every processing stage passed. Ledger exit1 reflects outstanding findings.",
+  "Untouched ccya versus filtered spon2:573newQ2rows,0removed;403position_id changes plus exempt identity fields, no other common-row field changes.",
+  "ccye versus ccyd:onecost,onerate,twomaturities and their audit/status fields changed;0row additions/removals; allother92columns identical."
+ ],
+ "not_done": [
+  "53outstanding before owner proposals; sevenX02 quarter groups have unfinished full-row review, three financial-convention groups need source clarification, Painters missingposition persists and2022HTMLcarry remains unreviewed. See13specific parked entries.",
+  "No full suite, cohort rebuild, frontend export, publication or commit. Huge semantic backstop previously timed out in parent session; not repeated here.",
+  "Five of six build allowance used; independent20row sample and orchestrator snapshot gate pending.",
+  "All14published quarters have filed total anchors; tolerance pass is not exact reconciliation and does not establish correctness. Historical2022HTMLquarter has no independent cached total anchor in validation artifact.",
+  "Older zero-FV missing fields, source-derived cost proxies and unrelated holdings fields were not exhaustively audited."
+ ]
+}

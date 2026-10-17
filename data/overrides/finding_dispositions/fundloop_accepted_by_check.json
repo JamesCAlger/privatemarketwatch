@@ -49,6 +49,28 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-C103-1633336",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C103",
+   "ciks": [
+    "0001633336"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "statement": "Small negative fair values on undrawn lines, as tagged.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox ccye for each quarter listed: 1 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py ccye C103 3",
+   "decided_by": "check passed on sandbox ccye; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-C103-1772704",
    "class": "as_filed",
    "engine": "row_validation",
@@ -333,6 +355,28 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py gsxc C107 3",
    "decided_by": "check passed on sandbox gsxc; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-C107-1633336",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001633336"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox ccya for each quarter listed: 39 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py ccya C107 3",
+   "decided_by": "check passed on sandbox ccya; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -790,6 +834,28 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-C107-2052152",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0002052152"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox aoyaa for each quarter listed: 36 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py aoyaa C107 3",
+   "decided_by": "check passed on sandbox aoyaa; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-C107-2083477",
    "class": "as_filed",
    "engine": "row_validation",
@@ -835,6 +901,28 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py mfxe 0001278752",
    "decided_by": "check passed on sandbox mfxe; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-X02-1633336",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001633336"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox ccya for each quarter listed: 71 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py ccya 0001633336",
+   "decided_by": "check passed on sandbox ccya; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -1203,6 +1291,28 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-X06-1633336",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001633336"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox ccya for each quarter listed: 4 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py ccya X06 3",
+   "decided_by": "check passed on sandbox ccya; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-X06-1634452",
    "class": "as_filed",
    "engine": "row_validation",
@@ -1464,6 +1574,33 @@
    ],
    "rerun": "python scripts/v05_evidence/pctq.py ssxf 0001508655",
    "decided_by": "check passed on sandbox ssxf; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-pct_of_net_assets_identity-1633336",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001633336"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "The percent of net assets the filer prints and tags disagrees with its own fair value over net assets (printed to one decimal, or printed on a neighbouring line). The printed figure is published as filed; the schema value, fair value over net assets, is published beside it in pct_of_net_assets_calculated.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check pct_as_filed_with_calculated passed on sandbox ccya for each quarter listed: 58 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/pctq.py ccya 0001633336",
+   "decided_by": "check passed on sandbox ccya; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {

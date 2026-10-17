@@ -1,0 +1,1662 @@
+[
+    {
+        "card":  "C001",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "not_printed",
+                                          "cause":  "",
+                                          "note":  "Printed dash; zero or blank equivalent."
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "not_printed",
+                                    "cause":  "",
+                                    "note":  "Printed dash; zero or blank equivalent."
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "not_printed",
+                                                "cause":  "",
+                                                "note":  "Par prints dash; published blank."
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C002",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C003",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C004",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "not_printed",
+                                                "cause":  "",
+                                                "note":  "Par prints dash; published blank."
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "wrong_value",
+                                            "cause":  "",
+                                            "note":  "S+475 means 4.75 percent; raw tag 4.75 instead of 0.0475. Published correct."
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C005",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C006",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C007",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C008",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C009",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C010",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  "S+550 cash plus 2.75 percent PIK gives total margin 8.25 percent; tag carries cash margin correctly."
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "right",
+                                        "cause":  "",
+                                        "note":  ""
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C011",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "right",
+                                        "cause":  "",
+                                        "note":  ""
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C012",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C013",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "wrong_value",
+                                            "cause":  "",
+                                            "note":  "S+500 means 5 percent; raw tag 5.0 instead of 0.05. Published correct."
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C014",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C015",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C016",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C017",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "not_printed",
+                                                "cause":  "",
+                                                "note":  "Par prints dash; published blank."
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C018",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C019",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    },
+    {
+        "card":  "C020",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "wrong_label",
+                                            "cause":  "",
+                                            "note":  "Published money matches Elk position; member describes Victors Purchaser, LLC and its different December 2032 maturity."
+                                        },
+                       "issuer_name":  {
+                                           "published":  "wrong",
+                                           "tag":  "wrong_label",
+                                           "cause":  "tag",
+                                           "note":  "Prints Elk Bidco, Inc under Eagle Railcar, but member and published name say Victors Purchaser, LLC. Cached page_line offset 147260 confirms Elk par 11,262, cost 11,209 and FV 11,205."
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No numeric value for this field printed; loan rate column shows benchmark plus margin."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "right",
+                                                   "cause":  "",
+                                                   "note":  ""
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No PIK component printed."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         }
+                   }
+    }
+]

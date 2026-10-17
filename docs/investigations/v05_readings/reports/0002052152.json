@@ -1,0 +1,2524 @@
+{
+  "cik": "0002052152",
+  "label": "aoyae",
+  "before": "spon3",
+  "investigator_id": "/root/apollo_origination_ii",
+  "shared_code": true,
+  "declared_changes": [
+    {
+      "column": "issuer_name",
+      "rows": 532,
+      "why": "Earlier source-name cleanup plus sample followup:3wrong issuer assignments corrected by exactquarter/member key and13correct Elk rows lose group prefix."
+    },
+    {
+      "column": "instrument_description",
+      "rows": 6,
+      "why": "Remove industry/hierarchy leakage and trailing rate/maturity labels while retaining tranche descriptions."
+    },
+    {
+      "column": "fair_value",
+      "rows": 1,
+      "why": "Exact December Elk DDT sign correction supported by visible +18 and two printed subtotals; +36,000 makes fund total exact."
+    },
+    {
+      "column": "cost",
+      "rows": 3,
+      "why": "Restore missing Datavant37.442m March2026 and missing custom money-market costs; four changes versus fresh aoyaa, three versus spon3."
+    },
+    {
+      "column": "shares_held",
+      "rows": 3,
+      "why": "Three printed common membership counts: December2025 Valor1788576, March2026 Valor1788576 and2549659; preferred ambiguous counts withheld."
+    },
+    {
+      "column": "principal_amount_currency",
+      "rows": 1,
+      "why": "December2025 Vantive principal is JPY as printed, not USD."
+    },
+    {
+      "column": "principal_amount_usd",
+      "rows": 1,
+      "why": "Convert251096000 JPY at cached2025-12-31 H10 rate0.006377551020408163 to1601377.551020408 USD."
+    },
+    {
+      "column": "principal_fx_rate_to_usd",
+      "rows": 1,
+      "why": "Use existing cached reference-date JPY/USD rate after currency correction."
+    },
+    {
+      "column": "principal_fx_status",
+      "rows": 1,
+      "why": "Mark corrected foreign principal reference_converted, consistent with actual conversion."
+    },
+    {
+      "column": "interest_rate",
+      "rows": 6,
+      "why": "Fix Valor10 and Wolfspeed9.88 fixed coupon scales; remove four margin/floor/PIK figures falsely published as fixed all-in coupons."
+    },
+    {
+      "column": "basis_spread",
+      "rows": 6,
+      "why": "Restore source margins and cash-plus-PIK: PDC5.25,Vantage9.5,ServiceLogic7,Zeus9,Vantive5/5.25."
+    },
+    {
+      "column": "reference_rate_type",
+      "rows": 5,
+      "why": "Dated printed TORF/TONAR mapping and CORRA floating benchmark restoration; baseline differences depend on prior mapping."
+    },
+    {
+      "column": "reference_rate_source",
+      "rows": 5,
+      "why": "Source-code provenance follows the explicit dated benchmark mappings."
+    },
+    {
+      "column": "coupon_type",
+      "rows": 2,
+      "why": "Two June2025 Vantive rows are floating benchmark-plus-spread, not fixed."
+    },
+    {
+      "column": "pik_rate",
+      "rows": 3,
+      "why": "March2026 Vantage2.75,ServiceLogic2.25,Zeus3: printed PIK instead of floor/misscaled tag."
+    },
+    {
+      "column": "src_facts",
+      "rows": 4,
+      "why": "Financial audit provenance follows exact FV sign correction; raw filing remains unedited."
+    },
+    {
+      "column": "corrected_fields",
+      "rows": 16,
+      "why": "31 explicit correction cells across16 exact row specs, including new FV sign correction."
+    },
+    {
+      "column": "entity_id",
+      "rows": 415,
+      "why": "Derived cache/name-resolution changes, mostly already present in untouched current-code baseline versus historical spon3. Only3 entity IDs moved during final name cleanup. Sample repair renumbers31entity assignments within Elk/Victors families after current-build name resolution;3canonical names change. EntityIDs are not assumed durable across these rebuilds."
+    },
+    {
+      "column": "canonical_name",
+      "rows": 125,
+      "why": "Derived name resolution following source-backed issuer cleanup and current caches; no manual entity merge."
+    },
+    {
+      "column": "extracted_industry",
+      "rows": 3,
+      "why": "Three source-context positions restored to printed industry headings; erroneous issuer members had supplied the opposite company industry."
+    },
+    {
+      "column": "gics_sub_industry",
+      "rows": 3,
+      "why": "Derived from corrected source industry through existing mapping, including Transportation Infrastructure -> Highways & Railtracks."
+    },
+    {
+      "column": "position_id",
+      "rows": 149,
+      "why": "Source-backed name corrections plus four reject-only B1b overrides; full affected-family audit across33rows, eight DDT component memberships repaired in build5 and746others unchanged."
+    },
+    {
+      "column": "cost_reported",
+      "rows": 3,
+      "why": "Reported-cost companion follows source-declared restored cost."
+    },
+    {
+      "column": "interest_rate_reported",
+      "rows": 6,
+      "why": "Reported-rate companion follows exact source coupon corrections and false fixed-rate withdrawals."
+    },
+    {
+      "column": "interest_rate_kind",
+      "rows": 4,
+      "why": "Fixed/floating rate semantics recomputed from corrected coupon/spread fields."
+    },
+    {
+      "column": "interest_rate_cash",
+      "rows": 1,
+      "why": "Derived cash-rate companion changes with corrected coupon; no storage convention migration."
+    },
+    {
+      "column": "pct_of_net_assets_calculated",
+      "rows": 1,
+      "why": "Corrected row FV changes numerator; net-assets denominator unchanged."
+    },
+    {
+      "column": "gics_sector",
+      "rows": 3,
+      "why": "Derived from corrected source industry/name through existing GICS mapping; no direct GICS correction."
+    }
+  ],
+  "rows_added": 187,
+  "rows_removed": 0,
+  "fixes": [
+    {
+      "what": "Restore source-declared zero FV on 29 separately identified revolver/delayed-draw positions, including cost-bearing rows.",
+      "kind": "untagged_value",
+      "quarters": [
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31"
+      ],
+      "quotes": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "First Lien Secured Debt - Revolver S+ 500 , 0.00 % Floor 6/6/2031 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "First Lien Secured Debt - Revolver S + 550 , 0.75 % Floor 2/28/2030 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Revolver S + 600 , 1.00 % Floor 10/8/2029 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Poly-Wood, LLC First Lien Secured Debt - Delayed Draw S + 575 , 1.00 % Floor 3/20/2030 - $ - $ - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "SG Acquisition, Inc. First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 4/3/2030 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "First Lien Secured Debt - Revolver S+ 500 , 0.75 % Floor 7/2/2031 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.00 % Floor 6/6/2031 3,503 - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 263 - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 1,661 2 - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "First Lien Secured Debt - Revolver S + 550 , 0.75 % Floor 2/28/2030 1,157 1 - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 7/2/2031 2,544 1 - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "First Lien Secured Debt - Revolver S + 475 , 0.75 % Floor 10/1/2029 1,365 ( 11 ) - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Revolver S + 550 , 0.75 % Floor 1/31/2030 - 3 - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 1.00 % Floor 4/1/2030 - ( 7 ) - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Delayed Draw S + 475 , 0.75 % Floor 3/5/2032 - ( 89 ) - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 3/5/2032 - ( 26 ) - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 7/2/2031 - 1 - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Revolver S + 475 , 0.75 % Floor 10/1/2029 - ( 9 ) - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 5/13/2032 - ( 5 ) - (8)(15)(17)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S+ 550 , 0.75 % Floor 1/31/2030 - - - (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 9/2/2031 - ( 25 ) - (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/5/2032 - - - (8)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 7/2/2031 - - - (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 475 , 0.75 % Floor 10/1/2029 - ( 11 ) - (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 5/13/2032 - ( 4 ) - (8)(16)(18)"
+        }
+      ]
+    },
+    {
+      "what": "Read missing Datavant cost 37.442 million from the printed row, not a reconciliation plug.",
+      "kind": "untagged_value",
+      "quarters": [
+        "2026-03-31"
+      ],
+      "quotes": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "CT Technologies Intermediate Holdings (Topco), Inc. First Lien Secured Debt - Bank Debt Term Loan S + 475 , 0.75 % Floor 9/2/2031 37,787 37,442 36,842 (5)(8)(13)"
+        }
+      ]
+    },
+    {
+      "what": "Exempt source-supported prelaunch balance sheet from median scaling; existing no_seed filter subsequently withholds all2024-12-31 financial fields. This is removal of bad scaling, not successful publication of seed figures.",
+      "kind": "wrapper",
+      "quarters": [
+        "2024-12-31"
+      ],
+      "quotes": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Total Assets $ 1,173,025 $ 2"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Total Liabilities $ 599,728 $ 88"
+        }
+      ]
+    },
+    {
+      "what": "Correct malformed hierarchy delimiters and repeated industry prefixes, and strip trailing rate/maturity from instrument labels.",
+      "kind": "wrapper",
+      "quarters": [
+        "2025-03-31",
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "quotes": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Goldeneye Parent, LLC First Lien Secured Debt - Bank Debt Term Loan S + 475 , 0.75 % Floor 3/31/2032 26,798 26,678 25,994 (5)(8)(13)"
+        }
+      ]
+    },
+    {
+      "what": "Declare total investments excludes separately printed money market cash; fill its missing custom-tag cost.",
+      "kind": "wrapper",
+      "quarters": [
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "quotes": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Goldman Sachs Financial Square Government Fund Institutional Shares N/A N/A $ 24,340 $ 24,340 $ 24,340 (17)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Goldman Sachs Financial Square Government Fund Institutional Shares N/A N/A 31,431 $ 31,431 $ 31,431 (18)"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "Goldman Sachs Financial Square Government Fund Institutional Shares N/A N/A 29,240 $ 29,240 $ 29,240 (18)"
+        }
+      ]
+    },
+    {
+      "what": "Correct13 exact row specs /24 cells: printed fixed coupons, margin/PIK confusion, JPY currency and cached-date FX, and common membership units.",
+      "kind": "row_correction",
+      "quarters": [
+        "2025-06-30",
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "quotes": [
+        {
+          "accession": "0000950170-25-107411",
+          "text": "First Lien Secured Debt - Term Loan S + 52 5, 1.00 % Floor 6/27/2030 $ 32,015 $ 31,715 $ 31,695 (8)(11)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 15,946 $ 15,387 $ 14,511 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Saber Parent Holdings Corp First Lien Secured Debt - Bank Debt Term Loan S+ 475 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 20,032 19,824 19,931 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Zeus Company LLC First Lien Secured Debt - Bank Debt Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031 8,272 8,238 7,301 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Higginbotham Insurance Agency, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 450 , 1.00 % Floor 6/11/2031 $ 2,486 $ 2,536 $ 2,436 (8)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Term Loan 10 % 11/20/2030 $ 39,887 $ 39,496 $ 39,488 (12)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Wolfspeed Inc First Lien Secured Debt - Corporate Bond 9.88 % 6/23/2030 $ 6,578 $ 5,550 $ 7,244 (5)(4)(15)"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "First Lien Secured Debt - Term Loan C + 500 , 0.75 % Floor 1/30/2032 C$ 2,360 1,617 1,708 (3)(9)(11)"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "First Lien Secured Debt - Term Loan T + 525 , 0.75 % Floor 1/30/2032 JPY 252,358 1,659 1,726 (3)(10)(11)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Term Loan T + 500 , 0.75 % Floor 1/30/2032 JPY 251,096 1,596 1,598 (8)(12)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Common Equity/Partnership Interests - Membership Interest N/A N/A 1,788,576 1,789 1,789 (12)(14)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Intermediate Topco 1 LLC Common Equity - Membership Interest N/A N/A 1,788,576 1,789 1,806 (13)(15)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Intermediate TopCo 2 LLC Common Equity - Membership Interest N/A N/A 2,549,659 2,549 2,576 (13)(15)"
+        }
+      ]
+    },
+    {
+      "what": "Use dated source footnotes for yen benchmark: TORF through2025, TONAR from2026; June2025 CORRA margin rows treated as floating.",
+      "kind": "wrapper",
+      "quarters": [
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "quotes": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": " (10) The interest rate on these loans is subject to 3 months Tokyo Term Risk Free Rate (TORF), which as of December 31 , 2025 was 0.72 %. (11) The interest rate on thes"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "ate on these loans is subject to 3 months Japan Tokyo Overnight Average Rate (TONAR or I), which as of March 31, 2026 was 0.73 %. (12) The interest rat"
+        }
+      ]
+    },
+    {
+      "what": "Remove repeated issuer-group prefixes only when followed by the full exact source legal name:673 of754 rows in aoyab,76 exact guarded patterns; eight rate-contaminated instrument strings cleaned. No lost GICS or new derived_proxy share counts.",
+      "kind": "wrapper",
+      "quarters": [
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "quotes": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "MRO Holdings, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.50 % Floor 12/17/2030 $ 48,082 $ 48,283 $ 48,082 (5)(8)(11)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Truck-Lite Co., LLC First Lien Secured Debt - Delayed Draw S + 575 , 0.75 % Floor 2/13/2031 $ 1,130 $ 1,115 $ 1,115 (8)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "LBM Acquisition, LLC First Lien Secured Debt - Term Loan S + 385 , 0.75 % Floor 12/17/2027 $ 685 $ 687 $ 672 (4)(8)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "A&V Holdings Midco, LLC First Lien Secured Debt - Delayed Draw S + 500 , 0.00 % Floor 6/6/2031 - $ ( 98 ) $ ( 95 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "AVSC Holding Corp. First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 12/5/2029 398 299 299 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Heritage Environmental Services, Inc. First Lien Secured Debt - Delayed Draw S + 500 , 0.75 % Floor 1/31/2031 - ( 8 ) ( 8 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "R. R. Donnelley & Sons Company First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 8/8/2029 9,543 9,265 9,352 (5)(8)(11)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Commscope, LLC First Lien Secured Debt - Corporate Bond 9.50 % 12/15/2031 $ 3,434 $ 3,573 $ 3,536 (4)(5)(11)(13)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Fire Flow Intermediate Corporation First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 7/10/2031 $ 34,258 $ 34,088 $ 34,087 (5)(8)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "LendingTree, Inc. First Lien Secured Debt - Delayed Draw S + 575 , 1.50 % Floor 3/27/2031 $ 6,953 $ 6,953 $ 6,953 (8)(11)(13)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Protein For Pets Opco, LLC First Lien Secured Debt - Revolver S + 525 , 1.00 % Floor 9/20/2030 - $ ( 19 ) $ ( 19 ) (7)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Viking Baked Goods Acquisition Corporation First Lien Secured Debt - Term Loan S + 500 , 0.00 % Floor 10/24/2031 28,777 28,350 28,345 (5)(7)(11)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Jensen Hughes, Inc First Lien Secured Debt - Delayed Draw S + 500 , 0.75 % Floor 9/1/2031 - $ ( 98 ) $ ( 98 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Wealth Enhancement Group, LLC First Lien Secured Debt - Revolver S + 500 , 1.00 % Floor 10/2/2028 - ( 6 ) ( 6 ) (7)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Spruce Bidco II Inc. First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2032 - $ ( 44 ) $ ( 44 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Zeus Company LLC First Lien Secured Debt - Delayed Draw S + 550 , 0.75 % Floor 2/28/2031 $ 540 555 551 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 - $ ( 13 ) $ 13 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Revolver S + 600 , 1.00 % Floor 10/8/2029 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/28/2029 34,086 34,257 34,086 (5)(8)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Goldeneye Parent, LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 3/31/2032 $ 27,000 $ 26,865 $ 26,865 (5)(8)(11)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Poly-Wood, LLC First Lien Secured Debt - Delayed Draw S + 575 , 1.00 % Floor 3/20/2030 - $ - $ - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Vensure Employer Services, Inc. First Lien Secured Debt - Delayed Draw S + 500 , 0.50 % Floor 9/27/2031 - $ ( 57 ) $ ( 57 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "HIG Intermediate, Inc. Preferred Equity - Cumulative Preferred Equity N/A 34 33 33"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Higginbotham Insurance Agency, Inc. First Lien Secured Debt - Delayed Draw S + 475 , 1.00 % Floor 11/24/2028 $ 1,423 $ 1,423 $ 1,423 (8)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Thg Acquisition, LLC First Lien Secured Debt - Delayed Draw S + 475 , 0.75 % Floor 10/31/2031 59 26 26 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "SG Acquisition, Inc. First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 4/3/2030 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Cambrex Corp. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 3/6/2032 $ 21,468 $ 21,254 $ 21,253 (5)(8)(11)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Curia Global, Inc. First Lien Secured Debt - Term Loan S + 625 , 1.00 % Floor 12/6/2029 46,708 45,890 45,890 (5)(8)(11)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Gannett Co., Inc. First Lien Secured Debt - Convertible Bond 6.00 % 12/1/2031 10 13 11 (11)(13)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Delayed Draw S + 500 , 1.50 % Floor 10/15/2029 - $ ( 44 ) $ ( 30 ) (4)(5)(8)(11)(13)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Parfums Holding Company, Inc. First Lien Secured Debt - Revolver S + 525 , 1.00 % Floor 6/27/2029 - $ ( 20 ) $ ( 20 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Silk Holdings III Corp. First Lien Secured Debt - Term Loan S + 500 , 1.00 % Floor 5/1/2029 19,889 19,724 19,740 (5)(8)(11)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Creek Parent, Inc. First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 12/18/2031 - $ ( 101 ) $ ( 101 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "BDO USA, P.A. First Lien Secured Debt - Term Loan S + 500 , 2.00 % Floor 8/31/2028 $ 30,446 $ 30,451 $ 30,446 (5)(8)(11)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Legends Hospitality Holding Company, LLC First Lien Secured Debt - Delayed Draw S + 500 , 0.75 % Floor 8/22/2031 - ( 13 ) ( 13 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Wolfspeed, Inc. First Lien Secured Debt - Corporate Bond 11.9 % 6/23/2030 $ 17,799 $ 17,336 $ 17,710 (5)(13)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Azurite Intermediate Holdings, Inc. First Lien Secured Debt - Delayed Draw S + 650 , 0.75 % Floor 3/19/2031 $ 10,303 $ 10,277 $ 10,278 (8)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Databricks, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/19/2031 - 44 65 (4)(7)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Everbridge Holdings, LLC First Lien Secured Debt - Delayed Draw S + 500 , 0.75 % Floor 7/2/2031 2,487 2,519 2,519 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Evergreen IX Borrower 2023, LLC First Lien Secured Debt - Revolver S + 475 , 0.75 % Floor 10/1/2029 - ( 14 ) ( 14 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "QBS Parent, Inc. First Lien Secured Debt - Revolver S + 475 , 0.75 % Floor 11/7/2031 - ( 15 ) ( 15 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Runway Bidco, LLC First Lien Secured Debt - Delayed Draw S + 500 , 0.50 % Floor 12/17/2031 - ( 99 ) ( 99 ) (8)(11)(14)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "The Men's Wearhouse, LLC First Lien Secured Debt - Term Loan S + 650 , 0.00 % Floor 2/26/2029 $ 17,442 $ 17,457 $ 17,478 (4)(5)(8)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Victors Purchaser, LLC First Lien Secured Debt - Delayed Draw S + 475 , 0.50 % Floor 8/15/2031 $ 1,472 $ 1,472 $ 1,404 (8)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Geotechnical Merger Sub, Inc. First Lien Secured Debt - Delayed Draw S + 475 , 0.75 % Floor 10/15/2031 $ 1,011 $ 944 $ 944 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "TITAN BW BORROWER L.P. First Lien Secured Debt - Bank Debt Term Loan S + 250 Cash plus 2.88 % PIK, 0.50 % Floor 7/24/2032 22,231 21,657 22,009 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "LHS Borrower LLC First Lien Secured Debt - Bank Debt Term Loan S + 525 , 0.75 % Floor 9/4/2031 $ 27,138 $ 26,761 $ 26,731 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Russell Investments US Institutional Holdco Inc First Lien Secured Debt - Bank Debt Term Loan S+ 625 Cash plus 1.25 % PIK, 2.00 % Floor 12/29/2032 $ 31,853 $ 31,287 $ 31,376 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 15,946 $ 15,387 $ 14,511 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Saber Parent Holdings Corp First Lien Secured Debt - Bank Debt Term Loan S+ 475 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 20,032 19,824 19,931 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Altern Marketing, LLC First Lien Secured Debt - Bank Debt Term Loan S + 425 , 2.00 % Floor 2/5/2031 $ 2,717 $ 2,676 $ 2,676 (8)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Golden Hippo Pet, LLC First Lien Secured Debt - Bank Debt Term Loan S + 425 , 2.00 % Floor 2/5/2031 13,844 13,636 13,636 (8)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Wolfspeed Inc First Lien Secured Debt - Corporate Bond 9.88 % 6/23/2030 $ 6,578 $ 5,550 $ 7,244 (5)(4)(15)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Wealth Enhancement Group, LLC First Lien Secured Debt - Delayed Draw S + 425 , 1.00 % Floor 10/2/2028 $ 23,807 $ 23,743 $ 23,075 (8)(17)(19)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Aryeh Bidco Investment Ltd. First Lien Secured Debt - Bank Debt Term Loan C + 500 , 0.75 % Floor 1/14/2033 C$ 10,935 $ 7,799 $ 7,779 (3)(5)(10)(13)(15)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "One Call Corporation (fka Opal Acquisition, Inc.) First Lien Secured Debt - Bank Debt Term Loan S + 575 , 0.50 % Floor 9/10/2030 30,609 30,190 30,150 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "CT Technologies Intermediate Holdings (Topco), Inc. First Lien Secured Debt - Bank Debt Term Loan S + 475 , 0.75 % Floor 9/2/2031 37,787 37,442 36,842 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "IRIS Specialty Acquisition LLC First Lien Secured Debt - Bank Debt Term Loan S + 450 , 0.50 % Floor 11/20/2032 18,256 18,167 18,028 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Koala Investment Holdings, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 425 , 0.75 % Floor 8/29/2032 18,804 18,628 18,475 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Curia Global, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 300 Cash plus 3.25 % PIK, 0.00 % Floor 12/6/2029 48,231 46,102 43,891 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Uft Buyer LLC First Lien Secured Debt - Bank Debt Term Loan S+ 225 Cash plus 2.75 % PIK, 0.50 % PIK 12/6/2032 $ 9,212 $ 9,042 $ 9,120 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "USA TODAY Co Inc (fka Gannett Co., Inc.) First Lien Secured Debt - Convertible Bond 6.00 % 12/1/2031 10 13 16 (13)(15)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Silk Holdings III Corp. First Lien Secured Debt - Bank Debt Term Loan S+ 450 , 0.50 % Floor 12/3/2032 43,339 42,754 42,905 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Deerfield Dakota Holding, LLC First Lien Secured Debt - Bank Debt Term Loan S + 575 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032 13,355 13,034 13,154 (5)(8)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Edition Holdings, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 450 , 0.75 % Floor 12/20/2032 27,569 27,468 27,293 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "JEPPESEN HOLDINGS, LLC First Lien Secured Debt - Bank Debt Term Loan S + 475 , 0.50 % Floor 11/1/2032 26,121 25,935 25,828 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Asset Holdings 1 LLC First Lien Secured Debt - Bank Debt Term Loan 10.00 % 11/20/2030 $ 37,893 $ 37,535 $ 40,193 (5)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Asset Holdings 2 LLC First Lien Secured Debt - Bank Debt Term Loan 7.38 % 2/18/2031 19,414 19,224 20,016 (5)(13)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Intermediate Topco 1 LLC Common Equity - Membership Interest N/A N/A 1,788,576 1,789 1,806 (13)(15)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Intermediate TopCo 2 LLC Common Equity - Membership Interest N/A N/A 2,549,659 2,549 2,576 (13)(15)"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "Curia Receivables II SPV, LLC First Lien Secured Debt - Revolver S + 625 , 1.00 % Floor 1/29/2029 1,047 1,047 1,044 (8)(15)(19)(20)"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "VCI Asset Holdings 1 LLC First Lien Secured Debt - Bank Debt Term Loan 10.00 % 11/20/2030 $ 35,899 $ 35,572 $ 38,311 (4)(5)(15)"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "VCI Asset Holdings 2 LLC First Lien Secured Debt - Bank Debt Term Loan 7.37 % 2/18/2031 18,614 18,439 19,124 (4)(5)(15)"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "VCI Intermediate TopCo 2 LLC Common Equity - Membership Interest N/A N/A 2,550 Units 2,550 2,397 (15)(16)"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "VCI Asset Holdings 3 LLC First Lien Secured Debt - Bank Debt Term Loan 6.88 % 4/24/2031 29,536 29,250 29,955 (4)(5)(15)"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "VCI Intermediate TopCo 3 LLC Common Equity - Membership Interest N/A N/A 69 Units 69 70 (15)(16)"
+        }
+      ]
+    },
+    {
+      "what": "Restore annualized NII ratio9.96percent at2025-12-31; duration normalization had divided the alreadyannualized source by4 to2.49.",
+      "kind": "wrapper",
+      "quarters": [
+        "2025-12-31"
+      ],
+      "quotes": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Annualized ratio of net investment income to average net assets (4) 9.96 %"
+        }
+      ]
+    },
+    {
+      "what": "Independent sampleC020 expanded to33Victors/Elk positions across6quarters. Correct3misassigned issuer/industry pairs (December2025twoDDTs, March2026Elktermloan); preserve genuineVictors keys and correctly published amounts/maturity. Anchored Elkprefix cleanup on13additionalrows. New extracted_industry row-correction support is inert without an explicit exact key;0preexisting entries found.",
+      "kind": "shared_code",
+      "quarters": [
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "quotes": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "Transportation Infrastructure Eagle Railcar Elk Bidco, Inc First Lien Secured Debt - Bank Debt Term Loan S + 450 , 0.50 % Floor 6/14/2032 $ 11,262 $ 11,209 $ 11,205 (5)(8)(13)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Transportation Infrastructure Eagle Railcar Elk Bidco, Inc First Lien Secured Debt - Term Loan S + 450 , 0.50 % Floor 6/14/2032 $ 11,290 $ 11,237 $ 11,375 (8)(12) First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Service Express Victors Purchaser, LLC First Lien Secured Debt - Term Loan S + 450 , 0.50 % Floor 12/23/2032 43,794 43,745 43,685 (8) First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 12/23/2032 - ( 19 ) ( 16 ) (8)(15)(16)(18)"
+        }
+      ]
+    },
+    {
+      "what": "Correct December Elk DDT FV from -18,000 to +18,000 by exact row key; reject four erroneous member-derived matches through existing per-CIK match overrides. Quarter FV increases 36,000 to exactly filed 1,517,967,000. No cost/rate/principal/maturity changes.",
+      "kind": "config",
+      "quarters": [
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "quotes": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18) 11,216 11,393"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 10/15/2031 590 568 584 (8)(12)(16)(18) 21,855 22,029"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Total Transportation Infrastructure $ 33,071 $ 33,422"
+        }
+      ]
+    }
+  ],
+  "total_exceptions": [],
+  "parked": [
+    {
+      "finding": "RVQ_REV_06eac4c6e54e oracle C04 2025-12-31",
+      "hypotheses": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 2 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted.",
+        "Prior real-error verdict called every Par/Shares value a share count. Re-read every cited row: its common-count diagnosis is fixed (1788576; plus2549659 in March), but its preferred34000-shares claim lacks unit evidence and is contradicted by dollar-marked September and explicit34Units in June. The earlier verdict is not treated as authority."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    },
+    {
+      "finding": "RVQ_REV_25c8252401c5 oracle C04 2026-03-31",
+      "hypotheses": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 3 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted.",
+        "Prior real-error verdict called every Par/Shares value a share count. Re-read every cited row: its common-count diagnosis is fixed (1788576; plus2549659 in March), but its preferred34000-shares claim lacks unit evidence and is contradicted by dollar-marked September and explicit34Units in June. The earlier verdict is not treated as authority."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    },
+    {
+      "finding": "RVQ_REV_5753d0d24b36 oracle C04 2025-09-30",
+      "hypotheses": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 1 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    },
+    {
+      "finding": "RVQ_REV_8a5214a87d1b oracle C04 2025-03-31",
+      "hypotheses": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 1 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    },
+    {
+      "finding": "RVQ_REV_b196c658ccfc oracle C04 2025-06-30",
+      "hypotheses": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 1 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    }
+  ],
+  "orchestrator_requests": [],
+  "observations": [
+    {
+      "observation_key": "missing-cost-does-not-trigger-cost-conservation",
+      "what": "Datavant March2026 printed cost37442(thousands), published null; declared37442000. FV reconciliation alone did not catch it.",
+      "field": "cost",
+      "quarters": [
+        "2026-03-31"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "suggested_check": "For each source position with a numeric cost cell, compare published cost presence and scaled value, excluding dash-only and non-USD cost cells unless converted.",
+      "quote": {
+        "accession": "0001193125-26-221801",
+        "text": "CT Technologies Intermediate Holdings (Topco), Inc. First Lien Secured Debt - Bank Debt Term Loan S + 475 , 0.75 % Floor 9/2/2031 37,787 37,442 36,842 (5)(8)(13)"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "fixed-coupon-percent-tag-scale-disagrees-with-page",
+      "what": "Valor December2025 published0.1 instead of10; Wolfspeed March2026 published0.0988 instead of9.88. Both corrected to printed fixed coupon.",
+      "field": "interest_rate",
+      "quarters": [
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "suggested_check": "Compare printed percentage in fixed-coupon row against published coupon; flag100x discrepancy, excluding benchmark spreads and floor/PIK-only cells.",
+      "quote": {
+        "accession": "0001193125-26-221801",
+        "text": "Wolfspeed Inc First Lien Secured Debt - Corporate Bond 9.88 % 6/23/2030 $ 6,578 $ 5,550 $ 7,244 (5)(4)(15)"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "margin-tagged-as-plain-rate-published-as-coupon",
+      "what": "March2026 Higginbotham4.5 was a floating margin rather than a fixed all-in coupon; June2025 Vantive5/5.25 had the same problem. Withdraw false fixed coupons and preserve source margins and benchmarks. Vantage2.75 was PIK, addressed separately.",
+      "field": "interest_rate",
+      "quarters": [
+        "2025-06-30",
+        "2026-03-31"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "suggested_check": "If printed rate cell is benchmark+margin or explicitly PIK/floor, flag an all-in fixed coupon equal to one component without an independent printed all-in rate.",
+      "quote": {
+        "accession": "0001193125-26-221801",
+        "text": "Higginbotham Insurance Agency, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 450 , 1.00 % Floor 6/11/2031 $ 2,486 $ 2,536 $ 2,436 (8)"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "pik-printed-on-the-row-and-not-tagged",
+      "what": "March2026 PIK components corrected: Vantage2.75,ServiceLogic2.25,Zeus3. Source tags held wrong semantic component or scale.",
+      "field": "pik_rate",
+      "quarters": [
+        "2026-03-31"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "suggested_check": "Compare explicit printed PIK percent in matched row with pik_rate, independently of total basis_spread; distinguish floor and cash tokens.",
+      "quote": {
+        "accession": "0001193125-26-221801",
+        "text": "Saber Parent Holdings Corp First Lien Secured Debt - Bank Debt Term Loan S+ 475 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 20,032 19,824 19,931 (5)(8)(13)"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+      "what": "December2025 Vantive printed JPY principal251096(thousands) was treated as251096000USD. Corrected to JPY and1601377.551020408USD using cached date FX.",
+      "field": "principal_amount_currency",
+      "quarters": [
+        "2025-12-31"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "suggested_check": "Compare explicit row currency symbol/code with published principal currency before applying FX; flag USD default conflicting with yen/foreign code, retaining same-context identity.",
+      "quote": {
+        "accession": "0001193125-26-104533",
+        "text": "First Lien Secured Debt - Term Loan T + 500 , 0.75 % Floor 1/30/2032 JPY 251,096 1,596 1,598 (8)(12)"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "issuer-name-from-member-differs-from-page",
+      "what": "673rows carried issuer group plus legal issuer (sometimes twice); exact guarded source-name strips remove group text. Names gate did not flag these plausible company-like prefixes.",
+      "field": "issuer_name",
+      "quarters": [
+        "2025-03-31",
+        "2025-06-30",
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "suggested_check": "Compare built issuer against source legal-name cell after excluding separately identified industry/group headings; flag extra leading group text without fuzzy company merges.",
+      "quote": {
+        "accession": "0000950170-25-070628",
+        "text": "MRO Holdings, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.50 % Floor 12/17/2030 $ 48,082 $ 48,283 $ 48,082 (5)(8)(11)"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "instrument-text-keeps-member-words",
+      "what": "Eight final instrument labels retained SOFR margins/floors or concatenated InterestRate. Source-backed strip leaves tranche type intact.",
+      "field": "instrument_description",
+      "quarters": [
+        "2025-03-31",
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "suggested_check": "Flag interest/maturity header tokens and benchmark-plus-margin clauses in instrument_description when independent rate/maturity fields and source columns exist.",
+      "quote": {
+        "accession": "0001193125-26-347350",
+        "text": "First Lien Secured Debt - Delayed Draw S + 475 , 0.75 % Floor 9/2/2031 3,740 3,697 3,601 (7)(8)(15)(17)(19)(20)"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "fund-income-ratio-published-is-not-the-printed-ratio",
+      "what": "December2025 annualized ratio9.96 was normalized to2.49; exact highlights wrapper restores9.96 without changing other quarters.",
+      "field": "income_yield_pct",
+      "quarters": [
+        "2025-12-31"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "suggested_check": "Compare source financial-highlights annualized NII/average-net-assets percent with published ratio; prohibit duration division when source label explicitly annualized.",
+      "quote": {
+        "accession": "0001193125-26-104533",
+        "text": "Annualized ratio of net investment income to average net assets (4) 9.96 %"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "unit-count-basis-changes-between-filings",
+      "what": "HIG preferred and VCI common unit presentations change by roughly1000x across filings while value/cost remain similar. June2026 explicit Units retained as printed; earlier preferred basis remains unresolved, common printed counts restored.",
+      "field": "shares_held",
+      "quarters": [
+        "2025-09-30",
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "cause": "fund",
+      "action": "parked",
+      "suggested_check": "For matched equity tranches flag>100x count change with<50percent cost/FV change; classify explicit unit-label/scale change separately and never rescale solely to smooth history.",
+      "quote": {
+        "accession": "0001193125-26-347350",
+        "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34 Units $ 33 $ 34"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "seed-financials-suppressed-without-published-reason",
+      "what": "After removing bad median scaling, shared no_seed CTE nulls all2024-12-31 financials because assets2000<100000; source liabilities88000/netassets-86000 reconcile. Existing intentional filter also drops its _is_seed flag. This run leaves the policy in place; the published nulls need a documented prelaunch-suppression status, not a claim of repaired balances.",
+      "field": "fund_financials",
+      "quarters": [
+        "2024-12-31"
+      ],
+      "cause": "shared",
+      "action": "left",
+      "suggested_check": "Flag source-present balance rows nulled by a seed filter without a retained suppression reason; verify assets/liabilities/net-assets identity before any opt-in retention. Implement provenance status first; changing whether prelaunch balances are published needs explicit product-scope decision.",
+      "quote": {
+        "accession": "0000950170-25-070628",
+        "text": "Total Assets $ 1,173,025 $ 2"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "reference-rate-code-misprinted-by-filer",
+      "what": "2026 row member retainsT while linked Japanese-rate footnote calls benchmark TONAR orI;2025footnotes specify TORF. Applied quarter-bounded mappings from source footnotes rather than guessed date default.",
+      "field": "reference_rate_type",
+      "quarters": [
+        "2025-12-31",
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "suggested_check": "Compare each benchmark code with the linked same-period footnote legend; flag code/legend mismatch and require dated evidence before mapping, with no automatic cross-fund substitution.",
+      "quote": {
+        "accession": "0001193125-26-221801",
+        "text": "The interest rate on these loans is subject to 3 months Japan Tokyo Overnight Average Rate (TONAR or I), which as of March 31, 2026 was 0.73 %."
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Direct printed-row/field comparison or explicitly bounded source-coverage test catches recurrence; flag for reading rather than auto-correct ambiguous sources.",
+        "reference": "proposed in this fund report; not installed"
+      }
+    },
+    {
+      "observation_key": "member-carries-another-rows-name",
+      "what": "Three source-backed issuer/industry repairs corrected the displayed names, but independent review correctly rejected the initial identity audit: unchanged DDT IDs still carried wrong issuers. Full 33-row source-family and all-754-row component audit now identifies three wrong B1b identity edges and a fourth erroneous pre-assignment term-loan pair. Four narrowly keyed reject-only overrides remove these edges; final components no longer mix different printed issuers or maturities. This removes wrong-company links without claiming complete same-issuer continuity or using force-pair directives. Final build changes eight DDT component memberships (seven final IDs), preserves all other 746 memberships, and every family component has consistent printed issuer/maturity. All term loans, genuine Victors positions and separate revolvers remain distinct. Victors December 2025 DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc remains a singleton (PID 7b87b151-9d16-5650-ae8c-d445bfe0300e), separate from March/June 2026 DDTs (PID ddb63e20-fd74-5d00-95da-620cd3b53757), although all print maturity 2032-12-23. Elk revolvers also remain fragmented: June, September and December 2025 singletons, plus a March/June 2026 chain. All rows remain retained and distinct; no forced continuity repair.",
+      "field": "issuer_name/extracted_industry/position_id",
+      "quarters": [
+        "2025-12-31",
+        "2026-03-31"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "quote": {
+        "accession": "0001193125-26-221801",
+        "text": "Transportation Infrastructure Eagle Railcar Elk Bidco, Inc First Lien Secured Debt - Bank Debt Term Loan S + 450 , 0.50 % Floor 6/14/2032 $ 11,262 $ 11,209 $ 11,205 (5)(8)(13)"
+      },
+      "suggested_check": "Compare each context-matched position to its printed legal issuer and industry headings, carrying headings only within the source table/group; flag incompatible member issuer/industry and distinguish legitimate aliases. Do not infer identity solely from maturity or amounts. Independently audit matched chains for conflicting source legal issuers and source maturities even when member text matches; emit a review flag with refinancing/renaming negatives, not an automatic split based only on amount change.",
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Plausible wrong-company names pass shape checks; independently matched source headings expose these3cases, with17genuineVictors rows as negative controls. The original wrong member also bypassed effective source-identity continuity in a chain; chain validation must compare independent printed issuer/maturity rather than reuse member-derived matching keys. Independent review found unchanged IDs still wrong; detector must inspect all affected-family rows, not only changed IDs. Existing member-derived keys are not independent source evidence.",
+        "reference": "SampleC020 and sample_followup.json; extends existing issuer-name-from-member-differs-from-page proposal"
+      },
+      "additional_evidence": [
+        {
+          "accession": "0001193125-26-347350",
+          "text": "First Lien Secured Debt - Bank Debt Term Loan S + 425 , 0.50 % Floor 12/23/2032 43,794 43,747 43,461 (5)(8)(15)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18) 11,216 11,393"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 10/15/2031 590 568 584 (8)(12)(16)(18) 21,855 22,029"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Total Transportation Infrastructure $ 33,071 $ 33,422"
+        }
+      ],
+      "family_audit": {
+        "population": 33,
+        "reviewed": 33,
+        "artifact": "scratch/fund_runs/0002052152/aoyae_audit.json",
+        "changed_component_rows": 8,
+        "unchanged_component_rows": 746,
+        "family_components": 13,
+        "cross_issuer_edges": 0,
+        "same_quarter_merges": 0,
+        "residual": "Victors December 2025 DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc remains a singleton (PID 7b87b151-9d16-5650-ae8c-d445bfe0300e), separate from March/June 2026 DDTs (PID ddb63e20-fd74-5d00-95da-620cd3b53757), although all print maturity 2032-12-23. Elk revolvers also remain fragmented: June, September and December 2025 singletons, plus a March/June 2026 chain. All rows remain retained and distinct; no forced continuity repair.",
+        "components": [
+          {
+            "pid": "089f7a2c-8985-5632-a8d8-ac8a1805cb65",
+            "rows": [
+              {
+                "report_date": "2025-12-31",
+                "src_context_id": "C_044367be-55a0-47ae-afa8-a100bbd4176f",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Revolver",
+                "maturity_date": "2032-06-14",
+                "fair_value": "0.0"
+              }
+            ]
+          },
+          {
+            "pid": "2f32c1ed-73c5-5ad4-9239-68f1d9a8c512",
+            "rows": [
+              {
+                "report_date": "2026-03-31",
+                "src_context_id": "C_9903ec72-0274-4392-8ce5-8641e26b0067",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Revolver",
+                "maturity_date": "2032-06-14",
+                "fair_value": "-53000.0"
+              },
+              {
+                "report_date": "2026-06-30",
+                "src_context_id": "C_848363a8-59a7-48cc-85b9-4e58104bcb2a",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Revolver",
+                "maturity_date": "2032-06-14",
+                "fair_value": "-79000.0"
+              }
+            ]
+          },
+          {
+            "pid": "4b71bbdf-2a80-5a12-956d-902375043544",
+            "rows": [
+              {
+                "report_date": "2025-09-30",
+                "src_context_id": "C_ddf4817a-55ee-414c-a9e0-6e939824a63c",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Revolver",
+                "maturity_date": "2032-06-14",
+                "fair_value": "0.0"
+              }
+            ]
+          },
+          {
+            "pid": "6bed4dcd-69cb-5e82-862f-aa5509ba5287",
+            "rows": [
+              {
+                "report_date": "2025-12-31",
+                "src_context_id": "C_3f64477f-725a-428e-aa1d-e853404e0c67",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt \u2013 Delayed Draw",
+                "maturity_date": "2032-06-14",
+                "fair_value": "18000.0"
+              },
+              {
+                "report_date": "2025-06-30",
+                "src_context_id": "C_bed5dd36-5b26-46f0-8836-eb4c721a9c20",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Delayed Draw",
+                "maturity_date": "2032-06-14",
+                "fair_value": "-12000.0"
+              },
+              {
+                "report_date": "2026-06-30",
+                "src_context_id": "C_f804427b-6a7f-45a1-ab86-c7a1febee4d8",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Delayed Draw",
+                "maturity_date": "2032-06-14",
+                "fair_value": "-86000.0"
+              },
+              {
+                "report_date": "2025-09-30",
+                "src_context_id": "C_f0e0e331-1b09-4233-b92a-3648bda8aa59",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Delayed Draw",
+                "maturity_date": "2032-06-14",
+                "fair_value": "24000.0"
+              },
+              {
+                "report_date": "2026-03-31",
+                "src_context_id": "C_6c6a9dce-bf7f-4563-a9fa-4c475cd44cc4",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Delayed Draw",
+                "maturity_date": "2032-06-14",
+                "fair_value": "-35000.0"
+              }
+            ]
+          },
+          {
+            "pid": "6d9645ab-89d5-596e-8086-afd03154e500",
+            "rows": [
+              {
+                "report_date": "2026-03-31",
+                "src_context_id": "C_62e7fd80-fec1-4b4d-a2fe-a4218f428fc0",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt \u2013 Revolver",
+                "maturity_date": "2032-12-23",
+                "fair_value": "-134000.0"
+              },
+              {
+                "report_date": "2025-12-31",
+                "src_context_id": "C_6b816803-8e5f-4691-985c-ad1778531fff",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt \u2013 Revolver",
+                "maturity_date": "2032-12-23",
+                "fair_value": "494000.0"
+              },
+              {
+                "report_date": "2026-06-30",
+                "src_context_id": "C_ce72de25-9468-45cf-b79e-bf96e00ad9c0",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt \u2013 Revolver",
+                "maturity_date": "2032-12-23",
+                "fair_value": "537000.0"
+              }
+            ]
+          },
+          {
+            "pid": "7b87b151-9d16-5650-ae8c-d445bfe0300e",
+            "rows": [
+              {
+                "report_date": "2025-12-31",
+                "src_context_id": "C_b29a37d7-568d-40af-bbc6-ba22636872fc",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt - Delayed Draw",
+                "maturity_date": "2032-12-23",
+                "fair_value": "-16000.0"
+              }
+            ]
+          },
+          {
+            "pid": "8f6da5f3-fdf2-5018-bc18-6aea68d06cd9",
+            "rows": [
+              {
+                "report_date": "2026-06-30",
+                "src_context_id": "C_74bca564-a450-4662-94be-623da0844ce4",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt \u2013 Bank Debt Term Loan",
+                "maturity_date": "2032-12-23",
+                "fair_value": "43461000.0"
+              },
+              {
+                "report_date": "2025-12-31",
+                "src_context_id": "C_07fe7683-2f8b-431c-8d6e-13ada0ccdbcd",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt \u2013 Term Loan",
+                "maturity_date": "2032-12-23",
+                "fair_value": "43685000.0"
+              },
+              {
+                "report_date": "2026-03-31",
+                "src_context_id": "C_829a2277-71d5-4ea8-933f-aace4265b60c",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt \u2013 Term Loan",
+                "maturity_date": "2032-12-23",
+                "fair_value": "42808000.0"
+              }
+            ]
+          },
+          {
+            "pid": "9c270efb-f8e0-5f36-83bb-7837b17eb505",
+            "rows": [
+              {
+                "report_date": "2025-06-30",
+                "src_context_id": "C_6cb3505f-261f-4e58-8a6e-61b3d30792fa",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt - Revolver",
+                "maturity_date": "2031-08-15",
+                "fair_value": "-39000.0"
+              },
+              {
+                "report_date": "2025-03-31",
+                "src_context_id": "C_57a5c952-4df9-40f4-83d0-5439af8ba2aa",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt \u2013 Revolver",
+                "maturity_date": "2031-08-15",
+                "fair_value": "-39000.0"
+              },
+              {
+                "report_date": "2025-09-30",
+                "src_context_id": "C_a30c81ba-036d-4d59-ac93-0d8dd2951ce0",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt - Revolver",
+                "maturity_date": "2031-08-15",
+                "fair_value": "-39000.0"
+              }
+            ]
+          },
+          {
+            "pid": "aa79320b-b3b2-560e-b267-a96aed33c9c0",
+            "rows": [
+              {
+                "report_date": "2025-06-30",
+                "src_context_id": "C_626ac7db-42d5-49d4-a1bc-024055150020",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt - Delayed Draw",
+                "maturity_date": "2031-08-15",
+                "fair_value": "1401000.0"
+              },
+              {
+                "report_date": "2025-03-31",
+                "src_context_id": "C_f3dd3759-f767-4ca7-bb53-d3fb05e726dc",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt - Delayed Draw",
+                "maturity_date": "2031-08-15",
+                "fair_value": "1404000.0"
+              },
+              {
+                "report_date": "2025-09-30",
+                "src_context_id": "C_d1e153d4-cebb-4747-a671-e389fc9befe9",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt - Delayed Draw",
+                "maturity_date": "2031-08-15",
+                "fair_value": "1397000.0"
+              }
+            ]
+          },
+          {
+            "pid": "ba3607f3-f773-5a10-8079-9c7c832e3e06",
+            "rows": [
+              {
+                "report_date": "2025-06-30",
+                "src_context_id": "C_98bd551e-8e0b-4a9a-b062-49cba651beda",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Revolver",
+                "maturity_date": "2032-06-14",
+                "fair_value": "-11000.0"
+              }
+            ]
+          },
+          {
+            "pid": "c8315a7b-4571-5ddb-a95e-ad34f41831e0",
+            "rows": [
+              {
+                "report_date": "2025-09-30",
+                "src_context_id": "C_06a8ffa1-af23-4ae8-af05-669807e4aa90",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt - Term Loan",
+                "maturity_date": "2031-08-15",
+                "fair_value": "28048000.0"
+              },
+              {
+                "report_date": "2025-03-31",
+                "src_context_id": "C_ae9ab0d7-e8ac-4275-ba7e-d8bc7bf8e9fc",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt - Term Loan",
+                "maturity_date": "2031-08-15",
+                "fair_value": "28189000.0"
+              },
+              {
+                "report_date": "2025-06-30",
+                "src_context_id": "C_f4287e5c-3af5-4beb-9282-adca2c8e98b5",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt - Term Loan",
+                "maturity_date": "2031-08-15",
+                "fair_value": "28118000.0"
+              }
+            ]
+          },
+          {
+            "pid": "d6854633-a48c-5818-9e77-a5313fd4010c",
+            "rows": [
+              {
+                "report_date": "2026-06-30",
+                "src_context_id": "C_ab0a80b0-6a90-438d-8fb2-29d66285f508",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Bank Debt Term Loan",
+                "maturity_date": "2032-06-14",
+                "fair_value": "10824000.0"
+              },
+              {
+                "report_date": "2025-09-30",
+                "src_context_id": "C_1d2183ea-2132-4dea-afcd-c81ec575b809",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Term Loan",
+                "maturity_date": "2032-06-14",
+                "fair_value": "11431000.0"
+              },
+              {
+                "report_date": "2026-03-31",
+                "src_context_id": "C_2cf8828e-5a94-47bf-b593-a42d2bddcadf",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt \u2013 Bank Debt Term Loan",
+                "maturity_date": "2032-06-14",
+                "fair_value": "11205000.0"
+              },
+              {
+                "report_date": "2025-06-30",
+                "src_context_id": "C_4b5a87dc-bb9a-4266-aab4-5073af5524bf",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Term Loan",
+                "maturity_date": "2032-06-14",
+                "fair_value": "11262000.0"
+              },
+              {
+                "report_date": "2025-12-31",
+                "src_context_id": "C_6ab69c7b-f3cc-404f-9631-b960c29e93d2",
+                "issuer_name": "Elk Bidco, Inc",
+                "instrument_description": "First Lien Secured Debt - Term Loan",
+                "maturity_date": "2032-06-14",
+                "fair_value": "11375000.0"
+              }
+            ]
+          },
+          {
+            "pid": "ddb63e20-fd74-5d00-95da-620cd3b53757",
+            "rows": [
+              {
+                "report_date": "2026-03-31",
+                "src_context_id": "C_a0210a59-d4ad-4b9b-8fc4-203837d8d1d9",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt \u2013 Delayed Draw",
+                "maturity_date": "2032-12-23",
+                "fair_value": "-144000.0"
+              },
+              {
+                "report_date": "2026-06-30",
+                "src_context_id": "C_02f274a3-542f-44ae-bbd2-1b5ae925fbe0",
+                "issuer_name": "Victors Purchaser, LLC",
+                "instrument_description": "First Lien Secured Debt \u2013 Delayed Draw",
+                "maturity_date": "2032-12-23",
+                "fair_value": "-49000.0"
+              }
+            ]
+          }
+        ],
+        "changed_component_row_ids": [
+          "ROW-0869b42dc8d0c95d",
+          "ROW-305288b1cce674b0",
+          "ROW-3e3853db3478706c",
+          "ROW-80463847fd95b6e1",
+          "ROW-9443a8b2edc7a1b7",
+          "ROW-009f0d8b791557fc",
+          "ROW-8c80f1086c8c11f8",
+          "ROW-c1ca170c6f4654d3"
+        ]
+      }
+    },
+    {
+      "observation_key": "floor-rate-tag-scale-disagrees-with-page",
+      "what": "SampleC015 source-only followup:17December2025floor facts across6issuer families have tagscale-4 although printed percent requires-2 (0.75percent tagged0.000075,0.50percent tagged0.00005). Full754holdings source-fact scan found nootherquarters. No floor column exists in unifiedholdings; raw filing tags preserved and no output floor invented.",
+      "field": "InvestmentInterestRateFloor",
+      "quarters": [
+        "2025-12-31"
+      ],
+      "cause": "fund",
+      "action": "left",
+      "quote": {
+        "accession": "0001193125-26-104533",
+        "text": "First Lien Secured Debt - Revolver S + 475 , 0.75 % Floor 10/1/2029 - ( 11 ) - (8)(12)(16)(18)"
+      },
+      "suggested_check": "For context-matched floor facts explicitly printed as percent, compare decoded XBRL numeric value to visible floor token/100; flag100x scale discrepancies, with zero floors and explicitly basis-point-labelled cells as negatives. This is a source-tag quality warning while floor is unpublished.",
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "A source-only semantic defect should be surfaced before future floor consumers use it; do not modify source tags or create an unsupported publishedfield.",
+        "reference": "Independent sampleC015;17contexts listed in sample_followup.json"
+      }
+    },
+    {
+      "observation_key": "elk-december-fair-value-sign-tag-wrong",
+      "what": "The only flagged row is December Elk DDT: raw inline fact sign=- gives -18,000; printed row gives +18,000. Independent Elk subtotal 11,375+18+0=11,393 and Transportation subtotal 11,393+22,029=33,422 both prove the positive sign. The correction also eliminates the entire -36,000 quarter residual: 1,517,931,000 becomes filed 1,517,967,000. Cost remains -11,000. Source/output disagreement is real, but it is caused by a source sign defect; reverting the correction would corrupt the printed values and totals.",
+      "field": "fair_value",
+      "quarters": [
+        "2025-12-31"
+      ],
+      "cause": "fund",
+      "action": "fixed",
+      "quote": {
+        "accession": "0001193125-26-104533",
+        "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+      },
+      "additional_evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18) 11,216 11,393"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 10/15/2031 590 568 584 (8)(12)(16)(18) 21,855 22,029"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Total Transportation Infrastructure $ 33,071 $ 33,422"
+        }
+      ],
+      "suggested_check": "Compare signed decoded FV with the visible cell sign, then verify issuer and industry subtotals independently. Flag tag-negative/display-positive conflicts only with source-cell alignment; genuine parenthesized negative DDT/revolver cells are negative controls. Do not auto-flip signs merely to improve fund totals.",
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Tag sign defect was unflagged before correction; source recon now catches the deliberate corrected-output disagreement. A printed-cell/subtotal cross-check would detect it before output correction.",
+        "reference": "C_3f64477f-725a-428e-aa1d-e853404e0c67; elk_sign.txt and aoyae_audit.json"
+      }
+    }
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_REV_06eac4c6e54e",
+      "coverage": {
+        "affected_rows": [
+          "0001193125-26-104533/C_adcc71bc-d5e3-4322-a8ae-b5ecc54f5d51/ROW-ff3f27070b8d1271",
+          "0001193125-26-104533/C_feec53e1-68ff-4f23-a1d3-0c936ddb7a49/ROW-4fde59292eecec99"
+        ],
+        "reviewed_rows": [
+          "0001193125-26-104533/C_adcc71bc-d5e3-4322-a8ae-b5ecc54f5d51/ROW-ff3f27070b8d1271",
+          "0001193125-26-104533/C_feec53e1-68ff-4f23-a1d3-0c936ddb7a49/ROW-4fde59292eecec99"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Preferred Equity - Cumulative Preferred N/A 12/10/2124 34,000 $ 34 $ 34"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Common Equity/Partnership Interests - Membership Interest N/A N/A 1,788,576 1,789 1,789 (12)(14)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "HIG Intermediate, Inc. Preferred Equity - Cumulative Preferred Equity N/A 34 33 33"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 34 33 34"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 $ 34 $ 33 $ 34"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34,000 33 34"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34 Units $ 33 $ 34"
+        }
+      ],
+      "conclusion": "source_ambiguity",
+      "hypotheses_tested": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 2 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted.",
+        "Prior real-error verdict called every Par/Shares value a share count. Re-read every cited row: its common-count diagnosis is fixed (1788576; plus2549659 in March), but its preferred34000-shares claim lacks unit evidence and is contradicted by dollar-marked September and explicit34Units in June. The earlier verdict is not treated as authority."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    },
+    {
+      "finding_id": "RVQ_REV_25c8252401c5",
+      "coverage": {
+        "affected_rows": [
+          "0001193125-26-221801/C_5f2895f1-d236-42cf-b690-6b7efeb3d3ea/ROW-15c2d28b4170f99a",
+          "0001193125-26-221801/C_f5af6c9a-a609-462a-b57b-58c215f067b6/ROW-ec076727007e95c9",
+          "0001193125-26-221801/C_3d2a66fa-89e0-4ec5-8f5c-6b47c46a3775/ROW-b010ba7a67235499"
+        ],
+        "reviewed_rows": [
+          "0001193125-26-221801/C_5f2895f1-d236-42cf-b690-6b7efeb3d3ea/ROW-15c2d28b4170f99a",
+          "0001193125-26-221801/C_f5af6c9a-a609-462a-b57b-58c215f067b6/ROW-ec076727007e95c9",
+          "0001193125-26-221801/C_3d2a66fa-89e0-4ec5-8f5c-6b47c46a3775/ROW-b010ba7a67235499"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-221801",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34,000 33 34"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Intermediate Topco 1 LLC Common Equity - Membership Interest N/A N/A 1,788,576 1,789 1,806 (13)(15)"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "VCI Intermediate TopCo 2 LLC Common Equity - Membership Interest N/A N/A 2,549,659 2,549 2,576 (13)(15)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "HIG Intermediate, Inc. Preferred Equity - Cumulative Preferred Equity N/A 34 33 33"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 34 33 34"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 $ 34 $ 33 $ 34"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Preferred Equity - Cumulative Preferred N/A 12/10/2124 34,000 $ 34 $ 34"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34 Units $ 33 $ 34"
+        }
+      ],
+      "conclusion": "source_ambiguity",
+      "hypotheses_tested": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 3 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted.",
+        "Prior real-error verdict called every Par/Shares value a share count. Re-read every cited row: its common-count diagnosis is fixed (1788576; plus2549659 in March), but its preferred34000-shares claim lacks unit evidence and is contradicted by dollar-marked September and explicit34Units in June. The earlier verdict is not treated as authority."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    },
+    {
+      "finding_id": "RVQ_REV_47d165bc0c84",
+      "coverage": {
+        "affected_rows": [
+          "0001193125-26-104533/C_402269ef-bf73-4b16-9ab4-94c411ee80ed/ROW-decd77ae40ad33cd"
+        ],
+        "reviewed_rows": [
+          "0001193125-26-104533/C_402269ef-bf73-4b16-9ab4-94c411ee80ed/ROW-decd77ae40ad33cd"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)"
+        }
+      ],
+      "conclusion": "false_alarm",
+      "hypotheses_tested": [
+        "Reconstructed flagged population: one Vantage December2025 loan; basis_spread15.74 equals printed675bps cash margin plus8.99percent PIK.",
+        "Tested decimal error and omitted PIK hypotheses: source explicitly prints8.99percent, so reducing it to0.899 or omitting it would contradict source.",
+        "This is source conformity only; the unusually high PIK may itself be a filing error. No economic correctness claim."
+      ],
+      "next_action": "Propose as-filed disposition for the printed total spread15.74; retain both cash-margin and PIK source evidence, no threshold widening."
+    },
+    {
+      "finding_id": "RVQ_REV_509b000aa387",
+      "coverage": {
+        "affected_rows": [
+          "0001193125-26-104533/C_402269ef-bf73-4b16-9ab4-94c411ee80ed/ROW-decd77ae40ad33cd"
+        ],
+        "reviewed_rows": [
+          "0001193125-26-104533/C_402269ef-bf73-4b16-9ab4-94c411ee80ed/ROW-decd77ae40ad33cd"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 15,877 $ 15,399 $ 15,242 (8)(12)"
+        }
+      ],
+      "conclusion": "false_alarm",
+      "hypotheses_tested": [
+        "Reconstructed flagged population: one Vantage December2025 loan; basis_spread15.74 equals printed675bps cash margin plus8.99percent PIK.",
+        "Tested decimal error and omitted PIK hypotheses: source explicitly prints8.99percent, so reducing it to0.899 or omitting it would contradict source.",
+        "This is source conformity only; the unusually high PIK may itself be a filing error. No economic correctness claim."
+      ],
+      "next_action": "Propose as-filed disposition for the printed total spread15.74; retain both cash-margin and PIK source evidence, no threshold widening."
+    },
+    {
+      "finding_id": "RVQ_REV_5753d0d24b36",
+      "coverage": {
+        "affected_rows": [
+          "0001193125-25-278006/C_ed82eb46-ca2d-4d01-97e8-b96e492a1f0d/ROW-a97afa1ee78205c5"
+        ],
+        "reviewed_rows": [
+          "0001193125-25-278006/C_ed82eb46-ca2d-4d01-97e8-b96e492a1f0d/ROW-a97afa1ee78205c5"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-25-278006",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 $ 34 $ 33 $ 34"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "HIG Intermediate, Inc. Preferred Equity - Cumulative Preferred Equity N/A 34 33 33"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 34 33 34"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Preferred Equity - Cumulative Preferred N/A 12/10/2124 34,000 $ 34 $ 34"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34,000 33 34"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34 Units $ 33 $ 34"
+        }
+      ],
+      "conclusion": "source_ambiguity",
+      "hypotheses_tested": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 1 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    },
+    {
+      "finding_id": "RVQ_REV_73785c4413c2",
+      "coverage": {
+        "affected_rows": [
+          "0000950170-25-070628/C_ce3f3f4e-b0c5-43d2-8ccd-026bd5315683/ROW-12e713d8bd7c84f7",
+          "0000950170-25-070628/C_dcd7dda3-2875-4835-adb4-0eb4cdfd8327/ROW-f2c2659d17be2988"
+        ],
+        "reviewed_rows": [
+          "0000950170-25-070628/C_ce3f3f4e-b0c5-43d2-8ccd-026bd5315683/ROW-12e713d8bd7c84f7",
+          "0000950170-25-070628/C_dcd7dda3-2875-4835-adb4-0eb4cdfd8327/ROW-f2c2659d17be2988"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 - - - (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 - - - (8)(11)(15)(17)"
+        }
+      ],
+      "conclusion": "false_alarm",
+      "hypotheses_tested": [
+        "Reconstructed both PP02 issue rows using value=investment_identifier because this rule emits blank row_id; both source context IDs matched.",
+        "Both Heritage revolvers have same issuer/maturity and zero par/cost/FV, but source separately prints500bps/.75floor and550bps/4.50floor.",
+        "Rejected duplicate removal: same amounts are not a position identity; distinct rate terms and separate source rows prove separate tranches."
+      ],
+      "next_action": "Propose false-alarm disposition for this exact pair; retain both positions. A future PP02 repair should include rate/floor or source-line identity before treating zero-valued rows as duplicates."
+    },
+    {
+      "finding_id": "RVQ_REV_7d8625d17374",
+      "coverage": {
+        "affected_rows": [
+          "0000950170-25-070628/C_5347953e-993a-4e9d-90ff-e6170146f861/ROW-f9b2398dda0862bf",
+          "0000950170-25-070628/C_7230905e-0140-4f59-920b-930ada5b1a23/ROW-a3aee3d7c8df0d1a"
+        ],
+        "reviewed_rows": [
+          "0000950170-25-070628/C_5347953e-993a-4e9d-90ff-e6170146f861/ROW-f9b2398dda0862bf",
+          "0000950170-25-070628/C_7230905e-0140-4f59-920b-930ada5b1a23/ROW-a3aee3d7c8df0d1a"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 - $ ( 13 ) $ 13 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Databricks, Inc. First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/19/2031 - 44 65 (4)(7)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "e commitment being valued below par. (15) The undrawn portion of these committed revolvers and delayed draw term loans includes a commitment and unused fee rate. (16"
+        }
+      ],
+      "conclusion": "false_alarm",
+      "hypotheses_tested": [
+        "Reconstructed every X11 issue row by row_id: 2 matches, no missing or extra rows.",
+        "Each printed revolver/delayed-draw line has dash principal but positive FV; commitment footnote explains undrawn status. Positive FV on an undrawn commitment does not imply funded principal.",
+        "Rejected filling principal from FV, commitment amount or prior period: none is printed funded par on these rows."
+      ],
+      "next_action": "Submit as-filed proposal for these exact fund-quarter rows; preserve null principal and positive FV. Owner/check must accept reason before ledger closure."
+    },
+    {
+      "finding_id": "RVQ_REV_8a5214a87d1b",
+      "coverage": {
+        "affected_rows": [
+          "0000950170-25-070628/C_ae5014cf-f872-40fd-bfcf-697c83f9ec62/ROW-f2e836462d1f3723"
+        ],
+        "reviewed_rows": [
+          "0000950170-25-070628/C_ae5014cf-f872-40fd-bfcf-697c83f9ec62/ROW-f2e836462d1f3723"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "HIG Intermediate, Inc. Preferred Equity - Cumulative Preferred Equity N/A 34 33 33"
+        },
+        {
+          "accession": "0000950170-25-107411",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 34 33 34"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 $ 34 $ 33 $ 34"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Preferred Equity - Cumulative Preferred N/A 12/10/2124 34,000 $ 34 $ 34"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34,000 33 34"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34 Units $ 33 $ 34"
+        }
+      ],
+      "conclusion": "source_ambiguity",
+      "hypotheses_tested": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 1 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    },
+    {
+      "finding_id": "RVQ_REV_b196c658ccfc",
+      "coverage": {
+        "affected_rows": [
+          "0000950170-25-107411/C_82145907-56b7-465c-ba2f-6d2e4982e282/ROW-7864d44523a1e614"
+        ],
+        "reviewed_rows": [
+          "0000950170-25-107411/C_82145907-56b7-465c-ba2f-6d2e4982e282/ROW-7864d44523a1e614"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-107411",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 34 33 34"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "HIG Intermediate, Inc. Preferred Equity - Cumulative Preferred Equity N/A 34 33 33"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "Preferred Equity - Cumulative Preferred Equity 12/10/2124 $ 34 $ 33 $ 34"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Preferred Equity - Cumulative Preferred N/A 12/10/2124 34,000 $ 34 $ 34"
+        },
+        {
+          "accession": "0001193125-26-221801",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34,000 33 34"
+        },
+        {
+          "accession": "0001193125-26-347350",
+          "text": "HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 34 Units $ 33 $ 34"
+        }
+      ],
+      "conclusion": "source_ambiguity",
+      "hypotheses_tested": [
+        "Reconstructed C04 full equity population from its exact classification/category predicate: 1 rows, all read; common membership counts are now populated where printed.",
+        "A bare Par/Shares number does not uniquely identify a preferred unit count: HIG is tagged USD principal; September2025 explicitly prints $34, December2025/March2026 print34000, June2026 prints34 Units. Stable cost/FV near34000 does not resolve face-value versus count.",
+        "Tested copying34000 or34 into every preferred shares field: rejected because it picks a basis unsupported by that quarter and conflicts with the changed presentation. No implied price or adjacent-quarter proxy inserted."
+      ],
+      "next_action": "Keep HIG preferred shares null for this quarter. Obtain an authoritative same-period unit basis or share-class disclosure distinguishing face amount from count; then declare only a supported count. Alternatively seek an evidence-backed scope clarification for C04 on preferred face-amount positions; no rule or acceptance change made here."
+    },
+    {
+      "finding_id": "RVQ_REV_c767ba0c7600",
+      "coverage": {
+        "affected_rows": [
+          "0002052152/2025-03-31/income_yield_pct_vs_wac"
+        ],
+        "reviewed_rows": [
+          "0002052152/2025-03-31/income_yield_pct_vs_wac"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Annualized ratio of net investment income to average net assets (4) 18.83 %"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Commscope, LLC First Lien Secured Debt - Corporate Bond 9.50 % 12/15/2031 $ 3,434 $ 3,573 $ 3,536 (4)(5)(11)(13)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Gannett Co., Inc. First Lien Secured Debt - Convertible Bond 6.00 % 12/1/2031 10 13 11 (11)(13)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "Wolfspeed, Inc. First Lien Secured Debt - Corporate Bond 11.9 % 6/23/2030 $ 17,799 $ 17,336 $ 17,710 (5)(13)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "MRO Holdings, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.50 % Floor 12/17/2030 $ 48,082 $ 48,283 $ 48,082 (5)(8)(11)"
+        }
+      ],
+      "conclusion": "false_alarm",
+      "hypotheses_tested": [
+        "Reproduced F27 WAC from its exact interest_rate>0,FV>0 predicate: three rows, FV21257000 of1106721000 (1.92percent), WAC11.4977184.",
+        "Printed annualized NII/average-net-assets ratio is18.83percent; source and published ratio agree. Floating-rate positions print benchmark plus spread rather than an all-in coupon, so they are absent from WAC.",
+        "Rejected changing18.83 to fit WAC: different denominators and tiny coupon-coverage sample make the heuristic unsuitable as an error verdict; no missing printed all-in coupon found on checked floating row."
+      ],
+      "next_action": "Propose false-alarm disposition under existing sparse-fixed-coupon WAC reason; keep source18.83. A future heuristic should require WAC coverage and consistent asset/net-asset denominator before flagging."
+    },
+    {
+      "finding_id": "RVQ_REV_d235f61d6440",
+      "coverage": {
+        "affected_rows": [
+          "0001193125-25-278006/C_203ca493-9b09-425f-8cf4-2f797f5bfe61/ROW-b40f91bfd71260c8",
+          "0001193125-25-278006/C_ea46fedc-a03e-435e-bd0d-b3ec69f329c7/ROW-7124505478ce0756",
+          "0001193125-25-278006/C_96cc9a88-9946-434a-ab78-db305a869c01/ROW-7df28f4ed66c0cee",
+          "0001193125-25-278006/C_f0e0e331-1b09-4233-b92a-3648bda8aa59/ROW-80463847fd95b6e1"
+        ],
+        "reviewed_rows": [
+          "0001193125-25-278006/C_203ca493-9b09-425f-8cf4-2f797f5bfe61/ROW-b40f91bfd71260c8",
+          "0001193125-25-278006/C_ea46fedc-a03e-435e-bd0d-b3ec69f329c7/ROW-7124505478ce0756",
+          "0001193125-25-278006/C_96cc9a88-9946-434a-ab78-db305a869c01/ROW-7df28f4ed66c0cee",
+          "0001193125-25-278006/C_f0e0e331-1b09-4233-b92a-3648bda8aa59/ROW-80463847fd95b6e1"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 - ( 12 ) 26 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 3/31/2032 - ( 15 ) 20 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/3/2031 - 45 87 (7)(15)(17)"
+        },
+        {
+          "accession": "0001193125-25-278006",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 24 (8)(11)(15)(17)"
+        },
+        {
+          "accession": "0000950170-25-070628",
+          "text": "e commitment being valued below par. (15) The undrawn portion of these committed revolvers and delayed draw term loans includes a commitment and unused fee rate. (16"
+        }
+      ],
+      "conclusion": "false_alarm",
+      "hypotheses_tested": [
+        "Reconstructed every X11 issue row by row_id: 4 matches, no missing or extra rows.",
+        "Each printed revolver/delayed-draw line has dash principal but positive FV; commitment footnote explains undrawn status. Positive FV on an undrawn commitment does not imply funded principal.",
+        "Rejected filling principal from FV, commitment amount or prior period: none is printed funded par on these rows."
+      ],
+      "next_action": "Submit as-filed proposal for these exact fund-quarter rows; preserve null principal and positive FV. Owner/check must accept reason before ledger closure."
+    },
+    {
+      "finding_id": "BDCSRC_0002052152_2025-12-31_BLOCKING_FAIR_VALUE_DISAGREEMENT_77f8ab5b01",
+      "coverage": {
+        "affected_rows": [
+          "0001193125-26-104533/C_3f64477f-725a-428e-aa1d-e853404e0c67/ROW-009f0d8b791557fc"
+        ],
+        "reviewed_rows": [
+          "0001193125-26-104533/C_3f64477f-725a-428e-aa1d-e853404e0c67/ROW-009f0d8b791557fc"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18) 11,216 11,393"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 10/15/2031 590 568 584 (8)(12)(16)(18) 21,855 22,029"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Total Transportation Infrastructure $ 33,071 $ 33,422"
+        }
+      ],
+      "conclusion": "false_alarm",
+      "hypotheses_tested": [
+        "Reconstructed complete value_mismatch population: exactly one context, used by SRC_BDC03 and blocking_fair_value_disagreement.",
+        "Tested negative sign as economically intended: rejected because visible row and two independent printed subtotals require positive 18.",
+        "Tested arbitrary correction or broad offset: rejected; exact key changes one FV cell, no other monetary fields, and removes the exact 36,000 quarter deficit.",
+        "Matching rejects affect only identity; they do not change financial values. Raw source sign remains preserved for audit."
+      ],
+      "next_action": "Propose false-alarm disposition against the corrected output, supported by the printed row and independent subtotals. Keep the source-tag discrepancy visible; owner/check acceptance required, no gate or source-reconciliation weakening."
+    },
+    {
+      "finding_id": "RVQ_BLK_1ac45f504f25",
+      "coverage": {
+        "affected_rows": [
+          "0001193125-26-104533/C_3f64477f-725a-428e-aa1d-e853404e0c67/ROW-009f0d8b791557fc"
+        ],
+        "reviewed_rows": [
+          "0001193125-26-104533/C_3f64477f-725a-428e-aa1d-e853404e0c67/ROW-009f0d8b791557fc"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 6/14/2032 - ( 11 ) 18 (8)(12)(16)(18)"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.50 % Floor 6/14/2032 - ( 10 ) - (8)(12)(16)(18) 11,216 11,393"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 10/15/2031 590 568 584 (8)(12)(16)(18) 21,855 22,029"
+        },
+        {
+          "accession": "0001193125-26-104533",
+          "text": "Total Transportation Infrastructure $ 33,071 $ 33,422"
+        }
+      ],
+      "conclusion": "false_alarm",
+      "hypotheses_tested": [
+        "Reconstructed complete value_mismatch population: exactly one context, used by SRC_BDC03 and blocking_fair_value_disagreement.",
+        "Tested negative sign as economically intended: rejected because visible row and two independent printed subtotals require positive 18.",
+        "Tested arbitrary correction or broad offset: rejected; exact key changes one FV cell, no other monetary fields, and removes the exact 36,000 quarter deficit.",
+        "Matching rejects affect only identity; they do not change financial values. Raw source sign remains preserved for audit."
+      ],
+      "next_action": "Propose false-alarm disposition against the corrected output, supported by the printed row and independent subtotals. Keep the source-tag discrepancy visible; owner/check acceptance required, no gate or source-reconciliation weakening."
+    }
+  ],
+  "name_shape_exceptions": [],
+  "tests_run": [
+    "tests/test_fund_highlights_wrapper.py tests/test_source_encodings.py:124 passed,1 existing FutureWarning; protected production outputs unchanged.",
+    "All754 issuer-name dry run;76 exact legal-name guards; already-clean legal names unchanged; no blank issuer introduced.",
+    "aoyac vs aoyab:673 issuer names,8 instrument labels,3 entity IDs,29 canonical names,12 position IDs changed; no numeric holding changes;0 GICS labels lost,0 new derived_proxy shares.",
+    "All6 operating-quarter FV gates within tolerance (not exact equality); no holdings exist for prelaunch2024-12-31.",
+    "Source reconstruction754holdings matched cached contexts; all final affected populations read; 29original B01 contexts source-read.",
+    "aoyac pre-sample self-gate: stages/corrections/totals/names/fields/verdict answers and156cached-filing quotes pass. Files not checked without snapshot; investigation shape/coverage complete, independent review missing (8 review-only problems).",
+    "Initial industry-support test job aborted after wrong patch anchor was detected by orchestrator; no build used that schema edit. Corrected diff changes only _CORRECTABLE_FIELDS; final focused results recorded separately.",
+    "Corrected TestApplyRowCorrections:22passed in66.83s, including new positive industry->GICS case and4wrong-key negatives. Protected-output check passed; no test/rebuild overlap.",
+    "aoyad vs aoyac:0rows added/removed;16issuer names;3each extractedindustry/GICSsubindustry/GICSsector/auditmarkers/canonicalnames;31entity IDs;7position IDs;92of100columns unchanged.17genuineVictors issuer/industry negativecontrols unchanged; allamounts/rates/maturities unchanged. Final11investigationIDs and allsourcecoveragekeys rechecked againstaoyad.",
+    "Corrected-FV 754-row replay regenerated matches from cached raw rows: exactly four rejects, eight DDT component memberships repaired, 746 unchanged; all33 raw identifier/date keys unique; wrong CIK/date/name negatives reject zero. Genuine Victors term continuity retained through supplementary matching. No force-pair or registry edits.",
+    "aoyae vs aoyad: zero added/removed rows; FV/src_facts/corrected_fields/pct_of_net_assets_calculated each1; position_id7;95of100columns unchanged. Full33row family chains and all746 unaffected component memberships checked. Percentage changes only corrected row because net-assets denominator unchanged. All other amounts/rates/maturities unchanged."
+  ],
+  "final_independent_sample": {"artifact": "docs/investigations/v05_readings/samples/0002052152_r3/results.md", "cards": 20, "field_labels": 260, "published_errors": 0, "limits": "260 labels are not 260 eligible observations. No eligible interest_rate/coupon, shares_held or pct_of_net_assets observations; PIK has only two. Zero observed errors does not establish population accuracy or complete identity continuity."},
+  "not_done": [
+    "Final r3 sample completed: 20 cards and 260 field labels, zero published errors. Full investigation reviewer must rebind the corrected narrative; no complete-continuity claim is made.",
+    "Five C04 preferred-unit findings remain source-ambiguous after complete population review; eight other findings have unaccepted proposals, including two new source-sign disagreement findings.",
+    "No full-cohort rebuild, full pytest suite, frontend export or semantic baseline diff run in this fund session; shared-code regression is coordinated by orchestrator.",
+    "Prelaunch financials withheld by existing no_seed policy; no retained reason field implemented.",
+    "Source conformity and clean mechanical checks do not prove all data correct.",
+    "New extracted_industry correction support requires orchestrator-scoped unchanged-input/shared-code regression; no full-cohort build or full suite performed by investigator."
+  ],
+  "build_history": [
+    {
+      "label": "aoyaa",
+      "holdings": 725,
+      "current_findings": 28,
+      "outstanding": 23,
+      "stage": "untouched June-inclusive baseline"
+    },
+    {
+      "label": "aoyab",
+      "outstanding": 11,
+      "stage": "repair checkpoint"
+    },
+    {
+      "label": "aoyac",
+      "outstanding": 11,
+      "stage": "Final investigator build; independent sample/review pending"
+    },
+    {
+      "label": "aoyad",
+      "outstanding": 11,
+      "stage": "Final sample-repair handoff; independent r2 sample and full investigation review pending"
+    },
+    {
+      "label": "aoyae",
+      "outstanding": 13,
+      "stage": "Independent-review repair: full family identity audit and source sign correction; r3 sample completed with zero published errors, corrected narrative awaits reviewer rebind."
+    }
+  ],
+  "reconciliation": {
+    "ok": true,
+    "basis": "ex_cash",
+    "quarters": 6,
+    "tie": 6,
+    "not_tying": [],
+    "undeclared": []
+  },
+  "counts": {
+    "holdings": 754,
+    "raw_ledger_findings": 21,
+    "outstanding": 13,
+    "proposed_findings": 8,
+    "parked_findings": 5,
+    "builds_used": 5,
+    "build_limit": 6,
+    "restored_rows_vs_fresh_baseline": 29,
+    "new_quarter_rows_vs_spon3": 158,
+    "current_findings": 18,
+    "row_correction_specs": 16,
+    "row_correction_cells": 31
+  },
+  "sample_followup": {
+    "source_label": "aoyac",
+    "card": "C020",
+    "affected_contexts": [
+      "C_2cf8828e-5a94-47bf-b593-a42d2bddcadf",
+      "C_3f64477f-725a-428e-aa1d-e853404e0c67",
+      "C_b29a37d7-568d-40af-bbc6-ba22636872fc"
+    ],
+    "issuer_rows_read": 33,
+    "unchanged_genuine_victors_controls": 17,
+    "prefix_cleanup_rows": 13,
+    "floor_contexts": [
+      "C_35d6653d-3e86-48ec-b267-a3b1c88b7573",
+      "C_2938c156-17ea-4426-ad36-00810fbf140c",
+      "C_6d31e4a5-8fcd-4e26-a0a1-c552b2de7e22",
+      "C_b06076b8-e106-4da4-b3c2-4601d77b660a",
+      "C_ed3b2a2f-a665-4168-9332-a7dc5cd21c04",
+      "C_0f8d2713-cd3a-441a-8c2a-4f024b25e49b",
+      "C_d8ae695c-b6c9-45d6-af49-a840543e5b04",
+      "C_9e67c634-e03c-4043-904f-349e2cfcb995",
+      "C_2f8fb641-b293-4575-9918-46c4df5f0d92",
+      "C_fec469b6-ed8e-42fc-bf06-95ada081c14f",
+      "C_1bfede9b-3b75-4143-b9d3-d8129a28c4ea",
+      "C_95bf6f51-81eb-405c-9c1c-bb794a5ee34d",
+      "C_7da0ac3a-927d-4440-8f13-67b89a50a134",
+      "C_1c6d52b5-9c77-4c6d-b08c-4518934754c3",
+      "C_20306d82-3fa2-4573-ae8b-fc6c0eb15643",
+      "C_d176f3b4-6b17-40b7-9a6c-d8e93b214a0a",
+      "C_9a3c00fc-a4a6-4744-a411-462684fbc59d"
+    ],
+    "evidence_artifact": "scratch/fund_runs/0002052152/sample_followup.json",
+    "status": "Build5 repair complete; r3 sample has zero published errors; documentation corrected to retain Victors DDT and Elk revolver fragmentation; independent review rebind pending",
+    "identity_audit": {
+      "population": 33,
+      "reviewed": 33,
+      "artifact": "scratch/fund_runs/0002052152/aoyae_audit.json",
+      "changed_component_rows": 8,
+      "unchanged_component_rows": 746,
+      "family_components": 13,
+      "cross_issuer_edges": 0,
+      "same_quarter_merges": 0,
+      "residual": "Victors December 2025 DDT C_b29a37d7-568d-40af-bbc6-ba22636872fc remains a singleton (PID 7b87b151-9d16-5650-ae8c-d445bfe0300e), separate from March/June 2026 DDTs (PID ddb63e20-fd74-5d00-95da-620cd3b53757), although all print maturity 2032-12-23. Elk revolvers also remain fragmented: June, September and December 2025 singletons, plus a March/June 2026 chain. All rows remain retained and distinct; no forced continuity repair.",
+      "components": [
+        {
+          "pid": "089f7a2c-8985-5632-a8d8-ac8a1805cb65",
+          "rows": [
+            {
+              "report_date": "2025-12-31",
+              "src_context_id": "C_044367be-55a0-47ae-afa8-a100bbd4176f",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Revolver",
+              "maturity_date": "2032-06-14",
+              "fair_value": "0.0"
+            }
+          ]
+        },
+        {
+          "pid": "2f32c1ed-73c5-5ad4-9239-68f1d9a8c512",
+          "rows": [
+            {
+              "report_date": "2026-03-31",
+              "src_context_id": "C_9903ec72-0274-4392-8ce5-8641e26b0067",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Revolver",
+              "maturity_date": "2032-06-14",
+              "fair_value": "-53000.0"
+            },
+            {
+              "report_date": "2026-06-30",
+              "src_context_id": "C_848363a8-59a7-48cc-85b9-4e58104bcb2a",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Revolver",
+              "maturity_date": "2032-06-14",
+              "fair_value": "-79000.0"
+            }
+          ]
+        },
+        {
+          "pid": "4b71bbdf-2a80-5a12-956d-902375043544",
+          "rows": [
+            {
+              "report_date": "2025-09-30",
+              "src_context_id": "C_ddf4817a-55ee-414c-a9e0-6e939824a63c",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Revolver",
+              "maturity_date": "2032-06-14",
+              "fair_value": "0.0"
+            }
+          ]
+        },
+        {
+          "pid": "6bed4dcd-69cb-5e82-862f-aa5509ba5287",
+          "rows": [
+            {
+              "report_date": "2025-12-31",
+              "src_context_id": "C_3f64477f-725a-428e-aa1d-e853404e0c67",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt \u2013 Delayed Draw",
+              "maturity_date": "2032-06-14",
+              "fair_value": "18000.0"
+            },
+            {
+              "report_date": "2025-06-30",
+              "src_context_id": "C_bed5dd36-5b26-46f0-8836-eb4c721a9c20",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Delayed Draw",
+              "maturity_date": "2032-06-14",
+              "fair_value": "-12000.0"
+            },
+            {
+              "report_date": "2026-06-30",
+              "src_context_id": "C_f804427b-6a7f-45a1-ab86-c7a1febee4d8",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Delayed Draw",
+              "maturity_date": "2032-06-14",
+              "fair_value": "-86000.0"
+            },
+            {
+              "report_date": "2025-09-30",
+              "src_context_id": "C_f0e0e331-1b09-4233-b92a-3648bda8aa59",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Delayed Draw",
+              "maturity_date": "2032-06-14",
+              "fair_value": "24000.0"
+            },
+            {
+              "report_date": "2026-03-31",
+              "src_context_id": "C_6c6a9dce-bf7f-4563-a9fa-4c475cd44cc4",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Delayed Draw",
+              "maturity_date": "2032-06-14",
+              "fair_value": "-35000.0"
+            }
+          ]
+        },
+        {
+          "pid": "6d9645ab-89d5-596e-8086-afd03154e500",
+          "rows": [
+            {
+              "report_date": "2026-03-31",
+              "src_context_id": "C_62e7fd80-fec1-4b4d-a2fe-a4218f428fc0",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt \u2013 Revolver",
+              "maturity_date": "2032-12-23",
+              "fair_value": "-134000.0"
+            },
+            {
+              "report_date": "2025-12-31",
+              "src_context_id": "C_6b816803-8e5f-4691-985c-ad1778531fff",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt \u2013 Revolver",
+              "maturity_date": "2032-12-23",
+              "fair_value": "494000.0"
+            },
+            {
+              "report_date": "2026-06-30",
+              "src_context_id": "C_ce72de25-9468-45cf-b79e-bf96e00ad9c0",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt \u2013 Revolver",
+              "maturity_date": "2032-12-23",
+              "fair_value": "537000.0"
+            }
+          ]
+        },
+        {
+          "pid": "7b87b151-9d16-5650-ae8c-d445bfe0300e",
+          "rows": [
+            {
+              "report_date": "2025-12-31",
+              "src_context_id": "C_b29a37d7-568d-40af-bbc6-ba22636872fc",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt - Delayed Draw",
+              "maturity_date": "2032-12-23",
+              "fair_value": "-16000.0"
+            }
+          ]
+        },
+        {
+          "pid": "8f6da5f3-fdf2-5018-bc18-6aea68d06cd9",
+          "rows": [
+            {
+              "report_date": "2026-06-30",
+              "src_context_id": "C_74bca564-a450-4662-94be-623da0844ce4",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt \u2013 Bank Debt Term Loan",
+              "maturity_date": "2032-12-23",
+              "fair_value": "43461000.0"
+            },
+            {
+              "report_date": "2025-12-31",
+              "src_context_id": "C_07fe7683-2f8b-431c-8d6e-13ada0ccdbcd",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt \u2013 Term Loan",
+              "maturity_date": "2032-12-23",
+              "fair_value": "43685000.0"
+            },
+            {
+              "report_date": "2026-03-31",
+              "src_context_id": "C_829a2277-71d5-4ea8-933f-aace4265b60c",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt \u2013 Term Loan",
+              "maturity_date": "2032-12-23",
+              "fair_value": "42808000.0"
+            }
+          ]
+        },
+        {
+          "pid": "9c270efb-f8e0-5f36-83bb-7837b17eb505",
+          "rows": [
+            {
+              "report_date": "2025-06-30",
+              "src_context_id": "C_6cb3505f-261f-4e58-8a6e-61b3d30792fa",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt - Revolver",
+              "maturity_date": "2031-08-15",
+              "fair_value": "-39000.0"
+            },
+            {
+              "report_date": "2025-03-31",
+              "src_context_id": "C_57a5c952-4df9-40f4-83d0-5439af8ba2aa",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt \u2013 Revolver",
+              "maturity_date": "2031-08-15",
+              "fair_value": "-39000.0"
+            },
+            {
+              "report_date": "2025-09-30",
+              "src_context_id": "C_a30c81ba-036d-4d59-ac93-0d8dd2951ce0",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt - Revolver",
+              "maturity_date": "2031-08-15",
+              "fair_value": "-39000.0"
+            }
+          ]
+        },
+        {
+          "pid": "aa79320b-b3b2-560e-b267-a96aed33c9c0",
+          "rows": [
+            {
+              "report_date": "2025-06-30",
+              "src_context_id": "C_626ac7db-42d5-49d4-a1bc-024055150020",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt - Delayed Draw",
+              "maturity_date": "2031-08-15",
+              "fair_value": "1401000.0"
+            },
+            {
+              "report_date": "2025-03-31",
+              "src_context_id": "C_f3dd3759-f767-4ca7-bb53-d3fb05e726dc",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt - Delayed Draw",
+              "maturity_date": "2031-08-15",
+              "fair_value": "1404000.0"
+            },
+            {
+              "report_date": "2025-09-30",
+              "src_context_id": "C_d1e153d4-cebb-4747-a671-e389fc9befe9",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt - Delayed Draw",
+              "maturity_date": "2031-08-15",
+              "fair_value": "1397000.0"
+            }
+          ]
+        },
+        {
+          "pid": "ba3607f3-f773-5a10-8079-9c7c832e3e06",
+          "rows": [
+            {
+              "report_date": "2025-06-30",
+              "src_context_id": "C_98bd551e-8e0b-4a9a-b062-49cba651beda",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Revolver",
+              "maturity_date": "2032-06-14",
+              "fair_value": "-11000.0"
+            }
+          ]
+        },
+        {
+          "pid": "c8315a7b-4571-5ddb-a95e-ad34f41831e0",
+          "rows": [
+            {
+              "report_date": "2025-09-30",
+              "src_context_id": "C_06a8ffa1-af23-4ae8-af05-669807e4aa90",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt - Term Loan",
+              "maturity_date": "2031-08-15",
+              "fair_value": "28048000.0"
+            },
+            {
+              "report_date": "2025-03-31",
+              "src_context_id": "C_ae9ab0d7-e8ac-4275-ba7e-d8bc7bf8e9fc",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt - Term Loan",
+              "maturity_date": "2031-08-15",
+              "fair_value": "28189000.0"
+            },
+            {
+              "report_date": "2025-06-30",
+              "src_context_id": "C_f4287e5c-3af5-4beb-9282-adca2c8e98b5",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt - Term Loan",
+              "maturity_date": "2031-08-15",
+              "fair_value": "28118000.0"
+            }
+          ]
+        },
+        {
+          "pid": "d6854633-a48c-5818-9e77-a5313fd4010c",
+          "rows": [
+            {
+              "report_date": "2026-06-30",
+              "src_context_id": "C_ab0a80b0-6a90-438d-8fb2-29d66285f508",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Bank Debt Term Loan",
+              "maturity_date": "2032-06-14",
+              "fair_value": "10824000.0"
+            },
+            {
+              "report_date": "2025-09-30",
+              "src_context_id": "C_1d2183ea-2132-4dea-afcd-c81ec575b809",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Term Loan",
+              "maturity_date": "2032-06-14",
+              "fair_value": "11431000.0"
+            },
+            {
+              "report_date": "2026-03-31",
+              "src_context_id": "C_2cf8828e-5a94-47bf-b593-a42d2bddcadf",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt \u2013 Bank Debt Term Loan",
+              "maturity_date": "2032-06-14",
+              "fair_value": "11205000.0"
+            },
+            {
+              "report_date": "2025-06-30",
+              "src_context_id": "C_4b5a87dc-bb9a-4266-aab4-5073af5524bf",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Term Loan",
+              "maturity_date": "2032-06-14",
+              "fair_value": "11262000.0"
+            },
+            {
+              "report_date": "2025-12-31",
+              "src_context_id": "C_6ab69c7b-f3cc-404f-9631-b960c29e93d2",
+              "issuer_name": "Elk Bidco, Inc",
+              "instrument_description": "First Lien Secured Debt - Term Loan",
+              "maturity_date": "2032-06-14",
+              "fair_value": "11375000.0"
+            }
+          ]
+        },
+        {
+          "pid": "ddb63e20-fd74-5d00-95da-620cd3b53757",
+          "rows": [
+            {
+              "report_date": "2026-03-31",
+              "src_context_id": "C_a0210a59-d4ad-4b9b-8fc4-203837d8d1d9",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt \u2013 Delayed Draw",
+              "maturity_date": "2032-12-23",
+              "fair_value": "-144000.0"
+            },
+            {
+              "report_date": "2026-06-30",
+              "src_context_id": "C_02f274a3-542f-44ae-bbd2-1b5ae925fbe0",
+              "issuer_name": "Victors Purchaser, LLC",
+              "instrument_description": "First Lien Secured Debt \u2013 Delayed Draw",
+              "maturity_date": "2032-12-23",
+              "fair_value": "-49000.0"
+            }
+          ]
+        }
+      ],
+      "changed_component_row_ids": [
+        "ROW-0869b42dc8d0c95d",
+        "ROW-305288b1cce674b0",
+        "ROW-3e3853db3478706c",
+        "ROW-80463847fd95b6e1",
+        "ROW-9443a8b2edc7a1b7",
+        "ROW-009f0d8b791557fc",
+        "ROW-8c80f1086c8c11f8",
+        "ROW-c1ca170c6f4654d3"
+      ]
+    }
+  }
+}

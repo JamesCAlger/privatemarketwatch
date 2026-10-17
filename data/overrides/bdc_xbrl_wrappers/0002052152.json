@@ -94,13 +94,14 @@
     "canonical_strip_re": "(?i)\\s+Interest\\s+Rate\\s+.*?(?=\\s+Maturity\\s+Date|$)",
     "category_marker_re": "^(?:Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents|Investments|Total\\s+.+)$",
     "industry_from_identifier_re": "(?i)^\\s*(Independent\\s+Power\\s+\\&\\s+Renewable\\s+Electricity\\s+Producers|Electronic\\s+Equipment,\\s+Instruments\\s+\\&\\s+Components|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Technology\\s+Hardware,\\s+Storage\\s+\\&\\s+Peripherals|Semiconductors\\s+\\&\\s+Semiconductor\\s+Equipment|Consumer\\s+Staples\\s+Distribution\\s+\\&\\s+Retail|Wireless\\s+Telecommunication\\s+Services|Health\\s+Care\\s+Equipment\\s+\\&\\s+Supplies|Health\\s+Care\\s+Providers\\s+\\&\\s+Services|Textiles,\\s+Apparel\\s+\\&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+\\&\\s+Distributors|Commercial\\s+Services\\s+\\&\\s+Supplies|Life\\s+Sciences\\s+Tools\\s+\\&\\s+Services|Diversified\\s+Consumer\\s+Services|Hotels,\\s+Restaurants\\s+\\&\\s+Leisure|Transportation\\s+Infrastructure|Energy\\s+Equipment\\s+\\&\\s+Services|Construction\\s+\\&\\s+Engineering|Communications\\s+Equipment|Air\\s+Freight\\s+\\&\\s+Logistics|Asset\\s+Backed\\s+Securities|Containers\\s+\\&\\s+Packaging|Health\\s+Care\\s+Technology|Personal\\s+Care\\s+Products|Special\\s+Purpose\\s+Entity|Automobile\\s+Components|Ground\\s+Transportation|Marine\\s+Transportation|Professional\\s+Services|Electrical\\s+Equipment|Aerospace\\s+\\&\\s+Defense|Electric\\s+Utilities|Financial\\s+Services|Household\\s+Durables|Building\\s+Products|Diversified\\s+REITs|Consumer\\s+Finance|Leisure\\s+Products|Specialty\\s+Retail|Capital\\s+Markets|Multi\\-Utilities|Pharmaceuticals|Entertainment|Food\\s+Products|Distributors|IT\\s+Services|Beverages|Chemicals|Financing|Insurance|Machinery|Software|Media)\\s",
-    "instrument_description_strip_re": "(?i)\\s+Interest\\s+Rate\\b.*$"
+    "instrument_description_strip_re": "(?i)(?:\\s*(?:Interest\\s+Rate|Maturity\\s+Date)\\b.*$|\\s+(?:Rate\\s+)?S\\s*\\+\\s*\\d.*$)",
+    "issuer_name_strip_re": "(?i)(?:^MRO\\ Holdings\\ (?=MRO\\ Holdings,\\ Inc\\.$)|^Clarience\\ Technologies\\ (?=Truck\\-Lite\\ Co\\.,\\ LLC$)|^US\\ LBM\\ (?=LBM\\ Acquisition,\\ LLC$)|^AVI\\-SPL\\ (?=A\\&V\\ Holdings\\ Midco,\\ LLC$)|^Encore\\ (?=AVSC\\ Holding\\ Corp\\.$)|^Heritage\\ Environmental\\ Services\\ (?=Heritage\\ Environmental\\ Services,\\ Inc\\.$)|^R\\.R\\.\\ Donnelley\\ (?=R\\.\\ R\\.\\ Donnelley\\ \\&\\ Sons\\ Company$)|^CommScope\\ (?=Commscope,\\ LLC$)|^ASC\\ Engineered\\ Solutions\\ (?=Fire\\ Flow\\ Intermediate\\ Corporation$)|^LendingTree\\ (?=LendingTree,\\ Inc\\.$)|^Protein\\ for\\ Pets\\ (?=Protein\\ For\\ Pets\\ Opco,\\ LLC$)|^Rise\\ Baking\\ (?=Viking\\ Baked\\ Goods\\ Acquisition\\ Corporation$)|^Jensen\\ Hughes\\ (?=Jensen\\ Hughes,\\ Inc$)|^Wealth\\ Enhancement\\ Group,\\ LLC\\ (?=Wealth\\ Enhancement\\ Group,\\ LLC$)|^Vantive\\ (?=Spruce\\ Bidco\\ II\\ Inc\\.$)|^Zeus\\ (?=Zeus\\ Company\\ LLC$)|^Advarra\\ (?=Advarra\\ Holdings,\\ Inc\\.$)|^Omega\\ Healthcare\\ (?=OMH\\-Healthedge\\ Holdings,\\ Inc\\.$)|^Tivity\\ Health\\ (?=Tivity\\ Health,\\ Inc\\.$)|^Suvoda\\ (?=Goldeneye\\ Parent,\\ LLC$)|^Polywood\\ (?=Poly\\-Wood,\\ LLC$)|^Vensure\\ (?=Vensure\\ Employer\\ Services,\\ Inc\\.$)|^Higginbotham\\ (?=HIG\\ Intermediate,\\ Inc\\.$)|^Higginbotham\\ (?=Higginbotham\\ Insurance\\ Agency,\\ Inc\\.$)|^Hilb\\ Group\\ (?=Thg\\ Acquisition,\\ LLC$)|^Safe\\-Guard\\ (?=SG\\ Acquisition,\\ Inc\\.$)|^Cambrex\\ (?=Cambrex\\ Corp\\.$)|^Curia\\ Curia\\ Global,\\ Inc\\.\\ (?=Curia\\ Global,\\ Inc\\.$)|^Gannett\\ (?=Gannett\\ Co\\.,\\ Inc\\.$)|^Gannett\\ (?=Gannett\\ Holdings,\\ LLC$)|^PDC\\ Brands\\ (?=Parfums\\ Holding\\ Company,\\ Inc\\.$)|^Silk\\ Holdings\\ III\\ Corp\\.\\ (?=Silk\\ Holdings\\ III\\ Corp\\.$)|^Catalent\\ (?=Creek\\ Parent,\\ Inc\\.$)|^BDO\\ USA\\ (?=BDO\\ USA,\\ P\\.A\\.$)|^Legends\\ (?=Legends\\ Hospitality\\ Holding\\ Company,\\ LLC$)|^Wolfspeed,\\ Inc\\.\\ (?=Wolfspeed,\\ Inc\\.$)|^Alteryx\\ (?=Azurite\\ Intermediate\\ Holdings,\\ Inc\\.$)|^Databricks\\ (?=Databricks,\\ Inc\\.$)|^Everbridge\\ (?=Everbridge\\ Holdings,\\ LLC$)|^G2CI\\ (?=Evergreen\\ IX\\ Borrower\\ 2023,\\ LLC$)|^Quorum\\ (?=QBS\\ Parent,\\ Inc\\.$)|^Redwood\\ (?=Runway\\ Bidco,\\ LLC$)|^Tailored\\ Brands\\ (?=The\\ Men's\\ Wearhouse,\\ LLC$)|^Service\\ Express\\ (?=Victors\\ Purchaser,\\ LLC$)|^GSI\\ (?=Geotechnical\\ Merger\\ Sub,\\ Inc\\.$)|^Triumph\\ (?=TITAN\\ BW\\ BORROWER\\ L\\.P\\.$)|^Leaf\\ Home\\ (?=LHS\\ Borrower\\ LLC$)|^Russell\\ (?=Russell\\ Investments\\ US\\ Institutional\\ Holdco\\ Inc$)|^Vantage\\ Specialty\\ Chemicals\\ (?=Vantage\\ Specialty\\ Chemicals\\ Holdings,\\ Inc\\.$)|^Service\\ Logic\\ (?=Saber\\ Parent\\ Holdings\\ Corp$)|^Golden\\ Hippo\\ (?=Altern\\ Marketing,\\ LLC$)|^Golden\\ Hippo\\ (?=Golden\\ Hippo\\ Pet,\\ LLC$)|^Wolfspeed\\ (?=Wolfspeed\\ Inc$)|^Wealth\\ Enhancement\\ Group\\ (?=Wealth\\ Enhancement\\ Group,\\ LLC$)|^Dental\\ Corp\\ (?=Aryeh\\ Bidco\\ Investment\\ Ltd\\.$)|^One\\ Call\\ Medical\\ (?=One\\ Call\\ Corporation\\ \\(fka\\ Opal\\ Acquisition,\\ Inc\\.\\)$)|^Datavant\\ (?=CT\\ Technologies\\ Intermediate\\ Holdings\\ \\(Topco\\),\\ Inc\\.$)|^ISC\\ (?=IRIS\\ Specialty\\ Acquisition\\ LLC$)|^Keystone\\ (?=Koala\\ Investment\\ Holdings,\\ Inc\\.$)|^Curia\\ (?=Curia\\ Global,\\ Inc\\.$)|^United\\ Flow\\ Technologies\\ (?=Uft\\ Buyer\\ LLC$)|^Gannett\\ (?=USA\\ TODAY\\ Co\\ Inc\\ \\(fka\\ Gannett\\ Co\\.,\\ Inc\\.\\)$)|^Suave\\ (?=Silk\\ Holdings\\ III\\ Corp\\.$)|^Kroll\\ (?=Deerfield\\ Dakota\\ Holding,\\ LLC$)|^Enverus\\ (?=Edition\\ Holdings,\\ Inc\\.$)|^Jeppesen\\ (?=JEPPESEN\\ HOLDINGS,\\ LLC$)|^Valor\\ (?=VCI\\ Asset\\ Holdings\\ 1\\ LLC$)|^Valor\\ (?=VCI\\ Asset\\ Holdings\\ 2\\ LLC$)|^Valor\\ (?=VCI\\ Intermediate\\ Topco\\ 1\\ LLC$)|^Valor\\ (?=VCI\\ Intermediate\\ TopCo\\ 2\\ LLC$)|^Curia\\ (?=Curia\\ Receivables\\ II\\ SPV,\\ LLC$)|^Valor\\ 1\\ (?=VCI\\ Asset\\ Holdings\\ 1\\ LLC$)|^Valor\\ 2\\ (?=VCI\\ Asset\\ Holdings\\ 2\\ LLC$)|^Valor\\ 2\\ (?=VCI\\ Intermediate\\ TopCo\\ 2\\ LLC$)|^Valor\\ 3\\ (?=VCI\\ Asset\\ Holdings\\ 3\\ LLC$)|^Valor\\ 3\\ (?=VCI\\ Intermediate\\ TopCo\\ 3\\ LLC$)|^Eagle\\ Railcar\\ (?=Elk\\ Bidco,\\ Inc$))"
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^(?:(?:MSD_INDUSTRY_LABELS)\\s+)?(.+?)\\s+(?:Investment|Security)\\s+Type\\s+",
-    "hierarchy_instrument_re": "(?:Investment|Security)\\s+Type\\s+(.+)$",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:Investment|Security)\\s+Type\\s+')",
+    "hierarchy_issuer_re": "(?i)^(?:(?:MSD_INDUSTRY_LABELS)\\s+)*(.+?)\\s+(?:(?:Investment|Security)\\s+Type\\s+|First\\s+Lien\\s+Secured\\s+Debt|Common\\s+Equity/Partnership\\s+Interests)",
+    "hierarchy_instrument_re": "(?i)\\s+((?:(?:First|Second)\\s+Lien\\s+Secured\\s+Debt|Unsecured\\s+Debt|Subordinated\\s+Debt|Common\\s+Equity|Preferred\\s+(?:Equity|-)).*)$",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)(?:Investment|Security)\\s+Type\\s+|First\\s+Lien\\s+Secured\\s+Debt|Common\\s+Equity/Partnership\\s+Interests')",
     "extra_industry_labels": [
       "Automobile Components",
       "Beverages",
@@ -217,10 +218,50 @@
     ],
     "reference_rate_codes": [
       "C=CORRA",
-      "BBSW=BBSW"
+      "BBSW=BBSW",
+      "T=TORF to 2025-12-31",
+      "T=TONAR from 2026-01-01"
     ],
     "printed_margin_reading": [
       "cash_plus_pik"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
+    ],
+    "untagged_values": [
+      "0000950170-25-070628 C_79d47b96-6c6f-4cd2-8cad-671e8cecaa3f fair_value 0",
+      "0000950170-25-070628 C_ce3f3f4e-b0c5-43d2-8ccd-026bd5315683 fair_value 0",
+      "0000950170-25-070628 C_dcd7dda3-2875-4835-adb4-0eb4cdfd8327 fair_value 0",
+      "0000950170-25-070628 C_31f2ae58-5ac7-4eb8-8f4d-943df12e8b36 fair_value 0",
+      "0000950170-25-070628 C_82b8453c-6d92-4965-a99a-0178f2029c99 fair_value 0",
+      "0000950170-25-070628 C_eaade273-c175-4b6a-a7d6-75fb625d232a fair_value 0",
+      "0000950170-25-070628 C_ba59e86c-288d-45a4-a08c-3dd31aefb2af fair_value 0",
+      "0000950170-25-070628 C_4d00dc9e-aae6-4154-b53a-a80d2e2d5d3e fair_value 0",
+      "0000950170-25-107411 C_59631666-5da0-491f-b8a5-8ebb1ddf24cb fair_value 0",
+      "0000950170-25-107411 C_3ecef62f-2ba3-40bb-89ae-c176859750bc fair_value 0",
+      "0000950170-25-107411 C_5585b117-be21-45c8-8685-bb5c42137d99 fair_value 0",
+      "0000950170-25-107411 C_fffd85a9-3df8-45b6-bec0-088c92862754 fair_value 0",
+      "0000950170-25-107411 C_afb0ab4a-9aee-4a81-bc07-99283bdfdef2 fair_value 0",
+      "0000950170-25-107411 C_5f26a585-9312-49e0-b776-4778ba0b5343 fair_value 0",
+      "0001193125-25-278006 C_79d8a65a-0e75-4561-af70-e8c9e6e50cf4 fair_value 0",
+      "0001193125-25-278006 C_b8f67b19-3578-46e8-8c86-3bf8815b6cf8 fair_value 0",
+      "0001193125-25-278006 C_a7bf3a5f-e735-436b-85dd-5897378bf4c8 fair_value 0",
+      "0001193125-25-278006 C_33e5de8d-42eb-468a-8969-f68a357ff909 fair_value 0",
+      "0001193125-25-278006 C_f46f9ef8-8c6e-4fa1-9b39-f3a5e8906c03 fair_value 0",
+      "0001193125-25-278006 C_b75fd158-0134-47a3-b5a5-b341382ba8b0 fair_value 0",
+      "0001193125-25-278006 C_ddf4817a-55ee-414c-a9e0-6e939824a63c fair_value 0",
+      "0001193125-25-278006 C_63142557-c424-4b0b-85df-924f6bfa6061 fair_value 0",
+      "0001193125-26-104533 C_46b73bd7-ce35-4308-8a0a-152c641e9c9b fair_value 0",
+      "0001193125-26-104533 C_6ffde2b2-5ec6-4bf1-bec5-5486439034c5 fair_value 0",
+      "0001193125-26-104533 C_edb275a6-5277-468d-89a7-24d86d9b3d6e fair_value 0",
+      "0001193125-26-104533 C_0f8d2713-cd3a-441a-8c2a-4f024b25e49b fair_value 0",
+      "0001193125-26-104533 C_9e67c634-e03c-4043-904f-349e2cfcb995 fair_value 0",
+      "0001193125-26-104533 C_044367be-55a0-47ae-afa8-a100bbd4176f fair_value 0",
+      "0001193125-26-104533 C_882f9ba0-116d-4db7-bb66-af68f6b11476 fair_value 0",
+      "0001193125-26-221801 C_da5a4b04-bccb-4656-96ac-98b0541b92ba cost 37442000",
+      "0001193125-26-104533 C_fd84f14b-4021-4cb2-bedf-84a682a6a543 cost 24340000",
+      "0001193125-26-221801 C_1f99c300-8873-4997-a624-06d7201fa4e8 cost 31431000",
+      "0001193125-26-347350 C_826b8d1b-da6e-40bc-a520-f71247f61bcd cost 29240000"
     ]
   }
 }
