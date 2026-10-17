@@ -167,7 +167,7 @@
  },
  {
   "quarter": "2023-03-31",
-  "identifier": "Investments United States Debt Investments Insurance Patriot Growth Insurance Services, LLC Investment\u00a0Type Unitranche First Lien Revolver Maturity/ Dissolution Date 10/2028",
+  "identifier": "Investments United States Debt Investments Insurance Patriot Growth Insurance Services, LLC Investment Type Unitranche First Lien Revolver Maturity/ Dissolution Date 10/2028",
   "exact": true,
   "fields": {
    "cost": "-11000"
@@ -176,7 +176,7 @@
  },
  {
   "quarter": "2023-03-31",
-  "identifier": "Investments United States Debt Investments Insurance Socius Insurance Services, Inc. Investment\u00a0Type Unitranche First Lien Revolver Maturity/ Dissolution Date 06/2027",
+  "identifier": "Investments United States Debt Investments Insurance Socius Insurance Services, Inc. Investment Type Unitranche First Lien Revolver Maturity/ Dissolution Date 06/2027",
   "exact": true,
   "fields": {
    "cost": "-5000"
@@ -264,5 +264,227 @@
    "maturity_date": ""
   },
   "reason": "0000950170-23-040555: Matilda Jane Holdings, Inc. (9) Senior Secured First Lien Term Loan 11,961 - 0.0 291 Matilda Jane Holdings, Inc. (9) Senior Secured First Lien Revolver 1,426 189 0.0 35. Both current maturity cells blank; withdraw12/2022 carried only in stale member text."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Investments Canada Debt Investments Telecommunication Services Sandvine Corporation Investment Type Senior Secured First Lien Term Loan Maturity/ Dissolution Date 06/2027",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0000950170-24-095458: Sandvine Corporation (8)(9)(11) Senior Secured First Lien Term Loan 06/2027 736 247. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of June 30, 2024'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Investments United States Debt Investments Commercial & Professional Services Seko Global Logistics Network, LLC Investment Type Senior Secured First Lien Revolver Maturity/Dissolution Date 07/2027",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0000950170-24-095458: Seko Global Logistics Network, LLC (5)(9)(11) Senior Secured First Lien Revolver 07/2027 764 742 0.1 389. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of June 30, 2024'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Investments United States Debt Investments Commercial & Professional Services Seko Global Logistics Network, LLC Investment Type Senior Secured First Lien Term Loan Maturity/Dissolution Date 07/2027",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0000950170-24-095458: Seko Global Logistics Network, LLC (9)(11) Senior Secured First Lien Term Loan 07/2027 4,924 4,883 0.5 3,501. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of June 30, 2024'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Investments United States Debt Investments Commercial & Professional Services Seko Global Logistics Network, LLC Investment Type Senior Secured First Lien Revolver Maturity/Dissolution Date 07/2027",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0000950170-24-124474: Seko Global Logistics Network, LLC (5)(9)(11) Senior Secured First Lien Revolver 07/2027 992 954 0.1 584. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of September 30, 2024'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Investments United States Debt Investments Commercial & Professional Services Seko Global Logistics Network, LLC Investment Type Senior Secured First Lien Term Loan Maturity/Dissolution Date 07/2027",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0000950170-24-124474: Seko Global Logistics Network, LLC (9)(11) Senior Secured First Lien Term Loan 07/2027 4,973 4,883 0.5 3,432. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of September 30, 2024'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Investments United States Debt Investments Diversified Financials iLending LLC Investment Type Senior Secured First Lien Maturity/ Dissolution Date 06/2026",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0000950170-25-071368: iLending LLC (9) Senior Secured First Lien Term Loan 06/2026 4,384 4,385 0.3 2,467. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of March 31, 2025'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investments United States Debt Investments Capital Goods TriStrux, LLC Investment Type Senior Secured First Lien Delayed Draw Term Maturity/ Dissolution Date 12/2027",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0001193125-25-277533: TriStrux, LLC (9) Senior Secured First Lien Delayed Draw Term Loan 12/2027 948 938 0.1 531. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of September 30, 2025'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investments United States Debt Investments Capital Goods TriStrux, LLC Investment Type Senior Secured First Lien Revolver Maturity/ Dissolution Date 12/2027",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0001193125-25-277533: TriStrux, LLC (9) Senior Secured First Lien Revolver 12/2027 969 958 0.1 500. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of September 30, 2025'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investments United States Debt Investments Materials Action Signature Acquisition, Inc. Investment Type Unitranche First Lien Term Loan Maturity/Dissolution Date 12/2027 Three",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0001193125-25-277533: Action Signature Acquisition, Inc. (9) Unitranche First Lien Term Loan 12/2027 957 826 0.0 106. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of September 30, 2025'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investments United States Debt Investments Materials Action Signature Acquisition, Inc. Investment Type Unitranche First Lien Term Loan Maturity/Dissolution Date 12/2027 Two",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0001193125-25-277533: Action Signature Acquisition, Inc. (9) Unitranche First Lien Term Loan 12/2027 280 242 0.0 31. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of September 30, 2025'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Investments United States Debt Investments Materials Action Signature Acquisition, Inc. Investment Type Unitranche First Lien Term Loan Maturity/Dissolution Date 12/2027 Three",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0001193125-26-071922: Action Signature Acquisition, Inc. (9) Unitranche First Lien Term Loan 12/2027 984 826 0.0 117. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of December 31, 2025'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Investments United States Debt Investments Materials Action Signature Acquisition, Inc. Investment Type Unitranche First Lien Term Loan Maturity/Dissolution Date 12/2027 Two",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true"
+  },
+  "reason": "Printed 0001193125-26-071922: Action Signature Acquisition, Inc. (9) Unitranche First Lien Term Loan 12/2027 288 242 0.0 34. Footnote (9) on that schedule reads 'The investment is on non-accrual status as of December 31, 2025'; the XBRL footnote link is missing or points at the comparative date's note."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investments United States Debt Investments Capital Goods TriStrux, LLC Maturity/ Dissolution Date 12/2027",
+  "exact": true,
+  "fields": {
+   "nonaccrual_footnote": "true",
+   "issuer_name": "TriStrux, LLC",
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "0001193125-25-277533: TriStrux, LLC (9) Senior Secured First Lien Term Loan 12/2027 2,700 2,674 0.2 1,514. Member names issuer and maturity only; (9) = 'on non-accrual status as of September 30, 2025'."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Investments United States Debt Investments Software & Services Certify, Inc. Investment Type Senior Secured First Term Loan Interest Term S + 550 (100 Floor) Interest Rate 10.70% Maturity/ Dissolution Date 02/2024",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "0000950170-23-040555: Certify, Inc. Senior Secured First Lien Term Loan S + 550 ( 100 Floor) 10.70 % 02/2024 1,544 1,544 0.2 1,543. Member says 'First Term Loan'."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Investments United States Debt Investments Software & Services Cedar Services Group, LLC Investment Type Senior Secured First Term Loan Interest Term S + 650 (150 Floor) Interest Rate 11.89% Maturity/ Dissolution Date 06/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "0000950170-23-040555: Cedar Services Group, LLC Senior Secured First Lien Term Loan S + 650 ( 150 Floor) 11.89 % 06/2027 2,860 2,778 0.4 2,797. Member says 'First Term Loan'."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Investments United States Debt Investments Software & Services Cedar Services Group, LLC Investment Type Senior Secured First Term Loan Interest Term S + 650 (100 Floor) Interest Rate 11.74% Maturity/ Dissolution Date 06/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "0000950170-23-040555: Cedar Services Group, LLC Senior Secured First Lien Term Loan S + 650 ( 100 Floor) 11.74 % 06/2027 988 959 0.1 966. Member says 'First Term Loan'."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Investments United States Debt Investments Health Care Equipment & Services, CC Amulet Management, LLC., Investment Type Senior Secured First Revolver, Interest Term S + 500 (100 Floor), Interest Rate 9.43%, Maturity/ Dissolution Date 08/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "0000950170-25-108024: CC Amulet Management, LLC Senior Secured First Lien Revolver S + 500 ( 100 Floor) 9.73 % 08/2027 671 662 0.1 671. Member says 'First Revolver'."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Investments United States Debt Investments Health Care Equipment & Services, CC Amulet Management, LLC., Investment Type Senior Secured First Revolver, Interest Term S + 525, 100 Floor, Interest Rate 9.69%, Maturity/ Dissolution Date 08/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "0001193125-25-277533: CC Amulet Management, LLC (6) Senior Secured First Lien Revolver S + 525 , 100 Floor 9.69 % 08/2027 763 756 0.1 763. Member says 'First Revolver'."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Investments United States Debt Investments Pharmaceuticals, Biotechnology & Life Sciences Investment Type Senior Secured First Lien Term Loan Interest Term S + 525 (75 Floor) (including 275 PIK) Interest Rate 10.49% Maturity/Dissolution Date 12/2028",
+  "exact": true,
+  "fields": {
+   "issuer_name": "BioAgilytix"
+  },
+  "reason": "0000950170-23-040555: BioAgilytix Senior Secured First Lien Term Loan S + 525 ( 75 Floor) (including 275 PIK) 10.49 % 12/2028 13,279 13,037 1.7 12,334. Member omits the issuer."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Investments United States Debt Investments Pharmaceuticals, Biotechnology & Life Sciences Investment Type Senior Secured First Lien Delayed Draw Term Loan Interest Term S + 525 (75 Floor) (including 275 PIK) Interest Rate 10.59% Maturity/Dissolution Date 12/2028",
+  "exact": true,
+  "fields": {
+   "issuer_name": "BioAgilytix"
+  },
+  "reason": "0000950170-23-040555: BioAgilytix (5) Senior Secured First Lien Delayed Draw Term Loan S + 525 ( 75 Floor) (including 275 PIK) 10.59 % 12/2028 685 665 0.1 503. Member omits the issuer."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Investment Type Unitranche First Lien Term Loan Interest Term S + 525 (75 Floor) Interest Rate 10.59% Maturity/Dissolution Date 09/2028",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Galway Borrower, LLC",
+   "instrument_description": "Unitranche First Lien Term Loan"
+  },
+  "reason": "0000950170-23-040555: Galway Borrower, LLC Unitranche First Lien Term Loan S + 525 ( 75 Floor) 10.59 % 09/2028 14,485 14,299 1.9 13,978. Member omits the issuer."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Investment Type Unitranche First Lien Term Loan Interest Term S + 525 (75 Floor) Interest Rate 10.74% Maturity/Dissolution Date 09/2028",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Galway Borrower, LLC",
+   "instrument_description": "Unitranche First Lien Term Loan"
+  },
+  "reason": "0000950170-23-061089: Galway Borrower, LLC Unitranche First Lien Term Loan S + 525 ( 75 Floor) 10.74 % 09/2028 14,448 14,273 1.9 14,087. Member omits the issuer."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Investment Type Unitranche First Lien Delayed Draw Term Loa Interest Term S + 525 (75 Floor) Interest Rate 10.74% Maturity/Dissolution Date 09/2028",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Galway Borrower, LLC",
+   "instrument_description": "Unitranche First Lien Delayed Draw Term Loan"
+  },
+  "reason": "0000950170-23-061089: Galway Borrower, LLC Unitranche First Lien Delayed Draw Term Loan S + 525 ( 75 Floor) 10.74 % 09/2028 134 133 0.0 131. Member omits the issuer."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Senior Secured First Lien Term Loan",
+  "exact": true,
+  "fields": {
+   "issuer_name": "United Language Group, Inc.",
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "0000950170-23-061089: United Language Group, Inc. Senior Secured First Lien Term Loan S + 875 ( 100 Floor) (including 200 PIK) 14.17 % 06/2024 4,510 4,516 0.6 4,462. Member is the instrument only."
  }
 ]

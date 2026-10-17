@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. Ledger does not read this directory.",
- "sandbox": "ccye",
+ "sandbox": "ccza",
  "dispositions": [
   {
    "disposition_id": "PD-0001633336-PP02-1",
@@ -95,7 +95,7 @@
     }
    ],
    "addresses_verdict": {},
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-16"
   },
@@ -192,7 +192,7 @@
     }
    ],
    "addresses_verdict": {},
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-16"
   },
@@ -265,7 +265,7 @@
     }
    ],
    "addresses_verdict": {},
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-16"
   },
@@ -309,7 +309,7 @@
     "2023-03-31": "Earlier verdict cites Matilda December2022 maturities and calls them value defects because they precede report date. Re-reading both current lines confirms December2022 is printed; published dates are faithful, not comparative leakage.",
     "2026-03-31": "Earlier verdict cites three Gener8 loans with February2026 maturity. All three current lines expressly print February2026; this is a source-level past-due exposure, not an extraction error to rewrite."
    },
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-16"
   },
@@ -343,7 +343,7 @@
     }
    ],
    "addresses_verdict": {},
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-16"
   },
@@ -377,42 +377,7 @@
     }
    ],
    "addresses_verdict": {},
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
-   "decided_by": "PROPOSED by fund agent; not accepted",
-   "decided_on": "2026-10-16"
-  },
-  {
-   "disposition_id": "PD-0001633336-C103-7",
-   "class": "as_filed",
-   "engine": "row_validation",
-   "rule_name": "C103",
-   "ciks": [
-    "0001633336"
-   ],
-   "quarters": [
-    "2024-06-30"
-   ],
-   "reason_key": "c103-negative-mark-on-undrawn-line-printed-at-zero-cost",
-   "statement": "The actual remaining flag is Affinitiv undrawn revolver with zero/dash cost and negative3000FV printed in parentheses. TecoStar common equity is positive3000 and already published correctly. No sign change applies.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-24-095458",
-     "verbatim": "Affinitiv, Inc. (4)(5) Unitranche First Lien Revolver 01/2025 - - ( 0.0 ) ( 3 )",
-     "quote": "Affinitiv, Inc. (4)(5) Unitranche First Lien Revolver 01/2025 - - ( 0.0 ) ( 3 )"
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-095458",
-     "verbatim": "TecoStar Holdings, Inc. Common Stock 500,000 500 0.0 3",
-     "quote": "TecoStar Holdings, Inc. Common Stock 500,000 500 0.0 3"
-    }
-   ],
-   "addresses_verdict": {
-    "2024-06-30": "Earlier verdict alleged TecoStar common FV-3000 versus printed+3000. That is not the current flagged row: TecoStar publishes+3000. Affinitiv is the remaining C103 row and its page explicitly prints (3), so flipping it would introduce error."
-   },
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-16"
   },
@@ -428,9 +393,15 @@
     "2023-03-31"
    ],
    "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
-   "statement": "Patriot and Socius are undrawn revolvers with parenthesized costs11 and5 thousand, now published negative. Seniorlink cost17 thousand was also restored negative in ccye. The page supports these negative carrying costs; inventing positive costs would contradict it.",
+   "statement": "All four C107 rows at 2023-03-31 were read: Pye-Barker 11/2027, Patriot and Socius revolvers and the Seniorlink revolver are undrawn lines printed with a dash for par and the cost in parentheses (24, 11, 5 and 17 thousand); published costs are those negatives. The Pye-Barker row was restored in ccza (its member omits the issuer) with the printed negative cost. Inventing positive costs would contradict the page.",
    "basis": "read",
    "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020540",
+     "verbatim": "Pye-Barker Fire & Safety, LLC (4)(5) Unitranche First Lien Revolver 11/2027 - ( 24 ) ( 0.0 ) ( 37 )",
+     "quote": "Pye-Barker Fire & Safety, LLC (4)(5) Unitranche First Lien Revolver 11/2027 - ( 24 ) ( 0.0 ) ( 37 )"
+    },
     {
      "source": "filing",
      "accession": "0000950170-23-020540",
@@ -451,9 +422,9 @@
     }
    ],
    "addresses_verdict": {},
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
-   "decided_on": "2026-10-16"
+   "decided_on": "2026-10-17"
   },
   {
    "disposition_id": "PD-0001633336-fmt_interest_rate-9",
@@ -478,7 +449,7 @@
     }
    ],
    "addresses_verdict": {},
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-16"
   },
@@ -505,7 +476,7 @@
     }
    ],
    "addresses_verdict": {},
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-16"
   },
@@ -539,9 +510,60 @@
     }
    ],
    "addresses_verdict": {},
-   "rerun": "ccye; scratch/fund_runs/0001633336/notes.md",
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-0001633336-X02-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001633336"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "statement": "Every X02 row in these four quarters was read on the current schedule (50, 65, 67 and 75 rows). All but one per quarter fall under the standing reason (undrawn, non-accrual or PIK). The one left each quarter is an undrawn line printed with a dash for par, a dash for cost, no Interest Term and no Interest Rate, and a small positive mark: the Integrity Marketing revolver (7, 2 and 2 thousand) and the Arrow Management delayed draw (59 thousand). The tags carry no rate or spread either. The standing reason misses them only because cost is blank, not negative. No rate can be supplied.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124474",
+     "verbatim": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.0 7",
+     "quote": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.0 7"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-023153",
+     "verbatim": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.1 2",
+     "quote": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.1 2"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071368",
+     "verbatim": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.1 2",
+     "quote": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.1 2"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-071922",
+     "verbatim": "Arrow Management Acquisition, LLC (5) Unitranche First Lien Delayed Draw Term Loan 07/2032 - - 0.0 59",
+     "quote": "Arrow Management Acquisition, LLC (5) Unitranche First Lien Delayed Draw Term Loan 07/2032 - - 0.0 59"
+    }
+   ],
+   "addresses_verdict": {
+    "2024-09-30": "The reviewer cited Envocore and Seko term loans with blank Interest Term and Interest Rate as a value defect. Both print footnote (9), non-accrual as of September 30, 2024; Envocore already published non-accrual and Seko is corrected to non-accrual in ccza, so both fall under the standing reason. Blank rates are as printed; no rate exists to add.",
+    "2025-12-31": "The reviewer cited Continental Battery and Envocore rows with blank rate cells. Each prints (9), non-accrual as of December 31, 2025, and publishes non-accrual; the blank rate is the page's own. The only row outside the standing reason is the undrawn Arrow delayed draw quoted above."
+   },
+   "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-17"
   }
  ]
 }

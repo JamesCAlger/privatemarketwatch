@@ -2105,10 +2105,34 @@ _CORRECTABLE_FIELDS = frozenset({
     # an explicit kind before any tag or fund-level reading (2026-10-14, Monroe Bandas Law Firm:
     # printed '4.00 % Cash/ 13.75 % PIK', tagged with the plain rate concept and a PIK rate).
     "interest_rate_kind",
+    # A position the printed schedule marks with the filer's non-accrual footnote where the XBRL
+    # footnote link is missing or points at the comparative date's note (2026-10-17, Crescent
+    # Seko/TriStrux/Action Signature: printed '(9)' = 'on non-accrual status as of <date>').
+    # Only 'true' or 'false'; the financial step derives nonaccrual_status from it.
+    "nonaccrual_footnote",
 })
 
 # The only kinds a row correction may state; anything else is skipped with a warning.
 _CORRECTABLE_RATE_KINDS = frozenset({"cash", "all_in"})
+_CORRECTABLE_BOOLEANS = {"true": True, "false": False}
+
+
+def _same_kind_as_column(column: pd.Series, flag: bool):
+    """A corrected flag in the representation the column already uses (bool, 0/1 number or text)."""
+    import numpy as np
+    present = column.dropna()
+    present = present[present.astype(str).str.strip() != ""]
+    if present.empty:
+        return flag
+    sample = present.iloc[0]
+    if isinstance(sample, (bool, np.bool_)):
+        return flag
+    if isinstance(sample, (int, np.integer)):
+        return int(flag)
+    if isinstance(sample, (float, np.floating)):
+        return float(flag)
+    text = str(sample)
+    return ("TRUE" if flag else "FALSE") if text.isupper() else ("true" if flag else "false") if text.islower() else str(flag)
 
 # Required columns in row_corrections.csv.
 _CORRECTIONS_REQUIRED_COLS = {
@@ -2225,6 +2249,18 @@ def _apply_row_corrections(
                     value, key,
                 )
                 continue
+            if field == "nonaccrual_footnote":
+                flag = _CORRECTABLE_BOOLEANS.get(str(value).strip().lower()) if value is not None else None
+                if flag is None:
+                    logger.warning(
+                        "Row correction skipped: nonaccrual_footnote must be true or false, got %r key=%s",
+                        value, key,
+                    )
+                    continue
+                # Keep the column's own representation: the combined frame can carry the flag as
+                # 0/1 integers or as text, and a mixed object column breaks later DuckDB scans
+                # (2026-10-17 sandbox ccza: 'Type BOOLEAN does not match with INTEGER').
+                value = _same_kind_as_column(df[field], flag)
             df.loc[mask, field] = value
             if "corrected_fields" in df.columns:
                 from pipeline.agent_promoted import append_corrected_fields

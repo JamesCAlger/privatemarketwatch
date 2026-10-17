@@ -63,11 +63,11 @@
    "evidence": [
     {
      "source": "query",
-     "quote": "Check values_as_filed passed on sandbox ccye for each quarter listed: 1 flagged rows tested, none failing."
+     "quote": "Check values_as_filed passed on sandbox ccza for each quarter listed: 1 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/issue_shape.py ccye C103 3",
-   "decided_by": "check passed on sandbox ccye; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/issue_shape.py ccza C103 3",
+   "decided_by": "check passed on sandbox ccza; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
@@ -912,17 +912,19 @@
     "0001633336"
    ],
    "quarters": [
+    "2024-06-30",
+    "2025-09-30",
     "2026-06-30"
    ],
    "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
    "evidence": [
     {
      "source": "query",
-     "quote": "Check no_rate_in_source passed on sandbox ccya for each quarter listed: 71 flagged rows tested, none failing."
+     "quote": "Check no_rate_in_source passed on sandbox ccza for each quarter listed: 105 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/x02_page_read.py ccya 0001633336",
-   "decided_by": "check passed on sandbox ccya; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/x02_page_read.py ccza 0001633336",
+   "decided_by": "check passed on sandbox ccza; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
