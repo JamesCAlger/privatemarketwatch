@@ -7,23 +7,86 @@
    "class": "as_filed",
    "engine": "oracle",
    "rule_name": "A07",
-   "ciks": ["0001965934"],
-   "quarters": ["2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30"],
+   "ciks": [
+    "0001965934"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
    "reason_key": "a07-outlier-percent-is-the-printed-row",
    "statement": "A07 warns because one or two rows carry more than 25 pct of net assets; the percent sums (184.02, 184.33, 226.94, 213.55, 213.73) are inside the 50 to 250 band and each equals the printed 'Total Investments and Cash Equivalents' percent. The outlier rows are printed so: Triwest 25.40 % (2024-06-30), CV Borrower 34.79 % and SGA Dental 27.51 % (2024-09-30), the U.S. Treasury bill 31.49 %, 33.12 % and 33.10 % (2024-12-31 to 2025-06-30). The fund is young and levered (investments about 1.8 to 2.3 times net assets). No fix applies: the published percents are the printed ones.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-097213", "verbatim": "Triwest Healthcare Alliance Corp(6)(7) First lien senior secured term loan SOFR + 5.50 % 12/27/2027 50,000 49,127 49,125 25.40 %", "quote": "2024-06-30 outlier, printed 25.40 pct; published 25.4"},
-    {"source": "filing", "accession": "0000950170-24-097213", "verbatim": "Total Investments and Cash Equivalents $ 358,067 $ 355,902 184.02 %", "quote": "2024-06-30 printed total percent 184.02 = published sum"},
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "CV Borrower, LLC(6)(7)(10) First lien senior secured term loan SOFR + 5.50 % 8/30/2029 100,000 98,021 98,000 34.79 %", "quote": "2024-09-30 outlier 34.79 pct as printed"},
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "SGA Dental Partners OPCO, LLC(6)(7) First lien senior secured term loan SOFR + 5.50 % 7/17/2029 79,079 77,594 77,498 27.51 %", "quote": "2024-09-30 outlier 27.51 pct as printed"},
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "Total Investments and Cash Equivalents $ 521,811 $ 519,264 184.33 %", "quote": "2024-09-30 printed total percent 184.33 = published sum"},
-    {"source": "filing", "accession": "0000950170-25-045206", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %", "quote": "2024-12-31 outlier: Treasury bill 31.49 pct as printed"},
-    {"source": "filing", "accession": "0000950170-25-045206", "verbatim": "Total Investments and Cash Equivalents $ 973,400 $ 973,692 226.94 %", "quote": "2024-12-31 printed total percent 226.94 = published sum"},
-    {"source": "filing", "accession": "0000950170-25-071771", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %", "quote": "2025-03-31 outlier: Treasury bill 33.12 pct as printed"},
-    {"source": "filing", "accession": "0000950170-25-071771", "verbatim": "Total Investments and Cash Equivalents $ 1,021,584 $ 1,016,389 213.55 %", "quote": "2025-03-31 printed total percent 213.55 = published sum"},
-    {"source": "filing", "accession": "0000950170-25-109383", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %", "quote": "2025-06-30 outlier: Treasury bill 33.10 pct as printed"},
-    {"source": "filing", "accession": "0000950170-25-109383", "verbatim": "Total Investments and Cash Equivalents $ 1,392,348 $ 1,389,007 213.73 %", "quote": "2025-06-30 printed total percent 213.73 = published sum"}
+    {
+     "source": "filing",
+     "accession": "0000950170-24-097213",
+     "verbatim": "Triwest Healthcare Alliance Corp(6)(7) First lien senior secured term loan SOFR + 5.50 % 12/27/2027 50,000 49,127 49,125 25.40 %",
+     "quote": "2024-06-30 outlier, printed 25.40 pct; published 25.4"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-097213",
+     "verbatim": "Total Investments and Cash Equivalents $ 358,067 $ 355,902 184.02 %",
+     "quote": "2024-06-30 printed total percent 184.02 = published sum"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-127235",
+     "verbatim": "CV Borrower, LLC(6)(7)(10) First lien senior secured term loan SOFR + 5.50 % 8/30/2029 100,000 98,021 98,000 34.79 %",
+     "quote": "2024-09-30 outlier 34.79 pct as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-127235",
+     "verbatim": "SGA Dental Partners OPCO, LLC(6)(7) First lien senior secured term loan SOFR + 5.50 % 7/17/2029 79,079 77,594 77,498 27.51 %",
+     "quote": "2024-09-30 outlier 27.51 pct as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-127235",
+     "verbatim": "Total Investments and Cash Equivalents $ 521,811 $ 519,264 184.33 %",
+     "quote": "2024-09-30 printed total percent 184.33 = published sum"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045206",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %",
+     "quote": "2024-12-31 outlier: Treasury bill 31.49 pct as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045206",
+     "verbatim": "Total Investments and Cash Equivalents $ 973,400 $ 973,692 226.94 %",
+     "quote": "2024-12-31 printed total percent 226.94 = published sum"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071771",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %",
+     "quote": "2025-03-31 outlier: Treasury bill 33.12 pct as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071771",
+     "verbatim": "Total Investments and Cash Equivalents $ 1,021,584 $ 1,016,389 213.55 %",
+     "quote": "2025-03-31 printed total percent 213.55 = published sum"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-109383",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %",
+     "quote": "2025-06-30 outlier: Treasury bill 33.10 pct as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-109383",
+     "verbatim": "Total Investments and Cash Equivalents $ 1,392,348 $ 1,389,007 213.73 %",
+     "quote": "2025-06-30 printed total percent 213.73 = published sum"
+    }
    ],
    "rerun": "python scratch/fund_runs/0001965934/q.py scratch/fund_runs/0001965934/pct.sql ovye",
    "decided_by": "PROPOSED by agent overland_fund_agent_2026-10-17 (fund-clearing loop); not accepted by the owner",
@@ -34,16 +97,41 @@
    "class": "as_filed",
    "engine": "weak",
    "rule_name": "pct_position_concentration",
-   "ciks": ["0001965934"],
-   "quarters": ["2024-06-30", "2024-09-30"],
+   "ciks": [
+    "0001965934"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30"
+   ],
    "reason_key": "concentration-large-loan-of-a-young-levered-fund-as-printed",
    "statement": "The rows above a quarter of net assets are loans printed so: Triwest Healthcare 49,125 (25.40 %) at 2024-06-30; CV Borrower 98,000 (34.79 %) and SGA Dental 77,498 (27.51 %) at 2024-09-30. The fund began investing on 2024-05-07 and had 193.4M and 281.7M of net assets in these quarters. Published fair value and percent equal the printed line; nothing to fix.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-097213", "verbatim": "Triwest Healthcare Alliance Corp(6)(7) First lien senior secured term loan SOFR + 5.50 % 12/27/2027 50,000 49,127 49,125 25.40 %", "quote": "2024-06-30 flagged row as printed"},
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "CV Borrower, LLC(6)(7)(10) First lien senior secured term loan SOFR + 5.50 % 8/30/2029 100,000 98,021 98,000 34.79 %", "quote": "2024-09-30 flagged row as printed"},
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "SGA Dental Partners OPCO, LLC(6)(7) First lien senior secured term loan SOFR + 5.50 % 7/17/2029 79,079 77,594 77,498 27.51 %", "quote": "2024-09-30 flagged row as printed"},
-    {"source": "filing", "accession": "0000950170-25-045206", "verbatim": "commenced investment operations on May 7, 2024", "quote": "commencement date: the fund is young"}
+    {
+     "source": "filing",
+     "accession": "0000950170-24-097213",
+     "verbatim": "Triwest Healthcare Alliance Corp(6)(7) First lien senior secured term loan SOFR + 5.50 % 12/27/2027 50,000 49,127 49,125 25.40 %",
+     "quote": "2024-06-30 flagged row as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-127235",
+     "verbatim": "CV Borrower, LLC(6)(7)(10) First lien senior secured term loan SOFR + 5.50 % 8/30/2029 100,000 98,021 98,000 34.79 %",
+     "quote": "2024-09-30 flagged row as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-127235",
+     "verbatim": "SGA Dental Partners OPCO, LLC(6)(7) First lien senior secured term loan SOFR + 5.50 % 7/17/2029 79,079 77,594 77,498 27.51 %",
+     "quote": "2024-09-30 flagged row as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045206",
+     "verbatim": "commenced investment operations on May 7, 2024",
+     "quote": "commencement date: the fund is young"
+    }
    ],
    "rerun": "python scratch/fund_runs/0001965934/q.py scratch/fund_runs/0001965934/pct.sql ovye",
    "decided_by": "PROPOSED by agent overland_fund_agent_2026-10-17 (fund-clearing loop); not accepted by the owner",
@@ -54,15 +142,36 @@
    "class": "as_filed",
    "engine": "weak",
    "rule_name": "pct_position_concentration",
-   "ciks": ["0001965934"],
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30"],
+   "ciks": [
+    "0001965934"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
    "reason_key": "concentration-is-a-treasury-bill-held-as-cash",
    "statement": "The only row above a quarter of net assets in these quarters is the fund's U.S. Treasury bill (31.49 %, 33.12 %, 33.10 % as printed), a cash-management holding published in the CASH class, not a credit exposure. Its published fair value and percent equal the printed line. No loan exceeds 25 pct (largest CV Borrower 22.97 % at 2024-12-31). Nothing to fix.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-25-045206", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %", "quote": "2024-12-31 flagged row: the Treasury bill"},
-    {"source": "filing", "accession": "0000950170-25-071771", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %", "quote": "2025-03-31 flagged row: the Treasury bill"},
-    {"source": "filing", "accession": "0000950170-25-109383", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %", "quote": "2025-06-30 flagged row: the Treasury bill"}
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045206",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %",
+     "quote": "2024-12-31 flagged row: the Treasury bill"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071771",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %",
+     "quote": "2025-03-31 flagged row: the Treasury bill"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-109383",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %",
+     "quote": "2025-06-30 flagged row: the Treasury bill"
+    }
    ],
    "rerun": "python scratch/fund_runs/0001965934/q.py scratch/fund_runs/0001965934/pct.sql ovye",
    "decided_by": "PROPOSED by agent overland_fund_agent_2026-10-17 (fund-clearing loop); not accepted by the owner",
@@ -73,13 +182,22 @@
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "PCT01",
-   "ciks": ["0001965934"],
-   "quarters": ["2024-12-31"],
+   "ciks": [
+    "0001965934"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
    "reason_key": "pct01-percent-sum-is-the-printed-total-of-a-levered-fund",
    "statement": "The published percents sum to 226.94, the filer's printed 'Total Investments and Cash Equivalents' percent; investments are 220.87 pct of net assets (borrowings 450.0M against net assets 429.1M) and the Treasury bill adds 31.49. No rescaling applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-25-045206", "verbatim": "Total Investments $ 947,345 $ 947,637 220.87 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 % Total Investments and Cash Equivalents $ 973,400 $ 973,692 226.94 %", "quote": "printed totals: 220.87 + 6.07 = 226.94, the published sum"}
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045206",
+     "verbatim": "Total Investments $ 947,345 $ 947,637 220.87 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 % Total Investments and Cash Equivalents $ 973,400 $ 973,692 226.94 %",
+     "quote": "printed totals: 220.87 + 6.07 = 226.94, the published sum"
+    }
    ],
    "rerun": "python scratch/fund_runs/0001965934/q.py scratch/fund_runs/0001965934/pct.sql ovye",
    "decided_by": "PROPOSED by agent overland_fund_agent_2026-10-17 (fund-clearing loop); not accepted by the owner",
@@ -90,16 +208,43 @@
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "C202",
-   "ciks": ["0001965934"],
-   "quarters": ["2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31"],
+   "ciks": [
+    "0001965934"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
    "reason_key": "short-issuer-name-is-the-printed-name",
    "statement": "The two-character issuer is RH (the listed company, formerly Restoration Hardware), printed 'RH' with footnote marks in each quarter and named 'Household Durables RH First lien senior secured term loan ...' in the filer's member. Not a parsing artifact; the published name is the printed one.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-097213", "verbatim": "Household Durables RH(7)(12) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,979 7,857 7,662 3.96 %", "quote": "2024-06-30 printed name RH"},
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "Household Durables RH(7)(13) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,959 7,841 7,652 2.71 %", "quote": "2024-09-30 printed name RH"},
-    {"source": "filing", "accession": "0000950170-25-045206", "verbatim": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,938 7,826 7,854 1.83 %", "quote": "2024-12-31 printed name RH"},
-    {"source": "filing", "accession": "0000950170-25-071771", "verbatim": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,918 7,814 7,536 1.58 %", "quote": "2025-03-31 printed name RH"}
+    {
+     "source": "filing",
+     "accession": "0000950170-24-097213",
+     "verbatim": "Household Durables RH(7)(12) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,979 7,857 7,662 3.96 %",
+     "quote": "2024-06-30 printed name RH"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-127235",
+     "verbatim": "Household Durables RH(7)(13) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,959 7,841 7,652 2.71 %",
+     "quote": "2024-09-30 printed name RH"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045206",
+     "verbatim": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,938 7,826 7,854 1.83 %",
+     "quote": "2024-12-31 printed name RH"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071771",
+     "verbatim": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,918 7,814 7,536 1.58 %",
+     "quote": "2025-03-31 printed name RH"
+    }
    ],
    "rerun": "python scratch/fund_runs/0001965934/q.py scratch/fund_runs/0001965934/names.sql ovye",
    "decided_by": "PROPOSED by agent overland_fund_agent_2026-10-17 (fund-clearing loop); not accepted by the owner",
@@ -110,8 +255,15 @@
    "class": "as_filed",
    "engine": "weak",
    "rule_name": "fmt_issuer_name",
-   "ciks": ["0001965934"],
-   "quarters": ["2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31"],
+   "ciks": [
+    "0001965934"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
    "reason_key": "short-issuer-name-is-the-printed-name",
    "statement": "fmt_issuer_name flags names shorter than 3 characters; the one row each quarter is RH, printed 'RH'. The 'Material Quikrete Holdings Inc' / 'Material Summit Materials LLC' names that the earlier verdicts cite were real and are fixed in ovyb/ovyc (the filer's heading 'Construction Material' added to the wrapper's industry labels: 8 rows now 'Quikrete Holdings Inc' / 'Summit Materials LLC'); they were never what this rule measures.",
    "basis": "read",
@@ -121,39 +273,47 @@
     "2025-03-31": "Reviewer found 'Material Quikrete Holdings Inc'; confirmed and fixed (ovyc: Quikrete Holdings Inc 5.868). The rule's remaining row is RH, as printed."
    },
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-097213", "verbatim": "Household Durables RH(7)(12) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,979 7,857 7,662 3.96 %", "quote": "2024-06-30 printed name RH"},
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "Construction Material Quikrete Holdings Inc(7) First lien senior secured term loan SOFR + 2.50 % 4/14/2031 5,970 5,993 5,970 2.12 %", "quote": "2024-09-30: 'Construction Material' is the heading, 'Quikrete Holdings Inc' the issuer (fixed)"},
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "Household Durables RH(7)(13) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,959 7,841 7,652 2.71 %", "quote": "2024-09-30 printed name RH"},
-    {"source": "filing", "accession": "0000950170-25-045206", "verbatim": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,938 7,826 7,854 1.83 %", "quote": "2024-12-31 printed name RH"},
-    {"source": "filing", "accession": "0000950170-25-071771", "verbatim": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,918 7,814 7,536 1.58 %", "quote": "2025-03-31 printed name RH"}
+    {
+     "source": "filing",
+     "accession": "0000950170-24-097213",
+     "verbatim": "Household Durables RH(7)(12) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,979 7,857 7,662 3.96 %",
+     "quote": "2024-06-30 printed name RH"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-127235",
+     "verbatim": "Construction Material Quikrete Holdings Inc(7) First lien senior secured term loan SOFR + 2.50 % 4/14/2031 5,970 5,993 5,970 2.12 %",
+     "quote": "2024-09-30: 'Construction Material' is the heading, 'Quikrete Holdings Inc' the issuer (fixed)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-127235",
+     "verbatim": "Household Durables RH(7)(13) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,959 7,841 7,652 2.71 %",
+     "quote": "2024-09-30 printed name RH"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045206",
+     "verbatim": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,938 7,826 7,854 1.83 %",
+     "quote": "2024-12-31 printed name RH"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071771",
+     "verbatim": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,918 7,814 7,536 1.58 %",
+     "quote": "2025-03-31 printed name RH"
+    }
    ],
    "rerun": "python scratch/fund_runs/0001965934/q.py scratch/fund_runs/0001965934/names.sql ovye",
    "decided_by": "PROPOSED by agent overland_fund_agent_2026-10-17 (fund-clearing loop); not accepted by the owner",
    "decided_on": "2026-10-17"
-  },
+  }
+ ],
+ "withdrawn": [
   {
    "disposition_id": "PD-0001965934-F27-7",
-   "class": "rule_problem",
-   "engine": "fund_financials",
-   "rule_name": "F27",
-   "ciks": ["0001965934"],
-   "quarters": ["2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-06-30"],
-   "reason_key": "f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed",
-   "statement": "F27 compares the income yield with a weighted coupon of published interest rates. Every loan of this fund is printed with a margin only ('SOFR + 3.75 %'), no coupon, so no loan has a rate; the weighted coupon is the yield of the cash rows alone: the money-market fund (4.84 at 2024-09-30, 4.23 with the bill's 4.28 at 2025-03-31), the money fund and Treasury bill (4.36 / 4.27 at 2024-12-31), and from 2025-06-30 the Treasury bill alone (4.32, 3.89, 3.61, 3.79; these four quarters fail since the bill's printed rate was published in ovyd after page-sample card C014). F27 is skipped only at 2026-03-31, the one quarter without a rated cash row. A yield on cash cannot measure a loan book: the comparison has no basis. Publishing coupons is not possible (none printed or tagged). Recorded as a check defect in orchestrator_requests (OVY-R2).",
-   "basis": "read",
-   "evidence": [
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %", "quote": "loans print the margin only, no coupon"},
-    {"source": "filing", "accession": "0000950170-24-127235", "verbatim": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %", "quote": "the only rated row at 2024-09-30: the money fund's 4.84 yield"},
-    {"source": "filing", "accession": "0000950170-25-045206", "verbatim": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %", "quote": "2024-12-31 rated rows: money fund 4.36 and Treasury bill 4.27"},
-    {"source": "filing", "accession": "0000950170-25-071771", "verbatim": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %", "quote": "2025-03-31 rated rows: money fund 4.23 and Treasury bill 4.28"},
-    {"source": "filing", "accession": "0000950170-25-109383", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %", "quote": "2025-06-30 only rated row: Treasury bill 4.32"},
-    {"source": "filing", "accession": "0001193125-25-272318", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %", "quote": "2025-09-30 only rated row: Treasury bill 3.89"},
-    {"source": "filing", "accession": "0001193125-26-117368", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %", "quote": "2025-12-31 only rated row: Treasury bill 3.61"},
-    {"source": "filing", "accession": "0001193125-26-346556", "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %", "quote": "2026-06-30 only rated row: Treasury bill 3.79"}
-   ],
-   "rerun": "python scratch/fund_runs/0001965934/q.py scratch/fund_runs/0001965934/wac.sql ovye",
-   "decided_by": "PROPOSED by agent overland_fund_agent_2026-10-17 (fund-clearing loop); not accepted by the owner",
-   "decided_on": "2026-10-17"
+   "withdrawn_on": "2026-10-17",
+   "why": "F27 findings no longer raised after owner ruling 2a (D-202): CASH rows left out of the coupon, check skipped under 50 pct rated non-cash FV."
   }
  ]
 }

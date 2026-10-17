@@ -159,6 +159,9 @@
     ],
     "fair_value_concepts": [
       "CashEquivalentsAtFairValue"
+    ],
+    "investments_total_includes_cash": [
+      "^U\\.S\\. Treasury Bill"
     ]
   }
 }

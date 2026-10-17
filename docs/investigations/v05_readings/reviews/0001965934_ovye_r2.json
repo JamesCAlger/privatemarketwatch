@@ -1,0 +1,487 @@
+{
+ "reviewer_id": "overland_independent_reviewer_2026-10-17",
+ "report_digest": "96252de7557e6b919ce6ac1e30ec77997ebb4a7c6dbaa4fc99752c78b4db3ac8",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_02abfe10320f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Rule definition read in scripts/shadow_weak_engine.py: gate pct_of_net_assets >= 0 on rows with bdc_dimensions_raw, violation pct > 25. Shadow ledger for 2025-06-30: warn, 1 of 66 rows. Reviewer rows.sql over ovye returns exactly ROW-3312a49f24f4ac79 (Treasury bill 33.10), matching affected_rows. Each value and percent equals the printed line; percent = FV / filed net assets within rounding (fund_financials net assets). No non-cash row exceeds 25 pct (largest loan CV Borrower 22.97 at 2024-12-31, 20.75 at 2025-03-31, 15.18 at 2025-06-30 in ovye); the flagged row is the CASH-class bill, so proposal -3 is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_056e788b99d9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from ovye oracle/check_results.csv: A07 2024-06-30 status warn, metric 184.02 under threshold 250, message lists the >25 pct outliers. Reviewer rows.sql over ovye (bdc rows, this fund, 2024-06-30) gives pct sum 184.02 with no null percent and outliers ROW-2b307949975b415f (Triwest 25.40), the same keys as affected_rows. Sum equals the printed 'Total Investments and Cash Equivalents' percent and each outlier percent equals its printed line; published FV total also equals the printed value column. Warn is as filed (young levered fund, bill held as cash); false_alarm and proposal PD-0001965934-A07-1 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Total Investments and Cash Equivalents $ 358,067 $ 355,902 184.02 %"
+    },
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Triwest Healthcare Alliance Corp(6)(7) First lien senior secured term loan SOFR + 5.50 % 12/27/2027 50,000 49,127 49,125 25.40 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0e488db6fa33",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fmt_issuer_name is the weak contract rule length(issuer_name) in [3,300] over bdc rows (shadow_weak_engine.py). Shadow ledger 2025-03-31: warn 1 of 68 (1.47 pct); reviewer rows.sql over ovye finds only ROW-50406ed07c3c5af1 'RH' outside the band, same as affected_rows. RH is printed. The ledger state for the three verdict quarters (real_error_unremediated) refers to 'Material Quikrete / Material Summit' names; reviewer confirmed in ovya they carried the 'Construction Material' heading and in ovye read 'Quikrete Holdings Inc' / 'Summit Materials LLC' (8 rows, 2024-06-30 to 2025-06-30). Those rows were never length violations, so the proposal's addresses_verdict is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,918 7,814 7,536 1.58 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0eab26746f5f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ovye row_validation_issues PCT01 2024-12-31: one fund-quarter issue, value 226.94 ('CIK-quarter sum outside expected range'); the fund-quarter key in affected_rows is the whole population. Reviewer rows.sql: 69 rows, no null percent, sum 226.94 = printed 'Total Investments and Cash Equivalents' percent; net assets 429.053M and borrowings 450.0M in ovye fund_financials. Leverage, not duplication; false_alarm and PD-0001965934-PCT01-4 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Total Investments $ 947,345 $ 947,637 220.87 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 % Total Investments and Cash Equivalents $ 973,400 $ 973,692 226.94 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_259588835617",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Rule definition read in scripts/shadow_weak_engine.py: gate pct_of_net_assets >= 0 on rows with bdc_dimensions_raw, violation pct > 25. Shadow ledger for 2024-12-31: warn, 1 of 68 rows. Reviewer rows.sql over ovye returns exactly ROW-c48465a1b582eb5d (Treasury bill 31.49), matching affected_rows. Each value and percent equals the printed line; percent = FV / filed net assets within rounding (fund_financials net assets). No non-cash row exceeds 25 pct (largest loan CV Borrower 22.97 at 2024-12-31, 20.75 at 2025-03-31, 15.18 at 2025-06-30 in ovye); the flagged row is the CASH-class bill, so proposal -3 is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4944745ea67a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ovye row_validation_issues.csv C202 for this fund/2024-12-31 holds one row, ROW-27a32018ea2551fd issuer 'RH' (message 'issuer_name is shorter than 3 characters'), same as affected_rows. Page prints the issuer as 'RH' under Household Durables; published FV and percent equal the printed line. false_alarm and PD-0001965934-C202-5 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,938 7,826 7,854 1.83 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4b0c30b85e40",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from ovye oracle/check_results.csv: A07 2024-09-30 status warn, metric 184.33 under threshold 250, message lists the >25 pct outliers. Reviewer rows.sql over ovye (bdc rows, this fund, 2024-09-30) gives pct sum 184.33 with no null percent and outliers ROW-d4e9f0b26b12efb3 (CV Borrower 34.79), ROW-3145608a4f4668d9 (SGA Dental 27.51), the same keys as affected_rows. Sum equals the printed 'Total Investments and Cash Equivalents' percent and each outlier percent equals its printed line; published FV total also equals the printed value column. Warn is as filed (young levered fund, bill held as cash); false_alarm and proposal PD-0001965934-A07-1 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Total Investments and Cash Equivalents $ 521,811 $ 519,264 184.33 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "CV Borrower, LLC(6)(7)(10) First lien senior secured term loan SOFR + 5.50 % 8/30/2029 100,000 98,021 98,000 34.79 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "SGA Dental Partners OPCO, LLC(6)(7) First lien senior secured term loan SOFR + 5.50 % 7/17/2029 79,079 77,594 77,498 27.51 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4e925888f52e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Rule definition read in scripts/shadow_weak_engine.py: gate pct_of_net_assets >= 0 on rows with bdc_dimensions_raw, violation pct > 25. Shadow ledger for 2024-09-30: warn, 2 of 50 rows. Reviewer rows.sql over ovye returns exactly ROW-d4e9f0b26b12efb3 (CV Borrower 34.79), ROW-3145608a4f4668d9 (SGA Dental 27.51), matching affected_rows. Each value and percent equals the printed line; percent = FV / filed net assets within rounding (fund_financials net assets). The rows are funded loans of a fund that started investing 2024-05-07; proposal -2 is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "CV Borrower, LLC(6)(7)(10) First lien senior secured term loan SOFR + 5.50 % 8/30/2029 100,000 98,021 98,000 34.79 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "SGA Dental Partners OPCO, LLC(6)(7) First lien senior secured term loan SOFR + 5.50 % 7/17/2029 79,079 77,594 77,498 27.51 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_58d5ccea19d0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fmt_issuer_name is the weak contract rule length(issuer_name) in [3,300] over bdc rows (shadow_weak_engine.py). Shadow ledger 2024-09-30: warn 1 of 51 (1.96 pct); reviewer rows.sql over ovye finds only ROW-037f9d8e66a5708b 'RH' outside the band, same as affected_rows. RH is printed. The ledger state for the three verdict quarters (real_error_unremediated) refers to 'Material Quikrete / Material Summit' names; reviewer confirmed in ovya they carried the 'Construction Material' heading and in ovye read 'Quikrete Holdings Inc' / 'Summit Materials LLC' (8 rows, 2024-06-30 to 2025-06-30). Those rows were never length violations, so the proposal's addresses_verdict is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Household Durables RH(7)(13) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,959 7,841 7,652 2.71 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Construction Material Quikrete Holdings Inc(7) First lien senior secured term loan SOFR + 2.50 % 4/14/2031 5,970 5,993 5,970 2.12 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_86e9642235d5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from ovye oracle/check_results.csv: A07 2025-03-31 status warn, metric 213.55 under threshold 250, message lists the >25 pct outliers. Reviewer rows.sql over ovye (bdc rows, this fund, 2025-03-31) gives pct sum 213.55 with no null percent and outliers ROW-d90a262344069396 (Treasury bill 33.12), the same keys as affected_rows. Sum equals the printed 'Total Investments and Cash Equivalents' percent and each outlier percent equals its printed line; published FV total also equals the printed value column. Warn is as filed (young levered fund, bill held as cash); false_alarm and proposal PD-0001965934-A07-1 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Total Investments and Cash Equivalents $ 1,021,584 $ 1,016,389 213.55 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_88e13c3d1cfe",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Rule definition read in scripts/shadow_weak_engine.py: gate pct_of_net_assets >= 0 on rows with bdc_dimensions_raw, violation pct > 25. Shadow ledger for 2024-06-30: warn, 1 of 47 rows. Reviewer rows.sql over ovye returns exactly ROW-2b307949975b415f (Triwest 25.40), matching affected_rows. Each value and percent equals the printed line; percent = FV / filed net assets within rounding (fund_financials net assets). The rows are funded loans of a fund that started investing 2024-05-07; proposal -2 is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Triwest Healthcare Alliance Corp(6)(7) First lien senior secured term loan SOFR + 5.50 % 12/27/2027 50,000 49,127 49,125 25.40 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_907fa4f5fb17",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ovye row_validation_issues.csv C202 for this fund/2024-09-30 holds one row, ROW-037f9d8e66a5708b issuer 'RH' (message 'issuer_name is shorter than 3 characters'), same as affected_rows. Page prints the issuer as 'RH' under Household Durables; published FV and percent equal the printed line. false_alarm and PD-0001965934-C202-5 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Household Durables RH(7)(13) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,959 7,841 7,652 2.71 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9097f524498d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fmt_issuer_name is the weak contract rule length(issuer_name) in [3,300] over bdc rows (shadow_weak_engine.py). Shadow ledger 2024-12-31: warn 1 of 69 (1.45 pct); reviewer rows.sql over ovye finds only ROW-27a32018ea2551fd 'RH' outside the band, same as affected_rows. RH is printed. The ledger state for the three verdict quarters (real_error_unremediated) refers to 'Material Quikrete / Material Summit' names; reviewer confirmed in ovya they carried the 'Construction Material' heading and in ovye read 'Quikrete Holdings Inc' / 'Summit Materials LLC' (8 rows, 2024-06-30 to 2025-06-30). Those rows were never length violations, so the proposal's addresses_verdict is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,938 7,826 7,854 1.83 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b5074f6d1488",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fmt_issuer_name is the weak contract rule length(issuer_name) in [3,300] over bdc rows (shadow_weak_engine.py). Shadow ledger 2024-06-30: warn 1 of 48 (2.08 pct); reviewer rows.sql over ovye finds only ROW-a7259471b7758f62 'RH' outside the band, same as affected_rows. RH is printed. The ledger state for the three verdict quarters (real_error_unremediated) refers to 'Material Quikrete / Material Summit' names; reviewer confirmed in ovya they carried the 'Construction Material' heading and in ovye read 'Quikrete Holdings Inc' / 'Summit Materials LLC' (8 rows, 2024-06-30 to 2025-06-30). Those rows were never length violations, so the proposal's addresses_verdict is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Household Durables RH(7)(12) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,979 7,857 7,662 3.96 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b683ea8098f5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from ovye oracle/check_results.csv: A07 2025-06-30 status warn, metric 213.73 under threshold 250, message lists the >25 pct outliers. Reviewer rows.sql over ovye (bdc rows, this fund, 2025-06-30) gives pct sum 213.73 with no null percent and outliers ROW-3312a49f24f4ac79 (Treasury bill 33.10), the same keys as affected_rows. Sum equals the printed 'Total Investments and Cash Equivalents' percent and each outlier percent equals its printed line; published FV total also equals the printed value column. Warn is as filed (young levered fund, bill held as cash); false_alarm and proposal PD-0001965934-A07-1 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Total Investments and Cash Equivalents $ 1,392,348 $ 1,389,007 213.73 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b82fa848c0c8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from ovye oracle/check_results.csv: A07 2024-12-31 status warn, metric 226.94 under threshold 250, message lists the >25 pct outliers. Reviewer rows.sql over ovye (bdc rows, this fund, 2024-12-31) gives pct sum 226.94 with no null percent and outliers ROW-c48465a1b582eb5d (Treasury bill 31.49), the same keys as affected_rows. Sum equals the printed 'Total Investments and Cash Equivalents' percent and each outlier percent equals its printed line; published FV total also equals the printed value column. Warn is as filed (young levered fund, bill held as cash); false_alarm and proposal PD-0001965934-A07-1 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Total Investments and Cash Equivalents $ 973,400 $ 973,692 226.94 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c1367e87d35b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Rule definition read in scripts/shadow_weak_engine.py: gate pct_of_net_assets >= 0 on rows with bdc_dimensions_raw, violation pct > 25. Shadow ledger for 2025-03-31: warn, 1 of 65 rows. Reviewer rows.sql over ovye returns exactly ROW-d90a262344069396 (Treasury bill 33.12), matching affected_rows. Each value and percent equals the printed line; percent = FV / filed net assets within rounding (fund_financials net assets). No non-cash row exceeds 25 pct (largest loan CV Borrower 22.97 at 2024-12-31, 20.75 at 2025-03-31, 15.18 at 2025-06-30 in ovye); the flagged row is the CASH-class bill, so proposal -3 is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f26d56644896",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ovye row_validation_issues.csv C202 for this fund/2024-06-30 holds one row, ROW-a7259471b7758f62 issuer 'RH' (message 'issuer_name is shorter than 3 characters'), same as affected_rows. Page prints the issuer as 'RH' under Household Durables; published FV and percent equal the printed line. false_alarm and PD-0001965934-C202-5 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Household Durables RH(7)(12) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,979 7,857 7,662 3.96 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fc97b8c74483",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "ovye row_validation_issues.csv C202 for this fund/2025-03-31 holds one row, ROW-50406ed07c3c5af1 issuer 'RH' (message 'issuer_name is shorter than 3 characters'), same as affected_rows. Page prints the issuer as 'RH' under Household Durables; published FV and percent equal the printed line. false_alarm and PD-0001965934-C202-5 hold.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,918 7,814 7,536 1.58 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "position-context-without-identifier-member",
+   "outcome": "supported",
+   "rationale": "Wrapper context_identifiers has four bill entries (2025-06-30, 2025-09-30, 2025-12-31, 2026-06-30); ovye publishes the 2026-06-30 bill at 107.377M, 3.79, fixed. ovya ledger holds RVQ_BLK_8d67d1550b23 fv_conservation 2026-06-30, so the existing detector demonstrably fires on this shape. Residual: the fix is per filing and must be re-added each quarter, which the observation states.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346556",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "ovya rows read 'Material Quikrete Holdings Inc' / 'Material Summit Materials LLC' (8 rows); ovye reads the printed names. Proposed check (first word of name = last word of extracted_industry) would have caught 7 of 8 in ovya (Summit 2024-06-30 has null extracted_industry); it returns no rows in ovye. Acceptable as a proposal. The cash-row heading defect raised in the ovyd review is now its own observation (section-heading-left-in-cash-row-name) and fixed in ovye.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Construction Material Quikrete Holdings Inc(7) First lien senior secured term loan SOFR + 2.50 % 4/14/2031 5,970 5,993 5,970 2.12 %"
+    },
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Total Investments $ 346,841 $ 344,676 178.22 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "money-market-yield-published-as-spread",
+   "outcome": "supported",
+   "rationale": "ovye corrected_fields on the 2024-09-30 and 2024-12-31 money-fund rows and the 2024-12-31 bill list basis_spread / reference_rate fields; basis_spread and reference_rate_type now null, bill 4.27 Fixed. FV 17.324+26.055+135.117 = 178.5M as stated. Proposed check (CASH row with basis_spread or reference rate) is concrete and low-noise. The 2025-03-31 money-fund coupon_type 'Fixed' flagged in the ovyd review is withdrawn in ovye (own observation).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "outcome": "supported",
+   "rationale": "ovye fund_financials 2024-12-31: total_investment_income 13.271M, NII 4.610M = 10-K year (25.722 / 9.599) less nine months (12.451 / 4.989). income_identity fired in ovya (RVQ_BLK_795a18d1e158, 2024-12-31), so the existing detector covers recurrence.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "For the Year Ended December 31, 2024 Total investment income $ 25,722 Net expenses 16,123 Net investment income 9,599"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Three Months Ended September 30, 2024 Nine Months Ended September 30, 2024 Total investment income $ 9,058 $ 12,451 Net expenses 5,656 7,462 Net investment income 3,402 4,989"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-row-fields-on-filer-custom-concepts-not-read",
+   "outcome": "supported",
+   "rationale": "ovye: money-fund interest_rate null from 2025-06-30, pct_of_net_assets null on cash rows from 2025-12-31; 2025-12-31 pct sum 205.70 vs printed 205.70 + 1.34 cash = 207.04. Proposed check (CASH row with no rate where the context carries a *Rate*/*Yield* fact) is concrete; noise from duration-context rate facts acknowledged. Left as cash-only, no FV effect.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-117368",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 3.64 % - 9,670 $ 9,670 $ 9,670 1.32 % Goldman Sachs Financial Square Government Fund Institutional Shares 3.69 % - 124 124 124 0.02 % Total Cash Equivalents $ 9,794 $ 9,794 1.34 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "wac-heuristic-uses-cash-row-yields",
+   "outcome": "supported",
+   "rationale": "Authority note: D-202 is cited in the report, code comments and the orchestrator's message, but no D-202 entry exists yet in docs/investigations/v05_decision_log.md or v05_owner_decisions_2026-10-12.md; the reviewer could not see the owner's ruling itself and relies on the orchestrator for it. Code check: pipeline/validate_fund_financials.py (uncommitted) now excludes index_classification = CASH from the coupon and skips F27 when rated non-cash FV share < F27_MIN_RATED_SHARE 0.5; tests in test_validate_fund_financials.py cover skip, skip and fail cases. ovye fund_financials_validation_current: F27 SKIP in all 11 quarters (no non-cash row has a rate). The seven F27 findings left the ledger because the rule no longer raises them, not because a disposition was written; the investigations and PD-0001965934-F27-7 were withdrawn consistently. existing_detector is acceptable: F27 now measures only funds whose loans carry rates. Residual: this is a global rule change; spon3 has 73 F27 FAILs and the cohort effect has not been measured (no semantic diff), which the owner/orchestrator should do before promotion.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Net investment income to average net assets (6) 15.88 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "treasury-bill-inside-investments-total-published-as-cash",
+   "outcome": "supported",
+   "rationale": "Authority note: D-202 is cited in the report, code comments and the orchestrator's message, but no D-202 entry exists yet in docs/investigations/v05_decision_log.md or v05_owner_decisions_2026-10-12.md; the reviewer could not see the owner's ruling itself and relies on the orchestrator for it. Wrapper source_encodings.investments_total_includes_cash = ['^U\\.S\\. Treasury Bill'], validated in pipeline/source_encodings.py and read by fund_gate.py check_totals only; test in tests/test_v05_fund_gate.py. ovye gate totals: basis ex_cash, 9 of 9 quarters tie, not_tying empty. Bill rows remain CASH with unchanged FV (cash_e.sql), so published FV and class are untouched; the six total exceptions were removed because the check now ties, which is consistent. existing_detector holds: a cash row printed inside Total Investments that the pattern does not name would still fail totals.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Total Investments and Cash Equivalents $ 1,392,348 $ 1,389,007 213.73 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "canonical-name-from-another-issuer-in-build",
+   "outcome": "supported",
+   "rationale": "Reviewer chariot.sql: spon3 maps the four Chariot Buyer LLC rows to canonical_name 'Charlotte Buyer, Inc.'; ovye maps them to 'Chariot Buyer LLC'. Proposed key comparison is concrete; it will be noisy on legitimate aliases, which the observation acknowledges (review list, not gate).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Chariot Buyer LLC(7)(14) First lien senior secured term loan SOFR + 3.25 % 11/3/2028 5,954 5,963 5,982 1.39 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-on-filer-custom-concept-not-read",
+   "outcome": "supported",
+   "rationale": "filing_grep on 0000950170-25-109383 context C_c76d3700...: ck0001965934:InvestmentFixedInterestRate = 0.0432 (and 0.0427 on the 2024-12-31 comparative). ovye bill rows publish 4.27, 4.28, 4.32, 3.89, 3.61, 3.79 Fixed, each equal to the page. Proposed unconsumed-rate-fact listing plus a fund-level rate-concept key is a sound recurrence plan; the six-filer claim is stated as unchecked.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    },
+    {
+     "accession": "0001193125-25-272318",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
+    },
+    {
+     "accession": "0001193125-26-117368",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
+    },
+    {
+     "accession": "0001193125-26-346556",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Page prints 'Acquistion' at 2024-06-30 and 2024-09-30 and 'Acquisition' from 2024-12-31; ovye publishes exactly that per quarter, with instrument_description, principal, cost and FV unchanged and equal to the page, one position_id over six quarters. Proposed name-vs-first-cell comparison is concrete; review list is the right enforcement.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Automobile Components LS Group OpCo Acquistion LLC(7) First lien senior secured term loan SOFR + 3.00 % 4/23/2031 $ 7,000 $ 7,044 $ 6,994 3.62 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Automobile Components LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 3.00 % 4/23/2031 $ 6,965 $ 7,004 $ 6,993 1.63 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,965 $ 7,002 $ 6,904 1.45 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "section-heading-left-in-cash-row-name",
+   "outcome": "supported",
+   "rationale": "Reviewer cash_e.sql on ovye: all nine money-fund rows read 'BlackRock Liquidity FedFund - Institutional' (instrument blank), equal to the printed first cell in every quarter checked (2024-06-30, 2025-03-31, 2025-06-30, 2025-12-31, 2026-06-30); FV, percent and the 4.84 / 4.36 / 4.23 yields unchanged; one position_id e9686955 from 2024-06-30 to 2025-12-31. The proposed heading-prefix check is concrete and reaches CASH rows that the industry test cannot; whole-word matching keeps the stated false positives rare.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Total Investments $ 346,841 $ 344,676 178.22 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-row-chain-breaks-on-value-jump",
+   "outcome": "supported",
+   "rationale": "ovye: same name and blank instrument at 2025-12-31 (9.670M, pid e9686955) and 2026-03-31 (49.105M, pid ed213c75); spon3 and ovyd split at the same date. The value-jump cause is stated as 'likely', not shown; that is honest, and the item is left on a cash row with no gate dependency. The same-name/different-chain listing is a concrete, cheap detector. Residual: the chain split remains in published data.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-117368",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 3.64 % - 9,670 $ 9,670 $ 9,670 1.32 % Goldman Sachs Financial Square Government Fund Institutional Shares 3.69 % - 124 124 124 0.02 % Total Cash Equivalents $ 9,794 $ 9,794 1.34 %"
+    },
+    {
+     "accession": "0001193125-26-221960",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 3.54 % - 49,105 $ 49,105 $ 49,105 6.67 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "money-market-yield-published-as-coupon-type",
+   "outcome": "supported",
+   "rationale": "ovye 2025-03-31 money-fund row: coupon_type null, corrected_fields includes coupon_type; yield 4.23 kept. The page prints a yield only. Proposed check (coupon_type on a non-bill CASH row) is concrete; excluding bills and notes by name is needed and stated.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
+    }
+   ]
+  }
+ ],
+ "request_reviews": []
+}

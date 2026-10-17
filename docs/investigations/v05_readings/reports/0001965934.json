@@ -270,125 +270,9 @@
    ]
   }
  ],
- "total_exceptions": [
-  {
-   "quarter": "2024-12-31",
-   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (135.117M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
-   "quote": {
-    "accession": "0000950170-25-045206",
-    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
-   }
-  },
-  {
-   "quarter": "2025-03-31",
-   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (157.633M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
-   "quote": {
-    "accession": "0000950170-25-071771",
-    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
-   }
-  },
-  {
-   "quarter": "2025-06-30",
-   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (215.151M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
-   "quote": {
-    "accession": "0000950170-25-109383",
-    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
-   }
-  },
-  {
-   "quarter": "2025-09-30",
-   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (90.840M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
-   "quote": {
-    "accession": "0001193125-25-272318",
-    "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
-   }
-  },
-  {
-   "quarter": "2025-12-31",
-   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (172.864M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
-   "quote": {
-    "accession": "0001193125-26-117368",
-    "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
-   }
-  },
-  {
-   "quarter": "2026-06-30",
-   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (107.377M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
-   "quote": {
-    "accession": "0001193125-26-346556",
-    "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
-   }
-  }
- ],
- "parked": [
-  {
-   "finding": "gate totals (not a ledger finding): Treasury bill printed inside Total Investments, classed cash, six quarters",
-   "hypotheses": [
-    "investments_total_excludes ['cash_rows'] does not fit: it would remove the bill from the published side too (the filed line holds the bill).",
-    "Reclass the bill as an investment: changes public FV and class; owner decision 7, not taken by an agent."
-   ]
-  }
- ],
- "orchestrator_requests": [
-  {
-   "request_id": "OVY-R1",
-   "classification": "acceptance_change",
-   "file": "scripts/v05_evidence/fund_gate.py",
-   "what": "Owner decision 7: let a wrapper state that the filed investments total includes the fund's Treasury-bill rows (cash class), so the totals comparison adds them; or rule that the bill is an investment row.",
-   "why": "Six quarters fail totals by exactly the bill while every row ties to the page.",
-   "quotes": [
-    {
-     "accession": "0000950170-25-109383",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
-    }
-   ],
-   "evidence": [
-    {
-     "accession": "0000950170-25-109383",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
-    },
-    {
-     "accession": "0001193125-26-117368",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
-    }
-   ],
-   "next_action": "Owner ruling on decision 7 (docs/investigations/v05_owner_decisions_2026-10-12.md); then a wrapper statement or a class change and a rebuild.",
-   "response": "Orchestrator 2026-10-17: acceptance_change, confirmed. It is owner decision 7 (open). Not implemented; the six quarters stay declared total exceptions until the owner rules."
-  },
-  {
-   "request_id": "OVY-R2",
-   "classification": "acceptance_change",
-   "file": "pipeline/validate_fund_financials.py",
-   "what": "F27's WAC averages every row with interest_rate > 0, including CASH rows. Exclude CASH rows and skip when the non-cash rated fair value is a small share of non-cash fair value.",
-   "why": "Overland's loans print a margin only; in all seven F27 quarters the WAC is a money-market or Treasury-bill yield, so F27 fails without measuring the loan book. Independent reviewer (ovyd): F27 also compares unlike quantities for a levered fund: income_yield_pct is income over net assets while the WAC is a coupon on investments, and investments are about 2x net assets (printed 'Total Investments and Cash Equivalents ... 213.73 %' at 2025-06-30).",
-   "quotes": [
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
-    }
-   ],
-   "evidence": [
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
-    },
-    {
-     "accession": "0000950170-25-109383",
-     "text": "Total Investments and Cash Equivalents $ 1,392,348 $ 1,389,007 213.73 %"
-    }
-   ],
-   "next_action": "Owner ruling on the F27 basis; until then proposal PD-0001965934-F27-7 (seven quarters).",
-   "response": "Orchestrator 2026-10-17: reclassified as acceptance_change. Excluding cash rows from F27's average coupon changes which findings F27 raises, which is the owner's call, not a verification repair. Not implemented; stays a proposal for the owner. F27 proposals kept as they are (quarters extended to the four that the bill-rate fix exposed, same reason)."
-  }
- ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
  "observations": [
   {
    "observation_key": "position-context-without-identifier-member",
@@ -509,7 +393,7 @@
   },
   {
    "observation_key": "wac-heuristic-uses-cash-row-yields",
-   "what": "F27's weighted coupon is taken over every published row with a rate, cash rows included. No loan of this fund has a rate (spread only printed), so the 'holdings WAC' is the money-fund or Treasury-bill yield in every quarter that has one. After the bill's printed rate was published (ovyd, card C014), F27 fails in four more quarters (2025-06-30, 2025-09-30, 2025-12-31, 2026-06-30): seven in all. Correct data raised the count; the check measures nothing here.",
+   "what": "F27's weighted coupon was taken over every published row with a rate, cash rows included; for this fund (loans print a margin only) it was a money-fund or Treasury-bill yield, so F27 failed in seven quarters without measuring the loan book. It also compared a ratio on net assets with a coupon on investments of a fund levered about 2x. Resolved by owner ruling 2a (D-202): CASH rows excluded; skipped under 50 pct rated non-cash FV.",
    "field": "wac",
    "quarters": [
     "2024-09-30",
@@ -522,21 +406,21 @@
    ],
    "fair_value_m": 0,
    "cause": "shared",
-   "action": "left",
+   "action": "fixed",
    "suggested_check": "F27 should exclude index_classification = 'CASH' rows and skip when non-cash rated fair value is under a share (e.g. 50 pct) of non-cash fair value.",
    "quote": {
     "accession": "0000950170-24-127235",
     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
    },
    "detection_decision": {
-    "action": "not_feasible",
-    "rationale": "A defect in the check, not data a detector can see; raised as OVY-R2, which the orchestrator classed as an acceptance change for the owner.",
-    "reference": "pipeline/validate_fund_financials.py F27"
+    "action": "existing_detector",
+    "rationale": "The check itself was changed by the owner's ruling; F27 now skips this fund instead of failing on cash yields.",
+    "reference": "pipeline/validate_fund_financials.py F27_MIN_RATED_SHARE (D-202)"
    }
   },
   {
    "observation_key": "treasury-bill-inside-investments-total-published-as-cash",
-   "what": "The filer prints its U.S. Treasury bill inside 'Total Investments' and the money funds below it. The bill is published (cash class) and the gate's totals check (published ex-cash vs filed investments) is short by exactly the bill in six quarters (135.117, 157.633, 215.151, 90.840, 172.864, 107.377M). Not changed: owner decision 7 (2026-10-12) is open.",
+   "what": "The filer prints its U.S. Treasury bill inside 'Total Investments' and the money funds below it. The bill is published (cash class); the gate's totals check was short by exactly the bill in six quarters (135.117, 157.633, 215.151, 90.840, 172.864, 107.377M). Resolved by owner ruling 1a (D-202): wrapper key investments_total_includes_cash; the class and published FV are unchanged.",
    "field": "index_classification",
    "quarters": [
     "2024-12-31",
@@ -548,7 +432,7 @@
    ],
    "fair_value_m": 215.151,
    "cause": "fund",
-   "action": "parked",
+   "action": "fixed",
    "suggested_check": "Gate totals: compare filed investments with ex-cash rows plus cash rows the schedule prints above its investments total.",
    "quote": {
     "accession": "0000950170-25-109383",
@@ -556,7 +440,7 @@
    },
    "detection_decision": {
     "action": "existing_detector",
-    "rationale": "fund_gate.py check_totals reports it every quarter.",
+    "rationale": "fund_gate.py check_totals reported it every quarter; with the ruling it ties and would report a bill that the pattern does not name.",
     "reference": "scripts/v05_evidence/fund_gate.py check_totals"
    }
   },
@@ -1181,224 +1065,6 @@
    "next_action": "Proposal PD-0001965934-fmt_issuer_name-6 (short-issuer-name-is-the-printed-name; addresses_verdict for the three verdict quarters); no further data change."
   },
   {
-   "finding_id": "RVQ_REV_d7e7465af57f",
-   "coverage": {
-    "affected_rows": [
-     "0001965934|2024-09-30|income_yield_pct",
-     "0001965934|2024-09-30|wac"
-    ],
-    "reviewed_rows": [
-     "0001965934|2024-09-30|income_yield_pct",
-     "0001965934|2024-09-30|wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 4.84 (money fund only). All non-cash loans publish no rate (page prints margin only).",
-    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
-    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
-   ],
-   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
-  },
-  {
-   "finding_id": "RVQ_REV_05df9592a2ec",
-   "coverage": {
-    "affected_rows": [
-     "0001965934|2024-12-31|income_yield_pct",
-     "0001965934|2024-12-31|wac"
-    ],
-    "reviewed_rows": [
-     "0001965934|2024-12-31|income_yield_pct",
-     "0001965934|2024-12-31|wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-25-045206",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %"
-    },
-    {
-     "accession": "0000950170-25-045206",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 4.285 (money fund 4.36 and Treasury bill 4.27). All non-cash loans publish no rate (page prints margin only).",
-    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
-    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
-   ],
-   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
-  },
-  {
-   "finding_id": "RVQ_REV_0208ebee983c",
-   "coverage": {
-    "affected_rows": [
-     "0001965934|2025-03-31|income_yield_pct",
-     "0001965934|2025-03-31|wac"
-    ],
-    "reviewed_rows": [
-     "0001965934|2025-03-31|income_yield_pct",
-     "0001965934|2025-03-31|wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-25-071771",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
-    },
-    {
-     "accession": "0000950170-25-071771",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 4.271 (money fund 4.23 and Treasury bill 4.28). All non-cash loans publish no rate (page prints margin only).",
-    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
-    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
-   ],
-   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
-  },
-  {
-   "finding_id": "RVQ_REV_a015cabe5787",
-   "coverage": {
-    "affected_rows": [
-     "0001965934|2025-06-30|income_yield_pct",
-     "0001965934|2025-06-30|wac"
-    ],
-    "reviewed_rows": [
-     "0001965934|2025-06-30|income_yield_pct",
-     "0001965934|2025-06-30|wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-25-109383",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 4.32 (Treasury bill only; new in ovyd after its printed rate was published). All non-cash loans publish no rate (page prints margin only).",
-    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
-    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
-   ],
-   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
-  },
-  {
-   "finding_id": "RVQ_REV_18ccbb1850de",
-   "coverage": {
-    "affected_rows": [
-     "0001965934|2025-09-30|income_yield_pct",
-     "0001965934|2025-09-30|wac"
-    ],
-    "reviewed_rows": [
-     "0001965934|2025-09-30|income_yield_pct",
-     "0001965934|2025-09-30|wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001193125-25-272318",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 3.89 (Treasury bill only; new in ovyd). All non-cash loans publish no rate (page prints margin only).",
-    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
-    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
-   ],
-   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
-  },
-  {
-   "finding_id": "RVQ_REV_cfbd9a8be3de",
-   "coverage": {
-    "affected_rows": [
-     "0001965934|2025-12-31|income_yield_pct",
-     "0001965934|2025-12-31|wac"
-    ],
-    "reviewed_rows": [
-     "0001965934|2025-12-31|income_yield_pct",
-     "0001965934|2025-12-31|wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001193125-26-117368",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 3.61 (Treasury bill only; new in ovyd). All non-cash loans publish no rate (page prints margin only).",
-    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
-    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
-   ],
-   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
-  },
-  {
-   "finding_id": "RVQ_REV_aba86a7ca6e3",
-   "coverage": {
-    "affected_rows": [
-     "0001965934|2026-06-30|income_yield_pct",
-     "0001965934|2026-06-30|wac"
-    ],
-    "reviewed_rows": [
-     "0001965934|2026-06-30|income_yield_pct",
-     "0001965934|2026-06-30|wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001193125-26-346556",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 3.79 (Treasury bill only; new in ovyd). All non-cash loans publish no rate (page prints margin only).",
-    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
-    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
-   ],
-   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
-  },
-  {
    "finding_id": "RVQ_REV_0eab26746f5f",
    "coverage": {
     "affected_rows": [
@@ -1428,11 +1094,11 @@
  ],
  "not_done": [
   "No cohort build: the two shared keys (FIGURE_FIELDS cash_equivalents_at_fair_value, nil_income_quarters) are inert unless a wrapper lists them, and no other wrapper does; the extra_industry_labels union change was checked only against spon3 identifiers (no other fund has 'Construction Material' without s). Semantic diff not run.",
-  "Full pytest suite not run. docs/agent_changelog.md not appended: another session has it modified (brief forbids editing it).",
   "Cash-row yields, money-fund cost and percent (custom concepts) not published: observation cash-row-fields-on-filer-custom-concepts-not-read.",
   "Industry labels and GICS not compared with the page beyond the seven sample rows (all matched par, cost, value, percent, spread, maturity).",
   "The 20-card page sample was taken on ovyc; ovyd changed 8 rows (5 bill rates, 3 names) and was not re-sampled. Independent investigation review not done (orchestrator's step).",
-  "Five builds used (ovya-ovye). The money fund's remaining chain split at 2026-03-31 (pre-existing in spon3) is not fixed."
+  "Five builds used (ovya-ovye). The money fund's remaining chain split at 2026-03-31 (pre-existing in spon3) is not fixed.",
+  "docs/agent_changelog.md not appended: another session has it modified (brief forbids editing it)."
  ],
  "sample": {
   "path": "docs/investigations/v05_readings/samples/0001965934/results.md",
@@ -1441,6 +1107,70 @@
    "C014 Treasury bill rate 2025-06-30 missing: fixed in all five quarters (ovyd)",
    "C018 LS Group issuer misspelled from member 2025-03-31: fixed in the three quarters where the page prints it correctly (ovyd)"
   ],
-  "note": "Sample on ovyc; ovyd fixed its two errors; ovye fixed the money-fund name and coupon type found by the independent review of ovyd. ovye not re-sampled."
- }
+  "note": "Sample on ovyc; ovyd fixed its two errors; ovye fixed the money-fund name and coupon type found by the independent review of ovyd. ovye not re-sampled. Owner rulings 1a/2a (D-202) applied without a rebuild."
+ },
+ "request_resolution_history": [
+  {
+   "request_id": "OVY-R1",
+   "classification": "acceptance_change",
+   "file": "scripts/v05_evidence/fund_gate.py",
+   "what": "Owner decision 7: let a wrapper state that the filed investments total includes the fund's Treasury-bill rows (cash class), so the totals comparison adds them; or rule that the bill is an investment row.",
+   "why": "Six quarters fail totals by exactly the bill while every row ties to the page.",
+   "quotes": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    },
+    {
+     "accession": "0001193125-26-117368",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
+    }
+   ],
+   "next_action": "Owner ruling on decision 7 (docs/investigations/v05_owner_decisions_2026-10-12.md); then a wrapper statement or a class change and a rebuild.",
+   "response": "implemented by owner ruling 2026-10-17 (1a), D-202",
+   "authority": "owner",
+   "resolution": "New wrapper key source_encodings.investments_total_includes_cash, set for this fund to ['^U\\\\.S\\\\. Treasury Bill'] (read by the gate's totals check only). The bill stays CASH and out of published FV; the gate adds it to the ex-cash side. The six declared total exceptions are removed: the gate ties all nine quarters on ovye."
+  },
+  {
+   "request_id": "OVY-R2",
+   "classification": "acceptance_change",
+   "file": "pipeline/validate_fund_financials.py",
+   "what": "F27's WAC averages every row with interest_rate > 0, including CASH rows. Exclude CASH rows and skip when the non-cash rated fair value is a small share of non-cash fair value.",
+   "why": "Overland's loans print a margin only; in all seven F27 quarters the WAC is a money-market or Treasury-bill yield, so F27 fails without measuring the loan book. Independent reviewer (ovyd): F27 also compares unlike quantities for a levered fund: income_yield_pct is income over net assets while the WAC is a coupon on investments, and investments are about 2x net assets (printed 'Total Investments and Cash Equivalents ... 213.73 %' at 2025-06-30).",
+   "quotes": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Total Investments and Cash Equivalents $ 1,392,348 $ 1,389,007 213.73 %"
+    }
+   ],
+   "next_action": "Owner ruling on the F27 basis; until then proposal PD-0001965934-F27-7 (seven quarters).",
+   "response": "implemented by owner ruling 2026-10-17 (2a), D-202",
+   "authority": "owner",
+   "resolution": "pipeline/validate_fund_financials.py: F27's coupon leaves out CASH rows and F27 is skipped when under 50 pct of non-cash FV carries a rate (F27_MIN_RATED_SHARE). ovye re-run from validate by the orchestrator (no build counted): all seven F27 findings gone, 19 outstanding. Proposal PD-0001965934-F27-7 withdrawn."
+  }
+ ]
 }

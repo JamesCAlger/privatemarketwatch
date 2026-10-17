@@ -5066,3 +5066,13 @@ Implemented by the orchestrator:
 - F27 (`pipeline/validate_fund_financials.py`): coupon over non-CASH rows; skipped when the rated share of non-cash fair value is under `F27_MIN_RATED_SHARE = 0.5` (the 0.5 is the orchestrator's choice, not the owner's). Four tests, one a false-positive guard (rated portfolio with a real gap still fails).
 - Cohort measurement before switching on (`scratch/2026-10-17_status/f27_cohort_effect.py`, each fund's accepted sandbox plus Overland ovye; 50 funds): F27 fail quarters 102 to 85, skip quarters 561 to 612. Six funds move, all to skipped: MidCap Financial 8 fails to 0, Overland 7 to 0, KKR FS Income Trust 2 to 0; Jefferies, KKR FS Income Trust Select, Ares Core Infrastructure lose only passing quarters. All six publish no rate on their loans, so F27 now checks nothing there. No other fund changes.
 - Sandboxes other than Overland's still hold the old F27 findings until rebuilt or re-run from validate (end-of-run regression). The removed findings leave no ledger trace; the fund reports record why they went.
+
+### D-203 Overland Advantage accepted after the owner's rulings (sandbox `ovye`), verdict PASS
+
+Follows D-201 (NEEDS_ORCHESTRATOR) and D-202 (rulings 1a, 2a). No rebuild: `ovye` re-run from the validate stage under the new F27.
+
+- Gate PASS with snapshot `0001965934.snapshot_d202.json`: the original snapshot with only the six D-202 files (gate, F27 module, source encodings, schema, two test files) re-baselined by `scratch/2026-10-17_status/rebase_snapshot.py`, so the files check still covers every change the fund agent made.
+- 30 findings, 19 outstanding, all 19 proposed (A07 and concentration on rows printed over 25 pct, 'RH' issuer printed so, PCT01 printed total). The seven F27 findings are no longer raised; their investigations and proposal were withdrawn.
+- Totals: 9 of 9 quarters tie ex-cash with the Treasury bill counted (`investments_total_includes_cash`); the six total exceptions are gone.
+- Report: OVY-R1 and OVY-R2 in `request_resolution_history` (owner, D-202). Third independent review (`reviews/0001965934_ovye_r2.json`): 19/19 findings, 13/13 observations supported, investigation COMPLETE; the reviewer noted the ruling had to be written down (now D-202).
+- Shared code from this fund: `nil_income_quarters` (D-201). Cohort regression at end of run. Nothing published. A cleared ledger would not establish data correctness.

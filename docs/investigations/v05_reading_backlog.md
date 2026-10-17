@@ -182,3 +182,4 @@ Manulife 0001988280.
 | 2026-10-16 | 0001772704 Goldman Sachs Private Middle Market Credit II | gpyf | INCOMPLETE | 102 findings, 38 outstanding, 27 proposed; 11 ledger items and two principal-key gaps parked; final sample 0/20 errors | D-199 |
 | 2026-10-17 | 0001633336 Crescent Capital BDC | ccza | INCOMPLETE (investigation COMPLETE) | 108 findings, 49 outstanding, 43 proposed, 6 parked; sample 2/20 errors parked (cost sign, PIK from terms) | D-200 |
 | 2026-10-17 | 0001965934 Overland Advantage | ovye | NEEDS_ORCHESTRATOR (OVY-R1, OVY-R2 for the owner; investigation COMPLETE) | 37 findings, 26 outstanding, 26 proposed; 3/9 quarters tie, 6 short by the Treasury bill; sample 2/20 errors, both fixed | D-201 |
+| 2026-10-17 | 0001965934 Overland Advantage | ovye | PASS (after owner rulings D-202) | 30 findings, 19 outstanding, 19 proposed; 9/9 quarters tie | D-203 |
