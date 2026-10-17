@@ -1,0 +1,1550 @@
+{
+ "cik": "0002008748",
+ "label": "layf",
+ "before": "sponfb",
+ "investigator_id": "lordabbett_fund_agent_2026-10-17",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "instrument_description",
+   "rows": 22,
+   "why": "Flourish revolver (2), Continental Buyer 2026-03-31 (1), Databricks 2025-06-30 and 2025-09-30 'Term Loan' (2, swapped axes), and the 17 rows above whose cut tranche words now lead the instrument ('Delayed Draw 2025 Term Loan B')"
+  },
+  {
+   "column": "issuer_name",
+   "rows": 19,
+   "why": "17 rows whose name kept tranche words ('Accession Risk Management Group Inc Delayed Draw Term', 'Lighthouse Technologies Holding Corp 4 th Amendment', 'Radwell Parent LLC Delayed Draw 20264 th Amendment'), cut by the extended issuer_name_strip_re; plus the 2 Flourish revolver rows (unchanged against sponfb)"
+  },
+  {
+   "column": "pct_of_net_assets",
+   "rows": 90,
+   "why": "2025-06-30 percents x100 (pct_tagged_as_ratio), 60 own-book + 30 JV rows"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 4,
+   "why": "Meta Buyer EUR/AUD par, 2026-03-31 and 2026-06-30"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 4,
+   "why": "same, H.10 reference conversion"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 4,
+   "why": "same"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 4,
+   "why": "same, reference_fx"
+  },
+  {
+   "column": "asset_category",
+   "rows": 11,
+   "why": "SBLA JV interest to FUND (7 quarters), Arkas equity to EQUITY_COMMON (4 rows)"
+  },
+  {
+   "column": "issuer_category",
+   "rows": 7,
+   "why": "SBLA JV interest to FUND"
+  },
+  {
+   "column": "index_classification",
+   "rows": 11,
+   "why": "SBLA to PRIVATE_CREDIT_FUND, Arkas to COMMON_EQUITY"
+  },
+  {
+   "column": "exposure_type",
+   "rows": 7,
+   "why": "SBLA to FUND"
+  },
+  {
+   "column": "asset_class",
+   "rows": 11,
+   "why": "SBLA 2025-06-30 OTHER to PRIVATE_CREDIT; Arkas to PRIVATE_EQUITY"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 142,
+   "why": "printed margin on the 142 loans of 2024-09-30 to 2025-03-31 (no spread tagged)"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 150,
+   "why": "printed code on those 142 loans; BBSY on the AUD loan, EURIBOR on the 2026-03-31 EUR loan, PRIME on 4 revolvers"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 150,
+   "why": "row_correction on the same rows"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 142,
+   "why": "Fixed to Floating on the 142 loans"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 90,
+   "why": "pct_of_net_assets:rate_x100 on the 2025-06-30 rows"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 162,
+   "why": "every row with a row correction"
+  },
+  {
+   "column": "position_id",
+   "rows": 100,
+   "why": "chains re-paired by the added 2026-06-30 quarter, the 37 zero-value rows and the 17 corrected names"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 3,
+   "why": "SolarWinds rows: canonical-name GICS depends on the funds in the sandbox (sponfb had 32); no change aimed at"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 3,
+   "why": "same"
+  }
+ ],
+ "rows_added": 224,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "2026-06-30 typed InvestmentIdentifierAxis rows ending ' [Member]' recognised as positions (debt '(<tranche>) [n] [Member]', '<x> Equity [Member]', 'SBLA Private Credit LLC [Member]'); industry, lien and total '[Member]' rows routed to category rollups; issuer and instrument split from '(...) [Member]'. Published 2026-06-30 from 131.8M to 1,563,657 thousand, equal to the filed total.",
+   "kind": "wrapper",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Total Investments (8) $ 1,572,733 $ 1,563,657 213.58 %"
+    },
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Vacation Rental Brands, LLC (Term Loan 2025) 3M S + 5.25 % 8.98 % 5/6/2032 64,677 64,124 64,192 8.77"
+    }
+   ]
+  },
+  {
+   "what": "Issuer strip takes a leading lot number before 'Incremental' ('Continental Buyer Inc 2 Incremental Term Loan 2025' to issuer 'Continental Buyer Inc', instrument '2 Incremental Term Loan 2025', as the 2026-06-30 label).",
+   "kind": "wrapper",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Continental Buyer Inc (2 Incremental Term Loan 2025)"
+    }
+   ]
+  },
+  {
+   "what": "pct_tagged_as_ratio for 0000930413-25-002470: percents x100 (were 100 times too small).",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Security 101 (Term Loan) 3M S + 5.00 % 9.30 % 4/11/2028 73,885 73,200 73,423 22.06"
+    }
+   ]
+  },
+  {
+   "what": "37 undrawn lines printed with a dash declared at fair value 0 (untagged_values).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "BCM One, Inc. (Revolver) (8) 3M S + 4.50% N/A 11/17/2027 - - - -"
+    },
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Security 101 (Revolver) (7) 3M S + 5.00 % N/A 4/11/2028 - ( 45 ) - -"
+    }
+   ]
+  },
+  {
+   "what": "SBLA Private Credit LLC JV interest reclassed PRIVATE_CREDIT_FUND / FUND (7 rows); Arkas equity reclassed COMMON_EQUITY (4 rows).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Investments in Joint Venture (4)(6)(9) SBLA Private Credit LLC (5) N/A N/A N/A 77,101 77,101 76,767 10.49"
+    },
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Equity (6) Personal Care Products Arkas Bidco Limited (5)(11)(12) N/A N/A N/A 888 888 888 0.17"
+    }
+   ]
+  },
+  {
+   "what": "Flourish Research Acquisition revolver published as 'Delayed Draw 1' (member name) corrected to Revolver.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Flourish Research Acquistion, LLC (Revolver) (7) 3M S + 5.00 % N/A 11/6/2031 - ( 57 ) ( 31 ) ( 0.01 )"
+    }
+   ]
+  },
+  {
+   "what": "Meta Buyer EUR and AUD par currency and H.10 dollar amount; BBSY on the AUD loan, EURIBOR on the 2026-03-31 EUR loan.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Meta Buyer LLC (Term Loan 2025 EUR) 3M E + 5.25 % 7.29 % 12/22/2031 16,762 19,438 19,204 2.87"
+    },
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Meta Buyer LLC (Term Loan 2025 AUD) 3M B + 5.25 % 9.62 % 12/22/2031 19,733 12,921 13,542 1.85"
+    }
+   ]
+  },
+  {
+   "what": "PRIME on the MGS MFG revolver (2025-12-31 to 2026-06-30) and the Leg Purchaser revolver (2026-06-30), published SOFR by date guess.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "MGS MFG. Group, Inc. (Revolver) (7) 1M P + 3.50 % 10.25 % 12/31/2028 1,682 1,677 1,656 0.23"
+    }
+   ]
+  },
+  {
+   "what": "Printed margin, reference rate and Floating coupon on the 142 loans of the three filings that tag no spread.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "IT Services BCM One, Inc. 6M S + 4.50% 8.85 % 11/17/2027 15,089 15,089 15,089"
+    },
+    {
+     "accession": "0000930413-25-001811",
+     "text": "World Insurance Associates, LLC (Revolver) 8) 3 M S + 1.00% N/A 4/3/2030 - ( 1 ) ( 1 ) -"
+    }
+   ]
+  },
+  {
+   "what": "issuer_name_strip_re extended: tranche words left in 17 names (lot years, 'Term Loan' after a delayed draw, 'Nth Amendment' before or after the tranche, 'Delayed Draw Term') are cut into the instrument.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-25-001811",
+     "text": "Accession Risk Management Group, Inc (Delayed Draw Term) (8) 3M S + 4.75% 9.05 % 11/1/2029 1,313 1,180 1,237 0.46"
+    }
+   ]
+  },
+  {
+   "what": "Databricks term loan published with no instrument at 2025-06-30 and 2025-09-30 (filer put the tranche on the industry axis): instrument 'Term Loan' by row correction.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Databricks Inc (Term Loan) 1M S + 4.50 % 8.82 % 1/3/2031 20,313 20,219 20,211 6.07"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "observation industry-heading-not-read-from-the-page (no filer industry on any row before 2026-06-30)",
+   "hypotheses": [
+    "industry_from_identifier_re: no; the explicit-member identifiers carry no industry text.",
+    "page reader: finds none of the humanised names (658 not_found); issuer_bridges per row would be about 700 entries.",
+    "axis industry: bdc_holdings.industry is filled on every row from EquitySecuritiesByIndustryAxis, but staging never reads it; a wrapper-gated read is shared code needing a test and a cohort measurement, and the humanised labels ('Commercial Services Supplies') would need the printed form."
+   ]
+  },
+  {
+   "finding": "oracle D06 2026-06-30 (RVQ_REV_f25717654bd1, confirmed error) and observation issuer-name-from-member-differs-from-page",
+   "hypotheses": [
+    "issuer_name_strip_re: cannot restore punctuation or spacing.",
+    "per-row issuer bridges or corrections: about 700 rows, row-pinned; not done."
+   ]
+  },
+  {
+   "finding": "observation position-chain-links-rows-of-different-size (Ambient Term Loan C/D mispaired at 2026-06-30, Term Loan B chain broken 2026-03-31 to 2026-06-30)",
+   "hypotheses": [
+    "Printed lines read: 2026-03-31 'Ambient Enterprises Holdco LLC, (Delayed Draw 2025 Term Loan B) (7) 3M S + 5.25 % 8.95 % 6/28/2030 462 457 458' and '(Delayed Draw 2025 Term Loan C) (7) 3M S + 5.25 % N/A 6/28/2030 - ( 4 ) ( 3 )'; 2026-06-30 Term Loan B 652 647 640, Term Loan C 249 245 240, Term Loan D - ( 4 ) ( 5 ). Same tranches by name across quarters; D is new.",
+    "Fix needs a rebuild: none left in this run.",
+    "Next action, next build: data/overrides/position_match_overrides/0002008748.json with a reject directive for the pair 2026-03-31 'Delayed Draw 2025 Term Loan C' (-3,000) -> 2026-06-30 'Delayed Draw 2026 Term Loan D' (-5,000), and replay to confirm Term Loan C (2026-03-31 -3,000 -> 2026-06-30 240,000) and Term Loan B (458,000 -> 640,000) then chain; if the matcher does not re-pair them, record the residual as that example does."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "typed-member-label-ending-member-read-as-aggregate",
+   "what": "The 10-Q for 2026-06-30 tags every schedule row on typed InvestmentIdentifierAxis with values ending literally ' [Member]' ('Vacation Rental Brands, LLC (Term Loan 2025) [Member]'). The shared aggregate filter (pipeline/bdc_identifier.py: any '[member]' text is an aggregate) dropped 162 of 179 positions; published 131.8M against a filed 1,563,657 thousand. Fixed in the wrapper (fallback patterns, leaf_marker_re, name strips).",
+   "field": "fair_value",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 1437.6,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A fund-quarter whose published fair value falls below half the prior quarter while the filed investments total rises is flagged before publication (fv_conservation caught it; a pre-build check on the share of '[Member]' identifiers would name the cause).",
+   "quote": {
+    "accession": "0000930413-26-002499",
+    "text": "Real Estate Management & Development Vacation Rental Brands, LLC (Term Loan 2025) 3M S + 5.25 % 8.98 % 5/6/2032 64,677 64,124 64,192 8.77"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fv_conservation, gav_reconciliation and the gate's totals check all failed for 2026-06-30 in laya (1,437.6M under).",
+    "reference": "conservation/fv_conservation 2026-06-30 in scratch/fund_sandbox/laya/findings_ledger.csv"
+   }
+  },
+  {
+   "observation_key": "pct-scale-test-counts-totals-and-lookthrough-rows",
+   "what": "At 2025-06-30 every percent of net assets was published 100 times too small (Security 101 0.2206 against printed 22.06): staging decides a filing is already in percent when its current-period values sum past 20, and this filing's sum (20.18) is reached only by counting the totals rows and the JV look-through rows. Fixed for this fund by source_encodings.pct_tagged_as_ratio; the shared heuristic is unchanged and 2025-09-30 passed it by 0.48.",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 856.9,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Run the 'already in percent' test over own-book position rows only (no subsidiary axis, no wrapper aggregate), or flag a fund-quarter whose published percent sum differs from fair value over net assets times 100 by more than a factor of 10.",
+   "quote": {
+    "accession": "0000930413-25-002470",
+    "text": "Security 101 (Term Loan) 3M S + 5.00 % 9.30 % 4/11/2028 73,885 73,200 73,423 22.06"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "PCT02 and A07 flagged 2025-06-30 (sum 2.57).",
+    "reference": "row_validation/PCT02 2025-06-30, oracle/A07 2025-06-30 in laya"
+   }
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "what": "37 undrawn lines printed with a dash for fair value (2024-09-30 to 2025-12-31) were not published; declared at 0 from the page (source_encodings.untagged_values).",
+   "field": "fair_value",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "B01 already counts the contexts; pair each with a printed dash line.",
+   "quote": {
+    "accession": "0000930413-24-003190",
+    "text": "BCM One, Inc. (Revolver) (8) 3M S + 4.50% N/A 11/17/2027 - - - -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 flagged these quarters and cleared in four of them after the fix.",
+    "reference": "oracle/B01"
+   }
+  },
+  {
+   "observation_key": "fund-interest-classed-as-loan-without-instrument-word",
+   "what": "The fund's own joint-venture interest, SBLA Private Credit LLC (33.2M to 76.8M, seven quarters), was published as a direct loan (unclassified at 2025-06-30); its member names no instrument. Reclassed PRIVATE_CREDIT_FUND / FUND by row corrections, as Blue Owl's OCIC SLF interest is. Row-pinned: the next quarter needs the same correction.",
+   "field": "index_classification",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 76.8,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A published row whose industry member or printed section is 'Investments in Joint Venture' and whose class is not a fund interest is flagged.",
+   "quote": {
+    "accession": "0000930413-26-002499",
+    "text": "Investments in Joint Venture (4)(6)(9) SBLA Private Credit LLC (5) N/A N/A N/A 77,101 77,101 76,767 10.49"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule saw it; the filer's EquitySecuritiesByIndustryAxis member InvestmentsInJointVentureMember (and the printed section) name the class in every quarter, so the check has a source signal and few false positives.",
+    "reference": "scratch/fund_runs/0002008748/jvclass.py"
+   }
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "what": "Arkas Bidco Limited equity (0.888M + 0.002M at 2025-12-31, 0.89M, 0.929M) printed under 'Equity' was published as a direct loan; reclassed common equity by row corrections.",
+   "field": "index_classification",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.9,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A row printed under an 'Equity' heading (or with an '...Equity' industry member) published as a loan is flagged.",
+   "quote": {
+    "accession": "0000930413-26-001612",
+    "text": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 890 0.13"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule saw it; the industry member 'PersonalCareProductsEquity' and the printed section carry the class.",
+    "reference": "observations.py show equity-section-rows-published-as-loans"
+   }
+  },
+  {
+   "observation_key": "member-names-another-tranche",
+   "what": "Flourish Research Acquisition's revolver (printed '(Revolver) ... ( 57 ) ( 31 )' at 2025-06-30, '523 468 492' at 2025-09-30) is tagged on a member named 'Delayed Draw 1' and was published as a delayed draw; corrected to Revolver.",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0000930413-25-003431",
+    "text": "Flourish Research Acquistion, LLC (Revolver) (7) 3M S + 5.00 % 9.22 % 11/6/2031 523 468 492 0.12"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "The member name is the only tag-side signal and it is wrong; only a page comparison of the tranche word finds it, which the typed unfunded-table contexts could support for this filer but not in general.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "what": "Correcting the Flourish instrument to 'Revolver' alone gave 'Delayed Draw 1 Revolver': the issuer-name strip runs after row corrections and puts the cut tranche words in front of a corrected instrument. Worked around by also correcting issuer_name.",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "After corrections, a corrected instrument_description that differs from the correction's value is flagged.",
+   "quote": {
+    "accession": "0000930413-25-002470",
+    "text": "Flourish Research Acquistion, LLC (Revolver) (7) 3M S + 5.00 % N/A 11/6/2031 - ( 57 ) ( 31 ) ( 0.01 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Deterministic: compare corrected fields with the correction file after the build; no false positives by construction.",
+    "reference": "pipeline/unified_holdings.py _strip_issuer_names"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "Meta Buyer's euro and Australian-dollar term loans (2026-03-31, 2026-06-30) tag their par with the usd unit (16,762,000 and 19,733,000 beside dollar costs 19,445,000 and 12,921,000); published as dollar par. Corrected with H.10 reference conversion.",
+   "field": "principal_amount_usd",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 32.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A loan whose identifier names a foreign currency (EUR, AUD, GBP) and whose par is tagged in usd is flagged.",
+   "quote": {
+    "accession": "0000930413-26-002499",
+    "text": "Meta Buyer LLC (Term Loan 2025 AUD) 3M B + 5.25 % 9.62 % 12/22/2031 19,733 12,921 13,542 1.85"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The currency is in the member text; FX01 did not fire because the unit says usd.",
+    "reference": "observations.py show principal-currency-from-unit-tag-not-checked-against-page"
+   }
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "what": "Reference rates are guessed from the date (SOFR) where the filer tags no code: the AUD loan prints BBSY ('3M B'), the MGS MFG and Leg Purchaser revolvers print Prime ('1M P', '3M P'). Corrected by row corrections (6 rows); the 184 other SOFR guesses at 2026-06-30 agree with the page where the reader confirmed them (156 of 158).",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 18.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A published reference rate whose source is a date guess and whose printed code, as read by the inline field-status reader, is a different benchmark is a ledger finding.",
+   "quote": {
+    "accession": "0000930413-26-002499",
+    "text": "Leg Purchaser Inc (Revolver) (7)(5) 3M P + 4.25 % 11.00 % 1/12/2032 1,924 1,878 1,924 0.26"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "printed_rates_check.py shows the disagreement (2 rows at 2026-06-30, 156 of 158 confirmed rows agree) but it is a diagnostic, not a ledger rule, and the gate does not call it; promoted as a rule it would have caught the Prime revolvers, with few false positives where the reader confirms the code.",
+    "reference": "scripts/v05_evidence/printed_rates_check.py"
+   }
+  },
+  {
+   "observation_key": "spread-printed-not-tagged-published-fixed",
+   "what": "The three filings for 2024-09-30 to 2025-03-31 tag no spread or rate code (no InvestmentBasisSpreadVariableRate fact); all 142 own-book loans were published with no spread and coupon 'Fixed' although the page prints '3M S + 5.25%'. Corrected from the printed lines (gen_spread_specs.py: matched on maturity, cost and fair value, every match agreeing, none skipped). Row-pinned to historical filings.",
+   "field": "coupon_type",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 1377.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A loan with an interest rate and no spread published as Fixed in a fund whose other quarters are all floating is flagged.",
+   "quote": {
+    "accession": "0000930413-24-003190",
+    "text": "IT Services BCM One, Inc. 6M S + 4.50% 8.85 % 11/17/2027 15,089 15,089 15,089"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The coupon-type flip between quarters of the same positions is mechanical; X02 saw only the undrawn rows.",
+    "reference": "scratch/fund_runs/0002008748/gen_spread_specs.py"
+   }
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "what": "No published row before 2026-06-30 carries the filer's industry (0 of 33 to 141 rows a quarter; GICS on about a third, from the name cache). The XBRL carries it on EquitySecuritiesByIndustryAxis (bdc_holdings.industry filled for every row) but staging never reads that column into extracted_industry, and the page reader finds none of the humanised member names (658 'not_found'). At 2026-06-30 the typed members hold the printed names and 149 of 150 rows get the printed industry. Not fixed: needs shared code (an opt-in axis-industry read) with a cohort measurement.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 1413.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "A fund-quarter where bdc_holdings.industry is filled on most rows and extracted_industry on none is flagged.",
+   "quote": {
+    "accession": "0000930413-26-001612",
+    "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Both columns exist in the build; a fill-rate comparison has no judgment in it.",
+    "reference": "pipeline/staging_bdc.py (extracted_industry from _hier_industry only)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Issuer names of 2024-09-30 to 2026-03-31 are the build's humanised explicit-member names ('JFL Atomic Acquisition Co Inc', 'Lead Venture Inc', 'Com Psych Investment Corp') where the page prints 'JFL-Atomic AcquisitionCo, Inc.', 'LeadVenture, Inc', 'ComPsych Investment Corp.'; from 2026-06-30 the printed names. Position matching links the quarters (83 of 150) but the name text changes form (D06). Not fixed: per-row issuer bridges for about 700 rows.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 1413.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "For every published row, compare issuer_name with the company name printed on the row's own schedule line (normalised for case, punctuation and spacing); a row whose name does not match is flagged in every quarter, so a stable wrong form (2024-09-30 to 2026-03-31) is caught, not only the quarter the form changes.",
+   "quote": {
+    "accession": "0000930413-26-001612",
+    "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The candidate rule pipeline/candidate_rules.py issuer-name-differs-from-page (branch worktree-agent-abbf79b781e80b96a commit 6751318, not merged or switched on) cannot see these filings: it reads the printed line from the page matches in bdc_ixbrl_field_status, which are empty for every row of 2024-09-30 to 2026-03-31 (the reader locates rows by name, and the humanised names are not on the page; found for 139 of 150 rows at 2026-06-30), so run read-only on laye it flags none of the humanised names. It needs page access by another key: match each row's printed line by maturity, cost and fair value (as scratch/fund_runs/0002008748/gen_spread_specs.py does, 142 of 142 rows located in three filings with no conflict), or by the context's own iXBRL fact positions, then compare names.",
+    "reference": "pipeline/candidate_rules.py, rule issuer-name-differs-from-page, branch worktree-agent-abbf79b781e80b96a commit 6751318 (worktree .claude/worktrees/agent-abbf79b781e80b96a), built and measured 2026-10-17, not merged or switched on; page-match method: scratch/fund_runs/0002008748/gen_spread_specs.py"
+   }
+  },
+  {
+   "observation_key": "gics-label-depends-on-build-composition",
+   "what": "SolarWinds Holdings Inc (3 rows, 2025-09-30 to 2026-03-31) had Information Technology / Application Software in sponfb (a 32-fund sandbox) and none in a one-fund build; the row's name did not change.",
+   "field": "gics_sector",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 30.1,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Build each fund alone and in its cohort sandbox; a row whose gics_sector or gics_sub_industry differs between the two while issuer_name, entity_id and extracted_industry are equal is flagged.",
+   "quote": {
+    "accession": "0000930413-26-002499",
+    "text": "Software SolarWinds Holdings, Inc. (Term Loan) 3M S + 6.00 % 9.67 % 4/18/2033 31,000 30,001 25,575 3.49"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The difference is deterministic between two builds of the same inputs; the regression_check comparison already pairs a one-fund build with an earlier cohort build, so the check needs no judgment and false positives arise only where the name or entity changed, which the condition excludes.",
+    "reference": "scripts/v05_evidence/regression_check.py (pairing); no rule yet"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "17 published issuer names kept tranche words the wrapper's strip did not cover (lot year before 'Term Loan', 'Nth Amendment', 'Delayed Draw Term'), e.g. 'Radwell Parent LLC Delayed Draw 20264 th Amendment'. Fixed by extending issuer_name_strip_re (dry run on every name: 17 changed, none emptied).",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 53.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Per published row, flag an issuer_name that still holds a tranche word (Term Loan, Delayed Draw, Revolver, Incremental, 'Nth Amendment') or differs from the company name on the row's printed line; list every row, not a share against a bar.",
+   "quote": {
+    "accession": "0000930413-25-001811",
+    "text": "Accession Risk Management Group, Inc (Delayed Draw Term) (8) 3M S + 4.75% 9.05 % 11/1/2029 1,313 1,180 1,237 0.46"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The gate's names check passed all 17 because they were under its 1 pct bar, so it is not a detector for them. The candidate rule compares names row by row, but for this filer it reads printed lines from the page matches in bdc_ixbrl_field_status, which are empty for every row of 2024-09-30 to 2026-03-31 (found for 139 of 150 at 2026-06-30); it would see these 17 only with page access by maturity, cost and fair value (as gen_spread_specs.py does) or a per-row tranche-word test on issuer_name, which needs no page.",
+    "reference": "pipeline/candidate_rules.py, rule issuer-name-differs-from-page, branch worktree-agent-abbf79b781e80b96a commit 6751318 (worktree .claude/worktrees/agent-abbf79b781e80b96a), built and measured 2026-10-17, not merged or switched on"
+   }
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "what": "The filer swapped the issuer and industry axes on four contexts. 2025-12-31 (0000930413-26-000841) c70 and c72: ownership member CommercialServicesSuppliesMember, industry member 'Ambient Enterprises Holdco LLC Term Loan 2025 2nd / 3rd Amendment'; published with issuer 'Commercial Services Supplies' and no instrument (379 and 308 thousand). 2025-06-30 c176 and 2025-09-30 c190: tranche on the industry axis ('Databricks Inc Term Loan'); fixed (instrument 'Term Loan'). c70 and c72 are LEFT: both rows have the same identifier 'Commercial Services Supplies' in the same filing, so a row correction (keyed on accession and identifier) cannot tell them apart, and source_encodings.context_identifiers never renames a context that already has an identifier member. No other context of the fund's eight filings has an industry-named issuer or a tranche-named industry (q32.sql).",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.7,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "A published row whose issuer_name equals an industry label of the same filing, or whose industry member names a tranche, is flagged.",
+   "quote": {
+    "accession": "0000930413-26-000841",
+    "text": "Ambient Enterprises Holdco LLC, (Term Loan 2025 2nd Amendment) 3M S + 5.25 % 8.92 % 6/28/2030 383 377 379 0.07"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Deterministic on the build's own columns (bdc_holdings.industry against the identifier); the fund has exactly these four hits, none spurious.",
+    "reference": "scratch/fund_runs/0002008748/q32.sql"
+   }
+  },
+  {
+   "observation_key": "position-chain-links-rows-of-different-size",
+   "what": "Position ids of Ambient Enterprises Holdco's delayed-draw tranches are mispaired in layf. At 2026-06-30 c94, the undrawn 'Delayed Draw 2026 Term Loan D' (fair value -5 thousand) carries id 7179acdf-..., the id of 'Delayed Draw 2025 Term Loan C' at 2025-12-31 (c78) and 2026-03-31 (c74); the real Term Loan C at 2026-06-30 (c92, 240) is on a new id 827d06ea-...; in laye Term Loan D had its own id. Older break: Term Loan B (2026-03-31 c72, 458) does not chain to 2026-06-30 (c90, 640), which is on new id 7b672e5e-.... Cause: the shared matching step pairs by name and figures after the issuer strip; once the strip made the issuer 'Ambient Enterprises Holdco LLC' in every quarter (layf), the undrawn Term Loan D (negative value like the undrawn Term Loan C of the quarter before) won the pairing over the now-drawn Term Loan C. Published values are right; only the chain is wrong.",
+   "field": "position_id",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.9,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A position chain whose instrument text changes tranche letter (Term Loan C -> Term Loan D) or vintage year (2025 -> 2026) between consecutive quarters, or that skips a same-issuer row whose instrument text is identical in both quarters, is flagged.",
+   "quote": {
+    "accession": "0000930413-26-002499",
+    "text": "Ambient Enterprises Holdco LLC, (Delayed Draw 2026 Term Loan D) (7) 3M S + 5.50 % N/A 6/28/2030 - ( 4 ) ( 5 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule saw it: the chain links rows of one issuer with plausible figures. The instrument text is published on both ends, so a tranche-letter or vintage change along a chain is a mechanical test; false positives are re-cut tranches the filer renames (the wrapper's edge case LORD_ABBETT_TRAILING_LOT_LABELS_ARE_DISTINCT_TRANCHES), which the test would list for reading rather than repair.",
+    "reference": "position_match_overrides lane (worked example data/overrides/position_match_overrides/0002052152.json)"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_8c48e3d5316b",
+   "coverage": {
+    "affected_rows": [
+     "0002008748|2024-09-30|PCT01|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0002008748|2024-09-30|PCT01|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; published-basis sum 244.41 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
+    "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+   ],
+   "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_3dcb414a66e8",
+   "coverage": {
+    "affected_rows": [
+     "0002008748|2024-12-31|PCT01|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0002008748|2024-12-31|PCT01|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-25-000900",
+     "text": "Total Investments at Fair Value (9) $ 471,418 $ 472,588 232."
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; published-basis sum 232.18 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
+    "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+   ],
+   "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_3a80619b0397",
+   "coverage": {
+    "affected_rows": [
+     "0002008748|2025-06-30|PCT01|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0002008748|2025-06-30|PCT01|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Total Investments (8) $ 856,319 $ 856,850 257.44 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; published-basis sum 257.44 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
+    "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+   ],
+   "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_8e3fe5d1aa5d",
+   "coverage": {
+    "affected_rows": [
+     "0002008748|2025-09-30|PCT01|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0002008748|2025-09-30|PCT01|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-25-003431",
+     "text": "Total Investments (8) $ 949,025 $ 950,464 226.60 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; published-basis sum 226.60 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
+    "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+   ],
+   "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_489c4f7e9ed6",
+   "coverage": {
+    "affected_rows": [
+     "0002008748|2025-12-31|PCT01|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0002008748|2025-12-31|PCT01|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Total Investments (8) $ 1,312,388 $ 1,309,928 248.07 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; published-basis sum 248.07 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
+    "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+   ],
+   "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_a08692fd6233",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-24-003190|c64",
+     "0000930413-24-003190|c61",
+     "0000930413-24-003190|c39"
+    ],
+    "reviewed_rows": [
+     "0000930413-24-003190|c64",
+     "0000930413-24-003190|c61",
+     "0000930413-24-003190|c39"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Mis-scaled percent: rejected; Playpower 33.36, GCOM 30.79 and Continental Buyer 25.32 equal the printed percents.",
+    "Fair value or net assets wrong: rejected; fair value equals printed and published total 313,562 equals the filed total; net assets 128,293 printed."
+   ],
+   "next_action": "Proposal PD-pct_position_concentration-2008748-1 (reason concentration-large-loan-of-a-young-levered-fund-as-printed) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_1819f88eea38",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-25-002470|c561",
+     "0000930413-25-002470|c527",
+     "0000930413-25-002470|c578",
+     "0000930413-25-002470|c571"
+    ],
+    "reviewed_rows": [
+     "0000930413-25-002470|c561",
+     "0000930413-25-002470|c527",
+     "0000930413-25-002470|c578",
+     "0000930413-25-002470|c571"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Seakeeper Technologies LLC (Term Loan) 3M S + 2.75 % 7.51 7/19/2027 18,500 18,321 18,321 33.14"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
+    "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+   ],
+   "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_0add5f585242",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-25-003431|c650",
+     "0000930413-25-003431|c686",
+     "0000930413-25-003431|c704",
+     "0000930413-25-003431|c638"
+    ],
+    "reviewed_rows": [
+     "0000930413-25-003431|c650",
+     "0000930413-25-003431|c686",
+     "0000930413-25-003431|c704",
+     "0000930413-25-003431|c638"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-25-003431",
+     "text": "Trimont Holdings LLC (Term Loan) 1M S + 3.00 % 7.16 % 5/31/2027 $ 26,600 $ 26,364 $ 26,334 39.50 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
+    "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+   ],
+   "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_b5ccef3284b7",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-26-000841|c783",
+     "0000930413-26-000841|c817",
+     "0000930413-26-000841|c819"
+    ],
+    "reviewed_rows": [
+     "0000930413-26-000841|c783",
+     "0000930413-26-000841|c817",
+     "0000930413-26-000841|c819"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Trimont Holdings LLC (Term Loan) 1M S + 2.75 % 6.47 % 3/1/2030 $ 25,900 $ 25,704 $ 25,641 36.42 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
+    "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+   ],
+   "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_f2337f8c0db5",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-26-001612|c1179",
+     "0000930413-26-001612|c1211"
+    ],
+    "reviewed_rows": [
+     "0000930413-26-001612|c1179",
+     "0000930413-26-001612|c1211"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Trimont Holdings LLC (Term Loan) 3M S + 2.75 % 6.45 % 5/31/2027 25,200 25,042 24,948 34.00"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
+    "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+   ],
+   "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_c2917ec0d28c",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-26-002499|c1281",
+     "0000930413-26-002499|c1289",
+     "0000930413-26-002499|c1285",
+     "0000930413-26-002499|c1257"
+    ],
+    "reviewed_rows": [
+     "0000930413-26-002499|c1281",
+     "0000930413-26-002499|c1289",
+     "0000930413-26-002499|c1285",
+     "0000930413-26-002499|c1257"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Iris Acquisition, LLC (Term Loan) 1M S + 5.00 % 8.61 % 6/9/2033 28,000 27,720 27,720 31.59"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
+    "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+   ],
+   "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_e6e88f92b6a0",
+   "coverage": {
+    "affected_rows": [
+     "0002008748|2024-09-30|A07|pct_of_net_assets_sum_and_outliers",
+     "0000930413-24-003190|c64",
+     "0000930413-24-003190|c61",
+     "0000930413-24-003190|c39"
+    ],
+    "reviewed_rows": [
+     "0002008748|2024-09-30|A07|pct_of_net_assets_sum_and_outliers",
+     "0000930413-24-003190|c64",
+     "0000930413-24-003190|c61",
+     "0000930413-24-003190|c39"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %"
+    },
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Outliers mis-scaled: rejected; the three rows above 25 pct print the same percents.",
+    "Sum out of band: rejected; 244.41 is inside 250 and equals the printed total."
+   ],
+   "next_action": "Proposal PD-A07-2008748-4 (reason a07-outlier-percent-is-the-printed-row) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_018ad0f71c92",
+   "coverage": {
+    "affected_rows": [
+     "0002008748|2025-06-30|A07|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0002008748|2025-06-30|A07|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Total Investments (8) $ 856,319 $ 856,850 257.44 %"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Total net assets $ 332,815 $ 203,539"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Security 101 (Term Loan) 3M S + 5.00 % 9.30 % 4/11/2028 73,885 73,200 73,423 22.06"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent 100x small (sum 2.57 in laya): confirmed and fixed; c138 tags 0.2206 and prints 22.06; the staging rule took the filing as already in percent. pct_tagged_as_ratio for 0000930413-25-002470 multiplies every tagged percent by 100.",
+    "After the fix the sum, 257.44, is out of A07's 250 band: as printed; 856,850 / 332,815 = 257.4 pct."
+   ],
+   "next_action": "Proposal PD-A07-2008748-5 (reason a07-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_7e5cb94e189b",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-25-002470|c268",
+     "0000930413-25-002470|c274",
+     "0000930413-25-002470|c276",
+     "0000930413-25-002470|c302",
+     "0000930413-25-002470|c316",
+     "0000930413-25-002470|c346",
+     "0000930413-25-002470|c347",
+     "0000930413-25-002470|c348",
+     "0000930413-25-002470|c349",
+     "0000930413-25-002470|c350",
+     "0000930413-25-002470|c351",
+     "0000930413-25-002470|c352",
+     "0000930413-25-002470|c353",
+     "0000930413-25-002470|c354",
+     "0000930413-25-002470|c355",
+     "0000930413-25-002470|c356",
+     "0000930413-25-002470|c357",
+     "0000930413-25-002470|c358",
+     "0000930413-25-002470|c359",
+     "0000930413-25-002470|c360",
+     "0000930413-25-002470|c361",
+     "0000930413-25-002470|c362",
+     "0000930413-25-002470|c363",
+     "0000930413-25-002470|c364",
+     "0000930413-25-002470|c365",
+     "0000930413-25-002470|c366",
+     "0000930413-25-002470|c367",
+     "0000930413-25-002470|c368",
+     "0000930413-25-002470|c369",
+     "0000930413-25-002470|c370",
+     "0000930413-25-002470|c371",
+     "0000930413-25-002470|c372",
+     "0000930413-25-002470|c373",
+     "0000930413-25-002470|c374",
+     "0000930413-25-002470|c375",
+     "0000930413-25-002470|c376",
+     "0000930413-25-002470|c377",
+     "0000930413-25-002470|c378",
+     "0000930413-25-002470|c379",
+     "0000930413-25-002470|c380",
+     "0000930413-25-002470|c381",
+     "0000930413-25-002470|c382",
+     "0000930413-25-002470|c383",
+     "0000930413-25-002470|c384",
+     "0000930413-25-002470|c385",
+     "0000930413-25-002470|c386",
+     "0000930413-25-002470|c387",
+     "0000930413-25-002470|c388",
+     "0000930413-25-002470|c389",
+     "0000930413-25-002470|c390",
+     "0000930413-25-002470|c391",
+     "0000930413-25-002470|c392",
+     "0000930413-25-002470|c393",
+     "0000930413-25-002470|c394",
+     "0000930413-25-002470|c395",
+     "0000930413-25-002470|c396",
+     "0000930413-25-002470|c397",
+     "0000930413-25-002470|c398",
+     "0000930413-25-002470|c399",
+     "0000930413-25-002470|c400",
+     "0000930413-25-002470|c401",
+     "0000930413-25-002470|c402",
+     "0000930413-25-002470|c403",
+     "0000930413-25-002470|c404",
+     "0000930413-25-002470|c405",
+     "0000930413-25-002470|c406",
+     "0000930413-25-002470|c407",
+     "0000930413-25-002470|c408",
+     "0000930413-25-002470|c409",
+     "0000930413-25-002470|c410"
+    ],
+    "reviewed_rows": [
+     "0000930413-25-002470|c268",
+     "0000930413-25-002470|c274",
+     "0000930413-25-002470|c276",
+     "0000930413-25-002470|c302",
+     "0000930413-25-002470|c316",
+     "0000930413-25-002470|c346",
+     "0000930413-25-002470|c347",
+     "0000930413-25-002470|c348",
+     "0000930413-25-002470|c349",
+     "0000930413-25-002470|c350",
+     "0000930413-25-002470|c351",
+     "0000930413-25-002470|c352",
+     "0000930413-25-002470|c353",
+     "0000930413-25-002470|c354",
+     "0000930413-25-002470|c355",
+     "0000930413-25-002470|c356",
+     "0000930413-25-002470|c357",
+     "0000930413-25-002470|c358",
+     "0000930413-25-002470|c359",
+     "0000930413-25-002470|c360",
+     "0000930413-25-002470|c361",
+     "0000930413-25-002470|c362",
+     "0000930413-25-002470|c363",
+     "0000930413-25-002470|c364",
+     "0000930413-25-002470|c365",
+     "0000930413-25-002470|c366",
+     "0000930413-25-002470|c367",
+     "0000930413-25-002470|c368",
+     "0000930413-25-002470|c369",
+     "0000930413-25-002470|c370",
+     "0000930413-25-002470|c371",
+     "0000930413-25-002470|c372",
+     "0000930413-25-002470|c373",
+     "0000930413-25-002470|c374",
+     "0000930413-25-002470|c375",
+     "0000930413-25-002470|c376",
+     "0000930413-25-002470|c377",
+     "0000930413-25-002470|c378",
+     "0000930413-25-002470|c379",
+     "0000930413-25-002470|c380",
+     "0000930413-25-002470|c381",
+     "0000930413-25-002470|c382",
+     "0000930413-25-002470|c383",
+     "0000930413-25-002470|c384",
+     "0000930413-25-002470|c385",
+     "0000930413-25-002470|c386",
+     "0000930413-25-002470|c387",
+     "0000930413-25-002470|c388",
+     "0000930413-25-002470|c389",
+     "0000930413-25-002470|c390",
+     "0000930413-25-002470|c391",
+     "0000930413-25-002470|c392",
+     "0000930413-25-002470|c393",
+     "0000930413-25-002470|c394",
+     "0000930413-25-002470|c395",
+     "0000930413-25-002470|c396",
+     "0000930413-25-002470|c397",
+     "0000930413-25-002470|c398",
+     "0000930413-25-002470|c399",
+     "0000930413-25-002470|c400",
+     "0000930413-25-002470|c401",
+     "0000930413-25-002470|c402",
+     "0000930413-25-002470|c403",
+     "0000930413-25-002470|c404",
+     "0000930413-25-002470|c405",
+     "0000930413-25-002470|c406",
+     "0000930413-25-002470|c407",
+     "0000930413-25-002470|c408",
+     "0000930413-25-002470|c409",
+     "0000930413-25-002470|c410"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Accel International Holdings Inc (Revolver) 4/26/2032 $ 2,162"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Accel International Holdings Inc (Revolver) (7) 3M S + 4.50 % N/A 4/26/2032 - ("
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Undrawn lines printed with a dash and not published: confirmed for 37 own-period contexts of 2024-09-30 to 2025-12-31 and fixed (untagged_values fair_value 0); B01 cleared in four quarters.",
+    "Remaining typed contexts are positions: rejected; they carry only InvestmentMaturityDate and lordabbett:UnfundedLoanCommitment (c346: 2,162,000; c360: 4,185,000), the rows of the schedule's 'Investments Maturity Date Unfunded' table. Every current-period one matches a published explicit-member row by issuer and tranche (query q17.sql: 39 of 39 at 2025-06-30, 41 of 41 at 2025-09-30, Flourish's revolver under its 'Delayed Draw 1' member).",
+    "Remaining explicit contexts are positions: rejected; the 5 a quarter are dated 2024-12-31, the prior year-end comparative schedule.",
+    "Per-row check (verify_rows.py, every affected context): each typed context has no fair value fact and its maturity and unfunded amount appear on the page as an unfunded-table line under the same issuer (e.g. 'Flourish Research Acquistion, LLC (Delayed Draw) 11/6/2031 2,302'); each explicit one is dated 2024-12-31 with an empty fair value fact. 0 exceptions."
+   ],
+   "next_action": "Proposal PD-B01-2008748-6 (reason b01-unfunded-commitment-table-rows-not-positions) for the owner. The source-only verdict 'source_unavailable' of the earlier reviewer is superseded: the filing is cached and was read."
+  },
+  {
+   "finding_id": "RVQ_REV_805434c4321d",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-25-003431|c287",
+     "0000930413-25-003431|c293",
+     "0000930413-25-003431|c295",
+     "0000930413-25-003431|c321",
+     "0000930413-25-003431|c335",
+     "0000930413-25-003431|c365",
+     "0000930413-25-003431|c366",
+     "0000930413-25-003431|c367",
+     "0000930413-25-003431|c368",
+     "0000930413-25-003431|c369",
+     "0000930413-25-003431|c370",
+     "0000930413-25-003431|c371",
+     "0000930413-25-003431|c372",
+     "0000930413-25-003431|c373",
+     "0000930413-25-003431|c374",
+     "0000930413-25-003431|c375",
+     "0000930413-25-003431|c376",
+     "0000930413-25-003431|c377",
+     "0000930413-25-003431|c378",
+     "0000930413-25-003431|c379",
+     "0000930413-25-003431|c380",
+     "0000930413-25-003431|c381",
+     "0000930413-25-003431|c382",
+     "0000930413-25-003431|c383",
+     "0000930413-25-003431|c384",
+     "0000930413-25-003431|c385",
+     "0000930413-25-003431|c386",
+     "0000930413-25-003431|c387",
+     "0000930413-25-003431|c388",
+     "0000930413-25-003431|c389",
+     "0000930413-25-003431|c390",
+     "0000930413-25-003431|c391",
+     "0000930413-25-003431|c392",
+     "0000930413-25-003431|c393",
+     "0000930413-25-003431|c394",
+     "0000930413-25-003431|c395",
+     "0000930413-25-003431|c396",
+     "0000930413-25-003431|c397",
+     "0000930413-25-003431|c398",
+     "0000930413-25-003431|c399",
+     "0000930413-25-003431|c400",
+     "0000930413-25-003431|c401",
+     "0000930413-25-003431|c402",
+     "0000930413-25-003431|c403",
+     "0000930413-25-003431|c404",
+     "0000930413-25-003431|c405",
+     "0000930413-25-003431|c406",
+     "0000930413-25-003431|c407",
+     "0000930413-25-003431|c408",
+     "0000930413-25-003431|c409",
+     "0000930413-25-003431|c410",
+     "0000930413-25-003431|c411",
+     "0000930413-25-003431|c412",
+     "0000930413-25-003431|c413",
+     "0000930413-25-003431|c414",
+     "0000930413-25-003431|c415",
+     "0000930413-25-003431|c416",
+     "0000930413-25-003431|c417",
+     "0000930413-25-003431|c418",
+     "0000930413-25-003431|c419",
+     "0000930413-25-003431|c420",
+     "0000930413-25-003431|c421",
+     "0000930413-25-003431|c422",
+     "0000930413-25-003431|c423",
+     "0000930413-25-003431|c424",
+     "0000930413-25-003431|c425",
+     "0000930413-25-003431|c426",
+     "0000930413-25-003431|c427",
+     "0000930413-25-003431|c428",
+     "0000930413-25-003431|c429",
+     "0000930413-25-003431|c430",
+     "0000930413-25-003431|c431"
+    ],
+    "reviewed_rows": [
+     "0000930413-25-003431|c287",
+     "0000930413-25-003431|c293",
+     "0000930413-25-003431|c295",
+     "0000930413-25-003431|c321",
+     "0000930413-25-003431|c335",
+     "0000930413-25-003431|c365",
+     "0000930413-25-003431|c366",
+     "0000930413-25-003431|c367",
+     "0000930413-25-003431|c368",
+     "0000930413-25-003431|c369",
+     "0000930413-25-003431|c370",
+     "0000930413-25-003431|c371",
+     "0000930413-25-003431|c372",
+     "0000930413-25-003431|c373",
+     "0000930413-25-003431|c374",
+     "0000930413-25-003431|c375",
+     "0000930413-25-003431|c376",
+     "0000930413-25-003431|c377",
+     "0000930413-25-003431|c378",
+     "0000930413-25-003431|c379",
+     "0000930413-25-003431|c380",
+     "0000930413-25-003431|c381",
+     "0000930413-25-003431|c382",
+     "0000930413-25-003431|c383",
+     "0000930413-25-003431|c384",
+     "0000930413-25-003431|c385",
+     "0000930413-25-003431|c386",
+     "0000930413-25-003431|c387",
+     "0000930413-25-003431|c388",
+     "0000930413-25-003431|c389",
+     "0000930413-25-003431|c390",
+     "0000930413-25-003431|c391",
+     "0000930413-25-003431|c392",
+     "0000930413-25-003431|c393",
+     "0000930413-25-003431|c394",
+     "0000930413-25-003431|c395",
+     "0000930413-25-003431|c396",
+     "0000930413-25-003431|c397",
+     "0000930413-25-003431|c398",
+     "0000930413-25-003431|c399",
+     "0000930413-25-003431|c400",
+     "0000930413-25-003431|c401",
+     "0000930413-25-003431|c402",
+     "0000930413-25-003431|c403",
+     "0000930413-25-003431|c404",
+     "0000930413-25-003431|c405",
+     "0000930413-25-003431|c406",
+     "0000930413-25-003431|c407",
+     "0000930413-25-003431|c408",
+     "0000930413-25-003431|c409",
+     "0000930413-25-003431|c410",
+     "0000930413-25-003431|c411",
+     "0000930413-25-003431|c412",
+     "0000930413-25-003431|c413",
+     "0000930413-25-003431|c414",
+     "0000930413-25-003431|c415",
+     "0000930413-25-003431|c416",
+     "0000930413-25-003431|c417",
+     "0000930413-25-003431|c418",
+     "0000930413-25-003431|c419",
+     "0000930413-25-003431|c420",
+     "0000930413-25-003431|c421",
+     "0000930413-25-003431|c422",
+     "0000930413-25-003431|c423",
+     "0000930413-25-003431|c424",
+     "0000930413-25-003431|c425",
+     "0000930413-25-003431|c426",
+     "0000930413-25-003431|c427",
+     "0000930413-25-003431|c428",
+     "0000930413-25-003431|c429",
+     "0000930413-25-003431|c430",
+     "0000930413-25-003431|c431"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-25-003431",
+     "text": "Accel International Holdings Inc (Revolver) 4/26/2032 $ 2,162"
+    },
+    {
+     "accession": "0000930413-25-003431",
+     "text": "Accel International Holdings Inc (Revolver) (7) 3M S + 4.50 % N/A 4/26/2032 - ("
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Undrawn lines printed with a dash and not published: confirmed for 37 own-period contexts of 2024-09-30 to 2025-12-31 and fixed (untagged_values fair_value 0); B01 cleared in four quarters.",
+    "Remaining typed contexts are positions: rejected; they carry only InvestmentMaturityDate and lordabbett:UnfundedLoanCommitment (c346: 2,162,000; c360: 4,185,000), the rows of the schedule's 'Investments Maturity Date Unfunded' table. Every current-period one matches a published explicit-member row by issuer and tranche (query q17.sql: 39 of 39 at 2025-06-30, 41 of 41 at 2025-09-30, Flourish's revolver under its 'Delayed Draw 1' member).",
+    "Remaining explicit contexts are positions: rejected; the 5 a quarter are dated 2024-12-31, the prior year-end comparative schedule.",
+    "Per-row check (verify_rows.py, every affected context): each typed context has no fair value fact and its maturity and unfunded amount appear on the page as an unfunded-table line under the same issuer (e.g. 'Flourish Research Acquistion, LLC (Delayed Draw) 11/6/2031 2,302'); each explicit one is dated 2024-12-31 with an empty fair value fact. 0 exceptions."
+   ],
+   "next_action": "Proposal PD-B01-2008748-6 (reason b01-unfunded-commitment-table-rows-not-positions) for the owner. The source-only verdict 'source_unavailable' of the earlier reviewer is superseded: the filing is cached and was read."
+  },
+  {
+   "finding_id": "RVQ_REV_9d540e9d7443",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-26-000841|c304",
+     "0000930413-26-000841|c306"
+    ],
+    "reviewed_rows": [
+     "0000930413-26-000841|c304",
+     "0000930413-26-000841|c306"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Equity (6) Personal Care Products Arkas Bidco Limited (5)(11)(12) N/A N/A N/A 888 888 888 0.17"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Unit count tagged with the share concept and dropped: rejected; the context carries InvestmentOwnedBalancePrincipalAmount in usd (890,000 at 2026-03-31 and 2026-06-30, decimals -3) and no share fact.",
+    "units_tagged_as_par would publish 890,000 units: not applied; the printed cell equals cost in thousands, so it may be a dollar amount, and the table prints share amounts unscaled ('except share amounts'), so it may be 890 shares; the filing does not say which.",
+    "Row is not equity: rejected; printed under 'Equity' (classed equity by row correction in this run, which is why C04 now counts it)."
+   ],
+   "next_action": "Proposal PD-C04-2008748-7 (reason c04-equity-count-cell-equals-cost-tagged-as-dollar-par); the owner decides whether the cell is a count."
+  },
+  {
+   "finding_id": "RVQ_REV_7e42a3400714",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-26-001612|c355"
+    ],
+    "reviewed_rows": [
+     "0000930413-26-001612|c355"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 890 0.13"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Unit count tagged with the share concept and dropped: rejected; the context carries InvestmentOwnedBalancePrincipalAmount in usd (890,000 at 2026-03-31 and 2026-06-30, decimals -3) and no share fact.",
+    "units_tagged_as_par would publish 890,000 units: not applied; the printed cell equals cost in thousands, so it may be a dollar amount, and the table prints share amounts unscaled ('except share amounts'), so it may be 890 shares; the filing does not say which.",
+    "Row is not equity: rejected; printed under 'Equity' (classed equity by row correction in this run, which is why C04 now counts it)."
+   ],
+   "next_action": "Proposal PD-C04-2008748-7 (reason c04-equity-count-cell-equals-cost-tagged-as-dollar-par); the owner decides whether the cell is a count."
+  },
+  {
+   "finding_id": "RVQ_REV_3a0a7439986a",
+   "coverage": {
+    "affected_rows": [
+     "0000930413-26-002499|c383"
+    ],
+    "reviewed_rows": [
+     "0000930413-26-002499|c383"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 929 0.13"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Unit count tagged with the share concept and dropped: rejected; the context carries InvestmentOwnedBalancePrincipalAmount in usd (890,000 at 2026-03-31 and 2026-06-30, decimals -3) and no share fact.",
+    "units_tagged_as_par would publish 890,000 units: not applied; the printed cell equals cost in thousands, so it may be a dollar amount, and the table prints share amounts unscaled ('except share amounts'), so it may be 890 shares; the filing does not say which.",
+    "Row is not equity: rejected; printed under 'Equity' (classed equity by row correction in this run, which is why C04 now counts it)."
+   ],
+   "next_action": "Proposal PD-C04-2008748-7 (reason c04-equity-count-cell-equals-cost-tagged-as-dollar-par); the owner decides whether the cell is a count."
+  },
+  {
+   "finding_id": "RVQ_REV_f25717654bd1",
+   "coverage": {
+    "affected_rows": [
+     "0002008748|2026-06-30|D06|issuer_name_continuity"
+    ],
+    "reviewed_rows": [
+     "0002008748|2026-06-30|D06|issuer_name_continuity"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"
+    },
+    {
+     "accession": "0000930413-26-002499",
+     "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.39 % 2/20/2031 45,988 45,412 45,357 6.20"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Filer spelling differs between filings: rejected; both the 10-Q for 2026-03-31 and the 10-Q for 2026-06-30 print 'JFL-Atomic AcquisitionCo, Inc.' (quotes above).",
+    "Portfolio turned over: rejected; 83 of 150 own-book rows carry a 2026-03-31 position id (85 of 141 the quarter before), 52 of 65 entity ids persist.",
+    "Build error: confirmed. Up to 2026-03-31 the issuer name is the pipeline's humanisation of the filer's explicit member (lordabbett:JFLAtomicAcquisitionCoIncTermLoanMember -> 'JFL Atomic Acquisition Co Inc'), which drops punctuation and re-spaces words; from 2026-06-30 the typed member holds the printed name and the build publishes it. The published names of 2024-09-30 to 2026-03-31 are wrong against the page; the continuity break is the correct form arriving.",
+    "Fund-level fix: none found within the build cap. issuer_name_strip_re cannot restore punctuation or spacing; industry or name bridges per row (about 700 rows over seven quarters) are row-pinned; the 2026-06-30 filing's typed comparatives cover only 2025-12-31."
+   ],
+   "next_action": "Left open, no proposal (PD-D06-2008748-8 withdrawn). Repair: a name map from each explicit member to the printed issuer for this filer (the typed comparative members of 0000930413-26-002499 give the printed name for every 2025-12-31 member; earlier members need the page reader to match by maturity and value, as gen_spread_specs.py does), or the candidate rule issuer-name-differs-from-page to detect it. Owner or a later run decides."
+  }
+ ],
+ "tests_run": [
+  "tests/test_source_encodings.py: 97 passed",
+  "wrapper JSON validated against schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json (classify_check.py)",
+  "strip dry run on every published name and identifier (scratch/fund_runs/0002008748/strip_dry.py): 17 changed, 0 emptied"
+ ],
+ "not_done": [
+  "No shared code changed; the cohort effect of the wrapper is nil by construction (one fund's wrapper and rows).",
+  "Industry before 2026-06-30 and humanised issuer names: parked, see observations.",
+  "JV look-through rows (underlying_schedule) were read only where a finding named them; their fields were not compared with the JV schedule.",
+  "Fund-level figures (net assets, income) were not compared with the balance sheet beyond the net assets used for percents.",
+  "B01 and concentration rows were checked one by one by script (scratch/fund_runs/0002008748/verify_rows.py, results in verify_rows.json); read by eye on the page: c346, c356, c359, c360, c385 (2025-06-30), c376, c377 (2025-09-30) and one JV row per quarter.",
+  "J01 (position-match tier rate 63.1 pct) fails in the oracle but is not a ledger finding; not investigated.",
+  "All findings cleared or proposed is not data correct: no rule checks unit counts, floors or the JV schedule's fields.",
+  "Ambient Enterprises c70/c72 at 2025-12-31 still publish issuer 'Commercial Services Supplies' (0.69M): no correction can address one of two rows with the same identifier.",
+  "Ambient Enterprises Holdco position ids: Term Loan D (2026-06-30 c94) carries Term Loan C's id and Term Loan C / Term Loan B start new ids at 2026-06-30 (introduced or left by layf); needs a position_match_overrides reject directive and a rebuild, none left."
+ ],
+ "review_responses": [
+  {
+   "review": "docs/investigations/v05_readings/reviews/0002008748_laye.json",
+   "changes": [
+    "D06 2026-06-30 recast confirmed_error (build humanises member names; filer prints the same name in both filings); proposal PD-D06-2008748-8 withdrawn; finding left open.",
+    "Three observations' detection decisions changed to propose_detector (reference-rate-guessed-from-date-where-column-printed, issuer-name-from-member-differs-from-page, gics-label-depends-on-build-composition).",
+    "No rebuild: no fund-level fix for the name cause fits the last build."
+   ]
+  },
+  {
+   "review": "docs/investigations/v05_readings/reviews/0002008748_laye.json (r2)",
+   "changes": [
+    "Observation issuer-name-from-member-differs-from-page: suggested_check replaced by a row-by-row comparison of the published issuer_name with the printed company name on the row's own page line; reference cites the candidate rule exactly (unmerged branch, commit 6751318).",
+    "Second parked entry renamed (r1): 'observation issuer-name-from-member-differs-from-page (humanised names 2024-09-30 to 2026-03-31; D06 2026-06-30)' became 'oracle D06 2026-06-30 (RVQ_REV_f25717654bd1, confirmed error) and observation issuer-name-from-member-differs-from-page'."
+   ]
+  },
+  {
+   "review": "docs/investigations/v05_readings/reviews/0002008748_laye.json (r3)",
+   "changes": [
+    "Issuer-name observation: detection decision says the candidate rule cannot see these filings (empty page matches 2024-09-30 to 2026-03-31) and names the page-access method (maturity, cost and value match).",
+    "Ambient c70/c72 (2025-12-31) read on the page: issuer/industry axes swapped; left with reason (duplicate identifier blocks a row correction; context_identifiers never renames). Same swap found on Databricks 2025-06-30 c176 and 2025-09-30 c190 (instrument only) and fixed; no other context affected.",
+    "Rebuilt as layf (last build): extended issuer_name_strip_re (17 names) and 2 Databricks corrections; field diff against laye: issuer_name 17, instrument_description 19, corrected_fields 2, canonical_name 10, position_id 13; ledger outstanding unchanged (19); all declared."
+   ]
+  },
+  {
+   "review": "layf review",
+   "changes": [
+    "issuer-name-differs-from-page: detection decision changed to propose_detector, citing the candidate rule and its page-access limit for this filer.",
+    "New observation position-chain-links-rows-of-different-size (Ambient Term Loan C/D mispair, Term Loan B break), read on the page; left, next action a position_match_overrides reject directive; added to parked and not_done. No rebuild."
+   ]
+  }
+ ]
+}

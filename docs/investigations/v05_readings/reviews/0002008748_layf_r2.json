@@ -1,0 +1,240 @@
+{
+ "reviewer_id": "lordabbett_independent_reviewer_2026-10-17",
+ "report_digest": "31c16d1b5f0fcf5621a56d03e7f7519465ff9250dd8a795758a043ea47f5640f",
+ "round_layf_r2": "layf_r2: fresh review bound to layf. The digest is recomputed over the current report and the layf ledger (unchanged since 23:35, 19 outstanding). Against the previous layf round (scratch/fund_runs/0002008748/reviewer/r4_summary.txt versus r5_summary.txt) only these changed: parked (one entry added), not_done (one added), review_responses (one added), the issuer-name-differs-from-page decision, and the new observation position-chain-links-rows-of-different-size. The 19 investigations, the 7 proposals and every other observation and section are unchanged. With no rebuild, the holdings checks below still hold. The position_id mislink noted below is now recorded by the investigator as that new observation.",
+ "round_layf": "layf: fresh review bound to label layf. The digest is recomputed over the current report and the layf ledger; the fund's ledger rows are byte-identical to laye and there are 19 outstanding. The holdings diff of laye to layf finds the same 874 rows on the same keys, with no change to fair value, percent, spread, class or principal, so every finding review below re-holds on layf: the 19 investigations and the 7 proposals are unchanged. Changed fields: issuer_name 17, instrument_description 19, corrected_fields 2, canonical_name 10, position_id 13, matching the investigator's count. Report changes: label, fixes (11), declared_changes, tests_run, not_done, review_responses, the rewritten issuer-name decision and two new observations (issuer-name-differs-from-page, member-carries-another-rows-name).",
+ "position_id_check": "13 changes, read chain by chain (scratch/fund_runs/0002008748/reviewer/chains_layf.py) and against the page. 12 are right or improvements. Qualus DD 2024 now chains 2025-09-30 to 2026-03-31, and DD 2025 links 1,478 to 1,477 instead of the DD 2024 row. Meta Buyer DD now chains 2025-12-31 to 2026-06-30. The Ambient 2nd and 3rd amendments and the Radwell DD 2024 and DD 2026 rows now chain 2026-03-31 to 2026-06-30. Ambient DD 2025 Term Loan B now chains 2025-06-30 to 2026-03-31. One change is a NEW MISLINK that the report's declaration ('chains re-paired by ... the 17 corrected names') does not explain: 2026-06-30 c94 'Delayed Draw 2026 Term Loan D' (undrawn, (5)) now carries the position_id of 'Delayed Draw 2025 Term Loan C' (2025-12-31 c78, 2026-03-31 c74). In laye it had its own id. Meanwhile the real Term Loan C at 2026-06-30 (c92, 240) sits on a separate id. The page prints both: 'Ambient Enterprises Holdco LLC, (Delayed Draw 2025 Term Loan C) (7) 3M S + 5.50 % 9.23 % 6/28/2030 249 245 240 0.03' and '(Delayed Draw 2026 Term Loan D) (7) 3M S + 5.50 % N/A 6/28/2030 - ( 4 ) ( 5 ) -' (0000930413-26-002499). Already present in laye: Term Loan B 2026-03-31 (458) does not chain to 2026-06-30 (640). These do not feed an outstanding finding, so the investigation check cannot see them, but the position_id change is not fully explained and identity is wrong for this tranche.",
+ "round_r3": "r3: fresh review, digest recomputed over the current report and the laye ledger (unchanged, 19 outstanding). Against r2 (r2_summary.py, output in scratch/fund_runs/0002008748/reviewer/r3_summary.txt): every top-level section hashes the same except review_responses (one r2 entry added); the 19 investigations keep conclusions and coverage counts; the 7 proposals hash identically; among observations only issuer-name-from-member-differs-from-page changed (suggested_check and reference). I ran the cited candidate rule (commit 6751318) read-only on laye: scratch/fund_runs/0002008748/reviewer/cand_issuer.py.",
+ "unreported_error_found": "Running that candidate rule flagged 2 published rows at 2025-12-31 (0000930413-26-000841 c70, c72) whose issuer_name is 'Commercial Services Supplies' with no instrument (FV 379K and 308K). The page prints them as 'Ambient Enterprises Holdco LLC, (Term Loan 2025 2nd Amendment) 3M S + 5.25 % 8.92 % 6/28/2030 383 377 379 0.07' and '(Term Loan 2025 3rd Amendment) ... 311 306 308 0.06'. The filer swapped the axes on these two contexts (ownershipaxis=CommercialServicesSuppliesMember, equitysecuritiesbyindustryaxis=AmbientEnterprisesHoldco...Member). This is a published error that no ledger finding, observation or the 20-card page sample covers. It does not change any outcome below, but the fund should not be accepted without a correction or an observation for it.",
+ "round": "r2:fresh review of the revised report (digest recomputed over the current report and the laye ledger, unchanged since 2026-10-17 22:51, 19 outstanding). Compared with round 1 by structure (scratch/fund_runs/0002008748/reviewer/r2_summary.py): the other 18 investigations keep their conclusions, coverage counts, evidence and next actions; the other 10 observations keep their decisions and references; the proposals keep the 7 other entries; fixes, declared_changes, rows_added, tests_run and not_done are unchanged. Changes found: the D06 investigation, PD-D06-2008748-8 removed, three observations' decisions and two suggested_checks, the review_responses entry, and one undeclared but consistent edit: parked[1].finding now names RVQ_REV_f25717654bd1 as a confirmed error. No earlier copy of the report was kept, so this comparison is by structure and read-through, not a byte diff.",
+ "method": "Populations rebuilt from scratch/fund_sandbox/laye/output (row_validation_issues.csv, oracle/check_results.csv and check_failures.csv, shadow/validation_results_ledger.csv, private_markets_holdings.csv) with scratch/fund_runs/0002008748/reviewer/recon.py, b01.py, fill.py and corr_sample.py; printed lines read with scripts/v05_evidence/page_line.py on the cached filings. Published-basis totals checked against the printed Total Investments in all eight quarters (313,562; 472,588; 591,274; 856,850; 950,464; 1,309,928; 1,413,006; 1,563,657 thousand: all equal).",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_8c48e3d5316b", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "PCT01 flags 2024-09-30 only at fund level (value 244.41, row_validation_issues.csv); the fund-quarter key is the whole population. Published-basis sum 244.41 over 33 parent_schedule rows (no underlying rows that quarter) equals the printed total percent; published FV 313,562 equals the printed total; net assets 128,293 printed. Leverage, not mis-scaling.",
+   "evidence": [{"accession": "0000930413-24-003190", "text": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %"}]
+  },
+  {
+   "finding_id": "RVQ_REV_3dcb414a66e8", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "PCT01 2024-12-31 value 232.18 is the only flag; recomputed published-basis sum 232.18 over 50 rows, FV 472,588 equals the printed total and the printed percent is 232.(18).",
+   "evidence": [{"accession": "0000930413-25-000900", "text": "Total Investments at Fair Value (9) $ 471,418 $ 472,588 232."}]
+  },
+  {
+   "finding_id": "RVQ_REV_3a80619b0397", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "PCT01 2025-06-30 value 257.44; recomputed published-basis sum 257.44 over 71 parent rows (the 30 JV look-through rows excluded); FV 856,850 equals printed; 856,850 / 332,815 = 257.4 pct. Security 101 publishes 22.06 as printed, so the x100 fix holds.",
+   "evidence": [{"accession": "0000930413-25-002470", "text": "Total Investments (8) $ 856,319 $ 856,850 257.44 %"}]
+  },
+  {
+   "finding_id": "RVQ_REV_8e3fe5d1aa5d", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "PCT01 2025-09-30 value 226.60; recomputed published-basis sum 226.60 over 77 rows; FV 950,464 equals the printed total.",
+   "evidence": [{"accession": "0000930413-25-003431", "text": "Total Investments (8) $ 949,025 $ 950,464 226.60 %"}]
+  },
+  {
+   "finding_id": "RVQ_REV_489c4f7e9ed6", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "PCT01 2025-12-31 value 248.07; recomputed published-basis sum 248.07 over 122 rows; FV 1,309,928 equals the printed total.",
+   "evidence": [{"accession": "0000930413-26-000841", "text": "Total Investments (8) $ 1,312,388 $ 1,309,928 248.07 %"}]
+  },
+  {
+   "finding_id": "RVQ_REV_a08692fd6233", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "Weak rule pct_position_concentration (pct > 25) at 2024-09-30: metric 15.0 pct of 20 units = 3 rows; my query returns exactly c64 Playpower 33.36, c61 GCOM 30.79, c39 Continental Buyer 25.32, all parent_schedule. Each equals the printed percent; net assets 128,293 printed.",
+   "evidence": [
+    {"accession": "0000930413-24-003190", "text": "Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %"},
+    {"accession": "0000930413-24-003190", "text": "GCOM 3M S + 7.50% 12.89 % 8/1/2031 39,899 39,505 39,505 30.79"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1819f88eea38", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "2025-06-30: rule metric 5.26 pct of 76 = 4 rows; my query returns c561, c527, c578, c571, all underlying_schedule (SBLA JV schedule), equal to affected_rows. Seakeeper prints 33.14 in the SBLA schedule, whose header is that JV's own schedule with a % of Net Assets column. Max own-book percent that quarter 22.06.",
+   "evidence": [
+    {"accession": "0000930413-25-002470", "text": "Seakeeper Technologies LLC (Term Loan) 3M S + 2.75 % 7.51 7/19/2027 18,500 18,321 18,321 33.14"},
+    {"accession": "0000930413-25-002470", "text": "SBLA Private Credit LLC Schedule of Investments June 30, 2025 (in thousands, except share amounts, per share data, and as otherwise noted)"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0add5f585242", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "2025-09-30: 5.0 pct of 80 = 4 rows; query returns c650, c686, c704, c638, all underlying_schedule, equal to affected_rows. Trimont 39.50 printed in the JV schedule. Max own-book percent 18.32.",
+   "evidence": [{"accession": "0000930413-25-003431", "text": "Trimont Holdings LLC (Term Loan) 1M S + 3.00 % 7.16 % 5/31/2027 $ 26,600 $ 26,364 $ 26,334 39.50 %"}]
+  },
+  {
+   "finding_id": "RVQ_REV_b5ccef3284b7", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "2025-12-31: 2.65 pct of 113 = 3 rows; query returns c783, c817, c819, all underlying_schedule, equal to affected_rows. Trimont 36.42 and Rental Equipment 35.06 printed. Max own-book percent 14.63.",
+   "evidence": [
+    {"accession": "0000930413-26-000841", "text": "Trimont Holdings LLC (Term Loan) 1M S + 2.75 % 6.47 % 3/1/2030 $ 25,900 $ 25,704 $ 25,641 36.42 %"},
+    {"accession": "0000930413-26-000841", "text": "Rental Equipment Investment Co. (Term Loan) 3M S + 4.50 % 8.17 % 10/8/2030 25,000 24,700 24,688 35.0"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f2337f8c0db5", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "2026-03-31: 1.27 pct of 157 = 2 rows; query returns c1179 and c1211, underlying_schedule, equal to affected_rows. Trimont 34.00 printed. Max own-book percent 9.55.",
+   "evidence": [{"accession": "0000930413-26-001612", "text": "Trimont Holdings LLC (Term Loan) 3M S + 2.75 % 6.45 % 5/31/2027 25,200 25,042 24,948 34.00"}]
+  },
+  {
+   "finding_id": "RVQ_REV_c2917ec0d28c", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "2026-06-30: 2.33 pct of 172 = 4 rows; query returns c1281, c1289, c1285, c1257, all underlying_schedule, equal to affected_rows. Iris 31.59 and ComPsych 28.07 are printed in the SBLA consolidated schedule (after the fund's own Total Investments); the fund's own Iris term loan is 230 at 0.03. Max own-book percent 10.49 (SBLA interest).",
+   "evidence": [
+    {"accession": "0000930413-26-002499", "text": "ComPsych Investment Corp. (Term Loan) 3M S + 4.75 % 8.41 % 7/22/2031 24,624 24,601 24,624 28.07"},
+    {"accession": "0000930413-26-002499", "text": "SBLA Private Credit LLC Consolidated Schedule of Investments June 30, 2026 (in thousands, except share amounts, per share data, percentages, and as otherwise noted)"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e6e88f92b6a0", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "A07 2024-09-30 status warn: pct_sum 244.41 inside 250, '3 outliers > 25%'. The three outliers are the same c64, c61, c39 rows as the concentration finding; coverage (fund key plus the three rows) is the full population; values equal the print.",
+   "evidence": [
+    {"accession": "0000930413-24-003190", "text": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %"},
+    {"accession": "0000930413-24-003190", "text": "Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_018ad0f71c92", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "A07 2025-06-30 fail at 257.44 (band 250), no outliers; fund-level key is the population. 856,850 / 332,815 = 257.4 pct as printed; the earlier 2.57 sum was the x100 scaling defect now fixed (Security 101 publishes 22.06).",
+   "evidence": [
+    {"accession": "0000930413-25-002470", "text": "Total net assets $ 332,815 $ 203,539"},
+    {"accession": "0000930413-25-002470", "text": "Security 101 (Term Loan) 3M S + 5.00 % 9.30 % 4/11/2028 73,885 73,200 73,423 22.06"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7e5cb94e189b", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "B01 2025-06-30 residual 70; check_failures lists 31 excluded_comparative_period + 39 excluded_no_fair_value contexts, the same 70 as affected_rows (c268, c274, c276, c302, c316, c346-c410). Source detail: the 5 explicit ones are period 2024-12-31 (prior year-end comparatives); c346-c384 are typed current-period contexts whose only standard concept is InvestmentMaturityDate; c385-c410 are typed 2024-12-31 contexts of the same kind. Printed unfunded-commitment table lines match (Accel revolver 2,162; Flourish revolver 4,185 in the comparative table) and the funded line of the same tranche is printed separately.",
+   "evidence": [
+    {"accession": "0000930413-25-002470", "text": "Accel International Holdings Inc (Revolver) 4/26/2032 $ 2,162"},
+    {"accession": "0000930413-25-002470", "text": "Accel International Holdings Inc (Revolver) (7) 3M S + 4.50 % N/A 4/26/2032 - ( 11 ) ( 11 ) -"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_805434c4321d", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "B01 2025-09-30 residual 72; check_failures 31 comparative + 41 no-fair-value, the same 72 as affected_rows. Breakdown: 5 explicit 2024-12-31 contexts, 26 typed 2024-12-31 and 41 typed 2025-09-30 contexts carrying only InvestmentMaturityDate among standard concepts, i.e. unfunded-table rows. Accel revolver's unfunded line and its funded line are both printed.",
+   "evidence": [
+    {"accession": "0000930413-25-003431", "text": "Accel International Holdings Inc (Revolver) 4/26/2032 $ 2,162"},
+    {"accession": "0000930413-25-003431", "text": "Accel International Holdings Inc (Revolver) (7) 3M S + 4.50 % N/A 4/26/2032 - ( 10 ) ( 11 ) -"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9d540e9d7443", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "C04 2025-12-31: '0.0% of 2 equity rows'; my query of equity rows returns c304 (Arkas 888) and c306 (Arkas Two 2), equal to affected_rows. Both have principal_amount 888,000 / 2,000 and no shares. The column header is 'Par Amount/ Common Shares' and the table says 'except share amounts', so the 888 cell may be a count; the tag says dollars. Genuine ambiguity. Minor: the hypotheses text quotes the 890,000 value of later quarters for this quarter too; does not change the conclusion.",
+   "evidence": [
+    {"accession": "0000930413-26-000841", "text": "Equity (6) Personal Care Products Arkas Bidco Limited (5)(11)(12) N/A N/A N/A 888 888 888 0.17"},
+    {"accession": "0000930413-26-001612", "text": "Maturity Date Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7e42a3400714", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "C04 2026-03-31: 1 equity row, c355 Arkas Bidco Limited Equity, principal 890,000, no shares; equals affected_rows. Same ambiguity between unscaled share count and dollar amount in thousands.",
+   "evidence": [{"accession": "0000930413-26-001612", "text": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 890 0.13"}]
+  },
+  {
+   "finding_id": "RVQ_REV_3a0a7439986a", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "C04 2026-06-30: 1 equity row, c383, principal 890,000, FV 929,000; equals affected_rows and the print.",
+   "evidence": [{"accession": "0000930413-26-002499", "text": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 929 0.13"}]
+  },
+  {
+   "finding_id": "RVQ_REV_f25717654bd1", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "Revised to confirmed_error, proposal PD-D06-2008748-8 withdrawn (absent from the proposals file), finding left open. This matches what I found: D06 is fund-level (31/86 issuers at 2026-06-30), 83 of 150 own-book rows carry a 2026-03-31 position id, both filings print 'JFL-Atomic AcquisitionCo, Inc.', and holdings carry the humanised 'JFL Atomic Acquisition Co Inc' / 'Lead Venture Inc' through 2026-03-31. The filer-spelling hypothesis is now rejected on that evidence. The next action names a concrete repair (member-to-printed-name map, with the 2026-06-30 typed comparatives as a source for 2025-12-31) and leaves the decision to the owner. Supported as an investigation; the finding stays outstanding, so the fund cannot sign off on it.",
+   "evidence": [
+    {"accession": "0000930413-26-001612", "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"},
+    {"accession": "0000930413-26-002499", "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.39 % 2/20/2031 45,988 45,412 45,357 6.20"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "typed-member-label-ending-member-read-as-aggregate", "outcome": "supported",
+   "rationale": "fv_conservation fired at 2026-06-30 in laya (RVQ_BLK_4aca7f25ce3a), so a recurrence is caught. The restoration checks out: 150 own-book rows, every one a named position (no Total, industry, lien or subtotal labels, no duplicate issuer/instrument pairs); sum 1,563,657 = printed total; by section first lien 1,460,386, second lien 25,575 (SolarWinds), equity 929, JV 76,767, each equal to its printed subtotal; the 37 JV rows sum to the JV schedule's 333,429. Spot lines (Auctane 50,766, NDT Global DD (154), Spark Buyer DD (1,219)) match.",
+   "evidence": [
+    {"accession": "0000930413-26-002499", "text": "Total First Lien Secured Debt $ 1,464,741 $ 1,460,386 199.47 %"},
+    {"accession": "0000930413-26-002499", "text": "Auctane, Inc. (6th Amendment Incremental Term Loan 2026) 3M S + 5.75 % 9.42 % 6/1/2033 51,532 50,766 50,766 6.93"}
+   ]
+  },
+  {
+   "observation_key": "pct-scale-test-counts-totals-and-lookthrough-rows", "outcome": "supported",
+   "rationale": "PCT02 (RVQ_REV_6e6c43e041cd) and A07 (RVQ_REV_018ad0f71c92) fired at 2025-06-30 in laya; a 100x-small sum lands far outside both bands, so recurrence is caught. Printed 22.06 now published for Security 101.",
+   "evidence": [{"accession": "0000930413-25-002470", "text": "Security 101 (Term Loan) 3M S + 5.00 % 9.30 % 4/11/2028 73,885 73,200 73,423 22.06"}]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published", "outcome": "supported",
+   "rationale": "B01 counts the no-fair-value leaves and fired for these quarters; it is the existing detector. The dash line is printed.",
+   "evidence": [{"accession": "0000930413-24-003190", "text": "BCM One, Inc. (Revolver) (8) 3M S + 4.50% N/A 11/17/2027 - - - -"}]
+  },
+  {
+   "observation_key": "fund-interest-classed-as-loan-without-instrument-word", "outcome": "supported",
+   "rationale": "SBLA now FUND / PRIVATE_CREDIT_FUND in all seven quarters (holdings checked). The proposed check keys on the 'Investments in Joint Venture' industry member or section, a source signal with little false-positive room. Concrete suggested_check present.",
+   "evidence": [{"accession": "0000930413-26-002499", "text": "Investments in Joint Venture (4)(6)(9) SBLA Private Credit LLC (5) N/A N/A N/A 77,101 77,101 76,767 10.49"}]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans", "outcome": "supported",
+   "rationale": "Arkas equity rows now EQUITY_COMMON in the four rows; the proposed section/industry-member check is concrete and the same key is open on 7 funds, so a rule is warranted.",
+   "evidence": [{"accession": "0000930413-26-000841", "text": "Equity (6) Personal Care Products Arkas Bidco Limited (5)(11)(12) N/A N/A N/A 888 888 888 0.17"}]
+  },
+  {
+   "observation_key": "member-names-another-tranche", "outcome": "supported",
+   "rationale": "Published 2025-09-30 Flourish row is now 'Revolver' at 492, matching the print. not_feasible is reasonable: the tag is the only machine signal and it is wrong; the page sample is the backstop. At 2025-03-31 'Delayed Draw 1' is a genuine second delayed draw (two DD lines printed), so the correction is rightly limited to two quarters.",
+   "evidence": [{"accession": "0000930413-25-003431", "text": "Flourish Research Acquistion, LLC (Revolver) (7) 3M S + 5.00 % 9.22 % 11/6/2031 523 468 492 0.12"}]
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip", "outcome": "supported",
+   "rationale": "The spec carries both instrument_description and issuer_name for the two Flourish rows, consistent with the stated workaround. A post-build corrected-field versus correction-file comparison is deterministic and has no false positives by construction.",
+   "evidence": [{"accession": "0000930413-25-002470", "text": "Flourish Research Acquistion, LLC (Revolver) (7) 3M S + 5.00 % N/A 11/6/2031 - ( 57 ) ( 31 ) ( 0.01 )"}]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page", "outcome": "supported",
+   "rationale": "Conversions reproduce with data/reference/fx_fred H.10 rates: 16,762,000 x 1.1518 = 19,306,472 (EUR 2026-03-31), x 1.1417 = 19,137,175 (2026-06-30); 19,733,000 x 0.6855 = 13,526,972 and x 0.6915 = 13,645,370 (AUD). Converted par sits just above FV, as expected. Currency-word-in-member versus usd unit is a concrete check.",
+   "evidence": [{"accession": "0000930413-26-002499", "text": "Meta Buyer LLC (Term Loan 2025 EUR) 3M E + 5.25 % 7.33 % 12/22/2031 16,762 19,445 18,984 2.59"}]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed", "outcome": "supported",
+   "rationale": "Now propose_detector; the rationale correctly says printed_rates_check.py is a diagnostic the gate does not call. The suggested_check (date-guessed rate whose printed code, as read by the field-status reader, is a different benchmark) is concrete and would have flagged the two Prime revolvers at 2026-06-30. False positives are limited to rows where the reader misreads the code. The fixes were verified in round 1 (MGS and Leg Purchaser print P).",
+   "evidence": [
+    {"accession": "0000930413-26-002499", "text": "Leg Purchaser Inc (Revolver) (7)(5) 3M P + 4.25 % 11.00 % 1/12/2032 1,924 1,878 1,924 0.26"},
+    {"accession": "0000930413-26-001612", "text": "MGS MFG. Group, Inc. (Revolver) (7) 1M P + 3.50 % 10.25 % 12/31/2028 1,564 1,557 1,534 0.23"}
+   ]
+  },
+  {
+   "observation_key": "spread-printed-not-tagged-published-fixed", "outcome": "supported",
+   "rationale": "142 spec entries = 33 + 49 + 60 corrected rows in holdings. Seven sampled (seed 20261017 plus GCOM, Schoeneck) all match the current-period printed line, not the comparative one (e.g. BCM One DD 2025-03-31: 6M S + 4.50% at 4,750, not the 1M S line at 4,762; Schoeneck revolver PRIME 3.75). Proposed check is concrete.",
+   "evidence": [
+    {"accession": "0000930413-25-001811", "text": "BCM One, Inc. (Delayed Draw) 6M S + 4.50% 8.74 % 11/17/2027 4,750 4,750 4,750 1.76"},
+    {"accession": "0000930413-24-003190", "text": "Schoeneck Containers, LLC (Revolver) (8) 3M P + 3.75% 11.75 % 5/7/2025 341 341 332 0.26"}
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page", "outcome": "supported",
+   "rationale": "Reproduced: extracted_industry is filled on 0 of 33/50/61/71/77/122/141 own-book rows for 2024-09-30 to 2026-03-31 and 149 of 150 at 2026-06-30. The fill-rate comparison is mechanical. Parking is honest, since the repair is shared code.",
+   "evidence": [{"accession": "0000930413-26-001612", "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"}]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page", "outcome": "supported",
+   "rationale": "layf: the decision now states what I measured: the candidate rule cannot see these filings because printed_row is empty for every row from 2024-09-30 to 2026-03-31, and run on laye it flags none of the humanised names. It names a concrete way to give the check page access: match the printed line by maturity, cost and fair value as gen_spread_specs.py does, which located 142 of 142 rows in this run and agreed with my 7-row sample. With the row-level suggested_check this is an honest, specific proposal. The defect itself stays parked and published (D06 confirmed_error remains open). Earlier rounds' text follows for the record. r3: the suggested_check is now right in concept (a row-by-row comparison with the row's own printed line), and the reference exists: pipeline/candidate_rules.py issuer_name_differs_from_page at 6751318, unmerged and not switched on. But I ran that rule read-only on laye and it catches none of this observation's rows. printed_row (joined from bdc_ixbrl_field_status by accession and member text) is null for every row from 2024-09-30 to 2026-03-31 (0 of 33, 50, 61, 71, 77, 122 and 141 rows), against 139 of 150 at 2026-06-30. The explicit members of those filings do not match a printed line, so the page test is never comparable and the shape fallback passes the humanised names. Result: 0 flags for 'JFL Atomic Acquisition Co Inc', 'Lead Venture Inc' or 'Com Psych Investment Corp'; the only flags are two other rows at 2025-12-31 (see unreported_error_found). For a recurrence of this mechanism (explicit-member filings) the cited detector would stay silent, which is the gap the observation is about. To be supported, the decision must say the candidate rule cannot see explicit-member filings and name what would give it page access for them (e.g. matching printed lines by maturity, cost and value as gen_spread_specs.py does), or record not_feasible for this filer. Round-2 text kept below for the record. Round 2: Decision changed to propose_detector, but the proposal still does not hold together. (1) The suggested_check is unchanged: 'D06 issuer continuity below 50 pct while position-id continuity stays above 50 pct'. That fires only on the quarter the form changes, which is exactly the gap the rationale names ('not while the wrong humanised form is stable'), so as written it would not catch the stable wrong names of 2024-09-30 to 2026-03-31. (2) The rationale describes a different check (row-level published issuer versus the printed name), and the reference cites 'candidate rule issuer-name-differs-from-page (built and measured 2026-10-17, not yet switched on)'. I found no such rule or script in pipeline/, scripts/, tests/ or scratch/; that key exists only as an observation in docs/investigations/v05_observations.csv. Fix: make the suggested_check the row-level printed-name comparison the rationale describes, and either point the reference at an artifact that exists or drop the 'built and measured' claim.",
+   "evidence": [{"accession": "0000930413-26-001612", "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"}]
+  },
+  {
+   "observation_key": "gics-label-depends-on-build-composition", "outcome": "supported",
+   "rationale": "Now propose_detector, with the reference saying plainly 'no rule yet'; scripts/v05_evidence/regression_check.py exists to supply the build pairing. The revised suggested_check (same fund built alone and in its cohort sandbox; GICS differs while issuer_name, entity_id and extracted_industry are equal) is deterministic, and its conditions exclude the legitimate causes of a label change. Matches the SolarWinds case (Information Technology in sponfb, none in a one-fund build).",
+   "evidence": [{"accession": "0000930413-26-002499", "text": "Software SolarWinds Holdings, Inc. (Term Loan) 3M S + 6.00 % 9.67 % 4/18/2033 31,000 30,001 25,575 3.49"}]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page", "outcome": "supported",
+   "rationale": "layf_r2: now propose_detector. The rationale states that the gate's names check let all 17 through, so it is not a detector for them, and that the candidate rule cannot see this filer's pre-2026-06-30 rows without page access. The revised suggested_check (list every row whose issuer_name still holds a tranche word, which needs no page, or differs from the printed name) would have caught all 17 and does not depend on a share bar. The round-1 layf assessment of the fix follows, and still stands. The fix holds. Diff laye to layf (scratch/fund_runs/0002008748/reviewer/diff_layf.py): exactly 17 issuer_name changes, all of the same kind; tranche words are moved into the instrument, and fair value, percent, spread, class and principal are unchanged on every row. Spot checks on the page match: Radwell DD 2024 Term Loan 926, Lighthouse 4th Amendment Term Loan 2025, MGS 1st Amendment Term Loan 2026, Qualus DD 2025 Term Loan / Term Loan 2, Accession DD Term 1,237. Some instruments still carry humanised spacing ('Delayed Draw 20264 th Amendment Term Loan', '1 st Amendment'); that is the parked humanised-text issue, not this fix. The detection decision does not hold. existing_detector cites the gate's names check, but the rationale says that check 'passed because they were under its 1 pct bar'. A detector that let all 17 through does not catch a recurrence below the bar; the suggested_check itself says a row-level list is what would show them. Should be propose_detector (a row-level tranche-word-in-issuer list), the same standard applied to the reference-rate and GICS observations in r1.",
+   "evidence": [
+    {"accession": "0000930413-26-001612", "text": "Radwell Parent, LLC (Delayed Draw 2024 Term Loan) 3M S + 4.75 % 8.45 % 4/1/2030 928 926 926 0.14"},
+    {"accession": "0000930413-26-001612", "text": "Lighthouse Technologies Holding Corp (4th Amendment Term Loan 2025) 3M S + 5.00 % 8.67 % 12/31/2029"}
+   ]
+  },
+  {
+   "observation_key": "position-chain-links-rows-of-different-size", "outcome": "supported",
+   "rationale": "This matches my chain read. 2026-06-30 c94 (Term Loan D, (5)) carries Term Loan C's id from 2025-12-31 c78 and 2026-03-31 c74; the real Term Loan C c92 (240) and Term Loan B c90 (640) start new ids. In laye, Term Loan D had its own id. The printed lines quoted in parked agree with the page: 2026-03-31 Term Loan C '- ( 4 ) ( 3 )'; 2026-06-30 Term Loan B 652 / 640, Term Loan C 249 / 240, Term Loan D '- ( 4 ) ( 5 )'. The cause stated (after the strip all quarters share one issuer string, and the undrawn D looks like the undrawn C of the quarter before) fits laye versus layf. 'left' is honest: the published values are right, and the repair (a reject directive in the existing data/overrides/position_match_overrides lane, then a replay) needs a rebuild and is recorded in parked and not_done. The proposed check (tranche letter or vintage changes along a chain, or a chain that skips a same-issuer row with identical instrument text) is mechanical, would flag C->D here, and lists rather than repairs, so false positives cost reading only. Residual: identity for these Ambient tranches stays wrong in layf until that rebuild.",
+   "evidence": [
+    {"accession": "0000930413-26-002499", "text": "Ambient Enterprises Holdco LLC, (Delayed Draw 2026 Term Loan D) (7) 3M S + 5.50 % N/A 6/28/2030 - ( 4 ) ( 5 )"},
+    {"accession": "0000930413-26-001612", "text": "(Delayed Draw 2025 Term Loan C) (7) 3M S + 5.25 % N/A 6/28/2030 - ( 4 ) ( 3 )"}
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name", "outcome": "supported",
+   "rationale": "Verified on the page. 2025-12-31 c70 and c72 print as Ambient Enterprises Holdco LLC, (Term Loan 2025 2nd / 3rd Amendment) at 379 and 308, but publish issuer 'Commercial Services Supplies' with no instrument. Both rows carry bdc_investment_identifier 'Commercial Services Supplies' in the same accession, and the row-correction spec keys on quarter plus identifier, so a correction cannot separate them; leaving them is justified. Databricks 2025-06-30 c176 and 2025-09-30 c190 now publish 'Term Loan', as printed (20,211 and 20,313), and keep their position chain. The proposed check (issuer equal to an industry label of the same filing, or an industry member naming a tranche) is deterministic. The candidate rule's equals_industry_label kind already found exactly the two Ambient rows on laye, a check independent of q32.sql. Residual: 0.7M published under the wrong issuer, and the 2025-12-31 Ambient amendment rows do not chain to 2026-03-31.",
+   "evidence": [
+    {"accession": "0000930413-26-000841", "text": "Ambient Enterprises Holdco LLC, (Term Loan 2025 3rd Amendment) 3M S + 5.25 % 8.92 % 6/28/2030 311 306 308 0.06"},
+    {"accession": "0000930413-25-002470", "text": "Databricks Inc (Term Loan) 1M S + 4.50 % 8.82 % 1/3/2031 20,313 20,219 20,211 6.07"}
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "corrections_check": "Spec scripts/v05_evidence/row_correction_specs/0002008748.json has 163 entries (142 spread/ref/coupon, 7 SBLA reclass, 4 Arkas, 2 Flourish, 4 Meta Buyer FX, 4 PRIME). Sampled 7 spread entries, all FX entries, SBLA, Arkas and the PRIME revolvers against printed lines and H.10 rates: no exceptions. The 2026-06-30 EUR loan gets EURIBOR from ixbrl_field_status, not a correction."
+}

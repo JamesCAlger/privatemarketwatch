@@ -1,0 +1,307 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "layf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-pct_position_concentration-2008748-1",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "reason_key": "concentration-large-loan-of-a-young-levered-fund-as-printed",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "statement": "The three rows above a quarter of net assets at 2024-09-30 are loans printed so in the fund's first schedule: Playpower 42,790 (33.36 %), GCOM 39,505 (30.79 %), Continental Buyer 32,484 (25.32 %), on net assets of 128,293 and investments of 313,562 (244.41 %). Each published percent equals the printed one and the tagged ratio times 100. No fix applies: nothing is mis-scaled; the fund was three months old and levered.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000930413-24-003190",
+     "verbatim": "Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %",
+     "quote": "'Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %': printed 33.36 pct; published 33.36."
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-24-003190",
+     "verbatim": "GCOM 3M S + 7.50% 12.89 % 8/1/2031 39,899 39,505 39,505 30.79",
+     "quote": "'GCOM 3M S + 7.50% 12.89 % 8/1/2031 39,899 39,505 39,505 30.79': printed 30.79; published 30.79."
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-24-003190",
+     "verbatim": "Continental Buyer Inc 3M S + 5.25% 9.85 % 4/2/2031 32,484 32,021 32,484 25.32",
+     "quote": "'Continental Buyer Inc 3M S + 5.25% 9.85 % 4/2/2031 32,484 32,021 32,484 25.32': printed 25.32; published 25.32."
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-24-003190",
+     "verbatim": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %",
+     "quote": "'Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %': a levered fund; published sum 244.41."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002008748.json and scratch/fund_runs/0002008748/",
+   "decided_by": "PROPOSED by agent lordabbett_fund_agent_2026-10-17 (fund-clearing loop, sandbox laye); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-pct_position_concentration-2008748-2",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "reason_key": "concentration-jv-lookthrough-row-percent-of-jv-net-assets",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Every row above 25 pct in these quarters is a look-through row of the SBLA Private Credit LLC joint-venture schedule (accounting_record_class underlying_schedule, not published): its percent is of the joint venture's own net assets, as the JV schedule prints it (Seakeeper 33.14 at 2025-06-30; Trimont 39.50, 36.42, 34.00; Iris Acquisition 31.59 at 2026-06-30). No own-book row exceeds 22.06 pct in any of these quarters. No fix applies: the percent is printed so and the rows are retained-and-flagged, not published.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "SBLA Private Credit LLC Schedule of Investments June 30, 2025 (in thousands, except share amounts, per share data, and as otherwise noted) Investments (1) Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Units Cost (3) Fair Value % of Net Assets",
+     "quote": "the JV's own schedule, whose percent column is of the JV's net assets"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "Seakeeper Technologies LLC (Term Loan) 3M S + 2.75 % 7.51 7/19/2027 18,500 18,321 18,321 33.14",
+     "quote": "'Seakeeper Technologies LLC (Term Loan) 3M S + 2.75 % 7.51 7/19/2027 18,500 18,321 18,321 33.14': JV row, 33.14 pct of the JV."
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-003431",
+     "verbatim": "Trimont Holdings LLC (Term Loan) 1M S + 3.00 % 7.16 % 5/31/2027 $ 26,600 $ 26,364 $ 26,334 39.50 %",
+     "quote": "'Trimont Holdings LLC (Term Loan) 1M S + 3.00 % 7.16 % 5/31/2027 $ 26,600 $ 26,364 $ 26,334 39.50 %': JV row at 2025-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-26-000841",
+     "verbatim": "Trimont Holdings LLC (Term Loan) 1M S + 2.75 % 6.47 % 3/1/2030 $ 25,900 $ 25,704 $ 25,641 36.42 %",
+     "quote": "'Trimont Holdings LLC (Term Loan) 1M S + 2.75 % 6.47 % 3/1/2030 $ 25,900 $ 25,704 $ 25,641 36.42 %': JV row at 2025-12-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-26-001612",
+     "verbatim": "Trimont Holdings LLC (Term Loan) 3M S + 2.75 % 6.45 % 5/31/2027 25,200 25,042 24,948 34.00",
+     "quote": "'Trimont Holdings LLC (Term Loan) 3M S + 2.75 % 6.45 % 5/31/2027 25,200 25,042 24,948 34.00': JV row at 2026-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-26-002499",
+     "verbatim": "Iris Acquisition, LLC (Term Loan) 1M S + 5.00 % 8.61 % 6/9/2033 28,000 27,720 27,720 31.59",
+     "quote": "'Iris Acquisition, LLC (Term Loan) 1M S + 5.00 % 8.61 % 6/9/2033 28,000 27,720 27,720 31.59': JV row at 2026-06-30."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002008748.json and scratch/fund_runs/0002008748/",
+   "decided_by": "PROPOSED by agent lordabbett_fund_agent_2026-10-17 (fund-clearing loop, sandbox laye); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-PCT01-2008748-3",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PCT01",
+   "reason_key": "pct01-percent-sum-is-the-printed-total-of-a-levered-fund",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "statement": "The published-basis percent sums (244.41, 232.18, 257.44, 226.60, 248.07) equal the filer's printed 'Total Investments' percent of net assets in each quarter; the fund borrows, and investments run 210 to 257 pct of net assets in all eight quarters. Published fair value equals the filed investments total in all eight quarters. No fix applies: no percent is mis-scaled (2025-06-30 was, and is fixed by pct_tagged_as_ratio).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000930413-24-003190",
+     "verbatim": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %",
+     "quote": "printed 244.41 at 2024-09-30; published sum 244.41"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-000900",
+     "verbatim": "Total Investments at Fair Value (9) $ 471,418 $ 472,588 232.",
+     "quote": "printed 232.18 at 2024-12-31; published sum 232.18"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "Total Investments (8) $ 856,319 $ 856,850 257.44 %",
+     "quote": "printed 257.44 at 2025-06-30; published sum 257.44"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-003431",
+     "verbatim": "Total Investments (8) $ 949,025 $ 950,464 226.60 %",
+     "quote": "printed 226.60 at 2025-09-30; published sum 226.60"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-26-000841",
+     "verbatim": "Total Investments (8) $ 1,312,388 $ 1,309,928 248.07 %",
+     "quote": "printed 248.07 at 2025-12-31; published sum 248.07"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002008748.json and scratch/fund_runs/0002008748/",
+   "decided_by": "PROPOSED by agent lordabbett_fund_agent_2026-10-17 (fund-clearing loop, sandbox laye); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-A07-2008748-4",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "reason_key": "a07-outlier-percent-is-the-printed-row",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "statement": "A07 warns at 2024-09-30 because three rows exceed 25 pct of net assets (Playpower 33.36, GCOM 30.79, Continental Buyer 25.32); each equals the printed percent, and the sum 244.41 equals the printed total and is inside the check's 250 band. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000930413-24-003190",
+     "verbatim": "Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %",
+     "quote": "printed outlier row equal to published"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-24-003190",
+     "verbatim": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %",
+     "quote": "printed total equal to the published sum"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002008748.json and scratch/fund_runs/0002008748/",
+   "decided_by": "PROPOSED by agent lordabbett_fund_agent_2026-10-17 (fund-clearing loop, sandbox laye); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-A07-2008748-5",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "reason_key": "a07-percent-sum-is-the-printed-total-of-a-levered-fund",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "statement": "A07 fails at 2025-06-30 because the percent sum, 257.44, is above its 250 band. That is the printed total: investments of 856,850 on net assets of 332,815. Before this run the sum was 2.57 (percents published 100 times too small) and is fixed by pct_tagged_as_ratio for 0000930413-25-002470. No further fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "Total Investments (8) $ 856,319 $ 856,850 257.44 %",
+     "quote": "printed 257.44; published sum 257.44"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "Total net assets $ 332,815 $ 203,539",
+     "quote": "856,850 / 332,815 = 257.4 pct"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002008748.json and scratch/fund_runs/0002008748/",
+   "decided_by": "PROPOSED by agent lordabbett_fund_agent_2026-10-17 (fund-clearing loop, sandbox laye); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-B01-2008748-6",
+   "class": "false_alarm",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "reason_key": "b01-unfunded-commitment-table-rows-not-positions",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "In the 10-Qs for 2025-06-30 and 2025-09-30 the leaves B01 counts without a fair value (70 and 72) are not positions. 65 and 67 are typed InvestmentIdentifierAxis contexts ('Accel International Holdings Inc (Revolver)') that carry only InvestmentMaturityDate and lordabbett:UnfundedLoanCommitment: the rows of the schedule's unfunded-commitments table (columns 'Investments Maturity Date Unfunded'), current and prior year-end. Each current-period one names a line the schedule prints and the build publishes from its explicit-member context (all 39 and 41 matched by issuer and tranche, Flourish's revolver under its 'Delayed Draw 1' member). The other 5 a quarter are explicit-member contexts of the prior year-end comparative schedule (period 2024-12-31), undrawn lines printed with a dash. No fix applies: publishing them would duplicate published lines; the 37 own-period dash lines are now published at 0.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "Investments Maturity Date Unfunded Accel International Holdings Inc (Revolver) 4/26/2032 $ 2,16",
+     "quote": "the unfunded-commitments table; c346 carries maturity 2032-04-26 and UnfundedLoanCommitment 2,162,000 only"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "Accel International Holdings Inc (Revolver) (7) 3M S + 4.50 % N/A 4/26/2032 - ( 11 ) ( 11 ) -",
+     "quote": "the same line in the schedule, published from the explicit member (fair value -11,000)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-003431",
+     "verbatim": "Accel International Holdings Inc (Revolver) 4/26/2032 $ 2,162",
+     "quote": "the table row at 2025-09-30"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002008748.json and scratch/fund_runs/0002008748/",
+   "decided_by": "PROPOSED by agent lordabbett_fund_agent_2026-10-17 (fund-clearing loop, sandbox laye); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-C04-2008748-7",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "reason_key": "c04-equity-count-cell-equals-cost-tagged-as-dollar-par",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The fund's only equity, Arkas Bidco Limited (reclassed from loan in this run), prints a figure in the 'Par Amount/Common Shares' column equal to its cost (888 and 2 at 2025-12-31, 890 later) and the filer tags that figure as InvestmentOwnedBalancePrincipalAmount in dollars (890,000 usd, decimals -3), not as a share count. Whether it is a count of shares (the table prints share amounts unscaled) or a dollar amount in thousands cannot be told from the filing. No fix applies without a guess; no unit count is published.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000930413-26-001612",
+     "verbatim": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 890 0.13",
+     "quote": "the count cell (890) equals cost and fair value"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-26-000841",
+     "verbatim": "Par Amount/ Common Shares Cost (3) Fair Value % of Net Assets Personal Care Products Arkas",
+     "quote": "column header 'Par Amount/ Common Shares'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-26-002499",
+     "verbatim": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 929 0.13",
+     "quote": "2026-06-30: count cell 890, value 929; tag InvestmentOwnedBalancePrincipalAmount 890000 usd"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002008748.json and scratch/fund_runs/0002008748/",
+   "decided_by": "PROPOSED by agent lordabbett_fund_agent_2026-10-17 (fund-clearing loop, sandbox laye); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  }
+ ]
+}

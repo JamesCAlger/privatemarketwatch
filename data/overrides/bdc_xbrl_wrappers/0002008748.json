@@ -68,6 +68,18 @@
         "family": "debt"
       },
       {
+        "regex": "(?i)^\\s*(?!(?:sub[-\\s]*)?total\\b)\\S.*?\\((?:[^()]*\\s)?(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Incremental)\\b[^()]*\\)(?:\\s+\\d{1,2})?\\s+\\[Member\\]\\s*$",
+        "family": "debt"
+      },
+      {
+        "regex": "(?i)^\\s*(?!Equity\\s+\\[Member\\])\\S.*?\\sEquity\\s+\\[Member\\]\\s*$",
+        "family": "equity"
+      },
+      {
+        "regex": "(?i)^\\s*SBLA\\s+Private\\s+Credit\\s+LLC\\s+\\[Member\\]\\s*$",
+        "family": "mixed"
+      },
+      {
         "regex": "(?i)^\\s*(?:First|Second)\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?\\s*$",
         "family": "debt"
       },
@@ -78,13 +90,20 @@
       {
         "regex": "(?i)^\\s*Total\\s+(?:First\\s+Lien\\s+Secured\\s+Debt(?:-non-controlled/non-aff?iliated)?|Second\\s+Lien\\s+Secured\\s+Debt|Equity|Investments(?:\\s+at\\s+Fair\\s+Value|\\s+in\\s+Joint\\s+Venture)?)\\s*$",
         "family": "mixed"
+      },
+      {
+        "regex": "(?i)^\\s*(?![^\\[]*\\b(?:LLC|L\\.L\\.C|Inc|Corp|Corporation|Co|Ltd|Limited|LP|L\\.P|plc|Holdings?|Holdco|Group|GmbH|S\\.?a\\.?r\\.?l|Buyer|Purchaser|Parent|Borrower|Acquisition)\\b)[^()\\[\\]]+\\[Member\\]\\s*$",
+        "family": "mixed"
       }
     ],
     "category_marker_re": "(?i)^\\s*(?:First\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Second\\s+Lien\\s+Secured\\s+Debt(?:\\s+\\[Member\\])?|Equity\\s+\\[Member\\]|Total\\s+(?:First\\s+Lien\\s+Secured\\s+Debt(?:-non-controlled/non-aff?iliated)?|Second\\s+Lien\\s+Secured\\s+Debt|Equity|Investments(?:\\s+at\\s+Fair\\s+Value|\\s+in\\s+Joint\\s+Venture)?))\\s*$",
     "category_marker_before_total": true,
     "bare_entity_rows": "positions",
-    "issuer_name_strip_re": "(?i)\\s+(?:Incremental\\s+)?(?:Delayed\\s+Draw(?:\\s+Term\\s+Loan)?|Term\\s+Loan|Revolver)(?:\\s+(?:[A-C]|One|Two|Three|USD|EUR|AUD|GBP|CAD|\\d{1,2}|20\\d\\d|20\\d\\d\\d|\\d\\s*(?:st|nd|rd|th)\\s+Amendment))*\\s*$",
-    "issuer_name_strip_to_instrument": true
+    "issuer_name_strip_re": "(?i)\\s+(?:\\d\\s*(?:st|nd|rd|th)\\s+Amendment\\s+|\\d\\s+Incremental\\s+|Incremental\\s+)?(?:Delayed\\s+Draw(?:\\s+Term(?:\\s+Loan)?)?|Term\\s+Loan|Revolver)(?:\\s+(?:[A-C]|One|Two|Three|USD|EUR|AUD|GBP|CAD|\\d{1,2}|20\\d\\d|20\\d\\d\\d|2\\d{4}|20\\d\\d\\d\\s*(?:st|nd|rd|th)\\s+Amendment|\\d\\s*(?:st|nd|rd|th)\\s+Amendment|Term\\s+Loan))*\\s*$|\\s+\\d\\s*(?:st|nd|rd|th)\\s+Amendment\\s*$|,?\\s*\\([^()]*\\)(?:\\s+\\d{1,2})?\\s+\\[Member\\]\\s*$|\\s+\\[Member\\]\\s*$",
+    "issuer_name_strip_to_instrument": true,
+    "instrument_description_strip_re": "(?i)[()]|\\s*\\[Member\\]\\s*$",
+    "instrument_description_strip_may_empty": true,
+    "leaf_marker_re": "(?i)\\S\\s+Equity\\s+\\[Member\\]\\s*$|^\\s*SBLA\\s+Private\\s+Credit\\s+LLC\\s+\\[Member\\]\\s*$"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -209,6 +228,13 @@
       "first_seen_quarter": "2024-12-31",
       "detection_pattern": "SBLA Private Credit LLC",
       "disposition": "expected"
+    },
+    {
+      "id": "LORD_ABBETT_TYPED_MEMBER_LABEL_ROWS_2026Q2",
+      "description": "From the 10-Q for 2026-06-30 (0000930413-26-002499) the filer drops srt:OwnershipAxis / EquitySecuritiesByIndustryAxis and tags every row, positions and subtotals alike, on the typed us-gaap:InvestmentIdentifierAxis with the label text literally ending ' [Member]' ('Vacation Rental Brands, LLC (Term Loan 2025) [Member]', industry subtotals 'Real Estate Management & Development [Member]', 'Software 1 [Member]'). The shared aggregate filter treats any '[member]' text as a rollup, so only rows also matching the older space-before-token pattern survived (17 of 179). Three fallback patterns plus leaf_marker_re route '<issuer> (<tranche>) [n] [Member]', '<issuer> Equity [Member]' and 'SBLA Private Credit LLC [Member]' to *_position_leaf; industry, lien and total [Member] rows stay rollups. issuer_name_strip_re cuts '(<tranche>) [Member]' into the instrument; instrument_description_strip_re removes the parentheses and the ' [Member]' tail.",
+      "first_seen_quarter": "2026-06-30",
+      "detection_pattern": "typed InvestmentIdentifierAxis value ending ' [Member]'",
+      "disposition": "expected"
     }
   ],
   "invariants": {
@@ -219,6 +245,48 @@
   "source_encodings": {
     "context_identifiers": [
       "0000930413-26-001612 c355 => Arkas Bidco Limited Equity"
+    ],
+    "pct_tagged_as_ratio": [
+      "0000930413-25-002470"
+    ],
+    "untagged_values": [
+      "0000930413-24-003190 c59 fair_value 0",
+      "0000930413-24-003190 c41 fair_value 0",
+      "0000930413-24-003190 c43 fair_value 0",
+      "0000930413-24-003190 c36 fair_value 0",
+      "0000930413-24-003190 c9 fair_value 0",
+      "0000930413-24-003190 c71 fair_value 0",
+      "0000930413-25-000900 c88 fair_value 0",
+      "0000930413-25-000900 c62 fair_value 0",
+      "0000930413-25-000900 c64 fair_value 0",
+      "0000930413-25-000900 c57 fair_value 0",
+      "0000930413-25-000900 c100 fair_value 0",
+      "0000930413-25-001811 c111 fair_value 0",
+      "0000930413-25-001811 c128 fair_value 0",
+      "0000930413-25-001811 c77 fair_value 0",
+      "0000930413-25-001811 c137 fair_value 0",
+      "0000930413-25-001811 c58 fair_value 0",
+      "0000930413-25-001811 c123 fair_value 0",
+      "0000930413-25-002470 c118 fair_value 0",
+      "0000930413-25-002470 c134 fair_value 0",
+      "0000930413-25-002470 c98 fair_value 0",
+      "0000930413-25-002470 c74 fair_value 0",
+      "0000930413-25-002470 c82 fair_value 0",
+      "0000930413-25-002470 c154 fair_value 0",
+      "0000930413-25-003431 c146 fair_value 0",
+      "0000930413-25-003431 c192 fair_value 0",
+      "0000930413-25-003431 c120 fair_value 0",
+      "0000930413-25-003431 c666 fair_value 0",
+      "0000930413-25-003431 c162 fair_value 0",
+      "0000930413-25-003431 c168 fair_value 0",
+      "0000930413-26-000841 c20 fair_value 0",
+      "0000930413-26-000841 c182 fair_value 0",
+      "0000930413-26-000841 c286 fair_value 0",
+      "0000930413-26-000841 c246 fair_value 0",
+      "0000930413-26-000841 c274 fair_value 0",
+      "0000930413-26-000841 c112 fair_value 0",
+      "0000930413-26-000841 c194 fair_value 0",
+      "0000930413-26-000841 c204 fair_value 0"
     ]
   }
 }

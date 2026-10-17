@@ -253,5 +253,10 @@
   "label": "nmyd",
   "accepted_on": "2026-10-17",
   "basis": "D-204, gate PASS: 59 outstanding, all proposed; 14/14 quarters tie (five were off before); investigation COMPLETE after three independent reviews; sample 0/20 errors; NMY-R1 re-verifier fix (4b579bf); four builds"
+ },
+ "0002008748": {
+  "label": "layf",
+  "accepted_on": "2026-10-17",
+  "basis": "D-205, gate INCOMPLETE with investigation COMPLETE (five review rounds): 19 outstanding, 18 proposed, D06 2026-06-30 a confirmed error (humanised issuer names to 2026-03-31); 8/8 quarters tie (2026-06-30 was 1,437.6M under); sample 0/20 errors on laye; Ambient two rows and C/D chain mislink left; six builds"
  }
 }

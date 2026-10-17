@@ -1152,6 +1152,18 @@ if NMFSLF_LOOP in held and NMFSLF_LOOP_FILE.exists():
         if spec.get("exact"):
             EXACT.add(spec["identifier"])
 
+# Lord Abbett Private Credit, fund-clearing loop (2026-10-17): the fund's joint-venture interest and its Arkas equity
+# lines published as direct loans (their members name no instrument). One spec per row, each with its printed line, in
+# row_correction_specs/0002008748.json.
+LORDABBETT_LOOP = "0002008748"
+LORDABBETT_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0002008748.json"
+if LORDABBETT_LOOP in held and LORDABBETT_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(LORDABBETT_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((LORDABBETT_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-2008748-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue
