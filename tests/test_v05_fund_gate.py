@@ -14,6 +14,70 @@ CIK = "0001234567"
 ACC = "0001234567-25-000001"
 
 
+def test_investigation_validator_is_forbidden_to_fund_agents():
+    assert any(re.search(pattern, "scripts/v05_evidence/investigation_review.py")
+               for pattern in fund_gate.FORBIDDEN)
+
+
+def test_investigation_ledger_binding_retains_state_and_verdict_details(sandbox):
+    import csv
+    root = sandbox / "audit"
+    root.mkdir()
+    rows = [{"review_id": "f1", "cik": CIK, "report_date": "2025-12-31",
+             "state": "real_error_unremediated", "engine": "row_validation",
+             "rule_name": "X11", "verdict_detail": "source context A"}]
+    with (root / "findings_ledger.csv").open("w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=rows[0])
+        writer.writeheader()
+        writer.writerows(rows)
+    result = fund_gate.outstanding_findings("audit", CIK)
+    assert result[0]["finding_id"] == "f1"
+    assert result[0]["verdict_detail"] == "source context A"
+    assert result[0]["state"] == "real_error_unremediated"
+
+
+def test_investigation_verifies_request_quotes_against_cache(sandbox, monkeypatch):
+    import investigation_review
+    monkeypatch.setattr(fund_gate, "outstanding_findings", lambda *args: [])
+    monkeypatch.setattr(investigation_review, "check_investigation",
+                        lambda *args: {"ok": True, "status": "COMPLETE", "problems": []})
+    report = {"orchestrator_requests": [{"evidence": [{"accession": ACC,
+               "text": "Acme Holdings invented amount 999999"}]}]}
+    assert not fund_gate.investigation_check("audit", CIK, report, None)["ok"]
+    report["orchestrator_requests"][0]["evidence"][0]["text"] = "Acme Holdings, Inc. First lien EUR 40,000"
+    assert fund_gate.investigation_check("audit", CIK, report, None)["ok"]
+
+
+def test_read_only_investigation_cli_blocks_without_rewriting_gate(sandbox, monkeypatch):
+    report = sandbox / "report.json"
+    report.write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(fund_gate, "investigation_check", lambda *args: {
+        "ok": False, "status": "INVESTIGATION_INCOMPLETE", "problems": ["missing review"]})
+    assert fund_gate.main(["investigation", "--label", "audit", "--cik", CIK,
+                           "--report", str(report)]) == 4
+    assert not (sandbox / "audit").exists()
+
+
+@pytest.mark.parametrize("complete,expected", [(False, 4), (True, 0)])
+def test_full_gate_cannot_pass_without_complete_investigation(sandbox, monkeypatch, complete, expected):
+    report = sandbox / "report.json"
+    report.write_text(json.dumps({"observations": [], "orchestrator_requests": []}), encoding="utf-8")
+    (sandbox / "audit").mkdir()
+    monkeypatch.setattr(fund_gate, "investigation_check", lambda *args: {
+        "ok": complete, "status": "COMPLETE" if complete else "INVESTIGATION_INCOMPLETE",
+        "problems": [] if complete else ["missing review"]})
+    for name in ("check_stages", "check_corrections", "check_quotes", "check_files", "check_names"):
+        monkeypatch.setattr(fund_gate, name, lambda *args: {"ok": True})
+    monkeypatch.setattr(fund_gate, "check_totals", lambda *args: {
+        "ok": True, "tie": 1, "quarters": 1, "basis": "ex_cash"})
+    monkeypatch.setattr(fund_gate, "check_ledger", lambda *args: {
+        "ok": True, "unanswered_verdicts": [], "findings": 1, "outstanding": 1,
+        "with_proposal": 1, "uncovered": []})
+    assert fund_gate.main(["check", "--label", "audit", "--cik", CIK, "--report", str(report)]) == expected
+    saved = json.loads((sandbox / "audit" / ("gate_" + CIK + ".json")).read_text())
+    assert saved["investigation"]["ok"] is complete
+
+
 @pytest.fixture
 def sandbox(tmp_path, monkeypatch):
     monkeypatch.setattr(fund_gate, "SANDBOXES", tmp_path)

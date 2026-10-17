@@ -27,7 +27,8 @@ decides, without judgment, whether the agent's run can be accepted:
                more is declared in "name_shape_exceptions" with a count and a reason
   ledger       every outstanding finding of the fund is covered by a written proposal
 
-Verdict: PASS, INCOMPLETE (clean, but findings without a proposal remain), FAIL, or
+Verdict: PASS, INCOMPLETE (investigated, but findings without a proposal remain), FAIL,
+INVESTIGATION_INCOMPLETE (exit 4; missing coverage/evidence/independent review), or
 NEEDS_ORCHESTRATOR (clean, and the report asks for a change the agent may not make: a check, the
 re-verifier, a rule). Written to scratch/fund_sandbox/<label>/gate_<cik>.json. Exit code 0, 1, 2, 3.
 
@@ -73,6 +74,7 @@ FORBIDDEN = (r"^AGENTS\.md$", r"^CLAUDE\.md$", r"^\.claude/skills/", r"^data/ref
              r"^pipeline/provenance_reverify\.py$", r"^pipeline/validate_holdings\.py$", r"^scripts/findings_ledger\.py$",
              r"^scripts/shadow_", r"^scripts/fund_ledger_trial\.py$", r"^scripts/v05_evidence/fund_gate\.py$",
              r"^scripts/v05_evidence/make_batch_dispositions\.py$")
+FORBIDDEN += (r"^scripts/v05_evidence/investigation_review\.py$",)
 SHARED_CODE = (r"^pipeline/.*\.py$", r"^scripts/(?!v05_evidence/).*\.py$", r"^schemas/")
 
 
@@ -323,6 +325,52 @@ def check_files(snapshot_path: str | None, report: dict) -> dict:
     return {"ok": not problems, "problems": problems, "changed": changed, "shared_code": shared}
 
 
+def outstanding_findings(label: str, cik: str) -> list[dict]:
+    """Current ledger identities, independent of the investigator's claimed coverage."""
+    csv.field_size_limit(10 ** 9)
+    proposals = _proposals(cik)
+    with open(SANDBOXES / label / "findings_ledger.csv", newline="", encoding="utf-8-sig") as fh:
+        return sorted(({
+            **row, "finding_id": row["review_id"], "engine": row["engine"],
+            "rule_name": row["rule_name"], "report_date": row["report_date"][:10],
+            "proposals": [entry for entry in proposals if cik in entry.get("ciks", [])
+                          and entry.get("engine") == row["engine"]
+                          and entry.get("rule_name") == row["rule_name"]
+                          and row["report_date"][:10] in entry.get("quarters", [])],
+        } for row in csv.DictReader(fh)
+            if row["cik"].zfill(10) == cik and row["report_date"][:10] >= SINCE
+            and row["state"] not in RESOLVED), key=lambda row: row["finding_id"])
+
+
+def investigation_check(label: str, cik: str, report: dict, review: dict | None) -> dict:
+    from investigation_review import check_investigation
+    result = check_investigation(report, outstanding_findings(label, cik), review)
+    # Structured evidence must also exist in the cached filing, not merely be populated.
+    evidence = []
+    for item in report.get("investigations", []) if isinstance(report.get("investigations"), list) else []:
+        if isinstance(item, dict) and isinstance(item.get("evidence"), list):
+            evidence.extend(item["evidence"])
+    if isinstance(review, dict):
+        for key in ("finding_reviews", "observation_reviews", "request_reviews"):
+            for item in review.get(key, []) if isinstance(review.get(key), list) else []:
+                if isinstance(item, dict) and isinstance(item.get("evidence"), list):
+                    evidence.extend(item["evidence"])
+    for item in report.get("orchestrator_requests", []) if isinstance(report.get("orchestrator_requests"), list) else []:
+        if isinstance(item, dict) and isinstance(item.get("evidence"), list):
+            evidence.extend(item["evidence"])
+    for quote in evidence:
+        if not isinstance(quote, dict):
+            continue  # Structural validator reports malformed evidence.
+        accession, words = quote.get("accession"), quote.get("text")
+        if isinstance(accession, str) and isinstance(words, str):
+            page = page_text(cik, accession)
+            if not page or normalise(words) not in page:
+                result["problems"].append("investigation/review quote absent from cached filing: " + accession)
+    result["ok"] = not result["problems"]
+    result["status"] = "COMPLETE" if result["ok"] else "INVESTIGATION_INCOMPLETE"
+    return result
+
+
 def check_ledger(label: str, cik: str) -> dict:
     csv.field_size_limit(10 ** 9)
     findings, outstanding, judged = 0, [], []
@@ -409,6 +457,12 @@ def main(argv=None) -> int:
     check.add_argument("--report", required=True)
     check.add_argument("--before")
     check.add_argument("--snapshot")
+    check.add_argument("--review", help="Independent investigation review JSON bound to this report and ledger")
+    audit = sub.add_parser("investigation", help="Read-only investigation audit; no rebuild or legacy verdict overwrite")
+    audit.add_argument("--label", required=True)
+    audit.add_argument("--cik", required=True)
+    audit.add_argument("--report", required=True)
+    audit.add_argument("--review")
     args = parser.parse_args(argv)
     if args.command == "park":
         return park(args.snapshot, args.cik.zfill(10))
@@ -424,6 +478,11 @@ def main(argv=None) -> int:
         print("FAIL: no report at", report_path)
         return 2
     report = json.loads(report_path.read_text(encoding="utf-8"))
+    review = json.loads(Path(args.review).read_text(encoding="utf-8")) if args.review else None
+    investigation = investigation_check(args.label, cik, report, review)
+    if args.command == "investigation":
+        print(json.dumps(investigation, indent=2))
+        return 0 if investigation["ok"] else 4
     # What the agent saw that no rule reported: the list must be there (it may be empty) and well formed.
     from observations import problems as observation_problems
     listed = report.get("observations")
@@ -443,9 +502,11 @@ def main(argv=None) -> int:
     failed = [name for name, result in checks.items() if not result["ok"]]
     # A change the agent may not make itself (a check, the re-verifier, a rule) is asked for in the report.
     requests = report.get("orchestrator_requests") or []
-    verdict = "FAIL" if failed else ("NEEDS_ORCHESTRATOR" if requests else ("PASS" if ledger["ok"] else "INCOMPLETE"))
+    verdict = "FAIL" if failed else ("INVESTIGATION_INCOMPLETE" if not investigation["ok"] else
+              ("NEEDS_ORCHESTRATOR" if requests else ("PASS" if ledger["ok"] else "INCOMPLETE")))
     result = {"verdict": verdict, "cik": cik, "label": args.label, "before": args.before, "failed": failed,
-              "checks": checks, "ledger": ledger, "fields_checked": bool(args.before), "orchestrator_requests": requests}
+              "checks": checks, "ledger": ledger, "investigation": investigation,
+              "fields_checked": bool(args.before), "orchestrator_requests": requests}
     (SANDBOXES / args.label / ("gate_%s.json" % cik)).write_text(json.dumps(result, indent=1), encoding="utf-8")
     print("%s  %s in %s%s" % (verdict, cik, args.label, "" if args.before else "  (no sandbox before: fields not compared)"))
     for name, outcome in checks.items():
@@ -457,7 +518,8 @@ def main(argv=None) -> int:
         "" if ledger["ok"] else "; without: " + "; ".join(ledger["uncovered"][:12])))
     for request in requests:
         print("   asks the orchestrator: %s" % json.dumps(request)[:400])
-    return {"PASS": 0, "INCOMPLETE": 1, "FAIL": 2, "NEEDS_ORCHESTRATOR": 3}[verdict]
+    print("   investigation: %s (%d problems)" % (investigation["status"], len(investigation["problems"])))
+    return {"PASS": 0, "INCOMPLETE": 1, "FAIL": 2, "NEEDS_ORCHESTRATOR": 3, "INVESTIGATION_INCOMPLETE": 4}[verdict]
 
 
 if __name__ == "__main__":

@@ -74,10 +74,19 @@ JSON you must write).
    `docs/investigations/v05_owner_queue.md` where the reason is the same, so the owner is asked once.
 8. **Write the report** (below) and stop. Do not commit.
 
+Before returning, satisfy `investigation-review.md`: one structured investigation per outstanding
+ledger review_id, including findings with proposals. Record all affected rows and which were read,
+source evidence, conclusion, hypotheses tested and next action. Generic parking text is insufficient.
+The orchestrator commissions an independent reviewer; never author or approve your own review.
+Every observation needs a detection decision, and every orchestrator request needs classification
+as verification_bug or acceptance_change, evidence and next_action.
+
 Write as you go: after every build, update `REPORT` and your notes under
 `scratch/fund_runs/<cik10>/notes.md` (what you read, what you changed, what is left). A run that is
 cut off must be resumable from those two files. At most six builds; if findings you could fix
-remain after that, list them under `parked` and stop.
+remain after that, list them under `parked`. Finish source investigation even when no builds remain.
+If evidence is unavailable, explicitly enumerate incomplete coverage and missing evidence; never
+claim investigation complete. Do not rebuild simply to add documentation or proposals.
 
 You may run the gate on your own result (`fund_gate.py check`, without `--snapshot`, so its
 `files` check will fail: ignore that one). The orchestrator runs it again.
@@ -120,6 +129,11 @@ You may run the gate on your own result (`fund_gate.py check`, without `--snapsh
 | a withdrawn dollar par on a foreign loan | It raises FX01; supply the amount at the build's own rate for that date. |
 
 ## Report (`REPORT`, JSON)
+
+The example below shows the original data-change fields. Also required: `investigator_id` and
+`investigations` in the exact shape in `investigation-review.md`. Every observation adds
+`detection_decision`; every request adds `request_id`, `classification`, `evidence`, `next_action`.
+Do not copy this abbreviated example as a complete passing report.
 
 ```json
 {

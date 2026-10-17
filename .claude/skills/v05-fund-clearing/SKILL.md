@@ -1,7 +1,8 @@
 ---
 name: v05-fund-clearing
 description: Use when asked to clear, work through or sign off a fund's outstanding ledger findings in the v0.5 programme, to run the fund-by-fund clearing loop over several funds unattended, or to take a new quarter into funds already cleared
-argument-hint: <cik> [<cik> ...] | next <n>
+metadata:
+  argument-hint: <cik> [<cik> ...] | next <n>
 allowed-tools: Bash PowerShell Read Write Edit Grep Glob Agent SendMessage Monitor TaskStop
 ---
 
@@ -19,7 +20,7 @@ setting, a column, a member format); work pinned to one quarter does not carry f
 1. **One fund agent at a time, and nothing else writing in this working tree.** Builds, shared
    files and shared code are not safe in parallel. If `git log` or `git status` shows another
    session's work appearing during a run, stop and report.
-2. **The gate decides.** `scripts/v05_evidence/fund_gate.py check` PASS, INCOMPLETE, FAIL or
+2. **The gate decides.** `scripts/v05_evidence/fund_gate.py check` PASS, INCOMPLETE, INVESTIGATION_INCOMPLETE, FAIL or
    NEEDS_ORCHESTRATOR. Never
    edit the gate, a rule, a threshold, a check or the reasons list to change a verdict.
 3. **Nobody in the loop accepts a new reason.** A disposition is accepted only by a check listed
@@ -37,7 +38,11 @@ setting, a column, a member format); work pinned to one quarter does not carry f
 digraph fund {
   snapshot -> dispatch -> gate;
   gate -> page_sample [label="PASS / INCOMPLETE"];
-  page_sample -> record [label="no published error"];
+  gate -> send_back [label="INVESTIGATION_INCOMPLETE: finish evidence/review"];
+  page_sample -> independent_review [label="sample complete; report final"];
+  independent_review -> final_gate;
+  final_gate -> record [label="PASS / investigated INCOMPLETE"];
+  final_gate -> send_back [label="investigation incomplete or FAIL"];
   page_sample -> send_back [label="published errors, round < 3"];
   gate -> send_back [label="FAIL, round < 3"];
   send_back -> gate;
@@ -57,9 +62,20 @@ digraph fund {
 3. **Dispatch** one general-purpose subagent. Its prompt is the whole of `fund-agent-brief.md`
    in this folder plus: `CIK`, `LABEL_PREFIX`, `BEFORE`, `ADD_QUARTER`,
    `REPORT = docs/investigations/v05_readings/reports/<cik10>.json`. Give it nothing else: no
-   hypothesis about what is wrong.
+   hypothesis about what is wrong. Include the investigation contract in
+   `investigation-review.md`; give the investigator its actual agent identity.
 4. **Gate** when it returns:
-   `python scripts/v05_evidence/fund_gate.py check --label <label from report> --cik <cik> --report <REPORT> --before <BEFORE> --snapshot <snapshot>`
+   `python scripts/v05_evidence/fund_gate.py check --label <label from report> --cik <cik> --report <REPORT> --before <BEFORE> --snapshot <snapshot> --review <independent-review.json>`
+   Before final acceptance, dispatch a separate investigator-reviewer while the fund agent is idle,
+   using `investigation-review.md`. It reviews EVERY outstanding finding and observation, not a
+   sample. The random page sample remains a separate check. The initial mechanical check may run
+   without a review; it cannot grant acceptance. After the page sample or any report/ledger edit,
+   obtain a fresh review bound to the final report and ledger.
+   **INVESTIGATION_INCOMPLETE (exit 4):** send missing coverage and rejected conclusions back to
+   the same fund agent. Do not register the sandbox as accepted or start the next fund. A build cap
+   limits repairs, not reading. If cached evidence cannot complete the investigation, save the exact
+   unchecked rows, evidence needed and next action; report the blocked investigation to the owner.
+   Do not run `park` merely because investigation is incomplete; preserve the resumable work.
 5. **FAIL:** send the gate's printed failures, verbatim, to the same agent (SendMessage, so it
    keeps its context). At most three gate rounds. Then
    `fund_gate.py park --snapshot <snapshot> --cik <cik>` and record the fund as parked with the
@@ -68,15 +84,20 @@ digraph fund {
    a rule). Read its evidence. A change to how a published value is VERIFIED (the re-verifier
    reading a new event) you make yourself, with a test, then re-snapshot, have the agent rebuild
    and gate again. A change to what counts as a FINDING or as ACCEPTED is the owner's: record
-   the request, leave the finding outstanding, and continue. List every such change in the
-   end-of-run report.
+   the request and leave the finding outstanding. Continue independent investigation on this fund;
+   do not interpret this as permission to accept it or advance while NEEDS_ORCHESTRATOR persists.
+   Keep unanswered requests active. When a request is implemented, rejected or explicitly deferred
+   by the owner, preserve it with the response, authority and evidence in `request_resolution_history`,
+   remove it from active `orchestrator_requests`, and obtain a fresh independent review and gate.
+   The resolution history is part of the hashed report and the reviewer must examine it. Never
+   remove a request just to change the verdict. List all requests and responses in the end-of-run report.
 7. **PASS or INCOMPLETE with shared code changed** (the report says so, or the gate lists it):
    run the changed modules' tests now. If the change altered an EXISTING wrapper setting, find
    the other funds that use it (search `data/overrides/bdc_xbrl_wrappers/` for the key), rebuild
    them and run `regression_check.py`; a fund that MOVED without an explanation in the report
    parks this fund. A NEW setting is on for one fund: nothing else is rebuilt until the end of
    the run.
-7b. **Page sample** (after a clean gate; the net for what no rule looks at). The ledger rules and
+7b. **Page sample** (after mechanical checks pass, even if independent review is pending; the net for what no rule looks at). The ledger rules and
    the gate miss whole fields: the 2026-10-14 sample found issuer names wrong on 75 pct of one
    fund's rows with every finding cleared. With `S = docs/investigations/v05_readings/samples/<cik10>`:
    `python scripts/v05_evidence/field_sample.py --dir <S> draw --per-fund 20 --label <label> --cik <cik>`,
@@ -103,9 +124,16 @@ digraph fund {
    run table in `docs/investigations/v05_reading_backlog.md`. Commit.
 10. Next fund.
 
-**INCOMPLETE** means the build is clean but some findings have neither a fix nor a proposal. It
-is recorded and committed like a pass, with the uncovered findings listed. It is not sent back
-more than once for that reason.
+**INCOMPLETE** means the build is clean and investigation independently supported, but some findings
+remain unfixed without a disposition proposal. It can be recorded with explicit mechanisms and next
+actions. **INVESTIGATION_INCOMPLETE** means coverage, evidence or independent review is missing;
+it cannot use this acceptance route. Never classify an unfinished read as an owner decision.
+
+Every observation needs a detection decision: propose a detector, reference an existing detector or
+proposal, or explain why reliable detection is not feasible. Collect these in the end-of-run report.
+Every verifier request must distinguish a verification bug from an acceptance-standard change and
+carry evidence plus a next action. Repair verification bugs with independent source evidence and tests;
+new detection/acceptance rules still require the owner's decision. Never verify a derived value against itself.
 
 ## Order and scope
 
