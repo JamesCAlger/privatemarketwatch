@@ -56,6 +56,9 @@ class HighlightsWrapperSpec:
     # Year-end dates of the year in which the fund began operating: the quarters before its first
     # income statement are nil, so that year-end quarter is the year less the quarters filed
     first_income_year_ends: tuple[str, ...] = ()
+    # Quarter-end dates of quarters filed before the fund began investing, whose statement prints a
+    # dash for its income lines: their missing income figures are nil (fund_financials.quarter_income_sql)
+    nil_income_quarters: tuple[str, ...] = ()
     # Accession numbers whose company facts this filer dated to the wrong period (a proxy
     # statement's price-range table): left out of the company-facts frame for this fund only
     companyfacts_ignore_accessions: tuple[str, ...] = ()
@@ -141,6 +144,10 @@ def _load_wrapper_from_path(path: Path) -> HighlightsWrapperSpec | None:
             for concept in (concepts or []) if str(concept).strip()),
         first_income_year_ends=tuple(str(day) for day in (data.get("first_income_year_ends") or [])
                                      if re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(day))),
+        nil_income_quarters=tuple(
+            str(entry.get("report_date", "")) for entry in (data.get("nil_income_quarters") or [])
+            if isinstance(entry, dict) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(entry.get("report_date", "")))
+            and str(entry.get("evidence", "")).strip()),
         companyfacts_ignore_accessions=tuple(
             str(entry.get("accession", "")) for entry in (data.get("companyfacts_ignore_accessions") or [])
             if isinstance(entry, dict) and re.fullmatch(r"\d{10}-\d{2}-\d{6}", str(entry.get("accession", "")))
@@ -196,7 +203,13 @@ FIGURE_FIELDS = frozenset({"total_assets", "total_liabilities", "net_assets", "i
                            # Private Credit Fund: LongTermDebt holds the 210,000,000 of notes while the balance
                            # sheet prints 'Debt ... 1,152,791,515'; InvestmentOwnedAtCost 300,000 is the
                            # asset-backed subtotal, the printed total cost is 1,753,090,392).
-                           "borrowings", "investments_at_cost"})
+                           "borrowings", "investments_at_cost",
+                           # The schedule's cash-equivalents total where the filer files no undimensioned fact
+                           # for it (Overland Advantage, 2024-06-30 to 2025-09-30: 'Cash Equivalents BlackRock
+                           # Liquidity FedFund ... 11,226' printed below 'Total Investments'; the filer tags
+                           # CashEquivalentsAtCarryingValue for that total only from 2025-12-31). Inert unless a
+                           # wrapper lists it.
+                           "cash_equivalents_at_fair_value"})
 
 
 def apply_figure_corrections(balance_df):
@@ -246,6 +259,17 @@ def first_income_year_ends() -> frozenset[tuple[str, str]]:
     """
     _ensure_cache_loaded()
     return frozenset((cik, day) for cik, spec in _WRAPPER_CACHE.items() for day in spec.first_income_year_ends)
+
+
+def nil_income_quarters() -> frozenset[tuple[str, str]]:
+    """(cik, quarter-end date) pairs whose wrapper declares a quarter filed before the fund began investing.
+
+    Opt-in: ``nil_income_quarters`` (each entry a report_date with its printed evidence). Read by
+    ``fund_financials.quarter_income_sql``: that quarter's missing income figures are nil, so it
+    counts as a filed quarter when the year-end quarter is derived. Off for every other fund.
+    """
+    _ensure_cache_loaded()
+    return frozenset((cik, day) for cik, spec in _WRAPPER_CACHE.items() for day in spec.nil_income_quarters)
 
 
 def scale_fix_exempt_pairs() -> frozenset[tuple[str, str]]:

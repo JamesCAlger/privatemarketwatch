@@ -1,0 +1,1446 @@
+{
+ "cik": "0001965934",
+ "label": "ovye",
+ "before": "spon3",
+ "shared_code": true,
+ "investigator_id": "overland_fund_agent_2026-10-17",
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 20,
+   "why": "8 rows: 'Material Quikrete Holdings Inc' / 'Material Summit Materials LLC' to the printed names (filer heading 'Construction Material' added to extra_industry_labels). 3 rows (2025-03-31 to 2025-09-30): 'LS Group OpCo Acquistion LLC' to the printed 'LS Group OpCo Acquisition LLC' (row corrections; page-sample card C018). 9 rows (every quarter): the money-market fund to its printed name 'BlackRock Liquidity FedFund - Institutional' (was 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31, the section heading in the name, and 'Black Rock Liquidity Fed Fund Institutional' after); independent review of ovyd."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 4,
+   "why": "Restated with the LS Group name corrections (unchanged value: 'First lien senior secured term loan'), so the name correction does not blank it. Money-fund 2024-06-30: 'Institutional' withdrawn (now part of the printed name)."
+  },
+  {
+   "column": "interest_rate",
+   "rows": 5,
+   "why": "Treasury bill printed yields: 2024-12-31 4.27 (tag was a spread), 2025-03-31 4.28, 2025-06-30 4.32, 2025-09-30 3.89, 2025-12-31 3.61 (tag ck0001965934:InvestmentFixedInterestRate, not read; card C014). The 2026-06-30 bill (3.79) is a new row, so not counted here."
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 5,
+   "why": "Follows the bill rates."
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 5,
+   "why": "Bill rate now present: unresolved to all_in."
+  },
+  {
+   "column": "basis_spread",
+   "rows": 3,
+   "why": "Money-fund and bill yields tagged as InvestmentBasisSpreadVariableRate withdrawn (2024-09-30, 2024-12-31)."
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 3,
+   "why": "SOFR guessed for the same three cash rows withdrawn."
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 3,
+   "why": "Same three rows."
+  },
+  {
+   "column": "coupon_type",
+   "rows": 8,
+   "why": "Floating withdrawn on the two money-fund rows; Fixed on the bill in 2024-12-31 and in the five bill quarters (four counted against spon3). Money-fund 2025-03-31: 'Fixed' withdrawn (the page prints a yield)."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 16,
+   "why": "Audit field of the row corrections."
+  },
+  {
+   "column": "position_id",
+   "rows": 32,
+   "why": "Fund-only identity allocation in a one-fund sandbox (whole chains re-keyed: Advanced Technology Services, CI (MG), ECLAT, Hand Family, JF Acquisition, Stark Tech, Technique Midco, BlackRock money fund). Identical in ovya, which has no edit. Not a comparison key. The LS Group chain keeps one position_id over its six quarters. Money-fund 2024-06-30 to 2025-03-31 now share the chain of 2025-06-30 to 2025-12-31 (4 rows re-keyed); 2026-03-31 and 2026-06-30 stay a separate chain, as in spon3."
+  }
+ ],
+ "rows_added": 45,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "2026-06-30 Treasury bill tagged on a context with no identifier member (107.377M unpublished): context_identifiers entry 'C_316c1d7d-650d-4452-8f95-30698413bb51 => U.S. Treasury Bill'.",
+   "kind": "wrapper",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-346556",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+    }
+   ]
+  },
+  {
+   "what": "Filer heading 'Construction Material' added to staging.extra_industry_labels: issuer names no longer start with 'Material' (8 rows).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Construction Material Quikrete Holdings Inc(7) First lien senior secured term loan SOFR + 2.50 % 4/14/2031 5,970 5,993 5,970 2.12 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Construction Material Quikrete Holdings Inc(7)(14) First lien senior secured term loan SOFR + 2.25 % 4/14/2031 5,925 5,944 5,912 0.91 %"
+    }
+   ]
+  },
+  {
+   "what": "New highlights wrapper data/overrides/fund_highlights_wrappers/0001965934.json: figure_corrections cash_equivalents_at_fair_value for six quarters from the printed schedule (the filer files the undimensioned fact only from 2025-12-31), so the published-rows anchor adds the money fund printed below Total Investments. Needs FIGURE_FIELDS to accept the field (shared code, inert unless listed).",
+   "kind": "shared_code",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Total Investments $ 346,841 $ 344,676 178.22 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %"
+    },
+    {
+     "accession": "0001193125-25-272318",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.02 % - 29,677 $ 29,677 $ 29,677 4.55 %"
+    }
+   ]
+  },
+  {
+   "what": "New highlights-wrapper key nil_income_quarters (pipeline/fund_highlights_wrapper.py, pipeline/fund_financials.quarter_income_sql, schema): the 2024-03-31 quarter, printed with a dash for income before operations began, counts as nil; Q4 2024 income 6.431 to 13.271M and NII 2.400 to 4.610M.",
+   "kind": "shared_code",
+   "quarters": [
+    "2024-03-31",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-059780",
+     "text": "For the three months ended March 31, 2024 Investment income $ - Expenses Organization costs 32,880"
+    },
+    {
+     "accession": "0000950170-24-059780",
+     "text": "Less expenses paid by the Advisor (Note 3) ( 884,913 ) Net investment income (loss) -"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "For the Year Ended December 31, 2024 Total investment income $ 25,722 Net expenses 16,123 Net investment income 9,599"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Three Months Ended September 30, 2024 Nine Months Ended September 30, 2024 Total investment income $ 9,058 $ 12,451 Net expenses 5,656 7,462 Net investment income 3,402 4,989"
+    }
+   ]
+  },
+  {
+   "what": "13 row corrections (row_correction_specs/0001965934.json): cash-row yields tagged as a variable-rate spread withdrawn; bill rate 4.27 fixed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    }
+   ]
+  },
+  {
+   "what": "Page-sample card C014: the Treasury bill's rate is tagged with the filer's own ck0001965934:InvestmentFixedInterestRate in every bill quarter from 2025-03-31 and the shared concept map does not read it. 10 row corrections set the printed rate and coupon_type Fixed in all five quarters (2025-03-31 4.28, 2025-06-30 4.32, 2025-09-30 3.89, 2025-12-31 3.61, 2026-06-30 3.79); with 2024-12-31 (4.27) every bill row now carries its printed rate. No fund-level setting exists for a rate concept; a global map entry would reach six other filers that use the same local name.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    },
+    {
+     "accession": "0001193125-25-272318",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
+    },
+    {
+     "accession": "0001193125-26-117368",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
+    },
+    {
+     "accession": "0001193125-26-346556",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+    }
+   ]
+  },
+  {
+   "what": "Page-sample card C018: the filer's member misspells 'Acquistion' in 2025-03-31 to 2025-09-30 while the page prints 'Acquisition'; 3 issuer-name corrections (with the instrument restated). The page itself prints 'Acquistion' at 2024-06-30 and 2024-09-30, so those two rows are left as printed. The position chain was never broken: one position_id over all six quarters, before and after.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,965 $ 7,002 $ 6,904 1.45 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,948 $ 6,984 $ 6,934 1.07 %"
+    },
+    {
+     "accession": "0001193125-25-272318",
+     "text": "LS Group OpCo Acquisition LLC(7)(8)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,930 $ 6,964 $ 6,900 1.06 %"
+    }
+   ]
+  },
+  {
+   "what": "Independent review of ovyd: the money-market fund's issuer name held the 'Cash Equivalents' section heading and dropped '- Institutional' (2024-06-30 to 2025-03-31), and read 'Black Rock Liquidity Fed Fund Institutional' from 2025-06-30, so its chain split. 19 row corrections set the printed name 'BlackRock Liquidity FedFund - Institutional' in all nine quarters (instrument blank) and withdraw coupon_type 'Fixed' at 2025-03-31.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [
+  {
+   "quarter": "2024-12-31",
+   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (135.117M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
+   "quote": {
+    "accession": "0000950170-25-045206",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+   }
+  },
+  {
+   "quarter": "2025-03-31",
+   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (157.633M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
+   "quote": {
+    "accession": "0000950170-25-071771",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+   }
+  },
+  {
+   "quarter": "2025-06-30",
+   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (215.151M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
+   "quote": {
+    "accession": "0000950170-25-109383",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+   }
+  },
+  {
+   "quarter": "2025-09-30",
+   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (90.840M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
+   "quote": {
+    "accession": "0001193125-25-272318",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
+   }
+  },
+  {
+   "quarter": "2025-12-31",
+   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (172.864M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
+   "quote": {
+    "accession": "0001193125-26-117368",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
+   }
+  },
+  {
+   "quarter": "2026-06-30",
+   "why": "Published ex-cash is short of filed investments by exactly the U.S. Treasury bill (107.377M), which the filer prints inside 'Total Investments' and which is published in the CASH class (with-cash published equals 'Total Investments and Cash Equivalents'). Owner decision 7 (count the bill in the comparison, or class it as an investment) is open; not changed.",
+   "quote": {
+    "accession": "0001193125-26-346556",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+   }
+  }
+ ],
+ "parked": [
+  {
+   "finding": "gate totals (not a ledger finding): Treasury bill printed inside Total Investments, classed cash, six quarters",
+   "hypotheses": [
+    "investments_total_excludes ['cash_rows'] does not fit: it would remove the bill from the published side too (the filed line holds the bill).",
+    "Reclass the bill as an investment: changes public FV and class; owner decision 7, not taken by an agent."
+   ]
+  }
+ ],
+ "orchestrator_requests": [
+  {
+   "request_id": "OVY-R1",
+   "classification": "acceptance_change",
+   "file": "scripts/v05_evidence/fund_gate.py",
+   "what": "Owner decision 7: let a wrapper state that the filed investments total includes the fund's Treasury-bill rows (cash class), so the totals comparison adds them; or rule that the bill is an investment row.",
+   "why": "Six quarters fail totals by exactly the bill while every row ties to the page.",
+   "quotes": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    },
+    {
+     "accession": "0001193125-26-117368",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
+    }
+   ],
+   "next_action": "Owner ruling on decision 7 (docs/investigations/v05_owner_decisions_2026-10-12.md); then a wrapper statement or a class change and a rebuild.",
+   "response": "Orchestrator 2026-10-17: acceptance_change, confirmed. It is owner decision 7 (open). Not implemented; the six quarters stay declared total exceptions until the owner rules."
+  },
+  {
+   "request_id": "OVY-R2",
+   "classification": "acceptance_change",
+   "file": "pipeline/validate_fund_financials.py",
+   "what": "F27's WAC averages every row with interest_rate > 0, including CASH rows. Exclude CASH rows and skip when the non-cash rated fair value is a small share of non-cash fair value.",
+   "why": "Overland's loans print a margin only; in all seven F27 quarters the WAC is a money-market or Treasury-bill yield, so F27 fails without measuring the loan book. Independent reviewer (ovyd): F27 also compares unlike quantities for a levered fund: income_yield_pct is income over net assets while the WAC is a coupon on investments, and investments are about 2x net assets (printed 'Total Investments and Cash Equivalents ... 213.73 %' at 2025-06-30).",
+   "quotes": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Total Investments and Cash Equivalents $ 1,392,348 $ 1,389,007 213.73 %"
+    }
+   ],
+   "next_action": "Owner ruling on the F27 basis; until then proposal PD-0001965934-F27-7 (seven quarters).",
+   "response": "Orchestrator 2026-10-17: reclassified as acceptance_change. Excluding cash rows from F27's average coupon changes which findings F27 raises, which is the owner's call, not a verification repair. Not implemented; stays a proposal for the owner. F27 proposals kept as they are (quarters extended to the four that the bill-rate fix exposed, same reason)."
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "position-context-without-identifier-member",
+   "what": "The filer tags its U.S. Treasury bill on a context with only the affiliation and type axes (no identifier member) in the 10-Qs for 2025-06-30, 2025-09-30, 2025-12-31 and again 2026-06-30, so the row is not extracted (107.377M missing at 2026-06-30, 6.6 pct of the printed total). Fixed for 2026-06-30 by a fourth context_identifiers entry; the setting is per filing and must be added each quarter until page_labelled_contexts can read a row whose second cell is a dash (reading of 2026-10-10, fix 1).",
+   "field": "fair_value",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 107.377,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A tagged InvestmentOwnedAtFairValue on a context with no identifier member and no published row, equal to a printed schedule line, flagged as unpublished.",
+   "quote": {
+    "accession": "0001193125-26-346556",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fv_conservation, gav_reconciliation, A04/E01, GAV_BDC03 and cost_conservation all failed at 2026-06-30 by exactly the bill (ovya). The next quarter will be caught the same way.",
+    "reference": "conservation/fv_conservation (RVQ_BLK_8d67d1550b23 in ovya)"
+   }
+  },
+  {
+   "observation_key": "industry-heading-left-in-issuer-name",
+   "what": "Issuer published as 'Material Quikrete Holdings Inc' (5 quarters) and 'Material Summit Materials LLC' (3 quarters): the filer's heading 'Construction Material' (singular) is not a known industry label, so the member split kept 'Material'. Fixed by adding 'Construction Material' to this wrapper's extra_industry_labels; the label list is a union over all wrappers, and no other cohort fund's identifier in spon3 contains 'Construction Material' without the s.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 5.97,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "An issuer name whose first word equals the last word of the row's extracted_industry.",
+   "quote": {
+    "accession": "0000950170-24-127235",
+    "text": "Construction Material Quikrete Holdings Inc(7) First lien senior secured term loan SOFR + 2.50 % 4/14/2031 5,970 5,993 5,970 2.12 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The gate's industry_in_name test looks for the whole industry label at the start of the name; a partial label ('Material ...' under 'Construction Material') passes it. Matching the first word of the name against the last word of extracted_industry catches this shape; false positives would be names like 'Software Inc' under 'Software', which are rare and readable.",
+    "reference": "scripts/v05_evidence/fund_gate.py check_names"
+   }
+  },
+  {
+   "observation_key": "money-market-yield-published-as-spread",
+   "what": "The filer tags the money fund's yield (2024-09-30 4.84, 2024-12-31 4.36) and the Treasury bill's yield (2024-12-31 4.27) with InvestmentBasisSpreadVariableRate, so they published as SOFR + yield, floating, with a guessed reference rate. Fixed by 13 row corrections (spread and reference withdrawn; bill rate 4.27, fixed).",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 178.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A CASH-class row with a basis_spread or a reference rate.",
+   "quote": {
+    "accession": "0000950170-24-127235",
+    "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Money funds and bills have no benchmark; a spread on a CASH row is always a tag misuse. No false positives expected outside floating-rate cash notes, which the cohort does not class CASH.",
+    "reference": "new row rule on index_classification = 'CASH'"
+   }
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "what": "Fourth quarter 2024 income published as the year divided by four (total investment income 6.431M, NII 2.400M) because the 10-Q for 2024-03-31, filed before operations began (2024-05-07), prints a dash for income and tags none, so the year had only two quarters with income. first_income_year_ends does not apply (the first quarter was filed). Fixed with a new highlights-wrapper key nil_income_quarters (shared code, inert unless listed): Q4 now 13.271M and 4.610M, equal to the 10-K year less the nine-month figures.",
+   "field": "total_investment_income",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "income_identity (existing) caught it: NII must be close to income less net expenses.",
+   "quote": {
+    "accession": "0000950170-24-059780",
+    "text": "For the three months ended March 31, 2024 Investment income $ - Expenses Organization costs 32,880"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "identity/income_identity failed at 2024-12-31 in ovya and passes in ovyc.",
+    "reference": "identity/income_identity (RVQ_BLK_795a18d1e158)"
+   }
+  },
+  {
+   "observation_key": "cash-row-fields-on-filer-custom-concepts-not-read",
+   "what": "Cash rows lack fields the page prints and the filer tags on its own concepts: money-fund yield (ck0001965934:InvestmentYieldPercentage, 2025-06-30 on), money-fund cost (not tagged, printed equal to value, 2025-06-30 on) and money-fund percent of net assets (ck0001965934:CashEquivalentsPercentOfNetAssets, 2025-12-31 on; sum 205.70 published against 207.04 printed). Left: cash rows only. The Treasury-bill rate on ck0001965934:InvestmentFixedInterestRate is now set by row correction (separate observation rate-on-filer-custom-concept-not-read).",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 18.711,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "A CASH row with no interest_rate where the context carries a fact named *Rate* or *Yield*.",
+   "quote": {
+    "accession": "0001193125-26-117368",
+    "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 3.64 % - 9,670 $ 9,670 $ 9,670 1.32 % Goldman Sachs Financial Square Government Fund Institutional Shares 3.69 % - 124 124 124 0.02 % Total Cash Equivalents $ 9,794 $ 9,794 1.34 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A fact on the row's context that no column consumed is visible to the extractor; reporting unconsumed rate- or yield-named facts per row would catch custom concepts on any fund. Expected noise: rate facts on duration contexts.",
+    "reference": "src_facts / provenance ledger"
+   }
+  },
+  {
+   "observation_key": "wac-heuristic-uses-cash-row-yields",
+   "what": "F27's weighted coupon is taken over every published row with a rate, cash rows included. No loan of this fund has a rate (spread only printed), so the 'holdings WAC' is the money-fund or Treasury-bill yield in every quarter that has one. After the bill's printed rate was published (ovyd, card C014), F27 fails in four more quarters (2025-06-30, 2025-09-30, 2025-12-31, 2026-06-30): seven in all. Correct data raised the count; the check measures nothing here.",
+   "field": "wac",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "F27 should exclude index_classification = 'CASH' rows and skip when non-cash rated fair value is under a share (e.g. 50 pct) of non-cash fair value.",
+   "quote": {
+    "accession": "0000950170-24-127235",
+    "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "A defect in the check, not data a detector can see; raised as OVY-R2, which the orchestrator classed as an acceptance change for the owner.",
+    "reference": "pipeline/validate_fund_financials.py F27"
+   }
+  },
+  {
+   "observation_key": "treasury-bill-inside-investments-total-published-as-cash",
+   "what": "The filer prints its U.S. Treasury bill inside 'Total Investments' and the money funds below it. The bill is published (cash class) and the gate's totals check (published ex-cash vs filed investments) is short by exactly the bill in six quarters (135.117, 157.633, 215.151, 90.840, 172.864, 107.377M). Not changed: owner decision 7 (2026-10-12) is open.",
+   "field": "index_classification",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 215.151,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "Gate totals: compare filed investments with ex-cash rows plus cash rows the schedule prints above its investments total.",
+   "quote": {
+    "accession": "0000950170-25-109383",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fund_gate.py check_totals reports it every quarter.",
+    "reference": "scripts/v05_evidence/fund_gate.py check_totals"
+   }
+  },
+  {
+   "observation_key": "canonical-name-from-another-issuer-in-build",
+   "what": "In the cohort build spon3 the four Chariot Buyer LLC rows carry canonical_name 'Charlotte Buyer, Inc.', another company; in this fund-only build (ovyc) they read 'Chariot Buyer LLC'. Entity resolution matched across funds on a near name. Not changed (shared matching step; canonical_name is not a gate field).",
+   "field": "canonical_name",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A canonical_name whose legal-form-stripped key differs from the issuer's key by more than the legal form.",
+   "quote": {
+    "accession": "0000950170-25-045206",
+    "text": "Chariot Buyer LLC(7)(14) First lien senior secured term loan SOFR + 3.25 % 11/3/2028 5,954 5,963 5,982 1.39 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Comparing the issuer key with the canonical key would catch cross-company merges; noise from legitimate renames needs a review list.",
+    "reference": "pipeline entity resolution"
+   }
+  },
+  {
+   "observation_key": "rate-on-filer-custom-concept-not-read",
+   "what": "Page-sample card C014: the Treasury bill prints a fixed rate (4.28, 4.32, 3.89, 3.61, 3.79 %) tagged ck0001965934:InvestmentFixedInterestRate; the extractor's concept map has no entry for that local name, so no rate published. Fixed for this fund by 10 row corrections in five quarters; it recurs each new quarter until a fund-level rate-concept setting exists. The same local name is in the cached filings of six other filers (1370755, 1633336, 1784700, 1841514, 1850787, 1911321), not checked.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 215.151,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A position context carrying a fact whose local name contains 'InterestRate' or 'Rate' that no output column consumed, on a row with no interest_rate.",
+   "quote": {
+    "accession": "0000950170-25-109383",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The extractor sees the unconsumed fact; listing them per row would catch filer concepts on any fund. Noise: floors and PIK facts already mapped elsewhere must be excluded. A fund-level wrapper key (rate concepts, like fair_value_concepts) would make the fix carry forward.",
+    "reference": "pipeline/bdc_filings.py CONCEPT_MAP"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Page-sample card C018: the member writes 'LS Group OpCo Acquistion LLC' in 2025-03-31 to 2025-09-30 while the page prints 'Acquisition'. The page itself prints the misspelling at 2024-06-30 and 2024-09-30 (left as printed). Fixed by 3 issuer-name corrections; the position chain was intact before and after (one position_id, six quarters).",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 6.934,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Compare the published issuer name with the printed row's first cell (page reader) and flag differences beyond footnote marks and case.",
+   "quote": {
+    "accession": "0000950170-25-109383",
+    "text": "LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,948 $ 6,984 $ 6,934 1.07 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The page reader already locates rows; a name-to-first-cell comparison catches member typos on any fund. False positives: filers whose member name is the legal name and page prints a short name; needs a review list, not a gate.",
+    "reference": "pipeline page reader (printed cells)"
+   }
+  },
+  {
+   "observation_key": "section-heading-left-in-cash-row-name",
+   "what": "The money-fund row was published 'Cash Equivalents BlackRock Liquidity FedFund' (2024-06-30 to 2025-03-31): the member starts with the schedule's 'Cash Equivalents' heading and the split dropped '- Institutional'. From 2025-06-30 (new member format, CashAndCashEquivalentsAxis) it read 'Black Rock Liquidity Fed Fund Institutional'. Two names for one holding split its position chain at 2025-06-30. Fixed by row corrections of name and instrument in all nine quarters (19 corrections with the coupon type). The gate's industry_in_name test does not see it: extracted_industry is empty on cash rows and 'Cash Equivalents' is not an industry.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 33.436,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a published issuer_name that begins with a schedule section heading of the same filing ('Cash Equivalents', 'Debt Investments', 'Investments', 'Total') or of the fund's wrapper category_marker_re / aggregate_markers, on any row class including CASH.",
+   "quote": {
+    "accession": "0000950170-25-071771",
+    "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The wrapper already lists the fund's section words (aggregate_markers, non_private_markers include 'cash equivalents'); testing the start of every published name against them catches this on cash rows where the industry test cannot. False positives: issuers whose legal name begins with such a word ('Investments Holdings LLC'), which a whole-word heading list keeps rare.",
+    "reference": "scripts/v05_evidence/fund_gate.py check_names"
+   }
+  },
+  {
+   "observation_key": "cash-row-chain-breaks-on-value-jump",
+   "what": "After the name fix the money fund still splits once: 2024-06-30 to 2025-12-31 share position_id e9686955, 2026-03-31 and 2026-06-30 carry ed213c75, with the same name and instrument. spon3 broke at the same date (before any edit here). The value moves from 9,670 to 49,105 (5x); the matcher's value or principal cost likely refuses the pair. Left: a cash row, no gate field depends on its chain, and a force_pair override was not tried (one build left, cash rows' treatment in the matcher not read).",
+   "field": "position_id",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 49.105,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Two consecutive-quarter rows of one fund with identical issuer_name and instrument_description and different position_id, reported per fund.",
+   "quote": {
+    "accession": "0001193125-26-221960",
+    "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 3.54 % - 49,105 $ 49,105 $ 49,105 6.67 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Same-name, same-instrument consecutive rows on different chains are cheap to list from published holdings; noise is twin lines printed separately, which the existing PP02 reason lists already distinguish.",
+    "reference": "pipeline/position_matching.py; match_quality metrics"
+   }
+  },
+  {
+   "observation_key": "money-market-yield-published-as-coupon-type",
+   "what": "The 2025-03-31 money-fund row carried coupon_type 'Fixed', inferred from its yield; the page prints a yield ('- 4.23 % -'), no coupon type. Withdrawn by row correction.",
+   "field": "coupon_type",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 33.436,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A CASH-class row that is not a Treasury bill or note with a coupon_type set.",
+   "quote": {
+    "accession": "0000950170-25-071771",
+    "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Money funds have no coupon; any coupon_type on a money-fund CASH row is inferred, not printed. Bills and notes carry a printed fixed rate and must be excluded by name.",
+    "reference": "new row rule on index_classification = 'CASH'"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_056e788b99d9",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2024-06-30|pct_of_net_assets_sum",
+     "ROW-2b307949975b415f"
+    ],
+    "reviewed_rows": [
+     "0001965934|2024-06-30|pct_of_net_assets_sum",
+     "ROW-2b307949975b415f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Total Investments and Cash Equivalents $ 358,067 $ 355,902 184.02 %"
+    },
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Triwest Healthcare Alliance Corp(6)(7) First lien senior secured term loan SOFR + 5.50 % 12/27/2027 50,000 49,127 49,125 25.40 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent sum out of the 50-250 band: rejected; published sum 184.02 equals the printed 'Total Investments and Cash Equivalents' percent (oracle check_results status warn, not fail).",
+    "Warn comes from rows above 25 pct (outliers): ROW-2b307949975b415f; each published percent equals its printed line.",
+    "Duplicate or mis-scaled percent: rejected; no row lacks a percent in this quarter and none is x100 (pct.sql on ovyd)."
+   ],
+   "next_action": "Proposal PD-0001965934-A07-1 (reason a07-outlier-percent-is-the-printed-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_4b0c30b85e40",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2024-09-30|pct_of_net_assets_sum",
+     "ROW-d4e9f0b26b12efb3",
+     "ROW-3145608a4f4668d9"
+    ],
+    "reviewed_rows": [
+     "0001965934|2024-09-30|pct_of_net_assets_sum",
+     "ROW-d4e9f0b26b12efb3",
+     "ROW-3145608a4f4668d9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Total Investments and Cash Equivalents $ 521,811 $ 519,264 184.33 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "CV Borrower, LLC(6)(7)(10) First lien senior secured term loan SOFR + 5.50 % 8/30/2029 100,000 98,021 98,000 34.79 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "SGA Dental Partners OPCO, LLC(6)(7) First lien senior secured term loan SOFR + 5.50 % 7/17/2029 79,079 77,594 77,498 27.51 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent sum out of the 50-250 band: rejected; published sum 184.33 equals the printed 'Total Investments and Cash Equivalents' percent (oracle check_results status warn, not fail).",
+    "Warn comes from rows above 25 pct (outliers): ROW-d4e9f0b26b12efb3, ROW-3145608a4f4668d9; each published percent equals its printed line.",
+    "Duplicate or mis-scaled percent: rejected; no row lacks a percent in this quarter and none is x100 (pct.sql on ovyd)."
+   ],
+   "next_action": "Proposal PD-0001965934-A07-1 (reason a07-outlier-percent-is-the-printed-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_b82fa848c0c8",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2024-12-31|pct_of_net_assets_sum",
+     "ROW-c48465a1b582eb5d"
+    ],
+    "reviewed_rows": [
+     "0001965934|2024-12-31|pct_of_net_assets_sum",
+     "ROW-c48465a1b582eb5d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Total Investments and Cash Equivalents $ 973,400 $ 973,692 226.94 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent sum out of the 50-250 band: rejected; published sum 226.94 equals the printed 'Total Investments and Cash Equivalents' percent (oracle check_results status warn, not fail).",
+    "Warn comes from rows above 25 pct (outliers): ROW-c48465a1b582eb5d; each published percent equals its printed line.",
+    "Duplicate or mis-scaled percent: rejected; no row lacks a percent in this quarter and none is x100 (pct.sql on ovyd)."
+   ],
+   "next_action": "Proposal PD-0001965934-A07-1 (reason a07-outlier-percent-is-the-printed-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_86e9642235d5",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2025-03-31|pct_of_net_assets_sum",
+     "ROW-d90a262344069396"
+    ],
+    "reviewed_rows": [
+     "0001965934|2025-03-31|pct_of_net_assets_sum",
+     "ROW-d90a262344069396"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Total Investments and Cash Equivalents $ 1,021,584 $ 1,016,389 213.55 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent sum out of the 50-250 band: rejected; published sum 213.55 equals the printed 'Total Investments and Cash Equivalents' percent (oracle check_results status warn, not fail).",
+    "Warn comes from rows above 25 pct (outliers): ROW-d90a262344069396; each published percent equals its printed line.",
+    "Duplicate or mis-scaled percent: rejected; no row lacks a percent in this quarter and none is x100 (pct.sql on ovyd)."
+   ],
+   "next_action": "Proposal PD-0001965934-A07-1 (reason a07-outlier-percent-is-the-printed-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_b683ea8098f5",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2025-06-30|pct_of_net_assets_sum",
+     "ROW-3312a49f24f4ac79"
+    ],
+    "reviewed_rows": [
+     "0001965934|2025-06-30|pct_of_net_assets_sum",
+     "ROW-3312a49f24f4ac79"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Total Investments and Cash Equivalents $ 1,392,348 $ 1,389,007 213.73 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent sum out of the 50-250 band: rejected; published sum 213.73 equals the printed 'Total Investments and Cash Equivalents' percent (oracle check_results status warn, not fail).",
+    "Warn comes from rows above 25 pct (outliers): ROW-3312a49f24f4ac79; each published percent equals its printed line.",
+    "Duplicate or mis-scaled percent: rejected; no row lacks a percent in this quarter and none is x100 (pct.sql on ovyd)."
+   ],
+   "next_action": "Proposal PD-0001965934-A07-1 (reason a07-outlier-percent-is-the-printed-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_88e13c3d1cfe",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2b307949975b415f"
+    ],
+    "reviewed_rows": [
+     "ROW-2b307949975b415f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Triwest Healthcare Alliance Corp(6)(7) First lien senior secured term loan SOFR + 5.50 % 12/27/2027 50,000 49,127 49,125 25.40 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged population = published rows with pct_of_net_assets > 25 (shadow_weak_engine rule): ROW-2b307949975b415f, the same rows as listed.",
+    "The rows are loans printed at those percents; fair value and percent equal the printed line.",
+    "Percent mis-scaled or denominator wrong: rejected; percent equals fair value over printed net assets within rounding."
+   ],
+   "next_action": "Proposal PD-0001965934-pct_position_concentration-2 (concentration-large-loan-of-a-young-levered-fund-as-printed) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_4e925888f52e",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d4e9f0b26b12efb3",
+     "ROW-3145608a4f4668d9"
+    ],
+    "reviewed_rows": [
+     "ROW-d4e9f0b26b12efb3",
+     "ROW-3145608a4f4668d9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "CV Borrower, LLC(6)(7)(10) First lien senior secured term loan SOFR + 5.50 % 8/30/2029 100,000 98,021 98,000 34.79 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "SGA Dental Partners OPCO, LLC(6)(7) First lien senior secured term loan SOFR + 5.50 % 7/17/2029 79,079 77,594 77,498 27.51 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged population = published rows with pct_of_net_assets > 25 (shadow_weak_engine rule): ROW-d4e9f0b26b12efb3, ROW-3145608a4f4668d9, the same rows as listed.",
+    "The rows are loans printed at those percents; fair value and percent equal the printed line.",
+    "Percent mis-scaled or denominator wrong: rejected; percent equals fair value over printed net assets within rounding."
+   ],
+   "next_action": "Proposal PD-0001965934-pct_position_concentration-2 (concentration-large-loan-of-a-young-levered-fund-as-printed) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_259588835617",
+   "coverage": {
+    "affected_rows": [
+     "ROW-c48465a1b582eb5d"
+    ],
+    "reviewed_rows": [
+     "ROW-c48465a1b582eb5d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged population = published rows with pct_of_net_assets > 25 (shadow_weak_engine rule): ROW-c48465a1b582eb5d, the same rows as listed.",
+    "The row is the U.S. Treasury bill (CASH class), printed at that percent; no loan exceeds 25 pct this quarter (largest CV Borrower 22.97 / 20.75 or below).",
+    "Percent mis-scaled or denominator wrong: rejected; percent equals fair value over printed net assets within rounding."
+   ],
+   "next_action": "Proposal PD-0001965934-pct_position_concentration-3 (concentration-is-a-treasury-bill-held-as-cash) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_c1367e87d35b",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d90a262344069396"
+    ],
+    "reviewed_rows": [
+     "ROW-d90a262344069396"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged population = published rows with pct_of_net_assets > 25 (shadow_weak_engine rule): ROW-d90a262344069396, the same rows as listed.",
+    "The row is the U.S. Treasury bill (CASH class), printed at that percent; no loan exceeds 25 pct this quarter (largest CV Borrower 22.97 / 20.75 or below).",
+    "Percent mis-scaled or denominator wrong: rejected; percent equals fair value over printed net assets within rounding."
+   ],
+   "next_action": "Proposal PD-0001965934-pct_position_concentration-3 (concentration-is-a-treasury-bill-held-as-cash) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_02abfe10320f",
+   "coverage": {
+    "affected_rows": [
+     "ROW-3312a49f24f4ac79"
+    ],
+    "reviewed_rows": [
+     "ROW-3312a49f24f4ac79"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged population = published rows with pct_of_net_assets > 25 (shadow_weak_engine rule): ROW-3312a49f24f4ac79, the same rows as listed.",
+    "The row is the U.S. Treasury bill (CASH class), printed at that percent; no loan exceeds 25 pct this quarter (largest CV Borrower 22.97 / 20.75 or below).",
+    "Percent mis-scaled or denominator wrong: rejected; percent equals fair value over printed net assets within rounding."
+   ],
+   "next_action": "Proposal PD-0001965934-pct_position_concentration-3 (concentration-is-a-treasury-bill-held-as-cash) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_f26d56644896",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a7259471b7758f62"
+    ],
+    "reviewed_rows": [
+     "ROW-a7259471b7758f62"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Household Durables RH(7)(12) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,979 7,857 7,662 3.96 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged population (row_validation_issues C202, ovyd): one row, ROW-a7259471b7758f62, issuer 'RH'.",
+    "Parsing artifact: rejected; the page prints the issuer as 'RH' with footnote marks and the member reads 'Household Durables RH First lien senior secured term loan'."
+   ],
+   "next_action": "Proposal PD-0001965934-C202-5 (short-issuer-name-is-the-printed-name); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_907fa4f5fb17",
+   "coverage": {
+    "affected_rows": [
+     "ROW-037f9d8e66a5708b"
+    ],
+    "reviewed_rows": [
+     "ROW-037f9d8e66a5708b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Household Durables RH(7)(13) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,959 7,841 7,652 2.71 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged population (row_validation_issues C202, ovyd): one row, ROW-037f9d8e66a5708b, issuer 'RH'.",
+    "Parsing artifact: rejected; the page prints the issuer as 'RH' with footnote marks and the member reads 'Household Durables RH First lien senior secured term loan'."
+   ],
+   "next_action": "Proposal PD-0001965934-C202-5 (short-issuer-name-is-the-printed-name); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_4944745ea67a",
+   "coverage": {
+    "affected_rows": [
+     "ROW-27a32018ea2551fd"
+    ],
+    "reviewed_rows": [
+     "ROW-27a32018ea2551fd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,938 7,826 7,854 1.83 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged population (row_validation_issues C202, ovyd): one row, ROW-27a32018ea2551fd, issuer 'RH'.",
+    "Parsing artifact: rejected; the page prints the issuer as 'RH' with footnote marks and the member reads 'Household Durables RH First lien senior secured term loan'."
+   ],
+   "next_action": "Proposal PD-0001965934-C202-5 (short-issuer-name-is-the-printed-name); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_fc97b8c74483",
+   "coverage": {
+    "affected_rows": [
+     "ROW-50406ed07c3c5af1"
+    ],
+    "reviewed_rows": [
+     "ROW-50406ed07c3c5af1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,918 7,814 7,536 1.58 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Flagged population (row_validation_issues C202, ovyd): one row, ROW-50406ed07c3c5af1, issuer 'RH'.",
+    "Parsing artifact: rejected; the page prints the issuer as 'RH' with footnote marks and the member reads 'Household Durables RH First lien senior secured term loan'."
+   ],
+   "next_action": "Proposal PD-0001965934-C202-5 (short-issuer-name-is-the-printed-name); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_b5074f6d1488",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a7259471b7758f62"
+    ],
+    "reviewed_rows": [
+     "ROW-a7259471b7758f62"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Household Durables RH(7)(12) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,979 7,857 7,662 3.96 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "fmt_issuer_name is the weak engine's issuer_name length rule (min 3, max 300): the only row under 3 characters is ROW-a7259471b7758f62 'RH' (names.sql on ovyd lists no other name shorter than 5).",
+    "RH is the printed issuer name; not a parsing artifact."
+   ],
+   "next_action": "Proposal PD-0001965934-fmt_issuer_name-6 (short-issuer-name-is-the-printed-name; addresses_verdict for the three verdict quarters); no further data change."
+  },
+  {
+   "finding_id": "RVQ_REV_58d5ccea19d0",
+   "coverage": {
+    "affected_rows": [
+     "ROW-037f9d8e66a5708b"
+    ],
+    "reviewed_rows": [
+     "ROW-037f9d8e66a5708b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Household Durables RH(7)(13) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,959 7,841 7,652 2.71 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Construction Material Quikrete Holdings Inc(7) First lien senior secured term loan SOFR + 2.50 % 4/14/2031 5,970 5,993 5,970 2.12 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "fmt_issuer_name is the weak engine's issuer_name length rule (min 3, max 300): the only row under 3 characters is ROW-037f9d8e66a5708b 'RH' (names.sql on ovyd lists no other name shorter than 5).",
+    "RH is the printed issuer name; not a parsing artifact.",
+    "Earlier real_error verdict (Material Quikrete Holdings Inc / Material Summit Materials LLC): confirmed on the page ('Construction Material' is the filer's industry heading) and fixed in ovyb by adding 'Construction Material' to extra_industry_labels; ovyc publishes 'Quikrete Holdings Inc' and 'Summit Materials LLC'. Those rows were not what the length rule flags."
+   ],
+   "next_action": "Proposal PD-0001965934-fmt_issuer_name-6 (short-issuer-name-is-the-printed-name; addresses_verdict for the three verdict quarters); no further data change."
+  },
+  {
+   "finding_id": "RVQ_REV_9097f524498d",
+   "coverage": {
+    "affected_rows": [
+     "ROW-27a32018ea2551fd"
+    ],
+    "reviewed_rows": [
+     "ROW-27a32018ea2551fd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,938 7,826 7,854 1.83 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "fmt_issuer_name is the weak engine's issuer_name length rule (min 3, max 300): the only row under 3 characters is ROW-27a32018ea2551fd 'RH' (names.sql on ovyd lists no other name shorter than 5).",
+    "RH is the printed issuer name; not a parsing artifact.",
+    "Earlier real_error verdict (Material Quikrete Holdings Inc / Material Summit Materials LLC): confirmed on the page ('Construction Material' is the filer's industry heading) and fixed in ovyb by adding 'Construction Material' to extra_industry_labels; ovyc publishes 'Quikrete Holdings Inc' and 'Summit Materials LLC'. Those rows were not what the length rule flags."
+   ],
+   "next_action": "Proposal PD-0001965934-fmt_issuer_name-6 (short-issuer-name-is-the-printed-name; addresses_verdict for the three verdict quarters); no further data change."
+  },
+  {
+   "finding_id": "RVQ_REV_0e488db6fa33",
+   "coverage": {
+    "affected_rows": [
+     "ROW-50406ed07c3c5af1"
+    ],
+    "reviewed_rows": [
+     "ROW-50406ed07c3c5af1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Household Durables RH(7)(13)(14) First lien senior secured term loan SOFR + 2.50 % 10/20/2028 7,918 7,814 7,536 1.58 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "fmt_issuer_name is the weak engine's issuer_name length rule (min 3, max 300): the only row under 3 characters is ROW-50406ed07c3c5af1 'RH' (names.sql on ovyd lists no other name shorter than 5).",
+    "RH is the printed issuer name; not a parsing artifact.",
+    "Earlier real_error verdict (Material Quikrete Holdings Inc / Material Summit Materials LLC): confirmed on the page ('Construction Material' is the filer's industry heading) and fixed in ovyb by adding 'Construction Material' to extra_industry_labels; ovyc publishes 'Quikrete Holdings Inc' and 'Summit Materials LLC'. Those rows were not what the length rule flags."
+   ],
+   "next_action": "Proposal PD-0001965934-fmt_issuer_name-6 (short-issuer-name-is-the-printed-name; addresses_verdict for the three verdict quarters); no further data change."
+  },
+  {
+   "finding_id": "RVQ_REV_d7e7465af57f",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2024-09-30|income_yield_pct",
+     "0001965934|2024-09-30|wac"
+    ],
+    "reviewed_rows": [
+     "0001965934|2024-09-30|income_yield_pct",
+     "0001965934|2024-09-30|wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 4.84 (money fund only). All non-cash loans publish no rate (page prints margin only).",
+    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
+    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
+   ],
+   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
+  },
+  {
+   "finding_id": "RVQ_REV_05df9592a2ec",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2024-12-31|income_yield_pct",
+     "0001965934|2024-12-31|wac"
+    ],
+    "reviewed_rows": [
+     "0001965934|2024-12-31|income_yield_pct",
+     "0001965934|2024-12-31|wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 4.285 (money fund 4.36 and Treasury bill 4.27). All non-cash loans publish no rate (page prints margin only).",
+    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
+    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
+   ],
+   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
+  },
+  {
+   "finding_id": "RVQ_REV_0208ebee983c",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2025-03-31|income_yield_pct",
+     "0001965934|2025-03-31|wac"
+    ],
+    "reviewed_rows": [
+     "0001965934|2025-03-31|income_yield_pct",
+     "0001965934|2025-03-31|wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 4.271 (money fund 4.23 and Treasury bill 4.28). All non-cash loans publish no rate (page prints margin only).",
+    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
+    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
+   ],
+   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
+  },
+  {
+   "finding_id": "RVQ_REV_a015cabe5787",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2025-06-30|income_yield_pct",
+     "0001965934|2025-06-30|wac"
+    ],
+    "reviewed_rows": [
+     "0001965934|2025-06-30|income_yield_pct",
+     "0001965934|2025-06-30|wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 4.32 (Treasury bill only; new in ovyd after its printed rate was published). All non-cash loans publish no rate (page prints margin only).",
+    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
+    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
+   ],
+   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
+  },
+  {
+   "finding_id": "RVQ_REV_18ccbb1850de",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2025-09-30|income_yield_pct",
+     "0001965934|2025-09-30|wac"
+    ],
+    "reviewed_rows": [
+     "0001965934|2025-09-30|income_yield_pct",
+     "0001965934|2025-09-30|wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-272318",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 3.89 (Treasury bill only; new in ovyd). All non-cash loans publish no rate (page prints margin only).",
+    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
+    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
+   ],
+   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
+  },
+  {
+   "finding_id": "RVQ_REV_cfbd9a8be3de",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2025-12-31|income_yield_pct",
+     "0001965934|2025-12-31|wac"
+    ],
+    "reviewed_rows": [
+     "0001965934|2025-12-31|income_yield_pct",
+     "0001965934|2025-12-31|wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-117368",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 3.61 (Treasury bill only; new in ovyd). All non-cash loans publish no rate (page prints margin only).",
+    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
+    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
+   ],
+   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
+  },
+  {
+   "finding_id": "RVQ_REV_aba86a7ca6e3",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2026-06-30|income_yield_pct",
+     "0001965934|2026-06-30|wac"
+    ],
+    "reviewed_rows": [
+     "0001965934|2026-06-30|income_yield_pct",
+     "0001965934|2026-06-30|wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346556",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Boxer Parent Co Inc(8) First lien senior secured term loan SOFR + 3.75 % 7/30/2031 6,982 7,055 6,964 2.47 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "WAC basis (wac.sql on ovyd): rows with interest_rate > 0 are cash rows only; WAC = 3.79 (Treasury bill only; new in ovyd). All non-cash loans publish no rate (page prints margin only).",
+    "Income yield too high: not tested as an error; income_yield_pct is the filer-derived figure and the fund is levered about 2x, so any loan-book comparison needs a loan coupon, which the page does not print.",
+    "Publish loan coupons: rejected; neither printed nor tagged (reading D-136)."
+   ],
+   "next_action": "Proposal PD-0001965934-F27-7 (rule_problem, reason f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed); OVY-R2 is with the owner as an acceptance change."
+  },
+  {
+   "finding_id": "RVQ_REV_0eab26746f5f",
+   "coverage": {
+    "affected_rows": [
+     "0001965934|2024-12-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001965934|2024-12-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Total Investments $ 947,345 $ 947,637 220.87 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 % Total Investments and Cash Equivalents $ 973,400 $ 973,692 226.94 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Sum 226.94 is inflated by duplicates or mis-scaled rows: rejected; it equals the printed 'Total Investments and Cash Equivalents' 226.94 % (220.87 investments incl. Treasury bill 31.49, plus money fund 6.07).",
+    "Denominator wrong: rejected; net assets 429.053M = printed net assets; fund is levered (borrowings 450.0M)."
+   ],
+   "next_action": "Proposal PD-0001965934-PCT01-4 (pct01-percent-sum-is-the-printed-total-of-a-levered-fund); no data change."
+  }
+ ],
+ "tests_run": [
+  "tests/test_fund_financials.py, test_fourth_quarter_income.py, test_fund_highlights_wrapper.py, test_validate_fund_financials.py: 190 passed (2 new tests in each of the two changed test files)",
+  "tests/test_bdc_xbrl_wrapper.py, test_wrapper_content_signatures.py: 598 passed"
+ ],
+ "not_done": [
+  "No cohort build: the two shared keys (FIGURE_FIELDS cash_equivalents_at_fair_value, nil_income_quarters) are inert unless a wrapper lists them, and no other wrapper does; the extra_industry_labels union change was checked only against spon3 identifiers (no other fund has 'Construction Material' without s). Semantic diff not run.",
+  "Full pytest suite not run. docs/agent_changelog.md not appended: another session has it modified (brief forbids editing it).",
+  "Cash-row yields, money-fund cost and percent (custom concepts) not published: observation cash-row-fields-on-filer-custom-concepts-not-read.",
+  "Industry labels and GICS not compared with the page beyond the seven sample rows (all matched par, cost, value, percent, spread, maturity).",
+  "The 20-card page sample was taken on ovyc; ovyd changed 8 rows (5 bill rates, 3 names) and was not re-sampled. Independent investigation review not done (orchestrator's step).",
+  "Five builds used (ovya-ovye). The money fund's remaining chain split at 2026-03-31 (pre-existing in spon3) is not fixed."
+ ],
+ "sample": {
+  "path": "docs/investigations/v05_readings/samples/0001965934/results.md",
+  "sandbox": "ovyc",
+  "errors": [
+   "C014 Treasury bill rate 2025-06-30 missing: fixed in all five quarters (ovyd)",
+   "C018 LS Group issuer misspelled from member 2025-03-31: fixed in the three quarters where the page prints it correctly (ovyd)"
+  ],
+  "note": "Sample on ovyc; ovyd fixed its two errors; ovye fixed the money-fund name and coupon type found by the independent review of ovyd. ovye not re-sampled."
+ }
+}

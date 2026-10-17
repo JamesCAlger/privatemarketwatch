@@ -469,6 +469,37 @@ class TestFigureCorrections:
         assert out.loc[("0001803498", "2026-03-31"), "borrowings"] == 210000000.0
         assert out.loc[("0001803498", "2026-03-31"), "investments_at_cost"] == 300000.0
 
+    def test_cash_equivalents_are_set_only_for_the_fund_that_lists_them(self, tmp_path, monkeypatch):
+        """Overland Advantage prints its money-market total below 'Total Investments' (2024-06-30: 11,226) and files
+        no undimensioned CashEquivalentsAtCarryingValue before 2025-12-31."""
+        import pandas as pd
+        from pipeline import fund_highlights_wrapper as fhw
+        spec = self._spec(tmp_path, [
+            {"report_date": "2024-06-30", "field": "cash_equivalents_at_fair_value", "value": 11226000,
+             "evidence": "10-Q schedule: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226'"}])
+        assert spec.figure_corrections == (("2024-06-30", "cash_equivalents_at_fair_value", 11226000.0),)
+        monkeypatch.setattr(fhw, "_WRAPPER_CACHE", {spec.cik: spec})
+        monkeypatch.setattr(fhw, "_CACHE_LOADED", True)
+        frame = pd.DataFrame([
+            {"cik": "0001930087", "report_date": "2024-06-30", "cash_equivalents_at_fair_value": None},
+            {"cik": "0001930087", "report_date": "2025-12-31", "cash_equivalents_at_fair_value": 9794000.0},
+            # another fund with no filed cash figure and no wrapper entry stays without one
+            {"cik": "0001803498", "report_date": "2024-06-30", "cash_equivalents_at_fair_value": None}])
+        out = fhw.apply_figure_corrections(frame).set_index(["cik", "report_date"])
+        assert out.loc[("0001930087", "2024-06-30"), "cash_equivalents_at_fair_value"] == 11226000.0
+        assert out.loc[("0001930087", "2025-12-31"), "cash_equivalents_at_fair_value"] == 9794000.0
+        assert pd.isna(out.loc[("0001803498", "2024-06-30"), "cash_equivalents_at_fair_value"])
+
+    def test_a_nil_income_quarter_needs_a_date_and_evidence(self, tmp_path):
+        from pipeline.fund_highlights_wrapper import _load_wrapper_from_path
+        path = tmp_path / "0001965934.json"
+        good = {"report_date": "2024-03-31", "evidence": "10-Q: 'Investment income $ - ... Net investment income (loss) -'"}
+        path.write_text(json.dumps({"schema_version": "fund-highlights-wrapper.v1", "cik": "0001965934",
+                                    "entity_name": "Overland Advantage", "version": 1,
+                                    "nil_income_quarters": [good, {**good, "evidence": ""}, {**good, "report_date": "2024-03"},
+                                                            "2024-06-30"]}), encoding="utf-8")
+        assert _load_wrapper_from_path(path).nil_income_quarters == ("2024-03-31",)
+
     def test_an_income_statement_total_is_still_not_a_correctable_figure(self, tmp_path):
         spec = self._spec(tmp_path, [
             {"report_date": "2023-12-31", "field": "total_investment_income", "value": 1.0, "evidence": "not a field a wrapper may set"},

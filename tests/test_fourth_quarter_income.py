@@ -104,6 +104,43 @@ def test_a_short_annual_period_keeps_the_stored_figure_unless_its_fund_and_year_
     assert _quarters_declared(GUARDIAN4_2022, {("0001925531", "2023-12-31")})[("0001925531", "2022q4")][0] == 2203.875
 
 
+# Overland Advantage began investing on 2024-05-07. The 10-Q for 2024-03-31 prints 'Investment income $ -' and tags no
+# income; 10-Qs of 3,393 and 9,058 follow, and the 10-K's 25,722 for the year is stored as 6,430.5.
+OVERLAND_2024 = [_income("1965934", "2024-03-31", 3, None, 884.913), _income("1965934", "2024-06-30", 3, 3393.0, 5111.0),
+                 _income("1965934", "2024-09-30", 3, 9058.0, 10147.0), _income("1965934", "2024-12-31", 12, 6430.5, 6257.25)]
+for _row in OVERLAND_2024[:1]:
+    _row["total_investment_income"] = None
+
+
+def _quarters_nil(rows, nil):
+    con = duckdb.connect()
+    frame = pd.DataFrame(rows)
+    con.register("income", frame)
+    out = con.execute("SELECT cik, report_quarter, total_investment_income, total_expenses FROM ("
+                      + quarter_income_sql("income", set(frame.columns), (), nil) + ") ORDER BY 1, 2").fetchall()
+    return {(r[0], r[1]): (r[2], r[3]) for r in out}
+
+
+def test_a_declared_nil_quarter_counts_as_filed_and_publishes_zero():
+    out = _quarters_nil(OVERLAND_2024, {("0001965934", "2024-03-31")})
+    assert out[("0001965934", "2024q4")][0] == pytest.approx(25722.0 - 3393.0 - 9058.0)           # 13,271
+    assert out[("0001965934", "2024q1")] == (0.0, 884.913)        # the dash is 0; the filed expenses are kept
+    assert out[("0001965934", "2024q4")][1] == pytest.approx(4 * 6257.25 - 884.913 - 5111.0 - 10147.0)
+
+
+def test_a_missing_quarter_figure_is_not_nil_unless_its_fund_and_date_are_declared():
+    # not declared: the year keeps its average, as for every other fund
+    assert _quarters_nil(OVERLAND_2024, ())[("0001965934", "2024q4")][0] == 6430.5
+    assert _quarters(OVERLAND_2024)[("0001965934", "2024q4")][0] == 6430.5
+    assert _quarters_nil(OVERLAND_2024, ())[("0001965934", "2024q1")][0] is None
+    # another fund's declaration, and this fund's declaration of another date, do not reach it
+    assert _quarters_nil(OVERLAND_2024, {("0001838126", "2024-03-31")})[("0001965934", "2024q4")][0] == 6430.5
+    assert _quarters_nil(OVERLAND_2024, {("0001965934", "2024-06-30")})[("0001965934", "2024q4")][0] == 6430.5
+    # a declared quarter that does carry a figure keeps it
+    assert _quarters_nil(HPS_2023, {("0001838126", "2023-03-31")})[("0001838126", "2023q1")] == (178.8, 80.0)
+    assert _quarters_nil(HPS_2023, {("0001838126", "2023-03-31")})[("0001838126", "2023q4")][0] == pytest.approx(264.7)
+
+
 def test_a_figure_missing_in_one_quarter_keeps_its_average_while_the_others_are_computed():
     rows = [dict(r) for r in HPS_2023]
     rows[1]["total_expenses"] = None

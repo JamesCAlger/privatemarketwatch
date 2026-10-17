@@ -1128,6 +1128,18 @@ if APOLLO_II_L_LOOP in held and APOLLO_II_L_LOOP_FILE.exists():
         if spec.get("exact"):
             EXACT.add(spec["identifier"])
 
+# Overland Advantage, fund-clearing loop (2026-10-17): money-fund and Treasury-bill yields the filer tagged with the
+# variable-rate spread concept (published as SOFR + yield). One spec per row, each with its printed line, in
+# row_correction_specs/0001965934.json.
+OVERLAND_LOOP = "0001965934"
+OVERLAND_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001965934.json"
+if OVERLAND_LOOP in held and OVERLAND_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(OVERLAND_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((OVERLAND_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1965934-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue

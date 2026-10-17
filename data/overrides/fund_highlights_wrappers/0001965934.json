@@ -1,0 +1,51 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001965934",
+ "entity_name": "Overland Advantage",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2024-06-30",
+   "field": "cash_equivalents_at_fair_value",
+   "value": 11226000,
+   "evidence": "0000950170-24-097213 (10-Q, 2024-06-30) schedule: 'Total Investments $ 346,841 $ 344,676 178.22 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 % Total Investments and Cash Equivalents $ 358,067 $ 355,902 184.02 %'. No undimensioned CashEquivalentsAtCarryingValue is filed for this date (the filer files it from 2025-12-31)."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "cash_equivalents_at_fair_value",
+   "value": 17324000,
+   "evidence": "0000950170-24-127235 (10-Q, 2024-09-30) schedule: 'Total Investments $ 504,487 $ 501,940 178.18 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 % Total Investments and Cash Equivalents $ 521,811 $ 519,264 184.33 %'."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "cash_equivalents_at_fair_value",
+   "value": 26055000,
+   "evidence": "0000950170-25-045206 (10-K, 2024-12-31) schedule: 'Total Investments $ 947,345 $ 947,637 220.87 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 % Total Investments and Cash Equivalents $ 973,400 $ 973,692 226.94 %'."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "cash_equivalents_at_fair_value",
+   "value": 33436000,
+   "evidence": "0000950170-25-071771 (10-Q, 2025-03-31) schedule: 'Total Investments $ 988,148 $ 982,953 206.53 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 % Total Investments and Cash Equivalents $ 1,021,584 $ 1,016,389 213.55 %'."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "cash_equivalents_at_fair_value",
+   "value": 22895000,
+   "evidence": "0000950170-25-109383 (10-Q, 2025-06-30) schedule: 'Total Investments $ 1,369,453 $ 1,366,112 210.20 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 % Total Investments and Cash Equivalents $ 1,392,348 $ 1,389,007 213.73 %'."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "cash_equivalents_at_fair_value",
+   "value": 29677000,
+   "evidence": "0001193125-25-272318 (10-Q, 2025-09-30) schedule: 'Total Investments $ 1,350,380 $ 1,347,655 206.48 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.02 % - 29,677 $ 29,677 $ 29,677 4.55 % Total Investments and Cash Equivalents $ 1,380,057 $ 1,377,332 211.03 %'."
+  }
+ ],
+ "nil_income_quarters": [
+  {
+   "report_date": "2024-03-31",
+   "evidence": "0000950170-24-059780 (10-Q, 2024-03-31) statement of operations: 'For the three months ended March 31, 2024 Investment income $ - Expenses Organization costs 32,880 ... Total expenses 884,913 Less expenses paid by the Advisor (Note 3) ( 884,913 ) Net investment income (loss) -'. No income fact is tagged for the quarter; 0000950170-25-045206 (10-K) 'the Company commenced investment operations on May 7, 2024'."
+  }
+ ],
+ "notes": "Cash equivalents: the schedule prints the money-market fund below 'Total Investments' (the balance-sheet investments line equals that total and includes the U.S. Treasury bill; the money fund sits in 'Cash and cash equivalents'). The filer files an undimensioned CashEquivalentsAtCarryingValue for that total only from 2025-12-31 (9,794 = 'Total Cash Equivalents $ 9,794'), so the six earlier quarters take the printed figure. First income year 2024: 0000950170-25-045206 (10-K, 2024-12-31) 'the Company commenced investment operations on May 7, 2024' and 'For the Year Ended December 31, 2024 Total investment income $ 25,722 Net expenses 16,123 Net investment income 9,599'; 0000950170-24-127235 (10-Q, 2024-09-30) 'Total investment income 9,058 12,451' (quarter, nine months). The 10-Q for 2024-03-31 prints a dash for income and tags none, so the year had two quarters with income and three filed; the fourth quarter was published as 25,722 / 4 = 6,431 (net investment income 9,599 / 4 = 2,400). With the first quarter nil (nil_income_quarters) it is 25,722 less 12,451 = 13,271 (net investment income 9,599 less 4,989 = 4,610). first_income_year_ends does not apply: the first quarter was filed."
+}

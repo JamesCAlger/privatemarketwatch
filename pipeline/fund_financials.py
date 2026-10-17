@@ -1010,7 +1010,7 @@ _INCOME_FLOWS = ("total_investment_income", "net_investment_income", "management
                  "incentive_fee", "interest_expense", "total_expenses")
 
 
-def quarter_income_sql(table: str, columns: set, first_income_years=()) -> str:
+def quarter_income_sql(table: str, columns: set, first_income_years=(), nil_quarters=()) -> str:
     """Income rows of ``table`` as one quarter each: cik, report_quarter and the six flow figures.
 
     The income table stores a 10-K's twelve-month figure divided by four. Where the three
@@ -1036,6 +1036,20 @@ def quarter_income_sql(table: str, columns: set, first_income_years=()) -> str:
             SELECT LPAD(CAST(cik AS VARCHAR), 10, '0') AS cik, report_quarter,
                 {flows}
             FROM {table}"""
+    # ``nil_quarters``: (cik, quarter-end date) pairs a fund's highlights wrapper declares
+    # (``nil_income_quarters``): a quarter filed before the fund began investing, whose statement
+    # prints a dash for its income lines and tags none (Overland Advantage, 2024-03-31: 'Investment
+    # income $ - ... Net investment income (loss) -'; operations began 2024-05-07). Its missing
+    # figures are nil, so it publishes 0 and counts as a filed quarter of the year. A figure the
+    # quarter does carry is kept. Every other quarter, and every other fund, is read as before.
+    nil = sorted({(str(cik).strip().zfill(10), str(day)[:10]) for cik, day in nil_quarters
+                  if str(cik).strip().isdigit() and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(day)[:10])})
+    if nil:
+        nil_cond = ("(LPAD(CAST(cik AS VARCHAR), 10, '0') || '|' || CAST(report_date AS VARCHAR)[:10] IN ("
+                    + ", ".join("'%s|%s'" % pair for pair in nil) + "))")
+        flows = ",\n                ".join(
+            f"CASE WHEN {nil_cond} THEN COALESCE(TRY_CAST({c} AS DOUBLE), 0) ELSE TRY_CAST({c} AS DOUBLE) END AS {c}"
+            for c in _INCOME_FLOWS)
     sums = ", ".join(f"sum(q.{c}) AS {c}_three, count(q.{c}) AS {c}_n, "
                      f"count(*) FILTER (WHERE q.{c} > 0) AS {c}_up, count(*) FILTER (WHERE q.{c} < 0) AS {c}_down"
                      for c in _INCOME_FLOWS)
@@ -1159,9 +1173,9 @@ def _prepare_bdc(
     )
 
     if has_income:
-        from pipeline.fund_highlights_wrapper import first_income_year_ends
+        from pipeline.fund_highlights_wrapper import first_income_year_ends, nil_income_quarters
         join_sql = f"""
-        WITH inc AS ({quarter_income_sql("income", set(income_df.columns), first_income_year_ends())})
+        WITH inc AS ({quarter_income_sql("income", set(income_df.columns), first_income_year_ends(), nil_income_quarters())})
         SELECT
             COALESCE(cf.cik, inc.cik) AS cik,
             cf.report_date,

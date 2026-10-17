@@ -1,0 +1,210 @@
+[
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Interest Rate 4.84%",
+  "exact": false,
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": ""
+  },
+  "reason": "Money market fund, not a floating loan. The filer tags its 4.84 pct yield with InvestmentBasisSpreadVariableRate, so it published as SOFR + 4.84; the page prints a yield only: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %' (0000950170-24-127235). Spread and reference rate withdrawn; interest_rate 4.84 kept."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Interest Rate 4.36%",
+  "exact": false,
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": ""
+  },
+  "reason": "Money market fund, not a floating loan. Yield tagged InvestmentBasisSpreadVariableRate 0.0436; printed 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %' (0000950170-25-045206). Spread and reference rate withdrawn; interest_rate 4.36 kept."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "U.S. Treasury Bill",
+  "exact": true,
+  "fields": {
+   "interest_rate": "4.27",
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "reference_rate_source": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Treasury bill, a fixed discount yield. Tagged InvestmentBasisSpreadVariableRate 0.0427, published as SOFR + 4.27 floating with no rate; printed 'U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %' (0000950170-25-045206)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "U.S. Treasury Bill",
+  "exact": true,
+  "fields": {
+   "interest_rate": "4.28",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Rate tagged with the filer's own ck0001965934:InvestmentFixedInterestRate 0.0428, which the shared concept map does not read; printed 'U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %' (0000950170-25-071771)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "U.S. Treasury Bill",
+  "exact": true,
+  "fields": {
+   "interest_rate": "4.32",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Rate tagged ck0001965934:InvestmentFixedInterestRate 0.0432, not read; printed 'U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %' (0000950170-25-109383). Page sample card C014."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "U.S. Treasury Bill",
+  "exact": true,
+  "fields": {
+   "interest_rate": "3.89",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Rate tagged ck0001965934:InvestmentFixedInterestRate 0.0389, not read; printed 'U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %' (0001193125-25-272318)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "U.S. Treasury Bill",
+  "exact": true,
+  "fields": {
+   "interest_rate": "3.61",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Rate tagged ck0001965934:InvestmentFixedInterestRate 0.0361, not read; printed 'U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %' (0001193125-26-117368)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "U.S. Treasury Bill",
+  "exact": true,
+  "fields": {
+   "interest_rate": "3.79",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Rate tagged ck0001965934:InvestmentFixedInterestRate 0.0379, not read; printed 'U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %' (0001193125-26-346556)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "LS Group OpCo Acquistion LLC First lien",
+  "exact": false,
+  "fields": {
+   "issuer_name": "LS Group OpCo Acquisition LLC",
+   "instrument_description": "First lien senior secured term loan"
+  },
+  "reason": "Member misspells 'Acquistion'; printed 'LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,965 $ 7,002 $ 6,904 1.45 %' (0000950170-25-071771). Page sample card C018."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "LS Group OpCo Acquistion LLC First lien",
+  "exact": false,
+  "fields": {
+   "issuer_name": "LS Group OpCo Acquisition LLC",
+   "instrument_description": "First lien senior secured term loan"
+  },
+  "reason": "Member misspells 'Acquistion'; printed 'LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,948 $ 6,984 $ 6,934 1.07 %' (0000950170-25-109383)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "LS Group OpCo Acquistion LLC First lien",
+  "exact": false,
+  "fields": {
+   "issuer_name": "LS Group OpCo Acquisition LLC",
+   "instrument_description": "First lien senior secured term loan"
+  },
+  "reason": "Member misspells 'Acquistion'; printed 'LS Group OpCo Acquisition LLC(7)(8)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,930 $ 6,964 $ 6,900 1.06 %' (0001193125-25-272318)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Liquidity Fed",
+  "exact": false,
+  "fields": {
+   "issuer_name": "BlackRock Liquidity FedFund - Institutional",
+   "instrument_description": ""
+  },
+  "reason": "Money-market fund printed under the 'Cash Equivalents' heading as 'BlackRock Liquidity FedFund - Institutional' (0000950170-24-097213: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 %'). Published as 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31 and 'Black Rock Liquidity Fed Fund Institutional' after, which split the position chain; one printed name in every quarter."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Liquidity Fed",
+  "exact": false,
+  "fields": {
+   "issuer_name": "BlackRock Liquidity FedFund - Institutional",
+   "instrument_description": ""
+  },
+  "reason": "Money-market fund printed under the 'Cash Equivalents' heading as 'BlackRock Liquidity FedFund - Institutional' (0000950170-24-127235: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %'). Published as 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31 and 'Black Rock Liquidity Fed Fund Institutional' after, which split the position chain; one printed name in every quarter."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Liquidity Fed",
+  "exact": false,
+  "fields": {
+   "issuer_name": "BlackRock Liquidity FedFund - Institutional",
+   "instrument_description": ""
+  },
+  "reason": "Money-market fund printed under the 'Cash Equivalents' heading as 'BlackRock Liquidity FedFund - Institutional' (0000950170-25-045206: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %'). Published as 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31 and 'Black Rock Liquidity Fed Fund Institutional' after, which split the position chain; one printed name in every quarter."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Liquidity Fed",
+  "exact": false,
+  "fields": {
+   "issuer_name": "BlackRock Liquidity FedFund - Institutional",
+   "instrument_description": "",
+   "coupon_type": ""
+  },
+  "reason": "Money-market fund printed under the 'Cash Equivalents' heading as 'BlackRock Liquidity FedFund - Institutional' (0000950170-25-071771: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %'). Published as 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31 and 'Black Rock Liquidity Fed Fund Institutional' after, which split the position chain; one printed name in every quarter. The page prints a yield, not a fixed coupon: coupon_type 'Fixed' withdrawn."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Liquidity Fed",
+  "exact": false,
+  "fields": {
+   "issuer_name": "BlackRock Liquidity FedFund - Institutional",
+   "instrument_description": ""
+  },
+  "reason": "Money-market fund printed under the 'Cash Equivalents' heading as 'BlackRock Liquidity FedFund - Institutional' (0000950170-25-109383: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %'). Published as 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31 and 'Black Rock Liquidity Fed Fund Institutional' after, which split the position chain; one printed name in every quarter."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Liquidity Fed",
+  "exact": false,
+  "fields": {
+   "issuer_name": "BlackRock Liquidity FedFund - Institutional",
+   "instrument_description": ""
+  },
+  "reason": "Money-market fund printed under the 'Cash Equivalents' heading as 'BlackRock Liquidity FedFund - Institutional' (0001193125-25-272318: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.02 % - 29,677 $ 29,677 $ 29,677 4.55 %'). Published as 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31 and 'Black Rock Liquidity Fed Fund Institutional' after, which split the position chain; one printed name in every quarter."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Liquidity Fed",
+  "exact": false,
+  "fields": {
+   "issuer_name": "BlackRock Liquidity FedFund - Institutional",
+   "instrument_description": ""
+  },
+  "reason": "Money-market fund printed under the 'Cash Equivalents' heading as 'BlackRock Liquidity FedFund - Institutional' (0001193125-26-117368: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 3.64 % - 9,670 $ 9,670 $ 9,670 1.32 %'). Published as 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31 and 'Black Rock Liquidity Fed Fund Institutional' after, which split the position chain; one printed name in every quarter."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Liquidity Fed",
+  "exact": false,
+  "fields": {
+   "issuer_name": "BlackRock Liquidity FedFund - Institutional",
+   "instrument_description": ""
+  },
+  "reason": "Money-market fund printed under the 'Cash Equivalents' heading as 'BlackRock Liquidity FedFund - Institutional' (0001193125-26-221960: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 3.54 % - 49,105 $ 49,105 $ 49,105 6.67 %'). Published as 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31 and 'Black Rock Liquidity Fed Fund Institutional' after, which split the position chain; one printed name in every quarter."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Liquidity Fed",
+  "exact": false,
+  "fields": {
+   "issuer_name": "BlackRock Liquidity FedFund - Institutional",
+   "instrument_description": ""
+  },
+  "reason": "Money-market fund printed under the 'Cash Equivalents' heading as 'BlackRock Liquidity FedFund - Institutional' (0001193125-26-346556: 'Cash Equivalents BlackRock Liquidity FedFund - Institutional - 3.54 % - 14,002 $ 14,002 $ 14,002 1.79 %'). Published as 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31 and 'Black Rock Liquidity Fed Fund Institutional' after, which split the position chain; one printed name in every quarter."
+ }
+]
