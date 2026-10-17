@@ -183,3 +183,4 @@ Manulife 0001988280.
 | 2026-10-17 | 0001633336 Crescent Capital BDC | ccza | INCOMPLETE (investigation COMPLETE) | 108 findings, 49 outstanding, 43 proposed, 6 parked; sample 2/20 errors parked (cost sign, PIK from terms) | D-200 |
 | 2026-10-17 | 0001965934 Overland Advantage | ovye | NEEDS_ORCHESTRATOR (OVY-R1, OVY-R2 for the owner; investigation COMPLETE) | 37 findings, 26 outstanding, 26 proposed; 3/9 quarters tie, 6 short by the Treasury bill; sample 2/20 errors, both fixed | D-201 |
 | 2026-10-17 | 0001965934 Overland Advantage | ovye | PASS (after owner rulings D-202) | 30 findings, 19 outstanding, 19 proposed; 9/9 quarters tie | D-203 |
+| 2026-10-17 | 0001766037 NMF SLF I | nmyd | PASS | 87 findings, 59 outstanding, 59 proposed; 14/14 quarters tie (5 off before); sample 0/20 errors; NMY-R1 re-verifier fix | D-204 |

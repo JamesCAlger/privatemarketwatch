@@ -1140,6 +1140,18 @@ if OVERLAND_LOOP in held and OVERLAND_LOOP_FILE.exists():
         if spec.get("exact"):
             EXACT.add(spec["identifier"])
 
+# NMF SLF I, fund-clearing loop (2026-10-17): the 10-Q for 2026-03-31 tags DigiCert's line one column off (principal on
+# a Bonterra member, cost as principal, fair value as cost, percent as fair value). One spec per row, each with its
+# printed line, in row_correction_specs/0001766037.json.
+NMFSLF_LOOP = "0001766037"
+NMFSLF_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001766037.json"
+if NMFSLF_LOOP in held and NMFSLF_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(NMFSLF_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((NMFSLF_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1766037-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue

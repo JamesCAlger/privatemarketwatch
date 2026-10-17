@@ -1,0 +1,861 @@
+[
+ {
+  "quarter": "2024-09-30",
+  "identifier": "LogRhythm, Inc., First Lien",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.5",
+   "pik_rate": "",
+   "coupon_type": "Floating"
+  },
+  "reason": "The filer tagged the 7.50 margin with the PIK concept (c-314: InvestmentInterestRatePaidInKind 0.0750, InvestmentInterestRate 0.1210, no spread); the printed line carries no PIK mark (the filer's '*' for payment in kind) and reads: 'LogRhythm, Inc. Software First Lien(2)(3)(6) SOFR(Q) 7.50 % 12.10 % 07/2024 07/2029 2,727 2,686 2,727 0.28 %' (0001766037-24-000017)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "DigiCert, Inc., First Lien",
+  "exact": true,
+  "fields": {
+   "principal_amount": "7063000",
+   "cost": "7016000",
+   "fair_value": "7010000",
+   "basis_spread": "5.75",
+   "reference_rate_type": "SOFR",
+   "coupon_type": "Floating"
+  },
+  "reason": "The filer tagged this line one column off: c-242 (DigiCert) carries principal 7,016, cost 7,010 and fair value 0.0073 (the percent), and the spread 5.75 and principal 7,063 sit on c-241 under a Bonterra member. The printed line reads: 'DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %' (0001766037-26-000009). The promoted rescale rule 1766037_20260331_digicert_fv_rescale (fair value 7,300) is withdrawn."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "MRI Software LLC, First Lien Bullhorn, Inc., First Lien  Undrawn1",
+  "exact": true,
+  "fields": {
+   "issuer_name": "MRI Software LLC",
+   "instrument_description": "First Lien Undrawn"
+  },
+  "reason": "The filer's member joins two names ('MRI Software LLC, First Lien Bullhorn, Inc., First Lien  Undrawn1'); the row's par 1,792 and maturity 12/2025 are MRI Software's undrawn line: 'MRI Software LLC Software First Lien(3)(4) - Undrawn - - - 12/2023 12/2025 1,792 - -' (0001766037-24-000012)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "YLG Holdings, Inc., First Lien Bullhorn, Inc., First Lien  Undrawn1",
+  "exact": true,
+  "fields": {
+   "issuer_name": "YLG Holdings, Inc.",
+   "instrument_description": "First Lien Undrawn"
+  },
+  "reason": "The filer's member joins two names ('YLG Holdings, Inc., First Lien Bullhorn, Inc., First Lien  Undrawn1'); the row's par 629 and maturity 10/2026 are YLG Holdings' undrawn line: 'YLG Holdings, Inc. Business Services First Lien(3)(4) - Undrawn - - - 06/2024 10/2026 629 - -' (0001766037-24-000017)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "TMK Hawk Parent Corp., First lien",
+  "exact": true,
+  "fields": {
+   "interest_rate": "9.17",
+   "basis_spread": "3.5",
+   "interest_rate_kind": "all_in"
+  },
+  "reason": "No rate or spread fact on the row's context c-267 (values only); the filer tagged its rate 0.0917 and spread 0.0350 on c-266 under a 'Trident Bidco Limited, First lien 2' member, and Trident's printed rows read 'SOFR(Q) 5.00 % 10.31 %'. The printed line reads: 'TMK Hawk Parent, Corp. Distribution & Logistics First lien (3) SOFR(Q) 3.50 % 9.17 % 09/2022 08/2024 2,468 1,913 1,787 0.21 %' (0001766037-23-000014)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Pioneer Topco I, L.P., Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 10,000 (scale x1000). The printed line reads: '$ 1,231,325 143.16 % Equity - United States Pioneer Topco I, L.P. (6) Software Ordinary Shares(3) - - - 11/2021 - 10 $ - $ -' (0001766037-23-000014)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Ambrosia Holdco Corp., Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 19,197,000 (scale x1000). The printed line reads: '146.67 % Equity - United States Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(7) - - - 01/2024 - 19,197 $ 205 $ 205' (0001766037-24-000008)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Ambrosia Holdco Corp., Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 19,197,000 (scale x1000). The printed line reads: '150.32 % Equity - United States Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(7) - - - 01/2024 - 19,197 $ 205 $ 205' (0001766037-24-000012)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Pioneer Topco I, L.P., Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 10,000 (scale x1000). The printed line reads: '- - - 01/2024 - 19,197 $ 205 $ 205 0.02 % Pioneer Topco I, L.P. Software Ordinary Shares(3)(6) - - - 11/2021 - 10 - -' (0001766037-24-000012)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Ambrosia Holdco Corp., Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 19,197,000 (scale x1000). The printed line reads: '- 5,691 $ 5,634 $ 5,634 0.58 % Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(8) - - - 01/2024 - 19,197 205 205' (0001766037-24-000017)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Eclipse Topco, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "5691"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 5,691,000 (scale x1000). The printed line reads: '% Equity - United States Eclipse Topco, Inc. Software Preferred Shares(9) FIXED(S)* 12.50 %/PIK 12.50 % 09/2024 - 5,691 $ 5,634 $ 5,634' (0001766037-24-000017)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Pioneer Topco I, L.P., Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 10,000 (scale x1000). The printed line reads: '- - - 01/2024 - 19,197 205 205 0.02 % Pioneer Topco I, L.P. Software Ordinary Shares(3)(7) - - - 11/2021 - 10 - -' (0001766037-24-000017)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Ambrosia Holdco Corp...Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 19,197,000 (scale x1000). The printed line reads: '- 569 $ 5,860 $ 5,858 0.60 % Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(8) - - - 01/2024 - 19,197 205 205' (0001766037-25-000003)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Eclipse Topco, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "569"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 569,000 (scale x1000). The printed line reads: '% Equity - United States Eclipse Topco, Inc. Software Preferred Shares(3)(9) FIXED(S)* 12.50 %/PIK 12.50 % 09/2024 - 569 $ 5,860 $ 5,858' (0001766037-25-000003)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Pioneer Topco I, L.P..Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 10,000 (scale x1000). The printed line reads: '- - - 01/2024 - 19,197 205 205 0.02 % Pioneer Topco I, L.P. Software Ordinary Shares(3)(7) - - - 11/2021 - 10 - -' (0001766037-25-000003)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Ambrosia Holdco Corp., Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 19,197,000 (scale x1000). The printed line reads: '1,999 1,871 4,055 3,927 0.40 % Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(8) - - - 01/2024 - 19,197 205 196' (0001766037-25-000006)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Eclipse Topco, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "569"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 569,000 (scale x1000). The printed line reads: '% Equity - United States Eclipse Topco, Inc. Software Preferred Shares(3)(9) FIXED(S)* 12.50 %/PIK 12.50 % 09/2024 - 569 $ 5,860 $ 5,858' (0001766037-25-000006)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "KWOR Intermediate I, Inc., Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "1922"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 1,922,000 (scale x1000). The printed line reads: 'Preferred Shares(3)(10) SOFR(Q)* 8.00 %/PIK 12.31 % 02/2025 - 2,056 2,056 2,056 Ordinary Shares(3)(10) - - - 02/2025 - 1,922 1,999 1,871' (0001766037-25-000006)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "KWOR Intermediate I, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "2056"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 2,056,000 (scale x1000). The printed line reads: '5,858 0.60 % KWOR Intermediate I, Inc. Business Services Preferred Shares(3)(10) SOFR(Q)* 8.00 %/PIK 12.31 % 02/2025 - 2,056 2,056 2,056' (0001766037-25-000006)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Pioneer Topco I, L.P., Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 10,000 (scale x1000). The printed line reads: 'or Shares Cost Fair Value Percent of Net Assets Pioneer Topco I, L.P. Software Ordinary Shares(3)(7) - - - 11/2021 - 10 $ - $ -' (0001766037-25-000006)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Ambrosia Topco, LLC, Class A-1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 19,197,000 (scale x1000). The printed line reads: '1,572 4,140 3,713 0.38 % Ambrosia Topco, LLC Distribution & Logistics Class A-1 common units (3)(8) - - - 01/2024 - 19,197 205 118' (0001766037-25-000012)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Eclipse Topco, Inc.., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "569"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 569,000 (scale x1000). The printed line reads: '% Equity - United States Eclipse Topco, Inc. Software Preferred Shares(3)(9) FIXED(S)* 12.50 %/PIK 12.50 % 09/2024 - 569 $ 6,227 $ 6,221' (0001766037-25-000012)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "KWOR Intermediate I, Inc., Class A-1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "1922"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 1,922,000 (scale x1000). The printed line reads: 'Shares(3)(10) SOFR(Q)* 8.00 %/PIK 12.33 % 02/2025 - 2,056 2,141 2,141 Class A-1 common stock (3)(10) - - - 02/2025 - 1,922 1,999 1,572' (0001766037-25-000012)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "KWOR Intermediate I, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "2056"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 2,056,000 (scale x1000). The printed line reads: '6,221 0.64 % KWOR Intermediate I, Inc. Business Services Preferred Shares(3)(10) SOFR(Q)* 8.00 %/PIK 12.33 % 02/2025 - 2,056 2,141 2,141' (0001766037-25-000012)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Pioneer Topco I, L.P., Class A-2 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the principal concept at 10,000 (scale x1000). The printed line reads: '- - - 01/2024 - 19,197 205 118 0.01 % Pioneer Topco I, L.P. Software Class A-2 common units (3)(7) - - - 11/2021 - 10 - -' (0001766037-25-000012)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Ambrosia Topco LLC, Class A-1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 19,197,000 (scale x1000). The printed line reads: '3,978 4,205 3,309 0.34 % Ambrosia Topco LLC Distribution & Logistics Class A-1 common units (3)(8) - - - 01/2024 - 19,197 205 90' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Eclipse Topco, Inc., Preferred shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "569"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 569,000 (scale x1000). The printed line reads: '% Equity - United States Eclipse Topco, Inc. Software Preferred Shares(3)(9) FIXED(S)* 12.50 %/PIK 12.50 % 09/2024 - 569 $ 6,227 $ 6,284' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "KWOR Intermediate I, LLC, Class A-1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "1922"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 1,922,000 (scale x1000). The printed line reads: 'Shares(3)(10) SOFR(Q)* 8.00 %/PIK 12.20 % 02/2025 - 2,056 2,206 2,206 Class A-1 common units (3)(10) - - - 02/2025 - 1,922 1,999 1,103' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "KWOR Intermediate I, LLC, Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "2056"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 2,056,000 (scale x1000). The printed line reads: 'LLC (10) KWOR Intermediate I, LLC (10) Business Services Preferred Shares(3)(10) SOFR(Q)* 8.00 %/PIK 12.20 % 02/2025 - 2,056 2,206 2,206' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Pioneer Buyer I, LLC, Class A-2 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 10,000 (scale x1000). The printed line reads: '- - - 01/2024 - 19,197 205 90 0.01 % Pioneer Topco I, L.P. Software Class A-2 common units (3)(7) - - - 11/2021 - 10 - -' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Ambrosia Holdco Corp. Class A-1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 19,197,000 (scale x1000). The printed line reads: '3,978 4,272 3,366 0.35 % Ambrosia TopCo LLC Distribution & Logistics Class A-1 common units (3)(8) - - - 01/2024 - 19,197 205 90' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Eclipse Topco, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "569"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 569,000 (scale x1000). The printed line reads: '% Eclipse Topco, Inc. Financial Services & Technology Preferred Shares(3)(9) FIXED(S)* 12.50 %/PIK 12.50 % 09/2024 - 569 6,623 6,688' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "KWOR Acquisition, Inc., Class A -1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "1922"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 1,922,000 (scale x1000). The printed line reads: 'Shares(3)(10) SOFR(Q)* 8.00 %/PIK 11.82 % 02/2025 - 2,056 2,273 2,273 Class A-1 common units (3)(10) - - - 02/2025 - 1,922 1,999 1,093' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "KWOR Acquisition, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "2056"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 2,056,000 (scale x1000). The printed line reads: 'LLC (10) KWOR Intermediate I, LLC (10) Business Services Preferred Shares(3)(10) SOFR(Q)* 8.00 %/PIK 11.82 % 02/2025 - 2,056 2,273 2,273' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Notorious Buyer LLC, Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "427"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 427,000 (scale x1000). The printed line reads: '1,493,879 152.46 % Equity - United States Notorious Buyer LLC Consumer Products Ordinary Shares(3)(11) - - - 12/2025 - 427 $ 8,345 $ 8,345' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Pioneer Buyer I, LLC , Class A-2 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 10,000 (scale x1000). The printed line reads: '- - - 01/2024 - 19,197 205 90 0.01 % Pioneer Topco I, L.P. Software Class A-2 common units (3)(7) - - - 11/2021 - 10 - -' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Ambrosia Holdco Corp. Class A-1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 19,197,000 (scale x1000). The printed line reads: '3,978 4,339 2,533 0.26 % Ambrosia Holdco Corp. Distribution & Logistics Class A-1 common units (3)(8) - - - 01/2024 - 19,197 205 89' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Eclipse Topco, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "569"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 569,000 (scale x1000). The printed line reads: '% Eclipse Topco, Inc. Financial Services & Technology Preferred Shares(3)(9) FIXED(S)* 12.50 %/PIK 12.50 % 09/2024 - 569 6,623 6,680' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "KWOR Acquisition, Inc., Class A -1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "1922"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 1,922,000 (scale x1000). The printed line reads: 'Shares(3)(10) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 - 2,056 2,340 2,340 Class A-1 common units (3)(10) - - - 02/2025 - 1,922 1,999 193' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "KWOR Acquisition, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "2056"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 2,056,000 (scale x1000). The printed line reads: 'LLC (10) KWOR Intermediate I, LLC (10) Business Services Preferred Shares(3)(10) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 - 2,056 2,340 2,340' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Notorious Buyer LLC, Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "427"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 427,000 (scale x1000). The printed line reads: '$ 1,441,890 150.52 % Equity - United States Notorious Buyer, LLC Consumer Products Ordinary Shares(3) - - - 12/2025 - 427 $ 8,345 $ 7,232' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Pioneer Buyer I, LLC , Class A-2 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 10,000 (scale x1000). The printed line reads: 'Cost Fair Value Percent of Net Assets Pioneer Topco I, L.P. Software Class A-2 common units (3)(7) - - - 11/2021 - 10 $ - $ -' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Ambrosia Topco, LLC. Class A-1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "19197"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 19,197,000 (scale x1000). The printed line reads: '- 3,978 4,407 1,870 0.20 % Ambrosia Topco, LLC Distribution & Logistics Class A-1 common units (3)(8) - - - 01/2024 - 19,197 205 53' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "DCA TopCo LP., Class A common units 1",
+  "exact": true,
+  "fields": {
+   "shares_held": "211794"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 211,794,000 (scale x1000). The printed line reads: '- 2,419 1,198 1,198 7,544 3,736 3,736 0.39 % DCA TopCo LP Healthcare Class A Common Units(2)(3)(12) - - - 06/2026 - 211,794 2,118 2,118' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "DCA TopCo LP., Class A common units 2",
+  "exact": true,
+  "fields": {
+   "shares_held": "37901"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 37,901,000 (scale x1000). The printed line reads: 'Class A Common Units(2)(3)(12) - - - 06/2026 - 211,794 2,118 2,118 Class A Common Units(3)(12) - - - 06/2026 - 37,901 379 379' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Eclipse Topco, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "569"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 569,000 (scale x1000). The printed line reads: '% Eclipse Topco, Inc. Financial Services & Technology Preferred Shares(3)(9) FIXED(S)* 12.50 %/PIK 12.50 % 09/2024 - 569 4,864 4,899' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "KWOR Acquisition, Inc., Class A -1 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "1922"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 1,922,000 (scale x1000). The printed line reads: 'Shares(3)(10) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 - 2,056 2,408 1,870 Class A-1 common units (3)(10) - - - 02/2025 - 1,922 1,999 -' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "KWOR Acquisition, Inc., Preferred Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "2056"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 2,056,000 (scale x1000). The printed line reads: 'LLC (10) KWOR Intermediate I, LLC (10) Business Services Preferred Shares(3)(10) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 - 2,056 2,408 1,870' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "New ACI Holdings LLC., Class A common units 1",
+  "exact": true,
+  "fields": {
+   "shares_held": "5125"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 5,125,000 (scale x1000). The printed line reads: '12.50 % 09/2024 - 569 4,864 4,899 0.51 % New ACI Holdings LLC Healthcare Class A Common Units(2)(13) - - - 06/2026 - 5,125 2,538 2,538' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "New ACI Holdings LLC., Class A common units 2",
+  "exact": true,
+  "fields": {
+   "shares_held": "2419"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 2,419,000 (scale x1000). The printed line reads: 'LLC Healthcare Class A Common Units(2)(13) - - - 06/2026 - 5,125 2,538 2,538 Class A Common Units(13) - - - 06/2026 - 2,419 1,198 1,198' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Notorious Buyer LLC, Ordinary Shares",
+  "exact": true,
+  "fields": {
+   "shares_held": "427"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 427,000 (scale x1000). The printed line reads: '144.55 % Equity - United States Notorious Buyer, LLC Consumer Products Ordinary Shares(3)(11) - - - 12/2025 - 427 $ 8,345 $ 6,466' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Pioneer Buyer I, LLC , Class A-2 common units",
+  "exact": true,
+  "fields": {
+   "shares_held": "10"
+  },
+  "reason": "Schedule is '(in thousands, except shares)'; the filer tags this row's unit count with the share-count concept at 10,000 (scale x1000). The printed line reads: '- - - 01/2024 - 19,197 205 53 0.01 % Pioneer Topco I, L.P. Software Class A-2 common units (3)(7) - - - 11/2021 - 10 - -' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Pioneer Buyer I, LLC, First lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '15,943 1.85 % Pioneer Topco I, L.P. (6) Pioneer Buyer I, LLC Software First lien (3) SOFR(Q)* 7.00 %/PIK 12.39 % 11/2021 11/2028 13,621 13,534 13,621' (0001766037-23-000014)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Pioneer Buyer I, LLC, First lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'lien (3) SOFR(Q)* 7.00 %/PIK 12.39 % 11/2021 11/2028 13,621 13,534 13,621 First lien (3) SOFR(Q)* 7.00 %/PIK 12.39 % 03/2022 11/2028 1,867 1,854 1,867' (0001766037-23-000014)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "CCBlue Bidco, Inc. First Lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.50",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 6.50 %/PIK 11.91 % 12/2021 12/2028 21,994 21,841 19,843 First Lien(3) SOFR(Q)* 6.50 %/PIK 11.91 % 12/2021 12/2028 1,142 1,140 1,031' (0001766037-24-000008)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "CCBlue Bidco, Inc., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.50",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '615 616 570 23,214 23,100 21,535 2.33 % CCBlue Bidco, Inc. Healthcare First Lien(2)(3) SOFR(Q)* 6.50 %/PIK 11.91 % 12/2021 12/2028 21,994 21,841 19,843' (0001766037-24-000008)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Pioneer Buyer I, LLC, First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '20,874 2.26 % Pioneer Topco I, L.P. (6) Pioneer Buyer I, LLC Software First Lien(3) SOFR(Q)* 7.00 %/PIK 12.31 % 11/2021 11/2028 18,231 18,148 18,231' (0001766037-24-000008)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "TMK Hawk Parent, Corp., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'Ambrosia Holdco Corp. (7) TMK Hawk Parent, Corp. Distribution & Logistics First Lien(3) SOFR(M)* 5.25 %/PIK 10.58 % 01/2024 06/2029 1,526 1,491 1,389' (0001766037-24-000008)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "CCBlue Bidco, Inc., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.50",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'Cost Fair Value Percent of Net Assets CCBlue Bidco, Inc. Healthcare First Lien(2)(3) SOFR(Q)* 6.50 %/PIK 11.93 % 12/2021 12/2028 $ 22,652 $ 22,511 $ 20,450' (0001766037-24-000012)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "CCBlue Bidco, Inc., First Lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.50",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 6.50 %/PIK 11.93 % 12/2021 12/2028 $ 22,652 $ 22,511 $ 20,450 First Lien(3) SOFR(Q)* 6.50 %/PIK 11.94 % 12/2021 12/2028 1,177 1,175 1,063' (0001766037-24-000012)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "TMK Hawk Parent, Corp., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'Ambrosia Holdco Corp. (7) TMK Hawk Parent, Corp. Distribution & Logistics First Lien(3) SOFR(M)* 5.25 %/PIK 10.59 % 01/2024 06/2029 1,628 1,574 1,404' (0001766037-24-000012)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "CCBlue Bidco, Inc., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.50",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '697 692 697 22,811 22,746 22,811 2.34 % CCBlue Bidco, Inc. Healthcare First Lien(2)(3) SOFR(Q)* 6.50 %/PIK 11.21 % 12/2021 12/2028 23,358 23,224 21,314' (0001766037-24-000017)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "CCBlue Bidco, Inc., First Lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.50",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 6.50 %/PIK 11.21 % 12/2021 12/2028 23,358 23,224 21,314 First Lien(3) SOFR(Q)* 6.50 %/PIK 11.21 % 12/2021 12/2028 1,214 1,212 1,108' (0001766037-24-000017)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "TMK Hawk Parent, Corp., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'Ambrosia Holdco Corp. (8) TMK Hawk Parent, Corp. Distribution & Logistics First Lien(3) SOFR(M)* 5.25 %/PIK 10.17 % 01/2024 06/2029 1,674 1,620 1,413' (0001766037-24-000017)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "CCBlue Bidco, Inc., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.50",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '09/2028 23,175 23,034 23,175 2.36 % CCBlue Bidco, Inc. Healthcare First Lien(2)(3) SOFR(Q)* 6.50 %/PIK 10.93 % 12/2021 12/2028 24,020 23,892 21,918' (0001766037-25-000003)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "CCBlue Bidco, Inc., First Lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.50",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 6.50 %/PIK 10.93 % 12/2021 12/2028 24,020 23,892 21,918 First Lien(3) SOFR(Q)* 6.50 %/PIK 10.93 % 12/2021 12/2028 1,248 1,247 1,139' (0001766037-25-000003)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "TMK Hawk Parent, Corp., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'Ambrosia Holdco Corp. (8) TMK Hawk Parent, Corp. Distribution & Logistics First Lien(3) SOFR(M)* 5.25 %/PIK 9.59 % 01/2024 06/2029 1,718 1,669 1,450' (0001766037-25-000003)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "KWOR Acquisition, Inc., Subordinated",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 1.00 % + 5.25 %/PIK 10.56 % 02/2025 02/2030 9,250 9,250 9,250 Subordinated(3) SOFR(Q)* 8.00 %/PIK 12.31 % 02/2025 02/2030 3,083 3,083 3,083' (0001766037-25-000006)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "KWOR Acquisition, Inc., Subordinated",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 1.00 % + 5.25 %/PIK 10.58 % 02/2025 02/2030 9,370 9,370 9,370 Subordinated(3) SOFR(Q)* 8.00 %/PIK 12.33 % 02/2025 02/2030 3,177 3,177 3,177' (0001766037-25-000012)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "DCA Investment Holding, LLC, First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.41",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'Value Percent of Net Assets DCA Investment Holding, LLC Healthcare First Lien(2)(3)(6) SOFR(Q)* 6.41 %/PIK 10.41 % 03/2021 04/2028 $ 6,322 $ 6,302 $ 5,572' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "DCA Investment Holding, LLC, First Lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.41",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 6.41 %/PIK 10.41 % 03/2021 04/2028 $ 6,322 $ 6,302 $ 5,572 First Lien(3) SOFR(Q)* 6.41 %/PIK 10.41 % 03/2021 04/2028 525 522 462' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "DCA Investment Holding, LLC, First Lien 3",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.41",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'First Lien(3) SOFR(Q)* 6.41 %/PIK 10.41 % 03/2021 04/2028 525 522 462 First Lien(3) SOFR(Q)* 6.41 %/PIK 10.41 % 03/2021 04/2028 361 360 318' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "DCA Investment Holding, LLC, First Lien 4",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.50",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '462 First Lien(3) SOFR(Q)* 6.41 %/PIK 10.41 % 03/2021 04/2028 361 360 318 First Lien(3) SOFR(Q)* 6.50 %/PIK 10.50 % 12/2022 04/2028 246 244 217' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "KWOR Acquisition, Inc., Subordinated",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 1.00 % + 5.25 %/PIK 10.45 % 02/2025 02/2030 9,497 9,497 9,497 Subordinated(3) SOFR(Q)* 8.00 %/PIK 12.20 % 02/2025 02/2030 3,278 3,278 3,278' (0001766037-25-000018)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "KWOR Acquisition, Inc., Subordinated",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 1.00 % + 5.25 %/PIK 10.07 % 02/2025 02/2030 9,623 9,623 9,623 Subordinated(3) SOFR(Q)* 8.00 %/PIK 11.82 % 02/2025 02/2030 3,379 3,379 3,379' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Notorious Buyer, LLC., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '0.81 % Notorious Buyer, LLC (11) Notorious Topco, LLC Consumer Products First Lien(2)(3) SOFR(Q)* 7.25 %/PIK 11.10 % 12/2025 12/2030 4,549 4,549 4,549' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Notorious Buyer, LLC., First Lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 9.00 %/PIK 12.85 % 12/2025 12/2031 2,184 2,184 2,184 First Lien(3) SOFR(Q)* 7.25 %/PIK 11.10 % 12/2025 12/2030 787 787 787' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Notorious Buyer, LLC., Subordinated 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "9.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 7.25 %/PIK 11.10 % 12/2025 12/2030 4,549 4,549 4,549 Subordinated(2)(3) SOFR(Q)* 9.00 %/PIK 12.85 % 12/2025 12/2031 2,184 2,184 2,184' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Notorious Buyer, LLC., Subordinated 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "9.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'First Lien(3) SOFR(Q)* 7.25 %/PIK 11.10 % 12/2025 12/2030 787 787 787 Subordinated(3) SOFR(Q)* 9.00 %/PIK 12.85 % 12/2025 12/2031 378 378 378' (0001766037-26-000004)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "KWOR Acquisition, Inc., Subordinated",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'KWOR Intermediate I, LLC (10) KWOR Acquisition, Inc. Business Services Subordinated(3) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 02/2030 $ 3,480 $ 3,480 $ 3,480' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Notorious Buyer, LLC., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '0.90 % Notorious Buyer, LLC (11) Notorious Topco, LLC Consumer Products First Lien(2)(3) SOFR(Q)* 7.25 %/PIK 11.10 % 12/2025 12/2030 4,693 4,693 4,693' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Notorious Buyer, LLC., First Lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '(3) SOFR(Q)* 9.00 %/PIK 12.85 % 12/2025 12/2031 2,263 2,263 2,263 First Lien(3) SOFR(Q)* 7.25 %/PIK 11.10 % 12/2025 12/2030 812 812 812' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Notorious Buyer, LLC., Subordinated 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "9.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 7.25 %/PIK 11.10 % 12/2025 12/2030 4,693 4,693 4,693 Subordinated(2) (3) SOFR(Q)* 9.00 %/PIK 12.85 % 12/2025 12/2031 2,263 2,263 2,263' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Notorious Buyer, LLC., Subordinated 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "9.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'First Lien(3) SOFR(Q)* 7.25 %/PIK 11.10 % 12/2025 12/2030 812 812 812 Subordinated(3) SOFR(Q)* 9.00 %/PIK 12.85 % 12/2025 12/2031 391 391 391' (0001766037-26-000009)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Diligent Corporation, First Lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8.42",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'Lien(2)(3)(6) SOFR(Q) 5.00 % 8.67 % 04/2024 08/2030 8,504 8,482 8,285 First Lien(3) SOFR(Q)* 8.42 %/PIK 12.09 % 04/2024 08/2030 1,458 1,454 1,420' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "KWOR Acquisition, Inc., Subordinated",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '% KWOR Intermediate I, LLC (10) KWOR Acquisition, Inc. Business Services Subordinated(3) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 02/2030 3,583 3,583 3,583' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Notorious Buyer, LLC., First Lien 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '0.88 % Notorious Buyer, LLC (11) Notorious Topco, LLC Consumer Products First Lien(2)(3) SOFR(Q)* 7.25 %/PIK 11.13 % 12/2025 12/2030 4,824 4,824 4,824' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Notorious Buyer, LLC., First Lien 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7.25",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: '(3) SOFR(Q)* 9.00 %/PIK 12.88 % 12/2025 12/2031 2,337 2,337 2,337 First Lien(3) SOFR(Q)* 7.25 %/PIK 11.13 % 12/2025 12/2030 834 834 834' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Notorious Buyer, LLC., Subordinated 1",
+  "exact": true,
+  "fields": {
+   "basis_spread": "9.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'SOFR(Q)* 7.25 %/PIK 11.13 % 12/2025 12/2030 4,824 4,824 4,824 Subordinated(2) (3) SOFR(Q)* 9.00 %/PIK 12.88 % 12/2025 12/2031 2,337 2,337 2,337' (0001766037-26-000013)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Notorious Buyer, LLC., Subordinated 2",
+  "exact": true,
+  "fields": {
+   "basis_spread": "9.00",
+   "coupon_type": "Floating"
+  },
+  "reason": "Floating loan whose whole margin is paid in kind: the filer tags the coupon (InvestmentInterestRate) and the PIK margin, no spread, so the row was published Fixed with no spread. The printed line reads: 'First Lien(3) SOFR(Q)* 7.25 %/PIK 11.13 % 12/2025 12/2030 834 834 834 Subordinated(3) SOFR(Q)* 9.00 %/PIK 12.88 % 12/2025 12/2031 404 404 404' (0001766037-26-000013)."
+ }
+]

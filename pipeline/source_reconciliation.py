@@ -1630,6 +1630,9 @@ def _extract_single_xbrl_source_file(
         _settle_margins(facts_by_ctx, mode=_margin_tags)
     from pipeline.page_labelled_contexts import fill_untagged_values
     fill_untagged_values(facts_by_ctx, filing_meta)
+    # cost and fair value printed in brackets and tagged with no sign, as the extractor publishes them
+    from pipeline.printed_sign import apply_printed_signs
+    apply_printed_signs(facts_by_ctx, filing_meta, record_events=False)
     from pipeline.cost_in_two_units import settle_cost_in_two_units
     settle_cost_in_two_units(tree, facts_by_ctx, filing_meta, record_events=False)
     from pipeline.schedule_row_tags import drop_non_schedule_contexts

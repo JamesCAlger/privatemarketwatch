@@ -104,7 +104,7 @@
     ],
     "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|\\|\\s*Non-Affiliated\\s+Issuer|\\|\\s*Affiliated\\s+Issuer)\\s*$",
     "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total|Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer)\\s*$",
-    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+)(?:First\\s+lien|Second\\s+lien|Subordinated|Preferred\\s+shares|Ordinary\\s+shares|Common\\s+(?:shares|units|stock))(?:\\s*-?\\s*(?:Undrawn|Drawn|Funded|Unfunded|Revolver|Delayed\\s+Draw))?(?:\\s+\\d{1,2})?\\s*$",
+    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+|(?<=\\.))(?:First\\s+lien?(?:\\s*\\()?|Second\\s+lien|Subordinated|Preferred\\s+shares|Ordinary\\s+shares|Common\\s+(?:shares|units|stock))(?:\\s*-?\\s*(?:Undrawn|Drawn|Funded|Unfunded|Revolver|Delayed\\s+Draw))?(?:\\s*\\d{1,2})?\\s*$",
     "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
@@ -203,6 +203,30 @@
   "source_encodings": {
     "filed_rate_reading": [
       "all_in"
+    ],
+    "reference_rate_columns": [
+      "Reference"
+    ],
+    "reference_rate_codes": [
+      "L=LIBOR",
+      "LM=LIBOR",
+      "LQ=LIBOR",
+      "LS=LIBOR",
+      "P=PRIME",
+      "PM=PRIME",
+      "PQ=PRIME"
+    ],
+    "context_identifiers": [
+      "0001766037-24-000005 c-250 => CommerceHub, Inc., First Lien",
+      "0001766037-24-000008 c-324 => Ambrosia Holdco Corp., Ordinary Shares"
+    ],
+    "rate_only_contexts": [
+      "adopt_adjacent"
+    ],
+    "bracketed_unsigned_values": [
+      "0001766037-26-000004",
+      "0001766037-26-000009",
+      "0001766037-26-000013"
     ]
   }
 }

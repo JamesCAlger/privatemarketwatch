@@ -32,7 +32,7 @@ def load_encodings(wrapper_directory=None):
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
-                'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash'}:
+                'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -54,6 +54,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('units_tagged_as_par lists accession numbers: '+str(path))
             if key=='pct_tagged_as_ratio' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
                 raise ValueError('pct_tagged_as_ratio lists accession numbers: '+str(path))
+            if key=='bracketed_unsigned_values' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
+                raise ValueError('bracketed_unsigned_values lists accession numbers: '+str(path))
             if key=='par_tagged_as_units' and any(v not in ('rows_near_cost','rows_within_twice_cost','rated_rows_near_cost') and not _ACCESSION_RE.fullmatch(v) for v in values):
                 raise ValueError('par_tagged_as_units lists accession numbers or a row mode: '+str(path))
             if key=='rate_only_contexts' and values!=['adopt_adjacent']:

@@ -1,0 +1,37 @@
+{
+  "cik": "1766037",
+  "rule_id": "exclude_2024q4_kwor_nonaccrual_note_aggregate",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2024-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2024-12-31' AND accession_number = '0001766037-25-000003' AND src_context_id = 'c-987' AND TRY_CAST(fair_value AS DOUBLE) = 16387000.0 AND TRY_CAST(cost AS DOUBLE) = 20161000.0 AND principal_amount IS NULL",
+  "evidence": [
+    {
+      "source": "filing",
+      "accession": "0001766037-25-000003",
+      "quote": "As of December 31, 2024, our first lien position in KWOR had an aggregate cost basis of $ 20,161 , an aggregate fair value of $ 16,387 and total unearned interest income of $ 1,366 for the year then ended."
+    },
+    {
+      "source": "query",
+      "quote": "Context c-987 (member 'KWOR Acquisition, Inc., First lien') carries only InvestmentOwnedAtCost 20,161,000 and InvestmentOwnedAtFairValue 16,387,000; its duration sibling c-988 carries InvestmentOwnedInterestIncome 1,366,000, the note's unearned income. No principal, rate or percent is tagged on it. The KWOR schedule rows are published on their own contexts."
+    },
+    {
+      "source": "query",
+      "quote": "Published 2024-12-31 fair value 1,462,042,000 against the filed investments total 1,445,655,000: +16,387,000, exactly this context."
+    }
+  ],
+  "rationale": "The context is the non-accrual note's aggregate for the KWOR first lien positions, tagged on an identifier member, not a schedule row. Excluding it removes a double count of positions published from their own schedule lines. Same mechanism as exclude_2025q3_notorious_topco_aggregate_duplicate (BIG, 2025-09-30) and exclude_2025q4_dca_nonaccrual_note_aggregate.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2024-12-31": {
+      "rows": 1,
+      "fv": -16387000.0,
+      "residual_before": 16387000.0,
+      "residual_after": 0.0
+    }
+  }
+}

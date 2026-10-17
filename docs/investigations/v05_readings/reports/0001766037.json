@@ -1,0 +1,3325 @@
+{
+ "cik": "0001766037",
+ "label": "nmyd",
+ "before": "sponfb",
+ "shared_code": true,
+ "investigator_id": "nmfslf_fund_agent_2026-10-17",
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 16,
+   "why": "issuer_name_strip_re widened (no separator after a period, 'First Lie', 'First Lien(', 'Undrawn1'): 12 rows; two-name members MRI Software 2024-06-30 and YLG Holdings 2024-09-30 corrected from the page; the rest is the final shared split (instrument cut only) against sponf*'s row-number cuts."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 22,
+   "why": "the text the widened strip cuts becomes the instrument (strip_to_instrument); MRI / YLG corrections; final shared split."
+  },
+  {
+   "column": "fair_value",
+   "rows": 107,
+   "why": "bracketed values tagged with no sign take the printed sign (2025-12-31 to 2026-06-30, shared code printed_sign.py); DigiCert 2026-03-31 7,300 -> 7,010 (row correction, rescale rule withdrawn)."
+  },
+  {
+   "column": "cost",
+   "rows": 169,
+   "why": "bracketed costs tagged with no sign take the printed sign; DigiCert 7,010 -> 7,016."
+  },
+  {
+   "column": "cost_reported",
+   "rows": 169,
+   "why": "follows cost."
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 107,
+   "why": "follows fair_value."
+  },
+  {
+   "column": "src_facts",
+   "rows": 207,
+   "why": "the sign event cik_scale_fix:x-1 with the tagged value recorded on each sign-read cost or value."
+  },
+  {
+   "column": "shares_held",
+   "rows": 36,
+   "why": "47 row corrections: unit counts tagged at 1,000 times the printed figure (schedule '(in thousands, except shares)'), or tagged as principal and not published (2024-06-30 to 2025-06-30); 36 rows differ against sponfb, the rest are new-quarter rows."
+  },
+  {
+   "column": "principal_amount",
+   "rows": 1,
+   "why": "DigiCert 2026-03-31 7,016 -> 7,063 (row correction)."
+  },
+  {
+   "column": "interest_rate",
+   "rows": 2,
+   "why": "CommerceHub 2024-03-31 11.58 joined from its rate-only context (rate_only_contexts adopt_adjacent); TMK Hawk 2023-09-30 9.17 (row correction)."
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 2,
+   "why": "follows interest_rate."
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 2,
+   "why": "follows interest_rate (all_in)."
+  },
+  {
+   "column": "interest_rate_source",
+   "rows": 1,
+   "why": "CommerceHub 2024-03-31 rate now from a tag."
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 1,
+   "why": "LogRhythm 2024-09-30: the PIK tag withdrawn, so no cash leg is derived."
+  },
+  {
+   "column": "basis_spread",
+   "rows": 36,
+   "why": "floating loans whose whole margin is PIK publish the printed margin as the spread (38 row corrections); CommerceHub 6.25 joined; DigiCert 5.75; TMK Hawk 3.5; LogRhythm 7.5."
+  },
+  {
+   "column": "basis_spread_source",
+   "rows": 1,
+   "why": "CommerceHub 2024-03-31 spread now from a tag."
+  },
+  {
+   "column": "coupon_type",
+   "rows": 35,
+   "why": "the PIK-margin floating loans, DigiCert and LogRhythm set Floating from the printed reference code."
+  },
+  {
+   "column": "pik_rate",
+   "rows": 1,
+   "why": "LogRhythm 2024-09-30: 7.5 tagged as PIK on a line printed without the PIK mark, withdrawn."
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 343,
+   "why": "reference_rate_columns ['Reference'] with codes L/P: the printed code replaces the date guess (2023-03-31: LIBOR 91, SOFR 87, PRIME 4 printed; all 183 had been guessed LIBOR)."
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 2983,
+   "why": "inferred_* -> ixbrl_field_status where the printed column confirms or replaces the guess."
+  },
+  {
+   "column": "maturity_date",
+   "rows": 6,
+   "why": "Businessolver 2023-12-31 to 2024-06-30: two contexts carry the same member text (the undrawn line lost 'Undrawn'), so the page reader no longer assigns either; was 2027-12-31 on both, printed 12/2027 and 12/2024. Not intended; observation duplicate-identifier-blocks-row-correction."
+  },
+  {
+   "column": "maturity_date_source",
+   "rows": 6,
+   "why": "follows maturity_date."
+  },
+  {
+   "column": "maturity_status",
+   "rows": 6,
+   "why": "follows maturity_date."
+  },
+  {
+   "column": "src_transforms",
+   "rows": 1,
+   "why": "CommerceHub 2024-03-31 rate transforms after the join."
+  },
+  {
+   "column": "src_filled_fields",
+   "rows": 1,
+   "why": "CommerceHub 2024-03-31 interest_rate, basis_spread filled from the rate-only context."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 73,
+   "why": "row corrections of this run (DigiCert, TMK Hawk, LogRhythm, MRI, YLG, unit counts, PIK margins)."
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 592,
+   "why": "Not from this run's changes: the untouched build nmya already differs from sponfb on 593 rows (97 lost), because GICS labels are resolved across the funds of a sandbox and sponfb held 32 funds (observation gics-label-depends-on-build-composition). nmyd against nmya: 0 rows."
+  },
+  {
+   "column": "gics_sector",
+   "rows": 453,
+   "why": "same cause as gics_sub_industry (nmya against sponfb: 454; nmyd against nmya: 0)."
+  },
+  {
+   "column": "position_id",
+   "rows": 395,
+   "why": "370 already in nmya against sponfb (build composition and the new quarter's chain); 62 more against nmya from the renamed issuers and the two added and two removed rows."
+  }
+ ],
+ "rows_added": 403,
+ "rows_removed": 2,
+ "fixes": [
+  {
+   "what": "Bracketed cost and fair value tagged with no sign take the printed sign: new wrapper key source_encodings.bracketed_unsigned_values (three accessions), pipeline/printed_sign.py called by the extractor (pipeline/bdc_filings.py) and by the source-reconciliation reader (pipeline/source_reconciliation.py, record_events False, as for the other encodings), part of the per-filing cache key (page_labelled_contexts.encoding_signature), schema key added, tests/test_printed_sign.py. Dry run: 0 mismatches in the 12 filings 2023-2025; 358, 392, 376 facts in the three listed. Totals 2025-12-31, 2026-03-31, 2026-06-30 now tie (0.54M, 2.75M, 2.7M over before).",
+   "kind": "shared_code",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(3)(4) - Undrawn - - - 07/2025 07/2030 512 ( 3 ) ( 4 ) ( 0.00 )%"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Unfunded Debt Investments - United States $ 154,904 $ ( 344 ) $ ( 1,337 ) ( 0.14 )%"
+    }
+   ]
+  },
+  {
+   "what": "Printed reference-rate column read: reference_rate_columns ['Reference'], reference_rate_codes L, LM, LQ, LS = LIBOR and P, PM, PQ = PRIME (legend: London Interbank Offered Rate (L), Prime Rate (P), SOFR). 2,983 rows move from a date guess to the printed code; 343 change benchmark.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5) Acquisition Date Maturity/Expiration Date"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Diligent Corporation Software First lien (2)(3) L(M) + 6.25"
+    }
+   ]
+  },
+  {
+   "what": "Two positions tagged on issuer-group contexts with no identifier member named from the page: source_encodings.context_identifiers CommerceHub c-250 (2023-12-31, 6,054) and Ambrosia c-324 (2024-03-31, 205). 2023-12-31 now ties (6.1M under before); CommerceHub's rate-only contexts join by rate_only_contexts adopt_adjacent (simulated first: only CommerceHub pairs, 2023-12-31 and 2024-03-31).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.79 % 06/2023 12/2027 6,053 5,704 6,054"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(7) - - - 01/2024 - 19,197 $ 205 $ 205 0.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.58 % 06/2023 12/2027 6,038 5,707 6,038"
+    }
+   ]
+  },
+  {
+   "what": "Non-accrual note aggregates tagged on an identifier member excluded (not positions): KWOR c-987 2024-12-31 (16,387) and DCA c-1112 2025-12-31 (6,376), rules exclude_2024q4_kwor_nonaccrual_note_aggregate and exclude_2025q4_dca_nonaccrual_note_aggregate (same mechanism as the existing BIG 2025-09-30 rule). 2024-12-31 now ties (16.4M over before).",
+   "kind": "exclusion",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-25-000003",
+     "text": "As of December 31, 2024, our first lien position in KWOR had an aggregate cost basis of $ 20,161 , an aggregate fair value of $ 16,387"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376"
+    }
+   ]
+  },
+  {
+   "what": "DigiCert 2026-03-31 tagged one column off: row correction of principal, cost, fair value, spread, reference, coupon type from the printed line; the promoted rule 1766037_20260331_digicert_fv_rescale (fair value 0.0073 x 1e9 = 7,300, a plug) deleted.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts: the schedule is '(in thousands, except shares)' and the filer tags counts at 1,000 times the print (share or principal concept); 47 row corrections set the printed count, each matched on its page line by count, cost and value (scratch/fund_runs/0001766037/units_specs.py). Clears C04 x5 (2024-06-30 to 2025-06-30, counts tagged as principal and unpublished).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Consolidated Schedule of Investments (Continued) June 30, 2024 (in thousands, except shares) (unaudited)"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(7) - - - 01/2024 - 19,197 $ 205 $ 205 0.02 %"
+    }
+   ]
+  },
+  {
+   "what": "Floating loans whose whole margin is paid in kind (tagged coupon + PIK margin, no spread) published Fixed with no spread: 38 row corrections set basis_spread to the printed margin and coupon Floating (scratch/fund_runs/0001766037/pikmargin_specs.py, each matched on its page line). LogRhythm 2024-09-30: 7.50 tagged as PIK on a line printed without the PIK mark; spread 7.5, PIK withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "KWOR Acquisition, Inc. Business Services Subordinated(3) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 02/2030 $ 3,480 $ 3,480 $ 3,480"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "LogRhythm, Inc. Software First Lien(2)(3)(6) SOFR(Q) 7.50 % 12.10 % 07/2024 07/2029 2,727 2,686 2,727 0.28 %"
+    }
+   ]
+  },
+  {
+   "what": "TMK Hawk 2023-09-30: rate and spread tagged on a Trident Bidco context (c-266); row correction rate 9.17, spread 3.5. Clears the X02 quarter by the standing check.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-23-000014",
+     "text": "TMK Hawk Parent, Corp. Distribution & Logistics First lien (3) SOFR(Q) 3.50 % 9.17 % 09/2022 08/2024 2,468 1,913 1,787 0.21 %"
+    }
+   ]
+  },
+  {
+   "what": "Two members that join two names (MRI Software / Bullhorn 2024-06-30, YLG Holdings / Bullhorn 2024-09-30): issuer and instrument corrected from the page.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-24-000012",
+     "text": "MRI Software LLC Software First Lien(3)(4) - Undrawn - - - 12/2023 12/2025 1,792 - -"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "YLG Holdings, Inc. Business Services First Lien(3)(4) - Undrawn - - - 06/2024 10/2026 629 - -"
+    }
+   ]
+  },
+  {
+   "what": "Year-end net investment income was the per-share distribution divided by four (-0.3175, -0.2575): new highlights wrapper data/overrides/fund_highlights_wrappers/0001766037.json, income_concept_suppress 'distributiontoshareholdersnetinvestmentincomepershare' (the filer's own concept, in the two 10-Ks only). Clears income_identity x2.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Net investment income 116,246 105,188 73,172"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Distributions declared to stockholders from net investment income ( 1.27 )"
+    }
+   ]
+  },
+  {
+   "what": "issuer_name_strip_re widened to cut the lien words where the member has no separator after a period ('Kaseya Inc.First Lien'), 'First Lie', 'First Lien(' and 'Undrawn1'; dry run on all 326 distinct names changed 13, all of that shape; no GICS label lost (nmyd against nmya).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "iCIMS, Inc. Software First Lien(2)(3) SOFR(Q)* 3.38 % + 3.88 %/PIK 12.58 % 08/2022 08/2028 20,632 20,502 20,838"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "filer industry not read on any row (extracted_industry empty in 14 quarters; GICS from the company name)",
+   "hypotheses": [
+    "industry_columns: rejected, the industry is printed in the company cell after the name ('Anaplan, Inc. Software'), not in a column of its own (D-125)."
+   ]
+  },
+  {
+   "finding": "cash and PIK margins printed apart ('3.38 % + 3.38 %/PIK') publish the cash part as the spread",
+   "hypotheses": [
+    "printed_margin_reading cash_plus_pik: not set; owner question D-092 is open for this filer family."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "what": "From the 10-K for 2025-12-31 the filer prints undrawn lines' negative cost and fair value in brackets and tags them with no sign (358, 392, 376 facts in the three filings; none in the 12 filings before). Published +540K, +2.75M, +2.7M over the filed totals and positive values on undrawn lines (X07). Fixed by source_encodings.bracketed_unsigned_values (shared code, on for this fund); the accession list must grow with each new filing that repeats it.",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 2.75,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "For every cost or fair-value fact, compare the tag's sign attribute with brackets around the printed figure; a filing with more than a handful of disagreements is flagged before publication.",
+   "quote": {
+    "accession": "0001766037-26-000009",
+    "text": "DigiCert, Inc. Software First Lien(3)(4) - Undrawn - - - 07/2025 07/2030 512 ( 3 ) ( 4 ) ( 0.00 )%"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The totals checks (fv_conservation, the gate's totals) catch it only when the sum exceeds tolerance (2025-12-31 was 0.54M, barely); a fact-level sign comparison catches it in every filing, and the dry run shows zero disagreements in 12 correctly signed filings, so false positives are low.",
+    "reference": "scratch/fund_runs/0001766037/sign_dry.py"
+   }
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "what": "Every floating loan's reference rate was guessed from the report date (LIBOR before mid-2023, SOFR after) although the schedule prints the code in its own 'Reference' column; at 2023-06-30 about 159 SOFR loans were published LIBOR and 4 Prime loans as LIBOR or SOFR in every quarter. Fixed by reference_rate_columns with the legend's L and P codes.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 680.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Where a fund's schedule header has a 'Reference' column and more than half its floating rows carry an inferred_* reference_rate_source, report the fund-quarter.",
+   "quote": {
+    "accession": "0001766037-23-000006",
+    "text": "Diligent Corporation Software First lien (2)(3) L(M) + 6.25"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule looks at reference_rate_source; the share of guessed benchmarks per fund-quarter is a cheap count, and a printed Reference header is read already by the bridge, so the check fires only where the page has the answer.",
+    "reference": "pipeline/bdc_xbrl_html_bridge.py reference_rate_columns"
+   }
+  },
+  {
+   "observation_key": "note-figure-on-investment-member-published-as-position",
+   "what": "The non-accrual note's aggregate cost and value are tagged on an identifier member and were published as a position: KWOR 2024-12-31 (16,387), BIG 2025-09-30 (15,604, already excluded by a pinned rule), DCA 2025-12-31 (6,376, on a reused BIG member). Fixed by two exclusion rules; each is pinned to its context, so a new note aggregate in a later filing is not caught by them.",
+   "field": "fair_value",
+   "quarters": [
+    "2024-12-31",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 16.387,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "An identifier context carrying only cost and fair value (no principal, rate or percent), with a duration sibling carrying interest income, whose value equals the sum of the same issuer's published rows or a note figure, is not a position.",
+   "quote": {
+    "accession": "0001766037-25-000003",
+    "text": "As of December 31, 2024, our first lien position in KWOR had an aggregate cost basis of $ 20,161 , an aggregate fair value of $ 16,387"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fv_conservation and the gate's totals check fired at 2024-12-31 (+16.4M) and the 2025-12-31 overage (+6.9M) was caught by F23's reviewer; the same checks will catch a recurrence of this size.",
+    "reference": "conservation/fv_conservation (RVQ_BLK_a7b8e61f2ac3 in nmya)"
+   }
+  },
+  {
+   "observation_key": "position-context-without-identifier-member",
+   "what": "Two positions tagged on issuer-group contexts with no identifier member were not published: CommerceHub 2023-12-31 (6,054; its rates on a separate identifier context) and Ambrosia ordinary shares 2024-03-31 (205). Fixed by context_identifiers; the setting is per filing.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "fair_value_m": 6.054,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A tagged fair value on a context with an issuer member and no identifier member, with no identifier context of that issuer carrying a fair value, is reported as an unpublished position.",
+   "quote": {
+    "accession": "0001766037-24-000005",
+    "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.79 % 06/2023 12/2027 6,053 5,704 6,054"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The gate's totals check and fv_conservation caught CommerceHub (-6.1M at 2023-12-31) but not Ambrosia (205K, under the 0.5M tolerance), so no existing rule catches a small recurrence; the suggested check reads the tagged facts directly and needs no tolerance.",
+    "reference": "scripts/v05_evidence/fund_gate.py totals (catches only gaps above 0.5M)"
+   }
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "what": "Values or rates of one printed line tagged on another issuer's member: DigiCert 2026-03-31 one column off (fair value 0.0073 = the percent; spread and principal on a Bonterra member); TMK Hawk 2023-09-30 rate and spread on a Trident Bidco member; MRI Software and YLG Holdings undrawn lines on members joining a Bullhorn name. The promoted DigiCert rule fixed only the fair value, by a factor of 1e9 (7,300 against a printed 7,010). Fixed by row corrections; rule withdrawn.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-09-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 7.01,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A position whose fair value is under 1 dollar while its cost is in millions, or whose tagged percent of net assets is missing while another context of a different issuer carries a spread and no value, is flagged.",
+   "quote": {
+    "accession": "0001766037-26-000009",
+    "text": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "SRC_BDC02 and blocking_pipeline_only_position flagged DigiCert; X02 flagged TMK Hawk (no rate); the two-name members are caught by the gate's names check. All three recur under existing rules.",
+    "reference": "row_validation SRC_BDC02 / X02"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "Equity unit counts are tagged at 1,000 times the printed count (schedule '(in thousands, except shares)'): 19,197 printed, 19,197,000 tagged; 2024-06-30 to 2025-06-30 with the principal concept, so no count was published (C04). 47 row corrections; a new quarter will repeat it.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 26.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Where the schedule header says 'except shares' and an equity row's tagged count divided by 1,000 equals the printed count on its line, report the row.",
+   "quote": {
+    "accession": "0001766037-24-000008",
+    "text": "Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(7) - - - 01/2024 - 19,197 $ 205 $ 205 0.02 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C04 fired only in the quarters where no count was published; the 1,000x counts in the other quarters passed every rule. A per-row printed-count comparison is what the generator script did and found 47 of 49 equity rows off.",
+    "reference": "scratch/fund_runs/0001766037/units_specs.py"
+   }
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
+   "what": "Floating loans printed 'SOFR(Q)* 8.00 %/PIK 11.67 %' are tagged with the coupon and the PIK margin and no spread, so they were published Fixed with no spread (38 rows, 3.5M to 21.9M each). 38 row corrections; no wrapper setting fits (pik_only_tag_reading needs no plain rate tag). LogRhythm 2024-09-30 is the reverse: a cash margin tagged as PIK.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 21.9,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A loan with a printed or read reference code, a PIK rate and no spread, published Fixed, is flagged.",
+   "quote": {
+    "accession": "0001766037-26-000009",
+    "text": "KWOR Acquisition, Inc. Business Services Subordinated(3) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 02/2030 $ 3,480 $ 3,480 $ 3,480"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule flagged these rows (they carry a rate); the combination reference code present, coupon Fixed, spread empty is mechanical and was empty for every other loan of this fund.",
+    "reference": "scratch/fund_runs/0001766037/q_pik.sql"
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-a-per-share-figure",
+   "what": "Year-end net investment income was -0.3175 and -0.2575: the filer's own per-share distribution concept (contains 'NetInvestmentIncome') was read first and divided by four. Fixed by a highlights wrapper suppress entry.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A net_investment_income under 1,000 dollars in absolute value for a fund with net assets over 10M is flagged.",
+   "quote": {
+    "accession": "0001766037-25-000003",
+    "text": "Distributions declared to stockholders from net investment income ( 1.27 )"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "identity/income_identity fired at both dates and cleared after the fix.",
+    "reference": "identity/income_identity"
+   }
+  },
+  {
+   "observation_key": "duplicate-identifier-blocks-row-correction",
+   "what": "Businessolver 2023-12-31 to 2024-06-30: the undrawn line's member lost 'Undrawn' and repeats the term loan's member, so two rows share one identifier; their maturity is now blank on both (was 2027-12-31 on both, printed 12/2027 and 12/2024). A row correction cannot tell the two apart. Left; 14.6M of term loan without a maturity in three quarters.",
+   "field": "maturity_date",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "fair_value_m": 14.599,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Two published rows of one fund-quarter with the same bdc_investment_identifier are reported, with their contexts.",
+   "quote": {
+    "accession": "0001766037-24-000008",
+    "text": "Businessolver.com, Inc. Software First Lien(2)(3) SOFR(Q) 5.50 % 10.91 % 12/2021 12/2027 14,562 14,521 14,562"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule looks at duplicate identifiers within a quarter; the count is cheap and here covers only these three quarters, so false positives would be few.",
+    "reference": "scratch/fund_runs/0001766037/q_dup.sql"
+   }
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "what": "No row publishes the filer's printed industry (extracted_industry empty in all 14 quarters); the standard label comes from the company name and is missing on about a quarter of rows. The page prints the industry after the company name in the same cell ('Anaplan, Inc. Software First Lien'), which industry_columns cannot read (D-125).",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1400.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A fund-quarter whose funded published rows have no extracted_industry (here empty on every row in all 14 quarters) is flagged.",
+   "quote": {
+    "accession": "0001766037-26-000013",
+    "text": "Anaplan, Inc. Software First Lien(2)(3)(6) SOFR(Q) 4.50 % 8.17 % 06/2022 06/2029 29,440 29,327 28,869 3.03 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Detecting the gap is a count of funded rows with no extracted_industry per fund-quarter and fires here in all 14 quarters; reading the industry from the company cell is the hard part, not detecting that it is missing.",
+    "reference": "industry-not-published candidate rule, 2026-10-17"
+   }
+  },
+  {
+   "observation_key": "gics-label-depends-on-build-composition",
+   "what": "With no edit, the single-fund build nmya differs from the 32-fund sponfb on 593 GICS labels (97 lost) and 454 sectors; GICS labels are resolved across the funds of a sandbox. nmyd against nmya: no GICS change.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Build one fund alone and inside the cohort from the same inputs; any GICS label that differs is reported.",
+   "quote": {
+    "accession": "0001766037-26-000013",
+    "text": "Anaplan, Inc. Software First Lien(2)(3)(6) SOFR(Q) 4.50 % 8.17 % 06/2022 06/2029 29,440 29,327 28,869 3.03 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Already recorded on three funds; holdings_field_diff shows it on every before / after comparison across sandboxes of different composition.",
+    "reference": "observations.py gics-label-depends-on-build-composition"
+   }
+  },
+  {
+   "observation_key": "cash-margin-published-as-spread-where-pik-margin-printed-apart",
+   "what": "Loans printed 'SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 %' publish the cash margin (3.38) as the spread and the PIK margin apart; the total margin over SOFR is 6.76. printed_margin_reading cash_plus_pik would publish the sum; not set while the owner question D-092 is open.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 21.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "A floating loan with both a spread and a PIK rate whose rate minus the reference rate is closer to spread plus PIK than to spread is listed for the convention question.",
+   "quote": {
+    "accession": "0001766037-24-000005",
+    "text": "First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "Whether the spread should include the PIK margin is a convention the owner has not ruled on (D-092); a detector would flag every such loan as a convention, not an error.",
+    "reference": "D-092"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_printed_sign.py: 7 passed (with test_page_labelled_contexts, test_source_encodings, test_unfunded_commitments, test_bdc_filings: 274 passed)"
+ ],
+ "not_done": [
+  "Full pytest suite not run; cohort regression of the shared change not run (the setting is new and on for this fund only; source_reconciliation.py and bdc_filings.py call it only for a listed accession).",
+  "Industry printed on the page not read (no fund setting fits the company-then-industry cell).",
+  "Rate-only contexts other than CommerceHub (2023-12-31: CCBlue, CFS, CG Group, Pioneer Buyer First Lien 1 / 2; 2024-03-31 iCIMS c-53) not traced row by row; no funded loan is left without a rate, so they duplicate published rates or belong to undrawn lines; not shown either way.",
+  "Non-accrual flags, acquisition dates and share counts of the 2023-03-31 and 2023-06-30 rows (10, as printed) not checked beyond the unit-count pass.",
+  "Eclipse Topco preferred 2024-09-30 prints 5,691 units against 569 in every other quarter; published as printed, not queried further.",
+  "Random 20-row page sample is the orchestrator's step; not run.",
+  "For the bracketed_unsigned_values facts the source-reconciliation reader applies the same sign flip as the extractor, so that check compares the published value with the same derived value for those facts and is not independent there; the independent evidence is the printed unfunded subtotals (e.g. 'Total Unfunded Debt Investments - United States $ 154,904 $ ( 344 ) $ ( 1,337 )') and the totals tie with the filed investments total in 2025-12-31, 2026-03-31 and 2026-06-30."
+ ],
+ "request_resolution_history": [
+  {
+   "request_id": "NMY-R1",
+   "classification": "verification_bug",
+   "file": "pipeline/provenance_reverify.py",
+   "what": "Cheap tier: read the factor of a cik_scale_fix event as the full tier does (_extractor_multiplier parses 'cik_scale_fix:x<float>'); the SQL CASE multiplies only 'cik_scale_fix:x1000'. With the sign event cik_scale_fix:x-1 the cheap tier fails and the full tier finds the tagged fact (raw_match), so classify_reason returns transform_drift.",
+   "why": "The published value equals the tagged value times the recorded factor, and the factor is evidenced by the printed brackets; the two tiers disagree only because one hard-codes the factor. The standing C103 / C107 reasons need status 'verified' and are withheld by the same defect.",
+   "quotes": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(3)(4) - Undrawn - - - 07/2025 07/2030 512 ( 3 ) ( 4 ) ( 0.00 )%"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(3)(4) - Undrawn - - - 07/2025 07/2030 512 ( 3 ) ( 4 ) ( 0.00 )%"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Unfunded Debt Investments - United States $ 154,904 $ ( 344 ) $ ( 1,337 ) ( 0.14 )%"
+    }
+   ],
+   "next_action": "Orchestrator changes the cik_fix CASE in the cheap tier to TRY_CAST(regexp_extract(x, 'cik_scale_fix:x(-?[0-9.]+)', 1) AS DOUBLE), default 1.0, with a test that a sign-read value (-3,000 from tag 3,000, event x-1) verifies and a value without the event (-3,000 from tag 3,000) still fails; then re-run this fund's provenance and ledger and the gate.",
+   "response": "implemented by the orchestrator as a verification bug, commit 4b579bf, with tests",
+   "authority": "orchestrator",
+   "resolution_evidence": "pipeline/provenance_reverify.py cheap tier reads the recorded cik_scale_fix factor (x1000, x-1); tests: a sign-read value with event x-1 passes, unsigned or wrong values fail. nmyd re-run from the provenance stage: transform_drift x3 gone; C103 2025-12-31 and C107 2026-06-30 then cleared by the standing checks (make_batch_dispositions --write, ledger re-run): outstanding 64 -> 59."
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "BDCSRC_0001766037_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_d7ea42fde7",
+   "coverage": {
+    "affected_rows": [
+     "0001766037-26-000004|c-1112"
+    ],
+    "reviewed_rows": [
+     "0001766037-26-000004|c-1112"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A schedule position dropped: rejected; c-1112 carries only cost 7,211 and fair value 6,376 (its duration sibling c-1113 the note's unearned income 229), equal to the note's DCA aggregate; the four DCA schedule rows are published (5,408 + 449 + 309 + 210 = 6,376).",
+    "Excluding it breaks the total: rejected; with it published was 6.4M over the filed 1,512,098, without it equal.",
+    "Only source row unpaired in the quarter: yes; source reconciliation lists c-1112 alone as missing_from_pipeline at 2025-12-31 in this build."
+   ],
+   "next_action": "Proposal PD-blocking_source_position_like_parser_mismatch-1766037-6 (reason src-missing-row-is-a-footnote-aggregate-on-an-investment-member) for the owner; the exclusion rule exclude_2025q4_dca_nonaccrual_note_aggregate stays."
+  },
+  {
+   "finding_id": "BDCSRC_0001766037_2026-03-31_BLOCKING_PIPELINE_ONLY_POSITION_7785c1bb28",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d7c7570b3bd6e26b",
+     "0001766037-26-000009|c-242",
+     "0001766037-26-000009|c-241"
+    ],
+    "reviewed_rows": [
+     "ROW-d7c7570b3bd6e26b",
+     "0001766037-26-000009|c-242",
+     "0001766037-26-000009|c-241"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published row invented: rejected; it is the printed DigiCert line; values set by row correction from that line (principal 7,063, cost 7,016, value 7,010, spread 5.75, SOFR).",
+    "Tags right: rejected; c-242 holds principal 7,016 (printed cost), cost 7,010 (printed value) and fair value 0.0073 (printed percent 0.73 %), and c-241, under a Bonterra member, holds DigiCert's spread 5.75 and principal 7,063; Bonterra's own lines are on other contexts.",
+    "The promoted rescale rule (fair value 7,300 = 0.0073 x 1e9) was right: rejected; it is a plug the page contradicts; withdrawn. Published now equals the filed 1,457,048."
+   ],
+   "next_action": "Proposal PD-blocking_pipeline_only_position-1766037-7 (reason fv-corrected-from-page-where-tags-are-cross-tagged) for the owner; row correction stays."
+  },
+  {
+   "finding_id": "RVQ_BLK_06349506ca72",
+   "coverage": {
+    "affected_rows": [
+     "0001766037-26-000004|c-1112"
+    ],
+    "reviewed_rows": [
+     "0001766037-26-000004|c-1112"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A schedule position dropped: rejected; c-1112 carries only cost 7,211 and fair value 6,376 (its duration sibling c-1113 the note's unearned income 229), equal to the note's DCA aggregate; the four DCA schedule rows are published (5,408 + 449 + 309 + 210 = 6,376).",
+    "Excluding it breaks the total: rejected; with it published was 6.4M over the filed 1,512,098, without it equal.",
+    "Only source row unpaired in the quarter: yes; source reconciliation lists c-1112 alone as missing_from_pipeline at 2025-12-31 in this build."
+   ],
+   "next_action": "Proposal PD-SRC_BDC01-1766037-6 (reason src-missing-row-is-a-footnote-aggregate-on-an-investment-member) for the owner; the exclusion rule exclude_2025q4_dca_nonaccrual_note_aggregate stays."
+  },
+  {
+   "finding_id": "RVQ_BLK_1d3a019bf6a6",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d7c7570b3bd6e26b",
+     "0001766037-26-000009|c-242",
+     "0001766037-26-000009|c-241"
+    ],
+    "reviewed_rows": [
+     "ROW-d7c7570b3bd6e26b",
+     "0001766037-26-000009|c-242",
+     "0001766037-26-000009|c-241"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published row invented: rejected; it is the printed DigiCert line; values set by row correction from that line (principal 7,063, cost 7,016, value 7,010, spread 5.75, SOFR).",
+    "Tags right: rejected; c-242 holds principal 7,016 (printed cost), cost 7,010 (printed value) and fair value 0.0073 (printed percent 0.73 %), and c-241, under a Bonterra member, holds DigiCert's spread 5.75 and principal 7,063; Bonterra's own lines are on other contexts.",
+    "The promoted rescale rule (fair value 7,300 = 0.0073 x 1e9) was right: rejected; it is a plug the page contradicts; withdrawn. Published now equals the filed 1,457,048."
+   ],
+   "next_action": "Proposal PD-SRC_BDC02-1766037-7 (reason fv-corrected-from-page-where-tags-are-cross-tagged) for the owner; row correction stays."
+  },
+  {
+   "finding_id": "RVQ_REV_03801ae8791e",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 144.70, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 92 of 369 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.98.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_05223e80a8da",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 150.79, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 86 of 280 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.16.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_07f616fe3736",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 150.28, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 97 of 355 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.26.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_0c4ea7a04d3c",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 146.63, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 96 of 342 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.35.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_1794dc1735ac",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-09-30|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-09-30|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Total Investments $ 1,483,914 $ 1,478,978 151.58 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 151.58, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 104 of 379 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 50.82.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_1bbe1bf6656f",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-12-31|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-12-31|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 152.64, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 91 of 329 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.05.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_2084cc051e67",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 145.32, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 96 of 384 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 45.29.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_233b9c1fc96f",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-09-30|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-09-30|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 143.04, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 88 of 298 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 44.14.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_2f565ae1263d",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-06-30|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-06-30|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 150.28, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 97 of 355 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.26.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_327d3cf5c6b0",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-06-30|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-06-30|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 150.79, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 86 of 280 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.16.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_354252e331ef",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-09-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-09-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 143.97, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 108 of 395 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.24.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_397a8d449f6c",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 150.79, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 86 of 280 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.16.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_441c10d9ac2d",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2026-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2026-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 146.46, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 103 of 401 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 43.38.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_44673571197e",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-12-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-12-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 152.64, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 91 of 329 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.05.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_4d9a8530e500",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2490d47137fec7f9",
+     "ROW-65331a8d68fe22da"
+    ],
+    "reviewed_rows": [
+     "ROW-2490d47137fec7f9",
+     "ROW-65331a8d68fe22da"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.79 % 06/2023 12/2027 6,053 5,704 6,054"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Merged rate from the wrong loan: rejected; each merged value equals the row's printed line (rowread.py found every row by par, cost and value with the published rate).",
+    "CommerceHub: rate-only context c-249 / c-232 joined to the value context (adjacent, same identifier), source_encodings.rate_only_contexts adopt_adjacent; the join was simulated on nmya first and touches only CommerceHub in both quarters.",
+    "TigerConnect drawn 2023-12-31: spread and PIK come from a duplicate-member context (dedupe_filled_fields); printed 3.38 % + 3.38 %/PIK, so the published spread is the cash margin only (owner question D-092, not this finding)."
+   ],
+   "next_action": "Proposal PD-merged_context_excluded-1766037-4 (reason merged-context-value-equals-printed-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_4fa398ed5bf4",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 149.48, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 84 of 276 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 48.23.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_505183528c16",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-09-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-09-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 143.04, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 88 of 298 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 44.14.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_5276a4d889d9",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2026-03-31|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2026-03-31|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 152.10, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 108 of 404 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 48.95.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_543e1e3d8694",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 145.32, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 96 of 384 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 45.29.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_5617ea9916d7",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-03-31|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-03-31|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 146.63, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 96 of 342 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.35.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_56d7baa1d8e3",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 146.63, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 96 of 342 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.35.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_5ce00e89b7c3",
+   "coverage": {
+    "affected_rows": [
+     "ROW-019f70f82d1843bf",
+     "ROW-03f210cf9b36a930",
+     "ROW-1aa884561c8acb41",
+     "ROW-b56e76a8356df339",
+     "ROW-6cff717041b1e0ba",
+     "ROW-756e858dec743584",
+     "ROW-03435d0b0d2e1c00",
+     "ROW-e80b769e80a186a9",
+     "ROW-f57704e7395b44be",
+     "ROW-ee65f7b46a47f65f",
+     "ROW-6a8be929ff13f310",
+     "ROW-4ea9fb2c2287952d",
+     "ROW-a1b36924135e7abd",
+     "ROW-aafac67987288a4d",
+     "ROW-9dbc57af095e8dc4",
+     "ROW-fa8c52c264fec05d",
+     "ROW-1c61d6dc56a04615",
+     "ROW-7184c9834abdc1a1",
+     "ROW-18291d97d124be00",
+     "ROW-2e2e38b0d11b1f5b",
+     "ROW-32b71bd659a3b1d3",
+     "ROW-7bfb43787a54c3aa",
+     "ROW-5d04aed5f3334c6c",
+     "ROW-baa7729badd67083",
+     "ROW-bd432da665c4dc86",
+     "ROW-097053a2ab9b212a",
+     "ROW-c271f5bd83299194",
+     "ROW-61b4c106bdc03960",
+     "ROW-35914d860d41ebbe",
+     "ROW-e61b5cc703d1755e",
+     "ROW-818469aa170a9d06",
+     "ROW-14603bb3824f1cd9",
+     "ROW-f4f7bb8c4fff4c10",
+     "ROW-cf6b069a5647bab3",
+     "ROW-e84be8cf86cad97f",
+     "ROW-9733941adeaec291",
+     "ROW-cb1e9eefd9c39620",
+     "ROW-7553af212249712e",
+     "ROW-f5b4abc7345bd27c",
+     "ROW-98b6d91e8ae4f100",
+     "ROW-2633429fa4b9dd92",
+     "ROW-32f76d1e8b542bf2",
+     "ROW-452c62fed7aaf3cc",
+     "ROW-9d0f0dff3246dea6",
+     "ROW-8b520629914ffd5e",
+     "ROW-5fa0bd36f04c973f",
+     "ROW-7befba4d31faf89c",
+     "ROW-ca5c1a29e1a59a81",
+     "ROW-6af9b34eafb49db3",
+     "ROW-a3bc366d6f48ded4",
+     "ROW-38fb4e81891e4b4b",
+     "ROW-0e5abe430f8c5866",
+     "ROW-cde380ea61142e5e",
+     "ROW-36ac8973b4b4f237",
+     "ROW-cdd38c373f58aa50",
+     "ROW-4208d7c0b273f9ae",
+     "ROW-4b6fea1e0a80529f",
+     "ROW-91607b024ba81d13",
+     "ROW-b7f76e09752bf1fd",
+     "ROW-e6e16033e12c66bb",
+     "ROW-3e1f55b6ea1a8cde",
+     "ROW-cfe660679d99ec60",
+     "ROW-e92517175ae9967d",
+     "ROW-0f8ca584ca4d5402",
+     "ROW-ca04a9f3bb0a1a35",
+     "ROW-ee8a844b4581e050",
+     "ROW-68ebb9019c1993d0",
+     "ROW-09735231d32c8616",
+     "ROW-7c5c6b7fab781c2e",
+     "ROW-ffb7aeba5d6f4309",
+     "ROW-858e85f44ae41fd6",
+     "ROW-7b92808cc466812d",
+     "ROW-3ab803d5a8f83569",
+     "ROW-8b43a63542d82e0b",
+     "ROW-a4f3633f00c24e15",
+     "ROW-ecf28d3b6a0669b5",
+     "ROW-1f93e7556eb292fd",
+     "ROW-0b03445777b18ba4",
+     "ROW-41f3bd5d9da93d12",
+     "ROW-39cf7aea77086050",
+     "ROW-9f153224ed8a93c2",
+     "ROW-254c50815793a322",
+     "ROW-3c9312fab8e5259f",
+     "ROW-4844903aea0c7445",
+     "ROW-3f3d62524d1bc6a9",
+     "ROW-875229c5e789db11",
+     "ROW-5299954bc51c9a99",
+     "ROW-3d44985b3b66c031",
+     "ROW-20604b29d4d1a48a",
+     "ROW-acbd1b5d45847270",
+     "ROW-6dc25a075653a9ab",
+     "ROW-c89458b4e9053644",
+     "ROW-d2e326f6ab84ee42",
+     "ROW-f64296d39deda5f2",
+     "ROW-cbe5763d956c7e29",
+     "ROW-d952b3f5cadec54b",
+     "ROW-df0ee52f64c24d68",
+     "ROW-20b1097b1aac7dfe",
+     "ROW-b114c2366e878d25",
+     "ROW-70c94240be8d1b95",
+     "ROW-ba3cd10be569560d",
+     "ROW-f6fded10743e6d29",
+     "ROW-bf7c20112c095941",
+     "ROW-4be12bcb29c05d11",
+     "ROW-5a87d6c12a07beba",
+     "ROW-398cb3ec3b44ef06",
+     "ROW-2a7e81bdf062e2f8",
+     "ROW-1a1666186dbfd386",
+     "ROW-5fa299fbc2e45c84",
+     "ROW-c4ffde1acf16d746",
+     "ROW-f61acbecd60198bf",
+     "ROW-b8542d7cc71250d1",
+     "ROW-787f134167254502",
+     "ROW-a57a477fca34a562",
+     "ROW-07b535d0eba9c938",
+     "ROW-ad1a00a08ce82b64",
+     "ROW-ba0f5fae2fd2dd93",
+     "ROW-d08d4686fc9e86db",
+     "ROW-265dd08de4fb9fda",
+     "ROW-96d7931b1b0fa384",
+     "ROW-ab9ce9a5900ea814",
+     "ROW-c9a89d7e1956579b",
+     "ROW-8136e38a5e90743f",
+     "ROW-72cdb9a347d545bb",
+     "ROW-7409210fee775369",
+     "ROW-a4b20e140cbd129b",
+     "ROW-91867cdd5380ceb8",
+     "ROW-4d7adc77fdcab53c",
+     "ROW-f257594e68faf492"
+    ],
+    "reviewed_rows": [
+     "ROW-019f70f82d1843bf",
+     "ROW-03f210cf9b36a930",
+     "ROW-1aa884561c8acb41",
+     "ROW-b56e76a8356df339",
+     "ROW-6cff717041b1e0ba",
+     "ROW-756e858dec743584",
+     "ROW-03435d0b0d2e1c00",
+     "ROW-e80b769e80a186a9",
+     "ROW-f57704e7395b44be",
+     "ROW-ee65f7b46a47f65f",
+     "ROW-6a8be929ff13f310",
+     "ROW-4ea9fb2c2287952d",
+     "ROW-a1b36924135e7abd",
+     "ROW-aafac67987288a4d",
+     "ROW-9dbc57af095e8dc4",
+     "ROW-fa8c52c264fec05d",
+     "ROW-1c61d6dc56a04615",
+     "ROW-7184c9834abdc1a1",
+     "ROW-18291d97d124be00",
+     "ROW-2e2e38b0d11b1f5b",
+     "ROW-32b71bd659a3b1d3",
+     "ROW-7bfb43787a54c3aa",
+     "ROW-5d04aed5f3334c6c",
+     "ROW-baa7729badd67083",
+     "ROW-bd432da665c4dc86",
+     "ROW-097053a2ab9b212a",
+     "ROW-c271f5bd83299194",
+     "ROW-61b4c106bdc03960",
+     "ROW-35914d860d41ebbe",
+     "ROW-e61b5cc703d1755e",
+     "ROW-818469aa170a9d06",
+     "ROW-14603bb3824f1cd9",
+     "ROW-f4f7bb8c4fff4c10",
+     "ROW-cf6b069a5647bab3",
+     "ROW-e84be8cf86cad97f",
+     "ROW-9733941adeaec291",
+     "ROW-cb1e9eefd9c39620",
+     "ROW-7553af212249712e",
+     "ROW-f5b4abc7345bd27c",
+     "ROW-98b6d91e8ae4f100",
+     "ROW-2633429fa4b9dd92",
+     "ROW-32f76d1e8b542bf2",
+     "ROW-452c62fed7aaf3cc",
+     "ROW-9d0f0dff3246dea6",
+     "ROW-8b520629914ffd5e",
+     "ROW-5fa0bd36f04c973f",
+     "ROW-7befba4d31faf89c",
+     "ROW-ca5c1a29e1a59a81",
+     "ROW-6af9b34eafb49db3",
+     "ROW-a3bc366d6f48ded4",
+     "ROW-38fb4e81891e4b4b",
+     "ROW-0e5abe430f8c5866",
+     "ROW-cde380ea61142e5e",
+     "ROW-36ac8973b4b4f237",
+     "ROW-cdd38c373f58aa50",
+     "ROW-4208d7c0b273f9ae",
+     "ROW-4b6fea1e0a80529f",
+     "ROW-91607b024ba81d13",
+     "ROW-b7f76e09752bf1fd",
+     "ROW-e6e16033e12c66bb",
+     "ROW-3e1f55b6ea1a8cde",
+     "ROW-cfe660679d99ec60",
+     "ROW-e92517175ae9967d",
+     "ROW-0f8ca584ca4d5402",
+     "ROW-ca04a9f3bb0a1a35",
+     "ROW-ee8a844b4581e050",
+     "ROW-68ebb9019c1993d0",
+     "ROW-09735231d32c8616",
+     "ROW-7c5c6b7fab781c2e",
+     "ROW-ffb7aeba5d6f4309",
+     "ROW-858e85f44ae41fd6",
+     "ROW-7b92808cc466812d",
+     "ROW-3ab803d5a8f83569",
+     "ROW-8b43a63542d82e0b",
+     "ROW-a4f3633f00c24e15",
+     "ROW-ecf28d3b6a0669b5",
+     "ROW-1f93e7556eb292fd",
+     "ROW-0b03445777b18ba4",
+     "ROW-41f3bd5d9da93d12",
+     "ROW-39cf7aea77086050",
+     "ROW-9f153224ed8a93c2",
+     "ROW-254c50815793a322",
+     "ROW-3c9312fab8e5259f",
+     "ROW-4844903aea0c7445",
+     "ROW-3f3d62524d1bc6a9",
+     "ROW-875229c5e789db11",
+     "ROW-5299954bc51c9a99",
+     "ROW-3d44985b3b66c031",
+     "ROW-20604b29d4d1a48a",
+     "ROW-acbd1b5d45847270",
+     "ROW-6dc25a075653a9ab",
+     "ROW-c89458b4e9053644",
+     "ROW-d2e326f6ab84ee42",
+     "ROW-f64296d39deda5f2",
+     "ROW-cbe5763d956c7e29",
+     "ROW-d952b3f5cadec54b",
+     "ROW-df0ee52f64c24d68",
+     "ROW-20b1097b1aac7dfe",
+     "ROW-b114c2366e878d25",
+     "ROW-70c94240be8d1b95",
+     "ROW-ba3cd10be569560d",
+     "ROW-f6fded10743e6d29",
+     "ROW-bf7c20112c095941",
+     "ROW-4be12bcb29c05d11",
+     "ROW-5a87d6c12a07beba",
+     "ROW-398cb3ec3b44ef06",
+     "ROW-2a7e81bdf062e2f8",
+     "ROW-1a1666186dbfd386",
+     "ROW-5fa299fbc2e45c84",
+     "ROW-c4ffde1acf16d746",
+     "ROW-f61acbecd60198bf",
+     "ROW-b8542d7cc71250d1",
+     "ROW-787f134167254502",
+     "ROW-a57a477fca34a562",
+     "ROW-07b535d0eba9c938",
+     "ROW-ad1a00a08ce82b64",
+     "ROW-ba0f5fae2fd2dd93",
+     "ROW-d08d4686fc9e86db",
+     "ROW-265dd08de4fb9fda",
+     "ROW-96d7931b1b0fa384",
+     "ROW-ab9ce9a5900ea814",
+     "ROW-c9a89d7e1956579b",
+     "ROW-8136e38a5e90743f",
+     "ROW-72cdb9a347d545bb",
+     "ROW-7409210fee775369",
+     "ROW-a4b20e140cbd129b",
+     "ROW-91867cdd5380ceb8",
+     "ROW-4d7adc77fdcab53c",
+     "ROW-f257594e68faf492"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-25-000006",
+     "text": "First Lien(3)(4) - Undrawn - - - 05/2024 07/2028 1,237 - 12"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A rate printed on the line and not tagged: rejected; each of the 129 flagged rows was found on the page by its par, cost and value (scratch/fund_runs/0001766037/rowread.py), and every one prints '- - -' in the reference, spread and rate cells.",
+    "Rate on a sibling context (as TMK Hawk 2023-09-30, fixed by row correction): rejected for these rows; the rate-only contexts of the filing were listed (q_rateonly.sql) and none pairs with a flagged row.",
+    "Why the standing check (no rate fact, undrawn) does not clear the quarter: the undrawn lines Coupa / PDQ.com / GC Waves / Associations print a small positive value, so they are neither at or below zero nor at a negative cost."
+   ],
+   "next_action": "Proposal PD-X02-1766037-2 (reason x02-no-rate-printed-on-the-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_7354be9bbc76",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-09-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-09-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 143.97, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 108 of 395 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.24.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_7f210bcf8ecf",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-06-30|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-06-30|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 145.32, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 96 of 384 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 45.29.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_8158d989428d",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-12-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-12-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 152.64, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 91 of 329 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.05.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_891c9c735861",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2026-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2026-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 146.46, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 103 of 401 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 43.38.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_8b445d2bdfed",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 150.28, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 97 of 355 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.26.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_8b511179056a",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-09-30|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-09-30|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Ratio to average net assets: Net investment income (4) 12.69 % 12.60 % Total expenses (4) 5.18 % 4.76 %"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Total expenses (4) 5.18 % 4.76 % Average debt outstanding"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Distributions declared to stockholders from net investment income ( 0.99 ) ( 0.96 )"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Total Investments $ 1,483,914 $ 1,478,978 151.58 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Field: F27 compares income_yield_pct 12.69, the printed annualised ratio of net investment income to average net assets for the nine months to 2024-09-30 (footnote (4) 'Annualized'; three quarterly distributions, 0.99 a share), with the period-end weighted coupon of the published rows, 10.54; difference 2.15.",
+    "Rate timing (tested): the published weighted coupon at 2023-12-31, 2024-03-31, 2024-06-30, 2024-09-30 is 11.32, 11.23, 11.11, 10.54 (SOFR falling from 2024-09); averaged over the period 11.05. Against it the ratio is 12.69 - 11.05 = 1.64, inside the 2.0 band. The period-end coupon is 0.51 below the period average, which carries the quarter over the band.",
+    "Control: in quarters where the coupon was flat the same comparison gives 1.27 (2023-09-30), 1.44 (2023-12-31), 1.33 (2024-03-31): a steady 1.3 to 1.7 points of ratio over coupon that rate timing does not explain (fees, OID and leverage net of expenses, not decomposed here); the two flagged quarters exceed it only by the timing gap.",
+    "Leverage minus expenses as the whole mechanism: rejected; on the printed figures 1.52 x 10.54 - 5.18 = 10.79 at 2024-09-30 and 1.47 x 9.99 - 5.15 = 9.54 at 2024-12-31, which do not reach 12.69 and 12.30.",
+    "Coupon too low (rates missing or wrong): rejected; every funded loan publishes its printed rate (TMK Hawk 2023-09-30 by row correction; the PIK-margin loans carry the printed coupon); rows without a rate are undrawn lines."
+   ],
+   "next_action": "Proposal PD-F27-1766037-3 (reason f27-income-over-net-assets-of-a-levered-fund: published as printed; the heuristic ignores leverage, fees and rate timing) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_8c9b5b2b0591",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-03-31|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-03-31|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 149.48, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 84 of 276 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 48.23.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_8cc0de0bf444",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-12-31|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-12-31|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 154.32, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 110 of 421 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 54.24.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_906504ed9388",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 144.70, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 92 of 369 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.98.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_983ee775ae97",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-12-31|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-12-31|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Ratio to average net assets: Net investment income (7) 12.30 % 12.76 % 9.66 % 11.08 % 8.40 %"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Total expenses, before waivers (7) 5.15 % 4.82 % 3.44 % 2.66"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Total Investments $ 1,451,005 $ 1,445,655 146.96 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Field: F27 compares income_yield_pct 12.30, the printed ratio of net investment income to average net assets for the year 2024 (10-K financial highlights, footnote (7); total expenses before waivers 5.15 %), with the year-end weighted coupon of the published rows, 9.99; difference 2.31.",
+    "Rate timing (tested): the published weighted coupon at 2023-12-31, 2024-03-31, 2024-06-30, 2024-09-30, 2024-12-31 is 11.32, 11.23, 11.11, 10.54, 9.99; averaged over the year 10.84. Against it the ratio is 12.30 - 10.84 = 1.46, inside the 2.0 band. The year-end coupon is 0.85 below the year's average, which carries the quarter over the band.",
+    "Control: in quarters where the coupon was flat the same comparison gives 1.27 (2023-09-30), 1.44 (2023-12-31), 1.33 (2024-03-31): a steady 1.3 to 1.7 points of ratio over coupon that rate timing does not explain (fees, OID and leverage net of expenses, not decomposed here); the two flagged quarters exceed it only by the timing gap.",
+    "Leverage minus expenses as the whole mechanism: rejected; on the printed figures 1.52 x 10.54 - 5.18 = 10.79 at 2024-09-30 and 1.47 x 9.99 - 5.15 = 9.54 at 2024-12-31, which do not reach 12.69 and 12.30.",
+    "Coupon too low (rates missing or wrong): rejected; every funded loan publishes its printed rate (TMK Hawk 2023-09-30 by row correction; the PIK-margin loans carry the printed coupon); rows without a rate are undrawn lines."
+   ],
+   "next_action": "Proposal PD-F27-1766037-3 (reason f27-income-over-net-assets-of-a-levered-fund: published as printed; the heuristic ignores leverage, fees and rate timing) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_9b6c76a0ba13",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2026-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2026-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 152.10, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 108 of 404 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 48.95.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_a2b1fadbc09c",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 144.70, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 92 of 369 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.98.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_a63d04f4956d",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-12-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-12-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 152.64, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 91 of 329 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.05.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_a691f3fd4561",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-12-31|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-12-31|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Total Investments $ 1,451,005 $ 1,445,655 146.96 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 146.96, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 100 of 354 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 55.54.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_a9a92ff10279",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-09-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-09-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 143.04, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 88 of 298 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 44.14.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_b99bbc8eb785",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 150.79, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 86 of 280 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.16.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_b9b2711b16fd",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 146.63, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 96 of 342 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.35.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_be0c54c38ec5",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2026-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2026-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 152.10, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 108 of 404 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 48.95.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_c6253cef2db2",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-09-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-09-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 143.97, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 108 of 395 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.24.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_c85c5785cc71",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2026-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2026-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 146.46, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 103 of 401 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 43.38.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_c98eabbb4eae",
+   "coverage": {
+    "affected_rows": [
+     "ROW-dfe4efa2fc518e92",
+     "ROW-0136aebecd691ef1",
+     "ROW-0a1cec0895d71719",
+     "ROW-8eb49c86a19749d6",
+     "ROW-18a04e5aaa29778a",
+     "ROW-bd6b65710c37585c",
+     "ROW-08b3e778483cac30",
+     "ROW-69e999aa35a39f4f",
+     "ROW-fb53e69730cf5184",
+     "ROW-c70407f9c35724bc",
+     "ROW-7f29ebd587a12faa",
+     "ROW-7fbe6446fc69ca30",
+     "ROW-a19f634d96f7d0b6",
+     "ROW-51c8663129068a2f",
+     "ROW-6f19b752c569c8dd",
+     "ROW-3b338dddbba88af1",
+     "ROW-891d2afcb89ed971",
+     "ROW-2d1dbf26299ab96b",
+     "ROW-ed3b6b7e81df4b8c",
+     "ROW-9fd3b3a4cf7c5251",
+     "ROW-d6522a910afdca3b",
+     "ROW-be368ecc9f4ad019",
+     "ROW-5e90cadf2abed19a",
+     "ROW-d73e6f30d421d42c",
+     "ROW-025f9674dfc1bdae",
+     "ROW-760c749131125f6d",
+     "ROW-dca475905ad8fceb",
+     "ROW-4b23ce3914812dcf",
+     "ROW-d1261df58d678773",
+     "ROW-391fd7a882e00366",
+     "ROW-1695779f2b951028",
+     "ROW-6b4cb63f38308c10",
+     "ROW-2fcf9f558e8ff27b",
+     "ROW-bbb2fb95dc7d94ce",
+     "ROW-6db54915867a18a1",
+     "ROW-9f1633a10954a874",
+     "ROW-b1a51a00fb8f4266",
+     "ROW-afe2540069db97b6",
+     "ROW-093b9a1a241a58c5",
+     "ROW-1897eab7ef74ee87",
+     "ROW-bec938f640f231c6",
+     "ROW-16dad6ee69e2b265",
+     "ROW-31331655548a6ca1",
+     "ROW-0688a90651be660b",
+     "ROW-9bc78e87f7b8cd6a",
+     "ROW-bd007308f4ad8e1d",
+     "ROW-31d9f43840ab8e73",
+     "ROW-92422e6c98e5337b",
+     "ROW-6a7e873b66278520",
+     "ROW-4f2762aca1ab95ff",
+     "ROW-dfed9ce38c949017",
+     "ROW-2cee97888e2eeaa8",
+     "ROW-4a5b0685ceecafbf",
+     "ROW-2070020c69bc5486",
+     "ROW-1106440ee79e05e7",
+     "ROW-c782f3e18ab8aec8",
+     "ROW-9ec08f96bc6b47eb",
+     "ROW-23d15a88aae9456c",
+     "ROW-14c169e0778a96f4",
+     "ROW-6f10a0bd4376a2dd",
+     "ROW-84d18838bdb87b25",
+     "ROW-fbb42688e41d27b8",
+     "ROW-741b36b46c1697b1",
+     "ROW-2dff627d37867d89",
+     "ROW-58cb628e1ddf1342",
+     "ROW-028f9d05385c3d5e",
+     "ROW-ef3014a34ac5390f",
+     "ROW-9cbdc7e0af47d028",
+     "ROW-a8583d42af77b3de",
+     "ROW-e54e8b5d43e0cf91",
+     "ROW-c6046a0d5ad5c873",
+     "ROW-3067268e40524e91",
+     "ROW-683509972976136c",
+     "ROW-1d6e85bbcea92b89",
+     "ROW-69ee15e1b7f03c8c",
+     "ROW-81d1dd264cdf430a",
+     "ROW-90b255b0d038687f",
+     "ROW-3cac5e56af85b579",
+     "ROW-6135e8d28a5bdbed",
+     "ROW-c8c51eacfa205fd0",
+     "ROW-8ee192613830b572",
+     "ROW-bd19c287e54db175",
+     "ROW-84b05e2367cc8b64",
+     "ROW-7e19067b56a18100",
+     "ROW-2818fb59063fbb7f",
+     "ROW-ea9c36e1a866b8c0",
+     "ROW-32e5ca31c54353db",
+     "ROW-c743f1f2bae91d5a",
+     "ROW-1c441e8d8e86c2ae",
+     "ROW-1e16e35f6e0fe8e5",
+     "ROW-6f9078c3619e984b",
+     "ROW-b2a52f05b8fec259",
+     "ROW-0a3a7241ebc56ff4",
+     "ROW-d8c87fabed5d0636",
+     "ROW-38a5eafa93634b00",
+     "ROW-94d297c1f4910d13",
+     "ROW-b65542e05b399061",
+     "ROW-5f58d44a955745a3",
+     "ROW-66ef60910e0e1719",
+     "ROW-ab55e4d2270b004a",
+     "ROW-4d294a39efc51393",
+     "ROW-1466fd20de07f6fb",
+     "ROW-8f8977e5d6763bf0",
+     "ROW-cec89fdf8cc7c19a",
+     "ROW-792696f4270d330d"
+    ],
+    "reviewed_rows": [
+     "ROW-dfe4efa2fc518e92",
+     "ROW-0136aebecd691ef1",
+     "ROW-0a1cec0895d71719",
+     "ROW-8eb49c86a19749d6",
+     "ROW-18a04e5aaa29778a",
+     "ROW-bd6b65710c37585c",
+     "ROW-08b3e778483cac30",
+     "ROW-69e999aa35a39f4f",
+     "ROW-fb53e69730cf5184",
+     "ROW-c70407f9c35724bc",
+     "ROW-7f29ebd587a12faa",
+     "ROW-7fbe6446fc69ca30",
+     "ROW-a19f634d96f7d0b6",
+     "ROW-51c8663129068a2f",
+     "ROW-6f19b752c569c8dd",
+     "ROW-3b338dddbba88af1",
+     "ROW-891d2afcb89ed971",
+     "ROW-2d1dbf26299ab96b",
+     "ROW-ed3b6b7e81df4b8c",
+     "ROW-9fd3b3a4cf7c5251",
+     "ROW-d6522a910afdca3b",
+     "ROW-be368ecc9f4ad019",
+     "ROW-5e90cadf2abed19a",
+     "ROW-d73e6f30d421d42c",
+     "ROW-025f9674dfc1bdae",
+     "ROW-760c749131125f6d",
+     "ROW-dca475905ad8fceb",
+     "ROW-4b23ce3914812dcf",
+     "ROW-d1261df58d678773",
+     "ROW-391fd7a882e00366",
+     "ROW-1695779f2b951028",
+     "ROW-6b4cb63f38308c10",
+     "ROW-2fcf9f558e8ff27b",
+     "ROW-bbb2fb95dc7d94ce",
+     "ROW-6db54915867a18a1",
+     "ROW-9f1633a10954a874",
+     "ROW-b1a51a00fb8f4266",
+     "ROW-afe2540069db97b6",
+     "ROW-093b9a1a241a58c5",
+     "ROW-1897eab7ef74ee87",
+     "ROW-bec938f640f231c6",
+     "ROW-16dad6ee69e2b265",
+     "ROW-31331655548a6ca1",
+     "ROW-0688a90651be660b",
+     "ROW-9bc78e87f7b8cd6a",
+     "ROW-bd007308f4ad8e1d",
+     "ROW-31d9f43840ab8e73",
+     "ROW-92422e6c98e5337b",
+     "ROW-6a7e873b66278520",
+     "ROW-4f2762aca1ab95ff",
+     "ROW-dfed9ce38c949017",
+     "ROW-2cee97888e2eeaa8",
+     "ROW-4a5b0685ceecafbf",
+     "ROW-2070020c69bc5486",
+     "ROW-1106440ee79e05e7",
+     "ROW-c782f3e18ab8aec8",
+     "ROW-9ec08f96bc6b47eb",
+     "ROW-23d15a88aae9456c",
+     "ROW-14c169e0778a96f4",
+     "ROW-6f10a0bd4376a2dd",
+     "ROW-84d18838bdb87b25",
+     "ROW-fbb42688e41d27b8",
+     "ROW-741b36b46c1697b1",
+     "ROW-2dff627d37867d89",
+     "ROW-58cb628e1ddf1342",
+     "ROW-028f9d05385c3d5e",
+     "ROW-ef3014a34ac5390f",
+     "ROW-9cbdc7e0af47d028",
+     "ROW-a8583d42af77b3de",
+     "ROW-e54e8b5d43e0cf91",
+     "ROW-c6046a0d5ad5c873",
+     "ROW-3067268e40524e91",
+     "ROW-683509972976136c",
+     "ROW-1d6e85bbcea92b89",
+     "ROW-69ee15e1b7f03c8c",
+     "ROW-81d1dd264cdf430a",
+     "ROW-90b255b0d038687f",
+     "ROW-3cac5e56af85b579",
+     "ROW-6135e8d28a5bdbed",
+     "ROW-c8c51eacfa205fd0",
+     "ROW-8ee192613830b572",
+     "ROW-bd19c287e54db175",
+     "ROW-84b05e2367cc8b64",
+     "ROW-7e19067b56a18100",
+     "ROW-2818fb59063fbb7f",
+     "ROW-ea9c36e1a866b8c0",
+     "ROW-32e5ca31c54353db",
+     "ROW-c743f1f2bae91d5a",
+     "ROW-1c441e8d8e86c2ae",
+     "ROW-1e16e35f6e0fe8e5",
+     "ROW-6f9078c3619e984b",
+     "ROW-b2a52f05b8fec259",
+     "ROW-0a3a7241ebc56ff4",
+     "ROW-d8c87fabed5d0636",
+     "ROW-38a5eafa93634b00",
+     "ROW-94d297c1f4910d13",
+     "ROW-b65542e05b399061",
+     "ROW-5f58d44a955745a3",
+     "ROW-66ef60910e0e1719",
+     "ROW-ab55e4d2270b004a",
+     "ROW-4d294a39efc51393",
+     "ROW-1466fd20de07f6fb",
+     "ROW-8f8977e5d6763bf0",
+     "ROW-cec89fdf8cc7c19a",
+     "ROW-792696f4270d330d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "PDQ.com Corporation Software First Lien(3)(4) - Undrawn - - - 10/2023 10/2025 458 - 4"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A rate printed on the line and not tagged: rejected; each of the 105 flagged rows was found on the page by its par, cost and value (scratch/fund_runs/0001766037/rowread.py), and every one prints '- - -' in the reference, spread and rate cells.",
+    "Rate on a sibling context (as TMK Hawk 2023-09-30, fixed by row correction): rejected for these rows; the rate-only contexts of the filing were listed (q_rateonly.sql) and none pairs with a flagged row.",
+    "Why the standing check (no rate fact, undrawn) does not clear the quarter: the undrawn lines Coupa / PDQ.com / GC Waves / Associations print a small positive value, so they are neither at or below zero nor at a negative cost."
+   ],
+   "next_action": "Proposal PD-X02-1766037-2 (reason x02-no-rate-printed-on-the-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_d127877ceae0",
+   "coverage": {
+    "affected_rows": [
+     "ROW-6e4fe374bf51dad9",
+     "ROW-baf37968624e1785",
+     "ROW-50764d46704f3621",
+     "ROW-ec198478e0a2407d",
+     "ROW-784d464654626240",
+     "ROW-4ea2085ddff498f3",
+     "ROW-8b2866e39be366de",
+     "ROW-ec5ffb032eab7f9a",
+     "ROW-ac869b16e0661957",
+     "ROW-a8027c9047a98f0f",
+     "ROW-98d363f3ab90f594",
+     "ROW-5c41d0f5fdf9d9df",
+     "ROW-06496a0966b1abad",
+     "ROW-d554c44d4d1c8e44",
+     "ROW-6ed000e290e03a20",
+     "ROW-3fd42119ee505467",
+     "ROW-b096e0ad4c79e7f6",
+     "ROW-ccb0c65acae5346c",
+     "ROW-4be341bb940f9ea6",
+     "ROW-c51328449c384ced",
+     "ROW-6d400928b3e03280",
+     "ROW-6bf39cbf082258de",
+     "ROW-7815fd86dfae9c67",
+     "ROW-aa679f1f7306d746",
+     "ROW-dd15ab9f7968c2ab",
+     "ROW-cc4a4bb121027704",
+     "ROW-a8c98f6f3633bd95",
+     "ROW-215e718dec548e98",
+     "ROW-42b87390b359bcf0",
+     "ROW-468992afe400eb25",
+     "ROW-0f343b70e1ed3ad0",
+     "ROW-482a22667987409c",
+     "ROW-c29c0402816dae0c",
+     "ROW-341434c305e04a13",
+     "ROW-fbc8dd7e131a9e75",
+     "ROW-7cefe729db1a9bd6",
+     "ROW-a6054ed644d39a7a",
+     "ROW-76866c1d5bb84c46",
+     "ROW-d80adf89d3386303",
+     "ROW-61896371c0134db9",
+     "ROW-098bd7a1b22563c9",
+     "ROW-d1c71ee92eb9a9ae",
+     "ROW-64e176d0606901af",
+     "ROW-8094da1ec0a171d7",
+     "ROW-b43db3237a38ac6b",
+     "ROW-9b5eb1cb7adbd153",
+     "ROW-1ec89790806fd4be",
+     "ROW-8d05c114e228ab9f",
+     "ROW-ea318a6c012e84fc",
+     "ROW-0eb6955460428882",
+     "ROW-f23dccc74e6a7983",
+     "ROW-61afe513179abb48",
+     "ROW-fb6dbc54733f23c7",
+     "ROW-ffe1931d70d0ddaf",
+     "ROW-51a3d7385645f983",
+     "ROW-44c5d861a23dfab8",
+     "ROW-88d3d1406739f883",
+     "ROW-ef9c6051f8d2c9e6",
+     "ROW-ee012e842af143ee",
+     "ROW-21f79e2a1d17f926",
+     "ROW-f96bd89287c8befd",
+     "ROW-9f2165e52bc092fd",
+     "ROW-b7d4b65c9b4a3a49",
+     "ROW-d0e019c87ff6b7ba",
+     "ROW-c6671d0bab9d99ab",
+     "ROW-b28614496d5a4cba",
+     "ROW-82adbf6150c25622",
+     "ROW-be8afe797b79add5",
+     "ROW-1fa6529da59cb6b4",
+     "ROW-131bd14a750c2c12",
+     "ROW-f591f10a7bc0374e",
+     "ROW-053a5718165ff88a",
+     "ROW-07008a6df971c602",
+     "ROW-48e29145b4bad8c1",
+     "ROW-014b94419f942576",
+     "ROW-e1abccec2691c539",
+     "ROW-c41af98a16e56dd1",
+     "ROW-d7d4b3992398d455",
+     "ROW-40489f78ac72891c",
+     "ROW-fb764f9461a3e6cc",
+     "ROW-6bbb378841e57e9b",
+     "ROW-15c8eb906fb8bc39",
+     "ROW-760c396d371ab08a",
+     "ROW-05424f3f699bbac6",
+     "ROW-b6bc7c2f728a7bf2",
+     "ROW-42f8ac96f3a0dc46",
+     "ROW-fb580a72684454fb",
+     "ROW-ef02674bfa18d42f",
+     "ROW-80d893a0c35a5648",
+     "ROW-62f90278de7ebea0",
+     "ROW-b2d6892e3f57d230",
+     "ROW-9399cf7e23d1be38",
+     "ROW-0876504b70dcb09d",
+     "ROW-241f1c64fa8a9d16",
+     "ROW-b0962b8c5bd8a237",
+     "ROW-cb34a37229a0f2f5",
+     "ROW-003142b6845863ba",
+     "ROW-4886f02b145ed012",
+     "ROW-f499b5b6563f0ee0",
+     "ROW-eb8030732a69ebce",
+     "ROW-b9166471456cdc90",
+     "ROW-a7cecd1b63cf58c5",
+     "ROW-d3aa8d0912678ad4",
+     "ROW-beaae86e938a840b",
+     "ROW-68b8aac047af2d8f",
+     "ROW-0e8d955d8ebff909",
+     "ROW-df769733bd472848",
+     "ROW-4b623e20ad2f5a36",
+     "ROW-8ddef47e01a9196f",
+     "ROW-18f5665a85043ccc",
+     "ROW-f9de54d2c151e9e5",
+     "ROW-2bb6debd324b2776",
+     "ROW-3d0e733adad1e3d1",
+     "ROW-dd158979b7b1a4e8",
+     "ROW-f266855bdd6da5e6",
+     "ROW-bf5816a48380209d",
+     "ROW-8b11df0f1190c119",
+     "ROW-d7b78bca75e01359",
+     "ROW-6b119834c63a04f4",
+     "ROW-e0ca2040432cd31f",
+     "ROW-fb232727d0f12278",
+     "ROW-eaa9f9ceaf7e2d56",
+     "ROW-6acfb1c6a105330a",
+     "ROW-0e801478c895c7aa",
+     "ROW-6b4f255bf1557278",
+     "ROW-6202082f0f506250",
+     "ROW-b91d7534cfa09fc9",
+     "ROW-ac0be880e6a41733",
+     "ROW-a37ef3da10a6034a",
+     "ROW-9ac81c207e9534ac",
+     "ROW-d03d46d4fd4b2650",
+     "ROW-7ae15405a96884f0",
+     "ROW-d0be23dd32f99b5f",
+     "ROW-0ae84f81961af49a"
+    ],
+    "reviewed_rows": [
+     "ROW-6e4fe374bf51dad9",
+     "ROW-baf37968624e1785",
+     "ROW-50764d46704f3621",
+     "ROW-ec198478e0a2407d",
+     "ROW-784d464654626240",
+     "ROW-4ea2085ddff498f3",
+     "ROW-8b2866e39be366de",
+     "ROW-ec5ffb032eab7f9a",
+     "ROW-ac869b16e0661957",
+     "ROW-a8027c9047a98f0f",
+     "ROW-98d363f3ab90f594",
+     "ROW-5c41d0f5fdf9d9df",
+     "ROW-06496a0966b1abad",
+     "ROW-d554c44d4d1c8e44",
+     "ROW-6ed000e290e03a20",
+     "ROW-3fd42119ee505467",
+     "ROW-b096e0ad4c79e7f6",
+     "ROW-ccb0c65acae5346c",
+     "ROW-4be341bb940f9ea6",
+     "ROW-c51328449c384ced",
+     "ROW-6d400928b3e03280",
+     "ROW-6bf39cbf082258de",
+     "ROW-7815fd86dfae9c67",
+     "ROW-aa679f1f7306d746",
+     "ROW-dd15ab9f7968c2ab",
+     "ROW-cc4a4bb121027704",
+     "ROW-a8c98f6f3633bd95",
+     "ROW-215e718dec548e98",
+     "ROW-42b87390b359bcf0",
+     "ROW-468992afe400eb25",
+     "ROW-0f343b70e1ed3ad0",
+     "ROW-482a22667987409c",
+     "ROW-c29c0402816dae0c",
+     "ROW-341434c305e04a13",
+     "ROW-fbc8dd7e131a9e75",
+     "ROW-7cefe729db1a9bd6",
+     "ROW-a6054ed644d39a7a",
+     "ROW-76866c1d5bb84c46",
+     "ROW-d80adf89d3386303",
+     "ROW-61896371c0134db9",
+     "ROW-098bd7a1b22563c9",
+     "ROW-d1c71ee92eb9a9ae",
+     "ROW-64e176d0606901af",
+     "ROW-8094da1ec0a171d7",
+     "ROW-b43db3237a38ac6b",
+     "ROW-9b5eb1cb7adbd153",
+     "ROW-1ec89790806fd4be",
+     "ROW-8d05c114e228ab9f",
+     "ROW-ea318a6c012e84fc",
+     "ROW-0eb6955460428882",
+     "ROW-f23dccc74e6a7983",
+     "ROW-61afe513179abb48",
+     "ROW-fb6dbc54733f23c7",
+     "ROW-ffe1931d70d0ddaf",
+     "ROW-51a3d7385645f983",
+     "ROW-44c5d861a23dfab8",
+     "ROW-88d3d1406739f883",
+     "ROW-ef9c6051f8d2c9e6",
+     "ROW-ee012e842af143ee",
+     "ROW-21f79e2a1d17f926",
+     "ROW-f96bd89287c8befd",
+     "ROW-9f2165e52bc092fd",
+     "ROW-b7d4b65c9b4a3a49",
+     "ROW-d0e019c87ff6b7ba",
+     "ROW-c6671d0bab9d99ab",
+     "ROW-b28614496d5a4cba",
+     "ROW-82adbf6150c25622",
+     "ROW-be8afe797b79add5",
+     "ROW-1fa6529da59cb6b4",
+     "ROW-131bd14a750c2c12",
+     "ROW-f591f10a7bc0374e",
+     "ROW-053a5718165ff88a",
+     "ROW-07008a6df971c602",
+     "ROW-48e29145b4bad8c1",
+     "ROW-014b94419f942576",
+     "ROW-e1abccec2691c539",
+     "ROW-c41af98a16e56dd1",
+     "ROW-d7d4b3992398d455",
+     "ROW-40489f78ac72891c",
+     "ROW-fb764f9461a3e6cc",
+     "ROW-6bbb378841e57e9b",
+     "ROW-15c8eb906fb8bc39",
+     "ROW-760c396d371ab08a",
+     "ROW-05424f3f699bbac6",
+     "ROW-b6bc7c2f728a7bf2",
+     "ROW-42f8ac96f3a0dc46",
+     "ROW-fb580a72684454fb",
+     "ROW-ef02674bfa18d42f",
+     "ROW-80d893a0c35a5648",
+     "ROW-62f90278de7ebea0",
+     "ROW-b2d6892e3f57d230",
+     "ROW-9399cf7e23d1be38",
+     "ROW-0876504b70dcb09d",
+     "ROW-241f1c64fa8a9d16",
+     "ROW-b0962b8c5bd8a237",
+     "ROW-cb34a37229a0f2f5",
+     "ROW-003142b6845863ba",
+     "ROW-4886f02b145ed012",
+     "ROW-f499b5b6563f0ee0",
+     "ROW-eb8030732a69ebce",
+     "ROW-b9166471456cdc90",
+     "ROW-a7cecd1b63cf58c5",
+     "ROW-d3aa8d0912678ad4",
+     "ROW-beaae86e938a840b",
+     "ROW-68b8aac047af2d8f",
+     "ROW-0e8d955d8ebff909",
+     "ROW-df769733bd472848",
+     "ROW-4b623e20ad2f5a36",
+     "ROW-8ddef47e01a9196f",
+     "ROW-18f5665a85043ccc",
+     "ROW-f9de54d2c151e9e5",
+     "ROW-2bb6debd324b2776",
+     "ROW-3d0e733adad1e3d1",
+     "ROW-dd158979b7b1a4e8",
+     "ROW-f266855bdd6da5e6",
+     "ROW-bf5816a48380209d",
+     "ROW-8b11df0f1190c119",
+     "ROW-d7b78bca75e01359",
+     "ROW-6b119834c63a04f4",
+     "ROW-e0ca2040432cd31f",
+     "ROW-fb232727d0f12278",
+     "ROW-eaa9f9ceaf7e2d56",
+     "ROW-6acfb1c6a105330a",
+     "ROW-0e801478c895c7aa",
+     "ROW-6b4f255bf1557278",
+     "ROW-6202082f0f506250",
+     "ROW-b91d7534cfa09fc9",
+     "ROW-ac0be880e6a41733",
+     "ROW-a37ef3da10a6034a",
+     "ROW-9ac81c207e9534ac",
+     "ROW-d03d46d4fd4b2650",
+     "ROW-7ae15405a96884f0",
+     "ROW-d0be23dd32f99b5f",
+     "ROW-0ae84f81961af49a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-24-000017",
+     "text": "GC Waves Holdings, Inc. Financial Services First Lien(4) - Undrawn - - - 07/2023 12/2024 $ 3,387 $ - $ 34"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A rate printed on the line and not tagged: rejected; each of the 134 flagged rows was found on the page by its par, cost and value (scratch/fund_runs/0001766037/rowread.py), and every one prints '- - -' in the reference, spread and rate cells.",
+    "Rate on a sibling context (as TMK Hawk 2023-09-30, fixed by row correction): rejected for these rows; the rate-only contexts of the filing were listed (q_rateonly.sql) and none pairs with a flagged row.",
+    "Why the standing check (no rate fact, undrawn) does not clear the quarter: the undrawn lines Coupa / PDQ.com / GC Waves / Associations print a small positive value, so they are neither at or below zero nor at a negative cost."
+   ],
+   "next_action": "Proposal PD-X02-1766037-2 (reason x02-no-rate-printed-on-the-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_d78ff419ded7",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2024-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2024-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 150.28, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 97 of 355 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.26.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_d8d909cc3965",
+   "coverage": {
+    "affected_rows": [
+     "ROW-b557e4b1655a11ab"
+    ],
+    "reviewed_rows": [
+     "ROW-b557e4b1655a11ab"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.58 % 06/2023 12/2027 6,038 5,707 6,038"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Merged rate from the wrong loan: rejected; each merged value equals the row's printed line (rowread.py found every row by par, cost and value with the published rate).",
+    "CommerceHub: rate-only context c-249 / c-232 joined to the value context (adjacent, same identifier), source_encodings.rate_only_contexts adopt_adjacent; the join was simulated on nmya first and touches only CommerceHub in both quarters.",
+    "TigerConnect drawn 2023-12-31: spread and PIK come from a duplicate-member context (dedupe_filled_fields); printed 3.38 % + 3.38 %/PIK, so the published spread is the cash margin only (owner question D-092, not this finding)."
+   ],
+   "next_action": "Proposal PD-merged_context_excluded-1766037-4 (reason merged-context-value-equals-printed-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_e14b519fb029",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2026-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2026-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 152.10, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 108 of 404 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 48.95.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_e1f302b4647a",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-09-30|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-09-30|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 143.97, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 108 of 395 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.24.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_e96dee6d4e31",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-03-31|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-03-31|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 144.70, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 92 of 369 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 47.98.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_f05093c6b0f8",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2025-06-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2025-06-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 145.32, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 96 of 384 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 45.29.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_f65f2f30ab97",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-09-30|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-09-30|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 143.04, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 88 of 298 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 44.14.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-A07-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_f824ee74386d",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 149.48, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 84 of 276 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 48.23.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F22-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_fb20effa313b",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2023-03-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001766037|2023-03-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 149.48, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 84 of 276 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 48.23.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-PCT02-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  },
+  {
+   "finding_id": "RVQ_REV_fc891f5dd07b",
+   "coverage": {
+    "affected_rows": [
+     "ROW-dfe39a4b75dd63f4",
+     "ROW-9d506da031531483",
+     "ROW-da7d93a3129b563d",
+     "ROW-d6a9e013b3d689f1",
+     "ROW-533078cb0f7ee456",
+     "ROW-7c8cbae0ccf0fd6b",
+     "ROW-93ba9413096dc796",
+     "ROW-ba459c2e1d5527cb",
+     "ROW-497f1209f5547be2",
+     "ROW-ebe0b7af7ad7a189",
+     "ROW-8e045ff4ffa80638",
+     "ROW-a89cf575c01f6533",
+     "ROW-5dfd3edfd9262e4b",
+     "ROW-36a31dc153a03610",
+     "ROW-5c2ecba2edb9a969",
+     "ROW-e1019d6446d11714",
+     "ROW-dbc1075dabf22ce2",
+     "ROW-108ec4d34835508c",
+     "ROW-a31c5bd1d89fa579",
+     "ROW-baa43559f9e338a3",
+     "ROW-8acbdf1d660b1c22",
+     "ROW-4bc8405f7475dea9",
+     "ROW-7b0d4c3ba7d37968",
+     "ROW-460a5fe71bc0d0ed",
+     "ROW-1f65de3c3b1205ce",
+     "ROW-67e7303a013898a8",
+     "ROW-2e5cd6c81621b7ed",
+     "ROW-fda3cf17cdfcec5d",
+     "ROW-683804d1c793cc2c",
+     "ROW-e9984a6dc1386963",
+     "ROW-89604cc8cc6678dc",
+     "ROW-399738ec4ad06541",
+     "ROW-5d2ee4b013d0f609",
+     "ROW-10967544b72137ad",
+     "ROW-9c0bd788d312c961",
+     "ROW-293f548c3fabfcff",
+     "ROW-4f4ac8209fa13a77",
+     "ROW-41cb7edacc1f1dce",
+     "ROW-9262b6f4b3f4b4f1",
+     "ROW-72161dc32cd3dcc3",
+     "ROW-3f4599b3aa6362b2",
+     "ROW-9b0890dbf356ebab",
+     "ROW-fcb97ee24bbd6bce",
+     "ROW-9ba495383bdafea3",
+     "ROW-9841564e4bb36e4b",
+     "ROW-b26aeb4a63d5a230",
+     "ROW-e9747a485325ca6b",
+     "ROW-eeb332b1cebd1e44",
+     "ROW-51b314b3727f1fdd",
+     "ROW-60b3ec03d5d7ac92",
+     "ROW-615e3244f9d37059",
+     "ROW-166754aef62f76e6",
+     "ROW-0d398807353bfcf4",
+     "ROW-a7349221da01fc70",
+     "ROW-bd72fb8ab9e788ae",
+     "ROW-1232b8e22ea92b57",
+     "ROW-2aff1662af43ce31",
+     "ROW-50179a9ba5901480",
+     "ROW-6e2ec3d16f1053f4",
+     "ROW-e35a80155b9ed420",
+     "ROW-37db76f9a43f9ecf",
+     "ROW-9915355ba0ed48b9",
+     "ROW-2f8e5378b4061885",
+     "ROW-b98b33f803e746f7",
+     "ROW-8f5d75a963ea9d25",
+     "ROW-96716c38685c7ca3",
+     "ROW-c4cd6678ed7e2e9e",
+     "ROW-ea5ddb247cb3ddce",
+     "ROW-cda2ef34b1a9bf84",
+     "ROW-673b8ce045b97a4f",
+     "ROW-a39734a2b9c0665f",
+     "ROW-ee59a1d1b4ce9e0c",
+     "ROW-75990ef7b7796dee",
+     "ROW-85ea29c93362e530",
+     "ROW-d72e0bee95b1e677",
+     "ROW-fa9c4dd3176de32b",
+     "ROW-94990af63f3ae6e9",
+     "ROW-ed17d1a890567f95",
+     "ROW-a3dd6171ab6292c0",
+     "ROW-5d94d58641c7d14e",
+     "ROW-f27391d968d32073",
+     "ROW-a97da63f2f889412",
+     "ROW-3883f207d49b4680",
+     "ROW-c5f65932ac0f2403",
+     "ROW-cbbb1802e9849a4d",
+     "ROW-294f50bc1b280c6e",
+     "ROW-e49b30938f9c8eaf",
+     "ROW-cb9d0be1764fc158",
+     "ROW-f574ddf160e169b1",
+     "ROW-978d6f186466422d",
+     "ROW-992f1c23c137b84f",
+     "ROW-5dd3fa20ed8bf443",
+     "ROW-666c63aa0a52accc",
+     "ROW-83383aed1ebaecd8",
+     "ROW-52aef28e0116b4c3",
+     "ROW-75c028293ec712e9",
+     "ROW-815afb2f28c47c99",
+     "ROW-6bf10c6603dd1053",
+     "ROW-37a0e2c182250f9c"
+    ],
+    "reviewed_rows": [
+     "ROW-dfe39a4b75dd63f4",
+     "ROW-9d506da031531483",
+     "ROW-da7d93a3129b563d",
+     "ROW-d6a9e013b3d689f1",
+     "ROW-533078cb0f7ee456",
+     "ROW-7c8cbae0ccf0fd6b",
+     "ROW-93ba9413096dc796",
+     "ROW-ba459c2e1d5527cb",
+     "ROW-497f1209f5547be2",
+     "ROW-ebe0b7af7ad7a189",
+     "ROW-8e045ff4ffa80638",
+     "ROW-a89cf575c01f6533",
+     "ROW-5dfd3edfd9262e4b",
+     "ROW-36a31dc153a03610",
+     "ROW-5c2ecba2edb9a969",
+     "ROW-e1019d6446d11714",
+     "ROW-dbc1075dabf22ce2",
+     "ROW-108ec4d34835508c",
+     "ROW-a31c5bd1d89fa579",
+     "ROW-baa43559f9e338a3",
+     "ROW-8acbdf1d660b1c22",
+     "ROW-4bc8405f7475dea9",
+     "ROW-7b0d4c3ba7d37968",
+     "ROW-460a5fe71bc0d0ed",
+     "ROW-1f65de3c3b1205ce",
+     "ROW-67e7303a013898a8",
+     "ROW-2e5cd6c81621b7ed",
+     "ROW-fda3cf17cdfcec5d",
+     "ROW-683804d1c793cc2c",
+     "ROW-e9984a6dc1386963",
+     "ROW-89604cc8cc6678dc",
+     "ROW-399738ec4ad06541",
+     "ROW-5d2ee4b013d0f609",
+     "ROW-10967544b72137ad",
+     "ROW-9c0bd788d312c961",
+     "ROW-293f548c3fabfcff",
+     "ROW-4f4ac8209fa13a77",
+     "ROW-41cb7edacc1f1dce",
+     "ROW-9262b6f4b3f4b4f1",
+     "ROW-72161dc32cd3dcc3",
+     "ROW-3f4599b3aa6362b2",
+     "ROW-9b0890dbf356ebab",
+     "ROW-fcb97ee24bbd6bce",
+     "ROW-9ba495383bdafea3",
+     "ROW-9841564e4bb36e4b",
+     "ROW-b26aeb4a63d5a230",
+     "ROW-e9747a485325ca6b",
+     "ROW-eeb332b1cebd1e44",
+     "ROW-51b314b3727f1fdd",
+     "ROW-60b3ec03d5d7ac92",
+     "ROW-615e3244f9d37059",
+     "ROW-166754aef62f76e6",
+     "ROW-0d398807353bfcf4",
+     "ROW-a7349221da01fc70",
+     "ROW-bd72fb8ab9e788ae",
+     "ROW-1232b8e22ea92b57",
+     "ROW-2aff1662af43ce31",
+     "ROW-50179a9ba5901480",
+     "ROW-6e2ec3d16f1053f4",
+     "ROW-e35a80155b9ed420",
+     "ROW-37db76f9a43f9ecf",
+     "ROW-9915355ba0ed48b9",
+     "ROW-2f8e5378b4061885",
+     "ROW-b98b33f803e746f7",
+     "ROW-8f5d75a963ea9d25",
+     "ROW-96716c38685c7ca3",
+     "ROW-c4cd6678ed7e2e9e",
+     "ROW-ea5ddb247cb3ddce",
+     "ROW-cda2ef34b1a9bf84",
+     "ROW-673b8ce045b97a4f",
+     "ROW-a39734a2b9c0665f",
+     "ROW-ee59a1d1b4ce9e0c",
+     "ROW-75990ef7b7796dee",
+     "ROW-85ea29c93362e530",
+     "ROW-d72e0bee95b1e677",
+     "ROW-fa9c4dd3176de32b",
+     "ROW-94990af63f3ae6e9",
+     "ROW-ed17d1a890567f95",
+     "ROW-a3dd6171ab6292c0",
+     "ROW-5d94d58641c7d14e",
+     "ROW-f27391d968d32073",
+     "ROW-a97da63f2f889412",
+     "ROW-3883f207d49b4680",
+     "ROW-c5f65932ac0f2403",
+     "ROW-cbbb1802e9849a4d",
+     "ROW-294f50bc1b280c6e",
+     "ROW-e49b30938f9c8eaf",
+     "ROW-cb9d0be1764fc158",
+     "ROW-f574ddf160e169b1",
+     "ROW-978d6f186466422d",
+     "ROW-992f1c23c137b84f",
+     "ROW-5dd3fa20ed8bf443",
+     "ROW-666c63aa0a52accc",
+     "ROW-83383aed1ebaecd8",
+     "ROW-52aef28e0116b4c3",
+     "ROW-75c028293ec712e9",
+     "ROW-815afb2f28c47c99",
+     "ROW-6bf10c6603dd1053",
+     "ROW-37a0e2c182250f9c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Coupa Holdings, LLC Software First Lien(3)(4) - Undrawn - - - 02/2023 08/2024 $ 1,193 $ - $ 12"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A rate printed on the line and not tagged: rejected; each of the 99 flagged rows was found on the page by its par, cost and value (scratch/fund_runs/0001766037/rowread.py), and every one prints '- - -' in the reference, spread and rate cells.",
+    "Rate on a sibling context (as TMK Hawk 2023-09-30, fixed by row correction): rejected for these rows; the rate-only contexts of the filing were listed (q_rateonly.sql) and none pairs with a flagged row.",
+    "Why the standing check (no rate fact, undrawn) does not clear the quarter: the undrawn lines Coupa / PDQ.com / GC Waves / Associations print a small positive value, so they are neither at or below zero nor at a negative cost."
+   ],
+   "next_action": "Proposal PD-X02-1766037-2 (reason x02-no-rate-printed-on-the-row) for the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_fdd290fdd2eb",
+   "coverage": {
+    "affected_rows": [
+     "0001766037|2026-06-30|pct_sum_vs_fv_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001766037|2026-06-30|pct_sum_vs_fv_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows missing from extraction: rejected; published fair value equals the filed investments total in this quarter (gate totals check, 14 of 14 quarters tie) and published fair value over published net assets is 146.46, against the total percent printed on the cited line (equal within 0.05).",
+    "Percent mis-scaled or duplicated: rejected; 103 of 401 rows publish a percent, each equal to fair value over net assets within 0.01 (one row off at 2024-09-30 only), sum 43.38.",
+    "Percent printed per row and not read: rejected; the schedule prints one percent per issuer on the issuer's total line (Zone Climate: two lines, one 3.02 %), tagged on the issuer-group context, which is not a position."
+   ],
+   "next_action": "Proposal PD-F23-1766037-1 (reason f23-percent-printed-once-per-issuer-group) for the owner; no data change. pct_of_net_assets_calculated already carries fair value over net assets on every row."
+  }
+ ]
+}

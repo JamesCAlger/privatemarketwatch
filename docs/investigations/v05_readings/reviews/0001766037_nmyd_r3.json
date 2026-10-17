@@ -1,0 +1,1144 @@
+{
+ "reviewer_id": "nmfslf_independent_reviewer_2026-10-17",
+ "report_digest": "4ca60896858dfaaf9281f9ea9a05fd1ba0389fa00a4cd6760a00269ffd42c17b",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001766037_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_d7ea42fde7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population: source_reconciliation_detail for 2025-12-31 has exactly one blocking row, status missing_from_pipeline, context c-1112 (identifier 'Notorious Topco, LLC (\"BIG\"), First Lien'), matching affected_rows 0001766037-26-000004|c-1112. Raw instance: c-1112 holds only InvestmentOwnedAtCost 7211000 and InvestmentOwnedAtFairValue 6376000 (sibling c-1113 holds interest income 229000, not 'unearned income' as the report says; immaterial). The four published DCA rows at 2025-12-31 are 5,408 + 449 + 309 + 210 = 6,376k, equal to the note's aggregate, and published FV 1,512,098k equals the filed total. The context is a note aggregate, not a position; excluding it is correct.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001766037_2026-03-31_BLOCKING_PIPELINE_ONLY_POSITION_7785c1bb28",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population: the only blocking source-recon row at 2026-03-31 is extra_in_pipeline ROW-d7c7570b3bd6e26b (DigiCert First Lien, 7,063 / 7,016 / 7,010k), matching affected_rows. Raw instance read by the reviewer: c-242 has principal 7016000, cost 7010000, fair value 0.0073 and rate 0.0942 (one column off the print); c-241 has spread 0.0575 and principal 7063000. The printed DigiCert line gives 7,063 / 7,016 / 7,010 and 0.73 %, so the row correction equals the page, the withdrawn 7,300 rescale was a plug, and published FV 1,457,048k equals the filed total. source_ambiguity is a fair label for a cross-tagged source the check cannot pair.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_06349506ca72",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population: source_reconciliation_detail for 2025-12-31 has exactly one blocking row, status missing_from_pipeline, context c-1112 (identifier 'Notorious Topco, LLC (\"BIG\"), First Lien'), matching affected_rows 0001766037-26-000004|c-1112. Raw instance: c-1112 holds only InvestmentOwnedAtCost 7211000 and InvestmentOwnedAtFairValue 6376000 (sibling c-1113 holds interest income 229000, not 'unearned income' as the report says; immaterial). The four published DCA rows at 2025-12-31 are 5,408 + 449 + 309 + 210 = 6,376k, equal to the note's aggregate, and published FV 1,512,098k equals the filed total. The context is a note aggregate, not a position; excluding it is correct.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1d3a019bf6a6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population: the only blocking source-recon row at 2026-03-31 is extra_in_pipeline ROW-d7c7570b3bd6e26b (DigiCert First Lien, 7,063 / 7,016 / 7,010k), matching affected_rows. Raw instance read by the reviewer: c-242 has principal 7016000, cost 7010000, fair value 0.0073 and rate 0.0942 (one column off the print); c-241 has spread 0.0575 and principal 7063000. The printed DigiCert line gives 7,063 / 7,016 / 7,010 and 0.73 %, so the row correction equals the page, the withdrawn 7,300 rescale was a plug, and published FV 1,457,048k equals the filed total. source_ambiguity is a fair label for a cross-tagged source the check cannot pair.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_03801ae8791e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2025-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-03-31: 92 of 369 rows carry a percent, sum 47.98; published FV 1,419,651k equals the filed investments total and published FV / net assets = 144.7, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 73 issuers with two or more funded rows at 2025-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_05223e80a8da",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2023-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-06-30: 86 of 280 rows carry a percent, sum 47.16; published FV 1,214,001k equals the filed investments total and published FV / net assets = 150.79, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 55 issuers with two or more funded rows at 2023-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_07f616fe3736",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2024-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-06-30: 97 of 355 rows carry a percent, sum 47.26; published FV 1,385,068k equals the filed investments total and published FV / net assets = 150.28, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 68 issuers with two or more funded rows at 2024-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0c4ea7a04d3c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2024-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-03-31: 96 of 342 rows carry a percent, sum 47.35; published FV 1,356,000k equals the filed investments total and published FV / net assets = 146.63, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 64 issuers with two or more funded rows at 2024-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1794dc1735ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2024-09-30|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-09-30: 104 of 379 rows carry a percent, sum 50.82; published FV 1,478,978k equals the filed investments total and published FV / net assets = 151.58, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 71 issuers with two or more funded rows at 2024-09-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Total Investments $ 1,483,914 $ 1,478,978 151.58 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1bbe1bf6656f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2023-12-31|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-12-31: 91 of 329 rows carry a percent, sum 47.05; published FV 1,320,435k equals the filed investments total and published FV / net assets = 152.64, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 64 issuers with two or more funded rows at 2023-12-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2084cc051e67",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2025-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-06-30: 96 of 384 rows carry a percent, sum 45.29; published FV 1,411,585k equals the filed investments total and published FV / net assets = 145.32, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 74 issuers with two or more funded rows at 2025-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_233b9c1fc96f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2023-09-30|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-09-30: 88 of 298 rows carry a percent, sum 44.14; published FV 1,230,366k equals the filed investments total and published FV / net assets = 143.04, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 56 issuers with two or more funded rows at 2023-09-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2f565ae1263d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2024-06-30|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-06-30: 97 of 355 rows carry a percent, sum 47.26; published FV 1,385,068k equals the filed investments total and published FV / net assets = 150.28, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 68 issuers with two or more funded rows at 2024-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_327d3cf5c6b0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2023-06-30|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-06-30: 86 of 280 rows carry a percent, sum 47.16; published FV 1,214,001k equals the filed investments total and published FV / net assets = 150.79, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 55 issuers with two or more funded rows at 2023-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_354252e331ef",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2025-09-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-09-30: 108 of 395 rows carry a percent, sum 47.24; published FV 1,402,593k equals the filed investments total and published FV / net assets = 143.97, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 70 issuers with two or more funded rows at 2025-09-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_397a8d449f6c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2023-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-06-30: 86 of 280 rows carry a percent, sum 47.16; published FV 1,214,001k equals the filed investments total and published FV / net assets = 150.79, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 55 issuers with two or more funded rows at 2023-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_441c10d9ac2d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2026-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2026-06-30: 103 of 401 rows carry a percent, sum 43.38; published FV 1,396,596k equals the filed investments total and published FV / net assets = 146.46, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 77 issuers with two or more funded rows at 2026-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_44673571197e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2023-12-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-12-31: 91 of 329 rows carry a percent, sum 47.05; published FV 1,320,435k equals the filed investments total and published FV / net assets = 152.64, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 64 issuers with two or more funded rows at 2023-12-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4d9a8530e500",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from provenance_ledger (reason_code merged_context_excluded, 2023-12-31) equals affected_rows exactly (ROW-2490d47137fec7f9, ROW-65331a8d68fe22da). Published values: ROW-2490d47137fec7f9 CommerceHub rate 11.79 / spread 6.25 (context c-250), ROW-65331a8d68fe22da TigerConnect drawn spread 3.38 / PIK 3.38 (c-281); both equal the printed lines quoted. The re-verifier marks them only because the value came from a sibling context it does not replay; the merged values are the printed ones. The cash-only TigerConnect spread is the separate open D-092 question.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.79 % 06/2023 12/2027 6,053 5,704 6,054"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4fa398ed5bf4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2023-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-03-31: 84 of 276 rows carry a percent, sum 48.23; published FV 1,196,808k equals the filed investments total and published FV / net assets = 149.48, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 55 issuers with two or more funded rows at 2023-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_505183528c16",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2023-09-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-09-30: 88 of 298 rows carry a percent, sum 44.14; published FV 1,230,366k equals the filed investments total and published FV / net assets = 143.04, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 56 issuers with two or more funded rows at 2023-09-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5276a4d889d9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2026-03-31|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2026-03-31: 108 of 404 rows carry a percent, sum 48.95; published FV 1,457,048k equals the filed investments total and published FV / net assets = 152.1, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 73 issuers with two or more funded rows at 2026-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_543e1e3d8694",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2025-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-06-30: 96 of 384 rows carry a percent, sum 45.29; published FV 1,411,585k equals the filed investments total and published FV / net assets = 145.32, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 74 issuers with two or more funded rows at 2025-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5617ea9916d7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2024-03-31|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-03-31: 96 of 342 rows carry a percent, sum 47.35; published FV 1,356,000k equals the filed investments total and published FV / net assets = 146.63, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 64 issuers with two or more funded rows at 2024-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_56d7baa1d8e3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2024-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-03-31: 96 of 342 rows carry a percent, sum 47.35; published FV 1,356,000k equals the filed investments total and published FV / net assets = 146.63, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 64 issuers with two or more funded rows at 2024-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5ce00e89b7c3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from row_validation_issues (rule X02, 2025-03-31): 129 row_ids, identical to affected_rows (0 missing, 0 extra). Reviewer's profile of those rows: none carries an interest_rate or spread, none has a positive cost, at most two carry a small positive FV; rows whose member lacks 'Undrawn' (e.g. Businessolver 2023-12-31, MRI Software 'Drawn' members 2024-03-31) were looked up on the page and are printed in the unfunded table as '- Undrawn - - -' lines. The investigator's row reads find every row (1 or 2 matching lines, all without a rate). No rate exists to publish; false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000006",
+     "text": "First Lien(3)(4) - Undrawn - - - 05/2024 07/2028 1,237 - 12"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7354be9bbc76",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2025-09-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-09-30: 108 of 395 rows carry a percent, sum 47.24; published FV 1,402,593k equals the filed investments total and published FV / net assets = 143.97, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 70 issuers with two or more funded rows at 2025-09-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7f210bcf8ecf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2025-06-30|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-06-30: 96 of 384 rows carry a percent, sum 45.29; published FV 1,411,585k equals the filed investments total and published FV / net assets = 145.32, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 74 issuers with two or more funded rows at 2025-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8158d989428d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2023-12-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-12-31: 91 of 329 rows carry a percent, sum 47.05; published FV 1,320,435k equals the filed investments total and published FV / net assets = 152.64, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 64 issuers with two or more funded rows at 2023-12-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_891c9c735861",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2026-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2026-06-30: 103 of 401 rows carry a percent, sum 43.38; published FV 1,396,596k equals the filed investments total and published FV / net assets = 146.46, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 77 issuers with two or more funded rows at 2026-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8b445d2bdfed",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2024-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-06-30: 97 of 355 rows carry a percent, sum 47.26; published FV 1,385,068k equals the filed investments total and published FV / net assets = 150.28, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 68 issuers with two or more funded rows at 2024-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8b511179056a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r3. Coupons recomputed by the reviewer from the published nmyd rows (FV-weighted rate of rated rows with FV > 0, rated share 1.0; same basis as F27, whose diffs it reproduces exactly): 2023-12-31 11.319, 2024-03-31 11.233, 2024-06-30 11.109, 2024-09-30 10.535, 2024-12-31 9.994, i.e. the report's 11.32 / 11.23 / 11.11 / 10.54 / 9.99. Period averages: 11.049 for the nine months to 2024-09-30 and 10.838 for 2024, the report's 11.05 / 10.84. The ratio is the printed period figure (published as printed), so against the period-average coupon the gap is 12.69 - 11.05 = 1.64 points, inside the 2.0 band, and the control quarters 2023-09-30 / 2023-12-31 / 2024-03-31 reproduce at 1.274 / 1.441 / 1.327. The leverage-minus-expenses arithmetic is now recorded and rejected as the whole mechanism. The rate-timing mechanism is tested and explains why these two quarters cross 200bp; 'no value is wrong' is supported (published ratio = printed ratio; funded loans carry rates). Residuals, not blocking: a four- or five-point average of quarter-end coupons approximates the period's earned coupon; the stated 'steady 1.3 to 1.7' baseline omits 2024-06-30 (1.79). Citations now correct: 10-Q footnote (4), expenses 5.18 %.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Ratio to average net assets: Net investment income (4) 12.69 % 12.60 % Total expenses (4) 5.18 % 4.76 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8c9b5b2b0591",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2023-03-31|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-03-31: 84 of 276 rows carry a percent, sum 48.23; published FV 1,196,808k equals the filed investments total and published FV / net assets = 149.48, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 55 issuers with two or more funded rows at 2023-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8cc0de0bf444",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2025-12-31|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-12-31: 110 of 421 rows carry a percent, sum 54.24; published FV 1,512,098k equals the filed investments total and published FV / net assets = 154.32, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 74 issuers with two or more funded rows at 2025-12-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_906504ed9388",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2025-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-03-31: 92 of 369 rows carry a percent, sum 47.98; published FV 1,419,651k equals the filed investments total and published FV / net assets = 144.7, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 73 issuers with two or more funded rows at 2025-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_983ee775ae97",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r3. Coupons recomputed by the reviewer from the published nmyd rows (FV-weighted rate of rated rows with FV > 0, rated share 1.0; same basis as F27, whose diffs it reproduces exactly): 2023-12-31 11.319, 2024-03-31 11.233, 2024-06-30 11.109, 2024-09-30 10.535, 2024-12-31 9.994, i.e. the report's 11.32 / 11.23 / 11.11 / 10.54 / 9.99. Period averages: 11.049 for the nine months to 2024-09-30 and 10.838 for 2024, the report's 11.05 / 10.84. The ratio is the printed period figure (published as printed), so against the period-average coupon the gap is 12.30 - 10.84 = 1.46 points, inside the 2.0 band, and the control quarters 2023-09-30 / 2023-12-31 / 2024-03-31 reproduce at 1.274 / 1.441 / 1.327. The leverage-minus-expenses arithmetic is now recorded and rejected as the whole mechanism. The rate-timing mechanism is tested and explains why these two quarters cross 200bp; 'no value is wrong' is supported (published ratio = printed ratio; funded loans carry rates). Residuals, not blocking: a four- or five-point average of quarter-end coupons approximates the period's earned coupon; the stated 'steady 1.3 to 1.7' baseline omits 2024-06-30 (1.79). Citations now correct: 10-K footnote (7), expenses before waivers 5.15 %.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Ratio to average net assets: Net investment income (7) 12.30 % 12.76 % 9.66 % 11.08 % 8.40 %"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Total expenses, before waivers (7) 5.15 % 4.82 % 3.44 % 2.66 % 2.47 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9b6c76a0ba13",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2026-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2026-03-31: 108 of 404 rows carry a percent, sum 48.95; published FV 1,457,048k equals the filed investments total and published FV / net assets = 152.1, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 73 issuers with two or more funded rows at 2026-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a2b1fadbc09c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2025-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-03-31: 92 of 369 rows carry a percent, sum 47.98; published FV 1,419,651k equals the filed investments total and published FV / net assets = 144.7, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 73 issuers with two or more funded rows at 2025-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a63d04f4956d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2023-12-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-12-31: 91 of 329 rows carry a percent, sum 47.05; published FV 1,320,435k equals the filed investments total and published FV / net assets = 152.64, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 64 issuers with two or more funded rows at 2023-12-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a691f3fd4561",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2024-12-31|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-12-31: 100 of 354 rows carry a percent, sum 55.54; published FV 1,445,655k equals the filed investments total and published FV / net assets = 146.96, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 66 issuers with two or more funded rows at 2024-12-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Total Investments $ 1,451,005 $ 1,445,655 146.96 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a9a92ff10279",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2023-09-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-09-30: 88 of 298 rows carry a percent, sum 44.14; published FV 1,230,366k equals the filed investments total and published FV / net assets = 143.04, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 56 issuers with two or more funded rows at 2023-09-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b99bbc8eb785",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2023-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-06-30: 86 of 280 rows carry a percent, sum 47.16; published FV 1,214,001k equals the filed investments total and published FV / net assets = 150.79, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 55 issuers with two or more funded rows at 2023-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b9b2711b16fd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2024-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-03-31: 96 of 342 rows carry a percent, sum 47.35; published FV 1,356,000k equals the filed investments total and published FV / net assets = 146.63, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 64 issuers with two or more funded rows at 2024-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_be0c54c38ec5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2026-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2026-03-31: 108 of 404 rows carry a percent, sum 48.95; published FV 1,457,048k equals the filed investments total and published FV / net assets = 152.1, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 73 issuers with two or more funded rows at 2026-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c6253cef2db2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2025-09-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-09-30: 108 of 395 rows carry a percent, sum 47.24; published FV 1,402,593k equals the filed investments total and published FV / net assets = 143.97, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 70 issuers with two or more funded rows at 2025-09-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c85c5785cc71",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2026-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2026-06-30: 103 of 401 rows carry a percent, sum 43.38; published FV 1,396,596k equals the filed investments total and published FV / net assets = 146.46, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 77 issuers with two or more funded rows at 2026-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c98eabbb4eae",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from row_validation_issues (rule X02, 2024-03-31): 105 row_ids, identical to affected_rows (0 missing, 0 extra). Reviewer's profile of those rows: none carries an interest_rate or spread, none has a positive cost, at most two carry a small positive FV; rows whose member lacks 'Undrawn' (e.g. Businessolver 2023-12-31, MRI Software 'Drawn' members 2024-03-31) were looked up on the page and are printed in the unfunded table as '- Undrawn - - -' lines. The investigator's row reads find every row (1 or 2 matching lines, all without a rate). No rate exists to publish; false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "PDQ.com Corporation Software First Lien(3)(4) - Undrawn - - - 10/2023 10/2025 458 - 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d127877ceae0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from row_validation_issues (rule X02, 2024-09-30): 134 row_ids, identical to affected_rows (0 missing, 0 extra). Reviewer's profile of those rows: none carries an interest_rate or spread, none has a positive cost, at most two carry a small positive FV; rows whose member lacks 'Undrawn' (e.g. Businessolver 2023-12-31, MRI Software 'Drawn' members 2024-03-31) were looked up on the page and are printed in the unfunded table as '- Undrawn - - -' lines. The investigator's row reads find every row (1 or 2 matching lines, all without a rate). No rate exists to publish; false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000017",
+     "text": "GC Waves Holdings, Inc. Financial Services First Lien(4) - Undrawn - - - 07/2023 12/2024 $ 3,387 $ - $ 34"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d78ff419ded7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2024-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2024-06-30: 97 of 355 rows carry a percent, sum 47.26; published FV 1,385,068k equals the filed investments total and published FV / net assets = 150.28, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 68 issuers with two or more funded rows at 2024-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d8d909cc3965",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from provenance_ledger (reason_code merged_context_excluded, 2024-03-31) equals affected_rows exactly (ROW-b557e4b1655a11ab). Published values: ROW-b557e4b1655a11ab CommerceHub rate 11.58 / spread 6.25 (c-233), equal to the printed line. The re-verifier marks them only because the value came from a sibling context it does not replay; the merged values are the printed ones. The cash-only TigerConnect spread is the separate open D-092 question.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.58 % 06/2023 12/2027 6,038 5,707 6,038"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e14b519fb029",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2026-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2026-03-31: 108 of 404 rows carry a percent, sum 48.95; published FV 1,457,048k equals the filed investments total and published FV / net assets = 152.1, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 73 issuers with two or more funded rows at 2026-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e1f302b4647a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2025-09-30|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-09-30: 108 of 395 rows carry a percent, sum 47.24; published FV 1,402,593k equals the filed investments total and published FV / net assets = 143.97, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 70 issuers with two or more funded rows at 2025-09-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e96dee6d4e31",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2025-03-31|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-03-31: 92 of 369 rows carry a percent, sum 47.98; published FV 1,419,651k equals the filed investments total and published FV / net assets = 144.7, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 73 issuers with two or more funded rows at 2025-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f05093c6b0f8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2025-06-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2025-06-30: 96 of 384 rows carry a percent, sum 45.29; published FV 1,411,585k equals the filed investments total and published FV / net assets = 145.32, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 74 issuers with two or more funded rows at 2025-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f65f2f30ab97",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 (oracle_checks.check_A07_pct_of_net_assets_sum) fails when the published-basis sum of pct_of_net_assets is under 50; the finding is one fund-quarter, key 0001766037|2023-09-30|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-09-30: 88 of 298 rows carry a percent, sum 44.14; published FV 1,230,366k equals the filed investments total and published FV / net assets = 143.04, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 56 issuers with two or more funded rows at 2023-09-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f824ee74386d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 fails when sum(pct_of_net_assets) is under 50; the finding is one fund-quarter, key 0001766037|2023-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-03-31: 84 of 276 rows carry a percent, sum 48.23; published FV 1,196,808k equals the filed investments total and published FV / net assets = 149.48, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 55 issuers with two or more funded rows at 2023-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fb20effa313b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 (column_validation._adapt_pct_sum, flag low_pct_sum) fires when the fund-quarter pct sum is low; the finding is one fund-quarter, key 0001766037|2023-03-31|pct_of_net_assets_sum, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2023-03-31: 84 of 276 rows carry a percent, sum 48.23; published FV 1,196,808k equals the filed investments total and published FV / net assets = 149.48, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 55 issuers with two or more funded rows at 2023-03-31, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fc891f5dd07b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population reconstructed from row_validation_issues (rule X02, 2023-12-31): 99 row_ids, identical to affected_rows (0 missing, 0 extra). Reviewer's profile of those rows: none carries an interest_rate or spread, none has a positive cost, at most two carry a small positive FV; rows whose member lacks 'Undrawn' (e.g. Businessolver 2023-12-31, MRI Software 'Drawn' members 2024-03-31) were looked up on the page and are printed in the unfunded table as '- Undrawn - - -' lines. The investigator's row reads find every row (1 or 2 matching lines, all without a rate). No rate exists to publish; false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Coupa Holdings, LLC Software First Lien(3)(4) - Undrawn - - - 02/2023 08/2024 $ 1,193 $ - $ 12"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fdd290fdd2eb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 fails when the summed reported percent differs from published FV over net assets by more than 10 pct relative; the finding is one fund-quarter, key 0001766037|2026-06-30|pct_sum_vs_fv_over_net_assets, and the rule's failing quarters (fund_financials_validation_current.csv / ledger) match the outstanding set. Reviewer's own query on the nmyd holdings at 2026-06-30: 103 of 401 rows carry a percent, sum 43.38; published FV 1,396,596k equals the filed investments total and published FV / net assets = 146.46, matching the printed total line quoted (within 0.05). Every published percent equals FV / net assets within 0.011 (0 rows off). Mechanism checked independently: of the 77 issuers with two or more funded rows at 2026-06-30, none carries a positive percent on any row, while single-line issuers carry one, consistent with the filer printing one percent per issuer on its total line (Zone Climate example). No row is missing (totals tie), so the low sum is a presentation effect, not an extraction error; false_alarm and the as_filed proposal are supported. The earlier 'verdict_real_error' state on some of these quarters is not borne out by the totals or the per-row percent check.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "outcome": "supported",
+   "rationale": "Independent check of the fix: the reviewer summed the published unfunded rows (undrawn-named rows plus the unfunded-table rows on 'Drawn'/numbered members) and they equal the printed unfunded subtotals exactly: 2025-12-31 cost -478k / FV -270k, 2026-03-31 -426k / -1,376k, 2026-06-30 -368k / -1,354k. These subtotals are not read by printed_sign.py, so they are an independent page check. printed_sign.py reads the bracket for each ix:nonFraction fact from the cell text around that fact (per context and concept), skips facts printed twice with differing brackets, and runs only for the three listed accessions. The proposed fact-level sign-vs-bracket detector is concrete and low false-positive. Caveat: the source-reconciliation reader applies the same flip (record_events=False), so for these facts the source check confirms consistency, not the sign itself; the independent sign evidence is the subtotals and the filed-total tie.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Unfunded Debt Investments $ 182,517 $ ( 426 ) $ ( 1,376 )"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Unfunded Debt Investments $ 158,842 $ ( 368 ) $ ( 1,354 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "outcome": "supported",
+   "rationale": "The schedule prints a Reference column with L / P / SOFR codes (header and Diligent line); a fund-quarter count of inferred_* reference_rate_source where such a header exists is mechanical and fires only where the page has the answer. Proposed detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Diligent Corporation Software First lien (2)(3) L(M) + 6.25"
+    }
+   ]
+  },
+  {
+   "observation_key": "note-figure-on-investment-member-published-as-position",
+   "outcome": "supported",
+   "rationale": "Existing detector is credible for the sizes seen (16.4M, 15.6M, 6.4M): the gate totals check (0.5M tolerance) and fv_conservation catch an aggregate published on top of its rows. Residual: an aggregate under 0.5M would pass; the suggested check (cost+FV-only identifier context equal to the sum of the issuer's rows) would close that and should be kept on file.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-context-without-identifier-member",
+   "outcome": "supported",
+   "rationale": "r2. Now propose_detector, with the existing suggested check (an issuer-member context with a tagged fair value and no identifier member, with no identifier context of that issuer carrying a value). The rationale states the 0.5M totals tolerance misses Ambrosia (205K); the check reads tagged facts, needs no tolerance, and fires only on unpublished values, so false positives should be few. Supported.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(7) - - - 01/2024 - 19,197 $ 205 $ 205 0.02 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "DigiCert surfaced through SRC_BDC02 / blocking_pipeline_only_position and the totals gap (0.0073 FV); TMK Hawk through X02 (no rate on its own context); the two-name members through the gate names check. Each recurrence shape trips an existing rule.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Source recon shows the share/principal diagnostic mismatches on the equity rows (e.g. Ambrosia 19,197,000 tagged vs 19,197 printed) only as non-blocking diagnostics, so no gate rule would stop a recurrence; a printed-count comparison under an 'except shares' header is the right proposed detector.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Consolidated Schedule of Investments (Continued) June 30, 2024 (in thousands, except shares) (unaudited)"
+    }
+   ]
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
+   "outcome": "supported",
+   "rationale": "Rows carry a rate, so no rate-presence rule fires; 'reference code present, PIK present, no spread, coupon Fixed' is a mechanical and narrow detector.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "KWOR Acquisition, Inc. Business Services Subordinated(3) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 02/2030 $ 3,480 $ 3,480 $ 3,480"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-holds-a-per-share-figure",
+   "outcome": "supported",
+   "rationale": "income_identity fired at both year-ends and is the right existing detector for a per-share figure in an amount field; the printed NII (116,246) confirms the amount scale.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Net investment income 116,246 105,188 73,172"
+    }
+   ]
+  },
+  {
+   "observation_key": "duplicate-identifier-blocks-row-correction",
+   "outcome": "supported",
+   "rationale": "No rule checks duplicate bdc_investment_identifier within a fund-quarter; the count is cheap and specific. Note the underlying 14.6M term loan maturity is left blank in three quarters (a known open defect, not a finding here).",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Businessolver.com, Inc. Software First Lien(2)(3) SOFR(Q) 5.50 % 10.91 % 12/2021 12/2027 14,562 14,521 14,562"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "r2. Now propose_detector with a concrete check (fund-quarter whose funded rows have no extracted_industry). Reviewer's query: funded rows with an extracted_industry are 0 of 183 to 0 of 278 in each of the 14 quarters, so the check fires here in every quarter, and BDCs that print no industry are rare enough to disposition. Supported.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Anaplan, Inc. Software First Lien(2)(3)(6) SOFR(Q) 4.50 % 8.17 % 06/2022 06/2029 29,440 29,327 28,869 3.03 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-label-depends-on-build-composition",
+   "outcome": "supported",
+   "rationale": "The fund gate's check_fields already counts lost gics_sub_industry values between builds, and holdings_field_diff reports label differences; build-composition drift recurs visibly there. Reference to an observation key is weak, but an operating check exists.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Anaplan, Inc. Software First Lien(2)(3)(6) SOFR(Q) 4.50 % 8.17 % 06/2022 06/2029 29,440 29,327 28,869 3.03 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-margin-published-as-spread-where-pik-margin-printed-apart",
+   "outcome": "supported",
+   "rationale": "Whether spread includes the PIK margin is the owner's open convention question D-092; a detector would flag a convention, not an error. Deferring is right until D-092 is ruled.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_resolution_history_reviews": [
+  {
+   "request_id": "NMY-R1",
+   "outcome": "supported",
+   "rationale": "Commit 4b579bf changes only the cheap tier's cik_scale_fix CASE in pipeline/provenance_reverify.py so it parses the recorded factor (regexp 'cik_scale_fix:x(-?[0-9]+(?:\\.[0-9]+)?)', default 1.0) exactly as the full tier's _extractor_multiplier already did; before, it hard-coded x1000 and failed x-1 rows that the full tier then matched (transform_drift). Tests added: x1000 and x-1 pass when published = tag x factor; an unapplied sign (17000 vs event x-1) and a wrong magnitude (-170000) fail. This aligns two tiers on an existing rule and loosens no threshold: a verification bug, not an acceptance change. Limitation: the re-verifier confirms published = tag x recorded factor; whether -1 is justified rests on printed_sign.py's page reading, which the reviewer checked against the printed unfunded subtotals.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Unfunded Debt Investments $ 182,517 $ ( 426 ) $ ( 1,376 )"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Unfunded Debt Investments $ 158,842 $ ( 368 ) $ ( 1,354 )"
+    }
+   ]
+  }
+ ],
+ "printed_sign_assessment": "Row by row from the page: yes. printed_sign.printed_signs reads, for each ix:nonFraction InvestmentOwnedAtCost / AtFairValue fact, whether the cell text immediately before ends with '(' and after starts with ')', keyed by context and concept, and flips the record only where that disagrees with the sign attribute, the magnitude matches, and all printings agree; it is gated to the three listed accessions. Source reconciliation calls the same function with record_events=False, so for those facts it compares published with the same derived value: it confirms consistency, not the sign. Independent confirmation exists outside that loop: published unfunded cost / FV equal the printed unfunded subtotals in all three quarters (-478/-270, -426/-1,376, -368/-1,354k), and published FV ties to the filed investments total in all 14 quarters. Uncommitted in the main checkout (pipeline/printed_sign.py, tests/test_printed_sign.py untracked); cohort effect not run (only this wrapper lists the key).",
+ "r2_change_verification": "Report and ledger are untracked, so there is no git diff. Method (scratch/fund_runs/0001766037/reviewer/reconstruct_r1.py): take the current report and ledger, undo only the declared revisions (the two F27 investigations' evidence and hypotheses, the two observations' detection_decision and the industry suggested_check, the appended not_done note, and the PD-F27 statement and evidence), using the r1 text the reviewer read; the result hashes to the r1 digest f557fb2f... exactly. Nothing else in the report, the outstanding ledger records or the applicable proposals changed. The new not_done note matches the reviewer's r1 printed-sign assessment.",
+ "r3_change_verification": "scratch/fund_runs/0001766037/reviewer/reconstruct_r2.py: undoing only the declared r3 revisions (the two F27 investigations' evidence, hypotheses and next_action; the PD-F27-1766037-3 statement and evidence) with the r2 text the reviewer read reproduces the r2 digest d01ed196... exactly; nothing else in the report, the outstanding ledger records or the applicable proposals changed. Ledger and holdings file times unchanged since r1."
+}

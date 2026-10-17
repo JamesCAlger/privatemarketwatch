@@ -320,5 +320,7 @@ def encoding_signature(cik: str) -> str:
     from pipeline.cost_in_two_units import reads_cost_in_two_units
     if reads_cost_in_two_units(cik):
         netting.append("cost:foreign_is_par")
+    from pipeline.printed_sign import listed_accessions
+    netting.extend("sign:" + accession for accession in sorted(listed_accessions(cik)))
     return "|".join(combos + misdated + untagged + named + netting
                     + sorted("fv:" + name for name in fair_value_aliases(cik)))

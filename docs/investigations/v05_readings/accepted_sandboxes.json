@@ -248,5 +248,10 @@
   "label": "ovye",
   "accepted_on": "2026-10-17",
   "basis": "D-203, gate PASS after owner rulings D-202 (T-bill counted in the investments total; F27 over non-cash rows): 19 outstanding, all proposed; 9/9 quarters tie ex-cash; investigation COMPLETE (third independent review, 19/19 findings, 13/13 observations); sample 2/20 errors on ovyc, both fixed; five builds"
+ },
+ "0001766037": {
+  "label": "nmyd",
+  "accepted_on": "2026-10-17",
+  "basis": "D-204, gate PASS: 59 outstanding, all proposed; 14/14 quarters tie (five were off before); investigation COMPLETE after three independent reviews; sample 0/20 errors; NMY-R1 re-verifier fix (4b579bf); four builds"
  }
 }

@@ -1,0 +1,10 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001766037",
+ "entity_name": "NMF SLF I, Inc.",
+ "version": 1,
+ "income_concept_suppress": [
+  "distributiontoshareholdersnetinvestmentincomepershare"
+ ],
+ "notes": "Fund clearing 2026-10-17 (nmfslf_fund_agent). Net investment income: the 10-Ks for 2024-12-31 (0001766037-25-000003) and 2025-12-31 (0001766037-26-000004) file nmslf:InvestmentCompanyDistributionToShareholdersNetInvestmentIncomePerShare (-1.27, -1.03, the financial-highlights line 'Distributions declared to stockholders from net investment income ( 1.27 )') ahead of the dollar fact us-gaap:InvestmentIncomeOperatingAfterExpenseAndTax (116,246,000; printed 'Net investment income 116,246 105,188 73,172'). The name contains 'NetInvestmentIncome', so the per-share distribution was read as the year's net investment income and a quarter of it (-0.3175, -0.2575) was published. The concept is in no 10-Q of this filer."
+}

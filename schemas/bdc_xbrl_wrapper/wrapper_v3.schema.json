@@ -729,6 +729,13 @@
           "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
           "description": "Accession numbers of filings in which the filer tags percent of net assets as a ratio above 0.50, which the shared row rule (multiply by 100 only up to 0.50) publishes unscaled (Ares Core Infrastructure Fund, 10-Q 2024-09-30: printed 224.22 %, tagged 2.2422). In a listed filing every tagged percent is multiplied by 100 (transform pct_of_net_assets:rate_x100). Evidence required: the printed percent and the tagged fact of a row, and fair value over net assets equal to the tagged ratio."
         },
+        "bracketed_unsigned_values": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
+          "description": "Accession numbers of filings in which the filer prints negative cost or fair value in brackets and tags it with no sign=\"-\" (NMF SLF I, 10-K 2025-12-31 and the 10-Qs after it: 'DigiCert, Inc. Software First Lien(3)(4) - Undrawn - - - 07/2025 07/2030 512 ( 3 ) ( 4 ) ( 0.00 )%', tagged +3 and +4). In a listed filing each InvestmentOwnedAtCost and InvestmentOwnedAtFairValue fact whose printed sign differs from its tagged sign takes the printed sign (pipeline/printed_sign.py; event cik_scale_fix:x-1, which the re-verifier reads as a multiplier). Evidence required: printed lines in brackets and the unsigned tag on their contexts."
+        },
         "section_total_reading": {
           "type": "array",
           "minItems": 1,

@@ -1,0 +1,37 @@
+{
+  "cik": "1766037",
+  "rule_id": "exclude_2025q4_dca_nonaccrual_note_aggregate",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-12-31' AND accession_number = '0001766037-26-000004' AND src_context_id = 'c-1112' AND TRY_CAST(fair_value AS DOUBLE) = 6376000.0 AND TRY_CAST(cost AS DOUBLE) = 7211000.0 AND principal_amount IS NULL",
+  "evidence": [
+    {
+      "source": "filing",
+      "accession": "0001766037-26-000004",
+      "quote": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376 and total unearned income of $ 229 for the year then ended."
+    },
+    {
+      "source": "query",
+      "quote": "Context c-1112 (member 'Notorious Topco, LLC (\"BIG\"), First Lien', reused by the filer for the DCA note) carries only InvestmentOwnedAtCost 7,211,000 and InvestmentOwnedAtFairValue 6,376,000; duration sibling c-1113 carries InvestmentOwnedInterestIncome 229,000, the note's unearned income. No principal, rate or percent is tagged on it."
+    },
+    {
+      "source": "query",
+      "quote": "Published 2025-12-31 fair value 1,519,014,000 against the filed investments total 1,512,098,000: +6,916,000 = this context 6,376,000 + bracketed undrawn values tagged with no sign 540,000 (fixed by source_encodings.bracketed_unsigned_values)."
+    }
+  ],
+  "rationale": "The context is the non-accrual note's aggregate for the DCA first lien positions (DCA First Lien 1-4 = 5,408 + 449 + 309 + 210 = 6,376), tagged on a reused identifier member, not a schedule row. Excluding it removes a double count. Same mechanism as exclude_2025q3_notorious_topco_aggregate_duplicate and exclude_2024q4_kwor_nonaccrual_note_aggregate.",
+  "confidence": 0.95,
+  "measured_impact": {
+    "2025-12-31": {
+      "rows": 1,
+      "fv": -6376000.0,
+      "residual_before": 6916000.0,
+      "residual_after": 540000.0
+    }
+  }
+}

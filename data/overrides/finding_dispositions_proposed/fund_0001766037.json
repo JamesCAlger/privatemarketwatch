@@ -1,0 +1,504 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "nmyd",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F23-1766037-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F23",
+   "reason_key": "f23-percent-printed-once-per-issuer-group",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The check sums the published percent of net assets (or compares the sum with fair value over net assets). This filer prints one percent per issuer, on the issuer's total line after its tranches, and tags it on the issuer-group context, which is not a position; a position row carries a percent only where the issuer has one line. So the published percents cover about a third of the rows and sum to 43 to 56 against printed totals of 143 to 154 (2026-03-31: 108 of 404 rows, sum 48.95, printed 152.10). Every published percent equals the row's fair value over net assets (0 rows off by more than 0.01 in 13 of 14 quarters, 1 at 2024-09-30), published fair value over net assets equals the printed total percent in every quarter, and published fair value equals the filed investments total in all 14 quarters. No fix applies: no per-row percent is printed for the other rows; pct_of_net_assets_calculated carries fair value over net assets for every row.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %",
+     "quote": "'Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %': two lines of one issuer, one percent (3.02 %) printed on the issuer's total line."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %",
+     "quote": "'Total Investments $ 1,491,388 $ 1,457,048 152.10 %': the printed total percent; published fair value over net assets is 152.10 and published fair value equals 1,457,048."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000012",
+     "verbatim": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %",
+     "quote": "'Total Investments $ 1,385,574 $ 1,385,068 150.28 %': printed total at 2024-06-30; published fair value equals 1,385,068."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000004",
+     "verbatim": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %",
+     "quote": "'Total Investments $ 1,525,141 $ 1,512,098 154.32 %': printed total at 2025-12-31; published fair value now equals 1,512,098."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17",
+   "addresses_verdict": {
+    "2025-12-31": "The earlier reviewer found published fair value 6.916M above the filed 1,512,098. Fixed in this run: the DCA non-accrual note aggregate (c-1112, 6,376) is excluded and the bracketed undrawn values tagged with no sign (+540) take the printed sign; published now equals 1,512,098. What F23 still reports is the per-issuer percent printing.",
+    "2026-03-31": "The earlier reviewer found the reported percent inconsistent with 152.10 and fair value off. Fixed in this run: DigiCert's line (tagged one column off, 0.0073 as fair value) is corrected from the page and the promoted 7,300 rescale withdrawn, and bracketed values take the printed sign; published fair value now equals 1,457,048. What F23 still reports is the per-issuer percent printing."
+   }
+  },
+  {
+   "disposition_id": "PD-A07-1766037-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "reason_key": "f23-percent-printed-once-per-issuer-group",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The check sums the published percent of net assets (or compares the sum with fair value over net assets). This filer prints one percent per issuer, on the issuer's total line after its tranches, and tags it on the issuer-group context, which is not a position; a position row carries a percent only where the issuer has one line. So the published percents cover about a third of the rows and sum to 43 to 56 against printed totals of 143 to 154 (2026-03-31: 108 of 404 rows, sum 48.95, printed 152.10). Every published percent equals the row's fair value over net assets (0 rows off by more than 0.01 in 13 of 14 quarters, 1 at 2024-09-30), published fair value over net assets equals the printed total percent in every quarter, and published fair value equals the filed investments total in all 14 quarters. No fix applies: no per-row percent is printed for the other rows; pct_of_net_assets_calculated carries fair value over net assets for every row.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %",
+     "quote": "'Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %': two lines of one issuer, one percent (3.02 %) printed on the issuer's total line."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %",
+     "quote": "'Total Investments $ 1,491,388 $ 1,457,048 152.10 %': the printed total percent; published fair value over net assets is 152.10 and published fair value equals 1,457,048."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000012",
+     "verbatim": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %",
+     "quote": "'Total Investments $ 1,385,574 $ 1,385,068 150.28 %': printed total at 2024-06-30; published fair value equals 1,385,068."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000004",
+     "verbatim": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %",
+     "quote": "'Total Investments $ 1,525,141 $ 1,512,098 154.32 %': printed total at 2025-12-31; published fair value now equals 1,512,098."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17",
+   "addresses_verdict": {
+    "2024-06-30": "The earlier reviewer read the gap between the published percent sum and the printed total percent as rows missing from extraction. It is not: the remaining percents are printed only on issuer total lines and tagged on non-position group contexts; published fair value equals the filed total in this quarter, so no position is missing. At 2024-06-30 published fair value is 1,385,068 = printed total.",
+    "2026-03-31": "The earlier reviewer read the gap between the published percent sum and the printed total percent as rows missing from extraction. It is not: the remaining percents are printed only on issuer total lines and tagged on non-position group contexts; published fair value equals the filed total in this quarter, so no position is missing. The Industry Type table's 100.00 % is a share of investments, not of net assets."
+   }
+  },
+  {
+   "disposition_id": "PD-F22-1766037-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F22",
+   "reason_key": "f23-percent-printed-once-per-issuer-group",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The check sums the published percent of net assets (or compares the sum with fair value over net assets). This filer prints one percent per issuer, on the issuer's total line after its tranches, and tags it on the issuer-group context, which is not a position; a position row carries a percent only where the issuer has one line. So the published percents cover about a third of the rows and sum to 43 to 56 against printed totals of 143 to 154 (2026-03-31: 108 of 404 rows, sum 48.95, printed 152.10). Every published percent equals the row's fair value over net assets (0 rows off by more than 0.01 in 13 of 14 quarters, 1 at 2024-09-30), published fair value over net assets equals the printed total percent in every quarter, and published fair value equals the filed investments total in all 14 quarters. No fix applies: no per-row percent is printed for the other rows; pct_of_net_assets_calculated carries fair value over net assets for every row.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %",
+     "quote": "'Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %': two lines of one issuer, one percent (3.02 %) printed on the issuer's total line."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %",
+     "quote": "'Total Investments $ 1,491,388 $ 1,457,048 152.10 %': the printed total percent; published fair value over net assets is 152.10 and published fair value equals 1,457,048."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000012",
+     "verbatim": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %",
+     "quote": "'Total Investments $ 1,385,574 $ 1,385,068 150.28 %': printed total at 2024-06-30; published fair value equals 1,385,068."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000004",
+     "verbatim": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %",
+     "quote": "'Total Investments $ 1,525,141 $ 1,512,098 154.32 %': printed total at 2025-12-31; published fair value now equals 1,512,098."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17",
+   "addresses_verdict": {
+    "2026-03-31": "The earlier reviewer read the gap between the published percent sum and the printed total percent as rows missing from extraction. It is not: the remaining percents are printed only on issuer total lines and tagged on non-position group contexts; published fair value equals the filed total in this quarter, so no position is missing. At 2026-03-31 published fair value is 1,457,048 = printed total (DigiCert corrected, bracket signs read)."
+   }
+  },
+  {
+   "disposition_id": "PD-PCT02-1766037-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PCT02",
+   "reason_key": "f23-percent-printed-once-per-issuer-group",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The check sums the published percent of net assets (or compares the sum with fair value over net assets). This filer prints one percent per issuer, on the issuer's total line after its tranches, and tags it on the issuer-group context, which is not a position; a position row carries a percent only where the issuer has one line. So the published percents cover about a third of the rows and sum to 43 to 56 against printed totals of 143 to 154 (2026-03-31: 108 of 404 rows, sum 48.95, printed 152.10). Every published percent equals the row's fair value over net assets (0 rows off by more than 0.01 in 13 of 14 quarters, 1 at 2024-09-30), published fair value over net assets equals the printed total percent in every quarter, and published fair value equals the filed investments total in all 14 quarters. No fix applies: no per-row percent is printed for the other rows; pct_of_net_assets_calculated carries fair value over net assets for every row.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %",
+     "quote": "'Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %': two lines of one issuer, one percent (3.02 %) printed on the issuer's total line."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %",
+     "quote": "'Total Investments $ 1,491,388 $ 1,457,048 152.10 %': the printed total percent; published fair value over net assets is 152.10 and published fair value equals 1,457,048."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000012",
+     "verbatim": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %",
+     "quote": "'Total Investments $ 1,385,574 $ 1,385,068 150.28 %': printed total at 2024-06-30; published fair value equals 1,385,068."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000004",
+     "verbatim": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %",
+     "quote": "'Total Investments $ 1,525,141 $ 1,512,098 154.32 %': printed total at 2025-12-31; published fair value now equals 1,512,098."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17",
+   "addresses_verdict": {
+    "2026-03-31": "The earlier reviewer read the gap between the published percent sum and the printed total percent as rows missing from extraction. It is not: the remaining percents are printed only on issuer total lines and tagged on non-position group contexts; published fair value equals the filed total in this quarter, so no position is missing. At 2026-03-31 published fair value is 1,457,048 = printed total."
+   }
+  },
+  {
+   "disposition_id": "PD-X02-1766037-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-09-30",
+    "2025-03-31"
+   ],
+   "statement": "Every row X02 flags in these quarters is an undrawn line the filer prints with '- - -' in the reference, spread and rate cells and tags with no rate or spread fact (page read of all 99, 105, 134 and 129 flagged rows: each printed line found by its par, cost and value, none prints a rate). The standing check does not cover them only because a few undrawn lines print a small positive value (Coupa 12 and 24, PDQ.com 4, GC Waves 34, Associations 12), so they are neither at or below zero nor at a negative cost. No fix applies: there is no rate to publish.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000005",
+     "verbatim": "Coupa Holdings, LLC Software First Lien(3)(4) - Undrawn - - - 02/2023 08/2024 $ 1,193 $ - $ 12",
+     "quote": "'Coupa Holdings, LLC Software First Lien(3)(4) - Undrawn - - - 02/2023 08/2024 $ 1,193 $ - $ 12': an undrawn line printed with no reference, spread or rate and a small positive value."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000017",
+     "verbatim": "GC Waves Holdings, Inc. Financial Services First Lien(4) - Undrawn - - - 07/2023 12/2024 $ 3,387 $ - $ 34",
+     "quote": "'GC Waves Holdings, Inc. Financial Services First Lien(4) - Undrawn - - - 07/2023 12/2024 $ 3,387 $ - $ 34': same at 2024-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-25-000006",
+     "verbatim": "First Lien(3)(4) - Undrawn - - - 05/2024 07/2028 1,237 - 12",
+     "quote": "'First Lien(3)(4) - Undrawn - - - 05/2024 07/2028 1,237 - 12': Associations, Inc. second undrawn line at 2025-03-31, value 12, no rate."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-F27-1766037-3",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "statement": "Published as printed; the heuristic ignores leverage, fees and rate timing. F27 compares income_yield_pct, the filer's printed ratio of net investment income to average net assets over the period (12.69 % annualised for the nine months to 2024-09-30; 12.30 % for the year 2024), with the weighted coupon of the published rows at the period END (10.54, 9.99). The coupon fell through 2024 (11.32, 11.23, 11.11, 10.54, 9.99 at the five quarter-ends from 2023-12-31); averaged over each period it is 11.05 and 10.84, and the ratio exceeds it by 1.64 and 1.46, inside the 2.0 band and in line with the 1.27 to 1.44 of the flat-rate quarters 2023-09-30 to 2024-03-31. Leverage less expenses alone does not explain the level (1.52 x 10.54 - 5.18 = 10.79; 1.47 x 9.99 - 5.15 = 9.54); the steady 1.3 to 1.7 points are fee, OID and leverage effects not decomposed here. Every funded loan publishes its printed rate; no value is wrong.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000017",
+     "verbatim": "Ratio to average net assets: Net investment income (4) 12.69 % 12.60 % Total expenses (4) 5.18 % 4.76 %",
+     "quote": "'Ratio to average net assets: Net investment income (4) 12.69 % 12.60 % Total expenses (4) 5.18 % 4.76 %': the printed nine-month ratio, as published (12.69)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000017",
+     "verbatim": "Total expenses (4) 5.18 % 4.76 % Average debt outstanding",
+     "quote": "'Total expenses (4) 5.18 % 4.76 % Average debt outstanding': footnote (4) of the 10-Q highlights."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-25-000003",
+     "verbatim": "Ratio to average net assets: Net investment income (7) 12.30 % 12.76 % 9.66 % 11.08 % 8.40 %",
+     "quote": "'Ratio to average net assets: Net investment income (7) 12.30 % 12.76 % 9.66 % 11.08 % 8.40 %': the 2024 ratio, as published (12.30)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-25-000003",
+     "verbatim": "Total expenses, before waivers (7) 5.15 % 4.82 % 3.44 % 2.66",
+     "quote": "'Total expenses, before waivers (7) 5.15 % 4.82 % 3.44 % 2.66': the 10-K's expense ratio for 2024."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000017",
+     "verbatim": "Total Investments $ 1,483,914 $ 1,478,978 151.58 %",
+     "quote": "'Total Investments $ 1,483,914 $ 1,478,978 151.58 %': investments at 151.58 % of net assets."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-25-000003",
+     "verbatim": "Total Investments $ 1,451,005 $ 1,445,655 146.96 %",
+     "quote": "'Total Investments $ 1,451,005 $ 1,445,655 146.96 %': investments at 146.96 % of net assets at 2024-12-31."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-1766037-4",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "reason_key": "merged-context-value-equals-printed-row",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "statement": "The rate fields of these rows come from a sibling context of the same loan (src_filled_fields), which the re-verifier does not replay. Each published value equals the printed line: CommerceHub 2023-12-31 spread 6.25 and rate 11.79 (rate-only context c-249 joined to c-250, the context this run names from the page) and 2024-03-31 6.25 / 11.58 (c-232 joined to c-233, source_encodings.rate_only_contexts adopt_adjacent); TigerConnect drawn 2023-12-31 spread 3.38 and PIK 3.38 merged from the duplicate-member context (dedupe), printed '3.38 % + 3.38 %/PIK 12.28 %'. The TigerConnect spread is the cash part of a 6.76 margin (owner question D-092, printed_margin_reading not set).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000005",
+     "verbatim": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.79 % 06/2023 12/2027 6,053 5,704 6,054",
+     "quote": "'CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.79 % 06/2023 12/2027 6,053 5,704 6,054': spread and rate as published."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000008",
+     "verbatim": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.58 % 06/2023 12/2027 6,038 5,707 6,038",
+     "quote": "'CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.58 % 06/2023 12/2027 6,038 5,707 6,038': spread and rate as published."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000005",
+     "verbatim": "First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190",
+     "quote": "'First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190': TigerConnect drawn line: cash margin 3.38 and PIK 3.38, as published."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC01-1766037-6",
+   "class": "not_applicable",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "The source row reported as missing at 2025-12-31 is context c-1112 (member 'Notorious Topco, LLC (\"BIG\"), First Lien'), which carries only a cost of 7,211 and a fair value of 6,376: the non-accrual note's aggregate for the DCA positions, whose four schedule rows are published (5,408 + 449 + 309 + 210 = 6,376). This run excludes it (rule exclude_2025q4_dca_nonaccrual_note_aggregate); with it published fair value was 6.4M over the filed total, without it equal. The source check reports the excluded fact as unpublished.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000004",
+     "verbatim": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376",
+     "quote": "'As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376': the note figure the context carries."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000004",
+     "verbatim": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %",
+     "quote": "'Total Investments $ 1,525,141 $ 1,512,098 154.32 %': printed total at 2025-12-31; published fair value now equals 1,512,098."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-blocking_source_position_like_parser_mismatch-1766037-6",
+   "class": "not_applicable",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_position_like_parser_mismatch",
+   "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "The source row reported as missing at 2025-12-31 is context c-1112 (member 'Notorious Topco, LLC (\"BIG\"), First Lien'), which carries only a cost of 7,211 and a fair value of 6,376: the non-accrual note's aggregate for the DCA positions, whose four schedule rows are published (5,408 + 449 + 309 + 210 = 6,376). This run excludes it (rule exclude_2025q4_dca_nonaccrual_note_aggregate); with it published fair value was 6.4M over the filed total, without it equal. The source check reports the excluded fact as unpublished.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000004",
+     "verbatim": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376",
+     "quote": "'As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376': the note figure the context carries."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000004",
+     "verbatim": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %",
+     "quote": "'Total Investments $ 1,525,141 $ 1,512,098 154.32 %': printed total at 2025-12-31; published fair value now equals 1,512,098."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-SRC_BDC02-1766037-7",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC02",
+   "reason_key": "fv-corrected-from-page-where-tags-are-cross-tagged",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The pipeline-only row at 2026-03-31 is DigiCert's first lien, corrected from the printed line: the filer tagged it one column off (c-242 principal 7,016 = printed cost, cost 7,010 = printed value, fair value 0.0073 = printed percent; spread 5.75 and principal 7,063 on c-241 under a Bonterra member). Published 7,063 / 7,016 / 7,010, spread 5.75, as printed; no source fact carries 7,010 as a fair value, so the source check cannot pair it. The promoted rescale rule that published 7,300 is withdrawn. Published fair value equals the filed 1,457,048.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %",
+     "quote": "'DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %': the corrected row."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %",
+     "quote": "'Total Investments $ 1,491,388 $ 1,457,048 152.10 %': the printed total percent; published fair value over net assets is 152.10 and published fair value equals 1,457,048."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-blocking_pipeline_only_position-1766037-7",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_pipeline_only_position",
+   "reason_key": "fv-corrected-from-page-where-tags-are-cross-tagged",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The pipeline-only row at 2026-03-31 is DigiCert's first lien, corrected from the printed line: the filer tagged it one column off (c-242 principal 7,016 = printed cost, cost 7,010 = printed value, fair value 0.0073 = printed percent; spread 5.75 and principal 7,063 on c-241 under a Bonterra member). Published 7,063 / 7,016 / 7,010, spread 5.75, as printed; no source fact carries 7,010 as a fair value, so the source check cannot pair it. The promoted rescale rule that published 7,300 is withdrawn. Published fair value equals the filed 1,457,048.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %",
+     "quote": "'DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %': the corrected row."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-26-000009",
+     "verbatim": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %",
+     "quote": "'Total Investments $ 1,491,388 $ 1,457,048 152.10 %': the printed total percent; published fair value over net assets is 152.10 and published fair value equals 1,457,048."
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_on": "2026-10-17"
+  }
+ ]
+}

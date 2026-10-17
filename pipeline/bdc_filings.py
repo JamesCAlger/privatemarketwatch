@@ -1094,6 +1094,9 @@ def _parse_single_filing(
     # A value the printed row shows and the tags lack, listed in the filer's wrapper.
     from pipeline.page_labelled_contexts import fill_untagged_values
     fill_untagged_values({rec["_context_id"]: rec for rec in facts}, filing_meta)
+    # Cost and fair value printed in brackets and tagged with no sign, in filings the wrapper lists.
+    from pipeline.printed_sign import apply_printed_signs
+    apply_printed_signs({rec["_context_id"]: rec for rec in facts}, filing_meta)
     # A cost tagged in dollars and again in a foreign unit: the foreign fact is the par (wrapper setting).
     from pipeline.cost_in_two_units import settle_cost_in_two_units
     settle_cost_in_two_units(tree, {rec["_context_id"]: rec for rec in facts}, filing_meta)
