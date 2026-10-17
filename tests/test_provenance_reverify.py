@@ -51,6 +51,19 @@ class TestCheapTier:
         assert ir.loc["ROW-a", "expected"] == pytest.approx(10.5)
         assert ir.loc["ROW-b", "cheap_status"] == "fail"
 
+    @pytest.mark.parametrize("event,raw,published,status", [
+        ("cik_scale_fix:x1000", 500, 500000.0, "pass"),
+        ("cik_scale_fix:x-1", 17000, -17000.0, "pass"),     # printed bracket, tagged unsigned
+        ("cik_scale_fix:x-1", 17000, 17000.0, "fail"),      # sign not applied: must not pass
+        ("cik_scale_fix:x-1", 17000, -170000.0, "fail"),    # wrong value with the right sign
+    ])
+    def test_cik_scale_fix_reads_the_recorded_factor(self, event, raw, published, status):
+        """NMY-R1: the cheap tier reads the factor the full tier reads, not only x1000."""
+        df = pd.DataFrame([_row(row_id="ROW-s", cost=published, cost_source="xbrl_field",
+                                src_facts=json.dumps({"cost": {"r": raw, "x": [event]}}))])
+        out = cheap_tier(holdings_df=df)
+        assert out[out["field"] == "cost"].iloc[0]["cheap_status"] == status
+
     def test_decimals_event_on_monetary_field(self):
         df = pd.DataFrame([_row(
             row_id="ROW-c", fair_value=500000.0,

@@ -96,9 +96,12 @@ def _field_sql(field: str, source_col: str) -> str:
         f"END"
     )
 
-    # cik_scale_fix multiplier
+    # cik_scale_fix multiplier: read the factor as _extractor_multiplier does (x1000, and the
+    # x-1 a printed-bracket sign correction records; NMY-R1, 2026-10-17). A malformed factor
+    # reads 1.0 here, so the row fails the cheap tier and the full tier decides.
     cik_fix = (
-        f"CASE WHEN {x_str} LIKE '%cik_scale_fix:x1000%' THEN 1000.0"
+        f"CASE WHEN {x_str} LIKE '%cik_scale_fix:x%' THEN COALESCE(TRY_CAST("
+        f"  regexp_extract({x_str}, 'cik_scale_fix:x(-?[0-9]+(?:\\.[0-9]+)?)', 1) AS DOUBLE), 1.0)"
         f"     ELSE 1.0 END"
     )
 
