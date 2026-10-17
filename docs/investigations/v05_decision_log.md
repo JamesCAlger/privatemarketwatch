@@ -5054,3 +5054,15 @@ Compared with `spon3`; five builds (ovya to ovye). Not accepted: both requests a
 - Page sample (on ovyc): 20 cards, 2 published errors (bill rate missing, LS Group misspelling), both fixed in ovyd; ovye not re-sampled. Twenty cards can miss a problem on under about 15 pct of rows.
 - Left: money-fund chain splits at 2026-03-31 (9.7M to 49.1M); cash-row yields, cost and percent on the filer's custom concepts not published; Chariot Buyer given another company's canonical name in the cohort build spon3 (shared matching).
 - Not run: full suite, cohort regression, semantic diff, export. Nothing published. A cleared ledger would not establish data correctness.
+
+### D-202 Owner rulings on Overland's two requests: T-bill inside the investments total; F27 over non-cash rows
+
+Owner, 2026-10-17 (verbatim): "1a, 2a", answering:
+1. Treasury bill printed inside 'Total Investments' (owner decision 7 of 2026-10-12): (a) keep it classed as cash, and let a wrapper say the filer's total includes its cash-class bill rows, so the totals comparison counts them; (b) class it as an investment. Ruled (a).
+2. F27 averages coupons over every rated row including cash: (a) leave cash rows out and skip a quarter where too little of the fund's fair value carries a rate, measured on the cohort before switching on; (b) keep F27 and rule on the existing proposal. Ruled (a).
+
+Implemented by the orchestrator:
+- `source_encodings.investments_total_includes_cash` (issuer-name patterns, validated in `pipeline/source_encodings.py`, schema `wrapper_v3`): read only by `fund_gate.check_totals`, which adds matching CASH rows to the ex-cash side. Rows stay CASH, out of published fair value. Overland: `^U\.S\. Treasury Bill`. Test: gate totals with and without the setting, money-market row not counted.
+- F27 (`pipeline/validate_fund_financials.py`): coupon over non-CASH rows; skipped when the rated share of non-cash fair value is under `F27_MIN_RATED_SHARE = 0.5` (the 0.5 is the orchestrator's choice, not the owner's). Four tests, one a false-positive guard (rated portfolio with a real gap still fails).
+- Cohort measurement before switching on (`scratch/2026-10-17_status/f27_cohort_effect.py`, each fund's accepted sandbox plus Overland ovye; 50 funds): F27 fail quarters 102 to 85, skip quarters 561 to 612. Six funds move, all to skipped: MidCap Financial 8 fails to 0, Overland 7 to 0, KKR FS Income Trust 2 to 0; Jefferies, KKR FS Income Trust Select, Ares Core Infrastructure lose only passing quarters. All six publish no rate on their loans, so F27 now checks nothing there. No other fund changes.
+- Sandboxes other than Overland's still hold the old F27 findings until rebuilt or re-run from validate (end-of-run regression). The removed findings leave no ledger trace; the fund reports record why they went.

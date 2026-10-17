@@ -695,6 +695,12 @@
           "items": {"enum": ["cash_rows"]},
           "description": "Set where the filer's balance-sheet investments line leaves out the money market or short-term fund rows its schedule lists (Goldman Sachs: 'Investments, at fair value 9,630,944' and, on its own line, 'Investments in affiliated money market fund 233,261'). The fair-value conservation check then compares that line with the published rows that are not cash, and checks the cash rows against the filed cash-equivalents figure where one exists. The cash rows stay published. Evidence required: the balance-sheet lines, and published non-cash rows equal to the investments line in each quarter."
         },
+        "investments_total_includes_cash": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Issuer-name patterns (regular expressions, case-insensitive) of cash-class rows the filer counts inside its printed 'Total Investments' (Overland: the U.S. Treasury Bill printed above 'Total Investments $ 1,626,749'). The rows stay classed as cash and out of the published fair value; the fund gate's totals comparison adds them to the non-cash rows. Owner ruling 2026-10-17 (D-202). Evidence required: the printed total line in each quarter."
+        },
         "fair_value_concepts": {
           "type": "array",
           "minItems": 1,

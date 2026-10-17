@@ -140,6 +140,24 @@ def test_totals_need_one_basis_and_every_other_quarter_declared(sandbox):
     assert fund_gate.check_totals("s1", CIK, [{"quarter": "2025-12-31"}, {"quarter": "2026-03-31"}])["ok"]
 
 
+def test_totals_count_cash_rows_the_filer_puts_inside_investments(sandbox):
+    """Owner ruling 2026-10-17 (D-202): a T-bill printed inside 'Total Investments' stays cash
+    but joins the non-cash side of the totals comparison; other cash rows do not."""
+    out = _holdings(sandbox, "tb", [_row("a", 100e6), _row("b", 7e6, index_classification="CASH",
+                                                          issuer_name="U.S. Treasury Bill"),
+                                    _row("c", 2e6, index_classification="CASH",
+                                         issuer_name="BlackRock Liquidity FedFund - Institutional")])
+    pd.DataFrame({"cik": [CIK], "report_date": ["2025-12-31"],
+                  "investments_at_fair_value": [107e6]}).to_csv(out / "fund_financials.csv", index=False)
+    assert not fund_gate.check_totals("tb", CIK, [])["ok"]          # no setting: 7M under
+    wrappers = sandbox / "data/overrides/bdc_xbrl_wrappers"
+    wrappers.mkdir(parents=True)
+    (wrappers / ("%s.json" % CIK)).write_text(json.dumps(
+        {"source_encodings": {"investments_total_includes_cash": ["^U\\.S\\. Treasury Bill"]}}), encoding="utf-8")
+    result = fund_gate.check_totals("tb", CIK, [])
+    assert result["ok"] and result["basis"] == "ex_cash"           # 100 + 7, money fund left out
+
+
 def test_issuer_names_holding_an_instrument_fail_unless_declared(sandbox):
     clean = [_row("c%d" % i, 1.0, source="bdc", issuer_name="Clean Co %s, Inc." % chr(65 + i % 26)) for i in range(198)]
     bad = [_row("b1", 1.0, source="bdc", issuer_name="Acme, Inc., First lien senior secured loan"),

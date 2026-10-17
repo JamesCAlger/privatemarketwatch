@@ -167,19 +167,31 @@ def check_corrections(label: str, cik: str) -> dict:
     return {"ok": not lines, "unmatched": lines[:20], "count": len(lines)}
 
 
+def _cash_in_investments_total(cik: str) -> list[str]:
+    """Wrapper source_encodings.investments_total_includes_cash (owner ruling 2026-10-17, D-202)."""
+    path = REPO / "data" / "overrides" / "bdc_xbrl_wrappers" / ("%s.json" % cik)
+    if not path.exists():
+        return []
+    encoding = json.loads(path.read_text(encoding="utf-8")).get("source_encodings") or {}
+    return list(encoding.get("investments_total_includes_cash") or [])
+
+
 def check_totals(label: str, cik: str, exceptions: list[dict]) -> dict:
     output = (SANDBOXES / label / "output").as_posix()
+    # Cash rows the filer counts inside its investments total join the non-cash side.
+    patterns = _cash_in_investments_total(cik)
+    counted = " OR ".join("regexp_matches(coalesce(issuer_name,''), ?, 'i')" for _ in patterns) or "FALSE"
     rows = _con().execute(f"""
         WITH p AS (SELECT strftime(CAST(report_date AS DATE), '%Y-%m-%d') AS q,
                           sum(fair_value) FILTER (WHERE coalesce(accounting_record_class,'') <> 'underlying_schedule'
-                                                  AND index_classification <> 'CASH') AS ex_cash,
+                                                  AND (index_classification <> 'CASH' OR {counted})) AS ex_cash,
                           sum(fair_value) FILTER (WHERE coalesce(accounting_record_class,'') <> 'underlying_schedule') AS with_cash
                    FROM read_parquet('{output}/private_markets_holdings.parquet')
                    WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? GROUP BY 1),
              f AS (SELECT strftime(CAST(report_date AS DATE), '%Y-%m-%d') AS q, any_value(investments_at_fair_value) AS filed
                    FROM read_csv_auto('{output}/fund_financials.csv') WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ? GROUP BY 1)
         SELECT p.q, p.ex_cash, p.with_cash, f.filed FROM p LEFT JOIN f USING (q) WHERE p.q >= '{SINCE}' ORDER BY 1""",
-                          [cik, cik]).fetchall()
+                          [*patterns, cik, cik]).fetchall()
     ties = {"ex_cash": 0, "with_cash": 0}
     for _q, ex_cash, with_cash, filed in rows:
         if filed is not None:

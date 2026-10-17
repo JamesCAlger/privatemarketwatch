@@ -304,6 +304,43 @@ def test_validate_cross_level_excludes_underlying_schedule_rows():
     assert _status(result, "F23") == STATUS_PASS
 
 
+def test_f27_coupon_leaves_out_cash_rows():
+    """Owner ruling 2026-10-17 (D-202): a T-bill yield is not part of the portfolio coupon."""
+    holdings = _holdings_df([{}, {}, {"fair_value": "100000", "interest_rate": "4",
+                                      "index_classification": "CASH"}])
+    result = validate_cross_level(_fund_df([{"income_yield_pct": "11.5"}]), holdings)
+
+    f27 = result[result["check_code"] == "F27"].iloc[0]
+    assert f27["status"] == STATUS_PASS  # coupon 10 over the loans; 9.4 with the cash row
+    assert float(f27["value"]) == 1.5
+
+
+def test_f27_skipped_when_loans_carry_no_rate():
+    """Loans printing a margin only: the only rated row is cash, so there is no coupon."""
+    holdings = _holdings_df([{"interest_rate": ""}, {"interest_rate": ""},
+                             {"fair_value": "100000", "interest_rate": "4",
+                              "index_classification": "CASH"}])
+    result = validate_cross_level(_fund_df([{"income_yield_pct": "11.5"}]), holdings)
+
+    assert _status(result, "F27") == STATUS_SKIP
+
+
+def test_f27_skipped_when_under_half_the_portfolio_is_rated():
+    holdings = _holdings_df([{"fair_value": "400000"}, {"fair_value": "500000", "interest_rate": ""}])
+    result = validate_cross_level(_fund_df([{"income_yield_pct": "14"}]), holdings)
+
+    assert _status(result, "F27") == STATUS_SKIP
+
+
+def test_f27_still_fails_when_rated_loans_cannot_explain_income():
+    """False-positive guard: excluding cash must not hide a real gap on a rated portfolio."""
+    holdings = _holdings_df([{}, {}, {"fair_value": "100000", "interest_rate": "4",
+                                      "index_classification": "CASH"}])
+    result = validate_cross_level(_fund_df([{"income_yield_pct": "13"}]), holdings)
+
+    assert _status(result, "F27") == STATUS_FAIL
+
+
 def test_validate_cross_level_without_class_column_keeps_all_rows():
     holdings = _jv_holdings().drop(columns=["accounting_record_class"])
     result = validate_cross_level(_fund_df([{}]), holdings)

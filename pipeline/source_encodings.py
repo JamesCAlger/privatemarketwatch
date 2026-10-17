@@ -32,7 +32,7 @@ def load_encodings(wrapper_directory=None):
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
-                'pct_tagged_as_ratio','section_total_reading'}:
+                'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -87,6 +87,16 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('The only admitted untagged PIK reading is none: '+str(path))
             if key=='unfunded_rows' and values!=['net_of_tagged_commitment']:
                 raise ValueError('The only admitted unfunded row handling is net_of_tagged_commitment: '+str(path))
+            # Cash-class rows (by issuer-name pattern) the filer counts inside its filed investments
+            # total; read by the fund gate's totals comparison only (owner ruling 2026-10-17, D-202).
+            if key=='investments_total_includes_cash':
+                for v in values:
+                    try:
+                        re.compile(v)
+                    except re.error:
+                        raise ValueError('investments_total_includes_cash lists issuer-name patterns: '+str(path))
+                if encoding.get('investments_total_excludes'):
+                    raise ValueError('investments_total_includes_cash contradicts investments_total_excludes: '+str(path))
             if key=='investments_total_excludes' and values!=['cash_rows']:
                 raise ValueError('The only admitted exclusion from the investments total is cash_rows: '+str(path))
             if key=='cost_in_two_units' and values!=['foreign_is_par']:

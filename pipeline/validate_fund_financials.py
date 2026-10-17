@@ -42,6 +42,11 @@ STATUS_PASS = "PASS"
 STATUS_FAIL = "FAIL"
 STATUS_SKIP = "SKIP"
 
+# F27 compares income yield with the coupon of the rows that carry a rate. When less than this
+# share of the non-cash fair value carries a rate (loans printing a margin only), the coupon
+# does not describe the portfolio and F27 is skipped (owner ruling 2026-10-17, D-202).
+F27_MIN_RATED_SHARE = 0.5
+
 RESULT_COLUMNS = [
     "dataset", "cik", "report_quarter", "report_date", "check_code",
     "status", "severity", "evidence_strength", "value", "expected",
@@ -397,6 +402,9 @@ def validate_cross_level(
     fund = _prepare_fund_df(fund_df)
     con = duckdb.connect()
     con.register("ff", fund)
+    holdings_df = holdings_df.assign(
+        is_cash=holdings_df["index_classification"].fillna("").eq("CASH")
+        if "index_classification" in holdings_df.columns else False)
     con.register("h", holdings_df)
     cross = con.execute(f"""
         WITH fund AS (
@@ -419,18 +427,30 @@ def validate_cross_level(
                 SUM(TRY_CAST(fair_value AS DOUBLE)) AS holdings_fv,
                 SUM(TRY_CAST(pct_of_net_assets AS DOUBLE)) AS pct_sum,
                 COUNT(*) AS position_count,
+                -- F27's coupon is over non-cash rows only (owner ruling 2026-10-17, D-202):
+                -- a money-market or T-bill yield is not the portfolio's coupon.
                 SUM(
                     CASE WHEN TRY_CAST(interest_rate AS DOUBLE) > 0
-                           AND TRY_CAST(fair_value AS DOUBLE) > 0
+                           AND TRY_CAST(fair_value AS DOUBLE) > 0 AND NOT is_cash
                          THEN TRY_CAST(interest_rate AS DOUBLE)
                               * TRY_CAST(fair_value AS DOUBLE)
                     END
                 ) / NULLIF(SUM(
                     CASE WHEN TRY_CAST(interest_rate AS DOUBLE) > 0
-                           AND TRY_CAST(fair_value AS DOUBLE) > 0
+                           AND TRY_CAST(fair_value AS DOUBLE) > 0 AND NOT is_cash
                          THEN TRY_CAST(fair_value AS DOUBLE)
                     END
-                ), 0) AS wac
+                ), 0) AS wac,
+                SUM(
+                    CASE WHEN TRY_CAST(interest_rate AS DOUBLE) > 0
+                           AND TRY_CAST(fair_value AS DOUBLE) > 0 AND NOT is_cash
+                         THEN TRY_CAST(fair_value AS DOUBLE)
+                    END
+                ) / NULLIF(SUM(
+                    CASE WHEN TRY_CAST(fair_value AS DOUBLE) > 0 AND NOT is_cash
+                         THEN TRY_CAST(fair_value AS DOUBLE)
+                    END
+                ), 0) AS wac_rated_share
             FROM h
             WHERE TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
             GROUP BY cik, report_quarter
@@ -450,6 +470,7 @@ def validate_cross_level(
                 hold.pct_sum,
                 hold.position_count,
                 hold.wac,
+                hold.wac_rated_share,
                 fund.cik IS NOT NULL AS has_fund,
                 hold.cik IS NOT NULL AS has_holdings
             FROM fund
@@ -614,7 +635,9 @@ def validate_cross_level(
 
         wac = row.get("wac")
         income_yield = row.get("income_yield_pct")
-        if pd.isna(wac) or pd.isna(income_yield):
+        rated_share = row.get("wac_rated_share")
+        if (pd.isna(wac) or pd.isna(income_yield) or pd.isna(rated_share)
+                or rated_share < F27_MIN_RATED_SHARE):
             add("F27", STATUS_SKIP, expected="income_yield_pct <= WAC + 200bps")
         else:
             diff = income_yield - wac
