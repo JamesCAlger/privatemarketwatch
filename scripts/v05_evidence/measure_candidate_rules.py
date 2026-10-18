@@ -118,7 +118,9 @@ READS = {
         "Hero Delivery Hero Finco Germany GmbH', 'Golden Hippo Altern Marketing, LLC'; Apollo is 4,177 of the "
         "5,759 rows), 1 a heading residue (Sixth Street 'and Consumer Products Rapid Data GmbH'). 1 cosmetic: "
         "Crescent 'Bankers Toolbox' for the printed 'Banker's Toolbox' (kind spacing_only; an apostrophe, not a "
-        "build error). The New Mountain industry-cell leaks are gone with the blind-quarter suppression."),
+        "build error). The New Mountain industry-cell leaks are gone with the blind-quarter suppression. "
+        "(Read on the 2026-10-18 run; the 2026-10-19 near-spelling restriction adds 175 rows, the Wildcat shape "
+        "and misjoined printed rows that the broad 'printed elsewhere' pass had hidden; not re-sampled.)"),
     "unit_count_differs_from_row_text": (
         "Finding kinds: 9 of 10 real (Ares AthenaHealth 198,505 for 10,487,951; Carlyle Talon 1,018,000 for "
         "145,631; ASIF Mustang 883 for 883,420; BCRED Point Broadband, Zoro, Jupiter), 1 unclear (BCRED GTCR/Jupiter "
@@ -142,7 +144,9 @@ READS = {
         "9 of 10 real: the filer says preferred or preference and the build publishes common (Ares McLaren 'Senior "
         "preference shares', Blue Owl PCF 'Series A Preferred Units', North Haven Vardiman 'Preferred Equity', AB "
         "venture rows under 'U.S. Preferred Stock'). 1 unclear: AB Avant 'Class A Units' listed under the filer's "
-        "'U.S. Preferred Stock' heading (the review's Swyft shape). AB is 101 of the 147 rows."),
+        "'U.S. Preferred Stock' heading (the review's Swyft shape). AB is 101 of the 147 rows. (Read on the "
+        "2026-10-18 run. Since 2026-10-19 heading-only rows, 100, all AB, are the weaker kind "
+        "preferred_heading_only, so the AB venture rows and Avant leave the findings; 47 remain.)"),
 }
 
 
@@ -155,15 +159,30 @@ OLD_TOTALS = {
     "industry_not_published": (4676, 57, 13, 40291.7),
     "preferred_published_as_common": (546, 122, 18, 5861.4),
 }
+# Findings of the first revision (commit ddc0e92, 2026-10-18, 52 funds), for the rows column.
+REV1_ROWS = {
+    "issuer_name_differs_from_page": 5759, "unit_count_differs_from_row_text": 416,
+    "pik_printed_not_published": 221, "industry_not_published": 4461, "preferred_published_as_common": 147,
+}
 # The kinds the review (docs/investigations/v05_rule_candidates_falsealarm_2026-10-18.md) and the
 # owner (D-207) treat as findings. Everything else a rule emits is weaker evidence, reported apart.
-FINDING_KINDS = {
-    "issuer_name_differs_from_page": None,  # all kinds
-    "unit_count_differs_from_row_text": {"proxy_count_not_on_row", "labelled_count_differs", "labelled_count_not_published"},
-    "pik_printed_not_published": {"pik_printed_not_published", "pik_value_mismatch"},
-    "industry_not_published": None,
-    "preferred_published_as_common": None,
-}
+FINDING_KINDS = cr.FINDING_KINDS
+
+# Changelog entries for these changes. Kept here, not in docs/agent_changelog.md, so the branch does not
+# collide with other sessions' uncommitted edits to that file (orchestrator, 2026-10-19); append on merge.
+CHANGELOG = """\
+### 2026-10-17 - Five candidate page rules built and measured, not switched on
+- New `pipeline/candidate_rules.py` (issuer name, unit count, PIK, industry coverage, preferred-as-common): DuckDB over published rows joined to the page reader's `printed_row`. Measured on the 51 accepted sandboxes (`docs/investigations/v05_rule_candidates_2026-10-17.md`). 18 tests.
+
+### 2026-10-18 - Candidate page rules revised after the false-alarm review (D-207)
+- Rule 1 legal-form tails, blind-quarter suppression and blind-spot table; rule 2 issuer name stripped, printed count passes, `units_scale_unclear`; rule 3 page-only findings, `pik_member_text_only`; rule 4 finding < 0.80, warning < 0.90, Blackstone Private Real Estate Credit exempt with evidence; rule 5 text kinds only. Re-measured on 52 sandboxes; 26 tests.
+
+### 2026-10-19 - Page rules wired into the ledger (D-207, orchestrator under the owner's standing delegation)
+- Rule 1 passes a near spelling the fund prints for the same issuer (26North Ascend, Antares Clear Capital) and flags another group entity on the row again (MidCap Wildcat); rule 5 heading-only evidence is the weaker kind `preferred_heading_only`.
+- `scripts/shadow_identity_engine.py`: `ensure_page_rules` runs the rules fund by fund over the wrapped cohort into table `page_rule_rows` (one row per tested row); five identity rules `issuer_name_printed`, `units_printed`, `pik_printed`, `industry_coverage`, `preferred_printed` (tier tight) read it, so failures reach the shadow ledger, the review queue (blocker lane) and the findings ledger like spread_printed. A fund-quarter with no tested row gets no result. `scripts/shadow_validation_runner.py` calls it before the identity rules.
+- Informational, never in the ledger: `data/output/shadow/page_rules_informational.csv` (weaker kinds, rule-1 flags in untested fund-quarters), `page_rules_name_blind_spots.csv`; finding detail in `page_rule_findings.csv`.
+- Tests: test_candidate_rules.py, test_shadow_identity_rules.py (+3 engine tests), test_oracle_checks.py, shadow runner / review-queue tests. No production run; dry run on the v0.5 sandbox: 74 fund-quarters tested per rule, 4,317 / 305 / 114 / 790 / 15 finding rows.
+"""
 
 
 def main(argv=None) -> int:
@@ -196,6 +215,7 @@ def main(argv=None) -> int:
                 spots = df.attrs["blind_spots"].copy()
                 spots["fund"] = name
                 blind.append(spots)
+                df.attrs.clear()
             if not df.empty:
                 df["label"] = label
                 df["fund"] = name
@@ -286,11 +306,14 @@ def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path, blindf: pd.
     L.append("")
     L.append("## Totals")
     L.append("")
-    L.append("Findings are the kinds the review and D-207 treat as errors; weaker kinds (`units_scale_unclear`, "
-             "`pik_member_text_only`) are counted apart. Old = commit 6751318 (51 funds, all kinds then emitted).")
+    L.append("Findings are the kinds the review and D-207 treat as errors (`candidate_rules.FINDING_KINDS`); weaker kinds "
+             "(`units_scale_unclear`, `pik_member_text_only`, `preferred_heading_only`) are counted apart. Old = commit "
+             "6751318 (51 funds, all kinds then emitted); 10-18 = commit ddc0e92 (first revision, 52 funds); new = this run "
+             "(2026-10-19 follow-ups: rule 1 near-spelling pass, rule 5 heading-only to the weaker kind). Not counted here: "
+             "the ledger also leaves out rule-1 shape flags in untested fund-quarters (`ledger_rows`).")
     L.append("")
-    L.append("| rule | old rows | new rows (findings) | weaker kinds | old FQ | new FQ | old funds | new funds | old FV (M) | new FV (M) | kinds |")
-    L.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|")
+    L.append("| rule | old rows | 10-18 rows | new rows (findings) | weaker kinds | old FQ | new FQ | old funds | new funds | old FV (M) | new FV (M) | kinds |")
+    L.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|")
     rng = random.Random(SEED)
     for rule in cr.RULES:
         g = rows[rows["rule"] == rule]
@@ -300,8 +323,9 @@ def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path, blindf: pd.
         fq = f[["cik", "report_date"]].drop_duplicates().shape[0]
         kinds = "; ".join("%s:%d" % (k, v) for k, v in g["kind"].value_counts().items())
         o = OLD_TOTALS[rule]
-        L.append("| %s | %d | %d | %d | %d | %d | %d | %d | %.1f | %.1f | %s |" % (
-            rule, o[0], len(f), weak, o[1], fq, o[2], f["cik"].nunique(), o[3], f["fair_value"].fillna(0).sum() / 1e6, kinds))
+        L.append("| %s | %d | %d | %d | %d | %d | %d | %d | %d | %.1f | %.1f | %s |" % (
+            rule, o[0], REV1_ROWS[rule], len(f), weak, o[1], fq, o[2], f["cik"].nunique(), o[3],
+            f["fair_value"].fillna(0).sum() / 1e6, kinds))
     L.append("")
     for rule in cr.RULES:
         g = rows[rows["rule"] == rule]
@@ -327,6 +351,9 @@ def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path, blindf: pd.
             groups = [(" (kind pik_printed_not_published)", g[g["kind"] == "pik_printed_not_published"]),
                       (" (kind pik_value_mismatch, reported separately)", g[g["kind"] == "pik_value_mismatch"]),
                       (" (weaker kind pik_member_text_only)", g[g["kind"] == "pik_member_text_only"])]
+        if rule == "preferred_published_as_common":
+            groups = [(" (finding kinds)", g[g["kind"] != "preferred_heading_only"]),
+                      (" (weaker kind preferred_heading_only)", g[g["kind"] == "preferred_heading_only"])]
         if rule == "unit_count_differs_from_row_text":
             groups = [(" (finding kinds)", g[g["kind"] != "units_scale_unclear"]),
                       (" (weaker kind units_scale_unclear)", g[g["kind"] == "units_scale_unclear"])]
@@ -348,6 +375,18 @@ def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path, blindf: pd.
                     "" if pd.isna(r.fair_value) else "{:,.0f}".format(r.fair_value), _fmt(r.published, 60),
                     _fmt(r.printed, 60), _fmt(line, 330)))
             L.append("")
+    L.append("## Ledger wiring (2026-10-19)")
+    L.append("")
+    L.append("The five rules now produce findings through the shadow identity engine (`scripts/shadow_identity_engine.py`, "
+             "`ensure_page_rules`), ledger names: " + ", ".join("`%s` (%s)" % (cr.LEDGER_NAMES[r], r) for r in cr.RULES) +
+             ". Only these finding kinds raise: " + "; ".join(
+                 "%s: %s" % (cr.LEDGER_NAMES[r], ", ".join(sorted(k))) for r, k in cr.FINDING_KINDS.items()) +
+             ". Weaker kinds and rule 1's blind-spot table go to `data/output/shadow/page_rules_informational.csv` and "
+             "`page_rules_name_blind_spots.csv`; a fund-quarter with no tested row gets no ledger result.")
+    L.append("")
+    L.append("## Changelog entries (to append to docs/agent_changelog.md on merge)")
+    L.append("")
+    L.append(CHANGELOG)
     path.write_text("\n".join(L) + "\n", encoding="utf-8")
 
 

@@ -351,11 +351,12 @@ def test_nothing_in_the_build_imports_candidate_rules():
     repo = pathlib.Path(__file__).resolve().parents[1]
     imports = re.compile(r"(?m)^\s*(from\s+pipeline(\.candidate_rules|\s+import\s+[^\n]*\bcandidate_rules\b)"
                          r"|import\s+pipeline\.candidate_rules)")
-    # read-only evidence scripts (scripts/v05_evidence/, e.g. the measurement and review scripts) may import it
-    users = [p for root in ("pipeline", "scripts") for p in (repo / root).rglob("*.py")
+    # Wired 2026-10-19 (D-207): the shadow identity engine is the one build-side importer; read-only
+    # evidence scripts (scripts/v05_evidence/) may import it too.
+    users = [p.name for root in ("pipeline", "scripts") for p in (repo / root).rglob("*.py")
              if imports.search(p.read_text(encoding="utf-8", errors="ignore"))
              and p.name != "candidate_rules.py" and "v05_evidence" not in p.parts]
-    assert users == [], users
+    assert users == ["shadow_identity_engine.py"], users
 
 
 # ---------------------------------------------------------------- 2026-10-18 review fixes (D-207)
@@ -466,3 +467,75 @@ def test_industry_exemption_and_warning_level():
     assert levels == {("0000000009", "2025-06-30"): "finding", ("0000000009", "2025-09-30"): "warning",
                       ("0002049733", "2025-06-30"): "exempt"}
     assert cr.INDUSTRY_EXEMPTIONS["0002049733"]["evidence"]
+
+
+# ---------------------------------------------------------------- 2026-10-19 re-sample follow-ups
+
+def test_issuer_other_group_entity_on_the_row_flags_again():
+    # MidCap 2024-09-30 (labelled real): the equity row prints 'Wildcat Parent LP'; the loan rows of the
+    # same borrower print 'Wildcat BuyerCo, Inc.', which must not rescue the equity row
+    out = _run(cr.issuer_name_differs_from_page, [
+        {"row_id": "eq", "issuer_name": "Wildcat BuyerCo, Inc.",
+         "printed_row": "Wildcat Parent LP | Common Equity - Common Stock | N/A | N/A | 1,070 Shares | 107 | 290"},
+        {"row_id": "tl", "issuer_name": "Wildcat BuyerCo, Inc.",
+         "printed_row": "Wildcat BuyerCo, Inc. | First Lien Secured Debt - Term Loan | SOFR+575, 1.00% Floor | 02/26/27 | 17,000"},
+    ])
+    assert list(out["row_id"]) == ["eq"] and list(out["kind"]) == ["not_the_printed_name"]
+
+
+def test_issuer_spelling_printed_for_the_same_issuer_in_another_quarter_passes():
+    # 26North (labelled false alarm): 'Ascend Partner Services LLC' printed through 2024-12-31,
+    # 'Ascend Partners Services LLC' from 2025-03-31; published 'Partner' throughout
+    out = _run(cr.issuer_name_differs_from_page, [
+        {"row_id": "old", "report_date": "2024-12-31", "accession_number": "a1", "issuer_name": "Ascend Partner Services LLC",
+         "printed_row": "Ascend Partner Services LLC (3)(7) | First Lien Senior Secured Revolving Loan | SOFR + 5.00% | 645"},
+        {"row_id": "new", "report_date": "2025-03-31", "accession_number": "a2", "issuer_name": "Ascend Partner Services LLC",
+         "printed_row": "Ascend Partners Services LLC (3)(7)(11) | First Lien Senior Secured Revolving Loan | SOFR + 5.00% | 645"},
+        # a member typo printed nowhere in the fund still flags (Sixth Street 'Scropio' for 'Scorpio')
+        {"row_id": "typo", "report_date": "2025-03-31", "accession_number": "a2", "issuer_name": "Scropio Bidco",
+         "printed_row": "Scorpio Bidco (3)(4) | First-lien loan (EUR 75,326 par, due 4/2031) | 4/4/2024 | E + 5.75%"},
+    ])
+    assert list(out["row_id"]) == ["typo"]
+
+
+def test_preferred_heading_only_is_the_weaker_kind():
+    out = _run(cr.preferred_published_as_common, [
+        # AB 2026-03-31 (labelled unclear): 'Class A Units' under the filer's 'U.S. Preferred Stock' heading
+        {"row_id": "avant", "asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY",
+         "issuer_name": "Avant NewCo Holdings, L.P.",
+         "bdc_investment_identifier": "U.S. Preferred Stock - 1.01% | Avant NewCo Holdings, L.P. | Class A Units | Digital Infrastructure & Services",
+         "printed_row": "Avant NewCo Holdings, L.P. | Class A Units | Digital Infrastructure & Services | 12/31/2025 | 375,804"},
+        # AB 2023 title-cased member with the heading after the name
+        {"row_id": "netskope", "asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY",
+         "issuer_name": "Netskope Inc",
+         "bdc_investment_identifier": "Netskope Inc - U.s.preferred Stock At Two Point Zero Three Percentage - Series G"},
+        # the row itself says preferred: stays a finding (Blue Owl PCF)
+        {"row_id": "pcf", "asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY", "pik_rate": 15.0,
+         "issuer_name": "PCF Holdco, LLC",
+         "bdc_investment_identifier": "U.S. Preferred Stock - 0.5% | PCF Holdco, LLC",
+         "printed_row": "PCF Holdco, LLC (dba PCF Insurance Services)(16)(17) | Series A Preferred Units | 15.00% PIK | N/A"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"avant": "preferred_heading_only", "netskope": "preferred_heading_only",
+                                                     "pcf": "text_and_rate"}
+
+
+def test_ledger_rows_keep_weaker_kinds_out_of_findings():
+    con = duckdb.connect()
+    frame = pd.DataFrame([
+        {"row_id": "f", "issuer_name": "Gannett Gannett Holdings, LLC",
+         "printed_row": "Gannett Holdings, LLC | First Lien | S+511 | 44,195"},
+        {"row_id": "w", "issuer_name": "Wash & Wax Group LP", "asset_category": "EQUITY_COMMON", "shares_held": 6312000,
+         "shares_held_source": "derived_proxy", "printed_row": "Wash & Wax Group LP (4)(20)(22) | 6,312 | 8,547 | 6,991"},
+        {"row_id": "h", "issuer_name": "Avant NewCo Holdings, L.P.", "asset_category": "EQUITY_COMMON",
+         "bdc_investment_identifier": "U.S. Preferred Stock - 1.01% | Avant NewCo Holdings, L.P. | Class A Units",
+         "printed_row": "Avant NewCo Holdings, L.P. | Class A Units | 12/31/2025 | 375,804"},
+    ])
+    frame["cik"], frame["report_date"], frame["accession_number"] = "0000000001", "2025-12-31", "a"
+    cr.prepare(con, frame)
+    tested, info, blind = cr.ledger_rows(con)
+    found = tested[tested["finding"] > 0]
+    assert list(zip(found["rule_name"], found["row_id"])) == [("issuer_name_printed", "f")]
+    assert {("units_printed", "w"), ("preferred_printed", "h")} <= set(
+        (r.rule_name, r.row_id) for r in tested.itertuples())  # tested, but not findings
+    assert {"units_scale_unclear", "preferred_heading_only"} <= set(info["kind"])
+    assert set(tested["rule_name"]) <= set(cr.LEDGER_NAMES.values()) and not blind.empty

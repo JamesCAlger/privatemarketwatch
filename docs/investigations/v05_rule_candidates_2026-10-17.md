@@ -12,15 +12,15 @@ A clean result is not 'data correct': these rules see only what the page reader 
 
 ## Totals
 
-Findings are the kinds the review and D-207 treat as errors; weaker kinds (`units_scale_unclear`, `pik_member_text_only`) are counted apart. Old = commit 6751318 (51 funds, all kinds then emitted).
+Findings are the kinds the review and D-207 treat as errors (`candidate_rules.FINDING_KINDS`); weaker kinds (`units_scale_unclear`, `pik_member_text_only`, `preferred_heading_only`) are counted apart. Old = commit 6751318 (51 funds, all kinds then emitted); 10-18 = commit ddc0e92 (first revision, 52 funds); new = this run (2026-10-19 follow-ups: rule 1 near-spelling pass, rule 5 heading-only to the weaker kind). Not counted here: the ledger also leaves out rule-1 shape flags in untested fund-quarters (`ledger_rows`).
 
-| rule | old rows | new rows (findings) | weaker kinds | old FQ | new FQ | old funds | new funds | old FV (M) | new FV (M) | kinds |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| issuer_name_differs_from_page | 6537 | 5759 | 0 | 370 | 303 | 48 | 46 | 217529.3 | 208501.7 | not_the_printed_name:5584; spacing_only:128; begins_with_section_word:23; equals_industry_label:10; begins_with_industry_label:8; holds_category_path:6 |
-| unit_count_differs_from_row_text | 459 | 416 | 34 | 140 | 126 | 27 | 21 | 5981.8 | 5895.9 | proxy_count_not_on_row:384; units_scale_unclear:34; labelled_count_differs:19; labelled_count_not_published:13 |
-| pik_printed_not_published | 245 | 221 | 22 | 88 | 81 | 22 | 22 | 3271.5 | 3158.1 | pik_printed_not_published:192; pik_value_mismatch:29; pik_member_text_only:22 |
-| industry_not_published | 4676 | 4461 | 0 | 57 | 59 | 13 | 13 | 40291.7 | 39264.9 | no_industry_at_all:4362; filer_industry_not_mapped:99 |
-| preferred_published_as_common | 546 | 147 | 0 | 122 | 43 | 18 | 8 | 5861.4 | 1429.3 | text_says_preferred:124; text_and_rate:23 |
+| rule | old rows | 10-18 rows | new rows (findings) | weaker kinds | old FQ | new FQ | old funds | new funds | old FV (M) | new FV (M) | kinds |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| issuer_name_differs_from_page | 6537 | 5759 | 5934 | 0 | 370 | 321 | 48 | 47 | 217529.3 | 211428.4 | not_the_printed_name:5771; spacing_only:116; begins_with_section_word:23; equals_industry_label:10; begins_with_industry_label:8; holds_category_path:6 |
+| unit_count_differs_from_row_text | 459 | 416 | 416 | 34 | 140 | 126 | 27 | 21 | 5981.8 | 5895.9 | proxy_count_not_on_row:384; units_scale_unclear:34; labelled_count_differs:19; labelled_count_not_published:13 |
+| pik_printed_not_published | 245 | 221 | 221 | 22 | 88 | 81 | 22 | 22 | 3271.5 | 3158.1 | pik_printed_not_published:192; pik_value_mismatch:29; pik_member_text_only:22 |
+| industry_not_published | 4676 | 4461 | 4461 | 0 | 57 | 59 | 13 | 13 | 40291.7 | 39264.9 | no_industry_at_all:4362; filer_industry_not_mapped:99 |
+| preferred_published_as_common | 546 | 147 | 47 | 100 | 122 | 30 | 18 | 8 | 5861.4 | 1383.4 | preferred_heading_only:100; text_says_preferred:24; text_and_rate:23 |
 
 ## issuer_name_differs_from_page
 
@@ -51,68 +51,69 @@ Per fund (flagged funds only):
 | cik | fund | sandbox | rows | fund-quarters | FV (M) | kinds |
 |---|---|---|---:|---:|---:|---|
 | 0001837532 | Apollo Debt Solutions BDC | rg1b | 4177 | 14 | 183211.0 | not_the_printed_name:4174; spacing_only:2; begins_with_section_word:1 |
-| 0001925309 | Sixth Street Lending Partners | rg1b | 94 | 14 | 8598.3 | not_the_printed_name:85; spacing_only:7; begins_with_section_word:2 |
-| 0001918712 | ARES STRATEGIC INCOME FUND | rg1b | 203 | 10 | 2656.5 | not_the_printed_name:203 |
-| 0001920145 | Goldman Sachs Private Credit Corp. | rg1b | 135 | 11 | 2068.9 | not_the_printed_name:132; spacing_only:2; begins_with_section_word:1 |
-| 0001287750 | ARES CAPITAL CORP | rg1b | 74 | 10 | 1741.1 | not_the_printed_name:56; spacing_only:12; holds_category_path:6 |
-| 0001872371 | Oaktree Strategic Credit Fund | rg1b | 82 | 6 | 976.6 | not_the_printed_name:63; begins_with_section_word:11; spacing_only:8 |
-| 0001803498 | Blackstone Private Credit Fund | rg1b | 14 | 6 | 955.4 | not_the_printed_name:12; spacing_only:2 |
+| 0001925309 | Sixth Street Lending Partners | rg1b | 122 | 14 | 8756.2 | not_the_printed_name:113; spacing_only:7; begins_with_section_word:2 |
+| 0001287750 | ARES CAPITAL CORP | rg1b | 80 | 14 | 2978.7 | not_the_printed_name:73; holds_category_path:6; spacing_only:1 |
+| 0001918712 | ARES STRATEGIC INCOME FUND | rg1b | 206 | 10 | 2807.9 | not_the_printed_name:206 |
+| 0001920145 | Goldman Sachs Private Credit Corp. | rg1b | 148 | 12 | 2139.2 | not_the_printed_name:145; spacing_only:2; begins_with_section_word:1 |
+| 0001803498 | Blackstone Private Credit Fund | rg1b | 17 | 5 | 1695.1 | not_the_printed_name:15; spacing_only:2 |
+| 0001872371 | Oaktree Strategic Credit Fund | rg1b | 83 | 6 | 986.3 | not_the_printed_name:64; begins_with_section_word:11; spacing_only:8 |
 | 0001965934 | Overland Advantage | ovye | 6 | 6 | 879.0 | equals_industry_label:4; not_the_printed_name:2 |
-| 0001825384 | Stone Point Credit Corp | stxf | 61 | 13 | 844.3 | not_the_printed_name:55; spacing_only:6 |
-| 0001950976 | 26North BDC, Inc. | tnxc | 36 | 6 | 529.6 | not_the_printed_name:36 |
-| 0001812554 | Blue Owl Credit Income Corp. | rg1b | 33 | 12 | 517.0 | not_the_printed_name:33 |
-| 0001572694 | Goldman Sachs BDC, Inc. | gsxf | 52 | 12 | 461.4 | not_the_printed_name:41; begins_with_section_word:7; spacing_only:4 |
+| 0001825384 | Stone Point Credit Corp | stxf | 50 | 12 | 743.9 | not_the_printed_name:46; spacing_only:4 |
+| 0001572694 | Goldman Sachs BDC, Inc. | gsxf | 63 | 12 | 600.8 | not_the_printed_name:52; begins_with_section_word:7; spacing_only:4 |
+| 0001950976 | 26North BDC, Inc. | tnxc | 17 | 8 | 518.0 | not_the_printed_name:15; spacing_only:2 |
+| 0001812554 | Blue Owl Credit Income Corp. | rg1b | 34 | 12 | 517.2 | not_the_printed_name:34 |
 | 0002031750 | Ares Core Infrastructure Fund | acxb | 2 | 2 | 454.5 | not_the_printed_name:2 |
 | 0001742313 | Monroe Capital Income Plus Corp | rg2 | 105 | 9 | 452.5 | not_the_printed_name:76; spacing_only:29 |
-| 0001993402 | Antares Strategic Credit Fund | rg2 | 114 | 9 | 398.3 | not_the_printed_name:104; spacing_only:5; begins_with_industry_label:3; equals_industry_label:1; begins_with_section_word:1 |
-| 0001278752 | MidCap Financial Investment Corp | mfxi | 50 | 14 | 360.8 | not_the_printed_name:42; spacing_only:8 |
-| 0001772704 | Goldman Sachs Private Middle Market Credit II... | gpyf | 57 | 6 | 349.5 | not_the_printed_name:57 |
-| 0001899017 | Bain Capital Private Credit | bnxd | 36 | 11 | 315.7 | not_the_printed_name:32; spacing_only:4 |
-| 0001633336 | Crescent Capital BDC, Inc. | ccza | 63 | 13 | 305.2 | not_the_printed_name:48; spacing_only:15 |
+| 0001993402 | Antares Strategic Credit Fund | rg2 | 127 | 9 | 437.4 | not_the_printed_name:118; spacing_only:4; begins_with_industry_label:3; equals_industry_label:1; begins_with_section_word:1 |
+| 0001278752 | MidCap Financial Investment Corp | mfxi | 61 | 14 | 431.4 | not_the_printed_name:53; spacing_only:8 |
+| 0001838126 | HPS Corporate Lending Fund | rg1b | 9 | 4 | 382.1 | not_the_printed_name:9 |
+| 0001633336 | Crescent Capital BDC, Inc. | ccza | 78 | 14 | 373.8 | not_the_printed_name:63; spacing_only:15 |
+| 0001772704 | Goldman Sachs Private Middle Market Credit II... | gpyf | 58 | 6 | 354.8 | not_the_printed_name:58 |
+| 0001899017 | Bain Capital Private Credit | bnxd | 38 | 11 | 319.0 | not_the_printed_name:34; spacing_only:4 |
 | 0001919369 | VISTA CREDIT STRATEGIC LENDING CORP. | viya | 8 | 5 | 294.1 | not_the_printed_name:8 |
-| 0001849894 | MSD Investment Corp. | rg2 | 4 | 3 | 258.2 | not_the_printed_name:4 |
-| 0001976336 | Antares Private Credit Fund | atxc | 49 | 7 | 196.9 | not_the_printed_name:44; begins_with_industry_label:4; equals_industry_label:1 |
+| 0001976336 | Antares Private Credit Fund | atxc | 55 | 7 | 215.1 | not_the_printed_name:50; begins_with_industry_label:4; equals_industry_label:1 |
+| 0001930087 | Golub Capital Private Credit Fund | rg1b | 31 | 9 | 185.9 | not_the_printed_name:31 |
+| 0001859919 | Barings Private Credit Corp | rg2 | 59 | 8 | 178.7 | not_the_printed_name:54; spacing_only:4; begins_with_industry_label:1 |
+| 0001851322 | North Haven Private Income Fund LLC | rg2 | 22 | 3 | 173.4 | not_the_printed_name:22 |
 | 0001916099 | Diameter Credit Co | dixc | 12 | 8 | 170.4 | not_the_printed_name:12 |
-| 0001930087 | Golub Capital Private Credit Fund | rg1b | 29 | 7 | 170.1 | not_the_printed_name:29 |
-| 0001851322 | North Haven Private Income Fund LLC | rg2 | 18 | 4 | 155.1 | not_the_printed_name:18 |
-| 0001920453 | Fidelity Private Credit Fund | fpxg | 28 | 10 | 146.9 | not_the_printed_name:26; spacing_only:2 |
-| 0001838126 | HPS Corporate Lending Fund | rg1b | 5 | 3 | 141.9 | not_the_printed_name:5 |
-| 0001902649 | BlackRock Private Credit Fund | bpxh | 55 | 14 | 115.6 | not_the_printed_name:49; spacing_only:6 |
-| 0001508655 | Sixth Street Specialty Lending, Inc. | ssxf | 35 | 7 | 102.3 | not_the_printed_name:33; spacing_only:2 |
-| 0001859919 | Barings Private Credit Corp | rg2 | 27 | 8 | 94.5 | not_the_printed_name:22; spacing_only:4; begins_with_industry_label:1 |
+| 0001920453 | Fidelity Private Credit Fund | fpxg | 33 | 11 | 150.0 | not_the_printed_name:33 |
+| 0001508655 | Sixth Street Specialty Lending, Inc. | ssxf | 38 | 7 | 134.0 | not_the_printed_name:36; spacing_only:2 |
+| 0001902649 | BlackRock Private Credit Fund | bpxh | 60 | 14 | 117.7 | not_the_printed_name:54; spacing_only:6 |
+| 0001634452 | AB Private Credit Investors Corp | abxf | 49 | 7 | 115.3 | not_the_printed_name:37; spacing_only:12 |
+| 0001989817 | HPS Corporate Capital Solutions Fund | hcxe | 6 | 4 | 99.4 | not_the_printed_name:6 |
+| 0001869453 | Blue Owl Technology Income Corp. | rg2 | 9 | 4 | 97.6 | not_the_printed_name:9 |
 | 0001901164 | T. Rowe Price OHA Select Private Credit Fund | trxd | 11 | 5 | 94.2 | not_the_printed_name:11 |
-| 0001869453 | Blue Owl Technology Income Corp. | rg2 | 8 | 3 | 90.3 | not_the_printed_name:8 |
-| 0001989817 | HPS Corporate Capital Solutions Fund | hcxe | 5 | 3 | 86.6 | not_the_printed_name:5 |
+| 0001849894 | MSD Investment Corp. | rg2 | 2 | 2 | 66.8 | not_the_printed_name:2 |
 | 0001959604 | Jefferies Credit Partners BDC Inc. | jcxd | 17 | 6 | 65.3 | not_the_printed_name:17 |
-| 0001634452 | AB Private Credit Investors Corp | abxf | 26 | 7 | 49.7 | not_the_printed_name:16; spacing_only:10 |
 | 0001950803 | Stepstone Private Credit Fund LLC | spxf | 1 | 1 | 48.3 | equals_industry_label:1 |
 | 0001702510 | Carlyle Credit Solutions, Inc. | ccxd | 4 | 4 | 43.4 | not_the_printed_name:4 |
 | 0001899996 | Fidelity Private Credit Co LLC | fcxe | 2 | 1 | 40.9 | not_the_printed_name:2 |
 | 0002037804 | New Mountain Private Credit Fund | npxd | 1 | 1 | 26.5 | equals_industry_label:1 |
+| 0002012139 | Fortress Private Lending Fund | foxd | 3 | 2 | 18.5 | not_the_printed_name:3 |
 | 0001911066 | Nuveen Churchill Private Capital Income Fund | ncxf | 1 | 1 | 16.4 | not_the_printed_name:1 |
-| 0001885968 | T Series BDC LLC | tsxd | 5 | 3 | 6.3 | not_the_printed_name:5 |
-| 0002012139 | Fortress Private Lending Fund | foxd | 1 | 1 | 5.0 | not_the_printed_name:1 |
+| 0001885968 | T Series BDC LLC | tsxd | 9 | 4 | 16.0 | not_the_printed_name:9 |
+| 0001786108 | Trinity Capital Inc. | tcxe | 5 | 5 | 15.0 | not_the_printed_name:5 |
 | 0001975736 | KKR FS Income Trust Select | ksxf | 8 | 3 | 4.6 | not_the_printed_name:8 |
-| 0001901612 | Golub Capital BDC 4, Inc. | g4xc | 2 | 2 | 1.7 | not_the_printed_name:2 |
+| 0001901612 | Golub Capital BDC 4, Inc. | g4xc | 4 | 3 | 1.7 | not_the_printed_name:4 |
 | 0002008748 | Lord Abbett Private Credit Fund | layf | 2 | 1 | 0.7 | equals_industry_label:2 |
 | 0001913724 | TPG Twin Brook Capital Income Fund | rg2 | 1 | 1 | -0.1 | not_the_printed_name:1 |
 
-**Read of the samples below (agent; not a disposition).** 9 of 10 real: 8 carry the member's group name in front of the legal name (Apollo Debt Solutions 'Delivery Hero Delivery Hero Finco Germany GmbH', 'Golden Hippo Altern Marketing, LLC'; Apollo is 4,177 of the 5,759 rows), 1 a heading residue (Sixth Street 'and Consumer Products Rapid Data GmbH'). 1 cosmetic: Crescent 'Bankers Toolbox' for the printed 'Banker's Toolbox' (kind spacing_only; an apostrophe, not a build error). The New Mountain industry-cell leaks are gone with the blind-quarter suppression.
+**Read of the samples below (agent; not a disposition).** 9 of 10 real: 8 carry the member's group name in front of the legal name (Apollo Debt Solutions 'Delivery Hero Delivery Hero Finco Germany GmbH', 'Golden Hippo Altern Marketing, LLC'; Apollo is 4,177 of the 5,759 rows), 1 a heading residue (Sixth Street 'and Consumer Products Rapid Data GmbH'). 1 cosmetic: Crescent 'Bankers Toolbox' for the printed 'Banker's Toolbox' (kind spacing_only; an apostrophe, not a build error). The New Mountain industry-cell leaks are gone with the blind-quarter suppression. (Read on the 2026-10-18 run; the 2026-10-19 near-spelling restriction adds 175 rows, the Wildcat shape and misjoined printed rows that the broad 'printed elsewhere' pass had hidden; not re-sampled.)
 
 Sample of 10 flagged rows, seed 20261017:
 
 | # | fund / quarter | kind / basis | issuer | FV | published | printed figure | printed row or page line |
 |---|---|---|---|---:|---|---|---|
-| 1 | Crescent Capital BDC, Inc. 2024-12-31 | spacing_only / page | Bankers Toolbox, Inc | 19,081,000 | Bankers Toolbox, Inc | Banker's Toolbox, Inc. | Banker's Toolbox, Inc. / Unitranche First Lien Term Loan / S + 450 (75 Floor) / 8.83% / 07/2027 / 19,186 / 19,186 / 2.5 / 19,081 |
-| 2 | Apollo Debt Solutions BDC 2023-12-31 | not_the_printed_name / page | Dental Care Alliance DCA Investment Holding LLC | 2,452,000 | Dental Care Alliance DCA Investment Holding LLC | DCA Investment Holding LLC | DCA Investment Holding LLC / First Lien Secured Debt / S+641, 0.75% Floor / 4/3/2028 / 2,452 / 2,452 / 2,452 / (4)(15) |
-| 3 | Apollo Debt Solutions BDC 2024-06-30 | not_the_printed_name / page | Delivery Hero Delivery Hero Finco Germany GmbH | 141,664,000 | Delivery Hero Delivery Hero Finco Germany GmbH | Delivery Hero Finco Germany GmbH | Delivery Hero Finco Germany GmbH / First Lien Secured Debt - Term Loan / K+575, 0.00% Floor / 8/12/2027 / ₩ / 195,000,000 / 138,436 / 141,664 / (3)(4)(8)(9)(18) |
-| 4 | Apollo Debt Solutions BDC 2024-12-31 | not_the_printed_name / page | Golden Hippo Altern Marketing, LLC | 75,235,000 | Golden Hippo Altern Marketing, LLC | Altern Marketing, LLC | Altern Marketing, LLC / First Lien Secured Debt - Term Loan / S+500, 2.00% Floor / 6/13/2028 / 75,235 / 74,462 / 75,235 / (4)(9)(15) |
-| 5 | Apollo Debt Solutions BDC 2025-12-31 | not_the_printed_name / page | Radiology Partners Radiology Partners, Inc. | 26,918,000 | Radiology Partners Radiology Partners, Inc. | Radiology Partners, Inc. | Radiology Partners, Inc. / First Lien Secured Debt - Term Loan / S+450, 0.00% Floor / 6/30/2032 / 26,933 / 26,715 / 26,918 / (16) |
-| 6 | Apollo Debt Solutions BDC 2026-03-31 | not_the_printed_name / page | Everbridge Everbridge Holdings, LLC | 59,802,000 | Everbridge Everbridge Holdings, LLC | Everbridge Holdings, LLC | Everbridge Holdings, LLC / First Lien Secured Debt - Term Loan / S+500, 0.75% Floor / 07/02/2031 / 60,713 / 60,494 / 59,802 / (4)(9)(16) |
-| 7 | Apollo Debt Solutions BDC 2026-03-31 | not_the_printed_name / page | Ergotron Ergotron Investments, LLC | 55,000 | Ergotron Ergotron Investments, LLC | Ergotron Investments, LLC | Ergotron Investments, LLC / Common Equity - Equity Unit / N/A / N/A / 500 Units / 50 / 55 / (4) |
-| 8 | Apollo Debt Solutions BDC 2026-03-31 | not_the_printed_name / page | Froneri Froneri US, Inc | 12,894,000 | Froneri Froneri US, Inc | Froneri US, Inc | Froneri US, Inc / First Lien Secured Debt - Term Loan / S+225, 0.00% Floor / 09/30/2031 / $ / 13,134 / $ / 13,038 / $ / 12,894 / (8)(17) |
-| 9 | Apollo Debt Solutions BDC 2026-06-30 | not_the_printed_name / page | Galway Galway Borrower LLC | 33,153,000 | Galway Galway Borrower LLC | Galway Borrower LLC | Galway Borrower LLC / First Lien Secured Debt - Term Loan / S+450, 0.75% Floor / 09/29/2028 / 33,446 / 33,282 / 33,153 / (9)(17) |
-| 10 | Sixth Street Lending Partner... 2025-03-31 | not_the_printed_name / page | and Consumer Products Rapid Data GmbH Unternehmens... | 8,079,000 | and Consumer Products Rapid Data GmbH Unternehmensberatung | Rapid Data GmbH Unternehmensberatung (3)(4) | Rapid Data GmbH Unternehmensberatung (3)(4) / First-lien loan (EUR 7,435 par, due 7/2029) / 7/11/2023 / E + 6.75% / 9.54% (incl. 3.00% PIK) / 7,952 / 8,079 (EUR 7,479) / 0.2 / % |
+| 1 | Crescent Capital BDC, Inc. 2023-06-30 | not_the_printed_name / page | MRI Software LLC | 1,891,000 | MRI Software LLC | New Era Technology, Inc. | New Era Technology, Inc. / Unitranche First Lien Delayed Draw Term Loan / S + 625 (100 Floor) / 11.75% / 10/2026 / 1,953 / 1,931 / 0.3 / 1,891 |
+| 2 | Apollo Debt Solutions BDC 2023-09-30 | not_the_printed_name / page | Accelerate360 Accelerate360 Holdings, LLC | 71,671,000 | Accelerate360 Accelerate360 Holdings, LLC | Accelerate360 Holdings, LLC | Accelerate360 Holdings, LLC / First Lien Secured Debt / S+626, 1.00% Floor / 2/11/2027 / $ / 71,315 / $ / 71,315 / $ / 71,671 / (4)(9)(17) |
+| 3 | Apollo Debt Solutions BDC 2024-06-30 | not_the_printed_name / page | Roaring Fork III-B Roaring Fork III-B, LLC | 1,153,000 | Roaring Fork III-B Roaring Fork III-B, LLC | Roaring Fork III-B, LLC | Roaring Fork III-B, LLC / First Lien Secured Debt - Term Loan / S+540, 0.00% Floor / 7/16/2026 / $ / 1,153 / $ / 1,153 / $ / 1,153 / (4)(8)(9)(15) |
+| 4 | Apollo Debt Solutions BDC 2024-12-31 | not_the_printed_name / page | ArcLight AL GCX Holdings, LLC | 5,040,000 | ArcLight AL GCX Holdings, LLC | AL GCX Holdings, LLC | AL GCX Holdings, LLC / First Lien Secured Debt - Term Loan / S+275, 0.50% Floor / 5/17/2029 / $ / 5,000 / $ / 5,024 / $ / 5,040 / (14) |
+| 5 | Apollo Debt Solutions BDC 2025-12-31 | not_the_printed_name / page | Howden Group HIG Finance 2 Limited | 9,988,000 | Howden Group HIG Finance 2 Limited | HIG Finance 2 Limited | HIG Finance 2 Limited / First Lien Secured Debt - Term Loan / S+275, 0.50% Floor / 4/18/2030 / 9,949 / 9,904 / 9,988 / (8)(16) |
+| 6 | Apollo Debt Solutions BDC 2025-12-31 | not_the_printed_name / page | Clarience Technologies Truck-Lite Co., LLC | 192,651,000 | Clarience Technologies Truck-Lite Co., LLC | Truck-Lite Co., LLC | Truck-Lite Co., LLC / First Lien Secured Debt - Term Loan / S+475, 0.75% Floor / 2/13/2032 / $ / 194,499 / $ / 193,755 / $ / 192,651 / (4)(15) |
+| 7 | Apollo Debt Solutions BDC 2026-03-31 | not_the_printed_name / page | Dynagrid Megavolt Borrower, LLC | 18,470,000 | Dynagrid Megavolt Borrower, LLC | Megavolt Borrower, LLC | Megavolt Borrower, LLC / First Lien Secured Debt - Term Loan / S+475, 1.00% Floor / 02/13/2032 / 18,609 / 18,283 / 18,470 / (4)(16) |
+| 8 | Apollo Debt Solutions BDC 2026-03-31 | not_the_printed_name / page | Enverus Edition Holdings, Inc. | 307,561,000 | Enverus Edition Holdings, Inc. | Edition Holdings, Inc. | Edition Holdings, Inc. / First Lien Secured Debt - Term Loan / S+450, 0.75% Floor / 12/20/2032 / 310,668 / 309,836 / 307,561 / (4)(15) |
+| 9 | Apollo Debt Solutions BDC 2026-03-31 | not_the_printed_name / page | Walter's WH BorrowerCo, LLC | 19,479,000 | Walter's WH BorrowerCo, LLC | WH BorrowerCo, LLC | WH BorrowerCo, LLC / First Lien Secured Debt - Term Loan / S+500, 1.00% Floor / 08/02/2030 / 20,238 / 20,002 / 19,479 / (4)(9)(16) |
+| 10 | Goldman Sachs Private Credit... 2025-06-30 | not_the_printed_name / page | Madison IAQ LLC Commercial Services & Supplies | 14,407,000 | Madison IAQ LLC Commercial Services & Supplies | Madison IAQ LLC | Madison IAQ LLC / Commercial Services & Supplies / 6.76% / S + 2.50% / 06/21/28 / 14,404 / 14,439 / 14,407 |
 
 ## unit_count_differs_from_row_text
 
@@ -352,24 +353,57 @@ Per fund (flagged funds only):
 | 0001287750 | ARES CAPITAL CORP | rg1b | 3 | 3 | 79.7 | text_and_rate:3 |
 | 0001803498 | Blackstone Private Credit Fund | rg1b | 3 | 2 | 78.2 | text_says_preferred:3 |
 | 0001508655 | Sixth Street Specialty Lending, Inc. | ssxf | 9 | 7 | 49.6 | text_says_preferred:9 |
-| 0001634452 | AB Private Credit Investors Corp | abxf | 101 | 14 | 46.2 | text_says_preferred:101 |
+| 0001634452 | AB Private Credit Investors Corp | abxf | 101 | 14 | 46.2 | preferred_heading_only:100; text_says_preferred:1 |
 | 0001851322 | North Haven Private Income Fund LLC | rg2 | 12 | 5 | 24.0 | text_and_rate:9; text_says_preferred:3 |
 | 0001930087 | Golub Capital Private Credit Fund | rg1b | 3 | 3 | 10.8 | text_and_rate:2; text_says_preferred:1 |
 
-**Read of the samples below (agent; not a disposition).** 9 of 10 real: the filer says preferred or preference and the build publishes common (Ares McLaren 'Senior preference shares', Blue Owl PCF 'Series A Preferred Units', North Haven Vardiman 'Preferred Equity', AB venture rows under 'U.S. Preferred Stock'). 1 unclear: AB Avant 'Class A Units' listed under the filer's 'U.S. Preferred Stock' heading (the review's Swyft shape). AB is 101 of the 147 rows.
+**Read of the samples below (agent; not a disposition).** 9 of 10 real: the filer says preferred or preference and the build publishes common (Ares McLaren 'Senior preference shares', Blue Owl PCF 'Series A Preferred Units', North Haven Vardiman 'Preferred Equity', AB venture rows under 'U.S. Preferred Stock'). 1 unclear: AB Avant 'Class A Units' listed under the filer's 'U.S. Preferred Stock' heading (the review's Swyft shape). AB is 101 of the 147 rows. (Read on the 2026-10-18 run. Since 2026-10-19 heading-only rows, 100, all AB, are the weaker kind preferred_heading_only, so the AB venture rows and Avant leave the findings; 47 remain.)
 
-Sample of 10 flagged rows, seed 20261017:
+Sample of 10 flagged rows (finding kinds), seed 20261017:
 
 | # | fund / quarter | kind / basis | issuer | FV | published | printed figure | printed row or page line |
 |---|---|---|---|---:|---|---|---|
-| 1 | ARES CAPITAL CORP 2022-12-31 | text_and_rate / page | McLaren Group Limited | 26,200,000 | EQUITY_COMMON/COMMON_EQUITY pik=12.5 rate= | Senior preference shares | McLaren Group Limited / Automobile manufacturer and retailer / Senior preference shares / 12.50% PIK / 8/2021 / 8/2028 / 200,000 / 23.7 / 26.2 / (2)(6) |
-| 2 | AB Private Credit Investors ... 2023-03-31 | text_says_preferred / member | Degreed Inc | 375,220 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series C One | member: Degreed Inc - U.s.preferred Stock At Two Point Zero Three Percentage - Series C One ; (issuer's first words not found on the visible page) |
-| 3 | AB Private Credit Investors ... 2023-06-30 | text_says_preferred / member | Netskope Inc | 394,625 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series G | member: Netskope Inc - U.s.Preferred Stock At Two Point Zero Two Percentage - Series G ; (issuer's first words not found on the visible page) |
-| 4 | AB Private Credit Investors ... 2023-06-30 | text_says_preferred / member | Protoscale Rubrik Llc | 676,994 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Class B | member: Protoscale Rubrik Llc - U.s.Preferred Stock At Two Point Zero Two Percentage - Class B ; (issuer's first words not found on the visible page) |
-| 5 | AB Private Credit Investors ... 2024-03-31 | text_says_preferred / member | Concerto HealthAI Solutions LLC | 329,633 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series B-1 | Concerto HealthAI Solutions LLC(11) (12) / Series B-1 / Software & Tech Services / 12/23/2019 / 65,614 / 349,977 / 329,633 |
-| 6 | AB Private Credit Investors ... 2024-09-30 | text_says_preferred / member | Degreed, Inc. | 193,286 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series C-1 | Degreed, Inc. / Series C-1 / Software & Tech Services / 6/19/2019 / 43,819 / 278,541 / 193,286 |
-| 7 | AB Private Credit Investors ... 2026-03-31 | text_says_preferred / member | Avant NewCo Holdings, L.P. | 398,013 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Class A Units | Avant NewCo Holdings, L.P. / Class A Units / Digital Infrastructure & Services / 12/31/2025 / 375,804 / 375,804 / 398,013 |
-| 8 | AB Private Credit Investors ... 2026-03-31 | text_says_preferred / member | Datarobot, Inc. | 36,075 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series F | Datarobot, Inc. / Series F / Software & Tech Services / 10/27/2020 / 6,715 / 88,248 / 36,075 |
-| 9 | Blue Owl Credit Income Corp. 2023-03-31 | text_and_rate / page | PCF Holdco, LLC (dba PCF Insurance Services) | 5,254,000 | EQUITY_COMMON/COMMON_EQUITY pik=15.0 rate= |  | PCF Holdco, LLC (dba PCF Insurance Services)(16)(17)(19)(24) / Series A Preferred Units / 15.00% PIK / N/A / 5,254 / 5,252 / 5,254 / 0.1 / % |
-| 10 | North Haven Private Income F... 2024-06-30 | text_and_rate / page | Vardiman Black Holdings, LLC | 3,375,000 | EQUITY_COMMON/COMMON_EQUITY pik=6.0 rate= |  | Vardiman Black Holdings, LLC / (6) (14) / Preferred Equity / 6.00% PIK / 3/29/2024 / 5,298,893 / 3,456 / 3,375 / 0.11 |
+| 1 | ARES CAPITAL CORP 2022-09-30 | text_and_rate / page | McLaren Group Limited | 25,000,000 | EQUITY_COMMON/COMMON_EQUITY pik=12.5 rate= | Senior preference shares | McLaren Group Limited / Automobile manufacturer and retailer / Senior preference shares / 12.50% PIK / 8/2021 / 8/2028 / 200,000 / 23.7 / 25.0 / (2)(6) |
+| 2 | Sixth Street Specialty Lendi... 2025-06-30 | text_says_preferred / page | Lucidworks, Inc. | 650,000 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Class A Units (2,333,333 Units) Initial Acquisition Date 4/1... | Lucidworks, Inc. (11) / Series F Preferred Shares (199,054 shares) / 8/2/2019 / 800 / 650 / 0.0 / % |
+| 3 | Sixth Street Specialty Lendi... 2025-12-31 | text_says_preferred / page | Elysium BidCo Limited | 7,581,000 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Convertible Preference Shares (4,976,563 Shares) Initial Acq... | Elysium BidCo Limited (4)(11) / Convertible Preference Shares (4,976,563 Shares) / 12/11/2024 / 6,341 / 7,581 (GBP 5,636) / 0.5 / % |
+| 4 | Blue Owl Credit Income Corp. 2023-03-31 | text_and_rate / page | PCF Holdco, LLC (dba PCF Insurance Services) | 5,254,000 | EQUITY_COMMON/COMMON_EQUITY pik=15.0 rate= |  | PCF Holdco, LLC (dba PCF Insurance Services)(16)(17)(19)(24) / Series A Preferred Units / 15.00% PIK / N/A / 5,254 / 5,252 / 5,254 / 0.1 / % |
+| 5 | North Haven Private Income F... 2024-09-30 | text_and_rate / page | Vardiman Black Holdings, LLC | 3,109,000 | EQUITY_COMMON/COMMON_EQUITY pik=6.0 rate= |  | Vardiman Black Holdings, LLC / (6) (16) / Preferred Equity / 6.00% PIK / 3/29/2024 / 7,065,190 / 4,689 / 3,109 / 0.10 |
+| 6 | North Haven Private Income F... 2024-09-30 | text_and_rate / page | Eclipse Topco, Inc. | 3,035,000 | EQUITY_COMMON/COMMON_EQUITY pik=12.5 rate= |  | Eclipse Topco, Inc. / (6) (16) / Preferred Equity / 12.50% PIK / 9/5/2024 / 310 / 3,035 / 3,035 / 0.10 |
+| 7 | North Haven Private Income F... 2024-12-31 | text_and_rate / page | Eclipse Topco, Inc. | 3,036,000 | EQUITY_COMMON/COMMON_EQUITY pik=12.5 rate= |  | Eclipse Topco, Inc. / (6) (16) / Preferred Equity / 12.50% PIK / 09/05/2024 / 310 / 3,048 / 3,036 / 0.09 |
+| 8 | North Haven Private Income F... 2025-03-31 | text_and_rate / page | Eclipse Topco, Inc. | 3,083,000 | EQUITY_COMMON/COMMON_EQUITY pik=12.5 rate= |  | Eclipse Topco, Inc. / (6) (18) / Preferred Equity / 12.50% PIK / 9/5/2024 / 310 / 3,048 / 3,083 / 0.09 |
+| 9 | Sixth Street Lending Partner... 2025-03-31 | text_says_preferred / page | Elysium BidCo Limited | 49,697,000 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Convertible Preference Shares (38,503,125 units) Initial Acq... | Elysium BidCo Limited (4)(8)(10) / Convertible Preference Shares (38,503,125 units) / 12/11/2024 / 49,063 / 49,697 (GBP 38,502) / 1.2 / % |
+| 10 | Sixth Street Lending Partner... 2026-06-30 | text_says_preferred / page | Elysium BidCo Limited | 53,403,000 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Convertible Preference Shares (38,503,125 Shares) Initial Ac... | Elysium BidCo Limited (4)(9) / Convertible Preference Shares (38,503,125 units) / 12/11/2024 / 49,063 / 53,403 (GBP 40,236) / 1.2 / % |
+
+Sample of 10 flagged rows (weaker kind preferred_heading_only), seed 20261017:
+
+| # | fund / quarter | kind / basis | issuer | FV | published | printed figure | printed row or page line |
+|---|---|---|---|---:|---|---|---|
+| 1 | AB Private Credit Investors ... 2023-03-31 | preferred_heading_only / member | Heap Inc. | 148,758 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series D | member: Heap Inc.One - U.s.preferred Stock At Two Point Zero Three Percentage - Series D ; (issuer's first words not found on the visible page) |
+| 2 | AB Private Credit Investors ... 2023-03-31 | preferred_heading_only / member | Heap Inc. | 1,033,815 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series C | member: Heap Inc. - U.s.preferred Stock At Two Point Zero Three Percentage - Series C ; (issuer's first words not found on the visible page) |
+| 3 | AB Private Credit Investors ... 2023-03-31 | preferred_heading_only / member | Vectra AI Inc | 110,279 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series F | member: Vectra AI Inc - U.s.preferred Stock At Two Point Zero Three Percentage - Series F ; (issuer's first words not found on the visible page) |
+| 4 | AB Private Credit Investors ... 2023-06-30 | preferred_heading_only / member | Phenom People Inc. | 431,871 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series C | member: Phenom People Inc. - U.s.Preferred Stock At Two Point Zero Two Percentage - Series C ; (issuer's first words not found on the visible page) |
+| 5 | AB Private Credit Investors ... 2023-09-30 | preferred_heading_only / member | Heap Inc | 848,035 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series C | Heap, Inc.(11) / Series C / Software & Tech Services / 05/21/2019 / 189,617 / 696,352 / 848,035 |
+| 6 | AB Private Credit Investors ... 2023-09-30 | preferred_heading_only / member | Symplr Software Intermediate Holdings Inc. | 2,077,310 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series A | Symplr Software Intermediate Holdings, Inc.(11) / Series A / Software & Tech Services / 11/30/2018 / 1,196 / 1,160,532 / 2,077,310 |
+| 7 | AB Private Credit Investors ... 2023-12-31 | preferred_heading_only / member | Phenom People, Inc. | 395,180 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series C | Phenom People, Inc. (11) / Series C / Software & Tech Services / 01/08/2020 / 35,055 / 220,610 / 395,180 |
+| 8 | AB Private Credit Investors ... 2024-03-31 | preferred_heading_only / member | Concerto HealthAI Solutions LLC | 329,633 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series B-1 | Concerto HealthAI Solutions LLC(11) (12) / Series B-1 / Software & Tech Services / 12/23/2019 / 65,614 / 349,977 / 329,633 |
+| 9 | AB Private Credit Investors ... 2024-09-30 | preferred_heading_only / member | Concerto HealthAI Solutions LLC | 304,455 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series B-1 | Concerto HealthAI Solutions LLC / Series B-1 / Software & Tech Services / 12/23/2019 / 65,614 / 349,977 / 304,455 |
+| 10 | AB Private Credit Investors ... 2026-06-30 | preferred_heading_only / member | Datarobot, Inc. | 66,794 | EQUITY_COMMON/COMMON_EQUITY pik= rate= | Series E | Datarobot, Inc. / Series E / Software / 8/31/2019 / 38,190 / 289,278 / 66,794 |
+
+## Ledger wiring (2026-10-19)
+
+The five rules now produce findings through the shadow identity engine (`scripts/shadow_identity_engine.py`, `ensure_page_rules`), ledger names: `issuer_name_printed` (issuer_name_differs_from_page), `units_printed` (unit_count_differs_from_row_text), `pik_printed` (pik_printed_not_published), `industry_coverage` (industry_not_published), `preferred_printed` (preferred_published_as_common). Only these finding kinds raise: issuer_name_printed: begins_with_industry_label, begins_with_section_word, equals_industry_label, holds_category_path, not_the_printed_name, spacing_only; units_printed: labelled_count_differs, labelled_count_not_published, proxy_count_not_on_row; pik_printed: pik_printed_not_published, pik_value_mismatch; industry_coverage: filer_industry_not_mapped, no_industry_at_all; preferred_printed: text_and_rate, text_says_preferred. Weaker kinds and rule 1's blind-spot table go to `data/output/shadow/page_rules_informational.csv` and `page_rules_name_blind_spots.csv`; a fund-quarter with no tested row gets no ledger result.
+
+## Changelog entries (to append to docs/agent_changelog.md on merge)
+
+### 2026-10-17 - Five candidate page rules built and measured, not switched on
+- New `pipeline/candidate_rules.py` (issuer name, unit count, PIK, industry coverage, preferred-as-common): DuckDB over published rows joined to the page reader's `printed_row`. Measured on the 51 accepted sandboxes (`docs/investigations/v05_rule_candidates_2026-10-17.md`). 18 tests.
+
+### 2026-10-18 - Candidate page rules revised after the false-alarm review (D-207)
+- Rule 1 legal-form tails, blind-quarter suppression and blind-spot table; rule 2 issuer name stripped, printed count passes, `units_scale_unclear`; rule 3 page-only findings, `pik_member_text_only`; rule 4 finding < 0.80, warning < 0.90, Blackstone Private Real Estate Credit exempt with evidence; rule 5 text kinds only. Re-measured on 52 sandboxes; 26 tests.
+
+### 2026-10-19 - Page rules wired into the ledger (D-207, orchestrator under the owner's standing delegation)
+- Rule 1 passes a near spelling the fund prints for the same issuer (26North Ascend, Antares Clear Capital) and flags another group entity on the row again (MidCap Wildcat); rule 5 heading-only evidence is the weaker kind `preferred_heading_only`.
+- `scripts/shadow_identity_engine.py`: `ensure_page_rules` runs the rules fund by fund over the wrapped cohort into table `page_rule_rows` (one row per tested row); five identity rules `issuer_name_printed`, `units_printed`, `pik_printed`, `industry_coverage`, `preferred_printed` (tier tight) read it, so failures reach the shadow ledger, the review queue (blocker lane) and the findings ledger like spread_printed. A fund-quarter with no tested row gets no result. `scripts/shadow_validation_runner.py` calls it before the identity rules.
+- Informational, never in the ledger: `data/output/shadow/page_rules_informational.csv` (weaker kinds, rule-1 flags in untested fund-quarters), `page_rules_name_blind_spots.csv`; finding detail in `page_rule_findings.csv`.
+- Tests: test_candidate_rules.py, test_shadow_identity_rules.py (+3 engine tests), test_oracle_checks.py, shadow runner / review-queue tests. No production run; dry run on the v0.5 sandbox: 74 fund-quarters tested per rule, 4,317 / 305 / 114 / 790 / 15 finding rows.
 

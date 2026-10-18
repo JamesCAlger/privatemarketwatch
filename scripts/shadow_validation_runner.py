@@ -188,7 +188,9 @@ def main(argv: list[str] | None = None) -> int:
         parts.append(_CONS.format(name=r.name))
     logger.info("conservation: %d rules", len(cons.RULES))
 
-    # 2. identity (skips rules with absent columns)
+    # 2. identity (skips rules with absent columns). The page-reading rules need their tested-row
+    #    table first (informational output -> data/output/shadow/page_rules_*.csv).
+    idn.ensure_page_rules(con)
     cache: dict[str, set[str]] = {}
     n_idn = 0
     for r in idn.RULES:

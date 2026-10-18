@@ -42,7 +42,80 @@ def test_active_identity_rules_unchanged():
         "spread_printed",
         # added 2026-10-13 at the owner's request (decision D-149)
         "field_coverage_drop",
+        # page-reading rules of pipeline/candidate_rules.py, wired 2026-10-19 (D-207)
+        "issuer_name_printed", "units_printed", "pik_printed", "industry_coverage", "preferred_printed",
     }
+
+
+def _page_fixture(tmp_path):
+    """A tiny cohort: one fund, a quarter the page test can see and one it cannot."""
+    import duckdb
+    import pandas as pd
+    cik = "0000000001"
+
+    def row(rid, rd, issuer, member, category="LOAN", **kw):
+        return dict(source="bdc", cik=cik, report_date=rd, accession_number="ACC-" + rd, row_id=rid, issuer_name=issuer,
+                    bdc_investment_identifier=member, bdc_dimensions_raw=None, fair_value=10.0, asset_category=category,
+                    index_classification=None, accounting_record_class=None, shares_held=kw.get("shares"),
+                    shares_held_source=kw.get("shares_source"), pik_rate=None, interest_rate=None,
+                    instrument_description=None, extracted_industry=None, gics_sub_industry="Application Software",
+                    gics_sector=None, basis_spread=None)
+    holdings = [
+        # seen quarter: Apollo-style group prefix (finding), a clean row, an HPS units-scale row (weaker kind)
+        row("r1", "2025-12-31", "Gannett Gannett Holdings, LLC", "m1"),
+        row("r2", "2025-12-31", "Acme Corp", "m2"),
+        row("r3", "2025-12-31", "Wash & Wax Group LP", "m3", category="EQUITY_COMMON", shares=6312000.0,
+            shares_source="derived_proxy"),
+        # blind quarter: no printed rows at all, and a shape-only bad name
+        row("b1", "2025-09-30", "Gannett Gannett Holdings, LLC", "m1"),
+        row("b2", "2025-09-30", "Debt Investments Capital Markets Cliffwater, LLC", "m4"),
+    ]
+    status = [
+        dict(cik=cik, accession_number="ACC-2025-12-31", period_role="current", raw_id_lower="m1",
+             printed_row="Gannett Holdings, LLC | First Lien Secured Debt - Term Loan | S+511 | 44,195"),
+        dict(cik=cik, accession_number="ACC-2025-12-31", period_role="current", raw_id_lower="m2",
+             printed_row="Acme Corp | First Lien | S + 5.00% | 1,000"),
+        dict(cik=cik, accession_number="ACC-2025-12-31", period_role="current", raw_id_lower="m3",
+             printed_row="Wash & Wax Group LP (4)(20)(22) | 6,312 | 8,547 | 6,991"),
+    ]
+    con = duckdb.connect()
+    con.register("h", pd.DataFrame(holdings))
+    con.execute(f"COPY (SELECT * FROM h) TO '{(tmp_path / 'holdings.parquet').as_posix()}' (FORMAT PARQUET)")
+    pd.DataFrame(status).to_csv(tmp_path / "status.csv", index=False)
+    con.execute("CREATE TABLE wrapped(cik VARCHAR)")
+    con.execute("INSERT INTO wrapped VALUES (?)", [cik])
+    return con
+
+
+def test_page_rules_reach_the_ledger_only_where_they_can_test(tmp_path):
+    import pandas as pd
+    con = _page_fixture(tmp_path)
+    out_dir = tmp_path / "shadow"
+    engine.ensure_page_rules(con, holdings=tmp_path / "holdings.parquet", status=tmp_path / "status.csv", out_dir=out_dir)
+    cache: dict = {}
+    for rule in [r for r in engine.RULES if r.name in engine.PAGE_RULE_NAMES]:
+        assert engine.run_rule(con, rule, cache), rule.name
+    got = con.execute("""SELECT report_date, row_id, holds FROM result_issuer_name_printed ORDER BY 1, 2""").fetchall()
+    # the seen quarter is tested and fails on r1; the blind quarter gets no result at all
+    assert got == [("2025-12-31", "r1", False), ("2025-12-31", "r2", True), ("2025-12-31", "r3", True)]
+    # the units-scale row is tested but not a finding: units_printed passes there
+    assert con.execute("SELECT bool_and(holds) FROM result_units_printed").fetchone()[0] is True
+    info = pd.read_csv(out_dir / "page_rules_informational.csv")
+    assert {("units_printed", "units_scale_unclear"), ("issuer_name_printed", "begins_with_section_word")} <= set(
+        zip(info["rule_name"], info["kind"]))
+    blind = pd.read_csv(out_dir / "page_rules_name_blind_spots.csv", dtype={"report_date": str})
+    assert dict(zip(blind["report_date"], blind["page_test_suppressed"])) == {"2025-09-30": True, "2025-12-31": False}
+    findings = pd.read_csv(out_dir / "page_rule_findings.csv")
+    assert list(findings["row_id"]) == ["r1"]
+
+
+def test_page_rules_without_holdings_create_an_empty_table(tmp_path):
+    import duckdb
+    con = duckdb.connect()
+    con.execute("CREATE TABLE wrapped(cik VARCHAR)")
+    assert engine.ensure_page_rules(con, holdings=tmp_path / "absent.parquet", status=tmp_path / "absent.csv",
+                                    out_dir=tmp_path) == 0
+    assert con.execute(f"SELECT count(*) FROM {engine.PAGE_RULES_TABLE}").fetchone()[0] == 0
 
 
 def _run(rule_name, tables):

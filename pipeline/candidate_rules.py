@@ -115,6 +115,11 @@ def _macros(con: duckdb.DuckDBPyConnection) -> None:
     # the normalised name less trailing legal forms ('IMA Financial Group LLC' ~ 'IMA Financial Group')
     con.execute(f"""CREATE OR REPLACE MACRO cr_key(x) AS
         trim(regexp_replace(cr_norm(x), '{_LEGAL_TAIL}', ''))""")
+    # two keys are near spellings: spaces ignored, at most 2 edits or 10 pct of the longer
+    con.execute("""CREATE OR REPLACE MACRO cr_near(a, b) AS
+        length(a) > 0 AND length(b) > 0
+        AND levenshtein(replace(a, ' ', ''), replace(b, ' ', ''))
+            <= greatest(2, floor(0.1 * greatest(length(replace(a, ' ', '')), length(replace(b, ' ', '')))))""")
     # 'name' starts 'cell' at a word boundary (a footnote digit right after the name is allowed)
     con.execute("""CREATE OR REPLACE MACRO cr_prefix(cell, name) AS
         length(name) > 0 AND starts_with(cell, name)
@@ -141,24 +146,30 @@ def load_fund_rows(con: duckdb.DuckDBPyConnection, output_dir: Path, cik: str, t
     keyed by accession and member text: first the identifier, then the dimension path less its axis
     name (Fidelity-style members). Read-only.
     """
-    cik = str(cik).zfill(10)
     out = Path(output_dir)
-    holdings = (out / "private_markets_holdings.parquet").as_posix()
     status = out / "bdc_ixbrl_field_status.parquet"
-    have = {r[0] for r in con.execute(f"DESCRIBE SELECT * FROM read_parquet('{holdings}')").fetchall()}
+    return _load(con, f"read_parquet('{(out / 'private_markets_holdings.parquet').as_posix()}')",
+                 f"read_parquet('{status.as_posix()}')" if status.exists() else None, cik, table)
+
+
+def _load(con: duckdb.DuckDBPyConnection, holdings_sql: str, status_src: str | None, cik: str, table: str) -> str:
+    cik = str(cik).zfill(10)
+    have = {r[0] for r in con.execute(f"DESCRIBE SELECT * FROM {holdings_sql}").fetchall()}
     sel = ", ".join(
         (f"CAST(h.{c} AS {t}) AS {c}" if c in have else f"CAST(NULL AS {t}) AS {c}")
         for c, t in INPUT_COLUMNS.items() if c not in ("printed_row", "cik", "report_date"))
-    if status.exists():
-        status_sql = f"""SELECT accession_number, raw_id_lower, any_value(printed_row) AS printed_row, count(*) AS n
-                         FROM read_parquet('{status.as_posix()}')
+    dims = "h.bdc_dimensions_raw" if "bdc_dimensions_raw" in have else "CAST(NULL AS VARCHAR)"
+    if status_src:
+        status_sql = f"""SELECT CAST(accession_number AS VARCHAR) AS accession_number, CAST(raw_id_lower AS VARCHAR) AS raw_id_lower,
+                                any_value(CAST(printed_row AS VARCHAR)) AS printed_row, count(*) AS n
+                         FROM {status_src}
                          WHERE period_role = 'current' AND lpad(CAST(cik AS VARCHAR), 10, '0') = '{cik}'
                          GROUP BY 1, 2"""
     else:
         status_sql = ("SELECT CAST(NULL AS VARCHAR) AS accession_number, CAST(NULL AS VARCHAR) AS raw_id_lower, "
                       "CAST(NULL AS VARCHAR) AS printed_row, 0 AS n WHERE false")
     con.execute(f"""CREATE OR REPLACE TABLE {table} AS
-        WITH h AS (SELECT * FROM read_parquet('{holdings}')
+        WITH h AS (SELECT * FROM {holdings_sql}
                    WHERE lpad(CAST(cik AS VARCHAR), 10, '0') = '{cik}' AND {PUBLISHED_WHERE}),
         s AS ({status_sql})
         SELECT '{cik}' AS cik, CAST(h.report_date AS VARCHAR)[:10] AS report_date, {sel},
@@ -166,10 +177,10 @@ def load_fund_rows(con: duckdb.DuckDBPyConnection, output_dir: Path, cik: str, t
                          WHEN s2.n = 1 AND nullif(trim(s2.printed_row), '') IS NOT NULL THEN s2.printed_row END
                     AS VARCHAR) AS printed_row
         FROM h
-        LEFT JOIN s s1 ON s1.accession_number = h.accession_number
+        LEFT JOIN s s1 ON s1.accession_number = CAST(h.accession_number AS VARCHAR)
              AND s1.raw_id_lower = lower(trim(CAST(h.bdc_investment_identifier AS VARCHAR)))
-        LEFT JOIN s s2 ON s2.accession_number = h.accession_number
-             AND s2.raw_id_lower = lower(trim(regexp_replace(regexp_replace(CAST(h.bdc_dimensions_raw AS VARCHAR),
+        LEFT JOIN s s2 ON s2.accession_number = CAST(h.accession_number AS VARCHAR)
+             AND s2.raw_id_lower = lower(trim(regexp_replace(regexp_replace(CAST({dims} AS VARCHAR),
                  '^[^=]*=', ''), '[ ]+', ' ', 'g')))""")
     _macros(con)
     return table
@@ -210,8 +221,9 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
     tranche printed without its company) is not comparable. Lead cells that are industry labels, or
     that the same filing prints in front of issuers with three or more different first words
     (a heading column), are not name cells. Names are also compared less trailing legal forms
-    (LLC, Inc., Ltd. ...), and a published name printed as a name cell on another row of the same
-    filing passes. In a fund-quarter where NAME_BLIND_LIMIT or more of the rows have no comparable
+    (LLC, Inc., Ltd. ...). A published name the fund prints as a name somewhere in its filings passes
+    when this row prints a near spelling of it (same issuer spelt two ways); a different group entity
+    printed on the row still flags (MidCap Wildcat, 2026-10-19 re-sample). In a fund-quarter where NAME_BLIND_LIMIT or more of the rows have no comparable
     printed name, page-basis flags are not raised; ``result.attrs['blind_spots']`` lists every
     fund-quarter's untested share (D-207).
 
@@ -268,11 +280,14 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
              WHERE comparable AND NOT coalesce(direct_ok, false)) n
         JOIN _cr_own l ON length(l.label) > 0 AND starts_with(cr_norm(n.cell), l.label || ' ')
         WHERE cr_prefix(substr(cr_norm(n.cell), length(l.label) + 2), n.nname)""")
-    # every name cell the filing prints, by key: a published name printed as a name on another row of
-    # the same filing passes (a page spelling variant on one row, a misjoined printed row)
-    con.execute("""CREATE OR REPLACE TEMP TABLE _cr_filing_names AS
-        SELECT DISTINCT accession_number, cr_key(c) AS key
-        FROM (SELECT accession_number, unnest(name_cells) AS c FROM _cr_names WHERE comparable)
+    # every name cell the fund's filings print, by key. A published name passes when the fund prints
+    # it as a name somewhere (any quarter) AND this row's printed name is a near spelling of it: the
+    # same issuer spelt two ways (26North 'Ascend Partner' / 'Ascend Partners', Antares 'Clear Capital'
+    # / 'ClearCapital'). A different entity of the group printed on this row (MidCap 'Wildcat Parent
+    # LP' on the equity row of 'Wildcat BuyerCo, Inc.') is not a near spelling and still flags.
+    con.execute("""CREATE OR REPLACE TEMP TABLE _cr_fund_names AS
+        SELECT DISTINCT cik, cr_key(c) AS key
+        FROM (SELECT cik, unnest(name_cells) AS c FROM _cr_names WHERE comparable)
         WHERE length(cr_key(c)) > 0""")
     # per fund-quarter: how much of it the page test can see
     con.execute(f"""CREATE OR REPLACE TEMP TABLE _cr_blind AS
@@ -296,9 +311,11 @@ def issuer_name_differs_from_page(con: duckdb.DuckDBPyConnection, table: str = "
                    (length(cr_norm(extracted_industry)) >= 4
                     AND starts_with(nname, cr_norm(extracted_industry) || ' ')) AS own_label_start,
                    regexp_matches(issuer_name, '{_CATEGORY_WORDS}') AS category_words,
-                   (f.key IS NOT NULL) AS elsewhere_ok, coalesce(bl.page_test_suppressed, false) AS suppressed
+                   (f.key IS NOT NULL AND coalesce(list_bool_or(list_transform(coalesce(n.name_cells, []),
+                        c -> cr_near(cr_key(c), cr_key(n.issuer_name)))), false)) AS elsewhere_ok,
+                   coalesce(bl.page_test_suppressed, false) AS suppressed
             FROM _cr_names n LEFT JOIN _cr_after_label a ON a.row_id = n.row_id AND a.accession_number = n.accession_number
-            LEFT JOIN _cr_filing_names f ON f.accession_number = n.accession_number AND f.key = cr_key(n.issuer_name)
+            LEFT JOIN _cr_fund_names f ON f.cik = n.cik AND f.key = cr_key(n.issuer_name)
             LEFT JOIN _cr_blind bl ON bl.cik = n.cik AND bl.report_date = n.report_date),
         k AS (
             SELECT *, CASE
@@ -540,6 +557,11 @@ def industry_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand_ro
 # ---------------------------------------------------------------------------------------------
 
 _PREFERRED_WORD = r"(?i)\b(pref|pref\.|preferred|prefered|preffered|preference)\b"
+# A section heading that names a class for a whole block: a geography before 'preferred stock', or
+# 'preferred stock/equity' followed by its percent of net assets (written out or as a figure).
+_PREFERRED_HEADING = (r"(?i)(\b(u\.?\s?s\.?|non-u\.?\s?s\.?|us)\s*preferred\s+(stock|equity)"
+                      r"(\s*-\s*[0-9.]+\s*%|\s+at\s+[a-z ]*percentage)?"
+                      r"|\bpreferred\s+(stock|equity)\s*-\s*[0-9.]+\s*%)")
 
 
 def preferred_published_as_common(con: duckdb.DuckDBPyConnection, table: str = "cand_rows") -> pd.DataFrame:
@@ -552,6 +574,11 @@ def preferred_published_as_common(con: duckdb.DuckDBPyConnection, table: str = "
 
     The issuer's own name is removed from the text first ('Preferred Freezer Services'). Warrants
     are left out (a warrant to buy preferred is not preferred), and so is text that also says common.
+
+    kind ``preferred_heading_only`` (weaker, not a finding; ruling 2026-10-19 under D-207): the only
+    'preferred' is a section heading carried in the member ('U.S. Preferred Stock - 1.30 %', 'U.s.preferred
+    Stock At Two Point Zero Three Percentage'), while the instrument and the printed row do not say it
+    (AB 'Avant NewCo Holdings, L.P. / Class A Units', 'Swyft Parent Holdings LP / LP Interests').
     """
     sql = f"""
         WITH b AS (
@@ -562,11 +589,14 @@ def preferred_published_as_common(con: duckdb.DuckDBPyConnection, table: str = "
             WHERE (asset_category = 'EQUITY_COMMON' OR index_classification = 'COMMON_EQUITY')),
         k AS (
             SELECT *, regexp_matches(txt, '{_PREFERRED_WORD}') AND NOT regexp_matches(txt, '(?i)\\bcommon\\b') AS says_pref,
+                   -- the same text with section headings taken out
+                   regexp_matches(regexp_replace(txt, '{_PREFERRED_HEADING}', ' ', 'g'), '{_PREFERRED_WORD}') AS row_says_pref,
                    coalesce(pik_rate, 0) > 0 OR coalesce(interest_rate, 0) > 0 AS has_rate,
                    regexp_matches(txt, '(?i)\\bwarrants?\\b') AS warrant
             FROM b),
         z AS (
             SELECT *, CASE WHEN warrant THEN NULL
+                           WHEN says_pref AND NOT row_says_pref THEN 'preferred_heading_only'
                            WHEN says_pref AND has_rate THEN 'text_and_rate'
                            WHEN says_pref THEN 'text_says_preferred'
                       END AS kind_
@@ -588,3 +618,112 @@ RULES = {
     "industry_not_published": industry_not_published,
     "preferred_published_as_common": preferred_published_as_common,
 }
+
+
+# ---------------------------------------------------------------------------------------------
+# Ledger wiring (2026-10-19, D-207): stable rule names, finding kinds, tested rows
+# ---------------------------------------------------------------------------------------------
+
+# The ledger rule_name of each rule (scripts/shadow_identity_engine.py).
+LEDGER_NAMES = {
+    "issuer_name_differs_from_page": "issuer_name_printed",
+    "unit_count_differs_from_row_text": "units_printed",
+    "pik_printed_not_published": "pik_printed",
+    "industry_not_published": "industry_coverage",
+    "preferred_published_as_common": "preferred_printed",
+}
+# Kinds that are findings; every other kind a rule emits is weaker evidence and goes to the
+# informational artifact only (re-sample 2026-10-19: the weaker kinds were about half right).
+FINDING_KINDS = {
+    "issuer_name_differs_from_page": {"not_the_printed_name", "spacing_only", "equals_industry_label",
+                                      "begins_with_section_word", "begins_with_industry_label",
+                                      "holds_category_path"},
+    "unit_count_differs_from_row_text": {"proxy_count_not_on_row", "labelled_count_differs",
+                                         "labelled_count_not_published"},
+    "pik_printed_not_published": {"pik_printed_not_published", "pik_value_mismatch"},
+    "industry_not_published": {"no_industry_at_all", "filer_industry_not_mapped"},
+    "preferred_published_as_common": {"text_says_preferred", "text_and_rate"},
+}
+
+
+def tested_rows_sql(rule: str, table: str = "cand_rows") -> str:
+    """The rows a rule can test: the denominator of its ledger result. A fund-quarter with no tested
+    row gets no ledger result, so a rule never fires (or passes) where it cannot look.
+
+    issuer_name_printed: rows with an issuer name in fund-quarters below NAME_BLIND_LIMIT untested
+                         (needs the rule to have run: reads _cr_blind).
+    units_printed:       equity rows with a printed row or a member that labels a count.
+    pik_printed:         rows with a printed row (findings are raised on the page only).
+    industry_coverage:   funded rows of non-exempt fund-quarters with INDUSTRY_MIN_ROWS or more.
+    preferred_printed:   rows classed common equity with any instrument, member or printed text.
+    """
+    if rule == "issuer_name_differs_from_page":
+        return f"""SELECT t.cik, t.report_date, t.row_id FROM {table} t
+                   JOIN _cr_blind bl ON bl.cik = t.cik AND bl.report_date = t.report_date
+                   WHERE nullif(trim(t.issuer_name), '') IS NOT NULL AND NOT bl.page_test_suppressed"""
+    if rule == "unit_count_differs_from_row_text":
+        return f"""SELECT cik, report_date, row_id FROM {table}
+                   WHERE asset_category LIKE 'EQUITY%'
+                     AND (printed_row IS NOT NULL OR regexp_matches(coalesce(bdc_investment_identifier, ''), '{_LABELLED_COUNT}'))"""
+    if rule == "pik_printed_not_published":
+        return f"SELECT cik, report_date, row_id FROM {table} WHERE printed_row IS NOT NULL"
+    if rule == "industry_not_published":
+        return f"""SELECT cik, report_date, row_id FROM {table}
+                   WHERE {_FUNDED} AND cik NOT IN ({_exempt_sql(None)})
+                     AND (cik, report_date) IN (SELECT cik, report_date FROM {table} WHERE {_FUNDED}
+                                                GROUP BY 1, 2 HAVING count(*) >= {INDUSTRY_MIN_ROWS})"""
+    if rule == "preferred_published_as_common":
+        return f"""SELECT cik, report_date, row_id FROM {table}
+                   WHERE (asset_category = 'EQUITY_COMMON' OR index_classification = 'COMMON_EQUITY')
+                     AND coalesce(instrument_description, bdc_investment_identifier, printed_row) IS NOT NULL"""
+    raise KeyError(rule)
+
+
+LEDGER_ROW_COLUMNS = ["rule_name", "cik", "report_date", "row_id", "finding", "kind"]
+
+
+def ledger_rows(con: duckdb.DuckDBPyConnection, table: str = "cand_rows") -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Run the five rules on ``table`` and return (tested, informational, blind_spots).
+
+    tested: one row per tested row and rule (LEDGER_ROW_COLUMNS), ``finding`` 1.0 when a finding kind
+    flags it, else 0.0. A finding outside the tested rows is dropped to informational (it cannot
+    happen by construction; kept as a guard). informational: every flagged row of a weaker kind, plus
+    rule-1 flags in fund-quarters it does not test (OUTPUT_COLUMNS + rule_name). blind_spots: rule 1's
+    per fund-quarter table.
+    """
+    tested_parts, info_parts = [], []
+    blind = pd.DataFrame()
+    for rule, fn in RULES.items():
+        flagged = fn(con, table)
+        if rule == "issuer_name_differs_from_page":
+            blind = flagged.attrs.get("blind_spots", pd.DataFrame())
+        flagged.attrs.clear()  # a frame in attrs breaks pd.concat
+        key =["cik", "report_date", "row_id"]
+        tested = con.execute(tested_rows_sql(rule, table)).fetchdf().astype("string").drop_duplicates(key)
+        flagged = flagged.astype({c: "string" for c in key})
+        flagged = flagged.merge(tested.assign(_tested=True), on=key, how="left")
+        is_finding = flagged["kind"].isin(FINDING_KINDS[rule]) & flagged["_tested"].eq(True)
+        info = flagged[~is_finding].drop(columns="_tested")
+        info["rule_name"] = LEDGER_NAMES[rule]
+        info_parts.append(info)
+        findings = flagged.loc[is_finding, key + ["kind"]].drop_duplicates(key)
+        out = tested.merge(findings, on=key, how="left")
+        out["finding"] = out["kind"].notna().astype(float)
+        out["rule_name"] = LEDGER_NAMES[rule]
+        tested_parts.append(out[LEDGER_ROW_COLUMNS])
+    tested_all = pd.concat(tested_parts, ignore_index=True) if tested_parts else pd.DataFrame(columns=LEDGER_ROW_COLUMNS)
+    info_parts = [p for p in info_parts if not p.empty]
+    info_all = pd.concat(info_parts, ignore_index=True) if info_parts else pd.DataFrame(columns=OUTPUT_COLUMNS + ["rule_name"])
+    return tested_all, info_all, blind
+
+
+def load_rows(con: duckdb.DuckDBPyConnection, holdings_path: Path, status_path: Path | None, cik: str,
+              table: str = "cand_rows") -> str:
+    """load_fund_rows for explicit files: unified holdings (parquet or csv) and the page reader's
+    field status (parquet or csv, may be absent). Used by the shadow identity engine on production."""
+    def src(p: Path) -> str:
+        p = Path(p)
+        return (f"read_parquet('{p.as_posix()}')" if p.suffix == ".parquet"
+                else f"read_csv('{p.as_posix()}', header=true, all_varchar=true, sample_size=-1)")
+    return _load(con, src(holdings_path), src(status_path) if status_path and Path(status_path).exists() else None,
+                 cik, table)

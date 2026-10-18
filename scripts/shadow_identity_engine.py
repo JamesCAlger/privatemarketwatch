@@ -183,6 +183,70 @@ def field_coverage_sql(unified_sql: str, cik_filter: str = "TRUE") -> str:
     )"""
 
 
+PAGE_RULES_TABLE = "page_rule_rows"
+PAGE_RULE_NAMES = ("issuer_name_printed", "units_printed", "pik_printed", "industry_coverage", "preferred_printed")
+
+
+def ensure_page_rules(con: duckdb.DuckDBPyConnection, holdings: Path | None = None, status: Path | None = None,
+                      out_dir: Path | None = None) -> int:
+    """Run the five page-reading rules of pipeline/candidate_rules.py (D-207, wired 2026-10-19) fund by
+    fund over the cohort in table ``wrapped`` and materialise PAGE_RULES_TABLE: one row per tested
+    row and rule, ``finding`` 1 or 0. The identity rules below read it; a fund-quarter with no tested
+    row has no rows there, so it gets no ledger result.
+
+    Weaker kinds (units_scale_unclear, pik_member_text_only, preferred_heading_only, rule-1 flags in
+    fund-quarters it does not test) and rule 1's blind-spot table are informational: they go to
+    ``out_dir`` (page_rules_informational.csv, page_rules_name_blind_spots.csv), never to the ledger.
+    The finding rows with their published and printed values go to page_rule_findings.csv.
+    Always creates the table (empty when the inputs are absent). Returns the tested-row count.
+    """
+    from pipeline import candidate_rules as cr
+    import pandas as pd
+
+    holdings = holdings or (UNIFIED_HOLDINGS_PARQUET_FILE if UNIFIED_HOLDINGS_PARQUET_FILE.exists() else UNIFIED_HOLDINGS_FILE)
+    status = status or BDC_IXBRL_FIELD_STATUS_FILE
+    out_dir = out_dir or SHADOW_DIR
+    con.execute(f"""CREATE OR REPLACE TABLE {PAGE_RULES_TABLE} (rule_name VARCHAR, cik VARCHAR, report_date VARCHAR,
+                    row_id VARCHAR, finding DOUBLE, kind VARCHAR)""")
+    if not Path(holdings).exists():
+        logger.info("  page rules: no unified holdings at %s; skipped", holdings)
+        return 0
+    ciks = [r[0] for r in con.execute("SELECT cik FROM wrapped ORDER BY 1").fetchall()]
+    tested_parts, info_parts, blind_parts, finding_parts = [], [], [], []
+    for cik in ciks:
+        cr.load_rows(con, Path(holdings), Path(status), cik, table="_page_rows")
+        if not con.execute("SELECT count(*) FROM _page_rows").fetchone()[0]:
+            continue
+        tested, info, blind = cr.ledger_rows(con, "_page_rows")
+        tested_parts.append(tested)
+        info_parts.append(info)
+        blind_parts.append(blind)
+        hit = tested[tested["finding"] > 0][["rule_name", "cik", "report_date", "row_id", "kind"]]
+        if not hit.empty:
+            detail = con.execute("""SELECT cik, report_date, row_id, accession_number, issuer_name, fair_value,
+                                           substr(printed_row, 1, 300) AS printed_row FROM _page_rows""").fetchdf()
+            finding_parts.append(hit.merge(detail.astype({"cik": "string", "report_date": "string", "row_id": "string"}),
+                                           on=["cik", "report_date", "row_id"], how="left"))
+    con.execute("DROP TABLE IF EXISTS _page_rows")
+    if tested_parts:
+        rows = pd.concat(tested_parts, ignore_index=True)[cr.LEDGER_ROW_COLUMNS]
+        con.register("_page_tested", rows)
+        con.execute(f"INSERT INTO {PAGE_RULES_TABLE} SELECT rule_name, cik, report_date, row_id, finding, kind FROM _page_tested")
+        con.unregister("_page_tested")
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for name, parts in (("page_rules_informational.csv", info_parts), ("page_rules_name_blind_spots.csv", blind_parts),
+                        ("page_rule_findings.csv", finding_parts)):
+        frame = pd.concat([p for p in parts if not p.empty], ignore_index=True) if any(not p.empty for p in parts) else pd.DataFrame()
+        for col in ("printed_row", "member", "instrument_description"):
+            if col in frame:
+                frame[col] = frame[col].astype("string").str.slice(0, 300)
+        frame.to_csv(out_dir / name, index=False)
+    n, n_find = con.execute(f"SELECT count(*), coalesce(sum(finding), 0) FROM {PAGE_RULES_TABLE}").fetchone()
+    logger.info("  page rules: %d tested rows, %d findings over %d funds", n, int(n_find), len(ciks))
+    return n
+
+
 def _named_reference_column_ciks() -> list[str]:
     from pipeline.source_encodings import load_encodings
     return sorted(cik for cik, encoding in load_encodings().items() if encoding.get("reference_rate_columns"))
@@ -209,6 +273,11 @@ SOURCES = {
                         "CAST(cik AS VARCHAR)", "CAST(report_date AS VARCHAR)",
                         "entity_name"),
 }
+# The page-reading candidate rules (D-207): one source per rule over the table ensure_page_rules builds.
+for _page_rule in PAGE_RULE_NAMES:
+    SOURCES["page_" + _page_rule] = (
+        f"(SELECT * FROM {PAGE_RULES_TABLE} WHERE rule_name = '{_page_rule}')", "TRUE",
+        "cik", "report_date", "row_id")
 
 
 @dataclass(frozen=True)
@@ -321,6 +390,21 @@ RULES: list[IdentityRule] = [
         tol_note="share of rows carrying a field falls less than 20 points against the fund's previous quarter",
     ),
 ]
+# Five page-reading rules (pipeline/candidate_rules.py), wired 2026-10-19 after two independent
+# false-alarm samples (30/30 real on rules 1-4, 29/30 on rule 5; v05_rule_candidates_falsealarm_2026-10-18.md).
+# One row per tested row; a row holds when no finding kind flags it. Weaker kinds never reach here.
+_PAGE_NOTES = {
+    "issuer_name_printed": "published issuer is the company printed on the row (or a near spelling the fund prints)",
+    "units_printed": "equity unit count equals the count printed on the row or labelled in the member",
+    "pik_printed": "a PIK figure printed on the row is published as pik_rate",
+    "industry_coverage": "a fund-quarter's funded rows carry gics_sub_industry (finding below 0.80 coverage)",
+    "preferred_printed": "a row the filer calls preferred on the row is not published as common equity",
+}
+RULES += [
+    IdentityRule(name=_name, table="page_" + _name, needed_cols=("finding",),
+                 holds_sql="finding = 0", residual_sql="finding", tol_note=_PAGE_NOTES[_name])
+    for _name in PAGE_RULE_NAMES
+]
 
 
 def wrapped_ciks() -> list[str]:
@@ -393,6 +477,7 @@ def main(argv: list[str] | None = None) -> int:
     con.execute("CREATE TABLE wrapped(cik VARCHAR)")
     con.executemany("INSERT INTO wrapped VALUES (?)", [(c,) for c in ciks])
     logger.info("identity engine: cohort %d CIKs, %d rules", len(ciks), len(RULES))
+    ensure_page_rules(con)
 
     cols_cache: dict[str, set[str]] = {}
     ran = [r for r in RULES if run_rule(con, r, cols_cache)]
