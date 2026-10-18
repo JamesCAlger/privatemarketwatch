@@ -725,13 +725,24 @@ def _normalize_mixed_decimals_monetary_facts(
     facts_by_ctx: dict[str, dict[str, Any]],
     monetary_facts_stored: list[tuple[str, str, int, str]],
     prov_by_ctx: dict[str, dict[str, dict]] | None = None,
+    whole_dollar: bool = False,
 ) -> None:
     """Normalize rare mixed-decimals monetary outliers in-place.
 
     Some filings tag most monetary investment facts at one decimals scale and
     a small number at a coarser scale.  When the outlier value is wildly larger
     than the dominant scale, align it with the dominant decimals.
+
+    ``whole_dollar`` (wrapper ``source_encodings.whole_dollar_scale_filings``): the
+    filing prints its schedule in whole dollars, so every investment fact tagged
+    decimals <= -3 carries a scale it should not have (TCW Direct Lending VIII,
+    10-Q 2023-03-31: about half the cost, fair value and principal facts). Each
+    such fact is read at decimals 0 whatever its size; the dominance and size
+    guards below are for filings nobody has read and do not apply.
     """
+    if whole_dollar:
+        _rescale_to_dominant(facts_by_ctx, monetary_facts_stored, prov_by_ctx, 0, None)
+        return
     if len(monetary_facts_stored) < 5:
         return
 
@@ -756,15 +767,29 @@ def _normalize_mixed_decimals_monetary_facts(
     )
     if median_dominant <= 0:
         return
+    _rescale_to_dominant(facts_by_ctx, monetary_facts_stored, prov_by_ctx, dominant_dec, median_dominant)
 
+
+def _rescale_to_dominant(
+    facts_by_ctx: dict[str, dict[str, Any]],
+    monetary_facts_stored: list[tuple[str, str, int, str]],
+    prov_by_ctx: dict[str, dict[str, dict]] | None,
+    dominant_dec: int,
+    median_dominant: float | None,
+) -> None:
+    """Align facts 3+ decimals away from ``dominant_dec``; with a median, only those over 100x it.
+
+    Without a median (whole-dollar filings) only coarser facts (decimals -3 or less) are read
+    down; a finer fact is never multiplied up.
+    """
     for ctx_ref, col, fact_dec, local in monetary_facts_stored:
         diff = fact_dec - dominant_dec
-        if abs(diff) < 3:
+        if abs(diff) < 3 or (median_dominant is None and diff > 0):
             continue
         val = facts_by_ctx[ctx_ref].get(col)
         if val is None or not isinstance(val, (int, float)):
             continue
-        if abs(val) / median_dominant > 100:
+        if median_dominant is None or abs(val) / median_dominant > 100:
             corrected = val * (10 ** diff)
             facts_by_ctx[ctx_ref][col] = corrected
             logger.debug(
@@ -890,6 +915,7 @@ def _extract_investment_facts(
     contexts: dict[str, dict],
     fair_value_concepts: frozenset[str] = frozenset(),
     margin_rate_tags: bool = False,
+    whole_dollar: bool = False,
 ) -> list[dict[str, Any]]:
     """Extract investment-level XBRL facts and group by context.
 
@@ -990,7 +1016,8 @@ def _extract_investment_facts(
     #   3. Decimals diff >= 3 (1000x+ scale difference)
     #   4. Outlier value must be > 100x the median of dominant-decimals values
     #      (prevents false corrections when decimals differ only in precision)
-    _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored, prov_by_ctx)
+    _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored, prov_by_ctx,
+                                             whole_dollar=whole_dollar)
     if margin_rate_tags:
         from pipeline.rate_tag_reading import settle
         settle(facts_by_ctx, prov_by_ctx, mode=margin_rate_tags if isinstance(margin_rate_tags, str) else "coupon_with_margins")
@@ -1089,8 +1116,10 @@ def _parse_single_filing(
 
     contexts = parse_filing_contexts(tree, filing_meta)
     from pipeline.rate_tag_reading import reading as rate_tag_reading
+    from pipeline.source_encodings import whole_dollar_scale_filing
     facts = _extract_investment_facts(tree, contexts, fair_value_aliases(filing_meta.get("cik", "")),
-                                      margin_rate_tags=rate_tag_reading(filing_meta.get("cik", "")))
+                                      margin_rate_tags=rate_tag_reading(filing_meta.get("cik", "")),
+                                      whole_dollar=whole_dollar_scale_filing(filing_meta))
     # A value the printed row shows and the tags lack, listed in the filer's wrapper.
     from pipeline.page_labelled_contexts import fill_untagged_values
     fill_untagged_values({rec["_context_id"]: rec for rec in facts}, filing_meta)

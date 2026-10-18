@@ -185,3 +185,4 @@ Manulife 0001988280.
 | 2026-10-17 | 0001965934 Overland Advantage | ovye | PASS (after owner rulings D-202) | 30 findings, 19 outstanding, 19 proposed; 9/9 quarters tie | D-203 |
 | 2026-10-17 | 0001766037 NMF SLF I | nmyd | PASS | 87 findings, 59 outstanding, 59 proposed; 14/14 quarters tie (5 off before); sample 0/20 errors; NMY-R1 re-verifier fix | D-204 |
 | 2026-10-17 | 0002008748 Lord Abbett Private Credit | layf | INCOMPLETE (investigation COMPLETE) | 29 findings, 19 outstanding, 18 proposed; D06 confirmed error; 8/8 quarters tie (2026-06-30 was 1,437.6M under); sample 0/20 | D-205 |
+| 2026-10-18 | 0001825265 TCW Direct Lending VIII | t8yf | BLOCKED on owner (OVR-T8Y-R2; F27 x3 insufficient evidence); not accepted | 27 findings, 20 outstanding, 13 proposed, 7 parked; 13/14 quarters tie (2023-09-30 92.4M untagged rows); sample 2/20 errors | D-206 |

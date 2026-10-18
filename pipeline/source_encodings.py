@@ -32,7 +32,8 @@ def load_encodings(wrapper_directory=None):
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
-                'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values'}:
+                'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
+                'whole_dollar_scale_filings','net_assets_concepts'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -56,6 +57,10 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('pct_tagged_as_ratio lists accession numbers: '+str(path))
             if key=='bracketed_unsigned_values' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
                 raise ValueError('bracketed_unsigned_values lists accession numbers: '+str(path))
+            if key=='net_assets_concepts' and any(not re.fullmatch('[A-Za-z][A-Za-z0-9]*',v) for v in values):
+                raise ValueError('A net-assets concept is one local name, no prefix: '+str(path))
+            if key=='whole_dollar_scale_filings' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
+                raise ValueError('whole_dollar_scale_filings lists accession numbers: '+str(path))
             if key=='par_tagged_as_units' and any(v not in ('rows_near_cost','rows_within_twice_cost','rated_rows_near_cost') and not _ACCESSION_RE.fullmatch(v) for v in values):
                 raise ValueError('par_tagged_as_units lists accession numbers or a row mode: '+str(path))
             if key=='rate_only_contexts' and values!=['adopt_adjacent']:
@@ -162,6 +167,26 @@ def industry_columns(cik,encodings=None):
     configured=load_encodings() if encodings is None else encodings
     encoding=configured.get(re.sub(r'[^0-9]','',str(cik or '')).zfill(10),{})
     return frozenset(' '.join(v.lower().split()) for v in encoding.get('industry_columns',[]))
+
+
+_WHOLE_DOLLAR_CACHE={}
+
+
+def whole_dollar_scale_filing(filing_meta,encodings=None):
+    """True for a filing listed under the filer's whole_dollar_scale_filings: its schedule is printed in
+    whole dollars and part of its facts carry decimals -3 (a scale they should not have), so the parser
+    reads every investment fact at decimals 0 (pipeline.bdc_filings._normalize_mixed_decimals_monetary_facts).
+    TCW Direct Lending VIII, 10-Q 2023-03-31. Off for every filing not listed."""
+    cik=re.sub(r'[^0-9]','',str((filing_meta or {}).get('cik','') or '')).zfill(10)
+    accession=str((filing_meta or {}).get('accession_number','') or '').strip()
+    if encodings is None:
+        if 'listed' not in _WHOLE_DOLLAR_CACHE:
+            _WHOLE_DOLLAR_CACHE['listed']={c:frozenset(e['whole_dollar_scale_filings']) for c,e in load_encodings().items()
+                                           if e.get('whole_dollar_scale_filings')}
+        listed=_WHOLE_DOLLAR_CACHE['listed']
+    else:
+        listed={c:frozenset(e['whole_dollar_scale_filings']) for c,e in encodings.items() if e.get('whole_dollar_scale_filings')}
+    return accession in listed.get(cik,frozenset())
 
 
 def section_total_label_first(cik,encodings=None):

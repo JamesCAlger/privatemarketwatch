@@ -97,9 +97,9 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^\\s*(?:Debt|Equity)\\s+Investments,\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)+(.+?),?\\s+Acquisition\\s+Date\\s+",
-    "hierarchy_instrument_re": "(?i)\\bAcquisition\\s+Date\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s+(.+?)(?:\\s*[^A-Za-z0-9\\s/,]\\s*\\d|\\s+Net\\s+Assets\\b|\\s+%\\s+of\\s+Net\\s+Assets\\b|$)",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt|Equity)\\s+Investments,\\s+.*\\bAcquisition\\s+Date\\s+.*\\b(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Last\\s+Out|Take\\s+Back|Warrants?|Common\\s+(?:Units|Stock)|Preferred\\s+(?:Units|Stock|Equity)|Equity)\\b')",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Debt|Equity)\\s+Investments,\\s+)+(?:(?:(?:MSD_INDUSTRY_LABELS)|Housewares\\s+&\\s+Specialties|Retailing)(?:\\s*,\\s*|\\s+))*(.+?),?\\s+Acquisition\\s+Date\\s+",
+    "hierarchy_instrument_re": "(?i)\\bAcquisition\\s+Date\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?),?\\s+(.+?)(?:\\s*[^A-Za-z0-9\\s/,.]\\s*\\d|\\s+Net\\s+Assets\\b|\\s+%\\s+of\\s+Net\\s+Assets\\b|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt|Equity)\\s+Investments,\\s+.*\\bAcquisition\\s+Date\\s+.*\\b(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Last\\s+Out|Take\\s+Back|Warrants?|Common\\s+(?:Units|Stock)|Preferred\\s+(?:Units|Stock|Equity)|Class\\s+[A-Z0-9]+\\s+Units|Equity)\\b')",
     "extra_industry_labels": [
       "Automobile Components",
       "Building Products",
@@ -200,7 +200,7 @@
     },
     {
       "id": "TCW_VIII_2023_SCALE_ERROR",
-      "description": "The 2023-03-31 filing has a known 1000x FV scale anomaly handled by the existing staging scale-correction guard.",
+      "description": "The 2023-03-31 filing (0000950170-23-020390) prints the schedule in whole dollars but tags part of its cost, fair value and principal facts decimals -3 (instance value 1,000 times the page) and the rest decimals 0: 'HOP Energy, LLC 06/17/22 Term Loan - 14.94 % inc PIK (SOFR + 10.00 %, 2.00 % Floor, 2.75 % PIK) 6.5 % 22,548,887 06/17/27 22,130,144 21,218,503' with cost tagged 22,130,144,000. The quarter-level 1000x guard divided every fact and left the decimals-0 ones 1,000 times small; source_encodings.whole_dollar_scale_filings now reads each decimals -3 fact at decimals 0.",
       "first_seen_quarter": "2023-03-31",
       "detection_pattern": "quarterly FV more than 100x CIK median",
       "disposition": "expected"
@@ -210,6 +210,27 @@
       "description": "Industry rows ending in Net Assets are subtotal rows, not position-level holdings; rows with Acquisition Date are treated as leaves.",
       "first_seen_quarter": "2023-03-31",
       "detection_pattern": "Debt Investments, <industry>, Net Assets <pct>%",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_VIII_WARRANT_UNITS_TAGGED_AS_PRINCIPAL",
+      "description": "10-Qs/10-K for 2024-06-30 to 2025-03-31 tag the warrant unit count with InvestmentOwnedBalancePrincipalAmount (unit USD): HydroSource 'Warrant, expires 4/4/34 0.2 % 380 - 1,115,411' tagged principal 380 on C_f4487f32-7311-4b76-a85f-6db89cc9d9de (0000950170-24-095507); from 0000950170-25-107434 the same counts are tagged InvestmentOwnedBalanceShares. Listed under source_encodings.units_tagged_as_par.",
+      "first_seen_quarter": "2024-06-30",
+      "detection_pattern": "equity row with a principal tag and no share tag",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_VIII_2023Q4_ALORICA_VALUE_ON_WRONG_CONTEXT",
+      "description": "0000950170-24-037182 prints 'Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946'; its context C_fa46a8e5-251b-4eb9-a091-957d935f5374 carries cost and principal and no fair value, and 33,046,946 is tagged on the D&D Buyer revolver context C_55ae7aaf-0205-4376-954b-fd4d37c2891f. Alorica's value is declared under untagged_values; the revolver's printed 1,130,534 is a row correction.",
+      "first_seen_quarter": "2023-12-31",
+      "detection_pattern": "fair value tagged on a neighbouring row's context",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_VIII_DASH_FAIR_VALUE_UNTAGGED",
+      "description": "0001193125-26-221923 prints 'HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.78 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 6,876,841 12/09/27 5,345,831 -' and tags cost 5,345,831 with no fair value on C_e4af6a44-8636-4afd-b243-32f6671d2e5e; the dash is a fair value of 0 (tagged 0 in 2024-09-30 to 2025-12-31). The 10-Q for 2026-06-30 (0001193125-26-346657) repeats it: 'HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.76 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 3,524,465 12/09/27 2,646,672 -' on C_8cec1e8c-7408-4e9f-b189-58717c8bdae8.",
+      "first_seen_quarter": "2026-03-31",
+      "detection_pattern": "context with cost and principal and no fair value",
       "disposition": "expected"
     }
   ],
@@ -224,6 +245,23 @@
     ],
     "schedule_row_tags": [
       "cost_or_percent_unrounded"
+    ],
+    "units_tagged_as_par": [
+      "0000950170-24-095507",
+      "0000950170-24-125154",
+      "0000950170-25-045559",
+      "0000950170-25-070652"
+    ],
+    "net_assets_concepts": [
+      "MembersEquity"
+    ],
+    "whole_dollar_scale_filings": [
+      "0000950170-23-020390"
+    ],
+    "untagged_values": [
+      "0000950170-24-037182 C_fa46a8e5-251b-4eb9-a091-957d935f5374 fair_value 33046946",
+      "0001193125-26-221923 C_e4af6a44-8636-4afd-b243-32f6671d2e5e fair_value 0",
+      "0001193125-26-346657 C_8cec1e8c-7408-4e9f-b189-58717c8bdae8 fair_value 0"
     ]
   }
 }

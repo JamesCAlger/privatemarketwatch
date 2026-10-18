@@ -1164,6 +1164,18 @@ if LORDABBETT_LOOP in held and LORDABBETT_LOOP_FILE.exists():
         if spec.get("exact"):
             EXACT.add(spec["identifier"])
 
+# TCW Direct Lending VIII, fund-clearing loop (2026-10-17): the 10-K for 2023-12-31 tags Alorica's value on the D&D Buyer
+# revolver; one warrant member misstates its expiry. One spec per row, each with its printed line, in
+# row_correction_specs/0001825265.json. (The 2023-03-31 mixed-scale values are read by whole_dollar_scale_filings.)
+TCW8_LOOP = "0001825265"
+TCW8_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001825265.json"
+if TCW8_LOOP in held and TCW8_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(TCW8_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((TCW8_LOOP, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1825265-fundloop"))
+        if spec.get("exact"):
+            EXACT.add(spec["identifier"])
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue

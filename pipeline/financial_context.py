@@ -12,7 +12,19 @@ from pipeline.programme.core import sha
 NAV_CONCEPTS={'stockholdersequity','netassetsornetassets','memberscapital','partnerscapital'}
 
 
-def compatible_nav(holdings,financials_file,companyfacts_dir):
+def _nav_concepts_by_cik(encodings=None):
+    """{cik10: lower-case concept names} from wrapper source_encodings.net_assets_concepts.
+
+    A filer listed there is checked against those concepts INSTEAD of the shared NAV_CONCEPTS
+    (TCW Direct Lending VIII tags its paid-in line as MembersCapital and its total capital as
+    MembersEquity). Every other fund keeps NAV_CONCEPTS."""
+    if encodings is None:
+        from pipeline.source_encodings import load_encodings
+        encodings=load_encodings()
+    return {cik:frozenset(v.lower() for v in e['net_assets_concepts']) for cik,e in encodings.items() if e.get('net_assets_concepts')}
+
+
+def compatible_nav(holdings,financials_file,companyfacts_dir,encodings=None):
     """Accept a fund denominator only when cached USD instant facts agree.
 
     Later filings may revise prior quarters under latest-best history. Distinct
@@ -23,6 +35,7 @@ def compatible_nav(holdings,financials_file,companyfacts_dir):
     if holdings.empty or not Path(financials_file).is_file():
         return pd.DataFrame(columns=columns),pd.DataFrame(columns=['cik','report_date','net_assets','source_sha256','status'])
     financials_hash=sha(financials_file)
+    nav_concepts=_nav_concepts_by_cik(encodings)
     records=[]
     unavailable_sources=[]
     with duckdb.connect(config={'threads':2,'memory_limit':'-1'}) as con:
@@ -46,9 +59,10 @@ def compatible_nav(holdings,financials_file,companyfacts_dir):
                 raise ValueError('NAV source CIK does not match its filename: '+str(path)
                                  +' (expected '+cik+', declared '+str(declared_cik)+')')
             # These are structured source facts, not row-wise holdings transforms.
+            wanted_concepts=nav_concepts.get(cik,NAV_CONCEPTS)
             for namespace,concepts in data.get('facts',{}).items():
                 for concept,payload in concepts.items():
-                    if concept.lower() not in NAV_CONCEPTS: continue
+                    if concept.lower() not in wanted_concepts: continue
                     for fact in payload.get('units',{}).get('USD',[]):
                         if not fact.get('start') and fact.get('end') and fact.get('filed'):
                             records.append(dict(cik=cik,report_date=fact['end'],concept=namespace+':'+concept,

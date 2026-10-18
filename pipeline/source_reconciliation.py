@@ -1625,7 +1625,9 @@ def _extract_single_xbrl_source_file(
                         pass
         concepts_by_ctx.setdefault(ctx_ref, set()).add(local)
 
-    _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored)
+    from pipeline.source_encodings import whole_dollar_scale_filing
+    _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored,
+                                             whole_dollar=whole_dollar_scale_filing(filing_meta))
     if _margin_tags:
         _settle_margins(facts_by_ctx, mode=_margin_tags)
     from pipeline.page_labelled_contexts import fill_untagged_values

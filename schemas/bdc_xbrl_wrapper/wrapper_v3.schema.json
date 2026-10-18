@@ -736,6 +736,20 @@
           "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
           "description": "Accession numbers of filings in which the filer prints negative cost or fair value in brackets and tags it with no sign=\"-\" (NMF SLF I, 10-K 2025-12-31 and the 10-Qs after it: 'DigiCert, Inc. Software First Lien(3)(4) - Undrawn - - - 07/2025 07/2030 512 ( 3 ) ( 4 ) ( 0.00 )%', tagged +3 and +4). In a listed filing each InvestmentOwnedAtCost and InvestmentOwnedAtFairValue fact whose printed sign differs from its tagged sign takes the printed sign (pipeline/printed_sign.py; event cik_scale_fix:x-1, which the re-verifier reads as a multiplier). Evidence required: printed lines in brackets and the unsigned tag on their contexts."
         },
+        "net_assets_concepts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*$"},
+          "description": "Concept local names that hold this filer's total net assets, read by the calculated-percent denominator check (pipeline/financial_context.compatible_nav) INSTEAD of the shared list (StockholdersEquity, NetAssetsOrNetAssets, MembersCapital, PartnersCapital). For a filer that tags a paid-in line with a shared concept (TCW Direct Lending VIII: 'Common Unitholders capital 879,986' as MembersCapital, 'Total Members Capital 815,597' as MembersEquity). The published net assets still come from the fund financials (for TCW VIII the printed figures of its highlights wrapper); this only names the cached fact they must equal. Evidence required: the printed balance-sheet lines and the concept of each."
+        },
+        "whole_dollar_scale_filings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
+          "description": "Accession numbers of filings whose schedule is printed in whole dollars while part of the investment facts carry scale 3 / decimals -3, so the instance holds them 1,000 times too large (TCW Direct Lending VIII, 10-Q 2023-03-31: HOP Energy 'Term Loan ... 22,548,887 06/17/27 22,130,144 21,218,503', principal and fair value tagged decimals 0, cost tagged decimals -3 as 22,130,144,000; cost 43 facts at -3 and 33 at 0, so the shared mixed-decimals guard, which needs 75 pct of one kind, does not fire and the quarter-level 1000x guard then divides every fact). In a listed filing every investment-context cost, fair value and principal fact tagged decimals -3 or coarser is read at decimals 0 (pipeline/bdc_filings._normalize_mixed_decimals_monetary_facts; event decimals_rescale:10^-3, which the re-verifier reads as a multiplier), in the extractor and in source reconciliation alike. Evidence required: printed lines in whole dollars and the decimals of their tags."
+        },
         "section_total_reading": {
           "type": "array",
           "minItems": 1,
