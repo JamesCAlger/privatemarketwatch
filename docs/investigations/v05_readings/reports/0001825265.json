@@ -1,82 +1,47 @@
 {
  "cik": "0001825265",
- "label": "t8yf",
- "before": "spon3",
+ "label": "t8zd",
+ "before": "t8yf",
  "shared_code": true,
- "investigator_id": "tcwviii_fund_agent_2026-10-17",
+ "investigator_id": "tcwviii_fund_agent_r2_2026-10-18",
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 9,
-   "why": "staging regexes (Lenox, Follett, Alorica, Resco, Superior 2025-09-30, EagleRock) and two Superior rows of 2025-06-30 named from the page"
-  },
-  {
-   "column": "instrument_description",
-   "rows": 12,
-   "why": "staging regex: instrument after 'Acquisition Date dd/mm/yy,' (9 rows), 'Amendment No. 1 Term Loan' (3), Sigmatron expiry (1, row correction); EagleRock is a new row"
-  },
-  {
-   "column": "fair_value",
-   "rows": 7,
-   "why": "2023-03-31 six fair values read at whole dollars (whole_dollar_scale_filings); D&D revolver 2023-12-31 printed 1,130,534"
-  },
-  {
-   "column": "principal_amount",
-   "rows": 7,
-   "why": "2023-03-31 seven principals read at whole dollars"
-  },
-  {
-   "column": "principal_amount_usd",
-   "rows": 7,
-   "why": "follows principal_amount on the same seven rows"
-  },
-  {
-   "column": "shares_held",
-   "rows": 10,
-   "why": "warrant unit counts tagged as principal (units_tagged_as_par, four filings)"
-  },
-  {
-   "column": "src_transforms",
-   "rows": 10,
-   "why": "event shares_held:from_principal_tag on the same ten warrant rows"
-  },
-  {
-   "column": "shares_held_source",
    "rows": 1,
-   "why": "HydroSource 2024-12-31 warrant: the shared unit-count step labels the now-filled 380 'derived_proxy' (value equals the page)"
-  },
-  {
-   "column": "src_facts",
-   "rows": 22,
-   "why": "2023-03-31 rows: the raw x1000 values and event decimals_rescale:10^-3 recorded (whole_dollar_scale_filings), replacing the quarter-wide cik_scale_fix"
+   "why": "Harvey Gulf 2024-03-31 Term Loan B: member cut at 'Harvey Gulf Holdings, LL'; row correction to the printed 'LLC'"
   },
   {
    "column": "corrected_fields",
-   "rows": 67,
-   "why": "quarter-wide 1000x correction no longer recorded on 2023-03-31 rows; row corrections recorded (pik_rate 52, issuer 2, industry 3, D&D fair value, Sigmatron instrument)"
-  },
-  {
-   "column": "pik_rate",
-   "rows": 44,
-   "why": "printed 'all PIK' coupons with no PIK tag (52 row corrections; 8 of them on rows new since spon3)"
-  },
-  {
-   "column": "interest_rate_cash",
-   "rows": 44,
-   "why": "cash leg 0 on the same all-PIK rows"
+   "rows": 1,
+   "why": "the same row records issuer_name as corrected"
   },
   {
    "column": "position_id",
-   "rows": 87,
-   "why": "65 rows of the 14 chains that continue into the added quarter 2026-06-30 (seen in the first build t8ya with no change); the rest chains joined by the name, instrument, scale and issuer fixes (Alorica, Resco, Hudson, HOP Energy, Black Rock Coffee, Red Robin, Follett, Superior)"
+   "rows": 14,
+   "why": "Harvey Gulf Term Loans A and B and the Lenox Term Loan chain through 2023-09-30 now that its three rows are published (each Harvey tranche one id 2023-03-31 to 2023-12-31, kept apart by two force_pair overrides). holdings_field_diff t8zc t8yf: 14 rows."
   },
   {
-   "column": "pct_of_net_assets_calculated",
-   "rows": 685,
-   "why": "fair value over the printed Total Members Capital (net_assets_concepts, OVR-T8Y-R1) in place of fair value over the paid-in line; on the 66 rows new since spon3 it is filled for the first time"
+   "column": "extracted_industry",
+   "rows": 1,
+   "why": "D&D Buyer revolver 2023-12-31 (ROW-09837033ef0f35f0): 'Professional Services' (Alorica's heading, via the shared fair-value context) -> printed 'Specialty Retail' (row correction)"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 1,
+   "why": "follows the D&D revolver industry: Research & Consulting Services -> Specialty Stores"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 1,
+   "why": "follows the D&D revolver industry: Industrials -> Consumer Discretionary"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 2,
+   "why": "Harvey Gulf issuer (1) and the D&D revolver now also records extracted_industry (1)"
   }
  ],
- "rows_added": 66,
+ "rows_added": 3,
  "rows_removed": 0,
  "fixes": [
   {
@@ -348,35 +313,145 @@
      "text": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"
     }
    ]
-  }
- ],
- "total_exceptions": [
+  },
   {
-   "quarter": "2023-09-30",
-   "why": "Published 631.4M against the printed 723.8M (filed figure supplied from 'Total Debt Investments'): three printed rows (Harvey Gulf A/B, Lenox; 92.4M) have no XBRL context. Parked, request OVR-T8Y-R2.",
-   "quote": {
-    "accession": "0000950170-23-060972",
-    "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
-   }
+   "what": "Three schedule rows printed with no XBRL context (Harvey Gulf Term Loans A and B, Lenox Term Loan, 2023-09-30) published from their printed lines: new shared key source_encodings.printed_rows_without_context (pipeline/printed_rows.py; loader checks each entry's issuer, instrument and three numbers against its line; extractor adds context printed_page:<hash>; staging labels fair value, cost and principal printed_page; a row the filing tags is refused). Owner ruling OVR-T8Y-R2 (a), 2026-10-18. The quarter now publishes 723,775,772 / 720,198,416 = printed total. Round three (OVR-T8Z-R2): the three entries also declare the printed rate, spread, floor, SOFR, maturity and percent of net assets; t8zc publishes them with interest_rate_source, basis_spread_source, reference_rate_source, maturity_date_source and pct_of_net_assets_source = printed_page.",
+   "kind": "shared_code",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ]
+  },
+  {
+   "what": "interest_expense = printed 'Interest and credit facility expenses' (us-gaap:InterestAndDebtExpense) in 17 of 18 quarters: highlights wrapper income_concept_suppress noninterestexpense + repurchaseagreementsinterestexpense, income_concept_fallback interest_expense interestanddebtexpense (shared: INCOME_FALLBACK_COLUMNS admits interest_expense, opt-in), concept_overrides suppress the same two for the highlights extractor. Checked against the InterestAndDebtExpense facts in every quarter (52, 357, 1,130, 2,982, 3,980, 7,049, 7,694 = 21,705 - 14,011, 7,577, 9,778, 9,831, 9,542 = 36,728 - 27,186, 8,813, 10,506, 9,775, 7,187 = 36,281 - 29,094, 7,358, 3,337 thousand). 2022-12-31 is now blank (was 2,000): that quarter has no income-statement row in the income table (total investment income is blank there in t8yf too).",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-125154",
+     "text": "Interest and credit facility expenses 9,831 7,049 27,186 14,011"
+    },
+    {
+     "accession": "0000950170-23-040379",
+     "text": "Expenses Interest and credit facility expenses 3,980 357 6,962 409"
+    }
+   ]
+  },
+  {
+   "what": "Harvey Gulf 2024-03-31 Term Loan B issuer 'Harvey Gulf Holdings, LL' -> 'Harvey Gulf Holdings, LLC' (row correction; page sample C012 of t8yf)",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-057006",
+     "text": "Harvey Gulf Holdings, LLC 01/19/24 Term Loan B - 11.56 % (SOFR + 6.25 %, 2.00 % Floor) 7.8 % 39,325,580 01/19/29 38,985,791 39,010,975"
+    }
+   ]
+  },
+  {
+   "what": "Tranche swap at 2023-09-30 -> 2023-12-31: the name-only matcher paired Term Loan A with Term Loan B (the declared rows carry no maturity or member key). Two force_pair entries in data/overrides/position_match_overrides/0001825265.json; t8zb: Term Loan A one id 2023-03-31 to 2023-12-31, Term Loan B one id 2023-03-31 to 2023-12-31. Round three: kept. The declared maturity does not separate the tranches: both print 08/10/27 at 2023-09-30 and at 2023-12-31, and both print 12.63% / SOFR + 7.00% at 2023-09-30; t8zc with the overrides keeps each tranche on one id.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 10.14 % (SOFR + 4.50 %, 1.00 % Floor) 4.7 % 21,324,957 08/10/27 21,055,796 21,538,206"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.64 % (SOFR + 7.00 %, 1.00 % Floor) 4.6 % 20,549,504 08/10/27 20,078,648 21,124,890"
+    }
+   ]
+  },
+  {
+   "what": "D&D Buyer revolver 2023-12-31 industry = printed 'Specialty Retail' (row correction; the page reader had given it Alorica's heading because Alorica's fair value is tagged on the revolver's context). Re-read every page-derived field of the fund's rows whose fair value was overridden: Alorica 2023-12-31 (untagged value; issuer, instrument, industry Professional Services, rate 12.23, spread 6.88, maturity 2027-03-02, percent 7.2, par/cost: all as printed), D&D revolver 2023-12-31 (issuer, instrument Revolver, rate 12.45, spread 7.00, maturity 2028-10-04, percent 0.2, par/cost: as printed; industry was the only error), HOP Energy Term Loan B 2026-03-31 and 2026-06-30 (untagged fair value 0; issuer, instrument, industry Oil, Gas & Consumable Fuels, PIK 13.78 / 13.76, spread 10.00, maturity 2027-12-09, percent 0.0, par 6,876,841 / 3,524,465, cost 5,345,831 / 2,646,672: as printed).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Specialty Retail D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Professional Services Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"
+    },
+    {
+     "accession": "0001193125-26-221923",
+     "text": "HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.78 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 6,876,841 12/09/27 5,345,831 -"
+    },
+    {
+     "accession": "0001193125-26-346657",
+     "text": "HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.76 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 3,524,465 12/09/27 2,646,672 -"
+    }
+   ]
+  },
+  {
+   "what": "maturity precision for declared rows: pipeline/financial_conventions.py grants day precision to maturity_date_source printed_page when the date is a full date (the loader admits only YYYY-MM-DD printed as MM/DD/YY or MM/DD/YYYY); tests/test_financial_conventions.py: full date -> day/dated, '2027-08' and empty -> unknown, not dated.",
+   "kind": "shared_code",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    }
+   ]
   }
  ],
+ "total_exceptions": [],
  "parked": [
-  {
-   "finding": "conservation/fv_conservation, conservation/cost_conservation, fund_financials/F20, gav_recon/gav_reconciliation, oracle/A04, oracle/E01, row_validation/GAV_BDC03 2023-09-30",
-   "hypotheses": [
-    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
-    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
-    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
-    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
-   ]
-  },
-  {
-   "finding": "Page sample C012 (t8yf), no ledger finding: Harvey Gulf Term Loan B 2024-03-31 published issuer 'Harvey Gulf Holdings, LL' (member truncated; page 'LLC'), 1 row, 39.0M",
-   "hypotheses": [
-    "Wrapper issuer_name_strip_re: no; it cuts text, it cannot add the missing C.",
-    "Row correction issuer_name on the exact 2024-03-31 identifier: right fix, not applied because no build remains (six used)."
-   ]
-  },
   {
    "finding": "Page sample C015 (t8yf), no ledger finding: 31 warrant rows (118.5M, 9 quarters) published EQUITY_COMMON",
    "hypotheses": [
@@ -416,9 +491,7 @@
     "decision": "Reclassified as not a verification bug: pct_of_net_assets_calculated is a published derived field, so reading another net-assets source changes data. Allowed as shared code switched on by this fund's wrapper only, with a focused and a false-positive test, the net assets coming from the printed highlights figures.",
     "implemented": "source_encodings.net_assets_concepts (schema wrapper_v3, loader validation, pipeline/financial_context.compatible_nav); TCW VIII lists MembersEquity; every other fund keeps the shared list (no other wrapper sets the key). Tests: tests/test_net_assets_concepts.py 3 passed (listed fund accepted on MembersEquity; unlisted fund with the same facts rejected; listed fund with the paid-in figure rejected), tests/test_financial_context.py 5 passed. Rebuilt as t8yf: against t8ye only pct_of_net_assets_calculated changed (685 rows, null to fair value over printed net assets); ledger unchanged (27 findings, 20 outstanding)."
    }
-  }
- ],
- "orchestrator_requests": [
+  },
   {
    "request_id": "OVR-T8Y-R2",
    "classification": "acceptance_change",
@@ -455,13 +528,128 @@
    ],
    "next_action": "Owner rules; if yes, a page-row mechanism is built with its own verification (the printed line re-read by the re-verifier), then this fund is rebuilt; if no, the seven 2023-09-30 findings get a recorded 'gap, as filed by the filer' disposition.",
    "response": {
-    "authority": "orchestrator",
+    "authority": "owner",
     "date": "2026-10-18",
-    "status": "active",
-    "decision": "Owner decision; put to the owner by the orchestrator. Kept active; the seven 2023-09-30 findings stay parked."
+    "decision": "Ruled (a): a printed schedule row with no XBRL context may be published from its printed line; nothing else inferred, provenance says the source is the printed page.",
+    "implemented": "source_encodings.printed_rows_without_context (pipeline/printed_rows.py, bdc_filings, staging_bdc, schema wrapper_v3, loader validation); tests/test_printed_rows.py 13 passed incl. refusal of a listed row the filing tags. Built t8za / t8zb: the three rows publish with fair_value_source / cost_source / principal_amount_source = printed_page; 2023-09-30 ties the printed total; the seven parked 2023-09-30 findings left the ledger."
+   }
+  },
+  {
+   "request_id": "OVR-T8Z-R1",
+   "classification": "acceptance_change",
+   "file": "pipeline/source_reconciliation.py (residual classification), pipeline/column_validation.py SRC_BDC02, pipeline/oracle_checks.py E07",
+   "what": "Give published rows declared under source_encodings.printed_rows_without_context (src_context_id 'printed_page:', *_source 'printed_page') a documented, non-blocking status of their own, keyed strictly to the wrapper entries (cik, quarter, issuer + instrument, fair value), as documented_audited_row_add does for audited row_add rules. They must stay unverified against XBRL (never 'matched').",
+   "why": "With the owner ruling the 3 rows are published by design and have no XBRL fact by construction, so source_recon blocking_pipeline_only_position, SRC_BDC02 and E07 fire at 2023-09-30 every build. The checks are right about the XBRL; without a keyed excusal each later build re-raises them, and putting the rows on the source side would make the check verify the declaration against itself. Proposals PD-0001825265-SRC_BDC02-11, -blocking_pipeline_only_position-12, -E07-13 cover the present quarter only.",
+   "quotes": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "next_action": "Orchestrator / owner: decide; if accepted, implement the keyed excusal with a test that a printed_page row matching its wrapper entry is documented and an unlisted pipeline-only row stays blocking, then re-run this sandbox from validate.",
+   "response": {
+    "authority": "orchestrator under the owner's delegation, 2026-10-18 (D-208)",
+    "date": "2026-10-18",
+    "decision": "Approved (acceptance_change) and implemented by the orchestrator: declared rows (printed_rows.declaration_sql) get the non-blocking status printed_page_declared in source reconciliation (documented_exclusion), SRC_BDC02 -> INFO rule SRC_BDC02P, E07 leaves them out of the output count.",
+    "implemented": "t8zc: source_recon blocking_pipeline_only_position, SRC_BDC02 and E07 at 2023-09-30 no longer fire; their proposals withdrawn."
+   }
+  },
+  {
+   "request_id": "OVR-T8Z-R2",
+   "classification": "acceptance_change",
+   "file": "pipeline/printed_rows.py (owner scope of the ruling)",
+   "what": "Owner decision: may a declared printed row also carry the printed rate, spread, floor, maturity and percent of net assets from its line (still labelled printed_page), or do X02 and F23 at 2023-09-30 stay open?",
+   "why": "The ruling admits issuer, instrument, fair value, cost and principal only. The page prints the rest ('12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % ... 08/10/27'); not publishing them raises X02 (3 loans with no rate) and F23 (reported percent sum short by the rows' 21.4 points, relative 0.127). The missing maturity also let the name-only matcher swap the Harvey Gulf tranches (fixed by override).",
+   "quotes": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    }
+   ],
+   "next_action": "Owner: rule. If yes: extend entry_errors (each declared number must appear in the line), staging sources 'printed_page' for each field, a test per field, then rebuild; X02 and F23 should clear and the two force_pair overrides become unnecessary.",
+   "response": {
+    "authority": "orchestrator under the owner's delegation, 2026-10-18 (D-208)",
+    "date": "2026-10-18",
+    "decision": "Approved: a declared row may carry the printed interest rate, spread, reference rate, floor, maturity and percent of net assets, each labelled printed_page where a *_source column exists; the loader refuses any value not printed in the line.",
+    "implemented": "Implemented by this agent: pipeline/printed_rows.py (optional term fields; entry_errors checks each percent as printed, the floor before 'Floor', the reference code and the maturity as MM/DD/YY or MM/DD/YYYY), staging_bdc *_source = printed_page, wrapper_v3 schema, three wrapper entries extended. tests/test_printed_rows.py 36 passed (11 new: carriage, 9 refusals, one false-positive spelling test). t8zc: X02 and F23 at 2023-09-30 no longer fire."
+   }
+  },
+  {
+   "request_id": "OVR-T8Z-R3",
+   "classification": "verification_bug",
+   "file": "pipeline/provenance_reverify.py",
+   "what": "Rows with fair_value_source / cost_source / principal_amount_source 'printed_page' reach the full tier, find no context (context_missing) and are coded provenance_wrong. They are correctly not 'verified', but the reason says the provenance is wrong when it is a declared page row. Add a cheap-tier short circuit for pathway 'printed_page' with its own reason (e.g. printed_page_declared), never counted as verified.",
+   "why": "t8zb provenance_ledger: 9 field rows (fair value, cost, principal of the 3 rows) provenance_wrong, total 92.38M fair value. A reviewer reading provenance_wrong would chase a non-existent anchor error.",
+   "quotes": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    }
+   ],
+   "next_action": "Orchestrator: add the short circuit with a test that a printed_page row gets the new reason (not verified) and an xbrl_field row with a missing context still gets provenance_wrong; re-run provenance for this sandbox.",
+   "response": {
+    "authority": "orchestrator under the owner's delegation, 2026-10-18 (D-208)",
+    "date": "2026-10-18",
+    "decision": "Verification bug, fixed by the orchestrator: provenance_reverify gives declared rows cheap status/reason printed_page_declared (never verified, never provenance_wrong); shadow_adapter treats it as a weak pass.",
+    "implemented": "Re-run in t8zc."
    }
   }
  ],
+ "orchestrator_requests": [],
  "observations": [
   {
    "observation_key": "net-assets-concept-not-mapped",
@@ -529,15 +717,15 @@
     "2023-12-31",
     "2025-06-30"
    ],
-   "what": "2023-12-31: Alorica's fair value is tagged on the D&D Buyer revolver's context, the revolver's on a third context (Alorica unpublished, revolver 33.0M, cost 32.2M short). 2025-06-30: two Superior Industries lines carry Fenix Intermediate and Resco Products members (20.7M and 0.4M published under the wrong issuer, chain broken). Fixed by untagged_values and row corrections from the printed lines.",
-   "suggested_check": "Flag a context whose fair value exceeds 10x its own cost and par while another context of the quarter has cost and par and no value within 2 pct of that fair value.",
+   "what": "2023-12-31: Alorica's fair value is tagged on the D&D Buyer revolver's context, the revolver's on a third context (Alorica unpublished, revolver 33.0M, cost 32.2M short). 2025-06-30: two Superior Industries lines carry Fenix Intermediate and Resco Products members (20.7M and 0.4M published under the wrong issuer, chain broken). Fixed by untagged_values and row corrections from the printed lines. Round four: the independent review of t8zc found the D&D Buyer revolver 2023-12-31 (ROW-09837033ef0f35f0, 1.13M) still published Alorica's industry (Professional Services / Research & Consulting Services / Industrials; printed 'Specialty Retail'): the row correction had fixed only the fair value. Industry row correction added; t8zd publishes Specialty Retail / Specialty Stores / Consumer Discretionary.",
+   "suggested_check": "Any row whose fair-value context was overridden (row correction of fair_value, untagged_values, or a value tagged on a neighbour's context) is re-read for every page-derived field (issuer, instrument, industry, rate, maturity, percent); and an issuer whose rows of one filing carry two different printed industries is a finding.",
    "quote": {
     "accession": "0000950170-24-037182",
     "text": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"
    },
    "detection_decision": {
     "action": "propose_detector",
-    "rationale": "X07 covers only the D&D/Alorica case (value over 10x cost). The Superior case (2025-06-30, Fenix and Resco members on two Superior lines) was caught by no rule. Proposed check for it: a member whose issuer differs from the issuer of the same position chain in the quarters before and after (same acquisition date and maturity), or from the printed line's issuer, is a finding.",
+    "rationale": "The earlier proposal (issuer changing along a chain) and X07 do not look at fields a row inherits from a neighbour's printed line. The widened check fires on the D&D revolver here (an overridden fair value, and D&D Buyer printed under Specialty Retail on its term loan but Professional Services on the revolver in the same filing) and is quiet on the other three overridden rows, all read against the page.",
     "reference": "suggested_check in this observation"
    }
   },
@@ -671,12 +859,12 @@
    "observation_key": "row-printed-not-tagged",
    "field": "fair_value",
    "cause": "fund",
-   "action": "parked",
+   "action": "fixed",
    "fair_value_m": 92.4,
    "quarters": [
     "2023-09-30"
    ],
-   "what": "Three printed rows of 2023-09-30 (Harvey Gulf Term Loans A and B, Lenox Term Loan; 92.4M fair value, 91.8M cost) carry no XBRL tag and no 2023-09-30 context. No admitted mechanism publishes a row with no context. Parked; owner request OVR-T8Y-R2.",
+   "what": "Three printed rows of 2023-09-30 (Harvey Gulf Term Loans A and B, Lenox Term Loan; 92,381,349 fair value, 91,765,811 cost) carry no XBRL tag and no 2023-09-30 context. Fixed in round two under the owner ruling OVR-T8Y-R2 (a): declared under source_encodings.printed_rows_without_context; published with *_source printed_page; the quarter ties the printed total. Rate, spread, maturity and percent are not published on them (OVR-T8Z-R2).",
    "suggested_check": "Existing: conservation against the printed total.",
    "quote": {
     "accession": "0000950170-23-060972",
@@ -759,7 +947,7 @@
     "2026-03-31",
     "2026-06-30"
    ],
-   "what": "Key shared with 0001901164 (a zero-value equity line there); here the row is a term loan: HOP Energy Term Loan B, held at fair value 0 from 2024-09-30 (cost 5.3M, then 2.6M), gets a new position_id every quarter (8 ids over 9 quarters), as in spon3. Shared position matching does not chain zero-value rows, loans or equity; not touched.",
+   "what": "Key shared with 0001901164 (a zero-value equity line there); here the row is a term loan: HOP Energy Term Loan B, held at fair value 0 from 2024-09-30 (cost 5.3M, then 2.6M), gets a new position_id every quarter (8 ids over 9 quarters), as in spon3. Shared position matching does not chain zero-value rows, loans or equity; not touched. Round two: not fixable by position_match_overrides: the file admits only reject and force_pair of an existing pair, and the Term Loan B rows of 2024-09-30 to 2026-06-30 have no pair at all in position_matches (t8yf, t8zb). Also seen and left: name-only links across HOP instruments (Protective Advance 2024-03-31 -> Term Loan B 2024-06-30, B2_exact_name; Term Loan B 2024-06-30 -> Term Loan 2024-09-30, C_normalized_name; Protective Advance 2025-09-30 -> Term Loan C 2025-12-31); not read against the page.",
    "suggested_check": "A row with the same issuer, instrument and maturity as a row of the previous quarter of the same fund that carries a different position_id is a chain break; count them per fund and quarter.",
    "quote": {
     "accession": "0001193125-26-221923",
@@ -817,12 +1005,12 @@
    "observation_key": "issuer-name-truncated-in-member",
    "field": "issuer_name",
    "cause": "row",
-   "action": "left",
+   "action": "fixed",
    "fair_value_m": 39.0,
    "quarters": [
     "2024-03-31"
    ],
-   "what": "Page sample C012 (t8yf): the 10-Q for 2024-03-31 member reads 'Harvey Gulf Holdings, LL, Acquisition Date 01/19/24 Term Loan B'; the page prints 'Harvey Gulf Holdings, LLC'. Published 'Harvey Gulf Holdings, LL'. Read-only count on t8yf: 1 row of this fund ends in a truncated 'LL' (39.011M fair value); the other 9 rows ending in ', Inc' (Lenox 2023-12-31/2024-03-31, Great Kitchens 2024-12-31 to 2025-12-31, Superior common stock 2025-09-30; 263.1M) end in ', Inc' without the period; Lenox (0000950170-24-037182) and Great Kitchens (0000950170-25-045559) print 'Inc.', Superior not read; not counted as truncation (no letter cut). No builds left. Next build: one issuer_name row correction (2024-03-31, exact identifier) to 'Harvey Gulf Holdings, LLC'; the position chain with the other Harvey Gulf Term Loan B quarters should then join.",
+   "what": "Page sample C012 (t8yf): the 10-Q for 2024-03-31 member reads 'Harvey Gulf Holdings, LL, Acquisition Date 01/19/24 Term Loan B'; the page prints 'Harvey Gulf Holdings, LLC'. Published 'Harvey Gulf Holdings, LL'. Read-only count on t8yf: 1 row of this fund ends in a truncated 'LL' (39.011M fair value); the other 9 rows ending in ', Inc' (Lenox 2023-12-31/2024-03-31, Great Kitchens 2024-12-31 to 2025-12-31, Superior common stock 2025-09-30; 263.1M) end in ', Inc' without the period; Lenox (0000950170-24-037182) and Great Kitchens (0000950170-25-045559) print 'Inc.', Superior not read; not counted as truncation (no letter cut). No builds left. Next build: one issuer_name row correction (2024-03-31, exact identifier) to 'Harvey Gulf Holdings, LLC'; the position chain with the other Harvey Gulf Term Loan B quarters should then join. Round two: fixed by one issuer_name row correction (t8zb publishes 'Harvey Gulf Holdings, LLC'); the row already chained.",
    "suggested_check": "Issuer names ending in a cut legal suffix (', LL', ', L', ', In', ', Co' without a following letter) are flagged against the fund's other spellings of the same issuer.",
    "quote": {
     "accession": "0000950170-24-057006",
@@ -867,7 +1055,7 @@
    "observation_key": "interest-expense-reads-noninterest-expense",
    "field": "interest_expense",
    "cause": "shared",
-   "action": "left",
+   "action": "fixed",
    "fair_value_m": 0.0,
    "quarters": [
     "2022-03-31",
@@ -889,7 +1077,7 @@
     "2026-03-31",
     "2026-06-30"
    ],
-   "what": "Found by the independent review; the printed interest line (us-gaap:InterestAndDebtExpense, 'Interest and credit facility expenses') is never published. 2024-03-31 to 2026-06-30 (10 quarters): interest_expense is the directors' fee (NoninterestExpenseDirectorsFees; read on the page: 75 at 2024-03-31, 64 at 2024-09-30 against the printed 9,831 thousand). 2022-03-31 to 2023-12-31: the interest on repurchase transactions (InterestExpense on repurchase lines; read on the page: 594 at 2023-06-30, 198 at 2023-09-30), per the r2 review for the other quarters. 2022-12-31: published 2,000; the printed fourth-quarter interest is the year's 3,709 thousand (10-K 2022: 'Interest and credit facility expenses $ 3,709') less the nine months' 1,539 thousand (10-Q 2022-09-30: 'Interest and credit facility expenses 1,130 1,539'), 2,170 thousand, equal to the InterestAndDebtExpense figure for the quarter; the published 2,000 is not it. 2022-03-31: published 0 is the repurchase-transaction dash of the comparative column (10-Q 2023-03-31: 'Interest expense on repurchase transactions 357 -'); the real interest line is 52 thousand ('Interest and credit facility expenses 2,982 52'). The shared concept maps take any concept containing 'interestexpense'. Not fixed (no build left). Next build: highlights wrapper income_concept_fallback / concept_overrides that make us-gaap:InterestAndDebtExpense the interest_expense concept for this filer (map/prefer 'interestanddebtexpense', suppress 'noninterestexpense' and the repurchase-transaction concept), then check interest_expense against the printed 'Interest and credit facility expenses' line in all 18 quarters 2022-03-31 to 2026-06-30 (2022-03-31 publishes 0).",
+   "what": "Found by the independent review; the printed interest line (us-gaap:InterestAndDebtExpense, 'Interest and credit facility expenses') is never published. 2024-03-31 to 2026-06-30 (10 quarters): interest_expense is the directors' fee (NoninterestExpenseDirectorsFees; read on the page: 75 at 2024-03-31, 64 at 2024-09-30 against the printed 9,831 thousand). 2022-03-31 to 2023-12-31: the interest on repurchase transactions (InterestExpense on repurchase lines; read on the page: 594 at 2023-06-30, 198 at 2023-09-30), per the r2 review for the other quarters. 2022-12-31: published 2,000; the printed fourth-quarter interest is the year's 3,709 thousand (10-K 2022: 'Interest and credit facility expenses $ 3,709') less the nine months' 1,539 thousand (10-Q 2022-09-30: 'Interest and credit facility expenses 1,130 1,539'), 2,170 thousand, equal to the InterestAndDebtExpense figure for the quarter; the published 2,000 is not it. 2022-03-31: published 0 is the repurchase-transaction dash of the comparative column (10-Q 2023-03-31: 'Interest expense on repurchase transactions 357 -'); the real interest line is 52 thousand ('Interest and credit facility expenses 2,982 52'). The shared concept maps take any concept containing 'interestexpense'. Not fixed (no build left). Next build: highlights wrapper income_concept_fallback / concept_overrides that make us-gaap:InterestAndDebtExpense the interest_expense concept for this filer (map/prefer 'interestanddebtexpense', suppress 'noninterestexpense' and the repurchase-transaction concept), then check interest_expense against the printed 'Interest and credit facility expenses' line in all 18 quarters 2022-03-31 to 2026-06-30 (2022-03-31 publishes 0). Round two: fixed for this fund by the highlights wrapper (suppress noninterestexpense and repurchaseagreementsinterestexpense, InterestAndDebtExpense as interest_expense fallback; shared INCOME_FALLBACK_COLUMNS admits interest_expense). t8zb equals the InterestAndDebtExpense quarter figures in 17 quarters; 2022-12-31 is blank (no income row for that quarter). The repurchase-transaction interest (a separate printed line, 2022-2023) is not included in interest_expense.",
    "suggested_check": "Where the period files an InterestAndDebtExpense (or InterestExpense) fact, published interest_expense must equal it; a published value equal to a NoninterestExpense* fact of the same period is a finding. (No borrowings test: borrowings are empty here after 2022-12-31.)",
    "quote": {
     "accession": "0000950170-24-125154",
@@ -914,13 +1102,60 @@
     "rationale": "No rule compares interest expense with the filed interest concepts of the period; the equality test fires on this fund in every quarter and on the three funds already under this key, and cannot fire on a fund whose interest line is published.",
     "reference": "suggested_check in this observation"
    }
+  },
+  {
+   "observation_key": "name-only-match-crosses-tranches-of-one-issuer",
+   "what": "t8za: the 2023-09-30 Harvey Gulf rows (declared from the page, no maturity, no member key) were chained by name only and crossed at 2023-12-31: Term Loan B 27.24M -> Term Loan A 21.54M (B2_exact_name), Term Loan A 28.43M -> Term Loan B 21.12M (C_normalized_name). Fixed by two force_pair overrides (t8zb: each tranche one id 2023-03-31 to 2023-12-31). The matcher does not compare the tranche letter. Round three: overrides kept; the printed maturity is the same for both tranches, so the veto cannot separate them. Round four: with the maturity veto now on for the declared rows the overrides are still needed: both tranches print 08/10/27 at 2023-09-30 and 2023-12-31, so the veto cannot separate them; kept.",
+   "field": "position_id",
+   "cause": "shared",
+   "action": "fixed",
+   "fair_value_m": 55.7,
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "suggested_check": "Within one fund and issuer, a matched pair whose begin and end instrument_description differ only by a trailing tranche letter or number (Term Loan A vs Term Loan B) is a finding.",
+   "quote": {
+    "accession": "0000950170-24-037182",
+    "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.64 % (SOFR + 7.00 %, 1.00 % Floor) 4.6 % 20,549,504 08/10/27 20,078,648 21,124,890"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the instrument text of matched pairs; the tranche-letter test is exact and fires on both crossed pairs here, and rarely on a true rename (a tranche relabelled A to B would be a real change worth reading).",
+    "reference": "suggested_check in this observation"
+   }
+  },
+  {
+   "observation_key": "declared-page-row-carries-no-rate-maturity-or-percent",
+   "what": "The three rows published from the printed page at 2023-09-30 carry no interest rate, spread, maturity or percent of net assets, although the page prints them (scope of the owner ruling). X02 and F23 report it; the missing maturity let the tranche swap through. Round three: fixed under OVR-T8Z-R2 (t8zc: rates 12.63 / 12.63 / 14.31, spreads 7.00 / 7.00 / 8.75, SOFR, maturities 2027-08-10 / 2027-08-10 / 2027-07-08, percents 6.6 / 6.3 / 8.5, each labelled printed_page).  Round four: the review found maturity_status 'unresolved' / maturity_precision 'unknown' on the three rows (financial_conventions granted day precision only to xbrl_field and nport maturities), which also switched the matcher's maturity veto off for them. printed_page added to the day-precision sources; t8zd publishes day / dated on all three.",
+   "field": "interest_rate",
+   "cause": "fund",
+   "action": "fixed",
+   "fair_value_m": 92.4,
+   "quarters": [
+    "2023-09-30"
+   ],
+   "suggested_check": "A published maturity_date that is a full YYYY-MM-DD date with maturity_precision 'unknown' or maturity_status 'unresolved' is a finding.",
+   "quote": {
+    "accession": "0000950170-23-060972",
+    "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "X02 and F23 now pass; nothing tests precision against a valid date. A check that a row with a full-date maturity_date never has maturity_precision unknown / status unresolved would have caught the 3 rows and is quiet on xbrl_field and nport rows.",
+    "reference": "suggested_check in this observation"
+   }
   }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
   "tests/test_whole_dollar_scale.py: 5 passed (new; includes the unlisted-filing false-positive test)",
   "tests/test_whole_dollar_scale.py tests/test_bdc_filings.py tests/test_source_encodings.py tests/test_printed_sign.py tests/test_schedule_row_tags.py tests/test_provenance_reverify.py tests/test_rate_tag_reading.py: 347 passed",
-  "tests/test_net_assets_concepts.py tests/test_whole_dollar_scale.py tests/test_source_encodings.py tests/test_financial_conventions.py: 188 passed; tests/test_financial_context.py: 5 passed"
+  "tests/test_net_assets_concepts.py tests/test_whole_dollar_scale.py tests/test_source_encodings.py tests/test_financial_conventions.py: 188 passed; tests/test_financial_context.py: 5 passed",
+  "round two: tests/test_printed_rows.py 13 passed; tests/test_income_interest_fallback.py 4 passed; tests/test_bdc_fund_income.py + tests/test_fund_highlights_wrapper.py with it 70 passed; tests/test_whole_dollar_scale.py + tests/test_net_assets_concepts.py 8 passed (with test_printed_rows 21)",
+  "round two: tests/test_bdc_filings.py, test_page_labelled_contexts.py, test_position_match_overrides.py, test_source_encodings.py, test_output_schemas.py: 288 passed",
+  "round three: tests/test_printed_rows.py 36 passed (orchestrator's R1/R3 tests plus 11 new R2 tests)",
+  "round four: tests/test_financial_conventions.py 86 passed (3 new: printed_page full date -> day/dated; '2027-08' and '' -> unknown)"
  ],
  "not_done": [
   "Full pytest suite, cohort regression and semantic diff not run (whole_dollar_scale_filings and net_assets_concepts are opt-in, on for this fund only; the refactor of _normalize_mixed_decimals_monetary_facts keeps the old path but is not measured on the cohort).",
@@ -929,319 +1164,16 @@
   "Industry heading on 2026-06-30 Helix Sleep reads 'Consumer Discretionary Textiles, Apparel & Luxury Goods' as printed (two headings run together on the page); left.",
   "The first build of this run (t8ya) already differed from spon3 only by the added quarter's rows and 65 position_ids; nothing else in spon3 was re-read.",
   "Process note: one bare 'python -' was typed by mistake during reading (it hung on stdin); killed by its own PID 19188; a second stray one (PID 7460) while recording the page sample, also killed by PID; no build or file was affected.",
-  "Page sample of t8yf found 2 published errors, recorded and not fixed (no builds left): C012 truncated issuer name (1 row, 39.0M; next build: one issuer_name row correction); C015 warrants classed EQUITY_COMMON (31 rows, 118.5M; needs a schema-level warrant class, owner decision). Twenty cards can miss a problem on under about 15 pct of rows.",
-  "Independent review of t8yf (reviews/0001825265_t8yf.json): rejected the F27 mechanism (now insufficient_evidence, proposal reworded without a mechanism), five detection decisions (revised) and found interest_expense never holds the printed interest line: directors' fees 2024-03-31 to 2026-06-30, repurchase-transaction interest 2022-03-31 to 2023-12-31 (0 at 2022-03-31 is that line's dash), 2,000 at 2022-12-31 against a printed 2,170 thousand (recorded as an observation; fix for the next build, not applied: no builds left).",
-  "A cleared ledger would not establish data correctness; 20 findings remain outstanding (13 with proposals, 7 parked)."
+  "A cleared ledger would not establish data correctness; 20 findings remain outstanding (13 with proposals, 7 parked).",
+  "Round two (t8za, t8zb; 2 of 3 builds): cohort regression and semantic diff not run for the new shared code (printed_rows_without_context and interest_expense fallback are opt-in, one wrapper each; the staging CASE branches only fire on a 'printed_page:' context id, which no other fund produces).",
+  "No independent review of round two yet; page sample not re-run on t8zb.",
+  "HOP Energy cross-instrument chain links (Protective Advance / Term Loan B / Term Loan / Term Loan C) seen in position_matches and not read against the page.",
+  "2022-12-31 income-statement quarter (total investment income, interest expense) is blank in the income table, as in t8yf; not investigated.",
+  "Round three (t8zc, the last build): tests/test_unified_holdings.py left to the orchestrator as instructed; full suite, cohort regression and semantic diff not run.",
+  "Whether the matcher would separate the Harvey Gulf tranches without the overrides was not rebuilt (no build left); judged from the printed lines (same maturity, same 2023-09-30 coupon).",
+  "Round four (t8zd): the Harvey Gulf force_pair overrides were not tested by a build without them (no build left); kept on the printed evidence (same maturity for both tranches)."
  ],
  "investigations": [
-  {
-   "finding_id": "RVQ_BLK_356ead8afcfa",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2023-09-30|fair_value_vs_filed_investments_ex_cash",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ],
-    "reviewed_rows": [
-     "0001825265|2023-09-30|fair_value_vs_filed_investments_ex_cash",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "fv_conservation residual -12.8 pct: published 631.4M against the filed (figure_corrections) 723.8M.",
-    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
-    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
-    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
-    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
-   ],
-   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_d24b0a9aaee6",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2023-09-30|cost_vs_filed_investments_at_cost",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ],
-    "reviewed_rows": [
-     "0001825265|2023-09-30|cost_vs_filed_investments_at_cost",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "cost_conservation residual -12.7 pct: published 628.4M against printed cost 720.2M.",
-    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
-    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
-    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
-    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
-   ],
-   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_1549d7e243b0",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2023-09-30|gav_reconciliation_status",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ],
-    "reviewed_rows": [
-     "0001825265|2023-09-30|gav_reconciliation_status",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "F20 reads the GAV reconciliation status FAIL (ratio 0.8724 = 631.4 / 723.8).",
-    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
-    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
-    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
-    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
-   ],
-   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_0380c67d650c",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2023-09-30|gav_ratio",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ],
-    "reviewed_rows": [
-     "0001825265|2023-09-30|gav_ratio",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "GAV ratio 0.8724 against the filed investments.",
-    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
-    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
-    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
-    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
-   ],
-   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_60c13bff9e3a",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2023-09-30|schedule_total_vs_filed",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ],
-    "reviewed_rows": [
-     "0001825265|2023-09-30|schedule_total_vs_filed",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "A04: holdings sum against the filed investments, 12.8 pct short.",
-    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
-    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
-    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
-    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
-   ],
-   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_37381b633cac",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2023-09-30|fair_value_total_vs_filed",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ],
-    "reviewed_rows": [
-     "0001825265|2023-09-30|fair_value_total_vs_filed",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "E01: same comparison as A04 from the oracle side.",
-    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
-    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
-    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
-    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
-   ],
-   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed."
-  },
-  {
-   "finding_id": "RVQ_BLK_8b808cfcf9b1",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2023-09-30|gav_ratio_investments",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ],
-    "reviewed_rows": [
-     "0001825265|2023-09-30|gav_ratio_investments",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
-     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
-    },
-    {
-     "accession": "0000950170-23-060972",
-     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
-    }
-   ],
-   "conclusion": "confirmed_error",
-   "hypotheses_tested": [
-    "GAV_BDC03: ratio 0.8724 inside the extreme band (comparison source investments_at_fair_value).",
-    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
-    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
-    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
-    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
-   ],
-   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed."
-  },
   {
    "finding_id": "RVQ_REV_0052719b46af",
    "coverage": {
@@ -1281,118 +1213,6 @@
     "Total assets wrong: rejected; published 692,689 and 780,612 thousand equal the printed balance sheets."
    ],
    "next_action": "Proposal PD-0001825265-F25-1 (reason f25-cash-deployed-into-investments) for the owner."
-  },
-  {
-   "finding_id": "RVQ_REV_e643b6d3156b",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2024-09-30|income_yield_minus_wac"
-    ],
-    "reviewed_rows": [
-     "0001825265|2024-09-30|income_yield_minus_wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-24-125154",
-     "text": "Ratio of net investment income to average net assets (7) 14.98"
-    },
-    {
-     "accession": "0000950170-24-125154",
-     "text": "Interest income $ 32,725 $ 24,375 $ 92,053 $ 50,988 Interest income paid-in-kind 3,523 1,329 7,171 3,155 Other fee income - 2,239 3,096 4,164 Total investment income 36,248 27,943 102,320 58,307"
-    },
-    {
-     "accession": "0000950170-24-125154",
-     "text": "Amortization of premium and accretion of discount, net ( 6,163 ) ( 2,669 )"
-    }
-   ],
-   "conclusion": "insufficient_evidence",
-   "hypotheses_tested": [
-    "Income yield misread: rejected; published 14.98 / 14.41 / 13.39 equal the printed ratios of net investment income to average net assets (13.38 printed at 2025-12-31); recomputed from printed NII over the average of quarter-end printed net assets: 15.12 (9M 2024), 14.30 (FY 2024), 13.52 (FY 2025).",
-    "Leverage less interest cost (my earlier reading): REJECTED by the reviewer and by the arithmetic (scratch/fund_runs/0001825265/f27_test.py): published weighted coupon x average fair value plus printed accretion and fee income, less printed expenses, gives about 12.1 pct of average net assets for 9M 2024 against the printed 15.1; leverage does not close it.",
-    "Accretion of discount and fee income (printed): tested; total investment income over average fair value 16.06 / 15.70 / 14.61 pct; after removing the printed net accretion (6,163 / 8,531 / 10,049) and other fee income (3,096 / 3,202 / 321) it is 14.61 / 14.35 / 13.72 pct of average fair value (14.32 / 14.04 / 13.34 of average par). Explains about 1.4 of the 3.3 points.",
-    "Rate timing (coupons fell during the period): tested; the published weighted coupon averaged over the period's quarter ends is 12.80 / 12.57 / 11.35 (not the period-end 12.32 / 11.63 / 10.87). A 1.4 to 2.4 point gap remains: coupon income implied by the printed lines exceeds the published rows' par x rate run-rate by 13.1M (10.5 pct) in 9M 2024, 13.1M (10.5 pct) in FY 2024 and 23.2M (14.5 pct) in FY 2025.",
-    "Published coupons wrong: not supported; every loan publishes a rate, spot checks of the ten largest loans and the 20-card page sample of t8yf found no rate error; but the sample cannot exclude a systematic gap of this size on every row.",
-    "Money-fund income inside printed interest income: measured, not dismissed (f27_test.py). Quarter-end balances and printed yields (41.4M 5.30 pct, 27.2M 5.24, 45.5M 5.24, 60.8M 4.82, 87.8M 4.39, 32.8M 4.27, 44.9M 4.26, 54.3M 4.04, 41.0M 3.68) give about 2.2M (9M 2024, annualised), 2.6M (FY 2024) and 2.2M (FY 2025) a year. Removing it, loan income is 14.35 / 14.05 / 13.53 pct of average loan fair value and the residual above the published par x rate run-rate is 10.8M (8.7 pct), 10.6M (8.5 pct) and 21.0M (13.2 pct) a year. Assumes the fund income is inside 'Interest income' (the statement has no dividend line); balance and yield taken at quarter ends."
-   ],
-   "next_action": "No mechanism established and no disposition claiming one. After printed accretion, printed fee income (the 10-K says other fee income is mainly late-closer fees received from investors), the estimated money-fund income and rate timing, 10.8M / 10.6M / 21.0M a year of interest income stays above the published loans' par x rate. Proposal PD-0001825265-F27-2 states the measured gap only (reason f27-income-above-coupon-mechanism-not-established); owner decides.",
-   "missing_evidence": "(1) No average invested balance is printed for any period, so income can only be compared with the average of quarter-end balances (repayment and purchase dates inside a period are not printed). (2) Printed interest income is not broken down into contractual coupon, prepayment and exit fees, amendment fees or default interest. Loans repaid inside a period are on the prior quarter-end schedule, so their coupons are known; only their repayment dates are not printed."
-  },
-  {
-   "finding_id": "RVQ_REV_ddc4d3078572",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2024-12-31|income_yield_minus_wac"
-    ],
-    "reviewed_rows": [
-     "0001825265|2024-12-31|income_yield_minus_wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-25-045559",
-     "text": "Ratio of net investment income before expenses (reimbursed) recaptured to average net assets 14.41 %"
-    },
-    {
-     "accession": "0001193125-26-126676",
-     "text": "Interest income $ 156,295 $ 123,857 $ 79,739 Interest income paid-in-kind 13,024 9,207 3,832 Other fee income 321 3,202 4,293 Total investment income 169,640 136,266 87,864"
-    },
-    {
-     "accession": "0001193125-26-126676",
-     "text": "Amortization of premium and accretion of discount, net ( 10,049 ) ( 8,531 ) ( 4,085 )"
-    }
-   ],
-   "conclusion": "insufficient_evidence",
-   "hypotheses_tested": [
-    "Income yield misread: rejected; published 14.98 / 14.41 / 13.39 equal the printed ratios of net investment income to average net assets (13.38 printed at 2025-12-31); recomputed from printed NII over the average of quarter-end printed net assets: 15.12 (9M 2024), 14.30 (FY 2024), 13.52 (FY 2025).",
-    "Leverage less interest cost (my earlier reading): REJECTED by the reviewer and by the arithmetic (scratch/fund_runs/0001825265/f27_test.py): published weighted coupon x average fair value plus printed accretion and fee income, less printed expenses, gives about 12.1 pct of average net assets for 9M 2024 against the printed 15.1; leverage does not close it.",
-    "Accretion of discount and fee income (printed): tested; total investment income over average fair value 16.06 / 15.70 / 14.61 pct; after removing the printed net accretion (6,163 / 8,531 / 10,049) and other fee income (3,096 / 3,202 / 321) it is 14.61 / 14.35 / 13.72 pct of average fair value (14.32 / 14.04 / 13.34 of average par). Explains about 1.4 of the 3.3 points.",
-    "Rate timing (coupons fell during the period): tested; the published weighted coupon averaged over the period's quarter ends is 12.80 / 12.57 / 11.35 (not the period-end 12.32 / 11.63 / 10.87). A 1.4 to 2.4 point gap remains: coupon income implied by the printed lines exceeds the published rows' par x rate run-rate by 13.1M (10.5 pct) in 9M 2024, 13.1M (10.5 pct) in FY 2024 and 23.2M (14.5 pct) in FY 2025.",
-    "Published coupons wrong: not supported; every loan publishes a rate, spot checks of the ten largest loans and the 20-card page sample of t8yf found no rate error; but the sample cannot exclude a systematic gap of this size on every row.",
-    "Money-fund income inside printed interest income: measured, not dismissed (f27_test.py). Quarter-end balances and printed yields (41.4M 5.30 pct, 27.2M 5.24, 45.5M 5.24, 60.8M 4.82, 87.8M 4.39, 32.8M 4.27, 44.9M 4.26, 54.3M 4.04, 41.0M 3.68) give about 2.2M (9M 2024, annualised), 2.6M (FY 2024) and 2.2M (FY 2025) a year. Removing it, loan income is 14.35 / 14.05 / 13.53 pct of average loan fair value and the residual above the published par x rate run-rate is 10.8M (8.7 pct), 10.6M (8.5 pct) and 21.0M (13.2 pct) a year. Assumes the fund income is inside 'Interest income' (the statement has no dividend line); balance and yield taken at quarter ends."
-   ],
-   "next_action": "No mechanism established and no disposition claiming one. After printed accretion, printed fee income (the 10-K says other fee income is mainly late-closer fees received from investors), the estimated money-fund income and rate timing, 10.8M / 10.6M / 21.0M a year of interest income stays above the published loans' par x rate. Proposal PD-0001825265-F27-2 states the measured gap only (reason f27-income-above-coupon-mechanism-not-established); owner decides.",
-   "missing_evidence": "(1) No average invested balance is printed for any period, so income can only be compared with the average of quarter-end balances (repayment and purchase dates inside a period are not printed). (2) Printed interest income is not broken down into contractual coupon, prepayment and exit fees, amendment fees or default interest. Loans repaid inside a period are on the prior quarter-end schedule, so their coupons are known; only their repayment dates are not printed."
-  },
-  {
-   "finding_id": "RVQ_REV_f7559af58f40",
-   "coverage": {
-    "affected_rows": [
-     "0001825265|2025-12-31|income_yield_minus_wac"
-    ],
-    "reviewed_rows": [
-     "0001825265|2025-12-31|income_yield_minus_wac"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001193125-26-126676",
-     "text": "Ratio of net investment income before expenses (reimbursed) recaptured to average net assets 13.38 %"
-    },
-    {
-     "accession": "0001193125-26-126676",
-     "text": "Interest income $ 156,295 $ 123,857 $ 79,739 Interest income paid-in-kind 13,024 9,207 3,832 Other fee income 321 3,202 4,293 Total investment income 169,640 136,266 87,864"
-    },
-    {
-     "accession": "0001193125-26-126676",
-     "text": "Amortization of premium and accretion of discount, net ( 10,049 ) ( 8,531 ) ( 4,085 )"
-    },
-    {
-     "accession": "0001193125-26-126676",
-     "text": "Total Members Capital 819,100 611,229"
-    }
-   ],
-   "conclusion": "insufficient_evidence",
-   "hypotheses_tested": [
-    "Income yield misread: rejected; published 14.98 / 14.41 / 13.39 equal the printed ratios of net investment income to average net assets (13.38 printed at 2025-12-31); recomputed from printed NII over the average of quarter-end printed net assets: 15.12 (9M 2024), 14.30 (FY 2024), 13.52 (FY 2025).",
-    "Leverage less interest cost (my earlier reading): REJECTED by the reviewer and by the arithmetic (scratch/fund_runs/0001825265/f27_test.py): published weighted coupon x average fair value plus printed accretion and fee income, less printed expenses, gives about 12.1 pct of average net assets for 9M 2024 against the printed 15.1; leverage does not close it.",
-    "Accretion of discount and fee income (printed): tested; total investment income over average fair value 16.06 / 15.70 / 14.61 pct; after removing the printed net accretion (6,163 / 8,531 / 10,049) and other fee income (3,096 / 3,202 / 321) it is 14.61 / 14.35 / 13.72 pct of average fair value (14.32 / 14.04 / 13.34 of average par). Explains about 1.4 of the 3.3 points.",
-    "Rate timing (coupons fell during the period): tested; the published weighted coupon averaged over the period's quarter ends is 12.80 / 12.57 / 11.35 (not the period-end 12.32 / 11.63 / 10.87). A 1.4 to 2.4 point gap remains: coupon income implied by the printed lines exceeds the published rows' par x rate run-rate by 13.1M (10.5 pct) in 9M 2024, 13.1M (10.5 pct) in FY 2024 and 23.2M (14.5 pct) in FY 2025.",
-    "Published coupons wrong: not supported; every loan publishes a rate, spot checks of the ten largest loans and the 20-card page sample of t8yf found no rate error; but the sample cannot exclude a systematic gap of this size on every row.",
-    "Money-fund income inside printed interest income: measured, not dismissed (f27_test.py). Quarter-end balances and printed yields (41.4M 5.30 pct, 27.2M 5.24, 45.5M 5.24, 60.8M 4.82, 87.8M 4.39, 32.8M 4.27, 44.9M 4.26, 54.3M 4.04, 41.0M 3.68) give about 2.2M (9M 2024, annualised), 2.6M (FY 2024) and 2.2M (FY 2025) a year. Removing it, loan income is 14.35 / 14.05 / 13.53 pct of average loan fair value and the residual above the published par x rate run-rate is 10.8M (8.7 pct), 10.6M (8.5 pct) and 21.0M (13.2 pct) a year. Assumes the fund income is inside 'Interest income' (the statement has no dividend line); balance and yield taken at quarter ends."
-   ],
-   "next_action": "No mechanism established and no disposition claiming one. After printed accretion, printed fee income (the 10-K says other fee income is mainly late-closer fees received from investors), the estimated money-fund income and rate timing, 10.8M / 10.6M / 21.0M a year of interest income stays above the published loans' par x rate. Proposal PD-0001825265-F27-2 states the measured gap only (reason f27-income-above-coupon-mechanism-not-established); owner decides.",
-   "missing_evidence": "(1) No average invested balance is printed for any period, so income can only be compared with the average of quarter-end balances (repayment and purchase dates inside a period are not printed). (2) Printed interest income is not broken down into contractual coupon, prepayment and exit fees, amendment fees or default interest. Loans repaid inside a period are on the prior quarter-end schedule, so their coupons are known; only their repayment dates are not printed."
   },
   {
    "finding_id": "RVQ_REV_6025bbb345b6",
@@ -1632,6 +1452,632 @@
     "A mechanism to move a fact to another context: none exists (untagged_values fills only a missing value; it cannot replace the revolver's tagged value)."
    ],
    "next_action": "Proposal PD-0001825265-blocking_fair_value_scale_or_unit_candidate-10 (reason src-fv-tagged-on-neighbour-context-corrected-from-page) for the owner."
+  }
+ ],
+ "resolved_investigations": [
+  {
+   "finding_id": "RVQ_BLK_356ead8afcfa",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|fair_value_vs_filed_investments_ex_cash",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|fair_value_vs_filed_investments_ex_cash",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "fv_conservation residual -12.8 pct: published 631.4M against the filed (figure_corrections) 723.8M.",
+    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
+    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
+    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
+    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
+   ],
+   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed.",
+   "resolution": "fixed in t8za/t8zb: the three 2023-09-30 rows are published from the printed page (owner ruling OVR-T8Y-R2 (a)); the finding is no longer raised"
+  },
+  {
+   "finding_id": "RVQ_BLK_d24b0a9aaee6",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|cost_vs_filed_investments_at_cost",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|cost_vs_filed_investments_at_cost",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "cost_conservation residual -12.7 pct: published 628.4M against printed cost 720.2M.",
+    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
+    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
+    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
+    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
+   ],
+   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed.",
+   "resolution": "fixed in t8za/t8zb: the three 2023-09-30 rows are published from the printed page (owner ruling OVR-T8Y-R2 (a)); the finding is no longer raised"
+  },
+  {
+   "finding_id": "RVQ_BLK_1549d7e243b0",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|gav_reconciliation_status",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|gav_reconciliation_status",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "F20 reads the GAV reconciliation status FAIL (ratio 0.8724 = 631.4 / 723.8).",
+    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
+    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
+    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
+    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
+   ],
+   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed.",
+   "resolution": "fixed in t8za/t8zb: the three 2023-09-30 rows are published from the printed page (owner ruling OVR-T8Y-R2 (a)); the finding is no longer raised"
+  },
+  {
+   "finding_id": "RVQ_BLK_0380c67d650c",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|gav_ratio",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|gav_ratio",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "GAV ratio 0.8724 against the filed investments.",
+    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
+    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
+    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
+    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
+   ],
+   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed.",
+   "resolution": "fixed in t8za/t8zb: the three 2023-09-30 rows are published from the printed page (owner ruling OVR-T8Y-R2 (a)); the finding is no longer raised"
+  },
+  {
+   "finding_id": "RVQ_BLK_60c13bff9e3a",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|schedule_total_vs_filed",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|schedule_total_vs_filed",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "A04: holdings sum against the filed investments, 12.8 pct short.",
+    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
+    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
+    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
+    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
+   ],
+   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed.",
+   "resolution": "fixed in t8za/t8zb: the three 2023-09-30 rows are published from the printed page (owner ruling OVR-T8Y-R2 (a)); the finding is no longer raised"
+  },
+  {
+   "finding_id": "RVQ_BLK_37381b633cac",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|fair_value_total_vs_filed",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|fair_value_total_vs_filed",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "E01: same comparison as A04 from the oracle side.",
+    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
+    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
+    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
+    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
+   ],
+   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed.",
+   "resolution": "fixed in t8za/t8zb: the three 2023-09-30 rows are published from the printed page (owner ruling OVR-T8Y-R2 (a)); the finding is no longer raised"
+  },
+  {
+   "finding_id": "RVQ_BLK_8b808cfcf9b1",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|gav_ratio_investments",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|gav_ratio_investments",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan A (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Harvey Gulf Holdings, LLC Term Loan B (no 2023-09-30 context)",
+     "0000950170-23-060972|page-row|Lenox Holdings, Inc. Term Loan (no 2023-09-30 context)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "GAV_BDC03: ratio 0.8724 inside the extreme band (comparison source investments_at_fair_value).",
+    "Rows tagged but dropped by a rule or filter: rejected; page_untagged_rows.py lists the three printed rows with no ix tag at all, and the instance holds only 2022-12-31 contexts for them (Harvey Gulf A C_df52f86d-9feb-4229-833c-a67a0aa2324b, B C_da2dba43-d368-4d3d-87dc-518e85fb383e, Lenox C_e004cb60-9a56-4348-a929-98da0e4e5078, plus their date-only duration twins).",
+    "untagged_values or context_identifiers could supply them: rejected; both need a 2023-09-30 context, and none exists.",
+    "A later filing restates the quarter: rejected; the 10-K for 2023-12-31 compares with 2022-12-31 only, no later filing prints a 2023-09-30 schedule.",
+    "Published total versus printed: published 631,394,423 fair value / 628,432,605 cost; printed 723,775,772 / 720,198,416; the three rows sum to 92,381,349 / 91,765,811 = both gaps exactly."
+   ],
+   "next_action": "Parked: owner decision OVR-T8Y-R2 (may a printed schedule row with no XBRL context be published, from its printed line). Until then the quarter is a declared total exception; no disposition proposed, because a printed figure the build does not publish is a gap, not as filed.",
+   "resolution": "fixed in t8za/t8zb: the three 2023-09-30 rows are published from the printed page (owner ruling OVR-T8Y-R2 (a)); the finding is no longer raised"
+  },
+  {
+   "finding_id": "RVQ_REV_e643b6d3156b",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2024-09-30|income_yield_minus_wac"
+    ],
+    "reviewed_rows": [
+     "0001825265|2024-09-30|income_yield_minus_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-125154",
+     "text": "Ratio of net investment income to average net assets (7) 14.98"
+    },
+    {
+     "accession": "0000950170-24-125154",
+     "text": "Interest income $ 32,725 $ 24,375 $ 92,053 $ 50,988 Interest income paid-in-kind 3,523 1,329 7,171 3,155 Other fee income - 2,239 3,096 4,164 Total investment income 36,248 27,943 102,320 58,307"
+    },
+    {
+     "accession": "0000950170-24-125154",
+     "text": "Amortization of premium and accretion of discount, net ( 6,163 ) ( 2,669 )"
+    }
+   ],
+   "conclusion": "insufficient_evidence",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; published 14.98 / 14.41 / 13.39 equal the printed ratios of net investment income to average net assets (13.38 printed at 2025-12-31); recomputed from printed NII over the average of quarter-end printed net assets: 15.12 (9M 2024), 14.30 (FY 2024), 13.52 (FY 2025).",
+    "Leverage less interest cost (my earlier reading): REJECTED by the reviewer and by the arithmetic (scratch/fund_runs/0001825265/f27_test.py): published weighted coupon x average fair value plus printed accretion and fee income, less printed expenses, gives about 12.1 pct of average net assets for 9M 2024 against the printed 15.1; leverage does not close it.",
+    "Accretion of discount and fee income (printed): tested; total investment income over average fair value 16.06 / 15.70 / 14.61 pct; after removing the printed net accretion (6,163 / 8,531 / 10,049) and other fee income (3,096 / 3,202 / 321) it is 14.61 / 14.35 / 13.72 pct of average fair value (14.32 / 14.04 / 13.34 of average par). Explains about 1.4 of the 3.3 points.",
+    "Rate timing (coupons fell during the period): tested; the published weighted coupon averaged over the period's quarter ends is 12.80 / 12.57 / 11.35 (not the period-end 12.32 / 11.63 / 10.87). A 1.4 to 2.4 point gap remains: coupon income implied by the printed lines exceeds the published rows' par x rate run-rate by 13.1M (10.5 pct) in 9M 2024, 13.1M (10.5 pct) in FY 2024 and 23.2M (14.5 pct) in FY 2025.",
+    "Published coupons wrong: not supported; every loan publishes a rate, spot checks of the ten largest loans and the 20-card page sample of t8yf found no rate error; but the sample cannot exclude a systematic gap of this size on every row.",
+    "Money-fund income inside printed interest income: measured, not dismissed (f27_test.py). Quarter-end balances and printed yields (41.4M 5.30 pct, 27.2M 5.24, 45.5M 5.24, 60.8M 4.82, 87.8M 4.39, 32.8M 4.27, 44.9M 4.26, 54.3M 4.04, 41.0M 3.68) give about 2.2M (9M 2024, annualised), 2.6M (FY 2024) and 2.2M (FY 2025) a year. Removing it, loan income is 14.35 / 14.05 / 13.53 pct of average loan fair value and the residual above the published par x rate run-rate is 10.8M (8.7 pct), 10.6M (8.5 pct) and 21.0M (13.2 pct) a year. Assumes the fund income is inside 'Interest income' (the statement has no dividend line); balance and yield taken at quarter ends."
+   ],
+   "next_action": "No mechanism established and no disposition claiming one. After printed accretion, printed fee income (the 10-K says other fee income is mainly late-closer fees received from investors), the estimated money-fund income and rate timing, 10.8M / 10.6M / 21.0M a year of interest income stays above the published loans' par x rate. Proposal PD-0001825265-F27-2 states the measured gap only (reason f27-income-above-coupon-mechanism-not-established); owner decides.",
+   "missing_evidence": "(1) No average invested balance is printed for any period, so income can only be compared with the average of quarter-end balances (repayment and purchase dates inside a period are not printed). (2) Printed interest income is not broken down into contractual coupon, prepayment and exit fees, amendment fees or default interest. Loans repaid inside a period are on the prior quarter-end schedule, so their coupons are known; only their repayment dates are not printed.",
+   "owner_ruling": "2026-10-18: the owner accepted reason f27-income-above-coupon-mechanism-not-established ('published as printed; the check's mechanism cannot be established from the filings'), data/overrides/finding_dispositions/owner_queue_accepted.json. t8zb ledger: dispositioned_as_filed, DS-0001825265-F27-2. The measured gap and the missing evidence stand as recorded.",
+   "resolution": "dispositioned by the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_ddc4d3078572",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2024-12-31|income_yield_minus_wac"
+    ],
+    "reviewed_rows": [
+     "0001825265|2024-12-31|income_yield_minus_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045559",
+     "text": "Ratio of net investment income before expenses (reimbursed) recaptured to average net assets 14.41 %"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Interest income $ 156,295 $ 123,857 $ 79,739 Interest income paid-in-kind 13,024 9,207 3,832 Other fee income 321 3,202 4,293 Total investment income 169,640 136,266 87,864"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Amortization of premium and accretion of discount, net ( 10,049 ) ( 8,531 ) ( 4,085 )"
+    }
+   ],
+   "conclusion": "insufficient_evidence",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; published 14.98 / 14.41 / 13.39 equal the printed ratios of net investment income to average net assets (13.38 printed at 2025-12-31); recomputed from printed NII over the average of quarter-end printed net assets: 15.12 (9M 2024), 14.30 (FY 2024), 13.52 (FY 2025).",
+    "Leverage less interest cost (my earlier reading): REJECTED by the reviewer and by the arithmetic (scratch/fund_runs/0001825265/f27_test.py): published weighted coupon x average fair value plus printed accretion and fee income, less printed expenses, gives about 12.1 pct of average net assets for 9M 2024 against the printed 15.1; leverage does not close it.",
+    "Accretion of discount and fee income (printed): tested; total investment income over average fair value 16.06 / 15.70 / 14.61 pct; after removing the printed net accretion (6,163 / 8,531 / 10,049) and other fee income (3,096 / 3,202 / 321) it is 14.61 / 14.35 / 13.72 pct of average fair value (14.32 / 14.04 / 13.34 of average par). Explains about 1.4 of the 3.3 points.",
+    "Rate timing (coupons fell during the period): tested; the published weighted coupon averaged over the period's quarter ends is 12.80 / 12.57 / 11.35 (not the period-end 12.32 / 11.63 / 10.87). A 1.4 to 2.4 point gap remains: coupon income implied by the printed lines exceeds the published rows' par x rate run-rate by 13.1M (10.5 pct) in 9M 2024, 13.1M (10.5 pct) in FY 2024 and 23.2M (14.5 pct) in FY 2025.",
+    "Published coupons wrong: not supported; every loan publishes a rate, spot checks of the ten largest loans and the 20-card page sample of t8yf found no rate error; but the sample cannot exclude a systematic gap of this size on every row.",
+    "Money-fund income inside printed interest income: measured, not dismissed (f27_test.py). Quarter-end balances and printed yields (41.4M 5.30 pct, 27.2M 5.24, 45.5M 5.24, 60.8M 4.82, 87.8M 4.39, 32.8M 4.27, 44.9M 4.26, 54.3M 4.04, 41.0M 3.68) give about 2.2M (9M 2024, annualised), 2.6M (FY 2024) and 2.2M (FY 2025) a year. Removing it, loan income is 14.35 / 14.05 / 13.53 pct of average loan fair value and the residual above the published par x rate run-rate is 10.8M (8.7 pct), 10.6M (8.5 pct) and 21.0M (13.2 pct) a year. Assumes the fund income is inside 'Interest income' (the statement has no dividend line); balance and yield taken at quarter ends."
+   ],
+   "next_action": "No mechanism established and no disposition claiming one. After printed accretion, printed fee income (the 10-K says other fee income is mainly late-closer fees received from investors), the estimated money-fund income and rate timing, 10.8M / 10.6M / 21.0M a year of interest income stays above the published loans' par x rate. Proposal PD-0001825265-F27-2 states the measured gap only (reason f27-income-above-coupon-mechanism-not-established); owner decides.",
+   "missing_evidence": "(1) No average invested balance is printed for any period, so income can only be compared with the average of quarter-end balances (repayment and purchase dates inside a period are not printed). (2) Printed interest income is not broken down into contractual coupon, prepayment and exit fees, amendment fees or default interest. Loans repaid inside a period are on the prior quarter-end schedule, so their coupons are known; only their repayment dates are not printed.",
+   "owner_ruling": "2026-10-18: the owner accepted reason f27-income-above-coupon-mechanism-not-established ('published as printed; the check's mechanism cannot be established from the filings'), data/overrides/finding_dispositions/owner_queue_accepted.json. t8zb ledger: dispositioned_as_filed, DS-0001825265-F27-2. The measured gap and the missing evidence stand as recorded.",
+   "resolution": "dispositioned by the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_f7559af58f40",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2025-12-31|income_yield_minus_wac"
+    ],
+    "reviewed_rows": [
+     "0001825265|2025-12-31|income_yield_minus_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Ratio of net investment income before expenses (reimbursed) recaptured to average net assets 13.38 %"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Interest income $ 156,295 $ 123,857 $ 79,739 Interest income paid-in-kind 13,024 9,207 3,832 Other fee income 321 3,202 4,293 Total investment income 169,640 136,266 87,864"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Amortization of premium and accretion of discount, net ( 10,049 ) ( 8,531 ) ( 4,085 )"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Total Members Capital 819,100 611,229"
+    }
+   ],
+   "conclusion": "insufficient_evidence",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; published 14.98 / 14.41 / 13.39 equal the printed ratios of net investment income to average net assets (13.38 printed at 2025-12-31); recomputed from printed NII over the average of quarter-end printed net assets: 15.12 (9M 2024), 14.30 (FY 2024), 13.52 (FY 2025).",
+    "Leverage less interest cost (my earlier reading): REJECTED by the reviewer and by the arithmetic (scratch/fund_runs/0001825265/f27_test.py): published weighted coupon x average fair value plus printed accretion and fee income, less printed expenses, gives about 12.1 pct of average net assets for 9M 2024 against the printed 15.1; leverage does not close it.",
+    "Accretion of discount and fee income (printed): tested; total investment income over average fair value 16.06 / 15.70 / 14.61 pct; after removing the printed net accretion (6,163 / 8,531 / 10,049) and other fee income (3,096 / 3,202 / 321) it is 14.61 / 14.35 / 13.72 pct of average fair value (14.32 / 14.04 / 13.34 of average par). Explains about 1.4 of the 3.3 points.",
+    "Rate timing (coupons fell during the period): tested; the published weighted coupon averaged over the period's quarter ends is 12.80 / 12.57 / 11.35 (not the period-end 12.32 / 11.63 / 10.87). A 1.4 to 2.4 point gap remains: coupon income implied by the printed lines exceeds the published rows' par x rate run-rate by 13.1M (10.5 pct) in 9M 2024, 13.1M (10.5 pct) in FY 2024 and 23.2M (14.5 pct) in FY 2025.",
+    "Published coupons wrong: not supported; every loan publishes a rate, spot checks of the ten largest loans and the 20-card page sample of t8yf found no rate error; but the sample cannot exclude a systematic gap of this size on every row.",
+    "Money-fund income inside printed interest income: measured, not dismissed (f27_test.py). Quarter-end balances and printed yields (41.4M 5.30 pct, 27.2M 5.24, 45.5M 5.24, 60.8M 4.82, 87.8M 4.39, 32.8M 4.27, 44.9M 4.26, 54.3M 4.04, 41.0M 3.68) give about 2.2M (9M 2024, annualised), 2.6M (FY 2024) and 2.2M (FY 2025) a year. Removing it, loan income is 14.35 / 14.05 / 13.53 pct of average loan fair value and the residual above the published par x rate run-rate is 10.8M (8.7 pct), 10.6M (8.5 pct) and 21.0M (13.2 pct) a year. Assumes the fund income is inside 'Interest income' (the statement has no dividend line); balance and yield taken at quarter ends."
+   ],
+   "next_action": "No mechanism established and no disposition claiming one. After printed accretion, printed fee income (the 10-K says other fee income is mainly late-closer fees received from investors), the estimated money-fund income and rate timing, 10.8M / 10.6M / 21.0M a year of interest income stays above the published loans' par x rate. Proposal PD-0001825265-F27-2 states the measured gap only (reason f27-income-above-coupon-mechanism-not-established); owner decides.",
+   "missing_evidence": "(1) No average invested balance is printed for any period, so income can only be compared with the average of quarter-end balances (repayment and purchase dates inside a period are not printed). (2) Printed interest income is not broken down into contractual coupon, prepayment and exit fees, amendment fees or default interest. Loans repaid inside a period are on the prior quarter-end schedule, so their coupons are known; only their repayment dates are not printed.",
+   "owner_ruling": "2026-10-18: the owner accepted reason f27-income-above-coupon-mechanism-not-established ('published as printed; the check's mechanism cannot be established from the filings'), data/overrides/finding_dispositions/owner_queue_accepted.json. t8zb ledger: dispositioned_as_filed, DS-0001825265-F27-2. The measured gap and the missing evidence stand as recorded.",
+   "resolution": "dispositioned by the owner"
+  },
+  {
+   "finding_id": "BDCSRC_0001825265_2023-09-30_BLOCKING_PIPELINE_ONLY_POSITION_170f976175",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|printed_page:d3dad0396499ac3b",
+     "0001825265|2023-09-30|printed_page:efdfecc0d22a32bc",
+     "0001825265|2023-09-30|printed_page:7df3ed5ea2636143"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|printed_page:d3dad0396499ac3b",
+     "0001825265|2023-09-30|printed_page:efdfecc0d22a32bc",
+     "0001825265|2023-09-30|printed_page:7df3ed5ea2636143"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows tagged on a current-period context after all: rejected; round one scanned all 344 contexts (only 2022-12-31 comparatives for these three) and the extractor's refusal guard (issuer + instrument, or fair value + cost, on a current-period record) did not fire in t8za/t8zb.",
+    "Wrong values on the declared rows: rejected; t8zb publishes 28,434,971 / 27,883,696 / 28,265,379, 27,237,547 / 26,569,849 / 27,237,547 and 36,708,831 / 37,312,266 / 37,883,211, as printed; the quarter sums to the printed 723,775,772 / 720,198,416.",
+    "Check wrong about the XBRL: no; the check (source recon extra_in_pipeline, 92.38M) is right that no XBRL fact matches; the rows are published from the page by the owner's ruling and labelled printed_page."
+   ],
+   "next_action": "Proposal (reason printed-row-without-xbrl-context-published-by-owner-ruling) for the owner; keyed excusal requested (OVR-T8Z-R1) so later builds do not re-raise it.",
+   "resolution": "no longer raised in t8zc: OVR-T8Z-R1 (declared rows non-blocking printed_page_declared in source recon, SRC_BDC02P, E07) and OVR-T8Z-R2 (printed terms carried) under D-208"
+  },
+  {
+   "finding_id": "RVQ_BLK_07d43523742c",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|printed_page:d3dad0396499ac3b",
+     "0001825265|2023-09-30|printed_page:efdfecc0d22a32bc",
+     "0001825265|2023-09-30|printed_page:7df3ed5ea2636143"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|printed_page:d3dad0396499ac3b",
+     "0001825265|2023-09-30|printed_page:efdfecc0d22a32bc",
+     "0001825265|2023-09-30|printed_page:7df3ed5ea2636143"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows tagged on a current-period context after all: rejected; round one scanned all 344 contexts (only 2022-12-31 comparatives for these three) and the extractor's refusal guard (issuer + instrument, or fair value + cost, on a current-period record) did not fire in t8za/t8zb.",
+    "Wrong values on the declared rows: rejected; t8zb publishes 28,434,971 / 27,883,696 / 28,265,379, 27,237,547 / 26,569,849 / 27,237,547 and 36,708,831 / 37,312,266 / 37,883,211, as printed; the quarter sums to the printed 723,775,772 / 720,198,416.",
+    "Check wrong about the XBRL: no; the check (SRC_BDC02, issue_rows 3) is right that no XBRL fact matches; the rows are published from the page by the owner's ruling and labelled printed_page."
+   ],
+   "next_action": "Proposal (reason printed-row-without-xbrl-context-published-by-owner-ruling) for the owner; keyed excusal requested (OVR-T8Z-R1) so later builds do not re-raise it.",
+   "resolution": "no longer raised in t8zc: OVR-T8Z-R1 (declared rows non-blocking printed_page_declared in source recon, SRC_BDC02P, E07) and OVR-T8Z-R2 (printed terms carried) under D-208"
+  },
+  {
+   "finding_id": "RVQ_BLK_c98d401f49c1",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|printed_page:d3dad0396499ac3b",
+     "0001825265|2023-09-30|printed_page:efdfecc0d22a32bc",
+     "0001825265|2023-09-30|printed_page:7df3ed5ea2636143"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|printed_page:d3dad0396499ac3b",
+     "0001825265|2023-09-30|printed_page:efdfecc0d22a32bc",
+     "0001825265|2023-09-30|printed_page:7df3ed5ea2636143"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows tagged on a current-period context after all: rejected; round one scanned all 344 contexts (only 2022-12-31 comparatives for these three) and the extractor's refusal guard (issuer + instrument, or fair value + cost, on a current-period record) did not fire in t8za/t8zb.",
+    "Wrong values on the declared rows: rejected; t8zb publishes 28,434,971 / 27,883,696 / 28,265,379, 27,237,547 / 26,569,849 / 27,237,547 and 36,708,831 / 37,312,266 / 37,883,211, as printed; the quarter sums to the printed 723,775,772 / 720,198,416.",
+    "Check wrong about the XBRL: no; the check (E07 source=27 vs output=30 (11.1 pct)) is right that no XBRL fact matches; the rows are published from the page by the owner's ruling and labelled printed_page."
+   ],
+   "next_action": "Proposal (reason printed-row-without-xbrl-context-published-by-owner-ruling) for the owner; keyed excusal requested (OVR-T8Z-R1) so later builds do not re-raise it.",
+   "resolution": "no longer raised in t8zc: OVR-T8Z-R1 (declared rows non-blocking printed_page_declared in source recon, SRC_BDC02P, E07) and OVR-T8Z-R2 (printed terms carried) under D-208"
+  },
+  {
+   "finding_id": "RVQ_REV_0019eb489ae5",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|printed_page:d3dad0396499ac3b",
+     "0001825265|2023-09-30|printed_page:efdfecc0d22a32bc",
+     "0001825265|2023-09-30|printed_page:7df3ed5ea2636143"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|printed_page:d3dad0396499ac3b",
+     "0001825265|2023-09-30|printed_page:efdfecc0d22a32bc",
+     "0001825265|2023-09-30|printed_page:7df3ed5ea2636143"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Rate tagged elsewhere: no; no fact exists for these rows.",
+    "Rate readable from the printed line: yes (12.63%, 12.63%, 14.31%), but outside the scope of the owner ruling; not read."
+   ],
+   "next_action": "Parked: owner decision OVR-T8Z-R2 (may the declaration carry the printed rate, spread, floor, maturity and percent).",
+   "resolution": "no longer raised in t8zc: OVR-T8Z-R1 (declared rows non-blocking printed_page_declared in source recon, SRC_BDC02P, E07) and OVR-T8Z-R2 (printed terms carried) under D-208"
+  },
+  {
+   "finding_id": "RVQ_REV_522297d400b4",
+   "coverage": {
+    "affected_rows": [
+     "0001825265|2023-09-30|F23"
+    ],
+    "reviewed_rows": [
+     "0001825265|2023-09-30|F23"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Net assets wrong: no; 433,968 thousand as printed (highlights wrapper), and F23 passes in every other quarter (0.0001 to 0.0027).",
+    "Missing percent on the declared rows: yes; printed 6.6 + 6.3 + 8.5 = 21.4 points are not published, relative gap 0.127 = their share of the quarter's fair value."
+   ],
+   "next_action": "Parked with X02: owner decision OVR-T8Z-R2.",
+   "resolution": "no longer raised in t8zc: OVR-T8Z-R1 (declared rows non-blocking printed_page_declared in source recon, SRC_BDC02P, E07) and OVR-T8Z-R2 (printed terms carried) under D-208"
   }
  ]
 }

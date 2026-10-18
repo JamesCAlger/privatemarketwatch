@@ -33,12 +33,26 @@ def load_encodings(wrapper_directory=None):
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
-                'whole_dollar_scale_filings','net_assets_concepts'}:
+                'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
             raise ValueError('Invalid or duplicate encoding CIK: '+str(path))
         for key,values in encoding.items():
+            if key=='printed_rows_without_context':
+                # Rows printed with no XBRL context, declared from the printed line (owner ruling
+                # 2026-10-18, OVR-T8Y-R2; pipeline.printed_rows). Objects, not strings.
+                from pipeline.printed_rows import entry_errors
+                if not isinstance(values,list) or not values:
+                    raise ValueError('printed_rows_without_context lists declared rows: '+str(path))
+                for entry in values:
+                    errors=entry_errors(entry)
+                    if errors:
+                        raise ValueError('Invalid printed row ('+'; '.join(errors)+'): '+str(path))
+                seen=[(e['accession'],' '.join(e['issuer'].lower().split()),' '.join(e['instrument'].lower().split())) for e in values]
+                if len(set(seen))!=len(seen):
+                    raise ValueError('Duplicate printed row: '+str(path))
+                continue
             if not isinstance(values,list) or not values or any(not isinstance(v,str) or not v.strip() for v in values):
                 raise ValueError('Invalid encoding values: '+str(path))
             if len(set(' '.join(v.lower().split()) for v in values))!=len(values):

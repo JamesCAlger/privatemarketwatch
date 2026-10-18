@@ -504,7 +504,11 @@ PROV_WEAK_WARN = {"anchor_stale", "no_provenance", "text_pathway",
 # pct_sense_check: recompute-vs-disclosure divergence on the derived pct field -- sense-check signal, not a pointer-verification failure (re-laned 2026-08-25).
 # Known-pass codes -- anything NOT in tight_fail or weak_warn AND NOT in this set
 # is an unrecognized code and routes to weak/warn (safe default, not weak/pass).
-PROV_WEAK_PASS = {"verified", "corrected", "derived", "unchecked_trivial"}
+PROV_WEAK_PASS = {"verified", "corrected", "derived", "unchecked_trivial",
+                  # declared from the printed line (printed_rows_without_context, owner ruling
+                  # 2026-10-18 / OVR-T8Z-R3): a known non-blocking state, NOT verified -- the
+                  # provenance summary keeps it out of verified_fv.
+                  "printed_page_declared"}
 
 
 def _provenance_select() -> str | None:

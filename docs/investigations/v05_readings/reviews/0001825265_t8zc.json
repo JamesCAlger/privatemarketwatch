@@ -1,0 +1,281 @@
+{
+ "reviewer_id": "tcwviii_independent_reviewer_t8zc_2026-10-18",
+ "review_round": "t8zc",
+ "report_digest": "2d9bc3ab90aabda667f20fd7787b3a10c83f09e75c1a585991649314d57c0411",
+ "review_basis": "Fresh review of sandbox t8zc: report mtime 2026-10-18 10:23, ledger mtime 2026-10-18 10:21 (10 outstanding from 2022-01-01; F28 2021-12-31 open but before SINCE). Populations rebuilt from t8zc output (row_validation_issues, source_reconciliation_detail and residual classification, fund_financials_validation_current, shadow validation_results_ledger, private_markets_holdings, provenance_ledger); all 51 report quotes found in the cached pages (pg.py quotes); ix tags read in 0000950170-24-037182 and 0000950170-23-060972. Scripts and notes under scratch/fund_runs/0001825265/reviewer_t8zc/. Two observations rejected for incomplete fixes that leave published errors: the D&D Buyer revolver 2023-12-31 industry, and maturity_status/maturity_precision on the three declared 2023-09-30 rows.",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001825265_2023-12-31_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_4cfe193968",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population: the residual classification has one blocking row for this fund (SRCRES-000001, 2023-12-31, mechanism blocking_fair_value_scale_or_unit_candidate, issue_count 1) = the single value_mismatch row in source_reconciliation_detail, context C_55ae7aaf-0205-4376-954b-fd4d37c2891f / output ROW-09837033ef0f35f0 (source FV 33,046,946, output 1,130,534, cost and par 1,153,606 both sides). That row is in affected_rows; the two extra keys (Alorica C_fa46a8e5, third context C_0ef4405c) are context for the mechanism. ix read: C_55ae7aaf carries InvestmentOwnedAtFairValue 33,046,946 with the revolver's rate 12.45, spread 7.00, par and cost 1,153,606; C_0ef4405c carries only InvestmentOwnedAtFairValue 1,130,534. The page prints 33,046,946 on Alorica's line and 1,130,534 on the revolver's. Not a scale error (ratio 29.2). Published totals 742,916,128 / 738,207,203 = printed. Conclusion false_alarm on the fair value holds. Note: the same cross-tag also gave the revolver Alorica's industry (see observation member-carries-another-rows-name); that does not change this fair-value finding.",
+   "evidence": [
+    {"accession": "0000950170-24-037182", "text": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"},
+    {"accession": "0000950170-24-037182", "text": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"},
+    {"accession": "0000950170-24-037182", "text": "Total Debt Investments (2) 161.5 % 738,207,203 742,916,128"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bd8396ead567",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population: row_validation_issues has exactly one SRC_BDC03 FAIL for this fund (2023-12-31, D&D Buyer revolver identifier), the same source/output pair as the source-recon finding (C_55ae7aaf / ROW-09837033ef0f35f0). Same ix and page reading as above: the source side is Alorica's value on the revolver's context; the published 1,130,534 is the printed revolver value (row correction) and Alorica publishes its printed 33,046,946 on its own context C_fa46a8e5 (source recon: matched). No mechanism exists to move a tagged fact between contexts, so the residual check cannot clear itself. false_alarm supported for the value; the proposal's 'no further fix applies' is true for fair value only (the revolver's extracted_industry is still wrong, see observation review).",
+   "evidence": [
+    {"accession": "0000950170-24-037182", "text": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"},
+    {"accession": "0000950170-24-037182", "text": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0052719b46af",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population: F25 FAIL only at 2023-06-30 (value 0.3979); one fund-quarter key, matches affected_rows. Recomputed from t8zc fund_financials: investments 403,510,457 -> 615,303,176 (+52.5 pct) vs total assets 692,689k -> 780,612k (+12.7 pct), gap 39.8pp. Both investments figures equal the printed 'Total Debt Investments'. Printed Total Investments including cash equivalents and the Treasury bill 686,157,510 -> 772,888,903 (+12.6 pct) tracks total assets, so growth came from deploying cash and bills, which the ex-cash holdings measure does not see. false_alarm supported; disposition is the owner's.",
+   "evidence": [
+    {"accession": "0000950170-23-020390", "text": "U.S. Treasury Bill, Yield 4.59 % 60.8 % 200,000,000 197,360,000 197,360,000"},
+    {"accession": "0000950170-23-020390", "text": "Total Investments ( 211.5 %) $ 687,902,445 $ 686,157,510"},
+    {"accession": "0000950170-23-040379", "text": "Total Investments ( 203.1 %) $ 770,456,020 $ 772,888,903"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_061bea727d9b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Shadow ledger: weak fmt_basis_spread 2025-06-30 warn 1.59, denominator 63. Reviewer count on t8zc holdings 2025-06-30: 63 spreads, 1 outside 0-15 (1/63 = 1.59 pct); across all quarters of the fund only one row has spread above 15: ROW-b8e6e17a39f35f4a Signature Brands 9th Amendment Term Loan A, 17.5, which the page prints as 'SOFR + 17.50 %'. Coverage keys (fund-quarter metric + that row) are the full flagged population. false_alarm supported.",
+   "evidence": [
+    {"accession": "0000950170-25-107434", "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK) 0.8 % 6,838,469 05/04/28 6,588,966 6,838,469"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_234516ae77ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Shadow ledger: weak fmt_pik_rate 2025-06-30 warn 6.67, denominator 15. Reviewer count: 15 PIK rates published at 2025-06-30, one above 20 (1/15 = 6.67 pct), and that is the only PIK rate above 20 in the fund: ROW-b8e6e17a39f35f4a, pik_rate 22.03 = printed coupon '22.03 % inc PIK ... all PIK' (interest_rate 22.03, interest_rate_cash 0). Coverage complete. false_alarm supported.",
+   "evidence": [
+    {"accession": "0000950170-25-107434", "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK) 0.8 % 6,838,469 05/04/28 6,588,966 6,838,469"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6025bbb345b6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F28 FAIL at 2026-08-12 (fund=True; holdings=False). The t8zc fund_financials row for 2026-08-12 carries only shares_outstanding 6,310,260 (report_quarter 2026q3, every other field blank) = the cover-page count of the 10-Q for 2026-06-30. Not a reporting period, so no holdings are expected. Coverage is one fund-quarter key. F28 for 2022-03-31..2022-12-31 is dispositioned_not_applicable (DS-LARGE12-F28-1825265); 2021-12-31 is open but before the ledger SINCE date. false_alarm supported. The underlying defect (units only on the cover row) is recorded as observation units-outstanding-only-from-cover-page.",
+   "evidence": [
+    {"accession": "0001193125-26-346657", "text": "The number of the Registrants common units outstanding at August 12, 2026 was 6,310,260"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_cb691056b0ed",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 FAIL at 2023-03-31 (rate 0.0; published distribution_per_share 0.0). Read the 10-Q statement of changes for the quarter: net investment income, realized and unrealized, contributions 125,000, no distributions line. Cross-check: the 2023 10-K prints total distributions 5.57 per unit (5.28 NII + 0.29 return of capital) = published quarters 0 + 0.41 + 1.50 + 3.66. Zero is the right value. false_alarm supported.",
+   "evidence": [
+    {"accession": "0000950170-23-020390", "text": "Members Capital at January 1, 2023 $ 198,894 $ ( 2,876 ) $ 196,018 Net Increase (Decrease) in Members Capital Resulting from Operations: Net investment income - 5,357 5,357"},
+    {"accession": "0000950170-23-020390", "text": "Contributions 125,000 - 125,000 Total Increase in Members Capital for the three months ended March 31, 2023"},
+    {"accession": "0000950170-24-037182", "text": "Less Distributions: From net investment income ( 5.28 ) ( 1.87 ) Return of Capital ( 0.29 ) - Total distributions ( 5.57 )"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f552f2c7e38d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 FAIL at 2026-06-30 (rate 0.0). The second-quarter statement of changes (March 31 to June 30, 2026) lists operations, contributions 69,500 and the Exchange Offer transfer, no distributions; the six-month cash-flow distributions 25,000 equal the first quarter's 25,000 in the 2026-03-31 10-Q. Zero is the right value. false_alarm supported.",
+   "evidence": [
+    {"accession": "0001193125-26-346657", "text": "Contributions 69,500 - 69,500 Transfer of net assets to Perpetual Fund pursuant to Exchange Offer on April 1, 2026 ( 444,314 ) 32,510 ( 411,804 )"},
+    {"accession": "0001193125-26-346657", "text": "Distributions to Members from distributable earnings ( 25,000 ) ( 50,000 )"},
+    {"accession": "0001193125-26-221923", "text": "Distributions to Members from: Distributable earnings - ( 25,000 ) ( 25,000 )"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e841f5c9083e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C117 WARN: one row in the fund, ROW-b8e6e17a39f35f4a (2025-06-30), pik_rate 22.03; matches affected_rows. The value comes from this run's all-PIK row correction and equals the printed coupon marked 'all PIK'; no PIK rate is tagged. The finding is the consequence of publishing a correct, unusually high PIK rate. false_alarm supported.",
+   "evidence": [
+    {"accession": "0000950170-25-107434", "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK) 0.8 % 6,838,469 05/04/28 6,588,966 6,838,469"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f1627e2d2018",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C115 WARN: one row in the fund, ROW-b8e6e17a39f35f4a (2025-06-30), basis_spread 17.5; matches affected_rows. Printed 'SOFR + 17.50 %' with coupon 22.03 (SOFR about 4.53 at the date), so neither a scale error nor a coupon tagged as spread. false_alarm supported.",
+   "evidence": [
+    {"accession": "0000950170-25-107434", "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK) 0.8 % 6,838,469 05/04/28 6,588,966 6,838,469"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "net-assets-concept-not-mapped",
+   "outcome": "supported",
+   "rationale": "t8zc net assets = printed Total Members Capital (815,597k at 2026-03-31, 380,619k at 2023-06-30); F10 now passes where evaluated. F10 / balance_sheet_identity fired on the wrong figure, so they are a real existing detector for recurrence on another fund.",
+   "evidence": [{"accession": "0001193125-26-221923", "text": "Common Unitholders capital 879,986 879,986 Accumulated overdistributed earnings ( 64,389 ) ( 60,886 ) Total Members Capital 815,597 819,100"}]
+  },
+  {
+   "observation_key": "mixed-scale-attributes-in-whole-dollar-filing",
+   "outcome": "supported",
+   "rationale": "t8zc 2023-03-31 publishes 21 rows, FV 403,510,457 = printed Total Debt Investments. With a filed total present, fv_conservation / A04 catch a 1000x-small subset, so existing_detector holds; the suggested decimals check is a useful refinement, not required.",
+   "evidence": [{"accession": "0000950170-23-020390", "text": "Total Debt Investments (2) 124.4 % 405,255,392 403,510,457"}]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "rejected",
+   "rationale": "Action 'fixed' is not true for the 2023-12-31 D&D/Alorica case. t8zc publishes the D&D Buyer Revolver (ROW-09837033ef0f35f0) with extracted_industry 'Professional Services', gics_sub_industry 'Research & Consulting Services', gics_sector Industrials; the page prints the revolver under 'Specialty Retail' (as every other D&D row of the fund, GICS Specialty Stores / Consumer Discretionary). Mechanism: the page reader matches by the fair-value tag, and the revolver's context carries Alorica's 33,046,946, so it took Alorica's 'Professional Services' heading. The row correction fixed fair_value only. This is a published error (1 row, 1.13M) not recorded anywhere in the report. Also the detection decision does not cover it: the proposed check (issuer differing along a chain) and X07 (value over 10x cost) do not look at fields inherited from the wrong printed line. Needed: an extracted_industry row correction for the revolver, and the suggested check widened to 'any row whose fair-value context was overridden by a row correction is re-read for every page-derived field (industry, issuer)'.",
+   "evidence": [
+    {"accession": "0000950170-24-037182", "text": "Professional Services Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"},
+    {"accession": "0000950170-24-037182", "text": "Specialty Retail D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"}
+   ]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "t8zc publishes HOP Term Loan B at FV 0 with cost 5,345,831 (2026-03-31) and 2,646,672 (2026-06-30), as printed with '-'. cost_conservation / B01 would see a missing cost of that size; existing_detector is acceptable, though below the 5 pct band a recurrence could pass silently (stated in the rationale).",
+   "evidence": [{"accession": "0001193125-26-346657", "text": "HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.76 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 3,524,465 12/09/27 2,646,672 -"}]
+  },
+  {
+   "observation_key": "industry-blank-on-declared-value-rows",
+   "outcome": "supported",
+   "rationale": "Alorica 2023-12-31 now publishes 'Professional Services' (row correction), as printed; the three printed_page rows of 2023-09-30 carry Energy Equipment & Services / Household Durables. The proposed null-industry check on untagged_values rows is exact for this failure. It would not catch the revolver case (industry present but wrong), which is reviewed under member-carries-another-rows-name.",
+   "evidence": [{"accession": "0000950170-24-037182", "text": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"}]
+  },
+  {
+   "observation_key": "all-pik-printed-no-pik-tag-pik-rate-not-published",
+   "outcome": "supported",
+   "rationale": "t8zc: 53 rows whose identifier says 'all PIK', none with null pik_rate (the report says 52 corrections; the 53rd carries a tagged rate). The text-vs-pik_rate check is exact and filer-independent where member text is kept.",
+   "evidence": [{"accession": "0001193125-26-346657", "text": "HOP Energy, LLC (2)(5) 06/17/22 Term Loan - 12.76 % inc PIK ( SOFR + 9.00 %, 2.00 % Floor, all PIK) 0.9 % 16,430,785 12/09/27 14,316,415 4,375,518"}]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "t8zc warrant rows 2024-06-30..2025-03-31 (1, 1, 2, 6 rows) all carry shares_held. C04 fired on each affected quarter, so existing_detector is a real reference.",
+   "evidence": [{"accession": "0000950170-24-095507", "text": "HydroSource Logistics, LLC 04/05/24 Warrant, expires 4/4/34 0.2 % 380 - 1,115,411"}]
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "t8zc: 0 null instrument_description, 0 ending in 'No'/'No.', 0 issuer names null or starting with a comma. Proposed checks are concrete; the expiry-vs-maturity comparison is the one that would catch the Sigmatron case.",
+   "evidence": [{"accession": "0001193125-26-346657", "text": "CF Newco, Inc. 12/11/25 Amendment No. 1 Term Loan - 9.92 % ( SOFR + 6.25 %, 1.50 % Floor) 1.0 % 4,941,633 12/10/29 4,874,888 4,971,283"}]
+  },
+  {
+   "observation_key": "row-printed-not-tagged",
+   "outcome": "supported",
+   "rationale": "ix read of 0000950170-23-060972: none of the three rows' values (28,434,971; 27,237,547; 36,708,831; 27,883,696; 37,312,266) sits in an ix:nonFraction tag. t8zc 2023-09-30 publishes 30 rows, FV 723,775,772 / cost 720,198,416 = printed totals. fv_conservation would catch recurrence where a filed total exists. The text 'Rate, spread, maturity and percent are not published on them' is stale after round three, but the observation's claims about the rows and the detector stand.",
+   "evidence": [{"accession": "0000950170-23-060972", "text": "Total Debt Investments (2) 166.8 % 720,198,416 723,775,772"}]
+  },
+  {
+   "observation_key": "pct-calculated-withheld-when-net-assets-concept-outside-nav-list",
+   "outcome": "supported",
+   "rationale": "t8zc: pct_of_net_assets_calculated on 688 of 688 rows (685 + the 3 declared rows); spot check Harvey Gulf A 28,434,971 / 433,968,000 = 6.55 vs printed 6.6. The proposed count (non-compatible denominator while F10 passes) is concrete and cannot fire on a fund with a right denominator.",
+   "evidence": [{"accession": "0001193125-26-221923", "text": "Common Unitholders capital 879,986 879,986 Accumulated overdistributed earnings ( 64,389 ) ( 60,886 ) Total Members Capital 815,597 819,100"}]
+  },
+  {
+   "observation_key": "quarter-distribution-derived-negative-from-missing-year-figure",
+   "outcome": "supported",
+   "rationale": "t8zc 2022-12-31 distribution_per_share 1.46 (= 1.87 - 0.41, both printed). The 2023 10-K prints '-' for 2022 total distributions, confirming the mechanism. F33 fired on the rate; a negative per-share test would be stronger but existing_detector with reference F33 is valid.",
+   "evidence": [{"accession": "0000950170-24-037182", "text": "Less Distributions: From net investment income ( 5.28 ) ( 1.87 ) Return of Capital ( 0.29 ) - Total distributions ( 5.57 )"}]
+  },
+  {
+   "observation_key": "zero-value-equity-chain-fragmented",
+   "outcome": "supported",
+   "rationale": "t8zc HOP Term Loan B: 9 rows 2024-06-30..2026-06-30, 9 distinct position_ids (8 breaks), while the Delayed Draw Term Loan B keeps one id. Left as shared matcher behaviour; the proposed exact-key continuity check is concrete and would flag all 8 breaks.",
+   "evidence": [{"accession": "0001193125-26-221923", "text": "HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.78 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 6,876,841 12/09/27 5,345,831 -"}]
+  },
+  {
+   "observation_key": "nav-per-unit-accrual-base-includes-undrawn-commitments",
+   "outcome": "supported",
+   "rationale": "t8zc nav_per_share 98.71 at 2026-06-30 = printed accrual-base figure; 501,995k / 6,310,260 units = 79.55. Published as printed; the proposed 5 pct check is concrete.",
+   "evidence": [{"accession": "0001193125-26-346657", "text": "Net Asset Value Per Unit (accrual base) (Note 10) (1) $ 98.71 $ 94.43"}]
+  },
+  {
+   "observation_key": "units-outstanding-only-from-cover-page",
+   "outcome": "supported",
+   "rationale": "t8zc fund_financials: shares_outstanding blank on every quarter-end row 2021-12-31..2026-06-30; only the 2026-08-12 cover row has 6,310,260. The proposed check is concrete.",
+   "evidence": [{"accession": "0001193125-26-346657", "text": "Common Unitholders commitment: ( 6,310,260 and 12,745,660 units issued and outstanding, respectively) 631,026 1,274,566"}]
+  },
+  {
+   "observation_key": "issuer-name-truncated-in-member",
+   "outcome": "supported",
+   "rationale": "t8zc publishes 'Harvey Gulf Holdings, LLC' at 2024-03-31; 0 issuer names in the fund end in ', LL', ', L', ', In' or ', Co'. Suffix test is exact.",
+   "evidence": [{"accession": "0000950170-24-057006", "text": "Harvey Gulf Holdings, LLC 01/19/24 Term Loan B - 11.56 % (SOFR + 6.25 %, 2.00 % Floor) 7.8 % 39,325,580 01/19/29 38,985,791 39,010,975"}]
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "outcome": "supported",
+   "rationale": "t8zc: 31 rows whose instrument names a warrant, all EQUITY_COMMON, 118.5M, 2024-06-30..2026-06-30, unchanged from t8yf. The t8zc page sample's only published error (C016, HydroSource 'Warrant, expires 4/4/34', 2025-09-30, same row as t8yf C015) is this observation; it is recorded with a detection decision (propose_detector, a runnable count today). Cause verified as shared (classifier keyword branch, enum with no warrant value); owner decision, no fund build can fix it.",
+   "evidence": [{"accession": "0001193125-25-276913", "text": "HydroSource Logistics, LLC (2)(4) 04/05/24 Warrant, expires 4/4/34 4.4 % 247 357,421 37,612,239"}]
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "outcome": "supported",
+   "rationale": "t8zc interest_expense: 52k, 357k, 1,130k (2022 Q1-Q3), 2,982k, 3,980k, 7,049k, 7,694k (2023), 9,831k at 2024-09-30, all equal to the printed 'Interest and credit facility expenses' quarter figures listed in the fix; 2022-12-31 is blank, as stated (not wrong, missing). Proposed equality check is concrete.",
+   "evidence": [{"accession": "0000950170-24-125154", "text": "Interest and credit facility expenses 9,831 7,049 27,186 14,011"}]
+  },
+  {
+   "observation_key": "name-only-match-crosses-tranches-of-one-issuer",
+   "outcome": "supported",
+   "rationale": "t8zc: Term Loan A one id (99939aa5) 2023-03-31..2023-12-31, Term Loan B one id (7ce59e69) over the same quarters; the 2024-03-31 Term Loan B (new loan, 01/19/24, maturity 01/19/29) has its own id. Both tranches print the same maturity 08/10/27, so the maturity veto could not separate them even with day precision; the overrides are needed. The tranche-letter check is concrete.",
+   "evidence": [{"accession": "0000950170-24-037182", "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.64 % (SOFR + 7.00 %, 1.00 % Floor) 4.6 % 20,549,504 08/10/27 20,078,648 21,124,890"}]
+  },
+  {
+   "observation_key": "declared-page-row-carries-no-rate-maturity-or-percent",
+   "outcome": "rejected",
+   "rationale": "Rate, spread, SOFR, maturity date and percent on the three rows match the printed lines (12.63/12.63/14.31; 7.00/7.00/8.75; 2027-08-10/2027-08-10/2027-07-08; 6.6/6.3/8.5), but the observation marks 'fixed' while noting maturity_status 'unresolved' as 'not investigated'. Investigated here: it is a published error on 3 rows, in maturity_status and maturity_precision, not in maturity_date. pipeline/financial_conventions.py sets precision_value 'day' only when maturity_date_source is xbrl_field or nport (line 264), so printed_page gives maturity_precision 'unknown' and then maturity_status 'unresolved' (line 313). The page prints a full MM/DD/YY date, so the right values are 'day' / 'dated'. Effect: maturity_interval_sql returns NULL bounds for unknown precision, so the matcher's maturity veto is off for these rows, and anything that filters maturity_status = 'dated' drops them. The frontend shows the full date (it only truncates month/year precision), so it shows nothing wrong. No detector catches it (financial_validation's status/precision consistency rules do not test 'unresolved' with a valid date). The existing_detector reference X02/F23 does not cover this residual. Needed: printed_page added to the day-precision sources (with a test), or a recorded owner decision that page dates stay 'unresolved'.",
+   "evidence": [
+    {"accession": "0000950170-23-060972", "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"},
+    {"accession": "0000950170-23-060972", "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"}
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "OVR-T8Y-R1",
+   "outcome": "supported",
+   "rationale": "The orchestrator was right to reclassify it from verification bug to data change: it changes a published derived field. Implemented opt-in per wrapper with a false-positive test (unlisted fund with the same facts rejected). t8zc: pct_of_net_assets_calculated on 688/688 rows.",
+   "evidence": [{"accession": "0001193125-26-221923", "text": "Common Unitholders capital 879,986 879,986 Accumulated overdistributed earnings ( 64,389 ) ( 60,886 ) Total Members Capital 815,597 819,100"}]
+  },
+  {
+   "request_id": "OVR-T8Y-R2",
+   "outcome": "supported",
+   "rationale": "An acceptance change, ruled by the owner (D-207, option a). Verified that the three printed lines are untagged (ix scan) and that t8zc publishes them with printed_page sources, tying 2023-09-30 to the printed totals. The 7 parked 2023-09-30 findings are absent from the t8zc ledger.",
+   "evidence": [{"accession": "0000950170-23-060972", "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"}]
+  },
+  {
+   "request_id": "OVR-T8Z-R1",
+   "outcome": "supported",
+   "rationale": "An acceptance change, approved by the orchestrator under owner delegation (D-208), not by the owner directly. It is keyed to the declaration and does not weaken the check silently: the rows stay unverified (source recon printed_page_declared, 3 rows, documented_exclusion; SRC_BDC02P INFO x3). Tests prove an undeclared row with no fact still blocks (test_printed_rows: reconciliation, SRC_BDC02 and E07 keep undeclared rows). No 2023-09-30 SRC/E07 finding in the t8zc ledger.",
+   "evidence": [{"accession": "0000950170-23-060972", "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"}]
+  },
+  {
+   "request_id": "OVR-T8Z-R2",
+   "outcome": "supported",
+   "rationale": "The decision (D-208) and the values are supported: every carried term matches its printed line and is labelled printed_page; X02/F23 no longer fire. The implementation is incomplete: the maturity carries but its precision and status read unknown / unresolved (see the rejected observation declared-page-row-carries-no-rate-maturity-or-percent). That residual belongs to the orchestrator.",
+   "evidence": [{"accession": "0000950170-23-060972", "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"}]
+  },
+  {
+   "request_id": "OVR-T8Z-R3",
+   "outcome": "supported",
+   "rationale": "Correctly a verification bug: the code said 'provenance_wrong' when the row was a declared page row. t8zc provenance_ledger: 24 field rows on printed_page contexts, all with the printed_page_declared code, none provenance_wrong or verified. Tests cover both sides (test_provenance_reverify: declared row gets its own code; undeclared missing context stays provenance_wrong).",
+   "evidence": [{"accession": "0000950170-23-060972", "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"}]
+  }
+ ],
+ "resolved_investigation_reviews": [
+  {"finding_ids": ["RVQ_BLK_356ead8afcfa", "RVQ_BLK_d24b0a9aaee6", "RVQ_BLK_1549d7e243b0", "RVQ_BLK_0380c67d650c", "RVQ_BLK_60c13bff9e3a", "RVQ_BLK_37381b633cac", "RVQ_BLK_8b808cfcf9b1"], "outcome": "supported", "rationale": "The 2023-09-30 total gaps closed: t8zc publishes 723,775,772 / 720,198,416 = printed; none of the seven ids is in the t8zc ledger."},
+  {"finding_ids": ["RVQ_REV_e643b6d3156b", "RVQ_REV_ddc4d3078572", "RVQ_REV_f7559af58f40"], "outcome": "supported", "rationale": "F27 2024-09-30, 2024-12-31, 2025-12-31: ledger state dispositioned_as_filed under DS-0001825265-F27-2 (owner-accepted reason, D-207). Investigation conclusion insufficient_evidence stays honest; the resolution is the disposition, not a mechanism."},
+  {"finding_ids": ["BDCSRC_0001825265_2023-09-30_BLOCKING_PIPELINE_ONLY_POSITION_170f976175", "RVQ_BLK_07d43523742c", "RVQ_BLK_c98d401f49c1", "RVQ_REV_0019eb489ae5", "RVQ_REV_522297d400b4"], "outcome": "supported", "rationale": "Absent from the t8zc ledger; source recon shows printed_page_declared x3 (non-blocking), SRC_BDC02P INFO x3, and X02/F23 cleared by the printed terms. Residual maturity_status/precision defect on these rows: see the rejected observation."}
+ ],
+ "additional_published_errors": [
+  {"row": "0000950170-24-037182|C_55ae7aaf-0205-4376-954b-fd4d37c2891f|ROW-09837033ef0f35f0", "field": "extracted_industry / gics_sub_industry / gics_sector", "published": "Professional Services / Research & Consulting Services / Industrials", "printed": "Specialty Retail", "recorded_in_report": false},
+  {"row": "0001825265|2023-09-30|printed_page:d3dad0396499ac3b, printed_page:efdfecc0d22a32bc, printed_page:7df3ed5ea2636143", "field": "maturity_status / maturity_precision", "published": "unresolved / unknown", "printed": "full MM/DD/YY date (dated / day)", "recorded_in_report": "noted as not investigated"}
+ ]
+}

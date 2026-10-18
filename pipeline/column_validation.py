@@ -33,6 +33,10 @@ ACTION_REVIEW = "REVIEW"
 ACTION_DISCLOSE = "DISCLOSE"
 ACTION_TRACK_ONLY = "TRACK_ONLY"
 
+# Source-reconciliation output row declared from its printed line (status 'printed_page_declared',
+# source_encodings.printed_rows_without_context; OVR-T8Z-R1): INFO / TRACK_ONLY, non-blocking.
+PRINTED_PAGE_RULE_ID = "SRC_BDC02P"
+
 GAV_BDC_FAIL_RULE = "GAV_BDC01"
 GAV_BDC_WARN_RULE = "GAV_BDC02"
 # Every BDC reconciliation_status FAIL not already caught by the extreme 0.3/5.0
@@ -1344,6 +1348,26 @@ def _adapt_source_reconciliation(
             "action": ACTION_BLOCK_VERIFIED,
             "value": str(row.get("raw_investment_identifier", "")),
             "message": message_by_status[status],
+            "evidence": str(row.get("calibration_reason", "") or row.get("evidence", "")),
+        })
+    # A row declared from its printed line (printed_rows_without_context; OVR-T8Z-R1) has no source
+    # fact by construction. The reconciliation gives it the status 'printed_page_declared' -- keyed on
+    # the declaration, so an undeclared extra row keeps SRC_BDC02 above. It is tracked here as
+    # SRC_BDC02P: INFO / TRACK_ONLY, never blocking, never verified, still listed per row.
+    from pipeline.printed_rows import DECLARED_STATUS
+    for _, row in df[df["status"].astype(str).eq(DECLARED_STATUS)].iterrows():
+        rows.append({
+            "source": "bdc",
+            "cik": row.get("cik", ""),
+            "report_date": row.get("report_date", ""),
+            "row_key": str(row.get("output_row_id", "")),
+            "column": "fair_value",
+            "rule_id": PRINTED_PAGE_RULE_ID,
+            "severity": SEVERITY_INFO,
+            "evidence_strength": EVIDENCE_MODERATE,
+            "action": ACTION_TRACK_ONLY,
+            "value": str(row.get("raw_investment_identifier", "")),
+            "message": DECLARED_STATUS + ": BDC row published from a declared printed schedule line; no XBRL source fact, not verified",
             "evidence": str(row.get("calibration_reason", "") or row.get("evidence", "")),
         })
     return _make_issue_frame(rows)

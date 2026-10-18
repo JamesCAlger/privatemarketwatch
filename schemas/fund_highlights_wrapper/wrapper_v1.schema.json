@@ -114,6 +114,13 @@
           "minItems": 1,
           "uniqueItems": true,
           "items": {"type": "string", "pattern": "^[a-z0-9]{8,}$"}
+        },
+        "interest_expense": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9]{8,}$"},
+          "description": "TCW Direct Lending VIII: us-gaap:InterestAndDebtExpense is the printed 'Interest and credit facility expenses' and is not read by the income concept map; the map's 'interestexpense' substring otherwise takes the directors' fee (NoninterestExpenseDirectorsFees), which the wrapper then suppresses. Evidence required: the printed interest line and its concept in each quarter."
         }
       },
       "description": "Per income column, the whole lower-case concept names the fund-income extractor (pipeline/bdc_fund_income.py) may take for it where a period has an income statement and no fact for that column. For a filer that tags the figure under a concept the extractor does not read (Monroe Capital Income Plus, first-quarter 10-Qs and most 10-Qs from 2024: expenses only as InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement). A period that already has the column is never changed. Evidence required: the fact, and the printed income statement lines showing that total investment income less it is the filed net investment income."

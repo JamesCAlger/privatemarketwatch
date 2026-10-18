@@ -123,6 +123,13 @@ class TestProvenanceFeed:
         assert out.loc["amended", "tier"] == "weak"
         assert out.loc["amended", "status"] == "warn"
 
+    def test_printed_page_declared_is_a_known_non_blocking_code(self, monkeypatch, tmp_path):
+        # OVR-T8Z-R3: neither a tight fail nor an unknown-code warn
+        df = _prov_rows([{"row_id": "ROW-p", "reason_code": "printed_page_declared"}])
+        out = _run_fragment(monkeypatch, tmp_path, df).set_index("rule_name")
+        assert out.loc["printed_page_declared", "tier"] == "weak"
+        assert out.loc["printed_page_declared", "status"] == "pass"
+
     def test_pct_sense_check_is_warn_lane_not_tight(self):
         """Canary re-lane 2026-08-25: pct_sense_check must be weak/warn and must
         NOT join the tight-fail (blocker) set -- PROV_TIGHT_FAIL is frozen by the

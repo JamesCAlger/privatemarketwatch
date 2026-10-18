@@ -4,9 +4,10 @@
   "identifier": "Debt Investments, Specialty Retail D&D Buyer, LLC, Acquisition Date 10/04/23 Revolver - 12.45% (SOFR + 7.00%, 2.00% Floor) Net Assets 0.2% Maturity 10/04/28",
   "exact": true,
   "fields": {
-   "fair_value": "1130534"
+   "fair_value": "1130534",
+   "extracted_industry": "Specialty Retail"
   },
-  "reason": "The 10-K for 2023-12-31 tags Alorica's fair value 33,046,946 on this revolver's context (C_55ae7aaf-0205-4376-954b-fd4d37c2891f) and the revolver's 1,130,534 on a third context with no other fact (C_0ef4405c-e370-487d-bbbc-08d1e3cf4aee, removed by schedule_row_tags). Printed line: 'D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534' (0000950170-24-037182)."
+  "reason": "The 10-K for 2023-12-31 tags Alorica's fair value 33,046,946 on this revolver's context (C_55ae7aaf-0205-4376-954b-fd4d37c2891f) and the revolver's 1,130,534 on a third context with no other fact (C_0ef4405c-e370-487d-bbbc-08d1e3cf4aee, removed by schedule_row_tags). The page reader, which matches rows by their fair-value tag, gave the revolver Alorica's heading 'Professional Services'; the page prints it under 'Specialty Retail' (independent review of t8zc). Printed line: 'D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534' (0000950170-24-037182)."
  },
  {
   "quarter": "2024-12-31",
@@ -497,5 +498,14 @@
    "extracted_industry": "Professional Services"
   },
   "reason": "Row published from untagged_values (its fair value is tagged on the D&D Buyer revolver), so the page reader, which matches rows by their fair-value tag, gives it no industry; the member and the page put it under 'Professional Services'. Printed: '... Services Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946' (0000950170-24-037182)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Investments, Energy Equipment & Services Harvey Gulf Holdings, LL, Acquisition Date 01/19/24 Term Loan B - 11.56% (SOFR + 6.25%, 2.00% Floor) Net Assets 7.8% Maturity 01/19/29",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Harvey Gulf Holdings, LLC"
+  },
+  "reason": "The member is cut at 'Harvey Gulf Holdings, LL'; the page prints 'Harvey Gulf Holdings, LLC 01/19/24 Term Loan B - 11.56 % (SOFR + 6.25 %, 2.00 % Floor) 7.8 % 39,325,580 01/19/29 38,985,791 39,010,975' (0000950170-24-057006). Page sample C012 of t8yf."
  }
 ]

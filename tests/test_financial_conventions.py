@@ -696,3 +696,19 @@ def test_a_cash_rate_with_no_pik_tag_is_the_coupon_only_for_a_fund_that_says_so(
     assert pd.isna(off.loc["plain","interest_rate"])
     assert float(on.loc["plain","interest_rate"])==8.7 and "cash_plus_pik" not in str(on.loc["plain","src_transforms"])
     assert round(float(on.loc["pik","interest_rate"]),2)==11.8 and round(float(off.loc["pik","interest_rate"]),2)==11.8
+
+
+@pytest.mark.parametrize("maturity,precision,status", [
+    ("2027-08-10", "day", "dated"),       # declared from the printed line '08/10/27'
+    ("2027-08", "unknown", None),          # false positive guard: no full date, no day precision
+    ("", "unknown", None),
+])
+def test_printed_page_maturity_gets_day_precision_only_with_a_full_date(maturity, precision, status):
+    result, _ = prepare(rows(dict(src_context_id="printed_page:d3dad0396499ac3b", fair_value_source="printed_page",
+                                  maturity_date=maturity, maturity_date_source="printed_page")))
+    row = result.iloc[0]
+    assert row.maturity_precision == precision
+    if status:
+        assert row.maturity_status == status
+    else:
+        assert row.maturity_status != "dated"

@@ -1137,6 +1137,10 @@ def _parse_single_filing(
     # A schedule row that is an undrawn commitment, netted by the commitment the filer tags.
     from pipeline.unfunded_commitments import net_unfunded_rows
     net_unfunded_rows(tree, contexts, {rec["_context_id"]: rec for rec in facts}, filing_meta)
+    # A schedule row printed with no XBRL context, declared from its printed line (wrapper setting
+    # source_encodings.printed_rows_without_context; owner ruling 2026-10-18). Refused where tagged.
+    from pipeline.printed_rows import printed_row_records
+    facts.extend(printed_row_records(facts, filing_meta))
 
     # --- Non-accrual evidence: footnotes + dimensions ---
     from pipeline.nonaccrual_evidence import (

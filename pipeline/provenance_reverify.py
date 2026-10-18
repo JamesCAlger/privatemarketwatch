@@ -210,6 +210,15 @@ def _field_sql(field: str, source_col: str) -> str:
     # - monetary fields: raw=stored-value by construction -> pass_trivial
     raw_null_no_event_status = "'fail'" if is_rate else "'pass_trivial'"
 
+    # A row declared from its printed line (source_encodings.printed_rows_without_context) has no
+    # XBRL context to re-read: every published value on it is 'printed_page_declared' -- never
+    # verified, never provenance_wrong (OVR-T8Z-R3). Keyed on the declaration, not on a missing context.
+    from pipeline.printed_rows import DECLARED_STATUS, declaration_sql
+    printed_declared = (
+        f"WHEN {declaration_sql('src_context_id', 'fair_value_source')} AND {published} IS NOT NULL"
+        f" THEN '{DECLARED_STATUS}'"
+    )
+
     return f"""
     SELECT {_ID_COLS},
            '{field}' AS field,
@@ -224,6 +233,7 @@ def _field_sql(field: str, source_col: str) -> str:
              WHEN {pathway} = 'identifier_text'   THEN 'text_pathway'
              WHEN {marker('src_filled_fields')}   THEN 'filled_field'
              WHEN {marker('src_conflict_fields')} THEN 'merged_conflict'
+             {printed_declared}
              WHEN COALESCE(CAST(src_context_id AS VARCHAR), '') = ''
                THEN 'no_provenance'
              {unresolved_coupon}
@@ -323,7 +333,7 @@ def cheap_tier(
 # cheap_status values that short-circuit full-tier (no filing access needed).
 _SHORT_CIRCUIT = frozenset({"corrected", "derived", "text_pathway", "unresolved_coupon",
                              "filled_field", "merged_conflict", "no_provenance",
-                             "undeclared"})
+                             "undeclared", "printed_page_declared"})
 
 
 def _staging_multiplier(field: str, events: str) -> float:
@@ -615,6 +625,8 @@ _CHEAP_REASON: dict[str, str] = {
     "no_provenance":   "no_provenance",
     "undeclared":      "no_provenance",
     "unresolved_coupon": "financial_convention_unresolved",
+    # declared from the printed line (printed_rows_without_context): not verified, not provenance_wrong
+    "printed_page_declared": "printed_page_declared",
 }
 
 _FULL_REASON: dict[str, str] = {
@@ -633,7 +645,7 @@ def classify_reason(cheap_status: str, full_status: str) -> str:
     Reason enum: verified | anchor_stale | transform_drift | filing_mismatch |
     pct_sense_check | anchor_missing | provenance_wrong | source_unavailable |
     corrected | derived | text_pathway | merged_context_excluded | no_provenance |
-    unchecked_trivial.
+    printed_page_declared | unchecked_trivial.
     """
     if cheap_status in _CHEAP_REASON:
         return _CHEAP_REASON[cheap_status]

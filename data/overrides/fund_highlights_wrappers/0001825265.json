@@ -3,6 +3,14 @@
  "cik": "0001825265",
  "entity_name": "TCW Direct Lending VIII LLC",
  "version": 1,
+ "concept_overrides": [
+  {"xbrl_concept_substring": "noninterestexpense", "target_field": "interest_expense", "action": "suppress",
+   "evidence": "us-gaap:NoninterestExpenseDirectorsFees (64,000 for 2024-07-01 to 2024-09-30, printed 'Directors fees 64') was read as interest expense through the substring 'interestexpense'; the printed interest line is 'Interest and credit facility expenses 9,831 7,049 27,186 14,011' (0000950170-24-125154), us-gaap:InterestAndDebtExpense."},
+  {"xbrl_concept_substring": "repurchaseagreementsinterestexpense", "target_field": "interest_expense", "action": "suppress",
+   "evidence": "us-gaap:RepurchaseAgreementsInterestExpenseAmount is the separate printed line 'Interest expense on repurchase transactions 594 171 951 297' (0000950170-23-040379); the interest line of the statement is 'Interest and credit facility expenses 3,980 357 6,962 409' (InterestAndDebtExpense)."}
+ ],
+ "income_concept_suppress": ["noninterestexpense", "repurchaseagreementsinterestexpense"],
+ "income_concept_fallback": {"interest_expense": ["interestanddebtexpense"]},
  "figure_corrections": [
   {"report_date": "2022-12-31", "field": "net_assets", "value": 196018000,
    "evidence": "0000950170-23-020390 (10-Q 2023-03-31, comparative column 2022-12-31): 'Common Unitholders capital 323,894 198,894 Accumulated earnings (loss) 591 ( 2,876 ) Total Members Capital $ 324,485 $ 196,018'. The published 198,894 is the paid-in line (us-gaap:MembersCapital); net assets are Total Members Capital (us-gaap:MembersEquity)."},
@@ -61,5 +69,5 @@
   {"report_date": "2025-06-30", "field": "investments_at_cost", "value": 1274560645,
    "evidence": "0000950170-25-107434 schedule: 'Total Debt & Equity Investments (3) 0.9 % 1,274,560,645 1,243,460,279'."}
  ],
- "notes": "TCW Direct Lending VIII tags its paid-in line 'Common Unitholders capital' as us-gaap:MembersCapital and its total capital as us-gaap:MembersEquity; the shared concept order reads MembersCapital as net assets, so every quarter is set from the printed 'Total Members Capital'. The investments totals excluding cash (printed 'Total Debt Investments' / 'Total Debt & Equity Investments') are set where no undimensioned fact is filed: fair value for the first three quarters of 2023, cost for nine quarters."
+ "notes": "TCW Direct Lending VIII tags its paid-in line 'Common Unitholders capital' as us-gaap:MembersCapital and its total capital as us-gaap:MembersEquity; the shared concept order reads MembersCapital as net assets, so every quarter is set from the printed 'Total Members Capital'. The investments totals excluding cash (printed 'Total Debt Investments' / 'Total Debt & Equity Investments') are set where no undimensioned fact is filed: fair value for the first three quarters of 2023, cost for nine quarters. Interest expense (2026-10-18, round two): the filer tags its printed 'Interest and credit facility expenses' as us-gaap:InterestAndDebtExpense, which the income concept map does not read, so the map's 'interestexpense' substring published the directors' fee (NoninterestExpenseDirectorsFees) or the repurchase-transaction interest (RepurchaseAgreementsInterestExpenseAmount, a separate printed line). Both are suppressed and InterestAndDebtExpense is the interest_expense fallback."
 }

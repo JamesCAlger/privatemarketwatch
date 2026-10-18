@@ -7,32 +7,31 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 
 | Field | n | Published wrong | of which tag | of which pipeline | Tag wrong (any) | wrong label | wrong value | wrong row | untagged |
 |---|---|---|---|---|---|---|---|---|---|
-| row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| issuer_name | 20 | 5.0% (0.9-23.6) | 1 | 0 | 5.0% (0.9-23.6) | 1 | 0 | 0 | 0 |
-| instrument_and_class | 20 | 5.0% (0.9-23.6) | 0 | 1 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| fair_value | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| cost | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| principal_amount | 18 | 0.0% (0.0-17.6) | 0 | 0 | 0.0% (0.0-17.6) | 0 | 0 | 0 | 0 |
-| shares_held | 2 | 0.0% (0.0-65.8) | 0 | 0 | 0.0% (0.0-65.8) | 0 | 0 | 0 | 0 |
-| pct_of_net_assets | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| interest_rate | 18 | 0.0% (0.0-17.6) | 0 | 0 | 0.0% (0.0-17.6) | 0 | 0 | 0 | 0 |
-| basis_spread | 18 | 0.0% (0.0-17.6) | 0 | 0 | 0.0% (0.0-17.6) | 0 | 0 | 0 | 0 |
-| reference_rate_type | 18 | 0.0% (0.0-17.6) | 0 | 0 | 44.4% (24.6-66.3) | 0 | 0 | 0 | 8 |
+| row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 0 | 0 | 0 | 1 |
+| issuer_name | 20 | 0.0% (0.0-16.1) | 0 | 0 | 10.0% (2.8-30.1) | 1 | 0 | 0 | 1 |
+| instrument_and_class | 20 | 5.0% (0.9-23.6) | 0 | 1 | 5.0% (0.9-23.6) | 0 | 0 | 0 | 1 |
+| fair_value | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 0 | 0 | 0 | 1 |
+| cost | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 0 | 0 | 0 | 1 |
+| principal_amount | 19 | 0.0% (0.0-16.8) | 0 | 0 | 5.3% (0.9-24.6) | 0 | 0 | 0 | 1 |
+| shares_held | 1 | 0.0% (0.0-79.3) | 0 | 0 | 0.0% (0.0-79.3) | 0 | 0 | 0 | 0 |
+| pct_of_net_assets | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 0 | 0 | 0 | 1 |
+| interest_rate | 19 | 0.0% (0.0-16.8) | 0 | 0 | 5.3% (0.9-24.6) | 0 | 0 | 0 | 1 |
+| basis_spread | 19 | 0.0% (0.0-16.8) | 0 | 0 | 5.3% (0.9-24.6) | 0 | 0 | 0 | 1 |
+| reference_rate_type | 19 | 0.0% (0.0-16.8) | 0 | 0 | 47.4% (27.3-68.3) | 0 | 0 | 0 | 9 |
 | pik_rate | 2 | 0.0% (0.0-65.8) | 0 | 0 | 0.0% (0.0-65.8) | 0 | 0 | 0 | 0 |
-| maturity_date | 19 | 0.0% (0.0-16.8) | 0 | 0 | 0.0% (0.0-16.8) | 0 | 0 | 0 | 0 |
+| maturity_date | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 0 | 0 | 0 | 1 |
 
 | Fund | cards | cards with any published error | with any tag error |
 |---|---|---|---|
-| 0001825265 | 20 | 10.0% (2.8-30.1) | 40.0% (21.9-61.3) |
+| 0001825265 | 20 | 5.0% (0.9-23.6) | 45.0% (25.8-65.8) |
 
 | Era | cards | with any published error | with any tag error |
 |---|---|---|---|
-| to 2023-12-31 | 2 | 0.0% (0.0-65.8) | 100.0% (34.2-100.0) |
-| 2024 on | 18 | 11.1% (3.1-32.8) | 33.3% (16.3-56.3) |
+| to 2023-12-31 | 3 | 0.0% (0.0-56.2) | 100.0% (43.8-100.0) |
+| 2024 on | 17 | 5.9% (1.0-27.0) | 35.3% (17.3-58.7) |
 
-Published errors: 2
+Published errors: 1
 
 | Card | Quarter | Field | Published | Cause | Note |
 |---|---|---|---|---|---|
-| C012 | 2024-03-31 | issuer_name | wrong | tag | prints 'Harvey Gulf Holdings, LLC'; member and published truncate to 'Harvey Gulf Holdings, LL' |
-| C015 | 2025-09-30 | instrument_and_class | wrong | pipeline | prints 'Warrant, expires 4/4/34'; published asset_category EQUITY_COMMON instead of WARRANT |
+| C016 | 2025-09-30 | instrument_and_class | wrong | pipeline | prints 'Warrant, expires 4/4/34'; asset_category published EQUITY_COMMON (no warrant class) |

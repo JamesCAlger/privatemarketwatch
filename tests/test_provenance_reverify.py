@@ -1001,3 +1001,46 @@ def test_a_spread_from_the_plain_rate_tag_replays_for_a_cash_rate_filer(monkeypa
     assert spread_row('0001950803') == 'raw_match'
     # another fund keeps reporting the missing spread fact
     assert spread_row('0001287750') == 'anchor_missing'
+
+
+def test_a_row_declared_from_its_printed_line_is_its_own_code_not_verified(tmp_path):
+    """OVR-T8Z-R3: a printed_rows_without_context row has no XBRL context to re-read. It gets
+    printed_page_declared, never verified and never provenance_wrong; its FV stays in total_fv only."""
+    printed = _row(row_id="ROW-p", src_context_id="printed_page:0123456789abcdef", fair_value=28434971.0,
+                   cost=27883696.0, principal_amount=28265379.0, fair_value_source="printed_page",
+                   cost_source="printed_page", principal_amount_source="printed_page",
+                   src_facts=json.dumps({"_printed_page": {"issuer": "Harvey Gulf Holdings, LLC"}}))
+    tagged = _row(row_id="ROW-t", fair_value=1000000.0)
+    cheap = cheap_tier(holdings_df=pd.DataFrame([printed, tagged]))
+    p = cheap[cheap["row_id"] == "ROW-p"].set_index("field")
+    for field in ("fair_value", "cost", "principal_amount"):
+        assert p.loc[field, "cheap_status"] == "printed_page_declared"
+    # nothing is published on the other fields: they keep the trivial path
+    assert p.loc["interest_rate", "cheap_status"] == "pass_trivial"
+    full = full_tier(cheap, xml_loader=_loader)
+    fp = full[full["row_id"] == "ROW-p"].set_index("field")
+    assert fp.loc["fair_value", "full_status"] == "not_checked"
+    _, sp = build_ledger(full, out_dir=tmp_path)
+    ledger = pd.read_csv(tmp_path / "provenance_ledger.csv")
+    codes = ledger[(ledger["row_id"] == "ROW-p") & ledger["field"].isin(["fair_value", "cost", "principal_amount"])]
+    assert set(codes["reason_code"]) == {"printed_page_declared"}
+    summary = pd.read_csv(sp).iloc[0]
+    assert summary["verified_fv"] == pytest.approx(1000000.0)
+    assert summary["total_fv"] == pytest.approx(29434971.0)
+    assert summary["verified_fv_share"] == pytest.approx(1000000.0 / 29434971.0)
+    assert summary["printed_page_declared"] == 3
+    assert "provenance_wrong" not in summary.index or summary["provenance_wrong"] == 0
+
+
+@pytest.mark.parametrize("ctx,fv_source", [
+    ("ctxZZ", "xbrl_field"),                              # an ordinary row whose context is gone
+    ("printed_page:0123456789abcdef", "xbrl_field"),      # the prefix alone is not a declaration
+])
+def test_a_missing_context_that_is_not_declared_stays_provenance_wrong(ctx, fv_source):
+    """False-positive guard: only the declaration (prefix AND fair_value_source='printed_page') is excused."""
+    cheap = cheap_tier(holdings_df=pd.DataFrame([_row(src_context_id=ctx, fair_value_source=fv_source)]))
+    fv = cheap[cheap["field"] == "fair_value"]
+    assert fv.iloc[0]["cheap_status"] == "pass_trivial"
+    full = full_tier(fv, xml_loader=_loader)
+    assert full.iloc[0]["full_status"] == "context_missing"
+    assert classify_reason(full.iloc[0]["cheap_status"], full.iloc[0]["full_status"]) == "provenance_wrong"

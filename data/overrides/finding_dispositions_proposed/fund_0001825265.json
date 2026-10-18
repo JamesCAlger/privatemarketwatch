@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "t8yf",
+ "sandbox": "t8zc",
  "dispositions": [
   {
    "disposition_id": "PD-0001825265-F25-1",
@@ -46,52 +46,6 @@
      "accession": "0000950170-23-040379",
      "verbatim": "Total Investments ( 203.1 %) $ 770,456,020 $ 772,888,903",
      "quote": "2023-06-30 total including cash: +12.6 pct, as total assets"
-    }
-   ],
-   "rerun": "see docs/investigations/v05_readings/reports/0001825265.json",
-   "decided_by": "PROPOSED by agent tcwviii_fund_agent_2026-10-17 (2026-10-18, sandbox t8yf); not accepted by the owner",
-   "decided_on": "2026-10-18"
-  },
-  {
-   "disposition_id": "PD-0001825265-F27-2",
-   "class": "as_filed",
-   "engine": "fund_financials",
-   "rule_name": "F27",
-   "ciks": [
-    "0001825265"
-   ],
-   "quarters": [
-    "2024-09-30",
-    "2024-12-31",
-    "2025-12-31"
-   ],
-   "reason_key": "f27-income-above-coupon-mechanism-not-established",
-   "statement": "F27 fires because the printed income ratio (14.98 for 9M 2024, 14.41 for 2024, 13.38 for 2025) exceeds the published weighted coupon plus 200bp. Every published value involved equals the page: the ratio is printed, every loan publishes its printed rate, net assets are the printed Total Members Capital. Measured gap (scratch/fund_runs/0001825265/f27_test.py): printed total investment income less printed accretion and fee income is 14.61 / 14.35 / 13.72 pct of average fair value against a published coupon averaged over the period quarter ends of 12.80 / 12.57 / 11.35, i.e. 13.1M, 13.1M and 23.2M a year of income above the published rows par x rate run-rate. NO MECHANISM IS ESTABLISHED: leverage less interest cost does not close it (about 12.1 pct of net assets against 15.1 printed), and printed accretion, printed fee income (late-closer fees), an estimated 2.2M to 2.6M a year of money-fund income and rate timing explain only part: 10.8M, 10.6M and 21.0M a year remain. The cause needs evidence the filings do not print: (1) an average invested balance for the period, (2) a breakdown of interest income. Proposed only as: the published figures are as filed and the residual is unexplained; the owner decides whether that is acceptable.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-24-125154",
-     "verbatim": "Ratio of net investment income to average net assets (7) 14.98",
-     "quote": "2024-09-30 printed income ratio"
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-25-045559",
-     "verbatim": "Ratio of net investment income before expenses (reimbursed) recaptured to average net assets 14.41 %",
-     "quote": "2024-12-31 printed income ratio"
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-126676",
-     "verbatim": "Ratio of net investment income before expenses (reimbursed) recaptured to average net assets 13.38 %",
-     "quote": "2025-12-31 printed income ratio"
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-26-126676",
-     "verbatim": "Total Members Capital 819,100 611,229",
-     "quote": "net assets 819.1M against 1,209.8M of investments at 2025-12-31"
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001825265.json",

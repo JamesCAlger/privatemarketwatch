@@ -232,6 +232,13 @@
       "first_seen_quarter": "2026-03-31",
       "detection_pattern": "context with cost and principal and no fair value",
       "disposition": "expected"
+    },
+    {
+      "id": "TCW_VIII_2023Q3_ROWS_PRINTED_WITHOUT_CONTEXT",
+      "description": "The 10-Q for 2023-09-30 (0000950170-23-060972) prints Harvey Gulf Term Loans A and B and the Lenox Term Loan (fair value 92,381,349, cost 91,765,811) and files no fact and no 2023-09-30 context for them (only their 2022-12-31 comparative contexts). Published from the printed lines under source_encodings.printed_rows_without_context (owner ruling 2026-10-18, OVR-T8Y-R2 (a)); fair value, cost and principal are labelled printed_page. Round three (OVR-T8Z-R2, D-208): the printed rate, spread, floor, reference rate, maturity and percent of net assets are declared too, each checked against the line by the loader and labelled printed_page.",
+      "first_seen_quarter": "2023-09-30",
+      "detection_pattern": "printed schedule row with no ix tag; quarter total short of the printed total",
+      "disposition": "expected"
     }
   ],
   "invariants": {
@@ -262,6 +269,44 @@
       "0000950170-24-037182 C_fa46a8e5-251b-4eb9-a091-957d935f5374 fair_value 33046946",
       "0001193125-26-221923 C_e4af6a44-8636-4afd-b243-32f6671d2e5e fair_value 0",
       "0001193125-26-346657 C_8cec1e8c-7408-4e9f-b189-58717c8bdae8 fair_value 0"
+    ],
+    "printed_rows_without_context": [
+      {
+        "accession": "0000950170-23-060972",
+        "quarter": "2023-09-30",
+        "issuer": "Harvey Gulf Holdings, LLC",
+        "instrument": "Term Loan A",
+        "fair_value": 28434971,
+        "cost": 27883696,
+        "principal_amount": 28265379,
+        "interest_rate": 12.63, "basis_spread": 7.0, "interest_rate_floor": 1.0, "reference_rate_type": "SOFR", "maturity_date": "2027-08-10", "pct_of_net_assets": 6.6,
+        "industry": "Energy Equipment & Services",
+        "printed_line": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+      },
+      {
+        "accession": "0000950170-23-060972",
+        "quarter": "2023-09-30",
+        "issuer": "Harvey Gulf Holdings, LLC",
+        "instrument": "Term Loan B",
+        "fair_value": 27237547,
+        "cost": 26569849,
+        "principal_amount": 27237547,
+        "interest_rate": 12.63, "basis_spread": 7.0, "interest_rate_floor": 1.0, "reference_rate_type": "SOFR", "maturity_date": "2027-08-10", "pct_of_net_assets": 6.3,
+        "industry": "Energy Equipment & Services",
+        "printed_line": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547"
+      },
+      {
+        "accession": "0000950170-23-060972",
+        "quarter": "2023-09-30",
+        "issuer": "Lenox Holdings, Inc.",
+        "instrument": "Term Loan",
+        "fair_value": 36708831,
+        "cost": 37312266,
+        "principal_amount": 37883211,
+        "interest_rate": 14.31, "basis_spread": 8.75, "interest_rate_floor": 1.0, "reference_rate_type": "SOFR", "maturity_date": "2027-07-08", "pct_of_net_assets": 8.5,
+        "industry": "Household Durables",
+        "printed_line": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+      }
     ]
   }
 }

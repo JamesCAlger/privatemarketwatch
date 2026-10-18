@@ -1025,6 +1025,13 @@ def check_E04_nav_per_share_sanity(
 _E07_POSITION_STATUSES = frozenset({"matched", "value_mismatch", "diagnostic_field_mismatch", "missing_from_pipeline"})
 
 
+def _e07_printed_declared(holdings_df: pd.DataFrame) -> pd.Series:
+    """Boolean per holdings row: declared under printed_rows_without_context (vectorised)."""
+    from pipeline.printed_rows import CONTEXT_PREFIX, SOURCE_LABEL
+    return (_col_str(holdings_df, "src_context_id").str.startswith(CONTEXT_PREFIX)
+            & _col_str(holdings_df, "fair_value_source").str.strip().eq(SOURCE_LABEL))
+
+
 def check_E07_position_count_vs_filing(
     source_detail_df: pd.DataFrame,
     holdings_df: pd.DataFrame,
@@ -1061,9 +1068,14 @@ def check_E07_position_count_vs_filing(
         ["cik", "report_date"], dropna=False
     ).size().reset_index(name="source_count")
 
-    output_counts = holdings_df.groupby(
-        ["cik", "report_date"], dropna=False
-    ).size().reset_index(name="output_count")
+    # A row declared from its printed line (printed_rows_without_context; OVR-T8Z-R1) has no source
+    # fact, so it cannot be in source_count. It is left out of output_count (like with like) and
+    # reported apart as printed_page_declared -- never counted as a matched source position. Keyed on
+    # the declaration (context prefix AND fair_value_source), not on a missing context.
+    printed = _e07_printed_declared(holdings_df)
+    output_counts = holdings_df[["cik", "report_date"]].assign(
+        output_count=(~printed).astype(int), printed_count=printed.astype(int),
+    ).groupby(["cik", "report_date"], dropna=False)[["output_count", "printed_count"]].sum().reset_index()
 
     merged = source_counts.merge(output_counts, on=["cik", "report_date"], how="outer").fillna(0)
 
@@ -1072,15 +1084,17 @@ def check_E07_position_count_vs_filing(
         rd_s = str(row["report_date"])
         src = int(row["source_count"])
         out = int(row["output_count"])
+        n_printed = int(row["printed_count"])
 
         if src == 0:
             continue
 
         diff = abs(src - out) / src
         status = "pass" if diff <= tolerance else "fail"
+        printed_note = f"; printed_page_declared={n_printed} (not counted)" if n_printed else ""
         results.append(_make_result(
             "E07", "cik_quarter", status, diff, tolerance,
-            f"{cik_s}/{rd_s}: source={src} vs output={out} ({diff:.1%} diff)",
+            f"{cik_s}/{rd_s}: source={src} vs output={out} ({diff:.1%} diff){printed_note}",
             cik=cik_s, report_date=rd_s,
         ))
 

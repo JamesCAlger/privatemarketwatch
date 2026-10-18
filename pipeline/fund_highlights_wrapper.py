@@ -189,7 +189,11 @@ def load_highlights_wrapper(cik: Any) -> HighlightsWrapperSpec | None:
 CLASS_NAV_PREFERENCE = "share_class_consensus"
 
 # Income columns a wrapper may name a fallback concept for (income_concept_fallback).
-INCOME_FALLBACK_COLUMNS = frozenset({"total_expenses"})
+# interest_expense: TCW Direct Lending VIII tags its printed 'Interest and credit facility expenses'
+# as us-gaap:InterestAndDebtExpense, which the income concept map does not read; the map's
+# 'interestexpense' substring took NoninterestExpenseDirectorsFees and the repurchase-transaction
+# interest instead (both suppressed in that wrapper). Inert for every wrapper that does not list it.
+INCOME_FALLBACK_COLUMNS = frozenset({"total_expenses", "interest_expense"})
 
 # Fund-level figures a wrapper may correct from the filing page.
 FIGURE_FIELDS = frozenset({"total_assets", "total_liabilities", "net_assets", "investments_at_fair_value",

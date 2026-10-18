@@ -1350,6 +1350,13 @@ def _prepare_bdc(
     _he_any_condition = (
         "(" + " OR ".join(f"({_he['condition']})" for _he in _he_per_cik) + ")"
     ) if _he_per_cik else "FALSE"
+    # Rows declared from their printed line (source_encodings.printed_rows_without_context):
+    # issuer, instrument and industry are the declared ones, never parsed from the identifier.
+    from pipeline.printed_rows import condition_sql as _printed_condition_sql, declared_sql as _printed_declared_sql
+    _printed_row_cond = _printed_condition_sql("src_context_id")
+    _printed_issuer = _printed_declared_sql("issuer")
+    _printed_instrument = _printed_declared_sql("instrument")
+    _printed_industry = _printed_declared_sql("industry")
     # Hierarchy leaf guard: CIK list, prefix patterns, marker/evidence from JSON
     _hierarchy_leaf_ciks = [v["cik"] for v in _leaf_guard_cfgs.values()]
     _hierarchy_leaf_cik_sql = (
@@ -2106,6 +2113,9 @@ def _prepare_bdc(
     parsed AS (
         SELECT * EXCLUDE (_issuer_raw, _issuer_lower, _pipe_issuer, _pipe_format, _segments),
             CASE
+                -- A row declared from its printed line (no XBRL context;
+                -- source_encodings.printed_rows_without_context): the printed issuer.
+                WHEN {_printed_row_cond} THEN {_printed_issuer}
                 -- CIK-scoped hierarchy_extract wrappers override generic pipe
                 -- parsing when their explicit condition matches. Some filers
                 -- use pipes as hierarchy delimiters rather than issuer/instrument
@@ -2230,6 +2240,8 @@ def _prepare_bdc(
                 ELSE _issuer_raw
             END AS issuer_name,
             CASE
+                -- A row declared from its printed line: the printed instrument.
+                WHEN {_printed_row_cond} THEN {_printed_instrument}
                 -- CIK-scoped hierarchy_extract wrappers override generic pipe
                 -- parsing when their explicit condition matches.
                 {_he_instrument_sql}
@@ -2842,7 +2854,8 @@ def _prepare_bdc(
                  ELSE NULL END AS interest_rate,
             -- provenance: did the value come from the structured XBRL tag (drift-immune)
             -- or the identifier text fallback? (structured-first; mirrors reference_rate_source)
-            CASE WHEN _ir IS NOT NULL AND _ir >= 0 THEN 'xbrl_field'
+            CASE WHEN {_printed_row_cond} AND _ir IS NOT NULL THEN 'printed_page'
+                 WHEN _ir IS NOT NULL AND _ir >= 0 THEN 'xbrl_field'
                  WHEN _ir IS NULL AND _text_interest_rate IS NOT NULL THEN 'identifier_text'
                  ELSE '' END AS interest_rate_source,
             CASE WHEN _bs IS NOT NULL AND _bs < 0 THEN NULL
@@ -2851,7 +2864,8 @@ def _prepare_bdc(
                  WHEN _bs IS NOT NULL THEN _bs
                  WHEN _text_basis_spread IS NOT NULL THEN _text_basis_spread
                  ELSE NULL END AS basis_spread,
-            CASE WHEN _bs IS NOT NULL AND _bs >= 0 THEN 'xbrl_field'
+            CASE WHEN {_printed_row_cond} AND _bs IS NOT NULL THEN 'printed_page'
+                 WHEN _bs IS NOT NULL AND _bs >= 0 THEN 'xbrl_field'
                  WHEN _bs IS NULL AND _text_basis_spread IS NOT NULL THEN 'identifier_text'
                  ELSE '' END AS basis_spread_source,
             -- reference_rate_type: XBRL field -> identifier text -> evidence-based
@@ -2872,6 +2886,8 @@ def _prepare_bdc(
                 '')
                 AS reference_rate_type,
             CASE
+                WHEN {_printed_row_cond} AND NULLIF(CAST(reference_rate_type AS VARCHAR), '') IS NOT NULL
+                    THEN 'printed_page'
                 WHEN NULLIF(CAST(reference_rate_type AS VARCHAR), '') IS NOT NULL
                     THEN 'xbrl_field'
                 WHEN _text_ref_rate IS NOT NULL THEN 'identifier_text'
@@ -2941,7 +2957,7 @@ def _prepare_bdc(
             CASE WHEN maturity_date IS NOT NULL AND CAST(maturity_date AS VARCHAR) != ''
                       AND TRY_CAST(maturity_date AS DATE) >= DATE '1950-01-01'
                       AND YEAR(TRY_CAST(maturity_date AS DATE)) < 2099
-                     THEN 'xbrl_field'
+                     THEN CASE WHEN {_printed_row_cond} THEN 'printed_page' ELSE 'xbrl_field' END
                  WHEN (maturity_date IS NULL OR CAST(maturity_date AS VARCHAR) = '')
                       AND (_text_maturity_raw IS NOT NULL OR _text_maturity_month_raw IS NOT NULL)
                      THEN 'identifier_text'
@@ -3005,12 +3021,17 @@ def _prepare_bdc(
                      WHEN _par_scale = 1000000.0 THEN 'principal_amount:count_x1000000' ELSE NULL END
             ), '') AS src_transforms,
             '' AS src_field_overrides,
-            '' AS cost_source,
+            -- A row declared from its printed line has no XBRL fact: its values are labelled
+            -- 'printed_page', never 'xbrl_field' (source_encodings.printed_rows_without_context).
+            CASE WHEN {_printed_row_cond} AND _cost IS NOT NULL THEN 'printed_page' ELSE '' END AS cost_source,
             '' AS shares_held_source,
             -- ELSE '' is dead: has_fv CTE (Phase C input gate) requires _fv IS NOT NULL.
-            CASE WHEN _fv IS NOT NULL THEN 'xbrl_field' ELSE '' END AS fair_value_source,
-            CASE WHEN _pa IS NOT NULL THEN 'xbrl_field' ELSE '' END AS principal_amount_source,
-            CASE WHEN _pct IS NOT NULL THEN 'xbrl_field' ELSE '' END AS pct_of_net_assets_source,
+            CASE WHEN {_printed_row_cond} AND _fv IS NOT NULL THEN 'printed_page'
+                 WHEN _fv IS NOT NULL THEN 'xbrl_field' ELSE '' END AS fair_value_source,
+            CASE WHEN {_printed_row_cond} AND _pa IS NOT NULL THEN 'printed_page'
+                 WHEN _pa IS NOT NULL THEN 'xbrl_field' ELSE '' END AS principal_amount_source,
+            CASE WHEN {_printed_row_cond} AND _pct IS NOT NULL THEN 'printed_page'
+                 WHEN _pct IS NOT NULL THEN 'xbrl_field' ELSE '' END AS pct_of_net_assets_source,
             CASE WHEN _pik IS NOT NULL AND _pik >= 0 THEN 'xbrl_field'
                  WHEN _pik IS NULL AND _text_pik_rate IS NOT NULL THEN 'identifier_text'
                  ELSE '' END AS pik_rate_source,
@@ -3059,7 +3080,9 @@ def _prepare_bdc(
             '' AS jv_subsidiary,
             '' AS entity_id,
             '' AS canonical_name,
-            COALESCE(_hier_industry, '') AS extracted_industry,
+            -- a row declared from its printed line takes the printed heading above it
+            CASE WHEN {_printed_row_cond} THEN COALESCE({_printed_industry}, '')
+                 ELSE COALESCE(_hier_industry, '') END AS extracted_industry,
             '' AS gics_sub_industry,
             '' AS lien_position,
             '' AS instrument_type,

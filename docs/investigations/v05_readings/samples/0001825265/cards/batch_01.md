@@ -352,7 +352,38 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C008 | 0001825265 | 2025-03-31 | 0000950170-25-070652
+### C008 | 0001825265 | 2023-09-30 | 0000950170-23-060972
+
+**No printed line found:** every fact on this context is hidden or the context is not in the filing.
+
+**Facts on this context not on the printed line:** none
+
+**Member (identifier text):** `Harvey Gulf Holdings, LLC | Term Loan B`
+
+**Published:**
+- issuer_name = Harvey Gulf Holdings, LLC
+- instrument_description = Term Loan B
+- asset_category = LOAN
+- fair_value = 27237547.0
+- cost = 26569849.0
+- principal_amount = 27237547.0
+- principal_amount_currency = 
+- shares_held = 
+- pct_of_net_assets = 6.3
+- interest_rate = 12.629999999999999
+- basis_spread = 7.000000000000001
+- reference_rate_type = SOFR
+- coupon_type = Floating
+- pik_rate = 
+- maturity_date = 2027-08-10
+- corrected_fields = 
+- interest_rate_source = printed_page
+- basis_spread_source = printed_page
+- pik_rate_source = 
+- shares_held_source = 
+- src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
+
+### C009 | 0001825265 | 2025-03-31 | 0000950170-25-070652
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) (continued) // Energy Equipment & Services
 
@@ -402,7 +433,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pik_rate:rate_x100;pct_of_net_assets:rate_x100
 
-### C009 | 0001825265 | 2025-03-31 | 0000950170-25-070652
+### C010 | 0001825265 | 2025-03-31 | 0000950170-25-070652
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) (continued) // Energy Equipment & Services
 
@@ -453,7 +484,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C010 | 0001825265 | 2024-06-30 | 0000950170-24-095507
+### C011 | 0001825265 | 2024-06-30 | 0000950170-24-095507
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) // Automobile Components
 
@@ -504,7 +535,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C011 | 0001825265 | 2026-03-31 | 0001193125-26-221923
+### C012 | 0001825265 | 2026-03-31 | 0001193125-26-221923
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) (continued) // Information Technology Services
 
@@ -554,7 +585,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C012 | 0001825265 | 2024-03-31 | 0000950170-24-057006
+### C013 | 0001825265 | 2024-03-31 | 0000950170-24-057006
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) // Automobile Components
 
@@ -583,7 +614,7 @@
 **Member (identifier text):** `Debt Investments, Energy Equipment & Services Harvey Gulf Holdings, LL, Acquisition Date 01/19/24 Term Loan B - 11.56% (SOFR + 6.25%, 2.00% Floor) Net Assets 7.8% Maturity 01/19/29`
 
 **Published:**
-- issuer_name = Harvey Gulf Holdings, LL
+- issuer_name = Harvey Gulf Holdings, LLC
 - instrument_description = Term Loan B
 - asset_category = LOAN
 - fair_value = 39010975.0  (tag: equal)
@@ -598,14 +629,14 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2029-01-19  (tag: equal)
-- corrected_fields = 
+- corrected_fields = issuer_name
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C013 | 0001825265 | 2025-09-30 | 0001193125-25-276913
+### C014 | 0001825265 | 2025-09-30 | 0001193125-25-276913
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) (continued) // Information Technology Services
 
@@ -656,7 +687,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C014 | 0001825265 | 2024-09-30 | 0000950170-24-125154
+### C015 | 0001825265 | 2024-09-30 | 0000950170-24-125154
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) // Automobile Components
 
@@ -707,7 +738,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C015 | 0001825265 | 2025-09-30 | 0001193125-25-276913
+### C016 | 0001825265 | 2025-09-30 | 0001193125-25-276913
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Shares | Amortized Cost | Fair Value // EQUITY // Automobile Components
 
@@ -757,7 +788,7 @@
 - shares_held_source = 
 - src_transforms = pct_of_net_assets:rate_x100
 
-### C016 | 0001825265 | 2025-06-30 | 0000950170-25-107434
+### C017 | 0001825265 | 2025-06-30 | 0000950170-25-107434
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) // Automobile Components
 
@@ -807,7 +838,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C017 | 0001825265 | 2026-06-30 | 0001193125-26-346657
+### C018 | 0001825265 | 2026-06-30 | 0001193125-26-346657
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) (continued) // Energy Equipment & Services
 
@@ -858,7 +889,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C018 | 0001825265 | 2025-06-30 | 0000950170-25-107434
+### C019 | 0001825265 | 2025-06-30 | 0000950170-25-107434
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) // Automobile Components
 
@@ -908,7 +939,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C019 | 0001825265 | 2024-12-31 | 0000950170-25-045559
+### C020 | 0001825265 | 2024-12-31 | 0000950170-25-045559
 
 **Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Par Amount | Maturity Date | Amortized Cost | Fair Value // DEBT (1) (continued) // Energy Equipment & Services
 
@@ -958,53 +989,3 @@
 - pik_rate_source = 
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
-
-### C020 | 0001825265 | 2025-12-31 | 0001193125-26-126676
-
-**Table header rows:** Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Shares | Amortized Cost | Fair Value // EQUITY // Automobile Components
-
-**Lines printed before it:**
-- Industry | Issuer | Acquisition Date | Investment | % of Net Assets | Shares | Amortized Cost | Fair Value
-- EQUITY
-- Automobile Components
-
-**The printed line** (cell text, then the facts tagged in that cell):
-1. `SUP Parent Holdings, LLC (2)(4)`
-2. `08/13/25`  <- InvestmentAcquisitionDate = 08/13/25 (same investment, other period context)
-3. `Common Units`
-4. `1.2`  <- InvestmentOwnedPercentOfNetAssets = 0.012
-5. `%`
-6. `38,121`  <- InvestmentOwnedBalanceShares = 38121.0
-7. `16,956,285`  <- InvestmentOwnedAtCost = 16956285.0
-8. `9,574,747`  <- InvestmentOwnedAtFairValue = 9574747.0
-
-**Lines printed after it:**
-- 1.2 | % | 16,956,285 | 9,574,747
-- Commercial Services & Supplies
-
-**Facts on this context not on the printed line:** none
-
-**Member (identifier text):** `Equity Investments, Automobile Components, SUP Parent Holdings, LLC, Acquisition Date 08/13/25 Common Units Net Assets 1.2%`
-
-**Published:**
-- issuer_name = SUP Parent Holdings, LLC
-- instrument_description = Common Units
-- asset_category = EQUITY_COMMON
-- fair_value = 9574747.0  (tag: equal)
-- cost = 16956285.0  (tag: equal)
-- principal_amount = 
-- principal_amount_currency = 
-- shares_held = 38121.0  (tag: equal)
-- pct_of_net_assets = 1.2  (tag: equal)
-- interest_rate = 
-- basis_spread = 
-- reference_rate_type = 
-- coupon_type = 
-- pik_rate = 
-- maturity_date = 
-- corrected_fields = 
-- interest_rate_source = 
-- basis_spread_source = 
-- pik_rate_source = 
-- shares_held_source = 
-- src_transforms = pct_of_net_assets:rate_x100

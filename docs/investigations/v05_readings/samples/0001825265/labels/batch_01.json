@@ -1,1662 +1,282 @@
 [
- {
-  "card": "C001",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C002",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "untagged",
-    "cause": "",
-    "note": "SOFR printed in the coupon; no rate-type enumeration on the context"
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C003",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "untagged",
-    "cause": "",
-    "note": "SOFR printed in the coupon; no rate-type enumeration on the context"
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C004",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "untagged",
-    "cause": "",
-    "note": "SOFR printed in the coupon; no rate-type enumeration on the context"
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C005",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "untagged",
-    "cause": "",
-    "note": "SOFR printed in the coupon; no rate-type enumeration on the context"
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C006",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C007",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C008",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C009",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C010",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "untagged",
-    "cause": "",
-    "note": "SOFR printed in the coupon; no rate-type enumeration on the context"
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C011",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C012",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "wrong",
-    "tag": "wrong_label",
-    "cause": "tag",
-    "note": "prints 'Harvey Gulf Holdings, LLC'; member and published truncate to 'Harvey Gulf Holdings, LL'"
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "untagged",
-    "cause": "",
-    "note": "SOFR printed in the coupon; no rate-type enumeration on the context"
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C013",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C014",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "untagged",
-    "cause": "",
-    "note": "SOFR printed in the coupon; no rate-type enumeration on the context"
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C015",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "wrong",
-    "tag": "right",
-    "cause": "pipeline",
-    "note": "prints 'Warrant, expires 4/4/34'; published asset_category EQUITY_COMMON instead of WARRANT"
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C016",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C017",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C018",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C019",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "untagged",
-    "cause": "",
-    "note": "SOFR printed in the coupon; no rate-type enumeration on the context"
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   }
-  }
- },
- {
-  "card": "C020",
-  "fields": {
-   "row_identity": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "issuer_name": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "instrument_and_class": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "fair_value": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "cost": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "principal_amount": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "shares_held": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "pct_of_net_assets": {
-    "published": "ok",
-    "tag": "right",
-    "cause": "",
-    "note": ""
-   },
-   "interest_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "basis_spread": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "reference_rate_type": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "pik_rate": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   },
-   "maturity_date": {
-    "published": "ok",
-    "tag": "not_printed",
-    "cause": "",
-    "note": ""
-   }
-  }
- }
+{"card": "C001", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C002", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR; no rate-type enumeration on the context"},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C003", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR; no rate-type enumeration on the context"},
+ "pik_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": "fact 03/28/28 is right; member text says Maturity 03/28/23 (filer typo)"}}},
+{"card": "C004", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR; no rate-type enumeration on the context"},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C005", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR; no rate-type enumeration on the context"},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C006", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C007", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C008", "fields": {
+ "row_identity": {"published": "ok", "tag": "untagged", "cause": "", "note": "filing prints Harvey Gulf Term Loan B 6.3 % 27,237,547 / 26,569,849 / 27,237,547; no facts on this context"},
+ "issuer_name": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints Harvey Gulf Holdings, LLC; no visible facts on context"},
+ "instrument_and_class": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints Term Loan B; no visible facts on context"},
+ "fair_value": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints 27,237,547; no fact on context"},
+ "cost": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints 26,569,849; no fact on context"},
+ "principal_amount": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints 27,237,547; no fact on context"},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints 6.3 %; no fact on context"},
+ "interest_rate": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints 12.63%; no fact on context"},
+ "basis_spread": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR + 7.00%; no fact on context"},
+ "reference_rate_type": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR; no fact on context"},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints 08/10/27; no fact on context"}}},
+{"card": "C009", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C010", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C011", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR; no rate-type enumeration on the context"},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C012", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C013", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "wrong_label", "cause": "", "note": "member text truncates the name to 'Harvey Gulf Holdings, LL'; page prints LLC; published corrected"},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR; no rate-type enumeration on the context"},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C014", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C015", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": "prints Delayed Draw Term Loan B-1; published Delayed Draw Term Loan B (drops -1, no contradiction)"},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR; no rate-type enumeration on the context"},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C016", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "wrong", "tag": "right", "cause": "pipeline", "note": "prints 'Warrant, expires 4/4/34'; asset_category published EQUITY_COMMON (no warrant class)"},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "not_printed", "cause": "", "note": "equity row; Shares column, no par"},
+ "shares_held": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "warrant; no coupon"},
+ "basis_spread": {"published": "ok", "tag": "not_printed", "cause": "", "note": "warrant; no spread"},
+ "reference_rate_type": {"published": "ok", "tag": "not_printed", "cause": "", "note": "warrant; no benchmark"},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "warrant; no PIK"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": "warrant expiry 4/4/34 tagged and published as maturity"}}},
+{"card": "C017", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C018", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C019", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}},
+{"card": "C020", "fields": {
+ "row_identity": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "issuer_name": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "instrument_and_class": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "fair_value": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "cost": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "principal_amount": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "shares_held": {"published": "ok", "tag": "not_printed", "cause": "", "note": "loan row; no share count printed"},
+ "pct_of_net_assets": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "interest_rate": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "basis_spread": {"published": "ok", "tag": "right", "cause": "", "note": ""},
+ "reference_rate_type": {"published": "ok", "tag": "untagged", "cause": "", "note": "prints SOFR; no rate-type enumeration on the context"},
+ "pik_rate": {"published": "ok", "tag": "not_printed", "cause": "", "note": "no PIK printed"},
+ "maturity_date": {"published": "ok", "tag": "right", "cause": "", "note": ""}}}
 ]

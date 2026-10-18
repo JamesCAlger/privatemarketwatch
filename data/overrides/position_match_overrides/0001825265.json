@@ -1,0 +1,42 @@
+{
+  "schema_version": "position-match-override.v1",
+  "cik": "0001825265",
+  "overrides": [
+    {
+      "begin_report_date": "2023-09-30",
+      "end_report_date": "2023-12-31",
+      "begin_issuer_name": "Harvey Gulf Holdings, LLC",
+      "end_issuer_name": "Harvey Gulf Holdings, LLC",
+      "begin_fair_value": 27237547.0,
+      "end_fair_value": 21538206.0,
+      "replace_end_issuer_name": "Harvey Gulf Holdings, LLC",
+      "replace_end_fair_value": 21124890.0,
+      "match_method": "B2_exact_name",
+      "action": "force_pair",
+      "mechanism": "Name-only match crossed the two Harvey Gulf tranches: the 2023-09-30 rows are declared from the printed page (printed_rows_without_context) and carry no maturity or member key, so neither the maturity veto nor the position key separates Term Loan A from Term Loan B. The printed tranche label is the identity: Term Loan B 2023-09-30 continues to Term Loan B 2023-12-31.",
+      "evidence": "0000950170-23-060972: 'Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.3 % 27,237,547 08/10/27 26,569,849 27,237,547'. 0000950170-24-037182: 'Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.64 % (SOFR + 7.00 %, 1.00 % Floor) 4.6 % 20,549,504 08/10/27 20,078,648 21,124,890'. t8za position_matches: 27237547 -> 21538206 (Term Loan A) by B2_exact_name.",
+      "confidence": 1.0,
+      "residual_risk": "Keyed by names and fair values within 1 pct; the two 2023-12-31 values (21.54M, 21.12M) are 2 pct apart, so each override matches one pair only. A later rebuild that changes these values leaves the override unmatched (logged).",
+      "created_by": "tcwviii_fund_agent_r2_2026-10-18",
+      "review_id": "OBS-1825265-harvey-gulf-tranche-swap-1"
+    },
+    {
+      "begin_report_date": "2023-09-30",
+      "end_report_date": "2023-12-31",
+      "begin_issuer_name": "Harvey Gulf Holdings, LLC",
+      "end_issuer_name": "Harvey Gulf Holdings, LLC",
+      "begin_fair_value": 28434971.0,
+      "end_fair_value": 21124890.0,
+      "replace_end_issuer_name": "Harvey Gulf Holdings, LLC",
+      "replace_end_fair_value": 21538206.0,
+      "match_method": "C_normalized_name",
+      "action": "force_pair",
+      "mechanism": "Name-only match crossed the two Harvey Gulf tranches (see the paired override): Term Loan A 2023-09-30 continues to Term Loan A 2023-12-31.",
+      "evidence": "0000950170-23-060972: 'Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971'. 0000950170-24-037182: 'Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 10.14 % (SOFR + 4.50 %, 1.00 % Floor) 4.7 % 21,324,957 08/10/27 21,055,796 21,538,206'. t8za position_matches: 28434971 -> 21124890 (Term Loan B) by C_normalized_name.",
+      "confidence": 1.0,
+      "residual_risk": "As the paired override.",
+      "created_by": "tcwviii_fund_agent_r2_2026-10-18",
+      "review_id": "OBS-1825265-harvey-gulf-tranche-swap-2"
+    }
+  ]
+}

@@ -750,6 +750,33 @@
           "items": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
           "description": "Accession numbers of filings whose schedule is printed in whole dollars while part of the investment facts carry scale 3 / decimals -3, so the instance holds them 1,000 times too large (TCW Direct Lending VIII, 10-Q 2023-03-31: HOP Energy 'Term Loan ... 22,548,887 06/17/27 22,130,144 21,218,503', principal and fair value tagged decimals 0, cost tagged decimals -3 as 22,130,144,000; cost 43 facts at -3 and 33 at 0, so the shared mixed-decimals guard, which needs 75 pct of one kind, does not fire and the quarter-level 1000x guard then divides every fact). In a listed filing every investment-context cost, fair value and principal fact tagged decimals -3 or coarser is read at decimals 0 (pipeline/bdc_filings._normalize_mixed_decimals_monetary_facts; event decimals_rescale:10^-3, which the re-verifier reads as a multiplier), in the extractor and in source reconciliation alike. Evidence required: printed lines in whole dollars and the decimals of their tags."
         },
+        "printed_rows_without_context": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["accession", "quarter", "issuer", "instrument", "fair_value", "cost", "principal_amount", "printed_line"],
+            "properties": {
+              "accession": {"type": "string", "pattern": "^[0-9]{10}-[0-9]{2}-[0-9]{6}$"},
+              "quarter": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+              "issuer": {"type": "string", "minLength": 1},
+              "instrument": {"type": "string", "minLength": 1},
+              "industry": {"type": "string", "minLength": 1},
+              "fair_value": {"type": "number"},
+              "cost": {"type": "number"},
+              "principal_amount": {"type": "number"},
+              "interest_rate": {"type": "number", "minimum": 0, "exclusiveMaximum": 100},
+              "basis_spread": {"type": "number", "minimum": 0, "exclusiveMaximum": 100},
+              "interest_rate_floor": {"type": "number", "minimum": 0, "exclusiveMaximum": 100},
+              "pct_of_net_assets": {"type": "number", "minimum": 0, "exclusiveMaximum": 100},
+              "reference_rate_type": {"type": "string", "pattern": "^[A-Z]{2,12}$"},
+              "maturity_date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+              "printed_line": {"type": "string", "minLength": 20}
+            }
+          },
+          "description": "Owner ruling 2026-10-18 (OVR-T8Y-R2, option a): schedule rows a filing prints and does not tag at all (no fact, no context for the quarter), published from the printed line (TCW Direct Lending VIII, 10-Q 2023-09-30: Harvey Gulf Term Loans A and B and the Lenox Term Loan, 92.4M, have only 2022-12-31 comparative contexts). Each entry gives the accession, the quarter, the issuer and instrument as printed, the printed fair value, cost and principal (whole dollars), the verbatim printed line and optionally the printed industry heading; the loader refuses an entry whose line does not contain its issuer, instrument and three numbers as printed. Optionally (OVR-T8Z-R2, 2026-10-18, D-208) the printed interest rate, spread, floor and percent of net assets (as printed: 12.63 for '12.63%'), reference rate code and maturity (YYYY-MM-DD, printed MM/DD/YY); each must be printed in the line or the loader refuses the entry. The extractor adds one record per entry with context printed_page:<hash> and nothing it was not given (nothing is parsed from the line); staging labels fair value, cost and principal printed_page in the *_source columns, so no check reads them as XBRL facts. A listed row the filing does tag on a current-period context (its issuer and instrument, or its fair value and cost) is refused and logged, not duplicated (pipeline/printed_rows.py). Evidence required: the printed line, and a scan of the filing's contexts showing none for the row."
+        },
         "section_total_reading": {
           "type": "array",
           "minItems": 1,

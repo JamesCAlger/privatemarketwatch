@@ -261,7 +261,9 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
                  WHEN regexp_full_match(maturity_raw,'[0-9]{4}-[0-9]{2}') THEN 'month'
                  WHEN regexp_full_match(maturity_raw,'[0-9]{4}') THEN 'year'
                  WHEN regexp_full_match(maturity_raw,'[0-9]{4}-[0-9]{2}-[0-9]{2}') THEN 'day'
-                 WHEN maturity_date_source IN ('xbrl_field','nport') AND TRY_CAST(maturity_date AS DATE) IS NOT NULL THEN 'day'
+                 -- printed_page: a maturity declared from its printed line (source_encodings.printed_rows_without_context);
+                 -- the loader admits only a full YYYY-MM-DD date printed in the line as MM/DD/YY(YY)
+                 WHEN maturity_date_source IN ('xbrl_field','nport','printed_page') AND TRY_CAST(maturity_date AS DATE) IS NOT NULL THEN 'day'
                  ELSE 'unknown' END AS precision_value
             FROM typed LEFT JOIN (SELECT row_id,cost_state FROM prior_states) p USING(row_id)""",[bool(migrated)])
         con.execute("DROP TABLE typed")

@@ -208,6 +208,7 @@ DOCUMENTED_MECHANISMS = {
     "excluded_bad_issuer_name": "documented_bad_issuer_name",
     "excluded_affiliation_dedup": "documented_affiliation_dedup",
     "excluded_non_private_market_output": "documented_non_private_market_cash_output",
+    "printed_page_declared": "documented_printed_page_declared",
     "documented_source_issuer_level_xbrl_subtotal": "documented_source_issuer_level_xbrl_subtotal",
     "documented_source_issuer_subtotal_arithmetic": "documented_source_issuer_subtotal_arithmetic",
 }
@@ -216,6 +217,11 @@ MECHANISM_RECOMMENDED_ACTIONS = {
     "documented_audited_row_add": (
         "Keep documented as non-blocking audited row-add recovery; re-verify via the "
         "rule's filing evidence, not row matching."
+    ),
+    "documented_printed_page_declared": (
+        "Keep documented as non-blocking: published from a printed schedule line declared under "
+        "source_encodings.printed_rows_without_context; re-check the wrapper entry against the filing, "
+        "not row matching. Not matched, not verified."
     ),
     "documented_comparative_period": "Keep documented as non-blocking comparative-period source fact.",
     "documented_no_fair_value": "Keep documented as non-blocking source row without fair value.",
@@ -268,6 +274,11 @@ MECHANISM_REASONS = {
         "Pipeline row was appended by an audited promoted row_add rule; its source "
         "fact is untagged or carries no fair value, so source reconciliation "
         "structurally cannot match it."
+    ),
+    "documented_printed_page_declared": (
+        "Pipeline row was declared from the filer's printed schedule line (owner ruling 2026-10-18, "
+        "printed_rows_without_context); the filing carries no XBRL context for it, so source "
+        "reconciliation structurally cannot match it."
     ),
     "documented_comparative_period": "Source row is from a comparative period, not the current report date.",
     "documented_no_fair_value": "Source row has no fair-value fact available for position reconciliation.",
@@ -1452,6 +1463,8 @@ def _coerce_output_df(holdings_df: pd.DataFrame, *, enable_bdc_xbrl_wrappers: bo
         "asset_category", "issuer_category", "maturity_date",
         "fair_value", "cost", "principal_amount", "shares_held",
         "interest_rate", "basis_spread", "pik_rate",
+        # provenance: identifies a row declared from its printed line (printed_rows_without_context)
+        "src_context_id", "fair_value_source",
     ]
     for col in required:
         if col not in df.columns:
@@ -1794,6 +1807,14 @@ def reconcile_bdc_source_to_holdings(
         "(COALESCE(o.output_wrapper_disposition, '') = 'non_private_market' "
         "AND COALESCE(o.output_wrapper_family, '') = 'cash')"
     )
+    # A published row declared from its printed line (source_encodings.printed_rows_without_context,
+    # owner ruling 2026-10-18; OVR-T8Z-R1) has no source fact by construction. It gets its own
+    # non-blocking status 'printed_page_declared': not matched, not blocking, still a detail row.
+    # Keyed on the declaration (context prefix AND fair_value_source), so an undeclared output row
+    # without a source fact stays a blocking extra_in_pipeline.
+    from pipeline.printed_rows import DECLARED_STATUS as _PRINTED_STATUS
+    from pipeline.printed_rows import declaration_sql as _printed_declaration_sql
+    output_printed_expr = "COALESCE(o.output_printed_page_declared, false)"
     fair_value_mismatch_expr = mismatch_checks["fair_value"]
     diagnostic_mismatch_expr = " OR ".join(
         mismatch_checks[field] for field in ["cost", "principal_amount", "shares_held"]
@@ -2082,7 +2103,8 @@ def reconcile_bdc_source_to_holdings(
                 CAST(instrument_description AS VARCHAR) AS instrument_description,
                 CAST(index_classification AS VARCHAR) AS index_classification,
                 CAST(asset_category AS VARCHAR) AS asset_category,
-                CAST(issuer_category AS VARCHAR) AS issuer_category
+                CAST(issuer_category AS VARCHAR) AS issuer_category,
+                {_printed_declaration_sql('src_context_id', 'fair_value_source')} AS output_printed_page_declared
             FROM output_raw
         ), output_accession_counts AS (
             SELECT cik, report_date, accession_number, COUNT(*) AS output_count
@@ -3336,21 +3358,25 @@ def reconcile_bdc_source_to_holdings(
             SELECT
                 CASE WHEN {output_cash_expr}
                     THEN 'excluded_non_private_market_output'
+                    WHEN {output_printed_expr} THEN '{_PRINTED_STATUS}'
                     ELSE 'extra_in_pipeline'
                 END AS status,
                 '' AS match_tier,
-                CASE WHEN {output_cash_expr} THEN '' ELSE 'FAIL' END AS issue_severity,
-                CASE WHEN {output_cash_expr}
+                CASE WHEN {output_cash_expr} OR {output_printed_expr} THEN '' ELSE 'FAIL' END AS issue_severity,
+                CASE WHEN {output_cash_expr} OR {output_printed_expr}
                     THEN 'documented_exclusion'
                     ELSE 'row_identity'
                 END AS residual_class,
-                CASE WHEN {output_cash_expr} THEN false ELSE true END AS blocking_issue,
+                CASE WHEN {output_cash_expr} OR {output_printed_expr} THEN false ELSE true END AS blocking_issue,
                 CASE WHEN {output_cash_expr}
                     THEN 'excluded_non_private_market_output'
+                    WHEN {output_printed_expr} THEN '{_PRINTED_STATUS}'
                     ELSE 'blocking_extra_in_pipeline'
                 END AS calibrated_status,
                 CASE WHEN {output_cash_expr}
                     THEN 'output-only cash bucket classified non_private_market by per-CIK wrapper; not a private production position'
+                    WHEN {output_printed_expr}
+                    THEN 'row declared from its printed line (source_encodings.printed_rows_without_context); the filing has no XBRL fact for it, so it cannot match and is not verified'
                     ELSE 'pipeline BDC row has no matching current-period source fact'
                 END AS calibration_reason,
                 o.cik, o.entity_name, o.report_date,
@@ -3402,6 +3428,8 @@ def reconcile_bdc_source_to_holdings(
                 '' AS wrapper_leaf_staging_excluded,
                 CASE WHEN {output_cash_expr}
                     THEN 'output-only cash bucket classified non_private_market by per-CIK wrapper; not a private production position'
+                    WHEN {output_printed_expr}
+                    THEN 'printed_page_declared: published from the printed schedule line declared in the wrapper; no XBRL context exists'
                     ELSE 'pipeline BDC row has no matching current-period source fact'
                 END AS evidence
             FROM output_prepared o
@@ -4530,6 +4558,9 @@ def compute_reconciliation_logic_hash() -> str:
         inspect.getsource(_staging_clean_identifier_sql),
         inspect.getsource(_material_mismatch_sql),
     ]
+    # the printed_page_declared status (OVR-T8Z-R1) is keyed by this predicate
+    from pipeline import printed_rows as _printed_rows
+    pieces += [inspect.getsource(_printed_rows.condition_sql), inspect.getsource(_printed_rows.declaration_sql)]
     return hashlib.sha256("\n\n".join(pieces).encode("utf-8")).hexdigest()
 
 
