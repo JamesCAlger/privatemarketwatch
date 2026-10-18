@@ -1,0 +1,111 @@
+{
+ "reviewer_id": "reviewer-bcred-bcpc-claude-opus-2026-10-18",
+ "report_digest": "0811ea4f22a6973430528d97c649e0e28ba987f3bc88608d1fcae7bafd70ee3c",
+ "sandbox": "bcpf",
+ "compared_with": "bcpe (and rg1b)",
+ "method": "Scripts in scratch/fund_runs/0001803498/reviewer_bcpc/: outstanding.py bcpf (ledger + digest), diff_all.py bcpe bcpf (every column), targeted queries on bcpf, grep_page.py, quotes_all.py (95 report quotes, all on page). Read pipeline/financial_conventions.py precision_value and pipeline/bdc_xbrl_html_bridge.py apply_ixbrl_field_status_overlay. Not done: cohort measurement of the shared steps; the 20-row random sample (orchestrator item).",
+ "coordinator_questions": {
+  "bcpe_rejections_rechecked": "(1) RVQ_BLK_ffeafeee0580 and the C04 findings: gone from the outstanding ledger. In bcpf the 223 equity tranches are LOAN again and the 41 unit counts are null, so equity unit-count coverage at 2025-06-30 to 2026-06-30 is 90.5 to 96.8 pct, and the shadow ledger has no failing field_coverage_drop for the fund. The proposals were withdrawn, so the wrong '12.5 points' figure is no longer asserted anywhere. Resolved. (2) maturity-status: the 6 maturity_precision corrections are reverted (bcpf: precision unknown, status unresolved on those 6, like the fund's other 22,361 dated rows), and the observation is re-diagnosed fund-wide with a per-source coverage detector. Resolved. (3) RSC Topco: 2023-12-31 to 2024-06-30 now publish 'RSC Topco, Inc.' + 'Preferred Shares' in the same position as later quarters. Resolved, the wider class-in-name claim failed on Pigments LP Int; corrected in the revised report, see class-text-left-in-issuer-name.",
+  "field_diff_bcpe_to_bcpf": "Same 24,672 rows; no change on underlying_schedule rows. Parent changes: asset_category 223 (all EQUITY_COMMON to LOAN), shares_held 41 (all to null; principal unchanged), issuer_name 3 and instrument_description 3 (RSC Topco), maturity_precision 6 and maturity_status 6 (the reverted rows), corrected_fields 9, position_id 1 (an EQUITY_COMMON row re-chained, consistent with the declared RSC Topco re-chain). index_classification and asset_class are unchanged, so the 281 + 14 structured-credit reclasses are kept. Only ruling-targeted columns moved.",
+  "maturity_precision_mechanism": "Confirmed in code. In pipeline/financial_conventions.py, precision_value gives 'day' only from a stored precision, a parseable maturity_raw, or maturity_date_source IN ('xbrl_field','nport','printed_page'); else 'unknown'. pipeline/bdc_xbrl_html_bridge.py apply_ixbrl_field_status_overlay labels bridge-filled maturities 'ixbrl_field_status' ('a bridge-filled value is NOT a structured XBRL tag'). In bcpf, all 22,361 dated BCRED rows have source ixbrl_field_status, no maturity_raw, and precision unknown. Addition for the owner: in the cohort build the 278,033 'unresolved'-with-date rows are 267,603 ixbrl_field_status (94 funds), 10,410 identifier_text (45 funds) and 20 with no source. The per-source detector covers both labels, but the observation names only the first.",
+  "class_in_name_search": "Not fully supported. A search of bcpf parent rows with an empty instrument_description finds no class phrase (common, preferred, units, shares, warrants, interests, class/series X) except 'AIMCO CLO Series 2015-A', a CLO name. But a listing of every non-loan row with an empty instrument finds 'Pigments LP Int' (5 parent rows, 2023-06-30 to 2024-06-30, fair value 0). The page prints it as one cell 'Pigments LP Int (4)(6)(16) 3,943', and from 2024-09-30 the fund publishes 'Pigments Holdings LP' with instrument 'LP Interest'. That is the same class-in-name pattern, abbreviated."
+ },
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_5a7ac8ea794a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged by the bcpf rulings (no issuer change at 2022-09-30 between bcpe and bcpf). affected_rows: the 10 rows bcpa flagged plus the 8 unflagged misnamed contexts; 18 = 16 renamed + 2 proposed. The rule now flags only ROW-6900c35a75241a00 (Minerva) and ROW-fb32f9352d6dcfba (Petco). Name check on bcpe found 1 mismatch in 15,499 published rows (Minerva). Both proposals are factually right on the page: Petco is the page truncation of the same amortising loan; Minerva has values that tie and a member that names the notes' issuing vehicle. Caveat: Minerva rests on a matcher defect, not on the name being right.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612"},
+    {"accession": "0001803498-22-000017", "text": "Petco Health & Wellness Co, Inc. (10) L + 3.25% 5.50% 2/24/2028 4,882 4,872 4,614"},
+    {"accession": "0001803498-22-000021", "text": "Unsecured Debt Health Care Technology Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Unchanged: the 63 normaliser rows match their printed lines in every quarter. units_printed is the existing detector. The 41 CLO-tranche counts dropped in bcpf were not among them.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Point Broadband Holdings, LLC - Class A Units (4) 15,636 13,261 12,616 0.06 Point Broadband Holdings, LLC - Class B Units (4) 833,140 2,375 2,222"}
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "As reviewed on bcpe: 18 misnamed, 16 renamed, 2 proposed; my value-triple check found 1 mismatch in 15,499 rows. propose_detector with a concrete check is right; it is a proxy.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Smile Doctors, LLC (4)(7)(10) L + 5.75 % 9.42 % 12/23/2028 449,679 439,765 438,872"}
+   ]
+  },
+  {
+   "observation_key": "duplicate-identifier-blocks-row-correction",
+   "outcome": "supported",
+   "rationale": "propose_detector: fail on a multi-match identifier key and count 'expected 1' lines in fund_gate. JV twins are untouched in bcpf (no underlying_schedule change).",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Reverb Buyer, Inc. (7)(9) L + 3.50 % 6.38 % 11/1/2028 43,958 43,657 41,658"}
+   ]
+  },
+  {
+   "observation_key": "position-chain-follows-shifted-member",
+   "outcome": "supported",
+   "rationale": "Still true; propose_detector is right. These position_ids remain wrong in the data.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Stepping Stones Healthcare Services, LLC (4)(7)(10) L + 5.75 % 9.42 % 1/2/2029 137,320 134,138 131,329"}
+   ]
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "outcome": "supported",
+   "rationale": "On bcpe I verified all 1,698 rows inside printed Structured Finance Obligations spans as STRUCTURED_CREDIT, and none outside. index_classification and asset_class do not change from bcpe to bcpf, so this holds. The equity tranches keep LOAN by ruling D-209, which the text now states. propose_detector is right.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Gulf Stream Meridian 5, Ltd. (4)(5)(6)(8) L + 6.75 % 9.26 % 7/15/2034 3,500 3,488 2,990"}
+   ]
+  },
+  {
+   "observation_key": "maturity-precision-unknown-for-page-read-maturity",
+   "outcome": "supported",
+   "rationale": "The mechanism is confirmed in pipeline/financial_conventions.py (precision_value source list lacks 'ixbrl_field_status') and pipeline/bdc_xbrl_html_bridge.py (the overlay sets that label on bridge-filled maturities). bcpf shows 22,361 such rows, all with precision unknown. A per-fund, per-source coverage metric avoids a 278K-row flood and goes to zero when the list is fixed, so the decision is sound. Re-review of the revised text: it now names 'identifier_text' (about 10,410 rows on 45 funds, none on BCRED), which matches my cohort count, and the check covers any source. My earlier gap is closed. fair_value_m 0.0 understates the reach (22,361 rows, essentially all of the fund's dated loans) but is defensible for a label-only field.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "PSKW Intermediate, LLC (4)(11) L + 6.25 % 9.37 % 3/9/2026 16,138 16,138 16,138"}
+   ]
+  },
+  {
+   "observation_key": "clo-name-year-printed-differs-from-member",
+   "outcome": "supported",
+   "rationale": "Unchanged; likely page typo. not_feasible is acceptable for 3.6M.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "OCP CLO 2020-22, Ltd. (4)(6)(8) L + 6.50 % 9.21 % 10/20/2034 4,250 4,069 3,587"}
+   ]
+  },
+  {
+   "observation_key": "clo-series-number-cut-as-row-number",
+   "outcome": "supported",
+   "rationale": "Pikes Peak CLO 10/3/8 names match the members; unchanged in bcpf. propose_detector is right.",
+   "evidence": [
+    {"accession": "0001803498-25-000038", "text": "Pikes Peak CLO 10 - Class ER 2025-03-31 0001803498 Pikes Peak Clo 17 Ltd - Class E 2025-03-31 0001803498 Pikes Peak CLO 3 - Class ERR"}
+   ]
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Re-reviewed after the report-only edit. The false 'no other variant' claim is withdrawn in both the observation and the fix text. 'Pigments LP Int' (5 parent rows, 2023-06-30 to 2024-06-30, fair value 0, no instrument) is recorded as left, with action parked and a not_done entry. Its quote 'Chemicals Pigments LP Int (4)(6)(16) - - 0.00' is on the 0001803498-23-000017 page. I ran the widened check myself (class or instrument phrase, full or abbreviated, after a separator, empty instrument) on bcpf published rows: it returns exactly 'Pigments LP Int' x5, with no false alarms on BCRED. Residual risk: the 5 rows stay wrong in the data until the next build applies the context-keyed split. They are zero fair value. Note: the report's top-level 'parked' list is still empty; the parking is recorded only on the observation and in not_done.",
+   "evidence": [
+    {"accession": "0001803498-23-000021", "text": "Chemicals Pigments LP Int (4)(6)(16) 3,943 - - 0.00"},
+    {"accession": "0001803498-23-000017", "text": "Chemicals Pigments LP Int (4)(6)(16) - - 0.00"}
+   ]
+  },
+  {
+   "observation_key": "clo-equity-tranche-has-no-asset-category",
+   "outcome": "supported",
+   "rationale": "Matches my bcpe finding. The published asset_category enum has no structured or CLO-equity value. The cohort uses LOAN + STRUCTURED_CREDIT (899 rows, 13 funds), and EQUITY_COMMON put par-denominated notes into C04. bcpf follows the convention on the 223 rows. propose_detector (section-based coverage figure) pending an owner ruling on a class is the right handling.",
+   "evidence": [
+    {"accession": "0001803498-26-000048", "text": "Structured Finance Obligations - Equity Instruments - non-controlled/non-affiliated Financial Services Aimco CLO 20, Ltd. - Subordinated Notes (4)(6) Estimated Yield: 12.12 %"}
+   ]
+  }
+ ],
+ "request_reviews": []
+}

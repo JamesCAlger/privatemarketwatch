@@ -1,0 +1,1485 @@
+{
+ "cik": "0001803498",
+ "label": "bcpf",
+ "before": "rg1b",
+ "shared_code": true,
+ "investigator_id": "fund-agent-bcred-pr-2026-10-18",
+ "first_reading": {
+  "sandbox": "bcpa",
+  "findings": 54,
+  "dispositioned": 26,
+  "outstanding": 28,
+  "by_rule": {
+   "units_printed": 16,
+   "issuer_name_printed": 5,
+   "pik_printed": 5,
+   "preferred_printed": 2
+  },
+  "carried_forward": "rg1b had 0 outstanding; all 28 are from the five page rules switched on 2026-10-18 (505a5bf), none from the new quarter except units_printed 2026-06-30",
+  "quarter_2026_06_30": "published 77,649.1M = filed investments 77,649.1M; 3 findings, 1 open (units_printed)",
+  "cleared_by_accepted_checks": 0
+ },
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 76,
+   "why": "context-keyed corrections: 22 shifted or mislabelled members, Dolcetto, TRC and Knockout spellings, 24 class-in-name rows (Shelf Holdco, Zoro x2, RSC Topco); and 28 Pikes Peak CLO 10/3/5/8 rows whose series number the strip regex no longer cuts"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 27,
+   "why": "printed preferred class on 3 rows (AVE, Knockout, Box) and the class split out of 24 class-in-name rows"
+  },
+  {
+   "column": "asset_category",
+   "rows": 3,
+   "why": "EQUITY_COMMON to EQUITY_PREFERRED on the three rows printed as preferred"
+  },
+  {
+   "column": "index_classification",
+   "rows": 298,
+   "why": "281 CLO tranches printed under Structured Finance Obligations DIRECT_LENDING to STRUCTURED_CREDIT and 14 units COMMON_EQUITY to STRUCTURED_CREDIT (printed-section step); 3 preferred rows"
+  },
+  {
+   "column": "asset_class",
+   "rows": 295,
+   "why": "STRUCTURED_CREDIT on the 295 rows the printed-section step re-classes"
+  },
+  {
+   "column": "shares_held",
+   "rows": 60,
+   "why": "tagged unit counts kept (shares_pow10_normalise: false)"
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 63,
+   "why": "derived_proxy no longer set (normaliser off for the fund)"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 63,
+   "why": "'shares_held:pow10_shares' no longer appended"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 5,
+   "why": "printed PIK set by row correction on 5 rows with no PIK fact"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 5,
+   "why": "derived by the financial step from the new pik_rate (Material Holdings 1.8e-15 is float residue of 10.1 - 10.1)"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 6,
+   "why": "printed maturity set on the 6 shifted 2022-09-30 rows that published none"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 6,
+   "why": "not_disclosed to unresolved on the same 6 rows (the fund's page-read maturities are all unresolved; precision correction reverted, ruling D-209)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 55,
+   "why": "names the corrected fields on the rows the context-keyed corrections touch"
+  },
+  {
+   "column": "position_id",
+   "rows": 70,
+   "why": "re-chained on renamed rows and their chains (shifted members, Pikes Peak CLO 5/8, Knockout, Zoro, Shelf, RSC Topco, Balboa Bay 2025-3) and singletons relabelled (Benefit Street CLO XXII 2022-09-30, same row, new id)"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 1,
+   "why": "not from this run: Carlyle US CLO 2022-4 2024-12-31 already differs in the untouched build bcpa (single-fund build vs rg1b's ten funds)"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 1,
+   "why": "same row as gics_sub_industry"
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_5a7ac8ea794a",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-22-000021/i5b767905ce9d4fd6a91ad6087e5a9556_I20220930/ROW-9b3f907105946796",
+     "0001803498-22-000021/i0bf60ca65f644ec79a3a1197c87a1ea0_I20220930/ROW-6900c35a75241a00",
+     "0001803498-22-000021/i108d612dd69640559cd33213b1b261d9_I20220930/ROW-4b75e14edadd61fc",
+     "0001803498-22-000021/ib65a8adbd73a480f8f1a0dfbcce2a73f_I20220930/ROW-fb32f9352d6dcfba",
+     "0001803498-22-000021/iab0677a689e446ed96229e28a1c33d7a_I20220930/ROW-61d62c10a7bc6e3f",
+     "0001803498-22-000021/ic35956111cbe4476b10b4e19f916cc16_I20220930/ROW-a9eb1394671b13f4",
+     "0001803498-22-000021/i85ff286c37674e3b9d9279a64491c40d_I20220930/ROW-e35d920e2cf24a7e",
+     "0001803498-22-000021/ia69ae86cb9b746bdbe85c77aa1e64dbf_I20220930/ROW-fa9769dd8e6bbcd0",
+     "0001803498-22-000021/i1614d798ff4b49648c50a330b004e9b8_I20220930/ROW-fc5ed563201e24c2",
+     "0001803498-22-000021/i1e474e9b8bde4b31a8d9b95e12005475_I20220930/ROW-5f21d87df1a292ee",
+     "0001803498-22-000021/i995ba913a58d4a748b245398885fd2bd_I20220930",
+     "0001803498-22-000021/i3aa001de2d984ebaabca6871b407e897_I20220930",
+     "0001803498-22-000021/ifd818b1975174b08a97f97eaade708ee_I20220930",
+     "0001803498-22-000021/i435f1f32152043ab882099a9ebcb2b8d_I20220930",
+     "0001803498-22-000021/i33eec2b682e04cfc81db8124143a282d_I20220930",
+     "0001803498-22-000021/if9df030b50e1485c84e54998f246a41c_I20220930",
+     "0001803498-22-000021/i0d78651101974ae9a8f288d675ceb292_I20220930",
+     "0001803498-22-000021/i1165bd68e3ea470a849c34b375db41e9_I20220930"
+    ],
+    "reviewed_rows": [
+     "0001803498-22-000021/i5b767905ce9d4fd6a91ad6087e5a9556_I20220930/ROW-9b3f907105946796",
+     "0001803498-22-000021/i0bf60ca65f644ec79a3a1197c87a1ea0_I20220930/ROW-6900c35a75241a00",
+     "0001803498-22-000021/i108d612dd69640559cd33213b1b261d9_I20220930/ROW-4b75e14edadd61fc",
+     "0001803498-22-000021/ib65a8adbd73a480f8f1a0dfbcce2a73f_I20220930/ROW-fb32f9352d6dcfba",
+     "0001803498-22-000021/iab0677a689e446ed96229e28a1c33d7a_I20220930/ROW-61d62c10a7bc6e3f",
+     "0001803498-22-000021/ic35956111cbe4476b10b4e19f916cc16_I20220930/ROW-a9eb1394671b13f4",
+     "0001803498-22-000021/i85ff286c37674e3b9d9279a64491c40d_I20220930/ROW-e35d920e2cf24a7e",
+     "0001803498-22-000021/ia69ae86cb9b746bdbe85c77aa1e64dbf_I20220930/ROW-fa9769dd8e6bbcd0",
+     "0001803498-22-000021/i1614d798ff4b49648c50a330b004e9b8_I20220930/ROW-fc5ed563201e24c2",
+     "0001803498-22-000021/i1e474e9b8bde4b31a8d9b95e12005475_I20220930/ROW-5f21d87df1a292ee",
+     "0001803498-22-000021/i995ba913a58d4a748b245398885fd2bd_I20220930",
+     "0001803498-22-000021/i3aa001de2d984ebaabca6871b407e897_I20220930",
+     "0001803498-22-000021/ifd818b1975174b08a97f97eaade708ee_I20220930",
+     "0001803498-22-000021/i435f1f32152043ab882099a9ebcb2b8d_I20220930",
+     "0001803498-22-000021/i33eec2b682e04cfc81db8124143a282d_I20220930",
+     "0001803498-22-000021/if9df030b50e1485c84e54998f246a41c_I20220930",
+     "0001803498-22-000021/i0d78651101974ae9a8f288d675ceb292_I20220930",
+     "0001803498-22-000021/i1165bd68e3ea470a849c34b375db41e9_I20220930"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Gulf Stream Meridian 7, Ltd. (4)(5)(6)(8) L + 6.90 % 9.18 % 7/15/2035 5,000 4,952 4,493"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "MRI Software, LLC (5)(7)(11) L + 5.50 % 7.96 % 2/10/2026 11,257 11,229 10,941 0.05 MRI Software, LLC (5)(7)(11) L + 5.50 % 9.17 % 2/10/2026 7,449 7,409 6,931"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "PPV Intermediate Holdings, LLC (4)(6)(7)(10) SOFR + 5.75 % 9.01 % 8/31/2029 102,361 99,921 99,870"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "PSKW Intermediate, LLC (4)(11) L + 6.25 % 9.37 % 3/9/2026 16,138 16,138 16,138"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Radnet, Inc. (6)(10) L + 3.00 % 6.12 % 4/21/2028 4,863 4,843 4,684"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Petco Health & Wellness Co, Inc. (10) L + 3.25 % 4.00 % 2/24/2028 4,899 4,887 4,899"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Page reader joined the wrong line: rejected. The XBRL facts on the flagged contexts are the values printed on the other company's line (e.g. 2022-09-30 context ic35956111 member 'Snoopy Bidco, Inc.' carries 449,679 / 439,765 / 438,872, printed on the Smile Doctors line; its 2021-12-31 facts are Snoopy's).",
+    "Filer member shifted or mislabelled: confirmed. 2022-09-30 has two runs of members shifted one line (Health Care Providers PPV to GI Alliance; Gulf Stream Meridian 1/5/7) plus single mislabels; the other quarters have one or two mislabelled members.",
+    "Rule population is complete: rejected. An independent value-triple check (value_name_check.py) finds 18 misnamed rows at 2022-09-30 against the rule's 10; 16 are renamed, 2 proposed.",
+    "Identifier-keyed row correction: rejected, 6 of the 2022-09-30 rows share their identifier with a JV-schedule row in the same filing; context-keyed corrections (row_corrections_by_context.csv) used instead.",
+    "Petco row: same issuer, page truncates ('Petco Health and Wellness Comp'); the comparative column of the same filing prints the published full name. Renaming to the cut text would worsen the name; no printed form satisfies the rule.",
+    "Minerva Merger Sub row: the member names the notes' issuing vehicle, the page the parent 'Athenahealth, Inc.'. Renamed in bcpb: the shared matcher then chained the 2030 notes onto the athenahealth 2029 term-loan position (d9953922) and split the 2022-09-30 loan off. Reverted from bcpc on."
+   ],
+   "next_action": "16 of the 18 misnamed 2022-09-30 rows renamed (bcpf). Two rows left, proposed: PD-0001803498-ISSUERNAME-1 (issuer-name-printed-truncated-same-issuer, Petco) and PD-0001803498-ISSUERNAME-2 (issuer-name-is-the-notes-issuing-vehicle, Minerva Merger Sub); owner decision."
+  }
+ ],
+ "resolved_investigations": [
+  {
+   "finding_id": "RVQ_BLK_79f15a0f55d0",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-23-000017/c-102/ROW-c91c950d75296969"
+    ],
+    "reviewed_rows": [
+     "0001803498-23-000017/c-102/ROW-c91c950d75296969"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-23-000017",
+     "text": "Triton Water Holdings, Inc. (9) SOFR + 3.25 % 8.49 % 3/31/2028 $ 44,998 $ 44,222 $ 43,613"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Page reader joined the wrong line: rejected. The XBRL facts on the flagged contexts are the values printed on the other company's line (e.g. 2022-09-30 context ic35956111 member 'Snoopy Bidco, Inc.' carries 449,679 / 439,765 / 438,872, printed on the Smile Doctors line; its 2021-12-31 facts are Snoopy's).",
+    "Filer member shifted or mislabelled: confirmed. 2022-09-30 has two runs of members shifted one line (Health Care Providers PPV to GI Alliance; Gulf Stream Meridian 1/5/7) plus single mislabels; the other quarters have one or two mislabelled members.",
+    "Rule population is complete: rejected. An independent value-triple check (value_name_check.py) finds 18 misnamed rows at 2022-09-30 against the rule's 10; 16 are renamed, 2 proposed.",
+    "Identifier-keyed row correction: rejected, 6 of the 2022-09-30 rows share their identifier with a JV-schedule row in the same filing; context-keyed corrections (row_corrections_by_context.csv) used instead."
+   ],
+   "next_action": "Fixed by context-keyed row corrections (bcpf)."
+  },
+  {
+   "finding_id": "RVQ_BLK_5ce874857717",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-23-000021/c-539/ROW-a8b1035c46cc00d4",
+     "0001803498-23-000021/c-319/ROW-5040aed8a4957e98"
+    ],
+    "reviewed_rows": [
+     "0001803498-23-000021/c-539/ROW-a8b1035c46cc00d4",
+     "0001803498-23-000021/c-319/ROW-5040aed8a4957e98"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-23-000021",
+     "text": "Inmar, Inc. (11) SOFR + 5.50 % 10.82 % 5/1/2026 29,846 28,904 29,685"
+    },
+    {
+     "accession": "0001803498-23-000021",
+     "text": "Midwest Physician Administrative Services, LLC (10) SOFR + 3.25 % 8.90 % 3/12/2028 19,036 18,977 17,925"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Page reader joined the wrong line: rejected. The XBRL facts on the flagged contexts are the values printed on the other company's line (e.g. 2022-09-30 context ic35956111 member 'Snoopy Bidco, Inc.' carries 449,679 / 439,765 / 438,872, printed on the Smile Doctors line; its 2021-12-31 facts are Snoopy's).",
+    "Filer member shifted or mislabelled: confirmed. 2022-09-30 has two runs of members shifted one line (Health Care Providers PPV to GI Alliance; Gulf Stream Meridian 1/5/7) plus single mislabels; the other quarters have one or two mislabelled members.",
+    "Rule population is complete: rejected. An independent value-triple check (value_name_check.py) finds 18 misnamed rows at 2022-09-30 against the rule's 10; 16 are renamed, 2 proposed.",
+    "Identifier-keyed row correction: rejected, 6 of the 2022-09-30 rows share their identifier with a JV-schedule row in the same filing; context-keyed corrections (row_corrections_by_context.csv) used instead."
+   ],
+   "next_action": "Fixed by context-keyed row corrections (bcpf)."
+  },
+  {
+   "finding_id": "RVQ_BLK_fe7d5d66b9b4",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-25-000038/c-567/ROW-65b3593262b1efab",
+     "0001803498-25-000038/c-566/ROW-d4516b75dc0fec93",
+     "0001803498-25-000038/c-169/ROW-4846c178fa3f4053"
+    ],
+    "reviewed_rows": [
+     "0001803498-25-000038/c-567/ROW-65b3593262b1efab",
+     "0001803498-25-000038/c-566/ROW-d4516b75dc0fec93",
+     "0001803498-25-000038/c-169/ROW-4846c178fa3f4053"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-25-000038",
+     "text": "Dolcetto Holdco S.p.A. (4)(5)(6)(8) E + 5.50 % 8.96 % 10/11/2022 10/27/2028 EUR 60,136 58,626 65,025 0.16 Dolcetto Holdco S.p.A. (4)(5)(6)(8) E + 5.50 % 7.87 % 1/28/2025 10/27/2028 EUR 23,167 23,873 25,050"
+    },
+    {
+     "accession": "0001803498-25-000038",
+     "text": "Dolcetto Holdco S.p.A. (4)(5)(6)(8) E + 5.50 % 8.96 % 10/11/2022 10/27/2028 EUR 60,136 58,626 65,025"
+    },
+    {
+     "accession": "0001803498-25-000038",
+     "text": "TRC Cos, LLC (8) SOFR + 3.00 % 7.32 % 1/14/2025 12/8/2028 26,726 26,726 26,509"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Page reader joined the wrong line: rejected. The XBRL facts on the flagged contexts are the values printed on the other company's line (e.g. 2022-09-30 context ic35956111 member 'Snoopy Bidco, Inc.' carries 449,679 / 439,765 / 438,872, printed on the Smile Doctors line; its 2021-12-31 facts are Snoopy's).",
+    "Filer member shifted or mislabelled: confirmed. 2022-09-30 has two runs of members shifted one line (Health Care Providers PPV to GI Alliance; Gulf Stream Meridian 1/5/7) plus single mislabels; the other quarters have one or two mislabelled members.",
+    "Rule population is complete: rejected. An independent value-triple check (value_name_check.py) finds 18 misnamed rows at 2022-09-30 against the rule's 10; 16 are renamed, 2 proposed.",
+    "Identifier-keyed row correction: rejected, 6 of the 2022-09-30 rows share their identifier with a JV-schedule row in the same filing; context-keyed corrections (row_corrections_by_context.csv) used instead."
+   ],
+   "next_action": "Fixed by context-keyed row corrections (bcpf)."
+  },
+  {
+   "finding_id": "RVQ_BLK_c5f7e2af1e90",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-25-000081/c-251/ROW-90331b20a2d81354"
+    ],
+    "reviewed_rows": [
+     "0001803498-25-000081/c-251/ROW-90331b20a2d81354"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-25-000081",
+     "text": "Trident TPI Holdings, Inc. (9) SOFR + 3.75 % 7.75 % 10/18/2024 9/15/2028 11,994 11,994 11,800"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Page reader joined the wrong line: rejected. The XBRL facts on the flagged contexts are the values printed on the other company's line (e.g. 2022-09-30 context ic35956111 member 'Snoopy Bidco, Inc.' carries 449,679 / 439,765 / 438,872, printed on the Smile Doctors line; its 2021-12-31 facts are Snoopy's).",
+    "Filer member shifted or mislabelled: confirmed. 2022-09-30 has two runs of members shifted one line (Health Care Providers PPV to GI Alliance; Gulf Stream Meridian 1/5/7) plus single mislabels; the other quarters have one or two mislabelled members.",
+    "Rule population is complete: rejected. An independent value-triple check (value_name_check.py) finds 18 misnamed rows at 2022-09-30 against the rule's 10; 16 are renamed, 2 proposed.",
+    "Identifier-keyed row correction: rejected, 6 of the 2022-09-30 rows share their identifier with a JV-schedule row in the same filing; context-keyed corrections (row_corrections_by_context.csv) used instead."
+   ],
+   "next_action": "Fixed by context-keyed row corrections (bcpf)."
+  },
+  {
+   "finding_id": "RVQ_BLK_6051bec18214",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-24-000022/c-454/ROW-6306fb6ded3bd410"
+    ],
+    "reviewed_rows": [
+     "0001803498-24-000022/c-454/ROW-6306fb6ded3bd410"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-24-000022",
+     "text": "Digital Media Solutions, LLC (6)(10)(17) SOFR + 11.00 % 16.57 % PIK 5/25/2026 33,699 33,383 9,267"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "PIK tagged on another context of the member: checked with filing_grep, no PIK fact on the row's current-period contexts; for Digital Media Solutions and Daylight Beta the prior-period context tags the PIK rate, the current one tags the same figure as InvestmentInterestRate only.",
+    "Printed PIK is a margin, not the rate: rejected; '16.57 % PIK', '10.00 % PIK', '10.10 % PIK' are the whole coupon in kind, '(incl. 0.50 % PIK)' is the PIK part."
+   ],
+   "next_action": "Fixed by context-keyed pik_rate corrections (bcpf)."
+  },
+  {
+   "finding_id": "RVQ_BLK_6b5dbfe189af",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-24-000044/c-793/ROW-1f70abb710ce5685"
+    ],
+    "reviewed_rows": [
+     "0001803498-24-000044/c-793/ROW-1f70abb710ce5685"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-24-000044",
+     "text": "Thermostat Purchaser III, Inc. (4)(10) SOFR + 7.25 % 12.74 %.(incl. 0.50 % PIK) 8/31/2029 32,740"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "PIK tagged on another context of the member: checked with filing_grep, no PIK fact on the row's current-period contexts; for Digital Media Solutions and Daylight Beta the prior-period context tags the PIK rate, the current one tags the same figure as InvestmentInterestRate only.",
+    "Printed PIK is a margin, not the rate: rejected; '16.57 % PIK', '10.00 % PIK', '10.10 % PIK' are the whole coupon in kind, '(incl. 0.50 % PIK)' is the PIK part."
+   ],
+   "next_action": "Fixed by context-keyed pik_rate corrections (bcpf)."
+  },
+  {
+   "finding_id": "RVQ_BLK_b3db087af5d3",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-24-000062/c-872/ROW-ce89e2354511bee5"
+    ],
+    "reviewed_rows": [
+     "0001803498-24-000062/c-872/ROW-ce89e2354511bee5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-24-000062",
+     "text": "Thermostat Purchaser III, Inc. (4)(10) SOFR + 7.25 % 12.96 %.(incl. 0.50 % PIK) 8/31/2021 8/31/2029 32,783 32,481 32,619"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "PIK tagged on another context of the member: checked with filing_grep, no PIK fact on the row's current-period contexts; for Digital Media Solutions and Daylight Beta the prior-period context tags the PIK rate, the current one tags the same figure as InvestmentInterestRate only.",
+    "Printed PIK is a margin, not the rate: rejected; '16.57 % PIK', '10.00 % PIK', '10.10 % PIK' are the whole coupon in kind, '(incl. 0.50 % PIK)' is the PIK part."
+   ],
+   "next_action": "Fixed by context-keyed pik_rate corrections (bcpf)."
+  },
+  {
+   "finding_id": "RVQ_BLK_6fda9a46bbe5",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-25-000038/c-891/ROW-c281fe1e7a36ecc9"
+    ],
+    "reviewed_rows": [
+     "0001803498-25-000038/c-891/ROW-c281fe1e7a36ecc9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-25-000038",
+     "text": "Daylight Beta Parent, LLC (Benefytt Technologies, Inc.) (4)(5)(8)(16)(17)(18) 10.00 % 10.00 % PIK 9/11/2023 9/12/2033 56,160 49,530 13,063"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "PIK tagged on another context of the member: checked with filing_grep, no PIK fact on the row's current-period contexts; for Digital Media Solutions and Daylight Beta the prior-period context tags the PIK rate, the current one tags the same figure as InvestmentInterestRate only.",
+    "Printed PIK is a margin, not the rate: rejected; '16.57 % PIK', '10.00 % PIK', '10.10 % PIK' are the whole coupon in kind, '(incl. 0.50 % PIK)' is the PIK part."
+   ],
+   "next_action": "Fixed by context-keyed pik_rate corrections (bcpf)."
+  },
+  {
+   "finding_id": "RVQ_BLK_a91066f2b6b2",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-25-000081/c-1013/ROW-47b9ef0abc4ec4ef"
+    ],
+    "reviewed_rows": [
+     "0001803498-25-000081/c-1013/ROW-47b9ef0abc4ec4ef"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-25-000081",
+     "text": "Material Holdings, LLC (4)(5)(10)(16)(17) SOFR + 6.00 % 10.10 % PIK 6/14/2024 8/19/2027 60,574 57,075 1,102 0.00 Material Holdings, LLC (4)(5)(7)(10)(16) SOFR + 6.00 % 10.10 % PIK 6/14/2024 8/19/2027 5,190 5,170 4,816"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "PIK tagged on another context of the member: checked with filing_grep, no PIK fact on the row's current-period contexts; for Digital Media Solutions and Daylight Beta the prior-period context tags the PIK rate, the current one tags the same figure as InvestmentInterestRate only.",
+    "Printed PIK is a margin, not the rate: rejected; '16.57 % PIK', '10.00 % PIK', '10.10 % PIK' are the whole coupon in kind, '(incl. 0.50 % PIK)' is the PIK part."
+   ],
+   "next_action": "Fixed by context-keyed pik_rate corrections (bcpf)."
+  },
+  {
+   "finding_id": "RVQ_BLK_bd35f66b6595",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-24-000044/c-950/ROW-9df3de261e00e739",
+     "0001803498-24-000044/c-975/ROW-5099becfc45eef0d"
+    ],
+    "reviewed_rows": [
+     "0001803498-24-000044/c-950/ROW-9df3de261e00e739",
+     "0001803498-24-000044/c-975/ROW-5099becfc45eef0d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-24-000044",
+     "text": "AVE Holdings I Corp. - Series A-1 Preferred Shares (4) 12,237,213 $ 11,870 $ 12,727"
+    },
+    {
+     "accession": "0001803498-24-000044",
+     "text": "Knockout Intermediate Holdings I, Inc. - Preferred Shares (4) 49,020 47,793 64,950"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Rate alone made the row look preferred: rejected; the printed line names the class ('Series A-1 Preferred Shares', 'Preferred Shares', 'Class C Preferred Units').",
+    "Earlier quarters should also be preferred: rejected under the D-207 ruling; before 2024-06-30 (AVE, Knockout) and 2024-09-30 (Box) the page prints no class, so those rows are left as published."
+   ],
+   "next_action": "Fixed by context-keyed class corrections (bcpf); the next quarters already publish them as preferred."
+  },
+  {
+   "finding_id": "RVQ_BLK_ecfa280dbe66",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-24-000062/c-1052/ROW-b23a0268a1b7a418"
+    ],
+    "reviewed_rows": [
+     "0001803498-24-000062/c-1052/ROW-b23a0268a1b7a418"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-24-000062",
+     "text": "Box Co-Invest Blocker, LLC - (BP Alpha Holdings, L.P.) - Class C Preferred Units (4) 7/12/2023 401,889 390 478"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Rate alone made the row look preferred: rejected; the printed line names the class ('Series A-1 Preferred Shares', 'Preferred Shares', 'Class C Preferred Units').",
+    "Earlier quarters should also be preferred: rejected under the D-207 ruling; before 2024-06-30 (AVE, Knockout) and 2024-09-30 (Box) the page prints no class, so those rows are left as published."
+   ],
+   "next_action": "Fixed by context-keyed class corrections (bcpf); the next quarters already publish them as preferred."
+  },
+  {
+   "finding_id": "RVQ_BLK_7ef809f79929",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-22-000021/ic90d8e1615f340f89871c316eb5a65ba_I20220930/ROW-c3ce2bc29d59526c"
+    ],
+    "reviewed_rows": [
+     "0001803498-22-000021/ic90d8e1615f340f89871c316eb5a65ba_I20220930/ROW-c3ce2bc29d59526c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Point Broadband Holdings, LLC - Class B Units (4) 833,140 2,375 2,222"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_a9ffb0f77a9f",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-23-000008/if4b2876277754ad7ad30029f6af7617c_I20221231/ROW-08dafc7f08a27f60",
+     "0001803498-23-000008/i1d0266fc3ab240f5bd76cda52909f44a_I20221231/ROW-a651153f106f9eaf"
+    ],
+    "reviewed_rows": [
+     "0001803498-23-000008/if4b2876277754ad7ad30029f6af7617c_I20221231/ROW-08dafc7f08a27f60",
+     "0001803498-23-000008/i1d0266fc3ab240f5bd76cda52909f44a_I20221231/ROW-a651153f106f9eaf"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-23-000008",
+     "text": "Point Broadband Holdings, LLC - Class B Units (4) 685,760 1,955 1,414"
+    },
+    {
+     "accession": "0001803498-23-000008",
+     "text": "Point Broadband Holdings, LLC - Class Additional A Units (4) 147,380 420 304"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_7760e2da549b",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-23-000012/i6918f9ae3c164a0ea2066f28ca26b705_I20230331/ROW-7b64bb7a0a56b6aa",
+     "0001803498-23-000012/ifce4a967d12e46528904ae6d10dbeba7_I20230331/ROW-5aef4da6b01552f2"
+    ],
+    "reviewed_rows": [
+     "0001803498-23-000012/i6918f9ae3c164a0ea2066f28ca26b705_I20230331/ROW-7b64bb7a0a56b6aa",
+     "0001803498-23-000012/ifce4a967d12e46528904ae6d10dbeba7_I20230331/ROW-5aef4da6b01552f2"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-23-000012",
+     "text": "Point Broadband Holdings, LLC - Class B Units (4) 685,760 1,955 3,603"
+    },
+    {
+     "accession": "0001803498-23-000012",
+     "text": "Point Broadband Holdings, LLC - Class Additional A Units (4) 147,380 420 774"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_ebe22b2d7cd2",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-23-000017/c-838/ROW-ff2dff5e8dd0e02f",
+     "0001803498-23-000017/c-839/ROW-46ace6005cb884fb"
+    ],
+    "reviewed_rows": [
+     "0001803498-23-000017/c-838/ROW-ff2dff5e8dd0e02f",
+     "0001803498-23-000017/c-839/ROW-46ace6005cb884fb"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-23-000017",
+     "text": "Point Broadband Holdings, LLC - Class B Units (4) 685,760 1,955 3,764"
+    },
+    {
+     "accession": "0001803498-23-000017",
+     "text": "Point Broadband Holdings, LLC - Class Additional A Units (4) 147,380 420 809"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_45087e3be8d8",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-23-000021/c-854/ROW-d4719c1879260f63",
+     "0001803498-23-000021/c-855/ROW-f7e3849bd52b328e"
+    ],
+    "reviewed_rows": [
+     "0001803498-23-000021/c-854/ROW-d4719c1879260f63",
+     "0001803498-23-000021/c-855/ROW-f7e3849bd52b328e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-23-000021",
+     "text": "Point Broadband Holdings, LLC - Class B Units (4) 685,760 1,955 4,628"
+    },
+    {
+     "accession": "0001803498-23-000021",
+     "text": "Point Broadband Holdings, LLC - Class Additional A Units (4) 147,380 420 995"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_24573e87ecbf",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-24-000007/c-970/ROW-d3a12263d1806bd8",
+     "0001803498-24-000007/c-971/ROW-0e7098de991b6993"
+    ],
+    "reviewed_rows": [
+     "0001803498-24-000007/c-970/ROW-d3a12263d1806bd8",
+     "0001803498-24-000007/c-971/ROW-0e7098de991b6993"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-24-000007",
+     "text": "Point Broadband Holdings, LLC - Class B Units (4) 685,760 1,955 4,628"
+    },
+    {
+     "accession": "0001803498-24-000007",
+     "text": "Point Broadband Holdings, LLC - Class Additional A Units (4) 147,380 420 995"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_4527cb34a36f",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-24-000022/c-837/ROW-8f8f1d551b16c9ea",
+     "0001803498-24-000022/c-836/ROW-dd6f3357b71ced5b"
+    ],
+    "reviewed_rows": [
+     "0001803498-24-000022/c-837/ROW-8f8f1d551b16c9ea",
+     "0001803498-24-000022/c-836/ROW-dd6f3357b71ced5b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-24-000022",
+     "text": "Point Broadband Holdings, LLC - Class Additional A Units (4) 147,380 420 995"
+    },
+    {
+     "accession": "0001803498-24-000022",
+     "text": "Point Broadband Holdings, LLC - Class B Units (4) 685,760 1,955 4,628"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_cbe039f67331",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-24-000044/c-946/ROW-8de791df9adc9d4a",
+     "0001803498-24-000044/c-945/ROW-72aeab6edf678b45"
+    ],
+    "reviewed_rows": [
+     "0001803498-24-000044/c-946/ROW-8de791df9adc9d4a",
+     "0001803498-24-000044/c-945/ROW-72aeab6edf678b45"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-24-000044",
+     "text": "Point Broadband Holdings, LLC - Class Additional A Units (4) 147,380 420 528"
+    },
+    {
+     "accession": "0001803498-24-000044",
+     "text": "Point Broadband Holdings, LLC - Class B Units (4) 685,760 1,955 2,455"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_e31227e31d78",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-24-000062/c-1058/ROW-d6b6b34031c76f16",
+     "0001803498-24-000062/c-1060/ROW-3cbed359a52f70cf",
+     "0001803498-24-000062/c-1099/ROW-52c7060298d683be"
+    ],
+    "reviewed_rows": [
+     "0001803498-24-000062/c-1058/ROW-d6b6b34031c76f16",
+     "0001803498-24-000062/c-1060/ROW-3cbed359a52f70cf",
+     "0001803498-24-000062/c-1099/ROW-52c7060298d683be"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-24-000062",
+     "text": "Point Broadband Holdings, LLC - Class B Common Units (4) 10/1/2021 685,760 1,955 2,750"
+    },
+    {
+     "accession": "0001803498-24-000062",
+     "text": "Point Broadband Holdings, LLC - Class Additional B Common Units (4) 3/24/2022 147,380 420 591"
+    },
+    {
+     "accession": "0001803498-24-000062",
+     "text": "Zoro - Common Equity (4) 11/22/2022 1,195,880 11,959"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_c97dcabe2169",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-25-000021/c-1255/ROW-4ac3aaea3da2da05",
+     "0001803498-25-000021/c-1252/ROW-ec9fbb337602311f",
+     "0001803498-25-000021/c-1258/ROW-63d48b94547abc27",
+     "0001803498-25-000021/c-1269/ROW-7c0c67b7a9333e84",
+     "0001803498-25-000021/c-1267/ROW-c879512a30b7726a",
+     "0001803498-25-000021/c-1313/ROW-d5b4e3efc7829d1d"
+    ],
+    "reviewed_rows": [
+     "0001803498-25-000021/c-1255/ROW-4ac3aaea3da2da05",
+     "0001803498-25-000021/c-1252/ROW-ec9fbb337602311f",
+     "0001803498-25-000021/c-1258/ROW-63d48b94547abc27",
+     "0001803498-25-000021/c-1269/ROW-7c0c67b7a9333e84",
+     "0001803498-25-000021/c-1267/ROW-c879512a30b7726a",
+     "0001803498-25-000021/c-1313/ROW-d5b4e3efc7829d1d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "GTCR/Jupiter Blocker, LLC - Blocker Note (4) 12/2/2024 115,036 115"
+    },
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Genstar Neptune Blocker, LLC - Blocker Note (4) 12/2/2024 159,782 160"
+    },
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Jupiter Ultimate Holdings, LLC - Class C Common Units (4) 11/8/2024 5,084,731 4,037 4,029"
+    },
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Point Broadband Holdings, LLC - Class Additional B Common Units (4) 3/24/2022 147,380 420 451"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_15b5c10d7b94",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-25-000038/c-1136/ROW-8c7c02cff947970e",
+     "0001803498-25-000038/c-1133/ROW-3d5b5f6d24144a55",
+     "0001803498-25-000038/c-1139/ROW-82be469ad5cde832",
+     "0001803498-25-000038/c-1151/ROW-5a4ea1aa99980748",
+     "0001803498-25-000038/c-1149/ROW-fbe6756e8a02ac9a",
+     "0001803498-25-000038/c-1197/ROW-5412bdf1db623b93"
+    ],
+    "reviewed_rows": [
+     "0001803498-25-000038/c-1136/ROW-8c7c02cff947970e",
+     "0001803498-25-000038/c-1133/ROW-3d5b5f6d24144a55",
+     "0001803498-25-000038/c-1139/ROW-82be469ad5cde832",
+     "0001803498-25-000038/c-1151/ROW-5a4ea1aa99980748",
+     "0001803498-25-000038/c-1149/ROW-fbe6756e8a02ac9a",
+     "0001803498-25-000038/c-1197/ROW-5412bdf1db623b93"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-25-000038",
+     "text": "GTCR/Jupiter Blocker, LLC - Blocker Note (4) 12/2/2024 115,036 115 120"
+    },
+    {
+     "accession": "0001803498-25-000038",
+     "text": "Genstar Neptune Blocker, LLC - Blocker Note (4) 12/2/2024 159,782 160 166"
+    },
+    {
+     "accession": "0001803498-25-000038",
+     "text": "Jupiter Ultimate Holdings, LLC - Class C Common Units (4) 11/8/2024 5,084,731 4,037 4,017"
+    },
+    {
+     "accession": "0001803498-25-000038",
+     "text": "Point Broadband Holdings, LLC - Class Additional B Common Units (4) 3/24/2022 147,380 420 252"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_ac65d522c9ae",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-25-000062/c-1252/ROW-5b98f1c9b980b07f",
+     "0001803498-25-000062/c-1249/ROW-0fbda4158233c0bc",
+     "0001803498-25-000062/c-1255/ROW-5940408e5b91163b",
+     "0001803498-25-000062/c-1267/ROW-8bcddcf67beaabc2",
+     "0001803498-25-000062/c-1265/ROW-054d56e513b13c0e",
+     "0001803498-25-000062/c-1314/ROW-830cea4c03adc424"
+    ],
+    "reviewed_rows": [
+     "0001803498-25-000062/c-1252/ROW-5b98f1c9b980b07f",
+     "0001803498-25-000062/c-1249/ROW-0fbda4158233c0bc",
+     "0001803498-25-000062/c-1255/ROW-5940408e5b91163b",
+     "0001803498-25-000062/c-1267/ROW-8bcddcf67beaabc2",
+     "0001803498-25-000062/c-1265/ROW-054d56e513b13c0e",
+     "0001803498-25-000062/c-1314/ROW-830cea4c03adc424"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-25-000062",
+     "text": "GTCR/Jupiter Blocker, LLC - Blocker Note (4) 12/2/2024 115,036 115"
+    },
+    {
+     "accession": "0001803498-25-000062",
+     "text": "Genstar Neptune Blocker, LLC - Blocker Note (4) 12/2/2024 159,782 160"
+    },
+    {
+     "accession": "0001803498-25-000062",
+     "text": "Jupiter Ultimate Holdings, LLC - Class C Common Units (4) 11/8/2024 5,084,731 4,037 4,627"
+    },
+    {
+     "accession": "0001803498-25-000062",
+     "text": "Point Broadband Holdings, LLC - Class Additional B Common Units (4) 3/24/2022 147,380 420 534"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_6af2d715850a",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-25-000081/c-1281/ROW-072cdda624ed4bc1",
+     "0001803498-25-000081/c-1278/ROW-b22da58c2fb77436",
+     "0001803498-25-000081/c-1284/ROW-3331d4d744a70e1c",
+     "0001803498-25-000081/c-1296/ROW-9e16f885747f2e8b",
+     "0001803498-25-000081/c-1294/ROW-2a4f676a1acbbd95",
+     "0001803498-25-000081/c-1342/ROW-870c86f6fa6c6b48"
+    ],
+    "reviewed_rows": [
+     "0001803498-25-000081/c-1281/ROW-072cdda624ed4bc1",
+     "0001803498-25-000081/c-1278/ROW-b22da58c2fb77436",
+     "0001803498-25-000081/c-1284/ROW-3331d4d744a70e1c",
+     "0001803498-25-000081/c-1296/ROW-9e16f885747f2e8b",
+     "0001803498-25-000081/c-1294/ROW-2a4f676a1acbbd95",
+     "0001803498-25-000081/c-1342/ROW-870c86f6fa6c6b48"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-25-000081",
+     "text": "GTCR/Jupiter Blocker, LLC - Blocker Note (4) 12/2/2024 115,036 115"
+    },
+    {
+     "accession": "0001803498-25-000081",
+     "text": "Genstar Neptune Blocker, LLC - Blocker Note (4) 12/2/2024 159,782 160"
+    },
+    {
+     "accession": "0001803498-25-000081",
+     "text": "Jupiter Ultimate Holdings, LLC - Class C Common Units (4) 11/8/2024 5,084,731 4,037 4,729"
+    },
+    {
+     "accession": "0001803498-25-000081",
+     "text": "Point Broadband Holdings, LLC - Class Additional B Common Units (4) 3/24/2022 147,380 420 534"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_7e71c94dc38c",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-26-000014/c-1458/ROW-010390db522d0ec1",
+     "0001803498-26-000014/c-1454/ROW-c9e229df350740c0",
+     "0001803498-26-000014/c-1462/ROW-76559a16933193d1",
+     "0001803498-26-000014/c-1474/ROW-c6f498fda78491a5",
+     "0001803498-26-000014/c-1472/ROW-30da735a9a835770",
+     "0001803498-26-000014/c-1525/ROW-28680df8f8bf5a3a"
+    ],
+    "reviewed_rows": [
+     "0001803498-26-000014/c-1458/ROW-010390db522d0ec1",
+     "0001803498-26-000014/c-1454/ROW-c9e229df350740c0",
+     "0001803498-26-000014/c-1462/ROW-76559a16933193d1",
+     "0001803498-26-000014/c-1474/ROW-c6f498fda78491a5",
+     "0001803498-26-000014/c-1472/ROW-30da735a9a835770",
+     "0001803498-26-000014/c-1525/ROW-28680df8f8bf5a3a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-26-000014",
+     "text": "GTCR/Jupiter Blocker, LLC - Blocker Note (4) 12/2/2024 115,036 115"
+    },
+    {
+     "accession": "0001803498-26-000014",
+     "text": "Genstar Neptune Blocker, LLC - Blocker Note (4) 12/2/2024 159,782 $ 160"
+    },
+    {
+     "accession": "0001803498-26-000014",
+     "text": "Jupiter Ultimate Holdings, LLC - Class C Common Units (4) 11/8/2024 5,084,731 4,037 5,288"
+    },
+    {
+     "accession": "0001803498-26-000014",
+     "text": "Point Broadband Holdings, LLC - Class Additional B Common Units (4) 3/24/2022 147,380 420 478"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_d490a91af9d0",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-26-000031/c-1326/ROW-761b442bb98dfb4a",
+     "0001803498-26-000031/c-1322/ROW-4e131a8a952e9fa1",
+     "0001803498-26-000031/c-1330/ROW-beec8e2f2b132de4",
+     "0001803498-26-000031/c-1342/ROW-6669fc78ba399800",
+     "0001803498-26-000031/c-1340/ROW-525f934b9204cf21",
+     "0001803498-26-000031/c-1393/ROW-3ea8ed10698e0215"
+    ],
+    "reviewed_rows": [
+     "0001803498-26-000031/c-1326/ROW-761b442bb98dfb4a",
+     "0001803498-26-000031/c-1322/ROW-4e131a8a952e9fa1",
+     "0001803498-26-000031/c-1330/ROW-beec8e2f2b132de4",
+     "0001803498-26-000031/c-1342/ROW-6669fc78ba399800",
+     "0001803498-26-000031/c-1340/ROW-525f934b9204cf21",
+     "0001803498-26-000031/c-1393/ROW-3ea8ed10698e0215"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-26-000031",
+     "text": "GTCR/Jupiter Blocker, LLC - Blocker Note (4) 12/2/2024 115,036 115"
+    },
+    {
+     "accession": "0001803498-26-000031",
+     "text": "Genstar Neptune Blocker, LLC - Blocker Note (4) 12/2/2024 159,782 160"
+    },
+    {
+     "accession": "0001803498-26-000031",
+     "text": "Jupiter Ultimate Holdings, LLC - Class C Common Units (4) 11/8/2024 5,084,731 4,035 5,288"
+    },
+    {
+     "accession": "0001803498-26-000031",
+     "text": "Point Broadband Holdings, LLC - Class Additional B Common Units (4) 3/24/2022 147,380 420 432"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  },
+  {
+   "finding_id": "RVQ_BLK_16e7db5ba840",
+   "coverage": {
+    "affected_rows": [
+     "0001803498-26-000048/c-1290/ROW-2bb3a9c287123ed2",
+     "0001803498-26-000048/c-1286/ROW-703b8c6001afd243",
+     "0001803498-26-000048/c-1294/ROW-b87a7f6174d88847",
+     "0001803498-26-000048/c-1306/ROW-d22964ee9c0ae57e",
+     "0001803498-26-000048/c-1304/ROW-424f01028d7f1f73",
+     "0001803498-26-000048/c-1356/ROW-d7698313b8d45778"
+    ],
+    "reviewed_rows": [
+     "0001803498-26-000048/c-1290/ROW-2bb3a9c287123ed2",
+     "0001803498-26-000048/c-1286/ROW-703b8c6001afd243",
+     "0001803498-26-000048/c-1294/ROW-b87a7f6174d88847",
+     "0001803498-26-000048/c-1306/ROW-d22964ee9c0ae57e",
+     "0001803498-26-000048/c-1304/ROW-424f01028d7f1f73",
+     "0001803498-26-000048/c-1356/ROW-d7698313b8d45778"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001803498-26-000048",
+     "text": "GTCR/Jupiter Blocker, LLC - Blocker Note (4) 12/2/2024 115,036 115"
+    },
+    {
+     "accession": "0001803498-26-000048",
+     "text": "Genstar Neptune Blocker, LLC - Blocker Note (4) 12/2/2024 159,782 160"
+    },
+    {
+     "accession": "0001803498-26-000048",
+     "text": "Jupiter Ultimate Holdings, LLC - Class C Common Units (4) 11/8/2024 5,084,731 4,035 5,441"
+    },
+    {
+     "accession": "0001803498-26-000048",
+     "text": "Point Broadband Holdings, LLC - Class Additional B Common Units (4) 3/24/2022 147,380 420 383"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Tagged count wrong: rejected. The staged (tagged) unit count of every flagged row equals the count printed on its line (44 rows matched on the 2022-09-30 to 2025-09-30 filings; the 2025-12-31 to 2026-06-30 rows are the same positions and counts, identifier format changed).",
+    "Shared pow10 share normaliser (unified_holdings with_shares_fix, grouped by cik and issuer name) replaced the counts: confirmed. shares_held_source was derived_proxy on all flagged rows; classes of one issuer at different unit prices (Point Broadband Class B and Class Additional B, Zoro common beside its preferred) and two blocker notes counted by par were each given another line's count.",
+    "Fix by row correction (63 rows, every quarter): rejected, it would not carry to the next quarter. Fixed instead by dispatch.shares_pow10_normalise: false in the fund's wrapper; in bcpb/bcpc all 63 rows publish the tagged count, 60 changed, and the rule flags none."
+   ],
+   "next_action": "Fixed (bcpf). Shared cause recorded as observation unit-count-rescaled-by-issuer-normaliser: the same normaliser is seen on 10 funds."
+  }
+ ],
+ "rows_added": 0,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Unit counts kept as tagged: new wrapper key dispatch.shares_pow10_normalise: false switches off the shared power-of-ten share normaliser for BCRED only. It had given 63 equity rows another class's or another line's count (Point Broadband Class B and Class Additional B, Zoro common, GTCR/Jupiter and Genstar Neptune blocker notes, Jupiter Ultimate Class C, Healthcomp preferred); 60 change, 3 were already equal (Box Co-Invest 1 unit x2, Healthcomp 18,035). Code: pipeline/staging_bdc.py shares_pow10_normalise_off_ciks, pipeline/unified_holdings.py with_shares_fix, schema key, 3 tests.",
+   "kind": "shared_code",
+   "quarters": [
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Point Broadband Holdings, LLC - Class B Units (4) 833,140 2,375 2,222"
+    },
+    {
+     "accession": "0001803498-26-000048",
+     "text": "Zoro - Common Equity (4) 11/22/2022 1,195,880 11,959 12,640"
+    },
+    {
+     "accession": "0001803498-26-000048",
+     "text": "GTCR/Jupiter Blocker, LLC - Blocker Note (4) 12/2/2024 115,036 115 115"
+    }
+   ]
+  },
+  {
+   "what": "Members shifted by one printed line in the 10-Q for 2022-09-30 (Health Care Providers run PPV Intermediate to The GI Alliance; Gulf Stream Meridian 1/5/7) and single mislabelled members (Pike Electric on COP Home Services' first lien, Mitnick 2 on MRI's second line; 2023-06-30 Naked Juice on Triton Water; 2023-09-30 IG Investments 2 on Inmar, National Mentor on Midwest Physician; 2025-03-31 Dolcetto 'SpA' and TRC's former name; 2025-09-30 TricorBraun 2 on Trident TPI): issuer_name set to the printed name (2022-09-30: 16 of the 18 misnamed rows; Petco and Minerva Merger Sub proposed), and maturity_date from the printed line (precision left as the fund's other page-read maturities, ruling D-209) on the 6 shifted rows that published none. Keyed by XBRL context because 6 of the identifiers are repeated on a JV-schedule line of the same filing (new optional file data/overrides/row_corrections_by_context.csv read by _apply_row_corrections; 3 tests).",
+   "kind": "row_correction",
+   "quarters": [
+    "2022-09-30",
+    "2023-06-30",
+    "2023-09-30",
+    "2025-03-31",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "PPV Intermediate Holdings, LLC (4)(6)(7)(10) SOFR + 5.75 % 9.01 % 8/31/2029 102,361 99,921 99,870"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Reverb Buyer, Inc. (7)(9) L + 3.50 % 6.38 % 11/1/2028 43,958 43,657 41,658"
+    },
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Gulf Stream Meridian 1, Ltd. (4)(5)(6)(8) L + 6.75 % 9.26 % 4/15/2034 1,000 958 840"
+    },
+    {
+     "accession": "0001803498-25-000081",
+     "text": "Trident TPI Holdings, Inc. (9) SOFR + 3.75 % 7.75 % 10/18/2024 9/15/2028 11,994 11,994 11,800"
+    }
+   ]
+  },
+  {
+   "what": "PIK printed and not tagged on the row's context: pik_rate set from the printed line on 5 rows (Digital Media Solutions 2024-03-31 16.57, Thermostat Purchaser III 2024-06-30 and 2024-09-30 0.50, Daylight Beta 2025-03-31 10.00, Material Holdings 3 2025-09-30 10.10). Context-keyed row corrections.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-24-000022",
+     "text": "Digital Media Solutions, LLC (6)(10)(17) SOFR + 11.00 % 16.57 % PIK 5/25/2026 33,699 33,383 9,267"
+    },
+    {
+     "accession": "0001803498-24-000044",
+     "text": "Thermostat Purchaser III, Inc. (4)(10) SOFR + 7.25 % 12.74 %.(incl. 0.50 % PIK) 8/31/2029 32,740 32,423 32,740"
+    }
+   ]
+  },
+  {
+   "what": "Preferred printed, published as common: AVE Holdings I Series A-1 Preferred Shares and Knockout Intermediate Holdings I Preferred Shares (2024-06-30; Knockout's name also as printed) and Box Co-Invest Class C Preferred Units (2024-09-30) set to EQUITY_PREFERRED / PREFERRED_EQUITY with the printed instrument. Context-keyed row corrections.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-24-000044",
+     "text": "AVE Holdings I Corp. - Series A-1 Preferred Shares (4) 12,237,213 $ 11,870 $ 12,727"
+    }
+   ]
+  },
+  {
+   "what": "Rows printed under 'Structured Finance Obligations' (and its '- Debt Instruments' / '- Equity Instruments' halves) classed by the printed section, keyed by each row's fair-value contextRef: new opt-in shared step pipeline/printed_sections.py, switched on by dispatch.structured_credit_sections in BCRED's wrapper (schema key, 5 tests incl. a fund without the key unchanged). 281 CLO debt tranches whose names lack 'CLO' (Octagon 55, CIFC Funding, Magnetite XXXII, RR 19, Broad River, CBAM ...) and 14 units move from DIRECT_LENDING / COMMON_EQUITY to STRUCTURED_CREDIT. Against an independent scan of all 16 filings (sections_scan.py): 1,698 published rows in structured sections, 1,698 STRUCTURED_CREDIT after, none outside. Ruling D-209 item 1: the 223 subordinated and Class M notes printed as equity instruments keep the cohort convention, asset_category LOAN with STRUCTURED_CREDIT (BCRED's wrapper sets no equity_re, so the step's equity option and its unit-count fill stay unused; bcpd/bcpe had published them as EQUITY_COMMON and 41 of them with the par also as a unit count, which double-published par: withdrawn).",
+   "kind": "shared_code",
+   "quarters": [
+    "2022-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-22-000021",
+     "text": "Gulf Stream Meridian 5, Ltd. (4)(5)(6)(8) L + 6.75 % 9.26 % 7/15/2034 3,500 3,488 2,990"
+    }
+   ]
+  },
+  {
+   "what": "CLO series number no longer cut as a row number: issuer_name_strip_re gains (?<!CLO) on its row-number branch. Dry run on all 7,154 distinct BCRED names: exactly 4 change, 'Pikes Peak CLO 10/3/5/8' (was 'Pikes Peak CLO'; 28 rows, 2024-06-30 to 2026-06-30, page sample C019); 'Pikes Peak CLO 10 2' still loses its row number.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-25-000021",
+     "text": "Pikes Peak CLO 10 - Subordinated Notes"
+    }
+   ]
+  },
+  {
+   "what": "Class text left in the issuer name in the old-format members (2022-12-31 to 2024-06-30): 'Shelf Holdco Ltd Common Equity', 'Zoro Common Equity', 'Zoro Series A Preferred Shares' (7 quarters each) and 'RSC Topco, Inc.- Preferred Shares' (2023-12-31 to 2024-06-30, no space before the hyphen): 24 rows, issuer and instrument split as the 2024-09-30 members split them. Context-keyed row corrections, each with its printed line. The round-three search (a separator followed by a full class or instrument word) missed an abbreviated form: 'Pigments LP Int' (5 rows, 2023-06-30 to 2024-06-30, fair value 0) is left, see observation class-text-left-in-issuer-name.",
+   "kind": "row_correction",
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001803498-23-000012",
+     "text": "Shelf Holdco Ltd Common Equity (4)(6) 1,300,000 1,300 1,430"
+    },
+    {
+     "accession": "0001803498-24-000007",
+     "text": "RSC Topco, Inc.- Preferred Shares (4) 100 97 102"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "The shared power-of-ten share normaliser (pipeline/unified_holdings.py with_shares_fix, grouped by cik and issuer_name) replaced 63 correct tagged BCRED unit counts with another line's (Point Broadband Class B printed 685,760 published 2,766). Since the issuer-name cleanup (D-164) several classes of one issuer share a group, so any fund holding two classes at different unit prices is exposed. Switched off for BCRED only; other funds unchanged.",
+   "field": "shares_held",
+   "quarters": [
+    "2022-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 195.1,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Rule units_printed (proxy_count_not_on_row) already catches it; a build-time check that a derived_proxy count is never published where the staged count appears on the row's printed line would stop it at source.",
+   "quote": {
+    "accession": "0001803498-26-000048",
+    "text": "Point Broadband Holdings, LLC - Class B Common Units (4) 10/1/2021 685,760 1,955 1,783"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "units_printed flagged all 16 BCRED quarters; it fires only where the printed row is joined.",
+    "reference": "pipeline/candidate_rules.py unit_count_differs_from_row_text"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "10-Q 2022-09-30 tags two runs of lines with the next company's member (PPV to GI Alliance, 9 rows, about 1.6B; Gulf Stream Meridian 1/5/7). The rule flagged 10 of the 18 misnamed rows at 2022-09-30; the other 8 had no comparable printed name or matched on a shared first word ('The', 'Gulf'). An independent check matching each row's par/cost/value triple on the page found all 18 (16 now renamed, Petco and Minerva Merger Sub proposed) and nothing else misnamed in any later quarter except the single mislabels fixed here.",
+   "field": "issuer_name",
+   "quarters": [
+    "2022-09-30"
+   ],
+   "fair_value_m": 1650.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Locate each row by its printed value triple and require the issuer name to be printed between the previous row's last cell and the triple (scratch/fund_runs/0001803498/value_name_check.py).",
+   "quote": {
+    "accession": "0001803498-22-000021",
+    "text": "Smile Doctors, LLC (4)(7)(10) L + 5.75 % 9.42 % 12/23/2028 449,679 439,765 438,872"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Value-triple placement is independent of the member text and of the page reader's member join, which is what failed here; on BCRED it had one false alarm per quarter type ('&' vs 'And').",
+    "reference": "scratch/fund_runs/0001803498/value_name_check.py"
+   }
+  },
+  {
+   "observation_key": "duplicate-identifier-blocks-row-correction",
+   "what": "Six of the 2022-09-30 misnamed members repeat their identifier on a correct JV-schedule line of the same filing (Smile Doctors, Stepping Stones, Surgery Centers, PSKW, Radnet, Reverb). An identifier-keyed row correction would have renamed the JV rows too. Added the optional context-keyed file row_corrections_by_context.csv.",
+   "field": "issuer_name",
+   "quarters": [
+    "2022-09-30"
+   ],
+   "fair_value_m": 230.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "An identifier-keyed row correction whose key matches more than one row should fail the build step (today it logs 'matches N rows (expected 1)' and applies to all), and the fund gate should count those lines as it counts 'unmatched' ones.",
+   "quote": {
+    "accession": "0001803498-22-000021",
+    "text": "Reverb Buyer, Inc. (7)(9) L + 3.50 % 6.38 % 11/1/2028 43,958 43,657 41,658"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The existing log line is a warning nobody reads: the gate parses only 'Row correction unmatched' lines, so a correction silently applied to a JV twin passes every check.",
+    "reference": "suggested_check (pipeline/unified_holdings.py _apply_row_corrections; scripts/v05_evidence/fund_gate.py corrections check)"
+   }
+  },
+  {
+   "observation_key": "position-chain-follows-shifted-member",
+   "what": "Position chains follow the member key, so where a filing shifts members (2022-09-30) the chain links the corrected row to the next quarter's row of the member's company: Stepping Stones (131,329, due 2029-01-02) chains to The Fertility Partners 2022-12-31 (due 2028-03-16); Surgery Centers (51,713) to Fertility; Inmar 2023-09-30 to the IG Investments chain. The same links existed in rg1b under the wrong names; correcting names makes them visible but does not fix them. Renaming Minerva Merger Sub to the printed 'Athenahealth, Inc.' made the matcher chain the 2030 notes onto the 2029 term-loan position, so that rename was reverted.",
+   "field": "position_id",
+   "quarters": [
+    "2022-09-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 213.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a position chain whose issuer_name changes between adjacent quarters while maturity also changes.",
+   "quote": {
+    "accession": "0001803498-22-000021",
+    "text": "Stepping Stones Healthcare Services, LLC (4)(7)(10) L + 5.75 % 9.42 % 1/2/2029 137,320 134,138 131,329"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule checks the issuer and maturity continuity of a chain; the matcher's maturity veto does not fire when one side has no maturity.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "what": "CLO tranches printed under Structured Finance Obligations whose names lack 'CLO' published DIRECT_LENDING (281 rows, 1,348M across 16 quarters), 14 units there COMMON_EQUITY. Fixed for BCRED by the printed-section step (the equity tranches keep LOAN by the cohort convention, ruling D-209); other funds still class CLO rows by name.",
+   "field": "index_classification",
+   "quarters": [
+    "2022-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1348.3,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A published row printed under a heading the page reader recognises as structured finance (or CLO equity) must be STRUCTURED_CREDIT; read the heading per row by its fair-value contextRef as pipeline/printed_sections.py does.",
+   "quote": {
+    "accession": "0001803498-22-000021",
+    "text": "Gulf Stream Meridian 5, Ltd. (4)(5)(6)(8) L + 6.75 % 9.26 % 7/15/2034 3,500 3,488 2,990"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule compares class with the printed section; the observations log is a record, not a check. The section reading is exact (contextRef), so false alarms would come only from headings misread, measurable per fund.",
+    "reference": "suggested_check; pipeline/printed_sections.py sections_of_filing"
+   }
+  },
+  {
+   "observation_key": "maturity-precision-unknown-for-page-read-maturity",
+   "what": "Every BCRED maturity is read from the printed page (maturity_date_source 'ixbrl_field_status': 22,361 rows, all with a valid full YYYY-MM-DD date) and every one publishes maturity_precision 'unknown' and maturity_status 'unresolved'. Mechanism: the financial step (pipeline/financial_conventions.py, precision_value) gives day precision only to maturity_date_source 'xbrl_field', 'nport' or 'printed_page', or to a parseable maturity_raw; the page reader's label 'ixbrl_field_status' and the member-text label 'identifier_text' are in neither list and those rows carry no maturity_raw. The reviewer measured about 278,000 such rows on 127 funds in the cohort build. Ruling D-209: the 6 maturity_precision row corrections of round two are reverted (they made 6 rows unlike the fund's other 22,361); the correctable field and its tests stay. Not fixed cohort-wide. The same gap covers maturities read from the member text (maturity_date_source 'identifier_text', about 10,410 rows on 45 funds per the bcpf review; BCRED has none): that label is not in the precision list either.",
+   "field": "maturity_status",
+   "quarters": [
+    "2022-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A coverage metric, not a row finding: per fund, quarter and maturity_date_source (ixbrl_field_status, identifier_text, or any other), the share of rows with a valid full maturity date whose precision is 'unknown'; alert when a source's share is above zero, so one entry per source names the gap instead of flagging 278k rows.",
+   "quote": {
+    "accession": "0001803498-22-000021",
+    "text": "PSKW Intermediate, LLC (4)(11) L + 6.25 % 9.37 % 3/9/2026 16,138 16,138 16,138"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A per-row check would flag every page-read maturity in the cohort; grouped by source it reports one mechanism per source and goes to zero when the precision list is fixed.",
+    "reference": "suggested_check; pipeline/financial_conventions.py precision_value"
+   }
+  },
+  {
+   "observation_key": "clo-name-year-printed-differs-from-member",
+   "what": "2022-09-30: member 'OCP CLO 2021-22, Ltd. 1' (10/20/2034 tranche, 3,587) is printed 'OCP CLO 2020-22, Ltd.'; the other tranche is printed 2021-22. Likely a page typo; left as filed in the member (the rule does not flag it).",
+   "field": "issuer_name",
+   "quarters": [
+    "2022-09-30"
+   ],
+   "fair_value_m": 3.6,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0001803498-22-000021",
+    "text": "OCP CLO 2020-22, Ltd. (4)(6)(8) L + 6.50 % 9.21 % 10/20/2034 4,250 4,069 3,587"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "A one-digit year difference between member and page cannot be told apart from a page typo without an outside reference.",
+    "reference": "none"
+   }
+  },
+  {
+   "observation_key": "clo-series-number-cut-as-row-number",
+   "what": "BCRED's issuer_name_strip_re removed a trailing 1-2 digit row number, and with it the series number of 'Pikes Peak CLO 10/3/5/8' (28 rows); the four vehicles collapsed into one issuer name. Fixed by a lookbehind on 'CLO'.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 60.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "After a name strip, flag issuers that several distinct members of one quarter collapse into when those members differ only by the cut number and are not printed as one company.",
+   "quote": {
+    "accession": "0001803498-25-000021",
+    "text": "Pikes Peak CLO 10 - Subordinated Notes"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Rule 1 compares the published name as a prefix of the printed name, so a truncated name passes; only the page sample saw it.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "what": "Old-format members (2022-12-31 to 2024-06-30) name issuer and class in one cell ('Zoro Series A Preferred Shares', 'RSC Topco, Inc.- Preferred Shares'); 24 rows kept the class in the issuer name and published no instrument, fixed by context-keyed corrections. LEFT: 'Pigments LP Int' on 5 rows (2023-06-30, 2023-09-30, 2023-12-31, 2024-03-31, 2024-06-30; fair value 0, no instrument), which the page prints 'Chemicals Pigments LP Int' and which from 2024-09-30 publishes as Pigments Holdings LP / LP Interest. Not fixed because no build remains; the fix is the same context-keyed split (issuer 'Pigments LP', instrument 'LP Interest'). The earlier claim that no other row has this shape was wrong: the searches looked for full class words only.",
+   "field": "issuer_name",
+   "quarters": [
+    "2022-12-31",
+    "2023-06-30",
+    "2024-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "Per row, not per fund: flag an issuer name that ends in a class or instrument phrase, full or abbreviated (common equity, preferred shares, units, LP Int, LLC Int, LP Interest(s), Interest(s), Pref, Pfd, Com, Ord, Wts, Notes, Term Loan), after a space or any separator ('-', '.-', ',', '|'), when instrument_description is empty.",
+   "quote": {
+    "accession": "0001803498-23-000017",
+    "text": "Chemicals Pigments LP Int (4)(6)(16) - - 0.00"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The gate's names check counts the shape but passes a fund under 1 pct of rows, so 29 rows passed; rule 1 accepts the name because the page prints it as one cell; the abbreviated forms escaped both agent searches.",
+    "reference": "suggested_check; scripts/v05_evidence/fund_gate.py names check"
+   }
+  },
+  {
+   "observation_key": "clo-equity-tranche-has-no-asset-category",
+   "what": "CLO subordinated notes, income notes and units printed under a fund's 'Structured Finance Obligations - Equity Instruments' heading are equity tranches, but the cohort publishes them asset_category LOAN with STRUCTURED_CREDIT (899 rows on 13 funds, orchestrator count): the asset_category enum has no structured or CLO-equity value, and EQUITY_COMMON would put a par in the unit-count checks. BCRED (223 rows) follows the convention under ruling D-209; a dedicated class is a cohort-wide question for the owner.",
+   "field": "asset_category",
+   "quarters": [
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1617.1,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Report rows printed under a CLO-equity heading (read per contextRef as pipeline/printed_sections.py does) by published asset_category, as a coverage figure per fund, until a class exists.",
+   "quote": {
+    "accession": "0001803498-26-000048",
+    "text": "Aimco CLO 20, Ltd. - Subordinated Notes (4)(6) Estimated Yield: 12.12 % 11/7/2025 10/16/2038 5,659 4,992 4,400"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The page sample flagged two of these cards; no rule reads the section, and the class question needs an owner ruling before a finding can say what is right.",
+    "reference": "suggested_check"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_unified_holdings.py + tests/test_row_correction_nonaccrual.py + tests/test_printed_sections.py + tests/test_source_encodings.py + tests/test_bcred_wrapper_flat_schedule.py -k 'RowCorrection or row_correction or nonaccrual or printed_sections or pow10 or bdc_shares or opted_out or opts_out or normalise_off or source_encodings or schema or bcred': 187 passed (incl. 3 context-keyed, 2 maturity_precision, 3 normaliser tests)",
+  "tests/test_printed_sections.py: 5 passed (incl. a fund without the setting unchanged, and a debt tranche given no unit count)",
+  "tests/test_bdc_xbrl_wrapper.py + tests/test_bcred_wrapper_flat_schedule.py + tests/test_source_encodings.py: 669 passed (wrapper incl. the new keys validates)",
+  "Round three: no code changed (wrapper key value, specs and report only); the round-two test runs stand."
+ ],
+ "not_done": [
+  "Full pytest suite not run; no cohort build. The shared changes are off for other funds by construction (wrapper opt-in keys shares_pow10_normalise and structured_credit_sections; a corrections file holding BCRED rows only; maturity_precision accepted only when a correction names it) but were not measured on them.",
+  "Fields no finding names were compared on the page only for the flagged and corrected rows and their chains, plus the 20-card sample; no systematic per-quarter field sample.",
+  "Position chains crossing the 2022-09-30 member shift, KKR Alberta 'Midsteam' (filer's own spelling except 2024-03-31) and OCP CLO 2020-22 vs 2021-22 seen and not fixed.",
+  "One GICS label differs from rg1b (Carlyle US CLO 2022-4 2024-12-31): already in the untouched bcpa, from build composition.",
+  "Agent process note: one bare 'python -' was started by mistake in round one and stopped by its task id within seconds; no other process touched.",
+  "The printed-section step reads each opted-in filing's cached page during the unified build (16 pages for BCRED); not measured on a cohort build.",
+  "maturity_precision 'unknown' on all 22,361 page-read BCRED maturities (and about 278k cohort rows) left as found, ruling D-209; the shared precision list was not changed.",
+  "CLO equity tranches keep asset_category LOAN by the cohort convention; no dedicated class.",
+  "Pigments LP Int (5 rows, 2023-06-30 to 2024-06-30, fair value 0) left with the class in the issuer name: no build remained after the bcpf review found it."
+ ]
+}

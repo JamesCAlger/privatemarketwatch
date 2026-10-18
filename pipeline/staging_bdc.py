@@ -373,6 +373,29 @@ def instrument_description_strip_may_empty_ciks(wrapper_dir: Path | None = None)
     return result
 
 
+def shares_pow10_normalise_off_ciks(wrapper_dir: Path | None = None) -> set[str]:
+    """CIKs whose tagged unit counts the unified build keeps as filed: no power-of-ten share
+    normalisation (dispatch.shares_pow10_normalise: false).
+
+    The normaliser groups a fund's rows by issuer name and replaces a count whose unit price is
+    more than 1.5 orders of magnitude from the group median. BCRED holds several classes of one
+    issuer at very different unit prices (Point Broadband Class B 685,760 units and Class Additional
+    B 147,380; Zoro common 1,195,880 beside its preferred) and two blocker notes counted by par; the
+    normaliser gave each of them another line's count, while the tagged count is the printed one
+    (2026-10-18, 63 rows, 44 read against the printed line).
+    """
+    folder = wrapper_dir or _WRAPPER_DEFINITIONS_DIR
+    result: set[str] = set()
+    for path in sorted(folder.glob("*.json")) if folder.exists() else []:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        if raw.get("dispatch", {}).get("shares_pow10_normalise") is False:
+            result.add(str(raw["cik"]).zfill(10))
+    return result
+
+
 def industry_from_identifier_patterns(wrapper_dir: Path | None = None) -> dict[str, str]:
     """CIK -> regex whose first group is the filer's industry inside the member text
     (dispatch.industry_from_identifier_re).

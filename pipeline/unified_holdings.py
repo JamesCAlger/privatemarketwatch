@@ -35,6 +35,7 @@ from pipeline.config import (
     IDENTIFIER_EXTRACTION_LOOKUP_FILE,
     NPORT_HOLDINGS_FILE,
     NPORT_HOLDINGS_PARQUET_FILE,
+    ROW_CORRECTIONS_BY_CONTEXT_FILE,
     ROW_CORRECTIONS_FILE,
     UNCLASSIFIED_REVIEW_CACHE_FILE,
     UNIFIED_HOLDINGS_FILE,
@@ -955,8 +956,10 @@ def build_unified_holdings(
         "nullif(CAST(nport_holding_id AS VARCHAR),''),'row:'||CAST(row_number() OVER () AS VARCHAR))",
     )
 
-    from pipeline.staging_bdc import distinct_member_suffix_sql
+    from pipeline.staging_bdc import distinct_member_suffix_sql, shares_pow10_normalise_off_ciks
     member_suffix_key = distinct_member_suffix_sql(None, 'bdc_investment_identifier')
+    # Funds whose wrapper keeps tagged unit counts as filed (dispatch.shares_pow10_normalise: false).
+    pow10_off_sql = ", ".join("'%s'" % c for c in sorted(shares_pow10_normalise_off_ciks())) or "''"
 
     sql = f"""
     WITH nport_deduped AS (
@@ -1202,6 +1205,7 @@ def build_unified_holdings(
                  AND TRY_CAST(shares_held AS DOUBLE) != 0
                  AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
                  AND TRY_CAST(fair_value AS DOUBLE) != 0
+                 AND lpad(CAST(cik AS VARCHAR), 10, '0') NOT IN ({pow10_off_sql})
                  AND COUNT(CASE WHEN TRY_CAST(shares_held AS DOUBLE) IS NOT NULL
                                 AND TRY_CAST(shares_held AS DOUBLE) != 0
                                 AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
@@ -1324,6 +1328,7 @@ def build_unified_holdings(
               AND TRY_CAST(shares_held AS DOUBLE) != 0
               AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL
               AND TRY_CAST(fair_value AS DOUBLE) != 0
+              AND lpad(CAST(cik AS VARCHAR), 10, '0') NOT IN ({pow10_off_sql})
         )
         SELECT COUNT(*) AS n_corrected,
                COUNT(DISTINCT orig_sh) AS n_distinct
@@ -1401,6 +1406,12 @@ def build_unified_holdings(
 
     # Keep the reported NAV percentage unchanged. The financial contract adds
     # an independently supported calculated percentage in a separate field.
+
+    # Class by printed schedule section, for the funds whose wrapper opts in
+    # (dispatch.structured_credit_sections; pipeline/printed_sections.py). Before the row
+    # corrections, so a correction still wins.
+    from pipeline.printed_sections import apply_structured_sections
+    combined = apply_structured_sections(combined)
 
     # Apply manual row corrections
     combined = _apply_row_corrections(combined)
@@ -2110,7 +2121,14 @@ _CORRECTABLE_FIELDS = frozenset({
     # Seko/TriStrux/Action Signature: printed '(9)' = 'on non-accrual status as of <date>').
     # Only 'true' or 'false'; the financial step derives nonaccrual_status from it.
     "nonaccrual_footnote",
+    # The precision of a maturity a correction sets from the printed line ('8/31/2029' is a day). The
+    # financial step reads an explicit precision first; without it a corrected date with no source
+    # tag published maturity_status 'unresolved' (2026-10-18, BCRED 2022-09-30 shifted members).
+    # Only 'day', 'month' or 'year'.
+    "maturity_precision",
 })
+
+_CORRECTABLE_PRECISIONS = frozenset({"day", "month", "year"})
 
 # The only kinds a row correction may state; anything else is skipped with a warning.
 _CORRECTABLE_RATE_KINDS = frozenset({"cash", "all_in"})
@@ -2145,20 +2163,39 @@ _CORRECTIONS_REQUIRED_COLS = {
 def _apply_row_corrections(
     df: pd.DataFrame,
     corrections_path: Optional[Path] = None,
+    context_corrections_path: Optional[Path] = None,
 ) -> pd.DataFrame:
     """Apply manual row-level corrections from an override CSV.
 
     Each row in the corrections file identifies one (row, field) to patch.
     Match key: (cik, report_date, accession_number, bdc_investment_identifier).
 
+    A second file (``row_corrections_by_context.csv``, same columns plus ``src_context_id``)
+    narrows the key to one XBRL context: a filer can repeat an identifier in one filing, for its
+    own line and for a joint venture's line (BCRED 2022-09-30 'Smile Doctors, LLC', 41.7M on
+    the fund's schedule, 120.5M on the JV's), and only one of them is wrong. The default file is
+    read only when ``corrections_path`` is not given (tests pass their own).
+
     Returns the dataframe with corrections applied.  Logs every correction
     applied and warns on unmatched correction rows.
     """
     path = corrections_path or ROW_CORRECTIONS_FILE
-    if not path.exists():
+    ctx_path = context_corrections_path or (ROW_CORRECTIONS_BY_CONTEXT_FILE if corrections_path is None else None)
+    has_ctx = ctx_path is not None and ctx_path.exists()
+    if not path.exists() and not has_ctx:
         return df
 
-    corrections = pd.read_csv(path, dtype=str).fillna("")
+    corrections = pd.read_csv(path, dtype=str).fillna("") if path.exists() else pd.DataFrame(
+        columns=sorted(_CORRECTIONS_REQUIRED_COLS))
+    if has_ctx:
+        by_context = pd.read_csv(ctx_path, dtype=str).fillna("")
+        if "src_context_id" not in by_context.columns:
+            logger.warning("%s has no src_context_id column -- skipping", ctx_path.name)
+        else:
+            by_context = by_context[by_context["src_context_id"].str.strip() != ""]
+            corrections = pd.concat([corrections, by_context], ignore_index=True).fillna("")
+    if "src_context_id" not in corrections.columns:
+        corrections["src_context_id"] = ""
 
     # --- Schema validation ---------------------------------------------------
     missing_cols = _CORRECTIONS_REQUIRED_COLS - set(corrections.columns)
@@ -2210,10 +2247,10 @@ def _apply_row_corrections(
     n_unmatched = 0
 
     # Group corrections by key for efficient lookup.
-    corr_by_key: dict[str, list[tuple[str, str, str]]] = {}
+    corr_by_key: dict[str, list[tuple[str, str, str, str]]] = {}
     for _, row in corrections.iterrows():
         corr_by_key.setdefault(row["_corr_key"], []).append(
-            (row["field"], row["value"], row["reason"])
+            (row["field"], row["value"], row["reason"], str(row["src_context_id"]).strip())
         )
 
     # Build a set of keys present in the dataframe for fast membership test.
@@ -2221,7 +2258,7 @@ def _apply_row_corrections(
 
     for key, patches in corr_by_key.items():
         if key not in df_keys:
-            for field, value, reason in patches:
+            for field, value, reason, _ctx in patches:
                 logger.warning(
                     "Row correction unmatched: field=%s reason=%r key=%s",
                     field, reason, key,
@@ -2229,16 +2266,25 @@ def _apply_row_corrections(
             n_unmatched += len(patches)
             continue
 
-        mask = df["_corr_key"] == key
-        match_count = mask.sum()
-        if match_count > 1:
+        key_mask = df["_corr_key"] == key
+        if not all(ctx for *_rest, ctx in patches) and key_mask.sum() > 1:
             logger.warning(
                 "Row correction matches %d rows (expected 1): key=%s -- "
                 "applying to all matches",
-                match_count, key,
+                key_mask.sum(), key,
             )
 
-        for field, value, reason in patches:
+        for field, value, reason, ctx in patches:
+            mask = key_mask
+            if ctx:
+                mask = key_mask & (df["src_context_id"].astype(str).str.strip() == ctx)
+                if not mask.any():
+                    logger.warning(
+                        "Row correction unmatched: field=%s reason=%r key=%s context=%s",
+                        field, reason, key, ctx,
+                    )
+                    n_unmatched += 1
+                    continue
             # An empty value withdraws the field. It is stored as a missing value, not as empty
             # text: later steps cast these columns to numbers.
             if pd.isna(value) or str(value).strip() == "":
@@ -2249,8 +2295,14 @@ def _apply_row_corrections(
                     value, key,
                 )
                 continue
+            if field == "maturity_precision" and value is not None and str(value).strip() not in _CORRECTABLE_PRECISIONS:
+                logger.warning(
+                    "Row correction skipped: maturity_precision must be day, month or year, got %r key=%s",
+                    value, key,
+                )
+                continue
             if field == "nonaccrual_footnote":
-                flag = _CORRECTABLE_BOOLEANS.get(str(value).strip().lower()) if value is not None else None
+                flag =_CORRECTABLE_BOOLEANS.get(str(value).strip().lower()) if value is not None else None
                 if flag is None:
                     logger.warning(
                         "Row correction skipped: nonaccrual_footnote must be true or false, got %r key=%s",
@@ -2267,8 +2319,8 @@ def _apply_row_corrections(
                 append_corrected_fields(df, df.index[mask], [field])
             n_applied += 1
             logger.info(
-                "Row correction applied: field=%s value=%s reason=%r key=%s",
-                field, value, reason, key,
+                "Row correction applied: field=%s value=%s reason=%r key=%s%s",
+                field, value, reason, key, (" context=" + ctx) if ctx else "",
             )
 
     df.drop(columns=["_corr_key"], inplace=True)

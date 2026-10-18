@@ -150,6 +150,21 @@
           "type": "boolean",
           "description": "When true, instrument_description_strip_re may leave the instrument blank: BCRED's 'Issuer | Emerald JV LP' puts only the joint venture's name after the separator (D-164)."
         },
+        "shares_pow10_normalise": {
+          "enum": [false],
+          "description": "false keeps this filer's tagged unit counts as filed: the unified build's power-of-ten share normaliser (one group per issuer name, a count replaced when its unit price is over 1.5 orders of magnitude from the group median) is not applied. BCRED holds several share classes of one issuer at very different unit prices and blocker notes counted by par; the normaliser gave each another line's count (Point Broadband Class B printed 685,760, published 2,766). Evidence required: the replaced rows' tagged counts read against their printed lines."
+        },
+        "structured_credit_sections": {
+          "type": "object",
+          "required": ["heading_re", "structured_re"],
+          "additionalProperties": false,
+          "properties": {
+            "heading_re": {"type": "string", "description": "Regex matching the filer's top-level schedule headings (industry sub-headings must not match)."},
+            "structured_re": {"type": "string", "description": "Regex on those headings: rows printed under them are STRUCTURED_CREDIT."},
+            "equity_re": {"type": "string", "description": "Regex on those headings: rows printed under them are also asset_category EQUITY_COMMON (CLO subordinated notes, units)."}
+          },
+          "description": "Class by printed schedule section (pipeline/printed_sections.py), keyed by each row's fair-value contextRef. BCRED prints CLO tranches whose names lack 'CLO' (Octagon 55, CIFC Funding, Magnetite XXXII) under 'Structured Finance Obligations' and its subordinated notes under '- Equity Instruments'; the name classifier published 281 of them as direct lending and 223 equity tranches as loans. Evidence required: the section population read from the pages against the published class."
+        },
         "global_issuer_split": {
           "enum": [false],
           "description": "false opts this filer out of the shared issuer/instrument split (pipeline/issuer_instrument_split.py). Manulife Private Credit: its instrument text carries a per-quarter section heading, so instrument text moved there breaks position chains (cohort A/B 2026-10-14)."

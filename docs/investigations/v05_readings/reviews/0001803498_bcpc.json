@@ -1,0 +1,105 @@
+{
+ "reviewer_id": "reviewer-bcred-bcpc-claude-opus-2026-10-18",
+ "report_digest": "7632a83a47d4b14a9e5fc2a3bfdba46a3fbf2760ff00d2628de5da855e7fa131",
+ "sandbox": "bcpc",
+ "compared_with": "rg1b",
+ "method": "Independent scripts in scratch/fund_runs/0001803498/reviewer_bcpc/: outstanding.py (ledger + digest), ctx_hits.sql (rows each context-keyed correction reaches, by context and by identifier), diffcols.sql (rg1b vs bcpc by row_id, by accounting_record_class), shares_check.py (every row whose shares_held or source changed, against the printed line), name_triple.py (each published row located by its printed cost/fair-value pair; issuer token must precede it), quotes_all.py (every quote in the report incl. resolved investigations). Not done: the 20-row random page sample (orchestrator item); no cohort-wide measurement of the two shared-code changes.",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_5a7ac8ea794a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed from shadow/page_rule_findings.csv. bcpa (before fixes) flagged 10 rows at 2022-09-30: ROW-6900c35a75241a00, 9b3f907105946796, fc5ed563201e24c2, fb32f9352d6dcfba, 5f21d87df1a292ee, 61d62c10a7bc6e3f, e35d920e2cf24a7e, a9eb1394671b13f4, fa9769dd8e6bbcd0, 4b75e14edadd61fc; all 10 are in affected_rows. bcpc flags 2: ROW-6900c35a75241a00 (Minerva) and ROW-fb32f9352d6dcfba (Petco), both covered. The 8 context-only keys are unflagged misnamed rows found by value triple; they match 8 of the 16 context-keyed issuer_name corrections at 2022-09-30. Independent check name_triple.py over all 722 published 2022-09-30 rows: 720 have their issuer printed before their cost/FV pair, 1 mismatch (Minerva), Petco passes on token 'petco'. Over all 15,499 published BCRED rows in all quarters: 1 mismatch (the same Minerva row), 4 pairs not on page, so no further misnamed rows found by this method. Context-keyed corrections: each of the 31 (accession, context) keys hits exactly one row, all parent_schedule; the 6 identifiers shared with JV-schedule rows (PSKW, Radnet, Reverb, Smile Doctors, Stepping Stones, Surgery Centers) leave the underlying_schedule twins untouched (no corrected_fields, original names). rg1b vs bcpc diff: 0 changes of any compared field on 9,173 underlying_schedule rows. Proposals checked on the page: PD-...-1 Petco: current line prints the truncated 'Petco Health and Wellness Comp' with 4,870/4,860/4,612 = published row; member 'Petco Health & Wellness Co, Inc.'; prior quarter (0001803498-22-000017) prints the full name on the same amortising loan (4,882 par), so same issuer is right. PD-...-2 Minerva: member 'Minerva Merger Sub, Inc.', page prints 'Athenahealth, Inc.' under Unsecured Debt with 7,146/7,146/5,663, 2/15/2030 = published row; bcpb (rename applied) puts this row at the head of position d9953922 (the 2029 term loan, 2022-12-31 to 2026-06-30) and moves the 2022-09-30 term loan (38,951 par) to a separate position 9901d72c; bcpc restores the rg1b chains. Both proposals are factually right. Conclusion source_ambiguity is reasonable (member vs page name both defensible). Caveats, not grounds for rejection: (1) the report's counts are off by one: it says 19 misnamed / 17 fixed, but bcpc renames 16 rows at 2022-09-30 and leaves 2 (18, matching affected_rows); (2) the Minerva proposal rests on a matcher defect, recorded as observation position-chain-follows-shifted-member, not on the name being right; (3) corrected rows still chain to the member's company (Stepping Stones 2022-09-30 to The Fertility Partners 2022-12-31 in d7e4c545; Surgery Centers to Fertility in 3a1f21b8), so position_id on those rows stays wrong.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Petco Health and Wellness Comp (10) L + 3.25 % 6.92 % 3/3/2028 4,870 4,860 4,612"},
+    {"accession": "0001803498-22-000017", "text": "Petco Health & Wellness Co, Inc. (10) L + 3.25% 5.50% 2/24/2028 4,882 4,872 4,614"},
+    {"accession": "0001803498-22-000021", "text": "Unsecured Debt Health Care Technology Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 7,146 7,146 5,663"},
+    {"accession": "0001803498-22-000021", "text": "Health Care Technology athenahealth, Inc. (7)(9) SOFR + 3.50 % 6.58 % 2/15/2029 $ 38,951 $ 38,441 $ 34,325"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "shares_check.py: 63 BCRED rows differ in shares_held or shares_held_source between rg1b and bcpc, all were derived_proxy in rg1b; 60 counts changed, 3 were equal (Box Co-Invest x2 at 2024-12-31, Healthcomp 2026-06-30). For all 63, across 2022-09-30 to 2026-06-30, the new count is printed on the issuer's own line with its cost and fair value (e.g. Point Broadband Class B 833,140; Zoro 1,195,880; GTCR/Jupiter blocker note 115,036; Jupiter Ultimate Class C 5,084,731), and the old count is the count printed on a sibling line (Class A 12,870 / 15,636, Class Z 749, Class B 5,082). No changed count is wrong on the page. bcpc has no derived_proxy rows left for the fund and units_printed flags none. One of the 63 is an underlying_schedule Box row whose count did not change. Detector units_printed (candidate_rules.unit_count_differs_from_row_text, kind proxy_count_not_on_row) exists and flagged all 16 quarters in bcpa, so existing_detector is right. Residual: the normaliser stays on for other funds; not measured.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Point Broadband Holdings, LLC - Class A Units (4) 15,636 13,261 12,616 0.06 Point Broadband Holdings, LLC - Class B Units (4) 833,140 2,375 2,222"},
+    {"accession": "0001803498-26-000048", "text": "Zoro - Common Equity (4) 11/22/2022 1,195,880 11,959 12,640"}
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Confirmed the shifted runs on the page and in bcpc (16 renamed rows at 2022-09-30, listed by context in ctx_hits.sql). My own implementation of the proposed value-triple check (name_triple.py, first distinctive name token within 170 characters before the printed cost/FV pair) over all 15,499 published BCRED rows returned 1 mismatch (Minerva, a real member/page difference) and 4 unlocated pairs, so the false-alarm rate on this fund is low and the check is independent of the member join. propose_detector with a concrete suggested_check is the right decision. Note it is a proxy: a loose token test can pass a shifted row whose neighbour shares a first word.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Smile Doctors, LLC (4)(7)(10) L + 5.75 % 9.42 % 12/23/2028 449,679 439,765 438,872"},
+    {"accession": "0001803498-22-000021", "text": "Stepping Stones Healthcare Services, LLC (4)(7)(10) L + 5.75 % 9.42 % 1/2/2029 137,320 134,138 131,329"}
+   ]
+  },
+  {
+   "observation_key": "duplicate-identifier-blocks-row-correction",
+   "outcome": "rejected",
+   "rationale": "The facts are right: 6 identifiers repeat on an underlying_schedule row of 0001803498-22-000021 (ctx_hits.sql shows n_ident_rows = 2 for PSKW, Radnet, Reverb, Smile Doctors, Stepping Stones, Surgery Centers), and the context-keyed file kept the JV twins untouched. The detection decision is not supported: 'existing_detector' points at the _apply_row_corrections warning 'Row correction matches %d rows (expected 1) ... applying to all matches', which logs and then applies the correction to every match. Nothing stops it: fund_gate.check_corrections reads only 'Row correction unmatched' lines. The report's own rationale says 'the guard is a warning, not a stop'. A recurrence would rename JV rows, caught at best by the declared-changes diff. The decision should be propose_detector, using the suggested_check already given (refuse a multi-match identifier spec, or make check_corrections fail on 'expected 1' lines for the fund).",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Reverb Buyer, Inc. (7)(9) L + 3.50 % 6.38 % 11/1/2028 43,958 43,657 41,658"}
+   ]
+  },
+  {
+   "observation_key": "position-chain-follows-shifted-member",
+   "outcome": "supported",
+   "rationale": "Verified in bcpc: position d7e4c545 runs Stepping Stones Healthcare Services 2022-09-30 (131,329, due 2029-01-02) into The Fertility Partners 2022-12-31 to 2023-06-30 (due 2028-03-16); position 3a1f21b8 runs Surgery Centers 2022-09-30 (51,713, due 2026-08-31) into The Fertility Partners 2022-12-31 and 2023-03-31. The Minerva rename effect is confirmed in bcpb (notes put at the head of d9953922, 2022-09-30 term loan split to 9901d72c). No rule checks issuer and maturity continuity in a chain, so propose_detector with the stated check is right. action 'left' means these position_ids stay wrong in the published data; that should stay visible to the owner.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Stepping Stones Healthcare Services, LLC (4)(7)(10) L + 5.75 % 9.42 % 1/2/2029 137,320 134,138 131,329"}
+   ]
+  },
+  {
+   "observation_key": "structured-credit-classed-as-direct-lending",
+   "outcome": "rejected",
+   "rationale": "The observation itself is plausible (Gulf Stream Meridian tranches are printed under Structured Finance Obligations) and was not re-measured here. The detection decision is wrong: 'existing_detector' cites 'observations.py structured-credit-classed-as-direct-lending', but scripts/v05_evidence/observations.py is the observations log, not a check, and the rationale itself says 'no ledger rule yet'. Nothing would catch a recurrence. The decision should be propose_detector using the suggested_check already given (rows printed under a structured-finance heading must not be DIRECT_LENDING), measured for false alarms before it is relied on.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "Gulf Stream Meridian 5, Ltd. (4)(5)(6)(8) L + 6.75 % 9.26 % 7/15/2034 3,500 3,488 2,990"}
+   ]
+  },
+  {
+   "observation_key": "maturity-status-unresolved-after-row-correction",
+   "outcome": "rejected",
+   "rationale": "The fact is right: the 6 rows that got maturity_date by correction (PSKW->PPV, Radnet->PSKW, Reverb->Radnet, Smile->Reverb, Stepping Stones->SpecialtyCare, Surgery Centers->SpecialtyCare contexts) publish a day-precision date. The decision 'not_feasible' is not supported. A check is trivially feasible and has no false-alarm risk: maturity_status 'unresolved' with a valid day-precision maturity_date. The rationale's 'no consumer reads it' is also contradicted by the code: pipeline/financial_validation.py tests maturity_status against maturity_date (e.g. 'not_disclosed' with a date fails), and pipeline/categorical_field_assessment.py assesses it. Either propose the check, or point existing_detector at financial_validation and extend it to the 'unresolved'-with-date case.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "PSKW Intermediate, LLC (4)(11) L + 6.25 % 9.37 % 3/9/2026 16,138 16,138 16,138"}
+   ]
+  },
+  {
+   "observation_key": "clo-name-year-printed-differs-from-member",
+   "outcome": "supported",
+   "rationale": "Page: the 10/20/2034 tranche (4,250 / 4,069 / 3,587) is printed 'OCP CLO 2020-22, Ltd.' and the next tranche 'OCP CLO 2021-22, Ltd.'. The contexts list members 'OCP CLO 2021-22, Ltd. 1' and '... 2' only, and the 2021-12-31 comparative prints 2021-22, so a page typo is the likely reading and leaving the member name is right. Detecting a digit difference is possible, but every hit would need an outside reference to resolve, and the row is 3.6M. not_feasible is acceptable.",
+   "evidence": [
+    {"accession": "0001803498-22-000021", "text": "OCP CLO 2020-22, Ltd. (4)(6)(8) L + 6.50 % 9.21 % 10/20/2034 4,250 4,069 3,587"}
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "resolved_investigation_reviews": [
+  {
+   "scope": "issuer_name fixes outside 2022-09-30: RVQ_BLK_79f15a0f55d0 (Triton/Naked Juice c-102), RVQ_BLK_5ce874857717 (Inmar c-539, Midwest Physician c-319), RVQ_BLK_fe7d5d66b9b4 (Dolcetto c-566/c-567, TRC c-169), RVQ_BLK_c5f7e2af1e90 (Trident TPI c-251)",
+   "outcome": "supported",
+   "rationale": "Each context key hits one parent_schedule row (ctx_hits.sql); bcpc issuer names now pass the value-triple name check in every quarter; quotes on page. Knockout 2024-06-30 rename 'Intermediated' to 'Intermediate' also matches the page."
+  },
+  {
+   "scope": "pik_printed: RVQ_BLK_6051bec18214, RVQ_BLK_6b5dbfe189af, RVQ_BLK_b3db087af5d3, RVQ_BLK_6fda9a46bbe5, RVQ_BLK_a91066f2b6b2",
+   "outcome": "supported",
+   "rationale": "pik_rate set on one row each (c-454 16.57, c-793 0.50, c-872 0.50, c-891 10.00, c-1013 10.10) and matches the printed line. Thermostat prints '(incl. 0.50 % PIK)' only at 2024-06-30 and 2024-09-30 (2024-03-31 and 2024-12-31 print no PIK), so correcting two quarters is right. Material Holdings c-1013 interest_rate_cash 1.8e-15 is float residue, as declared."
+  },
+  {
+   "scope": "preferred_printed: RVQ_BLK_bd35f66b6595, RVQ_BLK_ecfa280dbe66",
+   "outcome": "supported",
+   "rationale": "2024-03-31 prints 'AVE Holdings I Corp. (4)' and 'Knockout Intermediated Holdings I, Inc. (4)' with no class; 2024-06-30 prints the preferred class; Box prints 'Class C Preferred Units' from 2024-09-30. Only the three parent rows changed. Side note: the 2024-09-30 subsidiary schedule also prints the Box Class C as 'Preferred Units' (94,753 / 92 / 113) while its underlying_schedule row stays COMMON_EQUITY. Not published, so outside the rule."
+  },
+  {
+   "scope": "units_printed: RVQ_BLK_7ef809f79929, a9ffb0f77a9f, 7760e2da549b, ebe22b2d7cd2, 45087e3be8d8, 24573e87ecbf, 4527cb34a36f, cbe039f67331, e31227e31d78, c97dcabe2169, 15b5c10d7b94, ac65d522c9ae, 6af2d715850a, 7e71c94dc38c, d490a91af9d0, 16e7db5ba840",
+   "outcome": "supported",
+   "rationale": "See observation unit-count-rescaled-by-issuer-normaliser: all 63 changed rows verified against their printed lines in every quarter."
+  }
+ ]
+}

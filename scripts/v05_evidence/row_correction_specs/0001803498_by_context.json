@@ -1,0 +1,479 @@
+[
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i995ba913a58d4a748b245398885fd2bd_I20220930",
+  "fields": {
+   "issuer_name": "PPV Intermediate Holdings, LLC",
+   "maturity_date": "2029-08-31"
+  },
+  "reason": "10-Q 2022-09-30 tags each line of a run of the Health Care Providers block with the next company's member (PPV to The GI Alliance). This context (member 'PSKW Intermediate, LLC') carries the line printed 'PPV Intermediate Holdings, LLC (4)(6)(7)(10) SOFR + 5.75 % 9.01 % 8/31/2029 102,361 99,921 99,870'; no PPV member is tagged in the filing (0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i3aa001de2d984ebaabca6871b407e897_I20220930",
+  "fields": {
+   "issuer_name": "PSKW Intermediate, LLC",
+   "maturity_date": "2026-03-09"
+  },
+  "reason": "Member 'Radnet, Inc.' carries the line printed 'PSKW Intermediate, LLC (4)(11) L + 6.25 % 9.37 % 3/9/2026 16,138 16,138 16,138' (shifted members, 0001803498-22-000021); the JV schedule's own Radnet line (4,123) is on another context and is not changed."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "ifd818b1975174b08a97f97eaade708ee_I20220930",
+  "fields": {
+   "issuer_name": "Radnet, Inc.",
+   "maturity_date": "2028-04-21"
+  },
+  "reason": "Member 'Reverb Buyer, Inc.' carries the line printed 'Radnet, Inc. (6)(10) L + 3.00 % 6.12 % 4/21/2028 4,863 4,843 4,684' (shifted members, 0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i435f1f32152043ab882099a9ebcb2b8d_I20220930",
+  "fields": {
+   "issuer_name": "Reverb Buyer, Inc.",
+   "maturity_date": "2028-11-01"
+  },
+  "reason": "Member 'Smile Doctors, LLC' carries the line printed 'Reverb Buyer, Inc. (7)(9) L + 3.50 % 6.38 % 11/1/2028 43,958 43,657 41,658' (shifted members, 0001803498-22-000021); the JV schedule's Smile Doctors line (120,469) is on another context and is not changed."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "ic35956111cbe4476b10b4e19f916cc16_I20220930",
+  "fields": {
+   "issuer_name": "Smile Doctors, LLC"
+  },
+  "reason": "Member 'Snoopy Bidco, Inc.' carries the line printed 'Smile Doctors, LLC (4)(7)(10) L + 5.75 % 9.42 % 12/23/2028 449,679 439,765 438,872' (shifted members, 0001803498-22-000021; the same member's 2021-12-31 facts are Snoopy's printed 396,000 383,095 388,125)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i85ff286c37674e3b9d9279a64491c40d_I20220930",
+  "fields": {
+   "issuer_name": "Snoopy Bidco, Inc."
+  },
+  "reason": "Member 'SpecialtyCare, Inc.' carries the line printed 'Snoopy Bidco, Inc. (4)(7)(10) L + 6.00 % 9.08 % 6/1/2028 623,786 615,096 607,423' (shifted members, 0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i33eec2b682e04cfc81db8124143a282d_I20220930",
+  "fields": {
+   "issuer_name": "SpecialtyCare, Inc.",
+   "maturity_date": "2028-06-18"
+  },
+  "reason": "Member 'Stepping Stones Healthcare Services, LLC' carries the line printed 'SpecialtyCare, Inc. (4)(5)(11) L + 5.75 % 8.03 % 6/18/2028 69,352 67,625 68,213' (shifted members, 0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "if9df030b50e1485c84e54998f246a41c_I20220930",
+  "fields": {
+   "issuer_name": "SpecialtyCare, Inc.",
+   "maturity_date": "2026-06-18"
+  },
+  "reason": "Member 'Surgery Centers Holdings, Inc.' carries the line printed 'SpecialtyCare, Inc. (4)(5)(7)(8) L + 5.50 % 8.50 % 6/18/2026 1,068 936 979' (shifted members, 0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "ia69ae86cb9b746bdbe85c77aa1e64dbf_I20220930",
+  "fields": {
+   "issuer_name": "Stepping Stones Healthcare Services, LLC"
+  },
+  "reason": "Member 'The Fertility Partners, Inc. 1' carries the line printed 'Stepping Stones Healthcare Services, LLC (4)(7)(10) L + 5.75 % 9.42 % 1/2/2029 137,320 134,138 131,329' (shifted members, 0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i1614d798ff4b49648c50a330b004e9b8_I20220930",
+  "fields": {
+   "issuer_name": "Surgery Centers Holdings, Inc."
+  },
+  "reason": "Member 'The Fertility Partners, Inc. 2' carries the line printed 'Surgery Centers Holdings, Inc. (6)(10) L + 3.75 % 6.51 % 8/31/2026 54,352 53,969 51,713' (shifted members, 0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i1e474e9b8bde4b31a8d9b95e12005475_I20220930",
+  "fields": {
+   "issuer_name": "The Fertility Partners, Inc."
+  },
+  "reason": "Member 'The GI Alliance Management, LLC 1' carries the Canadian-dollar line printed 'The Fertility Partners, Inc. (4)(5)(6)(7)(10) C + 5.75 % 9.47 % 3/16/2028 C$ 146,722 114,094 103,819' (shifted members, 0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i0d78651101974ae9a8f288d675ceb292_I20220930",
+  "fields": {
+   "issuer_name": "Gulf Stream Meridian 1, Ltd."
+  },
+  "reason": "Structured Finance block, members shifted by one line: member 'Gulf Stream Meridian 5, Ltd.' carries the line printed 'Gulf Stream Meridian 1, Ltd. (4)(5)(6)(8) L + 6.75 % 9.26 % 4/15/2034 1,000 958 840' (0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i1165bd68e3ea470a849c34b375db41e9_I20220930",
+  "fields": {
+   "issuer_name": "Gulf Stream Meridian 5, Ltd."
+  },
+  "reason": "Member 'Gulf Stream Meridian 7, Ltd.' carries the line printed 'Gulf Stream Meridian 5, Ltd. (4)(5)(6)(8) L + 6.75 % 9.26 % 7/15/2034 3,500 3,488 2,990' (0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i5b767905ce9d4fd6a91ad6087e5a9556_I20220930",
+  "fields": {
+   "issuer_name": "Gulf Stream Meridian 7, Ltd."
+  },
+  "reason": "Member 'Gulf Stream Meridian IIIA, Ltd.' carries the line printed 'Gulf Stream Meridian 7, Ltd. (4)(5)(6)(8) L + 6.90 % 9.18 % 7/15/2035 5,000 4,952 4,493' (0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "iab0677a689e446ed96229e28a1c33d7a_I20220930",
+  "fields": {
+   "issuer_name": "COP Home Services TopCo IV, Inc."
+  },
+  "reason": "Member 'Pike Electric Corp.' carries the first-lien line printed 'COP Home Services TopCo IV, Inc. (4)(5)(7)(11) L + 5.00 % 8.12 % 12/31/2027 124,503 121,751 120,648'; the fund's schedule prints Pike Electric only in the JV schedule (0001803498-22-000021)."
+ },
+ {
+  "quarter": "2022-09-30",
+  "src_context_id": "i108d612dd69640559cd33213b1b261d9_I20220930",
+  "fields": {
+   "issuer_name": "MRI Software, LLC"
+  },
+  "reason": "Member 'Mitnick Purchaser, Inc. 2' carries the second MRI line printed 'MRI Software, LLC (5)(7)(11) L + 5.50 % 9.17 % 2/10/2026 7,449 7,409 6,931' (0001803498-22-000021)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "src_context_id": "c-102",
+  "fields": {
+   "issuer_name": "Triton Water Holdings, Inc."
+  },
+  "reason": "Member 'Naked Juice, LLC' carries the line printed 'Triton Water Holdings, Inc. (9) SOFR + 3.25 % 8.49 % 3/31/2028 $ 44,998 $ 44,222 $ 43,613'; Naked Juice is not printed in the current period (0001803498-23-000017)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "src_context_id": "c-539",
+  "fields": {
+   "issuer_name": "Inmar, Inc."
+  },
+  "reason": "Member 'IG Investments Holdings, LLC 2' carries the line printed 'Inmar, Inc. (11) SOFR + 5.50 % 10.82 % 5/1/2026 29,846 28,904 29,685' (0001803498-23-000021)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "src_context_id": "c-319",
+  "fields": {
+   "issuer_name": "Midwest Physician Administrative Services, LLC"
+  },
+  "reason": "Member 'National Mentor Holdings, Inc.' carries the line printed 'Midwest Physician Administrative Services, LLC (10) SOFR + 3.25 % 8.90 % 3/12/2028 19,036 18,977 17,925'; National Mentor is not printed in the current period (0001803498-23-000021)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-566",
+  "fields": {
+   "issuer_name": "Dolcetto Holdco S.p.A."
+  },
+  "reason": "Printed 'Dolcetto Holdco S.p.A. (4)(5)(6)(8) E + 5.50 % 8.96 % 10/11/2022 10/27/2028 EUR 60,136 58,626 65,025'; the member writes 'SpA' (0001803498-25-000038); later quarters publish the printed form."
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-567",
+  "fields": {
+   "issuer_name": "Dolcetto Holdco S.p.A."
+  },
+  "reason": "Printed 'Dolcetto Holdco S.p.A. (4)(5)(6)(8) E + 5.50 % 7.87 % 1/28/2025 10/27/2028 EUR 23,167 23,873 25,050'; the member writes 'SpA' (0001803498-25-000038)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-169",
+  "fields": {
+   "issuer_name": "TRC Cos, LLC"
+  },
+  "reason": "Printed 'TRC Cos, LLC (8) SOFR + 3.00 % 7.32 % 1/14/2025 12/8/2028 26,726 26,726 26,509'; the member keeps the former name 'TRC Companies, Inc (fka Bolt Infrastructure Merger Sub, Inc.)' (0001803498-25-000038); 2025-06-30 on publishes TRC Cos, LLC."
+ },
+ {
+  "quarter": "2025-09-30",
+  "src_context_id": "c-251",
+  "fields": {
+   "issuer_name": "Trident TPI Holdings, Inc."
+  },
+  "reason": "Member 'TricorBraun Holdings, Inc. 2' carries the line printed 'Trident TPI Holdings, Inc. (9) SOFR + 3.75 % 7.75 % 10/18/2024 9/15/2028 11,994 11,994 11,800'; the fund's TricorBraun line (24,212) is on member 1 (0001803498-25-000081)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "src_context_id": "c-454",
+  "fields": {
+   "pik_rate": "16.57"
+  },
+  "reason": "Printed 'Digital Media Solutions, LLC (6)(10)(17) SOFR + 11.00 % 16.57 % PIK 5/25/2026': the whole coupon is paid in kind; the 10-Q tags the 16.57 % as InvestmentInterestRate only (the 2023-12-31 context of the same investment tags InvestmentInterestRatePaidInKind 0.1661) (0001803498-24-000022)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "src_context_id": "c-793",
+  "fields": {
+   "pik_rate": "0.5"
+  },
+  "reason": "Printed 'Thermostat Purchaser III, Inc. (4)(10) SOFR + 7.25 % 12.74 %.(incl. 0.50 % PIK) 8/31/2029'; no PIK fact on the context (0001803498-24-000044)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-872",
+  "fields": {
+   "pik_rate": "0.5"
+  },
+  "reason": "Printed 'Thermostat Purchaser III, Inc. (4)(10) SOFR + 7.25 % 12.96 %.(incl. 0.50 % PIK) 8/31/2021 8/31/2029'; no PIK fact on the context (0001803498-24-000062)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "src_context_id": "c-891",
+  "fields": {
+   "pik_rate": "10.0"
+  },
+  "reason": "Printed 'Daylight Beta Parent, LLC (Benefytt Technologies, Inc.) (4)(5)(8)(16)(17)(18) 10.00 % 10.00 % PIK 9/11/2023 9/12/2033': the whole coupon is paid in kind; the 10-Q tags it as InvestmentInterestRate only (the 2024-12-31 context tags InvestmentInterestRatePaidInKind 0.1000) (0001803498-25-000038)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "src_context_id": "c-1013",
+  "fields": {
+   "pik_rate": "10.1"
+  },
+  "reason": "Printed 'Material Holdings, LLC (4)(5)(7)(10)(16) SOFR + 6.00 % 10.10 % PIK 6/14/2024 8/19/2027 5,190 5,170 4,816': the whole coupon is paid in kind; tagged as InvestmentInterestRate only (0001803498-25-000081)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "src_context_id": "c-950",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "instrument_description": "Series A-1 Preferred Shares"
+  },
+  "reason": "Printed 'AVE Holdings I Corp. - Series A-1 Preferred Shares (4) 12,237,213 $ 11,870 $ 12,727'; the member names the issuer only (0001803498-24-000044); 2024-09-30 on publishes it as preferred."
+ },
+ {
+  "quarter": "2024-06-30",
+  "src_context_id": "c-975",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "instrument_description": "Preferred Shares",
+   "issuer_name": "Knockout Intermediate Holdings I, Inc."
+  },
+  "reason": "Printed 'Knockout Intermediate Holdings I, Inc. - Preferred Shares (4) 49,020 47,793 64,950'; the member names the issuer only, spelt 'Intermediated' (0001803498-24-000044); 2024-09-30 on publishes it as preferred."
+ },
+ {
+  "quarter": "2024-09-30",
+  "src_context_id": "c-1052",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "instrument_description": "(BP Alpha Holdings, L.P.) - Class C Preferred Units"
+  },
+  "reason": "Printed 'Box Co-Invest Blocker, LLC - (BP Alpha Holdings, L.P.) - Class C Preferred Units (4) 7/12/2023 401,889 390 478'; the member says 'Class C Units' (0001803498-24-000062); 2024-12-31 on publishes it as preferred."
+ },
+ {
+  "quarter": "2022-12-31",
+  "src_context_id": "ibf5db15f71b24282a0f872d9a3231479_I20221231",
+  "fields": {
+   "issuer_name": "Shelf Holdco Ltd",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Shelf Holdco Ltd - Common Equity'). Printed: 'Shelf Holdco Ltd Common Equity (4)(6) 1,300,000 1,300' (0001803498-23-000008)."
+ },
+ {
+  "quarter": "2022-12-31",
+  "src_context_id": "ia952d19d8cf44c08af2a3331a07bf249_I20221231",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Common Equity'). Printed: 'Zoro Common Equity (4) 1,195,880 11,959' (0001803498-23-000008)."
+ },
+ {
+  "quarter": "2022-12-31",
+  "src_context_id": "i2171eb33ac174e58bb54a2a93319b23f_I20221231",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Series A Preferred Shares"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Series A Preferred Shares'). Printed: 'Zoro Series A Preferred Shares (4) 12.50 44,535 43,199' (0001803498-23-000008)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "src_context_id": "ic23ebe0ac8bd436199f58e9ea9183cd6_I20230331",
+  "fields": {
+   "issuer_name": "Shelf Holdco Ltd",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Shelf Holdco Ltd - Common Equity'). Printed: 'Shelf Holdco Ltd Common Equity (4)(6) 1,300,000 1,300 1,430' (0001803498-23-000012)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "src_context_id": "i76d0acf0beef45bc9352fcc6caed7e46_I20230331",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Common Equity'). Printed: 'Zoro Common Equity (4) 1,195,880 11,959' (0001803498-23-000012)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "src_context_id": "i0b6b45bef15844ea83b230906a45116f_I20230331",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Series A Preferred Shares"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Series A Preferred Shares'). Printed: 'Zoro Series A Preferred Shares (4) 12.50 % 44,535' (0001803498-23-000012)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "src_context_id": "c-854",
+  "fields": {
+   "issuer_name": "Shelf Holdco Ltd",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Shelf Holdco Ltd - Common Equity'). Printed: 'Shelf Holdco Ltd Common Equity (4)(6) 1,300,000 1,300 1,495' (0001803498-23-000017)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "src_context_id": "c-867",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Common Equity'). Printed: 'Zoro Common Equity (4) 1,195,880 11,959' (0001803498-23-000017)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "src_context_id": "c-868",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Series A Preferred Shares"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Series A Preferred Shares'). Printed: 'Zoro Series A Preferred Shares (4) 12.50 % 44,535 42,976 45,982' (0001803498-23-000017)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "src_context_id": "c-870",
+  "fields": {
+   "issuer_name": "Shelf Holdco Ltd",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Shelf Holdco Ltd - Common Equity'). Printed: 'Shelf Holdco Ltd Common Equity (4)(6) 1,300,000 1,300 1,950' (0001803498-23-000021)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "src_context_id": "c-885",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Common Equity'). Printed: 'Zoro Common Equity (4) 1,195,880 11,959' (0001803498-23-000021)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "src_context_id": "c-886",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Series A Preferred Shares"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Series A Preferred Shares'). Printed: 'Zoro Series A Preferred Shares (4) 12.50 % 44,535 42,976 47,875' (0001803498-23-000021)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "src_context_id": "c-987",
+  "fields": {
+   "issuer_name": "Shelf Holdco Ltd",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Shelf Holdco Ltd - Common Equity'). Printed: 'Shelf Holdco Ltd Common Equity (4)(6) 1,300,000 1,300 2,275' (0001803498-24-000007)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "src_context_id": "c-1004",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Common Equity'). Printed: 'Zoro Common Equity (4) 1,195,880 11,959' (0001803498-24-000007)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "src_context_id": "c-1005",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Series A Preferred Shares"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Series A Preferred Shares'). Printed: 'Zoro Series A Preferred Shares (4) 12.50 % 44,535 42,976 50,102' (0001803498-24-000007)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "src_context_id": "c-854",
+  "fields": {
+   "issuer_name": "Shelf Holdco Ltd",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Shelf Holdco Ltd - Common Equity'). Printed: 'Shelf Holdco Ltd Common Equity (4)(6) 1,300,000 1,300 3,250' (0001803498-24-000022)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "src_context_id": "c-870",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Common Equity'). Printed: 'Zoro Common Equity (4) 1,195,880 11,959' (0001803498-24-000022)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "src_context_id": "c-871",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Series A Preferred Shares"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the class is the instrument, the issuer the company (the 2024-09-30 member splits them: 'Zoro - Series A Preferred Shares'). Printed: 'Zoro Series A Preferred Shares (4) 12.50 % 44,535 42,976 52,329' (0001803498-24-000022)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "src_context_id": "c-981",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the page prints them split. Printed: 'Zoro - Common Equity (4) 1,195,880 11,959 11,959' (0001803498-24-000044)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "src_context_id": "c-964",
+  "fields": {
+   "issuer_name": "Shelf Holdco Ltd",
+   "instrument_description": "Common Equity"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the page prints them split. Printed: 'Shelf Holdco Ltd - Common Equity (4)(6) 1,300,000 1,300 4,160' (0001803498-24-000044)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "src_context_id": "c-982",
+  "fields": {
+   "issuer_name": "Zoro",
+   "instrument_description": "Series A Preferred Shares"
+  },
+  "reason": "Old-format member names the issuer and the class in one cell with no separator; the page prints them split. Printed: 'Zoro - Series A Preferred Shares (4) 12.50 % 44,535 42,976 54,444' (0001803498-24-000044)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "src_context_id": "c-988",
+  "fields": {
+   "issuer_name": "RSC Topco, Inc.",
+   "instrument_description": "Preferred Shares"
+  },
+  "reason": "Member names issuer and class in one cell joined by '.-' with no separator space; the class is the instrument (the 2024-09-30 member splits them: 'RSC Topco, Inc. - Preferred Shares'). Printed: 'RSC Topco, Inc.- Preferred Shares (4) 100 97 102' (0001803498-24-000007)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "src_context_id": "c-853",
+  "fields": {
+   "issuer_name": "RSC Topco, Inc.",
+   "instrument_description": "Preferred Shares"
+  },
+  "reason": "Member names issuer and class in one cell joined by '.-' with no separator space; the class is the instrument (the 2024-09-30 member splits them: 'RSC Topco, Inc. - Preferred Shares'). Printed: 'RSC Topco, Inc.- Preferred Shares (4) 100 97 106' (0001803498-24-000022)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "src_context_id": "c-963",
+  "fields": {
+   "issuer_name": "RSC Topco, Inc.",
+   "instrument_description": "Preferred Shares"
+  },
+  "reason": "Member names issuer and class in one cell joined by '.-' with no separator space; the class is the instrument (the 2024-09-30 member splits them: 'RSC Topco, Inc. - Preferred Shares'). Printed: 'RSC Topco, Inc. - Preferred Shares (4) 100 97 110' (0001803498-24-000044)."
+ }
+]

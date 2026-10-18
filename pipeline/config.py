@@ -162,6 +162,9 @@ UNIVERSE_ORPHAN_HOLDINGS_FILE = OUTPUT_DIR / "universe_orphan_holdings.csv"
 
 # Manual row-level corrections overlay (checked into data/overrides/)
 ROW_CORRECTIONS_FILE = OVERRIDES_DIR / "row_corrections.csv"
+# Row corrections narrowed to one XBRL context (same columns plus src_context_id), for a filing
+# that repeats an identifier on two lines of which only one is wrong (2026-10-18, BCRED).
+ROW_CORRECTIONS_BY_CONTEXT_FILE = OVERRIDES_DIR / "row_corrections_by_context.csv"
 BDC_XBRL_ORACLE_EXCEPTIONS_FILE = OVERRIDES_DIR / "bdc_xbrl_oracle_exceptions.json"
 
 # Promoted agent-fix stores (gap 1): gate-PASS fixes with production consumers.

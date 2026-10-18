@@ -6060,6 +6060,43 @@ class TestSharesNormalization:
         # Q3 outlier (200) replaced with Q2's shares (200000)
         assert shares == [200000.0, 200000.0, 200000.0, 200000.0]
 
+    def _widget_classes_bdc_df(self, cik):
+        # two classes of one issuer at very different unit prices: the normaliser groups them by
+        # issuer name and replaces the cheaper class's count (BCRED Point Broadband, 2026-10-18)
+        rows = []
+        for i, q in enumerate(["2023-03-31", "2023-06-30", "2023-09-30"]):
+            rows.append({"cik": cik, "investment_identifier": "Widget Holdings, LLC - Class A Units",
+                         "fair_value": 5000000, "shares_held": "5000", "report_date": q, "accession_number": "00%d" % i})
+            rows.append({"cik": cik, "investment_identifier": "Widget Holdings, LLC - Class B Units",
+                         "fair_value": 400000, "shares_held": "685760", "report_date": q, "accession_number": "00%d" % i})
+        return self._make_bdc_df(rows)
+
+    def test_bdc_shares_kept_as_filed_when_wrapper_opts_out(self, tmp_path):
+        """dispatch.shares_pow10_normalise: false keeps the fund's tagged counts."""
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE", tmp_path / "test.csv"), \
+             patch("pipeline.staging_bdc.shares_pow10_normalise_off_ciks", return_value={"0000000200"}):
+            result = build_unified_holdings(bdc_df=self._widget_classes_bdc_df("200"), nport_df=self._empty_nport_df())
+        widget = result[result["issuer_name"].str.contains("Widget", na=False)]
+        assert sorted(set(widget["shares_held"].tolist())) == [5000.0, 685760.0]
+        assert not widget["shares_held_source"].eq("derived_proxy").any()
+
+    def test_bdc_shares_normalised_for_funds_not_opted_out(self, tmp_path):
+        """False positive guard: another fund's opt-out does not switch the normaliser off here."""
+        with patch("pipeline.unified_holdings.UNIFIED_HOLDINGS_FILE", tmp_path / "test.csv"), \
+             patch("pipeline.staging_bdc.shares_pow10_normalise_off_ciks", return_value={"0001803498"}):
+            result = build_unified_holdings(bdc_df=self._widget_classes_bdc_df("200"), nport_df=self._empty_nport_df())
+        widget = result[result["issuer_name"].str.contains("Widget", na=False)]
+        assert widget["issuer_name"].nunique() == 1  # both classes in one issuer group
+        assert widget["shares_held_source"].eq("derived_proxy").any()
+
+    def test_shares_pow10_normalise_off_ciks_reads_wrapper(self, tmp_path):
+        import json
+        from pipeline.staging_bdc import shares_pow10_normalise_off_ciks
+        (tmp_path / "a.json").write_text(json.dumps({"cik": "0001803498", "dispatch": {"shares_pow10_normalise": False}}))
+        (tmp_path / "b.json").write_text(json.dumps({"cik": "0000000001", "dispatch": {"shares_pow10_normalise": True}}))
+        (tmp_path / "c.json").write_text(json.dumps({"cik": "0000000002", "dispatch": {}}))
+        assert shares_pow10_normalise_off_ciks(tmp_path) == {"0001803498"}
+
     def test_shares_pow10_fix_records_derived_proxy(self, tmp_path):
         """N-PORT outlier row gets shares_held_source=derived_proxy and event appended."""
         # 4 periods; Q3 has outlier shares=400 (should be 400000)
@@ -8821,6 +8858,71 @@ class TestApplyRowCorrections:
             value="Transportation Infrastructure", reason="Printed Elk heading")])
         result = _apply_row_corrections(df, corrections_path=path)
         pd.testing.assert_frame_equal(result, before)
+
+    def _write_context_corrections(self, tmp_path, rows):
+        import csv
+        path = tmp_path / "row_corrections_by_context.csv"
+        cols = ["cik", "report_date", "accession_number", "bdc_investment_identifier", "src_context_id",
+                "field", "value", "reason", "source_evidence", "author", "date_added"]
+        with open(path, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=cols)
+            w.writeheader()
+            for r in rows:
+                w.writerow({c: r.get(c, "") for c in cols})
+        return path
+
+    _SMILE = {"cik": "0001803498", "report_date": "2022-09-30", "accession_number": "0001803498-22-000021",
+              "bdc_investment_identifier": "Smile Doctors, LLC"}
+
+    def _smile_frame(self):
+        # one identifier on two lines of one filing: the fund's own (values of the printed line above,
+        # Reverb Buyer) and the joint venture's (its own Smile Doctors line)
+        return self._make_holdings_df([
+            dict(self._SMILE, source="bdc", issuer_name="Smile Doctors, LLC", fair_value="41658000",
+                 src_context_id="i435f1f32152043ab882099a9ebcb2b8d_I20220930"),
+            dict(self._SMILE, source="bdc", issuer_name="Smile Doctors, LLC", fair_value="120469000",
+                 src_context_id="i467d6c210e8f414ab362065be944a2b2_I20220930")])
+
+    def test_context_keyed_correction_changes_only_its_context(self, tmp_path):
+        main = self._write_corrections(tmp_path, [])
+        ctx = self._write_context_corrections(tmp_path, [dict(
+            self._SMILE, src_context_id="i435f1f32152043ab882099a9ebcb2b8d_I20220930", field="issuer_name",
+            value="Reverb Buyer, Inc.", reason="member shifted one printed line", author="test", date_added="2026-10-18")])
+        result = _apply_row_corrections(self._smile_frame(), corrections_path=main, context_corrections_path=ctx)
+        assert result["issuer_name"].tolist() == ["Reverb Buyer, Inc.", "Smile Doctors, LLC"]
+
+    def test_context_keyed_correction_with_another_context_changes_nothing(self, tmp_path):
+        """False positive guard: same identifier key, a context the frame does not hold."""
+        main = self._write_corrections(tmp_path, [])
+        ctx = self._write_context_corrections(tmp_path, [dict(
+            self._SMILE, src_context_id="c-999", field="issuer_name", value="Reverb Buyer, Inc.",
+            reason="test", author="test", date_added="2026-10-18")])
+        before = self._smile_frame()
+        result = _apply_row_corrections(self._smile_frame(), corrections_path=main, context_corrections_path=ctx)
+        pd.testing.assert_frame_equal(result, before)
+
+    def test_maturity_precision_correction_accepts_day(self, tmp_path):
+        main = self._write_corrections(tmp_path, [])
+        ctx = self._write_context_corrections(tmp_path, [dict(
+            self._SMILE, src_context_id="i435f1f32152043ab882099a9ebcb2b8d_I20220930", field="maturity_precision",
+            value="day", reason="printed 11/1/2028", author="test", date_added="2026-10-18")])
+        result = _apply_row_corrections(self._smile_frame(), corrections_path=main, context_corrections_path=ctx)
+        assert result["maturity_precision"].tolist() == ["day", ""]
+
+    def test_maturity_precision_correction_rejects_other_values(self, tmp_path):
+        """False positive guard: a value outside day/month/year is skipped, the row unchanged."""
+        main = self._write_corrections(tmp_path, [])
+        ctx = self._write_context_corrections(tmp_path, [dict(
+            self._SMILE, src_context_id="i435f1f32152043ab882099a9ebcb2b8d_I20220930", field="maturity_precision",
+            value="dated", reason="test", author="test", date_added="2026-10-18")])
+        before = self._smile_frame()
+        result = _apply_row_corrections(self._smile_frame(), corrections_path=main, context_corrections_path=ctx)
+        pd.testing.assert_frame_equal(result, before)
+
+    def test_identifier_keyed_correction_still_hits_every_row_of_the_key(self, tmp_path):
+        main = self._write_corrections(tmp_path, [dict(self._SMILE, field="issuer_name", value="X", reason="test")])
+        result = _apply_row_corrections(self._smile_frame(), corrections_path=main)
+        assert result["issuer_name"].tolist() == ["X", "X"]
 
     def test_correction_applied(self, tmp_path):
         """Matching correction row updates the target field."""
