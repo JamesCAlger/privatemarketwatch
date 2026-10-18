@@ -74,14 +74,21 @@ INDUSTRY_EXEMPTIONS = {
 
 # A cell that ends the name part of a printed row: an instrument, a rate, a date, a figure or a mark.
 _STOP_CELL = (r"(?i)^\s*(first|second|third|1st|2nd|senior|junior|unitranche|term|delayed|ddtl|revolv\w*|"
-              r"incremental|tranche|class|series|common|preferred|ordinary|warrants?|units?|lp units?|"
+              # a class or series designation ('Class E', 'Series C-3'), not a name that starts with the
+              # word ('Class Valuation', Kayne Anderson)
+              r"incremental|tranche|(class|series) [a-z0-9][a-z0-9-]{0,3}|common|preferred|ordinary|warrants?|units?|lp units?|"
               r"llc units?|membership|partnership|subordinated|mezzanine|unsecured|secured|notes?|bonds?|"
               r"loan|debt|convertible|sofr|libor|euribor|sonia|sterling|prime|n/a|fixed|floating|pik|equity|"
-              r"limited partner\w*|member units?|equipment financing|collater\w*)\b"
-              # instrument phrases anywhere in the cell (Ares 'Z2 preferred shares', 'Limited partnership interests')
+              r"limited partner\w*|member units?|member interests?|equipment financing|collater\w*)\b"
+              # a count before a class or series word (Sixth Street Raptor '12,832 Class C'); a name that
+              # starts with a number ('1375 Owner LLC', '1988 CLO 2 Ltd.') is not stopped
+              r"|(?i)^\s*[0-9][0-9,.]*\s+(class|series)\b"
+              # instrument phrases anywhere in the cell (Ares 'Z2 preferred shares', 'Limited partnership interests',
+              # Barings 'Structured Secured Note - Class B', Ares 'Member interest (100.00% interest)')
               r"|(?i)\b(term loan|revolving|delayed draw|first lien|second lien|senior secured|preferred (shares|stock|units|equity)|"
-              r"common (shares|stock|units|equity)|partnership interests?|partner interests?|membership (units|interests?)|"
+              r"common (shares|stock|units|equity)|partnership interests?|partner interests?|member(ship)? (units|interests?)|"
               r"lp interests?|llc interests?|units|shares|warrants?|loan obligation|subordinated (debt|notes?|certificates?)|"
+              r"structured( (secured|senior|subordinated|mezzanine))? notes?|notes? - class|"
               r"asset[- ]backed)\b")
 _STOP_SYMBOLS = r"^[\s$()%0-9.,?*#~<>+/\-]*$"
 _STOP_RATE = r"(?i)^\s*[SLEP]\s*\+"

@@ -128,6 +128,44 @@ def test_issuer_guards_legitimate_names():
     assert out.empty, out[["row_id", "kind"]]
 
 
+def test_issuer_later_tranche_instrument_cells_are_not_compared():
+    # 2026-10-20 review: five continuation rows whose first cell is an instrument the stop list missed
+    out = _run(cr.issuer_name_differs_from_page, [
+        {"row_id": "bb", "issuer_name": "Perimeter Master Note Business Trust",
+         "printed_row": "Structured Secured Note - Class B | 5.4% Cash | 03/2029 | 181 | 181 | 181"},
+        {"row_id": "be", "issuer_name": "Perimeter Master Note Business Trust",
+         "printed_row": "Structured Secured Note - Class E | 11.4% Cash | 03/2029 | 8,503 | 8,503 | 8,503"},
+        {"row_id": "ih", "issuer_name": "Ivy Hill Asset Management, L.P.",
+         "printed_row": "Member interest (100.00% interest) | (6)(11) | 06/2009 | 1,924.6 | 1,924.6"},
+        {"row_id": "rc", "issuer_name": "Raptor US Buyer II Corp.",
+         "printed_row": "12,832 Class C | 03/2023 | 1,283 | 1,288 | 0.1%"},
+        {"row_id": "re", "issuer_name": "Raptor US Buyer II Corp.",
+         "printed_row": "12,832 Class E | 03/2023 | 1,283 | 1,287 | 0.1%"},
+    ])
+    assert out.empty, out[["row_id", "kind"]]
+
+
+def test_issuer_names_with_class_interest_or_a_number_are_still_compared():
+    rows = [
+        # Kayne Anderson prints 'Class Valuation'; Bain '1375 Owner LLC'; a name containing 'Interest'
+        {"row_id": "cv", "issuer_name": "Class Valuation",
+         "printed_row": "Class Valuation | First Lien Senior Secured | S + 5.50% | 1,000 | 990 | 995"},
+        {"row_id": "is", "issuer_name": "Interest Solutions Inc",
+         "printed_row": "Interest Solutions Inc | First lien | S + 5.00 % | 1,000 | 990 | 995"},
+        {"row_id": "ow", "issuer_name": "1375 Owner LLC",
+         "printed_row": "1375 Owner LLC (4)(5) | First Lien Senior Secured Loan | 9.00% | 1,000 | 990 | 995"},
+        {"row_id": "sc", "issuer_name": "Structured Credit Partners JV, LLC",
+         "printed_row": "Structured Credit Partners JV, LLC | Class A | 1,000 | 990"},
+    ]
+    assert _run(cr.issuer_name_differs_from_page, rows).empty
+    # the same printed rows under another published name still flag
+    wrong = [dict(r, issuer_name=n) for r, n in zip(rows, ["Apex Valuation", "Omega Solutions Inc", "1375 Mezz LLC",
+                                                            "Credit Partners Feeder LLC"])]
+    out = _run(cr.issuer_name_differs_from_page, wrong)
+    assert _ids(out) == {"cv", "is", "ow", "sc"}
+    assert set(out["kind"]) == {"not_the_printed_name"} and set(out["basis"]) == {"page"}
+
+
 # ---------------------------------------------------------------- rule 2: unit counts
 
 def test_units_labelled_count_differs_flags():
