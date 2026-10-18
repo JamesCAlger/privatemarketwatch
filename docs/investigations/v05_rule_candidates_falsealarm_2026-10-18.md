@@ -132,3 +132,24 @@ The builder applied the fixes above (D-207, ddc0e92). Same method, seed 20261019
 | 5 | **Switch on** for 'preferred' on the instrument or printed row. Hold the 17 AB heading-only non-Series rows as unclear pending the owner's ruling. |
 
 Same caveats: 30-row fund-capped samples; "real" is page versus published, not proof the rest is right. Not done: the rule-4 warning level, the other 29 rule-4 fund-quarters, a rerun after the follow-ups.
+
+## Rule 1 rows added by the narrowed pass (2026-10-20, commit 02311c2)
+
+02311c2 narrowed rule 1's "printed elsewhere" pass. Findings went from 5,759 to 5,934, a net change of +175. Against the ddc0e92 rows CSV, 245 rule-1 rows are new and 70 dropped out. I drew 20 of the 245 new rows (seed 20261020, at most 5 per fund; script `scripts/v05_evidence/candidate_rules_falsealarm_sample_v3.py`) and read each against the cached filing. Labels are in `v05_rule_candidates_falsealarm_2026-10-20_rule1_new_labels.csv`.
+
+Result: 15 real, 5 false, 0 unclear. Precision 0.75 (95% Wilson 0.53-0.89).
+
+**Wrong page joins are not the pattern.** The printed row is found by the published fair-value fact's context (`ixbrl_contextref_anchor`). In every one of the 15 "joined to another company's line" cases, the published FV is printed on that line, so the join puts the row where the filer's fact sits. What fails is the filer's member. It names a neighbouring company (Goldman Sachs AI Titan carries AQ Helios's terms and FV; Crescent GrapeTree / Great Lakes, MRI / New Era; T Series Appfire / Bridgepointe; Bain 1375 Mezz / 1375 Owner). Or it carries a stale prefix (AB 'Visionary Buyer LLC | Zendesk, Inc.', 'Visionary Buyer LLC | Webster Equity Partners'; AB West Dermatology on AmerCareRoyal's row), or a former name (Ares PCG-Ares Sidecar for PCG-TAC-CV, LP). Where the member gives no terms, the published row pairs one company's name with another's FV: Antares Dwyer revolver published at 193 (Excelitas's row; Dwyer's revolver prints 240), BCRED 'TricorBraun 2' at Trident TPI's 11,800, Ares Strategic Income Keystone at Hyperion's 41,367.7, BCRED 'IG Investments 2' at Inmar's 29,685, Antares Plastipak at Pregis's 4,513. These are real errors in the published data: the issuer, and therefore any per-issuer FV, is wrong. They are inherited from the filer's tagging rather than made by the build.
+
+Correction to the first sample: #24 Antares Southpaw, labelled there a false alarm ("printed_row_misjoined"), is the same shape. Its published FV -19,000 is Movati's revolver, while Southpaw's revolver prints (11). It should be real. On that reading the first sample's rule 1 figure is 21 real / 8 false.
+
+**False alarms (5), one pattern: continuation rows the name-cell stop list misses.** The company is printed on the first tranche's row, and the later row starts with an instrument cell the stop list does not know:
+- 'Structured Secured Note - Class B / Class E' (Barings Perimeter Master Note Business Trust, 2 rows)
+- 'Member interest (100.00% interest)' (Ares Ivy Hill)
+- '12,832 Class C / Class E' (Sixth Street Lending Partners Raptor, 2 rows), a count before the class word
+
+Fix: add 'structured ... note', 'member interest' and a leading count followed by a class or series word to `_STOP_CELL`.
+
+Whole-rule effect: about 245 of 5,934 rows are this new slice. At 0.75 that is roughly 60 false rows, about 1 pct of rule 1's findings; the sample is fund-capped, so treat this as an estimate.
+
+**Rule 1 recommendation: switch on as is: yes.** Add the stop-list fix before the next quarter. Classify the filer-member cases as filer errors (the published issuer is wrong because the filer's member is), and route them to the filer's profile rather than to a build fix.
