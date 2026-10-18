@@ -92,3 +92,43 @@ Rate-only kind (rate_on_common): 399 rows, 4,432M FV. Not reviewed; dropped by t
 | 5 preferred_published_as_common, text kinds | **Switch on as is** (text kinds only) | Drop rate_on_common per the owner ruling. Keep the filer-heading case (AB LP interests under 'U.S. Preferred Stock') visible as unclear. |
 
 Not done: no rule code changed, no rerun of the rules after the proposed fixes (their effect is expected, not measured), no review of the rate_on_common kind, Carlyle and Fortress rule-4 fund-quarters not read.
+
+## Re-measure on the fixed rules (2026-10-19, commit ddc0e92)
+
+The builder applied the fixes above (D-207, ddc0e92). Same method, seed 20261019: 30 finding rows per rule (max 6 per fund), plus 10 rows each of the new weaker kinds `units_scale_unclear` and `pik_member_text_only` (reported apart), and 30 of the 59 rule-4 finding fund-quarters. Scripts: `scripts/v05_evidence/candidate_rules_falsealarm_sample_v2.py`, `..._score_v2.py`. Labels: `v05_rule_candidates_falsealarm_2026-10-19_labels.csv`, `..._2026-10-19_rule4_fq.csv`. The first-sample figures above are unchanged.
+
+| rule | old precision (95% CI) | new real / false / unclear | new precision | 95% Wilson |
+|---|---|---|---:|---|
+| 1 issuer_name_differs_from_page | 0.69 (0.51-0.83) | 30 / 0 / 0 | 1.00 | 0.89-1.00 |
+| 2 unit_count_differs_from_row_text, findings | 0.92 (0.76-0.98) | 30 / 0 / 0 | 1.00 | 0.89-1.00 |
+| 3 pik_printed_not_published, findings | 0.90 (0.74-0.96) | 30 / 0 / 0 | 1.00 | 0.89-1.00 |
+| 5 preferred_published_as_common, text | 1.00 (0.88-1.00) | 29 / 0 / 1 | 1.00 | 0.88-1.00 |
+| 4 industry_not_published, fund-quarters | 0.83 printed | 30 printed / 0 not | 1.00 | 0.89-1.00 |
+| weaker: units_scale_unclear | - | 3 / 3 / 4 | 0.50 | 0.19-0.81 |
+| weaker: pik_member_text_only | - | 3 / 3 / 4 | 0.50 | 0.19-0.81 |
+
+**Rule 1.** No false alarms. 2 of the 30 real rows are cosmetic ('Freddys' for "Freddy's", 'L V F Holdings' for 'LVF Holdings'); counting those as not real gives 28/30 (0.93). Real patterns: Apollo group prefix (6), instrument or industry appended, member typos ('Accordian', 'Martson', 'Reinsureance', 'GPZN', 'Parfums Holding'), section residue ('and Consumer Products Belk, Inc.'). Of the first sample's 9 false alarms, 7 no longer flag; Antares 'ClearCapital' (spacing_only) and 26North 'Ascend Partners' still do, so the published spelling printed on sibling rows is not yet passed. One first-sample real error was lost: MidCap equity in 'Wildcat Parent LP' published as 'Wildcat BuyerCo, Inc.' no longer flags, because the borrower name is printed on the loan rows and the "printed elsewhere in the filing" pass accepts it.
+
+**Rule 2.** 30 of 30 findings real (sibling row's count 9, /1000 2, count from another quarter 2 (MidCap AIC 142 vs 534,375, both directions), labelled not published 1, proxy count printed nowhere 16). Both first-sample false alarms no longer flag.
+
+**units_scale_unclear (10).** 4 HPS rows stay undecidable (274 / 2,000 / 3,528 under 'Par Amount/Units'). 3 Blue Owl rows are right as published: Blue Owl printed BEHP Co-Investor II as 1,269,969 units in 2023-03-31 and 1,270 in 2024-09-30, so its 2024 schedule is in thousands (BEHP 1,269,969, Hercules 10,000, Insight CP 989,000). 3 are real errors held in the weaker kind: 26North FH DMI 400,429,000 for 400,429 shares at cost 400k (labelled real in the first sample; now demoted), T Series Leaf Home 250,000 for 250 (the same table prints full counts such as 500,000 and 1,383,156), Golub Creek Parent 1,279,000 = cost x1000 (row prints 1 unit). Correctly kept out of findings; a row test cannot split these, a per-filer scale fact can.
+
+**Rule 3.** 30 of 30 page findings real (PIK not published 24; pik_rate holds spread, floor or all-in 6). The first-sample rounding false alarm no longer flags; the two member-versus-page false alarms moved to pik_member_text_only.
+
+**pik_member_text_only (10).** 3 real and printed on the visible page; the page reader did not join the row (Crescent BioAgilytix prints '(including 275 PIK)', 0.75 published; GS SPay '(incl. 3.50 % PIK)', 9.25 published; GS Gainsight 'S + 6.75 % PIK', none published). 3 false: member disagrees with the page (AB American Physician), member carries the next row's PIK (Antares Accelerate), stale member (Crescent Granicus 2023-12-31). 4 unclear: visible row prints no rate (Crescent Omni, Envocore, iLending, Lighthouse). Correctly kept out of findings.
+
+**Rule 4.** All 30 sampled fund-quarters print an industry, including the newly flagged Lord Abbett (headings 'Commercial Services & Supplies', 'Pharmaceuticals') and Fortress ('IT Services', 'Ground Transportation'). The BREC exemption removed the only not-printed fund.
+
+**Rule 5.** 29 of 30 real; unclear again AB 'Swyft Parent Holdings LP / LP Interests'. The AB 'Avant NewCo Holdings, L.P. / Class A Units' rows (2026-03-31, 2026-06-30) still flag: the visible page lists them under 'U.S. Preferred Stock - 1.01 %', while their neighbours print 'Series C Preferred' / 'Series B-1 Preferred' explicitly. In the pool, 100 of 147 rows carry 'preferred' only in the member's section heading, all AB: 83 venture 'Series X' rows (preferred in substance) and 17 that are not Series rows (Avant Class A Units, Bowline LLC Units, Content Square 'Ordinary Shares', Ntiva Class A, Rubrik Class B, SBS Class A, Swyft LP Interests, Knockout 'Perpetual'). Whether a heading alone is "the filer calls it preferred" is an owner ruling; Content Square 'Ordinary Shares' looks misfiled rather than preferred.
+
+### Recommendation on the fixed rules
+
+| rule | recommendation |
+|---|---|
+| 1 | **Switch on.** Follow-ups: pass the published spelling when it is printed on sibling rows (ClearCapital, Ascend Partners); restrict the "printed elsewhere" pass to the same position's or issuer block's rows so a member naming another group entity (Wildcat) still flags. Publish the blind-spot table with it. |
+| 2 | **Switch on** (findings only). Keep units_scale_unclear out; resolve it with per-filer scale facts (Blue Owl 2024+ in thousands, published right; 26North and T Series not, published wrong; HPS to be ruled). |
+| 3 | **Switch on** (page findings only). Keep pik_member_text_only out; its real cases are page-join misses, so fix the join rather than promote the kind. |
+| 4 | **Switch on** at the 0.80 finding level with the BREC exemption. Warning level (0.90) not reviewed. |
+| 5 | **Switch on** for 'preferred' on the instrument or printed row. Hold the 17 AB heading-only non-Series rows as unclear pending the owner's ruling. |
+
+Same caveats: 30-row fund-capped samples; "real" is page versus published, not proof the rest is right. Not done: the rule-4 warning level, the other 29 rule-4 fund-quarters, a rerun after the follow-ups.
