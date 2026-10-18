@@ -5112,3 +5112,17 @@ Compared with `spon3`; six builds (t8ya to t8yf). Gate: all mechanical checks pa
 - Page sample: 2 of 20 cards with published errors, recorded (no build left): Harvey Gulf name truncated (1 row, 39.0M); warrants classed EQUITY_COMMON (31 rows, 118.5M, 9 quarters). The asset_category enum has no warrant value (`pipeline/unified_holdings.py`; classifier maps 'warrant' to EQUITY_COMMON): a shared change for the owner; seen on five funds.
 - Found by the review, recorded for the next build: interest_expense is never the filer's interest line (InterestAndDebtExpense): directors' fees 2024-03-31 to 2026-06-30, repurchase-transaction interest 2022-06-30 to 2023-12-31, 2,000 against printed 2,170 thousand at 2022-12-31, 0 at 2022-03-31 against 52 thousand. Shared concept map (match on 'interestexpense').
 - Shared code: `whole_dollar_scale_filings`, `net_assets_concepts` (both opt-in, one fund), with tests. Cohort regression at end of run. Nothing published. A cleared ledger would not establish data correctness.
+
+### D-207 Owner delegates the recommended options (2026-10-18)
+
+Owner, 2026-10-18 (verbatim): "so far the recommended approaches seem to be very appropriate. going forward generate then use them, fixing issues, then continue". Read as standing authority to apply the orchestrator's recommended option on a blocking decision, record it here and continue; not as authority to accept fund agents' disposition proposals in general, push, publish, download or widen scope (orchestrator's reading). Choices applied from the open list of that day:
+
+1. Printed schedule rows with no XBRL context (TCW VIII 2023-09-30, 92.4M): (a) publish from the printed line, declared in the fund's wrapper with the verbatim line, provenance marked as printed page. Being built in TCW VIII round two.
+2. F27 TCW VIII x3, mechanism not established from the filings: (a) accepted as "published as printed; the check's mechanism cannot be established from the filings" (`owner_queue.py rule f27-income-above-coupon-mechanism-not-established accept`, into `owner_queue_accepted.json`).
+3. Warrant asset class: add it, measured on the cohort before switching on (pending).
+4. Interest expense concept: fix the shared map so the filer's interest line wins, measured on the cohort (pending; per-fund wrapper fixes meanwhile).
+5. Candidate rule industry-not-published: threshold 0.80 (0.90 as a warning line).
+6. Candidate rule preferred-published-as-common: text-based part only; units with a PIK dividend are not preferred unless the filer calls them preferred.
+7. Candidate rules: independent false-alarm check (30 rows per rule) and rule 1 blind-spot listing before any switch-on (running).
+8. F27 rated-share cut-off: keep 0.5.
+9. Owner queue (132 reasons): unchanged, still the owner's.
