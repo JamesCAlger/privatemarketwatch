@@ -105,53 +105,64 @@ OVERLAP = {
         "> 0, so it catches a dividend rate on a common row but not a PIK-only rate (Commonwealth LNG, KWOR "
         "publish pik_rate and no interest_rate) and never the text. Oracle C05 is a global share of rows whose "
         "instrument text says common and carry a rate. No rule reads 'preferred' on the printed row against "
-        "the class."),
+        "the class. Text kinds only since D-207 (the first run's rate_on_common, 399 rows, is gone)."),
 }
 
 
-# Written after reading the seed-20261017 samples of the run committed with this script. A rerun on
-# changed sandboxes draws other rows; re-read before quoting these.
+# Written 2026-10-18 after reading the seed-20261017 samples of the revised run (52 funds). A rerun
+# on changed sandboxes draws other rows; re-read before quoting these. Precision on a fund-capped
+# sample of 30 per rule is in v05_rule_candidates_falsealarm_2026-10-18.md (pre-fix rules).
 READS = {
     "issuer_name_differs_from_page": (
-        "9 of 10 look like real name errors: 7 carry the member's group name in front of the legal name "
-        "(Apollo Debt Solutions 'Gannett Gannett Holdings, LLC', 'CINC Systems 1475 Holdings, LLC', 'HKA Mount Olympus "
-        "Bidco Limited'), one a sequence word (',Two Recochem, Inc'), one an industry prefix (BlackRock 'Technology "
-        "PointClickCare'). 1 false alarm: New Mountain prints an industry heading in the row's first cell "
-        "('Consumer Products') that the heading test missed. Apollo alone is 4,179 of the flagged rows: the "
-        "group-name prefix is on most of its published names. spacing_only (193) is a separate kind for "
-        "'Circus Trix'/'CircusTrix'-type differences; some of those are the page's typo, not the build's."),
+        "9 of 10 real: 8 carry the member's group name in front of the legal name (Apollo Debt Solutions 'Delivery "
+        "Hero Delivery Hero Finco Germany GmbH', 'Golden Hippo Altern Marketing, LLC'; Apollo is 4,177 of the "
+        "5,759 rows), 1 a heading residue (Sixth Street 'and Consumer Products Rapid Data GmbH'). 1 cosmetic: "
+        "Crescent 'Bankers Toolbox' for the printed 'Banker's Toolbox' (kind spacing_only; an apostrophe, not a "
+        "build error). The New Mountain industry-cell leaks are gone with the blind-quarter suppression."),
     "unit_count_differs_from_row_text": (
-        "8 of 10 real: another row's count or a x1000/1000 shift (Ares Storm 3,297,791 for the printed 3,958; "
-        "AthenaHealth 198,505 for 10,487,951; BCRED Point Broadband 12,870 for 147,380; Sixth Street SMA 244 for "
-        "173,048). 2 unclear: BCRED Genstar 'Blocker Note' (a note classed equity; its printed 159,782 is a par, so "
-        "no count applies but the published 1,041 is not printed either) and HPS BCPE Virginia (published 2,000,000 "
-        "for a printed 2,000: a thousands scale, not decidable from the row). Almost all flags are shares_held_source "
-        "'derived_proxy': the shared normaliser (with_shares_fix) is the cause, as the observations say."),
+        "Finding kinds: 9 of 10 real (Ares AthenaHealth 198,505 for 10,487,951; Carlyle Talon 1,018,000 for "
+        "145,631; ASIF Mustang 883 for 883,420; BCRED Point Broadband, Zoro, Jupiter), 1 unclear (BCRED GTCR/Jupiter "
+        "'Blocker Note', a note classed equity whose 115,036 is a par). units_scale_unclear holds HPS-type rows "
+        "as asked, but the same shape also covers rows the review called real (26North FH DMI 400,429,000 for "
+        "400,429) and Blue Owl rows (Insight CP 989,000 for 989): read it as 'x1000, scale not on the row', not as "
+        "'probably fine'."),
     "pik_printed_not_published": (
-        "Printed-not-published: 9 of 10 real (Ares 'Senior preferred stock 10.00% PIK', HPS 'Foundation Automotive "
-        "SF + 7.75% PIK', Crescent 'E + 1000 PIK'); 1 unclear (Crescent iLending, basis member_page_silent: the "
-        "member says PIK, the printed row prints no rate at all). Mismatch: 8 of 10 real: pik_rate holds the floor "
-        "(MidCap KLO 1.00 and HomeRenew 2.50 for 'SOFR+650 PIK, 2.50% Floor'; AB Single Digits 1.00), the spread "
-        "(Blue Owl Kaseya 6.25 for '6.25% (2.50% PIK)') or the all-in coupon (Ares PRG 12.88 for '12.88% (3.13% "
-        "PIK)'); 2 unclear (Crescent BioAgilytix 0.75 vs 2.75, AB American Physician 3.5 vs 3.0). Tags rounded to "
-        "one decimal are their own kind, pik_value_rounding (3 rows)."),
+        "Printed on the row, not published: 10 of 10 real (MidCap KLO 'SOFR+500 PIK', Ares WorkWave '10.90% PIK', "
+        "Crescent 'including 50 PIK', HPS VetCor '14.75% PIK', Sixth Street Volante '16.50% PIK'). Mismatch: 10 of 10 "
+        "real by the review's standard: pik_rate holds the all-in coupon (Ares '11.95% (3.50% PIK)' published 11.95, "
+        "7 rows) or the spread (Blue Owl Kaseya 6.25, Barings Marmoutier 5.75 for '5.75%, 6.7% PIK'). Member-only "
+        "(weaker): mixed, as expected; Goldman Sachs BDC Gainsight 'S + 6.75 PIK' has no printed row to check, "
+        "Crescent Lighthouse and iLending print no PIK on the row."),
     "industry_not_published": (
-        "10 of 10 are funded rows with no published industry. New Mountain (Guardian IV, Private Credit, NMF SLF) "
-        "and Stone Point print the heading on the page and the build does not read it; HPS rows print no industry "
-        "on the row and the GICS name cache has no entry. All are real gaps in the field; whether a gap is an "
-        "error to fix or a coverage limit is the owner's call."),
+        "10 of 10 are funded rows with no published industry. Carlyle prints 'Construction & Building' on the row; "
+        "New Mountain prints the industry cell under each company; HPS prints industry as section headings (the "
+        "review's correction). Fillable gaps, not coverage limits. Blackstone Private Real Estate Credit is now "
+        "exempt with evidence."),
     "preferred_published_as_common": (
-        "rate_on_common (399 of 546) is mostly not evidence of preferred: of its 10 samples 9 are units the filer "
-        "does not call preferred but which carry a PIK or fixed dividend (Ares 'Class A units 8.00% PIK', Monroe "
-        "NationsBenefits 'Series B units 5.00% PIK', Sixth Street 'Class AA Units 20.00%', Ares CFC 'Loan "
-        "instrument units 9.75% PIK'); outside the sample BCRED Port Arthur LNG 'Class B Units 7.60% PIK' (1,079M) "
-        "is the same shape. 1 is a loan published as common equity (HPS DCA Acquisition '13.13% PIK', maturity "
-        "12/28/2032; HPS Foundation Automotive 'SF + 7.75% PIK' is another), a real class error but not a preferred "
-        "one. The text "
-        "kinds are stronger: 10 of 10 text samples read as preferred published as common (9 AB Private Credit "
-        "venture rows filed under 'U.S. Preferred Stock', Series C-1 to G; Golub Eclipse 'Preferred stock'), but "
-        "the sample is 90 pct one fund. Outside it: Ares McLaren 'Senior preference shares', Blue Owl Metis "
-        "'Series A Convertible Preferred Stock'. rate_on_common needs an owner ruling on PIK-dividend units first."),
+        "9 of 10 real: the filer says preferred or preference and the build publishes common (Ares McLaren 'Senior "
+        "preference shares', Blue Owl PCF 'Series A Preferred Units', North Haven Vardiman 'Preferred Equity', AB "
+        "venture rows under 'U.S. Preferred Stock'). 1 unclear: AB Avant 'Class A Units' listed under the filer's "
+        "'U.S. Preferred Stock' heading (the review's Swyft shape). AB is 101 of the 147 rows."),
+}
+
+
+# The first measurement (commit 6751318, 2026-10-17, 51 funds), before the 2026-10-18 review fixes
+# (D-207): rows, fund-quarters, funds, FV flagged in millions.
+OLD_TOTALS = {
+    "issuer_name_differs_from_page": (6537, 370, 48, 217529.3),
+    "unit_count_differs_from_row_text": (459, 140, 27, 5981.8),
+    "pik_printed_not_published": (245, 88, 22, 3271.5),
+    "industry_not_published": (4676, 57, 13, 40291.7),
+    "preferred_published_as_common": (546, 122, 18, 5861.4),
+}
+# The kinds the review (docs/investigations/v05_rule_candidates_falsealarm_2026-10-18.md) and the
+# owner (D-207) treat as findings. Everything else a rule emits is weaker evidence, reported apart.
+FINDING_KINDS = {
+    "issuer_name_differs_from_page": None,  # all kinds
+    "unit_count_differs_from_row_text": {"proxy_count_not_on_row", "labelled_count_differs", "labelled_count_not_published"},
+    "pik_printed_not_published": {"pik_printed_not_published", "pik_value_mismatch"},
+    "industry_not_published": None,
+    "preferred_published_as_common": None,
 }
 
 
@@ -163,7 +174,7 @@ def main(argv=None) -> int:
     main_dir: Path = args.main
     registry = json.loads((main_dir / "docs/investigations/v05_readings/accepted_sandboxes.json").read_text(encoding="utf-8"))
     wanted = {c.strip().zfill(10) for c in args.ciks.split(",") if c.strip()}
-    flagged, coverage, funds = [], [], []
+    flagged, coverage, funds, blind = [], [], [], []
     for cik, entry in registry.items():
         if wanted and cik not in wanted:
             continue
@@ -181,6 +192,10 @@ def main(argv=None) -> int:
         print("%s %-6s rows=%d on_page=%d" % (cik, label, n_rows, n_printed), flush=True)
         for rule_name, rule in cr.RULES.items():
             df = rule(con)
+            if "blind_spots" in df.attrs:
+                spots = df.attrs["blind_spots"].copy()
+                spots["fund"] = name
+                blind.append(spots)
             if not df.empty:
                 df["label"] = label
                 df["fund"] = name
@@ -216,8 +231,10 @@ def main(argv=None) -> int:
         trimmed[col] = trimmed[col].astype("string").str.slice(0, 300)
     trimmed.sort_values(["rule", "cik", "report_date", "row_id"]).to_csv(docs / f"{STEM}_rows.csv", index=False)
     cov.to_csv(docs / f"{STEM}_industry_coverage.csv", index=False)
+    blindf = pd.concat(blind, ignore_index=True)
+    blindf.to_csv(docs / f"{STEM}_rule1_blind_spots.csv", index=False)
 
-    write_report(docs / f"{STEM}.md", rows, summ, cov, fundf, main_dir)
+    write_report(docs / f"{STEM}.md", rows, summ, cov, fundf, main_dir, blindf)
     print("wrote", docs / f"{STEM}.md")
     return 0
 
@@ -235,9 +252,19 @@ def _sample(df: pd.DataFrame, k: int, rng: random.Random) -> pd.DataFrame:
     return df.iloc[sorted(rng.sample(range(len(df)), k))]
 
 
-def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path) -> None:
+def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path, blindf: pd.DataFrame) -> None:
     L = []
-    L.append("# v0.5 candidate rules, measured on the accepted sandboxes (2026-10-17)")
+    L.append("# v0.5 candidate rules, measured on the accepted sandboxes (2026-10-17, revised 2026-10-18)")
+    L.append("")
+    L.append("Revision 2026-10-18: the rules were changed after the independent false-alarm review "
+             "(`v05_rule_candidates_falsealarm_2026-10-18.md`) and the owner's rulings (D-207): rule 1 passes a name "
+             "printed as a name elsewhere in the filing and a trailing legal-form difference, and raises no page flags "
+             "in a fund-quarter that is %d pct or more untested (blind-spot table below); rule 2 strips the issuer name, "
+             "passes a count printed on the row, and reports exact x1000 cases as `units_scale_unclear`; rule 3 raises "
+             "on the printed row only (member text alone is `pik_member_text_only`) and passes a tag rounded to fewer "
+             "decimals; rule 4 finds below %.2f, warns below %.2f, and exempts funds whose filings print no industry; "
+             "rule 5 keeps the text kinds only. Counts below are this run; the first run's are beside them." % (
+                 round(100 * cr.NAME_BLIND_LIMIT), cr.INDUSTRY_COVERAGE_THRESHOLD, cr.INDUSTRY_COVERAGE_WARNING))
     L.append("")
     L.append("Owner, 2026-10-17: \"do it\" -- build the five candidate rules and measure them; do NOT switch them on. "
              "Code: `pipeline/candidate_rules.py` (not imported by the build, ledger, shadow engines, quarter pass or gate). "
@@ -245,7 +272,8 @@ def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path) -> None:
              "`docs/investigations/v05_readings/accepted_sandboxes.json`, published basis (no `underlying_schedule` rows). "
              "Page access: `printed_row` from that sandbox's `bdc_ixbrl_field_status` (current period, member printed once).")
     L.append("")
-    L.append("Files: `%s.csv` (rule x fund), `%s_rows.csv` (every flagged row), `%s_industry_coverage.csv` (rule 4)." % (STEM, STEM, STEM))
+    L.append("Files: `%s.csv` (rule x fund), `%s_rows.csv` (every flagged row), `%s_industry_coverage.csv` (rule 4, "
+             "with level), `%s_rule1_blind_spots.csv` (rule 1, per fund-quarter)." % (STEM, STEM, STEM, STEM))
     L.append("")
     tot_rows, tot_page = int(fundf["rows"].sum()), int(fundf["rows_on_page"].sum())
     L.append("Funds measured: %d; published rows: %d; rows whose printed row is known: %d (%.1f pct). Funds where "
@@ -258,15 +286,22 @@ def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path) -> None:
     L.append("")
     L.append("## Totals")
     L.append("")
-    L.append("| rule | rows | fund-quarters | funds | FV flagged (M) | rows on page basis | kinds |")
-    L.append("|---|---:|---:|---:|---:|---:|---|")
+    L.append("Findings are the kinds the review and D-207 treat as errors; weaker kinds (`units_scale_unclear`, "
+             "`pik_member_text_only`) are counted apart. Old = commit 6751318 (51 funds, all kinds then emitted).")
+    L.append("")
+    L.append("| rule | old rows | new rows (findings) | weaker kinds | old FQ | new FQ | old funds | new funds | old FV (M) | new FV (M) | kinds |")
+    L.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|")
     rng = random.Random(SEED)
     for rule in cr.RULES:
         g = rows[rows["rule"] == rule]
-        fq = g[["cik", "report_date"]].drop_duplicates().shape[0]
+        keep = FINDING_KINDS[rule]
+        f = g if keep is None else g[g["kind"].isin(keep)]
+        weak = len(g) - len(f)
+        fq = f[["cik", "report_date"]].drop_duplicates().shape[0]
         kinds = "; ".join("%s:%d" % (k, v) for k, v in g["kind"].value_counts().items())
-        L.append("| %s | %d | %d | %d | %.1f | %d | %s |" % (rule, len(g), fq, g["cik"].nunique(),
-                                                           g["fair_value"].fillna(0).sum() / 1e6, (g["basis"] == "page").sum(), kinds))
+        o = OLD_TOTALS[rule]
+        L.append("| %s | %d | %d | %d | %d | %d | %d | %d | %.1f | %.1f | %s |" % (
+            rule, o[0], len(f), weak, o[1], fq, o[2], f["cik"].nunique(), o[3], f["fair_value"].fillna(0).sum() / 1e6, kinds))
     L.append("")
     for rule in cr.RULES:
         g = rows[rows["rule"] == rule]
@@ -276,6 +311,8 @@ def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path) -> None:
         L.append("")
         if rule == "industry_not_published":
             _industry_section(L, cov)
+        if rule == "issuer_name_differs_from_page":
+            _blind_section(L, blindf)
         s = summ[summ["rule"] == rule].sort_values("fv_flagged_m", ascending=False)
         L.append("Per fund (flagged funds only):")
         L.append("")
@@ -288,12 +325,13 @@ def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path) -> None:
         groups = [("", g)]
         if rule == "pik_printed_not_published":
             groups = [(" (kind pik_printed_not_published)", g[g["kind"] == "pik_printed_not_published"]),
-                      (" (kind pik_value_mismatch, reported separately)", g[g["kind"] == "pik_value_mismatch"])]
-        if rule == "preferred_published_as_common":
-            groups = [(" (text kinds: text_says_preferred, text_and_rate)", g[g["kind"] != "rate_on_common"]),
-                      (" (kind rate_on_common)", g[g["kind"] == "rate_on_common"])]
+                      (" (kind pik_value_mismatch, reported separately)", g[g["kind"] == "pik_value_mismatch"]),
+                      (" (weaker kind pik_member_text_only)", g[g["kind"] == "pik_member_text_only"])]
+        if rule == "unit_count_differs_from_row_text":
+            groups = [(" (finding kinds)", g[g["kind"] != "units_scale_unclear"]),
+                      (" (weaker kind units_scale_unclear)", g[g["kind"] == "units_scale_unclear"])]
         if rule in READS:
-            L.append("**Read of the samples below (agent, 2026-10-17; not a disposition).** " + READS[rule])
+            L.append("**Read of the samples below (agent; not a disposition).** " + READS[rule])
             L.append("")
         for title, gg in groups:
             if gg.empty:
@@ -313,7 +351,41 @@ def write_report(path: Path, rows, summ, cov, fundf, main_dir: Path) -> None:
     path.write_text("\n".join(L) + "\n", encoding="utf-8")
 
 
+def _blind_section(L, b: pd.DataFrame) -> None:
+    rows, nb = int(b["n_rows"].sum()), int((b["n_no_printed_row"] + b["n_no_name_cell"]).sum())
+    sup = b[b["page_test_suppressed"]]
+    L.append("**Blind spots (part of the rule's result).** Of %d published rows with an issuer name, %d (%.1f pct) "
+             "could not be tested on the page (%d with no printed row, %d with a printed row but no name cell). "
+             "%d fund-quarters are %d pct or more untested and raise no page-basis flags (shape flags still run). "
+             "A clean rule-1 result there means 'not looked at'. Funds with the most untested fund-quarters:" % (
+                 rows, nb, 100.0 * nb / max(rows, 1), int(b["n_no_printed_row"].sum()), int(b["n_no_name_cell"].sum()),
+                 len(sup), round(100 * cr.NAME_BLIND_LIMIT)))
+    L.append("")
+    g = b.groupby(["cik", "fund"]).agg(fq=("report_date", "count"), suppressed=("page_test_suppressed", "sum"),
+                                       rows=("n_rows", "sum"), blind_rows=("n_no_name_cell", "sum"),
+                                       no_row=("n_no_printed_row", "sum")).reset_index()
+    g["blind_share"] = (g["blind_rows"] + g["no_row"]) / g["rows"]
+    L.append("| cik | fund | fund-quarters | suppressed | blind share (rows) |")
+    L.append("|---|---|---:|---:|---:|")
+    for r in g.sort_values(["suppressed", "blind_share"], ascending=False).head(15).itertuples():
+        L.append("| %s | %s | %d | %d | %.2f |" % (r.cik, _fmt(r.fund, 45), r.fq, r.suppressed, r.blind_share))
+    L.append("")
+
+
 def _industry_section(L, cov: pd.DataFrame) -> None:
+    lv = cov["level"].value_counts().to_dict()
+    L.append("Levels (D-207: finding below %.2f, warning below %.2f): %s." % (
+        cr.INDUSTRY_COVERAGE_THRESHOLD, cr.INDUSTRY_COVERAGE_WARNING,
+        ", ".join("%s %d" % (k, lv.get(k, 0)) for k in ("finding", "warning", "ok", "too_few_rows", "exempt"))))
+    L.append("")
+    for cik, ex in cr.INDUSTRY_EXEMPTIONS.items():
+        L.append("Exempt: %s %s (checked %s). Evidence: %s" % (cik, ex["fund"], ex["checked_on"], ex["evidence"]))
+        L.append("")
+    w = cov[cov["level"] == "warning"].sort_values("gics_coverage")
+    if not w.empty:
+        L.append("Warning fund-quarters (no rows raised): " + "; ".join(
+            "%s %s %.3f" % (_fmt(r.fund, 30), r.report_date, r.gics_coverage) for r in w.itertuples()) + ".")
+        L.append("")
     c = cov[cov["n_funded"] >= cr.INDUSTRY_MIN_ROWS]
     L.append("Coverage distribution, fund-quarters with %d+ funded rows (n = %d of %d):" % (
         cr.INDUSTRY_MIN_ROWS, len(c), len(cov)))
@@ -325,7 +397,8 @@ def _industry_section(L, cov: pd.DataFrame) -> None:
     q = c["gics_coverage"].quantile([0.05, 0.1, 0.25, 0.5]).round(3).to_dict()
     L.append("")
     L.append("gics_sub_industry coverage percentiles: p05 %.3f, p10 %.3f, p25 %.3f, median %.3f. Threshold used for the "
-             "flagged rows below: %.2f (proposed; see the reply)." % (q[0.05], q[0.1], q[0.25], q[0.5], cr.INDUSTRY_COVERAGE_THRESHOLD))
+             "flagged rows below: %.2f (owner ruling D-207). The distribution includes exempt funds." % (
+                 q[0.05], q[0.1], q[0.25], q[0.5], cr.INDUSTRY_COVERAGE_THRESHOLD))
     L.append("")
     low = c.sort_values("gics_coverage").head(15)
     L.append("Lowest 15 fund-quarters:")

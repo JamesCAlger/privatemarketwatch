@@ -196,17 +196,42 @@ def test_pik_printed_not_published_flags():
         {"row_id": "b", "pik_rate": 0.0, "printed_row": "Acme | Unsecured Debt | 1250 PIK | 12.50% | 05/2029 | 1,000"},
     ])
     figs = dict(zip(out["row_id"], out["printed"]))
-    assert set(out["kind"]) == {"pik_printed_not_published"}
+    kinds = dict(zip(out["row_id"], out["kind"]))
+    # D-207: the member-only Lighthouse row is the weaker kind; the printed rows raise
+    assert kinds == {"l": "pik_member_text_only", "s": "pik_printed_not_published", "b": "pik_printed_not_published"}
     assert figs == {"l": "0.75", "s": "15.28", "b": "12.5"}
 
 
 def test_pik_value_mismatch_flags():
     out = _run(cr.pik_printed_not_published, [
         {"row_id": "m", "pik_rate": 2.5, "printed_row": "Acme | First lien | S + 6.25% (incl. 5.25% PIK) | 10.07% | 02/28/2030"},
-        # North Haven Cyara: tag 2.2 for the printed 2.25
+        # MidCap HomeRenew: pik_rate holds the floor
+        {"row_id": "h", "pik_rate": 2.5, "printed_row": "HomeRenew Buyer, Inc. | First Lien Secured Debt - Term Loan | "
+                                                          "SOFR+650 PIK, 2.50% Floor | 04/14/30 | 3,192 | 3,192 | 3,192"},
+        # North Haven Cyara: tag 2.2 for the printed 2.25 -- rounded to fewer decimals, passes
         {"row_id": "r", "pik_rate": 2.2, "printed_row": "Cyara AcquisitionCo, LLC | First Lien Debt | S + | 6.25% (incl. 2.25% PIK) | 9.75"},
+        # Antares Vertex: 3.8 for the printed 3.83 (labelled false alarm)
+        {"row_id": "v", "pik_rate": 3.8, "printed_row": "Vertex Service Partners, LLC | (7)(13)(15)(17) | First Lien Delayed Draw "
+                                                          "Term Loan | S + 5.25% | 8.90% (Incl. 3.83% PIK) | 11/8/2030 | 1,502"},
     ])
-    assert dict(zip(out["row_id"], out["kind"])) == {"m": "pik_value_mismatch", "r": "pik_value_rounding"}
+    assert dict(zip(out["row_id"], out["kind"])) == {"m": "pik_value_mismatch", "h": "pik_value_mismatch"}
+
+
+def test_pik_raised_on_the_page_only():
+    out = _run(cr.pik_printed_not_published, [
+        # HPS Foundation Automotive: printed on the row, not published -> raised on the page
+        {"row_id": "fa", "pik_rate": None,
+         "printed_row": "Foundation Automotive US Corp (4)(7)(18) | SF + | 7.75% PIK | 12/24/2027 | 18,779 | 18,571 | 10,095"},
+        # Diameter BVI (labelled false alarm): member '(5.00% PIK)', the DDTL row prints no PIK
+        {"row_id": "bvi", "pik_rate": None, "bdc_investment_identifier": "BVI Medical, Inc., Delayed Draw Term Loan (5.00% PIK)",
+         "printed_row": "BVI Medical, Inc. | Delayed Draw Term Loan | S + 5.00% | 9.50% | 06/2031 | 2,000 | 1,931"},
+        # AB American Physician (labelled false alarm): member 3.00% PIK, page 3.50% PIK = published
+        {"row_id": "app", "pik_rate": 3.5,
+         "bdc_investment_identifier": "US Corporate Debt | American Physician Partners, LLC | Delayed Draw Term Loan | (S + 6.75%; 1.00% Floor; 3.00% PIK)",
+         "printed_row": "American Physician Partners, LLC | Healthcare | Delayed Draw Term Loan | (S + 6.75%; 1.00% Floor; 3.50% PIK) | 3/31/2026"},
+    ])
+    got = {r.row_id: (r.kind, r.basis) for r in out.itertuples()}
+    assert got == {"fa": ("pik_printed_not_published", "page"), "bvi": ("pik_member_text_only", "member_page_silent")}
 
 
 def test_pik_guards():
@@ -276,7 +301,22 @@ def test_preferred_as_common_flags():
          "issuer_name": "GT Polaris Holdings, Inc", "printed_row": "GT Polaris Holdings, Inc | Equity | 12.50 % | 6/6/2022 | 10,618,747"},
     ])
     kinds = dict(zip(out["row_id"], out["kind"]))
-    assert kinds == {"bm": "text_says_preferred", "lng": "text_and_rate", "gt": "rate_on_common"}
+    # D-207: a rate alone on a common row ('GT Polaris Equity 12.50 %') is no longer a flag
+    assert kinds == {"bm": "text_says_preferred", "lng": "text_and_rate"}
+
+
+def test_preferred_rate_only_units_are_not_flagged():
+    # Ares 'Class A units 8.00% PIK': the filer does not call them preferred (owner ruling D-207)
+    out = _run(cr.preferred_published_as_common, [
+        {"row_id": "pt", "asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY", "pik_rate": 8.0,
+         "issuer_name": "PracticeTek Purchaser, LLC", "instrument_description": "Class A units",
+         "printed_row": "Class A units | 8.00% PIK | 03/2021 | 33,220,282 | 23.5 | 34.3 | (2)"},
+        # ... while the filer's own 'Senior preference shares' with a rate still flags
+        {"row_id": "mc", "asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY", "pik_rate": 12.5,
+         "issuer_name": "McLaren Group Limited",
+         "printed_row": "McLaren Group Limited | Automobile manufacturer and retailer | Senior preference shares | 12.50% PIK | 08/2021"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"mc": "text_and_rate"}
 
 
 def test_preferred_as_common_guards():
@@ -311,7 +351,118 @@ def test_nothing_in_the_build_imports_candidate_rules():
     repo = pathlib.Path(__file__).resolve().parents[1]
     imports = re.compile(r"(?m)^\s*(from\s+pipeline(\.candidate_rules|\s+import\s+[^\n]*\bcandidate_rules\b)"
                          r"|import\s+pipeline\.candidate_rules)")
+    # read-only evidence scripts (scripts/v05_evidence/, e.g. the measurement and review scripts) may import it
     users = [p for root in ("pipeline", "scripts") for p in (repo / root).rglob("*.py")
              if imports.search(p.read_text(encoding="utf-8", errors="ignore"))
-             and p.name not in ("candidate_rules.py", "measure_candidate_rules.py")]
+             and p.name != "candidate_rules.py" and "v05_evidence" not in p.parts]
     assert users == [], users
+
+
+# ---------------------------------------------------------------- 2026-10-18 review fixes (D-207)
+
+def test_issuer_name_printed_elsewhere_in_the_filing_passes():
+    out = _run(cr.issuer_name_differs_from_page, [
+        # Antares 2026-03-31 (labelled false alarm): this row prints 'ClearCapital', a sibling row 'Clear Capital'
+        {"row_id": "cc1", "issuer_name": "Clear Capital Holdings, LLC",
+         "printed_row": "ClearCapital Holdings, LLC | (7)(13) | First Lien Revolver | S + 5.00% | 1,000"},
+        {"row_id": "cc2", "issuer_name": "Clear Capital Holdings, LLC",
+         "printed_row": "Clear Capital Holdings, LLC | (7)(13) | First Lien Term Loan | S + 5.00% | 9,000"},
+        # Apollo group prefix: the legal name printed elsewhere does not rescue the glued name
+        {"row_id": "gn1", "issuer_name": "Gannett Gannett Holdings, LLC",
+         "printed_row": "Gannett Holdings, LLC | First Lien Secured Debt - Term Loan | S+511, 0.50% Floor | 44,195"},
+        {"row_id": "gn2", "issuer_name": "Gannett Holdings, LLC",
+         "printed_row": "Gannett Holdings, LLC | First Lien Secured Debt - Revolver | S+511, 0.50% Floor | 1,000"},
+    ])
+    assert _ids(out) == {"gn1"}
+
+
+def test_issuer_trailing_legal_form_difference_passes():
+    out = _run(cr.issuer_name_differs_from_page, [
+        # Bain (labelled false alarm): member adds 'LLC', the page prints 'IMA Financial Group (14)'
+        {"row_id": "ima", "issuer_name": "IMA Financial Group LLC",
+         "printed_row": "IMA Financial Group (14) | First Lien Senior Secured Loan | S + 3.00% | 2,988"},
+        {"row_id": "inc", "issuer_name": "Kele Holdco Inc",
+         "printed_row": "Kele Holdco, Inc. | First Lien | S + 4.50% | 1,355"},
+        # MSD (labelled real): a member typo is not a legal-form difference
+        {"row_id": "msd", "issuer_name": "USA Debunk, LLC",
+         "printed_row": "USA Debusk, LLC | First Lien Term Loan | S + 5.50% | 10,000"},
+    ])
+    assert _ids(out) == {"msd"}
+
+
+def test_issuer_page_flags_suppressed_in_a_blind_fund_quarter():
+    # NMF SLF I (labelled false alarms): the company sits on its own row, so nearly every instrument
+    # row has no name cell; the one with an industry first cell leaks through unless suppressed
+    blind = [{"row_id": f"b{i}", "report_date": "2024-09-30", "issuer_name": "Sierra Enterprises, LLC",
+              "printed_row": "First Lien | SOFR(Q) | 5.00% | 9.60% | 1,000"} for i in range(9)]
+    leak = {"row_id": "leak", "report_date": "2024-09-30", "issuer_name": "Sierra Enterprises, LLC",
+            "printed_row": "Food & Beverage | First Lien | SOFR(Q) | 5.00% | 9.60% | 25,646"}
+    shape = {"row_id": "shape", "report_date": "2024-09-30", "issuer_name": "Debt Investments Capital Markets Cliffwater, LLC"}
+    # the same leak in a fund-quarter the page test can see is raised
+    seen = [{"row_id": "seen", "report_date": "2024-12-31", "issuer_name": "Sierra Enterprises, LLC",
+             "printed_row": "Food & Beverage | First Lien | SOFR(Q) | 5.00% | 9.60% | 25,646"},
+            {"row_id": "ok", "report_date": "2024-12-31", "issuer_name": "Coyote Buyer, LLC",
+             "printed_row": "Coyote Buyer, LLC | First Lien | SOFR(Q) | 5.00% | 9.60% | 1,000"}]
+    out = _run(cr.issuer_name_differs_from_page, blind + [leak, shape] + seen)
+    assert _ids(out) == {"shape", "seen"}  # shape-basis flags are not suppressed
+    spots = out.attrs["blind_spots"].set_index("report_date")
+    assert bool(spots.loc["2024-09-30", "page_test_suppressed"])
+    assert (spots.loc["2024-09-30", "n_no_name_cell"], spots.loc["2024-09-30", "n_no_printed_row"]) == (9, 1)
+    assert not bool(spots.loc["2024-12-31", "page_test_suppressed"])
+
+
+def test_units_issuer_name_digit_and_printed_count_pass():
+    out = _run(cr.unit_count_differs_from_row_text, [
+        # Diameter (labelled false alarm): 'Holdings 1 LLC Class B Interests' is not a count of 1
+        {"row_id": "vci", "asset_category": "EQUITY_COMMON", "shares_held": 1237, "issuer_name": "VCI Asset Holdings 1 LLC",
+         "bdc_investment_identifier": "VCI Asset Holdings 1 LLC Class B Interests",
+         "printed_row": "VCI Asset Holdings 1 LLC | Class B Interests | 1,237 | 1,250 | 1,273"},
+        # Ares PFL (labelled false alarm): member 'up to 3,280,444 shares', page and published 3,223,122
+        {"row_id": "pfl", "asset_category": "EQUITY_COMMON", "shares_held": 3223122,
+         "issuer_name": "Professional Fighters League, LLC and PFL MMA, Inc.",
+         "bdc_investment_identifier": "Professional Fighters League, LLC and PFL MMA, Inc., Warrant to purchase up to 3,280,444 shares of Series E preferred stock",
+         "printed_row": "Warrant to purchase up to 3,223,122 shares of Series E preferred stock | 01/2021 | 3,223,122 | 0.4 | 0.8"},
+        # a real labelled count still flags with a digit in the name
+        {"row_id": "h2", "asset_category": "EQUITY_COMMON", "shares_held": 700, "issuer_name": "Acme Holdings 2 LLC",
+         "printed_row": "Acme Holdings 2 LLC (5,000 units) | 03/2022 | 500 | 650"},
+        # BCRED Point Broadband (labelled real): Class B carries Class A's count
+        {"row_id": "pb", "asset_category": "EQUITY_COMMON", "shares_held": 15636, "shares_held_source": "derived_proxy",
+         "issuer_name": "Point Broadband Holdings, LLC",
+         "printed_row": "Point Broadband Holdings, LLC - Class B Common Units | (4) | 10/1/2021 | 685,760 | 1,955 | 2,482 | 0.01"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"h2": "labelled_count_differs", "pb": "proxy_count_not_on_row"}
+
+
+def test_units_scale_unclear_is_its_own_kind():
+    out = _run(cr.unit_count_differs_from_row_text, [
+        # HPS Wash & Wax (labelled unclear): 'Par Amount/Units' 6,312, published 6,312,000
+        {"row_id": "ww", "asset_category": "EQUITY_COMMON", "shares_held": 6312000, "shares_held_source": "derived_proxy",
+         "issuer_name": "Wash & Wax Group LP", "printed_row": "Wash & Wax Group LP (4)(20)(22) | 6,312 | 8,547 | 6,991"},
+        # Crescent Iris (labelled real): 577 for the printed 576,923 is not a units-scale question
+        {"row_id": "ir", "asset_category": "EQUITY_COMMON", "shares_held": 577, "shares_held_source": "derived_proxy",
+         "issuer_name": "Iris Buyer, LLC", "printed_row": "Iris Buyer, LLC | Common Stock | 576,923 | - | 0.0 | 56"},
+        # Barings Xeinadin: the row labels the count, so x1000 is an error, not a scale question
+        {"row_id": "xe", "asset_category": "EQUITY_COMMON", "shares_held": 36532680, "shares_held_source": "derived_proxy",
+         "issuer_name": "Xeinadin Bidco Limited", "printed_row": "Common Stock (36,533 shares) | N/A | 05/22 | N/A | 452 | 431"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"ww": "units_scale_unclear", "ir": "proxy_count_not_on_row",
+                                                     "xe": "labelled_count_differs"}
+
+
+def test_industry_exemption_and_warning_level():
+    def rows(cik, n, missing, rd):
+        return [{"row_id": f"{cik}-{rd}-{i}", "cik": cik, "report_date": rd, "fair_value": 10.0, "asset_category": "LOAN",
+                 "gics_sub_industry": None if i < missing else "Application Software"} for i in range(n)]
+    data = (rows("0002049733", 30, 30, "2025-06-30")    # Blackstone Private Real Estate Credit: exempt
+            + rows("0000000009", 30, 30, "2025-06-30")  # the same gap elsewhere is a finding
+            + rows("0000000009", 30, 4, "2025-09-30"))  # 0.867: warning, no rows raised
+    con = duckdb.connect()
+    frame = pd.DataFrame(data)
+    frame["accession_number"] = "a"
+    cr.prepare(con, frame)
+    out = cr.industry_not_published(con)
+    assert set(out["cik"]) == {"0000000009"} and set(out["report_date"]) == {"2025-06-30"} and len(out) == 30
+    levels = {(r.cik, r.report_date): r.level for r in cr.industry_coverage(con).itertuples()}
+    assert levels == {("0000000009", "2025-06-30"): "finding", ("0000000009", "2025-09-30"): "warning",
+                      ("0002049733", "2025-06-30"): "exempt"}
+    assert cr.INDUSTRY_EXEMPTIONS["0002049733"]["evidence"]
