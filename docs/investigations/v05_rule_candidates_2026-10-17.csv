@@ -1,0 +1,118 @@
+rule,cik,fund,label,rows_flagged,fund_quarters_flagged,fv_flagged_m,rows_on_page_basis,kinds
+industry_not_published,0001634452,AB Private Credit Investors Corp,abxf,280,2,793.85,0,no_industry_at_all:280
+industry_not_published,0001702510,"Carlyle Credit Solutions, Inc.",ccxd,58,1,367.62,0,filer_industry_not_mapped:29; no_industry_at_all:29
+industry_not_published,0001742313,Monroe Capital Income Plus Corp,rg2,740,3,3625.8,0,no_industry_at_all:737; filer_industry_not_mapped:3
+industry_not_published,0001766037,"NMF SLF I, Inc.",nmyd,544,8,2152.26,0,no_industry_at_all:544
+industry_not_published,0001786108,Trinity Capital Inc.,tcxe,113,1,831.2,0,filer_industry_not_mapped:67; no_industry_at_all:46
+industry_not_published,0001825384,Stone Point Credit Corp,stxf,387,8,3312.92,0,no_industry_at_all:387
+industry_not_published,0001837532,Apollo Debt Solutions BDC,rg1b,156,1,6915.07,0,no_industry_at_all:156
+industry_not_published,0001838126,HPS Corporate Lending Fund,rg1b,634,5,8983.64,0,no_industry_at_all:634
+industry_not_published,0001925531,"New Mountain Guardian IV BDC, L.L.C.",ngxd,500,9,3085.52,0,no_industry_at_all:500
+industry_not_published,0001989817,HPS Corporate Capital Solutions Fund,hcxe,272,6,1823.19,0,no_industry_at_all:272
+industry_not_published,0002008748,Lord Abbett Private Credit Fund,layf,265,7,3813.64,0,no_industry_at_all:265
+industry_not_published,0002012139,Fortress Private Lending Fund,foxd,31,1,288.04,0,no_industry_at_all:31
+industry_not_published,0002037804,New Mountain Private Credit Fund,npxd,481,7,3272.19,0,no_industry_at_all:481
+issuer_name_differs_from_page,0001278752,MidCap Financial Investment Corp,mfxi,61,14,431.4,61,not_the_printed_name:53; spacing_only:8
+issuer_name_differs_from_page,0001287750,ARES CAPITAL CORP,rg1b,80,14,2978.7,74,not_the_printed_name:73; holds_category_path:6; spacing_only:1
+issuer_name_differs_from_page,0001508655,"Sixth Street Specialty Lending, Inc.",ssxf,38,7,133.97,38,not_the_printed_name:36; spacing_only:2
+issuer_name_differs_from_page,0001572694,"Goldman Sachs BDC, Inc.",gsxf,63,12,600.79,56,not_the_printed_name:52; begins_with_section_word:7; spacing_only:4
+issuer_name_differs_from_page,0001633336,"Crescent Capital BDC, Inc.",ccza,78,14,373.8,78,not_the_printed_name:63; spacing_only:15
+issuer_name_differs_from_page,0001634452,AB Private Credit Investors Corp,abxf,49,7,115.28,49,not_the_printed_name:37; spacing_only:12
+issuer_name_differs_from_page,0001702510,"Carlyle Credit Solutions, Inc.",ccxd,4,4,43.37,4,not_the_printed_name:4
+issuer_name_differs_from_page,0001742313,Monroe Capital Income Plus Corp,rg2,105,9,452.47,105,not_the_printed_name:76; spacing_only:29
+issuer_name_differs_from_page,0001772704,Goldman Sachs Private Middle Market Credit II LLC,gpyf,58,6,354.8,58,not_the_printed_name:58
+issuer_name_differs_from_page,0001786108,Trinity Capital Inc.,tcxe,5,5,14.96,5,not_the_printed_name:5
+issuer_name_differs_from_page,0001803498,Blackstone Private Credit Fund,rg1b,17,5,1695.11,17,not_the_printed_name:15; spacing_only:2
+issuer_name_differs_from_page,0001812554,Blue Owl Credit Income Corp.,rg1b,34,12,517.18,34,not_the_printed_name:34
+issuer_name_differs_from_page,0001825384,Stone Point Credit Corp,stxf,50,12,743.88,50,not_the_printed_name:46; spacing_only:4
+issuer_name_differs_from_page,0001837532,Apollo Debt Solutions BDC,rg1b,4177,14,183211.0,4176,not_the_printed_name:4174; spacing_only:2; begins_with_section_word:1
+issuer_name_differs_from_page,0001838126,HPS Corporate Lending Fund,rg1b,9,4,382.06,9,not_the_printed_name:9
+issuer_name_differs_from_page,0001849894,MSD Investment Corp.,rg2,2,2,66.8,2,not_the_printed_name:2
+issuer_name_differs_from_page,0001851322,North Haven Private Income Fund LLC,rg2,22,3,173.42,22,not_the_printed_name:22
+issuer_name_differs_from_page,0001859919,Barings Private Credit Corp,rg2,59,8,178.67,58,not_the_printed_name:54; spacing_only:4; begins_with_industry_label:1
+issuer_name_differs_from_page,0001869453,Blue Owl Technology Income Corp.,rg2,9,4,97.58,9,not_the_printed_name:9
+issuer_name_differs_from_page,0001872371,Oaktree Strategic Credit Fund,rg1b,83,6,986.29,72,not_the_printed_name:64; begins_with_section_word:11; spacing_only:8
+issuer_name_differs_from_page,0001885968,T Series BDC LLC,tsxd,9,4,15.99,9,not_the_printed_name:9
+issuer_name_differs_from_page,0001899017,Bain Capital Private Credit,bnxd,38,11,318.98,38,not_the_printed_name:34; spacing_only:4
+issuer_name_differs_from_page,0001899996,Fidelity Private Credit Co LLC,fcxe,2,1,40.94,2,not_the_printed_name:2
+issuer_name_differs_from_page,0001901164,T. Rowe Price OHA Select Private Credit Fund,trxd,11,5,94.24,11,not_the_printed_name:11
+issuer_name_differs_from_page,0001901612,"Golub Capital BDC 4, Inc.",g4xc,4,3,1.68,4,not_the_printed_name:4
+issuer_name_differs_from_page,0001902649,BlackRock Private Credit Fund,bpxh,60,14,117.68,60,not_the_printed_name:54; spacing_only:6
+issuer_name_differs_from_page,0001911066,Nuveen Churchill Private Capital Income Fund,ncxf,1,1,16.38,1,not_the_printed_name:1
+issuer_name_differs_from_page,0001913724,TPG Twin Brook Capital Income Fund,rg2,1,1,-0.05,1,not_the_printed_name:1
+issuer_name_differs_from_page,0001916099,Diameter Credit Co,dixc,12,8,170.45,12,not_the_printed_name:12
+issuer_name_differs_from_page,0001918712,ARES STRATEGIC INCOME FUND,rg1b,206,10,2807.88,206,not_the_printed_name:206
+issuer_name_differs_from_page,0001919369,VISTA CREDIT STRATEGIC LENDING CORP.,viya,8,5,294.06,8,not_the_printed_name:8
+issuer_name_differs_from_page,0001920145,Goldman Sachs Private Credit Corp.,rg1b,148,12,2139.19,147,not_the_printed_name:145; spacing_only:2; begins_with_section_word:1
+issuer_name_differs_from_page,0001920453,Fidelity Private Credit Fund,fpxg,33,11,150.04,33,not_the_printed_name:33
+issuer_name_differs_from_page,0001925309,Sixth Street Lending Partners,rg1b,122,14,8756.21,120,not_the_printed_name:113; spacing_only:7; begins_with_section_word:2
+issuer_name_differs_from_page,0001930087,Golub Capital Private Credit Fund,rg1b,31,9,185.91,31,not_the_printed_name:31
+issuer_name_differs_from_page,0001950803,Stepstone Private Credit Fund LLC,spxf,1,1,48.29,0,equals_industry_label:1
+issuer_name_differs_from_page,0001950976,"26North BDC, Inc.",tnxc,17,8,518.05,17,not_the_printed_name:15; spacing_only:2
+issuer_name_differs_from_page,0001959604,Jefferies Credit Partners BDC Inc.,jcxd,17,6,65.27,17,not_the_printed_name:17
+issuer_name_differs_from_page,0001965934,Overland Advantage,ovye,6,6,878.98,2,equals_industry_label:4; not_the_printed_name:2
+issuer_name_differs_from_page,0001975736,KKR FS Income Trust Select,ksxf,8,3,4.63,8,not_the_printed_name:8
+issuer_name_differs_from_page,0001976336,Antares Private Credit Fund,atxc,55,7,215.11,50,not_the_printed_name:50; begins_with_industry_label:4; equals_industry_label:1
+issuer_name_differs_from_page,0001989817,HPS Corporate Capital Solutions Fund,hcxe,6,4,99.39,6,not_the_printed_name:6
+issuer_name_differs_from_page,0001993402,Antares Strategic Credit Fund,rg2,127,9,437.36,122,not_the_printed_name:118; spacing_only:4; begins_with_industry_label:3; equals_industry_label:1; begins_with_section_word:1
+issuer_name_differs_from_page,0002008748,Lord Abbett Private Credit Fund,layf,2,1,0.69,0,equals_industry_label:2
+issuer_name_differs_from_page,0002012139,Fortress Private Lending Fund,foxd,3,2,18.46,3,not_the_printed_name:3
+issuer_name_differs_from_page,0002031750,Ares Core Infrastructure Fund,acxb,2,2,454.53,2,not_the_printed_name:2
+issuer_name_differs_from_page,0002037804,New Mountain Private Credit Fund,npxd,1,1,26.52,0,equals_industry_label:1
+pik_printed_not_published,0001278752,MidCap Financial Investment Corp,mfxi,24,10,90.1,24,pik_printed_not_published:20; pik_value_mismatch:4
+pik_printed_not_published,0001287750,ARES CAPITAL CORP,rg1b,65,14,2027.6,65,pik_printed_not_published:52; pik_value_mismatch:13
+pik_printed_not_published,0001508655,"Sixth Street Specialty Lending, Inc.",ssxf,1,1,1.77,1,pik_printed_not_published:1
+pik_printed_not_published,0001572694,"Goldman Sachs BDC, Inc.",gsxf,7,2,132.78,2,pik_member_text_only:5; pik_printed_not_published:2
+pik_printed_not_published,0001633336,"Crescent Capital BDC, Inc.",ccza,39,12,93.29,28,pik_printed_not_published:26; pik_member_text_only:11; pik_value_mismatch:2
+pik_printed_not_published,0001634452,AB Private Credit Investors Corp,abxf,7,3,2.99,3,pik_member_text_only:4; pik_value_mismatch:3
+pik_printed_not_published,0001702510,"Carlyle Credit Solutions, Inc.",ccxd,1,1,0.26,1,pik_printed_not_published:1
+pik_printed_not_published,0001803498,Blackstone Private Credit Fund,rg1b,5,5,92.5,5,pik_printed_not_published:5
+pik_printed_not_published,0001812554,Blue Owl Credit Income Corp.,rg1b,6,4,7.54,6,pik_value_mismatch:6
+pik_printed_not_published,0001837532,Apollo Debt Solutions BDC,rg1b,2,2,39.08,2,pik_printed_not_published:2
+pik_printed_not_published,0001838126,HPS Corporate Lending Fund,rg1b,36,9,224.81,36,pik_printed_not_published:36
+pik_printed_not_published,0001851322,North Haven Private Income Fund LLC,rg2,1,1,0.51,1,pik_printed_not_published:1
+pik_printed_not_published,0001859919,Barings Private Credit Corp,rg2,8,6,207.49,8,pik_printed_not_published:7; pik_value_mismatch:1
+pik_printed_not_published,0001899017,Bain Capital Private Credit,bnxd,1,1,1.59,1,pik_printed_not_published:1
+pik_printed_not_published,0001901164,T. Rowe Price OHA Select Private Credit Fund,trxd,10,3,83.34,10,pik_printed_not_published:10
+pik_printed_not_published,0001913724,TPG Twin Brook Capital Income Fund,rg2,2,1,0.15,2,pik_printed_not_published:2
+pik_printed_not_published,0001916099,Diameter Credit Co,dixc,1,1,1.93,0,pik_member_text_only:1
+pik_printed_not_published,0001918712,ARES STRATEGIC INCOME FUND,rg1b,15,4,198.52,15,pik_printed_not_published:15
+pik_printed_not_published,0001925309,Sixth Street Lending Partners,rg1b,1,1,2.6,1,pik_printed_not_published:1
+pik_printed_not_published,0001976336,Antares Private Credit Fund,atxc,1,1,2.78,1,pik_printed_not_published:1
+pik_printed_not_published,0001989817,HPS Corporate Capital Solutions Fund,hcxe,6,2,58.17,6,pik_printed_not_published:6
+pik_printed_not_published,0001993402,Antares Strategic Credit Fund,rg2,3,3,1.45,2,pik_printed_not_published:2; pik_member_text_only:1
+pik_printed_not_published,0002008748,Lord Abbett Private Credit Fund,layf,1,1,-0.05,1,pik_printed_not_published:1
+preferred_published_as_common,0001287750,ARES CAPITAL CORP,rg1b,3,3,79.7,3,text_and_rate:3
+preferred_published_as_common,0001508655,"Sixth Street Specialty Lending, Inc.",ssxf,9,7,49.57,9,text_says_preferred:9
+preferred_published_as_common,0001634452,AB Private Credit Investors Corp,abxf,101,14,46.22,1,preferred_heading_only:100; text_says_preferred:1
+preferred_published_as_common,0001803498,Blackstone Private Credit Fund,rg1b,3,2,78.16,3,text_says_preferred:3
+preferred_published_as_common,0001812554,Blue Owl Credit Income Corp.,rg1b,9,2,766.65,9,text_and_rate:9
+preferred_published_as_common,0001851322,North Haven Private Income Fund LLC,rg2,12,5,24.02,12,text_and_rate:9; text_says_preferred:3
+preferred_published_as_common,0001925309,Sixth Street Lending Partners,rg1b,7,7,374.17,6,text_says_preferred:7
+preferred_published_as_common,0001930087,Golub Capital Private Credit Fund,rg1b,3,3,10.83,0,text_and_rate:2; text_says_preferred:1
+unit_count_differs_from_row_text,0001278752,MidCap Financial Investment Corp,mfxi,8,7,31.52,8,labelled_count_differs:6; labelled_count_not_published:2
+unit_count_differs_from_row_text,0001287750,ARES CAPITAL CORP,rg1b,188,16,4418.7,186,proxy_count_not_on_row:186; labelled_count_not_published:2
+unit_count_differs_from_row_text,0001508655,"Sixth Street Specialty Lending, Inc.",ssxf,2,1,4.78,2,labelled_count_not_published:2
+unit_count_differs_from_row_text,0001633336,"Crescent Capital BDC, Inc.",ccza,33,14,59.96,33,proxy_count_not_on_row:33
+unit_count_differs_from_row_text,0001634452,AB Private Credit Investors Corp,abxf,13,10,1.08,13,proxy_count_not_on_row:13
+unit_count_differs_from_row_text,0001702510,"Carlyle Credit Solutions, Inc.",ccxd,3,3,8.52,3,proxy_count_not_on_row:3
+unit_count_differs_from_row_text,0001803498,Blackstone Private Credit Fund,rg1b,60,16,195.12,60,proxy_count_not_on_row:60
+unit_count_differs_from_row_text,0001812554,Blue Owl Credit Income Corp.,rg1b,45,14,1053.61,45,proxy_count_not_on_row:37; units_scale_unclear:8
+unit_count_differs_from_row_text,0001837532,Apollo Debt Solutions BDC,rg1b,11,8,0.6,11,labelled_count_not_published:7; labelled_count_differs:4
+unit_count_differs_from_row_text,0001838126,HPS Corporate Lending Fund,rg1b,25,9,55.31,25,units_scale_unclear:16; proxy_count_not_on_row:9
+unit_count_differs_from_row_text,0001849894,MSD Investment Corp.,rg2,1,1,27.6,1,proxy_count_not_on_row:1
+unit_count_differs_from_row_text,0001851322,North Haven Private Income Fund LLC,rg2,2,2,1.04,2,proxy_count_not_on_row:2
+unit_count_differs_from_row_text,0001859919,Barings Private Credit Corp,rg2,2,2,0.88,2,labelled_count_differs:2
+unit_count_differs_from_row_text,0001869453,Blue Owl Technology Income Corp.,rg2,1,1,14.73,1,units_scale_unclear:1
+unit_count_differs_from_row_text,0001872371,Oaktree Strategic Credit Fund,rg1b,4,2,6.68,4,proxy_count_not_on_row:4
+unit_count_differs_from_row_text,0001885968,T Series BDC LLC,tsxd,1,1,0.33,1,units_scale_unclear:1
+unit_count_differs_from_row_text,0001899017,Bain Capital Private Credit,bnxd,1,1,3.88,1,units_scale_unclear:1
+unit_count_differs_from_row_text,0001918712,ARES STRATEGIC INCOME FUND,rg1b,22,9,66.21,22,proxy_count_not_on_row:22
+unit_count_differs_from_row_text,0001919369,VISTA CREDIT STRATEGIC LENDING CORP.,viya,1,1,0.02,1,units_scale_unclear:1
+unit_count_differs_from_row_text,0001920145,Goldman Sachs Private Credit Corp.,rg1b,2,2,0.65,2,proxy_count_not_on_row:2
+unit_count_differs_from_row_text,0001925309,Sixth Street Lending Partners,rg1b,7,7,0.12,7,labelled_count_differs:7
+unit_count_differs_from_row_text,0001930087,Golub Capital Private Credit Fund,rg1b,7,3,6.16,7,proxy_count_not_on_row:4; units_scale_unclear:3
+unit_count_differs_from_row_text,0001950976,"26North BDC, Inc.",tnxc,3,3,1.12,3,units_scale_unclear:3
+unit_count_differs_from_row_text,0001976336,Antares Private Credit Fund,atxc,1,1,5.42,1,proxy_count_not_on_row:1
+unit_count_differs_from_row_text,0001989817,HPS Corporate Capital Solutions Fund,hcxe,1,1,0.97,1,proxy_count_not_on_row:1
+unit_count_differs_from_row_text,0001993402,Antares Strategic Credit Fund,rg2,6,3,10.36,6,proxy_count_not_on_row:6
