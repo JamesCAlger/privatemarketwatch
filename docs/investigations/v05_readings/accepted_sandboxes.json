@@ -288,5 +288,10 @@
   "label": "psmf",
   "accepted_on": "2026-10-19",
   "basis": "D-214, gate PASS with investigation COMPLETE: 68 findings, 31 outstanding, all proposed; 13/14 quarters tie (2026-06-30 Sonar AUD -3.84M declared exception, shared extractor); sample 0/20; six builds plus two in-place re-runs"
+ },
+ "0001954360": {
+  "label": "cpig",
+  "accepted_on": "2026-10-19",
+  "basis": "D-215, gate INCOMPLETE (X05 2026-06-30 parked: Tropolis coupon_type) with investigation COMPLETE: 73 findings, 50 outstanding, 49 proposed; 12/12 quarters tie; sample 2/20 fixed; six builds plus three re-runs"
  }
 }

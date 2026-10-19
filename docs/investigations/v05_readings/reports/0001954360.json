@@ -1,0 +1,3005 @@
+{
+ "cik": "0001954360",
+ "label": "cpig",
+ "before": "spon3",
+ "shared_code": false,
+ "investigator_id": "fund-agent-crescent-pci-2026-10-19",
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 1369,
+   "why": "wrapper issuer pattern names the filer's 'and' industry labels, equity, comma and scrambled members; 1,229 null names at spon3 filled; member-name corrections from printed lines; money-fund names"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 181,
+   "why": "wrapper instrument pattern and strip; money-fund rows 'Cash Equivalents'; Pushpay, Saarni, Olyos, Ineos (2024-06-30, member names no issuer) and Ancora 'Common Stock1' from printed lines"
+  },
+  {
+   "column": "fair_value",
+   "rows": 2,
+   "why": "MB2 2024-06-30 sign as printed (38); MPH 2024-06-30 back to the printed 831 (plug rule 05 pulled)"
+  },
+  {
+   "column": "cost",
+   "rows": 3,
+   "why": "Pinnacle 2024-06-30 3,575 printed; Ineos 2024-06-30 434 printed; Pushpay 2023-09-30 printed ( 12 )"
+  },
+  {
+   "column": "shares_held",
+   "rows": 41,
+   "why": "unit counts from the printed rows; shared share-count normaliser off for this fund"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 5,
+   "why": "Pinnacle 3,607 printed; Stubhub par printed and not tagged (3 quarters); Accession Risk 2024-06-30 printed ( 137 )"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 36,
+   "why": "currency from the printed marker (fx_scan.py): 29 dollar pars tagged CAD/GBP/EUR/AUD (Klick, Garda, Westjet, Froneri, money funds ...) and 7 euro pars tagged USD or CAD (Bach, Ion, TK Elevator, Saarni, Avidity)"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 41,
+   "why": "follows the printed currency (par itself for dollar pars, H.10 rate of the quarter for euro pars); Stubhub par; Pinnacle 3,607,000 and Accession -137,000 where the par correction had not reached it; WCT 2025-12-31 withdrawn with its par"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 39,
+   "why": "follows the printed currency; WCT 2025-12-31 withdrawn with its par"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 39,
+   "why": "follows the printed currency; WCT 2025-12-31 withdrawn with its par"
+  },
+  {
+   "column": "principal_amount_source",
+   "rows": 3,
+   "why": "Stubhub par declared"
+  },
+  {
+   "column": "src_facts",
+   "rows": 3,
+   "why": "declared Stubhub par recorded"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 30,
+   "why": "Tropolis revolver 2026-06-30 member-text spread withdrawn (page prints none); owner convention D-031: 28 rows 2024-03-31..2025-06-30 printed '(including|plus X PIK)' now cash + PIK margin; IVX 2024-09-30 'S + 0' withdrawn"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 41,
+   "why": "Tropolis revolver 2026-06-30 withdrawn; benchmark from the printed 'Interest Term *' column and legend; IVX 2024-09-30 withdrawn (fixed PIK coupon)"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 42,
+   "why": "follows reference_rate_type"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "IVX Health 2024-09-30 fixed PIK coupon as in its other quarters"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 6,
+   "why": "Iris Buyer 2024-03-31 member text 11.58, printed 11.56; member-text rates the page does not print withdrawn (Tropolis revolver 2026-06-30, two money funds 2023-12-31); Outcomes Group 2026-06-30 first and second lien rates published 100x small (0.0664, 0.10) set to printed 6.64 and 10.00"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 6,
+   "why": "follows interest_rate"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 3,
+   "why": "unresolved on the three rows whose rate was withdrawn"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 2,
+   "why": "IVX Health Merger Sub 2024-12-31 and 2025-12-31 printed 13.50"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 2,
+   "why": "follows the IVX PIK rate"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 34,
+   "why": "maturity from the printed line where the page prints another month than the tag (maturity_scan.py)"
+  },
+  {
+   "column": "maturity_precision",
+   "rows": 34,
+   "why": "month: the page prints month and year only (correction, D-209)"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 34,
+   "why": "follows maturity_precision (unresolved -> partial)"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 3,
+   "why": "share-count normaliser no longer applied"
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 3,
+   "why": "share-count normaliser no longer applied"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 153,
+   "why": "row corrections listed above"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 631,
+   "why": "filer industry from the member text"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 597,
+   "why": "mapped from the filer's printed industry"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 563,
+   "why": "follows gics_sub_industry"
+  },
+  {
+   "column": "position_key",
+   "rows": 5,
+   "why": "issuer names on the scrambled 2024-12-31 UK members"
+  },
+  {
+   "column": "position_id",
+   "rows": 1219,
+   "why": "chains re-formed on the new names, maturities and dollar pars (the matcher compares them)"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 3,
+   "why": "follows cost"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 2,
+   "why": "follows the MB2 and MPH fair values"
+  }
+ ],
+ "rows_added": 537,
+ "rows_removed": 1,
+ "fixes": [
+  {
+   "what": "Issuer and instrument patterns for this filer (hierarchy_issuer_re / instrument_re / condition): the shared Crescent label list holds '&' spellings; this filer writes 'and', the singular typos and more labels. Dry run on all 2,761 identifiers: 0 in-scope members left without an issuer. issuer_name_strip_re and instrument_description_strip_re cut glued footnote digits, trailing commas and rate text.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Klick Inc. (6) Unitranche First Lien Term Loan S + 500 , 75 Floor 8.66 % 11/2032 32,885 32,737 5.9 32,720"
+    },
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Sedgwick CMS Holdings, Inc. (7) Senior Secured First Lien Term Loan S + 375 9.08 % 02/2028 746 741 1.0 746"
+    }
+   ]
+  },
+  {
+   "what": "Industry from the member text (industry_from_identifier_re) plus industry_label_gics for the singular typos 'Financial Service' and 'Commercial and Professional Service'.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Klick Inc. (6) Unitranche First Lien Term Loan S + 500 , 75 Floor 8.66 % 11/2032 32,885 32,737 5.9 32,720"
+    }
+   ]
+  },
+  {
+   "what": "Reference rates from the printed 'Interest Term *' column with each filing's legend codes (P, E, SN, B, SR, C=CORRA, L).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Secured Overnight Financing Rate (SOFR or S), Prime (P), EURIBOR (E), SONIA (SN), BBSY ( B), SARON (SR) or CORRA (C)"
+    }
+   ]
+  },
+  {
+   "what": "Positions dropped as duplicates once names were blank restored by the name fix (Sedgwick and Medline 2023-09-30, Anchor Packaging 2024-03-31, Asurion 2025-06-30, Granicus, LTC Ally, Career Certified, Bristol Hospice, Medicus, National Mentor, USALCO lines); distinct_member_suffix_re keeps undrawn twins with different maturities apart (Online Labels, Medicus). Rule 02 (Anchor plug row) pulled.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Sedgwick CMS Holdings, Inc. (7) Senior Secured First Lien Term Loan S + 375 9.08 % 02/2028 746 741 1.0 746"
+    },
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Medline Industries (Mozart Borrower) (7) Senior Secured First Lien Term Loan S + 325 ( 50 Floor) 8.58 % 10/2028 746 735 1.0 745"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Materials Anchor Packaging LLC (7) Senior Secured First Lien Term Loan S + 350 8.93 % 07/2026 744 741 0.5 745"
+    },
+    {
+     "accession": "0001193125-25-180767",
+     "text": "Asurion, LLC (7) Senior Secured First Lien Term Loan S + 425 8.58 % 08/2028 2,294 2,257 0.9 2,273"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2025 - ( 1 ) - -"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Medicus IT (4)(5) Unitranche First Lien Delayed Draw Term Loan 07/2031 - ( 11 ) - -"
+    }
+   ]
+  },
+  {
+   "what": "Plug rule 05 (MPH 930) pulled: printed 831. The 99 is the MB2 delayed draw tagged -38 printed 38 (row correction) plus a second MB2 line with no context (parked, 23).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MPH Acquisition (7) Senior Secured First Lien Term Loan S + 425 ( 50 Floor) 9.86 % 09/2028 995 968 0.5 831"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ]
+  },
+  {
+   "what": "Pinnacle term loan fair value, cost and par from the printed figures split at a space (rule 04 pulled); Ineos Quattro issuer (member names none) and cost 434.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Ineos Quattro (6)(7) Senior Secured First Lien Term Loan S + 425 9.69 % 04/2029 443 4 34 0.3 443 443 434 0.3 443"
+    }
+   ]
+  },
+  {
+   "what": "Stubhub par printed and not tagged, three quarters.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Stubhub (6)(7) Senior Secured First Lien Term Loan S + 475 10.09 % 03/2030 493 488 0.3 493"
+    }
+   ]
+  },
+  {
+   "what": "Member names that carry another printed row's issuer or a variant spelling: Rocket->Sovos 2024-09-30, Skopima->SMX 2025-03-31, Alliant->Acrisure and AmWINS->Alliant 2026-06-30, WCT->Parexel 2025-12-31, '#N/A'->Medical Review Institute, Bingo Hldgs, CallRevu LLCs, (Gain well), BUYERCASCADE.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Sovos Compliance (7) Senior Secured First Lien Term Loan S + 450 ( 50 Floor) 9.46 % 08/2028 992 987"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "SMX Group, LLC (7) Senior Secured First Lien Term Loan S + 450 8.80 % 02/2032 5,434 5,381 2.9 5,434"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Acrisure, LLC (7) Senior Secured First Lien Term Loan S + 300 6.64 % 11/2030 1,350 1,353 0.2 1,225 Alliant Holdings Intermediate LLC (7) Senior Secured First Lien Term Loan S + 250 6.14 % 09/2031 1,331 1,332 0.2 1,315"
+    },
+    {
+     "accession": "0001193125-26-096558",
+     "text": "Parexel International Corp (7) Senior Secured First Lien Term Loan S + 275 , 50 Floor 6.47 % 12/2031 2,270 2,265 0.5 2,281"
+    },
+    {
+     "accession": "0001193125-26-226641",
+     "text": "Medical Review Institute of America (5) Unitranche First Lien Revolver P + 400 , 100 Floor 10.75 % 07/2030 160 154 0.0 141"
+    },
+    {
+     "accession": "0001193125-25-280138",
+     "text": "Bingo Holdings I LLC (7) Senior Secured First Lien Term Loan S + 475 8.75 % 06/2032 447 445 0.1 448"
+    }
+   ]
+  },
+  {
+   "what": "IVX Health Merger Sub all-PIK coupon 13.50 (2024-12-31 not tagged, 2025-12-31 tagged 0.00135).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-024835",
+     "text": "IVX Health Merger Sub, Inc. (8) Unsecured Debt 1350 PIK 13.50 % 06/2031 3,083 3,015 1.8 3,176"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts from the printed rows (47 rows: tags at 1,000 times the count, counts tagged as principal and withheld in 2025-06-30 and 2025-09-30, and the shared share-count proxy); dispatch.shares_pow10_normalise false.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Iris Buyer LLC Common Stock 192,308 - - 31"
+    },
+    {
+     "accession": "0001193125-25-180767",
+     "text": "WhiteHawk Evergreen Fund, LP (2)(6)(9)(10) Partnership Interest 7,500,000 7,500 2.9 7,664"
+    }
+   ]
+  },
+  {
+   "what": "Money-market rows published as cash: promoted rule 00 (scope all, removed every cash row to pass the anchor) pulled; investments_total_excludes and cost_total_excludes cash_rows; 2025-06-30 to 2026-06-30 money funds tagged on CashAndCashEquivalentsAxis contexts named by context_identifiers with fair_value_concepts CashEquivalentsAtFairValue; names from the printed lines.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-09-30",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Goldman Sachs FS Government Fund Cash Equivalents 3.54 % 14,329 2.6 14,329"
+    }
+   ]
+  },
+  {
+   "what": "155 undrawn lines printed with '-' fair value and tagged with a cost or par only, each confirmed on its printed line (gen_dash_rows.py; dash_rows_cpid.json plus 8 read by page_line), published at 0; WCT 2025-12-31 second revolver at the printed (1) with the stray 1,000 principal withdrawn; Saarni 2025-06-30 instrument; cost signs printed in brackets (Pushpay, Evergreen IX 2023-12-31).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-226641",
+     "text": "Accurate Finance Sub, LLC (4)(5) Senior Secured First Lien Revolver 09/2032 - ( 1 ) - -"
+    },
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Pushpay USA Inc. (4)(5)(6) Unitranche First Lien Revolver 05/2029 - ( 12 ) - ( 3 )"
+    },
+    {
+     "accession": "0001193125-26-096558",
+     "text": "WCT Group Holdings, LLC (4)(5) Unitranche First Lien Revolver 12/2029 - ( 2 ) ( 0.0 ) ( 1 )"
+    },
+    {
+     "accession": "0001193125-25-180767",
+     "text": "Saarni (5)(6) Unitranche First Lien Delayed Draw Term Loan 03/2032 EUR 0 - - -"
+    }
+   ]
+  },
+  {
+   "what": "Round two (coordinator, one in-place re-run of cpif from rebuild; cpif before it copied to cpif0): maturity_date from the printed line on all 34 rows where the page prints another month than the tag (maturity_scan.py over 2,671 debt rows, 12 quarters; 54.2M), Accession Risk 2024-06-30 par -137,000 as printed on its unfunded line, Olyos 2025-06-30 instrument (delayed draw). Field diff vs cpif0: maturity_date 34, corrected_fields 36, position_id 12, principal_amount 1, instrument_description 1; no rows added or removed. Ledger 47 -> 49 outstanding: C110 and fmt_principal_amount fire on the printed negative par (proposed).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-280138",
+     "text": "Duraserv LLC Senior Secured First Lien Term Loan S + 475 , 75 Floor 9.11 % 06/2031 4,773 4,734 1.3 4"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "(13) Unitranche First Lien Revolver 12/2028 629 599 0.0 240 Avalign Technologies, Inc. (13) Unitranche First Lien Term Loan 12/2028 7,512 7,222 0.8 4,348"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ]
+  },
+  {
+   "what": "Round three (coordinator, build cpig = cpif re-run from rebuild with new corrections only; no wrapper change): principal currency from the printed marker on all 36 rows where it differs from the unit tag (fx_scan.py over 2,229 rows with a par; mechanism: the filer tags the par with the issuer's currency unit and principal_usd_reference converts it, so dollar pars of Canadian, UK and other foreign issuers and of the money funds were converted again; a few euro pars were tagged USD); 28 PIK loans 2024-03-31..2025-06-30 given cash + PIK margin (D-031); Outcomes Group 2026-06-30 rates; IVX 2024-09-30 fixed PIK; Ineos and Ancora instruments; maturity_precision month on the 34 corrected maturities. Field diff vs cpif: currency 36, usd 35, rate 36, status 35, basis_spread 29, interest_rate 2, coupon/reference 1, instrument 2, maturity_precision/status 34, position_id 1; no rows added or removed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Klick Inc. (6) Unitranche First Lien Term Loan S + 500 , 75 Floor 8.66 % 11/2032 32,885 32,737 5.9 32,720"
+    },
+    {
+     "accession": "0001193125-25-180767",
+     "text": "BVI Medical Inc. Unitranche First Lien Term Loan S + 125 ( 75 Floor) (plus 500 PIK) 10.58 % 03/2032 8,211 8,094 3.1 8,211"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Outcomes Group Holding Inc (7) Senior Secured First Lien Term Loan S + 300 6.64 % 05/2031 1,980 1,974 0.4 1,988"
+    },
+    {
+     "accession": "0000950170-24-126307",
+     "text": "IVX Health (8) Unsecured Debt S + 0 (including 1400 PIK) 14.00 % 06/2031 2,978 2,907 1.8 3,067"
+    }
+   ]
+  },
+  {
+   "what": "Round four (coordinator, final in-place re-run of cpig from rebuild): principal_amount_usd set on the rows where a par correction had not reached it (q_usdgap.sql over every row with a par: Pinnacle 2024-06-30 607,000 -> 3,607,000, Accession Risk 2024-06-30 +137,000 -> -137,000, WCT 2025-12-31 1,000 withdrawn with its par; every other principal-corrected row already had usd = par x rate); member-text rates the printed line does not show (q_idrate.sql over all 6 identifier_text rates: Tropolis revolver 2026-06-30 rate, spread and benchmark withdrawn, Dreyfus and Goldman 2023-12-31 rates withdrawn, Iris Buyer 2024-03-31 11.58 -> 11.56 printed; CCI Buyer and Bonterra equal the page). Field diff vs cpig before (copied to cpig0): principal_amount_usd 3, fx rate/status 1, interest_rate 4, basis_spread 1, reference 1, interest_rate_kind 3, corrected_fields 7.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Tropolis Holdings LLC (4)(5) Unitranche First Lien Revolver 02/2031 - ( 1 ) - -"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Iris Buyer LLC Unitranche First Lien Term Loan S + 625 ( 100 Floor) 11.56 % 10/2030 3,523 3,430 2.3 3,603"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "row_validation X05 2026-06-30 (Tropolis revolver): introduced by the round-four withdrawal of its member-text rate and spread; coupon_type 'Floating' from the member text was left, so the row is floating with no spread",
+   "hypotheses": [
+    "a context-keyed correction withdrawing coupon_type clears it; not built (final re-run used)",
+    "the page prints no rate, spread or benchmark on the line: '02/2031 - ( 1 ) - -'"
+   ]
+  },
+  {
+   "finding": "no ledger finding: MB2 Dental 2024-06-30 second delayed-draw line '- (22 ) - 23' has no context in the filing (23 thousand unpublished)",
+   "hypotheses": [
+    "printed_rows_without_context refuses a thousands-printed figure (loader compares whole-dollar '23,000' with the line)",
+    "untagged_values needs a context; none exists for the line",
+    "the quarter is within gate tolerance (published 243,218 against printed Investments and Cash Equivalents Total 243,241)"
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "36 rows published a par currency that the page does not print (fx_scan.py over 2,229 rows with a par): the filer tags the par of Canadian, UK, Dutch and Australian issuers and of the money funds (2025-03-31) with the issuer's currency unit although the page prints dollars (no marker), and principal_usd_reference then converted the dollar figure again (Klick 2026-06-30 published 23.15M for a printed 32,885 thousand); 7 euro pars (Bach, Ion, TK Elevator, Saarni, Avidity) were tagged USD or CAD. Fixed by context-keyed corrections from the printed marker; euro pars converted at the build's own H.10 rate of the quarter.",
+   "field": "principal_amount_usd",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 145.65,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "For each row with a printed row, compare the currency marker printed before the par cell (none = USD) with principal_amount_currency.",
+   "quote": {
+    "accession": "0001193125-26-352548",
+    "text": "Klick Inc. (6) Unitranche First Lien Term Loan S + 500 , 75 Floor 8.66 % 11/2032 32,885 32,737 5.9 32,720"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on these rows (FX01/FX03 were cleared at cpia by the conversion itself); the sample and the review found them. fx_scan.py is the proposed check: it reads the printed marker cell; a false positive needs a par printed in a non-dollar currency with no marker, which this filer does not print.",
+    "reference": "printed currency marker vs principal_amount_currency"
+   }
+  },
+  {
+   "observation_key": "cash-plus-pik-spread-is-cash-leg-only",
+   "what": "28 loans 2024-03-31 to 2025-06-30 (Granicus, Parts Town, Avalign, BVI; 104.75M) print 'S + 350 (including 225 PIK)' with the cash margin first and the PIK on top (11.06 = SOFR + 5.75) and published the cash margin; from 2025-09-30 the filer prints the total ('S + 575 (225 PIK)'). Set to cash + PIK by correction (D-031); printed_margin_reading cannot express it because the printed figure equals the tagged cash margin.",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 104.75,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Where a printed margin cell reads '(including|plus X PIK)' and the printed rate equals base + margin + PIK, the published spread must equal margin + PIK.",
+   "quote": {
+    "accession": "0001193125-25-180767",
+    "text": "BVI Medical Inc. Unitranche First Lien Term Loan S + 125 ( 75 Floor) (plus 500 PIK) 10.58 % 03/2032 8,211 8,094 3.1 8,211"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired in cpia; the independent review found the shape by comparing the same loan's margin across the 2025-09-30 wording change. The check reads the printed margin cell and the rate.",
+    "reference": "printed '(including|plus X PIK)' margin vs basis_spread"
+   }
+  },
+  {
+   "observation_key": "printed-percent-rate-scaled-down-100x",
+   "what": "Outcomes Group 2026-06-30 first lien 0.0664 and second lien 0.10 where the page prints 6.64 % and 10.00 % (the filer tagged 0.000664 / 0.001). The quarter's other rates are at the right scale (q_scale.sql: no other rate under 1 in any quarter). Fixed by correction.",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 19.65,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A published interest rate under 1 on a loan whose printed row prints a percent at or above 1.",
+   "quote": {
+    "accession": "0001193125-26-352548",
+    "text": "Outcomes Group Holding Inc (7) Senior Secured First Lien Term Loan S + 300 6.64 % 05/2031 1,980 1,974 0.4 1,988"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on the two rows in cpia or cpif.",
+    "reference": "interest_rate < 1 vs printed percent"
+   }
+  },
+  {
+   "observation_key": "pik-margin-loan-read-as-fixed",
+   "what": "IVX Health 2024-09-30 prints 'S + 0 (including 1400 PIK) 14.00 %' (the 14.00 is the whole PIK coupon; SOFR + 0 + 14 would be about 18.8) and published Floating, SOFR, spread 0, while every other quarter prints '1400 PIK' / '1350 PIK' and publishes fixed. Set to fixed with no benchmark or spread.",
+   "field": "coupon_type",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": 3.07,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "X05.",
+   "quote": {
+    "accession": "0000950170-24-126307",
+    "text": "IVX Health (8) Unsecured Debt S + 0 (including 1400 PIK) 14.00 % 06/2031 2,978 2,907 1.8 3,067"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "X05 fired on this row in cpia (floating with zero spread); after the fix it no longer fires.",
+    "reference": "X05"
+   }
+  },
+  {
+   "observation_key": "instrument-description-empty-old-member-format",
+   "what": "Ineos Quattro 2024-06-30 (member names no issuer, outside the wrapper condition) and Ancora 2024-12-31 ('Common Stock1') published no instrument. Fixed by correction.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-06-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 0.48,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Rows with a printed row and an empty instrument_description.",
+   "quote": {
+    "accession": "0000950170-24-096155",
+    "text": "Ineos Quattro (6)(7) Senior Secured First Lien Term Loan S + 425 9.69 % 04/2029 443 4 34 0.3 443 443 434 0.3 443"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; found by the page sample (C015).",
+    "reference": "empty instrument with printed row"
+   }
+  },
+  {
+   "observation_key": "principal-correction-does-not-flow-to-principal-amount-usd",
+   "what": "A row correction of principal_amount does not update principal_amount_usd, which keeps the tag's value (the USD step runs before corrections): Pinnacle 2024-06-30 published usd 607,000 for a corrected par 3,607,000; Accession Risk 2024-06-30 usd +137,000 for par -137,000; WCT 2025-12-31 usd 1,000 for a withdrawn par. Fixed here by correcting principal_amount_usd too (q_usdgap.sql: no other row of the fund has usd != par x rate). Likely on every fund with principal corrections.",
+   "field": "principal_amount_usd",
+   "quarters": [
+    "2024-06-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 3.6,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "principal_amount_usd differs from principal_amount x principal_fx_rate_to_usd (or is set where principal_amount is empty) by more than 1 dollar.",
+   "quote": {
+    "accession": "0000950170-24-096155",
+    "text": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the USD par with par x rate; the independent review of cpig found the rows. The check is exact arithmetic on published columns, so a false positive needs a row whose rate was rounded, which a 1-dollar tolerance on par x rate absorbs.",
+    "reference": "usd par != par x fx rate"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Six rows publish a rate read from the member text (identifier_text); q_idrate.sql read all six against the printed row: Tropolis revolver 2026-06-30 (page prints no rate or margin on the undrawn line) and the two money funds 2023-12-31 (no rate printed) withdrawn, Iris Buyer 2024-03-31 member 11.58 against printed 11.56 corrected; CCI Buyer 2024-09-30 and Bonterra 2026-06-30 equal the page.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 32.4,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Rows whose interest_rate_source is identifier_text and whose printed row prints no percent or another percent.",
+   "quote": {
+    "accession": "0001193125-26-352548",
+    "text": "Tropolis Holdings LLC (4)(5) Unitranche First Lien Revolver 02/2031 - ( 1 ) - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows; the review found Tropolis.",
+    "reference": "identifier_text rate vs printed row"
+   }
+  },
+  {
+   "observation_key": "issuer-name-is-hierarchy-path",
+   "what": "1,229 rows at spon3 (2,456.0M summed over quarters, q_counts.sql) had no issuer: the wrapper used the shared Crescent label list ('&' spellings) while this filer writes 'and', uses singular typos and more labels; equity rows and comma-delimited members fell outside the condition. Fixed in the wrapper; 0 null issuers in cpif.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 2456.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "C201 (rows with no issuer) already reports it.",
+   "quote": {
+    "accession": "0001193125-26-352548",
+    "text": "Klick Inc. (6) Unitranche First Lien Term Loan S + 500 , 75 Floor 8.66 % 11/2032 32,885 32,737 5.9 32,720"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "C201 fired on these rows in the untouched build cpia (12 quarters, 37 to 192 rows).",
+    "reference": "C201"
+   }
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "what": "Real positions dropped as duplicates: staging's dedup keys on issuer+instrument+values, so unnamed rows with equal values collided (Sedgwick 746, Medline 745, Asurion 2,273, Anchor 745 and small undrawn lines); the unified dimension-path dedup ignores cost and folded twin undrawn lines differing only in maturity (Online Labels, Medicus). Fixed by names and distinct_member_suffix_re.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 4.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Per fund-quarter, count printed schedule rows against published rows and list printed rows with no published row.",
+   "quote": {
+    "accession": "0000950170-23-062908",
+    "text": "Sedgwick CMS Holdings, Inc. (7) Senior Secured First Lien Term Loan S + 375 9.08 % 02/2028 746 741 1.0 746"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "fv_conservation fired only at 2023-09-30 (1.5M); the 0.7M Anchor loss was hidden by a promoted plug, the Asurion 2.3M loss sat inside tolerance, and zero-value twins move no total, so no existing rule catches the shape. The proposed check counts printed schedule rows per fund-quarter (bdc_ixbrl_field_status current-period printed rows with a value cell) against published rows and lists printed rows with no published row; a false positive needs a printed row that is a subtotal, which the printed-row reader already separates.",
+    "reference": "printed rows vs published rows per fund-quarter"
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "Once names were published the shared share-count normaliser gave Iris Buyer, Vital Care, Nephron, Arrow, IVX and WCT equity rows another line's count (Iris 192,308 printed published 192,000). Switched off for this fund; counts from the printed rows.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 39.3,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "units_printed should also test rows whose count source is the proxy when the row's issuer was null in the previous build.",
+   "quote": {
+    "accession": "0000950170-24-058631",
+    "text": "Iris Buyer LLC Common Stock 192,308 - - 31"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "units_printed flagged these rows only after names were filled (cpib); in the untouched build the rows had no issuer and were outside the rule.",
+    "reference": "units_printed blind spot: rows with null issuer_name"
+   }
+  },
+  {
+   "observation_key": "equity-units-tagged-as-principal",
+   "what": "10-Qs 2025-06-30 and 2025-09-30 tag equity unit counts with the principal concept at 1,000 times the printed count (Iris 192,308,000; WhiteHawk 7,500,000,000); the build withheld them and published no count. Set from the printed rows by correction.",
+   "field": "shares_held",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 32.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag equity rows with no unit count whose filing tags a principal on the same context.",
+   "quote": {
+    "accession": "0001193125-25-180767",
+    "text": "WhiteHawk Evergreen Fund, LP (2)(6)(9)(10) Partnership Interest 7,500,000 7,500 2.9 7,664"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired: diagnostic_field_mismatch in source reconciliation is not a ledger rule.",
+    "reference": "equity row null shares_held with InvestmentOwnedBalancePrincipalAmount tagged on its context"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Members carrying the issuer of the line above (Rocket on Sovos 2024-09-30, Skopima on SMX 2025-03-31, Alliant on Acrisure and AmWINS on Alliant 2026-06-30, WCT on Parexel 2025-12-31); values and terms follow the printed line. Fixed by context-keyed corrections.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 11.25,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed over rows whose published issuer was null in the previous build too.",
+   "quote": {
+    "accession": "0001193125-26-352548",
+    "text": "Acrisure, LLC (7) Senior Secured First Lien Term Loan S + 300 6.64 % 11/2030 1,350 1,353 0.2 1,225 Alliant Holdings Intermediate LLC (7) Senior Secured First Lien Term Loan S + 250 6.14 % 09/2031 1,331 1,332 0.2 1,315"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed fired on WCT/Parexel in cpia but the other four rows had no issuer there and were not tested.",
+    "reference": "issuer_name_printed"
+   }
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "what": "39 rows (q_counts.sql, 101.3M) changed benchmark: P, B, SN, SR or C codes had been published SOFR (guessed), and 'Prime Security Services' read PRIME from its name. Fixed with reference_rate_columns and codes.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 101.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Compare the printed benchmark code in the named column with the published benchmark on every row.",
+   "quote": {
+    "accession": "0001193125-26-352548",
+    "text": "Secured Overnight Financing Rate (SOFR or S), Prime (P), EURIBOR (E), SONIA (SN), BBSY ( B), SARON (SR) or CORRA (C)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on the guessed benchmarks in cpia.",
+    "reference": "printed benchmark code vs reference_rate_type"
+   }
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "what": "Promoted rule 00 removed every money-market row (scope all) to pass the fair-value anchor; from 2025-06-30 the money funds sit on CashAndCashEquivalentsAxis contexts with no identifier and were not read. Now published as cash in all 12 quarters.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 296.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Printed 'Cash Equivalents Total' greater than zero and no CASH row published for the quarter.",
+   "quote": {
+    "accession": "0000950170-23-062908",
+    "text": "Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired: the anchor check passed because the rule removed the rows.",
+    "reference": "filed cash equivalents vs published CASH rows"
+   }
+  },
+  {
+   "observation_key": "promoted-value-rule-is-a-plug",
+   "what": "Promoted rule 05 set MPH Acquisition to 930 ('subtotal-implied'); the page and tag say 831. Pulled; the 99 traced to MB2 (sign and an untagged line).",
+   "field": "fair_value",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 0.1,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A promoted value rule must set a figure that the row's printed line shows.",
+   "quote": {
+    "accession": "0000950170-24-096155",
+    "text": "MPH Acquisition (7) Senior Secured First Lien Term Loan S + 425 ( 50 Floor) 9.86 % 09/2028 995 968 0.5 831"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compared promoted values with the printed line; SRC_BDC03 listed the row as a value mismatch but was not read as an error.",
+    "reference": "promoted value_expression vs printed_row"
+   }
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "what": "155 undrawn lines printed with '-' fair value and a cost were not published. Declared at 0 from their printed lines.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "B01 counts leaf contexts with no fair value.",
+   "quote": {
+    "accession": "0001193125-26-226641",
+    "text": "Accurate Finance Sub, LLC (4)(5) Senior Secured First Lien Revolver 09/2032 - ( 1 ) - -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 fired in cpia (2024-09-30 to 2026-06-30) on these contexts.",
+    "reference": "B01"
+   }
+  },
+  {
+   "observation_key": "maturity-tag-differs-from-printed-line",
+   "what": "34 rows (54.2M; maturity_scan.py over all 2,671 non-cash debt rows of 12 quarters, listed in maturity_scan_cpif0.txt) published the filer's maturity tag where the printed line prints another month. Fixed in the in-place re-run of cpif by context-keyed maturity_date corrections (month end of the printed month). After it the scan finds 0 rows that differ (Parts Town 2024-09-30 prints 4/16/2030, equal to the published day). 13 rows (15.0M) still differ from the member text: there the member is wrong and the tag and page agree (Chemours member 10/2022, shifted members Alliant/AmWINS, Fortis, SMX, Olyos) (Duraserv 2025-09-30, Outcomes second lien 2026-06-30, Medicus, Trace3, Avalign). Left: no build left for corrections.",
+   "field": "maturity_date",
+   "quarters": [
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 54.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag rows whose tagged maturity month differs from the 'Maturity/ Dissolution Date MM/YYYY' in the member and in the printed row.",
+   "quote": {
+    "accession": "0001193125-25-280138",
+    "text": "Duraserv LLC Senior Secured First Lien Term Loan S + 475 , 75 Floor 9.11 % 06/2031 4,773 4,734 1.3 4"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on these rows in the untouched build; the comparison in scratch/fund_runs/0001954360/maturity_scan.py (printed MM/YYYY cell against the published month, current-period printed rows) is the proposed check; query q_mat.sql lists 33 such rows in cpif.",
+    "reference": "maturity tag vs member/printed month"
+   }
+  },
+  {
+   "observation_key": "row-printed-not-tagged",
+   "what": "MB2 Dental 2024-06-30 second delayed-draw line printed '- (22 ) - 23' has no context; 23 thousand unpublished.",
+   "field": "fair_value",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 0.023,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "Printed block subtotal vs published block sum at 1 thousand tolerance.",
+   "quote": {
+    "accession": "0000950170-24-096155",
+    "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "fv_conservation passes inside tolerance; no rule sees a 23 thousand gap.",
+    "reference": "page_block_sums style check"
+   }
+  },
+  {
+   "observation_key": "printed-negative-par-published-positive",
+   "what": "Accession Risk Management 2024-06-30 unfunded delayed-draw line (footnote 5, no rate) prints par '( 137 )' with cost 29 and value 31; tagged 137,000 unsigned. Now published -137,000 as printed; C110 and fmt_principal_amount fire on it and are proposed under negative-par-on-undrawn-line-as-printed. Was left for the owner.",
+   "field": "principal_amount",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 0.031,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Sign of published par against brackets in the printed par cell.",
+   "quote": {
+    "accession": "0000950170-24-096155",
+    "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the par sign with the page.",
+    "reference": "par sign vs printed brackets"
+   }
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "what": "IVX Health Merger Sub all-PIK 13.50: no PIK tag at 2024-12-31, tag 0.00135 at 2025-12-31. Fixed by correction.",
+   "field": "pik_rate",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 6.8,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "pik_printed.",
+   "quote": {
+    "accession": "0000950170-25-024835",
+    "text": "IVX Health Merger Sub, Inc. (8) Unsecured Debt 1350 PIK 13.50 % 06/2031 3,083 3,015 1.8 3,176"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "In the untouched build cpia the page rule pik_printed raised both rows (shadow/page_rule_findings.csv: kind pik_printed_not_published for IVX Health Merger Sub 2024-12-31, printed '1350 PIK' and no PIK published; kind pik_value_mismatch for 2025-12-31, published 0.135 against printed 13.50). A recurrence of either shape on any row with a printed row is caught by the same rule; rows with no printed row stay outside it.",
+    "reference": "pik_printed"
+   }
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "what": "Pushpay 2023-09-30 and 2023-12-31 and Evergreen IX 2023-12-31 undrawn costs tagged +12,000 where the page prints ( 12 ). Fixed by correction.",
+   "field": "cost",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "C103.",
+   "quote": {
+    "accession": "0000950170-23-062908",
+    "text": "Pushpay USA Inc. (4)(5)(6) Unitranche First Lien Revolver 05/2029 - ( 12 ) - ( 3 )"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "C103 fired on Pushpay 2023-09-30 in cpia; the 2023-12-31 rows were unpublished there.",
+    "reference": "C103"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "none: no shared code changed (wrapper keys used are existing ones); builds cpia..cpif all stages exit 0, ledger exit 1 = findings outstanding"
+ ],
+ "not_done": [
+  "maturity_date_source stays xbrl_field on the 34 corrected maturities (the field is not correctable); precision set to month. Maturity: 13 debt rows with no printed maturity found by the scan (C-4 Analytics2, Golden Nugget (Landrys), McKissock, Yahoo, Enverus, Accurate Finance; read by page_line.py: printed month equals published) and 9 ambiguous twin lines (published equals the member and one of the two printed months) were not corrected.",
+  "Rows of 2025-06-30 to 2026-06-30 money funds: cost and percent of net assets not published (filer tags them on custom concepts).",
+  "Interest rates, spreads and non-accrual flags were read only on rows a finding touched and the 20 lines quoted here; no full row-by-row comparison.",
+  "Fund-level figures (net assets, income) not re-read beyond the reading report of 2026-10-10.",
+  "No cohort measurement: no shared code changed.",
+  "A cleared ledger would not establish data correctness."
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_fbae66baa580",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2023-09-30|A01|investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2023-09-30|A01|investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The 'investments' rollup the check reads is the printed Total Investments (49,589 / 114,294 / 164,431 / 228,717 / 258,282 / 282,161 / 308,031); its children include the filer's 'Investments ... Cash Equivalents' member, so the child sum exceeds it by the printed Cash Equivalents Total: confirmed on the printed line."
+   ],
+   "next_action": "Proposed dispositions a01-cash-equivalents-member-under-the-investments-root, a01-subtotal-of-the-comparative-schedule, a01-subtotal-against-a-tag-split-at-a-printed-space, a01-position-member-tagged-with-another-country and a01-subtotal-tagged-on-wrong-member; owner decides. No data change: published fair value equals the printed Total Investments in every quarter (gate totals 12 of 12)."
+  },
+  {
+   "finding_id": "RVQ_BLK_ebf04b5e57ce",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2023-12-31|A01|investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2023-12-31|A01|investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-020134",
+     "text": "Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 8,576 8,576 8.3 8,576 Goldman Sachs FS Government Fund Cash Equivalents 20,178 20,178 19.4 20,178 Cash Equivalents Total $ 28,754 27.7 % $ 28,754 Investments and Cash Equivalents Total $ 141,673 137.7 % $ 143,048"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The 'investments' rollup the check reads is the printed Total Investments (49,589 / 114,294 / 164,431 / 228,717 / 258,282 / 282,161 / 308,031); its children include the filer's 'Investments ... Cash Equivalents' member, so the child sum exceeds it by the printed Cash Equivalents Total: confirmed on the printed line."
+   ],
+   "next_action": "Proposed dispositions a01-cash-equivalents-member-under-the-investments-root, a01-subtotal-of-the-comparative-schedule, a01-subtotal-against-a-tag-split-at-a-printed-space, a01-position-member-tagged-with-another-country and a01-subtotal-tagged-on-wrong-member; owner decides. No data change: published fair value equals the printed Total Investments in every quarter (gate totals 12 of 12)."
+  },
+  {
+   "finding_id": "RVQ_BLK_f93f293625b7",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-03-31|A01|investments",
+     "0001954360|2024-03-31|A01|investments(comparative)",
+     "0001954360|2024-03-31|A01|investments united states debt investments pharmaceuticals biotechnology and life sciences",
+     "0001954360|2024-03-31|A01|investments united states debt investments",
+     "0001954360|2024-03-31|A01|investments united states debt investments software and services"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-03-31|A01|investments",
+     "0001954360|2024-03-31|A01|investments(comparative)",
+     "0001954360|2024-03-31|A01|investments united states debt investments pharmaceuticals biotechnology and life sciences",
+     "0001954360|2024-03-31|A01|investments united states debt investments",
+     "0001954360|2024-03-31|A01|investments united states debt investments software and services"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Total Investments $ 112,919 110.0 % $ 114,294"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Sovos Compliance (7) Senior Secured First Lien Term Loan S + 450 ( 50 Floor) 9.94 % 08/2028 997 991 0.6 990 12,258 12,057 7.6 12,083"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "The 'investments' rollup the check reads is the printed Total Investments (49,589 / 114,294 / 164,431 / 228,717 / 258,282 / 282,161 / 308,031); its children include the filer's 'Investments ... Cash Equivalents' member, so the child sum exceeds it by the printed Cash Equivalents Total: confirmed on the printed line.",
+    "A second 'investments' rollup in the same filing is the prior-period comparative schedule (114,294 or 282,161) with the comparative cash members as children: its excess equals the comparative cash total.",
+    "Pharmaceuticals subtotal 4,927 vs children 1,836: the WCT term-loan fair value is tagged 343 where the page prints '3,43 4' (3,434); the 3,091 gap is that split tag. Published FV is 3,434 (kept rule 03); the check reads the tag.",
+    "Software and Services: the member tagged 12,083 is the printed block subtotal after Sovos ('12,258 12,057 7.6 12,083'); the check sums all 40 Software and Services rows under that key (36,561). Not resolved which block the 12,083 closes; the quarter's published total equals the printed Total Investments 164,431, so no row is missing."
+   ],
+   "next_action": "Proposed dispositions a01-cash-equivalents-member-under-the-investments-root, a01-subtotal-of-the-comparative-schedule, a01-subtotal-against-a-tag-split-at-a-printed-space, a01-position-member-tagged-with-another-country and a01-subtotal-tagged-on-wrong-member; owner decides. No data change: published fair value equals the printed Total Investments in every quarter (gate totals 12 of 12)."
+  },
+  {
+   "finding_id": "RVQ_BLK_84a061cf4e51",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-06-30|A01|investments",
+     "0001954360|2024-06-30|A01|investments(comparative)",
+     "0001954360|2024-06-30|A01|investments united states debt investments diversified financials",
+     "0001954360|2024-06-30|A01|investments united states debt investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-06-30|A01|investments",
+     "0001954360|2024-06-30|A01|investments(comparative)",
+     "0001954360|2024-06-30|A01|investments united states debt investments diversified financials",
+     "0001954360|2024-06-30|A01|investments united states debt investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Total Investments $ 226,726 142.4 % $ 228,717 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 548 548 0.3 548 Goldman Sachs FS Government Fund Cash Equivalents 13,976 13,976 8.7 13,976 Cash Equivalents Total $ 14,524 9.0 % $ 14,524 Investments and Cash Equivalents Total $ 241,250 151.4 % $ 243,241"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Total Investments $ 112,919 110.0 % $ 114,294"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The 'investments' rollup the check reads is the printed Total Investments (49,589 / 114,294 / 164,431 / 228,717 / 258,282 / 282,161 / 308,031); its children include the filer's 'Investments ... Cash Equivalents' member, so the child sum exceeds it by the printed Cash Equivalents Total: confirmed on the printed line.",
+    "A second 'investments' rollup in the same filing is the prior-period comparative schedule (114,294 or 282,161) with the comparative cash members as children: its excess equals the comparative cash total.",
+    "Diversified Financials 3,695 vs children 695: the Pinnacle term loan is tagged 607 / 575 / 607 where the page prints '3, 607 3, 575 2.3 3, 607'; published 3,607 / 3,575 / 3,607 by row correction.",
+    "United States debt 212,128 vs 209,029: the 3,000 Pinnacle split plus 99 in Health Care (MB2 delayed draw tagged -38 printed 38, and a second MB2 line '- (22 ) - 23' with no context)."
+   ],
+   "next_action": "Proposed dispositions a01-cash-equivalents-member-under-the-investments-root, a01-subtotal-of-the-comparative-schedule, a01-subtotal-against-a-tag-split-at-a-printed-space, a01-position-member-tagged-with-another-country and a01-subtotal-tagged-on-wrong-member; owner decides. No data change: published fair value equals the printed Total Investments in every quarter (gate totals 12 of 12)."
+  },
+  {
+   "finding_id": "RVQ_BLK_2ed608210fd3",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-09-30|A01|investments",
+     "0001954360|2024-09-30|A01|investments(comparative)"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-09-30|A01|investments",
+     "0001954360|2024-09-30|A01|investments(comparative)"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Total Investments $ 256,292 153.2 % $ 258,282 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 1,680 1,680 1.0 1,680 Goldman Sachs FS Government Fund Cash Equivalents 12,297 12,297 7.3 12,297 Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259"
+    },
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Total Investments $ 112,919 110.0 % $ 114,294"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The 'investments' rollup the check reads is the printed Total Investments (49,589 / 114,294 / 164,431 / 228,717 / 258,282 / 282,161 / 308,031); its children include the filer's 'Investments ... Cash Equivalents' member, so the child sum exceeds it by the printed Cash Equivalents Total: confirmed on the printed line.",
+    "A second 'investments' rollup in the same filing is the prior-period comparative schedule (114,294 or 282,161) with the comparative cash members as children: its excess equals the comparative cash total."
+   ],
+   "next_action": "Proposed dispositions a01-cash-equivalents-member-under-the-investments-root, a01-subtotal-of-the-comparative-schedule, a01-subtotal-against-a-tag-split-at-a-printed-space, a01-position-member-tagged-with-another-country and a01-subtotal-tagged-on-wrong-member; owner decides. No data change: published fair value equals the printed Total Investments in every quarter (gate totals 12 of 12)."
+  },
+  {
+   "finding_id": "RVQ_BLK_ed2548b85109",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-12-31|A01|investments",
+     "0001954360|2024-12-31|A01|investments(comparative)",
+     "0001954360|2024-12-31|A01|investments united states debt investments consumer discretionary distribution and retail savers",
+     "0001954360|2024-12-31|A01|investments netherlands debt investments commercial and professional services",
+     "0001954360|2024-12-31|A01|investments netherlands debt investments financial services",
+     "0001954360|2024-12-31|A01|investments united kingdom debt investments",
+     "0001954360|2024-12-31|A01|investments united kingdom debt investments commercial and professional services",
+     "0001954360|2024-12-31|A01|investments united states debt investments",
+     "0001954360|2024-12-31|A01|investments united states debt investments diversified financials"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-12-31|A01|investments",
+     "0001954360|2024-12-31|A01|investments(comparative)",
+     "0001954360|2024-12-31|A01|investments united states debt investments consumer discretionary distribution and retail savers",
+     "0001954360|2024-12-31|A01|investments netherlands debt investments commercial and professional services",
+     "0001954360|2024-12-31|A01|investments netherlands debt investments financial services",
+     "0001954360|2024-12-31|A01|investments united kingdom debt investments",
+     "0001954360|2024-12-31|A01|investments united kingdom debt investments commercial and professional services",
+     "0001954360|2024-12-31|A01|investments united states debt investments",
+     "0001954360|2024-12-31|A01|investments united states debt investments diversified financials"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Total Investments $ 280,031 156.1 % $ 282,161 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 4,304 4,304 2.4 4,304 Goldman Sachs FS Government Fund Cash Equivalents 4.41 % 7,660 7,660 4.2 7,660 Cash Equivalents Total $ 11,964 6.6 % $ 11,964 Investments and Cash Equivalents Total $ 291,995 162.7 % $ 294,125"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Total Investments $ 112,919 110.0 % $ 114,294"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Savers (6)(7) Senior Secured First Lien Term Loan S + 375 ( 75 Floor) 8.08 % 04/2028 2,075 2,075 1.2 2,083 6,948 6,934 3.8 6,974"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Hunter Douglas (6)(7) Senior Secured First Lien Term Loan S + 350 ( 50 Floor) 8.02 % 02/2029 $ 1,485 1,472 0.8 1,486 1,472 0.8 1,486 Total Debt Investments Netherlands $ 7,886 4.3 % $ 7,860"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Netherlands Debt Investments Commercial and Professional Services Pitch MidCo B.V. (6) Unitranche First Lien Term Loan E + 625 9.60 % 04/2031 EUR 2,864 2,981 1.6 2,967"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Diversified Financials Primrose Bidco Limited (6) Unitranche First Lien Term Loan S + 550 10.23 % 11/2031 GBP 1,971 2,422 1.3 2,403 2,422 1.3 2,403 Total Debt Investments United Kingdom $ 6,460 3.4 % $ 6,327"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Ineos Quattro (6) Senior Secured First Lien Term Loan S + 425 8.61 % 04/2029 $ 441 433 0.2 445 4,038 2.1 3,924"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "The 'investments' rollup the check reads is the printed Total Investments (49,589 / 114,294 / 164,431 / 228,717 / 258,282 / 282,161 / 308,031); its children include the filer's 'Investments ... Cash Equivalents' member, so the child sum exceeds it by the printed Cash Equivalents Total: confirmed on the printed line.",
+    "A second 'investments' rollup in the same filing is the prior-period comparative schedule (114,294 or 282,161) with the comparative cash members as children: its excess equals the comparative cash total.",
+    "Position members carry another country than the printed section (source_reconciliation_detail parent keys, q_a01c.sql): Pitch MidCo B.V. is printed under Netherlands but tagged on an 'Investments United Kingdom ... Pitch MidCo B.V' member (2,967 = the UK children; Netherlands C&PS 6,374 vs 3,407 short by the same 2,967); Primrose Bidco (printed under United Kingdom, 2,403) is tagged on a 'United States ... Diversified Financials' member (US Diversified Financials children 1,762 + 2,403 = 4,165; US debt 255,964 vs 258,367); Hamsard 3778 and Ineos Quattro members have no 'Investments <country>' prefix ('... Maturity/Dissolution Investments United Kingdom Date ...'), so the printed UK C&PS subtotal 3,924 (= 3,486 - 7 + 445) has no children under its key and drops out of the investments root (11,964 cash - 3,924 = 8,040 excess at the top).",
+    "The Netherlands total 7,860 is tagged on the Netherlands Financial Services member (children Hunter Douglas 1,486); the Consumer Discretionary subtotal 6,974 on the Savers member (Savers prints 2,083). Published rows equal their printed lines and the quarter total ties (282,161); the fund publishes no country column, so the wrong country members change no published field."
+   ],
+   "next_action": "Proposed dispositions a01-cash-equivalents-member-under-the-investments-root, a01-subtotal-of-the-comparative-schedule, a01-subtotal-against-a-tag-split-at-a-printed-space, a01-position-member-tagged-with-another-country and a01-subtotal-tagged-on-wrong-member; owner decides. No data change: published fair value equals the printed Total Investments in every quarter (gate totals 12 of 12)."
+  },
+  {
+   "finding_id": "RVQ_BLK_842ddce429cd",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2025-03-31|A01|investments",
+     "0001954360|2025-03-31|A01|investments(comparative)",
+     "0001954360|2025-03-31|A01|investments united states debt investments consumer discretionary distribution and retail savers",
+     "0001954360|2025-03-31|A01|investments netherlands debt investments",
+     "0001954360|2025-03-31|A01|investments united kingdom debt investments",
+     "0001954360|2025-03-31|A01|investments united states debt investments",
+     "0001954360|2025-03-31|A01|investments united states debt investments financial services"
+    ],
+    "reviewed_rows": [
+     "0001954360|2025-03-31|A01|investments",
+     "0001954360|2025-03-31|A01|investments(comparative)",
+     "0001954360|2025-03-31|A01|investments united states debt investments consumer discretionary distribution and retail savers",
+     "0001954360|2025-03-31|A01|investments netherlands debt investments",
+     "0001954360|2025-03-31|A01|investments united kingdom debt investments",
+     "0001954360|2025-03-31|A01|investments united states debt investments",
+     "0001954360|2025-03-31|A01|investments united states debt investments financial services"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Total Investments $ 306,628 163.9 % $ 308,031 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 917 917 0.5 917 Goldman Sachs FS Government Fund Cash Equivalents 6,061 6,061 3.2 6,061 Cash Equivalents Total $ 6,978 3.7 % $ 6,978 Investments and Cash Equivalents Total $ 313,606 167.6 % $ 315,009"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Total Investments $ 280,031 156.1 % $ 282,161 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cas"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Financial Services Hunter Douglas (6)(7) Senior Secured First Lien Term Loan S + 350 ( 50 Floor) 8.02 % 02/2029 $ 1,485 1,472 0.8 1,486"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Ineos Quattro (6) Senior Secured First Lien Term Loan S + 425 8.57 % 04/2029 GBP 440 432 0.2 423 4,039 2.1 4,007"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "The 'investments' rollup the check reads is the printed Total Investments (49,589 / 114,294 / 164,431 / 228,717 / 258,282 / 282,161 / 308,031); its children include the filer's 'Investments ... Cash Equivalents' member, so the child sum exceeds it by the printed Cash Equivalents Total: confirmed on the printed line.",
+    "A second 'investments' rollup in the same filing is the prior-period comparative schedule (114,294 or 282,161) with the comparative cash members as children: its excess equals the comparative cash total.",
+    "Comparative (2024-12-31) schedule in this 10-Q: Hunter Douglas is printed under Netherlands (1,486) but tagged on an 'Investments United States Debt Investments Financial Services Hunter Douglas' member, so Netherlands debt 7,860 vs 6,374, US debt 255,964 vs 257,450 and US Financial Services 5,933 vs 7,419 are each off by 1,486; Savers carries the Consumer Discretionary subtotal 6,974.",
+    "Current schedule: UK debt 6,840 vs 9,673 and investments 308,031 vs 317,842 (= cash 6,978 + 2,833): the 2,833 is the cut-off twin members of Primrose (2,475), Sophos (226) and Fortis (132), excluded from published data by promoted rule 01 but still leaves in the source tree. Published rows equal the printed lines; totals tie."
+   ],
+   "next_action": "Proposed dispositions a01-cash-equivalents-member-under-the-investments-root, a01-subtotal-of-the-comparative-schedule, a01-subtotal-against-a-tag-split-at-a-printed-space, a01-position-member-tagged-with-another-country and a01-subtotal-tagged-on-wrong-member; owner decides. No data change: published fair value equals the printed Total Investments in every quarter (gate totals 12 of 12)."
+  },
+  {
+   "finding_id": "RVQ_BLK_bedb0b02e7e3",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2023-09-30|A04|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2023-09-30|A04|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 85,671 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 49,589 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_BLK_238e6d076e8f",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2023-12-31|A04|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2023-12-31|A04|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-020134",
+     "text": "Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 8,576 8,576 8.3 8,576 Goldman Sachs FS Government Fund Cash Equivalents 20,178 20,178 19.4 20,178 Cash Equivalents Total $ 28,754 27.7 % $ 28,754 Investments and Cash Equivalents Total $ 141,673 137.7 % $ 143,048"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 143,048 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 114,294 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_BLK_3f9a855b9c57",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-03-31|A04|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-03-31|A04|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 226,124 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 164,431 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_BLK_1030648c4037",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-06-30|A04|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-06-30|A04|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Total Investments $ 226,726 142.4 % $ 228,717 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 548 548 0.3 548 Goldman Sachs FS Government Fund Cash Equivalents 13,976 13,976 8.7 13,976 Cash Equivalents Total $ 14,524 9.0 % $ 14,524 Investments and Cash Equivalents Total $ 241,250 151.4 % $ 243,241"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 243,218 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 228,717 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_BLK_454011a19d0a",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-09-30|A04|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-09-30|A04|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Total Investments $ 256,292 153.2 % $ 258,282 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 1,680 1,680 1.0 1,680 Goldman Sachs FS Government Fund Cash Equivalents 12,297 12,297 7.3 12,297 Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 272,259 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 258,282 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_BLK_795f5540a856",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2023-09-30|E01|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2023-09-30|E01|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 85,671 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 49,589 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_BLK_1c19c9be5df5",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2023-12-31|E01|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2023-12-31|E01|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-020134",
+     "text": "Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 8,576 8,576 8.3 8,576 Goldman Sachs FS Government Fund Cash Equivalents 20,178 20,178 19.4 20,178 Cash Equivalents Total $ 28,754 27.7 % $ 28,754 Investments and Cash Equivalents Total $ 141,673 137.7 % $ 143,048"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 143,048 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 114,294 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_BLK_5f568feb73a5",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-03-31|E01|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-03-31|E01|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 226,124 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 164,431 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_BLK_ca1d22bf7783",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-06-30|E01|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-06-30|E01|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Total Investments $ 226,726 142.4 % $ 228,717 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 548 548 0.3 548 Goldman Sachs FS Government Fund Cash Equivalents 13,976 13,976 8.7 13,976 Cash Equivalents Total $ 14,524 9.0 % $ 14,524 Investments and Cash Equivalents Total $ 241,250 151.4 % $ 243,241"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 243,218 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 228,717 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_BLK_5e1075630123",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-09-30|E01|holdings_fv_vs_filed_investments"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-09-30|E01|holdings_fv_vs_filed_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Total Investments $ 256,292 153.2 % $ 258,282 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 1,680 1,680 1.0 1,680 Goldman Sachs FS Government Fund Cash Equivalents 12,297 12,297 7.3 12,297 Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published total 272,259 includes the printed cash-equivalent rows; published non-cash rows equal the filed and printed Total Investments 258,282 exactly (gate totals ex-cash tie). The difference equals the printed Cash Equivalents Total (2024-06-30: less the untagged 23 MB2 line).",
+    "Removing the cash rows (the pulled rule 00 did this) would hide printed holdings; adding cash to the filed figure would change the anchor. Neither is applied."
+   ],
+   "next_action": "Proposed disposition oracle-holdings-with-cash-rows-against-ex-cash-investments-total (reason already in the owner queue)."
+  },
+  {
+   "finding_id": "RVQ_REV_3220cc358af3",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2023-09-30|A07|pct_sum"
+    ],
+    "reviewed_rows": [
+     "0001954360|2023-09-30|A07|pct_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent sum 112.2 / 142.9 equals the printed 'Investments and Cash Equivalents Total' percent; the outlier over 25 pct is the money-market row (47.3 pct Dreyfus 2023-09-30, 25.6 pct Goldman 2024-03-31) as printed."
+   ],
+   "next_action": "Proposed disposition a07-percent-sum-equals-printed-investments-and-cash-total."
+  },
+  {
+   "finding_id": "RVQ_REV_3dca621532ac",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-03-31|A07|pct_sum"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-03-31|A07|pct_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent sum 112.2 / 142.9 equals the printed 'Investments and Cash Equivalents Total' percent; the outlier over 25 pct is the money-market row (47.3 pct Dreyfus 2023-09-30, 25.6 pct Goldman 2024-03-31) as printed."
+   ],
+   "next_action": "Proposed disposition a07-percent-sum-equals-printed-investments-and-cash-total."
+  },
+  {
+   "finding_id": "RVQ_REV_f713c9b4a12b",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2023-09-30|Dreyfus Government Cash Management Institutional Fund"
+    ],
+    "reviewed_rows": [
+     "0001954360|2023-09-30|Dreyfus Government Cash Management Institutional Fund"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The only row over the concentration threshold is the money-market fund Dreyfus Government Cash Management Institutional Fund (47.3 pct / 25.6 pct of net assets as printed), published in the CASH class; the largest credit row is far below it."
+   ],
+   "next_action": "Proposed disposition concentration-is-a-money-market-fund-held-as-cash."
+  },
+  {
+   "finding_id": "RVQ_REV_3784928c0e7b",
+   "coverage": {
+    "affected_rows": [
+     "0001954360|2024-03-31|Goldman Sachs FS Government Fund"
+    ],
+    "reviewed_rows": [
+     "0001954360|2024-03-31|Goldman Sachs FS Government Fund"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The only row over the concentration threshold is the money-market fund Goldman Sachs FS Government Fund (47.3 pct / 25.6 pct of net assets as printed), published in the CASH class; the largest credit row is far below it."
+   ],
+   "next_action": "Proposed disposition concentration-is-a-money-market-fund-held-as-cash."
+  },
+  {
+   "finding_id": "RVQ_REV_9bb80222b08b",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-072599|C_04bad1ba-4a6b-495f-8517-409ef05d4a6a|2024-12-31",
+     "0000950170-25-072599|C_07dc3a47-2be2-49d0-837c-b8877ef1dc65|2024-12-31",
+     "0000950170-25-072599|C_0c145853-f895-4c74-8ceb-db7d82d0d6de|2024-12-31",
+     "0000950170-25-072599|C_13d85237-09df-4de5-8c6f-a0e9b590557b|2024-12-31",
+     "0000950170-25-072599|C_24e13b1f-1b93-4a0c-99ad-3afa084d776a|2024-12-31",
+     "0000950170-25-072599|C_3aabd1ea-b574-488c-9f52-ebf8a69cd7dc|2024-12-31",
+     "0000950170-25-072599|C_44a7eb79-3fa8-44b2-8405-8fc630febbed|2024-12-31",
+     "0000950170-25-072599|C_454c00e6-dd8e-4cfe-afd1-b6085012e065|2024-12-31",
+     "0000950170-25-072599|C_534cea86-0c96-442c-a5f7-6577b1684466|2024-12-31",
+     "0000950170-25-072599|C_6461e340-1b49-407b-a29f-0f68d0c55717|2024-12-31",
+     "0000950170-25-072599|C_6b700c0b-cbcb-4759-a1ff-196baa78991d|2024-12-31",
+     "0000950170-25-072599|C_752ca74f-2117-45c2-8b29-59bbe11ee1b7|2024-12-31",
+     "0000950170-25-072599|C_7f934f6c-1759-42c2-b7f3-2b1f5bf23e28|2024-12-31",
+     "0000950170-25-072599|C_c9c3d6e3-5eee-4b0b-9f46-cedfaa6c3786|2024-12-31",
+     "0000950170-25-072599|C_dca7e220-c56c-45ed-8d9b-04fb647a93cc|2024-12-31",
+     "0000950170-25-072599|C_e67f6158-4ceb-465d-b468-ecaa81f808ee|2024-12-31",
+     "0000950170-25-072599|C_ee471e94-3fda-4bac-8671-8a3dc86b3191|2024-12-31",
+     "0000950170-25-072599|C_efec384a-12d3-4e0e-a1b8-4153a5098ce2|2024-12-31",
+     "0000950170-25-072599|C_fed0ca54-a898-45a0-98a8-5a3e477df730|2024-12-31",
+     "0000950170-25-072599|C_003255cf-61c5-440d-adb4-2b5143e53989|2025-03-31",
+     "0000950170-25-072599|C_15d9e537-3a54-4556-9c20-5326ee4d0c21|2025-03-31",
+     "0000950170-25-072599|C_19e950b7-08f0-45cc-99da-389abdb0485a|2025-03-31",
+     "0000950170-25-072599|C_240b794d-e611-4f59-8079-cc870848511e|2025-03-31",
+     "0000950170-25-072599|C_269a33bb-22c3-4727-9525-d2888da978d6|2025-03-31",
+     "0000950170-25-072599|C_2c025008-5163-40e5-a3de-c20555b7dbd3|2025-03-31",
+     "0000950170-25-072599|C_2cec60ca-519f-4592-8594-7296a3bc25b6|2025-03-31",
+     "0000950170-25-072599|C_38392350-4d3a-4316-bf41-5d53709b6773|2025-03-31",
+     "0000950170-25-072599|C_4df325c0-021a-451b-8dc2-dfb857f323e5|2025-03-31",
+     "0000950170-25-072599|C_6538aeef-a920-431f-b2f1-1ff16f017aaf|2025-03-31",
+     "0000950170-25-072599|C_66acf791-1301-4798-868b-13c32fbdda41|2025-03-31",
+     "0000950170-25-072599|C_9ad92c42-8f59-490f-a373-79914271708b|2025-03-31",
+     "0000950170-25-072599|C_ea4b6369-efdc-4505-91bf-8fb2a30c7647|2025-03-31",
+     "0000950170-25-072599|C_fcf51fd6-e792-4e47-ab35-27754ebf1e6b|2025-03-31"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-072599|C_04bad1ba-4a6b-495f-8517-409ef05d4a6a|2024-12-31",
+     "0000950170-25-072599|C_07dc3a47-2be2-49d0-837c-b8877ef1dc65|2024-12-31",
+     "0000950170-25-072599|C_0c145853-f895-4c74-8ceb-db7d82d0d6de|2024-12-31",
+     "0000950170-25-072599|C_13d85237-09df-4de5-8c6f-a0e9b590557b|2024-12-31",
+     "0000950170-25-072599|C_24e13b1f-1b93-4a0c-99ad-3afa084d776a|2024-12-31",
+     "0000950170-25-072599|C_3aabd1ea-b574-488c-9f52-ebf8a69cd7dc|2024-12-31",
+     "0000950170-25-072599|C_44a7eb79-3fa8-44b2-8405-8fc630febbed|2024-12-31",
+     "0000950170-25-072599|C_454c00e6-dd8e-4cfe-afd1-b6085012e065|2024-12-31",
+     "0000950170-25-072599|C_534cea86-0c96-442c-a5f7-6577b1684466|2024-12-31",
+     "0000950170-25-072599|C_6461e340-1b49-407b-a29f-0f68d0c55717|2024-12-31",
+     "0000950170-25-072599|C_6b700c0b-cbcb-4759-a1ff-196baa78991d|2024-12-31",
+     "0000950170-25-072599|C_752ca74f-2117-45c2-8b29-59bbe11ee1b7|2024-12-31",
+     "0000950170-25-072599|C_7f934f6c-1759-42c2-b7f3-2b1f5bf23e28|2024-12-31",
+     "0000950170-25-072599|C_c9c3d6e3-5eee-4b0b-9f46-cedfaa6c3786|2024-12-31",
+     "0000950170-25-072599|C_dca7e220-c56c-45ed-8d9b-04fb647a93cc|2024-12-31",
+     "0000950170-25-072599|C_e67f6158-4ceb-465d-b468-ecaa81f808ee|2024-12-31",
+     "0000950170-25-072599|C_ee471e94-3fda-4bac-8671-8a3dc86b3191|2024-12-31",
+     "0000950170-25-072599|C_efec384a-12d3-4e0e-a1b8-4153a5098ce2|2024-12-31",
+     "0000950170-25-072599|C_fed0ca54-a898-45a0-98a8-5a3e477df730|2024-12-31",
+     "0000950170-25-072599|C_003255cf-61c5-440d-adb4-2b5143e53989|2025-03-31",
+     "0000950170-25-072599|C_15d9e537-3a54-4556-9c20-5326ee4d0c21|2025-03-31",
+     "0000950170-25-072599|C_19e950b7-08f0-45cc-99da-389abdb0485a|2025-03-31",
+     "0000950170-25-072599|C_240b794d-e611-4f59-8079-cc870848511e|2025-03-31",
+     "0000950170-25-072599|C_269a33bb-22c3-4727-9525-d2888da978d6|2025-03-31",
+     "0000950170-25-072599|C_2c025008-5163-40e5-a3de-c20555b7dbd3|2025-03-31",
+     "0000950170-25-072599|C_2cec60ca-519f-4592-8594-7296a3bc25b6|2025-03-31",
+     "0000950170-25-072599|C_38392350-4d3a-4316-bf41-5d53709b6773|2025-03-31",
+     "0000950170-25-072599|C_4df325c0-021a-451b-8dc2-dfb857f323e5|2025-03-31",
+     "0000950170-25-072599|C_6538aeef-a920-431f-b2f1-1ff16f017aaf|2025-03-31",
+     "0000950170-25-072599|C_66acf791-1301-4798-868b-13c32fbdda41|2025-03-31",
+     "0000950170-25-072599|C_9ad92c42-8f59-490f-a373-79914271708b|2025-03-31",
+     "0000950170-25-072599|C_ea4b6369-efdc-4505-91bf-8fb2a30c7647|2025-03-31",
+     "0000950170-25-072599|C_fcf51fd6-e792-4e47-ab35-27754ebf1e6b|2025-03-31"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Enverus (4)(5) Unitranche First Lien Revolver 12/2029 - ( 4 ) - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "All 33 of 452 leaf contexts without a fair value were listed from the check's failures (b01_2025q1_contexts.csv, q_b01ctx.sql): 19 are dated 2024-12-31, the comparative schedule in the same 10-Q (11 carry a comparative cost); 14 are dated 2025-03-31 and carry no cost, par or value, only a rate, spread or maturity of a row published from its value context (Pitch MidCo, Van Der Steen, Parts Town, CMG Holdco, Duraserv, Essential Services, RWA, UHY, Angels of Care, Pegasus, USALCO, Medicus).",
+    "Undrawn lines printed with '-' in the fair-value cell were the rest (verdicts 2025-12-31 / 2026-03-31): all 155 confirmed on their printed lines are now declared at 0 (wrapper untagged_values) and published."
+   ],
+   "next_action": "Proposed disposition b01-contexts-without-value-carry-no-position-value."
+  },
+  {
+   "finding_id": "RVQ_REV_2946eff18ae1",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-062908|C_978e4902-a9e5-49a4-b242-4c29d5bfb009|ROW-5e4b54e27d4774c9"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-062908|C_978e4902-a9e5-49a4-b242-4c29d5bfb009|ROW-5e4b54e27d4774c9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Pushpay USA Inc. (4)(5)(6) Unitranche First Lien Revolver 05/2029 - ( 12 ) - ( 3 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The Pushpay revolver's cost was tagged +12,000; the page prints '( 12 )' and fair value '( 3 )'. Cost corrected to -12,000 by row correction (earlier C103 verdict: real error, now fixed); C107 now flags the printed negative cost of an undrawn line."
+   ],
+   "next_action": "Proposed disposition c107-negative-cost-undrawn (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_BLK_21626a353b43",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-058631|C_9e06a2e0-232d-495b-9090-d98eeb520c95"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-058631|C_9e06a2e0-232d-495b-9090-d98eeb520c95"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "WCT term loan fair value tag 343,000; page '3,43 4'; published 3,434,000 by promoted rule 03 (kept: matches the page).",
+    "The source check compares the published value with the tag; the published value is the printed one."
+   ],
+   "next_action": "Proposed dispositions src-tag-drops-leading-digit-printed-in-own-cell (WCT, Pinnacle) and src-fv-sign-corrected-from-page (MB2)."
+  },
+  {
+   "finding_id": "RVQ_BLK_4e139a4dfcde",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096155|C_811246f6-6728-4f02-b3a8-3836400c6366",
+     "0000950170-24-096155|C_5fd51e30-7599-41a1-80e1-8eb85e9358ae"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096155|C_811246f6-6728-4f02-b3a8-3836400c6366",
+     "0000950170-24-096155|C_5fd51e30-7599-41a1-80e1-8eb85e9358ae"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Pinnacle term loan tags 607,000 / 575,000 / 607,000; page '3, 607 3, 575 2.3 3, 607'; published 3,607,000 / 3,575,000 / 3,607,000 by row correction (pulled rule 04 had set only the value).",
+    "MB2 delayed draw tagged -38,000; page prints '- ( 18 ) - 38'; published 38,000 by row correction.",
+    "The source check compares the published value with the tag; the published value is the printed one."
+   ],
+   "next_action": "Proposed dispositions src-tag-drops-leading-digit-printed-in-own-cell (WCT, Pinnacle) and src-fv-sign-corrected-from-page (MB2)."
+  },
+  {
+   "finding_id": "BDCSRC_0001954360_2024-06-30_BLOCKING_FAIR_VALUE_DISAGREEMENT_cb2ee27626",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096155|C_811246f6-6728-4f02-b3a8-3836400c6366",
+     "0000950170-24-096155|C_5fd51e30-7599-41a1-80e1-8eb85e9358ae"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096155|C_811246f6-6728-4f02-b3a8-3836400c6366",
+     "0000950170-24-096155|C_5fd51e30-7599-41a1-80e1-8eb85e9358ae"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Pinnacle term loan tags 607,000 / 575,000 / 607,000; page '3, 607 3, 575 2.3 3, 607'; published 3,607,000 / 3,575,000 / 3,607,000 by row correction (pulled rule 04 had set only the value).",
+    "MB2 delayed draw tagged -38,000; page prints '- ( 18 ) - 38'; published 38,000 by row correction.",
+    "The source check compares the published value with the tag; the published value is the printed one."
+   ],
+   "next_action": "Proposed dispositions src-tag-drops-leading-digit-printed-in-own-cell (WCT, Pinnacle) and src-fv-sign-corrected-from-page (MB2)."
+  },
+  {
+   "finding_id": "BDCSRC_0001954360_2024-03-31_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_703375a594",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-058631|C_9e06a2e0-232d-495b-9090-d98eeb520c95"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-058631|C_9e06a2e0-232d-495b-9090-d98eeb520c95"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "WCT term loan fair value tag 343,000; page '3,43 4'; published 3,434,000 by promoted rule 03 (kept: matches the page).",
+    "The source check compares the published value with the tag; the published value is the printed one."
+   ],
+   "next_action": "Proposed dispositions src-tag-drops-leading-digit-printed-in-own-cell (WCT, Pinnacle) and src-fv-sign-corrected-from-page (MB2)."
+  },
+  {
+   "finding_id": "RVQ_REV_4b851676735a",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096155|C_d18952d3-356b-4364-a5c9-9906b8b3cf4d|ROW-24912f288ac907b9",
+     "0000950170-24-096155|C_c3c8f24c-5cae-4e87-83dc-239ea76ac460|ROW-d82fcca0679e00e8",
+     "0000950170-24-096155|C_8d6e7e6d-6231-408c-bd4a-8b4ca466eb61|ROW-b4451893f3bbadfc",
+     "0000950170-24-096155|C_7e0dcf12-3409-41b6-89a4-b40f599fea4f|ROW-d1ea29a2e5add91b",
+     "0000950170-24-096155|C_0635c2bc-4c09-48cf-b27f-5dbdeadc9d48|ROW-81d328a84df11201",
+     "0000950170-24-096155|C_307bf343-9908-42ee-8cf6-66a34123e13c|ROW-ef2e2c083c66cc45",
+     "0000950170-24-096155|C_d9ce92ea-9339-4238-862a-2d5a720a2985|ROW-4035009cd974a0c3",
+     "0000950170-24-096155|C_9e86c3a6-2864-46b1-8d5a-4664fba28fc0|ROW-39ea601cb4d3b893",
+     "0000950170-24-096155|C_37c7e469-1c52-4c61-a263-91059d19ebb6|ROW-099354c5337c9d40",
+     "0000950170-24-096155|C_cc1486f9-3737-4706-aea4-4a4e9806b937|ROW-0bdb346466fc1dd7",
+     "0000950170-24-096155|C_9f76789e-38ac-48aa-a410-0e0d360d24cf|ROW-6391a8ded088af96",
+     "0000950170-24-096155|C_16a98402-b8e4-4837-b674-e6a74d6c21b0|ROW-6559e32672c3a996",
+     "0000950170-24-096155|C_3f7c19d1-0726-457c-aa39-5d8d36273ffc|ROW-ea397b2d5949695e",
+     "0000950170-24-096155|C_2dd41226-da5f-4990-9684-83855528e609|ROW-97a0fadfec950b5e",
+     "0000950170-24-096155|C_d93cb059-a9a2-4603-a5a6-645809277c08|ROW-23b1e32118227876",
+     "0000950170-24-096155|C_88a055f6-298c-4da1-8734-e12db91e4833|ROW-ae96c34aa8e53be1",
+     "0000950170-24-096155|C_8b3cc37f-3bfc-4f4b-aa68-ad41a7da4d93|ROW-3fd5f0042dfe769b",
+     "0000950170-24-096155|C_5fd51e30-7599-41a1-80e1-8eb85e9358ae|ROW-8e7c32b7116f4c23",
+     "0000950170-24-096155|C_b88025f7-d7bf-4d10-8353-28d6afee16c8|ROW-486e025a227eee94",
+     "0000950170-24-096155|C_93b0ef70-47e5-4175-a1fe-e87e1dd38359|ROW-115577f75eb68d7e",
+     "0000950170-24-096155|C_978f09dd-3d07-4940-b0e7-31b02bc25614|ROW-2b7799eae6733279",
+     "0000950170-24-096155|C_79cf8f68-b2d6-480b-b6e5-0c9544f7f27e|ROW-4a60956db708c58e",
+     "0000950170-24-096155|C_3bf90508-8ad7-4fb3-8280-2d94c0d0516e|ROW-700b1197a7a83402",
+     "0000950170-24-096155|C_9ac40bf5-0386-47ca-98ea-f87d446ebaea|ROW-12daf6bb9484dc87"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096155|C_d18952d3-356b-4364-a5c9-9906b8b3cf4d|ROW-24912f288ac907b9",
+     "0000950170-24-096155|C_c3c8f24c-5cae-4e87-83dc-239ea76ac460|ROW-d82fcca0679e00e8",
+     "0000950170-24-096155|C_8d6e7e6d-6231-408c-bd4a-8b4ca466eb61|ROW-b4451893f3bbadfc",
+     "0000950170-24-096155|C_7e0dcf12-3409-41b6-89a4-b40f599fea4f|ROW-d1ea29a2e5add91b",
+     "0000950170-24-096155|C_0635c2bc-4c09-48cf-b27f-5dbdeadc9d48|ROW-81d328a84df11201",
+     "0000950170-24-096155|C_307bf343-9908-42ee-8cf6-66a34123e13c|ROW-ef2e2c083c66cc45",
+     "0000950170-24-096155|C_d9ce92ea-9339-4238-862a-2d5a720a2985|ROW-4035009cd974a0c3",
+     "0000950170-24-096155|C_9e86c3a6-2864-46b1-8d5a-4664fba28fc0|ROW-39ea601cb4d3b893",
+     "0000950170-24-096155|C_37c7e469-1c52-4c61-a263-91059d19ebb6|ROW-099354c5337c9d40",
+     "0000950170-24-096155|C_cc1486f9-3737-4706-aea4-4a4e9806b937|ROW-0bdb346466fc1dd7",
+     "0000950170-24-096155|C_9f76789e-38ac-48aa-a410-0e0d360d24cf|ROW-6391a8ded088af96",
+     "0000950170-24-096155|C_16a98402-b8e4-4837-b674-e6a74d6c21b0|ROW-6559e32672c3a996",
+     "0000950170-24-096155|C_3f7c19d1-0726-457c-aa39-5d8d36273ffc|ROW-ea397b2d5949695e",
+     "0000950170-24-096155|C_2dd41226-da5f-4990-9684-83855528e609|ROW-97a0fadfec950b5e",
+     "0000950170-24-096155|C_d93cb059-a9a2-4603-a5a6-645809277c08|ROW-23b1e32118227876",
+     "0000950170-24-096155|C_88a055f6-298c-4da1-8734-e12db91e4833|ROW-ae96c34aa8e53be1",
+     "0000950170-24-096155|C_8b3cc37f-3bfc-4f4b-aa68-ad41a7da4d93|ROW-3fd5f0042dfe769b",
+     "0000950170-24-096155|C_5fd51e30-7599-41a1-80e1-8eb85e9358ae|ROW-8e7c32b7116f4c23",
+     "0000950170-24-096155|C_b88025f7-d7bf-4d10-8353-28d6afee16c8|ROW-486e025a227eee94",
+     "0000950170-24-096155|C_93b0ef70-47e5-4175-a1fe-e87e1dd38359|ROW-115577f75eb68d7e",
+     "0000950170-24-096155|C_978f09dd-3d07-4940-b0e7-31b02bc25614|ROW-2b7799eae6733279",
+     "0000950170-24-096155|C_79cf8f68-b2d6-480b-b6e5-0c9544f7f27e|ROW-4a60956db708c58e",
+     "0000950170-24-096155|C_3bf90508-8ad7-4fb3-8280-2d94c0d0516e|ROW-700b1197a7a83402",
+     "0000950170-24-096155|C_9ac40bf5-0386-47ca-98ea-f87d446ebaea|ROW-12daf6bb9484dc87"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Angels of Care (4)(5) Senior Secured First Lien Revolver 02/2030 - ( 4 ) - -"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Angels of Care (4)(5) Senior Secured First Lien Delayed Draw Term Loan 02/2030 - ( 4 ) - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 24 rows, 24 matched automatically; the rest read by page_line.py.",
+    "No line prints a rate; the rate cell is empty or the row is a dash-valued undrawn line."
+   ],
+   "next_action": "Proposed disposition x02-no-rate-printed-on-the-row (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_acd446c4523f",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-126307|C_5372673c-b440-4357-a683-2127b6b5cb5d|ROW-364811aec2352c5e",
+     "0000950170-24-126307|C_3ff24843-0fff-4882-923b-98c27bfa7c8a|ROW-5c1821001e959fcd",
+     "0000950170-24-126307|C_3edf245a-e3d9-45f0-bede-de94343cc345|ROW-b5f57e06748f0447",
+     "0000950170-24-126307|C_a110f138-a9ab-4041-981a-9662e824846e|ROW-373bf8ed35a7c27f",
+     "0000950170-24-126307|C_91aa23ca-9a17-486e-b595-0dbd3cc6bd16|ROW-72d8564e973004c6",
+     "0000950170-24-126307|C_c30fc29c-da51-40a3-9720-b862e9c93fe8|ROW-010567b17ebb5b92",
+     "0000950170-24-126307|C_2f6b96ac-71de-4ef5-b34a-871bc227ce17|ROW-fba2a5a7c5d03962",
+     "0000950170-24-126307|C_f4fcb793-f908-42b3-a58f-c0fa66f36cb0|ROW-4c6e4e59f0e3009d",
+     "0000950170-24-126307|C_cd9b6b36-27b0-40cb-96ce-f03bb84baa8d|ROW-e26eaeaf7d88e249",
+     "0000950170-24-126307|C_2d9641eb-234d-4c2c-adb0-0fb5d204d152|ROW-cc19c36c9228da44",
+     "0000950170-24-126307|C_352f17e0-7a4c-4b6d-9701-d9119b96ff63|ROW-b34b60102d9b5c96",
+     "0000950170-24-126307|C_924345b2-1f63-4320-8e11-6e5c6ec2158c|ROW-47bf563d9022c6ef",
+     "0000950170-24-126307|C_0332e3de-f3f0-4e09-87fc-0889ff0065e2|ROW-b2719dbc20b29526",
+     "0000950170-24-126307|C_35f619bc-837c-4afd-9027-cf99e1543778|ROW-950dc60f3fcadd43",
+     "0000950170-24-126307|C_48c33f52-0f50-40b8-af6e-c86ed6f1387f|ROW-0c9d9a47ce37fb54",
+     "0000950170-24-126307|C_e54d065c-7987-4550-8057-01cfbade3d11|ROW-be089432f660d093",
+     "0000950170-24-126307|C_cdd4cf1d-fc95-4cd5-ad1d-9d083d42b97e|ROW-16b136d74a80f268",
+     "0000950170-24-126307|C_3a1a09e6-aaea-4b66-9e98-ee68d3f2a2c8|ROW-59e172ee6f0aa792",
+     "0000950170-24-126307|C_5d15b134-b86b-4edb-9f75-48d4b9940309|ROW-6baf9f7baabb71ac",
+     "0000950170-24-126307|C_1ade3b3c-3506-41dd-9dd0-b68de642bfe5|ROW-a52a61f06da51297",
+     "0000950170-24-126307|C_39c0a0db-165b-4369-9a85-569b6d376a9b|ROW-0fcbe905e3765b80",
+     "0000950170-24-126307|C_5a2991d0-b112-4fbd-94be-ff293870d295|ROW-00783965b90fe4cf",
+     "0000950170-24-126307|C_ff2c2960-3d60-48a2-bf3f-a0ae9ba9b1c9|ROW-a8288975f9e5e7a3",
+     "0000950170-24-126307|C_88619da1-a108-476f-bf3d-5c66074a40bd|ROW-2a0a99e28b73beb6",
+     "0000950170-24-126307|C_a232b9a8-988a-4544-a970-926557827ea8|ROW-e0c506b365932e09"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-126307|C_5372673c-b440-4357-a683-2127b6b5cb5d|ROW-364811aec2352c5e",
+     "0000950170-24-126307|C_3ff24843-0fff-4882-923b-98c27bfa7c8a|ROW-5c1821001e959fcd",
+     "0000950170-24-126307|C_3edf245a-e3d9-45f0-bede-de94343cc345|ROW-b5f57e06748f0447",
+     "0000950170-24-126307|C_a110f138-a9ab-4041-981a-9662e824846e|ROW-373bf8ed35a7c27f",
+     "0000950170-24-126307|C_91aa23ca-9a17-486e-b595-0dbd3cc6bd16|ROW-72d8564e973004c6",
+     "0000950170-24-126307|C_c30fc29c-da51-40a3-9720-b862e9c93fe8|ROW-010567b17ebb5b92",
+     "0000950170-24-126307|C_2f6b96ac-71de-4ef5-b34a-871bc227ce17|ROW-fba2a5a7c5d03962",
+     "0000950170-24-126307|C_f4fcb793-f908-42b3-a58f-c0fa66f36cb0|ROW-4c6e4e59f0e3009d",
+     "0000950170-24-126307|C_cd9b6b36-27b0-40cb-96ce-f03bb84baa8d|ROW-e26eaeaf7d88e249",
+     "0000950170-24-126307|C_2d9641eb-234d-4c2c-adb0-0fb5d204d152|ROW-cc19c36c9228da44",
+     "0000950170-24-126307|C_352f17e0-7a4c-4b6d-9701-d9119b96ff63|ROW-b34b60102d9b5c96",
+     "0000950170-24-126307|C_924345b2-1f63-4320-8e11-6e5c6ec2158c|ROW-47bf563d9022c6ef",
+     "0000950170-24-126307|C_0332e3de-f3f0-4e09-87fc-0889ff0065e2|ROW-b2719dbc20b29526",
+     "0000950170-24-126307|C_35f619bc-837c-4afd-9027-cf99e1543778|ROW-950dc60f3fcadd43",
+     "0000950170-24-126307|C_48c33f52-0f50-40b8-af6e-c86ed6f1387f|ROW-0c9d9a47ce37fb54",
+     "0000950170-24-126307|C_e54d065c-7987-4550-8057-01cfbade3d11|ROW-be089432f660d093",
+     "0000950170-24-126307|C_cdd4cf1d-fc95-4cd5-ad1d-9d083d42b97e|ROW-16b136d74a80f268",
+     "0000950170-24-126307|C_3a1a09e6-aaea-4b66-9e98-ee68d3f2a2c8|ROW-59e172ee6f0aa792",
+     "0000950170-24-126307|C_5d15b134-b86b-4edb-9f75-48d4b9940309|ROW-6baf9f7baabb71ac",
+     "0000950170-24-126307|C_1ade3b3c-3506-41dd-9dd0-b68de642bfe5|ROW-a52a61f06da51297",
+     "0000950170-24-126307|C_39c0a0db-165b-4369-9a85-569b6d376a9b|ROW-0fcbe905e3765b80",
+     "0000950170-24-126307|C_5a2991d0-b112-4fbd-94be-ff293870d295|ROW-00783965b90fe4cf",
+     "0000950170-24-126307|C_ff2c2960-3d60-48a2-bf3f-a0ae9ba9b1c9|ROW-a8288975f9e5e7a3",
+     "0000950170-24-126307|C_88619da1-a108-476f-bf3d-5c66074a40bd|ROW-2a0a99e28b73beb6",
+     "0000950170-24-126307|C_a232b9a8-988a-4544-a970-926557827ea8|ROW-e0c506b365932e09"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Accession Risk Management (4)(5) Senior Secured First Lien Delayed Draw Term Loan 10/2029 - ( 2 ) - -"
+    },
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Angels of Care (4)(5) Senior Secured First Lien Delayed Draw Term Loan 02/2030 - ( 4 ) - -"
+    },
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Angels of Care (4)(5) Senior Secured First Lien Revolver 02/2030 - ( 4 ) - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 25 rows, 25 matched automatically; the rest read by page_line.py.",
+    "No line prints a rate; the rate cell is empty or the row is a dash-valued undrawn line."
+   ],
+   "next_action": "Proposed disposition x02-no-rate-printed-on-the-row (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_d8c475fca33a",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-024835|C_a1df4d1f-f997-4bab-b3d0-8d197eebcc00|ROW-a728e5227f3337f3",
+     "0000950170-25-024835|C_30339fdd-9727-4394-ad8a-b9713abda5c3|ROW-5511d47a3cef983a",
+     "0000950170-25-024835|C_7d34a421-fb69-4763-8161-ba96cb0a63d4|ROW-7f20e7335bd50730",
+     "0000950170-25-024835|C_34ac7afb-9652-4825-9924-7ee96f72b9d8|ROW-e44ce89d093c1b4e",
+     "0000950170-25-024835|C_7c2b4080-d765-4452-88a9-a797eaa53561|ROW-0389f3d3b6c8772a",
+     "0000950170-25-024835|C_a1018966-461b-49d6-976f-b828dd6b2e3e|ROW-06f6633c6c7c0ff9",
+     "0000950170-25-024835|C_20878aac-e36b-4ddc-81d0-3fb0e8196c84|ROW-aecaf554e5555897",
+     "0000950170-25-024835|C_dd89b986-014e-4748-8580-b376c3935f44|ROW-186cfb98e8cda707",
+     "0000950170-25-024835|C_9026874f-12d6-4af2-9f4b-bc7a4ceac01c|ROW-e010e3f167bdc273",
+     "0000950170-25-024835|C_31af8a5e-0f21-4c72-9002-e3e29a9017a7|ROW-864359918683bbbe",
+     "0000950170-25-024835|C_cd1eac04-610e-4889-ae32-dc57ff83ebd9|ROW-929a409ac72cf90b",
+     "0000950170-25-024835|C_1d101aac-fe21-4471-a83e-0d22c94adc61|ROW-33a810da3addea0b",
+     "0000950170-25-024835|C_3a31c07d-b16b-4786-9b8a-7d6b3a3fbd5d|ROW-5a06c97003523402",
+     "0000950170-25-024835|C_02b1b1f8-7d64-4768-ac34-3d83f62a4859|ROW-cfe03da5c28a54f5",
+     "0000950170-25-024835|C_a2c3c8e6-b359-4eff-a1ae-b56a82ca47f9|ROW-0c7721036ee76c9e",
+     "0000950170-25-024835|C_f8a87c49-1df1-4f98-96ae-3144b2e863dd|ROW-f5aa4244fae5c3b3",
+     "0000950170-25-024835|C_8eab6eb0-e91d-4f5e-a903-a957ca50b59a|ROW-7112065a3e1444c6",
+     "0000950170-25-024835|C_8621db1d-4823-4e06-ad1d-0e4458ad96ba|ROW-341375a0d1dd1f9e",
+     "0000950170-25-024835|C_def864c8-2dfe-4ff6-bd24-57ee7613aec2|ROW-4dea69f4568e26c2",
+     "0000950170-25-024835|C_24289859-3ae4-4249-978f-9d933911d011|ROW-bca7f6fbcf487ea9",
+     "0000950170-25-024835|C_1f360da2-8986-4b1b-b8cc-3ef21953aa1b|ROW-94e0960d026d875f",
+     "0000950170-25-024835|C_70d6c105-31a8-4d1b-9b81-52dc87c1376b|ROW-a1b3bf42eeb34bdc",
+     "0000950170-25-024835|C_25eb8bb6-d6e3-452c-b698-0110c55129c5|ROW-b069facb02f7c154",
+     "0000950170-25-024835|C_c3c17615-3b4e-4681-827b-bca195f6c8bc|ROW-0b5ca1462fe7f290",
+     "0000950170-25-024835|C_09dc3532-b9ab-4696-8085-5e46c175cbf0|ROW-57adf9a03dbf885b",
+     "0000950170-25-024835|C_4b32598d-e0a5-48e7-b16c-d4d04f6691be|ROW-6308db18a98bdd62",
+     "0000950170-25-024835|C_9a19a8be-34ef-4850-a032-87c85d50c5ad|ROW-3a598e2314e813aa",
+     "0000950170-25-024835|C_5e4e0edd-51bd-4035-ad93-ad32842bca21|ROW-ec37a0d074546b18",
+     "0000950170-25-024835|C_8e8a670f-3cc2-4ca7-a65c-097b785fbb14|ROW-daa3a02c551d7cf9",
+     "0000950170-25-024835|C_088c33ac-c0fc-4fd2-a9ca-5d7e7fd869de|ROW-ec15ad8adfda4bc6",
+     "0000950170-25-024835|C_4c0fcb7b-ff48-4df3-a3de-d46fa8f98548|ROW-2501dbe1c469296e",
+     "0000950170-25-024835|C_27556220-d251-47d2-8a9f-69cc8d13b43a|ROW-1ba66861b1826123"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-024835|C_a1df4d1f-f997-4bab-b3d0-8d197eebcc00|ROW-a728e5227f3337f3",
+     "0000950170-25-024835|C_30339fdd-9727-4394-ad8a-b9713abda5c3|ROW-5511d47a3cef983a",
+     "0000950170-25-024835|C_7d34a421-fb69-4763-8161-ba96cb0a63d4|ROW-7f20e7335bd50730",
+     "0000950170-25-024835|C_34ac7afb-9652-4825-9924-7ee96f72b9d8|ROW-e44ce89d093c1b4e",
+     "0000950170-25-024835|C_7c2b4080-d765-4452-88a9-a797eaa53561|ROW-0389f3d3b6c8772a",
+     "0000950170-25-024835|C_a1018966-461b-49d6-976f-b828dd6b2e3e|ROW-06f6633c6c7c0ff9",
+     "0000950170-25-024835|C_20878aac-e36b-4ddc-81d0-3fb0e8196c84|ROW-aecaf554e5555897",
+     "0000950170-25-024835|C_dd89b986-014e-4748-8580-b376c3935f44|ROW-186cfb98e8cda707",
+     "0000950170-25-024835|C_9026874f-12d6-4af2-9f4b-bc7a4ceac01c|ROW-e010e3f167bdc273",
+     "0000950170-25-024835|C_31af8a5e-0f21-4c72-9002-e3e29a9017a7|ROW-864359918683bbbe",
+     "0000950170-25-024835|C_cd1eac04-610e-4889-ae32-dc57ff83ebd9|ROW-929a409ac72cf90b",
+     "0000950170-25-024835|C_1d101aac-fe21-4471-a83e-0d22c94adc61|ROW-33a810da3addea0b",
+     "0000950170-25-024835|C_3a31c07d-b16b-4786-9b8a-7d6b3a3fbd5d|ROW-5a06c97003523402",
+     "0000950170-25-024835|C_02b1b1f8-7d64-4768-ac34-3d83f62a4859|ROW-cfe03da5c28a54f5",
+     "0000950170-25-024835|C_a2c3c8e6-b359-4eff-a1ae-b56a82ca47f9|ROW-0c7721036ee76c9e",
+     "0000950170-25-024835|C_f8a87c49-1df1-4f98-96ae-3144b2e863dd|ROW-f5aa4244fae5c3b3",
+     "0000950170-25-024835|C_8eab6eb0-e91d-4f5e-a903-a957ca50b59a|ROW-7112065a3e1444c6",
+     "0000950170-25-024835|C_8621db1d-4823-4e06-ad1d-0e4458ad96ba|ROW-341375a0d1dd1f9e",
+     "0000950170-25-024835|C_def864c8-2dfe-4ff6-bd24-57ee7613aec2|ROW-4dea69f4568e26c2",
+     "0000950170-25-024835|C_24289859-3ae4-4249-978f-9d933911d011|ROW-bca7f6fbcf487ea9",
+     "0000950170-25-024835|C_1f360da2-8986-4b1b-b8cc-3ef21953aa1b|ROW-94e0960d026d875f",
+     "0000950170-25-024835|C_70d6c105-31a8-4d1b-9b81-52dc87c1376b|ROW-a1b3bf42eeb34bdc",
+     "0000950170-25-024835|C_25eb8bb6-d6e3-452c-b698-0110c55129c5|ROW-b069facb02f7c154",
+     "0000950170-25-024835|C_c3c17615-3b4e-4681-827b-bca195f6c8bc|ROW-0b5ca1462fe7f290",
+     "0000950170-25-024835|C_09dc3532-b9ab-4696-8085-5e46c175cbf0|ROW-57adf9a03dbf885b",
+     "0000950170-25-024835|C_4b32598d-e0a5-48e7-b16c-d4d04f6691be|ROW-6308db18a98bdd62",
+     "0000950170-25-024835|C_9a19a8be-34ef-4850-a032-87c85d50c5ad|ROW-3a598e2314e813aa",
+     "0000950170-25-024835|C_5e4e0edd-51bd-4035-ad93-ad32842bca21|ROW-ec37a0d074546b18",
+     "0000950170-25-024835|C_8e8a670f-3cc2-4ca7-a65c-097b785fbb14|ROW-daa3a02c551d7cf9",
+     "0000950170-25-024835|C_088c33ac-c0fc-4fd2-a9ca-5d7e7fd869de|ROW-ec15ad8adfda4bc6",
+     "0000950170-25-024835|C_4c0fcb7b-ff48-4df3-a3de-d46fa8f98548|ROW-2501dbe1c469296e",
+     "0000950170-25-024835|C_27556220-d251-47d2-8a9f-69cc8d13b43a|ROW-1ba66861b1826123"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Ancora Bidco PTY LTD (4)(5)(6) Unitranche First Lien Delayed Draw Term Loan 11/2030 AUD 0 ( 14 ) ( 0.0 ) ( 13 )"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Angels of Care (4)(5) Senior Secured First Lien Delayed Draw Term Loan 02/2030 - ( 4 ) - -"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Angels of Care (4)(5) Senior Secured First Lien Revolver 02/2030 - ( 3 ) - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 32 rows, 31 matched automatically; the rest read by page_line.py.",
+    "C-4 Analytics2 (4)(5) ... 05/2030 - ( 8 ) - - read; Vital Care Buyer revolver '07/2031 - ( 3 ) ( 0.0 ) ( 4 )' read (published maturity now 2031-07-31 from the printed line).",
+    "No line prints a rate; the rate cell is empty or the row is a dash-valued undrawn line."
+   ],
+   "next_action": "Proposed disposition x02-no-rate-printed-on-the-row (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_612251c2d575",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-072599|C_5df85420-f97a-43a2-ac56-67ba8254aa09|ROW-c776f0c4b6b8f000",
+     "0000950170-25-072599|C_bdf3eb8e-068b-4bcf-9535-3b94932e4ae4|ROW-ea3579b3c17c7bfa",
+     "0000950170-25-072599|C_7306ab99-406e-4255-a170-efba46c123a5|ROW-64326bd40e1d4516",
+     "0000950170-25-072599|C_f3db0e7d-23a6-4445-aae1-36aba2074950|ROW-8d23815af733e7ce",
+     "0000950170-25-072599|C_d53bf11c-527a-4f37-964b-f590110c194b|ROW-16032a1ad7e7feff",
+     "0000950170-25-072599|C_55ebbdec-3aa7-4fef-8869-758d8ea8aa2f|ROW-46b4396fe261d5aa",
+     "0000950170-25-072599|C_97bf9bc7-a200-4866-b0b3-c5db09055f80|ROW-a139da405d193887",
+     "0000950170-25-072599|C_ea08e55e-92f8-4235-a30d-0922372d7ba5|ROW-5bdccc02394dd14b",
+     "0000950170-25-072599|C_bc5716e2-a052-489c-94e0-70f36dc02399|ROW-d569c1586053c57d",
+     "0000950170-25-072599|C_9ad91936-dbf6-4541-b01a-ca66fdbf3a64|ROW-cdf3caf9f4c401b8",
+     "0000950170-25-072599|C_d2584b11-40ce-4d9f-81ae-bd0ea855a421|ROW-43005d51b737b838",
+     "0000950170-25-072599|C_3212e755-2891-4e87-ba14-cad765f3eb5e|ROW-87eb6e31fb9cf410",
+     "0000950170-25-072599|C_367e810f-9bef-4bab-851c-99c37ae5a2bf|ROW-afb5886ca34f16e8",
+     "0000950170-25-072599|C_24f21c6f-9496-466b-be0d-7ff5951687cd|ROW-d19300e12c021627",
+     "0000950170-25-072599|C_c4b9c9a1-9d5c-4169-8c90-74cbf7802461|ROW-a8459275bc8c5c99",
+     "0000950170-25-072599|C_15dce2ae-aa13-4889-bf87-01101d901349|ROW-854a7db23e304281",
+     "0000950170-25-072599|C_c244bc35-a935-429d-b593-a1c8209c4275|ROW-b71d4825f447c0d2",
+     "0000950170-25-072599|C_2a337f86-ccc3-4f25-8f87-b6826ab0bfb6|ROW-407124ae2d1ab989",
+     "0000950170-25-072599|C_5901e86d-873b-4afc-9384-b0941e9cc7b1|ROW-c95ed813911e1c60",
+     "0000950170-25-072599|C_c6c26469-2b46-42da-9017-c75f3d47915e|ROW-266d2c86e824e34a",
+     "0000950170-25-072599|C_67471644-1276-4354-9649-461c36733528|ROW-76d8203e82c2cf52",
+     "0000950170-25-072599|C_a2e62d03-290b-43ec-8a0e-f5b74636d494|ROW-0ce1b5a9944f47af",
+     "0000950170-25-072599|C_b893901f-a9f4-4b40-924c-e65a5b884568|ROW-42bc97d8c8be8e85",
+     "0000950170-25-072599|C_f03a6af1-e001-4661-aa30-352831a49f71|ROW-de9dcca4aca2a7aa",
+     "0000950170-25-072599|C_da106111-6575-4ae1-9ae9-3efba016e445|ROW-8821d5f60397bb70",
+     "0000950170-25-072599|C_ea6f0396-730e-490e-8b50-73b697c99ac7|ROW-2b2f22f048982a05",
+     "0000950170-25-072599|C_c4cccabc-c138-49b0-a3ba-3526ca0a642c|ROW-e8c2bbf748804141",
+     "0000950170-25-072599|C_990c0ec4-6ec3-490d-9df0-c15791795e2e|ROW-a4a2ea7ceaf33fc2",
+     "0000950170-25-072599|C_898df6c1-1a9a-4570-bad0-c4d59327b79b|ROW-35a15e70574a594d",
+     "0000950170-25-072599|C_5049a1ba-4f84-4de6-9be4-cdb691ec894c|ROW-d235a760465fcb7b",
+     "0000950170-25-072599|C_4d68d36f-89da-4ef2-8472-6b7e08546085|ROW-df8b046386fc24e3",
+     "0000950170-25-072599|C_7dc7755f-7dd7-4c4e-ac70-7e33bb264ff0|ROW-3ac2efd522cec6e1",
+     "0000950170-25-072599|C_643108f0-bdb0-48e1-8a17-640784d7da41|ROW-8f327700a7dc3483"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-072599|C_5df85420-f97a-43a2-ac56-67ba8254aa09|ROW-c776f0c4b6b8f000",
+     "0000950170-25-072599|C_bdf3eb8e-068b-4bcf-9535-3b94932e4ae4|ROW-ea3579b3c17c7bfa",
+     "0000950170-25-072599|C_7306ab99-406e-4255-a170-efba46c123a5|ROW-64326bd40e1d4516",
+     "0000950170-25-072599|C_f3db0e7d-23a6-4445-aae1-36aba2074950|ROW-8d23815af733e7ce",
+     "0000950170-25-072599|C_d53bf11c-527a-4f37-964b-f590110c194b|ROW-16032a1ad7e7feff",
+     "0000950170-25-072599|C_55ebbdec-3aa7-4fef-8869-758d8ea8aa2f|ROW-46b4396fe261d5aa",
+     "0000950170-25-072599|C_97bf9bc7-a200-4866-b0b3-c5db09055f80|ROW-a139da405d193887",
+     "0000950170-25-072599|C_ea08e55e-92f8-4235-a30d-0922372d7ba5|ROW-5bdccc02394dd14b",
+     "0000950170-25-072599|C_bc5716e2-a052-489c-94e0-70f36dc02399|ROW-d569c1586053c57d",
+     "0000950170-25-072599|C_9ad91936-dbf6-4541-b01a-ca66fdbf3a64|ROW-cdf3caf9f4c401b8",
+     "0000950170-25-072599|C_d2584b11-40ce-4d9f-81ae-bd0ea855a421|ROW-43005d51b737b838",
+     "0000950170-25-072599|C_3212e755-2891-4e87-ba14-cad765f3eb5e|ROW-87eb6e31fb9cf410",
+     "0000950170-25-072599|C_367e810f-9bef-4bab-851c-99c37ae5a2bf|ROW-afb5886ca34f16e8",
+     "0000950170-25-072599|C_24f21c6f-9496-466b-be0d-7ff5951687cd|ROW-d19300e12c021627",
+     "0000950170-25-072599|C_c4b9c9a1-9d5c-4169-8c90-74cbf7802461|ROW-a8459275bc8c5c99",
+     "0000950170-25-072599|C_15dce2ae-aa13-4889-bf87-01101d901349|ROW-854a7db23e304281",
+     "0000950170-25-072599|C_c244bc35-a935-429d-b593-a1c8209c4275|ROW-b71d4825f447c0d2",
+     "0000950170-25-072599|C_2a337f86-ccc3-4f25-8f87-b6826ab0bfb6|ROW-407124ae2d1ab989",
+     "0000950170-25-072599|C_5901e86d-873b-4afc-9384-b0941e9cc7b1|ROW-c95ed813911e1c60",
+     "0000950170-25-072599|C_c6c26469-2b46-42da-9017-c75f3d47915e|ROW-266d2c86e824e34a",
+     "0000950170-25-072599|C_67471644-1276-4354-9649-461c36733528|ROW-76d8203e82c2cf52",
+     "0000950170-25-072599|C_a2e62d03-290b-43ec-8a0e-f5b74636d494|ROW-0ce1b5a9944f47af",
+     "0000950170-25-072599|C_b893901f-a9f4-4b40-924c-e65a5b884568|ROW-42bc97d8c8be8e85",
+     "0000950170-25-072599|C_f03a6af1-e001-4661-aa30-352831a49f71|ROW-de9dcca4aca2a7aa",
+     "0000950170-25-072599|C_da106111-6575-4ae1-9ae9-3efba016e445|ROW-8821d5f60397bb70",
+     "0000950170-25-072599|C_ea6f0396-730e-490e-8b50-73b697c99ac7|ROW-2b2f22f048982a05",
+     "0000950170-25-072599|C_c4cccabc-c138-49b0-a3ba-3526ca0a642c|ROW-e8c2bbf748804141",
+     "0000950170-25-072599|C_990c0ec4-6ec3-490d-9df0-c15791795e2e|ROW-a4a2ea7ceaf33fc2",
+     "0000950170-25-072599|C_898df6c1-1a9a-4570-bad0-c4d59327b79b|ROW-35a15e70574a594d",
+     "0000950170-25-072599|C_5049a1ba-4f84-4de6-9be4-cdb691ec894c|ROW-d235a760465fcb7b",
+     "0000950170-25-072599|C_4d68d36f-89da-4ef2-8472-6b7e08546085|ROW-df8b046386fc24e3",
+     "0000950170-25-072599|C_7dc7755f-7dd7-4c4e-ac70-7e33bb264ff0|ROW-3ac2efd522cec6e1",
+     "0000950170-25-072599|C_643108f0-bdb0-48e1-8a17-640784d7da41|ROW-8f327700a7dc3483"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Ancora Bidco PTY LTD (4)(5)(6) Unitranche First Lien Delayed Draw Term Loan 11/2030 AUD 0 ( 13 ) ( 0.0 ) ( 4 )"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Angels of Care (4)(5) Senior Secured First Lien Revolver 02/2030 - ( 3 ) - -"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Angels of Care (4)(5) Senior Secured First Lien Delayed Draw Term Loan 02/2030 - ( 3 ) - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 33 rows, 30 matched automatically; the rest read by page_line.py.",
+    "C-4 Analytics2 DDTL '05/2030 - ( 8 ) - -', Enverus revolver '12/2029 - ( 4 ) - -', Hamsard DDTL '10/2031 GBP - ( 7 ) ( 0.0 ) ( 7 )' read.",
+    "No line prints a rate; the rate cell is empty or the row is a dash-valued undrawn line."
+   ],
+   "next_action": "Proposed disposition x02-no-rate-printed-on-the-row (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_9a32706a867b",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-180767|C_df779d40-28ba-4354-b112-83646a16c92d|ROW-608aff0a7c0dfa1e",
+     "0001193125-25-180767|C_71bd6c30-dc38-4fbe-937b-43b8c4f94688|ROW-641a3656427628c2",
+     "0001193125-25-180767|C_6cbbc31a-55be-41c6-8410-3f39a4b5165a|ROW-06631a28ff4f4e4e",
+     "0001193125-25-180767|C_5bc891e9-6084-41d3-a021-8ac5f93daf44|ROW-da41c3bec2399945",
+     "0001193125-25-180767|C_6a78adff-6600-4371-82f1-76368c466823|ROW-217aa800748f4d5f",
+     "0001193125-25-180767|C_c9c7a3a5-3520-4a6b-bb60-91198c963159|ROW-2ad79cd04dca40f9",
+     "0001193125-25-180767|C_7a424269-ddf3-417f-ac8c-7efef2bbcd12|ROW-defad03df781c190",
+     "0001193125-25-180767|C_631a12b8-dcdd-437b-bb00-b392a5358d8f|ROW-94c004001705e9ab",
+     "0001193125-25-180767|C_771438ee-cd9a-4e29-bb9b-63072f7ed4a7|ROW-aa3df689fe7407eb",
+     "0001193125-25-180767|C_6cb00f8c-38ba-4ec6-ac15-c937eb6499aa|ROW-9b8d450ba64d8f12",
+     "0001193125-25-180767|C_abdfd934-5de8-404c-b375-641ec171c714|ROW-af4b81c4767143a7",
+     "0001193125-25-180767|C_d34a600c-eed5-4d50-b6b1-1a945afafaf2|ROW-756cdf1f8074cec6",
+     "0001193125-25-180767|C_3d6d4e5b-004b-4872-8301-5c862609b39e|ROW-04865768173a9998",
+     "0001193125-25-180767|C_fc9764f9-0693-4531-8113-038ecd382ab6|ROW-3fe5e38fffb78017",
+     "0001193125-25-180767|C_7779751d-bd4c-4d6c-ab3b-e903a9657638|ROW-b0b59716924dd0c2",
+     "0001193125-25-180767|C_13c619ec-541d-47b3-aa26-f462d0b45fb6|ROW-f3dabdba0432dd59",
+     "0001193125-25-180767|C_105b1e9e-140a-4eaf-891c-1230187ff15a|ROW-1f73fdd8501c92c0",
+     "0001193125-25-180767|C_55844e71-f589-4139-acbe-c3c3c48134be|ROW-6f8312141414c647",
+     "0001193125-25-180767|C_d3cbdc45-aaa3-4c39-a1f9-c1b324a927ce|ROW-85297aef12fa0e27",
+     "0001193125-25-180767|C_53865bd6-a3e6-4c3b-91c8-1b29155593a2|ROW-70e81c9b0f7c24d5",
+     "0001193125-25-180767|C_df48d1b1-a995-43e5-9833-d42367fc6c99|ROW-4eadd9887b53b2ff",
+     "0001193125-25-180767|C_c2d8a2c0-00b7-4e91-a9a7-a537cead27bc|ROW-a6e156cba30e23dc",
+     "0001193125-25-180767|C_716f86af-bf8b-4cd2-a98a-173fe422c734|ROW-65990485ba8fd1c3",
+     "0001193125-25-180767|C_be3dcc63-99d7-4fa1-a3ba-8b24c3bf2d7d|ROW-63e63138e09690d3",
+     "0001193125-25-180767|C_a8857228-e6d0-4c1d-99ae-167460f4949f|ROW-c12ec99a85ea61e3",
+     "0001193125-25-180767|C_d499eb7a-c609-459b-81cf-6cece9754e94|ROW-297b6a72316922ec",
+     "0001193125-25-180767|C_5b15ed3f-fed7-4e2d-aebd-c438bcca07e1|ROW-4686f0a12dca5c02",
+     "0001193125-25-180767|C_725a1c04-a4bb-4c95-bf9a-ed8c61181549|ROW-51f3cc2f4edabbbd",
+     "0001193125-25-180767|C_0a5dda97-fc5f-4b69-bcd6-0b89ea499e43|ROW-f20da2c10ff5e401",
+     "0001193125-25-180767|C_3c1cb748-7b6e-44eb-8866-d88750a9f73a|ROW-35aa488e89915023",
+     "0001193125-25-180767|C_94cf86d7-2334-41c2-9835-d1fc220f64d3|ROW-2fdad472e34bb21c",
+     "0001193125-25-180767|C_660ced9d-b39a-4bf7-8fa6-1346620a3a06|ROW-bded2f5c9c38a110",
+     "0001193125-25-180767|C_5bdf0aae-a81b-4734-a052-67e97b2a99f9|ROW-360884516ad9847a",
+     "0001193125-25-180767|C_67e1e14e-6805-40fe-a7d7-5576d6f58cde|ROW-ae5f753294394451",
+     "0001193125-25-180767|C_a616d086-7262-4477-a728-9737e97790c4|ROW-19924328a764698b",
+     "0001193125-25-180767|C_aa1053a3-4986-4d9f-b8eb-9db8ac4d73a3|ROW-d86feeb306d7b079",
+     "0001193125-25-180767|C_ee6310b3-c3d4-42b5-9a77-e2450d6f1cc4|ROW-281d6c0212cc5951",
+     "0001193125-25-180767|C_6d1a07fe-496c-4616-b181-77aa237ad84f|ROW-45cc6caed419a21c",
+     "0001193125-25-180767|C_ecc9358c-e109-431f-898a-b63ffdafb7c8|ROW-8a3153aeb57f0493",
+     "0001193125-25-180767|C_71843850-8b2c-4067-ab47-99ab8051f5bd|ROW-fc81827b4a42e477",
+     "0001193125-25-180767|C_f8f72025-e3a5-450d-9bab-7b9a7045c2ca|ROW-94094cc9a1546afb",
+     "0001193125-25-180767|C_229cf7cf-69ce-412a-9a18-eecb2ba8456b|ROW-b3c310b5284d8576",
+     "0001193125-25-180767|C_0a926ff6-95d9-4bb3-afb6-0fa3362297ff|ROW-f0f94912cc0f9cac",
+     "0001193125-25-180767|C_6b05a0b7-7169-44f9-b4c6-2310893d5c22|ROW-a8275c4f6e94a7b3",
+     "0001193125-25-180767|C_f0ccbb3d-58bc-4ead-b3b7-cb08c6098184|ROW-17e6bf5a92a7f291",
+     "0001193125-25-180767|C_286e4b8f-4524-43d3-940f-dd5fab58a9cf|ROW-2c75a716e044fd17",
+     "0001193125-25-180767|C_39a21b7b-ce94-4118-9ff8-64f10d62681e|ROW-7e62da879d71ae94",
+     "0001193125-25-180767|C_eeea5329-cee7-4689-a70b-f93a569fa4db|ROW-edd47fb859bce8bc",
+     "0001193125-25-180767|C_3e862f78-497c-4071-8cbd-c743570af2c7|ROW-9fe9a4c6d1d8f8f7",
+     "0001193125-25-180767|C_232371e8-d5b5-46cd-a922-7ee7e9cac7a6|ROW-f405a132fa328231",
+     "0001193125-25-180767|C_e000cfc0-fd0a-4284-8edc-d31db6ff579e|ROW-aaff94dc970dc8e7"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-180767|C_df779d40-28ba-4354-b112-83646a16c92d|ROW-608aff0a7c0dfa1e",
+     "0001193125-25-180767|C_71bd6c30-dc38-4fbe-937b-43b8c4f94688|ROW-641a3656427628c2",
+     "0001193125-25-180767|C_6cbbc31a-55be-41c6-8410-3f39a4b5165a|ROW-06631a28ff4f4e4e",
+     "0001193125-25-180767|C_5bc891e9-6084-41d3-a021-8ac5f93daf44|ROW-da41c3bec2399945",
+     "0001193125-25-180767|C_6a78adff-6600-4371-82f1-76368c466823|ROW-217aa800748f4d5f",
+     "0001193125-25-180767|C_c9c7a3a5-3520-4a6b-bb60-91198c963159|ROW-2ad79cd04dca40f9",
+     "0001193125-25-180767|C_7a424269-ddf3-417f-ac8c-7efef2bbcd12|ROW-defad03df781c190",
+     "0001193125-25-180767|C_631a12b8-dcdd-437b-bb00-b392a5358d8f|ROW-94c004001705e9ab",
+     "0001193125-25-180767|C_771438ee-cd9a-4e29-bb9b-63072f7ed4a7|ROW-aa3df689fe7407eb",
+     "0001193125-25-180767|C_6cb00f8c-38ba-4ec6-ac15-c937eb6499aa|ROW-9b8d450ba64d8f12",
+     "0001193125-25-180767|C_abdfd934-5de8-404c-b375-641ec171c714|ROW-af4b81c4767143a7",
+     "0001193125-25-180767|C_d34a600c-eed5-4d50-b6b1-1a945afafaf2|ROW-756cdf1f8074cec6",
+     "0001193125-25-180767|C_3d6d4e5b-004b-4872-8301-5c862609b39e|ROW-04865768173a9998",
+     "0001193125-25-180767|C_fc9764f9-0693-4531-8113-038ecd382ab6|ROW-3fe5e38fffb78017",
+     "0001193125-25-180767|C_7779751d-bd4c-4d6c-ab3b-e903a9657638|ROW-b0b59716924dd0c2",
+     "0001193125-25-180767|C_13c619ec-541d-47b3-aa26-f462d0b45fb6|ROW-f3dabdba0432dd59",
+     "0001193125-25-180767|C_105b1e9e-140a-4eaf-891c-1230187ff15a|ROW-1f73fdd8501c92c0",
+     "0001193125-25-180767|C_55844e71-f589-4139-acbe-c3c3c48134be|ROW-6f8312141414c647",
+     "0001193125-25-180767|C_d3cbdc45-aaa3-4c39-a1f9-c1b324a927ce|ROW-85297aef12fa0e27",
+     "0001193125-25-180767|C_53865bd6-a3e6-4c3b-91c8-1b29155593a2|ROW-70e81c9b0f7c24d5",
+     "0001193125-25-180767|C_df48d1b1-a995-43e5-9833-d42367fc6c99|ROW-4eadd9887b53b2ff",
+     "0001193125-25-180767|C_c2d8a2c0-00b7-4e91-a9a7-a537cead27bc|ROW-a6e156cba30e23dc",
+     "0001193125-25-180767|C_716f86af-bf8b-4cd2-a98a-173fe422c734|ROW-65990485ba8fd1c3",
+     "0001193125-25-180767|C_be3dcc63-99d7-4fa1-a3ba-8b24c3bf2d7d|ROW-63e63138e09690d3",
+     "0001193125-25-180767|C_a8857228-e6d0-4c1d-99ae-167460f4949f|ROW-c12ec99a85ea61e3",
+     "0001193125-25-180767|C_d499eb7a-c609-459b-81cf-6cece9754e94|ROW-297b6a72316922ec",
+     "0001193125-25-180767|C_5b15ed3f-fed7-4e2d-aebd-c438bcca07e1|ROW-4686f0a12dca5c02",
+     "0001193125-25-180767|C_725a1c04-a4bb-4c95-bf9a-ed8c61181549|ROW-51f3cc2f4edabbbd",
+     "0001193125-25-180767|C_0a5dda97-fc5f-4b69-bcd6-0b89ea499e43|ROW-f20da2c10ff5e401",
+     "0001193125-25-180767|C_3c1cb748-7b6e-44eb-8866-d88750a9f73a|ROW-35aa488e89915023",
+     "0001193125-25-180767|C_94cf86d7-2334-41c2-9835-d1fc220f64d3|ROW-2fdad472e34bb21c",
+     "0001193125-25-180767|C_660ced9d-b39a-4bf7-8fa6-1346620a3a06|ROW-bded2f5c9c38a110",
+     "0001193125-25-180767|C_5bdf0aae-a81b-4734-a052-67e97b2a99f9|ROW-360884516ad9847a",
+     "0001193125-25-180767|C_67e1e14e-6805-40fe-a7d7-5576d6f58cde|ROW-ae5f753294394451",
+     "0001193125-25-180767|C_a616d086-7262-4477-a728-9737e97790c4|ROW-19924328a764698b",
+     "0001193125-25-180767|C_aa1053a3-4986-4d9f-b8eb-9db8ac4d73a3|ROW-d86feeb306d7b079",
+     "0001193125-25-180767|C_ee6310b3-c3d4-42b5-9a77-e2450d6f1cc4|ROW-281d6c0212cc5951",
+     "0001193125-25-180767|C_6d1a07fe-496c-4616-b181-77aa237ad84f|ROW-45cc6caed419a21c",
+     "0001193125-25-180767|C_ecc9358c-e109-431f-898a-b63ffdafb7c8|ROW-8a3153aeb57f0493",
+     "0001193125-25-180767|C_71843850-8b2c-4067-ab47-99ab8051f5bd|ROW-fc81827b4a42e477",
+     "0001193125-25-180767|C_f8f72025-e3a5-450d-9bab-7b9a7045c2ca|ROW-94094cc9a1546afb",
+     "0001193125-25-180767|C_229cf7cf-69ce-412a-9a18-eecb2ba8456b|ROW-b3c310b5284d8576",
+     "0001193125-25-180767|C_0a926ff6-95d9-4bb3-afb6-0fa3362297ff|ROW-f0f94912cc0f9cac",
+     "0001193125-25-180767|C_6b05a0b7-7169-44f9-b4c6-2310893d5c22|ROW-a8275c4f6e94a7b3",
+     "0001193125-25-180767|C_f0ccbb3d-58bc-4ead-b3b7-cb08c6098184|ROW-17e6bf5a92a7f291",
+     "0001193125-25-180767|C_286e4b8f-4524-43d3-940f-dd5fab58a9cf|ROW-2c75a716e044fd17",
+     "0001193125-25-180767|C_39a21b7b-ce94-4118-9ff8-64f10d62681e|ROW-7e62da879d71ae94",
+     "0001193125-25-180767|C_eeea5329-cee7-4689-a70b-f93a569fa4db|ROW-edd47fb859bce8bc",
+     "0001193125-25-180767|C_3e862f78-497c-4071-8cbd-c743570af2c7|ROW-9fe9a4c6d1d8f8f7",
+     "0001193125-25-180767|C_232371e8-d5b5-46cd-a922-7ee7e9cac7a6|ROW-f405a132fa328231",
+     "0001193125-25-180767|C_e000cfc0-fd0a-4284-8edc-d31db6ff579e|ROW-aaff94dc970dc8e7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-180767",
+     "text": "Americana Partners LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2031 - ( 5 ) ( 0.0 ) ( 14 )"
+    },
+    {
+     "accession": "0001193125-25-180767",
+     "text": "Americana Partners LLC (4)(5) Unitranche First Lien Revolver 05/2031 - ( 3 ) ( 0.0 ) ( 3 )"
+    },
+    {
+     "accession": "0001193125-25-180767",
+     "text": "Ancora Bidco PTY LTD (4)(5)(6) Unitranche First Lien Delayed Draw Term Loan 11/2030 AUD 0 ( 13 ) 0.0 1"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 51 rows, 50 matched automatically; the rest read by page_line.py.",
+    "C4 DDTL '- ( 8 ) - -', Olyos DDTL '06/2028 EUR 0 ( 64 ) ( 0.0 ) ( 65 )' (instrument now the printed delayed draw), Pegasus DDTL '01/2031 - ( 2 ) ( 0.0 ) ( 2 )' read.",
+    "No line prints a rate; the rate cell is empty or the row is a dash-valued undrawn line."
+   ],
+   "next_action": "Proposed disposition x02-no-rate-printed-on-the-row (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_c9ef0944c2eb",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-352548|C_8d1eb158-a971-40cd-b48d-f555b89323fa|ROW-5a0ed7bc1359ec22",
+     "0001193125-26-352548|C_4878500e-24c2-43c4-9f2a-e29bfc44561a|ROW-842c8fb31199715e",
+     "0001193125-26-352548|C_c6d74bac-b32f-4f7d-86ec-c4028d11ae15|ROW-19103aff36e198dd",
+     "0001193125-26-352548|C_2efa33d3-97cc-48da-88f8-6b9d68fd2016|ROW-c7d89e367fa65de2",
+     "0001193125-26-352548|C_47720ea1-3f13-4566-86ad-a4fdfd692834|ROW-4db9675da98bf4ca",
+     "0001193125-26-352548|C_c764bfd3-9ef2-4763-80e4-eeef5e2a7000|ROW-3c747666d1e06ad2",
+     "0001193125-26-352548|C_027c72bc-9215-474b-bdde-8e31ce7a80b9|ROW-69729db4d55b349d",
+     "0001193125-26-352548|C_207d850d-301a-453b-8f0f-07e9f881916b|ROW-84e74cfe1306fcbe",
+     "0001193125-26-352548|C_1a6b5b4b-4522-4d88-95eb-8decb8daa304|ROW-320abc9306189b04",
+     "0001193125-26-352548|C_7f6772e7-c3c8-4da3-993d-0fc13025cac9|ROW-a4c1d6a0ff8221b5",
+     "0001193125-26-352548|C_35cda211-e22d-40cb-a590-677a1d340b77|ROW-788e78a3b3bbc80b",
+     "0001193125-26-352548|C_f712cf1b-a1bc-426d-bf7a-a754059920a1|ROW-4af28a501c14ccf1",
+     "0001193125-26-352548|C_f442c95d-d612-4fa3-b753-1015d151efa3|ROW-b4fb25a25a56db26",
+     "0001193125-26-352548|C_be3abc57-b773-4df8-9072-741cf3880ea4|ROW-4a1d37ae533e0361",
+     "0001193125-26-352548|C_1b3d6080-104f-4dac-960a-93128cb7e6b1|ROW-d8be2b07e858037b",
+     "0001193125-26-352548|C_e3eb1810-bc9b-4d48-8a01-9f54b32a3209|ROW-6e6d31da28d72115",
+     "0001193125-26-352548|C_e8d8e5eb-2f5a-4f65-82b3-ecf90c1109a5|ROW-e61116f87892902a",
+     "0001193125-26-352548|C_a48e7279-15cc-4903-afb1-961ff8f429bb|ROW-50b45a13d14114b2",
+     "0001193125-26-352548|C_7236a7af-2851-46d4-982d-79cecddab449|ROW-acb4b28226373cce",
+     "0001193125-26-352548|C_0a1ce154-c4d4-495d-9370-d489b69b766c|ROW-67cd280c2167fbe2",
+     "0001193125-26-352548|C_0c7bb51e-e5e1-4aeb-9da5-335e15dee2cb|ROW-05683324cbcec87a",
+     "0001193125-26-352548|C_00711ecd-7107-41b8-ba5d-4aac2c9bb372|ROW-72aa602eb23e160f",
+     "0001193125-26-352548|C_268e793e-ebdf-408c-ba3e-bc8e0c165415|ROW-a7930cdaca3dedb7",
+     "0001193125-26-352548|C_f7d032f0-450b-4e84-a535-e1bdb2fe9f24|ROW-539d893f561d688e",
+     "0001193125-26-352548|C_0e605d81-a840-4a40-8421-9a7ac6794c0a|ROW-87ffde29f2a65788",
+     "0001193125-26-352548|C_e17e218b-aa28-447a-b1cd-832d698af90f|ROW-ecccf7fa621be9e6",
+     "0001193125-26-352548|C_e68f5f21-b999-42d4-97e0-07193571fab3|ROW-0a1808fc79312b5b",
+     "0001193125-26-352548|C_4129c96c-5698-4d16-9d07-8caf8ae852f1|ROW-7b2e1d0a0571eba5",
+     "0001193125-26-352548|C_89c51a9d-8dae-4e2c-bb94-69cd72911867|ROW-bd7c104f14fe23ef",
+     "0001193125-26-352548|C_1e3dc514-591d-46ce-a87c-6b6a4e1061bb|ROW-6c625e021219382b",
+     "0001193125-26-352548|C_76829b99-3dee-43f6-9ebf-7f0806b69b1a|ROW-15031f7bda9ab835",
+     "0001193125-26-352548|C_0e43bcf8-8aff-4873-9585-1dca460e317b|ROW-b9c84636f6a125d4",
+     "0001193125-26-352548|C_d182d387-1542-4f5f-9baa-f458cd7c6076|ROW-f530aaa3bb11c551",
+     "0001193125-26-352548|C_f6b0b6ad-9b4f-4d5d-9f94-fd538ab0b910|ROW-e40f1b71f1004ec9",
+     "0001193125-26-352548|C_a606a036-5119-4aab-8a62-f6ff2a18a2e4|ROW-510e6aa8b2b20f05",
+     "0001193125-26-352548|C_5171bb88-7114-41ff-92ff-59773660e94b|ROW-0bcce7315e416d41",
+     "0001193125-26-352548|C_103e08ac-98d3-4721-b5a3-ee55daf53ef6|ROW-4ceeda6473438cad",
+     "0001193125-26-352548|C_b0387979-610a-4a93-b58e-cb2cffe3c6f6|ROW-c94fd1a72e9ee0fe",
+     "0001193125-26-352548|C_3abd13fd-1136-47dc-934a-229d7be7989f|ROW-1c69630b1bfdf209",
+     "0001193125-26-352548|C_acaadf76-88bc-407a-bc65-959d21023750|ROW-63ff79b0b21486fa",
+     "0001193125-26-352548|C_6d79e0f7-0259-45cd-b46d-f9e3afd7e5fb|ROW-f11aa6432a57a74e",
+     "0001193125-26-352548|C_3ef2fa9f-135c-4915-bca2-3fd19051439f|ROW-a6849122e1ecf768",
+     "0001193125-26-352548|C_44674517-bf12-4f06-a729-8a1a6426e4d1|ROW-97a10db8e35e3185",
+     "0001193125-26-352548|C_26e6c67b-4386-40ea-b549-4a5910cad12b|ROW-6cad6482a1e2224a",
+     "0001193125-26-352548|C_19d15b5f-ebc0-45fe-9ce4-4875e9e75436|ROW-46256dc2b66496b7",
+     "0001193125-26-352548|C_cccc73f0-7428-4faa-be7c-cbe5903a5917|ROW-949ef70f6dc1692d",
+     "0001193125-26-352548|C_52741f6f-ef5d-4510-9884-e0e33d3bdd1c|ROW-1c884b450ce43650",
+     "0001193125-26-352548|C_dcaaabf2-98a1-40ce-9621-1d4d59c9109b|ROW-22c085f9e58d747c",
+     "0001193125-26-352548|C_a9b7f88d-d120-4b5f-851e-adb340d265bc|ROW-668c00d53066c694",
+     "0001193125-26-352548|C_f8750fd1-d9c3-4976-bb56-dffc02a2ff2b|ROW-288b8800dcc11d4b",
+     "0001193125-26-352548|C_7db9a13c-46e3-4e81-93a0-f10f445895dd|ROW-8a214ed0228eb9e4",
+     "0001193125-26-352548|C_211c5c26-aa8d-493b-a255-4b1885c43cfc|ROW-a494ac31c65bf3ec",
+     "0001193125-26-352548|C_e58ed049-ca98-4b28-91b3-a0eeacb88c2b|ROW-a8ca047a06c8b075",
+     "0001193125-26-352548|C_0ea287ae-14cf-43e3-9366-ca719382d35d|ROW-63e2b2dc25e7a1a1",
+     "0001193125-26-352548|C_a076da28-d1b4-4755-9fdf-d5a37e2661cc|ROW-7571aaf28a8fb4ee",
+     "0001193125-26-352548|C_449ed059-864c-4406-813f-a7e8493ebee8|ROW-47ac57d81678d5bb",
+     "0001193125-26-352548|C_af17d1ab-7b60-451c-87c0-e6013664256b|ROW-9f9467c90ae84372",
+     "0001193125-26-352548|C_5677e83e-eb56-4d2d-ac04-7e948c0349fb|ROW-976702e0552082ea",
+     "0001193125-26-352548|C_bbbb77f6-6e32-453b-bd0e-34fc9587077e|ROW-7afab4e2f98b1840",
+     "0001193125-26-352548|C_e79aa4e7-c16f-4715-87f0-61ec4c5575fc|ROW-bd9ece62ed6d8455",
+     "0001193125-26-352548|C_31157020-1b73-4f87-b66f-cc342babda6f|ROW-7759ba13aa5a6583",
+     "0001193125-26-352548|C_4c0b287e-f312-40b0-87cd-012b2f8c6946|ROW-00f7e33848bc7b77",
+     "0001193125-26-352548|C_c3a369e1-7e72-476c-acfc-4a2598f3e336|ROW-22779b6dac5890f0",
+     "0001193125-26-352548|C_e162dbb6-c5ea-4fb1-a9da-11b02fba1855|ROW-3746e2de6804742e",
+     "0001193125-26-352548|C_035ed845-301b-4b45-ad2e-4cbea920ee68|ROW-5ecb2b3244a23524",
+     "0001193125-26-352548|C_b08bdc34-35f8-4993-a194-9bca74ff15b6|ROW-e7b4063f90a852c5",
+     "0001193125-26-352548|C_c4d35dc8-44cb-42a9-b506-820b8a591ee0|ROW-dd87255a9c26d35b",
+     "0001193125-26-352548|C_60323fc7-d3f7-4bc3-968e-062dfeb58402|ROW-f17fa386604b4f7f",
+     "0001193125-26-352548|C_6f89cf20-8372-42ec-a934-d159e63146f6|ROW-d317208e3d5719ee",
+     "0001193125-26-352548|C_3688a9ba-de79-4714-b542-a35a10c9f441|ROW-b589381f7fd02149",
+     "0001193125-26-352548|C_be1fb898-99bb-4dff-b8b9-97f39a7987c6|ROW-d399653c981707d0",
+     "0001193125-26-352548|C_a8fd6cfa-769c-4fed-8035-eb120730b68b|ROW-60e069a32fc520b2",
+     "0001193125-26-352548|C_9c09bbf9-fff4-4452-9d09-d58cd05b757d|ROW-ef6ff7ff4eea37ed",
+     "0001193125-26-352548|C_93ad8351-acbf-4eb3-acd4-c2228cfed0b8|ROW-a93d148791061208",
+     "0001193125-26-352548|C_c686c454-653c-4b60-88c2-ad9d02fbd979|ROW-b33eed0c276771fc",
+     "0001193125-26-352548|C_62ed0b2d-143e-468f-a153-df5d5d4fa83b|ROW-9b8003631abae904",
+     "0001193125-26-352548|C_9478522f-8088-4bc4-a07c-42dbf8008856|ROW-d1e9f967d0a7e59c"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-352548|C_8d1eb158-a971-40cd-b48d-f555b89323fa|ROW-5a0ed7bc1359ec22",
+     "0001193125-26-352548|C_4878500e-24c2-43c4-9f2a-e29bfc44561a|ROW-842c8fb31199715e",
+     "0001193125-26-352548|C_c6d74bac-b32f-4f7d-86ec-c4028d11ae15|ROW-19103aff36e198dd",
+     "0001193125-26-352548|C_2efa33d3-97cc-48da-88f8-6b9d68fd2016|ROW-c7d89e367fa65de2",
+     "0001193125-26-352548|C_47720ea1-3f13-4566-86ad-a4fdfd692834|ROW-4db9675da98bf4ca",
+     "0001193125-26-352548|C_c764bfd3-9ef2-4763-80e4-eeef5e2a7000|ROW-3c747666d1e06ad2",
+     "0001193125-26-352548|C_027c72bc-9215-474b-bdde-8e31ce7a80b9|ROW-69729db4d55b349d",
+     "0001193125-26-352548|C_207d850d-301a-453b-8f0f-07e9f881916b|ROW-84e74cfe1306fcbe",
+     "0001193125-26-352548|C_1a6b5b4b-4522-4d88-95eb-8decb8daa304|ROW-320abc9306189b04",
+     "0001193125-26-352548|C_7f6772e7-c3c8-4da3-993d-0fc13025cac9|ROW-a4c1d6a0ff8221b5",
+     "0001193125-26-352548|C_35cda211-e22d-40cb-a590-677a1d340b77|ROW-788e78a3b3bbc80b",
+     "0001193125-26-352548|C_f712cf1b-a1bc-426d-bf7a-a754059920a1|ROW-4af28a501c14ccf1",
+     "0001193125-26-352548|C_f442c95d-d612-4fa3-b753-1015d151efa3|ROW-b4fb25a25a56db26",
+     "0001193125-26-352548|C_be3abc57-b773-4df8-9072-741cf3880ea4|ROW-4a1d37ae533e0361",
+     "0001193125-26-352548|C_1b3d6080-104f-4dac-960a-93128cb7e6b1|ROW-d8be2b07e858037b",
+     "0001193125-26-352548|C_e3eb1810-bc9b-4d48-8a01-9f54b32a3209|ROW-6e6d31da28d72115",
+     "0001193125-26-352548|C_e8d8e5eb-2f5a-4f65-82b3-ecf90c1109a5|ROW-e61116f87892902a",
+     "0001193125-26-352548|C_a48e7279-15cc-4903-afb1-961ff8f429bb|ROW-50b45a13d14114b2",
+     "0001193125-26-352548|C_7236a7af-2851-46d4-982d-79cecddab449|ROW-acb4b28226373cce",
+     "0001193125-26-352548|C_0a1ce154-c4d4-495d-9370-d489b69b766c|ROW-67cd280c2167fbe2",
+     "0001193125-26-352548|C_0c7bb51e-e5e1-4aeb-9da5-335e15dee2cb|ROW-05683324cbcec87a",
+     "0001193125-26-352548|C_00711ecd-7107-41b8-ba5d-4aac2c9bb372|ROW-72aa602eb23e160f",
+     "0001193125-26-352548|C_268e793e-ebdf-408c-ba3e-bc8e0c165415|ROW-a7930cdaca3dedb7",
+     "0001193125-26-352548|C_f7d032f0-450b-4e84-a535-e1bdb2fe9f24|ROW-539d893f561d688e",
+     "0001193125-26-352548|C_0e605d81-a840-4a40-8421-9a7ac6794c0a|ROW-87ffde29f2a65788",
+     "0001193125-26-352548|C_e17e218b-aa28-447a-b1cd-832d698af90f|ROW-ecccf7fa621be9e6",
+     "0001193125-26-352548|C_e68f5f21-b999-42d4-97e0-07193571fab3|ROW-0a1808fc79312b5b",
+     "0001193125-26-352548|C_4129c96c-5698-4d16-9d07-8caf8ae852f1|ROW-7b2e1d0a0571eba5",
+     "0001193125-26-352548|C_89c51a9d-8dae-4e2c-bb94-69cd72911867|ROW-bd7c104f14fe23ef",
+     "0001193125-26-352548|C_1e3dc514-591d-46ce-a87c-6b6a4e1061bb|ROW-6c625e021219382b",
+     "0001193125-26-352548|C_76829b99-3dee-43f6-9ebf-7f0806b69b1a|ROW-15031f7bda9ab835",
+     "0001193125-26-352548|C_0e43bcf8-8aff-4873-9585-1dca460e317b|ROW-b9c84636f6a125d4",
+     "0001193125-26-352548|C_d182d387-1542-4f5f-9baa-f458cd7c6076|ROW-f530aaa3bb11c551",
+     "0001193125-26-352548|C_f6b0b6ad-9b4f-4d5d-9f94-fd538ab0b910|ROW-e40f1b71f1004ec9",
+     "0001193125-26-352548|C_a606a036-5119-4aab-8a62-f6ff2a18a2e4|ROW-510e6aa8b2b20f05",
+     "0001193125-26-352548|C_5171bb88-7114-41ff-92ff-59773660e94b|ROW-0bcce7315e416d41",
+     "0001193125-26-352548|C_103e08ac-98d3-4721-b5a3-ee55daf53ef6|ROW-4ceeda6473438cad",
+     "0001193125-26-352548|C_b0387979-610a-4a93-b58e-cb2cffe3c6f6|ROW-c94fd1a72e9ee0fe",
+     "0001193125-26-352548|C_3abd13fd-1136-47dc-934a-229d7be7989f|ROW-1c69630b1bfdf209",
+     "0001193125-26-352548|C_acaadf76-88bc-407a-bc65-959d21023750|ROW-63ff79b0b21486fa",
+     "0001193125-26-352548|C_6d79e0f7-0259-45cd-b46d-f9e3afd7e5fb|ROW-f11aa6432a57a74e",
+     "0001193125-26-352548|C_3ef2fa9f-135c-4915-bca2-3fd19051439f|ROW-a6849122e1ecf768",
+     "0001193125-26-352548|C_44674517-bf12-4f06-a729-8a1a6426e4d1|ROW-97a10db8e35e3185",
+     "0001193125-26-352548|C_26e6c67b-4386-40ea-b549-4a5910cad12b|ROW-6cad6482a1e2224a",
+     "0001193125-26-352548|C_19d15b5f-ebc0-45fe-9ce4-4875e9e75436|ROW-46256dc2b66496b7",
+     "0001193125-26-352548|C_cccc73f0-7428-4faa-be7c-cbe5903a5917|ROW-949ef70f6dc1692d",
+     "0001193125-26-352548|C_52741f6f-ef5d-4510-9884-e0e33d3bdd1c|ROW-1c884b450ce43650",
+     "0001193125-26-352548|C_dcaaabf2-98a1-40ce-9621-1d4d59c9109b|ROW-22c085f9e58d747c",
+     "0001193125-26-352548|C_a9b7f88d-d120-4b5f-851e-adb340d265bc|ROW-668c00d53066c694",
+     "0001193125-26-352548|C_f8750fd1-d9c3-4976-bb56-dffc02a2ff2b|ROW-288b8800dcc11d4b",
+     "0001193125-26-352548|C_7db9a13c-46e3-4e81-93a0-f10f445895dd|ROW-8a214ed0228eb9e4",
+     "0001193125-26-352548|C_211c5c26-aa8d-493b-a255-4b1885c43cfc|ROW-a494ac31c65bf3ec",
+     "0001193125-26-352548|C_e58ed049-ca98-4b28-91b3-a0eeacb88c2b|ROW-a8ca047a06c8b075",
+     "0001193125-26-352548|C_0ea287ae-14cf-43e3-9366-ca719382d35d|ROW-63e2b2dc25e7a1a1",
+     "0001193125-26-352548|C_a076da28-d1b4-4755-9fdf-d5a37e2661cc|ROW-7571aaf28a8fb4ee",
+     "0001193125-26-352548|C_449ed059-864c-4406-813f-a7e8493ebee8|ROW-47ac57d81678d5bb",
+     "0001193125-26-352548|C_af17d1ab-7b60-451c-87c0-e6013664256b|ROW-9f9467c90ae84372",
+     "0001193125-26-352548|C_5677e83e-eb56-4d2d-ac04-7e948c0349fb|ROW-976702e0552082ea",
+     "0001193125-26-352548|C_bbbb77f6-6e32-453b-bd0e-34fc9587077e|ROW-7afab4e2f98b1840",
+     "0001193125-26-352548|C_e79aa4e7-c16f-4715-87f0-61ec4c5575fc|ROW-bd9ece62ed6d8455",
+     "0001193125-26-352548|C_31157020-1b73-4f87-b66f-cc342babda6f|ROW-7759ba13aa5a6583",
+     "0001193125-26-352548|C_4c0b287e-f312-40b0-87cd-012b2f8c6946|ROW-00f7e33848bc7b77",
+     "0001193125-26-352548|C_c3a369e1-7e72-476c-acfc-4a2598f3e336|ROW-22779b6dac5890f0",
+     "0001193125-26-352548|C_e162dbb6-c5ea-4fb1-a9da-11b02fba1855|ROW-3746e2de6804742e",
+     "0001193125-26-352548|C_035ed845-301b-4b45-ad2e-4cbea920ee68|ROW-5ecb2b3244a23524",
+     "0001193125-26-352548|C_b08bdc34-35f8-4993-a194-9bca74ff15b6|ROW-e7b4063f90a852c5",
+     "0001193125-26-352548|C_c4d35dc8-44cb-42a9-b506-820b8a591ee0|ROW-dd87255a9c26d35b",
+     "0001193125-26-352548|C_60323fc7-d3f7-4bc3-968e-062dfeb58402|ROW-f17fa386604b4f7f",
+     "0001193125-26-352548|C_6f89cf20-8372-42ec-a934-d159e63146f6|ROW-d317208e3d5719ee",
+     "0001193125-26-352548|C_3688a9ba-de79-4714-b542-a35a10c9f441|ROW-b589381f7fd02149",
+     "0001193125-26-352548|C_be1fb898-99bb-4dff-b8b9-97f39a7987c6|ROW-d399653c981707d0",
+     "0001193125-26-352548|C_a8fd6cfa-769c-4fed-8035-eb120730b68b|ROW-60e069a32fc520b2",
+     "0001193125-26-352548|C_9c09bbf9-fff4-4452-9d09-d58cd05b757d|ROW-ef6ff7ff4eea37ed",
+     "0001193125-26-352548|C_93ad8351-acbf-4eb3-acd4-c2228cfed0b8|ROW-a93d148791061208",
+     "0001193125-26-352548|C_c686c454-653c-4b60-88c2-ad9d02fbd979|ROW-b33eed0c276771fc",
+     "0001193125-26-352548|C_62ed0b2d-143e-468f-a153-df5d5d4fa83b|ROW-9b8003631abae904",
+     "0001193125-26-352548|C_9478522f-8088-4bc4-a07c-42dbf8008856|ROW-d1e9f967d0a7e59c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Accurate Finance Sub, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 09/2032 $ - $ ( 1 ) - % $ -"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Americana Partners LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2031 - ( 4 ) ( 0.0 ) ( 29 )"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Americana Partners LLC (4)(5) Unitranche First Lien Revolver 05/2031 - ( 3 ) ( 0.0 ) ( 6 )"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "(13) Unitranche First Lien Revolver 12/2028 629 599 0.0 240 Avalign Technologies, Inc. (13) Unitranche First Lien Term Loan 12/2028 7,512 7,222 0.8 4,348"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 77 rows, 76 matched automatically; the rest read by page_line.py.",
+    "Medicus IT DDTL '07/2031 - ( 11 ) - -' and Trace3 DDTL '10/2032 - - ( 0.0 ) ( 3 )' read; both published maturities now the printed month (corrected).",
+    "Avalign revolver and term loan (240 and 4,348): printed on non-accrual (13) with no rate; published nonaccrual.",
+    "No line prints a rate; the rate cell is empty or the row is a dash-valued undrawn line."
+   ],
+   "next_action": "Proposed disposition x02-no-rate-printed-on-the-row (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_5a076542cd5c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-058631|C_398646dd-34de-4bc6-8625-39f903d7cb5c|ROW-7a54fbb5c71617c2",
+     "0000950170-24-058631|C_1a833fcd-e57f-45e4-b197-311146e5418e|ROW-6a75aead56fc6add",
+     "0000950170-24-058631|C_27b399bc-b834-44c0-9156-ccf8084d1bb2|ROW-9f825c2ceec4d1c3",
+     "0000950170-24-058631|C_d5e3a428-01ca-4f72-9b20-35b0051bd722|ROW-2f90ddbd714e5128"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-058631|C_398646dd-34de-4bc6-8625-39f903d7cb5c|ROW-7a54fbb5c71617c2",
+     "0000950170-24-058631|C_1a833fcd-e57f-45e4-b197-311146e5418e|ROW-6a75aead56fc6add",
+     "0000950170-24-058631|C_27b399bc-b834-44c0-9156-ccf8084d1bb2|ROW-9f825c2ceec4d1c3",
+     "0000950170-24-058631|C_d5e3a428-01ca-4f72-9b20-35b0051bd722|ROW-2f90ddbd714e5128"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Accession Risk Management (4)(5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 - ( 12 ) - 8"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Formulations Parent Corporation (4)(5) Unitranche First Lien Revolver 11/2030 - ( 10 ) - 1"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Iris Buyer LLC (4)(5) Unitranche First Lien Revolver 10/2029 - ( 13 ) - 11"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 4 rows, 4 matched automatically; the rest read by page_line.py.",
+    "Each prints '-' in the par column; no par can be published."
+   ],
+   "next_action": "Proposed disposition x11-undrawn-line-par-printed-as-dash (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_9975cb2c09aa",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096155|C_9e86c3a6-2864-46b1-8d5a-4664fba28fc0|ROW-39ea601cb4d3b893",
+     "0000950170-24-096155|C_37c7e469-1c52-4c61-a263-91059d19ebb6|ROW-099354c5337c9d40",
+     "0000950170-24-096155|C_5fd51e30-7599-41a1-80e1-8eb85e9358ae|ROW-8e7c32b7116f4c23"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096155|C_9e86c3a6-2864-46b1-8d5a-4664fba28fc0|ROW-39ea601cb4d3b893",
+     "0000950170-24-096155|C_37c7e469-1c52-4c61-a263-91059d19ebb6|ROW-099354c5337c9d40",
+     "0000950170-24-096155|C_5fd51e30-7599-41a1-80e1-8eb85e9358ae|ROW-8e7c32b7116f4c23"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Enverus (4)(5) Unitranche First Lien Delayed Draw Term Loan 12/2029 - ( 3 ) - 1"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Enverus (4)(5) Unitranche First Lien Revolver 12/2029 - ( 5 ) - 1"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 3 rows, 3 matched automatically; the rest read by page_line.py.",
+    "Each prints '-' in the par column; no par can be published."
+   ],
+   "next_action": "Proposed disposition x11-undrawn-line-par-printed-as-dash (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_72a588b401c4",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-126307|C_2f6b96ac-71de-4ef5-b34a-871bc227ce17|ROW-fba2a5a7c5d03962",
+     "0000950170-24-126307|C_cd9b6b36-27b0-40cb-96ce-f03bb84baa8d|ROW-e26eaeaf7d88e249",
+     "0000950170-24-126307|C_0332e3de-f3f0-4e09-87fc-0889ff0065e2|ROW-b2719dbc20b29526",
+     "0000950170-24-126307|C_e54d065c-7987-4550-8057-01cfbade3d11|ROW-be089432f660d093"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-126307|C_2f6b96ac-71de-4ef5-b34a-871bc227ce17|ROW-fba2a5a7c5d03962",
+     "0000950170-24-126307|C_cd9b6b36-27b0-40cb-96ce-f03bb84baa8d|ROW-e26eaeaf7d88e249",
+     "0000950170-24-126307|C_0332e3de-f3f0-4e09-87fc-0889ff0065e2|ROW-b2719dbc20b29526",
+     "0000950170-24-126307|C_e54d065c-7987-4550-8057-01cfbade3d11|ROW-be089432f660d093"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Enverus (4)(5) Unitranche First Lien Delayed Draw Term Loan 12/2029 - ( 3 ) - 1"
+    },
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Essential Services Holding Company (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2031 - ( 4 ) - 2"
+    },
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Granicus, Inc. (5) Unitranche First Lien Revolver 01/2031 - 4 - 3"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 4 rows, 4 matched automatically; the rest read by page_line.py.",
+    "Each prints '-' in the par column; no par can be published."
+   ],
+   "next_action": "Proposed disposition x11-undrawn-line-par-printed-as-dash (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_fcec766731ff",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-024835|C_8eab6eb0-e91d-4f5e-a903-a957ca50b59a|ROW-7112065a3e1444c6"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-024835|C_8eab6eb0-e91d-4f5e-a903-a957ca50b59a|ROW-7112065a3e1444c6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Iris Buyer, LLC (4)(5) Unitranche First Lien Revolver 10/2029 - ( 11 ) 0.0 5"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 1 rows, 1 matched automatically; the rest read by page_line.py.",
+    "Each prints '-' in the par column; no par can be published."
+   ],
+   "next_action": "Proposed disposition x11-undrawn-line-par-printed-as-dash (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_780f165245fd",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-072599|C_367e810f-9bef-4bab-851c-99c37ae5a2bf|ROW-afb5886ca34f16e8",
+     "0000950170-25-072599|C_f03a6af1-e001-4661-aa30-352831a49f71|ROW-de9dcca4aca2a7aa",
+     "0000950170-25-072599|C_da106111-6575-4ae1-9ae9-3efba016e445|ROW-8821d5f60397bb70"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-072599|C_367e810f-9bef-4bab-851c-99c37ae5a2bf|ROW-afb5886ca34f16e8",
+     "0000950170-25-072599|C_f03a6af1-e001-4661-aa30-352831a49f71|ROW-de9dcca4aca2a7aa",
+     "0000950170-25-072599|C_da106111-6575-4ae1-9ae9-3efba016e445|ROW-8821d5f60397bb70"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Essential Services Holding Corporation (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2031 - ( 3 ) 0.0 1"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Pegasus Steel (5) Senior Secured First Lien Delayed Draw Term Loan 01/2031 - - 0.0 1"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Pegasus Steel (5) Senior Secured First Lien Delayed Draw Term Loan 01/2031 - - 0.0 1"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Pegasus Steel (5) Senior Secured First Lien Delayed Draw Term Loan 01/2031 - - 0.0 1"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 3 rows, 3 matched automatically; the rest read by page_line.py.",
+    "Each prints '-' in the par column; no par can be published."
+   ],
+   "next_action": "Proposed disposition x11-undrawn-line-par-printed-as-dash (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_d103db554878",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-180767|C_71843850-8b2c-4067-ab47-99ab8051f5bd|ROW-fc81827b4a42e477",
+     "0001193125-25-180767|C_39a21b7b-ce94-4118-9ff8-64f10d62681e|ROW-7e62da879d71ae94"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-180767|C_71843850-8b2c-4067-ab47-99ab8051f5bd|ROW-fc81827b4a42e477",
+     "0001193125-25-180767|C_39a21b7b-ce94-4118-9ff8-64f10d62681e|ROW-7e62da879d71ae94"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-180767",
+     "text": "RN Enterprises, LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 10/2031 - ( 10 ) 0.0 22"
+    },
+    {
+     "accession": "0001193125-25-180767",
+     "text": "USALCO (5)(7) Senior Secured First Lien Delayed Draw Term Loan 09/2031 - - 0.0 1"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 2 rows, 2 matched automatically; the rest read by page_line.py.",
+    "Each prints '-' in the par column; no par can be published."
+   ],
+   "next_action": "Proposed disposition x11-undrawn-line-par-printed-as-dash (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_e9f0f9fb084b",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-096558|C_d0d294cc-2da3-4166-b034-61464b4f8a25|ROW-1478bf11dd77da08",
+     "0001193125-26-096558|C_09618673-4dfc-42e8-b707-59a90ce0ab02|ROW-96dc0f0dbe9e7700",
+     "0001193125-26-096558|C_03636832-11f8-4b87-a093-b595c1808cdd|ROW-8cef5b182ea7c9e9",
+     "0001193125-26-096558|C_b85b114d-6a88-4a53-a045-dfd91eb1acd3|ROW-20ae49c1bd9a5d43",
+     "0001193125-26-096558|C_1536296b-0410-4b68-b993-8a72c875a7dc|ROW-49c5ff2099c83b70",
+     "0001193125-26-096558|C_58fa3fa5-b95b-4a82-bcc2-1090daf67d9e|ROW-510cd58530ca474b",
+     "0001193125-26-096558|C_27f79b74-dc54-48d0-9cd8-14b0989de5c3|ROW-960ed89e914d89c0",
+     "0001193125-26-096558|C_d1530bdd-dd82-4091-93a9-bcf1297962a6|ROW-fea04da6bf1197f6"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-096558|C_d0d294cc-2da3-4166-b034-61464b4f8a25|ROW-1478bf11dd77da08",
+     "0001193125-26-096558|C_09618673-4dfc-42e8-b707-59a90ce0ab02|ROW-96dc0f0dbe9e7700",
+     "0001193125-26-096558|C_03636832-11f8-4b87-a093-b595c1808cdd|ROW-8cef5b182ea7c9e9",
+     "0001193125-26-096558|C_b85b114d-6a88-4a53-a045-dfd91eb1acd3|ROW-20ae49c1bd9a5d43",
+     "0001193125-26-096558|C_1536296b-0410-4b68-b993-8a72c875a7dc|ROW-49c5ff2099c83b70",
+     "0001193125-26-096558|C_58fa3fa5-b95b-4a82-bcc2-1090daf67d9e|ROW-510cd58530ca474b",
+     "0001193125-26-096558|C_27f79b74-dc54-48d0-9cd8-14b0989de5c3|ROW-960ed89e914d89c0",
+     "0001193125-26-096558|C_d1530bdd-dd82-4091-93a9-bcf1297962a6|ROW-fea04da6bf1197f6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-096558",
+     "text": "Arrow Management Acquisition, LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 07/2032 - ( 32 ) 0.0 89"
+    },
+    {
+     "accession": "0001193125-26-096558",
+     "text": "CCI Buyer, Inc (4)(5) Unitranche First Lien Revolver 05/2032 - ( 15 ) 0.0 5"
+    },
+    {
+     "accession": "0001193125-26-096558",
+     "text": "Chicago US Midco III LP (5) Senior Secured First Lien Delayed Draw Term Loan 10/2032 - 1 0.0 1"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 8 rows, 7 matched automatically; the rest read by page_line.py.",
+    "Trace3 DDTL '10/2032 - - 0.0 1' read.",
+    "Each prints '-' in the par column; no par can be published."
+   ],
+   "next_action": "Proposed disposition x11-undrawn-line-par-printed-as-dash (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_554e6d23d743",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-226641|C_78f05a8e-d2fa-4ed8-8ee3-8436486dd76f|ROW-5c64d4d40c8dfe49",
+     "0001193125-26-226641|C_5c844fc0-4478-45a6-b9c9-3d7fab9a4804|ROW-8e1576aa547c7ba1"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-226641|C_78f05a8e-d2fa-4ed8-8ee3-8436486dd76f|ROW-5c64d4d40c8dfe49",
+     "0001193125-26-226641|C_5c844fc0-4478-45a6-b9c9-3d7fab9a4804|ROW-8e1576aa547c7ba1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-226641",
+     "text": "CCI Buyer, Inc (4)(5) Unitranche First Lien Revolver 05/2032 - ( 15 ) 0.0 2"
+    },
+    {
+     "accession": "0001193125-26-226641",
+     "text": "Headlands Buyer, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 09/2032 - ( 13 ) 0.0 27"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 2 rows, 2 matched automatically; the rest read by page_line.py.",
+    "Each prints '-' in the par column; no par can be published."
+   ],
+   "next_action": "Proposed disposition x11-undrawn-line-par-printed-as-dash (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_5bafe704571e",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-352548|C_be3abc57-b773-4df8-9072-741cf3880ea4|ROW-4a1d37ae533e0361",
+     "0001193125-26-352548|C_0e605d81-a840-4a40-8421-9a7ac6794c0a|ROW-87ffde29f2a65788"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-352548|C_be3abc57-b773-4df8-9072-741cf3880ea4|ROW-4a1d37ae533e0361",
+     "0001193125-26-352548|C_0e605d81-a840-4a40-8421-9a7ac6794c0a|ROW-87ffde29f2a65788"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "CCI Buyer, Inc (4)(5) Unitranche First Lien Revolver 05/2032 - ( 14 ) 0.0 6"
+    },
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Dispatch Acquisition Holdings, LLC (5) Unitranche First Lien Delayed Draw Term Loan 11/2032 - - 0.0 11"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Matched each flagged row to its printed line by issuer, instrument words, maturity and fair-value cell (collect_rows.py / check_rows.py, rows_cpif.json): 2 rows, 2 matched automatically; the rest read by page_line.py.",
+    "Each prints '-' in the par column; no par can be published."
+   ],
+   "next_action": "Proposed disposition x11-undrawn-line-par-printed-as-dash (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_99addb76783b",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-352548|C_9c09bbf9-fff4-4452-9d09-d58cd05b757d|Tropolis revolver"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-352548|C_9c09bbf9-fff4-4452-9d09-d58cd05b757d|Tropolis revolver"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Tropolis Holdings LLC (4)(5) Unitranche First Lien Revolver 02/2031 - ( 1 ) - -"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Introduced by this run's correction: the Tropolis revolver's member-text rate, spread and benchmark were withdrawn because the page prints none ('02/2031 - ( 1 ) - -'), but coupon_type 'Floating' (also from the member text) was not, so the row is floating with no spread. The published coupon type is not printed on the line.",
+    "Fix: a context-keyed correction withdrawing coupon_type (correctable field) on this context. Not built: the coordinator allowed one final re-run and it was used."
+   ],
+   "next_action": "Parked: add coupon_type '' for 2026-06-30 C_9c09bbf9-fff4-4452-9d09-d58cd05b757d in the next build of this fund; X05 then clears."
+  },
+  {
+   "finding_id": "RVQ_REV_13bc38100e5c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-072599|C_3226e4f1-0da5-4437-8a8d-a8162231bd1c|CP Atlas"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-072599|C_3226e4f1-0da5-4437-8a8d-a8162231bd1c|CP Atlas"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "CP Atlas (7) Senior Secured First Lien Term Loan S + 375 ( 50 Floor) 11/2027 820 813 0.4 761"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "CP Atlas term loan: the value context carries spread 3.75 and floor; the duration context carries the rate terms text only. The page prints no interest rate on the row ('S + 375 ( 50 Floor) 11/2027 820 813 0.4 761'), so the published rate is blank as printed; fair value, cost and par equal the printed line."
+   ],
+   "next_action": "Proposed disposition merged-context-value-equals-printed-row."
+  },
+  {
+   "finding_id": "RVQ_BLK_119b1932cb8a",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-180767|UHY Advisors , Inc.|pct",
+     "0001193125-25-180767|Clydesdale Acquisition Holdings, Inc.|pct",
+     "0001193125-25-180767|Discovery Purchaser Corporation|pct"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-180767|UHY Advisors , Inc.|pct",
+     "0001193125-25-180767|Clydesdale Acquisition Holdings, Inc.|pct",
+     "0001193125-25-180767|Discovery Purchaser Corporation|pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-180767",
+     "text": "UHY Advisors , Inc. Unitranche First Lien Term Loan S + 475 ( 75 Floor) 9.08 % 11/2031 1,771 1,759 0.6 1,771"
+    },
+    {
+     "accession": "0001193125-25-180767",
+     "text": "Clydesdale Acquisition Holdings, Inc. (7) Senior Secured First Lien Term Loan S + 325 7.58 % 03/2032 1,992 1,987 0.9 1,988"
+    },
+    {
+     "accession": "0001193125-25-180767",
+     "text": "Discovery Purchaser Corporation (7) Senior Secured First Lien Term Loan S + 375 ( 50 Floor) 8.02 % 10/2029 1,995 1,975 0.9 1,994"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Three of 214 rows fail by more than 0.06 points: UHY 0.6 printed (0.67 computed), Clydesdale 0.9 (0.76), Discovery 0.9 (0.76); the published percent is the printed one, net assets 262,964 thousand is the filed figure."
+   ],
+   "next_action": "Proposed disposition pct-identity-printed-percent-is-the-filers-own-figure (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_4fa977c6bce4",
+   "coverage": {
+    "affected_rows": [
+     "2024-03-31|online labels group ddtl twins"
+    ],
+    "reviewed_rows": [
+     "2024-03-31|online labels group ddtl twins"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2025 - ( 1 ) - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Online Labels Group prints two undrawn delayed-draw lines, maturities 12/2025 and 12/2029, each '- ( 1 ) - -'; both are published (distinct_member_suffix_re keeps them apart). Equal values, separate printed positions."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_244a842bb65e",
+   "coverage": {
+    "affected_rows": [
+     "2024-06-30|online labels group ddtl twins"
+    ],
+    "reviewed_rows": [
+     "2024-06-30|online labels group ddtl twins"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2025 - ( 1 ) - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Online Labels Group prints two undrawn delayed-draw lines, maturities 12/2025 and 12/2029, each '- ( 1 ) - -'; both are published (distinct_member_suffix_re keeps them apart). Equal values, separate printed positions."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_2d66a2886941",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096155|C_d18952d3-356b-4364-a5c9-9906b8b3cf4d|Accession Risk Management DDTL 10/2026"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096155|C_d18952d3-356b-4364-a5c9-9906b8b3cf4d|Accession Risk Management DDTL 10/2026"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The only negative principal of the fund: Accession Risk Management delayed draw, 2024-06-30, set to -137,000 by row correction because the page prints the par in brackets '( 137 )' on an unfunded delayed-draw line (footnote 5: 'Position or portion thereof is an unfunded loan commitment'), no rate printed, cost 29 and fair value 31. The tag was 137,000 unsigned; publishing +137,000 contradicted the page.",
+    "Not a funded par: the line prints no rate and carries the unfunded footnote; what the bracketed par stands for (an amount repaid beyond the drawn balance, or the filer's sign error) is not stated in the filing."
+   ],
+   "next_action": "Proposed disposition negative-par-on-undrawn-line-as-printed (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_b85712536590",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096155|C_d18952d3-356b-4364-a5c9-9906b8b3cf4d|Accession Risk Management DDTL 10/2026"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096155|C_d18952d3-356b-4364-a5c9-9906b8b3cf4d|Accession Risk Management DDTL 10/2026"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The only negative principal of the fund: Accession Risk Management delayed draw, 2024-06-30, set to -137,000 by row correction because the page prints the par in brackets '( 137 )' on an unfunded delayed-draw line (footnote 5: 'Position or portion thereof is an unfunded loan commitment'), no rate printed, cost 29 and fair value 31. The tag was 137,000 unsigned; publishing +137,000 contradicted the page.",
+    "Not a funded par: the line prints no rate and carries the unfunded footnote; what the bracketed par stands for (an amount repaid beyond the drawn balance, or the filer's sign error) is not stated in the filing."
+   ],
+   "next_action": "Proposed disposition negative-par-on-undrawn-line-as-printed (existing reason)."
+  },
+  {
+   "finding_id": "RVQ_REV_133849fbecc1",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096155|C_d18952d3-356b-4364-a5c9-9906b8b3cf4d|Accession Risk Management DDTL 10/2026"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096155|C_d18952d3-356b-4364-a5c9-9906b8b3cf4d|Accession Risk Management DDTL 10/2026"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The only negative principal of the fund: Accession Risk Management delayed draw, 2024-06-30, set to -137,000 by row correction because the page prints the par in brackets '( 137 )' on an unfunded delayed-draw line (footnote 5: 'Position or portion thereof is an unfunded loan commitment'), no rate printed, cost 29 and fair value 31. The tag was 137,000 unsigned; publishing +137,000 contradicted the page.",
+    "Not a funded par: the line prints no rate and carries the unfunded footnote; what the bracketed par stands for (an amount repaid beyond the drawn balance, or the filer's sign error) is not stated in the filing."
+   ],
+   "next_action": "Proposed disposition negative-par-on-undrawn-line-as-printed (existing reason)."
+  }
+ ]
+}

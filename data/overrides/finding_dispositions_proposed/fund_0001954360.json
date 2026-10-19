@@ -1,0 +1,787 @@
+{
+ "status": "PROPOSED, not accepted. Ledger does not read this directory.",
+ "sandbox": "cpig",
+ "dispositions": [
+  {
+   "disposition_id": "PD-0001954360-A01-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "a01-cash-equivalents-member-under-the-investments-root",
+   "statement": "In every flagged quarter the 'investments' rollup is the printed Total Investments and its children include the filer's Cash Equivalents member, printed below Total Investments; the child sum exceeds the rollup by the printed Cash Equivalents Total (36,082 / 28,754 / 61,693 / 14,524 / 13,977 / 11,964 / 6,978). Published non-cash rows equal the printed Total Investments in every quarter; the cash rows are published as cash.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062908",
+     "verbatim": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671",
+     "quote": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124",
+     "quote": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-A01-2",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "a01-subtotal-of-the-comparative-schedule",
+   "statement": "Each 10-Q also tags the prior-period schedule's totals on the same members (Total Investments 114,294 at 2023-12-31; 282,161 at 2024-12-31); the check evaluates those comparative rollups against comparative children including cash.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Total Investments $ 112,919 110.0 % $ 114,294",
+     "quote": "Total Investments $ 112,919 110.0 % $ 114,294"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-A01-3",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "reason_key": "a01-subtotal-against-a-tag-split-at-a-printed-space",
+   "statement": "Where the page prints a figure split at a space ('3,43 4', '3, 607'), the tag holds only the trailing digits (343, 607); the industry subtotal is right and the check reads the short tag. Published values follow the page (rule 03 and row corrections).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4",
+     "quote": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695",
+     "quote": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-A01-4",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "a01-position-member-tagged-with-another-country",
+   "statement": "The filer tags positions on members that name another country than the section they are printed in (2024-12-31: Pitch MidCo printed under Netherlands on a United Kingdom member; Primrose printed under United Kingdom on a United States Diversified Financials member; Hamsard and Ineos on members with no country prefix; the 2024-12-31 comparative in the 2025-03-31 10-Q: Hunter Douglas printed under Netherlands on a United States Financial Services member), so the check sums children under the wrong country key; also country and industry totals tagged on a member that names one issuer or a narrower group (Netherlands 7,860 on the Financial Services member, Consumer Discretionary 6,974 on the Savers member) and, at 2025-03-31, the cut-off twin members of Primrose, Sophos and Fortis (2,833) left in the source tree. Published rows equal their printed lines, the quarter totals tie, and no country is published.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-024835",
+     "verbatim": "Netherlands Debt Investments Commercial and Professional Services Pitch MidCo B.V. (6) Unitranche First Lien Term Loan E + 625 9.60 % 04/2031 EUR 2,864 2,981 1.6 2,967",
+     "quote": "Netherlands Debt Investments Commercial and Professional Services Pitch MidCo B.V. (6) Unitranche First Lien Term Loan E + 625 9.60 % 04/2031 EUR 2,864 2,981 1.6 2,967"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-024835",
+     "verbatim": "Diversified Financials Primrose Bidco Limited (6) Unitranche First Lien Term Loan S + 550 10.23 % 11/2031 GBP 1,971 2,422 1.3 2,403 2,422 1.3 2,403 Total Debt Investments United Kingdom $ 6,460 3.4 % $ 6,327",
+     "quote": "Diversified Financials Primrose Bidco Limited (6) Unitranche First Lien Term Loan S + 550 10.23 % 11/2031 GBP 1,971 2,422 1.3 2,403 2,422 1.3 2,403 Total Debt Investments United Kingdom $ 6,460 3.4 % $ 6,327"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-024835",
+     "verbatim": "Ineos Quattro (6) Senior Secured First Lien Term Loan S + 425 8.61 % 04/2029 $ 441 433 0.2 445 4,038 2.1 3,924",
+     "quote": "Ineos Quattro (6) Senior Secured First Lien Term Loan S + 425 8.61 % 04/2029 $ 441 433 0.2 445 4,038 2.1 3,924"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-072599",
+     "verbatim": "Financial Services Hunter Douglas (6)(7) Senior Secured First Lien Term Loan S + 350 ( 50 Floor) 8.02 % 02/2029 $ 1,485 1,472 0.8 1,486",
+     "quote": "Financial Services Hunter Douglas (6)(7) Senior Secured First Lien Term Loan S + 350 ( 50 Floor) 8.02 % 02/2029 $ 1,485 1,472 0.8 1,486"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-A01-5",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "reason_key": "a01-subtotal-tagged-on-wrong-member",
+   "statement": "The Software and Services block subtotal printed after Sovos (12,083) is tagged on the industry member, so the check sums every Software and Services row against it. The rows equal their printed lines and the quarter total ties.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "Sovos Compliance (7) Senior Secured First Lien Term Loan S + 450 ( 50 Floor) 9.94 % 08/2028 997 991 0.6 990 12,258 12,057 7.6 12,083",
+     "quote": "Sovos Compliance (7) Senior Secured First Lien Term Loan S + 450 ( 50 Floor) 9.94 % 08/2028 997 991 0.6 990 12,258 12,057 7.6 12,083"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-A04-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A04",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "The check compares all published rows, including the money-market rows printed below Total Investments, with the filed investments figure, which excludes them. Published non-cash rows equal the printed Total Investments exactly in each quarter; the excess is the printed Cash Equivalents Total.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062908",
+     "verbatim": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671",
+     "quote": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126307",
+     "verbatim": "Total Investments $ 256,292 153.2 % $ 258,282 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 1,680 1,680 1.0 1,680 Goldman Sachs FS Government Fund Cash Equivalents 12,297 12,297 7.3 12,297 Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259",
+     "quote": "Total Investments $ 256,292 153.2 % $ 258,282 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 1,680 1,680 1.0 1,680 Goldman Sachs FS Government Fund Cash Equivalents 12,297 12,297 7.3 12,297 Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-E01-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "E01",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "The check compares all published rows, including the money-market rows printed below Total Investments, with the filed investments figure, which excludes them. Published non-cash rows equal the printed Total Investments exactly in each quarter; the excess is the printed Cash Equivalents Total.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062908",
+     "verbatim": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671",
+     "quote": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126307",
+     "verbatim": "Total Investments $ 256,292 153.2 % $ 258,282 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 1,680 1,680 1.0 1,680 Goldman Sachs FS Government Fund Cash Equivalents 12,297 12,297 7.3 12,297 Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259",
+     "quote": "Total Investments $ 256,292 153.2 % $ 258,282 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 1,680 1,680 1.0 1,680 Goldman Sachs FS Government Fund Cash Equivalents 12,297 12,297 7.3 12,297 Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-A07-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31"
+   ],
+   "reason_key": "a07-percent-sum-equals-printed-investments-and-cash-total",
+   "statement": "The percent sum of published rows equals the printed 'Investments and Cash Equivalents Total' percent of net assets (112.2 pct and 142.9 pct); the single row over 25 pct is a money-market fund printed at that percent.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062908",
+     "verbatim": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671",
+     "quote": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124",
+     "quote": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-pct_position_concentration-1",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31"
+   ],
+   "reason_key": "concentration-is-a-money-market-fund-held-as-cash",
+   "statement": "The row above the threshold is a money-market fund printed at 47.3 pct (2023-09-30) and 25.6 pct (2024-03-31) of net assets during the fund's ramp-up, published as cash; no credit position is concentrated.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062908",
+     "verbatim": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671",
+     "quote": "Total Investments $ 49,157 64.9 % $ 49,589 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082 Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124",
+     "quote": "Total Investments $ 162,510 104.0 % $ 164,431 Cash Equivalents Dreyfus Government Cash Management Institutional Fund Cash Equivalents 21,099 21,099 13.3 21,099 Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594 Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-B01-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "reason_key": "b01-contexts-without-value-carry-no-position-value",
+   "statement": "The remaining leaf contexts without a fair value are the comparative schedule's (2024-12-31) and current contexts that carry only a rate, spread or maturity of a row published from its value context. The dash-valued undrawn lines are published at 0 from their printed lines.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-072599",
+     "verbatim": "Enverus (4)(5) Unitranche First Lien Revolver 12/2029 - ( 4 ) - -",
+     "quote": "Enverus (4)(5) Unitranche First Lien Revolver 12/2029 - ( 4 ) - -"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-C107-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "reason_key": "c107-negative-cost-undrawn",
+   "statement": "Undrawn revolver printed with a negative cost and fair value ('- ( 12 ) - ( 3 )'): the negative cost is the unamortised fee printed by the filer.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062908",
+     "verbatim": "Pushpay USA Inc. (4)(5)(6) Unitranche First Lien Revolver 05/2029 - ( 12 ) - ( 3 )",
+     "quote": "Pushpay USA Inc. (4)(5)(6) Unitranche First Lien Revolver 05/2029 - ( 12 ) - ( 3 )"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-SRC_BDC03-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "reason_key": "src-tag-drops-leading-digit-printed-in-own-cell",
+   "statement": "The filer splits a printed figure at a space and tags only the trailing digits (WCT '3,43 4' tagged 343; Pinnacle '3, 607 3, 575' tagged 607 / 575). Published values are the printed figures; the industry subtotals and the quarter totals tie with them.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4",
+     "quote": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695",
+     "quote": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-SRC_BDC03-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "reason_key": "src-fv-sign-corrected-from-page",
+   "statement": "MB2 Dental delayed-draw fair value tagged -38,000 where the page prints 38 unbracketed; published 38,000 by row correction. With it the Health Care block equals its printed subtotal less the untagged second line (23).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23",
+     "quote": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-blocking_fair_value_disagreement-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "reason_key": "src-tag-drops-leading-digit-printed-in-own-cell",
+   "statement": "The filer splits a printed figure at a space and tags only the trailing digits (WCT '3,43 4' tagged 343; Pinnacle '3, 607 3, 575' tagged 607 / 575). Published values are the printed figures; the industry subtotals and the quarter totals tie with them.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4",
+     "quote": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695",
+     "quote": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-blocking_fair_value_disagreement-2",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "reason_key": "src-fv-sign-corrected-from-page",
+   "statement": "MB2 Dental delayed-draw fair value tagged -38,000 where the page prints 38 unbracketed; published 38,000 by row correction. With it the Health Care block equals its printed subtotal less the untagged second line (23).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23",
+     "quote": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38 MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-blocking_fair_value_scale_or_unit_candidate-1",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "reason_key": "src-tag-drops-leading-digit-printed-in-own-cell",
+   "statement": "The filer splits a printed figure at a space and tags only the trailing digits (WCT '3,43 4' tagged 343; Pinnacle '3, 607 3, 575' tagged 607 / 575). Published values are the printed figures; the industry subtotals and the quarter totals tie with them.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4",
+     "quote": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695",
+     "quote": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-X02-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "statement": "Every flagged row was read on its printed line: undrawn revolvers and delayed draws printing '-' for par and no rate, dash-valued lines now published at 0, and the non-accrual Avalign loans (footnote 13) printed with no rate.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31",
+     "quote": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126307",
+     "verbatim": "Accession Risk Management (4)(5) Senior Secured First Lien Delayed Draw Term Loan 10/2029 - ( 2 ) - -",
+     "quote": "Accession Risk Management (4)(5) Senior Secured First Lien Delayed Draw Term Loan 10/2029 - ( 2 ) - -"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-X11-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "x11-undrawn-line-par-printed-as-dash",
+   "statement": "Every flagged row was read on its printed line: undrawn lines printing '-' for par with a small positive mark.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "Accession Risk Management (4)(5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 - ( 12 ) - 8",
+     "quote": "Accession Risk Management (4)(5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 - ( 12 ) - 8"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Enverus (4)(5) Unitranche First Lien Delayed Draw Term Loan 12/2029 - ( 3 ) - 1",
+     "quote": "Enverus (4)(5) Unitranche First Lien Delayed Draw Term Loan 12/2029 - ( 3 ) - 1"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-merged_context_excluded-1",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "reason_key": "merged-context-value-equals-printed-row",
+   "statement": "The row's values equal the printed line; the merged second context holds only the rate-terms text and the page prints no rate.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-072599",
+     "verbatim": "CP Atlas (7) Senior Secured First Lien Term Loan S + 375 ( 50 Floor) 11/2027 820 813 0.4 761",
+     "quote": "CP Atlas (7) Senior Secured First Lien Term Loan S + 375 ( 50 Floor) 11/2027 820 813 0.4 761"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-pct_of_net_assets_identity-1",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "reason_key": "pct-identity-printed-percent-is-the-filers-own-figure",
+   "statement": "The three rows publish the percent the page prints (UHY 0.6, Clydesdale 0.9, Discovery 0.9); the filer's own rounding or computation differs from fair value over filed net assets.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-180767",
+     "verbatim": "UHY Advisors , Inc. Unitranche First Lien Term Loan S + 475 ( 75 Floor) 9.08 % 11/2031 1,771 1,759 0.6 1,771",
+     "quote": "UHY Advisors , Inc. Unitranche First Lien Term Loan S + 475 ( 75 Floor) 9.08 % 11/2031 1,771 1,759 0.6 1,771"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-180767",
+     "verbatim": "Clydesdale Acquisition Holdings, Inc. (7) Senior Secured First Lien Term Loan S + 325 7.58 % 03/2032 1,992 1,987 0.9 1,988",
+     "quote": "Clydesdale Acquisition Holdings, Inc. (7) Senior Secured First Lien Term Loan S + 325 7.58 % 03/2032 1,992 1,987 0.9 1,988"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-180767",
+     "verbatim": "Discovery Purchaser Corporation (7) Senior Secured First Lien Term Loan S + 375 ( 50 Floor) 8.02 % 10/2029 1,995 1,975 0.9 1,994",
+     "quote": "Discovery Purchaser Corporation (7) Senior Secured First Lien Term Loan S + 375 ( 50 Floor) 8.02 % 10/2029 1,995 1,975 0.9 1,994"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-PP02-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "reason_key": "pp02-twin-lines-printed-separately",
+   "statement": "Two undrawn delayed-draw lines of Online Labels Group with different printed maturities and equal values.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058631",
+     "verbatim": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2025 - ( 1 ) - -",
+     "quote": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2025 - ( 1 ) - -"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-C110-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C110",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "reason_key": "negative-par-on-undrawn-line-as-printed",
+   "statement": "The page prints the par of this unfunded delayed-draw line in brackets; the published negative par is the printed figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31",
+     "quote": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-fmt_principal_amount-1",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_principal_amount",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "reason_key": "negative-par-on-undrawn-line-as-printed",
+   "statement": "The page prints the par of this unfunded delayed-draw line in brackets; the published negative par is the printed figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31",
+     "quote": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001954360-fmt_principal_amount_usd-1",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_principal_amount_usd",
+   "ciks": [
+    "0001954360"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
+   "reason_key": "negative-par-on-undrawn-line-as-printed",
+   "statement": "The page prints the par of this unfunded delayed-draw line in brackets; the published negative par is the printed figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096155",
+     "verbatim": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31",
+     "quote": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "cpif; scratch/fund_runs/0001954360/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  }
+ ]
+}

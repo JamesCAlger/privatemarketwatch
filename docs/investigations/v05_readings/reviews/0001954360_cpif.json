@@ -1,0 +1,930 @@
+{
+ "reviewer_id": "independent-reviewer-cpif-0001954360-2026-10-19 (Claude agent, separate from fund-agent-crescent-pci-2026-10-19)",
+ "report_digest": "dc24a968805374042469c48644292ef679013e87d235f3bb179a78fcd12444f8",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001954360_2024-03-31_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_703375a594",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "WCT term loan 2024-03-31 (C_9e06a2e0): tag 343,000, page \"3,43 4\", published 3,434,000 by kept rule 03; cost 3,286 and par 3,366 match. The Pharmaceuticals block arithmetic (4,927 = Parexel 1,484 + WCT revolver 9 + 3,434) confirms the printed figure. The source check compares the corrected value with the short tag; the disposition is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001954360_2024-06-30_BLOCKING_FAIR_VALUE_DISAGREEMENT_cb2ee27626",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2024-06-30, two contexts: Pinnacle C_811246f6 published 3,607 / 3,575 / 3,607 (printed \"3, 607 3, 575 2.3 3, 607\", tags 607/575/607) and MB2 C_5fd51e30 published +38 (printed \"- ( 18 ) - 38\", tag -38). The 99K Health Care gap closes with MB2 +76 and the untagged 23 line, so MPH stays at the printed 831; no plug remains (rule 05 and 04 pulled, corrections cite lines).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1030648c4037",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2024-06-30: affected key 0001954360|2024-06-30|A04|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Cash Equivalents Total $ 14,524 9.0 % $ 14,524 Investments and Cash Equivalents Total $ 241,250 151.4 % $ 243,241"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_119b1932cb8a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pct identity 2025-06-30: the three affected rows (UHY, Clydesdale, Discovery) publish 0.6 / 0.9 / 0.9, exactly the printed percents; recomputed 0.67 / 0.76 / 0.76 on filed net assets. The filer printed percents that do not match its own values; publishing the printed figure is the existing reason. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-180767",
+     "text": "UHY Advisors , Inc. Unitranche First Lien Term Loan S + 475 ( 75 Floor) 9.08 % 11/2031 1,771 1,759 0.6 1,771"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1c19c9be5df5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2023-12-31: affected key 0001954360|2023-12-31|E01|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-020134",
+     "text": "Cash Equivalents Total $ 28,754 27.7 % $ 28,754 Investments and Cash Equivalents Total $ 141,673 137.7 % $ 143,048"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_21626a353b43",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "WCT term loan 2024-03-31 (C_9e06a2e0): tag 343,000, page \"3,43 4\", published 3,434,000 by kept rule 03; cost 3,286 and par 3,366 match. The Pharmaceuticals block arithmetic (4,927 = Parexel 1,484 + WCT revolver 9 + 3,434) confirms the printed figure. The source check compares the corrected value with the short tag; the disposition is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_238e6d076e8f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2023-12-31: affected key 0001954360|2023-12-31|A04|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-020134",
+     "text": "Cash Equivalents Total $ 28,754 27.7 % $ 28,754 Investments and Cash Equivalents Total $ 141,673 137.7 % $ 143,048"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2ed608210fd3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Two A01 failures for 2024-09-30 (comparative investments 28,754; investments 258,282 vs 272,259 = cash 13,977), both in coverage; published non-cash 258,282 and cash rows 1,680 + 12,297 from tagged facts. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3f9a855b9c57",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2024-03-31: affected key 0001954360|2024-03-31|A04|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_454011a19d0a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2024-09-30: affected key 0001954360|2024-09-30|A04|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_4e139a4dfcde",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2024-06-30, two contexts: Pinnacle C_811246f6 published 3,607 / 3,575 / 3,607 (printed \"3, 607 3, 575 2.3 3, 607\", tags 607/575/607) and MB2 C_5fd51e30 published +38 (printed \"- ( 18 ) - 38\", tag -38). The 99K Health Care gap closes with MB2 +76 and the untagged 23 line, so MPH stays at the printed 831; no plug remains (rule 05 and 04 pulled, corrections cite lines).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5e1075630123",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2024-09-30: affected key 0001954360|2024-09-30|E01|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Cash Equivalents Total $ 13,977 8.3 % $ 13,977 Investments and Cash Equivalents Total $ 270,269 161.5 % $ 272,259"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5f568feb73a5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2024-03-31: affected key 0001954360|2024-03-31|E01|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_795f5540a856",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2023-09-30: affected key 0001954360|2023-09-30|E01|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_842ddce429cd",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Seven 2025-03-31 A01 keys are covered; four are explained (comparative investments = cash 11,964; investments 308,031 vs 317,842 = cash 6,978 + the rule-01 UK twins 2,833; UK debt 2,833 twins; Savers 6,974). Three are not: NL debt 7,860 vs 6,374, US debt 255,964 vs 257,450 and US Financial Services 5,933 vs 7,419, each off by 1,486. That is Hunter Douglas: the comparative schedule prints it under Netherlands (1,486) while the 10-Q tags it on an \"Investments United States Debt Investments Financial Services Hunter Douglas\" member, so it leaves NL and joins US Financial Services. The hypothesis \"Netherlands debt total 7,860 sits on the Netherlands Financial Services member\" does not account for these three keys. Same fix as 2024-12-31: name the country-mislabelled member and use a reason whose statement matches it.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Financial Services Hunter Douglas (6)(7) Senior Secured First Lien Term Loan S + 350 ( 50 Floor) 8.02 % 02/2029 $ 1,485 1,472 0.8 1,486 1,472 0.8 1,486 Total Debt Investments Netherlands $ 7,886 4.3 % $ 7,860"
+    },
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Investments United States Debt Investments Financial Services Hunter Douglas"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_84a061cf4e51",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Four A01 failures for 2024-06-30, all in coverage: comparative investments (28,754 cash); investments 228,717 vs 240,142 (11,425 = cash 14,524 less 3,099); US debt 212,128 vs 209,029 (3,099) and Diversified Financials 3,695 vs 695 (3,000). 3,099 = Pinnacle split tag (607 vs printed 3,607: 3,000) + MB2 99 (tag -38 vs printed 38 = 76, plus the untagged second MB2 line 23). Checked in cpif: Pinnacle 3,607/3,575/3,607 and MB2 +38 published by context corrections; MPH stays at printed 831 (plug rule 05 pulled); non-cash total 228,694 = filed 228,717 less the parked 23K line.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Pinnacle Purchaser, LLC Senior Secured First Lien Term Loan S + 575 ( 100 Floor) 11.01 % 12/2029 3, 607 3, 575 2.3 3, 607 3,695 3,659 2.4 3,695"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 18 ) - 38"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MPH Acquisition (7) Senior Secured First Lien Term Loan S + 425 ( 50 Floor) 9.86 % 09/2028 995 968 0.5 831"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bedb0b02e7e3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2023-09-30: affected key 0001954360|2023-09-30|A04|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ca1d22bf7783",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2024-06-30: affected key 0001954360|2024-06-30|E01|holdings_fv_vs_filed_investments. Recomputed in cpif: published non-cash rows equal the printed Total Investments (12/12 quarters ex-cash; 2024-06-30 is 23K short = the parked MB2 line), and the CASH rows equal the printed money-fund lines and come from tagged CashEquivalentsAtFairValue facts. No printed cash figure was declared as a filed figure (no highlights change), so this is not the D-212 self-comparison: the check compares holdings with cash against an ex-cash filed figure. Pulling rule 00 (hide all cash) was right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Cash Equivalents Total $ 14,524 9.0 % $ 14,524 Investments and Cash Equivalents Total $ 241,250 151.4 % $ 243,241"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ebf04b5e57ce",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One A01 failure for 2023-12-31: \"investments\" 114,294K vs children 143,048K, diff 28,754K = printed Cash Equivalents Total (8,576 + 20,178). Published non-cash 114,294K, cash rows 28,754K from tagged facts. Coverage (1 key) equals the rule output; conclusion supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-020134",
+     "text": "Cash Equivalents Total $ 28,754 27.7 % $ 28,754 Investments and Cash Equivalents Total $ 141,673 137.7 % $ 143,048"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ed2548b85109",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Coverage lists all nine 2024-12-31 A01 keys, but the hypotheses do not explain five of them and misattribute one. Rule output: UK debt 6,327 vs children 2,967; UK C&PS 3,924 vs 2,967; Netherlands C&PS 6,374 vs 3,407; US debt 255,964 vs 258,367; US Diversified Financials 1,762 vs 4,165; top-level investments 282,161 vs 290,201 (8,040, not the cash 11,964). Actual mechanism, read in the filing: position members carry the wrong country. Pitch MidCo B.V. is printed under Netherlands but its member reads \"Investments United Kingdom ... Pitch MidCo B.V\" (2,967 = the UK children); Primrose (printed under UK, 2,403) has a \"United States ... Diversified Financials\" member (US Div Fin children 1,762 + 2,403 = 4,165); Hamsard and Ineos members have no \"Investments <country>\" prefix (\"Maturity/Dissolution Investments United Kingdom Date\"), so 3,924 drops out of the investments root (11,964 - 3,924 = 8,040). The report instead cites \"UK 2025-03-31 parent rows Primrose, Sophos and Fortis ... rule 01\", which is the next quarter, and the proposed reason a01-subtotal-tagged-on-wrong-member describes subtotals on the wrong member, not positions on the wrong country. Published values do tie (282,161) and the fund publishes no country, so I expect the conclusion to survive, but the explanation and the proposal text must name the country-mislabelled members before this can be supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Commercial and Professional Services Pitch MidCo B.V. (6) Unitranche First Lien Term Loan E + 625 9.60 % 04/2031 EUR 2,864 2,981 1.6 2,967"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Investments United Kingdom Debt Investments Commercial and Professional Services Pitch MidCo B.V"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Diversified Financials Primrose Bidco Limited (6) Unitranche First Lien Term Loan S + 550 10.23 % 11/2031 GBP 1,971 2,422 1.3 2,403 2,422 1.3 2,403 Total Debt Investments United Kingdom $ 6,460 3.4 % $ 6,327"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Investments United States Debt Investments Diversified Financials Primrose Bidco Limited"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f93f293625b7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Five A01 failures for 2024-03-31, all five in coverage: comparative \"investments\" 114,294 vs 143,048 (cash 28,754); current \"investments\" 164,431 vs 223,033 (58,602 = cash 61,693 less the WCT short tag 3,091); US debt 154,824 vs 151,733 and Pharmaceuticals 4,927 vs 1,836 (both 3,091 = WCT tagged 343 vs printed 3,434; published 3,434 by kept rule 03); Software and Services 12,083 vs 36,561. I resolved the point the investigator left open: the industry is printed in two blocks whose printed subtotals are 12,083 (closes Access Records..Sovos) and 24,478 (closes the Granicus unitranche block); 12,083 + 24,478 = 36,561 exactly, so the rule compares one block subtotal with both blocks. No published value is wrong; quarter ties at 164,431.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Sovos Compliance (7) Senior Secured First Lien Term Loan S + 450 ( 50 Floor) 9.94 % 08/2028 997 991 0.6 990 12,258 12,057 7.6 12,083"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Granicus, Inc. (4)(5) Unitranche First Lien Revolver 01/2031 - ( 5 ) - ( 1 ) 24,540 24,075 15.6 24,478"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "WCT Group Holdings, LLC Unitranche First Lien Term Loan S + 625 ( 75 Floor) 11.43 % 12/2029 3,366 3,286 2.2 3,43 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_fbae66baa580",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Oracle check_failures (cpif) holds one A01 rollup for 2023-09-30: key \"investments\", rollup 49,589K, children 85,671K, diff 36,082K = affected row 0001954360|2023-09-30|A01|investments. The diff equals the printed Cash Equivalents Total exactly; published non-cash rows sum 49,589K (= printed Total Investments) and the one CASH row (Dreyfus, 36,082K) is a CashEquivalentsAtFairValue/XBRL fact, not a declared figure, so the comparison is not circular. Coverage equals the rule population.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_13bc38100e5c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "CP Atlas 2025-03-31 (C_3226e4f1): printed line has no interest rate; cpif publishes FV 761, cost 813, par 820, spread 3.75, rate null, as printed. The merged second context only holds rate-terms text. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "CP Atlas (7) Senior Secured First Lien Term Loan S + 375 ( 50 Floor) 11/2027 820 813 0.4 761"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_218c19f525e3",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "X05 2024-09-30 IVX Health unsecured note (ROW-12cd5260f8c2a396). The investigation accepts spread 0 \"as printed\" without testing it against the printed all-in rate. The line prints \"S + 0 (including 1400 PIK) 14.00 %\": if this were SOFR + 0 plus 14.00 PIK the all-in would be about 18.8 pct (SOFR about 4.8 at 2024-09-30), but the page prints 14.00. The same note prints \"1400 PIK 14.00 %\" at 2024-06-30 and \"1350 PIK 13.50 %\" from 2024-12-31, and cpif publishes those quarters as Fixed with no reference rate and no spread. At 2024-09-30 alone cpif publishes coupon_type Floating, reference SOFR, spread 0. So the \"S + 0\" is a template artifact and the row should be published as fixed 14.00 PIK with no floating spread, like its neighbouring quarters. Under the owner convention D-031 (spread = cash + PIK margin) a 0 spread is wrong in any case. x05-zero-spread-printed-on-the-row does not fit; a row correction (coupon fixed, no spread or reference rate) is the repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "IVX Health (8) Unsecured Debt S + 0 (including 1400 PIK) 14.00 % 06/2031 2,978 2,907 1.8 3,067"
+    },
+    {
+     "accession": "0000950170-24-096155",
+     "text": "IVX Health (8) Unsecured Debt 1400 PIK 14.00 % 06/2031 2,850 2,780 1.7 2,779"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_244a842bb65e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Online Labels Group prints two undrawn delayed-draw lines with equal values and different maturities (12/2025 and 12/2029). cpif publishes both (C_5f2e4c1a / C_6559c46f at 2024-03-31; C_978f09dd / C_b88025f7 at 2024-06-30), maturities 2025-12-31 and 2029-12-31, each FV 0 cost -1,000. Real twins, not duplicates; distinct_member_suffix_re keeps them apart.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2025 - ( 1 ) - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2946eff18ae1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2023-09-30 Pushpay revolver (row ROW-5e4b54e27d4774c9): cpif publishes cost -12,000, fair value -3,000, instrument Revolver, matching the printed \"- ( 12 ) - ( 3 )\". The negative cost is printed; c107-negative-cost-undrawn is an existing reason. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Pushpay USA Inc. (4)(5)(6) Unitranche First Lien Revolver 05/2029 - ( 12 ) - ( 3 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2d66a2886941",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Accession Risk 2024-06-30 DDTL (C_d18952d3): the only negative par of the fund; cpif publishes -137,000, cost 29,000, FV 31,000, maturity 2026-10-31, matching \"10/2026 ( 137 ) 29 - 31\" on an unfunded-commitment (5) line with no rate. The tag was unsigned 137,000 against a bracketed printed par. Publishing the printed sign under the existing reason is defensible; the meaning of a negative par on an unfunded line is not stated by the filer, which the investigation says.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3220cc358af3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2023-09-30: the published percent sum equals the printed \"Investments and Cash Equivalents Total\" percent (112.2 / 142.9); the row over 25 pct is the money fund printed at that percent. Key 0001954360|2023-09-30|A07|pct_sum checked.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Cash Equivalents Total $ 36,082 47.3 % $ 36,082 Investments and Cash Equivalents Total $ 85,239 112.2 % $ 85,671"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3784928c0e7b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Concentration 2024-03-31: the only row over threshold is the money fund published in CASH (Dreyfus 47.3 pct at 2023-09-30, Goldman 25.6 pct at 2024-03-31, both as printed); largest credit rows are small. Coverage (one row) matches.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Goldman Sachs FS Government Fund Cash Equivalents 40,594 40,594 25.6 40,594"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3dca621532ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2024-03-31: the published percent sum equals the printed \"Investments and Cash Equivalents Total\" percent (112.2 / 142.9); the row over 25 pct is the money fund printed at that percent. Key 0001954360|2024-03-31|A07|pct_sum checked.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Cash Equivalents Total $ 61,693 38.9 % $ 61,693 Investments and Cash Equivalents Total $ 224,203 142.9 % $ 226,124"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4b851676735a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2024-06-30: row_validation_issues holds 24 X02 rows for this quarter, equal to the 24 affected rows. I matched all X02/X11 rows with a nonzero value to their printed lines by issuer, maturity and value (reviewer_cpif/x02.py): undrawn lines print \"- ( n )\" with no rate; the funded rows printed nearby carry rates, the flagged line does not. Avalign 2026-06-30 lines are printed on non-accrual (13) with no rate and published nonaccrual. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Angels of Care (4)(5) Senior Secured First Lien Revolver 02/2030 - ( 4 ) - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4fa977c6bce4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Online Labels Group prints two undrawn delayed-draw lines with equal values and different maturities (12/2025 and 12/2029). cpif publishes both (C_5f2e4c1a / C_6559c46f at 2024-03-31; C_978f09dd / C_b88025f7 at 2024-06-30), maturities 2025-12-31 and 2029-12-31, each FV 0 cost -1,000. Real twins, not duplicates; distinct_member_suffix_re keeps them apart.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2025 - ( 1 ) - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_554e6d23d743",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2026-03-31: 2 X11 rows in row_validation_issues = affected rows. Each printed line has \"-\" in the par column and a small value; no par can be published. Checked against the printed lines.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-226641",
+     "text": "Headlands Buyer, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 09/2032 - ( 13 ) 0.0 27"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5a076542cd5c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2024-03-31: 4 X11 rows in row_validation_issues = affected rows. Each printed line has \"-\" in the par column and a small value; no par can be published. Checked against the printed lines.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Accession Risk Management (4)(5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 - ( 12 ) - 8"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5bafe704571e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2026-06-30: 2 X11 rows in row_validation_issues = affected rows. Each printed line has \"-\" in the par column and a small value; no par can be published. Checked against the printed lines.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Dispatch Acquisition Holdings, LLC (5) Unitranche First Lien Delayed Draw Term Loan 11/2032 - - 0.0 11"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_612251c2d575",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2025-03-31: row_validation_issues holds 33 X02 rows for this quarter, equal to the 33 affected rows. I matched all X02/X11 rows with a nonzero value to their printed lines by issuer, maturity and value (reviewer_cpif/x02.py): undrawn lines print \"- ( n )\" with no rate; the funded rows printed nearby carry rates, the flagged line does not. Avalign 2026-06-30 lines are printed on non-accrual (13) with no rate and published nonaccrual. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Ancora Bidco PTY LTD (4)(5)(6) Unitranche First Lien Delayed Draw Term Loan 11/2030 AUD 0 ( 13 ) ( 0.0 ) ( 4 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_72a588b401c4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2024-09-30: 4 X11 rows in row_validation_issues = affected rows. Each printed line has \"-\" in the par column and a small value; no par can be published. Checked against the printed lines.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Granicus, Inc. (5) Unitranche First Lien Revolver 01/2031 - 4 - 3"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_780f165245fd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2025-03-31: 3 X11 rows in row_validation_issues = affected rows. Each printed line has \"-\" in the par column and a small value; no par can be published. Checked against the printed lines.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Pegasus Steel (5) Senior Secured First Lien Delayed Draw Term Loan 01/2031 - - 0.0 1"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9975cb2c09aa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2024-06-30: 3 X11 rows in row_validation_issues = affected rows. Each printed line has \"-\" in the par column and a small value; no par can be published. Checked against the printed lines.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Enverus (4)(5) Unitranche First Lien Delayed Draw Term Loan 12/2029 - ( 3 ) - 1"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9a32706a867b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2025-06-30: row_validation_issues holds 51 X02 rows for this quarter, equal to the 51 affected rows. I matched all X02/X11 rows with a nonzero value to their printed lines by issuer, maturity and value (reviewer_cpif/x02.py): undrawn lines print \"- ( n )\" with no rate; the funded rows printed nearby carry rates, the flagged line does not. Avalign 2026-06-30 lines are printed on non-accrual (13) with no rate and published nonaccrual. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-180767",
+     "text": "Americana Partners LLC (4)(5) Unitranche First Lien Revolver 05/2031 - ( 3 ) ( 0.0 ) ( 3 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9bb80222b08b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2025-03-31: the 33 affected context keys equal the 33 B01 rows in oracle/check_failures.csv (set comparison, scratch reviewer_cpif/b01.py). Their concept lists confirm the split: 19 are period 2024-12-31 (comparative), 14 current contexts carry only InvestmentMaturityDate / InterestRateTerms / spread facts (Pitch, Parts Town, CMG, Duraserv, USALCO, Medicus ...). The dash-valued current lines are published at 0 via untagged_values (156 declared contexts, all 156 published, I checked 15 at random against \"- ( n ) - -\" printed lines).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072599",
+     "text": "Enverus (4)(5) Unitranche First Lien Revolver 12/2029 - ( 4 ) - -"
+    },
+    {
+     "accession": "0001193125-26-226641",
+     "text": "Accurate Finance Sub, LLC (4)(5) Senior Secured First Lien Revolver 09/2032 - ( 1 ) - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_acd446c4523f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2024-09-30: row_validation_issues holds 25 X02 rows for this quarter, equal to the 25 affected rows. I matched all X02/X11 rows with a nonzero value to their printed lines by issuer, maturity and value (reviewer_cpif/x02.py): undrawn lines print \"- ( n )\" with no rate; the funded rows printed nearby carry rates, the flagged line does not. Avalign 2026-06-30 lines are printed on non-accrual (13) with no rate and published nonaccrual. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126307",
+     "text": "Accession Risk Management (4)(5) Senior Secured First Lien Delayed Draw Term Loan 10/2029 - ( 2 ) - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b85712536590",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Accession Risk 2024-06-30 DDTL (C_d18952d3): the only negative par of the fund; cpif publishes -137,000, cost 29,000, FV 31,000, maturity 2026-10-31, matching \"10/2026 ( 137 ) 29 - 31\" on an unfunded-commitment (5) line with no rate. The tag was unsigned 137,000 against a bracketed printed par. Publishing the printed sign under the existing reason is defensible; the meaning of a negative par on an unfunded line is not stated by the filer, which the investigation says.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c9ef0944c2eb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2026-06-30: row_validation_issues holds 76 X02 rows for this quarter, equal to the 76 affected rows. I matched all X02/X11 rows with a nonzero value to their printed lines by issuer, maturity and value (reviewer_cpif/x02.py): undrawn lines print \"- ( n )\" with no rate; the funded rows printed nearby carry rates, the flagged line does not. Avalign 2026-06-30 lines are printed on non-accrual (13) with no rate and published nonaccrual. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "(13) Unitranche First Lien Revolver 12/2028 629 599 0.0 240 Avalign Technologies, Inc. (13) Unitranche First Lien Term Loan 12/2028 7,512 7,222 0.8 4,348"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d103db554878",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2025-06-30: 2 X11 rows in row_validation_issues = affected rows. Each printed line has \"-\" in the par column and a small value; no par can be published. Checked against the printed lines.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-180767",
+     "text": "USALCO (5)(7) Senior Secured First Lien Delayed Draw Term Loan 09/2031 - - 0.0 1"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d8c475fca33a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2024-12-31: row_validation_issues holds 32 X02 rows for this quarter, equal to the 32 affected rows. I matched all X02/X11 rows with a nonzero value to their printed lines by issuer, maturity and value (reviewer_cpif/x02.py): undrawn lines print \"- ( n )\" with no rate; the funded rows printed nearby carry rates, the flagged line does not. Avalign 2026-06-30 lines are printed on non-accrual (13) with no rate and published nonaccrual. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Ancora Bidco PTY LTD (4)(5)(6) Unitranche First Lien Delayed Draw Term Loan 11/2030 AUD 0 ( 14 ) ( 0.0 ) ( 13 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e9f0f9fb084b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2025-12-31: 8 X11 rows in row_validation_issues = affected rows. Each printed line has \"-\" in the par column and a small value; no par can be published. Checked against the printed lines.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-096558",
+     "text": "CCI Buyer, Inc (4)(5) Unitranche First Lien Revolver 05/2032 - ( 15 ) 0.0 5"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f713c9b4a12b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Concentration 2023-09-30: the only row over threshold is the money fund published in CASH (Dreyfus 47.3 pct at 2023-09-30, Goldman 25.6 pct at 2024-03-31, both as printed); largest credit rows are small. Coverage (one row) matches.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Dreyfus Government Cash Management Institutional Fund Cash Equivalents - 5.22 % - 36,082 36,082 47.3 36,082"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fcec766731ff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2024-12-31: 1 X11 rows in row_validation_issues = affected rows. Each printed line has \"-\" in the par column and a small value; no par can be published. Checked against the printed lines.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Iris Buyer, LLC (4)(5) Unitranche First Lien Revolver 10/2029 - ( 11 ) 0.0 5"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-is-hierarchy-path",
+   "outcome": "supported",
+   "rationale": "cpif has 0 null issuers (2,826 rows); 140 names that were already non-null changed, all from a hierarchy path to the printed name or a printed-line correction (Bingo Hldgs -> Bingo Holdings, WCT -> Parexel). No name made worse. C201 is a working detector for recurrence.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Sedgwick CMS Holdings, Inc. (7) Senior Secured First Lien Term Loan S + 375 9.08 % 02/2028 746 741 1.0 746"
+    }
+   ]
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "outcome": "rejected",
+   "rationale": "Restoration verified: Sedgwick 746 and Medline 745 (2023-09-30), Anchor 745 (2024-03-31, real context C_5015f54c replaces the rule-02 plug row, which is the only row removed), Asurion 2,273 (2025-06-30) and Medicus 2025-06-30 twin; each appears once and matches its printed line; quarter totals tie. The detection decision is the problem: it says existing_detector fv_conservation, yet its own rationale says zero-value twins have no detector, and one dropped 0.7M row is far below fv_conservation tolerance in any quarter after 2023-12-31 (the Anchor loss was hidden by a promoted plug, not caught). The concrete suggested_check (printed rows vs published rows per quarter) makes this propose_detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Sedgwick CMS Holdings, Inc. (7) Senior Secured First Lien Term Loan S + 375 9.08 % 02/2028 746 741 1.0 746"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Checked the 47 unit corrections against printed counts (Iris 192 and 192,308; WCT 118; Vital Care 649 and 64; Sequence 3,290 and 48; BVI 681; Landscape 810,811; Nephron warrant 4; WhiteHawk 7,500,000): all equal. shares_pow10_normalise false is fund-scoped. The proposed widening of units_printed is a reasonable detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Iris Buyer LLC Common Stock 192,308 - - 31"
+    }
+   ]
+  },
+  {
+   "observation_key": "equity-units-tagged-as-principal",
+   "outcome": "supported",
+   "rationale": "2025-06-30 / 2025-09-30 equity rows had null counts in spon3 and now carry the printed counts (WhiteHawk 7,500,000 and 8,500,000). The proposed check is concrete and low-noise.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-180767",
+     "text": "WhiteHawk Evergreen Fund, LP (2)(6)(9)(10) Partnership Interest 7,500,000 7,500 2.9 7,664"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Sovos 2024-09-30 (993), SMX 2025-03-31 (5,434), Acrisure 1,225 and Alliant 1,315 (2026-06-30), Parexel 2,281 (2025-12-31), Medical Review 141 (2026-03-31): names and values equal the printed lines.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Acrisure, LLC (7) Senior Secured First Lien Term Loan S + 300 6.64 % 11/2030 1,350 1,353 0.2 1,225"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "outcome": "supported",
+   "rationale": "Rates, spreads and benchmarks matched the page on 30 random untouched rows; CORRA appears only at 2026-06-30 as the legend allows. Proposed comparison is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Secured Overnight Financing Rate (SOFR or S), Prime (P), EURIBOR (E), SONIA (SN), BBSY ( B), SARON (SR) or CORRA (C)"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "outcome": "supported",
+   "rationale": "Cash rows 2025-06-30..2026-06-30 equal the printed money-fund lines (11,977; 25,879; 34,566; 34,231; 15,534) and come from tagged facts; \"Other cash\" is not published, correctly. Proposed check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-180767",
+     "text": "Goldman Sachs FS Government Fund Cash Equivalents 11,189 11,189 4.3 11,189 Cash Equivalents Total $ 11,977 4.6 % $ 11,977"
+    }
+   ]
+  },
+  {
+   "observation_key": "promoted-value-rule-is-a-plug",
+   "outcome": "supported",
+   "rationale": "MPH 2024-06-30 published 831 as printed; the 99 is explained by MB2 (sign) and the untagged 23 line. Proposal to check promoted value rules against printed lines is sound.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MPH Acquisition (7) Senior Secured First Lien Term Loan S + 425 ( 50 Floor) 9.86 % 09/2028 995 968 0.5 831"
+    }
+   ]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "155 declared fair_value 0 contexts plus the WCT -1,000 line: all 156 published once; 15 random ones each print \"-\" in the value cell with the published cost. Caveat: B01 fired only from 2024-09-30, so the 17 dash rows of 2023-12-31..2024-06-30 were outside it; B01 still catches a recurrence of the volume seen from 2024-09-30.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-226641",
+     "text": "Accurate Finance Sub, LLC (4)(5) Senior Secured First Lien Revolver 09/2032 - ( 1 ) - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-tag-differs-from-printed-line",
+   "outcome": "supported",
+   "rationale": "Spot-checked Chemours 2024-12-31 (08/2028), Duraserv 2025-09-30 (06/2031), Outcomes 2L 2026-06-30 (05/2032), Energy Solutions 2024-03-31 (09/2030), Avalign 2026-06-30 (12/2028): published month equals the printed month. The schedule prints MM/YYYY only; full dates in the unfunded-commitment table are commitment expiries, not maturities. The filer tags month-end on 1,830 of 1,864 tagged maturities, so last-day matches its convention. Defect left: the 34 corrected rows still say maturity_date_source xbrl_field / identifier_text and precision \"day\", which overstates a month-precision value taken from the page. The \"Left: no build left\" sentence is stale.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280138",
+     "text": "Duraserv LLC Senior Secured First Lien Term Loan S + 475 , 75 Floor 9.11 % 06/2031 4,773 4,734 1.3 4,731"
+    },
+    {
+     "accession": "0000950170-25-024835",
+     "text": "Chemours (6)(7) Senior Secured First Lien Term Loan S + 350 ( 50 Floor) 7.86 % 08/2028 1,449 1,436 0.8 1,459"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-printed-not-tagged",
+   "outcome": "supported",
+   "rationale": "MB2 second DDTL \"- (22 ) - 23\" has no context; 2024-06-30 non-cash total is 228,694 vs filed 228,717. A block-subtotal comparison would catch it.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - (22 ) - 23"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-negative-par-published-positive",
+   "outcome": "supported",
+   "rationale": "Par sign now follows the printed brackets; proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Accession Risk Management (5) Senior Secured First Lien Delayed Draw Term Loan 10/2026 ( 137 ) 29 - 31"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "outcome": "supported",
+   "rationale": "IVX 2024-12-31 and 2025-12-31 publish pik 13.5, cash 0, as printed; pik_printed covers rows with a printed row.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-024835",
+     "text": "IVX Health Merger Sub, Inc. (8) Unsecured Debt 1350 PIK 13.50 % 06/2031 3,083 3,015 1.8 3,176"
+    }
+   ]
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "outcome": "supported",
+   "rationale": "Pushpay 2023-09-30 cost -12,000 as printed; C103 is the existing detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062908",
+     "text": "Pushpay USA Inc. (4)(5)(6) Unitranche First Lien Revolver 05/2029 - ( 12 ) - ( 3 )"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "additional_findings_not_in_ledger": [
+  {
+   "issue": "PIK-toggle spread published as cash margin only before 2025-09-30 (owner convention D-031: spread = cash + PIK margin)",
+   "rows": "28 rows, 104.75M FV, 2024-03-31..2025-06-30 (Granicus, Parts Town, Avalign, BVI)",
+   "detail": "Printed \"S + 125 (plus 500 PIK) 10.58 %\" (BVI 2025-06-30) is published spread 1.25; the same loan prints \"S + 625 (500 PIK) 10.41 %\" at 2025-09-30 and is published 6.25. Granicus \"S + 350 (including 225 PIK) 11.06 %\" is published 3.5, but 11.06 = SOFR + 5.75. No finding covers it; the wrapper has no printed_margin_reading.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-180767",
+     "text": "BVI Medical Inc. Unitranche First Lien Term Loan S + 125 ( 75 Floor) (plus 500 PIK) 10.58 % 03/2032 8,211 8,094 3.1 8,211"
+    },
+    {
+     "accession": "0001193125-25-280138",
+     "text": "BVI Medical Inc. Unitranche First Lien Term Loan S + 625 ( 500 PIK), 75 Floor 10.41 % 03/2032 8,316 8,203 2.2 8,316"
+    },
+    {
+     "accession": "0000950170-24-058631",
+     "text": "Granicus, Inc. Unitranche First Lien Term Loan S + 350 ( 100 Floor) (including 225 PIK) 11.06 % 01/2031 3,873 3,838 2.4 3,864"
+    }
+   ]
+  },
+  {
+   "issue": "Interest rate 100x too small at 2026-06-30",
+   "rows": "Outcomes Group Holding Inc first lien 0.0664 (printed 6.64) and second lien 0.10 (printed 10.00), 19.65M FV",
+   "detail": "Filer tagged 0.000664 / 0.001; no ledger rule fired.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Outcomes Group Holding Inc (8) Senior Secured Second Lien Term Loan 10.00 % 10.00 % 05/2032 17,753 17,668 3.2 17,664"
+    }
+   ]
+  },
+  {
+   "issue": "Principal currency taken from a non-USD unit where the page prints a USD loan",
+   "rows": "Klick Inc. TL and DDTL, Froneri US Inc, Garda World, Westjet Loyalty, Dawson Logan (2025-12-31..2026-06-30); 39 SOFR rows with non-USD principal currency over 7 quarters; pre-existing in spon3",
+   "detail": "Klick TL prints \"S + 500 ... 32,885\" with no currency marker (Aryeh on the same page prints \"CAD 35,000\"), but is published CAD with principal_amount_usd 23.15M instead of 32.885M.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Klick Inc. (6) Unitranche First Lien Term Loan S + 500 , 75 Floor 8.66 % 11/2032 32,885 32,737 5.9 32,720"
+    }
+   ]
+  },
+  {
+   "issue": "Instrument lost on one row (undeclared)",
+   "rows": "Ineos Quattro 2024-06-30 C_c3426fc0: spon3 instrument \"Senior Secured First Lien Term Loan\", cpif null (issuer now set by correction). Ancora Bidco 2024-12-31 \"Common Stock1\" instrument still null although notes say fixed by the strip.",
+   "detail": "The 181 instrument changes in declared_changes do not mention it.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096155",
+     "text": "Ineos Quattro (6)(7) Senior Secured First Lien Term Loan S + 425 9.69 % 04/2029 443 4 34 0.3 443"
+    }
+   ]
+  },
+  {
+   "issue": "Rate on an undrawn line from member text",
+   "rows": "Tropolis revolver 2026-06-30 (C_9c09bbf9) rate 8.73 / spread 5.0 from the member while the printed line \"- ( 1 ) - -\" prints none",
+   "detail": "Minor; source ambiguity.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352548",
+     "text": "Tropolis Holdings LLC (4)(5) Unitranche First Lien Revolver 02/2031 - ( 1 ) - -"
+    }
+   ]
+  }
+ ],
+ "review_notes": [
+  "Read-only review; no data, wrapper, code or report edited.",
+  "Process slips: two bare \"python -\" processes were started by mistake during the review (PIDs 14880 and 24024) and killed by PID; neither ran code; no effect.",
+  "A cleared ledger would not establish data correctness; the additional findings above were found on rows no rule touched."
+ ]
+}
