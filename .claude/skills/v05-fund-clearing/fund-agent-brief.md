@@ -128,6 +128,21 @@ You may run the gate on your own result (`fund_gate.py check`, without `--snapsh
 | a removed subtotal | The ledger can go up (the source check then reports the fact as unpublished). Say so. |
 | a withdrawn dollar par on a foreign loan | It raises FX01; supply the amount at the build's own rate for that date. |
 
+## What independent reviewers rejected most often (2026-10-18/19 runs)
+
+Check each before you return; every one cost a fund a full extra round.
+
+- **Detection decisions.** `existing_detector` only if a named rule actually fired on these rows in your untouched build. An observation key, the observations log, or a guard that only warns is not a detector: use `propose_detector` with a concrete check.
+- **Counts.** Every count in the report must reproduce from a query you saved in your notes folder. Recount after the last build.
+- **Scope of a fix.** A sample error or finding is a symptom: search every row and quarter for the same shape (all name variants, abbreviations, every foreign marker), not just the cited rows, and list what you searched.
+- **Coverage.** `affected_rows` lists every row or context the rule flagged, including prior-period comparative contexts in the same filing.
+- **"As filed".** Only when the page prints the published value. If the page prints something else, or the build drops or mis-scales a printed value, it is an error to fix or park.
+- **New rows.** Rows you newly publish (dash rows, restored rows, cash rows) must go through every fix you made earlier: re-run your name, rate and spread checks on them.
+- **Accepted reasons.** A finding cleared by an accepted reason can still hide a printed value: read the flagged rows anyway.
+- **Anchors.** Never declare a printed figure as an anchor that a check then compares with the same printed rows (D-212).
+- **Shared tables and defaults.** Do not change them (alias tables, global maps, default thresholds); add an opt-in wrapper key instead and propose the shared change (D-211).
+- **Owner conventions.** Spread = cash + PIK margin with `pik_rate` separate (D-031); `interest_rate` storage is still the cash leg (AGENTS.md).
+
 ## Report (`REPORT`, JSON)
 
 The example below shows the original data-change fields. Also required: `investigator_id` and
