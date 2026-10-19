@@ -1,0 +1,1501 @@
+{
+ "reviewer_id": "tcwdl-independent-reviewer-2026-10-20",
+ "report_digest": "2955f8099a066d3f021395f7e012af33eb1f8713371a0676e135e9ce5b32cbf3",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_241ba6085186",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow identity/nav_identity fail 2023-03-31 (violation 100 pct, 1 unit), matching the single fund-quarter key; 2023-03-31 is the only quarter with a published unit count. Source: published nav_per_share 32.63 and net_assets 389,426,000 are both printed. (389,426 + 199,120) thousand / 18,034,649 = 32.634, i.e. the printed per-unit NAV is on the accrual base that adds back the undrawn commitment printed as a deduction in members' capital; the filer defines the accrual base in the highlights note. The new reason key nav-per-unit-printed-on-accrual-base-with-undrawn-commitments is backed by printed text and exact arithmetic, not generic (same filer family as TCW VII, D-212). Conclusion false_alarm and PD-0001603480-nav_identity-13 supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "The accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit and reflects all units issued and outstanding"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6cfa5c0dd582",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow html_extract/html_agg fails only at 2022-12-31 (adj_ratio 4.40, 1 unit) among dated quarters in scope; the single fund-quarter key matches. Source and mechanism checked independently: html_template_validation.csv reads 12 rows summing 349,861,119 against the printed Debt & Equity total 515,454,057 (debt section only), and the cached XBRL instance 000095017023012037.xml carries no InvestmentIdentifierAxis at all (InvestmentTypeAxis 257, InvestmentIssuerNameAxis 225 dimension uses), while the 2023-03-31 instance has InvestmentIdentifierAxis 135; holdings start 2023-03-31. Conclusion confirmed_error is right and the next action is specific: either extractor support for the issuer-name x investment-type axes (shared code, cohort measurement) or a template that reads the equity section, decided by the orchestrator. Parked, not dispositioned; investigation complete, repair not done.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Total Debt & Equity Investments (9) 131.2 % 547,873,141 515,454,057"
+    },
+    {
+     "accession": "0000950170-23-012037",
+     "text": "Total Debt & Equity Investments (9) 131.2 % 547,873,141 515,454,057"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e2a438c5fd5a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle E04 fail 2023-03-31 'nav*shares=588,470,597 vs net_assets=389,426,000 (51.1%)', matching the single fund-quarter key; 2023-03-31 is the only quarter with a published unit count. Source: published nav_per_share 32.63 and net_assets 389,426,000 are both printed. (389,426 + 199,120) thousand / 18,034,649 = 32.634, i.e. the printed per-unit NAV is on the accrual base that adds back the undrawn commitment printed as a deduction in members' capital; the filer defines the accrual base in the highlights note. The new reason key nav-per-unit-printed-on-accrual-base-with-undrawn-commitments is backed by printed text and exact arithmetic, not generic (same filer family as TCW VII, D-212). Conclusion false_alarm and PD-0001603480-E04-14 supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "The accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit and reflects all units issued and outstanding"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_01b972f807e7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has one F33 FAIL for 2023-03-31 (value 0.0, expected 0 < distribution_rate < 30%), matching the single fund-quarter key. Source: I read this quarter's own highlights (the tdle report now cites them per quarter): the three months to 2023-03-31 print '-' (0.89 is the 2022 comparative). The published distribution_per_share 0.0 and distribution_rate 0.0 are the printed figures (tdle fund_financials); the rule's lower bound rejects a quarter without a distribution. Conclusion false_alarm and PD-0001603480-F33-7 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Less Distributions: Return of capital - ( 0.89 ) Total distributions (2) - ( 0.89 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_037f7e05758d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one F16 FAIL for 2022-03-31 (value 0.92 = distribution_rate 9.05 less 1.5 x income_yield_pct 5.42), matching the fund-quarter key. Source: the 10-Q prints the quarter's distribution 0.89, all return of capital, and the quarter's net investment income ratio 5.42 %; published distribution_per_share 0.89 and income_yield_pct 5.42 equal the printed figures (Q1: year to date is the quarter). The distribution exceeds 1.5x the income yield because it is a return of capital, as printed. Conclusion false_alarm and PD-0001603480-F16-8 supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-009572",
+     "text": "Less Distributions: From net investment income - (0.75 ) Return of capital (0.89 ) - Total distributions (2) (0.89 ) (0.75 )"
+    },
+    {
+     "accession": "0000950170-22-009572",
+     "text": "Ratio of net investment income to average net assets (6) 5.42 % 7.86 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_03af5a1e144d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the shadow weak metric is one failing row of the quarter; recomputing pct_of_net_assets > 25 on tdld holdings gives only ROW-c4cfece4dfa5fc72, matching affected_rows 0000950170-24-037856/C_e06e296b-fdcf-49c5-ac9a-1b76e10b219c/ROW-c4cfece4dfa5fc72. Source: the printed line in 0000950170-24-037856 shows H-D Advanced Manufacturing Term Loan at 26.8 pct of net assets and fair value 98,278,214, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-pct_position_concentration-5 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_03f5d12f5d58",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-a010a7c3b07e7fab), matching affected_rows 0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab. Source: I read the printed line in 0000950170-24-126078; published row ROW-a010a7c3b07e7fab (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,009, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.32, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126078",
+     "text": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_06f5c32fa51c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle check_results A07 for the quarter is 'warn: pct_sum=118.7%; 1 outliers > 25%' (residual rows 0); the one outlier is ROW-c22cc93c2b9bd9be, matching affected_rows 0000950170-23-061710/C_8d9af6b9-f6a9-4587-b261-2340b1ba77c7/ROW-c22cc93c2b9bd9be. Source: the printed line in 0000950170-23-061710 shows H-D Advanced Manufacturing Term Loan at 32.6 pct of net assets and fair value 130,270,359, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-A07-6 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0aad7b5a34ed",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow html_extract/html_carry warns at 2022-03-31 (carry_rate 0.143, 1 unit), the single in-scope quarter; the key matches. Source: html_template_validation.csv reads 11 rows summing 347,900,882, exactly the printed 'Total Debt Investments'; the printed Debt & Equity total is 492,120,013, so the 144.2M equity section is not read, and the prior quarter (2021-12-31, 34 rows) included equity names, which explains the low carry rate. Same cause as html_agg 2022-12-31. Conclusion confirmed_error and the parked next action (template repair or a recorded decision to keep 2022 unpublished, orchestrator) are specific. Investigation complete, repair not done.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-009572",
+     "text": "Total Debt Investments 90.9 % 409,839,518 347,900,882"
+    },
+    {
+     "accession": "0000950170-22-009572",
+     "text": "Total Debt & Equity Investments (9) 128.6 % 531,359,325 492,120,013"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0bdc41a2e802",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-20370f006e63a3aa, value 20.44), matching affected_rows 0000950170-25-107759/C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf/ROW-20370f006e63a3aa. Source: I read the printed line in 0000950170-25-107759; published row ROW-20370f006e63a3aa (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,000, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.44, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0c8dd02a8fc0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle check_results A07 for the quarter is 'warn: pct_sum=124.3%; 1 outliers > 25%' (residual rows 0); the one outlier is ROW-c813960ddbb6484f, matching affected_rows 0000950170-24-095898/C_b2a522bb-883d-4f14-b091-ffdbcb728f41/ROW-c813960ddbb6484f. Source: the printed line in 0000950170-24-095898 shows H-D Advanced Manufacturing Term Loan at 30.3 pct of net assets and fair value 99,609,137, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-A07-6 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_16b94048fa33",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-9705cf774ea59b28), matching affected_rows 0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28. Source: I read the printed line in 0000950170-25-047910; published row ROW-9705cf774ea59b28 (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.65, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_18043a4bcc05",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-1ecff253f5ce4f4b), matching affected_rows 0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b. Source: I read the printed line in 0001193125-25-279849; published row ROW-1ecff253f5ce4f4b (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.39, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_19192e8f45c8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one F16 FAIL for 2024-12-31 (value 2.53 = 9.83 less 1.5 x 4.87), matching the fund-quarter key. Source: 2024 total 0.98 (10-K) less nine months 0.36 (10-Q 2024-09-30) = 0.62 published; income_yield_pct 4.87 is the printed 2024 annual ratio. Q4 NII 1,578 thousand against 0.62 x 18,034,649 = 11.2M distributed: the distribution is far above quarter income. As printed; PD-0001603480-F16-10 supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "Total distributions (3) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 )"
+    },
+    {
+     "accession": "0000950170-24-126078",
+     "text": "Less Distributions: From net investment income ( 0.36 ) ( 0.55 ) Return of capital - ( 0.22 ) Total distributions ( 0.36 ) ( 0.77 )"
+    },
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Ratio of net investment income to average net assets 2.42 % 4.87 % 9.60 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_22da587f1f1f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has one F33 FAIL for 2025-09-30 (value 0.0, expected 0 < distribution_rate < 30%), matching the single fund-quarter key. Source: I read this quarter's own highlights (the tdle report now cites them per quarter): the nine months to 2025-09-30 print '-' (0.36 is the 2024 comparative). The published distribution_per_share 0.0 and distribution_rate 0.0 are the printed figures (tdle fund_financials); the rule's lower bound rejects a quarter without a distribution. Conclusion false_alarm and PD-0001603480-F33-7 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_23fef5b5bf53",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C115 row for this fund-quarter (ROW-20370f006e63a3aa, value 16.0), matching affected_rows 0000950170-25-107759/C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf/ROW-20370f006e63a3aa. Source: I read the printed line in 0000950170-25-107759; published row ROW-20370f006e63a3aa (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,000, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.44, interest_rate_cash 0, interest_rate_kind all_in. basis_spread 16.0 is the printed margin 'SOFR + 16.00 %'. The loan is all PIK, so cash margin 0 plus PIK margin 16.00 counted once is 16.00 (D-031), with pik_rate carried separately. As printed. Conclusion false_alarm and proposal PD-0001603480-C115-3 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2e2e6bab5b6b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-a010a7c3b07e7fab), matching affected_rows 0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab. Source: I read the printed line in 0000950170-24-126078; published row ROW-a010a7c3b07e7fab (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,009, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.32, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126078",
+     "text": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2f225c4bef08",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-3fc68b4581895e72), matching affected_rows 0000950170-23-020966/C_f0448690-9c99-4742-ab11-90cba005a8f7/ROW-3fc68b4581895e72. Source: I read the printed line in 0000950170-23-020966; published row ROW-3fc68b4581895e72 (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,940,116, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.73, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2f38fa99dc07",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-9fd7d19a4a3798fa), matching affected_rows 0000950170-25-071647/C_f5d916d9-88a5-46e7-ad69-d72153ea68b7/ROW-9fd7d19a4a3798fa. Source: I read the printed line in 0000950170-25-071647; published row ROW-9fd7d19a4a3798fa (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,011, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.44, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_33eaf9c2c059",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-66b9389c5564220d, value 21.44), matching affected_rows 0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d. Source: I read the printed line in 0000950170-24-057614; published row ROW-66b9389c5564220d (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.44, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3cc6e843cd74",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-9705cf774ea59b28), matching affected_rows 0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28. Source: I read the printed line in 0000950170-25-047910; published row ROW-9705cf774ea59b28 (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.65, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3f43d0cd26ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-9fd7d19a4a3798fa, value 20.44), matching affected_rows 0000950170-25-071647/C_f5d916d9-88a5-46e7-ad69-d72153ea68b7/ROW-9fd7d19a4a3798fa. Source: I read the printed line in 0000950170-25-071647; published row ROW-9fd7d19a4a3798fa (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,011, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.44, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_44c763812d11",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-3dbd7bd09dd6f71d, value 21.44), matching affected_rows 0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d. Source: I read the printed line in 0000950170-24-095898; published row ROW-3dbd7bd09dd6f71d (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,002, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.44, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_51304ea68608",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle check_results A07 for the quarter is 'warn: pct_sum=96.1%; 1 outliers > 25%' (residual rows 0); the one outlier is ROW-a889c70add6fbe9d, matching affected_rows 0001193125-26-346645/C_2311c899-52a7-4260-81a6-82c9ab0e178d/ROW-a889c70add6fbe9d. Source: the printed line in 0001193125-26-346645 shows Precision Products Machining Group Class A Units at 25.1 pct of net assets and fair value 46,616,419, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-A07-6 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 %"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_52f56c1aeff9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_strategy_validation.csv for 2025-12-31 is UNDER_REVIEW/WARN with FS02 and private_credit_share 0.4250, matching the single fund-quarter key. Source: the printed debt and equity totals for the quarter give a debt share of 0.4250 of Total Debt & Equity Investments, equal to the published share, so holdings are not misclassified. The fund is a lender past its commitment period (ended 2017) that is winding down and holds equity received in restructurings (Precision Products 'acquired through an investment restructuring'; Xiphias/Yellowtail fka Pace; RT Holdings), all printed. The new reason key fund-strategy-direct-lender-in-wind-down-holds-restructured-equity is backed by printed text (commitment period, 'continue to wind down', restructuring note), not generic. Conclusion false_alarm (holdings) and PD-0001603480-fund_strategy_validation-11 supported as a proposal for the owner. Earlier real-error verdict (PRIVATE_CREDIT is a classification error because printed equity exceeds debt) checked: its numbers are right and the published holdings carry them; what it calls an error is the label of a direct lender whose equity came from restructurings while it winds down. That is a fund-level taxonomy choice for the owner (the proposal says so and does not change the label), not a holdings defect; the verdict's mechanism (classification_lookthrough) is not established by the page, which prints the lending mandate.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Total Debt Investments 48.1 % 246,859,409 112,090,217"
+    },
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Total Equity Investments 65.2 % 144,513,218 151,633,878"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "as we continue to wind down may heighten the risk that an adverse change in one issuer"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_54292068c282",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-73d26458a11beb81), matching affected_rows 0001193125-26-346645/C_791967f4-84d2-4f79-866f-97af145e0066/ROW-73d26458a11beb81. Source: I read the printed line in 0001193125-26-346645; published row ROW-73d26458a11beb81 (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,000, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 19.73, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5a68d58e4fd0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_strategy_validation.csv for 2026-03-31 is UNDER_REVIEW/WARN with FS02 and private_credit_share 0.3480, matching the single fund-quarter key. Source: the printed debt and equity totals for the quarter give a debt share of 0.3480 of Total Debt & Equity Investments, equal to the published share, so holdings are not misclassified. The fund is a lender past its commitment period (ended 2017) that is winding down and holds equity received in restructurings (Precision Products 'acquired through an investment restructuring'; Xiphias/Yellowtail fka Pace; RT Holdings), all printed. The new reason key fund-strategy-direct-lender-in-wind-down-holds-restructured-equity is backed by printed text (commitment period, 'continue to wind down', restructuring note), not generic. Conclusion false_alarm (holdings) and PD-0001603480-fund_strategy_validation-11 supported as a proposal for the owner. Earlier real-error verdict (PRIVATE_CREDIT is a classification error because printed equity exceeds debt) checked: its numbers are right and the published holdings carry them; what it calls an error is the label of a direct lender whose equity came from restructurings while it winds down. That is a fund-level taxonomy choice for the owner (the proposal says so and does not change the label), not a holdings defect; the verdict's mechanism (classification_lookthrough) is not established by the page, which prints the lending mandate.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Debt Investments 39.8 % 86,770,613 86,897,322"
+    },
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Equity Investments 74.6 % 171,528,465 162,797,111"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "as we continue to wind down may heighten the risk that an adverse change in one issuer"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5b24d35235df",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_strategy_validation.csv for 2025-06-30 is UNDER_REVIEW/WARN with FS04 and private_credit_share 0.5148, matching the single fund-quarter key. Source: the printed debt and equity totals for the quarter give a debt share of 0.5148 of Total Debt & Equity Investments, equal to the published share, so holdings are not misclassified. The fund is a lender past its commitment period (ended 2017) that is winding down and holds equity received in restructurings (Precision Products 'acquired through an investment restructuring'; Xiphias/Yellowtail fka Pace; RT Holdings), all printed. The new reason key fund-strategy-direct-lender-in-wind-down-holds-restructured-equity is backed by printed text (commitment period, 'continue to wind down', restructuring note), not generic. Conclusion false_alarm (holdings) and PD-0001603480-fund_strategy_validation-11 supported as a proposal for the owner.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Total Debt Investments 65.9 % 287,734,298 168,757,151"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Total Equity Investments 62.2 % 145,153,218 159,075,179"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "as we continue to wind down may heighten the risk that an adverse change in one issuer"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_638eb3f1654c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has one F33 FAIL for 2025-03-31 (value 0.0, expected 0 < distribution_rate < 30%), matching the single fund-quarter key. Source: I read this quarter's own highlights (the tdle report now cites them per quarter): the three months to 2025-03-31 print '-' (0.14 is the 2024 comparative). The published distribution_per_share 0.0 and distribution_rate 0.0 are the printed figures (tdle fund_financials); the rule's lower bound rejects a quarter without a distribution. Conclusion false_alarm and PD-0001603480-F33-7 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "Less Distributions: From net investment income (loss) - ( 0.14 ) Total distributions - ( 0.14 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_63c4ec27e896",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-a010a7c3b07e7fab, value 21.32), matching affected_rows 0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab. Source: I read the printed line in 0000950170-24-126078; published row ROW-a010a7c3b07e7fab (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,009, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.32, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126078",
+     "text": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_65c474039100",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-d84e014a3dba64ea), matching affected_rows 0000950170-23-061710/C_545fc2a4-6594-4bcc-9890-2285f0b420d2/ROW-d84e014a3dba64ea. Source: I read the printed line in 0000950170-23-061710; published row ROW-d84e014a3dba64ea (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,976,817, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.43, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_68b1778be076",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has one F33 FAIL for 2023-09-30 (value 0.0, expected 0 < distribution_rate < 30%), matching the single fund-quarter key. Source: I read this quarter's own highlights (the tdle report now cites them per quarter): six months 0.77 and nine months 0.77, so the third quarter is nil. The published distribution_per_share 0.0 and distribution_rate 0.0 are the printed figures (tdle fund_financials); the rule's lower bound rejects a quarter without a distribution. Conclusion false_alarm and PD-0001603480-F33-7 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "Less Distributions: From net investment income ( 0.55 ) ( 0.53 ) Return of capital ( 0.22 ) ( 0.89 ) Total distributions (2) ( 0.77 ) ( 1.42 )"
+    },
+    {
+     "accession": "0000950170-23-061710",
+     "text": "Less Distributions: From net investment income ( 0.55 ) ( 0.93 ) Return of capital ( 0.22 ) ( 1.19 ) Total distributions (3) ( 0.77 ) ( 2.12 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_68caddef761b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-66b9389c5564220d), matching affected_rows 0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d. Source: I read the printed line in 0000950170-24-057614; published row ROW-66b9389c5564220d (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.44, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6b3c1fb9bb87",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_strategy_validation.csv for 2025-09-30 is UNDER_REVIEW/WARN with FS02;FS04 and private_credit_share 0.4792, matching the single fund-quarter key. Source: the printed debt and equity totals for the quarter give a debt share of 0.4792 of Total Debt & Equity Investments, equal to the published share, so holdings are not misclassified. The fund is a lender past its commitment period (ended 2017) that is winding down and holds equity received in restructurings (Precision Products 'acquired through an investment restructuring'; Xiphias/Yellowtail fka Pace; RT Holdings), all printed. The new reason key fund-strategy-direct-lender-in-wind-down-holds-restructured-equity is backed by printed text (commitment period, 'continue to wind down', restructuring note), not generic. Conclusion false_alarm (holdings) and PD-0001603480-fund_strategy_validation-11 supported as a proposal for the owner.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "Total Debt Investments 57.6 % 267,031,949 139,685,748"
+    },
+    {
+     "accession": "0001193125-25-279849",
+     "text": "Total Equity Investments 62.7 % 144,513,218 151,785,778"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "as we continue to wind down may heighten the risk that an adverse change in one issuer"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6e5410de4306",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has one F33 FAIL for 2025-06-30 (value 0.0, expected 0 < distribution_rate < 30%), matching the single fund-quarter key. Source: I read this quarter's own highlights (the tdle report now cites them per quarter): the six months to 2025-06-30 print '-' (0.36 is the 2024 comparative). The published distribution_per_share 0.0 and distribution_rate 0.0 are the printed figures (tdle fund_financials); the rule's lower bound rejects a quarter without a distribution. Conclusion false_alarm and PD-0001603480-F33-7 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_754c700ab52c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-d84e014a3dba64ea, value 21.43), matching affected_rows 0000950170-23-061710/C_545fc2a4-6594-4bcc-9890-2285f0b420d2/ROW-d84e014a3dba64ea. Source: I read the printed line in 0000950170-23-061710; published row ROW-d84e014a3dba64ea (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,976,817, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.43, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_797472b759bb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-1ecff253f5ce4f4b, value 20.39), matching affected_rows 0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b. Source: I read the printed line in 0001193125-25-279849; published row ROW-1ecff253f5ce4f4b (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.39, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7c9ef06ee4f2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the shadow weak metric is one failing row of the quarter; recomputing pct_of_net_assets > 25 on tdld holdings gives only ROW-c813960ddbb6484f, matching affected_rows 0000950170-24-095898/C_b2a522bb-883d-4f14-b091-ffdbcb728f41/ROW-c813960ddbb6484f. Source: the printed line in 0000950170-24-095898 shows H-D Advanced Manufacturing Term Loan at 30.3 pct of net assets and fair value 99,609,137, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-pct_position_concentration-5 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_814671bb0c45",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_strategy_validation.csv for 2025-03-31 is UNDER_REVIEW/WARN with FS02;FS04 and private_credit_share 0.4976, matching the single fund-quarter key. Source: the printed debt and equity totals for the quarter give a debt share of 0.4976 of Total Debt & Equity Investments, equal to the published share, so holdings are not misclassified. The fund is a lender past its commitment period (ended 2017) that is winding down and holds equity received in restructurings (Precision Products 'acquired through an investment restructuring'; Xiphias/Yellowtail fka Pace; RT Holdings), all printed. The new reason key fund-strategy-direct-lender-in-wind-down-holds-restructured-equity is backed by printed text (commitment period, 'continue to wind down', restructuring note), not generic. Conclusion false_alarm (holdings) and PD-0001603480-fund_strategy_validation-11 supported as a proposal for the owner.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "Total Debt Investments 62.7 % 280,211,107 166,032,809"
+    },
+    {
+     "accession": "0000950170-25-071647",
+     "text": "Total Equity Investments 63.3 % 145,153,218 167,602,355"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "as we continue to wind down may heighten the risk that an adverse change in one issuer"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_827a51046e89",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-3dbd7bd09dd6f71d), matching affected_rows 0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d. Source: I read the printed line in 0000950170-24-095898; published row ROW-3dbd7bd09dd6f71d (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,002, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.44, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_849ac3b15d83",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the shadow weak metric is one failing row of the quarter; recomputing pct_of_net_assets > 25 on tdld holdings gives only ROW-5630bfcd57e0c0a6, matching affected_rows 0000950170-23-020966/C_6f0137b3-87af-4a47-9c34-75795db7ed5f/ROW-5630bfcd57e0c0a6. Source: the printed line in 0000950170-23-020966 shows H-D Advanced Manufacturing Term Loan at 33.5 pct of net assets and fair value 130,270,359, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-pct_position_concentration-5 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_890bf9820c34",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: in tdle one F16 FAIL for 2025-12-31 (value 1.38 = distribution_rate 5.01 less 1.5 x income_yield_pct 2.42), matching the fund-quarter key. income_yield_pct is now the printed 2025 annual ratio 2.42 (highlights figure correction; was 0.67), and the finding still fires for the reason the proposal gives. Source (2025 10-K and 10-Q 2025-09-30): 2025 total 0.30, nine months '-', so the whole 0.30 fell in Q4; distribution_rate 5.01 = 0.30 x 4 / 23.96 is the quarter annualised, as for every other quarter. The earlier real-error verdict (0.30 / 23.96 = 1.25 pct against the 2.42 pct annual ratio) compared an annual rate with an annualised quarter rate; on a like-for-like quarter basis Q4 NII is 6,172 less 3,367 = 2,805 thousand against 0.30 x 18,034,649 = 5.4M distributed, above 1.5x income. The verdict does not stand, and the updated addresses_verdict and hypotheses (yield corrected to 2.42; still fires because the whole year's distribution fell in one quarter: 5.01 > 3.63) are correct. PD-0001603480-F16-10 supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Total distributions (3) ( 0.30 ) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 )"
+    },
+    {
+     "accession": "0001193125-25-279849",
+     "text": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )"
+    },
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Net expenses 11,304 15,296 15,666 Net investment income 6,172 16,182 37,577"
+    },
+    {
+     "accession": "0001193125-25-279849",
+     "text": "Net investment income 337 717 3,367 14,604"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8e8c8bf0befc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the shadow weak metric is one failing row of the quarter; recomputing pct_of_net_assets > 25 on tdld holdings gives only ROW-628437a979c00393, matching affected_rows 0000950170-24-057614/C_3861b6d6-2aca-499e-bcce-42dbfa4bb60b/ROW-628437a979c00393. Source: the printed line in 0000950170-24-057614 shows H-D Advanced Manufacturing Term Loan at 28.0 pct of net assets and fair value 101,539,355, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-pct_position_concentration-5 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8fd590b438e1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_strategy_validation.csv for 2026-06-30 is UNDER_REVIEW/WARN with FS02 and private_credit_share 0.2843, matching the single fund-quarter key. Source: the printed debt and equity totals for the quarter give a debt share of 0.2843 of Total Debt & Equity Investments, equal to the published share, so holdings are not misclassified. The fund is a lender past its commitment period (ended 2017) that is winding down and holds equity received in restructurings (Precision Products 'acquired through an investment restructuring'; Xiphias/Yellowtail fka Pace; RT Holdings), all printed. The new reason key fund-strategy-direct-lender-in-wind-down-holds-restructured-equity is backed by printed text (commitment period, 'continue to wind down', restructuring note), not generic. Conclusion false_alarm (holdings) and PD-0001603480-fund_strategy_validation-11 supported as a proposal for the owner.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Total Debt Investments 27.4 % 50,699,585 50,710,476"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Total Equity Investments 68.7 % 158,728,465 127,635,544"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "as we continue to wind down may heighten the risk that an adverse change in one issuer"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9991e9b7ac63",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle B01 2023-09-30 fail '55/60 leaves have fair_value (91.7%)'; check_failures lists the five excluded_no_fair_value contexts C_e5041c5c-74e2-496b-a7ce-9777e8f0afec, C_5ecf2e49-7630-48cc-92ce-520609b27b59, C_6ec82ebc-44af-40e6-8d96-f3ef5a382284, C_cdf86927-fa36-4bc6-8e81-515d2feb1d60, C_c5659029-cc0a-4af9-8d37-5f4d339188dc. The tdle report keys affected_rows by exactly these five accession/context ids, all reviewed. Source: filing_grep on 000095017023061710.xml shows each context holds only us-gaap:InvestmentAcquisitionDate (2020-09-15 SSI, 2021-02-24 Ruby Tuesday, 2015-05-19 Cedar, 2015-06-30 H-D, 2022-10-07 Pace), no value; each loan is published once from its valued context and the quarter ties to the printed total 474,204,801. No position value missing. Conclusion false_alarm and PD-0001603480-B01-16 supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "09/15/20 Term Loan - 13.42 % (SOFR + 8.00 %, 1.25 % Floor) 2.3 % 8,993,842 12/29/26 8,970,536 8,993,842"
+    },
+    {
+     "accession": "0000950170-23-061710",
+     "text": "Total Debt & Equity Investments (9) 118.8 % 516,645,118 474,204,801"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9d8d47e60c40",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one F16 FAIL for 2023-12-31 (value 8.93 = 23.33 less 1.5 x 9.6), matching the fund-quarter key. Source: 2023 total 2.60 per unit (10-K) less nine months 0.77 (10-Q 2023-09-30) = 1.83 published for the quarter; income_yield_pct 9.6 is the printed 2023 annual ratio 9.60 %. The year-end distribution exceeds 1.5x the income yield on that basis and also on the quarter's own income (Q4 NII 8,344 thousand against 1.83 x 18,034,649 = 33.0M distributed). As printed; PD-0001603480-F16-10 supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "Total distributions (3) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 ) ( 6.40 )"
+    },
+    {
+     "accession": "0000950170-23-061710",
+     "text": "Less Distributions: From net investment income ( 0.55 ) ( 0.93 ) Return of capital ( 0.22 ) ( 1.19 ) Total distributions (3) ( 0.77 ) ( 2.12 )"
+    },
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Ratio of net investment income to average net assets 2.42 % 4.87 % 9.60 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a0a5c82ef1a9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one F16 FAIL for 2026-06-30 (value 9.45 = 12.75 less 1.5 x 2.2), matching the fund-quarter key. Source: six months 0.68, all return of capital; Q1 2026 prints no distribution; the statement of changes prints the 12,300 thousand return of capital in the three months to 2026-06-30 (= 0.68 x 18,034,649). Published distribution_per_share 0.68 (highlights figure correction, previously derived 0.34) and income_yield_pct 2.2 = printed six-month ratio 2.20 %. Q2 NII 1,511 thousand against 12.3M distributed: return of capital, as printed. PD-0001603480-F16-8 supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Less Distributions: Return of capital ( 0.68 ) - Total distributions ( 0.68 ) -"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Distributions to Members from: Return of capital ( 12,300 ) - ( 12,300 )"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Net investment income 1,511 2,835 2,409 3,030"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a226df6e66c1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-9fd7d19a4a3798fa), matching affected_rows 0000950170-25-071647/C_f5d916d9-88a5-46e7-ad69-d72153ea68b7/ROW-9fd7d19a4a3798fa. Source: I read the printed line in 0000950170-25-071647; published row ROW-9fd7d19a4a3798fa (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,011, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.44, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a37a7b9058d0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the shadow weak metric is one failing row of the quarter; recomputing pct_of_net_assets > 25 on tdld holdings gives only ROW-a889c70add6fbe9d, matching affected_rows 0001193125-26-346645/C_2311c899-52a7-4260-81a6-82c9ab0e178d/ROW-a889c70add6fbe9d. Source: the printed line in 0001193125-26-346645 shows Precision Products Machining Group Class A Units at 25.1 pct of net assets and fair value 46,616,419, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-pct_position_concentration-5 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 %"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a4439964bbc5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-ad7471dc2392553e, value 21.26), matching affected_rows 0000950170-23-041105/C_35d8adbd-7643-4663-9e7b-4571bdc57966/ROW-ad7471dc2392553e. Source: I read the printed line in 0000950170-23-041105; published row ROW-ad7471dc2392553e (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,332, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.26, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a75d030cae0e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-e97fe3729ed5395a), matching affected_rows 0001193125-26-140703/C_457b3dbf-f28c-42fa-a80d-d084b6b66530/ROW-e97fe3729ed5395a. Source: I read the printed line in 0001193125-26-140703; published row ROW-e97fe3729ed5395a (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 19.98, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported. Earlier real-error verdict (Noramco 0.38 % PIK leg read as spread) checked: in tdld Noramco publishes basis_spread 8.38, pik_rate 0.38, interest_rate 12.51, interest_rate_cash 12.13 (printed 'SOFR + 8.38 %, 1.00 % Floor, 0.38 % PIK'). Verdict no longer applies.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-140703",
+     "text": "02/01/23 Incremental Term Loan - 19.98 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.3 % 2,660,747 02/24/27 2,660,747 2,928,001 5.7 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a967735bc457",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-b7fc6d9b2bbfea5b, value 21.46), matching affected_rows 0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b. Source: I read the printed line in 0000950170-24-037856; published row ROW-b7fc6d9b2bbfea5b (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,940,257, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.46, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ae4cbff93648",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C115 row for this fund-quarter (ROW-b7fc6d9b2bbfea5b, value 16.0), matching affected_rows 0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b. Source: I read the printed line in 0000950170-24-037856; published row ROW-b7fc6d9b2bbfea5b (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,940,257, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.46, interest_rate_cash 0, interest_rate_kind all_in. basis_spread 16.0 is the printed margin 'SOFR + 16.00 %'. The loan is all PIK, so cash margin 0 plus PIK margin 16.00 counted once is 16.00 (D-031), with pik_rate carried separately. As printed. Conclusion false_alarm and proposal PD-0001603480-C115-3 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_aefc3df5a225",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle check_results A07 for the quarter is 'warn: pct_sum=120.6%; 1 outliers > 25%' (residual rows 0); the one outlier is ROW-7dd8b024234ec609, matching affected_rows 0000950170-23-041105/C_3da6d0e6-1987-4e27-bd0a-6dde97100244/ROW-7dd8b024234ec609. Source: the printed line in 0000950170-23-041105 shows H-D Advanced Manufacturing Term Loan at 33.2 pct of net assets and fair value 130,270,359, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-A07-6 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b1f3aa8b4941",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle check_results A07 for the quarter is 'warn: pct_sum=121.0%; 1 outliers > 25%' (residual rows 0); the one outlier is ROW-628437a979c00393, matching affected_rows 0000950170-24-057614/C_3861b6d6-2aca-499e-bcce-42dbfa4bb60b/ROW-628437a979c00393. Source: the printed line in 0000950170-24-057614 shows H-D Advanced Manufacturing Term Loan at 28.0 pct of net assets and fair value 101,539,355, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-A07-6 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b66bfb517645",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-ad7471dc2392553e), matching affected_rows 0000950170-23-041105/C_35d8adbd-7643-4663-9e7b-4571bdc57966/ROW-ad7471dc2392553e. Source: I read the printed line in 0000950170-23-041105; published row ROW-ad7471dc2392553e (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,332, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.26, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bb409cd67cbd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-3dbd7bd09dd6f71d), matching affected_rows 0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d. Source: I read the printed line in 0000950170-24-095898; published row ROW-3dbd7bd09dd6f71d (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,002, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.44, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_be71a069b222",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-9705cf774ea59b28, value 20.65), matching affected_rows 0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28. Source: I read the printed line in 0000950170-25-047910; published row ROW-9705cf774ea59b28 (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.65, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c453fbe13b33",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-1ecff253f5ce4f4b), matching affected_rows 0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b. Source: I read the printed line in 0001193125-25-279849; published row ROW-1ecff253f5ce4f4b (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.39, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_cabf5befda04",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation F11 FAIL 2023-03-31 (value 199,044,597; every other quarter SKIP for missing units), matching the single fund-quarter key; 2023-03-31 is the only quarter with a published unit count. Source: published nav_per_share 32.63 and net_assets 389,426,000 are both printed. (389,426 + 199,120) thousand / 18,034,649 = 32.634, i.e. the printed per-unit NAV is on the accrual base that adds back the undrawn commitment printed as a deduction in members' capital; the filer defines the accrual base in the highlights note. The new reason key nav-per-unit-printed-on-accrual-base-with-undrawn-commitments is backed by printed text and exact arithmetic, not generic (same filer family as TCW VII, D-212). Conclusion false_alarm and PD-0001603480-F11-12 supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "The accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit and reflects all units issued and outstanding"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ccc5f8cd4bbd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C115 row for this fund-quarter (ROW-73d26458a11beb81, value 16.0), matching affected_rows 0001193125-26-346645/C_791967f4-84d2-4f79-866f-97af145e0066/ROW-73d26458a11beb81. Source: I read the printed line in 0001193125-26-346645; published row ROW-73d26458a11beb81 (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,000, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 19.73, interest_rate_cash 0, interest_rate_kind all_in. basis_spread 16.0 is the printed margin 'SOFR + 16.00 %'. The loan is all PIK, so cash margin 0 plus PIK margin 16.00 counted once is 16.00 (D-031), with pik_rate carried separately. As printed. Conclusion false_alarm and proposal PD-0001603480-C115-3 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_cd10aaf38743",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-b7fc6d9b2bbfea5b), matching affected_rows 0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b. Source: I read the printed line in 0000950170-24-037856; published row ROW-b7fc6d9b2bbfea5b (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,940,257, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.46, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported. Earlier real-error verdict (Retail & Animal Intermediate Delayed Draw Priming 20.00 % fixed coupon read as spread) checked: in tdld that row publishes basis_spread NULL, interest_rate 20.0, pik_rate 20.0; the only row above 15 is Ruby Tuesday. Verdict no longer applies.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ce26e66af43b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation F28 FAIL 2026-08-12 'fund=True;holdings=False', the only F28 failure since 2023; the key matches. Source: 2026-08-12 is the cover-page date of the 10-Q for 2026-06-30 (units outstanding 18,034,649); the fund_financials row for that date carries only shares_outstanding. Not a reporting quarter, no holdings exist for it. Same reason as D-219 (cover-page unit count). PD-0001603480-F28-15 supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The number of the Registrants common units outstanding at August 12, 2026 was 18,034,649"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ceaee883ee65",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-66b9389c5564220d), matching affected_rows 0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d. Source: I read the printed line in 0000950170-24-057614; published row ROW-66b9389c5564220d (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.44, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_cecdbbd2d9e0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-b7fc6d9b2bbfea5b), matching affected_rows 0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b. Source: I read the printed line in 0000950170-24-037856; published row ROW-b7fc6d9b2bbfea5b (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,940,257, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.46, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d2a263e616c1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the shadow weak metric is one failing row of the quarter; recomputing pct_of_net_assets > 25 on tdld holdings gives only ROW-7dd8b024234ec609, matching affected_rows 0000950170-23-041105/C_3da6d0e6-1987-4e27-bd0a-6dde97100244/ROW-7dd8b024234ec609. Source: the printed line in 0000950170-23-041105 shows H-D Advanced Manufacturing Term Loan at 33.2 pct of net assets and fair value 130,270,359, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-pct_position_concentration-5 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d2de59d69cca",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle check_results A07 for the quarter is 'warn: pct_sum=131.6%; 1 outliers > 25%' (residual rows 0); the one outlier is ROW-5630bfcd57e0c0a6, matching affected_rows 0000950170-23-020966/C_6f0137b3-87af-4a47-9c34-75795db7ed5f/ROW-5630bfcd57e0c0a6. Source: the printed line in 0000950170-23-020966 shows H-D Advanced Manufacturing Term Loan at 33.5 pct of net assets and fair value 130,270,359, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-A07-6 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d44c53c552b9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C115 row for this fund-quarter (ROW-9705cf774ea59b28, value 16.0), matching affected_rows 0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28. Source: I read the printed line in 0000950170-25-047910; published row ROW-9705cf774ea59b28 (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.65, interest_rate_cash 0, interest_rate_kind all_in. basis_spread 16.0 is the printed margin 'SOFR + 16.00 %'. The loan is all PIK, so cash margin 0 plus PIK margin 16.00 counted once is 16.00 (D-031), with pik_rate carried separately. As printed. Conclusion false_alarm and proposal PD-0001603480-C115-3 (as_filed) supported. Earlier real-error verdict (Overton Chicago Gear Term Loan A carrying its 16.0 pct of net assets as spread) checked: in tdld that row publishes basis_spread NULL, interest_rate 6.0, pik_rate 6.0, pct 16.0 (printed '6.00 %, Fixed Coupon, all PIK'); no other 2024-12-31 row has a spread above 15. The verdict no longer applies; addresses_verdict in PD-0001603480-C115-3 is correct.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d57af20530c5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-20370f006e63a3aa), matching affected_rows 0000950170-25-107759/C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf/ROW-20370f006e63a3aa. Source: I read the printed line in 0000950170-25-107759; published row ROW-20370f006e63a3aa (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,000, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.44, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row out of the quarter's PIK rows; that row is the one listed. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK'. As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_pik_rate-2 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d6f08805f78d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C115 row for this fund-quarter (ROW-ad7471dc2392553e, value 16.0), matching affected_rows 0000950170-23-041105/C_35d8adbd-7643-4663-9e7b-4571bdc57966/ROW-ad7471dc2392553e. Source: I read the printed line in 0000950170-23-041105; published row ROW-ad7471dc2392553e (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,332, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.26, interest_rate_cash 0, interest_rate_kind all_in. basis_spread 16.0 is the printed margin 'SOFR + 16.00 %'. The loan is all PIK, so cash margin 0 plus PIK margin 16.00 counted once is 16.00 (D-031), with pik_rate carried separately. As printed. Conclusion false_alarm and proposal PD-0001603480-C115-3 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_dd18bd4c0811",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C115 row for this fund-quarter (ROW-1ecff253f5ce4f4b, value 16.0), matching affected_rows 0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b. Source: I read the printed line in 0001193125-25-279849; published row ROW-1ecff253f5ce4f4b (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.39, interest_rate_cash 0, interest_rate_kind all_in. basis_spread 16.0 is the printed margin 'SOFR + 16.00 %'. The loan is all PIK, so cash margin 0 plus PIK margin 16.00 counted once is 16.00 (D-031), with pik_rate carried separately. As printed. Conclusion false_alarm and proposal PD-0001603480-C115-3 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_df810fa90c53",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C115 row for this fund-quarter (ROW-3dbd7bd09dd6f71d, value 16.0), matching affected_rows 0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d. Source: I read the printed line in 0000950170-24-095898; published row ROW-3dbd7bd09dd6f71d (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,002, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.44, interest_rate_cash 0, interest_rate_kind all_in. basis_spread 16.0 is the printed margin 'SOFR + 16.00 %'. The loan is all PIK, so cash margin 0 plus PIK margin 16.00 counted once is 16.00 (D-031), with pik_rate carried separately. As printed. Conclusion false_alarm and proposal PD-0001603480-C115-3 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_dfc2b6514710",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C115 row for this fund-quarter (ROW-66b9389c5564220d, value 16.0), matching affected_rows 0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d. Source: I read the printed line in 0000950170-24-057614; published row ROW-66b9389c5564220d (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,001, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.44, interest_rate_cash 0, interest_rate_kind all_in. basis_spread 16.0 is the printed margin 'SOFR + 16.00 %'. The loan is all PIK, so cash margin 0 plus PIK margin 16.00 counted once is 16.00 (D-031), with pik_rate carried separately. As printed. Conclusion false_alarm and proposal PD-0001603480-C115-3 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e598718cdb8c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-d84e014a3dba64ea), matching affected_rows 0000950170-23-061710/C_545fc2a4-6594-4bcc-9890-2285f0b420d2/ROW-d84e014a3dba64ea. Source: I read the printed line in 0000950170-23-061710; published row ROW-d84e014a3dba64ea (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,976,817, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.43, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e610bebe2887",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: shadow validation_results_ledger shows the quarter failing on one row; recomputing the bound on tdld holdings gives one row (ROW-3fc68b4581895e72), matching affected_rows 0000950170-23-020966/C_f0448690-9c99-4742-ab11-90cba005a8f7/ROW-3fc68b4581895e72. Source: I read the printed line in 0000950170-23-020966; published row ROW-3fc68b4581895e72 (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,940,116, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.73, interest_rate_cash 0, interest_rate_kind all_in. Shadow weak metric for the quarter is exactly one failing row; it is the listed Ruby Tuesday row and basis_spread 16.0 is the printed 'SOFR + 16.00 %' margin (D-031: all-PIK loan, PIK margin counted once). As printed. Conclusion false_alarm and proposal PD-0001603480-fmt_basis_spread-4 (as_filed) supported. Earlier ambiguous verdict (rule could not localise a row) resolved: the failing row is the Ruby Tuesday Incremental Term Loan; Noramco publishes 8.38, inside the bound.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_eee9879e5cb6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C117 row for this fund-quarter (ROW-3fc68b4581895e72, value 20.73), matching affected_rows 0000950170-23-020966/C_f0448690-9c99-4742-ab11-90cba005a8f7/ROW-3fc68b4581895e72. Source: I read the printed line in 0000950170-23-020966; published row ROW-3fc68b4581895e72 (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,940,116, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 20.73, interest_rate_cash 0, interest_rate_kind all_in. The published pik_rate equals the printed all-in coupon of a loan printed 'all PIK' (whole coupon paid in kind, D-092/D-218); interest_rate equals the same printed figure and interest_rate_cash is 0, so PIK is not added on top of a cash coupon. As printed; the 20 pct bound is a rule threshold, not a defect. Conclusion false_alarm and proposal PD-0001603480-C117-1 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f6fc1908b4a7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has one F33 FAIL for 2024-09-30 (value 0.0, expected 0 < distribution_rate < 30%), matching the single fund-quarter key. Source: I read this quarter's own highlights (the tdle report now cites them per quarter): six months 2024 (10-Q 2024-06-30) 0.36 and nine months 2024 (10-Q 2024-09-30) 0.36, so the third quarter is nil. The published distribution_per_share 0.0 and distribution_rate 0.0 are the printed figures (tdle fund_financials); the rule's lower bound rejects a quarter without a distribution. Conclusion false_alarm and PD-0001603480-F33-7 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "Less Distributions: From net investment income ( 0.36 ) ( 0.55 ) Return of capital - ( 0.22 ) Total distributions ( 0.36 ) ( 0.77 )"
+    },
+    {
+     "accession": "0000950170-24-126078",
+     "text": "Less Distributions: From net investment income ( 0.36 ) ( 0.55 ) Return of capital - ( 0.22 ) Total distributions ( 0.36 ) ( 0.77 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f91e52a8ffa7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle check_results A07 for the quarter is 'warn: pct_sum=120.5%; 1 outliers > 25%' (residual rows 0); the one outlier is ROW-c4cfece4dfa5fc72, matching affected_rows 0000950170-24-037856/C_e06e296b-fdcf-49c5-ac9a-1b76e10b219c/ROW-c4cfece4dfa5fc72. Source: the printed line in 0000950170-24-037856 shows H-D Advanced Manufacturing Term Loan at 26.8 pct of net assets and fair value 98,278,214, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-A07-6 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_faa56d2da9a7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the shadow weak metric is one failing row of the quarter; recomputing pct_of_net_assets > 25 on tdld holdings gives only ROW-c22cc93c2b9bd9be, matching affected_rows 0000950170-23-061710/C_8d9af6b9-f6a9-4587-b261-2340b1ba77c7/ROW-c22cc93c2b9bd9be. Source: the printed line in 0000950170-23-061710 shows H-D Advanced Manufacturing Term Loan at 32.6 pct of net assets and fair value 130,270,359, equal to the published row. The pct sum is inside the 50-250 band and within rounding of the printed 'Total Debt & Equity Investments' percent. The concentration is real: the fund is past its commitment period (ended 2017) and winding down (both printed, quoted) with 22 to 29 published rows a quarter. Conclusion false_alarm and proposal PD-0001603480-pct_position_concentration-5 supported; the wind-down wording in the reason key is backed by printed text, not generic.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The Commitment Period commenced on September 19, 2014 (the Initial Closing Date) and ended on September 19, 2017"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fcdafea1f59f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues.csv has exactly one C115 row for this fund-quarter (ROW-a010a7c3b07e7fab, value 16.0), matching affected_rows 0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab. Source: I read the printed line in 0000950170-24-126078; published row ROW-a010a7c3b07e7fab (Ruby Tuesday Operations LLC, Incremental Term Loan) has fair value 2,928,009, pct and maturity as printed, basis_spread 16.0, interest_rate = pik_rate = 21.32, interest_rate_cash 0, interest_rate_kind all_in. basis_spread 16.0 is the printed margin 'SOFR + 16.00 %'. The loan is all PIK, so cash margin 0 plus PIK margin 16.00 counted once is 16.00 (D-031), with pik_rate carried separately. As printed. Conclusion false_alarm and proposal PD-0001603480-C115-3 (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126078",
+     "text": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "affiliate-rollforward-note-members-published-as-positions",
+   "outcome": "supported",
+   "rationale": "Independently checked spon3 against tdld at 2025-06-30: spon3 published 51 rows / 616,142,575; tdld 26 rows / 327,832,330 = printed total (cost 432,887,516 = printed). Every one of the 25 removed rows has no cost and no percent and a same-value schedule row survives (e.g. Precision Products Class A 47,291,000; Overton Term Loan A 42,197,289); the six removed zero-value rows (ASC Acquisition Holdings, Animal Supply First Out, Retail & Animal DDTL, and note twins of Pace Common, Pace Term Loan, Strategic Ventures Common) are roll-forward note rows of positions exited before the quarter, and the surviving schedule rows include Pace Common Stock and Strategic Ventures Common at 0. Row counts are unchanged against spon3 in 2023-12-31 to 2025-03-31 and 2025-09-30/2025-12-31, so schedule_row_tags removed nothing elsewhere; all 14 quarters tie on FV and cost. No real position lost. existing_detector: conservation/fv_conservation is open in tdla at 2025-06-30, 2026-03-31 and 2026-06-30 (verified in the tdla ledger).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Total Debt & Equity Investments (8) 128.1 % 432,887,516 327,832,330"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "ASC Acquisition Holdings LLC Term Loan - 9.50 % $ 686,276 $ - $ - $ ( 27,362,675 ) $ 26,676,399 $ - $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "plug-rule-adds-rows-without-context",
+   "outcome": "supported",
+   "rationale": "The pulled row_add (README in _pulled_1603480_fundloop_2026-10-19) added First American 1,906,618 and a Treasury bill 321,170,326 at 2026-03-31 with no context; 249,694,433 + 323,076,944 = 572,771,377, the printed Total Investments including cash, while the filed and printed comparable figure is Total Debt & Equity Investments 249,694,433. A plug; pulling it is right, and tdld ties to 249,694,433 with schedule contexts restored (8 rows whose spon3 short-form twins had replaced them). existing_detector verified: no_provenance, C006, C301, C303, C304 are open in tdla at 2025-06-30 and 2026-03-31.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Investments ( 262.7 %) $ 581,376,022 $ 572,771,377"
+    },
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Debt & Equity Investments (7) 114.4 % 258,299,078 249,694,433"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-blank-when-member-uses-en-dash",
+   "outcome": "supported",
+   "rationale": "tdld has 0 rows of this fund with a blank instrument_description (query instr.py). The suggested check (loan rows with blank instrument whose identifier contains Term Loan / Revolver, above 1 pct) is concrete and would have caught the 130 blanks; false positives limited to identifiers that carry only the issuer. No rule fired in tdla, so propose_detector is the right decision.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "08/14/20 Term Loan - 13.65 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK)"
+    }
+   ]
+  },
+  {
+   "observation_key": "all-pik-loan-publishes-no-pik-rate",
+   "outcome": "supported",
+   "rationale": "tdld: 119 loan rows whose identifier says 'all PIK' all have pik_rate = interest_rate and interest_rate_cash 0; the 18 partial-PIK rows (Noramco 0.38 % PIK, Ruby Tuesday Term Loan 6.00 % PIK) carry spread as the total margin and pik_rate as the printed PIK leg (D-031). The suggested member-text check is concrete; no rule fired, so propose_detector is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "08/14/20 Term Loan - 13.65 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK)"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-misnames-instrument",
+   "outcome": "supported",
+   "rationale": "Spot-checked the Ruby Tuesday 2024-12-31 line (printed 'Term Loan', published 'Term Loan'). The suggested check is concrete but will miss single-quarter mislabels; acceptable as a proposed detector. No existing rule compares instruments with the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "Ruby Tuesday Operations LLC (4) 02/24/21 Term Loan - 16.65 % inc PIK (SOFR + 12.00 %, 1.25 % Floor, all PIK) 3.7 % 9,389,540"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "outcome": "supported",
+   "rationale": "tdla shadow page_rule_findings has 16 issuer_name_printed rows for this fund, including ROW-fbcbc8fa907f7041 (2023-12-31, member 'SSI Parent', printed 'RT Holdings Parent, LLC ... Class P-2 Units ... 110,000') and the 'fks' rows 2023-03-31 to 2024-06-30. The existing detector catches the problem the key names. Caveat: it did not fire on the dropped-bracket SSI names (2024-09-30 to 2026-06-30) or the missing 'LLC' on Strategic Ventures (2025-03-31 on), which the row corrections also fixed; those are punctuation/legal-form differences the rule tolerates by design, and the printed names (no 'LLC' before 2025-03-31, 'LLC' after) match tdld.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "RT Holdings Parent, LLC (2)(4)(7) Class P-2 Units 0.0 % 53,104 66,914 110,000"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-and-treasury-bills-printed-not-published",
+   "outcome": "supported",
+   "rationale": "Verified printed and unpublished (e.g. 2025-06-30 money fund 993,983 and bills; 2026-06-30 bill 246,922,986). Leaving them is consistent with the filed investments figure (Debt & Equity basis) and with D-217; it is inconsistent with TCW VII (cash_identifier_rows, D-212), so it is correctly framed as an owner/cohort choice. Claim that the filer moves the money fund off the investment axes from 2025-06-30 checked: in 000095017025107759.xml the FGXXX member sits on CashAndCashEquivalentsAxis, in 2025-03-31 on InvestmentIssuerNameAxis. The proposed check (printed cash sections vs published CASH rows, reporting only) is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.26 %, Class X (FGXXX) 0.4 % 993,983 993,983 993,983"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 3.85 %, Maturity Date 10/27/26 133.1 % 250,000,000 246,922,986 246,922,986"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-sub-industry-from-printed-industry-heading",
+   "outcome": "supported",
+   "rationale": "tdld: Ruby Tuesday Operations (30 rows) and RT Holdings (56 rows) publish gics_sub_industry 'Hotels, Resorts & Cruise Lines' for a restaurant chain; the printed heading is the industry 'Hotels, Restaurants & Leisure'. Shared mapping, left; the suggested multi-child-heading flag is concrete and low false-positive.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Ruby Tuesday Operations LLC (3) 02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK)"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-without-a-change-on-the-page",
+   "outcome": "supported",
+   "rationale": "Verified in tdld: RT Holdings Class A Units (5,475,885 units every quarter) change position_id at 2024-03-31 (221ab7c9 to 391ba87f) and Class P-1 Units (105,624) at 2024-12-31 (166bc919 to 9e9d3fa2) with unit count and cost unchanged. Shared matcher; the unit-count continuity check is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "RT Holdings Parent, LLC (2)(4)(7) Class A Units 5.3 % 5,475,885 5,133,708 19,186,953"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-per-unit-derived-wrong-when-first-quarter-prints-none",
+   "outcome": "supported",
+   "rationale": "Verified: six months 2026 print 0.68 return of capital, Q1 2026 prints no distribution, and the statement of changes puts the 12,300 thousand in the second quarter; tdld publishes 0.68. The suggested year-to-date recomputation check is concrete. Minor: 2026-03-31 publishes distribution_per_share blank rather than 0 (the page prints no line), harmless.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Less Distributions: Return of capital ( 0.68 ) - Total distributions ( 0.68 ) -"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Distributions to Members from: Return of capital ( 12,300 ) - ( 12,300 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "income-yield-pct-difference-of-year-to-date-ratios",
+   "outcome": "supported",
+   "rationale": "Fixed at fund level as asked in the tdld review. tdle fund_financials: 2022-06-30 income_yield_pct 8.55, 2025-06-30 2.33, 2025-12-31 2.42, each equal to the printed year-to-date ratio of that filing (lines quoted; 2025-06-30 was 2.03, a quarter I had not listed). The other quarters 2022-2026 equal printed year-to-date ratios (e.g. 2022-03-31 5.42, 2023-03-31 7.67, 2026-03-31 1.58, 2026-06-30 2.20). F16 2022-06-30 now PASS (value -7.64) and PD-0001603480-F16-9 is withdrawn; 2025-06-30 F16 PASS. The shared derivation remains; propose_detector with 'published income_yield_pct against the printed ratio of the same filing' is concrete and low false-positive.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-016777",
+     "text": "Ratio of net investment income to average net assets (6) 8.55 % 7.72 %"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Ratio of net investment income to average net assets (5) 2.33 % 7.70 %"
+    },
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Ratio of net investment income to average net assets 2.42 % 4.87 % 9.60 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "warrant-expiry-not-published-as-maturity",
+   "outcome": "supported",
+   "rationale": "Verified all 14 changed rows (warrant_tdle.py): the RT Holdings warrant row of each quarter 2023-03-31 to 2026-06-30 now publishes maturity_date equal to the printed 'Warrant, expires' date of that filing: 2027-12-21 (2023-03-31 to 2023-12-31), 2025-02-24 (2024-03-31 to 2024-09-30, as printed '2/24/25'), 2027-02-24 (2024-12-31 to 2026-06-30); each printed line's fair value equals the published row. holdings_field_diff tdle vs tdld: same 367 rows, only maturity_date (14), maturity_status (14, not_disclosed -> unresolved) and corrected_fields (14) differ, all on these rows. No rule fired; the proposed text-or-tag check is concrete. Residual: maturity_status 'unresolved' and blank maturity_date_source on these rows; harmless but the status label is not 'disclosed'.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "RT Holdings Parent, LLC (2)(4)(8) Warrant, expires 12/21/27 0.7 % 912,647 - 2,836,507"
+    },
+    {
+     "accession": "0000950170-24-057614",
+     "text": "RT Holdings Parent, LLC (2)(4)(7) Warrant, expires 2/24/25 0.9 % 912,647 - 3,198,098"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "RT Holdings Parent, LLC (2)(4)(7) Warrant, expires 2/24/27 1.3 % 912,647 - 3,400,888"
+    }
+   ]
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "outcome": "supported",
+   "rationale": "Verified: the 14 RT Holdings warrant rows publish asset_category EQUITY_COMMON (1.8M to 3.4M); the build has no warrant class (shared gap, D-207 item 3, owner decision), so action left is right. Detection decision is now propose_detector referencing the observation's concrete suggested_check (warrant rows under a common-equity category, counted per fund), which would report the gap fund by fund with few false positives; no ledger rule fired on these rows, so a proposal, not existing_detector, is correct. The edit was confirmed to be the only change: restoring the previous decision in memory reproduces the prior digest 70e79558 exactly (confirm_edit.py).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "RT Holdings Parent, LLC (2)(4)(7) Warrant, expires 2/24/27 1.3 % 912,647 - 3,400,888"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-return-of-capital-sign",
+   "outcome": "supported",
+   "rationale": "Verified in tdld fund_financials: distribution_return_of_capital is positive 2020-12-31 to 2025-12-31 (59,063,250 ... 143,750) and -12,300,000 at 2026-06-30, while the page prints a 12,300 thousand return of capital outflow. The field is not in the highlights wrapper's FIGURE_FIELDS, so 'not correctable by wrapper' holds; the within-fund sign check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Common Unitholders return of capital ( 1,130,202 ) ( 1,117,902 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "accepted-reason-statement-contradicted-by-cache",
+   "outcome": "supported",
+   "rationale": "Verified: DS-LARGE13-F28-1603480 (large13_accepted_by_check.json) states 'the cache holds no position schedule before the fund's first structured filing'. The cache holds data/raw/filings/bdc_xbrl/1603480/000095017023012037.xml (10-K 2022-12-31) with positions on InvestmentTypeAxis / InvestmentIssuerNameAxis and no InvestmentIdentifierAxis, plus the 2022 10-Q HTML read by the debt-only template. The accepted statement is wrong; the F28 2022 findings it clears are coverage gaps, not 'not applicable'. Proposed cache-side test is concrete. The orchestrator should reopen that disposition for this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-012037",
+     "text": "Total Debt & Equity Investments (9) 131.2 % 547,873,141 515,454,057"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-interest-classed-as-preferred-equity",
+   "outcome": "supported",
+   "rationale": "Verified: TCW Direct Lending Strategic Ventures (printed under 'Investment Funds & Vehicles', valued at the NAV the investment fund reports) publishes PREFERRED_EQUITY (14 rows) and COMMON_EQUITY (14 rows, 0 value). Cohort class question, left; the heading-to-class check is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "TCW Direct Lending Strategic Ventures (4)(7) Preferred membership Interests 20.9 % 84,880 84,880,000 81,579,355"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "TDL-R1",
+   "outcome": "supported",
+   "rationale": "Classification verification_bug is right. Both anchors are in agent_anchor/1603480/_pulled_wrong_grand_total_2026-10-20/ with a README; the 2026-03-31 file sets grand_total 572,771,377 (Total Investments with the money fund and Treasury bill) while its own companyfacts_fv is 249,694,433, the printed Debt & Equity total the build publishes; the 2025-06-30 file sets 628,526,565 (schedule rows plus the affiliate-note twins) against printed 327,832,330. Neither had a basis key, so no verdict changed (D-220). Pulling them prevents a later basis key from verifying the wrong figure; it weakens no check.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Investments ( 262.7 %) $ 581,376,022 $ 572,771,377"
+    },
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Debt & Equity Investments (7) 114.4 % 258,299,078 249,694,433"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Total Debt & Equity Investments (8) 128.1 % 432,887,516 327,832,330"
+    }
+   ]
+  }
+ ],
+ "summary": {
+  "findings": {
+   "supported": 80,
+   "rejected": 0
+  },
+  "observations": {
+   "supported": 16,
+   "rejected": 0
+  },
+  "notes": "tdle final re-review: the only report change since digest 70e79558 is the warrant-class detection decision (now propose_detector), confirmed by digest reconstruction. All earlier rejections resolved: income_yield_pct set to printed YTD ratios (8.55, 2.33, 2.42), F16 2022-06-30 gone from the ledger. tdle vs tdld differs only in maturity_date / maturity_status / corrected_fields on the 14 warrant rows, each matching the printed expiry. A cleared ledger would not establish data correctness; the page sample found 2 errors on tdld (warrant class, warrant maturity): the maturity is fixed, the class is a shared open gap."
+ }
+}

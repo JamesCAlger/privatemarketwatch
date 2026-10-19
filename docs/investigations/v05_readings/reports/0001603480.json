@@ -1,0 +1,2626 @@
+{
+ "cik": "0001603480",
+ "label": "tdle",
+ "before": "spon3",
+ "investigator_id": "tcw-direct-lending-fund-agent-2026-10-19",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 42,
+   "why": "printed issuer names: SSI bracket / 'fks', Strategic Ventures 'LLC', RT Holdings P-2 line"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 131,
+   "why": "en-dash members now parse; Class A/B Preferred Stock; 6 misnamed instruments corrected"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 130,
+   "why": "filed_rate_reading all_in: printed all-in rate on PIK loans; 2 Pace rates from the page"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 110,
+   "why": "all-PIK loans: pik_rate = printed coupon (row corrections)"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 128,
+   "why": "rate read under the all-in convention"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 166,
+   "why": "row corrections applied"
+  },
+  {
+   "column": "position_id",
+   "rows": 44,
+   "why": "instrument and name changes re-key positions; short-form twins removed"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 2,
+   "why": "Pace 2025 Term Loan rate from the page"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 130,
+   "why": "unresolved -> all_in"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 130,
+   "why": "cash leg under the all-in convention (0 for all-PIK loans)"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 14,
+   "why": "warrant expiry from the printed line, 14 warrant rows (12 matched by row_id to spon3)"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 14,
+   "why": "follows the warrant maturity (not_disclosed -> unresolved)"
+  }
+ ],
+ "rows_added": 36,
+ "rows_removed": 41,
+ "rows_note": "Added: 6 RT Holdings Equity Units rows (2023), 8 schedule rows at 2026-03-31 that the pulled dedups had replaced by short-form twins, 22 rows of 2026-06-30 (new quarter). Removed: 25 affiliate-note rows at 2025-06-30, 16 at 2026-03-31 (short-form twins and the two plug cash rows). Query: scratch/fund_runs/0001603480/q_rows_vs_before.sql.",
+ "fixes": [
+  {
+   "what": "Affiliate roll-forward note members (short name, fair value only, no cost or percent) published as positions beside the schedule rows from 2025-06-30: source_encodings.schedule_row_tags cost_or_percent_unrounded (as TCW VII) drops them in every quarter (25 rows at 2025-06-30, 288.3M; 2026-03-31 and 2026-06-30 twins). 2025-06-30, 2026-03-31 and 2026-06-30 now tie to the printed 'Total Debt & Equity Investments'.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Total Debt & Equity Investments (8) 128.1 % 432,887,516 327,832,330"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Total Debt & Equity Investments (7) 96.1 % 209,428,050 178,346,020"
+    }
+   ]
+  },
+  {
+   "what": "Six promoted rules pulled to agent_investigate_rules/_pulled_1603480_fundloop_2026-10-19/ (README) and the B2 dedup to agent_b2_corrections/0001603480/_pulled_1603480_fundloop_2026-10-19/: two-quarter exclusion, a row_add of short-form twins with no context, a row_add of the money fund and the Treasury bill as positions at 2026-03-31 (323.1M), two dedups that kept the short-form twin, a cost := 0 on the RT warrant. All replaced by schedule_row_tags; 2026-03-31 now ties at the printed 249,694,433 (was 572,771,377).",
+   "kind": "exclusion",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Debt & Equity Investments (7) 114.4 % 258,299,078 249,694,433"
+    }
+   ]
+  },
+  {
+   "what": "Two RT Holdings 'Equity Units' lines (2023-03-31 to 2023-09-30) dropped as issuer subtotals: 'Equity Units' added as an equity instrument word in the wrapper patterns; the three quarters now tie (415K, 459K, 483K restored; cost 200K each).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "RT Holdings Parent, LLC (2)(4)(8) Equity Units 0.1 % 105,624 133,086 328,005"
+    }
+   ]
+  },
+  {
+   "what": "Loans with PIK published no interest rate (financial_convention_unresolved x14, X02 x13, dl_rate_fill x5): source_encodings.filed_rate_reading all_in; interest_rate is the printed all-in rate on 130 rows, interest_rate_cash the cash leg (0 for all-PIK loans).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "08/14/20 Term Loan - 13.65 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK)"
+    }
+   ]
+  },
+  {
+   "what": "Instrument blank on every loan whose member separates the instrument from the rate with an en dash (Term Loan \u2013 13.65%): wrapper hierarchy_instrument_re accepts the en/em dash; 'Class A/B Preferred Stock' kept whole (was 'Preferred Stock'). 131 instrument values changed.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "SSI Parent, LLC (fka School Specialty, Inc.) (2)(4)(6)(8) Class A Preferred Stock 3.4 % 806,264 8,062,637 13,061,472"
+    }
+   ]
+  },
+  {
+   "what": "172 row corrections from the page (row_correction_specs/0001603480.json, generated by scratch/fund_runs/0001603480/gen_specs.py): 117 pik_rate on 'all PIK' loans (no PIK tag; whole coupon PIK, D-092/D-218), 47 issuer names (member drops the bracket, misspells 'fka' as 'fks', drops 'LLC', or names SSI on the RT Holdings P-2 line), 6 instruments the member misnames (First Out Term Loan x3, Delayed Draw Priming x2, Ruby Term Loan at 2024-12-31), 2 rates (Pace 2025 Term Loan tagged only as PIK).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "RT Holdings Parent, LLC (2)(4)(7) Class P-2 Units 0.0 % 53,104 66,914 110,000"
+    },
+    {
+     "accession": "0000950170-24-095898",
+     "text": "05/29/24 First Out Term Loan - 14.10 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK) 0.8 % 2,519,562"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "04/11/25 2025 Term Loan - 10.72 % inc PIK ( SOFR + 6.25 %, 1.50 % Floor, all PIK) 1.7 % 4,235,424"
+    }
+   ]
+  },
+  {
+   "what": "New highlights wrapper data/overrides/fund_highlights_wrappers/0001603480.json: investments FV and cost = printed 'Total Debt & Equity Investments' for the 8 quarters with no filed figure (A04/E01/F20/GAV findings were total assets standing in); net assets 2026-03-31 and 2026-06-30 (published blank); NII 2025-12-31 and 2026-03-31 (the filer's ratio concepts were read as dollars: 0.0675 and 0.003; now 2,805,000 and 898,000); interest expense = printed credit facility line, not the repurchase-transaction line (2026-06-30 490,000, was 772,000); distribution per unit 2026-06-30 0.68 (was derived 0.34).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Total Debt & Equity Investments (9) 131.6 % 556,414,730 511,808,022"
+    },
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Net Assets ( 100.0 %) $ 218,052,984"
+    },
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Net expenses 1,987 2,967 Net investment income 898 195"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Interest and credit facility expenses 490 1,594 1,174 3,142"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Less Distributions: Return of capital ( 0.68 ) - Total distributions ( 0.68 ) -"
+    }
+   ]
+  },
+  {
+   "what": "income_yield_pct published as the difference of year-to-date ratios in 3 of 18 quarters (2022-06-30 3.13, 2025-06-30 2.03, 2025-12-31 0.67): highlights figure_corrections set the printed year-to-date ratio (8.55, 2.33, 2.42). The other 15 quarters already equal the printed ratio (nii_ratio.py). F16 2022-06-30 cleared; proposal F16 for that quarter withdrawn.",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-06-30",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-22-016777",
+     "text": "net investment income to average net assets (6) 8.55 % 7.72 %"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Ratio of net investment income to average net assets (5) 2.33 % 7.70 %"
+    },
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Ratio of net investment income to average net assets 2.42 % 4.87 % 9.60 % 7.67 % 7.02 %"
+    }
+   ]
+  },
+  {
+   "what": "Warrant expiry published as maturity_date on the RT Holdings warrant in all 14 quarters (the only warrant rows), by 14 row corrections from the printed 'Warrant, expires' line (TCW VIII publishes its warrants' expiry as maturity from the tagged InvestmentMaturityDate; this filer tags WarrantsAndRightsOutstandingMaturityDate, not read).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "RT Holdings Parent, LLC (2)(4)(8) Warrant, expires 12/21/27 0.7 % 912,647 - 2,836,507"
+    },
+    {
+     "accession": "0000950170-24-057614",
+     "text": "RT Holdings Parent, LLC (2)(4)(7) Warrant, expires 2/24/25 0.9 % 912,647 - 3,198,098"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "RT Holdings Parent, LLC (2)(4)(7) Warrant, expires 2/24/27 1.3 % 912,647 - 3,400,888"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "html_extract html_agg 2022-12-31",
+   "hypotheses": [
+    "10-K 2022 positions are tagged on InvestmentIssuerNameAxis x InvestmentTypeAxis; the XBRL extractor reads InvestmentIdentifierAxis only (no bdc_holdings row before 2023-03-31)",
+    "HTML template sum 349,861,119 is the debt section only; printed Debt & Equity 515,454,057",
+    "fix needs shared extractor code or a template change; 2022 is outside the fund's published range"
+   ]
+  },
+  {
+   "finding": "html_extract html_carry 2022-03-31",
+   "hypotheses": [
+    "template read 11 debt rows = printed Total Debt Investments 347,900,882; equity section (144.2M) not read",
+    "same cause as html_agg 2022-12-31"
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "TDL-R1",
+   "classification": "verification_bug",
+   "resolution": "implemented",
+   "response": "implemented: both anchors pulled to _pulled_wrong_grand_total_2026-10-20 (git mv, README); no verdict change because neither had a basis key",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-220",
+   "original_request": {
+    "file": "data/overrides/agent_anchor/1603480/2025-06-30.json, data/overrides/agent_anchor/1603480/2026-03-31.json",
+    "what": "Pull both anchor files. 2025-06-30 sets 628,526,565 (schedule rows plus the affiliate-note twins); 2026-03-31 sets 572,771,377 (Total Investments with the money fund and Treasury bill). Neither has a 'basis' key, so load_anchor_overrides skips them today (inert), but a basis added later would verify the wrong figure.",
+    "why": "The printed comparable figure is 'Total Debt & Equity Investments' (327,832,330 and 249,694,433), which the build now publishes; the anchors would contradict it."
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Total Debt & Equity Investments (8) 128.1 % 432,887,516 327,832,330"
+    },
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Debt & Equity Investments (7) 114.4 % 258,299,078 249,694,433"
+    }
+   ],
+   "next_action": "none"
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "affiliate-rollforward-note-members-published-as-positions",
+   "field": "fair_value",
+   "what": "From 2025-06-30 the filer tags a second investment-axis member per position for the affiliate roll-forward note (fair value only). 25 were published at 2025-06-30 (+288.3M) and twins at 2026-03-31/06-30; promoted plug rules had papered over three quarters. Fixed with schedule_row_tags.",
+   "quarters": [
+    "2025-06-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 288.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "fv_conservation already fires; add: a member with fair value only whose issuer and value equal a schedule member of the same quarter",
+   "quote": {
+    "accession": "0000950170-25-107759",
+    "text": "Total Debt & Equity Investments (8) 128.1 % 432,887,516 327,832,330"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "conservation/fv_conservation fired on 2025-06-30 and 2026-06-30 in the untouched build tdla (published minus filed 267.9M / 151.2M at cost and value)",
+    "reference": "conservation/fv_conservation (tdla)"
+   }
+  },
+  {
+   "observation_key": "plug-rule-adds-rows-without-context",
+   "field": "fair_value",
+   "what": "A promoted row_add put the money market fund and a Treasury bill (323.1M) into 2026-03-31 as positions with no context and no cash class, one quarter only; another added short-form twins at 2025-06-30. Pulled.",
+   "quarters": [
+    "2025-06-30",
+    "2026-03-31"
+   ],
+   "fair_value_m": 323.1,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "no_provenance already fires on rows without a source context",
+   "quote": {
+    "accession": "0001193125-26-221900",
+    "text": "Total Debt & Equity Investments (7) 114.4 % 258,299,078 249,694,433"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "provenance_reverify/no_provenance and C006/C301/C303/C304 fired on the added rows at 2025-06-30 and 2026-03-31 in tdla",
+    "reference": "provenance_reverify/no_provenance (tdla)"
+   }
+  },
+  {
+   "observation_key": "instrument-blank-when-member-uses-en-dash",
+   "field": "instrument_description",
+   "what": "Every term loan / revolver member printed with an en dash before the rate published a blank instrument (5 to 6 loans a quarter, 2023 to 2026). No rule reported it.",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 130.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "LOAN rows with a blank instrument_description whose identifier contains 'Term Loan' or 'Revolver' above 1 pct of a fund's loan rows",
+   "quote": {
+    "accession": "0000950170-23-020966",
+    "text": "08/14/20 Term Loan - 13.65 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on 130 blank instruments in tdla; the identifier holds the instrument word, so a text-versus-field test catches it with few false positives.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "all-pik-loan-publishes-no-pik-rate",
+   "field": "pik_rate",
+   "what": "Loans printed 'all PIK' tag no PIK rate (only rate, spread, floor); 117 rows published pik_rate blank. Fixed by row corrections, as on TCW VII.",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 200.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "a row whose identifier or printed line says 'all PIK' and whose pik_rate is blank",
+   "quote": {
+    "accession": "0000950170-23-020966",
+    "text": "08/14/20 Term Loan - 13.65 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired in tdla/tdlb; the pattern recurs on TCW VII and VIII, so a member-text rule is cheap and precise.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "member-misnames-instrument",
+   "field": "instrument_description",
+   "what": "Members name 'Term Loan' for the printed 'First Out Term Loan' (Animal Supply 2024-06-30 to 2024-12-31), 'Delayed Draw Printing' for 'Priming' (2024-03-31, 2024-06-30), and 'Incremental Term Loan' for the printed Ruby Tuesday 'Term Loan' (2024-12-31). Fixed by row corrections.",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 12.1,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "within one quarter, two LOAN rows of one issuer with the same instrument and different acquisition dates where earlier quarters name them differently",
+   "quote": {
+    "accession": "0000950170-25-047910",
+    "text": "Ruby Tuesday Operations LLC (4) 02/24/21 Term Loan - 16.65 % inc PIK (SOFR + 12.00 %, 1.25 % Floor, all PIK) 3.7 % 9,389,540"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares instruments with the printed line; issuer_name_printed covers names only.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "field": "issuer_name",
+   "what": "The 2023-12-31 member names SSI Parent on the RT Holdings Class P-2 Units line (110,000); SSI members also drop the closing bracket or print 'fks'. Fixed by row corrections.",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.1,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (fired on these rows)",
+   "quote": {
+    "accession": "0000950170-24-037856",
+    "text": "RT Holdings Parent, LLC (2)(4)(7) Class P-2 Units 0.0 % 53,104 66,914 110,000"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "identity/issuer_name_printed flagged the SSI rows at 2023-03-31 to 2024-06-30 and the 2023-12-31 P-2 row in tdlb",
+    "reference": "identity/issuer_name_printed (tdlb)"
+   }
+  },
+  {
+   "observation_key": "cash-and-treasury-bills-printed-not-published",
+   "field": "fair_value",
+   "what": "The schedule prints a money market fund and Treasury bills (321M to 508M a quarter) under 'Cash Equivalents' / 'Short-term Investments'; no quarter publishes them (TCW VII publishes them as cash rows through cash_identifier_rows). Left: the filed investments figure is the Debt & Equity line, the bills are not private-markets positions, and from 2025-06-30 the filer tags the money fund without a fair value context; publishing them for nine quarters only would be uneven. Owner choice.",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 508.2,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "printed cash-equivalent / short-term section totals compared with published CASH rows per quarter, reported, not blocking",
+   "quote": {
+    "accession": "0001193125-26-346645",
+    "text": "Short-term Investments U.S. Treasury Bill, Yield 3.85 %, Maturity Date 10/27/26 133.1 % 250,000,000 246,922,986 246,922,986"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares printed cash sections with published cash rows; the funds of this family differ.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "gics-sub-industry-from-printed-industry-heading",
+   "field": "gics_sub_industry",
+   "what": "Ruby Tuesday Operations and RT Holdings (a restaurant chain) publish 'Hotels, Resorts & Cruise Lines': the printed heading is the GICS industry 'Hotels, Restaurants & Leisure' and the sub-industry chosen is its first child. Left (shared mapping).",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 25.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "rows whose sub-industry was derived from a printed GICS industry heading with more than one child, reported per fund",
+   "quote": {
+    "accession": "0001193125-26-346645",
+    "text": "Ruby Tuesday Operations LLC (3) 02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The step that maps a printed industry to a sub-industry does not record the ambiguity; a flag on multi-child headings would expose it.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "position-chain-breaks-without-a-change-on-the-page",
+   "field": "position_id",
+   "what": "RT Holdings Class A Units get a new position_id at 2024-03-31 and Class P-1 Units at 2024-12-31 with nothing changed on the page; zero-value rows (Cedar Class D / E, Pace common, Strategic Ventures common, SSI common at 2026-06-30) get a new id every quarter. Left (shared matcher).",
+   "quarters": [
+    "2024-03-31",
+    "2024-12-31"
+   ],
+   "fair_value_m": 19.2,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "same issuer, instrument and unit count in consecutive quarters with different position_id",
+   "quote": {
+    "accession": "0000950170-24-057614",
+    "text": "RT Holdings Parent, LLC (2)(4)(7) Class A Units 5.3 % 5,475,885 5,133,708 19,186,953"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Chain stability is measured in aggregate only; a per-row unit-count continuity test catches these.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "distribution-per-unit-derived-wrong-when-first-quarter-prints-none",
+   "field": "distribution_per_share",
+   "what": "2026-06-30 published 0.34 per unit; the page prints 0.68 for six months and nothing in the first quarter. Fixed by a highlights figure correction.",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "quarter distribution per unit against printed year-to-date less prior year-to-date",
+   "quote": {
+    "accession": "0001193125-26-346645",
+    "text": "Less Distributions: Return of capital ( 0.68 ) - Total distributions ( 0.68 ) -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "F16 fired here only by chance (yield heuristic); no rule recomputes the quarter from printed year-to-date figures.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "income-yield-pct-difference-of-year-to-date-ratios",
+   "field": "income_yield_pct",
+   "what": "The shared derivation publishes income_yield_pct as the difference of printed year-to-date NII ratios, a figure the filing does not print. On this fund 3 of 18 quarters differed from the printed ratio: 2022-06-30 3.13 (printed 8.55), 2025-06-30 2.03 (printed 2.33), 2025-12-31 0.67 (printed 2.42). Fixed for this fund with highlights figure_corrections (the printed year-to-date ratio, as the nine other wrappers that declare income_yield_pct); F16 2022-06-30 cleared. The shared derivation stays (second rule batch; also seen on Phillip Street, D-214). Every quarter compared by scratch/fund_runs/0001603480/nii_ratio.py.",
+   "quarters": [
+    "2022-06-30",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "published income_yield_pct against the printed 'Ratio of net investment income to average net assets' of the same filing",
+   "quote": {
+    "accession": "0000950170-22-016777",
+    "text": "net investment income to average net assets (6) 8.55 % 7.72 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the derived yield with the printed ratio; the F16 heuristic consumes it, so a wrong yield surfaces only by chance. The fund-level fix does not remove the shared cause.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "warrant-expiry-not-published-as-maturity",
+   "field": "maturity_date",
+   "what": "The RT Holdings warrant (one row a quarter, 14 quarters) published no maturity: the filer tags the expiry only as us-gaap:WarrantsAndRightsOutstandingMaturityDate on a second context, which the extractor does not read (TCW VIII tags InvestmentMaturityDate, which it does). Fixed by 14 row corrections from the printed 'Warrant, expires m/d/yy' lines; maturity_status moves from not_disclosed to unresolved and maturity_date_source stays blank on these rows.",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 3.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "equity rows whose instrument text carries 'expires <date>' with no maturity_date, or a WarrantsAndRightsOutstandingMaturityDate fact on the investment that is not published",
+   "quote": {
+    "accession": "0000950170-25-107759",
+    "text": "RT Holdings Parent, LLC (2)(4)(7) Warrant, expires 2/24/27 1.3 % 912,647 - 3,400,888"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on the 14 warrant rows in tdld; the page sample found it. The expiry is in the instrument text and in a tagged fact, so a text-or-tag test is precise.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "field": "asset_category",
+   "what": "The RT Holdings warrant is published asset_category EQUITY_COMMON (14 rows, 1.8M to 3.4M): the build has no warrant class. Left: shared gap, D-207 item 3, owner decision; no data change.",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 3.4,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "rows whose instrument names a warrant published under a common-equity category, counted per fund",
+   "quote": {
+    "accession": "0000950170-25-107759",
+    "text": "RT Holdings Parent, LLC (2)(4)(7) Warrant, expires 2/24/27 1.3 % 912,647 - 3,400,888"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these 14 rows; the page sample found it. The suggested check (warrant rows published under a common-equity category, counted per fund) would report the gap on every fund until the owner rules on a warrant class (D-207 item 3; also TCW VII Greenfield, TCW VIII C016, Silver Point Delos).",
+    "reference": "suggested_check; D-207 item 3 (owner decision on a warrant asset class)"
+   }
+  },
+  {
+   "observation_key": "distribution-return-of-capital-sign",
+   "field": "distribution_return_of_capital",
+   "what": "distribution_return_of_capital is -12,300,000 at 2026-06-30 and positive in other quarters (143,750 at 2025-12-31); the page prints the capital line growing by 12,300 thousand. Left (shared, field not correctable by wrapper).",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "sign consistency of distribution_return_of_capital within a fund",
+   "quote": {
+    "accession": "0001193125-26-346645",
+    "text": "Common Unitholders return of capital ( 1,130,202 ) ( 1,117,902 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule reads distribution_return_of_capital, so a sign flip within one fund's series goes unreported; a within-fund sign test has few false positives.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "accepted-reason-statement-contradicted-by-cache",
+   "field": "fund_financials coverage",
+   "what": "DS-LARGE13-F28-1603480 (accepted by check) says the cache holds no schedule before 2023; the 10-K for 2022-12-31 is cached as XBRL (positions tagged on InvestmentIssuerNameAxis x InvestmentTypeAxis, which the extractor does not read) and the 2022 10-Qs as HTML (template reads the debt section only). 2022 is unpublished. Left, not changed: the orchestrator is taking the accepted disposition to the owner (2026-10-20); see the parked html findings.",
+   "quarters": [
+    "2022-03-31",
+    "2022-12-31"
+   ],
+   "fair_value_m": 515.5,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "the F28 check-acceptance should test the cached instance for any investment-axis facts, not only the identifier axis",
+   "quote": {
+    "accession": "0000950170-23-012037",
+    "text": "Total Debt & Equity Investments (9) 131.2 % 547,873,141 515,454,057"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The accepting check looked only at published holdings; a cache-side test would have kept these open.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "fund-interest-classed-as-preferred-equity",
+   "field": "index_classification",
+   "what": "TCW Direct Lending Strategic Ventures LLC (the adviser's affiliated fund, printed under 'Investment Funds & Vehicles') is published PREFERRED_EQUITY / COMMON_EQUITY. Left: no fund-interest class is used for this kind of holding in this fund; cohort question.",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 81.6,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "equity rows printed under an 'Investment Funds & Vehicles' heading not classed as a fund interest",
+   "quote": {
+    "accession": "0000950170-23-020966",
+    "text": "TCW Direct Lending Strategic Ventures (4)(7) Preferred membership Interests 20.9 % 84,880 84,880,000 81,579,355"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule ties the printed heading to the class.",
+    "reference": "suggested_check"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_241ba6085186",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2023-03-31|nav_identity"
+    ],
+    "reviewed_rows": [
+     "0001603480|2023-03-31|nav_identity"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "NAV per unit mis-extracted: rejected, 32.63 is printed on the accrual base",
+    "net assets wrong: rejected, printed Members' capital 389,426 thousand"
+   ],
+   "next_action": "Proposed as nav-per-unit-printed-on-accrual-base-with-undrawn-commitments (PD-0001603480-nav_identity-13); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_6cfa5c0dd582",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2022-12-31|html_agg"
+    ],
+    "reviewed_rows": [
+     "0001603480|2022-12-31|html_agg"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-012037",
+     "text": "Total Debt & Equity Investments (9) 131.2 % 547,873,141 515,454,057"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "the 2022-12-31 schedule is not cached: rejected, the 10-K (0000950170-23-012037) is cached as XBRL and HTML",
+    "the XBRL extractor reads it: rejected, the filing tags positions on InvestmentIssuerNameAxis x InvestmentTypeAxis (no InvestmentIdentifierAxis); bdc_holdings has no row before 2023-03-31",
+    "the HTML template total is the schedule: rejected, template sum 349,861,119 against printed 515,454,057 (the debt section only)"
+   ],
+   "next_action": "Parked: no published quarter is affected (holdings start 2023-03-31). Publishing 2022 needs either extractor support for the issuer-name x investment-type axes (shared code, cohort measurement) or a template that reads the equity section; an orchestrator decision."
+  },
+  {
+   "finding_id": "RVQ_BLK_e2a438c5fd5a",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2023-03-31|E04"
+    ],
+    "reviewed_rows": [
+     "0001603480|2023-03-31|E04"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "NAV per unit x units against net assets: the 5 pct gap equals the undrawn commitment included in the accrual-base NAV",
+    "a scale error in units: rejected, cover page and highlights print 18,034,649"
+   ],
+   "next_action": "Proposed as nav-per-unit-printed-on-accrual-base-with-undrawn-commitments (PD-0001603480-E04-14); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_01b972f807e7",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2023-03-31|F33"
+    ],
+    "reviewed_rows": [
+     "0001603480|2023-03-31|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Less Distributions: Return of capital - ( 0.89 ) Total distributions (2) - ( 0.89 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a distribution was declared but not extracted: rejected, the per-unit highlights print a dash or an unchanged year-to-date total",
+    "quarterisation lost a distribution: rejected, year-to-date less prior year-to-date is nil from the printed figures"
+   ],
+   "next_action": "Proposed as f33-no-distribution-declared-in-the-quarter (PD-0001603480-F33-7); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_037f7e05758d",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2022-03-31|F16"
+    ],
+    "reviewed_rows": [
+     "0001603480|2022-03-31|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-009572",
+     "text": "Less Distributions: From net investment income - (0.75 ) Return of capital (0.89 ) - Total distributions (2) (0.89 ) (0.75 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published distribution mis-derived: checked against printed year-to-date figures (2026-06-30 was wrong, 0.34 against 0.68, and fixed)",
+    "income yield mis-derived: income_yield_pct was a difference of year-to-date ratios in 2022-06-30, 2025-06-30 and 2025-12-31; set to the printed ratio in the highlights wrapper (tdle); this quarter's published yield equals the printed ratio"
+   ],
+   "next_action": "Proposed as f16-return-of-capital-distribution-in-the-quarter (PD-0001603480-F16-8); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_03af5a1e144d",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-037856/C_e06e296b-fdcf-49c5-ac9a-1b76e10b219c/ROW-c4cfece4dfa5fc72"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-037856/C_e06e296b-fdcf-49c5-ac9a-1b76e10b219c/ROW-c4cfece4dfa5fc72"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent mis-scaled or duplicated: rejected, the printed line shows the same percent",
+    "a subtotal published as a position: rejected, the row is a single printed position and the quarter ties"
+   ],
+   "next_action": "Proposed as concentration-largest-position-of-a-fund-in-wind-down-as-printed (PD-0001603480-pct_position_concentration-5); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_03f5d12f5d58",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126078",
+     "text": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_06f5c32fa51c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-061710/C_8d9af6b9-f6a9-4587-b261-2340b1ba77c7/ROW-c22cc93c2b9bd9be"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-061710/C_8d9af6b9-f6a9-4587-b261-2340b1ba77c7/ROW-c22cc93c2b9bd9be"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent sum out of range: rejected, the sum equals the printed Debt & Equity percent",
+    "outlier percent from a wrong denominator: rejected, the printed row shows the same percent"
+   ],
+   "next_action": "Proposed as a07-outlier-percent-is-the-printed-row (PD-0001603480-A07-6); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_0aad7b5a34ed",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2022-03-31|html_carry"
+    ],
+    "reviewed_rows": [
+     "0001603480|2022-03-31|html_carry"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-009572",
+     "text": "Total Debt Investments 90.9 % 409,839,518 347,900,882"
+    },
+    {
+     "accession": "0000950170-22-009572",
+     "text": "Total Debt & Equity Investments (9) 128.6 % 531,359,325 492,120,013"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "carry rate low because positions were exited: not established; the template read 11 rows summing 347,900,882 = the printed 'Total Debt Investments'",
+    "equity section read: rejected, the template total misses the 144.2M of printed equity (492,120,013 less 347,900,882)"
+   ],
+   "next_action": "Parked with html_agg 2022-12-31: the 2022 HTML template reads only the debt section; 2022 is not published. Template repair or a decision to keep 2022 unpublished is for the orchestrator."
+  },
+  {
+   "finding_id": "RVQ_REV_0bdc41a2e802",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107759/C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf/ROW-20370f006e63a3aa"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107759/C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf/ROW-20370f006e63a3aa"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_0c8dd02a8fc0",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-095898/C_b2a522bb-883d-4f14-b091-ffdbcb728f41/ROW-c813960ddbb6484f"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-095898/C_b2a522bb-883d-4f14-b091-ffdbcb728f41/ROW-c813960ddbb6484f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent sum out of range: rejected, the sum equals the printed Debt & Equity percent",
+    "outlier percent from a wrong denominator: rejected, the printed row shows the same percent"
+   ],
+   "next_action": "Proposed as a07-outlier-percent-is-the-printed-row (PD-0001603480-A07-6); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_16b94048fa33",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_18043a4bcc05",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_19192e8f45c8",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2024-12-31|F16"
+    ],
+    "reviewed_rows": [
+     "0001603480|2024-12-31|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "Total distributions (3) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 )"
+    },
+    {
+     "accession": "0000950170-24-126078",
+     "text": "Total distributions ( 0.36 ) ( 0.77 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published distribution mis-derived: checked against printed year-to-date figures (2026-06-30 was wrong, 0.34 against 0.68, and fixed)",
+    "income yield mis-derived: income_yield_pct was a difference of year-to-date ratios in 2022-06-30, 2025-06-30 and 2025-12-31; set to the printed ratio in the highlights wrapper (tdle); this quarter's published yield equals the printed ratio"
+   ],
+   "next_action": "Proposed as f16-distribution-above-quarter-income-as-printed (PD-0001603480-F16-10); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_22da587f1f1f",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2025-09-30|F33"
+    ],
+    "reviewed_rows": [
+     "0001603480|2025-09-30|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a distribution was declared but not extracted: rejected, the per-unit highlights print a dash or an unchanged year-to-date total",
+    "quarterisation lost a distribution: rejected, year-to-date less prior year-to-date is nil from the printed figures"
+   ],
+   "next_action": "Proposed as f33-no-distribution-declared-in-the-quarter (PD-0001603480-F33-7); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_23fef5b5bf53",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107759/C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf/ROW-20370f006e63a3aa"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107759/C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf/ROW-20370f006e63a3aa"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread holds the coupon or the percent of net assets: rejected, the page prints 'SOFR + 16.00 %' on this row",
+    "earlier reviewer's row (Overton Term Loan A) carries the value: rejected, it publishes no spread in this build"
+   ],
+   "next_action": "Proposed as c115-spread-above-15-is-the-printed-spread (PD-0001603480-C115-3); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_2e2e6bab5b6b",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126078",
+     "text": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_2f225c4bef08",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-020966/C_f0448690-9c99-4742-ab11-90cba005a8f7/ROW-3fc68b4581895e72"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-020966/C_f0448690-9c99-4742-ab11-90cba005a8f7/ROW-3fc68b4581895e72"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_2f38fa99dc07",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-071647/C_f5d916d9-88a5-46e7-ad69-d72153ea68b7/ROW-9fd7d19a4a3798fa"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-071647/C_f5d916d9-88a5-46e7-ad69-d72153ea68b7/ROW-9fd7d19a4a3798fa"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_33eaf9c2c059",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_3cc6e843cd74",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_3f43d0cd26ac",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-071647/C_f5d916d9-88a5-46e7-ad69-d72153ea68b7/ROW-9fd7d19a4a3798fa"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-071647/C_f5d916d9-88a5-46e7-ad69-d72153ea68b7/ROW-9fd7d19a4a3798fa"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_44c763812d11",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_51304ea68608",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-346645/C_2311c899-52a7-4260-81a6-82c9ab0e178d/ROW-a889c70add6fbe9d"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-346645/C_2311c899-52a7-4260-81a6-82c9ab0e178d/ROW-a889c70add6fbe9d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent sum out of range: rejected, the sum equals the printed Debt & Equity percent",
+    "outlier percent from a wrong denominator: rejected, the printed row shows the same percent"
+   ],
+   "next_action": "Proposed as a07-outlier-percent-is-the-printed-row (PD-0001603480-A07-6); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_52f56c1aeff9",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2025-12-31|fund_strategy_validation"
+    ],
+    "reviewed_rows": [
+     "0001603480|2025-12-31|fund_strategy_validation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Total Debt Investments 48.1 % 246,859,409 112,090,217"
+    },
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Total Equity Investments 65.2 % 144,513,218 151,633,878"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings misclassified as equity: rejected, printed equity totals equal the published equity rows",
+    "a debt subtotal missing: rejected, quarters tie to the printed Debt & Equity line to the dollar"
+   ],
+   "next_action": "Proposed as fund-strategy-direct-lender-in-wind-down-holds-restructured-equity (PD-0001603480-fund_strategy_validation-11); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_54292068c282",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-346645/C_791967f4-84d2-4f79-866f-97af145e0066/ROW-73d26458a11beb81"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-346645/C_791967f4-84d2-4f79-866f-97af145e0066/ROW-73d26458a11beb81"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_5a68d58e4fd0",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2026-03-31|fund_strategy_validation"
+    ],
+    "reviewed_rows": [
+     "0001603480|2026-03-31|fund_strategy_validation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Debt Investments 39.8 % 86,770,613 86,897,322"
+    },
+    {
+     "accession": "0001193125-26-221900",
+     "text": "Total Equity Investments 74.6 % 171,528,465 162,797,111"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings misclassified as equity: rejected, printed equity totals equal the published equity rows",
+    "a debt subtotal missing: rejected, quarters tie to the printed Debt & Equity line to the dollar"
+   ],
+   "next_action": "Proposed as fund-strategy-direct-lender-in-wind-down-holds-restructured-equity (PD-0001603480-fund_strategy_validation-11); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_5b24d35235df",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2025-06-30|fund_strategy_validation"
+    ],
+    "reviewed_rows": [
+     "0001603480|2025-06-30|fund_strategy_validation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Total Debt Investments 65.9 % 287,734,298 168,757,151"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Total Equity Investments 62.2 % 145,153,218 159,075,179"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings misclassified as equity: rejected, printed equity totals equal the published equity rows",
+    "a debt subtotal missing: rejected, quarters tie to the printed Debt & Equity line to the dollar"
+   ],
+   "next_action": "Proposed as fund-strategy-direct-lender-in-wind-down-holds-restructured-equity (PD-0001603480-fund_strategy_validation-11); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_638eb3f1654c",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2025-03-31|F33"
+    ],
+    "reviewed_rows": [
+     "0001603480|2025-03-31|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "Less Distributions: From net investment income (loss) - ( 0.14 ) Total distributions - ( 0.14 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a distribution was declared but not extracted: rejected, the per-unit highlights print a dash or an unchanged year-to-date total",
+    "quarterisation lost a distribution: rejected, year-to-date less prior year-to-date is nil from the printed figures"
+   ],
+   "next_action": "Proposed as f33-no-distribution-declared-in-the-quarter (PD-0001603480-F33-7); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_63c4ec27e896",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126078",
+     "text": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_65c474039100",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-061710/C_545fc2a4-6594-4bcc-9890-2285f0b420d2/ROW-d84e014a3dba64ea"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-061710/C_545fc2a4-6594-4bcc-9890-2285f0b420d2/ROW-d84e014a3dba64ea"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_68b1778be076",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2023-09-30|F33"
+    ],
+    "reviewed_rows": [
+     "0001603480|2023-09-30|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "Less Distributions: From net investment income ( 0.55 ) ( 0.93 ) Return of capital ( 0.22 ) ( 1.19 ) Total distributions (3) ( 0.77 ) ( 2.12 )"
+    },
+    {
+     "accession": "0000950170-23-041105",
+     "text": "Return of capital ( 0.22 ) ( 0.89 ) Total distributions (2) ( 0.77 ) ( 1.42 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a distribution was declared but not extracted: rejected, the per-unit highlights print a dash or an unchanged year-to-date total",
+    "quarterisation lost a distribution: rejected, year-to-date less prior year-to-date is nil from the printed figures"
+   ],
+   "next_action": "Proposed as f33-no-distribution-declared-in-the-quarter (PD-0001603480-F33-7); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_68caddef761b",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_6b3c1fb9bb87",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2025-09-30|fund_strategy_validation"
+    ],
+    "reviewed_rows": [
+     "0001603480|2025-09-30|fund_strategy_validation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "Total Debt Investments 57.6 % 267,031,949 139,685,748"
+    },
+    {
+     "accession": "0001193125-25-279849",
+     "text": "Total Equity Investments 62.7 % 144,513,218 151,785,778"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings misclassified as equity: rejected, printed equity totals equal the published equity rows",
+    "a debt subtotal missing: rejected, quarters tie to the printed Debt & Equity line to the dollar"
+   ],
+   "next_action": "Proposed as fund-strategy-direct-lender-in-wind-down-holds-restructured-equity (PD-0001603480-fund_strategy_validation-11); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_6e5410de4306",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2025-06-30|F33"
+    ],
+    "reviewed_rows": [
+     "0001603480|2025-06-30|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a distribution was declared but not extracted: rejected, the per-unit highlights print a dash or an unchanged year-to-date total",
+    "quarterisation lost a distribution: rejected, year-to-date less prior year-to-date is nil from the printed figures"
+   ],
+   "next_action": "Proposed as f33-no-distribution-declared-in-the-quarter (PD-0001603480-F33-7); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_754c700ab52c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-061710/C_545fc2a4-6594-4bcc-9890-2285f0b420d2/ROW-d84e014a3dba64ea"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-061710/C_545fc2a4-6594-4bcc-9890-2285f0b420d2/ROW-d84e014a3dba64ea"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_797472b759bb",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_7c9ef06ee4f2",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-095898/C_b2a522bb-883d-4f14-b091-ffdbcb728f41/ROW-c813960ddbb6484f"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-095898/C_b2a522bb-883d-4f14-b091-ffdbcb728f41/ROW-c813960ddbb6484f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent mis-scaled or duplicated: rejected, the printed line shows the same percent",
+    "a subtotal published as a position: rejected, the row is a single printed position and the quarter ties"
+   ],
+   "next_action": "Proposed as concentration-largest-position-of-a-fund-in-wind-down-as-printed (PD-0001603480-pct_position_concentration-5); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_814671bb0c45",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2025-03-31|fund_strategy_validation"
+    ],
+    "reviewed_rows": [
+     "0001603480|2025-03-31|fund_strategy_validation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "Total Debt Investments 62.7 % 280,211,107 166,032,809"
+    },
+    {
+     "accession": "0000950170-25-071647",
+     "text": "Total Equity Investments 63.3 % 145,153,218 167,602,355"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings misclassified as equity: rejected, printed equity totals equal the published equity rows",
+    "a debt subtotal missing: rejected, quarters tie to the printed Debt & Equity line to the dollar"
+   ],
+   "next_action": "Proposed as fund-strategy-direct-lender-in-wind-down-holds-restructured-equity (PD-0001603480-fund_strategy_validation-11); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_827a51046e89",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_849ac3b15d83",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-020966/C_6f0137b3-87af-4a47-9c34-75795db7ed5f/ROW-5630bfcd57e0c0a6"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-020966/C_6f0137b3-87af-4a47-9c34-75795db7ed5f/ROW-5630bfcd57e0c0a6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent mis-scaled or duplicated: rejected, the printed line shows the same percent",
+    "a subtotal published as a position: rejected, the row is a single printed position and the quarter ties"
+   ],
+   "next_action": "Proposed as concentration-largest-position-of-a-fund-in-wind-down-as-printed (PD-0001603480-pct_position_concentration-5); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_890bf9820c34",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2025-12-31|F16"
+    ],
+    "reviewed_rows": [
+     "0001603480|2025-12-31|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Total distributions (3) ( 0.30 ) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 )"
+    },
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Net investment income 0.34 0.90 2.08 1.67 1.78"
+    },
+    {
+     "accession": "0001193125-26-140703",
+     "text": "Ratio of net investment income to average net assets 2.42 % 4.87 % 9.60 % 7.67 % 7.02 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published distribution mis-derived: checked against printed year-to-date figures (2026-06-30 was wrong, 0.34 against 0.68, and fixed)",
+    "income yield mis-derived: income_yield_pct was a difference of year-to-date ratios in 2022-06-30, 2025-06-30 and 2025-12-31; set to the printed ratio in the highlights wrapper (tdle); this quarter's published yield equals the printed ratio"
+   ],
+   "next_action": "Proposed as f16-distribution-above-quarter-income-as-printed (PD-0001603480-F16-10); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_8e8c8bf0befc",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-057614/C_3861b6d6-2aca-499e-bcce-42dbfa4bb60b/ROW-628437a979c00393"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-057614/C_3861b6d6-2aca-499e-bcce-42dbfa4bb60b/ROW-628437a979c00393"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent mis-scaled or duplicated: rejected, the printed line shows the same percent",
+    "a subtotal published as a position: rejected, the row is a single printed position and the quarter ties"
+   ],
+   "next_action": "Proposed as concentration-largest-position-of-a-fund-in-wind-down-as-printed (PD-0001603480-pct_position_concentration-5); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_8fd590b438e1",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2026-06-30|fund_strategy_validation"
+    ],
+    "reviewed_rows": [
+     "0001603480|2026-06-30|fund_strategy_validation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Total Debt Investments 27.4 % 50,699,585 50,710,476"
+    },
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Total Equity Investments 68.7 % 158,728,465 127,635,544"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings misclassified as equity: rejected, printed equity totals equal the published equity rows",
+    "a debt subtotal missing: rejected, quarters tie to the printed Debt & Equity line to the dollar"
+   ],
+   "next_action": "Proposed as fund-strategy-direct-lender-in-wind-down-holds-restructured-equity (PD-0001603480-fund_strategy_validation-11); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_9991e9b7ac63",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-061710/C_e5041c5c-74e2-496b-a7ce-9777e8f0afec",
+     "0000950170-23-061710/C_5ecf2e49-7630-48cc-92ce-520609b27b59",
+     "0000950170-23-061710/C_6ec82ebc-44af-40e6-8d96-f3ef5a382284",
+     "0000950170-23-061710/C_cdf86927-fa36-4bc6-8e81-515d2feb1d60",
+     "0000950170-23-061710/C_c5659029-cc0a-4af9-8d37-5f4d339188dc"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-061710/C_e5041c5c-74e2-496b-a7ce-9777e8f0afec",
+     "0000950170-23-061710/C_5ecf2e49-7630-48cc-92ce-520609b27b59",
+     "0000950170-23-061710/C_6ec82ebc-44af-40e6-8d96-f3ef5a382284",
+     "0000950170-23-061710/C_cdf86927-fa36-4bc6-8e81-515d2feb1d60",
+     "0000950170-23-061710/C_c5659029-cc0a-4af9-8d37-5f4d339188dc"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "09/15/20 Term Loan - 13.42 % (SOFR + 8.00 %, 1.25 % Floor) 2.3 % 8,993,842 12/29/26 8,970,536 8,993,842"
+    },
+    {
+     "accession": "0000950170-23-061710",
+     "text": "Total Debt & Equity Investments (9) 118.8 % 516,645,118 474,204,801"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a position without fair value dropped: rejected, each context carries only an acquisition date and its loan is published from the valued context",
+    "a dash-valued printed line: rejected, the printed lines for these loans carry values matching the published rows"
+   ],
+   "next_action": "Proposed as b01-contexts-without-value-carry-no-position-value (PD-0001603480-B01-16); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_9d8d47e60c40",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2023-12-31|F16"
+    ],
+    "reviewed_rows": [
+     "0001603480|2023-12-31|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "Return of capital ( 0.16 ) ( 0.71 ) ( 12.17 ) ( 11.74 ) ( 0.20 ) Total distributions (3) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 ) ( 6.40 )"
+    },
+    {
+     "accession": "0000950170-23-061710",
+     "text": "Total distributions (3) ( 0.77 ) ( 2.12 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published distribution mis-derived: checked against printed year-to-date figures (2026-06-30 was wrong, 0.34 against 0.68, and fixed)",
+    "income yield mis-derived: income_yield_pct was a difference of year-to-date ratios in 2022-06-30, 2025-06-30 and 2025-12-31; set to the printed ratio in the highlights wrapper (tdle); this quarter's published yield equals the printed ratio"
+   ],
+   "next_action": "Proposed as f16-distribution-above-quarter-income-as-printed (PD-0001603480-F16-10); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_a0a5c82ef1a9",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2026-06-30|F16"
+    ],
+    "reviewed_rows": [
+     "0001603480|2026-06-30|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Less Distributions: Return of capital ( 0.68 ) - Total distributions ( 0.68 ) -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published distribution mis-derived: checked against printed year-to-date figures (2026-06-30 was wrong, 0.34 against 0.68, and fixed)",
+    "income yield mis-derived: income_yield_pct was a difference of year-to-date ratios in 2022-06-30, 2025-06-30 and 2025-12-31; set to the printed ratio in the highlights wrapper (tdle); this quarter's published yield equals the printed ratio"
+   ],
+   "next_action": "Proposed as f16-return-of-capital-distribution-in-the-quarter (PD-0001603480-F16-8); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_a226df6e66c1",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-071647/C_f5d916d9-88a5-46e7-ad69-d72153ea68b7/ROW-9fd7d19a4a3798fa"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-071647/C_f5d916d9-88a5-46e7-ad69-d72153ea68b7/ROW-9fd7d19a4a3798fa"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071647",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_a37a7b9058d0",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-346645/C_2311c899-52a7-4260-81a6-82c9ab0e178d/ROW-a889c70add6fbe9d"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-346645/C_2311c899-52a7-4260-81a6-82c9ab0e178d/ROW-a889c70add6fbe9d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent mis-scaled or duplicated: rejected, the printed line shows the same percent",
+    "a subtotal published as a position: rejected, the row is a single printed position and the quarter ties"
+   ],
+   "next_action": "Proposed as concentration-largest-position-of-a-fund-in-wind-down-as-printed (PD-0001603480-pct_position_concentration-5); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_a4439964bbc5",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-041105/C_35d8adbd-7643-4663-9e7b-4571bdc57966/ROW-ad7471dc2392553e"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-041105/C_35d8adbd-7643-4663-9e7b-4571bdc57966/ROW-ad7471dc2392553e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_a75d030cae0e",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-140703/C_457b3dbf-f28c-42fa-a80d-d084b6b66530/ROW-e97fe3729ed5395a"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-140703/C_457b3dbf-f28c-42fa-a80d-d084b6b66530/ROW-e97fe3729ed5395a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-140703",
+     "text": "02/01/23 Incremental Term Loan - 19.98 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.3 % 2,660,747 02/24/27 2,660,747 2,928,001 5.7 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_a967735bc457",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_ae4cbff93648",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread holds the coupon or the percent of net assets: rejected, the page prints 'SOFR + 16.00 %' on this row",
+    "earlier reviewer's row (Overton Term Loan A) carries the value: rejected, it publishes no spread in this build"
+   ],
+   "next_action": "Proposed as c115-spread-above-15-is-the-printed-spread (PD-0001603480-C115-3); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_aefc3df5a225",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-041105/C_3da6d0e6-1987-4e27-bd0a-6dde97100244/ROW-7dd8b024234ec609"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-041105/C_3da6d0e6-1987-4e27-bd0a-6dde97100244/ROW-7dd8b024234ec609"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent sum out of range: rejected, the sum equals the printed Debt & Equity percent",
+    "outlier percent from a wrong denominator: rejected, the printed row shows the same percent"
+   ],
+   "next_action": "Proposed as a07-outlier-percent-is-the-printed-row (PD-0001603480-A07-6); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_b1f3aa8b4941",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-057614/C_3861b6d6-2aca-499e-bcce-42dbfa4bb60b/ROW-628437a979c00393"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-057614/C_3861b6d6-2aca-499e-bcce-42dbfa4bb60b/ROW-628437a979c00393"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent sum out of range: rejected, the sum equals the printed Debt & Equity percent",
+    "outlier percent from a wrong denominator: rejected, the printed row shows the same percent"
+   ],
+   "next_action": "Proposed as a07-outlier-percent-is-the-printed-row (PD-0001603480-A07-6); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_b66bfb517645",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-041105/C_35d8adbd-7643-4663-9e7b-4571bdc57966/ROW-ad7471dc2392553e"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-041105/C_35d8adbd-7643-4663-9e7b-4571bdc57966/ROW-ad7471dc2392553e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_bb409cd67cbd",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_be71a069b222",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_c453fbe13b33",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_cabf5befda04",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2023-03-31|F11"
+    ],
+    "reviewed_rows": [
+     "0001603480|2023-03-31|F11"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )"
+    },
+    {
+     "accession": "0000950170-23-020966",
+     "text": "accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "net assets taken from the paid-in line: rejected, 389,426 thousand is Members' capital as printed",
+    "units mis-scaled: rejected, 18,034,649 units are printed; the gap is exactly the undrawn commitment"
+   ],
+   "next_action": "Proposed as nav-per-unit-printed-on-accrual-base-with-undrawn-commitments (PD-0001603480-F11-12); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_ccc5f8cd4bbd",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-346645/C_791967f4-84d2-4f79-866f-97af145e0066/ROW-73d26458a11beb81"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-346645/C_791967f4-84d2-4f79-866f-97af145e0066/ROW-73d26458a11beb81"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread holds the coupon or the percent of net assets: rejected, the page prints 'SOFR + 16.00 %' on this row",
+    "earlier reviewer's row (Overton Term Loan A) carries the value: rejected, it publishes no spread in this build"
+   ],
+   "next_action": "Proposed as c115-spread-above-15-is-the-printed-spread (PD-0001603480-C115-3); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_cd10aaf38743",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_ce26e66af43b",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2026-08-12|F28"
+    ],
+    "reviewed_rows": [
+     "0001603480|2026-08-12|F28"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346645",
+     "text": "The number of the Registrants common units outstanding at August 12, 2026 was 18,034,649"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a holdings quarter missing: rejected, 2026-08-12 is the cover-page date of the 10-Q for 2026-06-30",
+    "a fund_financials row with values: only shares_outstanding from the cover page"
+   ],
+   "next_action": "Proposed as f28-cover-page-unit-count-date-not-a-quarter (PD-0001603480-F28-15); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_ceaee883ee65",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_cecdbbd2d9e0",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-037856/C_12c176f9-172b-4ea9-96ed-e62b233ca6f7/ROW-b7fc6d9b2bbfea5b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_d2a263e616c1",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-041105/C_3da6d0e6-1987-4e27-bd0a-6dde97100244/ROW-7dd8b024234ec609"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-041105/C_3da6d0e6-1987-4e27-bd0a-6dde97100244/ROW-7dd8b024234ec609"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent mis-scaled or duplicated: rejected, the printed line shows the same percent",
+    "a subtotal published as a position: rejected, the row is a single printed position and the quarter ties"
+   ],
+   "next_action": "Proposed as concentration-largest-position-of-a-fund-in-wind-down-as-printed (PD-0001603480-pct_position_concentration-5); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_d2de59d69cca",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-020966/C_6f0137b3-87af-4a47-9c34-75795db7ed5f/ROW-5630bfcd57e0c0a6"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-020966/C_6f0137b3-87af-4a47-9c34-75795db7ed5f/ROW-5630bfcd57e0c0a6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent sum out of range: rejected, the sum equals the printed Debt & Equity percent",
+    "outlier percent from a wrong denominator: rejected, the printed row shows the same percent"
+   ],
+   "next_action": "Proposed as a07-outlier-percent-is-the-printed-row (PD-0001603480-A07-6); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_d44c53c552b9",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-047910/C_56af22cc-62c6-4a82-9891-dbd3c22ac94b/ROW-9705cf774ea59b28"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047910",
+     "text": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread holds the coupon or the percent of net assets: rejected, the page prints 'SOFR + 16.00 %' on this row",
+    "earlier reviewer's row (Overton Term Loan A) carries the value: rejected, it publishes no spread in this build"
+   ],
+   "next_action": "Proposed as c115-spread-above-15-is-the-printed-spread (PD-0001603480-C115-3); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_d57af20530c5",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107759/C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf/ROW-20370f006e63a3aa"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107759/C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf/ROW-20370f006e63a3aa"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107759",
+     "text": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "format error in pik_rate (scale x100 or ratio): rejected, value equals the printed percent",
+    "PIK counted on top of the coupon: rejected, interest_rate and pik_rate are the same printed all-in rate"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-0001603480-fmt_pik_rate-2); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_d6f08805f78d",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-041105/C_35d8adbd-7643-4663-9e7b-4571bdc57966/ROW-ad7471dc2392553e"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-041105/C_35d8adbd-7643-4663-9e7b-4571bdc57966/ROW-ad7471dc2392553e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041105",
+     "text": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread holds the coupon or the percent of net assets: rejected, the page prints 'SOFR + 16.00 %' on this row",
+    "earlier reviewer's row (Overton Term Loan A) carries the value: rejected, it publishes no spread in this build"
+   ],
+   "next_action": "Proposed as c115-spread-above-15-is-the-printed-spread (PD-0001603480-C115-3); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_dd18bd4c0811",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-279849/C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0/ROW-1ecff253f5ce4f4b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-279849",
+     "text": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread holds the coupon or the percent of net assets: rejected, the page prints 'SOFR + 16.00 %' on this row",
+    "earlier reviewer's row (Overton Term Loan A) carries the value: rejected, it publishes no spread in this build"
+   ],
+   "next_action": "Proposed as c115-spread-above-15-is-the-printed-spread (PD-0001603480-C115-3); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_df810fa90c53",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-095898/C_8267d664-fbeb-4efa-9970-50afbd06d819/ROW-3dbd7bd09dd6f71d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095898",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread holds the coupon or the percent of net assets: rejected, the page prints 'SOFR + 16.00 %' on this row",
+    "earlier reviewer's row (Overton Term Loan A) carries the value: rejected, it publishes no spread in this build"
+   ],
+   "next_action": "Proposed as c115-spread-above-15-is-the-printed-spread (PD-0001603480-C115-3); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_dfc2b6514710",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-057614/C_2976daa4-013e-42e1-b86a-0fa310fcf6ba/ROW-66b9389c5564220d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-057614",
+     "text": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread holds the coupon or the percent of net assets: rejected, the page prints 'SOFR + 16.00 %' on this row",
+    "earlier reviewer's row (Overton Term Loan A) carries the value: rejected, it publishes no spread in this build"
+   ],
+   "next_action": "Proposed as c115-spread-above-15-is-the-printed-spread (PD-0001603480-C115-3); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_e598718cdb8c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-061710/C_545fc2a4-6594-4bcc-9890-2285f0b420d2/ROW-d84e014a3dba64ea"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-061710/C_545fc2a4-6594-4bcc-9890-2285f0b420d2/ROW-d84e014a3dba64ea"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_e610bebe2887",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-020966/C_f0448690-9c99-4742-ab11-90cba005a8f7/ROW-3fc68b4581895e72"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-020966/C_f0448690-9c99-4742-ab11-90cba005a8f7/ROW-3fc68b4581895e72"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread scale error: rejected, 16.0 equals the printed margin",
+    "a fixed coupon or the PIK leg read as spread: rejected, those rows (Retail & Animal, Noramco) no longer carry it"
+   ],
+   "next_action": "Proposed as fmt-basis-spread-above-15-is-the-printed-spread (PD-0001603480-fmt_basis_spread-4); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_eee9879e5cb6",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-020966/C_f0448690-9c99-4742-ab11-90cba005a8f7/ROW-3fc68b4581895e72"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-020966/C_f0448690-9c99-4742-ab11-90cba005a8f7/ROW-3fc68b4581895e72"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020966",
+     "text": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate is a misread margin: rejected, the page prints 'all PIK' with the coupon equal to the published pik_rate",
+    "the row belongs to another loan: rejected, date 02/01/23, instrument and fair value match the printed line"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-0001603480-C117-1); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_f6fc1908b4a7",
+   "coverage": {
+    "affected_rows": [
+     "0001603480|2024-09-30|F33"
+    ],
+    "reviewed_rows": [
+     "0001603480|2024-09-30|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126078",
+     "text": "Less Distributions: From net investment income ( 0.36 ) ( 0.55 ) Return of capital - ( 0.22 ) Total distributions ( 0.36 ) ( 0.77 )"
+    },
+    {
+     "accession": "0000950170-25-107759",
+     "text": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a distribution was declared but not extracted: rejected, the per-unit highlights print a dash or an unchanged year-to-date total",
+    "quarterisation lost a distribution: rejected, year-to-date less prior year-to-date is nil from the printed figures"
+   ],
+   "next_action": "Proposed as f33-no-distribution-declared-in-the-quarter (PD-0001603480-F33-7); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_f91e52a8ffa7",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-037856/C_e06e296b-fdcf-49c5-ac9a-1b76e10b219c/ROW-c4cfece4dfa5fc72"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-037856/C_e06e296b-fdcf-49c5-ac9a-1b76e10b219c/ROW-c4cfece4dfa5fc72"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-037856",
+     "text": "06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent sum out of range: rejected, the sum equals the printed Debt & Equity percent",
+    "outlier percent from a wrong denominator: rejected, the printed row shows the same percent"
+   ],
+   "next_action": "Proposed as a07-outlier-percent-is-the-printed-row (PD-0001603480-A07-6); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_faa56d2da9a7",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-061710/C_8d9af6b9-f6a9-4587-b261-2340b1ba77c7/ROW-c22cc93c2b9bd9be"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-061710/C_8d9af6b9-f6a9-4587-b261-2340b1ba77c7/ROW-c22cc93c2b9bd9be"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061710",
+     "text": "06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "percent mis-scaled or duplicated: rejected, the printed line shows the same percent",
+    "a subtotal published as a position: rejected, the row is a single printed position and the quarter ties"
+   ],
+   "next_action": "Proposed as concentration-largest-position-of-a-fund-in-wind-down-as-printed (PD-0001603480-pct_position_concentration-5); owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_fcdafea1f59f",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-126078/C_ac5092e3-ef6c-47f1-9453-96a967b84527/ROW-a010a7c3b07e7fab"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126078",
+     "text": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread holds the coupon or the percent of net assets: rejected, the page prints 'SOFR + 16.00 %' on this row",
+    "earlier reviewer's row (Overton Term Loan A) carries the value: rejected, it publishes no spread in this build"
+   ],
+   "next_action": "Proposed as c115-spread-above-15-is-the-printed-spread (PD-0001603480-C115-3); owner decides the reason."
+  }
+ ],
+ "counts": {
+  "untouched_tdla": "215 findings, 208 outstanding, 4 of 14 quarters tie",
+  "final": "87 findings, 80 outstanding, 78 with a proposal, 2 parked (html 2022); tdld had 88 / 81, 14 of 14 quarters tie on FV and cost",
+  "queries": "scratch/fund_runs/0001603480/q_totals.sql, q_rows_vs_before.sql, q_loans.sql, q_names.sql; spec counts spec_check.py"
+ },
+ "tests_run": [
+  "none: no shared code changed (wrapper, highlights wrapper, row corrections, evidence-script block only)"
+ ],
+ "not_done": [
+  "2022 quarters not published (parked): extractor/template gap, outside the published range",
+  "cash equivalents and Treasury bills not published (owner choice, observation)",
+  "position chains across the RT Holdings Class A / P-1 breaks not repaired (no match overrides added)",
+  "GICS sub-industry of Ruby Tuesday / RT Holdings not corrected (shared mapping)",
+  "X06 2024-12-31 (accepted by check, DS-LARGE13-X06-1603480) not re-read",
+  "two Bash calls during the run started a bare 'python -' by mistake (the second an empty heredoc); both hung and were stopped by task id; no python process of mine left",
+  "a cleared ledger is not data correct: no rule checks unit counts, maturities or industries against the page beyond the sample read here"
+ ]
+}

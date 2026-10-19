@@ -1,0 +1,941 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "tdle",
+ "dispositions": [
+  {
+   "disposition_id": "PD-0001603480-C117-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C117",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "reason_key": "pik-rate-above-20-as-printed",
+   "statement": "The flagged row is the Ruby Tuesday 02/01/23 Incremental Term Loan, printed all PIK at SOFR + 16.00 %: the whole coupon (20.39 % to 21.46 %) is paid in kind, so pik_rate equals the printed rate. As printed; no other row of the quarter has pik_rate above 20.",
+   "basis": "read",
+   "why_no_fix": "The published value is the printed value; a fix would publish something the page does not print.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328",
+     "quote": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328 (2023-03-31 Ruby Tuesday Operations LLC, context C_f0448690-9c99-4742-ab11-90cba005a8f7, published pct 0.8 spread 16.0 pik 20.73)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041105",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765",
+     "quote": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765 (2023-06-30 Ruby Tuesday Operations LLC, context C_35d8adbd-7643-4663-9e7b-4571bdc57966, published pct 0.7000000000000001 spread 16.0 pik 21.26)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646",
+     "quote": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646 (2023-09-30 Ruby Tuesday Operations LLC, context C_545fc2a4-6594-4bcc-9890-2285f0b420d2, published pct 0.7000000000000001 spread 16.0 pik 21.43)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037856",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138",
+     "quote": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138 (2023-12-31 Ruby Tuesday Operations LLC, context C_12c176f9-172b-4ea9-96ed-e62b233ca6f7, published pct 0.8 spread 16.0 pik 21.46)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057614",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863 (2024-03-31 Ruby Tuesday Operations LLC, context C_2976daa4-013e-42e1-b86a-0fa310fcf6ba, published pct 0.8 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095898",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192 (2024-06-30 Ruby Tuesday Operations LLC, context C_8267d664-fbeb-4efa-9970-50afbd06d819, published pct 0.8999999999999999 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126078",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %",
+     "quote": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 % (2024-09-30 Ruby Tuesday Operations LLC, context C_ac5092e3-ef6c-47f1-9453-96a967b84527, published pct 1.0 spread 16.0 pik 21.32)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047910",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 % (2024-12-31 Ruby Tuesday Operations LLC, context C_56af22cc-62c6-4a82-9891-dbd3c22ac94b, published pct 1.0999999999999999 spread 16.0 pik 20.65)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071647",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 % (2025-03-31 Ruby Tuesday Operations LLC, context C_f5d916d9-88a5-46e7-ad69-d72153ea68b7, published pct 1.0999999999999999 spread 16.0 pik 20.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107759",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 % (2025-06-30 Ruby Tuesday Operations LLC, context C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf, published pct 1.0999999999999999 spread 16.0 pik 20.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279849",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 % (2025-09-30 Ruby Tuesday Operations LLC, context C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0, published pct 1.2 spread 16.0 pik 20.39)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-fmt_pik_rate-2",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_pik_rate",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "reason_key": "fmt-pik-rate-above-20-as-printed",
+   "statement": "Same row as C117: the Ruby Tuesday 02/01/23 Incremental Term Loan, printed '... % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK)'; the published pik_rate is the printed all-in rate (whole coupon PIK). As printed.",
+   "basis": "read",
+   "why_no_fix": "The published value is the printed value; a fix would publish something the page does not print.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328",
+     "quote": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328 (2023-03-31 Ruby Tuesday Operations LLC, context C_f0448690-9c99-4742-ab11-90cba005a8f7, published pct 0.8 spread 16.0 pik 20.73)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041105",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765",
+     "quote": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765 (2023-06-30 Ruby Tuesday Operations LLC, context C_35d8adbd-7643-4663-9e7b-4571bdc57966, published pct 0.7000000000000001 spread 16.0 pik 21.26)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646",
+     "quote": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646 (2023-09-30 Ruby Tuesday Operations LLC, context C_545fc2a4-6594-4bcc-9890-2285f0b420d2, published pct 0.7000000000000001 spread 16.0 pik 21.43)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037856",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138",
+     "quote": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138 (2023-12-31 Ruby Tuesday Operations LLC, context C_12c176f9-172b-4ea9-96ed-e62b233ca6f7, published pct 0.8 spread 16.0 pik 21.46)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057614",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863 (2024-03-31 Ruby Tuesday Operations LLC, context C_2976daa4-013e-42e1-b86a-0fa310fcf6ba, published pct 0.8 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095898",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192 (2024-06-30 Ruby Tuesday Operations LLC, context C_8267d664-fbeb-4efa-9970-50afbd06d819, published pct 0.8999999999999999 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126078",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %",
+     "quote": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 % (2024-09-30 Ruby Tuesday Operations LLC, context C_ac5092e3-ef6c-47f1-9453-96a967b84527, published pct 1.0 spread 16.0 pik 21.32)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047910",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 % (2024-12-31 Ruby Tuesday Operations LLC, context C_56af22cc-62c6-4a82-9891-dbd3c22ac94b, published pct 1.0999999999999999 spread 16.0 pik 20.65)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071647",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 % (2025-03-31 Ruby Tuesday Operations LLC, context C_f5d916d9-88a5-46e7-ad69-d72153ea68b7, published pct 1.0999999999999999 spread 16.0 pik 20.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107759",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 % (2025-06-30 Ruby Tuesday Operations LLC, context C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf, published pct 1.0999999999999999 spread 16.0 pik 20.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279849",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 % (2025-09-30 Ruby Tuesday Operations LLC, context C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0, published pct 1.2 spread 16.0 pik 20.39)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-C115-3",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "reason_key": "c115-spread-above-15-is-the-printed-spread",
+   "statement": "The flagged row is the Ruby Tuesday 02/01/23 Incremental Term Loan, printed 'SOFR + 16.00 %'; basis_spread 16.0 is the printed margin (all PIK, so cash margin 0 plus PIK margin 16, counted once, D-031). As printed.",
+   "basis": "read",
+   "why_no_fix": "The published value is the printed value; a fix would publish something the page does not print.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041105",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765",
+     "quote": "02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765 (2023-06-30 Ruby Tuesday Operations LLC, context C_35d8adbd-7643-4663-9e7b-4571bdc57966, published pct 0.7000000000000001 spread 16.0 pik 21.26)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037856",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138",
+     "quote": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138 (2023-12-31 Ruby Tuesday Operations LLC, context C_12c176f9-172b-4ea9-96ed-e62b233ca6f7, published pct 0.8 spread 16.0 pik 21.46)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057614",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863 (2024-03-31 Ruby Tuesday Operations LLC, context C_2976daa4-013e-42e1-b86a-0fa310fcf6ba, published pct 0.8 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095898",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192 (2024-06-30 Ruby Tuesday Operations LLC, context C_8267d664-fbeb-4efa-9970-50afbd06d819, published pct 0.8999999999999999 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126078",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %",
+     "quote": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 % (2024-09-30 Ruby Tuesday Operations LLC, context C_ac5092e3-ef6c-47f1-9453-96a967b84527, published pct 1.0 spread 16.0 pik 21.32)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047910",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 % (2024-12-31 Ruby Tuesday Operations LLC, context C_56af22cc-62c6-4a82-9891-dbd3c22ac94b, published pct 1.0999999999999999 spread 16.0 pik 20.65)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107759",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 % (2025-06-30 Ruby Tuesday Operations LLC, context C_3ce82c27-0a54-41d0-b1c7-f6bdaf66abbf, published pct 1.0999999999999999 spread 16.0 pik 20.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279849",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 % (2025-09-30 Ruby Tuesday Operations LLC, context C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0, published pct 1.2 spread 16.0 pik 20.39)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday",
+     "quote": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday (2026-06-30 Ruby Tuesday Operations LLC, context C_791967f4-84d2-4f79-866f-97af145e0066, published pct 1.6 spread 16.0 pik 19.73)"
+    }
+   ],
+   "addresses_verdict": {
+    "2024-12-31": "The earlier reviewer read basis_spread 16.0 as the Overton Chicago Gear Term Loan A's 16.0 % of net assets. In this build the Overton Term Loan A row (fixed 6.00 %, all PIK) has no spread; the only row with spread 16.0 is the Ruby Tuesday 02/01/23 Incremental Term Loan, which the page prints as 'SOFR + 16.00 %'. The cited row does not carry the flagged value; the verdict does not stand for this build."
+   }
+  },
+  {
+   "disposition_id": "PD-0001603480-fmt_basis_spread-4",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "reason_key": "fmt-basis-spread-above-15-is-the-printed-spread",
+   "statement": "Same row as C115: Ruby Tuesday 02/01/23 Incremental Term Loan, printed 'SOFR + 16.00 %'. The published spread is the printed margin. As printed.",
+   "basis": "read",
+   "why_no_fix": "The published value is the printed value; a fix would publish something the page does not print.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328",
+     "quote": "02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328 (2023-03-31 Ruby Tuesday Operations LLC, context C_f0448690-9c99-4742-ab11-90cba005a8f7, published pct 0.8 spread 16.0 pik 20.73)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646",
+     "quote": "02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646 (2023-09-30 Ruby Tuesday Operations LLC, context C_545fc2a4-6594-4bcc-9890-2285f0b420d2, published pct 0.7000000000000001 spread 16.0 pik 21.43)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037856",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138",
+     "quote": "02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138 (2023-12-31 Ruby Tuesday Operations LLC, context C_12c176f9-172b-4ea9-96ed-e62b233ca6f7, published pct 0.8 spread 16.0 pik 21.46)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057614",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863 (2024-03-31 Ruby Tuesday Operations LLC, context C_2976daa4-013e-42e1-b86a-0fa310fcf6ba, published pct 0.8 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095898",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192",
+     "quote": "02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192 (2024-06-30 Ruby Tuesday Operations LLC, context C_8267d664-fbeb-4efa-9970-50afbd06d819, published pct 0.8999999999999999 spread 16.0 pik 21.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126078",
+     "verbatim": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %",
+     "quote": "02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 % (2024-09-30 Ruby Tuesday Operations LLC, context C_ac5092e3-ef6c-47f1-9453-96a967b84527, published pct 1.0 spread 16.0 pik 21.32)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047910",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 % (2024-12-31 Ruby Tuesday Operations LLC, context C_56af22cc-62c6-4a82-9891-dbd3c22ac94b, published pct 1.0999999999999999 spread 16.0 pik 20.65)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071647",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 % (2025-03-31 Ruby Tuesday Operations LLC, context C_f5d916d9-88a5-46e7-ad69-d72153ea68b7, published pct 1.0999999999999999 spread 16.0 pik 20.44)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279849",
+     "verbatim": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %",
+     "quote": "02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 % (2025-09-30 Ruby Tuesday Operations LLC, context C_eb2d4e95-ce33-4c57-bce5-7e1b07a3f1d0, published pct 1.2 spread 16.0 pik 20.39)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-140703",
+     "verbatim": "02/01/23 Incremental Term Loan - 19.98 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.3 % 2,660,747 02/24/27 2,660,747 2,928,001 5.7 %",
+     "quote": "02/01/23 Incremental Term Loan - 19.98 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.3 % 2,660,747 02/24/27 2,660,747 2,928,001 5.7 % (2025-12-31 Ruby Tuesday Operations LLC, context C_457b3dbf-f28c-42fa-a80d-d084b6b66530, published pct 1.3 spread 16.0 pik 19.98)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday",
+     "quote": "02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday (2026-06-30 Ruby Tuesday Operations LLC, context C_791967f4-84d2-4f79-866f-97af145e0066, published pct 1.6 spread 16.0 pik 19.73)"
+    }
+   ],
+   "addresses_verdict": {
+    "2023-12-31": "The earlier reviewer said a 20.00 % fixed coupon (Retail & Animal Intermediate Delayed Draw Priming Term Loan) was read as a spread. In this build that row has no spread; the only row with a spread above 15 is the Ruby Tuesday Incremental Term Loan, printed 'SOFR + 16.00 %'. The verdict does not stand.",
+    "2025-12-31": "The earlier reviewer said Noramco's 0.38 % PIK leg was read as the spread. In this build Noramco publishes basis_spread 8.38 (printed 'SOFR + 8.38 %, 1.00 % Floor, 0.38 % PIK') and pik_rate 0.38; the flagged row is the Ruby Tuesday Incremental Term Loan at the printed 'SOFR + 16.00 %'. The verdict does not stand."
+   }
+  },
+  {
+   "disposition_id": "PD-0001603480-pct_position_concentration-5",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "reason_key": "concentration-largest-position-of-a-fund-in-wind-down-as-printed",
+   "statement": "The flagged row is the fund's largest position, printed at that percent of net assets: the H-D Advanced Manufacturing Term Loan (26.8 % to 33.5 %, 2023-03-31 to 2024-06-30) and, after the restructuring, Precision Products Machining Group Class A Units (25.1 %, 2026-06-30). The fund is in wind-down (commitment period ended 2017) with 10 to 14 positions, and its debt and equity total exceeds net assets (credit facility). As printed.",
+   "basis": "read",
+   "why_no_fix": "The published value is the printed value; a fix would publish something the page does not print.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065",
+     "quote": "06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065 (2023-03-31 H-D Advanced Manufacturing Company, context C_6f0137b3-87af-4a47-9c34-75795db7ed5f, published pct 33.5 spread 8.5 pik 13.41)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041105",
+     "verbatim": "06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755",
+     "quote": "06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755 (2023-06-30 H-D Advanced Manufacturing Company, context C_3da6d0e6-1987-4e27-bd0a-6dde97100244, published pct 33.2 spread 8.5 pik 13.7)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541",
+     "quote": "06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541 (2023-09-30 H-D Advanced Manufacturing Company, context C_8d9af6b9-f6a9-4587-b261-2340b1ba77c7, published pct 32.6 spread 8.5 pik 13.92)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037856",
+     "verbatim": "06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450",
+     "quote": "06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450 (2023-12-31 H-D Advanced Manufacturing Company, context C_e06e296b-fdcf-49c5-ac9a-1b76e10b219c, published pct 26.8 spread 8.5 pik 13.96)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057614",
+     "verbatim": "06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced",
+     "quote": "06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced (2024-03-31 H-D Advanced Manufacturing Company, context C_3861b6d6-2aca-499e-bcce-42dbfa4bb60b, published pct 28.000000000000004 spread 8.5 pik 13.93)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095898",
+     "verbatim": "06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced",
+     "quote": "06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced (2024-06-30 H-D Advanced Manufacturing Company, context C_b2a522bb-883d-4f14-b091-ffdbcb728f41, published pct 30.3 spread 8.5 pik 13.94)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 %",
+     "quote": "Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 % (2026-06-30 Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company), context C_2311c899-52a7-4260-81a6-82c9ab0e178d, published pct 25.1 spread None pik None)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-A07-6",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "reason_key": "a07-outlier-percent-is-the-printed-row",
+   "statement": "A07 fires on a row above 25 % of net assets; the percent sum is within 50 to 250 % (it equals the printed 'Total Debt & Equity Investments' percent). The outlier row prints that percent (H-D Advanced Manufacturing Term Loan 26.8 % to 33.5 %; Precision Products Machining Group Class A Units 25.1 % at 2026-06-30). As printed.",
+   "basis": "read",
+   "why_no_fix": "The published value is the printed value; a fix would publish something the page does not print.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065",
+     "quote": "06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065 (2023-03-31 H-D Advanced Manufacturing Company, context C_6f0137b3-87af-4a47-9c34-75795db7ed5f, published pct 33.5 spread 8.5 pik 13.41)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041105",
+     "verbatim": "06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755",
+     "quote": "06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755 (2023-06-30 H-D Advanced Manufacturing Company, context C_3da6d0e6-1987-4e27-bd0a-6dde97100244, published pct 33.2 spread 8.5 pik 13.7)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541",
+     "quote": "06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541 (2023-09-30 H-D Advanced Manufacturing Company, context C_8d9af6b9-f6a9-4587-b261-2340b1ba77c7, published pct 32.6 spread 8.5 pik 13.92)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037856",
+     "verbatim": "06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450",
+     "quote": "06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450 (2023-12-31 H-D Advanced Manufacturing Company, context C_e06e296b-fdcf-49c5-ac9a-1b76e10b219c, published pct 26.8 spread 8.5 pik 13.96)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057614",
+     "verbatim": "06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced",
+     "quote": "06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced (2024-03-31 H-D Advanced Manufacturing Company, context C_3861b6d6-2aca-499e-bcce-42dbfa4bb60b, published pct 28.000000000000004 spread 8.5 pik 13.93)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095898",
+     "verbatim": "06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced",
+     "quote": "06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced (2024-06-30 H-D Advanced Manufacturing Company, context C_b2a522bb-883d-4f14-b091-ffdbcb728f41, published pct 30.3 spread 8.5 pik 13.94)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 %",
+     "quote": "Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 % (2026-06-30 Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company), context C_2311c899-52a7-4260-81a6-82c9ab0e178d, published pct 25.1 spread None pik None)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-F33-7",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "reason_key": "f33-no-distribution-declared-in-the-quarter",
+   "statement": "The fund declared no distribution in the quarter; the per-unit highlights print a dash for the period, or the year-to-date total equals the prior year-to-date total. A fund in wind-down that distributes irregularly. The published 0.0 is the printed figure.",
+   "basis": "read",
+   "why_no_fix": "The published fund figures are the printed figures; the rule's expectation does not fit this filer.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "Less Distributions: Return of capital - ( 0.89 ) Total distributions (2) - ( 0.89 )",
+     "quote": "Less Distributions: Return of capital - ( 0.89 ) Total distributions (2) - ( 0.89 ) (three months 2023: none)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "Less Distributions: From net investment income ( 0.55 ) ( 0.93 ) Return of capital ( 0.22 ) ( 1.19 ) Total distributions (3) ( 0.77 ) ( 2.12 )",
+     "quote": "Less Distributions: From net investment income ( 0.55 ) ( 0.93 ) Return of capital ( 0.22 ) ( 1.19 ) Total distributions (3) ( 0.77 ) ( 2.12 ) (nine months 0.77)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041105",
+     "verbatim": "Return of capital ( 0.22 ) ( 0.89 ) Total distributions (2) ( 0.77 ) ( 1.42 )",
+     "quote": "Return of capital ( 0.22 ) ( 0.89 ) Total distributions (2) ( 0.77 ) ( 1.42 ) (six months 0.77: third quarter nil)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126078",
+     "verbatim": "Less Distributions: From net investment income ( 0.36 ) ( 0.55 ) Return of capital - ( 0.22 ) Total distributions ( 0.36 ) ( 0.77 )",
+     "quote": "Less Distributions: From net investment income ( 0.36 ) ( 0.55 ) Return of capital - ( 0.22 ) Total distributions ( 0.36 ) ( 0.77 ) (nine months 2024 0.36)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107759",
+     "verbatim": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )",
+     "quote": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 ) (six months 2024 (comparative) 0.36: third quarter nil)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071647",
+     "verbatim": "Less Distributions: From net investment income (loss) - ( 0.14 ) Total distributions - ( 0.14 )",
+     "quote": "Less Distributions: From net investment income (loss) - ( 0.14 ) Total distributions - ( 0.14 ) (three months 2025: none)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107759",
+     "verbatim": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )",
+     "quote": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 ) (six months 2025: none)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279849",
+     "verbatim": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )",
+     "quote": "Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 ) (nine months 2025: none)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-F16-8",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "f16-return-of-capital-distribution-in-the-quarter",
+   "statement": "The quarter's distribution is a return of capital (wind-down fund returning capital), not paid from income, so it exceeds the income-yield heuristic. The published distribution equals the printed figure (2026-06-30 corrected from 0.34 to the printed 0.68 in this run).",
+   "basis": "read",
+   "why_no_fix": "The published fund figures are the printed figures; the rule's expectation does not fit this filer.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-22-009572",
+     "verbatim": "Less Distributions: From net investment income - (0.75 ) Return of capital (0.89 ) - Total distributions (2) (0.89 ) (0.75 )",
+     "quote": "Less Distributions: From net investment income - (0.75 ) Return of capital (0.89 ) - Total distributions (2) (0.89 ) (0.75 ) (Q1 2022: 0.89, all return of capital)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "Less Distributions: Return of capital ( 0.68 ) - Total distributions ( 0.68 ) -",
+     "quote": "Less Distributions: Return of capital ( 0.68 ) - Total distributions ( 0.68 ) - (six months 2026: 0.68 return of capital, none in Q1)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-F16-10",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "reason_key": "f16-distribution-above-quarter-income-as-printed",
+   "statement": "The fourth-quarter distribution is the year's total less nine months as printed (2023: 2.60 less 0.77 = 1.83; 2024: 0.98 less 0.36 = 0.62; 2025: 0.30 less nil = 0.30), and it exceeds that quarter's income: the fund distributes at year end (annual per-unit NII 2.08, 0.90, 0.34 against distributions 2.60, 0.98, 0.30, return of capital included). As printed.",
+   "basis": "read",
+   "why_no_fix": "The published fund figures are the printed figures; the rule's expectation does not fit this filer.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037856",
+     "verbatim": "Return of capital ( 0.16 ) ( 0.71 ) ( 12.17 ) ( 11.74 ) ( 0.20 ) Total distributions (3) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 ) ( 6.40 )",
+     "quote": "Return of capital ( 0.16 ) ( 0.71 ) ( 12.17 ) ( 11.74 ) ( 0.20 ) Total distributions (3) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 ) ( 6.40 ) (2023 total 2.60)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "Total distributions (3) ( 0.77 ) ( 2.12 )",
+     "quote": "Total distributions (3) ( 0.77 ) ( 2.12 ) (nine months 2023 0.77)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-047910",
+     "verbatim": "Total distributions (3) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 )",
+     "quote": "Total distributions (3) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 ) (2024 total 0.98)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126078",
+     "verbatim": "Total distributions ( 0.36 ) ( 0.77 )",
+     "quote": "Total distributions ( 0.36 ) ( 0.77 ) (nine months 2024 0.36)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-140703",
+     "verbatim": "Total distributions (3) ( 0.30 ) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 )",
+     "quote": "Total distributions (3) ( 0.30 ) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 ) (2025 total 0.30, nine months nil)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-140703",
+     "verbatim": "Net investment income 0.34 0.90 2.08 1.67 1.78",
+     "quote": "Net investment income 0.34 0.90 2.08 1.67 1.78 (annual per-unit NII 2025, 2024, 2023)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-140703",
+     "verbatim": "Ratio of net investment income to average net assets 2.42 % 4.87 % 9.60 % 7.67 % 7.02 %",
+     "quote": "Ratio of net investment income to average net assets 2.42 % 4.87 % 9.60 % 7.67 % 7.02 % (annual NII ratio 2.42, now published)"
+    }
+   ],
+   "addresses_verdict": {
+    "2025-12-31": "The earlier reviewer computed 0.30 / 23.96 = 1.25 % and called the published distribution rate (5.0 %) mis-scaled. The published distribution_per_share is the quarter's 0.30 (the whole 2025 distribution fell in the fourth quarter: nine months print '-'), annualised as the field is everywhere else; the reviewer compared an annualised quarter rate with an annual one. The distribution stands. The income yield the heuristic used (0.67) was wrong and is now the printed 2.42 (highlights wrapper, tdle); the finding still fires because the whole year's distribution fell in one quarter (0.30 x 4 / 23.96 = 5.0 % against 1.5 x 2.42)."
+   }
+  },
+  {
+   "disposition_id": "PD-0001603480-fund_strategy_validation-11",
+   "class": "as_filed",
+   "engine": "fund_strategy",
+   "rule_name": "fund_strategy_validation",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "fund-strategy-direct-lender-in-wind-down-holds-restructured-equity",
+   "statement": "The fund is a direct lender past its commitment period (ended 2017) that holds equity received in restructurings (Precision Products Machining Group was 'acquired through an investment restructuring'; Xiphias / Yellowtail fka Pace; RT Holdings fka Ruby Tuesday). As loans are repaid the printed equity total overtakes the debt total. The holdings mix is as printed; the PRIVATE_CREDIT strategy is the fund's stated lending strategy, so the check's divergence is expected, not a classification error.",
+   "basis": "read",
+   "why_no_fix": "The published fund figures are the printed figures; the rule's expectation does not fit this filer.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071647",
+     "verbatim": "Total Debt Investments 62.7 % 280,211,107 166,032,809",
+     "quote": "Total Debt Investments 62.7 % 280,211,107 166,032,809 (printed debt and equity totals)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071647",
+     "verbatim": "Total Equity Investments 63.3 % 145,153,218 167,602,355",
+     "quote": "Total Equity Investments 63.3 % 145,153,218 167,602,355 (printed equity total)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107759",
+     "verbatim": "Total Debt Investments 65.9 % 287,734,298 168,757,151",
+     "quote": "Total Debt Investments 65.9 % 287,734,298 168,757,151 (printed debt and equity totals)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107759",
+     "verbatim": "Total Equity Investments 62.2 % 145,153,218 159,075,179",
+     "quote": "Total Equity Investments 62.2 % 145,153,218 159,075,179 (printed equity total)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279849",
+     "verbatim": "Total Debt Investments 57.6 % 267,031,949 139,685,748",
+     "quote": "Total Debt Investments 57.6 % 267,031,949 139,685,748 (printed debt and equity totals)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-279849",
+     "verbatim": "Total Equity Investments 62.7 % 144,513,218 151,785,778",
+     "quote": "Total Equity Investments 62.7 % 144,513,218 151,785,778 (printed equity total)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-140703",
+     "verbatim": "Total Debt Investments 48.1 % 246,859,409 112,090,217",
+     "quote": "Total Debt Investments 48.1 % 246,859,409 112,090,217 (printed debt and equity totals)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-140703",
+     "verbatim": "Total Equity Investments 65.2 % 144,513,218 151,633,878",
+     "quote": "Total Equity Investments 65.2 % 144,513,218 151,633,878 (printed equity total)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221900",
+     "verbatim": "Total Debt Investments 39.8 % 86,770,613 86,897,322",
+     "quote": "Total Debt Investments 39.8 % 86,770,613 86,897,322 (printed debt and equity totals)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221900",
+     "verbatim": "Total Equity Investments 74.6 % 171,528,465 162,797,111",
+     "quote": "Total Equity Investments 74.6 % 171,528,465 162,797,111 (printed equity total)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "Total Debt Investments 27.4 % 50,699,585 50,710,476",
+     "quote": "Total Debt Investments 27.4 % 50,699,585 50,710,476 (printed debt and equity totals)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "Total Equity Investments 68.7 % 158,728,465 127,635,544",
+     "quote": "Total Equity Investments 68.7 % 158,728,465 127,635,544 (printed equity total)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "Precision Products Machining Group, LLC was acquired through an investment restructuring",
+     "quote": "Precision Products Machining Group, LLC was acquired through an investment restructuring (note 1)"
+    }
+   ],
+   "addresses_verdict": {
+    "2025-12-31": "The earlier reviewer called PRIVATE_CREDIT a classification error because printed equity (151,633,878) exceeds printed debt (112,090,217). The published holdings carry those printed totals exactly; the equity came from restructurings of the fund's loans (10-Q note 1: Precision Products 'was acquired through an investment restructuring'). The fund strategy is the lender's stated strategy; reclassing the fund on its wind-down mix is an owner decision, so this is proposed, not fixed.",
+    "2026-03-31": "The earlier reviewer called PRIVATE_CREDIT a classification error (printed equity 162,797,111 against debt 86,897,322). Published rows equal the printed totals; the equity is restructured holdings of a lender in wind-down. Whether a fund's strategy follows its run-off mix is an owner decision; proposed, not fixed."
+   }
+  },
+  {
+   "disposition_id": "PD-0001603480-F11-12",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F11",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "reason_key": "nav-per-unit-printed-on-accrual-base-with-undrawn-commitments",
+   "statement": "The filer prints NAV per unit on an accrual base that includes the unitholders' undrawn commitments: 32.63 x 18,034,649 units = 588.5M = Members' capital 389.4M + undrawn commitment 199.1M. Net assets (389,426 thousand) and the per-unit figure are both as printed; the identity check assumes NAV per unit = net assets / units. Only 2023-03-31 publishes a unit count, so only that quarter is tested.",
+   "basis": "read",
+   "why_no_fix": "The published fund figures are the printed figures; the rule's expectation does not fit this filer.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84",
+     "quote": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84 (printed accrual-base NAV per unit)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )",
+     "quote": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 ) (undrawn commitment 199,120 thousand on 18,034,649 units)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit",
+     "quote": "accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit (definition)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-nav_identity-13",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "nav_identity",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "reason_key": "nav-per-unit-printed-on-accrual-base-with-undrawn-commitments",
+   "statement": "The filer prints NAV per unit on an accrual base that includes the unitholders' undrawn commitments: 32.63 x 18,034,649 units = 588.5M = Members' capital 389.4M + undrawn commitment 199.1M. Net assets (389,426 thousand) and the per-unit figure are both as printed; the identity check assumes NAV per unit = net assets / units. Only 2023-03-31 publishes a unit count, so only that quarter is tested.",
+   "basis": "read",
+   "why_no_fix": "The published fund figures are the printed figures; the rule's expectation does not fit this filer.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84",
+     "quote": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84 (printed accrual-base NAV per unit)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )",
+     "quote": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 ) (undrawn commitment 199,120 thousand on 18,034,649 units)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit",
+     "quote": "accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit (definition)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-E04-14",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "E04",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "reason_key": "nav-per-unit-printed-on-accrual-base-with-undrawn-commitments",
+   "statement": "The filer prints NAV per unit on an accrual base that includes the unitholders' undrawn commitments: 32.63 x 18,034,649 units = 588.5M = Members' capital 389.4M + undrawn commitment 199.1M. Net assets (389,426 thousand) and the per-unit figure are both as printed; the identity check assumes NAV per unit = net assets / units. Only 2023-03-31 publishes a unit count, so only that quarter is tested.",
+   "basis": "read",
+   "why_no_fix": "The published fund figures are the printed figures; the rule's expectation does not fit this filer.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84",
+     "quote": "Net Asset Value Per Unit (accrual base) (Note 10) $ 32.63 $ 32.84 (printed accrual-base NAV per unit)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )",
+     "quote": "Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 ) (undrawn commitment 199,120 thousand on 18,034,649 units)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020966",
+     "verbatim": "accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit",
+     "quote": "accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit (definition)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-F28-15",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2026-08-12"
+   ],
+   "reason_key": "f28-cover-page-unit-count-date-not-a-quarter",
+   "statement": "2026-08-12 is the cover-page date of the 10-Q for 2026-06-30 (units outstanding at that date); it is not a reporting quarter, so there are no holdings for it.",
+   "basis": "read",
+   "why_no_fix": "The published fund figures are the printed figures; the rule's expectation does not fit this filer.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346645",
+     "verbatim": "The number of the Registrants common units outstanding at August 12, 2026 was 18,034,649",
+     "quote": "The number of the Registrants common units outstanding at August 12, 2026 was 18,034,649 (cover page)"
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-0001603480-B01-16",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001603480"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "reason_key": "b01-contexts-without-value-carry-no-position-value",
+   "statement": "The five leaf contexts without a fair value (C_e5041c5c-74e2-496b-a7ce-9777e8f0afec SSI, C_5ecf2e49-7630-48cc-92ce-520609b27b59 Ruby Tuesday, C_6ec82ebc-44af-40e6-8d96-f3ef5a382284 Cedar, C_cdf86927-fa36-4bc6-8e81-515d2feb1d60 H-D term loans; C_c5659029-cc0a-4af9-8d37-5f4d339188dc Pace revolver) carry only an acquisition date (us-gaap:InvestmentAcquisitionDate) and a member with stale rate text (13.44 %, 17.43 % with 6.00 % PIK, 13.39 %, 13.93 %, 13.67 %). Each loan is published once from its valued context, whose printed line matches the published rate. No position value is missing: the quarter ties to the printed total.",
+   "basis": "read",
+   "why_no_fix": "The published fund figures are the printed figures; the rule's expectation does not fit this filer.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "09/15/20 Term Loan - 13.42 % (SOFR + 8.00 %, 1.25 % Floor) 2.3 % 8,993,842 12/29/26 8,970,536 8,993,842",
+     "quote": "09/15/20 Term Loan - 13.42 % (SOFR + 8.00 %, 1.25 % Floor) 2.3 % 8,993,842 12/29/26 8,970,536 8,993,842 (SSI printed line, published row 13.42)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-061710",
+     "verbatim": "Total Debt & Equity Investments (9) 118.8 % 516,645,118 474,204,801",
+     "quote": "Total Debt & Equity Investments (9) 118.8 % 516,645,118 474,204,801 (printed total = published)"
+    }
+   ]
+  }
+ ]
+}

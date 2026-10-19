@@ -46,6 +46,7 @@
         "class a units",
         "class p-1 units",
         "class p-2 units",
+        "equity units",
         "class a preferred stock",
         "class b preferred stock",
         "class d preferred units",
@@ -84,7 +85,7 @@
         "family": "debt"
       },
       {
-        "regex": "(?i)^\\s*(?!Debt\\s+Investments|Equity\\s+Investments|Cash\\s+Equivalents|Short-term\\s+Investments|Total\\s+Investments)(?=.*\\b(?:Common\\s+Stock|Common\\s+Shares|Common\\s+Membership\\s+Interests|Preferred\\s+Membership\\s+Interests|Preferred\\s+Stock|Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Preferred\\s+)?Units?|P-[12]\\s+Units|Warrant)\\b)(?=.*\\b(?:LLC|Inc\\.?|Corp\\.?|Parent|Holdings|Ventures)\\b)",
+        "regex": "(?i)^\\s*(?!Debt\\s+Investments|Equity\\s+Investments|Cash\\s+Equivalents|Short-term\\s+Investments|Total\\s+Investments)(?=.*\\b(?:Common\\s+Stock|Common\\s+Shares|Common\\s+Membership\\s+Interests|Preferred\\s+Membership\\s+Interests|Preferred\\s+Stock|Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Preferred\\s+)?Units?|P-[12]\\s+Units|Equity\\s+Units|Warrant)\\b)(?=.*\\b(?:LLC|Inc\\.?|Corp\\.?|Parent|Holdings|Ventures)\\b)",
         "family": "equity"
       },
       {
@@ -96,7 +97,7 @@
         "family": "mixed"
       }
     ],
-    "category_marker_re": "(?i)^(?!.*\\b(?:Date|Term\\s+Loan|Subordinated\\s+Loan|Incremental\\s+Term\\s+Loan|HoldCo\\s+Term\\s+Loan|Revolver|Common\\s+Stock|Common\\s+Shares|Common\\s+Units|Preferred\\s+(?:Stock|Equity|Units)|Preferred\\s+membership\\s+Interests|Common\\s+membership\\s+Interests|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|Warrants?)\\b)\\s*(?:[-,]\\s*)?[A-Za-z&/,.'()\\-\\s]+(?:\\s+Net\\s+Assets\\s+[-\\d.]+%?|\\s*)$",
+    "category_marker_re": "(?i)^(?!.*\\b(?:Date|Term\\s+Loan|Subordinated\\s+Loan|Incremental\\s+Term\\s+Loan|HoldCo\\s+Term\\s+Loan|Revolver|Common\\s+Stock|Common\\s+Shares|Common\\s+Units|Preferred\\s+(?:Stock|Equity|Units)|Preferred\\s+membership\\s+Interests|Common\\s+membership\\s+Interests|Class\\s+[A-Z][A-Z0-9-]*|Equity\\s+Units|Membership\\s+Interests|Warrants?)\\b)\\s*(?:[-,]\\s*)?[A-Za-z&/,.'()\\-\\s]+(?:\\s+Net\\s+Assets\\s+[-\\d.]+%?|\\s*)$",
     "category_marker_before_total": true,
     "canonical_strip_re": "(?i)\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*?(?=\\s+Net\\s+Assets\\b|\\s+Maturity\\b)|\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*$|\\s+Net\\s+Assets\\s+[-\\d.]+%?"
   },
@@ -120,9 +121,9 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Debt|Equity)\\s+Investments-\\s+United\\s+States\\s+(?:(?:Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Industrial\\s+Conglomerates|Investment\\s+Funds\\s+&\\s+Vehicles|Metals\\s+&\\s+Mining|Pharmaceuticals|Technolog(?:y|ies)\\s+Hardware,\\s+Storage\\s+and\\s+Peripherals),?\\s+)+)?(.+?)\\s+(?:Date\\s+|(?:\\d+(?:st|nd|rd|th)\\s+Amendment\\s+|\\d{4}\\s+|First\\s+Out\\s+|Delayed\\s+Draw\\s+(?:Priming|Printing)\\s+|HoldCo\\s+|Incremental\\s+)?Term\\s+Loan|Subordinated\\s+Loan|Revolver(?:\\s+Opco)?|Class\\s+[A-Z][A-Z0-9-]*|P-[12]\\s+Units|Common\\s+(?:Stock|Shares|Units|membership\\s+Interests)|Preferred\\s+(?:Stock|Equity|Units|membership\\s+Interests)|Membership\\s+Interests|Warrants?)\\b",
-    "hierarchy_instrument_re": "(?i)(?:\\bDate\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s+|^\\s*(?:(?:Debt|Equity)\\s+Investments-\\s+United\\s+States\\s+(?:(?:Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Industrial\\s+Conglomerates|Investment\\s+Funds\\s+&\\s+Vehicles|Metals\\s+&\\s+Mining|Pharmaceuticals|Technolog(?:y|ies)\\s+Hardware,\\s+Storage\\s+and\\s+Peripherals),?\\s+)+)?.+?\\s+)((?:(?:\\d+(?:st|nd|rd|th)\\s+Amendment\\s+|\\d{4}\\s+|First\\s+Out\\s+|Delayed\\s+Draw\\s+(?:Priming|Printing)\\s+|HoldCo\\s+|Incremental\\s+)?Term\\s+Loan|Subordinated\\s+Loan|Revolver(?:\\s+Opco)?)(?:\\s+[A-Z])?|(?:Class\\s+[A-Z][A-Z0-9-]*\\s+Common|Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Common\\s+)?(?:Preferred\\s+)?Units?|P-[12]\\s+Units|Common\\s+(?:Stock|Shares|Units|membership\\s+Interests)|Preferred\\s+(?:Stock|Equity|Units|membership\\s+Interests)|Membership\\s+Interests|Warrants?(?:,\\s*expires\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)(?:.*?))\\s*(?:[-,]?\\s*\\d|\\s+Net\\s+Assets|\\s+Maturity\\b|$)",
-    "hierarchy_condition_extra": "(regexp_matches(_clean, '(?i)^\\s*(?:Debt|Equity)\\s+Investments-\\s+United\\s+States\\s+.*\\b(?:Date|Term\\s+Loan|Subordinated\\s+Loan|Revolver|Common\\s+Stock|Common\\s+Shares|Common\\s+Units|Preferred\\s+(?:Stock|Equity|Units)|Preferred\\s+membership\\s+Interests|Common\\s+membership\\s+Interests|Class\\s+[A-Z][A-Z0-9-]*|P-[12]\\s+Units|Membership\\s+Interests|Warrants?)\\b') OR (regexp_matches(_clean, '(?i)^\\s*.*\\b(?:Term\\s+Loan|Subordinated\\s+Loan|Revolver|Common\\s+Stock|Common\\s+Shares|Common\\s+Units|Preferred\\s+(?:Stock|Equity|Units)|Preferred\\s+membership\\s+Interests|Common\\s+membership\\s+Interests|Class\\s+[A-Z][A-Z0-9-]*|P-[12]\\s+Units|Membership\\s+Interests|Warrants?)\\b') AND NOT regexp_matches(_clean, '(?i)^\\s*(?:Short-term\\s+Investments|Cash\\s+Equivalents|Total\\s+Investments)\\b')))",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Debt|Equity)\\s+Investments-\\s+United\\s+States\\s+(?:(?:Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Industrial\\s+Conglomerates|Investment\\s+Funds\\s+&\\s+Vehicles|Metals\\s+&\\s+Mining|Pharmaceuticals|Technolog(?:y|ies)\\s+Hardware,\\s+Storage\\s+and\\s+Peripherals),?\\s+)+)?(.+?)\\s+(?:Date\\s+|(?:\\d+(?:st|nd|rd|th)\\s+Amendment\\s+|\\d{4}\\s+|First\\s+Out\\s+|Delayed\\s+Draw\\s+(?:Priming|Printing)\\s+|HoldCo\\s+|Incremental\\s+)?Term\\s+Loan|Subordinated\\s+Loan|Revolver(?:\\s+Opco)?|Class\\s+[A-Z][A-Z0-9-]*|P-[12]\\s+Units|Equity\\s+Units|Common\\s+(?:Stock|Shares|Units|membership\\s+Interests)|Preferred\\s+(?:Stock|Equity|Units|membership\\s+Interests)|Membership\\s+Interests|Warrants?)\\b",
+    "hierarchy_instrument_re": "(?i)(?:\\bDate\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s+|^\\s*(?:(?:Debt|Equity)\\s+Investments-\\s+United\\s+States\\s+(?:(?:Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+Financial\\s+Services|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Industrial\\s+Conglomerates|Investment\\s+Funds\\s+&\\s+Vehicles|Metals\\s+&\\s+Mining|Pharmaceuticals|Technolog(?:y|ies)\\s+Hardware,\\s+Storage\\s+and\\s+Peripherals),?\\s+)+)?.+?\\s+)((?:(?:\\d+(?:st|nd|rd|th)\\s+Amendment\\s+|\\d{4}\\s+|First\\s+Out\\s+|Delayed\\s+Draw\\s+(?:Priming|Printing)\\s+|HoldCo\\s+|Incremental\\s+)?Term\\s+Loan|Subordinated\\s+Loan|Revolver(?:\\s+Opco)?)(?:\\s+[A-Z])?|(?:Class\\s+[A-Z][A-Z0-9-]*\\s+Preferred\\s+Stock|Class\\s+[A-Z][A-Z0-9-]*\\s+Common|Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Common\\s+)?(?:Preferred\\s+)?Units?|P-[12]\\s+Units|Equity\\s+Units|Common\\s+(?:Stock|Shares|Units|membership\\s+Interests)|Preferred\\s+(?:Stock|Equity|Units|membership\\s+Interests)|Membership\\s+Interests|Warrants?(?:,\\s*expires\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)(?:.*?))\\s*(?:[-,\\x{2013}\\x{2014}]?\\s*\\d|\\s+Net\\s+Assets|\\s+Maturity\\b|$)",
+    "hierarchy_condition_extra": "(regexp_matches(_clean, '(?i)^\\s*(?:Debt|Equity)\\s+Investments-\\s+United\\s+States\\s+.*\\b(?:Date|Term\\s+Loan|Subordinated\\s+Loan|Revolver|Common\\s+Stock|Common\\s+Shares|Common\\s+Units|Preferred\\s+(?:Stock|Equity|Units)|Preferred\\s+membership\\s+Interests|Common\\s+membership\\s+Interests|Class\\s+[A-Z][A-Z0-9-]*|P-[12]\\s+Units|Equity\\s+Units|Membership\\s+Interests|Warrants?)\\b') OR (regexp_matches(_clean, '(?i)^\\s*.*\\b(?:Term\\s+Loan|Subordinated\\s+Loan|Revolver|Common\\s+Stock|Common\\s+Shares|Common\\s+Units|Preferred\\s+(?:Stock|Equity|Units)|Preferred\\s+membership\\s+Interests|Common\\s+membership\\s+Interests|Class\\s+[A-Z][A-Z0-9-]*|P-[12]\\s+Units|Equity\\s+Units|Membership\\s+Interests|Warrants?)\\b') AND NOT regexp_matches(_clean, '(?i)^\\s*(?:Short-term\\s+Investments|Cash\\s+Equivalents|Total\\s+Investments)\\b')))",
     "extra_industry_labels": [
       "Distributors",
       "Diversified Consumer Services",
@@ -228,11 +229,33 @@
       "first_seen_quarter": "2023-03-31",
       "detection_pattern": "TCW Direct Lending Strategic Ventures Preferred membership Interests",
       "disposition": "expected"
+    },
+    {
+      "id": "TCW_DIRECT_AFFILIATE_NOTE_MEMBERS_2025Q2",
+      "description": "From the 10-Q for 2025-06-30 the filer tags a second set of investment-axis members for the affiliate roll-forward note ('Pace Industries, Inc. Term Loan - 9.75%', fair value only: no cost, no percent of net assets) beside the schedule members ('Debt Investments- United States Metals & Mining Pace Industries, Inc. Date 06/01/20 Term Loan ...', principal, cost, fair value, percent). schedule_row_tags cost_or_percent_unrounded drops the note rows in every quarter (TCW Direct Lending VII uses the same setting); it replaced six promoted rules and one B2 dedup pulled 2026-10-19.",
+      "first_seen_quarter": "2025-06-30",
+      "detection_pattern": "member without 'Debt Investments-' / 'Equity Investments-' prefix carrying only a fair value",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_DIRECT_EQUITY_UNITS_2023",
+      "description": "10-Qs 2023-03-31 to 2023-09-30 print two RT Holdings lines as 'RT Holdings Parent, LLC (2)(4)(8) Equity Units 0.1 % 105,624 133,086 328,005' (renamed Class P-1 / P-2 Units from 2023-12-31); 'Equity Units' is an instrument word, so the rows are positions, not issuer subtotals.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "quarter total short of the printed 'Total Debt & Equity Investments' by the two Equity Units lines",
+      "disposition": "expected"
     }
   ],
   "invariants": {
     "unclassified_rate": {
       "max_pct": 0.10
     }
+  },
+  "source_encodings": {
+    "schedule_row_tags": [
+      "cost_or_percent_unrounded"
+    ],
+    "filed_rate_reading": [
+      "all_in"
+    ]
   }
 }

@@ -313,5 +313,10 @@
   "label": "scie",
   "accepted_on": "2026-10-19",
   "basis": "D-219, gate PASS with investigation COMPLETE: 40 findings, 31 outstanding, all proposed; 11/11 quarters tie; sample 0/20; SCI-R1 deferred to the second rule batch; five builds"
+ },
+ "0001603480": {
+  "label": "tdle",
+  "accepted_on": "2026-10-20",
+  "basis": "D-220, gate INCOMPLETE with investigation COMPLETE: 87 findings, 80 outstanding, 78 proposed, 2 parked (2022 html_agg / html_carry); 14/14 quarters tie (4 before); sample 2/20 on the warrant (maturity fixed, class shared); five builds"
  }
 }
