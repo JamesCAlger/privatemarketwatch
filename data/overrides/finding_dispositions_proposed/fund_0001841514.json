@@ -1,0 +1,220 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "cwaf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-CWA-PIK-D218",
+   "class": "rule_problem",
+   "engine": "identity",
+   "rule_name": "pik_printed",
+   "ciks": [
+    "0001841514"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "reason_key": "pik-printed-rule-reads-margin-of-floating-pik-leg",
+   "statement": "The flagged rows are VardimanBlack's term loan and delayed draw, printed 'SOFR + 2.00 % PIK + 5.00 % [Fixed] R %': a PIK leg floating at SOFR + 2.00 and a fixed 5.00 cash leg. Under orchestrator decision D-218 the build publishes basis_spread 2.00, pik_rate = R - 5.00 (the whole PIK coupon, as for whole-coupon PIK loans) and the printed all-in rate, so the cash leg is 5.00. The rule compares pik_rate with the 2.00 margin printed before the word PIK. No fix applies: publishing 2.00 as pik_rate overstates the cash leg by about 4.65 points.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125642",
+     "verbatim": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % 12.30 % 3/18/2027 19,825 17,349 19,825 3.6 %",
+     "quote": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % 12.30 % 3/18/2027 19,825 17,349 19,825 3.6 % -- PIK leg SOFR + 2.00, fixed cash 5.00, all-in R"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038112",
+     "verbatim": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % Fixed 11.65 % 3/18/2027 20,173 17,799 20,173 3.7 %",
+     "quote": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % Fixed 11.65 % 3/18/2027 20,173 17,799 20,173 3.7 % -- PIK leg SOFR + 2.00, fixed cash 5.00, all-in R"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001841514.json",
+   "decided_by": "PROPOSED by fund-agent-commonwealth-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-CWA-PIK-WHOLE-COUPON",
+   "class": "rule_problem",
+   "engine": "identity",
+   "rule_name": "pik_printed",
+   "ciks": [
+    "0001841514"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "reason_key": "pik-printed-rule-reads-margin-of-whole-coupon-pik-loan",
+   "statement": "The six flagged rows are the Kent Water Sports first-out and last-out delayed draw loans, printed 'SOFR + 9.00 % PIK 14.44 %' and 'SOFR + 10.00 % PIK 15.44 %': the whole coupon is paid in kind. The build publishes pik_rate = the printed coupon (whole-coupon convention, D-092 and the BCRED 'SOFR + 11.00 % 16.57 % PIK' correction) with the margin as basis_spread; the rule compares pik_rate with the margin printed before the word PIK. No fix applies: publishing the margin as pik_rate would leave a cash leg on a loan that pays none and break the series with 2024-09-30 onward, printed with a floor and published the same way.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-029358",
+     "verbatim": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11)(12) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.44 % 12/31/2025 13,186 12,748 8,176 1.6 %",
+     "quote": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11)(12) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.44 % 12/31/2025 13,186 12,748 8,176 1.6 % -- last-out 2023-12-31: margin 9.00, whole coupon 14.44 paid in kind"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-057722",
+     "verbatim": "Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out (4)(8)(10)(11) Consumer Durables & Apparel SOFR + 10.00 % PIK 15.41 % 12/31/2025 5,217 4,658 5,217 1.0 %",
+     "quote": "Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out (4)(8)(10)(11) Consumer Durables & Apparel SOFR + 10.00 % PIK 15.41 % 12/31/2025 5,217 4,658 5,217 1.0 % -- first-out 2024-03-31: margin 10.00, coupon 15.41"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096491",
+     "verbatim": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.59 % 10/18/2027 14,006 12,840 5,224 0.9 %",
+     "quote": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.59 % 10/18/2027 14,006 12,840 5,224 0.9 % -- last-out 2024-06-30: margin 9.00, coupon 14.59"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001841514.json",
+   "decided_by": "PROPOSED by fund-agent-commonwealth-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-CWA-B01",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001841514"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "reason_key": "b01-restricted-holdings-acquisition-table-contexts",
+   "statement": "Every context B01 counts without a fair value in these quarters is either the prior year-end comparative schedule (period not the report date) or a bare-member context of the note table 'The initial acquisition dates of the restricted securities are as follows', which carries the acquisition date only; plus, at 2025-09-30, one context holding only the percent of the ACT Acquisition delayed draw. After this run every current-period schedule row printed with a dash for fair value is published at 0 from its own context, so no position is missing.",
+   "basis": "read",
+   "addresses_verdict": {
+    "2025-12-31": "The earlier verdict (real_error, extraction_gap: leaf rows printed with a dash fair value not normalised to zero) was right and is fixed: the 21 dash-printed contexts of 2025-12-31 are published at fair value 0 (untagged_values). The 39 contexts left are 27 comparative and 12 acquisition-date-table contexts, not positions."
+   },
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108128",
+     "verbatim": "The initial acquisition dates of the restricted securities are as follows: Portfolio Company - Investment (15) Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022",
+     "quote": "The initial acquisition dates of the restricted securities are as follows: Portfolio Company - Investment (15) Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022 -- note table of acquisition dates; its contexts carry no values"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277996",
+     "verbatim": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 Units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 11, 2025",
+     "quote": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 Units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 11, 2025 -- note table of acquisition dates; its contexts carry no values"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104454",
+     "verbatim": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 9, 2025",
+     "quote": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 9, 2025 -- note table of acquisition dates; its contexts carry no values"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344908",
+     "verbatim": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 9, 2025",
+     "quote": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 9, 2025 -- note table of acquisition dates; its contexts carry no values"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001841514.json",
+   "decided_by": "PROPOSED by fund-agent-commonwealth-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-CWA-C107",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001841514"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
+   "statement": "Every flagged row is an undrawn delayed draw or revolving line printed with a dash par and a bracketed amortized cost (unamortized fee). The published cost equals the printed one (2023-12-31 signs restored and KeyMe 2026-06-30 cost set from the page by row corrections). Same reason as the C107 quarters of this fund the check accepted (2023-03-31, 2023-06-30 and later quarters).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-029358",
+     "verbatim": "Oak Dental - Delayed Draw Term Loan (4)(8) Health Care Equipment & Services SOFR + 6.50 % ( 2.00 % floor) 11.97 % 3/22/2028 - ( 78 ) ( 433 ) ( 0.1 )%",
+     "quote": "Oak Dental - Delayed Draw Term Loan (4)(8) Health Care Equipment & Services SOFR + 6.50 % ( 2.00 % floor) 11.97 % 3/22/2028 - ( 78 ) ( 433 ) ( 0.1 )% -- undrawn line, par a dash, cost bracketed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344908",
+     "verbatim": "OneCare Media, LLC - Revolving Credit Line (4)(11) Media & Entertainment SOFR + 4.50 % ( 1.00 % floor) 8.24 % 12/31/2027 - ( 9 ) ( 458 ) ( 0.1 )%",
+     "quote": "OneCare Media, LLC - Revolving Credit Line (4)(11) Media & Entertainment SOFR + 4.50 % ( 1.00 % floor) 8.24 % 12/31/2027 - ( 9 ) ( 458 ) ( 0.1 )% -- undrawn line, par a dash, cost bracketed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344908",
+     "verbatim": "KeyMe, LLC - Delayed Draw Term Loan (4) Consumer Discretionary Distribution & Retail SOFR + 5.50 % ( 0.75 % floor) 9.16 % 5/4/2032 - ( 12 ) ( 25 ) - %",
+     "quote": "KeyMe, LLC - Delayed Draw Term Loan (4) Consumer Discretionary Distribution & Retail SOFR + 5.50 % ( 0.75 % floor) 9.16 % 5/4/2032 - ( 12 ) ( 25 ) - % -- undrawn line, par a dash, cost bracketed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001841514.json",
+   "decided_by": "PROPOSED by fund-agent-commonwealth-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-CWA-D06",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "D06",
+   "ciks": [
+    "0001841514"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "reason_key": "d06-issuer-spelling-differs-between-filings",
+   "statement": "Issuer continuity 2024-06-30 to 2024-09-30 is 25 of 53 by exact name because the 10-Q 2024-09-30 renamed the portfolio companies to their legal names (footnote 13), e.g. 'Hasa' -> 'Hasa Acquisition, LLC'. The published names are the printed ones; the companies continue.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125642",
+     "verbatim": "(13) The Company updated certain descriptions of its portfolio companies presented in the consolidated financial statements as of September 30, 2024 to align with the legal issuer name, where applicable.",
+     "quote": "(13) The Company updated certain descriptions of its portfolio companies presented in the consolidated financial statements as of September 30, 2024 to align with the legal issuer name, where applicable. -- names changed by the filer, not exits"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001841514.json",
+   "decided_by": "PROPOSED by fund-agent-commonwealth-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-CWA-F30",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F30",
+   "ciks": [
+    "0001841514"
+   ],
+   "quarters": [
+    "2022-03-31"
+   ],
+   "reason_key": "f30-nav-per-share-printed-just-above-1000-issue-price",
+   "statement": "NAV per share 1,001.80 at 2022-03-31 is the printed figure (balance sheet and financial highlights); the fund prices shares near 1,000, so the check's 1,000 upper bound is exceeded by 1.80. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-22-148742",
+     "verbatim": "Total Net Assets $ 142,570 $ 140,094 Total Liabilities and Net Assets $ 265,274 $ 253,539 Net Asset Value Per Common Share $ 1,001.80 $ 996.26",
+     "quote": "Total Net Assets $ 142,570 $ 140,094 Total Liabilities and Net Assets $ 265,274 $ 253,539 Net Asset Value Per Common Share $ 1,001.80 $ 996.26 -- printed NAV per share 1,001.80"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001841514.json",
+   "decided_by": "PROPOSED by fund-agent-commonwealth-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  }
+ ]
+}

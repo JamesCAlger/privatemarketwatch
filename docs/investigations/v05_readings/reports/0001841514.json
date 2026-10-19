@@ -1,0 +1,1557 @@
+{
+ "cik": "0001841514",
+ "label": "cwaf",
+ "before": "sponfb",
+ "investigator_id": "fund-agent-commonwealth-2026-10-19",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 172,
+   "why": "Section headings ('Debt Investments, First Lien Senior Secured,', 'Equity Investments, Preferred Equity,', 'Membership Interest Investments, Common Membership Interest,') and instrument text left in the name, en-dash members not split, 2023 equity rows named 'Preferred'/'Common': staging hierarchy regexes in the wrapper; plus 5 context-keyed corrections (Wilnat 2023-12-31, EPS member on the Engineered Films term loan 2024-09-30, CTM Acquisition 2024-06-30, Cardiology 'Draw Term Loan B' 2025-06-30). Count = rows present in both sponfb and the final build."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 239,
+   "why": "Instrument cut at the first comma after the instrument words (member text ', Industry, Spread Above Index ... Maturity Date ...' no longer kept), blank instruments of en-dash members filled; instrument_description_strip_re removes one ' Consumer Services' tail; corrections for Wilnat (revolver), Engineered Films (Term Loan), CTM (Equity), Senior Support 2025-09-30 (Term Loan), Cardiology (Delayed Draw Term Loan B). Round two (cwaf): Kent 2024-09-30 last-out labelled First-Out, Discovery 2024-06-30 term loan / delayed draw A swapped, Wilnat 2023-09-30 and 2023-12-31 'Term Loan B', National Debt Relief 2023 'Delayed Draw Loan' x3."
+  },
+  {
+   "column": "cost",
+   "rows": 239,
+   "why": "2023-03-31 and 2023-06-30: cost tagged only with the filer's concept ck0001841514:InvestmentCompanyAmortizedUnamortizedCost, declared from the page (untagged_values, 201 contexts); 2023-09-30 and 2023-12-31: 38 undrawn-line costs published positive, set to the printed negative cost; KeyMe 2026-06-30 cost set from the page. Cost totals now equal the printed totals in 14 of 14 quarters."
+  },
+  {
+   "column": "cost_reported",
+   "rows": 239,
+   "why": "Follows cost (same rows)."
+  },
+  {
+   "column": "src_facts",
+   "rows": 201,
+   "why": "The 2023 declared costs are recorded in src_facts (untagged values)."
+  },
+  {
+   "column": "shares_held",
+   "rows": 184,
+   "why": "Printed unit counts of every equity row (the filer tags them with the principal concept in USD at scale 3, so 857,787 units read 857,787,000); context-keyed corrections from the printed Principal / Shares column, plus CTM 2024-06-30 and SDB 2024-12-31."
+  },
+  {
+   "column": "principal_amount",
+   "rows": 1,
+   "why": "CTM Acquisition 2024-06-30 equity row had its unit count x1000 as par; withdrawn (also SDB 2024-12-31 and KeyMe x2 2026-06-30 among rows new since sponfb)."
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 1,
+   "why": "Follows principal_amount."
+  },
+  {
+   "column": "asset_category",
+   "rows": 13,
+   "why": "Rows printed under 'Preferred Equity' / 'Preferred Membership Interest' (Atlas US Holdings Class B-2 units, TVG OCM III Class B units 2023, Sea-K Class A units) published as common: set to EQUITY_PREFERRED; CTM 2024-06-30 LOAN -> EQUITY_COMMON."
+  },
+  {
+   "column": "index_classification",
+   "rows": 13,
+   "why": "Same rows as asset_category (PREFERRED_EQUITY; CTM COMMON_EQUITY)."
+  },
+  {
+   "column": "asset_class",
+   "rows": 1,
+   "why": "CTM Acquisition 2024-06-30 PRIVATE_CREDIT -> PRIVATE_EQUITY with its class correction."
+  },
+  {
+   "column": "interest_rate",
+   "rows": 5,
+   "why": "Rates read from stale member text replaced by the printed rate: VardimanBlack term loan 2023-03-31 1.00 -> 11.90, Vecta revolver 2023-06-30 11.67 -> 11.49, Senior Support term loan 2025-09-30 (none -> 9.25). Round two: Hornblower 2026-03-31 term loan and revolver, kind cash, so interest_rate (all-in storage) = printed cash 9.18 + 1.50 PIK = 10.68."
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 2,
+   "why": "Follows interest_rate on the two rows where a reported rate existed."
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 3,
+   "why": "Senior Support term loan 2025-09-30: unresolved -> all_in once the printed rate is set. Round two: Hornblower 2026-03-31 x2 all_in -> cash."
+  },
+  {
+   "column": "basis_spread",
+   "rows": 88,
+   "why": "Loans printed 'SOFR + X % (floor) + Y % PIK' publish the total margin X + Y (owner convention D-031); 88 of 96 such printed rows have a printed all-in rate equal to base + X + Y (pik_base.py), so X is the cash leg and the total is counted once. VardimanBlack 2024-09-30 to 2025-09-30 'SOFR + 2.00 % PIK + 5.00 % Fixed': total 7.00. Round two: Kent 2023-12-31 first-out 9.0 -> 10.00 and last-out 10.0 -> 9.00 (members swap the terms); VardimanBlack 2024-09-30 to 2025-09-30 set to 2.00 per D-218 (net count vs sponfb falls because those rows held 2.0 there)."
+  },
+  {
+   "column": "pik_rate",
+   "rows": 44,
+   "why": "Printed PIK figures published: '+ Y % PIK' margins, whole-coupon PIK loans (Kent Water Sports, pik_rate = printed coupon), equity PIK dividends (Atlas Class X 15 %, VardimanBlack preferred 6 %, Oak Dental Class D 2.25 %, Sea-K 15 %); withdrawn where the printed line has no PIK (CheckedUp and Juvare 2026-06-30 from stale member text, VardimanBlack 2025-12-31 to 2026-06-30 margin tagged as PIK, Engineered Films 2024-12-31, Senior Support 2025-09-30). Round two: VardimanBlack 2024-09-30 to 2025-09-30 pik_rate = printed rate less the fixed 5.00 (6.65 at 2024-12-31 is filer-stated in its member 'SOFR + 5.00% + 6.65% PIK'; 7.30, 6.42, 6.42, 6.38 at 2024-09-30, 2025-03-31, 2025-06-30, 2025-09-30 are derived as the printed rate less the 5.00 fixed cash leg) per D-218."
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 36,
+   "why": "Derived from interest_rate - pik_rate: whole-coupon PIK loans now have a cash leg of 0 (Kent), loans with '+ Y % PIK' reflect the published PIK margin. Round two: VardimanBlack 2024-09-30 to 2025-09-30 cash leg 5.00 (10 rows); Hornblower 2026-03-31 9.18."
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 209,
+   "why": "Industry read from the member text where none was extracted (dispatch.industry_from_identifier_re, label list of this filer; 2026 quarters had 17 pct coverage), the section heading 'Common/Preferred Membership Interest' published as industry replaced (37 rows), 15 rows whose member industry differs from the printed one corrected, Engineered Films 2024-09-30 (EPS member). Every published industry now appears on its printed line (ind_check.py)."
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 28,
+   "why": "Follows extracted_industry / issuer name: 0 rows lost a GICS label, 15 gained, 13 changed (gicsloss.sql)."
+  },
+  {
+   "column": "gics_sector",
+   "rows": 19,
+   "why": "Follows gics_sub_industry."
+  },
+  {
+   "column": "canonical_name",
+   "rows": 17,
+   "why": "Canonical names resolved from the cleaned issuer names (e.g. TVG OCM III rows had 'Atlas US Holdings, LP')."
+  },
+  {
+   "column": "position_key",
+   "rows": 1,
+   "why": "Narcote 2024-06-30 key built from the cleaned name."
+  },
+  {
+   "column": "position_id",
+   "rows": 210,
+   "why": "Position chains re-formed on the cleaned issuer names and the new rows; no fair value moved. Round two: the relabelled Kent, Discovery and Wilnat rows re-chain (9 rows)."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 366,
+   "why": "Lists the fields set by the context-keyed corrections."
+  },
+  {
+   "column": "src_transforms",
+   "rows": 3,
+   "why": "Senior Support 2025-09-30 rate transform after the rate correction. Round two: Hornblower 2026-03-31 x2."
+  }
+ ],
+ "rows_added": 281,
+ "rows_removed": 8,
+ "fixes": [
+  {
+   "what": "Staging hierarchy regexes rewritten for this filer's member forms (section heading optional and in every form incl. 'Membership Interest Investments', 'Preferred Equity', singular 'Debt Investment', missing space after comma, the 'quity Investments' typo of the 10-K 2024-12-31; en dash or plain space as separator; equity instrument words). Dry run on every published identifier: 1,843 of 1,844 taken, none lost from the old condition.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344908",
+     "text": "Narcote, LLC - Term Loan A (1) Materials SOFR + 7.00 % ( 1.00 % floor) 10.76 % 3/30/2027 2,608 2,599 2,608 0.5 %"
+    },
+    {
+     "accession": "0001193125-26-344908",
+     "text": "Rushmore Lender Co-Invest Blocker, LLC - Common Stock Health Care Equipment & Services NA NA NA 676,823 719 183 - %"
+    }
+   ]
+  },
+  {
+   "what": "Affiliated-investments roll-forward note rows (members 'Affiliate company investment,', 'Affiliated investments,', 'Non-controlled, Affiliated investments,') excluded by a new rule on the note's own headings; the inert value-matching rule and the one-issuer rule pulled to agent_investigate_rules/_pulled_1841514_fundloop_2026-10-19/. Totals 2024-03-31 to 2024-12-31 now tie (were 11.5M, 10.9M, 9.9M, 9.6M over).",
+   "kind": "exclusion",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-096491",
+     "text": "Affiliated investments: Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out First Lien Senior Secured $ - $ 8,176 $ 92 $ - $ - $ ( 3,044 ) $ 5,224"
+    }
+   ]
+  },
+  {
+   "what": "157 current-period schedule contexts printed with a dash for fair value (undrawn lines with a negative cost, equity written to zero, the Kent last-out loan, cost 12.7M) published at fair value 0 from their own contexts (untagged_values fair_value 0; cost 0 where the cost cell is a dash), 2024-06-30 to 2026-06-30.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344908",
+     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Term Loan Last-Out (11)(12) Consumer Durables & Apparel SOFR + 13.50 % ( 1.00 % floor) PIK 17.23 % 10/18/2027 20,747 12,713 - - %"
+    },
+    {
+     "accession": "0001193125-26-344908",
+     "text": "Atlas US Holdings, LP - Class B-2 Units Financial Services NA NA NA 857,787 873 - - %"
+    }
+   ]
+  },
+  {
+   "what": "2023-03-31 and 2023-06-30 cost declared from the page for 201 contexts (the filer tags cost only with ck0001841514:InvestmentCompanyAmortizedUnamortizedCost; each declared value equals the custom fact and the printed cost).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-021246",
+     "text": "190 Octane Financing - Delayed Draw Loan (8) Consumer Services SOFR + 6.50 % ( 1.00 % floor) 11.51 % 5/10/2027 4,912 $ 4,839 $ 4,763 1.0 %"
+    }
+   ]
+  },
+  {
+   "what": "Industry from the member text (dispatch.industry_from_identifier_re with this filer's printed labels) where none was extracted.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344908",
+     "text": "CTM Group, Inc. - Term Loan Media & Entertainment SOFR + 6.75 % ( 1.00 % floor) + 0.75 % PIK 11.24 % 11/30/2026 19,433 19,363 18,112 3.3 %"
+    }
+   ]
+  },
+  {
+   "what": "594 context-keyed row corrections from the printed lines (corr_gen.py 554 + corr_manual.py 40): total margin of cash-plus-PIK loans (96; 100 basis_spread corrections in all with 2 Kent swaps and 2 VardimanBlack D-218 rows), PIK rates (61: 21 whole coupons, 20 equity dividends, 10 withdrawals where nothing is printed, 10 VardimanBlack D-218), unit counts (256 incl. dash rows), preferred class (21 x2), negative costs (40), industries (52), 3 rates, names / instruments / classes of 7 rows.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344908",
+     "text": "190 Octane Financing, LLC - Term Loan (11) Consumer Services SOFR + 5.50 % ( 1.00 % floor) + 2.25 % PIK 11.44 % 5/10/2027 $ 8,627 $ 8,242 $ 7,213 1.3 %"
+    },
+    {
+     "accession": "0001193125-26-344908",
+     "text": "Atlas US Holdings, LP - Class X Preferred Units Financial Services 15.00 % PIK 15.00 % NA 285,441 394 - - %"
+    },
+    {
+     "accession": "0000950170-24-125642",
+     "text": "Engineered Films Acquisition Inc. - Term Loan Capital Goods SOFR + 7.00 % ( 1.00 % floor) 11.96 % 4/29/2027 20,075 19,833 19,553 3.6 %"
+    },
+    {
+     "accession": "0001193125-26-104454",
+     "text": "VardimanBlack Holdings, LLC - Term Loan (12) Health Care Equipment & Services SOFR + 7.00 % ( 0.50 % floor) 10.97 % 3/18/2027 21,561 19,284 15,847 2.8 %"
+    },
+    {
+     "accession": "0000950170-23-021246",
+     "text": "VardimanBlack Holdings LLC - Term Loan (8) Health Care Equipment & Services SOFR + 7.00 % ( 0.50 % floor) 11.90 % 3/18/2027 8,166 8,098 8,036 1.7 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 77.0,
+   "what": "The untouched build published 198 rows (559.0M summed over 14 quarters; 19 rows, 77.0M at 2026-06-30; obs_fv_cwaa.sql) whose issuer kept the section heading ('Debt Investments, First Lien Senior Secured,Spartan CP, LLC', 'Membership Interest Investments, Common Membership Interest, Senior Support Holdings, LP') or the instrument and terms ('OneCare Media, LLC Revolving Credit Line, Media, Spread Above Index ...'), and 2023 equity rows named 'Preferred' / 'Common'. Gate name shape 113 of 1,696 rows. Fixed by the wrapper's staging regexes.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a published issuer name that begins with a heading the same filing prints as a section total ('Total First Lien Senior Secured', 'Total Preferred Equity') or that contains 'Spread Above Index' / 'Maturity Date'.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "Rushmore Lender Co-Invest Blocker, LLC - Common Stock Health Care Equipment & Services NA NA NA 676,823 719 183 - %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "C206 fired on the 2023 rows in the untouched build (3 findings) and the gate's name-shape check counted 113 rows; the 2024-2026 heading forms were caught only by the gate shape check, not a ledger rule.",
+    "reference": "row_validation C206; fund_gate names check"
+   }
+  },
+  {
+   "observation_key": "instrument-text-after-en-dash-dropped-by-staging",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 283.1,
+   "what": "Members written with an en dash ('Narcote, LLC \u2013 Term Loan A') failed the filer's hierarchy regex (hyphen only): instrument blank and the heading kept in the issuer on 38 rows (283.1M summed over the quarters, obs_fv.sql). Fixed with the en dash in the wrapper regexes.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a loan row with a blank instrument_description whose identifier contains an en dash.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "Narcote, LLC - Term Loan A (1) Materials SOFR + 7.00 % ( 1.00 % floor) 10.76 % 3/30/2027 2,608 2,599 2,608 0.5 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reads instrument emptiness against the identifier.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "field": "fair_value",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "what": "157 schedule contexts printed with a dash fair value and tagged with a cost or units were dropped (excluded_no_fair_value), with their cost (26.0M over the quarters, 12.7M Kent last-out at 2026-03-31 and 2026-06-30). Fixed by untagged_values fair value 0.",
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "B01 (leaves without fair value) does fire; add a cost conservation check: published cost against the filed or printed cost total.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "Kent Water Sports Holdings, LLC - Delayed Draw Term Loan Last-Out (11)(12) Consumer Durables & Apparel SOFR + 13.50 % ( 1.00 % floor) PIK 17.23 % 10/18/2027 20,747 12,713 - - %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 fired on 6 quarters in the untouched build and its earlier verdict named this mechanism.",
+    "reference": "oracle B01"
+   }
+  },
+  {
+   "observation_key": "affiliate-rollforward-note-rows-published",
+   "field": "fair_value",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 41.8,
+   "what": "Kent Water Sports rows of the affiliated-investments roll-forward note published as positions beside the schedule rows (2 a quarter, 11.5M / 10.9M / 9.9M / 9.6M); the promoted rule meant to remove them required src_transforms = 'cost:cost_proxy_fv' and had gone inert. Replaced by a rule on the note headings.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Promoted-rule health: report a value-matching or transform-matching exclusion rule that matched no row in a build where its residual reappears.",
+   "quote": {
+    "accession": "0000950170-24-057722",
+    "text": "Affiliate company investment: Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out First Lien Senior Secured $ - $ 8,176 $ 80 $ - $ - $ ( 1,999 ) $ 6,257"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "fv_conservation fired on all four quarters in the untouched build.",
+    "reference": "conservation fv_conservation"
+   }
+  },
+  {
+   "observation_key": "cost-tagged-with-filer-custom-concept-not-read",
+   "field": "cost",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "fair_value_m": 1105.9,
+   "what": "Every row of 2023-03-31 and 2023-06-30 published no cost: the 10-Qs tag amortized cost only with ck0001841514:InvestmentCompanyAmortizedUnamortizedCost. Declared from the page (201 values). No rule reported it.",
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a fund-quarter where cost coverage of published rows drops to zero while the filing carries a custom concept whose local name contains 'Cost' on the schedule contexts.",
+   "quote": {
+    "accession": "0000950170-23-021246",
+    "text": "190 Octane Financing - Delayed Draw Loan (8) Consumer Services SOFR + 6.50 % ( 1.00 % floor) 11.51 % 5/10/2027 4,912 $ 4,839 $ 4,763 1.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "field_coverage_drop compares a quarter with the previous one; these are the first two quarters, so nothing fired.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "negative-cost-published-positive",
+   "field": "cost",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": -2.18,
+   "what": "38 undrawn-line costs printed in brackets were published positive (the 10-Q 2023-09-30 and 10-K 2023-12-31 tag them without sign), cost totals 1,100 and 1,036 above the printed totals. Set by row corrections.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Cost conservation against the printed or filed cost total; flag an undrawn line (par a dash) with positive cost and negative fair value.",
+   "quote": {
+    "accession": "0000950170-24-029358",
+    "text": "Oak Dental - Delayed Draw Term Loan (4)(8) Health Care Equipment & Services SOFR + 6.50 % ( 2.00 % floor) 11.97 % 3/22/2028 - ( 78 ) ( 433 ) ( 0.1 )%"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; the reading report had noted the cost residue.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "units-tagged-as-principal-at-scale-3",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 5.6,
+   "what": "Every equity row's unit count (23 rows, 5.6M at 2026-06-30, obs_fv.sql) is tagged as USD principal with decimals -3 (857,787 units read 857,787,000); shares_held was null on all equity rows. Set from the printed column by corrections (256). A wrapper setting units_tagged_as_par exists but would publish the x1000 figure.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "C04 does fire; extend units_tagged_as_par with an ':x0.001' form for filers whose unit counts carry the dollar scale.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "Atlas US Holdings, LP - Class B-2 Units Financial Services NA NA NA 857,787 873 - - %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "C04 fired in 13 quarters of the untouched build (14 with 2026-06-30).",
+    "reference": "oracle C04"
+   }
+  },
+  {
+   "observation_key": "preferred-section-rows-published-as-common",
+   "field": "index_classification",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 4.8,
+   "what": "Rows printed under 'Preferred Equity' / 'Preferred Membership Interest' whose instrument reads 'Class B-2 units' or 'Class A Units' were published common (Atlas B-2, TVG Class B 2023, Sea-K Class A). Corrected (21 rows, 4.8M summed over the quarters, obs_fv.sql).",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "preferred_printed fires once the name is clean; classify by the member's section heading where the filer writes it.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "Atlas US Holdings, LP - Class B-2 Units Financial Services NA NA NA 857,787 873 - - %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "preferred_printed fired on 7 fund-quarters in cwab (it was blind while the names held the heading).",
+    "reference": "identity preferred_printed"
+   }
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "field": "asset_category",
+   "quarters": [
+    "2024-06-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 0.3,
+   "what": "CTM Acquisition LLC Equity (2024-06-30, member without a separator) and SDB Partners Class A (2024-12-31, member typed 'quity Investments') were classed LOAN with the unit count x1000 as par. Corrected.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "X02 covers a published equity row classed LOAN without a rate; for rows not yet published (SDB 2024-12-31 was a dash row dropped until cwab) add: flag a LOAN row with no maturity, no rate and a par above 100 times its cost.",
+   "quote": {
+    "accession": "0000950170-25-038112",
+    "text": "SDB Partners Holdco, LLC - Class A (9) Health Care Equipment & Services NA NA NA 19,103,095 - - 0.0"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "X02 fired on CTM in the untouched build: cwaa row_validation_issues X02 2024-06-30 lists 'CTM Acquisition LLC / Equity', asset_category LOAN, principal 664,865,000, cost 665,000 (finding RVQ_REV_029f8acf76db). SDB 2024-12-31 was not published in cwaa (dash fair value) and X02 flagged it once published (cwac, RVQ_REV_b5dfa720d697). The par-to-cost test in suggested_check is a proposal for the dropped-row case.",
+    "reference": "row_validation X02"
+   }
+  },
+  {
+   "observation_key": "pik-spread-published-as-cash-leg-only",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 58.2,
+   "what": "Loans printed 'SOFR + X % (floor) + Y % PIK' published basis_spread X (the tag), against owner convention D-031 (total margin, PIK apart). 96 rows corrected (496.1M summed over the 14 quarters; 12 rows, 58.2M at 2026-06-30; spread_count.py). The other 4 basis_spread corrections of this fund are the 2 Kent 2023-12-31 swaps and 2 VardimanBlack D-218 rows (100 in all) to X + Y; the printed all-in rate equals base + X + Y on 88 of 96 printed rows, so the total is not double counted.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "spread_printed: compare basis_spread with the printed cash margin plus the printed '+ Y % PIK' margin.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "CTM Group, Inc. - Term Loan Media & Entertainment SOFR + 6.75 % ( 1.00 % floor) + 0.75 % PIK 11.24 % 11/30/2026 19,433 19,363 18,112 3.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired: the printed-margin reader does not read this filer's '+ Y % PIK' form.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 34.3,
+   "what": "Values read from member text that the page contradicts: VardimanBlack term loan 2023-03-31 rate 1.00 (printed 11.90), Vecta revolver 2023-06-30 11.67 (11.49), Senior Support term loan 2025-09-30 labelled delayed draw with '9.55% PIK' (printed term loan 9.25, no PIK), CheckedUp x3 and Juvare term loan 2026-06-30 PIK 2.25 / 4.50 (printed none). Corrected.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a rate or PIK with source identifier_text that differs from the printed row's figure.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "CheckedUp, Inc - Term Loan Media & Entertainment SOFR + 5.00 % ( 1.00 % floor) 8.74 % 10/20/2027 8,845 8,797 8,845 1.6 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed looks only for printed PIK figures not published; it did not fire on PIK published with none printed.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "margin-tagged-as-pik-rate",
+   "field": "pik_rate",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 16.1,
+   "what": "VardimanBlack loans. (a) 2025-12-31 to 2026-06-30 printed 'SOFR + 7.00 % ( 0.50 % floor) 10.97 %' (no PIK) and tagged PaidInKind 0.07: pik withdrawn. (b) 2024-09-30 to 2025-09-30 printed 'SOFR + 2.00 % PIK + 5.00 % [Fixed] R %' (filer member 2024-12-31: 'SOFR + 5.00% + 6.65% PIK Interest Rate 11.65%'): a PIK leg floating at SOFR + 2.00 and a fixed 5.00 cash leg. cwae had published pik 2.0 / cash 9.65 (12.30 / 10.30 at 2024-09-30). Fixed under D-218 (orchestrator, owner delegation D-207): basis_spread 2.00, pik_rate = printed rate less the fixed 5.00 (7.30, 6.42, 6.42, 6.38 at 2024-09-30, 2025-03-31, 2025-06-30, 2025-09-30 are derived: the page prints only the total, less the 5.00 fixed cash leg; 6.65 at 2024-12-31 is filer-stated in its member 'SOFR + 5.00% + 6.65% PIK'), interest_rate = the printed all-in rate (the repo's decided storage convention, all-in with pik_rate apart, as on Kent), so the published cash leg (interest_rate_cash) is 5.00 in every quarter.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a PIK tag equal to the printed margin on a line that prints no PIK; and flag a line whose printed rate minus pik_rate leaves a cash leg above the printed fixed cash coupon.",
+   "quote": {
+    "accession": "0000950170-25-038112",
+    "text": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % Fixed 11.65 % 3/18/2027 20,173 17,799 20,173 3.7 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed fired on VardimanBlack 2024-09-30 only (pik_value_mismatch on the tag 5.00); once pik_rate equalled the printed 2.00 nothing fired although the cash leg was overstated by about 4.65 points, and the 2025-12-31 to 2026-06-30 margin-as-PIK rows were never flagged. A cash-leg check against the printed fixed coupon is needed.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "equity-pik-dividend-not-published",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "what": "Equity lines printing a PIK dividend (Atlas Class X 15 %, VardimanBlack preferred 6 %, Oak Dental Class D 2.25 %, Sea-K 15 %) published no pik_rate. Corrected (3 rows at 2026-06-30, fair value under 0.1M, obs_fv.sql).",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "pik_printed covers it.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "Oak Dental Partners Holding Company, LLC - Class D Units (10) Health Care Equipment & Services 2.25 % 2.25 % PIK NA 19 19 30 - %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "pik_printed fired on 7 fund-quarters in the untouched build.",
+    "reference": "identity pik_printed"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "fair_value_m": 19.6,
+   "what": "Members carrying another printed line's label or terms. Searched every published loan row of every quarter (swap_audit.py: printed margin vs basis_spread, printed instrument vs published, two rows of one issuer and instrument with different printed lines). Found and corrected: Engineered Films term loan tagged with the EPS revolver member (2024-09-30, issuer, instrument, industry); Kent 2023-12-31 first-out / last-out members swap their terms (spreads 9 / 10 published the wrong way round; basis_spread set to the printed 10.00 / 9.00); Kent 2024-09-30 last-out (cost 12,977) labelled First-Out (two First-Out rows, last-out chain broken; instrument set to Last-Out); Discovery SL 2024-06-30 term loan and delayed draw A members swapped; Wilnat 2023-09-30 'Term Loan B' published 'Term Loan', 2023-12-31 'Term Loan B B'; National Debt Relief 2023 'Delayed Draw Loan' published 'Delayed Draw Term Loan'. Kent first-out / last-out labels and spreads checked in all 11 quarters 2023-12-31 to 2026-06-30 (dup.sql). Remaining same-name pairs (Narcote 2023-03-31 to 2024-03-31, Wilnat 2023-06-30) are printed as two identical 'Term Loan' lines; published as printed.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag two published rows of one issuer and instrument in a quarter whose maturities or rates differ, where the printed page has one such line.",
+   "quote": {
+    "accession": "0000950170-24-125642",
+    "text": "Engineered Films Acquisition Inc. - Term Loan Capital Goods SOFR + 7.00 % ( 1.00 % floor) 11.96 % 4/29/2027 20,075 19,833 19,553 3.6 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the EPS/Engineered Films, Kent 2024-09-30, Discovery or Wilnat rows (totals tie; the rows have all fields). pik_printed fired on Kent 2023-12-31 but for its PIK reading, not the swapped spread. The suggested check (implemented as swap_audit.py) finds all of them.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "section-heading-published-as-industry",
+   "field": "extracted_industry",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 5.6,
+   "what": "From the 10-K 2025-12-31 the equity members start 'Membership Interest Investments, Common Membership Interest,'; 37 rows published that heading as the industry, and from 2026-03-31 loan rows published none (coverage 0.96 -> 0.17). Fixed by the member-text industry reading and corrections.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a published extracted_industry that contains any of the words 'Investments', 'Membership Interest', 'First Lien', 'Senior Secured', 'Common Equity' or 'Preferred Equity', or that equals the text between the first and second comma of the row's own investment identifier when that text also opens the identifiers of rows in other industries of the same filing.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "Rushmore Lender Co-Invest Blocker, LLC - Common Stock Health Care Equipment & Services NA NA NA 676,823 719 183 - %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Nothing fired on the 37 equity rows that carried 'Common/Preferred Membership Interest' as industry from 2025-12-31. field_coverage_drop fired once (2026-03-31) for a different defect, loan rows with no industry at all.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "industry-from-member-differs-from-page",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "fair_value_m": 132.1,
+   "what": "15 rows carried the member's industry where the printed row says otherwise (Kemper 'Consumenr Services', VENU+ 'Commercial Services' printed Consumer Services, Planet DDS Health Care Technology / Software & Services swapped, Bradford and VardimanBlack spellings, OneCare 'Media & Entertainment' printed 'Media'). Corrected; fair value 132.1M summed over these rows and the Engineered Films 2024-09-30 row (obs_fv.sql).",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Compare extracted_industry with the industry cell of the printed row (page reader).",
+   "quote": {
+    "accession": "0000950170-23-041104",
+    "text": "Kemper Sports Management - Term Loan (8) Consumer Services SOFR + 6.50 % ( 1.00 % floor) 11.92 % 1/12/2028"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the industry with the printed row.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "pct-on-a-second-context-of-the-member",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 1.4,
+   "what": "ACT Acquisition delayed draw 2025-09-30: the 0.2 percent is tagged on a second context whose member spells the rate '11.039%'; the published row has no percent. Left: pct_of_net_assets is not a correctable field.",
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Join a context carrying only a percent to the published context of the same issuer and instrument (rate_only_contexts covers rate, spread and PIK only).",
+   "quote": {
+    "accession": "0001193125-25-277996",
+    "text": "ACT Acquisition Intermediate Holdco, LLC - Delayed Draw Term Loan Media & Entertainment SOFR + 6.75 % ( 1.00 % floor) 11.03 % 12/4/2028 1,407 1,386 1,407 0.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "B01 counts the context but does not say it holds a value of a published row.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "pct-printed-dash-published-null",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.4,
+   "what": "From 2025-06-30 the filer prints '- %' for positions under 0.05 percent (earlier filings printed '0.0 %' and tagged 0); these rows publish no percent (36 to 44 rows a quarter including the dash-value rows). Left: the printed cell is a dash.",
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "None needed beyond field coverage; a dash cell is not a printed figure.",
+   "quote": {
+    "accession": "0001193125-26-344908",
+    "text": "Rushmore Lender Co-Invest Blocker, LLC - Common Stock Health Care Equipment & Services NA NA NA 676,823 719 183 - %"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "The page prints no number; nothing to compare.",
+    "reference": "field_coverage_drop"
+   }
+  },
+  {
+   "observation_key": "printed-rate-excludes-pik-leg",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 4.4,
+   "what": "Hornblower 2026-03-31 prints 'SOFR + 5.50 % + 1.50 % PIK 9.18 %': the printed rate is base + cash margin only (9.18 - 5.50 = 3.68, the quarter's base; the same loan prints 10.68 = 3.68 + 5.50 + 1.50 at 2026-06-30). cwae published it with kind all_in, so the cash leg read 7.68 against a printed 9.18. Fixed: interest_rate_kind set to cash on the term loan and the revolver (context-keyed corrections). cwaf publishes interest_rate_cash 9.18 (the printed figure) and, under the decided all-in storage, interest_rate 10.68 = 9.18 + 1.50 PIK, which equals the printed rate of the same loan at 2026-06-30.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a cash-plus-PIK row whose printed rate minus the cash margin equals the quarter's base rate (pik_base.py).",
+   "quote": {
+    "accession": "0001193125-26-219691",
+    "text": "Hornblower Sub LLC - Term Loan (11) Transportation SOFR + 5.50 % ( 1.00 % floor) + 1.50 % PIK 9.18 % 7/3/2029"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reads the rate against base plus margins.",
+    "reference": "suggested_check"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "None: no shared code changed (wrapper, override files and promoted rules only). Builds cwaa to cwaf via build_fund.sh (six of six); fund_gate.py check run on cwab, cwad and the final build."
+ ],
+ "not_done": [
+  "The 20-row random page sample (orchestrator step).",
+  "Position-chain quality after the renames (position_id changed on 202 rows; not measured against the page).",
+  "CTM Group 2024-12-31 and 2025-06-30 (6 rows): printed rate minus X + Y differs from the quarter's base by about 0.57; the total margin X + Y is printed and used.",
+  "Reference-rate types, floors and lien were not compared row by row with the page.",
+  "pct_of_net_assets compared only for numeric printed cells."
+ ],
+ "reconciliation": {
+  "basis": "printed schedule totals (page_rows.py) and fund_gate totals: fair value and cost equal the printed totals in 14 of 14 quarters; printed rows 1,845, published 1,845.",
+  "cost_2023_independence": "The reviewer is right that the 2023-03-31 and 2023-06-30 cost totals tying to the page is circular: those costs were declared from the page (untagged_values). The independent support is the filer's own XBRL: (1) every declared value equals the filer's fact ck0001841514:InvestmentCompanyAmortizedUnamortizedCost on the same context (cost23_gen.py: 201 of 201 declared contexts equal the custom fact, including the Kemper Holdings equity line 611,000, whose printed line the page parser did not pair automatically and which was read on the page by hand); (2) the filer tags the same concept on its total member 'Total Investments Debt Preferred Equity and Common Equity' with 538,602,000 (0000950170-23-021246, context C_ffe848d4-81c4-42b7-a5b9-906fa6ea9020) and 583,542,000 (0000950170-23-041104, context C_28cbebde-3952-4e9a-b26e-cb40a0b484bf), equal to the published cost sums 538,602 and 583,542 thousand (cost_total_facts.py, filing_grep.py). The build does not read that concept, so the comparison is against facts the build never used."
+ },
+ "build_history": [
+  "cwaa untouched (50 outstanding; 49 after check-accepted)",
+  "cwab wrapper staging regexes, 391 untagged values (dash rows, 2023 costs), note-row exclusion rule, two Kent rules pulled (43 outstanding)",
+  "cwac + 511 context-keyed corrections, 'quity' prefix (19 outstanding)",
+  "cwad + member-text industry, 37 heading-industry corrections, CTM/SDB/KeyMe corrections (13; 11 after check-accepted C107 x2)",
+  "cwae + 15 industry corrections (11 outstanding, all proposed)",
+  "cwaf round two (review of cwae): Kent 2023-12-31 spreads unswapped, Kent 2024-09-30 Last-Out instrument, Discovery / Wilnat / National Debt Relief instruments (swap_audit.py over every quarter), Hornblower 2026-03-31 rate kind cash, VardimanBlack 2024-09-30 to 2025-09-30 per D-218 (spread 2.00, PIK = printed rate less 5.00, cash leg 5.00)"
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_2752c77026a3",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-125642/C_7c1b58fd-9452-4e57-90a3-9dff3f7ed900/ROW-db600ad25f79c253",
+     "0000950170-24-125642/C_ede6c28e-ab10-46e0-b8d4-52a38f02668c/ROW-b6389c6f010c260f"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-125642/C_7c1b58fd-9452-4e57-90a3-9dff3f7ed900/ROW-db600ad25f79c253",
+     "0000950170-24-125642/C_ede6c28e-ab10-46e0-b8d4-52a38f02668c/ROW-b6389c6f010c260f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-125642",
+     "text": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % 12.30 % 3/18/2027 19,825 17,349 19,825 3.6 %"
+    },
+    {
+     "accession": "0000950170-24-125642",
+     "text": "VardimanBlack Holdings, LLC - Delayed Draw Term Loan (4) Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % 12.30 % 3/18/2027 1,967 1,891 2,203 0.4 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2024-09-30, kind pik_value_mismatch: 2 rows, the VardimanBlack term loan and delayed draw (populations_cwaf.json); both read on the page.",
+    "Printed form 'SOFR + 2.00 % PIK + 5.00 % [Fixed] R %': a PIK leg floating at SOFR + 2.00 and a fixed 5.00 % cash leg (the filer's own 2024-12-31 member reads 'SOFR + 5.00% + 6.65% PIK Interest Rate 11.65%'). The rule takes the 2.00 before the word PIK as the PIK rate.",
+    "Published (cwaf) under orchestrator decision D-218 (owner delegation D-207): basis_spread 2.00, pik_rate = printed rate less the fixed 5.00 (Term Loan 7.3, Delayed Draw Term Loan 7.3); the page prints only the total rate, so the PIK figure is derived as printed rate less 5.00, except 6.65 at 2024-12-31 which the filer states in its member), interest_rate = the printed all-in rate, so the cash leg is 5.00. Before (cwae) pik 2.0 left a cash leg of 10.30 / 9.65, which the page contradicts.",
+    "These findings are new in cwaf: they appear because pik_rate now holds the whole PIK coupon rather than the 2.00 margin. The 2025-03-31 to 2025-09-30 rows (printed with '( 0.50 % floor)') are published the same way and are not flagged."
+   ],
+   "next_action": "Proposal PD-CWA-PIK-D218 (pik-printed-rule-reads-margin-of-floating-pik-leg); suggested rule repair: on a line printing 'reference + X % PIK + Y % R %', compare pik_rate with R - Y."
+  },
+  {
+   "finding_id": "RVQ_BLK_d3091e56613c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-038112/C_f7cc8e71-d043-4a66-b102-f4714fb3e904/ROW-346e682b7132ed72",
+     "0000950170-25-038112/C_3eaeea43-cfe9-41f6-96d3-52c6432ec559/ROW-5da26655a96432e5"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-038112/C_f7cc8e71-d043-4a66-b102-f4714fb3e904/ROW-346e682b7132ed72",
+     "0000950170-25-038112/C_3eaeea43-cfe9-41f6-96d3-52c6432ec559/ROW-5da26655a96432e5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-038112",
+     "text": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % Fixed 11.65 % 3/18/2027 20,173 17,799 20,173 3.7 %"
+    },
+    {
+     "accession": "0000950170-25-038112",
+     "text": "VardimanBlack Holdings, LLC - Delayed Draw Term Loan (4) Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % Fixed 11.65 % 3/18/2027 2,089 2,023 2,328 0.4 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2024-12-31, kind pik_value_mismatch: 2 rows, the VardimanBlack term loan and delayed draw (populations_cwaf.json); both read on the page.",
+    "Printed form 'SOFR + 2.00 % PIK + 5.00 % [Fixed] R %': a PIK leg floating at SOFR + 2.00 and a fixed 5.00 % cash leg (the filer's own 2024-12-31 member reads 'SOFR + 5.00% + 6.65% PIK Interest Rate 11.65%'). The rule takes the 2.00 before the word PIK as the PIK rate.",
+    "Published (cwaf) under orchestrator decision D-218 (owner delegation D-207): basis_spread 2.00, pik_rate = printed rate less the fixed 5.00 (Delayed Draw Term Loan 6.65, Term Loan 6.65); the page prints only the total rate, so the PIK figure is derived as printed rate less 5.00, except 6.65 at 2024-12-31 which the filer states in its member), interest_rate = the printed all-in rate, so the cash leg is 5.00. Before (cwae) pik 2.0 left a cash leg of 10.30 / 9.65, which the page contradicts.",
+    "These findings are new in cwaf: they appear because pik_rate now holds the whole PIK coupon rather than the 2.00 margin. The 2025-03-31 to 2025-09-30 rows (printed with '( 0.50 % floor)') are published the same way and are not flagged."
+   ],
+   "next_action": "Proposal PD-CWA-PIK-D218 (pik-printed-rule-reads-margin-of-floating-pik-leg); suggested rule repair: on a line printing 'reference + X % PIK + Y % R %', compare pik_rate with R - Y."
+  },
+  {
+   "finding_id": "RVQ_BLK_a0117ac1f4f1",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-029358/C_877bda4e-e571-47cd-874a-d1ff223a9c55/ROW-3836c0cd455403c1",
+     "0000950170-24-029358/C_287d1960-2a7c-4646-a7b9-98bb32e705ec/ROW-f959ed8acbfa4ea3"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-029358/C_877bda4e-e571-47cd-874a-d1ff223a9c55/ROW-3836c0cd455403c1",
+     "0000950170-24-029358/C_287d1960-2a7c-4646-a7b9-98bb32e705ec/ROW-f959ed8acbfa4ea3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-029358",
+     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11)(12) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.44 % 12/31/2025 13,186 12,748 8,176 1.6 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2023-12-31, kind pik_value_mismatch: 2 rows, the Kent Water Sports first-out and last-out delayed draw loans (populations_cwaf.json); both read on the page.",
+    "Printed form: 'SOFR + 9.00 % PIK 14.44 %' (last-out) / 'SOFR + 10.00 % PIK 15.44 %' (first-out): the margin over SOFR is the 9.00 / 10.00 and the whole coupon, printed in the interest-rate column, is paid in kind. The rule takes the figure before the word PIK (the margin) as the PIK rate.",
+    "Published (cwaf): pik_rate = the printed coupon (Delayed Draw Loan First-Out 15.44, Delayed Draw Loan Last-Out 14.44), interest_rate = the same printed all-in rate, basis_spread = the margin. This is the convention used for whole-coupon PIK loans (D-092: 'PIK 11.55, spread 7.50'; BCRED Digital Media Solutions row correction pik_rate 16.57 for 'SOFR + 11.00 % 16.57 % PIK'), and the same loans from 2024-09-30 print 'SOFR + 10.00 % ( 1.00 % floor) PIK 13.78 %', published the same way, where the rule does not fire.",
+    "Swapped terms (found by the independent review of cwae, then by swap_audit.py): at 2023-12-31 the filer's members swap the two loans' terms (member of the last-out context reads 'SOFR + 10.00% PIK Interest rate 15.44%'), so cwae published basis_spread 9.0 on the first-out and 10.0 on the last-out. Corrected in cwaf by context-keyed basis_spread corrections (first-out C_877bda4e -> 10.00, last-out C_287d1960 -> 9.00, each with its printed line); cwaf publishes margin 10.00 / 9.00 and pik_rate 15.44 / 14.44 as printed.",
+    "Alternative tested: publish the margin (9.00 / 10.00) as pik_rate. Rejected: the cash leg (interest_rate minus pik_rate) would then be 5.44 on a loan that pays no cash, and it would differ from the later quarters of the same loans."
+   ],
+   "next_action": "Proposal PD-CWA-PIK-WHOLE-COUPON (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan); suggested rule repair: where the printed rate column is followed by PIK on a row whose margin is followed by PIK with no '+', compare pik_rate with the printed rate, not with the margin."
+  },
+  {
+   "finding_id": "RVQ_BLK_bb6c3d945574",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-057722/C_de5418b1-836c-40e8-9713-0c780ea242b4/ROW-24da7e37a6806618",
+     "0000950170-24-057722/C_96d81413-45f3-47fd-9f15-0ffc069feb0a/ROW-4be5128752c738fc"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-057722/C_de5418b1-836c-40e8-9713-0c780ea242b4/ROW-24da7e37a6806618",
+     "0000950170-24-057722/C_96d81413-45f3-47fd-9f15-0ffc069feb0a/ROW-4be5128752c738fc"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-057722",
+     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out (4)(8)(10)(11) Consumer Durables & Apparel SOFR + 10.00 % PIK 15.41 % 12/31/2025 5,217 4,658 5,217 1.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2024-03-31, kind pik_value_mismatch: 2 rows, the Kent Water Sports first-out and last-out delayed draw loans (populations_cwaf.json); both read on the page.",
+    "Printed form: 'SOFR + 9.00 % PIK 14.44 %' (last-out) / 'SOFR + 10.00 % PIK 15.44 %' (first-out): the margin over SOFR is the 9.00 / 10.00 and the whole coupon, printed in the interest-rate column, is paid in kind. The rule takes the figure before the word PIK (the margin) as the PIK rate.",
+    "Published (cwaf): pik_rate = the printed coupon (Delayed Draw Loan First-Out 15.41, Delayed Draw Loan Last-Out 14.41), interest_rate = the same printed all-in rate, basis_spread = the margin. This is the convention used for whole-coupon PIK loans (D-092: 'PIK 11.55, spread 7.50'; BCRED Digital Media Solutions row correction pik_rate 16.57 for 'SOFR + 11.00 % 16.57 % PIK'), and the same loans from 2024-09-30 print 'SOFR + 10.00 % ( 1.00 % floor) PIK 13.78 %', published the same way, where the rule does not fire.",
+    "Spreads checked: cwaf publishes basis_spread 10.00 on the first-out and 9.00 on the last-out, equal to the printed margins (swap_audit.py reports no spread difference).",
+    "Alternative tested: publish the margin (9.00 / 10.00) as pik_rate. Rejected: the cash leg (interest_rate minus pik_rate) would then be 5.44 on a loan that pays no cash, and it would differ from the later quarters of the same loans."
+   ],
+   "next_action": "Proposal PD-CWA-PIK-WHOLE-COUPON (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan); suggested rule repair: where the printed rate column is followed by PIK on a row whose margin is followed by PIK with no '+', compare pik_rate with the printed rate, not with the margin."
+  },
+  {
+   "finding_id": "RVQ_BLK_cf06a429a431",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096491/C_35a391ad-9767-4ebd-bc40-33e8088c0695/ROW-c9c8930369aa84a7",
+     "0000950170-24-096491/C_c56596d2-9c48-4999-8b63-de58f3a02a22/ROW-0dd1d6728abfbcb9"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096491/C_35a391ad-9767-4ebd-bc40-33e8088c0695/ROW-c9c8930369aa84a7",
+     "0000950170-24-096491/C_c56596d2-9c48-4999-8b63-de58f3a02a22/ROW-0dd1d6728abfbcb9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096491",
+     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.59 % 10/18/2027 14,006 12,840 5,224 0.9 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2024-06-30, kind pik_value_mismatch: 2 rows, the Kent Water Sports first-out and last-out delayed draw loans (populations_cwaf.json); both read on the page.",
+    "Printed form: 'SOFR + 9.00 % PIK 14.44 %' (last-out) / 'SOFR + 10.00 % PIK 15.44 %' (first-out): the margin over SOFR is the 9.00 / 10.00 and the whole coupon, printed in the interest-rate column, is paid in kind. The rule takes the figure before the word PIK (the margin) as the PIK rate.",
+    "Published (cwaf): pik_rate = the printed coupon (Delayed Draw Loan First-Out 15.59, Delayed Draw Loan Last-Out 14.59), interest_rate = the same printed all-in rate, basis_spread = the margin. This is the convention used for whole-coupon PIK loans (D-092: 'PIK 11.55, spread 7.50'; BCRED Digital Media Solutions row correction pik_rate 16.57 for 'SOFR + 11.00 % 16.57 % PIK'), and the same loans from 2024-09-30 print 'SOFR + 10.00 % ( 1.00 % floor) PIK 13.78 %', published the same way, where the rule does not fire.",
+    "Spreads checked: cwaf publishes basis_spread 10.00 on the first-out and 9.00 on the last-out, equal to the printed margins (swap_audit.py reports no spread difference).",
+    "Alternative tested: publish the margin (9.00 / 10.00) as pik_rate. Rejected: the cash leg (interest_rate minus pik_rate) would then be 5.44 on a loan that pays no cash, and it would differ from the later quarters of the same loans."
+   ],
+   "next_action": "Proposal PD-CWA-PIK-WHOLE-COUPON (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan); suggested rule repair: where the printed rate column is followed by PIK on a row whose margin is followed by PIK with no '+', compare pik_rate with the printed rate, not with the margin."
+  },
+  {
+   "finding_id": "RVQ_REV_c0f8e1a23340",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-108128/C_1519afb4-ba77-4f9f-b79b-d08e57d7f140",
+     "0000950170-25-108128/C_49dabb1a-5f34-4321-a5ce-77c86d99378c",
+     "0000950170-25-108128/C_751ccbc6-7e56-48eb-aa3f-345a193a9ef7",
+     "0000950170-25-108128/C_f9aaabfb-9979-4b21-90e4-75b5325168f1",
+     "0000950170-25-108128/C_328a1e3c-8c1a-4667-a1a2-497814f751b9",
+     "0000950170-25-108128/C_a9cc904b-d66d-4ea7-8bb7-60077644747c",
+     "0000950170-25-108128/C_add30908-d08a-4d6b-a09a-b8db62ef5125",
+     "0000950170-25-108128/C_bdf9ce04-a1cb-48d1-a3d6-2c7aa347fdae",
+     "0000950170-25-108128/C_fa8c86b8-8efb-4836-98b6-61e2f6c8b162",
+     "0000950170-25-108128/C_54abf4b8-6a7e-4b44-9fc0-f0de8febece2",
+     "0000950170-25-108128/C_320a24ae-ec78-4dcd-a7d9-5b2f88401cdf",
+     "0000950170-25-108128/C_6fc1d1e4-1b55-4a50-8328-aa3c34ff7c02",
+     "0000950170-25-108128/C_34ef5c53-fc84-4c18-af43-18f39dc43c13",
+     "0000950170-25-108128/C_44a22d25-c6cf-4592-a75b-84f64bd9ff18",
+     "0000950170-25-108128/C_e9f2b69a-914e-450d-a237-8d61a60128fc",
+     "0000950170-25-108128/C_fa3fb4d5-afe1-4e1e-84f4-3dfa7396f303",
+     "0000950170-25-108128/C_7c5fb1c2-c43a-4102-90b0-1164f5cc7cb7",
+     "0000950170-25-108128/C_6c3dfdb0-b661-4d72-a9dd-6714bf681b80",
+     "0000950170-25-108128/C_9f6d74c1-2eca-40fe-8e6b-df49fc2c500b",
+     "0000950170-25-108128/C_63b33835-23b7-415b-93de-ece23a320987",
+     "0000950170-25-108128/C_cd7b3a74-1f8a-4c82-bd8c-b1a91afe8f1f",
+     "0000950170-25-108128/C_b6cf23cf-ced2-4661-b0df-4f466b1061d8",
+     "0000950170-25-108128/C_c82ea8f2-f8df-4c8a-bdf4-8a5216d1b50a",
+     "0000950170-25-108128/C_4ad7007b-af9e-4393-82a7-a6c8011d6673",
+     "0000950170-25-108128/C_fe6977f4-87f3-4626-81b1-a92578532bcb",
+     "0000950170-25-108128/C_2eb21e4c-1bee-4ca4-89ec-5547ea24d387",
+     "0000950170-25-108128/C_dc3137fb-b2ba-434c-9935-ede58333b2f5",
+     "0000950170-25-108128/C_e978e6f8-896e-40e1-867f-1d52b1e86606",
+     "0000950170-25-108128/C_42853bf6-cb0b-4203-9bc1-66349e273905",
+     "0000950170-25-108128/C_c69b5c81-2358-42aa-8db6-50c43690d0dd",
+     "0000950170-25-108128/C_85fb1eb1-09c8-4a46-8b92-7000f8d6d150",
+     "0000950170-25-108128/C_f1e0a335-9285-4e35-9290-4dacbe5637de",
+     "0000950170-25-108128/C_264baaef-4331-44cc-864f-b53e96d15fb1",
+     "0000950170-25-108128/C_a0d289ae-84d0-496f-ae37-f979e7efe055",
+     "0000950170-25-108128/C_f830f5e5-d3a9-4cee-b9cb-a9a77c52cf72",
+     "0000950170-25-108128/C_89148e7b-33ed-497e-a612-8ac55171baed",
+     "0000950170-25-108128/C_74c85ed2-9df1-4af8-bf48-52c5edabd1ee"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-108128/C_1519afb4-ba77-4f9f-b79b-d08e57d7f140",
+     "0000950170-25-108128/C_49dabb1a-5f34-4321-a5ce-77c86d99378c",
+     "0000950170-25-108128/C_751ccbc6-7e56-48eb-aa3f-345a193a9ef7",
+     "0000950170-25-108128/C_f9aaabfb-9979-4b21-90e4-75b5325168f1",
+     "0000950170-25-108128/C_328a1e3c-8c1a-4667-a1a2-497814f751b9",
+     "0000950170-25-108128/C_a9cc904b-d66d-4ea7-8bb7-60077644747c",
+     "0000950170-25-108128/C_add30908-d08a-4d6b-a09a-b8db62ef5125",
+     "0000950170-25-108128/C_bdf9ce04-a1cb-48d1-a3d6-2c7aa347fdae",
+     "0000950170-25-108128/C_fa8c86b8-8efb-4836-98b6-61e2f6c8b162",
+     "0000950170-25-108128/C_54abf4b8-6a7e-4b44-9fc0-f0de8febece2",
+     "0000950170-25-108128/C_320a24ae-ec78-4dcd-a7d9-5b2f88401cdf",
+     "0000950170-25-108128/C_6fc1d1e4-1b55-4a50-8328-aa3c34ff7c02",
+     "0000950170-25-108128/C_34ef5c53-fc84-4c18-af43-18f39dc43c13",
+     "0000950170-25-108128/C_44a22d25-c6cf-4592-a75b-84f64bd9ff18",
+     "0000950170-25-108128/C_e9f2b69a-914e-450d-a237-8d61a60128fc",
+     "0000950170-25-108128/C_fa3fb4d5-afe1-4e1e-84f4-3dfa7396f303",
+     "0000950170-25-108128/C_7c5fb1c2-c43a-4102-90b0-1164f5cc7cb7",
+     "0000950170-25-108128/C_6c3dfdb0-b661-4d72-a9dd-6714bf681b80",
+     "0000950170-25-108128/C_9f6d74c1-2eca-40fe-8e6b-df49fc2c500b",
+     "0000950170-25-108128/C_63b33835-23b7-415b-93de-ece23a320987",
+     "0000950170-25-108128/C_cd7b3a74-1f8a-4c82-bd8c-b1a91afe8f1f",
+     "0000950170-25-108128/C_b6cf23cf-ced2-4661-b0df-4f466b1061d8",
+     "0000950170-25-108128/C_c82ea8f2-f8df-4c8a-bdf4-8a5216d1b50a",
+     "0000950170-25-108128/C_4ad7007b-af9e-4393-82a7-a6c8011d6673",
+     "0000950170-25-108128/C_fe6977f4-87f3-4626-81b1-a92578532bcb",
+     "0000950170-25-108128/C_2eb21e4c-1bee-4ca4-89ec-5547ea24d387",
+     "0000950170-25-108128/C_dc3137fb-b2ba-434c-9935-ede58333b2f5",
+     "0000950170-25-108128/C_e978e6f8-896e-40e1-867f-1d52b1e86606",
+     "0000950170-25-108128/C_42853bf6-cb0b-4203-9bc1-66349e273905",
+     "0000950170-25-108128/C_c69b5c81-2358-42aa-8db6-50c43690d0dd",
+     "0000950170-25-108128/C_85fb1eb1-09c8-4a46-8b92-7000f8d6d150",
+     "0000950170-25-108128/C_f1e0a335-9285-4e35-9290-4dacbe5637de",
+     "0000950170-25-108128/C_264baaef-4331-44cc-864f-b53e96d15fb1",
+     "0000950170-25-108128/C_a0d289ae-84d0-496f-ae37-f979e7efe055",
+     "0000950170-25-108128/C_f830f5e5-d3a9-4cee-b9cb-a9a77c52cf72",
+     "0000950170-25-108128/C_89148e7b-33ed-497e-a612-8ac55171baed",
+     "0000950170-25-108128/C_74c85ed2-9df1-4af8-bf48-52c5edabd1ee"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108128",
+     "text": "The initial acquisition dates of the restricted securities are as follows: Portfolio Company - Investment (15) Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle/check_failures.csv B01 for 2025-06-30, 37 contexts (populations_cwaf.json): 27 excluded_comparative_period (the prior year-end schedule each filing prints after the current one, period not the report date) and 10 excluded_no_fair_value.",
+    "The excluded_no_fair_value contexts with a bare member ('190 Octane Holdings, LLC - Series A-1 units', no section heading, no cost, par, rate or value fact) belong to the note table 'The initial acquisition dates of the restricted securities are as follows' (one context per restricted equity holding, acquisition date only); read on the page.",
+    "Dash-printed schedule rows: every current-period schedule context printed with a dash for fair value is now published at fair value 0 from its own context (source_encodings.untagged_values, cwaf); none is left in the population."
+   ],
+   "next_action": "Proposal PD-CWA-B01 (b01-restricted-holdings-acquisition-table-contexts; comparative contexts as b01-leaves-without-value-are-the-comparative-schedule)."
+  },
+  {
+   "finding_id": "RVQ_REV_124199877db6",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-277996/C_79ed0024-990e-493b-bd17-222ba6c22c7f",
+     "0001193125-25-277996/C_4d672a8b-0d8d-49a6-87f4-cab0d710e209",
+     "0001193125-25-277996/C_95c23bb1-a39d-406f-bd25-901a8f61aeba",
+     "0001193125-25-277996/C_4aad4ad8-d716-48b3-ae85-8876a8c4deeb",
+     "0001193125-25-277996/C_9b99bbd8-30f6-4998-847b-ac84289f4c05",
+     "0001193125-25-277996/C_96a45037-7426-468b-bd8a-2f90b5aa2f07",
+     "0001193125-25-277996/C_6deb653f-05a8-463c-a646-55667c9d5bd9",
+     "0001193125-25-277996/C_a1539730-7051-4106-b2d0-0d9187164d55",
+     "0001193125-25-277996/C_5280e5b3-1a65-4deb-a0dd-b18983e04a57",
+     "0001193125-25-277996/C_05087be4-16cd-40ae-9f15-235c32d5fee4",
+     "0001193125-25-277996/C_b5f329b5-63e4-45d8-a708-d516ad91a44b",
+     "0001193125-25-277996/C_2953ac0f-7534-422c-a5e8-ccf33ad2c942",
+     "0001193125-25-277996/C_eba48f0a-4688-42d8-8d48-43315bd3d291",
+     "0001193125-25-277996/C_bbf7ab03-2c1e-48c0-9d36-6fb4fe5cf657",
+     "0001193125-25-277996/C_ef5fdb33-2015-41f3-b7bb-885a131bca2c",
+     "0001193125-25-277996/C_4c9d84ff-1b42-41a1-af35-e02642211e3c",
+     "0001193125-25-277996/C_ddc71537-97b9-4f3e-9993-bf1eaccc1572",
+     "0001193125-25-277996/C_836d9cc7-1c5a-413a-9a22-fe3da3bc36a5",
+     "0001193125-25-277996/C_6aa10838-61f1-4bd1-9c9f-699f4d57df0c",
+     "0001193125-25-277996/C_a896cba8-10ef-46bc-b588-ddbda05c7f40",
+     "0001193125-25-277996/C_efc4e2ed-17c4-4133-a2c3-a1f420fbc714",
+     "0001193125-25-277996/C_384a2b21-98d9-4ad6-ad15-c93a960a8007",
+     "0001193125-25-277996/C_174b8597-10cb-4821-800f-3235745693e9",
+     "0001193125-25-277996/C_27989eb1-69e2-4cd0-af39-fdb357c338d3",
+     "0001193125-25-277996/C_4bfe0e46-a3d4-4878-8c12-4427e26cd371",
+     "0001193125-25-277996/C_17a0efc3-3008-4a63-ad2d-09ebb286ca06",
+     "0001193125-25-277996/C_abebf4a6-b6c8-4753-8151-b1b9088d02db",
+     "0001193125-25-277996/C_c40afde0-6cd5-4a31-a6d5-e54ce81991a2",
+     "0001193125-25-277996/C_abdcc0e7-567d-4a08-a079-434aa2ef01f7",
+     "0001193125-25-277996/C_8bf98965-db16-492f-9fc2-fe5f176cbaad",
+     "0001193125-25-277996/C_ef2b0176-795b-4695-a3d8-1954964f8d45",
+     "0001193125-25-277996/C_079574d9-b2ca-4bf6-a44f-fabe943c41d9",
+     "0001193125-25-277996/C_3dd87acd-2ef8-4502-bc24-88eb95fd808f",
+     "0001193125-25-277996/C_4de9e8c3-0055-4d8a-8fa0-50a097503442",
+     "0001193125-25-277996/C_e0aaead1-b5de-4a5a-831c-ae62b2f9b1ed",
+     "0001193125-25-277996/C_dda6fd49-ea1b-464c-a06b-eba2bc845204",
+     "0001193125-25-277996/C_0295c27a-4e81-4f99-904a-857ffd1b28da",
+     "0001193125-25-277996/C_a2bcb014-9977-4c6a-b198-e2d7d13e3534"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-277996/C_79ed0024-990e-493b-bd17-222ba6c22c7f",
+     "0001193125-25-277996/C_4d672a8b-0d8d-49a6-87f4-cab0d710e209",
+     "0001193125-25-277996/C_95c23bb1-a39d-406f-bd25-901a8f61aeba",
+     "0001193125-25-277996/C_4aad4ad8-d716-48b3-ae85-8876a8c4deeb",
+     "0001193125-25-277996/C_9b99bbd8-30f6-4998-847b-ac84289f4c05",
+     "0001193125-25-277996/C_96a45037-7426-468b-bd8a-2f90b5aa2f07",
+     "0001193125-25-277996/C_6deb653f-05a8-463c-a646-55667c9d5bd9",
+     "0001193125-25-277996/C_a1539730-7051-4106-b2d0-0d9187164d55",
+     "0001193125-25-277996/C_5280e5b3-1a65-4deb-a0dd-b18983e04a57",
+     "0001193125-25-277996/C_05087be4-16cd-40ae-9f15-235c32d5fee4",
+     "0001193125-25-277996/C_b5f329b5-63e4-45d8-a708-d516ad91a44b",
+     "0001193125-25-277996/C_2953ac0f-7534-422c-a5e8-ccf33ad2c942",
+     "0001193125-25-277996/C_eba48f0a-4688-42d8-8d48-43315bd3d291",
+     "0001193125-25-277996/C_bbf7ab03-2c1e-48c0-9d36-6fb4fe5cf657",
+     "0001193125-25-277996/C_ef5fdb33-2015-41f3-b7bb-885a131bca2c",
+     "0001193125-25-277996/C_4c9d84ff-1b42-41a1-af35-e02642211e3c",
+     "0001193125-25-277996/C_ddc71537-97b9-4f3e-9993-bf1eaccc1572",
+     "0001193125-25-277996/C_836d9cc7-1c5a-413a-9a22-fe3da3bc36a5",
+     "0001193125-25-277996/C_6aa10838-61f1-4bd1-9c9f-699f4d57df0c",
+     "0001193125-25-277996/C_a896cba8-10ef-46bc-b588-ddbda05c7f40",
+     "0001193125-25-277996/C_efc4e2ed-17c4-4133-a2c3-a1f420fbc714",
+     "0001193125-25-277996/C_384a2b21-98d9-4ad6-ad15-c93a960a8007",
+     "0001193125-25-277996/C_174b8597-10cb-4821-800f-3235745693e9",
+     "0001193125-25-277996/C_27989eb1-69e2-4cd0-af39-fdb357c338d3",
+     "0001193125-25-277996/C_4bfe0e46-a3d4-4878-8c12-4427e26cd371",
+     "0001193125-25-277996/C_17a0efc3-3008-4a63-ad2d-09ebb286ca06",
+     "0001193125-25-277996/C_abebf4a6-b6c8-4753-8151-b1b9088d02db",
+     "0001193125-25-277996/C_c40afde0-6cd5-4a31-a6d5-e54ce81991a2",
+     "0001193125-25-277996/C_abdcc0e7-567d-4a08-a079-434aa2ef01f7",
+     "0001193125-25-277996/C_8bf98965-db16-492f-9fc2-fe5f176cbaad",
+     "0001193125-25-277996/C_ef2b0176-795b-4695-a3d8-1954964f8d45",
+     "0001193125-25-277996/C_079574d9-b2ca-4bf6-a44f-fabe943c41d9",
+     "0001193125-25-277996/C_3dd87acd-2ef8-4502-bc24-88eb95fd808f",
+     "0001193125-25-277996/C_4de9e8c3-0055-4d8a-8fa0-50a097503442",
+     "0001193125-25-277996/C_e0aaead1-b5de-4a5a-831c-ae62b2f9b1ed",
+     "0001193125-25-277996/C_dda6fd49-ea1b-464c-a06b-eba2bc845204",
+     "0001193125-25-277996/C_0295c27a-4e81-4f99-904a-857ffd1b28da",
+     "0001193125-25-277996/C_a2bcb014-9977-4c6a-b198-e2d7d13e3534"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277996",
+     "text": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 Units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 11, 2025"
+    },
+    {
+     "accession": "0001193125-25-277996",
+     "text": "ACT Acquisition Intermediate Holdco, LLC - Delayed Draw Term Loan Media & Entertainment SOFR + 6.75 % ( 1.00 % floor) 11.03 % 12/4/2028 1,407 1,386 1,407 0.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle/check_failures.csv B01 for 2025-09-30, 38 contexts (populations_cwaf.json): 27 excluded_comparative_period (the prior year-end schedule each filing prints after the current one, period not the report date) and 11 excluded_no_fair_value.",
+    "The excluded_no_fair_value contexts with a bare member ('190 Octane Holdings, LLC - Series A-1 units', no section heading, no cost, par, rate or value fact) belong to the note table 'The initial acquisition dates of the restricted securities are as follows' (one context per restricted equity holding, acquisition date only); read on the page.",
+    "Dash-printed schedule rows: every current-period schedule context printed with a dash for fair value is now published at fair value 0 from its own context (source_encodings.untagged_values, cwaf); none is left in the population.",
+    "One schedule-member context (0001193125-25-277996/C_4de9e8c3-0055-4d8a-8fa0-50a097503442) carries only InvestmentOwnedPercentOfNetAssets 0.002 for the ACT Acquisition delayed draw, whose values sit on another context of a member spelled 'Interest Rate 11.03%' (published row, fair value 1,407); it is not a position. The published row lacks that 0.2 percent (observation pct-on-a-second-context-of-the-member)."
+   ],
+   "next_action": "Proposal PD-CWA-B01 (b01-restricted-holdings-acquisition-table-contexts; comparative contexts as b01-leaves-without-value-are-the-comparative-schedule)."
+  },
+  {
+   "finding_id": "RVQ_REV_64c6f298504f",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-104454/C_56b12dbb-65af-4381-a3c8-a491a6ee3c47",
+     "0001193125-26-104454/C_f8266a72-806d-4361-a293-843eafbbb575",
+     "0001193125-26-104454/C_9ee40b5b-e3dc-4f37-a40b-0b8b96baf513",
+     "0001193125-26-104454/C_c2c0c27e-d42a-4fa1-860d-7f1c652cc3b9",
+     "0001193125-26-104454/C_e575144e-3f74-4a05-a84e-d5b58a60657d",
+     "0001193125-26-104454/C_0d3cf1a5-97f3-44c7-8694-4abba41dc13b",
+     "0001193125-26-104454/C_e9748ed5-c956-4316-b602-4f99c2be3954",
+     "0001193125-26-104454/C_5a2844eb-6035-4a6d-822b-4e55fdafdb88",
+     "0001193125-26-104454/C_a5a86726-fd77-4146-ab0a-cb8f0415356b",
+     "0001193125-26-104454/C_f09cc02b-f47e-4d4b-b3c0-fa16fd9a4acc",
+     "0001193125-26-104454/C_05c313a9-8e7c-4d5f-b9bd-dd6171cedfb7",
+     "0001193125-26-104454/C_98c43056-be14-43e1-a9e2-ab557761527e",
+     "0001193125-26-104454/C_3dae050a-096b-4a53-bb5f-952a16855390",
+     "0001193125-26-104454/C_64ba2996-bc9c-4260-ac4e-c877ccc52508",
+     "0001193125-26-104454/C_4106ac08-ce4d-4184-a7f3-566ce3d83398",
+     "0001193125-26-104454/C_80d374dc-ca7d-4226-8889-cc1e1cccf615",
+     "0001193125-26-104454/C_7155db47-5ab3-473a-b675-d8c262dc1231",
+     "0001193125-26-104454/C_621582e6-8dfe-4cd5-8de7-094badd499aa",
+     "0001193125-26-104454/C_1597f4bc-b516-483c-b72e-2d36bec05161",
+     "0001193125-26-104454/C_fcb6adb7-126c-43f9-871c-b7426532534f",
+     "0001193125-26-104454/C_960d8da0-9071-4cc2-9c98-741158a2246d",
+     "0001193125-26-104454/C_408cd29c-04b9-4c3c-92b6-7876ecc327ae",
+     "0001193125-26-104454/C_05f343ba-7b3f-4411-bbcf-18b3298da26b",
+     "0001193125-26-104454/C_9da0997c-5b40-445d-82bf-d91106670d11",
+     "0001193125-26-104454/C_1446e379-f0c0-4832-9206-f2a0be39b1e8",
+     "0001193125-26-104454/C_5580ccf4-b6db-41f7-95cd-3d706ee5c400",
+     "0001193125-26-104454/C_71b06613-c8b0-4026-a7e0-0791d64f45b9",
+     "0001193125-26-104454/C_0d688e58-dd04-4143-b3cb-1754694832ce",
+     "0001193125-26-104454/C_a2440f60-c96f-4f1a-88b4-4b148db90b5f",
+     "0001193125-26-104454/C_c02c90ac-fb51-4907-870a-36824b5e60a5",
+     "0001193125-26-104454/C_4398c164-33db-4395-98d5-aa28a774455f",
+     "0001193125-26-104454/C_318eda23-8962-45cc-8005-bd2cec71c3aa",
+     "0001193125-26-104454/C_d147c0c5-c142-4015-9a84-2e30ce5fc2a1",
+     "0001193125-26-104454/C_266f9893-80a4-4573-b7d2-5139b86472ea",
+     "0001193125-26-104454/C_080f9888-3f8f-4209-8518-5b553b5cd176",
+     "0001193125-26-104454/C_9535b3b8-3440-4826-8342-888fc5922de2",
+     "0001193125-26-104454/C_be2037c2-5a20-4ebc-836c-cfeb75039d52",
+     "0001193125-26-104454/C_22089470-20ac-4321-af2b-48f3e6b2ac9c",
+     "0001193125-26-104454/C_d4f014f0-045e-45c0-a6dc-cfcdc7fc8f6a"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-104454/C_56b12dbb-65af-4381-a3c8-a491a6ee3c47",
+     "0001193125-26-104454/C_f8266a72-806d-4361-a293-843eafbbb575",
+     "0001193125-26-104454/C_9ee40b5b-e3dc-4f37-a40b-0b8b96baf513",
+     "0001193125-26-104454/C_c2c0c27e-d42a-4fa1-860d-7f1c652cc3b9",
+     "0001193125-26-104454/C_e575144e-3f74-4a05-a84e-d5b58a60657d",
+     "0001193125-26-104454/C_0d3cf1a5-97f3-44c7-8694-4abba41dc13b",
+     "0001193125-26-104454/C_e9748ed5-c956-4316-b602-4f99c2be3954",
+     "0001193125-26-104454/C_5a2844eb-6035-4a6d-822b-4e55fdafdb88",
+     "0001193125-26-104454/C_a5a86726-fd77-4146-ab0a-cb8f0415356b",
+     "0001193125-26-104454/C_f09cc02b-f47e-4d4b-b3c0-fa16fd9a4acc",
+     "0001193125-26-104454/C_05c313a9-8e7c-4d5f-b9bd-dd6171cedfb7",
+     "0001193125-26-104454/C_98c43056-be14-43e1-a9e2-ab557761527e",
+     "0001193125-26-104454/C_3dae050a-096b-4a53-bb5f-952a16855390",
+     "0001193125-26-104454/C_64ba2996-bc9c-4260-ac4e-c877ccc52508",
+     "0001193125-26-104454/C_4106ac08-ce4d-4184-a7f3-566ce3d83398",
+     "0001193125-26-104454/C_80d374dc-ca7d-4226-8889-cc1e1cccf615",
+     "0001193125-26-104454/C_7155db47-5ab3-473a-b675-d8c262dc1231",
+     "0001193125-26-104454/C_621582e6-8dfe-4cd5-8de7-094badd499aa",
+     "0001193125-26-104454/C_1597f4bc-b516-483c-b72e-2d36bec05161",
+     "0001193125-26-104454/C_fcb6adb7-126c-43f9-871c-b7426532534f",
+     "0001193125-26-104454/C_960d8da0-9071-4cc2-9c98-741158a2246d",
+     "0001193125-26-104454/C_408cd29c-04b9-4c3c-92b6-7876ecc327ae",
+     "0001193125-26-104454/C_05f343ba-7b3f-4411-bbcf-18b3298da26b",
+     "0001193125-26-104454/C_9da0997c-5b40-445d-82bf-d91106670d11",
+     "0001193125-26-104454/C_1446e379-f0c0-4832-9206-f2a0be39b1e8",
+     "0001193125-26-104454/C_5580ccf4-b6db-41f7-95cd-3d706ee5c400",
+     "0001193125-26-104454/C_71b06613-c8b0-4026-a7e0-0791d64f45b9",
+     "0001193125-26-104454/C_0d688e58-dd04-4143-b3cb-1754694832ce",
+     "0001193125-26-104454/C_a2440f60-c96f-4f1a-88b4-4b148db90b5f",
+     "0001193125-26-104454/C_c02c90ac-fb51-4907-870a-36824b5e60a5",
+     "0001193125-26-104454/C_4398c164-33db-4395-98d5-aa28a774455f",
+     "0001193125-26-104454/C_318eda23-8962-45cc-8005-bd2cec71c3aa",
+     "0001193125-26-104454/C_d147c0c5-c142-4015-9a84-2e30ce5fc2a1",
+     "0001193125-26-104454/C_266f9893-80a4-4573-b7d2-5139b86472ea",
+     "0001193125-26-104454/C_080f9888-3f8f-4209-8518-5b553b5cd176",
+     "0001193125-26-104454/C_9535b3b8-3440-4826-8342-888fc5922de2",
+     "0001193125-26-104454/C_be2037c2-5a20-4ebc-836c-cfeb75039d52",
+     "0001193125-26-104454/C_22089470-20ac-4321-af2b-48f3e6b2ac9c",
+     "0001193125-26-104454/C_d4f014f0-045e-45c0-a6dc-cfcdc7fc8f6a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-104454",
+     "text": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 9, 2025"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle/check_failures.csv B01 for 2025-12-31, 39 contexts (populations_cwaf.json): 27 excluded_comparative_period (the prior year-end schedule each filing prints after the current one, period not the report date) and 12 excluded_no_fair_value.",
+    "The excluded_no_fair_value contexts with a bare member ('190 Octane Holdings, LLC - Series A-1 units', no section heading, no cost, par, rate or value fact) belong to the note table 'The initial acquisition dates of the restricted securities are as follows' (one context per restricted equity holding, acquisition date only); read on the page.",
+    "Dash-printed schedule rows: every current-period schedule context printed with a dash for fair value is now published at fair value 0 from its own context (source_encodings.untagged_values, cwaf); none is left in the population."
+   ],
+   "next_action": "Proposal PD-CWA-B01 (b01-restricted-holdings-acquisition-table-contexts; comparative contexts as b01-leaves-without-value-are-the-comparative-schedule)."
+  },
+  {
+   "finding_id": "RVQ_REV_7e16ba27c339",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-344908/C_1c02f958-18dc-446b-b5e7-fb80bba03688",
+     "0001193125-26-344908/C_c08fbf1a-984e-4021-95ed-0271498d9182",
+     "0001193125-26-344908/C_e50a9148-73ab-4a02-811a-b9e1c0957e94",
+     "0001193125-26-344908/C_b3ed27aa-f39f-4523-a1c0-3e0ea1dc82a3",
+     "0001193125-26-344908/C_ca44f7c2-de20-40a5-bd60-d5bff46be700",
+     "0001193125-26-344908/C_9e2e92fb-6586-4a50-b3c7-2324c2b0b5c7",
+     "0001193125-26-344908/C_58814000-0952-4c7b-be41-e6f603389e17",
+     "0001193125-26-344908/C_b60b648e-8d46-4bb9-88f7-213ecc911da9",
+     "0001193125-26-344908/C_0771a092-9bc4-4f8c-a73b-a7f6da8fb645",
+     "0001193125-26-344908/C_91d9a8ee-e3d8-4edc-8125-64df707a2592",
+     "0001193125-26-344908/C_054e9c7d-162d-4026-8ca3-2db93e564649",
+     "0001193125-26-344908/C_21d0be3c-e3b6-410c-a263-402097d8820b",
+     "0001193125-26-344908/C_25be35e1-ff35-4c66-bbcc-4a994f2ddf4e",
+     "0001193125-26-344908/C_fe47536d-a4e8-46ed-a722-fbc298da4570",
+     "0001193125-26-344908/C_54980187-337d-4a4e-94de-5b81969a308a",
+     "0001193125-26-344908/C_7f305729-df1f-44df-886e-c1f80721f937",
+     "0001193125-26-344908/C_4695298b-d22e-49a1-9f05-c3098f616525",
+     "0001193125-26-344908/C_1ff3ba15-ca24-495c-a4de-b7e334780bd6",
+     "0001193125-26-344908/C_2377b4e0-4e72-4d90-8aae-b53eb3cebc06",
+     "0001193125-26-344908/C_9f2bc78d-687f-4e7d-8201-17ae7d64b7b4",
+     "0001193125-26-344908/C_6070960f-e6f9-4d01-b4b4-a28afecc2fce",
+     "0001193125-26-344908/C_0373ccf8-d1a0-46ca-a336-4df495109e7f",
+     "0001193125-26-344908/C_b27086fd-2f4e-47ba-81b5-41e787f170fe",
+     "0001193125-26-344908/C_45eea485-04b6-47b0-b3b1-7522382bf516",
+     "0001193125-26-344908/C_ed6100bc-69ce-447e-97af-517893c71c6e",
+     "0001193125-26-344908/C_a076977c-9950-4474-a9ee-c06e1886d809",
+     "0001193125-26-344908/C_976f3862-f12e-41e1-bc27-0cbe01ac0f28",
+     "0001193125-26-344908/C_7077c0ea-90f6-4863-a9b9-bfd6cb630154",
+     "0001193125-26-344908/C_f1a6bce9-29a1-4880-af59-a6e751a5d166",
+     "0001193125-26-344908/C_07f9bfe5-6cc6-4c99-b0e2-8726f34ac660",
+     "0001193125-26-344908/C_f6b0500b-2640-4776-8ee8-e23802081952",
+     "0001193125-26-344908/C_9897f1ea-62fc-4749-930d-442d8e105a83",
+     "0001193125-26-344908/C_b9ae7a50-fcd8-4cdf-bdc3-dd12b624d658",
+     "0001193125-26-344908/C_79405679-0fb9-4361-9d88-ca6d2adcd2ae",
+     "0001193125-26-344908/C_e0492fe4-f5fd-4d68-ac78-6612a1a97a40",
+     "0001193125-26-344908/C_93bd31e0-87e4-4cec-800e-c6a6b73fe0b5",
+     "0001193125-26-344908/C_1c8d21c7-b8a1-4246-ac9e-ab9759b88548",
+     "0001193125-26-344908/C_4c2f8834-e7a1-4b57-b96f-bbba303cde39",
+     "0001193125-26-344908/C_5e0078fd-c1f9-4a53-921c-db86d0c85189",
+     "0001193125-26-344908/C_133800c3-3946-4d8c-a37b-08dafb82dbde",
+     "0001193125-26-344908/C_afd6ec8b-e5b8-4127-bbcf-c32a9ec1d268",
+     "0001193125-26-344908/C_1f0ebb65-25a8-4666-8e94-43c3cb040b59",
+     "0001193125-26-344908/C_a5fa4a41-f52a-4f64-86b9-3d6002f6f8e3",
+     "0001193125-26-344908/C_8e061ff8-1a12-4b9d-b9f2-9c29d00013fc",
+     "0001193125-26-344908/C_8555a3e7-6020-47da-81dd-006b62f15c8a"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-344908/C_1c02f958-18dc-446b-b5e7-fb80bba03688",
+     "0001193125-26-344908/C_c08fbf1a-984e-4021-95ed-0271498d9182",
+     "0001193125-26-344908/C_e50a9148-73ab-4a02-811a-b9e1c0957e94",
+     "0001193125-26-344908/C_b3ed27aa-f39f-4523-a1c0-3e0ea1dc82a3",
+     "0001193125-26-344908/C_ca44f7c2-de20-40a5-bd60-d5bff46be700",
+     "0001193125-26-344908/C_9e2e92fb-6586-4a50-b3c7-2324c2b0b5c7",
+     "0001193125-26-344908/C_58814000-0952-4c7b-be41-e6f603389e17",
+     "0001193125-26-344908/C_b60b648e-8d46-4bb9-88f7-213ecc911da9",
+     "0001193125-26-344908/C_0771a092-9bc4-4f8c-a73b-a7f6da8fb645",
+     "0001193125-26-344908/C_91d9a8ee-e3d8-4edc-8125-64df707a2592",
+     "0001193125-26-344908/C_054e9c7d-162d-4026-8ca3-2db93e564649",
+     "0001193125-26-344908/C_21d0be3c-e3b6-410c-a263-402097d8820b",
+     "0001193125-26-344908/C_25be35e1-ff35-4c66-bbcc-4a994f2ddf4e",
+     "0001193125-26-344908/C_fe47536d-a4e8-46ed-a722-fbc298da4570",
+     "0001193125-26-344908/C_54980187-337d-4a4e-94de-5b81969a308a",
+     "0001193125-26-344908/C_7f305729-df1f-44df-886e-c1f80721f937",
+     "0001193125-26-344908/C_4695298b-d22e-49a1-9f05-c3098f616525",
+     "0001193125-26-344908/C_1ff3ba15-ca24-495c-a4de-b7e334780bd6",
+     "0001193125-26-344908/C_2377b4e0-4e72-4d90-8aae-b53eb3cebc06",
+     "0001193125-26-344908/C_9f2bc78d-687f-4e7d-8201-17ae7d64b7b4",
+     "0001193125-26-344908/C_6070960f-e6f9-4d01-b4b4-a28afecc2fce",
+     "0001193125-26-344908/C_0373ccf8-d1a0-46ca-a336-4df495109e7f",
+     "0001193125-26-344908/C_b27086fd-2f4e-47ba-81b5-41e787f170fe",
+     "0001193125-26-344908/C_45eea485-04b6-47b0-b3b1-7522382bf516",
+     "0001193125-26-344908/C_ed6100bc-69ce-447e-97af-517893c71c6e",
+     "0001193125-26-344908/C_a076977c-9950-4474-a9ee-c06e1886d809",
+     "0001193125-26-344908/C_976f3862-f12e-41e1-bc27-0cbe01ac0f28",
+     "0001193125-26-344908/C_7077c0ea-90f6-4863-a9b9-bfd6cb630154",
+     "0001193125-26-344908/C_f1a6bce9-29a1-4880-af59-a6e751a5d166",
+     "0001193125-26-344908/C_07f9bfe5-6cc6-4c99-b0e2-8726f34ac660",
+     "0001193125-26-344908/C_f6b0500b-2640-4776-8ee8-e23802081952",
+     "0001193125-26-344908/C_9897f1ea-62fc-4749-930d-442d8e105a83",
+     "0001193125-26-344908/C_b9ae7a50-fcd8-4cdf-bdc3-dd12b624d658",
+     "0001193125-26-344908/C_79405679-0fb9-4361-9d88-ca6d2adcd2ae",
+     "0001193125-26-344908/C_e0492fe4-f5fd-4d68-ac78-6612a1a97a40",
+     "0001193125-26-344908/C_93bd31e0-87e4-4cec-800e-c6a6b73fe0b5",
+     "0001193125-26-344908/C_1c8d21c7-b8a1-4246-ac9e-ab9759b88548",
+     "0001193125-26-344908/C_4c2f8834-e7a1-4b57-b96f-bbba303cde39",
+     "0001193125-26-344908/C_5e0078fd-c1f9-4a53-921c-db86d0c85189",
+     "0001193125-26-344908/C_133800c3-3946-4d8c-a37b-08dafb82dbde",
+     "0001193125-26-344908/C_afd6ec8b-e5b8-4127-bbcf-c32a9ec1d268",
+     "0001193125-26-344908/C_1f0ebb65-25a8-4666-8e94-43c3cb040b59",
+     "0001193125-26-344908/C_a5fa4a41-f52a-4f64-86b9-3d6002f6f8e3",
+     "0001193125-26-344908/C_8e061ff8-1a12-4b9d-b9f2-9c29d00013fc",
+     "0001193125-26-344908/C_8555a3e7-6020-47da-81dd-006b62f15c8a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344908",
+     "text": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 9, 2025"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle/check_failures.csv B01 for 2026-06-30, 45 contexts (populations_cwaf.json): 33 excluded_comparative_period (the prior year-end schedule each filing prints after the current one, period not the report date) and 12 excluded_no_fair_value.",
+    "The excluded_no_fair_value contexts with a bare member ('190 Octane Holdings, LLC - Series A-1 units', no section heading, no cost, par, rate or value fact) belong to the note table 'The initial acquisition dates of the restricted securities are as follows' (one context per restricted equity holding, acquisition date only); read on the page.",
+    "Dash-printed schedule rows: every current-period schedule context printed with a dash for fair value is now published at fair value 0 from its own context (source_encodings.untagged_values, cwaf); none is left in the population."
+   ],
+   "next_action": "Proposal PD-CWA-B01 (b01-restricted-holdings-acquisition-table-contexts; comparative contexts as b01-leaves-without-value-are-the-comparative-schedule)."
+  },
+  {
+   "finding_id": "RVQ_REV_3b39f8f6a34f",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-029358/C_205a5b5f-e478-416b-b8db-073ea3545259/ROW-39c58bddf9a23fed",
+     "0000950170-24-029358/C_921b14f1-809e-476e-a088-03f0b682820d/ROW-d83801ffd57edf87",
+     "0000950170-24-029358/C_373baee5-24fd-4ce1-87ac-ad7bc3c9fc53/ROW-4dbd8202a83102b7",
+     "0000950170-24-029358/C_ff2a7809-7e6d-49bd-b252-7149bec6ba8a/ROW-9a648a11ee55eab3",
+     "0000950170-24-029358/C_1214d33b-ea1c-45af-bd9b-729b2d321b99/ROW-6118c20826a053f9",
+     "0000950170-24-029358/C_75864cd2-2702-4add-bb38-9ce22407d1c7/ROW-4d03d7e3181e57a8",
+     "0000950170-24-029358/C_2a6f8cee-8d85-438a-a5a8-f4ff694a0b65/ROW-be3a85e9057fba3e",
+     "0000950170-24-029358/C_f62e3d1f-1e3a-4a04-a29c-0b2b64e06db0/ROW-5845b5115412b4ca",
+     "0000950170-24-029358/C_8e96b8d3-7ac3-4bfc-8ea1-2ef2c8dc99ed/ROW-b158283991133e84",
+     "0000950170-24-029358/C_2c6b5d70-b744-412c-92b3-46501fc3f3be/ROW-19bb743e5044330d",
+     "0000950170-24-029358/C_fcf95fd0-e975-4229-8f26-1fd174f57145/ROW-c6bad253b9c389b5",
+     "0000950170-24-029358/C_6d9c5450-cb01-4fa6-b072-dbd97a6301db/ROW-4578e5a829395780",
+     "0000950170-24-029358/C_e90b3adb-a9ec-41d8-b225-a3f9a28a9774/ROW-7ee055e6f9c53bb9",
+     "0000950170-24-029358/C_f7fb53be-30c7-43d3-9332-2aca39fa73fe/ROW-9c694c31ea0a4a9e",
+     "0000950170-24-029358/C_02b15ca8-1f73-479d-9619-a065aa8608da/ROW-d4395899871b0dc4",
+     "0000950170-24-029358/C_1fbd9509-4d97-4ab2-ba2a-fe854e002ce6/ROW-24064884bae1d02f",
+     "0000950170-24-029358/C_455cc076-ea3a-46e3-8237-0fdf6f488fa5/ROW-d95c17da1286199a",
+     "0000950170-24-029358/C_5dd6bfd5-dc96-4c56-963c-bc0d2239b4e2/ROW-5313b3517fc43d69",
+     "0000950170-24-029358/C_73c736f2-197f-4ed3-bf8f-719cc5475d4e/ROW-ae25b65a0c7b11b3",
+     "0000950170-24-029358/C_a72921e6-3001-48e8-af6a-9cb270a1371d/ROW-87845b8433d245bb"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-029358/C_205a5b5f-e478-416b-b8db-073ea3545259/ROW-39c58bddf9a23fed",
+     "0000950170-24-029358/C_921b14f1-809e-476e-a088-03f0b682820d/ROW-d83801ffd57edf87",
+     "0000950170-24-029358/C_373baee5-24fd-4ce1-87ac-ad7bc3c9fc53/ROW-4dbd8202a83102b7",
+     "0000950170-24-029358/C_ff2a7809-7e6d-49bd-b252-7149bec6ba8a/ROW-9a648a11ee55eab3",
+     "0000950170-24-029358/C_1214d33b-ea1c-45af-bd9b-729b2d321b99/ROW-6118c20826a053f9",
+     "0000950170-24-029358/C_75864cd2-2702-4add-bb38-9ce22407d1c7/ROW-4d03d7e3181e57a8",
+     "0000950170-24-029358/C_2a6f8cee-8d85-438a-a5a8-f4ff694a0b65/ROW-be3a85e9057fba3e",
+     "0000950170-24-029358/C_f62e3d1f-1e3a-4a04-a29c-0b2b64e06db0/ROW-5845b5115412b4ca",
+     "0000950170-24-029358/C_8e96b8d3-7ac3-4bfc-8ea1-2ef2c8dc99ed/ROW-b158283991133e84",
+     "0000950170-24-029358/C_2c6b5d70-b744-412c-92b3-46501fc3f3be/ROW-19bb743e5044330d",
+     "0000950170-24-029358/C_fcf95fd0-e975-4229-8f26-1fd174f57145/ROW-c6bad253b9c389b5",
+     "0000950170-24-029358/C_6d9c5450-cb01-4fa6-b072-dbd97a6301db/ROW-4578e5a829395780",
+     "0000950170-24-029358/C_e90b3adb-a9ec-41d8-b225-a3f9a28a9774/ROW-7ee055e6f9c53bb9",
+     "0000950170-24-029358/C_f7fb53be-30c7-43d3-9332-2aca39fa73fe/ROW-9c694c31ea0a4a9e",
+     "0000950170-24-029358/C_02b15ca8-1f73-479d-9619-a065aa8608da/ROW-d4395899871b0dc4",
+     "0000950170-24-029358/C_1fbd9509-4d97-4ab2-ba2a-fe854e002ce6/ROW-24064884bae1d02f",
+     "0000950170-24-029358/C_455cc076-ea3a-46e3-8237-0fdf6f488fa5/ROW-d95c17da1286199a",
+     "0000950170-24-029358/C_5dd6bfd5-dc96-4c56-963c-bc0d2239b4e2/ROW-5313b3517fc43d69",
+     "0000950170-24-029358/C_73c736f2-197f-4ed3-bf8f-719cc5475d4e/ROW-ae25b65a0c7b11b3",
+     "0000950170-24-029358/C_a72921e6-3001-48e8-af6a-9cb270a1371d/ROW-87845b8433d245bb"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-029358",
+     "text": "Oak Dental - Delayed Draw Term Loan (4)(8) Health Care Equipment & Services SOFR + 6.50 % ( 2.00 % floor) 11.97 % 3/22/2028 - ( 78 ) ( 433 ) ( 0.1 )%"
+    },
+    {
+     "accession": "0000950170-24-029358",
+     "text": "Wilnat, Inc. - Revolving Credit Line (4) Capital Goods SOFR + 5.00 % ( 1.00 % floor) 10.35 % 12/29/2026 - ( 15 ) - - %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: row_validation_issues C107 for 2023-12-31, 20 rows (populations_cwaf.json), each matched to its printed line by fair value, cost and issuer (page_rows.py): 20 of 20 matched; every printed line shows a dash par and a bracketed (negative) amortized cost on an undrawn delayed draw or revolver.",
+    "2023-12-31: the costs were published positive in the untouched build (sign lost: the 10-K tags them without sign); set to the printed negative figure by context-keyed row corrections, so the published cost now equals the printed cost and the quarter's cost total equals the printed 627,891.",
+    "The negative cost is unamortized fee on an undrawn line, as printed; the accepted reason applies, but the check that accepts it did not clear these quarters (their costs are corrected or declared values, not tagged ones)."
+   ],
+   "next_action": "Proposal PD-CWA-C107 (undrawn-line-negative-cost-from-unamortized-fees, accepted reason; owner or check to accept)."
+  },
+  {
+   "finding_id": "RVQ_REV_e9baecaafb4e",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-344908/C_ac6560c5-4ff6-4163-99c9-b7988da5f07e/ROW-9ac04e9ebc57f37e",
+     "0001193125-26-344908/C_f5bb45c2-794f-4d68-9427-4146ddd53a3f/ROW-30299d2db060ab6e",
+     "0001193125-26-344908/C_b64aef42-74d0-44fa-8952-ebed07b41edf/ROW-b1e0db23313c4392",
+     "0001193125-26-344908/C_88b77065-b832-4ed2-a2ab-b7eae5f5f956/ROW-6390d5da42616cfd",
+     "0001193125-26-344908/C_ed77db17-4c99-493e-beae-662af3912b08/ROW-5d350f17024ebe09",
+     "0001193125-26-344908/C_191d0b76-5837-4fa0-a7e7-e87f27dbd9b7/ROW-2c7f6c76a97c8e9f",
+     "0001193125-26-344908/C_f476303a-901e-4702-9a0e-c1ab5b42b1ed/ROW-d55b275e37a17900",
+     "0001193125-26-344908/C_3f9bcd76-4342-441b-90a3-cb3fe19c6275/ROW-7a94e4695bb21d0d",
+     "0001193125-26-344908/C_f3a737b0-39cb-4714-8a86-f516cf7a6413/ROW-17d99d81cb689442",
+     "0001193125-26-344908/C_72ead908-d9f6-44d4-a600-135d52f3a1ae/ROW-a86c1f8eab81ef69",
+     "0001193125-26-344908/C_4da09880-b347-4435-96bd-a3e039a53efb/ROW-d9349c363912006f",
+     "0001193125-26-344908/C_08cd8be4-b25a-45d0-80fc-e01e3326e7b1/ROW-8f2b28613342ec4d",
+     "0001193125-26-344908/C_5ce51ece-b401-48cb-bd74-adb9df0ba621/ROW-399d5d2debf72ab1",
+     "0001193125-26-344908/C_772aca2f-e204-446f-a63b-b001f5ed1dee/ROW-8e7506cd2a1fe02e",
+     "0001193125-26-344908/C_4b0ec2a7-4529-4103-97a3-fa61213821b4/ROW-dc94dc29d84a7af2",
+     "0001193125-26-344908/C_cef13bd9-8219-4d3d-b67e-1d81b3cdab83/ROW-2100cc61955bde62",
+     "0001193125-26-344908/C_cb9fe5d0-be57-4239-b14b-de8ea8c9d22c/ROW-241b65b552cfe4b9",
+     "0001193125-26-344908/C_89a27816-68a6-44a6-9f1f-a3aa24dd2c86/ROW-e32c3a07eca31783",
+     "0001193125-26-344908/C_7c8c654f-4c3a-4f2e-8cd6-bc07b4337baf/ROW-846215d0495f304b",
+     "0001193125-26-344908/C_a96c63ac-7872-42e0-a499-5f47f26ab952/ROW-323a8933f37b67a8",
+     "0001193125-26-344908/C_bc3fd743-5d71-420d-aa15-31d79f4fb5a6/ROW-c8c813e6d40ca283"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-344908/C_ac6560c5-4ff6-4163-99c9-b7988da5f07e/ROW-9ac04e9ebc57f37e",
+     "0001193125-26-344908/C_f5bb45c2-794f-4d68-9427-4146ddd53a3f/ROW-30299d2db060ab6e",
+     "0001193125-26-344908/C_b64aef42-74d0-44fa-8952-ebed07b41edf/ROW-b1e0db23313c4392",
+     "0001193125-26-344908/C_88b77065-b832-4ed2-a2ab-b7eae5f5f956/ROW-6390d5da42616cfd",
+     "0001193125-26-344908/C_ed77db17-4c99-493e-beae-662af3912b08/ROW-5d350f17024ebe09",
+     "0001193125-26-344908/C_191d0b76-5837-4fa0-a7e7-e87f27dbd9b7/ROW-2c7f6c76a97c8e9f",
+     "0001193125-26-344908/C_f476303a-901e-4702-9a0e-c1ab5b42b1ed/ROW-d55b275e37a17900",
+     "0001193125-26-344908/C_3f9bcd76-4342-441b-90a3-cb3fe19c6275/ROW-7a94e4695bb21d0d",
+     "0001193125-26-344908/C_f3a737b0-39cb-4714-8a86-f516cf7a6413/ROW-17d99d81cb689442",
+     "0001193125-26-344908/C_72ead908-d9f6-44d4-a600-135d52f3a1ae/ROW-a86c1f8eab81ef69",
+     "0001193125-26-344908/C_4da09880-b347-4435-96bd-a3e039a53efb/ROW-d9349c363912006f",
+     "0001193125-26-344908/C_08cd8be4-b25a-45d0-80fc-e01e3326e7b1/ROW-8f2b28613342ec4d",
+     "0001193125-26-344908/C_5ce51ece-b401-48cb-bd74-adb9df0ba621/ROW-399d5d2debf72ab1",
+     "0001193125-26-344908/C_772aca2f-e204-446f-a63b-b001f5ed1dee/ROW-8e7506cd2a1fe02e",
+     "0001193125-26-344908/C_4b0ec2a7-4529-4103-97a3-fa61213821b4/ROW-dc94dc29d84a7af2",
+     "0001193125-26-344908/C_cef13bd9-8219-4d3d-b67e-1d81b3cdab83/ROW-2100cc61955bde62",
+     "0001193125-26-344908/C_cb9fe5d0-be57-4239-b14b-de8ea8c9d22c/ROW-241b65b552cfe4b9",
+     "0001193125-26-344908/C_89a27816-68a6-44a6-9f1f-a3aa24dd2c86/ROW-e32c3a07eca31783",
+     "0001193125-26-344908/C_7c8c654f-4c3a-4f2e-8cd6-bc07b4337baf/ROW-846215d0495f304b",
+     "0001193125-26-344908/C_a96c63ac-7872-42e0-a499-5f47f26ab952/ROW-323a8933f37b67a8",
+     "0001193125-26-344908/C_bc3fd743-5d71-420d-aa15-31d79f4fb5a6/ROW-c8c813e6d40ca283"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344908",
+     "text": "OneCare Media, LLC - Revolving Credit Line (4)(11) Media & Entertainment SOFR + 4.50 % ( 1.00 % floor) 8.24 % 12/31/2027 - ( 9 ) ( 458 ) ( 0.1 )%"
+    },
+    {
+     "accession": "0001193125-26-344908",
+     "text": "KeyMe, LLC - Delayed Draw Term Loan (4) Consumer Discretionary Distribution & Retail SOFR + 5.50 % ( 0.75 % floor) 9.16 % 5/4/2032 - ( 12 ) ( 25 ) - %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: row_validation_issues C107 for 2026-06-30, 21 rows (populations_cwaf.json), each matched to its printed line by fair value, cost and issuer (page_rows.py): 21 of 21 matched; every printed line shows a dash par and a bracketed (negative) amortized cost on an undrawn delayed draw or revolver.",
+    "2026-06-30: KeyMe delayed draw and revolver costs were tagged with the principal concept and no cost; cost set from the page (-12, -16) and the principal withdrawn by row corrections; the other 19 rows carry the tagged negative cost.",
+    "The negative cost is unamortized fee on an undrawn line, as printed; the accepted reason applies, but the check that accepts it did not clear these quarters (their costs are corrected or declared values, not tagged ones)."
+   ],
+   "next_action": "Proposal PD-CWA-C107 (undrawn-line-negative-cost-from-unamortized-fees, accepted reason; owner or check to accept)."
+  },
+  {
+   "finding_id": "RVQ_REV_f9953afbdf3a",
+   "coverage": {
+    "affected_rows": [
+     "0001841514/2024-09-30/D06/issuer_continuity"
+    ],
+    "reviewed_rows": [
+     "0001841514/2024-09-30/D06/issuer_continuity"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-125642",
+     "text": "(13) The Company updated certain descriptions of its portfolio companies presented in the consolidated financial statements as of September 30, 2024 to align with the legal issuer name, where applicable."
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Metric: issuer-name continuity 2024-06-30 to 2024-09-30 is 25 of 53 names (d06.sql). The 28 names missing are renamed, not exited: '190 Octane Financing' -> '190 Octane Financing, LLC', 'Hasa' -> 'Hasa Acquisition, LLC', 'Oak Dental' -> 'Oak Dental Partners', 'BKH' -> 'BKH ...', 'Kemper Sports Management' -> 'Kemper Sports Management, LLC' and so on; the published names follow the printed ones in both quarters.",
+    "Footnote (13) of the 10-Q 2024-09-30 says the descriptions were updated to the legal issuer names. Fair value and row counts are continuous (627,927 -> 642,327; 136 -> 142 rows).",
+    "Position chains are not affected by this rule; the matcher links by name key and maturity (not checked here)."
+   ],
+   "next_action": "Proposal PD-CWA-D06 (d06-issuer-spelling-differs-between-filings)."
+  },
+  {
+   "finding_id": "RVQ_REV_7b4139cb3ed0",
+   "coverage": {
+    "affected_rows": [
+     "0001841514/2022-03-31/F30/nav_per_share"
+    ],
+    "reviewed_rows": [
+     "0001841514/2022-03-31/F30/nav_per_share"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-22-148742",
+     "text": "Total Net Assets $ 142,570 $ 140,094 Total Liabilities and Net Assets $ 265,274 $ 253,539 Net Asset Value Per Common Share $ 1,001.80 $ 996.26"
+    },
+    {
+     "accession": "0001193125-22-148742",
+     "text": "Net Asset Value, End of Period $ 1,001.80 Shares Outstanding, End of Period 142,314"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published nav_per_share 1,001.80 (fund_financials_validation_current.csv F30 FAIL, range 0.01 < nav < 1000). The 10-Q 2022-03-31 prints 'Net Asset Value Per Common Share $ 1,001.80' and the financial highlights 'Net Asset Value, End of Period $ 1,001.80'.",
+    "The fund issues shares at about 1,000 (2021-12-31 996.26, 2022-06-30 997.52); the value is as printed and above the check's upper bound by 1.80. Before the holdings period (holdings start 2023-03-31)."
+   ],
+   "next_action": "Proposal PD-CWA-F30 (f30-nav-per-share-printed-just-above-1000-issue-price)."
+  }
+ ]
+}

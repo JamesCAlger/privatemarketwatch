@@ -1,0 +1,33 @@
+{
+  "cik": "1841514",
+  "rule_id": "exclude_affiliate_rollforward_note_rows",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {"quarters": ["all"]},
+  "predicate_sql": "(bdc_investment_identifier LIKE 'Affiliate company investment,%' OR bdc_investment_identifier LIKE 'Affiliated investments,%' OR bdc_investment_identifier LIKE 'Non-controlled, Affiliated investments,%')",
+  "evidence": [
+    {
+      "source": "filing",
+      "accession": "0000950170-24-057722",
+      "quote": "Affiliate company investment: Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out First Lien Senior Secured $ - $ 8,176 $ 80 $ - $ - $ ( 1,999 ) $ 6,257 Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out First Lien Senior Secured - 3,662 1,163 - - 392 5,217"
+    },
+    {
+      "source": "filing",
+      "accession": "0000950170-24-096491",
+      "quote": "Affiliated investments: Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out First Lien Senior Secured $ - $ 8,176 $ 92 $ - $ - $ ( 3,044 ) $ 5,224 Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out First Lien Senior Secured - 3,662 1,462 - - 513 5,637"
+    },
+    {
+      "source": "filing",
+      "accession": "0000950170-25-038112",
+      "quote": "Affiliated investments: Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out First Lien Senior Secured $ - $ 8,176 $ - $ - $ - $ ( 4,846 ) $ 3,330"
+    }
+  ],
+  "rationale": "The members that start 'Affiliate company investment,' (10-Q 2024-03-31), 'Affiliated investments,' (2024-06-30 to 2024-12-31) and 'Non-controlled, Affiliated investments,' (2025-03-31 on) tag the affiliated-investments roll-forward note (fair value at period end only; no cost, principal or percent). The same Kent Water Sports loans are printed and tagged in the schedule under 'Debt Investments, First Lien Senior Secured, Kent Water Sports Holdings, LLC - Delayed Draw Term Loan First-Out / Last-Out'. Published, they double the Kent loans: fv_conservation 2024-03-31 to 2024-12-31 (published minus filed 11.5M, 10.9M, 9.9M, 9.6M = the two note rows). Replaces exclude_duplicate_kent_affiliate_rows (inert: it required src_transforms = 'cost:cost_proxy_fv', no longer set) and exclude_kent_water_affiliated_duplicate_rows (named one issuer; a second affiliate would leak). Rows that are not positions; matched by the note's own heading, not by value.",
+  "confidence": 0.98,
+  "measured_impact": {
+    "2024-03-31": {"rows": 2, "fv": 11474000.0, "residual_before": 11474000.0, "residual_after": 0.0},
+    "2024-06-30": {"rows": 2, "fv": 10861000.0, "residual_before": 10861000.0, "residual_after": 0.0},
+    "2024-09-30": {"rows": 2, "fv": 9886000.0, "residual_before": 9886000.0, "residual_after": 0.0},
+    "2024-12-31": {"rows": 2, "fv": 9586000.0, "residual_before": 9586000.0, "residual_after": 0.0}
+  }
+}

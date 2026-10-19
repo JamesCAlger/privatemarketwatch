@@ -1,0 +1,276 @@
+{
+ "reviewer_id": "commonwealth-independent-reviewer-2026-10-19",
+ "report_digest": "4af686bb134afea54baba23c0d21f1d5de134f8fb03b53b64cff432fa4305904",
+ "reviewer_method": "Final review (cwaf, report-only correction after the second review rejected one observation for a stale count). Re-checked: populations still 13 of 13 equal (coverage2.py); ledger, row corrections, wrapper and rules unchanged since the cwaf build (file times precede the report edit); proposals unchanged in substance; the report changes are the spread / PIK counts, the VardimanBlack derived-versus-filer-stated wording, and a new reconciliation.cost_2023_independence note (verified: total cost facts 538,602,000 and 583,542,000 on the filer's custom concept, and also on us-gaap:InvestmentOwnedAtCost, equal to the published sums; review/final.sql, fact_members.py). Earlier: second review (cwaf), after the cwae review (reviews/0001841514_cwae.json: 1 finding and 5 observations rejected). Populations rebuilt from cwaf rule outputs by scratch/fund_runs/0001841514/review/coverage2.py (13 of 13 equal to affected_rows). Published values read from cwaf private_markets_holdings.parquet (review/cwaf_rows.sql, disc.sql); storage convention measured on cwaf and sponfb (review/conv.sql, conv2.sql); 2023 declared costs checked against the filer's custom facts (review/cost23_check.py: 201 of 201 equal); correction counts by field and reason (review/corr.sql, spcorr.sql: 594 rows, 0 'Row correction unmatched' for this fund in cwaf rebuild.log); the investigator's swap_audit.py re-run read-only on cwaf (0 spread diffs, 0 instrument diffs, 6 same-name groups that the page prints as identical lines). Printed lines read with page_line.py; member texts and tags read from the cached XBRL instances.",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_2752c77026a3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "New in cwaf. pik_printed 2024-09-30 flags exactly ROW-db600ad25f79c253 (C_7c1b58fd, term loan) and ROW-b6389c6f010c260f (C_ede6c28e, delayed draw), equal to affected_rows. Page: 'SOFR + 2.00 % PIK + 5.00 % 12.30 %' on both. Structure: a PIK leg at SOFR + 2.00 and a fixed 5.00 cash leg; the filer's member in later filings reads the same line as 'SOFR + 2.00% PIK + 5.00% Fixed', and its 2024-12-31 member states the PIK leg outright ('SOFR + 5.00% + 6.65% PIK Interest Rate 11.65%', tags InvestmentFixedInterestRate 0.05). cwaf: interest_rate 12.30 (printed), kind all_in, pik_rate 7.30, basis_spread 2.00, cash 5.00. Derivation check: 7.30 implies SOFR 5.30 at this filing; other loans of the same filing imply a similar base (Hornblower 10.82 - 5.50 = 5.32, Kent first-out 15.51 - 10.00 = 5.51), so R - 5.00 is a sound reading, but it is derived, not printed, for every quarter except 2024-12-31. The rule compares pik_rate with the 2.00 before the word PIK; rule problem supported. D-218 is now recorded in docs/investigations/v05_decision_log.md (Commonwealth entry, orchestrator decision under D-207) and states 6.65 as filer-stated and 7.30 / 6.42 / 6.42 / 6.38 as derived.",
+   "evidence": [
+    {"accession": "0000950170-24-125642", "text": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % 12.30 % 3/18/2027 19,825 17,349 19,825 3.6 %"},
+    {"accession": "0000950170-24-125642", "text": "VardimanBlack Holdings, LLC - Delayed Draw Term Loan (4) Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % 12.30 % 3/18/2027 1,967 1,891 2,203 0.4 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d3091e56613c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "New in cwaf. pik_printed 2024-12-31 flags exactly ROW-346e682b7132ed72 (C_f7cc8e71, delayed draw) and ROW-5da26655a96432e5 (C_3eaeea43, term loan), equal to affected_rows. Page 'SOFR + 2.00 % PIK + 5.00 % Fixed 11.65 %'; the member of both contexts reads 'SOFR + 5.00% + 6.65% PIK Interest Rate 11.65%' and the filer tags PaidInKind 0.02 and InvestmentFixedInterestRate 0.05. cwaf: interest_rate 11.65, pik_rate 6.65 (equal to the filer's own stated PIK leg), spread 2.00, cash 5.00. This is the one quarter where the derived figure is confirmed by the filer. Rule problem supported; D-218 recorded in the decision log.",
+   "evidence": [
+    {"accession": "0000950170-25-038112", "text": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % Fixed 11.65 % 3/18/2027 20,173 17,799 20,173 3.7 %"},
+    {"accession": "0000950170-25-038112", "text": "VardimanBlack Holdings, LLC - Delayed Draw Term Loan (4) Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % Fixed 11.65 % 3/18/2027 2,089 2,023 2,328 0.4 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a0117ac1f4f1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "My cwae rejection is resolved. Population unchanged (ROW-3836c0cd455403c1 C_877bda4e, ROW-f959ed8acbfa4ea3 C_287d1960). cwaf: First-Out spread 10.0, pik 15.44, rate 15.44, cash 0; Last-Out spread 9.0, pik 14.44, rate 14.44, cash 0: every field equals the printed line. The spread swap is fixed by two context-keyed corrections that cite the printed lines, and the investigation now records the swapped member terms. Whole-coupon PIK reading (D-092) and rule-problem reason supported.",
+   "evidence": [
+    {"accession": "0000950170-24-029358", "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out (10)(11)(12) Consumer Durables & Apparel SOFR + 10.00 % PIK 15.44 % 12/31/2025 3,662 3,495 3,662 0.7 %"},
+    {"accession": "0000950170-24-029358", "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11)(12) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.44 % 12/31/2025 13,186 12,748 8,176 1.6 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bb6c3d945574",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population unchanged and equal to affected_rows (ROW-24da7e37a6806618, ROW-4be5128752c738fc). Values as in the cwae review: First-Out pik 15.41 / spread 10, Last-Out pik 14.41 / spread 9, cash 0, all equal to the page. Rule problem supported.",
+   "evidence": [
+    {"accession": "0000950170-24-057722", "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out (4)(8)(10)(11) Consumer Durables & Apparel SOFR + 10.00 % PIK 15.41 % 12/31/2025 5,217 4,658 5,217 1.0 %"},
+    {"accession": "0000950170-24-057722", "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (8)(10)(11) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.41 % 12/31/2025 13,691 12,828 6,257 1.2 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_cf06a429a431",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population unchanged and equal to affected_rows (ROW-c9c8930369aa84a7, ROW-0dd1d6728abfbcb9). Last-Out pik 14.59 / spread 9, First-Out pik 15.59 / spread 10, equal to the page. The caveat in my cwae review (2024-09-30 Last-Out published as First-Out) is fixed in cwaf: C_9d475502 now 'Delayed Draw Term Loan Last-Out', spread 9, pik 14.51, so the proposal's 'published the same way from 2024-09-30' now holds.",
+   "evidence": [
+    {"accession": "0000950170-24-096491", "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.59 % 10/18/2027 14,006 12,840 5,224 0.9 %"},
+    {"accession": "0000950170-24-125642", "text": "Kent Water Sports Holdings, LLC - Delayed Draw Term Loan Last-Out (10)(11) Consumer Durables & Apparel SOFR + 9.00 % ( 1.00 % floor) PIK 14.51 % 10/18/2027 14,529 12,977 4,024 0.7 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c0f8e1a23340",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2025-06-30 in cwaf: 37 contexts, equal to affected_rows. As verified on cwae: 27 comparative contexts dated 2024-12-31, 10 contexts carrying only InvestmentAcquisitionDate (restricted-securities table); each of those holdings has its own published schedule row.",
+   "evidence": [
+    {"accession": "0000950170-25-108128", "text": "The initial acquisition dates of the restricted securities are as follows: Portfolio Company - Investment (15) Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_124199877db6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2025-09-30 in cwaf: 38 contexts, equal to affected_rows. 27 comparative, 10 acquisition-date-only contexts, and C_4de9e8c3 carrying only the ACT delayed-draw percent (InvestmentOwnedPercentOfNetAssets 0.002) whose position is published from its other context. No position missing.",
+   "evidence": [
+    {"accession": "0001193125-25-277996", "text": "ACT Acquisition Intermediate Holdco, LLC - Delayed Draw Term Loan Media & Entertainment SOFR + 6.75 % ( 1.00 % floor) 11.03 % 12/4/2028 1,407 1,386 1,407 0.2 %"},
+    {"accession": "0001193125-25-277996", "text": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 Units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 11, 2025"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_64c6f298504f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2025-12-31 in cwaf: 39 contexts, equal to affected_rows (27 comparative, 12 acquisition-date-only). The earlier real_error verdict (dash fair value rows not published) stays addressed: the dash rows are published at 0 from their own contexts.",
+   "evidence": [
+    {"accession": "0001193125-26-104454", "text": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 9, 2025"},
+    {"accession": "0001193125-26-104454", "text": "Allbridge, LLC - Delayed Draw Term Loan (4) Telecommunication Services SOFR + 5.50 % ( 1.00 % floor) 9.17 % 6/5/2030 - ( 1 ) - - %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7e16ba27c339",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2026-06-30 in cwaf: 45 contexts, equal to affected_rows (33 comparative dated 2025-12-31, 12 acquisition-date-only); all 12 holdings published from their schedule contexts.",
+   "evidence": [
+    {"accession": "0001193125-26-344908", "text": "Initial Acquisition Date 190 Octane Holdings, LLC - Series A-1 units July 1, 2022 Allied OMS Intermediate Company, LLC - Preferred Units June 9, 2025"},
+    {"accession": "0001193125-26-344908", "text": "Atlas US Holdings, LP - Class B-2 Units Financial Services NA NA NA 857,787 873 - - %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3b39f8f6a34f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2023-12-31 in cwaf: 20 rows, equal to affected_rows. Sampled costs (Raven revolver -50, Hasa delayed draw -41, Oak Dental DDTL -78) equal the printed bracketed costs with a dash par; undrawn-line unamortized fee, accepted reason.",
+   "evidence": [
+    {"accession": "0000950170-24-029358", "text": "Raven Engineered Films, Inc. - Revolving Credit Line (4)(8) Industrials SOFR + 7.00 % ( 1.00 % floor) 12.47 % 4/29/2027 - ( 50 ) ( 132 ) - %"},
+    {"accession": "0000950170-24-029358", "text": "Hasa - Delayed Draw Loan (4)(8)(9) Capital Goods SOFR + 5.75 % ( 1.00 % floor) 11.23 % 1/10/2029 - ( 41 ) ( 19 ) - %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e9baecaafb4e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2026-06-30 in cwaf: 21 rows, equal to affected_rows. KeyMe revolver (-16), Heathos DDTL (-16) equal the printed costs; undrawn-line unamortized fee.",
+   "evidence": [
+    {"accession": "0001193125-26-344908", "text": "KeyMe, LLC - Revolving Credit Line (4) Consumer Discretionary Distribution & Retail SOFR + 5.50 % ( 0.75 % floor) 9.16 % 5/4/2032 - ( 16 ) ( 16 ) - %"},
+    {"accession": "0001193125-26-344908", "text": "Heathos Advance, LLC - Delayed Draw Term Loan (1)(4) Financial Services SOFR + 6.00 % ( 1.00 % floor) 9.65 % 9/19/2031 - ( 16 ) ( 33 ) - %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f9953afbdf3a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "As verified on cwae: 25 of 53 names kept; all 28 lost names have a same-maturity successor at 2024-09-30 (e.g. Peak Technologies -> AIDC IntermediateCo 2, BKH -> Restaurant Holding Company, VENU+ -> CTM Group); footnote 13 states the renaming. Renames, not exits.",
+   "evidence": [
+    {"accession": "0000950170-24-125642", "text": "The Company updated certain descriptions of its portfolio companies presented in the consolidated financial statements as of September 30, 2024 to align with the legal issuer name"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7b4139cb3ed0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F30 2022-03-31: published 1001.8 equals the printed NAV per share (142,570 / 142,314 shares); bound exceeded by 1.80, value as printed.",
+   "evidence": [
+    {"accession": "0001193125-22-148742", "text": "Total Net Assets $ 142,570 $ 140,094 Total Liabilities and Net Assets $ 265,274 $ 253,539 Net Asset Value Per Common Share $ 1,001.80 $ 996.26"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "C206 fired in cwaa and the gate name-shape check counted the heading rows; gate names check passes. Small residual unchanged: VardimanBlack preferred 2024-09-30 to 2025-03-31 published without the printed comma.",
+   "evidence": [{"accession": "0000950170-24-125642", "text": "VardimanBlack Holdings, LLC - Preferred Equity (9)(10) Health Care Equipment & Services 6.00 % PIK 6.00 % PIK NA 9,268,770 2,908 3,784 0.7 %"}]
+  },
+  {
+   "observation_key": "instrument-text-after-en-dash-dropped-by-staging",
+   "outcome": "supported",
+   "rationale": "Fixed by the wrapper regexes; the proposed check is concrete with low false-positive risk.",
+   "evidence": [{"accession": "0001193125-26-344908", "text": "Narcote, LLC - Term Loan A (1) Materials SOFR + 7.00 % ( 1.00 % floor) 10.76 % 3/30/2027 2,608 2,599 2,608 0.5 %"}]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "B01 fired 6 times in cwaa; dash rows published at 0 from their own contexts; sampled declared values match the page.",
+   "evidence": [{"accession": "0000950170-25-069480", "text": "Firebirds Intermediate Holdings I, LLC - Class B Units Consumer Services NA NA NA 590,012 - - 0.0 %"}]
+  },
+  {
+   "observation_key": "affiliate-rollforward-note-rows-published",
+   "outcome": "supported",
+   "rationale": "fv_conservation fired 4 times in cwaa. The heading-based exclusion matches only note rows and note totals (53 raw rows, FV only), none from the schedule.",
+   "evidence": [{"accession": "0000950170-24-096491", "text": "Affiliated investments: Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out First Lien Senior Secured $ - $ 8,176 $ 92 $ - $ - $ ( 3,044 ) $ 5,224"}]
+  },
+  {
+   "observation_key": "cost-tagged-with-filer-custom-concept-not-read",
+   "outcome": "supported",
+   "rationale": "All 201 declared cost values for the 2023-03-31 and 2023-06-30 10-Qs equal ck0001841514:InvestmentCompanyAmortizedUnamortizedCost on the same context (review/cost23_check.py: 201 equal, 0 differ, 0 missing; the coordinator's note said 200/200, my count is 201/201). That custom fact is the support independent of the page; it is not a self-comparison.",
+   "evidence": [
+    {"accession": "0000950170-23-021246", "text": "Oak Dental - Term Loan (8) Health Care Equipment & Services SOFR + 6.50 % ( 2.00 % floor) 11.67 % 3/22/2028 18,068 17,617 17,706 3.9 %"},
+    {"accession": "0000950170-23-041104", "text": "Bradford Health Services - Term Loan (8) Health Care Providers & Services SOFR + 6.00 % ( 1.00 % floor) 11.42 % 10/27/2028 13,129 12,888 12,919 2.6 %"}
+   ]
+  },
+  {
+   "observation_key": "negative-cost-published-positive",
+   "outcome": "supported",
+   "rationale": "Sampled sign corrections match the page; proposed check is concrete.",
+   "evidence": [{"accession": "0000950170-23-061868", "text": "Raven Engineered Films, Inc. - Revolving Credit Line (4)(8) Industrials SOFR + 7.00 % ( 1.00 % floor) 12.43 % 4/29/2027 - ( 54 ) ( 117 ) 0.0 %"}]
+  },
+  {
+   "observation_key": "units-tagged-as-principal-at-scale-3",
+   "outcome": "supported",
+   "rationale": "C04 fired 14 times in cwaa; 258 shares_held corrections, sampled ones equal the printed unit column.",
+   "evidence": [{"accession": "0001193125-26-219691", "text": "Allied OMS Intermediate Company, LLC - Preferred Units Health Care Equipment & Services NA NA NA 13,570 $ 726 $ 858 0.2 %"}]
+  },
+  {
+   "observation_key": "preferred-section-rows-published-as-common",
+   "outcome": "supported",
+   "rationale": "preferred_printed fired on these rows in cwab (7 quarters); it was blind in cwaa only because of the name defect, now fixed and guarded by the gate name check.",
+   "evidence": [{"accession": "0001193125-26-344908", "text": "Atlas US Holdings, LP - Class B-2 Units Financial Services NA NA NA 857,787 873 - - %"}]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "outcome": "supported",
+   "rationale": "My cwae rejection is resolved. Verified: cwaa X02 2024-06-30 (RVQ_REV_029f8acf76db) lists CTM Acquisition LLC Equity as LOAN; cwac X02 2024-12-31 lists SDB Partners Holdco Class A as LOAN once the row was published. existing_detector X02 is now accurate; the par-to-cost proposal for dropped rows is a reasonable addition.",
+   "evidence": [{"accession": "0000950170-25-038112", "text": "SDB Partners Holdco, LLC - Class A (9) Health Care Equipment & Services NA NA NA 19,103,095 - - 0.0"}]
+  },
+  {
+   "observation_key": "pik-spread-published-as-cash-leg-only",
+   "outcome": "supported",
+   "rationale": "My second-review rejection (stale count 106) is resolved. All counts now reproduce from my own queries (review/final.sql, spcorr.sql). There are 96 'Cash margin plus the printed + Y % PIK' corrections, 496.1M fair value summed over 14 quarters in cwaf, and 12 rows (58.2M) at 2026-06-30. Adding 2 Kent and 2 D-218 VardimanBlack corrections gives 100 basis_spread corrections. The fix's 61 PIK rates also reproduce: 21 whole coupons, 20 equity dividends, 10 withdrawals and 10 D-218. The mechanism checks out on the page: CTM revolver 2025-06-30, 4.75 + 2.75 = 7.50. propose_detector is right; no rule reads this '+ Y % PIK' form.",
+   "evidence": [{"accession": "0000950170-25-108128", "text": "CTM Group, Inc. - Revolving Credit Line PIK Media & Entertainment SOFR + 4.75 % ( 1.00 % floor) + 2.75 % PIK 11.43 % 11/30/2026 23 23 21 - %"}]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Checked on cwae and unchanged: VardimanBlack TL 2023-03-31 11.90, Vecta revolver 2023-06-30 11.49, Senior Support TL 2025-09-30 9.25 no PIK, CheckedUp and Juvare 2026-06-30 no PIK, all as printed.",
+   "evidence": [{"accession": "0001193125-25-277996", "text": "Senior Support Holdings (Franchise) Acquisition, Inc. - Term Loan Health Care Equipment & Services SOFR + 5.25 % ( 1.00 % floor) 9.25 % 3/20/2030 4,226 4,159 4,226 0.7 %"}]
+  },
+  {
+   "observation_key": "margin-tagged-as-pik-rate",
+   "outcome": "supported",
+   "rationale": "My cwae rejection is resolved. cwaf publishes all 10 VardimanBlack loan rows 2024-09-30 to 2025-09-30 with spread 2.00 and cash 5.00. PIK is 7.30, 6.65, 6.42, 6.42 and 6.38, each equal to the printed rate (12.30, 11.65, 11.42, 11.42, 11.38) less 5.00. The derivation is sound. The filer prints the line as a PIK leg at SOFR + 2.00 plus a fixed 5.00 ('Fixed' in the 2025 members). Its 2024-12-31 member confirms 6.65. The implied base for each quarter agrees within about 0.2 with other loans in the same filing (Kent first-out and Hornblower). Only 6.65 is filer-stated; the other four are derived and should be described that way. The 2025-12-31 to 2026-06-30 rows print no PIK and publish none. Storage: interest_rate holds the printed all-in rate (kind all_in) and interest_rate_cash = interest_rate - pik_rate. That matches the build: sponfb has 3,185 all_in rows (16 funds) with interest_rate = reported rate and cash = rate - PIK, and Kent is stored the same way. The detection decision (propose_detector, cash leg above the printed fixed coupon) is concrete.",
+   "evidence": [
+    {"accession": "0000950170-25-038112", "text": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % PIK + 5.00 % Fixed 11.65 % 3/18/2027 20,173 17,799 20,173 3.7 %"},
+    {"accession": "0000950170-25-069480", "text": "VardimanBlack Holdings, LLC - Term Loan Health Care Equipment & Services SOFR + 2.00 % ( 0.50 % floor) PIK + 5.00 % Fixed 11.42 % 3/18/2027 20,507 18,375 20,507 3.8 %"}
+   ]
+  },
+  {
+   "observation_key": "equity-pik-dividend-not-published",
+   "outcome": "supported",
+   "rationale": "pik_printed fired in cwaa on Atlas Class X, Oak Dental Class D and VardimanBlack preferred; published 6.00 on VardimanBlack preferred matches the page.",
+   "evidence": [{"accession": "0000950170-25-038112", "text": "VardimanBlack Holdings, LLC - Preferred Equity (9)(10) Health Care Equipment & Services 6.00 % PIK 6.00 % PIK NA 9,268,770 2,908 2,469 0.5 %"}]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "My cwae rejection is resolved. In cwaf: the Kent 2023-12-31 spreads are 10/9 as printed. Kent 2024-09-30 C_9d475502 is 'Delayed Draw Term Loan Last-Out' (cost 12,977). Discovery 2024-06-30: term loan (C_92e11097, 2,584) and DDTL A (C_57f1cf1c, 432) carry their printed labels, and both chains now continue into 2024-09-30. Wilnat 2023-09-30 and 2023-12-31 are 'Term Loan B'; National Debt Relief 2023 is 'Delayed Draw Loan'. swap_audit.py on cwaf reports 0 spread and 0 instrument differences. The 6 remaining same-name groups (Narcote 2023-03-31 to 2024-03-31, Wilnat 2023-06-30) are two identical 'Term Loan' lines on the page, so they are published as printed (checked on 0000950170-23-021246 and 0000950170-23-041104). propose_detector is accurate: no ledger rule fired on these rows.",
+   "evidence": [
+    {"accession": "0000950170-24-096491", "text": "Discovery SL Management, LLC - Delayed Draw Term Loan A Health Care Equipment & Services SOFR + 5.75 % ( 1.00 % floor) 11.09 % 3/18/2030 435 430 432 0.1 %"},
+    {"accession": "0000950170-24-125642", "text": "Kent Water Sports Holdings, LLC - Delayed Draw Term Loan Last-Out (10)(11) Consumer Durables & Apparel SOFR + 9.00 % ( 1.00 % floor) PIK 14.51 % 10/18/2027 14,529 12,977 4,024 0.7 %"}
+   ]
+  },
+  {
+   "observation_key": "section-heading-published-as-industry",
+   "outcome": "supported",
+   "rationale": "My cwae rejection is resolved: the action is now propose_detector and the rationale says that nothing fired on the 37 heading rows. The suggested check is concrete (heading words, or the identifier's second segment shared across industries).",
+   "evidence": [{"accession": "0001193125-26-104454", "text": "Kemper Sports Management Holdings, LLC Equity (11) Consumer Services NA NA NA 420,992 421 1,225 0.2 %"}]
+  },
+  {
+   "observation_key": "industry-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Sampled VENU+ 2023-06-30 correction matches the printed industry; no rule compares industry with the printed row.",
+   "evidence": [{"accession": "0000950170-23-041104", "text": "VENU+ - Term Loan (8) Consumer Services SOFR + 6.75 % ( 1.00 % floor) 12.04 % 11/30/2026 19,347 18,895 18,922 3.8 %"}]
+  },
+  {
+   "observation_key": "pct-on-a-second-context-of-the-member",
+   "outcome": "supported",
+   "rationale": "C_4de9e8c3 carries only the percent; pct_of_net_assets is neither a correctable field nor in the untagged_values grammar. Left, with a concrete check proposed.",
+   "evidence": [{"accession": "0001193125-25-277996", "text": "ACT Acquisition Intermediate Holdco, LLC - Delayed Draw Term Loan Media & Entertainment SOFR + 6.75 % ( 1.00 % floor) 11.03 % 12/4/2028 1,407 1,386 1,407 0.2 %"}]
+  },
+  {
+   "observation_key": "pct-printed-dash-published-null",
+   "outcome": "supported",
+   "rationale": "A dash percent cell is not a figure; not_feasible justified.",
+   "evidence": [{"accession": "0001193125-26-344908", "text": "Billhighway, LLC - Revolving Credit Line (4) Software & Services SOFR + 5.00 % ( 1.00 % floor) 8.64 % 2/8/2029 - ( 2 ) - - %"}]
+  },
+  {
+   "observation_key": "printed-rate-excludes-pik-leg",
+   "outcome": "supported",
+   "rationale": "My cwae rejection is resolved. Two interest_rate_kind = cash corrections were made (term loan C_388e379d, revolver C_62d210a6). cwaf publishes interest_rate_reported 9.18 (printed) and interest_rate_cash 9.18. interest_rate is 10.68 = 9.18 + 1.50 PIK, which equals the printed rate of the same loan at 2026-06-30. Storing a cash-kind row as reported + PIK matches the build: sponfb has 259 cash-kind rows (2 funds), all with interest_rate = reported + pik_rate. Note for the page sample: this row's interest_rate (10.68) is not the printed 9.18; that is the build's storage convention, not an error.",
+   "evidence": [
+    {"accession": "0001193125-26-219691", "text": "Hornblower Sub LLC - Term Loan (11) Transportation SOFR + 5.50 % ( 1.00 % floor) + 1.50 % PIK 9.18 % 7/3/2029 3,973 3,945 3,766 0.7 %"},
+    {"accession": "0001193125-26-219691", "text": "Hornblower Sub LLC - Revolving Credit Line (11) Transportation SOFR + 5.50 % ( 1.00 % floor) + 1.50 % PIK 9.18 % 7/3/2029 628 624 596 0.1 %"}
+   ]
+  }
+ ],
+ "request_reviews": []
+}

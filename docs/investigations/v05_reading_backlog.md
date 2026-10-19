@@ -196,3 +196,4 @@ Manulife 0001988280.
 | 2026-10-19 | 0001954360 Crescent Private Credit Income Corp | cpig | INCOMPLETE (investigation COMPLETE) | 73 findings, 50 outstanding, 49 proposed, X05 parked; 12/12 quarters tie; sample 2/20 fixed | D-215 |
 | 2026-10-19 | 0001784700 Varagon Capital Corporation | vgaf | PASS (investigation COMPLETE) | 58 findings, 24 outstanding, all proposed; 14/14 quarters tie (3 before); sample 0/20 | D-216 |
 | 2026-10-19 | 0002052153 Apollo Origination II (UL) Capital Trust | aoud | PASS (investigation COMPLETE) | 12 findings, 5 outstanding, all proposed; 6/6 quarters tie; sample 0/20; PIK double count found on the Apollo layout | D-217 |
+| 2026-10-19 | 0001841514 Commonwealth Credit Partners BDC I | cwaf | PASS (investigation COMPLETE) | 47 findings, 13 outstanding, all proposed; 14/14 quarters tie; sample 0/20; filer swapped Kent first-out/last-out terms | D-218 |
