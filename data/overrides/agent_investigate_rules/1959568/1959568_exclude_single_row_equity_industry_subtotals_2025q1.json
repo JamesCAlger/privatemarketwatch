@@ -1,0 +1,33 @@
+{
+  "cik": "1959568",
+  "rule_id": "1959568_exclude_single_row_equity_industry_subtotals_2025q1",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2025-03-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2025-03-31' AND bdc_investment_identifier IN ('Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments Common Stock Commercial Services & Supplies', 'Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments Preferred Stock Professional Services')",
+  "evidence": [
+    {
+      "source": "filing",
+      "accession": "0000950170-25-071598",
+      "quote": "Equity Investments Preferred Stock Professional Services Eclipse Topco, Inc. Preferred Stock 28 $ 285 $ 291 285 291 Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Common Stock 764 3,694 3,250 3,694 3,250 L.P. Interest Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 152 160 152 Total non-controlled-non-affiliated Portfolio Company equity investments 4,139 3,693 2.1 %"
+    },
+    {
+      "source": "query",
+      "quote": "scia 2025-03-31: the two members (section, class heading and industry only, no issuer, no 'Investment Type') carry cost 160,000 / fair value 152,000 and cost 285,000 / fair value 291,000, the same figures as the Firebird Co-Invest and Eclipse Topco rows published beside them; published fair value 355,643,000 against the printed total 355,200,000: +443,000 = 152,000 + 291,000."
+    }
+  ],
+  "rationale": "Each industry of the equity section holds one position at 2025-03-31 and the page prints that industry's subtotal after it (the second pair of figures on each line). The filer tags the subtotal on a member named by the section, class heading and industry only, which the build publishes as a second position. The printed equity total 3,693 = 291 + 3,250 + 152 counts each once. The third subtotal (Air Freight & Logistics, 3,250) is removed by 1959568_2025q1_exclude_red_griffin_category_duplicate. Same filer behaviour and fix as the sister fund 0001959604 (rule 1959604_exclude_single_row_equity_industry_subtotals_2025q1).",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2025-03-31": {
+      "rows": 2,
+      "fv": -443000.0,
+      "residual_before": 443000.0,
+      "residual_after": 0.0
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001959568",
+ "entity_name": "Senior Credit Investments, LLC",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-12-31",
+   "field": "net_assets",
+   "value": 81780000,
+   "evidence": "0000950170-24-038500 (10-K, 2023-12-31) balance sheet: 'Member's Capital Common units ( 44,576 units issued and outstanding) $ 80,943 Accumulated distributable earnings 837 Total member's capital $ 81,780' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "shares_outstanding",
+   "value": 44576,
+   "evidence": "0000950170-24-038500 (10-K, 2023-12-31) balance sheet: 'Member's Capital Common units ( 44,576 units issued and outstanding) $ 80,943 Accumulated distributable earnings 837 Total member's capital $ 81,780'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "net_assets",
+   "value": 82888000,
+   "evidence": "0000950170-24-058828 (10-Q, 2024-03-31) balance sheet: 'Common units ( 44,576 and 44,576 units issued and outstanding, at March 31, 2024 and December 31, 2023, respectively) $ 80,943 $ 80,943 Accumulated distributable earnings 1,945 837 Total members capital $ 82,888 $ 81,780' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "shares_outstanding",
+   "value": 44576,
+   "evidence": "0000950170-24-058828 (10-Q, 2024-03-31) balance sheet: 'Common units ( 44,576 and 44,576 units issued and outstanding, at March 31, 2024 and December 31, 2023, respectively) $ 80,943 $ 80,943 Accumulated distributable earnings 1,945 837 Total members capital $ 82,888 $ 81,780'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "net_assets",
+   "value": 83106000,
+   "evidence": "0000950170-24-096299 (10-Q, 2024-06-30) balance sheet: 'Common units ( 44,576 and 44,576 units issued and outstanding, at June 30, 2024 and December 31, 2023, respectively) $ 80,943 $ 80,943 Accumulated distributable earnings 2,163 837 Total members capital $ 83,106 $ 81,780' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "shares_outstanding",
+   "value": 44576,
+   "evidence": "0000950170-24-096299 (10-Q, 2024-06-30) balance sheet: 'Common units ( 44,576 and 44,576 units issued and outstanding, at June 30, 2024 and December 31, 2023, respectively) $ 80,943 $ 80,943 Accumulated distributable earnings 2,163 837 Total members capital $ 83,106 $ 81,780'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "net_assets",
+   "value": 117607000,
+   "evidence": "0000950170-24-126452 (10-Q, 2024-09-30) balance sheet: 'Common units ( 63,363 and 44,576 units issued and outstanding, at September 30, 2024 and December 31, 2023, respectively) $ 115,943 $ 80,943 Accumulated distributable earnings 1,664 837 Total members capital $ 117,607 $ 81,780' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "shares_outstanding",
+   "value": 63363,
+   "evidence": "0000950170-24-126452 (10-Q, 2024-09-30) balance sheet: 'Common units ( 63,363 and 44,576 units issued and outstanding, at September 30, 2024 and December 31, 2023, respectively) $ 115,943 $ 80,943 Accumulated distributable earnings 1,664 837 Total members capital $ 117,607 $ 81,780'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "net_assets",
+   "value": 154331000,
+   "evidence": "0000950170-25-044443 (10-K, 2024-12-31) balance sheet: 'Common units ( 85,248 and 44,576 units issued and outstanding, at December 31, 2024 and December 31, 2023, respectively) $ 155,318 $ 80,943 Accumulated distributable earnings ( 987 ) 837 Total members capital $ 154,331 $ 81,780' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "shares_outstanding",
+   "value": 85248,
+   "evidence": "0000950170-25-044443 (10-K, 2024-12-31) balance sheet: 'Common units ( 85,248 and 44,576 units issued and outstanding, at December 31, 2024 and December 31, 2023, respectively) $ 155,318 $ 80,943 Accumulated distributable earnings ( 987 ) 837 Total members capital $ 154,331 $ 81,780'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "net_assets",
+   "value": 176075000,
+   "evidence": "0000950170-25-071598 (10-Q, 2025-03-31) balance sheet: 'Common units ( 97,607 and 85,248 units issued and outstanding, at March 31, 2025 and December 31, 2024, respectively) $ 177,818 $ 155,318 Accumulated distributable earnings ( 1,743 ) ( 987 ) Total members capital $ 176,075 $ 154,331' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "shares_outstanding",
+   "value": 97607,
+   "evidence": "0000950170-25-071598 (10-Q, 2025-03-31) balance sheet: 'Common units ( 97,607 and 85,248 units issued and outstanding, at March 31, 2025 and December 31, 2024, respectively) $ 177,818 $ 155,318 Accumulated distributable earnings ( 1,743 ) ( 987 ) Total members capital $ 176,075 $ 154,331'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "net_assets",
+   "value": 175479000,
+   "evidence": "0000950170-25-108055 (10-Q, 2025-06-30) balance sheet: 'Common units ( 97,607 and 85,248 units issued and outstanding, at June 30, 2025 and December 31, 2024, respectively) $ 177,818 $ 155,318 Accumulated distributable earnings ( 2,339 ) ( 987 ) Total members capital $ 175,479 $ 154,331' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "shares_outstanding",
+   "value": 97607,
+   "evidence": "0000950170-25-108055 (10-Q, 2025-06-30) balance sheet: 'Common units ( 97,607 and 85,248 units issued and outstanding, at June 30, 2025 and December 31, 2024, respectively) $ 177,818 $ 155,318 Accumulated distributable earnings ( 2,339 ) ( 987 ) Total members capital $ 175,479 $ 154,331'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "net_assets",
+   "value": 207259000,
+   "evidence": "0001193125-25-280629 (10-Q, 2025-09-30) balance sheet: 'Common units ( 115,771 and 85,248 units issued and outstanding, at September 30, 2025 and December 31, 2024, respectively) $ 210,318 $ 155,318 Accumulated distributed earnings (losses) ( 3,059 ) ( 987 ) Total members capital $ 207,259 $ 154,331' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "shares_outstanding",
+   "value": 115771,
+   "evidence": "0001193125-25-280629 (10-Q, 2025-09-30) balance sheet: 'Common units ( 115,771 and 85,248 units issued and outstanding, at September 30, 2025 and December 31, 2024, respectively) $ 210,318 $ 155,318 Accumulated distributed earnings (losses) ( 3,059 ) ( 987 ) Total members capital $ 207,259 $ 154,331'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "net_assets",
+   "value": 232005000,
+   "evidence": "0001193125-26-116346 (10-K, 2025-12-31) balance sheet: 'Common units ( 129,757 and 85,248 units issued and outstanding, at December 31, 2025 and December 31, 2024, respectively) $ 235,318 $ 155,318 Accumulated distributed earnings (losses) ( 3,313 ) ( 987 ) Total members capital $ 232,005 $ 154,331' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "shares_outstanding",
+   "value": 129757,
+   "evidence": "0001193125-26-116346 (10-K, 2025-12-31) balance sheet: 'Common units ( 129,757 and 85,248 units issued and outstanding, at December 31, 2025 and December 31, 2024, respectively) $ 235,318 $ 155,318 Accumulated distributed earnings (losses) ( 3,313 ) ( 987 ) Total members capital $ 232,005 $ 154,331'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "net_assets",
+   "value": 261092000,
+   "evidence": "0001193125-26-221845 (10-Q, 2026-03-31) balance sheet: 'Common units ( 146,634 and 129,757 units issued and outstanding, at March 31, 2026 and December 31, 2025, respectively) $ 265,318 $ 235,318 Accumulated distributed earnings (losses) ( 4,226 ) ( 3,313 ) Total members capital $ 261,092 $ 232,005' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "shares_outstanding",
+   "value": 146634,
+   "evidence": "0001193125-26-221845 (10-Q, 2026-03-31) balance sheet: 'Common units ( 146,634 and 129,757 units issued and outstanding, at March 31, 2026 and December 31, 2025, respectively) $ 265,318 $ 235,318 Accumulated distributed earnings (losses) ( 4,226 ) ( 3,313 ) Total members capital $ 261,092 $ 232,005'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "net_assets",
+   "value": 259467000,
+   "evidence": "0001193125-26-345215 (10-Q, 2026-06-30) balance sheet: 'Common units ( 146,634 and 129,757 units issued and outstanding, at June 30, 2026 and December 31, 2025, respectively) $ 265,318 $ 235,318 Accumulated distributed earnings (losses) ( 5,851 ) ( 3,313 ) Total members capital $ 259,467 $ 232,005' (thousands). The build published the paid-in 'Common units' figure as net assets."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "shares_outstanding",
+   "value": 146634,
+   "evidence": "0001193125-26-345215 (10-Q, 2026-06-30) balance sheet: 'Common units ( 146,634 and 129,757 units issued and outstanding, at June 30, 2026 and December 31, 2025, respectively) $ 265,318 $ 235,318 Accumulated distributed earnings (losses) ( 5,851 ) ( 3,313 ) Total members capital $ 259,467 $ 232,005'. Units outstanding were blank (the only undimensioned unit count is the cover-page date)."
+  }
+ ],
+ "notes": "Fund-clearing loop 2026-10-19 (sci): net assets were the paid-in common-units line in every quarter (80,943 ... 265,318), set to the printed total members' capital; units outstanding declared from the same balance-sheet line. NAV per unit (1,769 to 1,865) is as printed and unchanged."
+}

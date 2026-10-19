@@ -197,3 +197,4 @@ Manulife 0001988280.
 | 2026-10-19 | 0001784700 Varagon Capital Corporation | vgaf | PASS (investigation COMPLETE) | 58 findings, 24 outstanding, all proposed; 14/14 quarters tie (3 before); sample 0/20 | D-216 |
 | 2026-10-19 | 0002052153 Apollo Origination II (UL) Capital Trust | aoud | PASS (investigation COMPLETE) | 12 findings, 5 outstanding, all proposed; 6/6 quarters tie; sample 0/20; PIK double count found on the Apollo layout | D-217 |
 | 2026-10-19 | 0001841514 Commonwealth Credit Partners BDC I | cwaf | PASS (investigation COMPLETE) | 47 findings, 13 outstanding, all proposed; 14/14 quarters tie; sample 0/20; filer swapped Kent first-out/last-out terms | D-218 |
+| 2026-10-19 | 0001959568 Senior Credit Investments, LLC | scie | PASS (investigation COMPLETE) | 40 findings, 31 outstanding, all proposed; 11/11 quarters tie; sample 0/20; 306 whole-member issuer names fixed; SCI-R1 deferred | D-219 |

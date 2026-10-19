@@ -1,0 +1,425 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "scie",
+ "dispositions": [
+  {
+   "disposition_id": "PD-SCI-F30-NAV-UNIT",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F30",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "reason_key": "f30-nav-per-unit-as-printed-units-issued-near-1800",
+   "statement": "The fund issues units at about 1,800 dollars, so its printed net asset value per unit is 1,769.49 to 1,864.36 in every quarter, above the rule's 1,000 ceiling. The published figure is the printed one (1,834.62 at 2023-12-31, 1,780.57 at 2026-03-31, 1,769.49 at 2026-06-30) and, with the corrected net assets, NAV per unit x units equals net assets (146,634 x 1,780.57 = 261,092). No fix applies: the range is a heuristic for per-share funds.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62",
+     "quote": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62 -- printed NAV per unit 1,834.62 on 44,576 units"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "verbatim": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98",
+     "quote": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98 -- printed NAV per unit 1,780.57 = 261,092 / 146,634"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-F16-Q4-2024",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "reason_key": "f16-distribution-above-quarter-income-as-printed",
+   "statement": "Q4 2024 carries three declarations (62.9280, 18.9414 and 22.2167 per unit, total 104.0861 = the published distribution_per_share), 7,625 thousand against quarterly net investment income of 4,217; the distribution rate is above 1.5 x the income yield as printed. No fix applies: the figure is the filer's.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-044443",
+     "verbatim": "October 31, 2024 October 31, 2024 November 13, 2024 62.9280 4,325 November 27, 2024 November 29, 2024 December 12, 2024 18.9414 1,406 December 27, 2024 December 27, 2024 January 30, 2025 22.2167 1,894",
+     "quote": "October 31, 2024 October 31, 2024 November 13, 2024 62.9280 4,325 November 27, 2024 November 29, 2024 December 12, 2024 18.9414 1,406 December 27, 2024 December 27, 2024 January 30, 2025 22.2167 1,894 -- three Q4 2024 declarations, 104.0861 per unit in total"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-F26-RAMP",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F26",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "reason_key": "f26-ramp-up-fund-holds-cash-not-borrowings",
+   "statement": "At its first year end the fund held 39,094 of cash against 106,888 of investments, so debt / total assets (66,294 / 150,760 = 0.44) and the holdings view ((106,888 - 81,780) / 106,888 = 0.23) differ by 0.2048, just over the 0.20 band. Every input is the printed balance sheet; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Cash and cash equivalents 39,094 Restricted cash 468 Interest receivable 529 Deferred financing costs 2,815 Deferred offering costs 635 Prepaid expenses and other assets 331 Total assets $ 150,760 Liabilities Debt $ 66,294",
+     "quote": "Cash and cash equivalents 39,094 Restricted cash 468 Interest receivable 529 Deferred financing costs 2,815 Deferred offering costs 635 Prepaid expenses and other assets 331 Total assets $ 150,760 Liabilities Debt $ 66,294 -- cash 39,094, total assets 150,760, debt 66,294"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Member's Capital Common units ( 44,576 units issued and outstanding) $ 80,943 Accumulated distributable earnings 837 Total member's capital $ 81,780",
+     "quote": "Member's Capital Common units ( 44,576 units issued and outstanding) $ 80,943 Accumulated distributable earnings 837 Total member's capital $ 81,780 -- net assets 81,780"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-F28-COVER",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2026-08-03"
+   ],
+   "reason_key": "f28-cover-page-unit-count-date-not-a-quarter",
+   "statement": "The fund-level row dated 2026-08-03 holds only the cover-page unit count of the 10-Q for 2026-06-30. It is not a reporting period, so no schedule exists for it.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-345215",
+     "verbatim": "As of August 3, 2026, the registrant had 146,634 common units outstanding.",
+     "quote": "As of August 3, 2026, the registrant had 146,634 common units outstanding. -- cover-page count dated August 3, 2026"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-A01-PRINTED",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30"
+   ],
+   "reason_key": "a01-printed-subtotals-equal-published-rows",
+   "statement": "2023-12-31: the printed Chemicals, Plastic, & Rubber subtotal 5,880 equals the four published rows (2,475 + 1,111 + 1,372 + 922); the oracle finds three children because ASP Meteor's term loan sits on a truncated member ('n-Affiliated Portfolio Company Investments ...'). 2024-06-30: the parent is the printed debt total 154,643, which equals the sum of all 69 published rows (totals.sql); the oracle groups only 2 rows under the bare section key. No fix applies: every printed row is published once.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Chemicals, Plastic, & Rubber ASP Meteor Acquisition Co. LLC First Lien Term Loan S + 7.00 % 9/1/2029 2,558 2,444 2,475 7 ASP Meteor Acquisition Co. LLC First Lien Delayed Draw Term Loan S + 7.00 % 9/1/2029 1,170 1,089 1,111 5,7 Aurora Plastics, LLC First Lien Term Loan S + 4.75 % 8/10/2028 1,468 1,337 1,372 7 Aurora Plastics, LLC First Lien Delayed Draw Term Loan S + 4.75 % 8/10/2028 986 898 922 7 6,182 5,768 5,880 7.2 %",
+     "quote": "Chemicals, Plastic, & Rubber ASP Meteor Acquisition Co. LLC First Lien Term Loan S + 7.00 % 9/1/2029 2,558 2,444 2,475 7 ASP Meteor Acquisition Co. LLC First Lien Delayed Draw Term Loan S + 7.00 % 9/1/2029 1,170 1,089 1,111 5,7 Aurora Plastics, LLC First Lien Term Loan S + 4.75 % 8/10/2028 1,468 1,337 1,372 7 Aurora Plastics, LLC First Lien Delayed Draw Term Loan S + 4.75 % 8/10/2028 986 898 922 7 6,182 5,768 5,880 7.2 % -- industry subtotal 5,880 = 2,475 + 1,111 + 1,372 + 922"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096299",
+     "verbatim": "debt investments (8) $ 157,022 $ 153,448 $ 154,643 186.1 %",
+     "quote": "debt investments (8) $ 157,022 $ 153,448 $ 154,643 186.1 % -- debt total 154,643 = published sum"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-A01-COMPARATIVE",
+   "class": "rule_problem",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "reason_key": "a01-subtotal-of-the-comparative-schedule",
+   "statement": "The parent fact (106,888) is the 2023-12-31 debt total that the 2024-09-30 10-Q and the 2024-12-31 10-K print in their comparative schedules; the oracle compares it with five current-period rows. The 2023-12-31 published rows sum to 106,888 exactly.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126452",
+     "verbatim": "debt investments (8) $ 108,829 $ 105,495 $ 106,888 130.7 %",
+     "quote": "debt investments (8) $ 108,829 $ 105,495 $ 106,888 130.7 % -- comparative 2023-12-31 total printed in the 2024-09-30 10-Q"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-044443",
+     "verbatim": "Portfolio Company debt investments (8) $ 108,829 $ 105,495 $ 106,888 130.7 %",
+     "quote": "Portfolio Company debt investments (8) $ 108,829 $ 105,495 $ 106,888 130.7 % -- comparative 2023-12-31 total printed in the 2024-12-31 10-K"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-B01-COMPARATIVE",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "b01-leaves-without-value-are-the-comparative-schedule",
+   "statement": "Every flagged context (41 at 2026-03-31, 37 at 2026-06-30) is a 2025-12-31 context of the comparative schedule these 10-Qs print after the current one (residual_class excluded_comparative_period); undrawn lines there print a dash for fair value. The current-period rows are published; no position value is lost.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "verbatim": "Consolidated Schedule of Investments December 31, 2025 (In thousands, except for",
+     "quote": "Consolidated Schedule of Investments December 31, 2025 (In thousands, except for -- comparative schedule heading in the 2026-03-31 10-Q"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "verbatim": "Integrity Marketing Acquisition, LLC First Lien Revolver S + 5.00 % 8/25/2028 - ( 1 ) - 23",
+     "quote": "Integrity Marketing Acquisition, LLC First Lien Revolver S + 5.00 % 8/25/2028 - ( 1 ) - 23 -- an undrawn line with a dash for fair value, printed in both schedules"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-C04-FIREBIRD",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "reason_key": "c04-share-cell-printed-as-dash",
+   "statement": "The equity rows left without a unit count are the Firebird Co-Invest L.P. interests, whose Principal / Shares cell the filer prints as a dash (or leaves blank at 2026-06-30) and tags no unit count for. Eclipse Topco (28 / 19) and Red Griffin (764) carry their printed counts in every quarter (corrected where untagged).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108055",
+     "verbatim": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 173 Firebird Co-Invest L.P. L.P. Interest - - 1",
+     "quote": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 173 Firebird Co-Invest L.P. L.P. Interest - - 1 -- units cell '-' on both Firebird lines"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-345215",
+     "verbatim": "Firebird Co-Invest L.P. L.P. Interest 160 215 Firebird Co-Invest L.P. L.P. Interest - 3 160 218",
+     "quote": "Firebird Co-Invest L.P. L.P. Interest 160 215 Firebird Co-Invest L.P. L.P. Interest - 3 160 218 -- no unit count printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-C107-UNDRAWN",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "reason_key": "c107-negative-cost-undrawn",
+   "statement": "The flagged rows are undrawn delayed-draw and revolving lines printed with a dash for par and a negative cost in parentheses; published cost equals the printed cost on every flagged row (row_audit, 0 cost differences). 2024-09-30: the earlier verdict cited the commitment-table line for AB Centers (fair value (22), no cost column); commitment-table rows are no longer published (schedule_row_tags not_commitment_only), and the published AB Centers row is the schedule line with cost (10) and fair value (21).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-126452",
+     "verbatim": "AB Centers Acquisition Corporation First Lien Delayed Draw Term Loan S + 5.25 % 7/2/2031 - ( 10 ) ( 21 ) 9",
+     "quote": "AB Centers Acquisition Corporation First Lien Delayed Draw Term Loan S + 5.25 % 7/2/2031 - ( 10 ) ( 21 ) 9 -- schedule line: cost (10), fair value (21)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-345215",
+     "verbatim": "AB Centers Acquisition Corporation First Lien Revolver S + 5.25 % 7/2/2031 - ( 2 ) ( 1 ) 25",
+     "quote": "AB Centers Acquisition Corporation First Lien Revolver S + 5.25 % 7/2/2031 - ( 2 ) ( 1 ) 25 -- undrawn revolver, cost (2)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19",
+   "addresses_verdict": {
+    "2024-09-30": "The reviewer found the commitment-table AB Centers line ('7/2/2026 $ 1,432 $ ( 22 )') published with its fair value copied into cost. That row is no longer published (not_commitment_only); the published AB Centers delayed draw is the schedule line printed '- ( 10 ) ( 21 )', cost -10,000 and fair value -21,000 as printed. The remaining C107 rows are negative costs the page prints."
+   }
+  },
+  {
+   "disposition_id": "PD-SCI-PP02-TWINS",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "pp02-twin-lines-printed-separately",
+   "statement": "The flagged pairs are lines the filer prints twice with the same terms and figures and tags on two contexts whose members differ only by the trailing token 'One' (Hercules Borrower delayed draw, 2025-09-30 to 2026-06-30; Kona revolver 2026-03-31; Packaging Coordinators delayed draw 2025-12-31). Both lines count in the printed totals, which the published rows now equal exactly (twin_lines.py lists every repeated printed line).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-280629",
+     "verbatim": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21",
+     "quote": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 -- the same Hercules line printed twice"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221845",
+     "verbatim": "Kona Buyer, LLC First Lien Revolver S + 4.50 % 7/23/2031 - ( 1 ) ( 1 ) 23 Kona B",
+     "quote": "Kona Buyer, LLC First Lien Revolver S + 4.50 % 7/23/2031 - ( 1 ) ( 1 ) 23 Kona B -- Kona revolver, one of two identical lines"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-B02-TWINS",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B02",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "b02-twin-undrawn-lines-printed-separately",
+   "statement": "The six rows are three pairs of separately printed undrawn lines: Hercules' delayed draw printed twice with the same figures; Packaging Coordinators' delayed draws printed with cost 1 and cost (2); Trystar's revolver printed with cost (1) and with dashes. B02's terms ignore cost, so each pair looks repeated.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-345215",
+     "verbatim": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 8 ) ( 5",
+     "quote": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 8 ) ( 5 -- Hercules delayed draw, one of two identical lines"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-SRC-UNSCALED",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "reason_key": "fact-tagged-without-thousands-scale-published-from-page",
+   "statement": "Chartwell's two loans at 2023-12-31 are tagged with cost and fair value at decimals 0 (6,506 / 6,671 and 432 / 443 dollars) beside principal at decimals -3 (6,773,000 / 450,000) in a schedule printed in thousands. The build publishes the printed thousands (row correction); the source check compares with the unscaled tag. Without the correction the quarter is 7.1M short of the printed total; with it the quarter ties exactly.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7",
+     "quote": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7 -- printed in thousands: 6,506 cost, 6,671 fair value"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7",
+     "quote": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7 -- printed in thousands: 432 cost, 443 fair value"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-SCI-BDCSRC-UNSCALED",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_scale_or_unit_candidate",
+   "ciks": [
+    "0001959568"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "reason_key": "fact-tagged-without-thousands-scale-published-from-page",
+   "statement": "Same two Chartwell rows as PD-SCI-SRC-UNSCALED: the source reconciliation sees published 6,671,000 / 443,000 against tagged 6,671 / 443 and calls it a scale candidate. It is one: the filer omitted the thousands scale on these two facts.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7",
+     "quote": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7 -- printed in thousands"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-038500",
+     "verbatim": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7",
+     "quote": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7 -- printed in thousands"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001959568.json",
+   "decided_by": "PROPOSED by senior-credit-investments-fund-agent-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  }
+ ]
+}

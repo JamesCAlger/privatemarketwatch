@@ -1,0 +1,716 @@
+{
+ "reviewer_id": "sci-independent-reviewer-2026-10-19",
+ "report_digest": "fbde8d1b1633b1a9c63af3eb526c53ccfdfe42d2f40bfcd655b1edce9f86ba47",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_0a7fc3c3cc12",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has exactly one F30 FAIL for 2023-12-31 (value 1834.62, expected 0.01 < nav_per_share < 1000), matching the single fund-quarter key 0001959568/2023-12-31/F30. Source: I read this quarter's own balance sheet (the report cites only the 2023-12-31 and 2026-03-31 pages for every F30 quarter; I supply the quarter's line). Printed NAV per unit equals the published nav_per_share 1834.62, and printed total members' capital / printed units gives the same figure (81,780 / 44,576 = 1,834.6), so the published value is the printed one and is not inflated by a denominator error; published net_assets now equals the printed total in this quarter. The rule's 1,000 ceiling is a per-share-fund heuristic; units here were issued near 1,800 (80,943 paid in / 44,576 units = 1,816 at inception). Conclusion false_alarm and proposal PD-SCI-F30-NAV-UNIT (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Total member's capital $ 81,780 Total liabilities and member's capital $ 150,760"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8853f87cac42",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has exactly one F30 FAIL for 2024-03-31 (value 1859.46, expected 0.01 < nav_per_share < 1000), matching the single fund-quarter key 0001959568/2024-03-31/F30. Source: I read this quarter's own balance sheet (the report cites only the 2023-12-31 and 2026-03-31 pages for every F30 quarter; I supply the quarter's line). Printed NAV per unit equals the published nav_per_share 1859.46, and printed total members' capital / printed units gives the same figure (82,888 / 44,576 = 1,859.5), so the published value is the printed one and is not inflated by a denominator error; published net_assets now equals the printed total in this quarter. The rule's 1,000 ceiling is a per-share-fund heuristic; units here were issued near 1,800 (80,943 paid in / 44,576 units = 1,816 at inception). Conclusion false_alarm and proposal PD-SCI-F30-NAV-UNIT (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058828",
+     "text": "44,576 44,576 Net asset value per unit $ 1,859.46 $ 1,834.62"
+    },
+    {
+     "accession": "0000950170-24-058828",
+     "text": "Total members capital $ 82,888 $ 81,780 Total liabilities and members capital $ 154,608 $ 150,760"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b6885b37dffa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has exactly one F30 FAIL for 2024-06-30 (value 1864.36, expected 0.01 < nav_per_share < 1000), matching the single fund-quarter key 0001959568/2024-06-30/F30. Source: I read this quarter's own balance sheet (the report cites only the 2023-12-31 and 2026-03-31 pages for every F30 quarter; I supply the quarter's line). Printed NAV per unit equals the published nav_per_share 1864.36, and printed total members' capital / printed units gives the same figure (83,106 / 44,576 = 1,864.4), so the published value is the printed one and is not inflated by a denominator error; published net_assets now equals the printed total in this quarter. The rule's 1,000 ceiling is a per-share-fund heuristic; units here were issued near 1,800 (80,943 paid in / 44,576 units = 1,816 at inception). Conclusion false_alarm and proposal PD-SCI-F30-NAV-UNIT (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096299",
+     "text": "44,576 44,576 Net asset value per unit $ 1,864.36 $ 1,834.62"
+    },
+    {
+     "accession": "0000950170-24-096299",
+     "text": "Total members capital $ 83,106 $ 81,780 Total liabilities and members capital $ 178,226 $ 150,760"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c167a962c800",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has exactly one F30 FAIL for 2024-09-30 (value 1856.08, expected 0.01 < nav_per_share < 1000), matching the single fund-quarter key 0001959568/2024-09-30/F30. Source: I read this quarter's own balance sheet (the report cites only the 2023-12-31 and 2026-03-31 pages for every F30 quarter; I supply the quarter's line). Printed NAV per unit equals the published nav_per_share 1856.08, and printed total members' capital / printed units gives the same figure (117,607 / 63,363 = 1,856.1), so the published value is the printed one and is not inflated by a denominator error; published net_assets now equals the printed total in this quarter. The rule's 1,000 ceiling is a per-share-fund heuristic; units here were issued near 1,800 (80,943 paid in / 44,576 units = 1,816 at inception). Conclusion false_alarm and proposal PD-SCI-F30-NAV-UNIT (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126452",
+     "text": "63,363 44,576 Net asset value per unit $ 1,856.08 $ 1,834.62"
+    },
+    {
+     "accession": "0000950170-24-126452",
+     "text": "Total members capital $ 117,607 $ 81,780 Total liabilities and members capital $ 282,044 $ 150,760"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0d305c4025ee",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has exactly one F30 FAIL for 2024-12-31 (value 1810.37, expected 0.01 < nav_per_share < 1000), matching the single fund-quarter key 0001959568/2024-12-31/F30. Source: I read this quarter's own balance sheet (the report cites only the 2023-12-31 and 2026-03-31 pages for every F30 quarter; I supply the quarter's line). Printed NAV per unit equals the published nav_per_share 1810.37, and printed total members' capital / printed units gives the same figure (154,331 / 85,248 = 1,810.4), so the published value is the printed one and is not inflated by a denominator error; published net_assets now equals the printed total in this quarter. The rule's 1,000 ceiling is a per-share-fund heuristic; units here were issued near 1,800 (80,943 paid in / 44,576 units = 1,816 at inception). Conclusion false_alarm and proposal PD-SCI-F30-NAV-UNIT (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-044443",
+     "text": "85,248 44,576 Net asset value per unit $ 1,810.37 $ 1,834.62"
+    },
+    {
+     "accession": "0000950170-25-044443",
+     "text": "Total members capital $ 154,331 $ 81,780 Total liabilities and members capital $ 333,198 $ 150,760"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1773f1993ce7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has exactly one F30 FAIL for 2025-03-31 (value 1803.92, expected 0.01 < nav_per_share < 1000), matching the single fund-quarter key 0001959568/2025-03-31/F30. Source: I read this quarter's own balance sheet (the report cites only the 2023-12-31 and 2026-03-31 pages for every F30 quarter; I supply the quarter's line). Printed NAV per unit equals the published nav_per_share 1803.92, and printed total members' capital / printed units gives the same figure (176,075 / 97,607 = 1,803.9), so the published value is the printed one and is not inflated by a denominator error; published net_assets now equals the printed total in this quarter. The rule's 1,000 ceiling is a per-share-fund heuristic; units here were issued near 1,800 (80,943 paid in / 44,576 units = 1,816 at inception). Conclusion false_alarm and proposal PD-SCI-F30-NAV-UNIT (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071598",
+     "text": "97,607 85,248 Net asset value per unit $ 1,803.92 $ 1,810.37"
+    },
+    {
+     "accession": "0000950170-25-071598",
+     "text": "Total members capital $ 176,075 $ 154,331 Total liabilities and members capital $ 377,076 $ 333,198"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1c2b10b77425",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has exactly one F30 FAIL for 2025-06-30 (value 1797.8, expected 0.01 < nav_per_share < 1000), matching the single fund-quarter key 0001959568/2025-06-30/F30. Source: I read this quarter's own balance sheet (the report cites only the 2023-12-31 and 2026-03-31 pages for every F30 quarter; I supply the quarter's line). Printed NAV per unit equals the published nav_per_share 1797.8, and printed total members' capital / printed units gives the same figure (175,479 / 97,607 = 1,797.8), so the published value is the printed one and is not inflated by a denominator error; published net_assets now equals the printed total in this quarter. The rule's 1,000 ceiling is a per-share-fund heuristic; units here were issued near 1,800 (80,943 paid in / 44,576 units = 1,816 at inception). Conclusion false_alarm and proposal PD-SCI-F30-NAV-UNIT (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108055",
+     "text": "97,607 85,248 Net asset value per unit $ 1,797.80 $ 1,810.37"
+    },
+    {
+     "accession": "0000950170-25-108055",
+     "text": "Total members capital $ 175,479 $ 154,331 Total liabilities and members capital $ 442,274 $ 333,198"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bce16b2898a4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has exactly one F30 FAIL for 2025-09-30 (value 1790.25, expected 0.01 < nav_per_share < 1000), matching the single fund-quarter key 0001959568/2025-09-30/F30. Source: I read this quarter's own balance sheet (the report cites only the 2023-12-31 and 2026-03-31 pages for every F30 quarter; I supply the quarter's line). Printed NAV per unit equals the published nav_per_share 1790.25, and printed total members' capital / printed units gives the same figure (207,259 / 115,771 = 1,790.3), so the published value is the printed one and is not inflated by a denominator error; published net_assets now equals the printed total in this quarter. The rule's 1,000 ceiling is a per-share-fund heuristic; units here were issued near 1,800 (80,943 paid in / 44,576 units = 1,816 at inception). Conclusion false_alarm and proposal PD-SCI-F30-NAV-UNIT (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "115,771 85,248 Net asset value per unit $ 1,790.25 $ 1,810.37"
+    },
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Total members capital $ 207,259 $ 154,331 Total liabilities and members capital $ 514,422 $ 333,198"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bbf348eb87cf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund_financials_validation_current.csv has exactly one F30 FAIL for 2026-06-30 (value 1769.49, expected 0.01 < nav_per_share < 1000), matching the single fund-quarter key 0001959568/2026-06-30/F30. Source: I read this quarter's own balance sheet (the report cites only the 2023-12-31 and 2026-03-31 pages for every F30 quarter; I supply the quarter's line). Printed NAV per unit equals the published nav_per_share 1769.49, and printed total members' capital / printed units gives the same figure (259,467 / 146,634 = 1,769.5), so the published value is the printed one and is not inflated by a denominator error; published net_assets now equals the printed total in this quarter. The rule's 1,000 ceiling is a per-share-fund heuristic; units here were issued near 1,800 (80,943 paid in / 44,576 units = 1,816 at inception). Conclusion false_alarm and proposal PD-SCI-F30-NAV-UNIT (as_filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Net asset value per unit $ 1,769.49 $ 1,787.98"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Total members capital $ 259,467 $ 232,005 Total liabilities and members capital $ 621,684 $ 571,632"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1ec3f3d6eab7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle/check_failures.csv has one A01 row for 2023-12-31 (parent 'plastic rubber', rollup 5,880,000, 3 children 3,405,000), equal to the declared key. Source: the printed Chemicals, Plastic, & Rubber block has four lines whose fair values 2,475 + 1,111 + 1,372 + 922 = 5,880 equal the printed subtotal; all four are published (ASP Meteor TL 2,475,000, DDTL 1,111,000, Aurora TL 1,372,000, DDTL 922,000). The ASP Meteor term-loan identifier in the build starts 'n-Affiliated Portfolio Company Investments ...' (truncated member), which is why the oracle counts 3 children (1,111 + 1,372 + 922 = 3,405). source_reconciliation_detail shows the 5,880,000 parent as excluded_self_referential_subtotal. Rule problem, no published error; supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Aurora Plastics, LLC First Lien Delayed Draw Term Loan S + 4.75 % 8/10/2028 986 898 922 7 6,182 5,768 5,880 7.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_215d02158d6b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one A01 row for 2024-06-30 (parent 'non controlled non affiliated portfolio company investments first lien', rollup 154,643,000, 2 children 8,214,000) = the declared key. The parent fact is a current-period (2024-06-30) context (source_reconciliation_detail: documented_source_rollup_exact). The 69 published rows sum to 154,643,000, equal to the printed first-lien debt total; percent 186.1 = 154,643 / 83,106 (printed net assets). The oracle's 2-child grouping is a key problem, not missing rows. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096299",
+     "text": "debt investments (8) $ 157,022 $ 153,448 $ 154,643 186.1 %"
+    },
+    {
+     "accession": "0000950170-24-096299",
+     "text": "Total members capital $ 83,106 $ 81,780 Total liabilities and members capital $ 178,226 $ 150,760"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3161ca614bab",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one A01 row (parent first-lien key, rollup 106,888,000, 5 children 16,182,000) = declared key. Independent check: source_reconciliation_detail lists the 106,888,000 fact in accession 0000950170-24-126452 on context C_4f6db162-a005-4b8f-8b04-26d66e4fb527 with period 2023-12-31 and class excluded_comparative_period, i.e. the comparative schedule's debt total, compared by the oracle with current-period children. The current quarter's own printed total (259,337 cost / 259,073 fair value) equals the published sums. The comparative explanation is verified, not inferred. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126452",
+     "text": "debt investments (8) $ 108,829 $ 105,495 $ 106,888 130.7 %"
+    },
+    {
+     "accession": "0000950170-24-126452",
+     "text": "Total non-controlled-non-affiliated Portfolio Company investments $ 259,337 $ 259,073 220.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3ef354a102dc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one A01 row (rollup 106,888,000, 5 children 16,182,000) = declared key. source_reconciliation_detail places the 106,888,000 fact in 0000950170-25-044443 on context C_ad0f34b6-0028-4318-bd9a-8e177dcc7025, period 2023-12-31, excluded_comparative_period: the 10-K's comparative schedule total. The current 2024-12-31 printed totals (316,371 / 318,629) equal the published sums. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-044443",
+     "text": "Portfolio Company debt investments (8) $ 108,829 $ 105,495 $ 106,888 130.7 %"
+    },
+    {
+     "accession": "0000950170-25-044443",
+     "text": "Total non-controlled-non-affiliated Portfolio Company investments $ 316,371 $ 318,629 206.5 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_762a99390857",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: oracle/check_failures.csv has 41 B01 rows for 2026-03-31, all in accession 0001193125-26-221845; the 41 context ids equal affected_rows exactly (0 missing, 0 extra). Every one has period 2025-12-31 and calibration_reason excluded_comparative_period; concepts are spread/maturity/cost with no fair-value fact. Identifiers are undrawn revolvers / delayed draws (AGS Health, Integrity Marketing, Kona, VaxCare, ...). Source: the comparative 2025-12-31 schedule in this 10-Q prints a dash for fair value on these lines; the current 2026-03-31 schedule ties to the published sums (593,625 / 591,810). No current-period position is unpublished. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Integrity Marketing Acquisition, LLC First Lien Revolver S + 5.00 % 8/25/2028 - ( 1 ) - 23"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Total non-controlled-non-affiliated Portfolio Company investments $ 593,625 $ 591,810 226.7 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ec911ba18586",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: 37 B01 rows for 2026-06-30 in 0001193125-26-345215; context ids equal affected_rows exactly. All period 2025-12-31, excluded_comparative_period, no fair-value fact (undrawn lines of the comparative schedule). Current-period totals 603,649 / 599,900 equal the published sums. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Swoop Intermediate III, Inc. First Lien Revolver S + 4.50 % 4/12/2032 - ( 1 ) - 23"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Total non-controlled-non-affiliated Portfolio Company investments $ 603,649 $ 599,900 231.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1207f1bdfa9d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: check_results shows B02 2026-06-30 FAIL with 6 rows; re-running B02's test (position_key plus _B02_TERM_COLUMNS: scope, maturity, rates, spread, pik, principal, shares, fair value; cost is not a term) on the published rows returns exactly the 6 declared row ids (Hercules x2, Packaging Coordinators DDTL x2, Trystar revolver x2). Source: Hercules DDTL printed twice '- ( 8 ) ( 5 )'; Packaging DDTLs printed '- 1 -' and '- ( 2 ) -' (published cost 1,000 and -2,000); Trystar revolvers printed '$ - $ ( 1 ) $ -' and '- - -' (published -1,000 and 0). Each is a separate printed line; the pairs differ only in cost, which B02 ignores. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Packaging Coordinators Midco, Inc. First Lien Delayed Draw Term Loan S + 5.00 % 10/15/2032 - 1 - 25 Packaging Coordinators Midco, Inc. First Lien Delayed Draw Term Loan S + 5.00 % 10/15/2032 - ( 2 ) - 25"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Trystar, LLC First Lien Revolver S + 4.25 % 8/6/2031 $ - $ ( 1 ) $ - 25 Trystar, LLC First Lien Revolver S + 4.25 % 8/6/2031 - - - 25"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 8 ) ( 5 ) 25 Hercules Borrower LL"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_94bd3c9fe90d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: check_results C04 2025-03-31 FAIL (66.7% of 3 equity rows have shares). Re-applying C04's mask (index_classification equity/equity_other or asset_category equity/stock) to the published rows, the equity rows without a unit count are exactly Firebird C_7acedbdb (fair value 152,000, no unit fact: filing_grep shows only cost 160000 and fair value 152000 on the context), matching affected_rows plus the fund-quarter key. Eclipse Topco and Red Griffin carry their printed counts (28 or 19, and 764). Source: the Firebird lines print a dash (or nothing) in the Principal / Shares column, so no unit count exists to publish. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071598",
+     "text": "L.P. Interest Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 152 160 152"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6b7f7c9495fc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: check_results C04 2025-06-30 FAIL (50.0% of 4 equity rows have shares). Re-applying C04's mask (index_classification equity/equity_other or asset_category equity/stock) to the published rows, the equity rows without a unit count are exactly Firebird C_da73e2f1 (1,000) and C_93b18413 (173,000), matching affected_rows plus the fund-quarter key. Eclipse Topco and Red Griffin carry their printed counts (28 or 19, and 764). Source: the Firebird lines print a dash (or nothing) in the Principal / Shares column, so no unit count exists to publish. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108055",
+     "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 173 Firebird Co-Invest L.P. L.P. Interest - - 1 160 174"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a3dade47bf54",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: check_results C04 2025-09-30 FAIL (50.0% of 4 equity rows have shares). Re-applying C04's mask (index_classification equity/equity_other or asset_category equity/stock) to the published rows, the equity rows without a unit count are exactly Firebird C_da85671c (172,000) and C_bf5aa911 (1,000), shares 0, matching affected_rows plus the fund-quarter key. Eclipse Topco and Red Griffin carry their printed counts (28 or 19, and 764). Source: the Firebird lines print a dash (or nothing) in the Principal / Shares column, so no unit count exists to publish. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 172 Firebird Co-Invest L.P. L.P. Interest - - 1 160 173"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_115316ac0d0e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: check_results C04 2026-06-30 FAIL (50.0% of 4 equity rows have shares). Re-applying C04's mask (index_classification equity/equity_other or asset_category equity/stock) to the published rows, the equity rows without a unit count are exactly Firebird C_05f76e1e (215,000) and C_991ce104 (3,000); filing_grep on C_991ce104 shows no current unit fact (the 0 shares fact is on the 2025-12-31 comparative context), matching affected_rows plus the fund-quarter key. Eclipse Topco and Red Griffin carry their printed counts (28 or 19, and 764). Source: the Firebird lines print a dash (or nothing) in the Principal / Shares column, so no unit count exists to publish. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Firebird Co-Invest L.P. L.P. Interest 160 215 Firebird Co-Invest L.P. L.P. Interest - 3 160 218"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ccd366f14e46",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues has 39 C107 rows for 2024-09-30; their row ids equal affected_rows exactly. Source: I read 8 random flagged rows plus every AB Centers row against the 10-Q (Advarra DDTL (1)/(2), Victors DDTL (9)/(19), Vessco revolver (1)/(1), CB Buyer revolver (1)/(1), AB Centers DDTL (10)/(21), Petvet revolver (3)/(5), GS AcquisitionCo DDTL (2)/(5), Trystar DDTL (13)/(26)): published cost and fair value equal the printed schedule cells on all of them. The earlier real_error verdict cited the unfunded-commitment table line 'AB Centers ... 7/2/2026 $ 1,432 $ ( 22 )' published with cost -22,000; in scie no 2024-09-30 row has cost = fair value < 0 with a par (0 rows) and the published AB Centers DDTL is the schedule line (cost -10,000, fair value -21,000). Verdict addressed. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126452",
+     "text": "AB Centers Acquisition Corporation First Lien Delayed Draw Term Loan S + 5.25 % 7/2/2031 - ( 10 ) ( 21 ) 9"
+    },
+    {
+     "accession": "0000950170-24-126452",
+     "text": "Trystar, LLC First Lien Delayed Draw Term Loan S + 4.50 % 8/6/2031 - ( 13 ) ( 26 ) 9"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_10a0cd69e285",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: 66 C107 rows for 2026-06-30 in row_validation_issues; row ids equal affected_rows exactly. Source: 8 random flagged rows read against the 10-Q (Vessco DDTL (2)/-, ICR revolver (1)/(1), Eclipse Buyer DDTL (3)/-, Redwood revolver (1)/(1), Coding Solutions revolver (2)/(1) and DDTL (1)/(4), Wrench DDTL (3)/-, Swoop revolver (1)/-): published cost and fair value equal the printed cells on every one. Negative costs are printed in parentheses on undrawn lines. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Revolver S + 5.00 % 8/7/2031 - ( 2 ) ( 1 ) 25"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Eclipse Buyer, Inc. First Lien Delayed Draw Term Loan S + 4.50 % 9/5/2031 - ( 3 ) - 25"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_744d7b5235c4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues PP02 rows for 2025-09-30 carry the identifiers only (row_id empty); joining them to the published rows by identifier and quarter gives exactly the declared keys: Hercules C_b2f31d07 / C_979c8d6e (cost -10,000, fair value -21,000 each). The members differ only by a trailing 'One'/'Three'. Source: the current schedule prints each of these lines twice with identical figures (the report's own evidence quotes other quarters; I read this quarter's page), and the published fair value and cost equal the printed portfolio totals in the quarter, so both lines count. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c54ef4045ebb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues PP02 rows for 2025-12-31 carry the identifiers only (row_id empty); joining them to the published rows by identifier and quarter gives exactly the declared keys: Hercules C_b0b7e7fb / C_e9a87ce9 (-9,000 / -21,000) and Packaging Coordinators DDTL C_8ab36532 / C_0c38a02e (0 / 0); the page prints the Hercules line twice and the Packaging '- - -' line twice (a third Packaging DDTL '- ( 2 ) -' is a separate published row). The members differ only by a trailing 'One'/'Three'. Source: the current schedule prints each of these lines twice with identical figures (the report's own evidence quotes other quarters; I read this quarter's page), and the published fair value and cost equal the printed portfolio totals in the quarter, so both lines count. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-116346",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 9 ) ( 21 ) 23 Hercules Borrower L"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e7b950b9e203",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues PP02 rows for 2026-03-31 carry the identifiers only (row_id empty); joining them to the published rows by identifier and quarter gives exactly the declared keys: Hercules C_089265f4 / C_13c2090c (-8,000 / -16,000) and Kona revolver C_ea2992d8 / C_e9965285 (-1,000 / -1,000). The members differ only by a trailing 'One'/'Three'. Source: the current schedule prints each of these lines twice with identical figures (the report's own evidence quotes other quarters; I read this quarter's page), and the published fair value and cost equal the printed portfolio totals in the quarter, so both lines count. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Kona Buyer, LLC First Lien Revolver S + 4.50 % 7/23/2031 - ( 1 ) ( 1 ) 23 Kona Buyer, LLC First"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_369da50aaba6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues PP02 rows for 2026-06-30 carry the identifiers only (row_id empty); joining them to the published rows by identifier and quarter gives exactly the declared keys: Hercules C_ab4bf501 / C_5f018a7e (-8,000 / -5,000). The members differ only by a trailing 'One'/'Three'. Source: the current schedule prints each of these lines twice with identical figures (the report's own evidence quotes other quarters; I read this quarter's page), and the published fair value and cost equal the printed portfolio totals in the quarter, so both lines count. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 8 ) ( 5 ) 25 Hercules Borrower LL"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_64e466a6fd92",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one F16 FAIL for 2024-12-31 (fund-level key). Source: the 10-K distribution table prints three Q4 2024 declarations 62.9280 + 18.9414 + 22.2167 = 104.0861 per unit (amounts 4,325 + 1,406 + 1,894 = 7,625), equal to the published distribution_per_share 104.0861 and distribution_ordinary_income 7,625,000. Q4 net investment income 4,217 = annual 10,635 printed in the statement of changes less 1,532 + 1,901 + 2,985 for Q1-Q3. The heuristic fires on a printed large Q4 distribution. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-044443",
+     "text": "October 31, 2024 October 31, 2024 November 13, 2024 62.9280 4,325 November 27, 2024 November 29, 2024 December 12, 2024 18.9414 1,406 December 27, 2024 December 27, 2024 January 30, 2025 22.2167 1,894"
+    },
+    {
+     "accession": "0000950170-25-044443",
+     "text": "Net investment income $ 10,635 $ ( 871 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a925d88f2632",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one F26 FAIL for 2023-12-31, value 0.2048. Recomputed from the printed balance sheet: debt 66,294 / total assets 150,760 = 0.4397; (investments 106,888 - net assets 81,780) / 106,888 = 0.2349; difference 0.2048, equal to the rule value, so the rule now uses the corrected net assets. The gap is the 39,094 cash held at the first year end; every input is printed. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Cash and cash equivalents 39,094 Restricted cash 468 Interest receivable 529 Deferred financing costs 2,815 Deferred offering costs 635 Prepaid expenses and other assets 331 Total assets $ 150,760 Liabilities Debt $ 66,294"
+    },
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Total member's capital $ 81,780 Total liabilities and member's capital $ 150,760"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0d8f306032b0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one F28 FAIL dated 2026-08-03 (fund=True; holdings=False). fund_financials holds only shares_outstanding 146,634 for that date, the cover-page count of the 2026-06-30 10-Q; no schedule exists for a cover date. Supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "As of August 3, 2026, the registrant had 146,634 common units outstanding."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ad4fa20a3115",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues SRC_BDC03 2023-12-31 has 2 rows whose row_key is ROW-9564becc0c138537 and ROW-693ce2d009a2bff3 (row_id column empty), equal to the declared keys. Source: filing_grep shows InvestmentOwnedAtCost 6506 / InvestmentOwnedAtFairValue 6671 and 432 / 443 at decimals 0 beside InvestmentOwnedBalancePrincipalAmount 6773000 / 450000 at decimals -3 on the same contexts; the schedule (in thousands) prints 6,773 6,506 6,671 and 450 432 443. The published 6,671,000 / 443,000 are the printed values; the check compares them with the unscaled tags. Not circular: the correction is tested against the separately printed first-lien total 106,888, which the published rows now equal (7.1M short without it). Conclusion source_ambiguity (tag vs page) with the proposals left to the owner after SCI-R1's deferral (D-219) is the right state. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7"
+    },
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001959568_2023-12-31_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_2d17f63bfb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: source_reconciliation_detail has exactly 2 blocking rows for 2023-12-31 (value_mismatch / blocking_fair_value_mismatch), contexts C_e2010a5a and C_2a1026e8 with output rows ROW-9564becc0c138537 and ROW-693ce2d009a2bff3; residual SRCRES-000001 counts 2 issues, 7.114M. Equal to the declared keys. Source: filing_grep shows InvestmentOwnedAtCost 6506 / InvestmentOwnedAtFairValue 6671 and 432 / 443 at decimals 0 beside InvestmentOwnedBalancePrincipalAmount 6773000 / 450000 at decimals -3 on the same contexts; the schedule (in thousands) prints 6,773 6,506 6,671 and 450 432 443. The published 6,671,000 / 443,000 are the printed values; the check compares them with the unscaled tags. Not circular: the correction is tested against the separately printed first-lien total 106,888, which the published rows now equal (7.1M short without it). Conclusion source_ambiguity (tag vs page) with the proposals left to the owner after SCI-R1's deferral (D-219) is the right state. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7"
+    },
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-is-hierarchy-path",
+   "outcome": "supported",
+   "rationale": "scia shadow/page_rule_findings.csv has issuer_name_printed on 306 rows at 2026-06-30 (whole member as issuer), so the existing detector fired on the untouched build. In scie every one of 1,971 published issuer names occurs in its own filing's page text and no published issuer or instrument holds 'Investment Type', 'NCNA', 'FLDI' or a row-number token (name_check.py).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "AA&D Midco, Inc. (fka GB Eagle Buyer, Inc.) First Lien Term Loan S + 4.75 % 11/29/2030 $ 689 $ 683 $ 689 9"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-row-number-left",
+   "outcome": "supported",
+   "rationale": "Round 2: now scoped to the issuer field. rownum_scia.py finds 13 scia rows with a row-number token in issuer_name (Dwyer 1 and IG 1 at 2023-12-31; Nellson One x2, Dwyer One/Two/Three, Trystar One, AB Centers One, National Express One, Kona One, Galway One at 2025-06-30) and issuer_name_printed flagged all 13 in scia page_rule_findings, so existing_detector holds for this half; quarters 2023-12-31 and 2025-06-30 are right. None remain in scie. The instrument half moved to instrument-row-number-left.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108055",
+     "text": "Kona Buyer, LLC First Lien Delayed Draw Term Loan S + 4.50 % 7/23/2031 - - ( 9 ) 17"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-row-number-left",
+   "outcome": "supported",
+   "rationale": "New in round 2. The 27 listed contexts equal exactly the scia rows whose issuer is clean and whose instrument_description ends in a row-number token (instr27.py: 27 listed, 27 rebuilt, 0 differences). My round-1 count of 26 excluded National Express 2025-03-31 because issuer_name_printed flagged that row, but only for its 'LLCC' spelling, as the text says; the Firebird 'L.P. Interest One' rows are correctly kept out (their issuer also held the heading and was flagged). No rule reads the instrument field for the token, so propose_detector with the concrete suggested_check is right; 0 such rows in scie (name_check.py).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-044443",
+     "text": "Trystar, LLC First Lien Term Loan S + 4.50 % 8/6/2031 2,059 2,039 2,038 7"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "scib page_rule_findings lists exactly 20 issuer_name_printed rows (Harvey Tool x2 / Redwood / ICR / Vacation Rental / Syndigo x2 / Sapphire / Zenith x3 at 2026-03-31, AB Centers 2026-06-30, AVSC 2025-06-30, LLCC x4 2025-03-31, ILLC 2023-12-31, IRI f/k/a 2025-06-30 and 2025-09-30), the rows the observation names; none remain in scie. Residual, below the detector and not material: 18 published issuer + instrument pairs differ from the printed line only in punctuation the filer itself varies (e.g. 'Eclipse Topco,Inc.' 2025-06-30 vs printed 'Eclipse Topco, Inc.'; 'Aptean, Inc' vs 'Aptean, Inc.'; 'CB Buyer, Inc' 2025-09-30; 'ASP Meteor Acquisition Co. LLC' 2024-03-31 vs printed 'Co LLC'); worth a follow-up, not a reason to reject.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221845",
+     "text": "PTSH Intermediate Holdings, LLC First Lien Term Loan S + 5.00 % 1/10/2033 1,558 1,543 1,543 9"
+    },
+    {
+     "accession": "0000950170-25-108055",
+     "text": "Eclipse Topco, Inc. Preferred Stock 28 303 302 303 302"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "No ledger rule compares instrument text with the printed line (page rules in scia/scib are issuer_name_printed only), so propose_detector is right and the suggested_check is concrete. In scie every published issuer + instrument pair except 18 punctuation variants occurs in its filing; the Wrench and Seko corrections read as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Wrench Group, LLC First Lien Term Loan S + 4.75 % 9/3/2032 5,741 5,684 5,684 8"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "outcome": "supported",
+   "rationale": "Every non-SOFR published code matches the printed cell: Victors revolver 'C + 4.75 %' (CORRA) 2024-12-31, Wildcat 'P + 3.75 %' (PRIME), VaxCare 'P + 3.25 %', Spruce C/T, Titan and Flexera E, Packaging SN (fx_check.py). No rule fired on these rows in scia, so propose_detector with a concrete check is correct.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-044443",
+     "text": "Victors Purchaser, LLC First Lien Revolver C + 4.75 % 8/15/2031 21 20 21 8,9"
+    }
+   ]
+  },
+  {
+   "observation_key": "foreign-par-tagged-with-the-usd-unit",
+   "outcome": "supported",
+   "rationale": "fx_check.py lists every printed foreign-currency par in every filing (CAD, JPY, EUR, GBP); each current-period one is published with the printed currency and par and an H.10 dollar amount (JPY 20,849,000 at 0.00667 = 139,086 at 2025-03-31; CAD 195,000 at 0.6955). No USD par remains on a foreign line. propose_detector is justified (no FX rule fired in scia).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071598",
+     "text": "Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 20,849 133 137 11"
+    }
+   ]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "126 untagged_values contexts, all published (0 missing): 1/1/3/19/28/31/22/21 by quarter 2023-12-31..2025-12-31. 15 random ones read on the page (AGS Health, PT Intermediate, Advarra, SG Acquisition x3, Eclipse Buyer, Solis, Healthedge, Integrity, Packaging, Aptean, Vessco, GS AcquisitionCo, ManTech): each prints a dash for fair value and the published cost equals the printed cost. B01 FAILed in scia for 2024-12-31..2025-12-31 (20/35/38/29/22 missing leaves), covering 121 of the 126 rows; the other three quarters were under B01's 95 pct threshold. Acceptable as existing_detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-044443",
+     "text": "SG Acquisition, Inc. First Lien Revolver S + 4.75 % 4/3/2030 - ( 1 ) - 9"
+    }
+   ]
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "outcome": "supported",
+   "rationale": "Published rows identical in issuer, instrument, maturity, spread, cost and fair value form 6 pairs (Hercules 2025-09-30..2026-06-30, Packaging 2025-12-31, Kona 2026-03-31); each line is printed twice in the current schedule (twins.py). Published totals equal the printed totals in every quarter from 2024-09-30. The gate's tolerance let the collapsed quarters pass, so propose_detector is right.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21"
+    }
+   ]
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "outcome": "supported",
+   "rationale": "source_reconciliation_detail 2023-12-31 shows Dwyer, Brave x2 and Blackbird x2 as diagnostic cost mismatches (source +32,000 etc., output -32,000), the printed '( 32 )'. cost_conservation fired at 2023-12-31 in scia (ledger RVQ_BLK_d0ebd58c9c8c). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Dwyer Instruments, LLC First Lien Delayed Draw Term Loan S + 5.75 % 7/21/2027 - ( 32 ) ( 65 ) 5"
+    }
+   ]
+  },
+  {
+   "observation_key": "cost-printed-dash-published-null",
+   "outcome": "supported",
+   "rationale": "Dash costs now publish 0 where printed '-' (Packaging 2025-09-30 '- - -', ManTech 2025-12-31 '- - -', AGS Health 2025-09-30). No ledger rule covered them; propose_detector with a concrete check is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071598",
+     "text": "Aptean, Inc. First Lien Delayed Draw Term Loan S + 5.25 % 1/30/2031 - - ( 2 ) 15"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-blank-on-declared-value-rows",
+   "outcome": "supported",
+   "rationale": "0 published rows have a blank extracted_industry in scie; sampled dash rows carry the printed heading (Insurance, Software, Health Care Technology). propose_detector is right; no rule fired on the blanks.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chemicals, Plastic, & Rubber ASP Meteor Acquisition Co. LLC First Lien Term Loan S + 7.00 % 9/1/2029 2,558 2,444 2,475 7"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Round 2: reworded as a source ambiguity, action left, which matches what I read: the 2025-03-31 line prints 'S + 5.00 %' with no PIK and the tag is 0.05, while 2024-12-31 and 2025-06-30 print 'S + 7.00 % (includes 5.00 % PIK)' and par grows 1,600 -> 1,617 -> 1,621. The published row (spread 5.0, no PIK) follows the printed line, and the text no longer claims the member is stale. The proposed continuity check (PIK terms vanish for one quarter while par grows) is concrete and would flag this row; the slug still says 'stale-member-text', a naming nit only. The informational rule pik_printed_not_published (pik_member_text_only) also reports this row in scie.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071598",
+     "text": "Seko Global Logistics Network, LLC First Lien Term Loan, Last-out S + 5.00 % 5/27/2030 1,617 1,526 1,617 8"
+    },
+    {
+     "accession": "0000950170-25-108055",
+     "text": "Seko Global Logistics Network, LLC First Lien Term Loan, Last-out S + 7.00 % (includes 5.00 % PIK) 5/27/2030 1,621 1,533 1,621 8"
+    }
+   ]
+  },
+  {
+   "observation_key": "pct-calculated-withheld-when-net-assets-concept-outside-nav-list",
+   "outcome": "supported",
+   "rationale": "pct_of_net_assets_calculated is filled on all 1,971 rows; per quarter sum(fair value) / sum(pct) gives 81,780 ... 259,467 thousand, the printed totals, and the printed subtotal percents reproduce (5,880 / 81,780 = 7.2; 154,643 / 83,106 = 186.1; 259,073 / 117,607 = 220.3). No rule reports a fund-wide loss of the percent; propose_detector is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126452",
+     "text": "Total non-controlled-non-affiliated Portfolio Company investments $ 259,337 $ 259,073 220.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-assets-concept-not-mapped",
+   "outcome": "supported",
+   "rationale": "Round 2: now propose_detector, stating that F10 and balance_sheet_identity fired only at 2024-03-31 and 2024-06-30 in scia (2 of 11 quarters), which matches the scia ledger. The fix is verified: fund_financials net_assets and shares_outstanding equal the printed total members' capital and units in all 11 quarters (page_nav.py). The suggested check (net assets equal to a paid-in fact while assets less liabilities differ by more than 0.5 pct) would have caught all 11 quarters here (smallest gap: 210,318 vs 207,259 = 1.5 pct at 2025-09-30; 80,943 vs 81,780 = 1.0 pct at 2023-12-31) and does not fire when the paid-in line happens to be the total.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Total members capital $ 207,259 $ 154,331 Total liabilities and members capital $ 514,422 $ 333,198"
+    }
+   ]
+  },
+  {
+   "observation_key": "one-context-for-two-printed-lines",
+   "outcome": "supported",
+   "rationale": "Kona 2025-06-30 prints a revolver '- - -' beside the published revolver '- ( 1 ) ( 1 )'; Packaging 2025-09-30 prints two DDTL '- - -' lines and one is published. Both are zero in every column, so no total moves; left with propose_detector is acceptable.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108055",
+     "text": "Kona Buyer, LLC First Lien Revolver S + 4.50 % 7/23/2031 - - - 17"
+    }
+   ]
+  },
+  {
+   "observation_key": "pct-printed-once-per-issuer-group",
+   "outcome": "supported",
+   "rationale": "Position lines print no percent column value (only industry subtotal lines end with a percent); not_feasible for a row-level check is right.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Portfolio Company (5) Investment Type Reference Rate and Spread (1) Maturity Date Principal / Shares Cost (2) Fair Value (3) % of Members Capital Footnotes"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "SCI-R1",
+   "outcome": "supported",
+   "rationale": "Not in orchestrator_requests (moved to request_resolution_history), so request_reviews stays empty for the gate. Evidence verified: the two Chartwell contexts carry cost/fair value at decimals 0 beside principal at -3 and the page prints the thousands. Classification verification_bug is arguable (it changes when a blocking check stops blocking, which the orchestrator treated as a cohort-level change); deferral under D-207 recorded in D-219 with the two proposals left for the owner is a legitimate, non-weakening outcome.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "Round 2 (report_diff.py vs scratch/fund_runs/0001959568/report_before_round2.json): only observations changed (issuer-name-row-number-left, net-assets-concept-not-mapped, rate-or-spread-read-from-stale-member-text edited; instrument-row-number-left added). Investigations, fixes, declared_changes, proposals references and request history are unchanged; the outstanding ledger is the same 31 findings, so the finding reviews carry over.",
+  "Page-check residuals (row_audit_scie, 3): Qnnect 2023-12-31 name is a parser artefact (table header prefixed); Packaging 2025-09-30 instrument is a pairing artefact of zero-value lines (published DDTL + revolver, one DDTL '- - -' has no context); Seko 2026-06-30 'S + 7.00 % PIK' published spread 7.0 / pik 7.0, consistent with D-031/D-092. None is a published error.",
+  "Totals: published cost/fair value equal the printed portfolio totals in every quarter from 2024-09-30 and the printed debt totals at 2023-12-31 and 2024-06-30. 2024-03-31 was not re-read by this reviewer.",
+  "2025-03-31 exclusion rule (single-row equity industry subtotals) matched 2 rows / 443,000 (agent_fix_application_audit); printed equity total 3,693 = 291 + 3,250 + 152 equals the three published equity rows.",
+  "97 context corrections applied, 0 unmatched in rebuild.log.",
+  "Not done here: the 20-row random page sample required before acceptance (orchestrator step)."
+ ]
+}

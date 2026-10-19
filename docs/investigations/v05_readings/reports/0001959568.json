@@ -1,0 +1,2079 @@
+{
+ "cik": "0001959568",
+ "label": "scie",
+ "before": "sponfb",
+ "investigator_id": "senior-credit-investments-fund-agent-2026-10-19",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 57,
+   "why": "Member spellings and neighbour-member mislabels corrected from the printed lines; row-number tokens cut (staging)."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 115,
+   "why": "Staging regexes (row numbers, 'Investment TypeFirst', equity classes) and 10 instrument corrections (plus 3 equity rows printed as L.P. Interest)."
+  },
+  {
+   "column": "fair_value",
+   "rows": 2,
+   "why": "Chartwell 2023-12-31 term loan and delayed draw tagged without the thousands scale (6,671 -> 6,671,000; 443 -> 443,000)."
+  },
+  {
+   "column": "cost",
+   "rows": 24,
+   "why": "Chartwell x2 (thousands), 2023-12-31 undrawn costs tagged positive x5, printed dash costs published blank set to 0."
+  },
+  {
+   "column": "cost_reported",
+   "rows": 24,
+   "why": "Follows cost."
+  },
+  {
+   "column": "shares_held",
+   "rows": 5,
+   "why": "Eclipse 28 (2024-09-30, 2024-12-31, 2025-03-31) and Red Griffin 764 (2024-12-31, 2025-03-31) printed and untagged."
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 8,
+   "why": "CAD / JPY / EUR pars tagged USD."
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 8,
+   "why": "Dollar par at the build's H.10 rate for the same 8 rows."
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 8,
+   "why": "Same 8 rows."
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 8,
+   "why": "Same 8 rows: source_usd -> reference_fx."
+  },
+  {
+   "column": "interest_rate",
+   "rows": 8,
+   "why": "KL Stockton whole-coupon PIK loan: interest_rate 13.0 (pik_only_tag_reading coupon)."
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 8,
+   "why": "Same KL Stockton rows: unresolved -> all_in."
+  },
+  {
+   "column": "src_transforms",
+   "rows": 8,
+   "why": "Same KL Stockton rows: interest_rate:pik_only."
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 21,
+   "why": "C, T, SN, P codes read from the printed column (were SOFR)."
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 21,
+   "why": "Same 21 rows: identifier_text -> ixbrl_field_status."
+  },
+  {
+   "column": "pik_rate",
+   "rows": 1,
+   "why": "Seko 2025-03-31: PIK from member text withdrawn (printed 'S + 5.00 %')."
+  },
+  {
+   "column": "src_facts",
+   "rows": 2,
+   "why": "Chartwell 2023-12-31 x2: the corrected values recorded."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 66,
+   "why": "Rows carrying a context-keyed correction."
+  },
+  {
+   "column": "position_key",
+   "rows": 3,
+   "why": "Keys rebuilt from cleaned names (ASP Meteor 2023-12-31, previously the truncated member)."
+  },
+  {
+   "column": "position_id",
+   "rows": 251,
+   "why": "Follows names / instruments and the restored rows."
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 1416,
+   "why": "Net assets now the printed total members' capital (denominator), so every row's calculated percent changes."
+  }
+ ],
+ "rows_added": 439,
+ "rows_removed": 2,
+ "fixes": [
+  {
+   "what": "Staging hierarchy regexes rewritten for every member form the filer uses: the 2026-06-30 abbreviated prefixes ('NCNA Ptfl Cmp Invs', 'FLDI', 'NCNAPC Inv. FLD Inv', 'FLDI Air'), the truncated 'n-Affiliated' and 'NC/NA' prefixes, 'Investment TypeFirst Lien' (no space), 'Investment Type Revolver', ', continued' industries, equity 'Common/Preferred Stock' and 'L.P. Interests' headings, and row-number tokens ('One', 'Two', '1') cut from issuer and instrument. Dry run (stg_regex.py) over 1,200 identifiers: 0 lost, every changed issuer read; 'Services: Wholesale' label added. At 2026-06-30 all 306 rows had published the whole member as issuer.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "AA&D Midco, Inc. (fka GB Eagle Buyer, Inc.) First Lien Term Loan S + 4.75 % 11/29/2030 $ 689 $ 683 $ 689 9"
+    }
+   ]
+  },
+  {
+   "what": "reference_rate_columns ['Reference Rate and Spread'] and reference_rate_codes from the legend (S, E, C=CORRA, SN=SONIA, T=TONA, P=PRIME): 21 rows had SOFR guessed for printed C, T, SN and P codes.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Sterling Overnight Index Average (SONIA or SN), Tokyo Overnight Average Rate (TONAR or T), or an alternate base rate"
+    },
+    {
+     "accession": "0000950170-25-071598",
+     "text": "Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 20,849 133 137 11"
+    }
+   ]
+  },
+  {
+   "what": "untagged_values: fair value 0 for 126 current-period contexts printed with a dash for fair value (dash_lines.py; cost 0 where the printed cost is a dash and none is tagged); they had been dropped as excluded_no_fair_value (cost totals short by their negative costs).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-044443",
+     "text": "SG Acquisition, Inc. First Lien Revolver S + 4.75 % 4/3/2030 - ( 1 ) - 9"
+    }
+   ]
+  },
+  {
+   "what": "staging.distinct_member_suffix_re (row-number token before 'Investment Type' / 'Reference' or at the end of the member): 14 twin contexts printed as separate lines (Hercules delayed draw printed twice in four quarters, Kona, Aptean, Packaging Coordinators, Trystar) had been folded into one row; fair value and cost now equal the printed totals exactly in 11 of 11 quarters.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21"
+    }
+   ]
+  },
+  {
+   "what": "dispatch.industry_from_identifier_re: the declared dash rows had no industry (123 rows); filled from the member's industry label (dry run: 122 equal to the printed heading, 1 line-key collision where member and printed agree).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chemicals, Plastic, & Rubber ASP Meteor Acquisition Co. LLC First Lien Term Loan S + 7.00 % 9/1/2029 2,558 2,444 2,475 7 ASP Meteor Acquisition Co. LLC First Lien Delayed Draw Term Loan S + 7.00 % 9/1/2029 1,170 1,089 1,111 5,7 Aurora Plastics, LLC First Lien Term Loan S + 4.75 % 8/10/2028 1,468 1,337 1,372 7 Aurora Plastics, LLC First Lien Delayed Draw Term Loan S + 4.75 % 8/10/2028 986 898 922 7 6,182 5,768 5,880 7.2 %"
+    }
+   ]
+  },
+  {
+   "what": "pik_only_tag_reading ['coupon']: KL Stockton's whole-coupon PIK loan ('13.00 % PIK') publishes interest_rate 13.0 (8 rows) beside pik_rate 13.0 (D-092).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 388 384 332"
+    }
+   ]
+  },
+  {
+   "what": "New highlights wrapper: net assets were the paid-in 'Common units' line in every quarter (80,943 ... 265,318); set to the printed total members' capital (81,780 ... 259,467) with units outstanding from the same lines (blank before). source_encodings.net_assets_concepts ['MembersEquity'] so the calculated percent of net assets stays filled (the filer tags the paid-in line as MembersCapital and the total as MembersEquity, equal to the printed total in 11 of 11 filings).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Member's Capital Common units ( 44,576 units issued and outstanding) $ 80,943 Accumulated distributable earnings 837 Total member's capital $ 81,780"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Common units ( 146,634 and 129,757 units issued and outstanding, at March 31, 2026 and December 31, 2025, respectively) $ 265,318 $ 235,318 Accumulated distributed earnings (losses) ( 4,226 ) ( 3,313 ) Total members capital $ 261,092 $ 232,005"
+    }
+   ]
+  },
+  {
+   "what": "Exclusion rule 1959568_exclude_single_row_equity_industry_subtotals_2025q1: two equity industry subtotals (Firebird 152, Eclipse 291) tagged on section/class/industry members were published as positions (+443 thousand).",
+   "kind": "exclusion",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-071598",
+     "text": "Equity Investments Preferred Stock Professional Services Eclipse Topco, Inc. Preferred Stock 28 $ 285 $ 291 285 291 Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Common Stock 764 3,694 3,250 3,694 3,250"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections by context (97 rows, corr_specs.json): Chartwell 2023-12-31 cost and fair value tagged without the thousands scale (7.1M short); 8 foreign pars tagged USD (CAD/JPY/EUR, converted at the build's H.10 rate); member mislabels (2026-03-31 seven contexts carry a neighbour's member: PTSH, World Insurance x2, Real Chemistry, Bluefin x2, IG Investments; 2026-06-30 Coding Solutions on AB Centers' member; 2025-06-30 Real Chemistry on AVSC's member); 10 instrument mislabels; 11 names spelled differently in the member (ILLC, LLCC, IRI f/k/a, Zenith Acquisition, Sapphire Software Aptean); undrawn costs tagged positive at 2023-12-31 (5) and printed dash costs published blank (16); unit counts printed and untagged (Eclipse 28, Red Griffin 764); Firebird printed as L.P. Interest; Seko 2025-03-31 PIK from member text withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "PTSH Intermediate Holdings, LLC First Lien Term Loan S + 5.00 % 1/10/2033 1,558 1,543 1,543 9"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Term Loan S + 5.00 % 8/7/2031 10,609 10,508"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Zenith AcquisitionCo, LLC First Lien Term Loan S + 4.50 % 1/13/2033 2,784 2,770 2,770 9"
+    },
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Wrench Group, LLC First Lien Term Loan S + 4.75 % 9/3/2032 5,741 5,684 5,684 8"
+    },
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Dwyer Instruments, LLC First Lien Delayed Draw Term Loan S + 5.75 % 7/21/2027 - ( 32 ) ( 65 ) 5"
+    },
+    {
+     "accession": "0000950170-25-071598",
+     "text": "Aptean, Inc. First Lien Delayed Draw Term Loan S + 5.25 % 1/30/2031 - - ( 2 ) 15"
+    },
+    {
+     "accession": "0000950170-24-126452",
+     "text": "Eclipse Topco, Inc. Preferred Stock 28 274 274"
+    },
+    {
+     "accession": "0000950170-25-071598",
+     "text": "Seko Global Logistics Network, LLC First Lien Term Loan, Last-out S + 5.00 % 5/27/2030 1,617 1,526 1,617 8"
+    },
+    {
+     "accession": "0000950170-25-071598",
+     "text": "Spruce Bidco II Inc. First Lien Term Loan C + 5.00 % 2/2/2032 CAD 195 132 133 10"
+    },
+    {
+     "accession": "0001193125-26-116346",
+     "text": "Titan Luxco I SARL First Lien Term Loan E + 5.00 % 6/14/2032 EUR 101 116 118 14"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "issuer-name-is-hierarchy-path",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 599.9,
+   "what": "The 10-Q for 2026-06-30 shortens the member prefix ('NCNA Ptfl Cmp Invs First Lien Debt Investments', 'FLDI', 'NCNAPC Inv. FLD Inv'); the untouched build published the whole member as issuer on all 306 rows (instrument blank). Fixed by the staging regexes. The gate's names check passed these rows.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag an issuer name that contains 'Investment Type' or a maturity date.",
+   "quote": {
+    "accession": "0001193125-26-345215",
+    "text": "AA&D Midco, Inc. (fka GB Eagle Buyer, Inc.) First Lien Term Loan S + 4.75 % 11/29/2030 $ 689 $ 683 $ 689 9"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on 2026-06-30 in the untouched build (scia, 306 rows) and C206 on earlier quarters.",
+    "reference": "identity issuer_name_printed; row_validation C206"
+   }
+  },
+  {
+   "observation_key": "issuer-name-row-number-left",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-12-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 25.0,
+   "what": "Members carry a row-number token in the issuer ('Dwyer Instruments, LLC 1', 'Trystar, LLC One', 'Nellson Nutraceutical, LLC One'); 13 rows in the untouched build (scia) published it in issuer_name until the staging regexes cut it. The rows where only the instrument carried the token are a separate observation (instrument-row-number-left).",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag an issuer name ending in One/Two/Three or a lone digit.",
+   "quote": {
+    "accession": "0000950170-24-038500",
+    "text": "Dwyer Instruments, LLC First Lien Delayed Draw Term Loan S + 5.75 % 7/21/2027 - ( 32 ) ( 65 ) 5"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on the 13 issuer-name rows in scia (e.g. 2025-06-30 'Nellson Nutraceutical, LLC One', 'Kona Buyer, LLC One'); it does not cover the instrument field.",
+    "reference": "identity issuer_name_printed"
+   }
+  },
+  {
+   "observation_key": "instrument-row-number-left",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": null,
+   "what": "In the untouched build (scia) 27 rows with a clean issuer published the member's row-number token in instrument_description (instr_rowno.sql; 4 more Firebird 'L.P. Interest One' rows also kept the heading in the issuer). No rule flagged them for the token: 1 of 27 appears in the scia page_rule_findings, National Express 2025-03-31, and only for its LLCC issuer spelling. Fixed by the staging regexes (0 such rows in scie). Rows: 2024-12-31 Dwyer Instruments, LLC 'First Lien Delayed Draw Term Loan 1' (0000950170-25-044443/C_5c977261-0d38-4fab-af55-790874262b59); 2024-12-31 Dwyer Instruments, LLC 'First Lien Term Loan 1' (0000950170-25-044443/C_09f15b8b-25ca-44c5-a12e-d7c8070e970d); 2024-12-31 Galway Borrower LLC 'First Lien Delayed Draw Term Loan One' (0000950170-25-044443/C_8edb6828-5095-4510-b1fd-30b2f3f1d2db); 2024-12-31 Kona Buyer, LLC 'First Lien Delayed Draw Term Loan One' (0000950170-25-044443/C_555a2ac2-4df3-43ce-9c39-b90520037c88); 2024-12-31 Qnnect, LLC 'First Lien Term Loan 1' (0000950170-25-044443/C_02f1580f-3d7a-4f11-b90f-04cf7a780581); 2024-12-31 SitusAMC Holdings Corporation 'First Lien Term Loan One' (0000950170-25-044443/C_6b6995e4-2e79-40b4-ac01-fd2c0ebf5148); 2024-12-31 The GI Alliance Management, LLC 'First Lien Term Loan One' (0000950170-25-044443/C_887b2f6a-4fbb-4934-b802-2874e63c452f); 2024-12-31 Trystar, LLC 'First Lien Term Loan One' (0000950170-25-044443/C_5b09803d-9707-43e9-b2af-61570ce6d29a); 2025-03-31 Aptean, Inc 'First Lien Delayed Draw Term Loan 1' (0000950170-25-071598/C_bc8170ef-a556-42c4-8d24-0c7d884b9892); 2025-03-31 Aptean, Inc 'First Lien Delayed Draw Term Loan 2' (0000950170-25-071598/C_abd74b15-a5e2-49fc-8e84-684fc42bac16); 2025-03-31 Chartwell Cumming Holding Corporation 'First Lien Delayed Draw Term Loan One' (0000950170-25-071598/C_8e6ba4ec-985a-4259-9b0f-0497f9b5aef1); 2025-03-31 Chartwell Cumming Holding Corporation 'First Lien Delayed Draw Term Loan Two' (0000950170-25-071598/C_6f773354-52de-4a91-bb1a-3b3e84892a61); 2025-03-31 Dwyer Instruments, LLC 'First Lien Delayed Draw Term Loan 1' (0000950170-25-071598/C_5275d097-6d38-4c2e-b25d-fa78bb82cfc0); 2025-03-31 Dwyer Instruments, LLC 'First Lien Term Loan 1' (0000950170-25-071598/C_061ecd58-140b-47ac-a4e5-e9914ab2ab85); 2025-03-31 Galway Borrower LLC 'First Lien Delayed Draw Term Loan One' (0000950170-25-071598/C_089f2430-0a44-43df-9cea-69743a49880b); 2025-03-31 National Express Wash Parent Intermediate Holdco, LLCC 'First Lien Delayed Draw Term Loan One' (0000950170-25-071598/C_47a79e57-02a3-4aeb-91ea-d59b5cabd481); 2025-03-31 Redwood Services Group, LLC 'First Lien Delayed Draw Term Loan One' (0000950170-25-071598/C_7deba935-0f60-45f2-897d-0c723a142037); 2025-03-31 SitusAMC Holdings Corporation 'First Lien Term Loan One' (0000950170-25-071598/C_834d5e93-f7b0-40e6-834b-b15b981616ea); 2025-03-31 Trystar, LLC 'First Lien Term Loan One' (0000950170-25-071598/C_f693a041-4e95-45a1-ac93-c485be62fd94); 2025-06-30 Aurora Plastics, LLC 'First Lien Delayed Draw Term Loan One' (0000950170-25-108055/C_f21206e7-45fb-4301-aad8-82f93d853464); 2025-06-30 Chartwell Cumming Holding Corporation 'First Lien Delayed Draw Term Loan One' (0000950170-25-108055/C_dadab746-0706-4bfb-ba4d-a95a90d04ac2); 2025-06-30 Chartwell Cumming Holding Corporation 'First Lien Delayed Draw Term Loan Two' (0000950170-25-108055/C_74d4ccfe-5b7f-42ba-a870-63ee61b6784d); 2025-06-30 Kona Buyer, LLC 'First Lien Delayed Draw Term Loan Four' (0000950170-25-108055/C_b82fb689-4a44-4bdb-a304-2e27864fe2b3); 2025-06-30 Kona Buyer, LLC 'First Lien Delayed Draw Term Loan Three' (0000950170-25-108055/C_9ea5cce7-bab7-4d9d-a366-ed8bf4f8d9b7); 2025-06-30 Kona Buyer, LLC 'First Lien Delayed Draw Term Loan Two' (0000950170-25-108055/C_ba304eac-50a5-4b0d-a457-c9a4e1db5fe8); 2025-06-30 Kona Buyer, LLC 'First Lien Revolver One' (0000950170-25-108055/C_6709bb03-f596-43ce-9386-0c5a043f6d4d); 2025-06-30 Redwood Services Group, LLC 'First Lien Delayed Draw Term Loan One' (0000950170-25-108055/C_9183f97a-7560-460d-a201-b25bf447674b).",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a loan or equity row whose instrument_description ends in One/Two/Three/Four/Five/Six or a lone digit 1-9 after a known instrument phrase ('Term Loan', 'Delayed Draw Term Loan', 'Revolver', 'L.P. Interest').",
+   "quote": {
+    "accession": "0000950170-25-044443",
+    "text": "Trystar, LLC First Lien Term Loan S + 4.50 % 8/6/2031 2,059 2,039 2,038 7"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed compares only the issuer with the printed name; it flagged one of these rows (National Express 2025-03-31) for the LLCC spelling and none for the token; these rows in scia; no rule reads the instrument field for a trailing row number."
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 25.5,
+   "what": "Ten contexts carry a neighbouring line's member (2026-03-31: PTSH on Redwood Services' member, World Insurance x2 on Harvey Tool's, Real Chemistry on ICR's, Bluefin x2 on Syndigo's, IG Investments on Vacation Rental Brands'; 2026-06-30 Coding Solutions 10.5M on AB Centers' revolver member; 2025-06-30 Real Chemistry delayed draw on AVSC's) and 11 rows spell the issuer differently from the page. Fixed by context-keyed corrections from the printed lines.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Compare each published row with the printed line carrying its cost and fair value; flag a different issuer name.",
+   "quote": {
+    "accession": "0001193125-26-221845",
+    "text": "PTSH Intermediate Holdings, LLC First Lien Term Loan S + 5.00 % 1/10/2033 1,558 1,543 1,543 9"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on every one of these rows in scib (20 rows).",
+    "reference": "identity issuer_name_printed"
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-page",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 25.4,
+   "what": "Ten contexts name a different instrument in the member than the printed line (Seko last-out term loan as delayed draw x2, Wrench term loans as revolvers x2, Real Chemistry and Coding Solutions term loans, Galway, National Express, AB Centers revolver, Harvey Tool revolver printed without First Lien). Fixed by corrections.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Compare the published instrument with the printed instrument of the line carrying the row's cost and fair value.",
+   "quote": {
+    "accession": "0001193125-25-280629",
+    "text": "Wrench Group, LLC First Lien Term Loan S + 4.75 % 9/3/2032 5,741 5,684 5,684 8"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule compares instrument text with the printed line; found only by row_audit.py."
+   }
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 2.5,
+   "what": "Loans printed with C, T, SN and P codes published SOFR (21 rows). Fixed with reference_rate_columns / reference_rate_codes from the legend.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a reference_rate_type that differs from the code printed in the Reference Rate and Spread cell.",
+   "quote": {
+    "accession": "0001193125-26-345215",
+    "text": "Sterling Overnight Index Average (SONIA or SN), Tokyo Overnight Average Rate (TONAR or T), or an alternate base rate"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on these rows in scia; found by row_audit.py's printed-code comparison."
+   }
+  },
+  {
+   "observation_key": "foreign-par-tagged-with-the-usd-unit",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 1.0,
+   "what": "Eight CAD / JPY / EUR pars (Spruce Bidco, Titan Luxco) tagged with unit USD were published as dollar pars (JPY 20,849,000 as 20.8M dollars). Fixed with corrections at the build's H.10 rates.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a principal currency that differs from the currency code printed before the par.",
+   "quote": {
+    "accession": "0000950170-25-071598",
+    "text": "Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 20,849 133 137 11"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No FX rule fired on these rows in scia; found by row_audit.py's printed-currency comparison."
+   }
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "field": "fair_value",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "what": "126 schedule rows printed with a dash for fair value (undrawn lines, many with a negative cost) were dropped as excluded_no_fair_value. Fixed with untagged_values.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Count printed schedule rows against published rows per quarter.",
+   "quote": {
+    "accession": "0000950170-25-044443",
+    "text": "SG Acquisition, Inc. First Lien Revolver S + 4.75 % 4/3/2030 - ( 1 ) - 9"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 (excluded_no_fair_value) fired in the untouched build for 2024-12-31 to 2025-12-31.",
+    "reference": "oracle B01"
+   }
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "field": "fair_value",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.1,
+   "what": "Fourteen twin contexts (members differ only by a row-number token) were folded into one row; the quarters ran 2 to 21 thousand above the printed totals, inside the gate's tolerance. Fixed with distinct_member_suffix_re.",
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Require published fair value to equal the printed total to the thousand, or compare printed and published row counts.",
+   "quote": {
+    "accession": "0001193125-25-280629",
+    "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The gate's totals check passed these quarters (tolerance); PP02 / B02 fire only after the rows are restored."
+   }
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "field": "cost",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "what": "Five undrawn-line costs at 2023-12-31 are tagged positive (Dwyer 32,000) and printed in parentheses; the cost total was 168 thousand over. Fixed by corrections.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a positive cost on a row whose fair value is negative and par is blank.",
+   "quote": {
+    "accession": "0000950170-24-038500",
+    "text": "Dwyer Instruments, LLC First Lien Delayed Draw Term Loan S + 5.75 % 7/21/2027 - ( 32 ) ( 65 ) 5"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "cost_conservation fired at 2023-12-31 in the untouched build.",
+    "reference": "conservation cost_conservation"
+   }
+  },
+  {
+   "observation_key": "cost-printed-dash-published-null",
+   "field": "cost",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "what": "Undrawn lines printed '- - ( x )' published cost null (16 rows). Fixed by corrections to 0.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a loan row with a fair value and no cost where the printed cost cell is a dash.",
+   "quote": {
+    "accession": "0000950170-25-071598",
+    "text": "Aptean, Inc. First Lien Delayed Draw Term Loan S + 5.25 % 1/30/2031 - - ( 2 ) 15"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on the 16 rows in scib (C110-style missing-cost checks skip undrawn lines with a negative fair value); row_audit.py found them by comparing each row's cost with the printed cost cell."
+   }
+  },
+  {
+   "observation_key": "industry-blank-on-declared-value-rows",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "what": "Rows published from untagged_values got no industry (123 rows). Fixed with industry_from_identifier_re. Shared: the page reader matches rows by tagged values, so declared rows miss it.",
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag published rows with no extracted_industry where the member text carries an industry label.",
+   "quote": {
+    "accession": "0000950170-24-038500",
+    "text": "Chemicals, Plastic, & Rubber ASP Meteor Acquisition Co. LLC First Lien Term Loan S + 7.00 % 9/1/2029 2,558 2,444 2,475 7 ASP Meteor Acquisition Co. LLC First Lien Delayed Draw Term Loan S + 7.00 % 9/1/2029 1,170 1,089 1,111 5,7 Aurora Plastics, LLC First Lien Term Loan S + 4.75 % 8/10/2028 1,468 1,337 1,372 7 Aurora Plastics, LLC First Lien Delayed Draw Term Loan S + 4.75 % 8/10/2028 986 898 922 7 6,182 5,768 5,880 7.2 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the null industries in scib; found by row_audit.py."
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 1.6,
+   "what": "Source ambiguity, no data claim beyond the printed line: Seko's 2025-03-31 member reads '(includes 5.00% PIK)' while the 10-Q prints 'S + 5.00 %' with no PIK and tags spread 0.05. The adjacent quarters print 'S + 7.00 % (includes 5.00 % PIK)' and par grows 1,600 -> 1,617 -> 1,621, which is consistent with PIK accruing, so the 2025-03-31 printed line may be the outlier rather than the member. The build publishes the printed line (pik_rate withdrawn by correction); which reading is right is not established from the filings.",
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Flag a loan whose printed PIK terms disappear for one quarter and return the next while par keeps growing.",
+   "quote": {
+    "accession": "0000950170-25-071598",
+    "text": "Seko Global Logistics Network, LLC First Lien Term Loan, Last-out S + 5.00 % 5/27/2030 1,617 1,526 1,617 8"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed did not fire (it checks a printed PIK against the published one); a quarter-over-quarter PIK-terms continuity check would surface the one-quarter gap for a reader to settle."
+   }
+  },
+  {
+   "observation_key": "pct-calculated-withheld-when-net-assets-concept-outside-nav-list",
+   "field": "pct_of_net_assets_calculated",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 599.9,
+   "what": "Once net assets were the printed total, pct_of_net_assets_calculated went blank on all 1,971 rows (scid): the denominator check looks for MembersCapital, which this filer uses for the paid-in line. Fixed with net_assets_concepts ['MembersEquity'].",
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a fund whose calculated-percent coverage falls to zero between builds.",
+   "quote": {
+    "accession": "0001193125-26-221845",
+    "text": "Common units ( 146,634 and 129,757 units issued and outstanding, at March 31, 2026 and December 31, 2025, respectively) $ 265,318 $ 235,318 Accumulated distributed earnings (losses) ( 4,226 ) ( 3,313 ) Total members capital $ 261,092 $ 232,005"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Found by holdings_field_diff; no rule reports a fund-wide loss of the calculated percent."
+   }
+  },
+  {
+   "observation_key": "net-assets-concept-not-mapped",
+   "field": "net_assets",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "what": "fund_financials.net_assets held the paid-in 'Common units' line (MembersCapital) in every quarter; the printed total is tagged MembersEquity. Fixed by the highlights wrapper.",
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag net assets equal to a paid-in or contributed-capital fact (MembersCapital, CommonStockValue plus APIC) when total assets less total liabilities differs from it by more than 0.5 pct.",
+   "quote": {
+    "accession": "0000950170-24-038500",
+    "text": "Member's Capital Common units ( 44,576 units issued and outstanding) $ 80,943 Accumulated distributable earnings 837 Total member's capital $ 81,780"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "F10 and balance_sheet_identity fired only at 2024-03-31 and 2024-06-30 in scia, i.e. they cover 2 of 11 quarters; in the other 9 the paid-in line was published as net assets with no rule firing (e.g. 210,318 against printed total members' capital 207,259 at 2025-09-30)."
+   }
+  },
+  {
+   "observation_key": "one-context-for-two-printed-lines",
+   "field": "fair_value",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "what": "Two printed zero-value lines have no current-period context (Kona revolver '- - -' at 2025-06-30; the second Packaging Coordinators delayed draw '- - -' at 2025-09-30; nocontext.sql). Left: zero value, cost and par; publishing them would need a printed-row declaration and does not change any total.",
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Compare printed and published row counts per quarter.",
+   "quote": {
+    "accession": "0000950170-25-108055",
+    "text": "Kona Buyer, LLC First Lien Revolver S + 4.50 % 7/23/2031 - - - 17"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fires on a missing zero-value row; found by row_audit.py (printed-unmatched)."
+   }
+  },
+  {
+   "observation_key": "pct-printed-once-per-issuer-group",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "what": "The schedule prints percent of members' capital only on industry subtotal lines, never per row; pct_of_net_assets is blank as filed and pct_of_net_assets_calculated carries fair value / net assets.",
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "None needed: the printed column is empty on position rows.",
+   "quote": {
+    "accession": "0001193125-26-345215",
+    "text": "Portfolio Company (5) Investment Type Reference Rate and Spread (1) Maturity Date Principal / Shares Cost (2) Fair Value (3) % of Members Capital Footnotes"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "No row-level printed figure exists to compare."
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_bdc_xbrl_wrapper.py: 557 passed (after each wrapper edit)",
+  "tests/test_bdc_xbrl_wrapper.py + tests/test_fund_highlights_wrapper.py + tests/test_bdc_xbrl_wrapper_oracle.py: 697 passed (before scib)",
+  "jsonschema validation of the BDC wrapper (wrapper_v3) and the highlights wrapper (wrapper_v1): ok"
+ ],
+ "not_done": [
+  "The 20-row random page sample (orchestrator step).",
+  "Two printed zero-value lines with no current-period context left unpublished (observation one-context-for-two-printed-lines).",
+  "Floors, lien and maturity of every row compared only through row_audit (maturity, spread, PIK, currency, par, cost, fair value, industry, name, instrument); interest_rate has no printed column and stays blank on floating loans.",
+  "Position-chain quality after the renames (position_id changed on 251 rows) not measured against the page.",
+  "The 2023-09-30 filing has no schedule (fund pre-inception); not read further."
+ ],
+ "reconciliation": {
+  "basis": "page_rows.py parses every printed debt row; their sums equal the printed debt totals in 11 of 11 quarters; published fair value and cost (totals.sql) equal the printed 'Total non-controlled-non-affiliated Portfolio Company investments' in 11 of 11 quarters to the thousand.",
+  "rows": "printed debt rows + equity rows = published rows in 9 of 11 quarters; 2025-06-30 and 2025-09-30 each miss one zero-value printed line that has no context."
+ },
+ "build_history": [
+  "scia untouched (61 outstanding; 59 after check-accepted)",
+  "scib staging regexes, reference codes, untagged dash rows, highlights, equity-subtotal rule, Chartwell (34)",
+  "scic twin suffix key, member-industry key, 93 context corrections (31)",
+  "scid 4 more corrections (31; row_audit clean)",
+  "scie net_assets_concepts MembersEquity (31; calculated percent restored)"
+ ],
+ "investigations": [
+  {
+   "finding_id": "BDCSRC_0001959568_2023-12-31_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_2d17f63bfb",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-038500/C_e2010a5a-0f84-4446-b2b2-549a0e6e2481/ROW-9564becc0c138537",
+     "0000950170-24-038500/C_2a1026e8-aa08-4877-981c-eb8c8ae8b138/ROW-693ce2d009a2bff3"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-038500/C_e2010a5a-0f84-4446-b2b2-549a0e6e2481/ROW-9564becc0c138537",
+     "0000950170-24-038500/C_2a1026e8-aa08-4877-981c-eb8c8ae8b138/ROW-693ce2d009a2bff3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7"
+    },
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Population: the two Chartwell contexts at 2023-12-31 (source_recon blocking scale candidate, fair value at risk 7.11M).",
+    "Same mechanism as SRC_BDC03 2023-12-31: published printed thousands against unscaled tags."
+   ],
+   "next_action": "Proposal PD-SCI-BDCSRC-UNSCALED; request SCI-R1 deferred by the orchestrator (D-219); proposal stays for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_1ec3f3d6eab7",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2023-12-31/A01:plastic rubber"
+    ],
+    "reviewed_rows": [
+     "0001959568/2023-12-31/A01:plastic rubber"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chemicals, Plastic, & Rubber ASP Meteor Acquisition Co. LLC First Lien Term Loan S + 7.00 % 9/1/2029 2,558 2,444 2,475 7 ASP Meteor Acquisition Co. LLC First Lien Delayed Draw Term Loan S + 7.00 % 9/1/2029 1,170 1,089 1,111 5,7 Aurora Plastics, LLC First Lien Term Loan S + 4.75 % 8/10/2028 1,468 1,337 1,372 7 Aurora Plastics, LLC First Lien Delayed Draw Term Loan S + 4.75 % 8/10/2028 986 898 922 7 6,182 5,768 5,880 7.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle A01 parent 'plastic rubber' (rollup 5,880,000; 3 children, 3,405,000).",
+    "Printed block: subtotal 5,880 = 2,475 (ASP Meteor term loan) + 1,111 + 1,372 + 922; all four rows are published (row_audit 44 of 44 matched).",
+    "ASP Meteor's term-loan member is truncated ('n-Affiliated Portfolio Company Investments ...'), so the oracle does not place it under the parent."
+   ],
+   "next_action": "Proposal PD-SCI-A01-PRINTED (a01-printed-subtotals-equal-published-rows)."
+  },
+  {
+   "finding_id": "RVQ_BLK_215d02158d6b",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2024-06-30/A01:non controlled non affiliated portfolio company investments first lien debt investments"
+    ],
+    "reviewed_rows": [
+     "0001959568/2024-06-30/A01:non controlled non affiliated portfolio company investments first lien debt investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096299",
+     "text": "debt investments (8) $ 157,022 $ 153,448 $ 154,643 186.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle A01 parent 'first lien debt investments' (rollup 154,643,000; 2 children).",
+    "The parent is the printed debt total, equal to the sum of all 69 published rows (totals.sql: 154,643).",
+    "The oracle counts as direct children only rows whose member has no recognised industry segment."
+   ],
+   "next_action": "Proposal PD-SCI-A01-PRINTED."
+  },
+  {
+   "finding_id": "RVQ_BLK_3161ca614bab",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2024-09-30/A01:non controlled non affiliated portfolio company investments first lien debt investments"
+    ],
+    "reviewed_rows": [
+     "0001959568/2024-09-30/A01:non controlled non affiliated portfolio company investments first lien debt investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126452",
+     "text": "debt investments (8) $ 108,829 $ 105,495 $ 106,888 130.7 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle A01 parent 'first lien debt investments' (rollup 106,888,000; 5 children, 16,182,000).",
+    "106,888 is the 2023-12-31 debt total printed in this 10-Q's comparative schedule, not a 2024-09-30 figure; the 2023-12-31 published rows sum to 106,888."
+   ],
+   "next_action": "Proposal PD-SCI-A01-COMPARATIVE (a01-subtotal-of-the-comparative-schedule)."
+  },
+  {
+   "finding_id": "RVQ_BLK_3ef354a102dc",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2024-12-31/A01:non controlled non affiliated portfolio company investments first lien debt investments"
+    ],
+    "reviewed_rows": [
+     "0001959568/2024-12-31/A01:non controlled non affiliated portfolio company investments first lien debt investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-044443",
+     "text": "Portfolio Company debt investments (8) $ 108,829 $ 105,495 $ 106,888 130.7 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle A01 parent 'first lien debt investments' (rollup 106,888,000; 5 children, 16,182,000).",
+    "106,888 is the 2023-12-31 debt total in the 10-K's comparative schedule."
+   ],
+   "next_action": "Proposal PD-SCI-A01-COMPARATIVE."
+  },
+  {
+   "finding_id": "RVQ_BLK_ad4fa20a3115",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-038500/C_e2010a5a-0f84-4446-b2b2-549a0e6e2481/ROW-9564becc0c138537",
+     "0000950170-24-038500/C_2a1026e8-aa08-4877-981c-eb8c8ae8b138/ROW-693ce2d009a2bff3"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-038500/C_e2010a5a-0f84-4446-b2b2-549a0e6e2481/ROW-9564becc0c138537",
+     "0000950170-24-038500/C_2a1026e8-aa08-4877-981c-eb8c8ae8b138/ROW-693ce2d009a2bff3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7"
+    },
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Population: the two Chartwell contexts at 2023-12-31 (source_reconciliation value_mismatch rows).",
+    "filing_grep: InvestmentOwnedAtCost 6506 and InvestmentOwnedAtFairValue 6671 at decimals 0 beside principal 6773000 at decimals -3; the page prints 6,506 / 6,671 in a schedule stated in thousands.",
+    "Published the printed thousands by row correction; the quarter now ties exactly (106,888); before, 7.1M short."
+   ],
+   "next_action": "Proposal PD-SCI-SRC-UNSCALED; request SCI-R1 deferred by the orchestrator (D-219); proposal stays for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_0a7fc3c3cc12",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2023-12-31/F30"
+    ],
+    "reviewed_rows": [
+     "0001959568/2023-12-31/F30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F30 for the quarter, one fund-quarter-metric key (fund level).",
+    "Read the printed balance sheet: NAV per unit is printed (1,769.49 to 1,864.36 across quarters) and equals net assets / units.",
+    "Tested whether a wrong denominator inflates it: net assets were the paid-in line before this run (80,943 at 2023-12-31) and are now the printed total (highlights wrapper); NAV per unit was already the printed figure and is unchanged.",
+    "The rule's 1,000 ceiling assumes per-share funds; these units were issued near 1,800."
+   ],
+   "next_action": "Proposal PD-SCI-F30-NAV-UNIT (f30-nav-per-unit-as-printed-units-issued-near-1800)."
+  },
+  {
+   "finding_id": "RVQ_REV_0d305c4025ee",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2024-12-31/F30"
+    ],
+    "reviewed_rows": [
+     "0001959568/2024-12-31/F30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F30 for the quarter, one fund-quarter-metric key (fund level).",
+    "Read the printed balance sheet: NAV per unit is printed (1,769.49 to 1,864.36 across quarters) and equals net assets / units.",
+    "Tested whether a wrong denominator inflates it: net assets were the paid-in line before this run (80,943 at 2023-12-31) and are now the printed total (highlights wrapper); NAV per unit was already the printed figure and is unchanged.",
+    "The rule's 1,000 ceiling assumes per-share funds; these units were issued near 1,800."
+   ],
+   "next_action": "Proposal PD-SCI-F30-NAV-UNIT (f30-nav-per-unit-as-printed-units-issued-near-1800)."
+  },
+  {
+   "finding_id": "RVQ_REV_0d8f306032b0",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2026-08-03/F28"
+    ],
+    "reviewed_rows": [
+     "0001959568/2026-08-03/F28"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "As of August 3, 2026, the registrant had 146,634 common units outstanding."
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: the fund_financials row dated 2026-08-03 (fund level).",
+    "The row holds only shares_outstanding 146,634, the cover-page count of the 10-Q for 2026-06-30 dated August 3, 2026; no holdings exist for that date."
+   ],
+   "next_action": "Proposal PD-SCI-F28-COVER (f28-cover-page-unit-count-date-not-a-quarter)."
+  },
+  {
+   "finding_id": "RVQ_REV_10a0cd69e285",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-345215/C_8bddd8f9-7e93-4bcd-9b47-9a7061c93395/ROW-8cafcafd9b47f868",
+     "0001193125-26-345215/C_a0980941-dc09-468a-a2b8-075222c83af2/ROW-c68568cc68b9308a",
+     "0001193125-26-345215/C_2c4d1f01-8b4f-4456-b658-b8b316c52f52/ROW-d9eff6863f0f0eb5",
+     "0001193125-26-345215/C_21c6f174-9318-493e-a5d4-571013a86a93/ROW-93fd8540f4812049",
+     "0001193125-26-345215/C_1c3e1f57-9dab-4bd1-93b9-d69279f537eb/ROW-2b7b0b1b6999f422",
+     "0001193125-26-345215/C_2b4c056d-9e97-43dc-9b07-3de7ef8f33cb/ROW-cc3396d126e74790",
+     "0001193125-26-345215/C_3b9d495c-65cc-44db-93cf-d74b43b282eb/ROW-b18b57a581a5617b",
+     "0001193125-26-345215/C_700df23a-f96d-4934-bf0e-cd741f88d393/ROW-120e7dce4101c3b1",
+     "0001193125-26-345215/C_cabdc6e3-d7a1-4260-9fc0-465b352759b3/ROW-0b573f19e7e3b0a0",
+     "0001193125-26-345215/C_491c813c-bf7b-4c65-9c8c-b5bff5120626/ROW-e71c546f123c478b",
+     "0001193125-26-345215/C_ebd41900-df62-46d7-9a60-761814cbf38e/ROW-0d9045531fe6d8b0",
+     "0001193125-26-345215/C_87882da9-1bf6-4fbc-84a7-8495596ec1a7/ROW-f4fddda3ee860356",
+     "0001193125-26-345215/C_1e3651b8-45f2-485a-ae85-bbda5914c573/ROW-3472b75df6024375",
+     "0001193125-26-345215/C_effec898-a490-4990-95a1-48f62e46e3f7/ROW-d1023ba1ffdeddea",
+     "0001193125-26-345215/C_67527532-a788-4919-bee2-1b73b0ad6754/ROW-6c12823273ed074d",
+     "0001193125-26-345215/C_07df6f34-d3ff-4a58-9765-d8d9706c8242/ROW-d4f782a7efae7966",
+     "0001193125-26-345215/C_6f114692-d635-4333-802e-330053a55a2c/ROW-52de12569e3d5513",
+     "0001193125-26-345215/C_092ef133-7393-4922-94cf-d9e5887dd085/ROW-d216d1cfd4ec7433",
+     "0001193125-26-345215/C_ab4bf501-e24d-4016-8864-33c393fe99d7/ROW-c57248ee5f317f5f",
+     "0001193125-26-345215/C_84ac2eaf-7957-44a8-8b53-34e55875ffa3/ROW-95c8492bc0f854bc",
+     "0001193125-26-345215/C_b4cbe398-7d1f-498b-b092-588bb0d2c098/ROW-f143ad892f708fbf",
+     "0001193125-26-345215/C_f3021c4d-2062-429c-9552-7cdc8f3c1be2/ROW-5f714c68bcf92558",
+     "0001193125-26-345215/C_ba4abcd6-3d40-4e5d-b44a-c7b7e5d45696/ROW-41230f6d65aba973",
+     "0001193125-26-345215/C_8cd5590b-0df7-46ad-9b1c-0f5bcaa5a62b/ROW-218df4d372381346",
+     "0001193125-26-345215/C_064e6e7b-4b94-4faa-b2c5-80c9ed6f7a64/ROW-88e519d718a9165a",
+     "0001193125-26-345215/C_82ac1089-2c1f-4b61-8abc-ecf5ad08de62/ROW-32f4e5ce6fccc6ae",
+     "0001193125-26-345215/C_e40732c0-8bf7-4975-8a4c-5ef85342a934/ROW-ae7e23041cc89148",
+     "0001193125-26-345215/C_5053f02d-7555-483a-948e-55372e8d2178/ROW-6509ca9b4e77d0d6",
+     "0001193125-26-345215/C_7881ed6e-5efb-40ef-9c9f-f7aac64c3c7e/ROW-7eedf1f8cabc28af",
+     "0001193125-26-345215/C_f42dbac1-91c1-48b6-a36f-fe7fbd4fd519/ROW-21c33cf7db6bcd4a",
+     "0001193125-26-345215/C_69b47180-41e6-4ec0-8f68-a0f617a13776/ROW-3559d8eadefa23a2",
+     "0001193125-26-345215/C_cc84c52a-e2d2-4f05-a064-17d0d0447fbb/ROW-0e3d6016c09c6605",
+     "0001193125-26-345215/C_250f592d-f3d5-470f-ae36-aba6ee40caa8/ROW-b48f88a596f58ce3",
+     "0001193125-26-345215/C_b600499a-9c0c-4270-922e-ed31829a29dd/ROW-39722a81e957c98f",
+     "0001193125-26-345215/C_8fc7d066-9ab4-4919-b906-5061c6585391/ROW-844ca7b266cf039b",
+     "0001193125-26-345215/C_031b53bc-8854-4164-b97c-192058414504/ROW-0155ebf51c9818b3",
+     "0001193125-26-345215/C_feba5974-3654-45a8-b244-0eaea0a5bb4d/ROW-5ffee023bd0ccb2d",
+     "0001193125-26-345215/C_59c05ef3-3091-4563-8840-f05074a13707/ROW-d9b767b5309b4127",
+     "0001193125-26-345215/C_f886240f-1f5f-4325-a501-463e065e86f5/ROW-440f19fe79562dea",
+     "0001193125-26-345215/C_43f3e559-6a89-4b6e-9415-0190c4e8e7eb/ROW-be5562a1d75a63f4",
+     "0001193125-26-345215/C_9d2f8a6c-c263-423f-8257-c453df0eef1e/ROW-b3b2b8535de5974e",
+     "0001193125-26-345215/C_41bd886a-9109-4feb-aa56-e831a01bfcae/ROW-ab7bf701db4fd34f",
+     "0001193125-26-345215/C_c7e956fd-1a78-4f96-bb2a-85ccfe4983be/ROW-3e9bd2d57f565dec",
+     "0001193125-26-345215/C_d828208f-dc46-4938-b618-82f1110eb70f/ROW-8cf8334e2ea09252",
+     "0001193125-26-345215/C_3dae89e6-ab51-429d-b647-31a14a579b95/ROW-7d800df78d4e7c3a",
+     "0001193125-26-345215/C_d53a95d8-92d0-470e-9b24-7f69c52bbdf9/ROW-d5bde9d4cec48e0d",
+     "0001193125-26-345215/C_155fc8e7-ae37-486f-808e-dd0800f1b249/ROW-a6d45d79d53074a7",
+     "0001193125-26-345215/C_713aab66-1110-4514-938f-f49080a2b8d2/ROW-82e80c0ae34dd687",
+     "0001193125-26-345215/C_0dbb81e1-82a7-4993-a38e-5e77da776605/ROW-dad9b2171e7d3de0",
+     "0001193125-26-345215/C_b604cb2e-6c5f-41a6-a17d-210f0d0ff9c4/ROW-4d263765ec321308",
+     "0001193125-26-345215/C_7a960f30-b521-4f84-a4a0-dad12cb5e9ca/ROW-97ebe97f02c815ee",
+     "0001193125-26-345215/C_e728acda-516c-47d6-b75b-0fd262ee8ac3/ROW-3c8a4fcd909bd6ee",
+     "0001193125-26-345215/C_2a35b918-862a-4643-8456-64f4a34ab735/ROW-e4e6923b14551bfd",
+     "0001193125-26-345215/C_11d61f3f-db98-4ce9-9069-5038f3e1dd24/ROW-92effc1293533b9f",
+     "0001193125-26-345215/C_62323464-873c-4ddd-95af-617c6063c44f/ROW-5e14be7450474930",
+     "0001193125-26-345215/C_ee257b33-2b5c-4a16-9556-69326edb246d/ROW-b6580ddfd8d6bc7f",
+     "0001193125-26-345215/C_a6fedd5d-3f16-41b6-ae64-e1dc96c6317c/ROW-d0a17a22b8a45121",
+     "0001193125-26-345215/C_9f81893e-8d7a-4919-9222-ed99a2361c52/ROW-81aae0b4c1ca2fab",
+     "0001193125-26-345215/C_5f018a7e-fde7-4f09-ab8e-894e01392b39/ROW-e5586badce228bcb",
+     "0001193125-26-345215/C_dfb24961-0f76-4c55-b934-41c983c66444/ROW-9209ce470827e10b",
+     "0001193125-26-345215/C_ab091e42-7d13-4c63-bbfd-ab5030c2122d/ROW-80acbc320bfcc2bd",
+     "0001193125-26-345215/C_00eae8a2-58d1-4a19-88c1-eeb9b773cf63/ROW-7a2db6bbaf221731",
+     "0001193125-26-345215/C_4f73a2a3-4737-461b-ac67-d6a2907bacf1/ROW-8815b89f7035c7fb",
+     "0001193125-26-345215/C_ff5f3e18-ec84-45ce-9f50-bbd8270643f4/ROW-a9c2d7bb030f53d5",
+     "0001193125-26-345215/C_a040ea0d-fbe3-4f86-91a3-2594d77c5204/ROW-194b394b6ca48e51",
+     "0001193125-26-345215/C_5ceb7163-cc2b-450c-9105-a164160acdfe/ROW-933d5242223b5bb7"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-345215/C_8bddd8f9-7e93-4bcd-9b47-9a7061c93395/ROW-8cafcafd9b47f868",
+     "0001193125-26-345215/C_a0980941-dc09-468a-a2b8-075222c83af2/ROW-c68568cc68b9308a",
+     "0001193125-26-345215/C_2c4d1f01-8b4f-4456-b658-b8b316c52f52/ROW-d9eff6863f0f0eb5",
+     "0001193125-26-345215/C_21c6f174-9318-493e-a5d4-571013a86a93/ROW-93fd8540f4812049",
+     "0001193125-26-345215/C_1c3e1f57-9dab-4bd1-93b9-d69279f537eb/ROW-2b7b0b1b6999f422",
+     "0001193125-26-345215/C_2b4c056d-9e97-43dc-9b07-3de7ef8f33cb/ROW-cc3396d126e74790",
+     "0001193125-26-345215/C_3b9d495c-65cc-44db-93cf-d74b43b282eb/ROW-b18b57a581a5617b",
+     "0001193125-26-345215/C_700df23a-f96d-4934-bf0e-cd741f88d393/ROW-120e7dce4101c3b1",
+     "0001193125-26-345215/C_cabdc6e3-d7a1-4260-9fc0-465b352759b3/ROW-0b573f19e7e3b0a0",
+     "0001193125-26-345215/C_491c813c-bf7b-4c65-9c8c-b5bff5120626/ROW-e71c546f123c478b",
+     "0001193125-26-345215/C_ebd41900-df62-46d7-9a60-761814cbf38e/ROW-0d9045531fe6d8b0",
+     "0001193125-26-345215/C_87882da9-1bf6-4fbc-84a7-8495596ec1a7/ROW-f4fddda3ee860356",
+     "0001193125-26-345215/C_1e3651b8-45f2-485a-ae85-bbda5914c573/ROW-3472b75df6024375",
+     "0001193125-26-345215/C_effec898-a490-4990-95a1-48f62e46e3f7/ROW-d1023ba1ffdeddea",
+     "0001193125-26-345215/C_67527532-a788-4919-bee2-1b73b0ad6754/ROW-6c12823273ed074d",
+     "0001193125-26-345215/C_07df6f34-d3ff-4a58-9765-d8d9706c8242/ROW-d4f782a7efae7966",
+     "0001193125-26-345215/C_6f114692-d635-4333-802e-330053a55a2c/ROW-52de12569e3d5513",
+     "0001193125-26-345215/C_092ef133-7393-4922-94cf-d9e5887dd085/ROW-d216d1cfd4ec7433",
+     "0001193125-26-345215/C_ab4bf501-e24d-4016-8864-33c393fe99d7/ROW-c57248ee5f317f5f",
+     "0001193125-26-345215/C_84ac2eaf-7957-44a8-8b53-34e55875ffa3/ROW-95c8492bc0f854bc",
+     "0001193125-26-345215/C_b4cbe398-7d1f-498b-b092-588bb0d2c098/ROW-f143ad892f708fbf",
+     "0001193125-26-345215/C_f3021c4d-2062-429c-9552-7cdc8f3c1be2/ROW-5f714c68bcf92558",
+     "0001193125-26-345215/C_ba4abcd6-3d40-4e5d-b44a-c7b7e5d45696/ROW-41230f6d65aba973",
+     "0001193125-26-345215/C_8cd5590b-0df7-46ad-9b1c-0f5bcaa5a62b/ROW-218df4d372381346",
+     "0001193125-26-345215/C_064e6e7b-4b94-4faa-b2c5-80c9ed6f7a64/ROW-88e519d718a9165a",
+     "0001193125-26-345215/C_82ac1089-2c1f-4b61-8abc-ecf5ad08de62/ROW-32f4e5ce6fccc6ae",
+     "0001193125-26-345215/C_e40732c0-8bf7-4975-8a4c-5ef85342a934/ROW-ae7e23041cc89148",
+     "0001193125-26-345215/C_5053f02d-7555-483a-948e-55372e8d2178/ROW-6509ca9b4e77d0d6",
+     "0001193125-26-345215/C_7881ed6e-5efb-40ef-9c9f-f7aac64c3c7e/ROW-7eedf1f8cabc28af",
+     "0001193125-26-345215/C_f42dbac1-91c1-48b6-a36f-fe7fbd4fd519/ROW-21c33cf7db6bcd4a",
+     "0001193125-26-345215/C_69b47180-41e6-4ec0-8f68-a0f617a13776/ROW-3559d8eadefa23a2",
+     "0001193125-26-345215/C_cc84c52a-e2d2-4f05-a064-17d0d0447fbb/ROW-0e3d6016c09c6605",
+     "0001193125-26-345215/C_250f592d-f3d5-470f-ae36-aba6ee40caa8/ROW-b48f88a596f58ce3",
+     "0001193125-26-345215/C_b600499a-9c0c-4270-922e-ed31829a29dd/ROW-39722a81e957c98f",
+     "0001193125-26-345215/C_8fc7d066-9ab4-4919-b906-5061c6585391/ROW-844ca7b266cf039b",
+     "0001193125-26-345215/C_031b53bc-8854-4164-b97c-192058414504/ROW-0155ebf51c9818b3",
+     "0001193125-26-345215/C_feba5974-3654-45a8-b244-0eaea0a5bb4d/ROW-5ffee023bd0ccb2d",
+     "0001193125-26-345215/C_59c05ef3-3091-4563-8840-f05074a13707/ROW-d9b767b5309b4127",
+     "0001193125-26-345215/C_f886240f-1f5f-4325-a501-463e065e86f5/ROW-440f19fe79562dea",
+     "0001193125-26-345215/C_43f3e559-6a89-4b6e-9415-0190c4e8e7eb/ROW-be5562a1d75a63f4",
+     "0001193125-26-345215/C_9d2f8a6c-c263-423f-8257-c453df0eef1e/ROW-b3b2b8535de5974e",
+     "0001193125-26-345215/C_41bd886a-9109-4feb-aa56-e831a01bfcae/ROW-ab7bf701db4fd34f",
+     "0001193125-26-345215/C_c7e956fd-1a78-4f96-bb2a-85ccfe4983be/ROW-3e9bd2d57f565dec",
+     "0001193125-26-345215/C_d828208f-dc46-4938-b618-82f1110eb70f/ROW-8cf8334e2ea09252",
+     "0001193125-26-345215/C_3dae89e6-ab51-429d-b647-31a14a579b95/ROW-7d800df78d4e7c3a",
+     "0001193125-26-345215/C_d53a95d8-92d0-470e-9b24-7f69c52bbdf9/ROW-d5bde9d4cec48e0d",
+     "0001193125-26-345215/C_155fc8e7-ae37-486f-808e-dd0800f1b249/ROW-a6d45d79d53074a7",
+     "0001193125-26-345215/C_713aab66-1110-4514-938f-f49080a2b8d2/ROW-82e80c0ae34dd687",
+     "0001193125-26-345215/C_0dbb81e1-82a7-4993-a38e-5e77da776605/ROW-dad9b2171e7d3de0",
+     "0001193125-26-345215/C_b604cb2e-6c5f-41a6-a17d-210f0d0ff9c4/ROW-4d263765ec321308",
+     "0001193125-26-345215/C_7a960f30-b521-4f84-a4a0-dad12cb5e9ca/ROW-97ebe97f02c815ee",
+     "0001193125-26-345215/C_e728acda-516c-47d6-b75b-0fd262ee8ac3/ROW-3c8a4fcd909bd6ee",
+     "0001193125-26-345215/C_2a35b918-862a-4643-8456-64f4a34ab735/ROW-e4e6923b14551bfd",
+     "0001193125-26-345215/C_11d61f3f-db98-4ce9-9069-5038f3e1dd24/ROW-92effc1293533b9f",
+     "0001193125-26-345215/C_62323464-873c-4ddd-95af-617c6063c44f/ROW-5e14be7450474930",
+     "0001193125-26-345215/C_ee257b33-2b5c-4a16-9556-69326edb246d/ROW-b6580ddfd8d6bc7f",
+     "0001193125-26-345215/C_a6fedd5d-3f16-41b6-ae64-e1dc96c6317c/ROW-d0a17a22b8a45121",
+     "0001193125-26-345215/C_9f81893e-8d7a-4919-9222-ed99a2361c52/ROW-81aae0b4c1ca2fab",
+     "0001193125-26-345215/C_5f018a7e-fde7-4f09-ab8e-894e01392b39/ROW-e5586badce228bcb",
+     "0001193125-26-345215/C_dfb24961-0f76-4c55-b934-41c983c66444/ROW-9209ce470827e10b",
+     "0001193125-26-345215/C_ab091e42-7d13-4c63-bbfd-ab5030c2122d/ROW-80acbc320bfcc2bd",
+     "0001193125-26-345215/C_00eae8a2-58d1-4a19-88c1-eeb9b773cf63/ROW-7a2db6bbaf221731",
+     "0001193125-26-345215/C_4f73a2a3-4737-461b-ac67-d6a2907bacf1/ROW-8815b89f7035c7fb",
+     "0001193125-26-345215/C_ff5f3e18-ec84-45ce-9f50-bbd8270643f4/ROW-a9c2d7bb030f53d5",
+     "0001193125-26-345215/C_a040ea0d-fbe3-4f86-91a3-2594d77c5204/ROW-194b394b6ca48e51",
+     "0001193125-26-345215/C_5ceb7163-cc2b-450c-9105-a164160acdfe/ROW-933d5242223b5bb7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126452",
+     "text": "AB Centers Acquisition Corporation First Lien Delayed Draw Term Loan S + 5.25 % 7/2/2031 - ( 10 ) ( 21 ) 9"
+    },
+    {
+     "accession": "0000950170-24-126452",
+     "text": "AB Centers Acquisition Corporation First Lien Delayed Draw Term Loan 7/2/2026 $ 1,432 $ ( 22 )"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "AB Centers Acquisition Corporation First Lien Revolver S + 5.25 % 7/2/2031 - ( 2 ) ( 1 ) 25"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: row_validation C107 rows of the quarter (every negative-cost row; listed).",
+    "row_audit_scie.txt compares every published loan with its printed line on cost and fair value: no cost or fair-value difference in either quarter; each flagged row is an undrawn line printed with its cost in parentheses.",
+    "Earlier verdict (2024-09-30) cited the commitment-table AB Centers line; that table is no longer published (not_commitment_only)."
+   ],
+   "next_action": "Proposal PD-SCI-C107-UNDRAWN (c107-negative-cost-undrawn) with addresses_verdict for 2024-09-30."
+  },
+  {
+   "finding_id": "RVQ_REV_115316ac0d0e",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2026-06-30/C04",
+     "0001193125-26-345215/C_05f76e1e-4b2c-49fb-bc80-bb1821326b54/ROW-afd812ee364f3f77",
+     "0001193125-26-345215/C_991ce104-41ed-4ca4-a174-0912d8775003/ROW-1963d202373ea971"
+    ],
+    "reviewed_rows": [
+     "0001959568/2026-06-30/C04",
+     "0001193125-26-345215/C_05f76e1e-4b2c-49fb-bc80-bb1821326b54/ROW-afd812ee364f3f77",
+     "0001193125-26-345215/C_991ce104-41ed-4ca4-a174-0912d8775003/ROW-1963d202373ea971"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108055",
+     "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 173 Firebird Co-Invest L.P. L.P. Interest - - 1"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Firebird Co-Invest L.P. L.P. Interest 160 215 Firebird Co-Invest L.P. L.P. Interest - 3 160 218"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle C04 fund-quarter result plus the equity rows of the quarter without a unit count (listed).",
+    "Each listed row is a Firebird Co-Invest L.P. interest; its printed Principal / Shares cell is '-' (2025-03-31 to 2025-09-30) or blank (2026-06-30) and no unit fact is tagged on the context.",
+    "Eclipse Topco and Red Griffin carry the printed counts (row corrections where untagged, 2024-09-30 to 2025-03-31)."
+   ],
+   "next_action": "Proposal PD-SCI-C04-FIREBIRD (c04-share-cell-printed-as-dash)."
+  },
+  {
+   "finding_id": "RVQ_REV_1207f1bdfa9d",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-345215/C_ab4bf501-e24d-4016-8864-33c393fe99d7/ROW-c57248ee5f317f5f",
+     "0001193125-26-345215/C_5f018a7e-fde7-4f09-ab8e-894e01392b39/ROW-e5586badce228bcb",
+     "0001193125-26-345215/C_99792057-68fc-4aea-9b94-08a7816166ad/ROW-f290ecc5ca143c42",
+     "0001193125-26-345215/C_67527532-a788-4919-bee2-1b73b0ad6754/ROW-6c12823273ed074d",
+     "0001193125-26-345215/C_c7e956fd-1a78-4f96-bb2a-85ccfe4983be/ROW-3e9bd2d57f565dec",
+     "0001193125-26-345215/C_01bf6cf3-7dce-4a31-8c88-363c62a23ac0/ROW-bae79af2308f6814"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-345215/C_ab4bf501-e24d-4016-8864-33c393fe99d7/ROW-c57248ee5f317f5f",
+     "0001193125-26-345215/C_5f018a7e-fde7-4f09-ab8e-894e01392b39/ROW-e5586badce228bcb",
+     "0001193125-26-345215/C_99792057-68fc-4aea-9b94-08a7816166ad/ROW-f290ecc5ca143c42",
+     "0001193125-26-345215/C_67527532-a788-4919-bee2-1b73b0ad6754/ROW-6c12823273ed074d",
+     "0001193125-26-345215/C_c7e956fd-1a78-4f96-bb2a-85ccfe4983be/ROW-3e9bd2d57f565dec",
+     "0001193125-26-345215/C_01bf6cf3-7dce-4a31-8c88-363c62a23ac0/ROW-bae79af2308f6814"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 8 ) ( 5"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: rows of 2026-06-30 repeating position key and B02's term columns (populations.py applies check_B02's test): 6 rows.",
+    "Hercules delayed draw printed twice identically; Packaging Coordinators delayed draws printed '- 1 -' and '- ( 2 ) -'; Trystar revolver printed '$ - $ ( 1 ) $ -' and '- - -' (printed lines in populations_scie.json).",
+    "B02's terms omit cost, so the Packaging and Trystar pairs look repeated though their printed costs differ."
+   ],
+   "next_action": "Proposal PD-SCI-B02-TWINS (b02-twin-undrawn-lines-printed-separately)."
+  },
+  {
+   "finding_id": "RVQ_REV_1773f1993ce7",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2025-03-31/F30"
+    ],
+    "reviewed_rows": [
+     "0001959568/2025-03-31/F30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F30 for the quarter, one fund-quarter-metric key (fund level).",
+    "Read the printed balance sheet: NAV per unit is printed (1,769.49 to 1,864.36 across quarters) and equals net assets / units.",
+    "Tested whether a wrong denominator inflates it: net assets were the paid-in line before this run (80,943 at 2023-12-31) and are now the printed total (highlights wrapper); NAV per unit was already the printed figure and is unchanged.",
+    "The rule's 1,000 ceiling assumes per-share funds; these units were issued near 1,800."
+   ],
+   "next_action": "Proposal PD-SCI-F30-NAV-UNIT (f30-nav-per-unit-as-printed-units-issued-near-1800)."
+  },
+  {
+   "finding_id": "RVQ_REV_1c2b10b77425",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2025-06-30/F30"
+    ],
+    "reviewed_rows": [
+     "0001959568/2025-06-30/F30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F30 for the quarter, one fund-quarter-metric key (fund level).",
+    "Read the printed balance sheet: NAV per unit is printed (1,769.49 to 1,864.36 across quarters) and equals net assets / units.",
+    "Tested whether a wrong denominator inflates it: net assets were the paid-in line before this run (80,943 at 2023-12-31) and are now the printed total (highlights wrapper); NAV per unit was already the printed figure and is unchanged.",
+    "The rule's 1,000 ceiling assumes per-share funds; these units were issued near 1,800."
+   ],
+   "next_action": "Proposal PD-SCI-F30-NAV-UNIT (f30-nav-per-unit-as-printed-units-issued-near-1800)."
+  },
+  {
+   "finding_id": "RVQ_REV_369da50aaba6",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-345215/C_ab4bf501-e24d-4016-8864-33c393fe99d7/ROW-c57248ee5f317f5f",
+     "0001193125-26-345215/C_5f018a7e-fde7-4f09-ab8e-894e01392b39/ROW-e5586badce228bcb"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-345215/C_ab4bf501-e24d-4016-8864-33c393fe99d7/ROW-c57248ee5f317f5f",
+     "0001193125-26-345215/C_5f018a7e-fde7-4f09-ab8e-894e01392b39/ROW-e5586badce228bcb"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Kona Buyer, LLC First Lien Revolver S + 4.50 % 7/23/2031 - ( 1 ) ( 1 ) 23 Kona B"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: row_validation PP02 rows of the quarter (listed).",
+    "twin_lines.py: each flagged pair is a line printed twice identically in the same filing; both contexts are published since staging.distinct_member_suffix_re (the members differ only by 'One').",
+    "Totals: published fair value and cost equal the printed totals exactly in the quarter (totals.sql)."
+   ],
+   "next_action": "Proposal PD-SCI-PP02-TWINS (pp02-twin-lines-printed-separately)."
+  },
+  {
+   "finding_id": "RVQ_REV_64e466a6fd92",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2024-12-31/F16"
+    ],
+    "reviewed_rows": [
+     "0001959568/2024-12-31/F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-044443",
+     "text": "October 31, 2024 October 31, 2024 November 13, 2024 62.9280 4,325 November 27, 2024 November 29, 2024 December 12, 2024 18.9414 1,406 December 27, 2024 December 27, 2024 January 30, 2025 22.2167 1,894"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F16 2024-12-31 (fund level).",
+    "Summed the 10-K 2024 declarations of October to December: 62.9280 + 18.9414 + 22.2167 = 104.0861 = published distribution_per_share.",
+    "Q4 2024 net investment income 4,217 against distributions 7,625: the rate exceeds 1.5 x income yield as printed; no extraction error."
+   ],
+   "next_action": "Proposal PD-SCI-F16-Q4-2024 (f16-distribution-above-quarter-income-as-printed)."
+  },
+  {
+   "finding_id": "RVQ_REV_6b7f7c9495fc",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2025-06-30/C04",
+     "0000950170-25-108055/C_da73e2f1-2b76-4ee9-9104-5ba77a4f766f/ROW-c99edf3ab37c4e0a",
+     "0000950170-25-108055/C_93b18413-7eec-40cf-8969-2d3fd6148b76/ROW-642e5deab6e1d021"
+    ],
+    "reviewed_rows": [
+     "0001959568/2025-06-30/C04",
+     "0000950170-25-108055/C_da73e2f1-2b76-4ee9-9104-5ba77a4f766f/ROW-c99edf3ab37c4e0a",
+     "0000950170-25-108055/C_93b18413-7eec-40cf-8969-2d3fd6148b76/ROW-642e5deab6e1d021"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108055",
+     "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 173 Firebird Co-Invest L.P. L.P. Interest - - 1"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Firebird Co-Invest L.P. L.P. Interest 160 215 Firebird Co-Invest L.P. L.P. Interest - 3 160 218"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle C04 fund-quarter result plus the equity rows of the quarter without a unit count (listed).",
+    "Each listed row is a Firebird Co-Invest L.P. interest; its printed Principal / Shares cell is '-' (2025-03-31 to 2025-09-30) or blank (2026-06-30) and no unit fact is tagged on the context.",
+    "Eclipse Topco and Red Griffin carry the printed counts (row corrections where untagged, 2024-09-30 to 2025-03-31)."
+   ],
+   "next_action": "Proposal PD-SCI-C04-FIREBIRD (c04-share-cell-printed-as-dash)."
+  },
+  {
+   "finding_id": "RVQ_REV_744d7b5235c4",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-280629/C_b2f31d07-99d3-416c-8ef9-6746a51b4872/ROW-b9d63ddb69c2bff6",
+     "0001193125-25-280629/C_979c8d6e-a8ae-4da8-b311-1ea34454627e/ROW-8c43b4a10b34e62b"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-280629/C_b2f31d07-99d3-416c-8ef9-6746a51b4872/ROW-b9d63ddb69c2bff6",
+     "0001193125-25-280629/C_979c8d6e-a8ae-4da8-b311-1ea34454627e/ROW-8c43b4a10b34e62b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Kona Buyer, LLC First Lien Revolver S + 4.50 % 7/23/2031 - ( 1 ) ( 1 ) 23 Kona B"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: row_validation PP02 rows of the quarter (listed).",
+    "twin_lines.py: each flagged pair is a line printed twice identically in the same filing; both contexts are published since staging.distinct_member_suffix_re (the members differ only by 'One').",
+    "Totals: published fair value and cost equal the printed totals exactly in the quarter (totals.sql)."
+   ],
+   "next_action": "Proposal PD-SCI-PP02-TWINS (pp02-twin-lines-printed-separately)."
+  },
+  {
+   "finding_id": "RVQ_REV_762a99390857",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-221845/C_04de3ff8-594a-42eb-a539-152394dcf5d4",
+     "0001193125-26-221845/C_13b6d786-5bed-4811-9021-c09abdfd8324",
+     "0001193125-26-221845/C_158e8d38-fea6-44ff-aad8-ab1dddafbb5f",
+     "0001193125-26-221845/C_16d9cd08-c52a-4194-a26c-58cdf2c8b7fd",
+     "0001193125-26-221845/C_1befe5f1-935b-4fc0-80ed-fba5eaadd6ab",
+     "0001193125-26-221845/C_4c4f5da6-24f2-4cc0-a9f6-7b24ff537b7c",
+     "0001193125-26-221845/C_503139d1-3b7e-4cd0-991e-808b29ec2c7f",
+     "0001193125-26-221845/C_5573f37f-9637-4b44-aa2f-81c5eab7ff3f",
+     "0001193125-26-221845/C_5d25361f-4126-4801-b7d3-400951d88b65",
+     "0001193125-26-221845/C_60b6321f-66c8-4a29-8f6d-92c8678efd22",
+     "0001193125-26-221845/C_66abe2df-5084-49aa-8255-e9e70cbc4582",
+     "0001193125-26-221845/C_6b65d3c9-f8f7-4119-90bb-a7967133a250",
+     "0001193125-26-221845/C_6e55a2f8-021d-4b11-ac3f-b7c58cfd4f09",
+     "0001193125-26-221845/C_74418b50-283c-4a7f-89eb-23a704c08ab1",
+     "0001193125-26-221845/C_7ce28570-731f-421d-a35e-97fdbc5b9d62",
+     "0001193125-26-221845/C_8c02d78c-f2fc-4d58-99ab-8a45fd7e1a46",
+     "0001193125-26-221845/C_8eb7e518-3f60-4bb5-87a5-03c58e55771e",
+     "0001193125-26-221845/C_a024e0d7-eb43-47e1-8105-c4e5455cb04e",
+     "0001193125-26-221845/C_a5ada965-925a-4108-ad9d-8bcfc5a255d0",
+     "0001193125-26-221845/C_a909a857-c63a-4c03-a7ee-963d4e3fa659",
+     "0001193125-26-221845/C_adc10bc7-8b79-401a-99b5-0e8e1674f3ec",
+     "0001193125-26-221845/C_af22c8ba-16a7-41a4-9696-40559a1b70ae",
+     "0001193125-26-221845/C_af9a95e2-f0f7-4e65-8212-fc9aec75e1e9",
+     "0001193125-26-221845/C_b22776ef-3c2e-4dc2-a83e-c7541711133d",
+     "0001193125-26-221845/C_b49caa8d-54a5-452e-829d-5a31d9813da2",
+     "0001193125-26-221845/C_b4aa80e3-518b-4060-bf4e-faa472cdb606",
+     "0001193125-26-221845/C_bad4bc44-9575-48fb-bce2-c6c7bc4ea5b7",
+     "0001193125-26-221845/C_bceab5e9-3372-4c3f-a80a-b16d5e990e42",
+     "0001193125-26-221845/C_bd598912-17d2-4b23-8ed4-5e241cdaef71",
+     "0001193125-26-221845/C_be29af2d-3a38-4242-874f-5759bd39c887",
+     "0001193125-26-221845/C_bfeddf5a-e632-4829-b7f8-ca4d9d840200",
+     "0001193125-26-221845/C_c332e2e7-5ff4-4bf3-8db6-5f0974216ced",
+     "0001193125-26-221845/C_c6705e93-4ea8-4a95-acbb-c75a77f925be",
+     "0001193125-26-221845/C_c8224b53-9b44-491a-95c3-acc4b61a00b1",
+     "0001193125-26-221845/C_cda1ebb4-624d-40c9-8111-357a9ea5200e",
+     "0001193125-26-221845/C_d22c02ee-fe2f-4669-8f5d-b1c1a46b07e3",
+     "0001193125-26-221845/C_d263c385-9b47-470d-873b-b0317b031509",
+     "0001193125-26-221845/C_d4d57e92-918b-4ecf-9e7a-9bab55208c2a",
+     "0001193125-26-221845/C_db99adc2-eeb5-419c-b599-c3ab3ada5335",
+     "0001193125-26-221845/C_ede579c8-5364-48d1-9003-f9b63acb856d",
+     "0001193125-26-221845/C_ededab65-989a-4658-8152-b8cff6ba30f4"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-221845/C_04de3ff8-594a-42eb-a539-152394dcf5d4",
+     "0001193125-26-221845/C_13b6d786-5bed-4811-9021-c09abdfd8324",
+     "0001193125-26-221845/C_158e8d38-fea6-44ff-aad8-ab1dddafbb5f",
+     "0001193125-26-221845/C_16d9cd08-c52a-4194-a26c-58cdf2c8b7fd",
+     "0001193125-26-221845/C_1befe5f1-935b-4fc0-80ed-fba5eaadd6ab",
+     "0001193125-26-221845/C_4c4f5da6-24f2-4cc0-a9f6-7b24ff537b7c",
+     "0001193125-26-221845/C_503139d1-3b7e-4cd0-991e-808b29ec2c7f",
+     "0001193125-26-221845/C_5573f37f-9637-4b44-aa2f-81c5eab7ff3f",
+     "0001193125-26-221845/C_5d25361f-4126-4801-b7d3-400951d88b65",
+     "0001193125-26-221845/C_60b6321f-66c8-4a29-8f6d-92c8678efd22",
+     "0001193125-26-221845/C_66abe2df-5084-49aa-8255-e9e70cbc4582",
+     "0001193125-26-221845/C_6b65d3c9-f8f7-4119-90bb-a7967133a250",
+     "0001193125-26-221845/C_6e55a2f8-021d-4b11-ac3f-b7c58cfd4f09",
+     "0001193125-26-221845/C_74418b50-283c-4a7f-89eb-23a704c08ab1",
+     "0001193125-26-221845/C_7ce28570-731f-421d-a35e-97fdbc5b9d62",
+     "0001193125-26-221845/C_8c02d78c-f2fc-4d58-99ab-8a45fd7e1a46",
+     "0001193125-26-221845/C_8eb7e518-3f60-4bb5-87a5-03c58e55771e",
+     "0001193125-26-221845/C_a024e0d7-eb43-47e1-8105-c4e5455cb04e",
+     "0001193125-26-221845/C_a5ada965-925a-4108-ad9d-8bcfc5a255d0",
+     "0001193125-26-221845/C_a909a857-c63a-4c03-a7ee-963d4e3fa659",
+     "0001193125-26-221845/C_adc10bc7-8b79-401a-99b5-0e8e1674f3ec",
+     "0001193125-26-221845/C_af22c8ba-16a7-41a4-9696-40559a1b70ae",
+     "0001193125-26-221845/C_af9a95e2-f0f7-4e65-8212-fc9aec75e1e9",
+     "0001193125-26-221845/C_b22776ef-3c2e-4dc2-a83e-c7541711133d",
+     "0001193125-26-221845/C_b49caa8d-54a5-452e-829d-5a31d9813da2",
+     "0001193125-26-221845/C_b4aa80e3-518b-4060-bf4e-faa472cdb606",
+     "0001193125-26-221845/C_bad4bc44-9575-48fb-bce2-c6c7bc4ea5b7",
+     "0001193125-26-221845/C_bceab5e9-3372-4c3f-a80a-b16d5e990e42",
+     "0001193125-26-221845/C_bd598912-17d2-4b23-8ed4-5e241cdaef71",
+     "0001193125-26-221845/C_be29af2d-3a38-4242-874f-5759bd39c887",
+     "0001193125-26-221845/C_bfeddf5a-e632-4829-b7f8-ca4d9d840200",
+     "0001193125-26-221845/C_c332e2e7-5ff4-4bf3-8db6-5f0974216ced",
+     "0001193125-26-221845/C_c6705e93-4ea8-4a95-acbb-c75a77f925be",
+     "0001193125-26-221845/C_c8224b53-9b44-491a-95c3-acc4b61a00b1",
+     "0001193125-26-221845/C_cda1ebb4-624d-40c9-8111-357a9ea5200e",
+     "0001193125-26-221845/C_d22c02ee-fe2f-4669-8f5d-b1c1a46b07e3",
+     "0001193125-26-221845/C_d263c385-9b47-470d-873b-b0317b031509",
+     "0001193125-26-221845/C_d4d57e92-918b-4ecf-9e7a-9bab55208c2a",
+     "0001193125-26-221845/C_db99adc2-eeb5-419c-b599-c3ab3ada5335",
+     "0001193125-26-221845/C_ede579c8-5364-48d1-9003-f9b63acb856d",
+     "0001193125-26-221845/C_ededab65-989a-4658-8152-b8cff6ba30f4"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Consolidated Schedule of Investments December 31, 2025 (In thousands, except for"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Integrity Marketing Acquisition, LLC First Lien Revolver S + 5.00 % 8/25/2028 - ( 1 ) - 23"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle check_failures B01 for the quarter (every context is listed in affected_rows).",
+    "b01_periods.sql: all 41 (2026-03-31) and 37 (2026-06-30) contexts have period 2025-12-31 and no fair-value fact; residual_class excluded_comparative_period on every one.",
+    "Read the comparative schedule in the 10-Q: undrawn lines print a dash for fair value (Integrity Marketing revolver '- ( 1 ) -'); the same lines in the current schedule are published (row_audit_scie: every current printed line matched)."
+   ],
+   "next_action": "Proposal PD-SCI-B01-COMPARATIVE (b01-leaves-without-value-are-the-comparative-schedule)."
+  },
+  {
+   "finding_id": "RVQ_REV_8853f87cac42",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2024-03-31/F30"
+    ],
+    "reviewed_rows": [
+     "0001959568/2024-03-31/F30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F30 for the quarter, one fund-quarter-metric key (fund level).",
+    "Read the printed balance sheet: NAV per unit is printed (1,769.49 to 1,864.36 across quarters) and equals net assets / units.",
+    "Tested whether a wrong denominator inflates it: net assets were the paid-in line before this run (80,943 at 2023-12-31) and are now the printed total (highlights wrapper); NAV per unit was already the printed figure and is unchanged.",
+    "The rule's 1,000 ceiling assumes per-share funds; these units were issued near 1,800."
+   ],
+   "next_action": "Proposal PD-SCI-F30-NAV-UNIT (f30-nav-per-unit-as-printed-units-issued-near-1800)."
+  },
+  {
+   "finding_id": "RVQ_REV_94bd3c9fe90d",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2025-03-31/C04",
+     "0000950170-25-071598/C_7acedbdb-7fa8-411a-b014-5fc5aaf9d538/ROW-d7a1b32315603676"
+    ],
+    "reviewed_rows": [
+     "0001959568/2025-03-31/C04",
+     "0000950170-25-071598/C_7acedbdb-7fa8-411a-b014-5fc5aaf9d538/ROW-d7a1b32315603676"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108055",
+     "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 173 Firebird Co-Invest L.P. L.P. Interest - - 1"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Firebird Co-Invest L.P. L.P. Interest 160 215 Firebird Co-Invest L.P. L.P. Interest - 3 160 218"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle C04 fund-quarter result plus the equity rows of the quarter without a unit count (listed).",
+    "Each listed row is a Firebird Co-Invest L.P. interest; its printed Principal / Shares cell is '-' (2025-03-31 to 2025-09-30) or blank (2026-06-30) and no unit fact is tagged on the context.",
+    "Eclipse Topco and Red Griffin carry the printed counts (row corrections where untagged, 2024-09-30 to 2025-03-31)."
+   ],
+   "next_action": "Proposal PD-SCI-C04-FIREBIRD (c04-share-cell-printed-as-dash)."
+  },
+  {
+   "finding_id": "RVQ_REV_a3dade47bf54",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2025-09-30/C04",
+     "0001193125-25-280629/C_da85671c-5229-422e-a280-1ffab5b11ea2/ROW-0d955579eabb1757",
+     "0001193125-25-280629/C_bf5aa911-3686-461c-ba6a-b5c03ef386ed/ROW-0723bbd2914834e1"
+    ],
+    "reviewed_rows": [
+     "0001959568/2025-09-30/C04",
+     "0001193125-25-280629/C_da85671c-5229-422e-a280-1ffab5b11ea2/ROW-0d955579eabb1757",
+     "0001193125-25-280629/C_bf5aa911-3686-461c-ba6a-b5c03ef386ed/ROW-0723bbd2914834e1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108055",
+     "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 160 173 Firebird Co-Invest L.P. L.P. Interest - - 1"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "Firebird Co-Invest L.P. L.P. Interest 160 215 Firebird Co-Invest L.P. L.P. Interest - 3 160 218"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle C04 fund-quarter result plus the equity rows of the quarter without a unit count (listed).",
+    "Each listed row is a Firebird Co-Invest L.P. interest; its printed Principal / Shares cell is '-' (2025-03-31 to 2025-09-30) or blank (2026-06-30) and no unit fact is tagged on the context.",
+    "Eclipse Topco and Red Griffin carry the printed counts (row corrections where untagged, 2024-09-30 to 2025-03-31)."
+   ],
+   "next_action": "Proposal PD-SCI-C04-FIREBIRD (c04-share-cell-printed-as-dash)."
+  },
+  {
+   "finding_id": "RVQ_REV_a925d88f2632",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2023-12-31/F26"
+    ],
+    "reviewed_rows": [
+     "0001959568/2023-12-31/F26"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Cash and cash equivalents 39,094 Restricted cash 468 Interest receivable 529 Deferred financing costs 2,815 Deferred offering costs 635 Prepaid expenses and other assets 331 Total assets $ 150,760 Liabilities Debt $ 66,294"
+    },
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Member's Capital Common units ( 44,576 units issued and outstanding) $ 80,943 Accumulated distributable earnings 837 Total member's capital $ 81,780"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F26 2023-12-31 (fund level).",
+    "Recomputed from the printed balance sheet: 66,294 / 150,760 = 0.4397; (106,888 - 81,780) / 106,888 = 0.2349; difference 0.2048.",
+    "The gap is the 39,094 of cash held at the first year end, not an extraction error; net assets corrected to 81,780 (was 80,943)."
+   ],
+   "next_action": "Proposal PD-SCI-F26-RAMP (f26-ramp-up-fund-holds-cash-not-borrowings)."
+  },
+  {
+   "finding_id": "RVQ_REV_b6885b37dffa",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2024-06-30/F30"
+    ],
+    "reviewed_rows": [
+     "0001959568/2024-06-30/F30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F30 for the quarter, one fund-quarter-metric key (fund level).",
+    "Read the printed balance sheet: NAV per unit is printed (1,769.49 to 1,864.36 across quarters) and equals net assets / units.",
+    "Tested whether a wrong denominator inflates it: net assets were the paid-in line before this run (80,943 at 2023-12-31) and are now the printed total (highlights wrapper); NAV per unit was already the printed figure and is unchanged.",
+    "The rule's 1,000 ceiling assumes per-share funds; these units were issued near 1,800."
+   ],
+   "next_action": "Proposal PD-SCI-F30-NAV-UNIT (f30-nav-per-unit-as-printed-units-issued-near-1800)."
+  },
+  {
+   "finding_id": "RVQ_REV_bbf348eb87cf",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2026-06-30/F30"
+    ],
+    "reviewed_rows": [
+     "0001959568/2026-06-30/F30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F30 for the quarter, one fund-quarter-metric key (fund level).",
+    "Read the printed balance sheet: NAV per unit is printed (1,769.49 to 1,864.36 across quarters) and equals net assets / units.",
+    "Tested whether a wrong denominator inflates it: net assets were the paid-in line before this run (80,943 at 2023-12-31) and are now the printed total (highlights wrapper); NAV per unit was already the printed figure and is unchanged.",
+    "The rule's 1,000 ceiling assumes per-share funds; these units were issued near 1,800."
+   ],
+   "next_action": "Proposal PD-SCI-F30-NAV-UNIT (f30-nav-per-unit-as-printed-units-issued-near-1800)."
+  },
+  {
+   "finding_id": "RVQ_REV_bce16b2898a4",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2025-09-30/F30"
+    ],
+    "reviewed_rows": [
+     "0001959568/2025-09-30/F30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F30 for the quarter, one fund-quarter-metric key (fund level).",
+    "Read the printed balance sheet: NAV per unit is printed (1,769.49 to 1,864.36 across quarters) and equals net assets / units.",
+    "Tested whether a wrong denominator inflates it: net assets were the paid-in line before this run (80,943 at 2023-12-31) and are now the printed total (highlights wrapper); NAV per unit was already the printed figure and is unchanged.",
+    "The rule's 1,000 ceiling assumes per-share funds; these units were issued near 1,800."
+   ],
+   "next_action": "Proposal PD-SCI-F30-NAV-UNIT (f30-nav-per-unit-as-printed-units-issued-near-1800)."
+  },
+  {
+   "finding_id": "RVQ_REV_c167a962c800",
+   "coverage": {
+    "affected_rows": [
+     "0001959568/2024-09-30/F30"
+    ],
+    "reviewed_rows": [
+     "0001959568/2024-09-30/F30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Common units outstanding ( 1,000,000,000 units authorized) 44,576 Net asset value per unit $ 1,834.62"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Net assets $ 261,092 $ 232,005 Common units outstanding ( 1,000,000,000 units authorized, at March 31, 2026 and December 31, 2025) 146,634 129,757 Net asset value per unit $ 1,780.57 $ 1,787.98"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: fund_financials F30 for the quarter, one fund-quarter-metric key (fund level).",
+    "Read the printed balance sheet: NAV per unit is printed (1,769.49 to 1,864.36 across quarters) and equals net assets / units.",
+    "Tested whether a wrong denominator inflates it: net assets were the paid-in line before this run (80,943 at 2023-12-31) and are now the printed total (highlights wrapper); NAV per unit was already the printed figure and is unchanged.",
+    "The rule's 1,000 ceiling assumes per-share funds; these units were issued near 1,800."
+   ],
+   "next_action": "Proposal PD-SCI-F30-NAV-UNIT (f30-nav-per-unit-as-printed-units-issued-near-1800)."
+  },
+  {
+   "finding_id": "RVQ_REV_c54ef4045ebb",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-116346/C_e9a87ce9-5f6d-4db3-86cc-ac8f12e40eb1/ROW-2418d89c4b56b653",
+     "0001193125-26-116346/C_b0b7e7fb-7899-4cdb-8e16-27a80acacce7/ROW-9bd0ad519ff2ed30",
+     "0001193125-26-116346/C_0c38a02e-2b29-4526-b2a0-0e883034905b/ROW-855a049e4aa96f77",
+     "0001193125-26-116346/C_8ab36532-bc3f-495f-9575-08891ba3c431/ROW-17b3bffde179b04f"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-116346/C_e9a87ce9-5f6d-4db3-86cc-ac8f12e40eb1/ROW-2418d89c4b56b653",
+     "0001193125-26-116346/C_b0b7e7fb-7899-4cdb-8e16-27a80acacce7/ROW-9bd0ad519ff2ed30",
+     "0001193125-26-116346/C_0c38a02e-2b29-4526-b2a0-0e883034905b/ROW-855a049e4aa96f77",
+     "0001193125-26-116346/C_8ab36532-bc3f-495f-9575-08891ba3c431/ROW-17b3bffde179b04f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Kona Buyer, LLC First Lien Revolver S + 4.50 % 7/23/2031 - ( 1 ) ( 1 ) 23 Kona B"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: row_validation PP02 rows of the quarter (listed).",
+    "twin_lines.py: each flagged pair is a line printed twice identically in the same filing; both contexts are published since staging.distinct_member_suffix_re (the members differ only by 'One').",
+    "Totals: published fair value and cost equal the printed totals exactly in the quarter (totals.sql)."
+   ],
+   "next_action": "Proposal PD-SCI-PP02-TWINS (pp02-twin-lines-printed-separately)."
+  },
+  {
+   "finding_id": "RVQ_REV_ccd366f14e46",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-126452/C_1cd28c50-1c95-4615-9d5f-bf98a0d0dc7b/ROW-3e81403cfac21ef5",
+     "0000950170-24-126452/C_fa5e874a-91fb-4ebf-8fd1-b0866c5a9cbe/ROW-36d61a4a02ecd318",
+     "0000950170-24-126452/C_7df5c86f-d967-4858-85dc-5bc30e6f2d3c/ROW-cd29503643512a7a",
+     "0000950170-24-126452/C_721a8c5c-71ec-4dda-82bd-35f1963df4ee/ROW-d6dd80bb491ce74c",
+     "0000950170-24-126452/C_5194b8c2-b373-459b-b390-6c782929e555/ROW-8af0ef49f62c83ad",
+     "0000950170-24-126452/C_0a49f77c-1c8a-40be-b32c-e6e2b24f4644/ROW-0d90339613adbc77",
+     "0000950170-24-126452/C_06bffcb3-abbf-45d6-a488-8d5fdd3475c6/ROW-6ac36233938b2ed1",
+     "0000950170-24-126452/C_296233fa-edf1-4f14-8f77-bf1b5bb533dd/ROW-083f8fd472cd5c28",
+     "0000950170-24-126452/C_5ad91aba-63c3-450f-b222-2ba31b6e2b06/ROW-9101663930c2e943",
+     "0000950170-24-126452/C_052b8bab-19e1-41c4-9478-f534d407dfd1/ROW-13fd566df21003ef",
+     "0000950170-24-126452/C_14c2fc92-6946-4763-a52f-8628bf59f7cd/ROW-b6847cefcd5c32f9",
+     "0000950170-24-126452/C_4f7177e4-67e4-437e-8193-1a70344a9f6b/ROW-ca8f1d252da6437e",
+     "0000950170-24-126452/C_b6fdb11f-ef83-4b27-8aec-902ff9ce51d7/ROW-3fcc31c436a91b45",
+     "0000950170-24-126452/C_dc5f116a-4b19-445f-ac3b-e22ed2970656/ROW-fc57bfb7c7363916",
+     "0000950170-24-126452/C_57474789-c0a3-4af6-bf8e-639d9bd9fda2/ROW-905334c912bf2b5b",
+     "0000950170-24-126452/C_ccd196c2-124f-4525-bfab-9f07477e1811/ROW-633d6524febc7f96",
+     "0000950170-24-126452/C_ca526d7e-04b3-4c8c-b53e-76685fa34201/ROW-c5de21248ffe9d85",
+     "0000950170-24-126452/C_3521c678-13ab-40ad-a00b-6d15e596e6ae/ROW-0c28c60d87011deb",
+     "0000950170-24-126452/C_4adc84d2-3e12-4271-8131-02cee0106324/ROW-aa223b090150a998",
+     "0000950170-24-126452/C_ff4d795f-30dd-43e8-b638-0faf197f94b4/ROW-7bfa93373bcd6bd8",
+     "0000950170-24-126452/C_9cd411f3-309d-45eb-a9d7-b4a3bf5f6c1e/ROW-1932d539280eefa8",
+     "0000950170-24-126452/C_1fbee515-9061-49d8-8c26-9fe940cda436/ROW-2500929a21d216c3",
+     "0000950170-24-126452/C_cfb93bb1-7c81-404f-a03c-b9d750806c90/ROW-1407bde2965c52d8",
+     "0000950170-24-126452/C_0c8f5fe2-59ad-4033-abe3-136806c60e4e/ROW-80599755824233ab",
+     "0000950170-24-126452/C_467caa78-a794-4074-b103-beb5b7b2fb2f/ROW-1e552b091547377f",
+     "0000950170-24-126452/C_f91b858e-20c5-4add-b33e-22ba061c5223/ROW-bd71f75f23f61ae9",
+     "0000950170-24-126452/C_63627fac-4e7a-42c5-b394-0a8fa822203e/ROW-125873620bd511b4",
+     "0000950170-24-126452/C_9b9f8e7e-5421-4ebd-b34a-4f88a3e91bda/ROW-54bec5b9be81ee4d",
+     "0000950170-24-126452/C_665bdfc0-b591-46fb-8a65-8a5e8622d056/ROW-f678d2a82e090d9c",
+     "0000950170-24-126452/C_70026ed3-dae4-4e92-9c86-2b8e269a1e90/ROW-a37e791d3f9cfcdd",
+     "0000950170-24-126452/C_6a419fb0-508e-4831-8410-b44ed1107e7c/ROW-e4645103cf965b50",
+     "0000950170-24-126452/C_13b84ff2-f118-4518-8ff5-0a307969139a/ROW-96818d4e9b1777d0",
+     "0000950170-24-126452/C_3e175201-accc-420e-b441-bd022d3a4e2a/ROW-4155042e904f5332",
+     "0000950170-24-126452/C_7558cbc5-7183-4856-89b0-6e053fcdb52f/ROW-ffac7969866925b0",
+     "0000950170-24-126452/C_df4db020-b0e2-4b6d-b86d-e037c0c3a999/ROW-be975b8a439bd706",
+     "0000950170-24-126452/C_62836a37-d257-4324-a1b2-9fce786599c9/ROW-be3e15e02b65f52e",
+     "0000950170-24-126452/C_232c85fd-9e98-4d07-9c2c-a44c3b52627f/ROW-4b4bd5711eb361bd",
+     "0000950170-24-126452/C_0c4226d9-5944-416b-8771-dd1f5fae55c2/ROW-2460c478c1787a69",
+     "0000950170-24-126452/C_b0fab77f-ff9f-4f54-b56f-8926e15f6d76/ROW-d98cd20ac8e7b73b"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-126452/C_1cd28c50-1c95-4615-9d5f-bf98a0d0dc7b/ROW-3e81403cfac21ef5",
+     "0000950170-24-126452/C_fa5e874a-91fb-4ebf-8fd1-b0866c5a9cbe/ROW-36d61a4a02ecd318",
+     "0000950170-24-126452/C_7df5c86f-d967-4858-85dc-5bc30e6f2d3c/ROW-cd29503643512a7a",
+     "0000950170-24-126452/C_721a8c5c-71ec-4dda-82bd-35f1963df4ee/ROW-d6dd80bb491ce74c",
+     "0000950170-24-126452/C_5194b8c2-b373-459b-b390-6c782929e555/ROW-8af0ef49f62c83ad",
+     "0000950170-24-126452/C_0a49f77c-1c8a-40be-b32c-e6e2b24f4644/ROW-0d90339613adbc77",
+     "0000950170-24-126452/C_06bffcb3-abbf-45d6-a488-8d5fdd3475c6/ROW-6ac36233938b2ed1",
+     "0000950170-24-126452/C_296233fa-edf1-4f14-8f77-bf1b5bb533dd/ROW-083f8fd472cd5c28",
+     "0000950170-24-126452/C_5ad91aba-63c3-450f-b222-2ba31b6e2b06/ROW-9101663930c2e943",
+     "0000950170-24-126452/C_052b8bab-19e1-41c4-9478-f534d407dfd1/ROW-13fd566df21003ef",
+     "0000950170-24-126452/C_14c2fc92-6946-4763-a52f-8628bf59f7cd/ROW-b6847cefcd5c32f9",
+     "0000950170-24-126452/C_4f7177e4-67e4-437e-8193-1a70344a9f6b/ROW-ca8f1d252da6437e",
+     "0000950170-24-126452/C_b6fdb11f-ef83-4b27-8aec-902ff9ce51d7/ROW-3fcc31c436a91b45",
+     "0000950170-24-126452/C_dc5f116a-4b19-445f-ac3b-e22ed2970656/ROW-fc57bfb7c7363916",
+     "0000950170-24-126452/C_57474789-c0a3-4af6-bf8e-639d9bd9fda2/ROW-905334c912bf2b5b",
+     "0000950170-24-126452/C_ccd196c2-124f-4525-bfab-9f07477e1811/ROW-633d6524febc7f96",
+     "0000950170-24-126452/C_ca526d7e-04b3-4c8c-b53e-76685fa34201/ROW-c5de21248ffe9d85",
+     "0000950170-24-126452/C_3521c678-13ab-40ad-a00b-6d15e596e6ae/ROW-0c28c60d87011deb",
+     "0000950170-24-126452/C_4adc84d2-3e12-4271-8131-02cee0106324/ROW-aa223b090150a998",
+     "0000950170-24-126452/C_ff4d795f-30dd-43e8-b638-0faf197f94b4/ROW-7bfa93373bcd6bd8",
+     "0000950170-24-126452/C_9cd411f3-309d-45eb-a9d7-b4a3bf5f6c1e/ROW-1932d539280eefa8",
+     "0000950170-24-126452/C_1fbee515-9061-49d8-8c26-9fe940cda436/ROW-2500929a21d216c3",
+     "0000950170-24-126452/C_cfb93bb1-7c81-404f-a03c-b9d750806c90/ROW-1407bde2965c52d8",
+     "0000950170-24-126452/C_0c8f5fe2-59ad-4033-abe3-136806c60e4e/ROW-80599755824233ab",
+     "0000950170-24-126452/C_467caa78-a794-4074-b103-beb5b7b2fb2f/ROW-1e552b091547377f",
+     "0000950170-24-126452/C_f91b858e-20c5-4add-b33e-22ba061c5223/ROW-bd71f75f23f61ae9",
+     "0000950170-24-126452/C_63627fac-4e7a-42c5-b394-0a8fa822203e/ROW-125873620bd511b4",
+     "0000950170-24-126452/C_9b9f8e7e-5421-4ebd-b34a-4f88a3e91bda/ROW-54bec5b9be81ee4d",
+     "0000950170-24-126452/C_665bdfc0-b591-46fb-8a65-8a5e8622d056/ROW-f678d2a82e090d9c",
+     "0000950170-24-126452/C_70026ed3-dae4-4e92-9c86-2b8e269a1e90/ROW-a37e791d3f9cfcdd",
+     "0000950170-24-126452/C_6a419fb0-508e-4831-8410-b44ed1107e7c/ROW-e4645103cf965b50",
+     "0000950170-24-126452/C_13b84ff2-f118-4518-8ff5-0a307969139a/ROW-96818d4e9b1777d0",
+     "0000950170-24-126452/C_3e175201-accc-420e-b441-bd022d3a4e2a/ROW-4155042e904f5332",
+     "0000950170-24-126452/C_7558cbc5-7183-4856-89b0-6e053fcdb52f/ROW-ffac7969866925b0",
+     "0000950170-24-126452/C_df4db020-b0e2-4b6d-b86d-e037c0c3a999/ROW-be975b8a439bd706",
+     "0000950170-24-126452/C_62836a37-d257-4324-a1b2-9fce786599c9/ROW-be3e15e02b65f52e",
+     "0000950170-24-126452/C_232c85fd-9e98-4d07-9c2c-a44c3b52627f/ROW-4b4bd5711eb361bd",
+     "0000950170-24-126452/C_0c4226d9-5944-416b-8771-dd1f5fae55c2/ROW-2460c478c1787a69",
+     "0000950170-24-126452/C_b0fab77f-ff9f-4f54-b56f-8926e15f6d76/ROW-d98cd20ac8e7b73b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126452",
+     "text": "AB Centers Acquisition Corporation First Lien Delayed Draw Term Loan S + 5.25 % 7/2/2031 - ( 10 ) ( 21 ) 9"
+    },
+    {
+     "accession": "0000950170-24-126452",
+     "text": "AB Centers Acquisition Corporation First Lien Delayed Draw Term Loan 7/2/2026 $ 1,432 $ ( 22 )"
+    },
+    {
+     "accession": "0001193125-26-345215",
+     "text": "AB Centers Acquisition Corporation First Lien Revolver S + 5.25 % 7/2/2031 - ( 2 ) ( 1 ) 25"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: row_validation C107 rows of the quarter (every negative-cost row; listed).",
+    "row_audit_scie.txt compares every published loan with its printed line on cost and fair value: no cost or fair-value difference in either quarter; each flagged row is an undrawn line printed with its cost in parentheses.",
+    "Earlier verdict (2024-09-30) cited the commitment-table AB Centers line; that table is no longer published (not_commitment_only)."
+   ],
+   "next_action": "Proposal PD-SCI-C107-UNDRAWN (c107-negative-cost-undrawn) with addresses_verdict for 2024-09-30."
+  },
+  {
+   "finding_id": "RVQ_REV_e7b950b9e203",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-221845/C_e9965285-b1df-4663-bc0d-998052154a70/ROW-5a6d6dece7fbb844",
+     "0001193125-26-221845/C_089265f4-2989-4a70-9bbe-8265544e2862/ROW-3497b32d46f08f78",
+     "0001193125-26-221845/C_ea2992d8-55ee-4619-89b2-a50e2c114280/ROW-1c22a679d8df2018",
+     "0001193125-26-221845/C_13c2090c-e698-48fd-b7b0-54a5521122ad/ROW-1772fcc015941ab8"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-221845/C_e9965285-b1df-4663-bc0d-998052154a70/ROW-5a6d6dece7fbb844",
+     "0001193125-26-221845/C_089265f4-2989-4a70-9bbe-8265544e2862/ROW-3497b32d46f08f78",
+     "0001193125-26-221845/C_ea2992d8-55ee-4619-89b2-a50e2c114280/ROW-1c22a679d8df2018",
+     "0001193125-26-221845/C_13c2090c-e698-48fd-b7b0-54a5521122ad/ROW-1772fcc015941ab8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-280629",
+     "text": "Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21 Hercules Borrower LLC First Lien Delayed Draw Term Loan S + 4.75 % 12/15/2028 - ( 10 ) ( 21 ) 21"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Kona Buyer, LLC First Lien Revolver S + 4.50 % 7/23/2031 - ( 1 ) ( 1 ) 23 Kona B"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: row_validation PP02 rows of the quarter (listed).",
+    "twin_lines.py: each flagged pair is a line printed twice identically in the same filing; both contexts are published since staging.distinct_member_suffix_re (the members differ only by 'One').",
+    "Totals: published fair value and cost equal the printed totals exactly in the quarter (totals.sql)."
+   ],
+   "next_action": "Proposal PD-SCI-PP02-TWINS (pp02-twin-lines-printed-separately)."
+  },
+  {
+   "finding_id": "RVQ_REV_ec911ba18586",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-345215/C_075e542f-7094-459a-8208-a04c53d621b6",
+     "0001193125-26-345215/C_093ed3d4-cf56-4242-9a1f-8f3326997c3a",
+     "0001193125-26-345215/C_0a16ae72-3aad-4717-8299-8202ca2db84c",
+     "0001193125-26-345215/C_0b5ff76b-33bb-4e0c-a777-eab618c58b62",
+     "0001193125-26-345215/C_0c2e8746-5760-4efa-93af-d4a1b5b6d8c0",
+     "0001193125-26-345215/C_1c922c22-e99d-4bf3-a5e9-0cd5287bda93",
+     "0001193125-26-345215/C_234c2213-7302-4cd6-9638-bbf09defc4af",
+     "0001193125-26-345215/C_2ca669f8-30ef-48e4-989c-d767d0d40687",
+     "0001193125-26-345215/C_322ec3ae-52fd-43fe-aa6b-e4e5bdeeaf8e",
+     "0001193125-26-345215/C_4a2898f9-bce4-4910-ad42-0df409eac582",
+     "0001193125-26-345215/C_4e35e4c9-f5d7-48ef-a40b-82fef79e27c8",
+     "0001193125-26-345215/C_521edcd0-047f-4474-a7a1-98d524d34ea7",
+     "0001193125-26-345215/C_5754d186-d4dd-46ae-8a40-d2f48a60e3b9",
+     "0001193125-26-345215/C_57d9d4b5-8e7c-4b28-9563-61cbbfacce0a",
+     "0001193125-26-345215/C_5b069217-3617-4949-903b-319f8b4447fc",
+     "0001193125-26-345215/C_5d57f43e-3856-4bfd-82b2-e302416e9e2d",
+     "0001193125-26-345215/C_69d18162-e53e-4f0a-9a54-c83cb987856b",
+     "0001193125-26-345215/C_766626c9-280f-4f48-867e-b2821c0793c4",
+     "0001193125-26-345215/C_768c07fd-dac7-492f-b463-bed7f25bf413",
+     "0001193125-26-345215/C_85cac846-4346-465b-9845-09e099b68995",
+     "0001193125-26-345215/C_865dd1a9-80b3-4780-866d-79832618e230",
+     "0001193125-26-345215/C_878b5ddd-36c7-4a68-ad58-11b737a6ad5c",
+     "0001193125-26-345215/C_883ee19b-c789-46f1-9833-809fb7cfdcd7",
+     "0001193125-26-345215/C_88564bd3-87ce-4b3e-995b-d523fc9e3043",
+     "0001193125-26-345215/C_8a12b6f5-7ea1-416e-b355-bc813b3a63d6",
+     "0001193125-26-345215/C_94bc1526-a9d7-48bd-a754-d3412d2bb087",
+     "0001193125-26-345215/C_96133025-a598-4317-b7e8-bbfa3b064b3a",
+     "0001193125-26-345215/C_a33ae9be-def6-43bf-80f7-b13df142db7f",
+     "0001193125-26-345215/C_ac33a5e3-04d2-4e0a-8d92-2b578026b974",
+     "0001193125-26-345215/C_b04d256c-a374-4472-927e-b9dd086b99a1",
+     "0001193125-26-345215/C_c87f8d00-2839-498d-90b9-fb280b2974e2",
+     "0001193125-26-345215/C_c890b06d-19ad-44ae-bd05-6ec99fd5aade",
+     "0001193125-26-345215/C_d0934000-97de-4023-bc1d-29f0c3e975b6",
+     "0001193125-26-345215/C_dee485dd-eb30-4930-8167-c883e1dd1f36",
+     "0001193125-26-345215/C_e24cd34c-2457-403e-b518-e9dfd198241e",
+     "0001193125-26-345215/C_ee156548-94c7-446e-9828-2737a4cfcbee",
+     "0001193125-26-345215/C_f63b608c-da18-41f2-90b2-dea4bf708548"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-345215/C_075e542f-7094-459a-8208-a04c53d621b6",
+     "0001193125-26-345215/C_093ed3d4-cf56-4242-9a1f-8f3326997c3a",
+     "0001193125-26-345215/C_0a16ae72-3aad-4717-8299-8202ca2db84c",
+     "0001193125-26-345215/C_0b5ff76b-33bb-4e0c-a777-eab618c58b62",
+     "0001193125-26-345215/C_0c2e8746-5760-4efa-93af-d4a1b5b6d8c0",
+     "0001193125-26-345215/C_1c922c22-e99d-4bf3-a5e9-0cd5287bda93",
+     "0001193125-26-345215/C_234c2213-7302-4cd6-9638-bbf09defc4af",
+     "0001193125-26-345215/C_2ca669f8-30ef-48e4-989c-d767d0d40687",
+     "0001193125-26-345215/C_322ec3ae-52fd-43fe-aa6b-e4e5bdeeaf8e",
+     "0001193125-26-345215/C_4a2898f9-bce4-4910-ad42-0df409eac582",
+     "0001193125-26-345215/C_4e35e4c9-f5d7-48ef-a40b-82fef79e27c8",
+     "0001193125-26-345215/C_521edcd0-047f-4474-a7a1-98d524d34ea7",
+     "0001193125-26-345215/C_5754d186-d4dd-46ae-8a40-d2f48a60e3b9",
+     "0001193125-26-345215/C_57d9d4b5-8e7c-4b28-9563-61cbbfacce0a",
+     "0001193125-26-345215/C_5b069217-3617-4949-903b-319f8b4447fc",
+     "0001193125-26-345215/C_5d57f43e-3856-4bfd-82b2-e302416e9e2d",
+     "0001193125-26-345215/C_69d18162-e53e-4f0a-9a54-c83cb987856b",
+     "0001193125-26-345215/C_766626c9-280f-4f48-867e-b2821c0793c4",
+     "0001193125-26-345215/C_768c07fd-dac7-492f-b463-bed7f25bf413",
+     "0001193125-26-345215/C_85cac846-4346-465b-9845-09e099b68995",
+     "0001193125-26-345215/C_865dd1a9-80b3-4780-866d-79832618e230",
+     "0001193125-26-345215/C_878b5ddd-36c7-4a68-ad58-11b737a6ad5c",
+     "0001193125-26-345215/C_883ee19b-c789-46f1-9833-809fb7cfdcd7",
+     "0001193125-26-345215/C_88564bd3-87ce-4b3e-995b-d523fc9e3043",
+     "0001193125-26-345215/C_8a12b6f5-7ea1-416e-b355-bc813b3a63d6",
+     "0001193125-26-345215/C_94bc1526-a9d7-48bd-a754-d3412d2bb087",
+     "0001193125-26-345215/C_96133025-a598-4317-b7e8-bbfa3b064b3a",
+     "0001193125-26-345215/C_a33ae9be-def6-43bf-80f7-b13df142db7f",
+     "0001193125-26-345215/C_ac33a5e3-04d2-4e0a-8d92-2b578026b974",
+     "0001193125-26-345215/C_b04d256c-a374-4472-927e-b9dd086b99a1",
+     "0001193125-26-345215/C_c87f8d00-2839-498d-90b9-fb280b2974e2",
+     "0001193125-26-345215/C_c890b06d-19ad-44ae-bd05-6ec99fd5aade",
+     "0001193125-26-345215/C_d0934000-97de-4023-bc1d-29f0c3e975b6",
+     "0001193125-26-345215/C_dee485dd-eb30-4930-8167-c883e1dd1f36",
+     "0001193125-26-345215/C_e24cd34c-2457-403e-b518-e9dfd198241e",
+     "0001193125-26-345215/C_ee156548-94c7-446e-9828-2737a4cfcbee",
+     "0001193125-26-345215/C_f63b608c-da18-41f2-90b2-dea4bf708548"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Consolidated Schedule of Investments December 31, 2025 (In thousands, except for"
+    },
+    {
+     "accession": "0001193125-26-221845",
+     "text": "Integrity Marketing Acquisition, LLC First Lien Revolver S + 5.00 % 8/25/2028 - ( 1 ) - 23"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: oracle check_failures B01 for the quarter (every context is listed in affected_rows).",
+    "b01_periods.sql: all 41 (2026-03-31) and 37 (2026-06-30) contexts have period 2025-12-31 and no fair-value fact; residual_class excluded_comparative_period on every one.",
+    "Read the comparative schedule in the 10-Q: undrawn lines print a dash for fair value (Integrity Marketing revolver '- ( 1 ) -'); the same lines in the current schedule are published (row_audit_scie: every current printed line matched)."
+   ],
+   "next_action": "Proposal PD-SCI-B01-COMPARATIVE (b01-leaves-without-value-are-the-comparative-schedule)."
+  }
+ ],
+ "request_resolution_history": [
+  {
+   "request_id": "SCI-R1",
+   "classification": "verification_bug",
+   "file": "pipeline/source_reconciliation.py",
+   "what": "Treat a source fact whose decimals (0) disagree with its context siblings (-3) in a filing stated in thousands as a scale candidate that a page-backed row correction may resolve, instead of a blocking mismatch (Chartwell 2023-12-31, two contexts).",
+   "why": "The filer tagged InvestmentOwnedAtCost 6506 / InvestmentOwnedAtFairValue 6671 at decimals 0 beside principal 6773000 at decimals -3; the page prints 6,506 / 6,671 thousand and the quarter ties only with the thousands. The check compares with the unscaled tag.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7"
+    },
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Delayed Draw Term Loan S + 5.75 % 11/16/2027 450 432 443 7"
+    }
+   ],
+   "next_action": "Orchestrator: decide whether the source check reads the decimals mismatch (test: the two Chartwell contexts pass at the printed thousands and fail at 1,000 x too much); otherwise accept proposals PD-SCI-SRC-UNSCALED / PD-SCI-BDCSRC-UNSCALED.",
+   "quotes": [
+    {
+     "accession": "0000950170-24-038500",
+     "text": "Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 6,773 6,506 6,671 7"
+    }
+   ],
+   "resolution": "deferred by the orchestrator, 2026-10-19 (recorded in D-219): it changes when the source check stops blocking on a fact, for 2 contexts in one quarter; that belongs with the second rule batch where it can be measured on the cohort, not as a one-fund change. The two Chartwell proposals (PD-SCI-SRC-UNSCALED for SRC_BDC03 and PD-SCI-BDCSRC-UNSCALED for the blocking scale candidate, 2023-12-31) stay as proposals for the owner.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-219"
+  }
+ ]
+}
