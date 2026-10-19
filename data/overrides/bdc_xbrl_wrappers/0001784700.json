@@ -80,7 +80,9 @@
     ],
     "category_marker_re": "(?i)^\\s*(?:Total\\s+(?:Investments(?:,\\s+[A-Za-z]+\\s+\\d{1,2},\\s+\\d{4})?|Senior\\s+Secured\\s+First\\s+Lien\\s+Loans|Senior\\s+Direct\\s+Lending\\s+Program|Equity)|Subtotal\\s+(?:Non-Controlled/Non-Affiliated|Controlled)\\s+Investments|(?:Non-Controlled/Non-Affiliated|Controlled(?:/Non-Affiliated)?|Controlled\\s+Non-Affiliated)\\s+Investments,\\s+(?:Senior\\s+Secured\\s+First\\s+Lien\\s+Loans,\\s+)?(?:Industry\\s+)?(?:MSD_INDUSTRY_LABELS)?)\\s*$",
     "category_marker_before_total": true,
-    "canonical_strip_re": "(?i)^\\s*(?:(?:Non-Controlled/Non-AffiliateNon-Controlled/Non-Affiliated|Non-Controlled/Non-Affiliated|Controlled\\s+Non-Affiliated|Controlled/Non-Affiliated)\\s+Investments,\\s+Senior\\s+Secured\\s+First\\s+Lien\\s+Loans,\\s+|Non-Controlled/Non-Affiliated\\s+Investments,\\s+Equity,\\s+|Controlled\\s+Investments,\\s+)(?:Industry(?:\\s+[^,]*)?,\\s+)?(?:Company\\s+)?|,?\\s*Industry\\s+[^,]+(?=,?\\s+Type\\s+of\\s+Investment\\b)|,?\\s*Reference\\s+Rate\\s+and\\s+Spread\\s+.*?(?=,?\\s+(?:Interest\\s+Rate|Acquisition\\s+Date|Maturity)\\b|$)|,?\\s*Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%?|,?\\s*Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}"
+    "canonical_strip_re": "(?i)^\\s*(?:(?:Non-Controlled/Non-AffiliateNon-Controlled/Non-Affiliated|Non-Controlled/Non-Affiliated|Controlled\\s+Non-Affiliated|Controlled/Non-Affiliated)\\s+Investments,\\s+Senior\\s+Secured\\s+First\\s+Lien\\s+Loans,\\s+|Non-Controlled/Non-Affiliated\\s+Investments,\\s+Equity,\\s+|Controlled\\s+Investments,\\s+)(?:Industry(?:\\s+[^,]*)?,\\s+)?(?:Company\\s+)?|,?\\s*Industry\\s+[^,]+(?=,?\\s+Type\\s+of\\s+Investment\\b)|,?\\s*Reference\\s+Rate\\s+and\\s+Spread\\s+.*?(?=,?\\s+(?:Interest\\s+Rate|Acquisition\\s+Date|Maturity)\\b|$)|,?\\s*Interest\\s+Rate\\s+\\d+(?:\\.\\d+)?%?|,?\\s*Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}",
+    "issuer_name_strip_re": "(?:Revolver|,\\s*Company)$",
+    "industry_from_identifier_re": "(?i)\\bIndustry\\s+(Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|[^,]+?)(?:,|\\s+Company\\b|\\s+Type\\s+of\\b)"
   },
   "identifier_format": {
     "delimiter": ", ",
@@ -97,9 +99,9 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Non-Controlled/Non-AffiliateNon-Controlled/Non-Affiliated|Non-Controlled/Non-Affiliated|Controlled\\s+Non-Affiliated|Controlled/Non-Affiliated)\\s+Investments,\\s+Senior\\s+Secured\\s+First\\s+Lien\\s+Loans,\\s+|Non-Controlled/Non-Affiliated\\s+Investments,\\s+Equity,\\s+|Controlled\\s+Investments,\\s+)(?:Industry(?:\\s+[^,]*)?,\\s+)?(?:Company\\s+)?(.+?)(?:,\\s+Industry\\s+[^,]+)?(?:,\\s+|\\s+)Type\\s+of\\s+Investment\\b",
-    "hierarchy_instrument_re": "(?i)\\bType\\s+of\\s+Investment\\s+(.+?)(?:,?\\s+Reference\\s+Rate\\s+and\\s+Spread\\b|,?\\s+Interest\\s+Rate\\b|,?\\s+Acquisition\\s+Date\\b|,?\\s+Maturity\\b|$)",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:(?:Non-Controlled/Non-AffiliateNon-Controlled/Non-Affiliated|Non-Controlled/Non-Affiliated|Controlled\\s+Non-Affiliated|Controlled/Non-Affiliated)\\s+Investments,\\s+Senior\\s+Secured\\s+First\\s+Lien\\s+Loans,\\s+|Non-Controlled/Non-Affiliated\\s+Investments,\\s+Equity,\\s+|Controlled\\s+Investments,\\s+)') AND regexp_matches(_clean, '(?i)\\bType\\s+of\\s+Investment\\b')",
+    "hierarchy_issuer_re": "(?i)(?:(?:,\\s*|\\s)Company,?\\s+|\\bIndustry\\s+Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail\\s+Company\\s+|\\bIndustry\\s+(?:Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|[^,]+),\\s+(?:(?:Senior\\s+Secured\\s+First\\s+Lien\\s+Loans|Instruments\\s+&\\s+Components),\\s+)?(?:Company,?\\s+)?)(?:National\\s+Safety\\s+Apparel\\s+LLC\\s+)?(.+?)(?:,?\\s+Industry\\s|,?\\s*Type\\s+of\\b|,\\s+Acquisition\\s+Date\\b|,\\s+Maturity\\b)",
+    "hierarchy_instrument_re": "(?i)\\bType\\s+of\\s+(?:Investment\\s+)?(.+?)(?:,?\\s+Reference\\s+Rate\\s+and\\s+Spread\\b|,?\\s+Interest\\s+Rate\\b|,?\\s+Acquisition\\s+Date\\b|,?\\s+Maturity\\b|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:N?on-Controlled|Controlled)\\b') AND regexp_matches(_clean, '(?i)\\b(?:Type\\s+of|Acquisition\\s+Date|Maturity)\\b') AND regexp_matches(_clean, '(?i)(?:\\bCompany\\b|\\bIndustry\\s)')",
     "extra_industry_labels": [
       "Aerospace & Defense",
       "Air Freight & Logistics",
@@ -133,7 +135,8 @@
       "Professional Services",
       "Software",
       "Trading Companies & Distributors"
-    ]
+    ],
+    "distinct_member_suffix_re": "(?i)\\bType\\s+of\\b.*$"
   },
   "archetypes": {
     "debt": {
@@ -231,6 +234,13 @@
       "first_seen_quarter": "2024-03-31",
       "detection_pattern": "Maturity <date> (One|Two)",
       "disposition": "expected"
+    },
+    {
+      "id": "VARAGON_THOUSANDS_AT_DECIMALS_ZERO",
+      "description": "The schedule prints thousands. In the listed filings part of the position facts carry the printed thousands figure at decimals 0 beside -3 siblings (10-Q 2023-03-31: every current-period principal fact, e.g. A&R Logistics 5010 against printed '05/03/25 5,010 $ 4,973 $ 4,872'; Del Real fair value 3478; later filings single rows: Graffiti, EIS, Oliver revolver, Horizon Freight, Cold Spring, JTM, Alert SRC, the money market fund par 2025-09-30). source_encodings.thousands_scale_filings reads decimals-0 cost, fair value and principal as thousands there. Equity unit counts tagged as principal at decimals 0 (2023-03-31, 2023-09-30: '500,000' units) are counts; only KLC Fund 1-C1 publishes that principal and it is withdrawn by context correction.",
+      "first_seen_quarter": "2023-03-31",
+      "detection_pattern": "decimals=\"0\" beside decimals=\"-3\" on one context",
+      "disposition": "expected"
     }
   ],
   "invariants": {
@@ -241,6 +251,17 @@
   "source_encodings": {
     "filed_rate_reading": [
       "all_in"
+    ],
+    "thousands_scale_filings": [
+      "0000950170-23-021632",
+      "0000950170-23-063476",
+      "0000950170-24-035857",
+      "0000950170-24-094111",
+      "0000950170-25-106434",
+      "0001193125-25-272093",
+      "0001193125-26-114266",
+      "0001193125-26-219643",
+      "0001193125-26-344075"
     ]
   }
 }

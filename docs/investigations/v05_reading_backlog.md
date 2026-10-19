@@ -194,3 +194,4 @@ Manulife 0001988280.
 | 2026-10-19 | 0002006758 MidCap Apollo Institutional Private Lending | maif | PASS (investigation COMPLETE) | 32 findings, 10 outstanding, all proposed; 9/9 quarters tie; sample 1 real error of 20, fixed | D-213 |
 | 2026-10-19 | 0001948368 Phillip Street Middle Market Lending Fund | psmf | PASS (investigation COMPLETE) | 68 findings, 31 outstanding, all proposed; 13/14 quarters tie (2026-06-30 Sonar AUD -3.84M declared); sample 0/20 | D-214 |
 | 2026-10-19 | 0001954360 Crescent Private Credit Income Corp | cpig | INCOMPLETE (investigation COMPLETE) | 73 findings, 50 outstanding, 49 proposed, X05 parked; 12/12 quarters tie; sample 2/20 fixed | D-215 |
+| 2026-10-19 | 0001784700 Varagon Capital Corporation | vgaf | PASS (investigation COMPLETE) | 58 findings, 24 outstanding, all proposed; 14/14 quarters tie (3 before); sample 0/20 | D-216 |

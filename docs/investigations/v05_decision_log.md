@@ -5222,3 +5222,15 @@ Compared with `spon3`; six builds (cpia to cpif), one in-place re-run of cpif (m
 - Shared observations for the rule batch: principal correction does not flow to principal_amount_usd; principal_usd_reference double-converts a dollar par tagged in the issuer's currency; dedup collapses unnamed twin lines.
 - Page sample (cpif): 2 of 20 cards with published errors (money-fund CAD, Ineos instrument), both fixed fund-wide in cpig. Twenty cards can miss a problem on under about 15 pct of rows.
 - Shared code: none. Nothing published. A cleared ledger would not establish data correctness.
+
+### D-216 Varagon Capital Corporation through the fund-clearing skill (sandbox `vgaf`, with 2026-06-30): gate PASS
+
+Compared with `sponfb`; six builds (vgaa to vgaf) plus two in-place re-runs of vgaf from rebuild (orchestrator fixes; reviewer-found rows), logs kept verbatim with a header naming the stages. First untouched reading (vgaa): 88 outstanding. Gate PASS with independent investigation review COMPLETE after two rounds (`reviews/0001784700_vgaf.json`: 24/24 findings, 18/18 observations, 2/2 request resolutions supported).
+
+- Ledger: 58 findings, 24 outstanding, all proposed (7 entries): PP02 x14 (twin lines printed separately), X02 x4, A01 2023-12-31 / 2025-03-31, C107, X07, F28, derivative swap notional (the derivative step runs before financials corrects borrowings: compared with revolver-only 31.6M, not 456.6M; shared observation).
+- Totals: 14 of 14 quarters tie (3 of 14 before).
+- Fixed: par in thousands tagged as dollars in 9 filings (549 loans at 1/1000; existing `thousands_scale_filings`; no rule fired); 225 twin lines restored with `staging.distinct_member_suffix_re`, three row_add plug rules pulled to `agent_investigate_rules/_pulled_1784700_fundloop_2026-10-19/`; issuer/instrument patterns (~200 names), member-text industry on 707 rows; new highlights wrapper (TII had been published as NII every quarter; borrowings now include the notes); 593 context-keyed corrections (391 PIK spreads to the D-031 total margin, 23 cash-rate rows, names, instruments, unit counts, SOFR, RFI cost).
+- Orchestrator (verified first): VGA-R1 source reconciliation now applies `thousands_scale_filings` (cache re-extracts listed filings; also changes Phillip Street's reconciliation, end-of-run regression); VGA-R2 anchor 2026-03-31 pulled (ex-cash basis vs a published cash row; the automatic anchor gives the printed 841,056); page rules: `pik_printed` read ".50" as 50, `units_printed` had the same flaw; both fixed with tests.
+- Left: NII 2023-09-30 published pre-tax 11,224 vs printed 11,222; three ambiguous instrument mislabels and SDLP certificate par (parked); member-text punctuation in some names.
+- Page sample (vgaf): 0 of 20 published errors. Twenty cards can miss a problem on under about 15 pct of rows.
+- Shared code: source_reconciliation (thousands scale), candidate_rules (number parsing). Tests 145 pass. Nothing published. A cleared ledger would not establish data correctness.

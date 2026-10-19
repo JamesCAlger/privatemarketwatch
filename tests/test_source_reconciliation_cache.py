@@ -489,6 +489,51 @@ def test_source_fact_extraction_version_participates_in_metadata_hash(monkeypatc
     assert before != after
 
 
+# ---- thousands_scale_filings on the source side (Varagon VGA-R1) ----
+# The extractor reads a listed filing's decimals-0 facts at thousands; reconciliation must read the
+# same facts the same way, or every rescaled row shows as a 1,000x mismatch (SRC_BDC03 / A01).
+
+
+def _thousands_body():
+    return _cash_equivalents_context("ctx_k", "DelRealTermLoanMember") + (
+        '<us-gaap:InvestmentOwnedAtCost contextRef="ctx_k" unitRef="usd" decimals="-3">3451000</us-gaap:InvestmentOwnedAtCost>'
+        '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx_k" unitRef="usd" decimals="0">3478</us-gaap:InvestmentOwnedAtFairValue>'
+    )
+
+
+def _list_thousands(monkeypatch, accessions):
+    from pipeline import source_encodings
+    monkeypatch.setitem(source_encodings._THOUSANDS_CACHE, "listed",
+                        {"0000000100": frozenset(accessions)})
+
+
+def test_declared_thousands_filing_is_scaled_on_source_side(tmp_path, monkeypatch):
+    _list_thousands(monkeypatch, [_FILING_META["accession_number"]])
+    rows = _extract(tmp_path, _thousands_body())
+    assert len(rows) == 1
+    assert rows[0]["fair_value"] == 3478000.0
+    assert rows[0]["cost"] == 3451000.0
+
+
+def test_undeclared_filing_is_not_scaled_on_source_side(tmp_path, monkeypatch):
+    # false-positive guard: same facts, filing not listed (another accession of the same filer is)
+    _list_thousands(monkeypatch, ["0000950170-23-021632"])
+    rows = _extract(tmp_path, _thousands_body())
+    assert len(rows) == 1
+    assert rows[0]["fair_value"] == 3478.0
+    assert rows[0]["cost"] == 3451000.0
+
+
+def test_listing_a_thousands_filing_changes_only_its_metadata_hash(monkeypatch):
+    listed = dict(_FILING_META)
+    other = {**_FILING_META, "accession_number": "acc-other"}
+    _list_thousands(monkeypatch, [])
+    before_listed, before_other = sr._filing_metadata_hash(listed), sr._filing_metadata_hash(other)
+    _list_thousands(monkeypatch, [listed["accession_number"]])
+    assert sr._filing_metadata_hash(listed) != before_listed
+    assert sr._filing_metadata_hash(other) == before_other
+
+
 def _mm_reconcile(source_rows, output_rows):
     source_df = pd.DataFrame(source_rows, columns=sr.SOURCE_FACT_COLUMNS)
     holdings_df = pd.DataFrame(output_rows)

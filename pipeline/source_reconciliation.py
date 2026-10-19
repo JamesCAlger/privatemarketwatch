@@ -1639,9 +1639,12 @@ def _extract_single_xbrl_source_file(
                         pass
         concepts_by_ctx.setdefault(ctx_ref, set()).add(local)
 
-    from pipeline.source_encodings import whole_dollar_scale_filing
+    # Same scale readings as the extractor (bdc_filings._parse_single_filing); without them a
+    # filing listed under thousands_scale_filings is compared unscaled (Varagon VGA-R1).
+    from pipeline.source_encodings import thousands_scale_filing, whole_dollar_scale_filing
     _normalize_mixed_decimals_monetary_facts(facts_by_ctx, monetary_facts_stored,
-                                             whole_dollar=whole_dollar_scale_filing(filing_meta))
+                                             whole_dollar=whole_dollar_scale_filing(filing_meta),
+                                             thousands=thousands_scale_filing(filing_meta))
     if _margin_tags:
         _settle_margins(facts_by_ctx, mode=_margin_tags)
     from pipeline.page_labelled_contexts import fill_untagged_values
@@ -4409,11 +4412,17 @@ def _filing_metadata_hash(filing: dict[str, Any]) -> str:
     keys = ["cik", "entity_name", "accession_number", "form_type", "filing_date", "report_date"]
     from pipeline.page_labelled_contexts import encoding_signature
     signature = encoding_signature(str(filing.get("cik", "") or ""))
+    # A filing listed under whole_dollar_scale_filings / thousands_scale_filings is read at another
+    # scale; the token keys only the listed filing, so listing one re-extracts it and nothing else.
+    from pipeline.source_encodings import thousands_scale_filing, whole_dollar_scale_filing
+    scale = (["scale:whole_dollar"] if whole_dollar_scale_filing(filing) else []) \
+        + (["scale:thousands"] if thousands_scale_filing(filing) else [])
     payload = "\x1f".join(
         [_SOURCE_FACT_EXTRACTION_VERSION]
         + [str(filing.get(k, "") or "") for k in keys]
         # a filer's page-labelled / misdated context settings change what is extracted
         + ([signature] if signature else [])
+        + scale
     )
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 

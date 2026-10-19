@@ -1,0 +1,89 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001784700",
+ "entity_name": "Varagon Capital Corporation",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2023-12-31",
+   "field": "borrowings",
+   "value": 291308000,
+   "evidence": "0000950170-24-035857 balance sheet at 2023-12-31 prints 'Revolving credit facility payable (Note 6) $ 241,670' and 'Notes payable (net of debt issuance costs ...) (Note 6) 49,638' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2024-03-31",
+   "field": "borrowings",
+   "value": 343865000,
+   "evidence": "0000950170-24-058847 balance sheet at 2024-03-31 prints 'Revolving credit facility payable (Note 6) $ 295,090' and 'Notes payable (net of debt issuance costs ...) (Note 6) 48,775' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "borrowings",
+   "value": 342495000,
+   "evidence": "0000950170-24-094111 balance sheet at 2024-06-30 prints 'Revolving credit facility payable (Note 6) $ 293,810' and 'Notes payable (net of debt issuance costs ...) (Note 6) 48,685' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "borrowings",
+   "value": 372944000,
+   "evidence": "0000950170-24-125262 balance sheet at 2024-09-30 prints 'Revolving credit facility payable (Note 6) $ 322,850' and 'Notes payable (net of debt issuance costs ...) (Note 6) 50,094' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "borrowings",
+   "value": 474009000,
+   "evidence": "0000950170-25-043295 balance sheet at 2024-12-31 prints 'Revolving credit facility payable (Note 6) $ 50,000' and 'Notes payable (net of debt issuance costs ...) (Note 6) 424,009' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2025-03-31",
+   "field": "borrowings",
+   "value": 465566000,
+   "evidence": "0000950170-25-071178 balance sheet at 2025-03-31 prints 'Revolving credit facility payable (Note 6) $ 41,000' and 'Notes payable (net of debt issuance costs ...) (Note 6) 424,566' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "borrowings",
+   "value": 461481000,
+   "evidence": "0000950170-25-106434 balance sheet at 2025-06-30 prints 'Revolving credit facility payable (Note 6) $ 36,600' and 'Notes payable (net of debt issuance costs ...) (Note 6) 424,881' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "borrowings",
+   "value": 456619000,
+   "evidence": "0001193125-25-272093 balance sheet at 2025-09-30 prints 'Revolving credit facility payable (Note 6) $ 31,600' and 'Notes payable (net of debt issuance costs ...) (Note 6) 425,019' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "borrowings",
+   "value": 492212000,
+   "evidence": "0001193125-26-114266 balance sheet at 2025-12-31 prints 'Revolving credit facility payable (Note 6) $ 67,100' and 'Notes payable (net of debt issuance costs ...) (Note 6) 425,112' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2026-03-31",
+   "field": "borrowings",
+   "value": 468058000,
+   "evidence": "0001193125-26-219643 balance sheet at 2026-03-31 prints 'Revolving credit facility payable (Note 6) $ 43,100' and 'Notes payable (net of debt issuance costs ...) (Note 6) 424,958' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "borrowings",
+   "value": 496912000,
+   "evidence": "0001193125-26-344075 balance sheet at 2026-06-30 prints 'Revolving credit facility payable (Note 6) $ 72,100' and 'Notes payable (net of debt issuance costs ...) (Note 6) 424,812' (thousands). Published borrowings held the revolver only (LineOfCredit); the notes (SeniorNotes / NotesPayable) were left out, so leverage fell from 0.38 to 0.05 when the 2024 notes replaced the revolver (F26). Value = the two printed lines."
+  }
+ ],
+ "income_concept_suppress": [
+  "netinvestmentincomelosspershare",
+  "preincentivefeenetinvestmentincome",
+  "distributionofnetinvestmentincome",
+  "interestexpenseandcreditfacilityfeesexpenseratio"
+ ],
+ "income_concept_fallback": {
+  "total_investment_income": [
+   "investmentincomenet"
+  ],
+  "total_expenses": [
+   "operatingexpenses"
+  ]
+ },
+ "notes": "Fund-clearing loop 2026-10-19 (vga). Income: 10-Q 2026-03-31 (0001193125-26-219643) prints 'Total investment income 20,906 22,890 ... Total expenses 10,786 11,994 Net investment income (loss) 10,120 10,896'; tagged us-gaap:InvestmentIncomeNet 20,906,000 (the total), InvestmentIncomeOperatingAfterExpenseAndTax 10,120,000 (net) and OperatingExpenses 10,786,000. The shared map read InvestmentIncomeNet as net investment income in every quarter (total investment income was blank). InvestmentIncomeNet is read as total investment income and OperatingExpenses as total expenses; net investment income then comes from InvestmentIncomeOperatingAfterExpenseAndTax. Borrowings: see figure_corrections."
+}

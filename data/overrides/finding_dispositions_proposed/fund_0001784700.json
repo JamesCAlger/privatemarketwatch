@@ -1,0 +1,336 @@
+{
+ "status": "PROPOSED, not accepted. Ledger does not read this directory.",
+ "sandbox": "vgaf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-0001784700-PP02-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "ciks": [
+    "0001784700"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "pp02-twin-lines-printed-separately",
+   "statement": "Every PP02 group (163 groups, 384 rows over 14 quarters, pp02_check.py) is a set of lines the page prints separately with the same issuer, instrument and par / cost / fair value cells; each has its own context and a member that differs after 'Type of' (the printed rate, or a trailing One / Two). Two groups were matched by hand ('(ALL PIK)' and '$' cells): Center for Autism 2023-06-30 prints two '436 423 327' lines (15.53 % and 15.51 %), Horizon Freight 2024-09-30 two '- ( 11 ) ( 23 )' lines. Staging used to fold them as affiliation duplicates (totals 0.06M to 6.4M short); they are now published, and totals tie in 14 of 14 quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-021632",
+     "verbatim": "KL Bronco Acquisition, Inc. Personal Products Revolver SOFR + 5.25 % (Q) 10.04 % 06/30/28 71 69 66",
+     "quote": "KL Bronco Acquisition, Inc. Personal Products Revolver SOFR + 5.25 % (Q) 10.04 % 06/30/28 71 69 66 -- two printed lines with these cells, 2023-03-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041717",
+     "verbatim": "Integrity Marketing Acquisition, LLC Insurance Delayed Draw Term Loan SOFR + 6.05 % (Q) 11.41 % 08/27/25 5,430 5,430 5,335",
+     "quote": "Integrity Marketing Acquisition, LLC Insurance Delayed Draw Term Loan SOFR + 6.05 % (Q) 11.41 % 08/27/25 5,430 5,430 5,335 -- two printed lines with these cells, 2023-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-063476",
+     "verbatim": "SGA Dental Partners Opco, LLC Health Care Providers & Services Delayed Draw Term Loan SOFR + 6.00 % (Q) 11.60 % 12/30/26 68 67 67",
+     "quote": "SGA Dental Partners Opco, LLC Health Care Providers & Services Delayed Draw Term Loan SOFR + 6.00 % (Q) 11.60 % 12/30/26 68 67 67 -- two printed lines with these cells, 2023-09-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035857",
+     "verbatim": "Castleworks Home Services Company Revolver SOFR + 5.50 % (M) 12.95 % ( 2.00 % PIK) 06/29/28 136 134 112",
+     "quote": "Castleworks Home Services Company Revolver SOFR + 5.50 % (M) 12.95 % ( 2.00 % PIK) 06/29/28 136 134 112 -- two printed lines with these cells, 2023-12-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-058847",
+     "verbatim": "Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.46 % 12/28/2025 414 412 400",
+     "quote": "Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.46 % 12/28/2025 414 412 400 -- two printed lines with these cells, 2024-03-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-094111",
+     "verbatim": "Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.49 % 12/28/2025 414 412 400",
+     "quote": "Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.49 % 12/28/2025 414 412 400 -- two printed lines with these cells, 2024-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125262",
+     "verbatim": "BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (M) 10.45 % 8/31/2027 3,381 3,334 3,339",
+     "quote": "BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (M) 10.45 % 8/31/2027 3,381 3,334 3,339 -- two printed lines with these cells, 2024-09-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-043295",
+     "verbatim": "BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (Q) 9.98 % 7/26/2022 7/26/2028 3,372 3,328 3,322",
+     "quote": "BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (Q) 9.98 % 7/26/2022 7/26/2028 3,372 3,328 3,322 -- two printed lines with these cells, 2024-12-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071178",
+     "verbatim": "Boulder Scientific Company, LLC Term Loan SOFR + 4.75 % (Q) 9.05 % 6/2/2022 12/31/2027 414 412 408",
+     "quote": "Boulder Scientific Company, LLC Term Loan SOFR + 4.75 % (Q) 9.05 % 6/2/2022 12/31/2027 414 412 408 -- two printed lines with these cells, 2025-03-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-106434",
+     "verbatim": "Boulder Scientific Company, LLC Term Loan SOFR + 4.50 % (Q) 8.80 % 6/2/2022 12/31/2027 414 412 413",
+     "quote": "Boulder Scientific Company, LLC Term Loan SOFR + 4.50 % (Q) 8.80 % 6/2/2022 12/31/2027 414 412 413 -- two printed lines with these cells, 2025-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-272093",
+     "verbatim": "Krayden Holdings, Inc. Delayed Draw Term Loan SOFR + 4.75 % (M) 8.91 % 3/1/2023 3/1/2029 385 377 384",
+     "quote": "Krayden Holdings, Inc. Delayed Draw Term Loan SOFR + 4.75 % (M) 8.91 % 3/1/2023 3/1/2029 385 377 384 -- two printed lines with these cells, 2025-09-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-114266",
+     "verbatim": "NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 9.07 % 9/9/2025 8/6/2030 3,507 3,457 3,455",
+     "quote": "NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 9.07 % 9/9/2025 8/6/2030 3,507 3,457 3,455 -- two printed lines with these cells, 2025-12-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219643",
+     "verbatim": "NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 8.90 % 9/9/2025 8/6/2030 3,498 3,451 3,455",
+     "quote": "NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 8.90 % 9/9/2025 8/6/2030 3,498 3,451 3,455 -- two printed lines with these cells, 2026-03-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344075",
+     "verbatim": "NS and Associates LLC Term Loan SOFR + 5.00 % (Q) 8.65 % 9/9/2025 8/6/2030 3,490 3,444 3,446",
+     "quote": "NS and Associates LLC Term Loan SOFR + 5.00 % (Q) 8.65 % 9/9/2025 8/6/2030 3,490 3,444 3,446 -- two printed lines with these cells, 2026-06-30"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "vgaf; scratch/fund_runs/0001784700/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001784700-X02-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001784700"
+   ],
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "reason_key": "x02-rate-columns-printed-n-a",
+   "statement": "The flagged rows are undrawn revolvers and delayed draws whose reference-rate and rate columns print 'N/A' (or a dash line with no rate); every flagged row in these quarters was read on the page (x02_scan.py: all 'N/A'; six by hand). The filer tags no rate or spread on them. Nothing is printed that the build does not publish.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125262",
+     "verbatim": "3G Intermediate, Inc. Delayed Draw Term Loan N/A 9/30/2030 $ - $ ( 27 ) $ ( 13 )",
+     "quote": "3G Intermediate, Inc. Delayed Draw Term Loan N/A 9/30/2030 $ - $ ( 27 ) $ ( 13 ) -- undrawn line, N/A in the rate columns"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-043295",
+     "verbatim": "3G Intermediate, Inc. Delayed Draw Term Loan N/A 9/30/2024 9/30/2030 - ( 26 ) ( 13 )",
+     "quote": "3G Intermediate, Inc. Delayed Draw Term Loan N/A 9/30/2024 9/30/2030 - ( 26 ) ( 13 ) -- undrawn line, N/A in the rate columns"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-106434",
+     "verbatim": "ACP Oak Buyer, Inc. Revolver N/A 6/12/2025 5/16/2031 $ - $ ( 19 ) $ ( 7 )",
+     "quote": "ACP Oak Buyer, Inc. Revolver N/A 6/12/2025 5/16/2031 $ - $ ( 19 ) $ ( 7 ) -- undrawn line, N/A in the rate columns"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-114266",
+     "verbatim": "360 Partners, LLC Revolver N/A 8/7/2025 8/7/2031 $ - $( 24 ) $( 13 )",
+     "quote": "360 Partners, LLC Revolver N/A 8/7/2025 8/7/2031 $ - $( 24 ) $( 13 ) -- undrawn line, N/A in the rate columns"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-114266",
+     "verbatim": "M&D MidCo, Inc. Term Loan SOFR + 6.00 % (Q) 8/31/2022 8/31/2028 63 63 63",
+     "quote": "M&D MidCo, Inc. Term Loan SOFR + 6.00 % (Q) 8/31/2022 8/31/2028 63 63 63 -- the 2025-12-31 verdict's row"
+    }
+   ],
+   "addresses_verdict": {
+    "2025-12-31": "The earlier verdict cited M&D MidCo's 63 term loan (printed 'SOFR + 6.00 %' with a blank rate) as missing its spread; in vgaf that row publishes basis_spread 6.0 and SOFR and is no longer flagged. The 65 rows still flagged print N/A."
+   },
+   "rerun": "vgaf; scratch/fund_runs/0001784700/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001784700-C107-3",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0001784700"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "reason_key": "c107-negative-cost-undrawn",
+   "statement": "The seven flagged rows are undrawn lines printed with a dash par and a cost in brackets (KL Bronco ( 15 ), Krayden ( 11 ) x3, BRG, Boulder, OIS); published cost and fair value equal the printed figures.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041717",
+     "verbatim": "KL Bronco Acquisition, Inc. Personal Products Delayed Draw Term Loan N/A 0.00 % 06/30/28 - ( 15 ) ( 80 )",
+     "quote": "KL Bronco Acquisition, Inc. Personal Products Delayed Draw Term Loan N/A 0.00 % 06/30/28 - ( 15 ) ( 80 ) -- negative cost printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041717",
+     "verbatim": "Krayden Holdings, Inc. Trading Companies & Distributors Revolver N/A 0.00 % 03/01/29 - ( 11 ) ( 6 )",
+     "quote": "Krayden Holdings, Inc. Trading Companies & Distributors Revolver N/A 0.00 % 03/01/29 - ( 11 ) ( 6 ) -- negative cost printed"
+    }
+   ],
+   "addresses_verdict": {
+    "2023-06-30": "The earlier verdict (column_remap) cited Accupac's delayed draw, printed '- - ( 15 )', as carrying a negative cost; in vgaf Accupac publishes no cost (blank, as the dash) and fair value -15,000, and neither Accupac nor Techmer is flagged. The rows flagged now print the negative cost themselves."
+   },
+   "rerun": "vgaf; scratch/fund_runs/0001784700/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001784700-X07-4",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X07",
+   "ciks": [
+    "0001784700"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "x07-fair-value-above-cost-on-a-small-draw",
+   "statement": "Allergy & Clinical MidCo's delayed draw prints par 88, cost 7 and fair value 85 thousand; the published figures are the printed ones.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344075",
+     "verbatim": "Allergy & Clinical MidCo, LLC Delayed Draw Term Loan SOFR + 4.75 % (S) 8.37 % 1/29/2025 1/29/2031 88 7 85",
+     "quote": "Allergy & Clinical MidCo, LLC Delayed Draw Term Loan SOFR + 4.75 % (S) 8.37 % 1/29/2025 1/29/2031 88 7 85 -- cost 7, fair value 85"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "vgaf; scratch/fund_runs/0001784700/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001784700-F28-5",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001784700"
+   ],
+   "quarters": [
+    "2026-08-11"
+   ],
+   "reason_key": "f28-cover-page-unit-count-date-not-a-quarter",
+   "statement": "The fund-level row dated 2026-08-11 holds only the share count from the cover page of the 10-Q for 2026-06-30; it is not a reporting period, so no schedule exists for it.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344075",
+     "verbatim": "As of August 11, 2026, the registrant had 41,538,726 sha res of common stock",
+     "quote": "As of August 11, 2026, the registrant had 41,538,726 sha res of common stock -- cover-page count"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "vgaf; scratch/fund_runs/0001784700/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001784700-A01-6",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "ciks": [
+    "0001784700"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "a01-printed-subtotals-equal-published-rows",
+   "statement": "The printed industry subtotals equal the published rows under them: Electronic Equipment, Instruments & Components 2023-12-31 13,510 (BC Group 795 + 6,516, Wildcat 189 + 1,894 + 535 + 3,581); Textiles, Apparel & Luxury Goods 2025-03-31 7,378 (874 + 0 + 6,504). The check compares other figures (19,414 / 23,999 and 7,396, the comparative 2024-12-31 subtotal).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035857",
+     "verbatim": "Wildcat Buyerco, Inc. Term Loan SOFR + 5.75 % (Q) 11.10 % 02/26/27 3,590 3,590 3,581 (1)(6) 13,579 13,510",
+     "quote": "Wildcat Buyerco, Inc. Term Loan SOFR + 5.75 % (Q) 11.10 % 02/26/27 3,590 3,590 3,581 (1)(6) 13,579 13,510 -- subtotal 13,510"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071178",
+     "verbatim": "BPCP NSA Intermedco, Inc. Term Loan SOFR + 4.75 % (Q) 9.05 % 5/17/2024 5/17/2030 6,503 6,417 6,504 (1)(6) 7,260 7,378",
+     "quote": "BPCP NSA Intermedco, Inc. Term Loan SOFR + 4.75 % (Q) 9.05 % 5/17/2024 5/17/2030 6,503 6,417 6,504 (1)(6) 7,260 7,378 -- subtotal 7,378"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "vgaf; scratch/fund_runs/0001784700/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001784700-derivative_role_notional_contradiction-9",
+   "class": "false_alarm",
+   "engine": "derivative_role",
+   "rule_name": "derivative_role_notional_contradiction",
+   "ciks": [
+    "0001784700"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "reason_key": "derivative-swap-notional-hedges-unsecured-notes",
+   "statement": "The two swaps (25,000 each, 50,000 in all) hedge the fund's 2026 and 2028 unsecured notes, printed at 425,019 on the balance sheet; the check compared the notional with the revolver only (31,600). Mechanism: the derivative step runs before the financials stage applies the highlights wrapper's borrowings (revolver + notes), so it read the uncorrected revolver-only figure (observation derivative-check-runs-before-borrowings-correction). Total debt 456,619 exceeds the notional.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-272093",
+     "verbatim": "Interest rate swap 2026 Notes 8.10 % USD-SOFR-Compound + 4.226% CIBC Bank USA 12/21/2026 $ 25,000 $ 61 $ - $ 61 (7) Interest rate swap 2028 Notes 8.20 % USD-SOFR-Compound + 4.595% CIBC Bank USA 12/21/2028 25,000 106 - 106 (7) Total $ 50,000 $ 167",
+     "quote": "Interest rate swap 2026 Notes 8.10 % USD-SOFR-Compound + 4.226% CIBC Bank USA 12/21/2026 $ 25,000 $ 61 $ - $ 61 (7) Interest rate swap 2028 Notes 8.20 % USD-SOFR-Compound + 4.595% CIBC Bank USA 12/21/2028 25,000 106 - 106 (7) Total $ 50,000 $ 167 -- swaps on the 2026 / 2028 notes"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-272093",
+     "verbatim": "Revolving credit facility payable (Note 6) $ 31,600 $ 50,000 Notes payable (net of debt issuance costs of $ 2,633 , and $ 2,870 , respectively) (Note 6) 425,019 424,009",
+     "quote": "Revolving credit facility payable (Note 6) $ 31,600 $ 50,000 Notes payable (net of debt issuance costs of $ 2,633 , and $ 2,870 , respectively) (Note 6) 425,019 424,009 -- notes 425,019, revolver 31,600"
+    }
+   ],
+   "addresses_verdict": {},
+   "rerun": "vgaf; scratch/fund_runs/0001784700/notes.md",
+   "decided_by": "PROPOSED by fund agent; not accepted",
+   "decided_on": "2026-10-19"
+  }
+ ]
+}

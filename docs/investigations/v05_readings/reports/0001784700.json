@@ -1,0 +1,2667 @@
+{
+ "cik": "0001784700",
+ "label": "vgaf",
+ "before": "sponfb",
+ "investigator_id": "fund-agent-varagon-2026-10-19",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 199,
+   "why": "new hierarchy issuer pattern (industry labels with commas, 'Company X, Industry Y' order, no 'Industry' word, 'Type of Revolver', 'on-Controlled' typo, ',Type', 'LLCRevolver'); 16 members naming another company corrected from the printed line; Royal Holdco and 360 Partners by correction"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 49,
+   "why": "instrument pattern accepts 'Type of <instrument>' without 'Investment'; 30 rows whose member names another instrument than the printed line with the row's values; 4 with member fragments (US Health, Boulder, RBS, BRG); National Safety Apparel 2025-12-31 two swapped labels; HLSG, Krayden, Concord, A&R by correction"
+  },
+  {
+   "column": "fair_value",
+   "rows": 9,
+   "why": "facts tagged at decimals 0 with the printed thousands figure, read at thousands (thousands_scale_filings)"
+  },
+  {
+   "column": "cost",
+   "rows": 11,
+   "why": "as fair_value (thousands_scale_filings); RFI Buyer revolver 2026-03-31 cost tagged -9,000, printed 9 (unbracketed)"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 11,
+   "why": "follows cost"
+  },
+  {
+   "column": "shares_held",
+   "rows": 32,
+   "why": "equity unit counts tagged only as principal in 2023 Q1-Q3 (printed units); M&D, Chimney Rock, Techmer counts from the page"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 621,
+   "why": "2023-03-31, 2023-09-30, 2023-12-31 par tagged at decimals 0 in thousands (549 loans x1000) and single rows later; equity unit counts withdrawn from principal; SDLP certificates par withdrawn (2 rows)"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 621,
+   "why": "follows principal_amount (all USD)"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 361,
+   "why": "owner convention D-031: printed 'REF + A % ( B % PIK)' published as total margin A + B (391 rows confirmed on the page); Krayden revolver spread from member text withdrawn"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 7,
+   "why": "printed PIK figure where the tag differs (Polk 1.75, Oliver 2025-12-31 1.00 x3); Premier Imaging default interest is not PIK (3)"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 24,
+   "why": "rows whose printed rate is the cash coupon only (rate kind cash, all-in = printed cash coupon + PIK; 21 rows, q_cashkind.sql: all-in - reported - PIK = 0 on each); Oliver 2025-12-31 term loans 9.82 (corrected all-in, rate kind left all_in so the PIK is not added twice); LAV 2025-03-31 10.00"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 2,
+   "why": "Oliver Packaging 2025-12-31 term loans corrected to 9.82 (printed 8.82 cash + printed 1.00 PIK)"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 22,
+   "why": "cash on the 21 cash-coupon rows and LAV 2025-03-31"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 29,
+   "why": "follows interest_rate / kind / pik"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 3,
+   "why": "Royal Holdco 2023-03-31 and Walnut 2023-06-30 SOFR as printed (member text LIBOR); Krayden revolver withdrawn"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 5,
+   "why": "VG Target and LAV SOFR rows 2025-09-30 Floating as printed; LAV 2025-03-31 Fixed (10 % PIK coupon); Krayden revolver withdrawn"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 664,
+   "why": "industry read from the member text where none was published (707 rows, mostly 2023); SDLP 2023 'Investment Funds and Vehicles'; Boulder 2023-03-31 Chemicals"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 510,
+   "why": "follows extracted_industry and the renamed issuers"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 472,
+   "why": "follows gics_sub_industry"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 9,
+   "why": "follows the rescaled fair values"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 22,
+   "why": "rate events follow the rate-kind corrections"
+  },
+  {
+   "column": "src_facts",
+   "rows": 673,
+   "why": "decimals_rescale:10^3 recorded on the rescaled facts"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 452,
+   "why": "context-keyed row corrections (590 in row_corrections_by_context.csv for this fund)"
+  },
+  {
+   "column": "position_key",
+   "rows": 87,
+   "why": "follows issuer and instrument text"
+  },
+  {
+   "column": "position_id",
+   "rows": 641,
+   "why": "follows issuer and instrument text and the restored twin rows"
+  }
+ ],
+ "rows_added": 611,
+ "rows_removed": 43,
+ "fixes": [
+  {
+   "what": "Facts tagged at decimals 0 with the printed thousands figure read as thousands: every current-period loan par of the 10-Qs 2023-03-31 and 2023-09-30 and the 10-K 2023-12-31 (549 loans published at 1/1000), and single rows later (Del Real, North Haven, Beacon, Eye Health 2023; EIS, Graffiti, Oliver 2024-06-30; Horizon 2025-06-30; money-market par 2025-09-30; Cold Spring 2025-12-31; JTM, Alert SRC 2026). Wrapper source_encodings.thousands_scale_filings (9 accessions).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-021632",
+     "text": "A&R Logistics Holdings, Inc. Road & Rail Term Loan SOFR + 5.50 % (Q) 10.24 % 05/03/25 5,010 $ 4,973 $ 4,872"
+    },
+    {
+     "accession": "0000950170-23-021632",
+     "text": "Del Real, LLC Food Products Term Loan SOFR + 7.00 % (M) 13.53 % ( 1.50 % PIK) 03/28/28 3,504 3,451 3,478"
+    },
+    {
+     "accession": "0001193125-26-344075",
+     "text": "(dollar amounts in thousands, except Shares/Units)"
+    }
+   ]
+  },
+  {
+   "what": "Twin printed lines (same issuer, instrument and figures, separate contexts) were folded as affiliation duplicates (225 source rows, 0.06M to 6.4M a quarter). Wrapper staging.distinct_member_suffix_re (member tail from 'Type of'); the three promoted row_add rules that re-added some of them with no issuer or context moved to agent_investigate_rules/_pulled_1784700_fundloop_2026-10-19/. Totals tie in 14 of 14 quarters (3 of 14 before).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 8.90 % 9/9/2025 8/6/2030 3,498 3,451 3,455 (1)(6) NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 8.92 % 9/9/2025 8/6/2030 3,498 3,451 3,455"
+    }
+   ]
+  },
+  {
+   "what": "Issuer and instrument patterns rewritten (dry run on 4,559 identifiers: 0 without issuer, 1 without instrument, corrected); issuer_name_strip_re; industry_from_identifier_re fills the 707 rows that had no industry.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-125262",
+     "text": "Wildcat Buyerco, Inc. Term Loan SOFR + 5.75 % (M) 10.60 % 6/30/2028 3,562 3,562 3,562"
+    },
+    {
+     "accession": "0000950170-23-021632",
+     "text": "BRG Group Holdings, LLC Health Care Technology Class A Units 500,000 $ 500 $ 500"
+    }
+   ]
+  },
+  {
+   "what": "Fund level (new highlights wrapper): InvestmentIncomeNet is the printed total investment income and was published as net investment income in every quarter; read as total income, OperatingExpenses as total expenses, NII from InvestmentIncomeOperatingAfterExpenseAndTax; the filer's per-share and incentive-fee concepts suppressed. Borrowings = revolver + notes payable as printed, 2023-12-31 to 2026-06-30 (revolver only before; F26 x5).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-12-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Total investment income 20,906 22,890"
+    },
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Net investment income (loss) 10,120 10,896"
+    },
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Revolving credit facility payable (Note 6) $ 43,100 $ 67,100 Notes payable (net of debt issuance costs of $ 2,474 , and $ 2,553 , respectively) (Note 6) 424,958 425,112"
+    }
+   ]
+  },
+  {
+   "what": "PIK margins (owner convention D-031): the page prints 'REF + A % ( B % PIK)' with A the cash margin (filed all-in rate = reference + A + B); basis_spread published as A + B on 391 rows read from their printed lines (pik_scan.py), pik_rate corrected where the tag differs (Polk 1.75, Oliver 1.00); rows printed as fixed coupons left without a spread.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Walnut Parent, Inc. Term Loan SOFR + 2.88 % ( 3.38 % PIK) (Q) 9.94 % 6/2/2022 11/9/2029 $ 9,314 $ 9,297 $ 8,755"
+    },
+    {
+     "accession": "0000950170-23-021632",
+     "text": "Polk Acquisition Corp. Distributors Term Loan SOFR + 5.25 % (M) 11.91 % ( 1.75 % PIK) 12/20/24 10,593 10,520 10,116"
+    },
+    {
+     "accession": "0001193125-26-114266",
+     "text": "Oliver Packaging, LLC Term Loan SOFR + 5.00 % (1.00% PIK) (Q) 8.82 % 7/6/2022 7/6/2028 3,936 3,900 3,267"
+    }
+   ]
+  },
+  {
+   "what": "Rate kind cash on 23 PIK rows whose printed rate is the cash coupon only (reference + A), mostly the 10-K 2025-12-31; Premier Imaging '(2.00 % Default)' tagged as PIK withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-114266",
+     "text": "Arrowhead Holdco Company Term Loan SOFR + 2.50 % ( 2.75 % PIK) (Q) 6.34 % 6/2/2022 8/31/2028 1,122 1,114 898"
+    },
+    {
+     "accession": "0000950170-24-094111",
+     "text": "Premier Imaging, LLC Term Loan SOFR + 6.00 % ( 2.00 % Default) (Q) 13.60 % 1/2/2025 3,679 3,667 3,347"
+    }
+   ]
+  },
+  {
+   "what": "Members naming another company (16 rows) or another instrument (30 + 4 + 2 rows) corrected to the printed line that carries the row's values; reference rate SOFR for Royal Holdco and Walnut (member text LIBOR); Krayden 2023-06-30 revolver context with term-loan member text.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-06-30",
+    "2025-03-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-041717",
+     "text": "North Haven USHC Acquisition, Inc. Diversified Consumer Services Delayed Draw Term Loan SOFR + 6.50 % (S) 11.46 % 10/30/25 706 706 686"
+    },
+    {
+     "accession": "0000950170-24-094111",
+     "text": "Graffiti Buyer, Inc. Term Loan SOFR + 5.50 % (Q) 10.92 % 8/10/2027 1,732 1,708 1,732"
+    },
+    {
+     "accession": "0000950170-23-021632",
+     "text": "Royal Holdco Corporation Construction & Engineering Term Loan SOFR + 4.50 % (Q) 9.50 % 12/30/26 687 667 673"
+    },
+    {
+     "accession": "0000950170-23-041717",
+     "text": "Krayden Holdings, Inc. Trading Companies & Distributors Revolver N/A 0.00 % 03/01/29 - ( 11 ) ( 6 )"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts: 2023 Q1-Q3 equity units tagged only as principal (BRG 500,000 ...) published as units, principal withdrawn; M&D 5,144, Chimney Rock 125,000, Techmer 348 as printed (tag at another scale / shared power-of-ten normaliser).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-021632",
+     "text": "BRG Group Holdings, LLC Health Care Technology Class A Units 500,000 $ 500 $ 500"
+    },
+    {
+     "accession": "0001193125-26-344075",
+     "text": "M&D Parent Holdings, LLC Class B Units 5,144 518 467"
+    },
+    {
+     "accession": "0001193125-26-344075",
+     "text": "Chimney Rock 3G Co-Invest Equity Co-Invest 125,000 127 119"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "3 ambiguous instrument mislabels (instr_check.py vgaf: North Haven 2023-03-31 1/1/1, Techmer 2023-06-30 1/1/1, RFI Buyer 2024-03-31 58/57/58)",
+   "hypotheses": [
+    "The row's par / cost / fair value cells print on more than one line of the issuer, so no printed line settles which line the context is; the member's own instrument is kept."
+   ]
+  },
+  {
+   "finding": "SDLP subordinated certificates par (printed in the principal column, not published in any quarter)",
+   "hypotheses": [
+    "Tagged only in two filings; the FUND row keeps no principal. Left for the owner (fund-interest par)."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "VGA-R1",
+   "file": "pipeline/source_reconciliation.py (and the oracle rollup reader if it reads facts separately)",
+   "classification": "verification_bug",
+   "what": "Pass thousands=thousands_scale_filing(filing_meta) to _normalize_mixed_decimals_monetary_facts at source_reconciliation.py:1642, as bdc_filings.py:1134-1138 already does for the extractor (whole_dollar is passed in both).",
+   "why": "The fund's filings tag some position facts at decimals 0 with the printed thousands figure; the extractor publishes them x1,000 (= the printed line) with event decimals_rescale:10^3, but reconciliation compares with the unscaled fact and reports SRC_BDC03 / blocking_fair_value_scale_or_unit_candidate on 10 rows in 5 quarters, and A01 2024-06-30 reads the unscaled subtotal 17304.",
+   "quotes": [
+    {
+     "accession": "0000950170-23-021632",
+     "text": "Del Real, LLC Food Products Term Loan SOFR + 7.00 % (M) 13.53 % ( 1.50 % PIK) 03/28/28 3,504 3,451 3,478"
+    },
+    {
+     "accession": "0000950170-24-094111",
+     "text": "EIS Legacy, LLC Term Loan SOFR + 6.00 % (Q) 11.43 % 11/1/2027 3,793 3,720 3,793"
+    },
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Alert SRC Newco LLC Revolver SOFR + 5.00 % (M) 8.68 % 12/11/2024 12/11/2030 121 188 121"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0000950170-23-021632",
+     "text": "Del Real, LLC Food Products Term Loan SOFR + 7.00 % (M) 13.53 % ( 1.50 % PIK) 03/28/28 3,504 3,451 3,478"
+    },
+    {
+     "accession": "0000950170-24-094111",
+     "text": "EIS Legacy, LLC Term Loan SOFR + 6.00 % (Q) 11.43 % 11/1/2027 3,793 3,720 3,793"
+    },
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Alert SRC Newco LLC Revolver SOFR + 5.00 % (M) 8.68 % 12/11/2024 12/11/2030 121 188 121"
+    },
+    {
+     "accession": "0000950170-24-094111",
+     "text": "Wildcat Buyerco, Inc. Term Loan SOFR + 5.75 % (Q) 11.08 % 2/26/2027 3,572 3,572 3,572 (1)(6) 17,229 17,304"
+    }
+   ],
+   "next_action": "Orchestrator: make the change with a test (a listed filing's decimals-0 fact equal to the printed thousands passes; the same fact in an unlisted filing still mismatches), re-run vgaf from the validate stage, re-gate.",
+   "resolution": "implemented by the orchestrator, 2026-10-19 (verification bug): source_reconciliation passes thousands_scale_filing; the source-facts cache re-extracts listed filings. In the vgaf re-run SRC_BDC03 x5, blocking_fair_value_scale_or_unit_candidate x5 and A01 2024-06-30 no longer fire.",
+   "authority": "orchestrator"
+  },
+  {
+   "request_id": "VGA-R2",
+   "file": "data/overrides/agent_anchor/1784700/2026-03-31.json",
+   "classification": "verification_bug",
+   "what": "Re-base the promoted anchor to the published-rows basis (825,525 + money market 15,531 = 841,056 printed 'Total Investments and Cash Equivalents') or pull it: companyfacts gives the same 825,525 and the engine's fund_financials_plus_cash anchor covers the cash row.",
+   "why": "The anchor's basis is investments_ex_cash and it outranks the published-rows anchors, so fv_conservation compares published rows including the money-market cash row with the ex-cash figure (residual 1.88 pct = 15,531). Other quarters with the same cash row pass.",
+   "quotes": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Total Investments, March 31, 2026 $ 858,951 $ 825,525 220.04 % Cash Equivalents: State Street Institutional U.S. Government Money Market Fund 7-Day Yield 3.60 % $ 15,531 $ 15,531 $ 15,531"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Total Investments, March 31, 2026 $ 858,951 $ 825,525 220.04 % Cash Equivalents: State Street Institutional U.S. Government Money Market Fund 7-Day Yield 3.60 % $ 15,531 $ 15,531 $ 15,531"
+    }
+   ],
+   "next_action": "Orchestrator: re-base or pull the anchor, re-run vgaf from the shadow stage, re-gate.",
+   "resolution": "implemented by the orchestrator, 2026-10-19 (verification bug): the 2026-03-31 anchor was pulled to data/overrides/agent_anchor/1784700/_pulled_ex_cash_basis_against_published_cash_row_2026-10-19/; the automatic anchor gives the printed 841,056. fv_conservation 2026-03-31 no longer fires.",
+   "authority": "orchestrator"
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "principal-tag-omits-thousand-scale",
+   "what": "Every current-period loan par of the 10-Qs 2023-03-31, 2023-09-30 and the 10-K 2023-12-31 was published at 1/1000 (549 rows, e.g. A&R Logistics 5,010 instead of 5,010,000). No ledger rule fired and the reading report did not see it; found by a par / fair value ratio query. Fixed with thousands_scale_filings.",
+   "field": "principal_amount",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 1840.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Per fund-quarter, flag when more than 10 pct of funded loans have principal below 1 pct of fair value.",
+   "quote": {
+    "accession": "0000950170-23-021632",
+    "text": "A&R Logistics Holdings, Inc. Road & Rail Term Loan SOFR + 5.50 % (Q) 10.24 % 05/03/25 5,010 $ 4,973 $ 4,872"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "X06 tests par above 10x fair value only; nothing tests the reverse, so 549 rows passed every rule.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "what": "Twin printed lines folded as affiliation duplicates in every quarter (225 source rows, 3 to 28 a quarter); three quarter-pinned row_add rules re-added some of them without issuer or context.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 28.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "For each excluded_affiliation_dedup source row, compare the member text after 'Type of' with the kept row's; a difference means a separate printed line.",
+   "quote": {
+    "accession": "0001193125-26-219643",
+    "text": "NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 8.90 % 9/9/2025 8/6/2030 3,498 3,451 3,455 (1)(6) NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 8.92 % 9/9/2025 8/6/2030 3,498 3,451 3,455"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "fv_conservation saw only the five quarters outside its band; no rule looks at the dropped rows themselves.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "spread-tag-is-cash-leg-of-printed-total-margin",
+   "what": "On every PIK loan the page prints 'REF + A % ( B % PIK)' and the spread tag holds A only (391 rows); the owner convention D-031 wants A + B. Fixed by context corrections from each printed line; they do not carry to a new quarter. printed_margin_reading cannot express it (its parser reads 'A% (B% PIK)' as a total A).",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 560.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Where the printed row reads 'A % ( B % PIK)' and pik_rate = B, basis_spread must equal A + B.",
+   "quote": {
+    "accession": "0001193125-26-219643",
+    "text": "Walnut Parent, Inc. Term Loan SOFR + 2.88 % ( 3.38 % PIK) (Q) 9.94 % 6/2/2022 11/9/2029 $ 9,314 $ 9,297 $ 8,755"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the printed margin pair with the published spread; pik_printed checks only B.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "Issuer names kept member fragments (industry labels with commas, 'Company X, Industry Y' order, whole members): about 200 rows; 16 more members named another company than the printed line with the row's values.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 180.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (page rule).",
+   "quote": {
+    "accession": "0000950170-23-041717",
+    "text": "North Haven USHC Acquisition, Inc. Diversified Consumer Services Delayed Draw Term Loan SOFR + 6.50 % (S) 11.46 % 10/30/25 706 706 686"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired in 14 quarters of the untouched build vgaa on these rows.",
+    "reference": "identity/issuer_name_printed"
+   }
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "what": "Rows whose member names another instrument than the printed line carrying the row's values (e.g. Graffiti 2024-06-30 member 'Delayed Draw Term Loan', printed Term Loan 1,732 / 1,708 / 1,732): 30 fixed, plus National Safety Apparel 2025-12-31 (the filer swapped the words of its 6,454 term loan and 2,273 delayed draw). The first check (instr_check.py) matched across printed lines and gave 4 wrong corrections (Titan 2024-09-30, Accupac 2023-12-31 and 2024-03-31, Turbo 2023-12-31), found by the review and reverted; it also missed names with '(fka ...)'. instr_check2.py anchors on the full issuer name and stops at a footnote marker; on vgaf it reports only ambiguous 1-2 thousand rows.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 120.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Match each funded row to the printed line with its issuer and par / cost / fair value cells; flag when the printed instrument differs (instr_check.py).",
+   "quote": {
+    "accession": "0000950170-24-094111",
+    "text": "Graffiti Buyer, Inc. Term Loan SOFR + 5.50 % (Q) 10.92 % 8/10/2027 1,732 1,708 1,732"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule reads the printed instrument; issuer_name_printed compares names only. The proposed check must anchor on the whole issuer and one printed row (the cross-line defect of instr_check.py).",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "derivative-check-runs-before-borrowings-correction",
+   "what": "derivative_role_notional_contradiction 2025-09-30 compared the swaps' 50,000 notional with borrowings 31.6M (revolver only): the derivative step runs before the financials stage applies the highlights wrapper's borrowings (456.6M = revolver 31,600 + notes 425,019), so it read the uncorrected figure. The finding stays (proposal derivative-swap-notional-hedges-unsecured-notes).",
+   "field": "borrowings",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.17,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Run the derivative role check after fund financials (or read corrected borrowings); test: a swap below revolver + notes passes.",
+   "quote": {
+    "accession": "0001193125-25-272093",
+    "text": "Revolving credit facility payable (Note 6) $ 31,600 $ 50,000 Notes payable (net of debt issuance costs of $ 2,633 , and $ 2,870 , respectively) (Note 6) 425,019 424,009"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The check read a stale input; ordering it after financials, with a test that a wrapper-corrected borrowings figure is used, would remove this false positive without hiding a real excess notional.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "net-investment-income-is-pre-tax-figure",
+   "what": "NII 2023-09-30 published 11,224 = 'Net investment income before taxes'; the page prints 'Net investment income (loss) 11,222' after 2 of excise tax (tagged InvestmentIncomeOperatingAfterExpenseAndTax 11,222,000; NetInvestmentIncome 11,224,000 is the pre-tax line). Not fixed: the fund-income and financials stages were not part of the allowed re-run from rebuild.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Where both NetInvestmentIncome and InvestmentIncomeOperatingAfterExpenseAndTax are filed and differ, prefer the after-tax figure (the printed NII line).",
+   "quote": {
+    "accession": "0000950170-23-063476",
+    "text": "Net investment income before taxes 11,224 8,625 31,614 10,934 Excise tax expense 2 - 2 - Net investment income (loss) 11,222"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the two NII concepts; a fund-level check that NII equals the after-tax concept when both are filed would catch it (2 thousand here).",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "what": "net_investment_income held InvestmentIncomeNet (the printed total) in every quarter; total_investment_income was blank. Fixed by the highlights wrapper.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a fund-quarter where total_investment_income is blank and net_investment_income exceeds 80 pct of the printed total-income line, or NII > total expenses x 1.5 with no TII.",
+   "quote": {
+    "accession": "0001193125-26-219643",
+    "text": "Total investment income 20,906 22,890"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired in vgaa (F26 fired on borrowings, not on income).",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "borrowings-exclude-securitization-and-notes",
+   "what": "Borrowings held the revolver only; the notes payable (49.6M from 2023-12-31, 424M from 2024-12-31) were left out. Fixed by figure corrections (revolver + notes as printed).",
+   "field": "borrowings",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "F26.",
+   "quote": {
+    "accession": "0001193125-26-219643",
+    "text": "Revolving credit facility payable (Note 6) $ 43,100 $ 67,100 Notes payable (net of debt issuance costs of $ 2,474 , and $ 2,553 , respectively) (Note 6) 424,958 425,112"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "F26 fired 2024-12-31 to 2026-06-30 in vgaa.",
+    "reference": "fund_financials/F26"
+   }
+  },
+  {
+   "observation_key": "equity-units-tagged-as-principal",
+   "what": "2023 Q1-Q3 equity unit counts were tagged with the principal concept and no share concept; units unpublished.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "fair_value_m": 3.9,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "C04.",
+   "quote": {
+    "accession": "0000950170-23-021632",
+    "text": "BRG Group Holdings, LLC Health Care Technology Class A Units 500,000 $ 500 $ 500"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "C04 fired 2023-03-31 to 2023-09-30 in vgaa (verdict cites these rows).",
+    "reference": "oracle/C04"
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "M&D Parent 5,144 units published 500,000 or 5,144,000 and Chimney Rock 125,000 published 1,250 (shared power-of-ten normaliser on a tag at another scale).",
+   "field": "shares_held",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.6,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Compare the published count with the printed Shares/Units cell (units_check.py).",
+   "quote": {
+    "accession": "0001193125-26-344075",
+    "text": "Chimney Rock 3G Co-Invest Equity Co-Invest 125,000 127 119"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "units_printed fired only on M&D 2025-09-30; the other 8 rows passed.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Reference rate LIBOR from member text where the page prints SOFR (Royal 2023-03-31, Walnut 2023-06-30); Krayden 2023-06-30 revolver context carried a term-loan member with 'SOFR+6.00%' and published that spread.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "fair_value_m": 9.8,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Where reference_rate_source is identifier_text, compare the code with the printed row (libor_check.py).",
+   "quote": {
+    "accession": "0000950170-23-021632",
+    "text": "Royal Holdco Corporation Construction & Engineering Term Loan SOFR + 4.50 % (Q) 9.50 % 12/30/26 687 667 673"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "X05 fired on Krayden only after the fix; nothing fired before.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "pik-coupon-tagged-as-cash-or-plain-rate",
+   "what": "On 23 PIK rows (mostly the 10-K 2025-12-31) the printed rate is the cash coupon only (reference + cash margin) while the fund's reading is all_in; corrected to rate kind cash.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 25.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a PIK row where rate - spread - pik is far below the quarter's reference level and rate - spread matches it.",
+   "quote": {
+    "accession": "0001193125-26-114266",
+    "text": "Arrowhead Holdco Company Term Loan SOFR + 2.50 % ( 2.75 % PIK) (Q) 6.34 % 6/2/2022 8/31/2028 1,122 1,114 898"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows: the fund-level all_in reading hid a per-row cash coupon that only a comparison with the quarter's reference level shows.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "default-interest-tagged-as-pik",
+   "what": "Premier Imaging 2024-06-30 prints '( 2.00 % Default)'; the filer tagged 2.00 as a PIK rate.",
+   "field": "pik_rate",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 10.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag pik_rate where the printed row shows the figure followed by 'Default'.",
+   "quote": {
+    "accession": "0000950170-24-094111",
+    "text": "Premier Imaging, LLC Term Loan SOFR + 6.00 % ( 2.00 % Default) (Q) 13.60 % 1/2/2025 3,679 3,667 3,347"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed looks only for 'PIK' figures and did not fire; no rule reads a printed 'Default' figure against pik_rate.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "pik-rule-misreads-leading-point-decimal",
+   "what": "The pik_printed rule's figure pattern reads '( .50 % PIK)' as 50 and reports a mismatch (6 rows, 3 quarters); published 0.5 equals the page. Fixed by the orchestrator (also in units_printed); no longer fires in vgaf.",
+   "field": "pik_rate",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 4.9,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "In pipeline/candidate_rules.py _PIK_PERCENT accept a leading point: ([0-9]*\\.?[0-9]+)\\s*%.",
+   "quote": {
+    "accession": "0000950170-24-125262",
+    "text": "Oliver Packaging, LLC Term Loan SOFR + 5.00 % ( .50 % PIK) (Q) 10.25 % 9/1/2028 3,945 3,898 3,906"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The defect is in the detector itself; the proposal is the regex change with a test for '.50 % PIK'.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "filer-printed-spread-and-rate-swapped",
+   "what": "Oliver Packaging revolver 2024-06-30 prints 'SOFR + 10.49 % (Q) 5.00 %' (cells swapped against its siblings at 5.00 / 10.48) and is tagged so; published as printed (spread 10.49, rate 5.00).",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 0.4,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Flag a floating loan whose spread exceeds its all-in rate.",
+   "quote": {
+    "accession": "0000950170-24-094111",
+    "text": "Oliver Packaging, LLC Revolver SOFR + 10.49 % (Q) 5.00 % 7/6/2028 408 403 393"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Left as printed: the page and the tags agree; a correction would contradict both.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "instrument-text-keeps-member-words",
+   "what": "Four rows keep member fragments in the instrument or issuer text: US Health 2024-09-30 'Revolver,Maturity 10/30/2027', Boulder 2025-06-30 'Revolver,Acquisition Date 1/7/2025', BRG 2024-09-30 'Term Loan Delayed Draw' (3.3M), RBS Buyer 2025-12-31 '| Revolver'. Fixed by four context corrections from the printed lines in the vgaf re-run.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-09-30",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 3.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag instrument_description containing a comma, a digit or '|'.",
+   "quote": {
+    "accession": "0000950170-24-125262",
+    "text": "US Health Partners Management, LLC Revolver N/A 10/30/2027"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reads instrument text; the names gate checks issuer shapes only, so member fragments in the instrument pass.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "verification-reader-ignores-thousands-scale-filings",
+   "what": "Source reconciliation and the oracle read the cached facts without the fund's thousands_scale_filings, so every rescaled fair value (10 rows) is reported as a mismatch (SRC_BDC03 x5, blocking x5) and the 2024-06-30 subtotal as A01. VGA-R1 implemented by the orchestrator; none of these fire in the vgaf re-run.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2024-06-30",
+    "2025-06-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 12.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A test that every source_encodings key read by the extractor's fact normaliser is read by the reconciliation reader.",
+   "quote": {
+    "accession": "0000950170-23-021632",
+    "text": "Del Real, LLC Food Products Term Loan SOFR + 7.00 % (M) 13.53 % ( 1.50 % PIK) 03/28/28 3,504 3,451 3,478"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Shared verification gap; the orchestrator owns the reader (VGA-R1).",
+    "reference": ""
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "none: no shared code changed (wrapper, highlights wrapper, row corrections and pulled rules only)"
+ ],
+ "not_done": [
+  "Builds: six (vgaa to vgaf); a seventh start was refused by the build guard (my own owner_queue.py process was running) and did not create a sandbox. After the orchestrator's fixes vgaf was re-run once in place (allowed by the orchestrator) with fund_ledger_trial.py --from rebuild (rebuild, nonaccrual, validate, oracle, provenance, shadow, queue, ledger), then make_batch_dispositions --write and --from ledger; highlights, add-quarter, ixbrl field status and financials were not re-run. scratch/fund_runs/vgaf.log = vgaf.build.log + vgaf.rerun.log verbatim. Field diff against the pre-rerun copy (sandbox vgaf0): instrument_description and corrected_fields on 4 rows only. Round 3 (after the independent review, allowed as the last re-run): copy vgaf1, same stages again (rebuild to ledger, dispositions, --from ledger); vgaf.log = vgaf.round2.log + vgaf.rerun3.log verbatim. Field diff against vgaf1: instrument_description 6 rows (Titan, Accupac x2, Turbo reverted; NSA x2), cost / cost_reported 1 (RFI), interest_rate / interest_rate_kind / interest_rate_cash / src_transforms 2 (Oliver), corrected_fields 9, position_id 6.",
+  "NII 2023-09-30 (pre-tax 11,224 vs printed 11,222) not fixed: financials / fund income were outside the allowed re-run.",
+  "Twin lines with identical cells cannot be tied one-to-one to contexts on the page; rate / maturity of those rows checked against the member text and tags only (row_check.py, 811 ambiguous matches).",
+  "Castleworks Home Services published without the printed 'Company' (5 rows, member reads ', Company Type of').",
+  "LAV Gear 'FIXED + 2.25 %' tranche (2025-09-30 to 2026-03-31) printed FIXED with the SOFR tranches' rate: left without a spread.",
+  "Accupac PIK rows whose rate fits neither all-in nor cash (10.67 with A 3.00, B 6.00) left all_in.",
+  "Pre-2022 quarters not read. Findings cleared is not data correct."
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_5c282bd57e71",
+   "coverage": {
+    "affected_rows": [
+     "0001784700|2023-12-31|A01|instruments components"
+    ],
+    "reviewed_rows": [
+     "0001784700|2023-12-31|A01|instruments components"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-035857",
+     "text": "Wildcat Buyerco, Inc. Term Loan SOFR + 5.75 % (Q) 11.10 % 02/26/27 3,590 3,590 3,581 (1)(6) 13,579 13,510"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published rows missing under the subtotal: rejected, published rows sum to the printed subtotal (13,510; 7,378; 17,304).",
+    "2024-06-30: the subtotal fact is tagged at decimals 0 (17304) in a thousands filing; the oracle reads it unscaled."
+   ],
+   "next_action": "Proposed dispositions a01-printed-subtotals-equal-published-rows / a01-subtotal-tagged-without-thousands-scale; VGA-R1 covers the oracle reader."
+  },
+  {
+   "finding_id": "RVQ_BLK_1c660535cbf2",
+   "coverage": {
+    "affected_rows": [
+     "0001784700|2025-03-31|A01|apparel luxury goods"
+    ],
+    "reviewed_rows": [
+     "0001784700|2025-03-31|A01|apparel luxury goods"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071178",
+     "text": "BPCP NSA Intermedco, Inc. Term Loan SOFR + 4.75 % (Q) 9.05 % 5/17/2024 5/17/2030 6,503 6,417 6,504 (1)(6) 7,260 7,378"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published rows missing under the subtotal: rejected, published rows sum to the printed subtotal (13,510; 7,378; 17,304).",
+    "2024-06-30: the subtotal fact is tagged at decimals 0 (17304) in a thousands filing; the oracle reads it unscaled."
+   ],
+   "next_action": "Proposed dispositions a01-printed-subtotals-equal-published-rows / a01-subtotal-tagged-without-thousands-scale; VGA-R1 covers the oracle reader."
+  },
+  {
+   "finding_id": "RVQ_REV_f5c5cb6cb726",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-041717/C_23656c4e-1791-492e-945a-5a19b92dbb85/ROW-81876ec81bd6a6db",
+     "0000950170-23-041717/C_3c108da5-7115-436f-acc3-a444200d8984/ROW-938f3b108d47c5b1",
+     "0000950170-23-041717/C_d6cfd188-f1af-4c73-97ba-a2a5e5b1663e/ROW-e7b0f1a5f65ec589",
+     "0000950170-23-041717/C_f841cc70-dd61-42f2-82e1-107db990704f/ROW-2ea18714a921a74f",
+     "0000950170-23-041717/C_05744a47-e22b-4af1-947f-c470aae68ad8/ROW-acaee7f945483b49",
+     "0000950170-23-041717/C_88bb6196-dfcc-4a74-8763-bc74722f820e/ROW-ef722c94f3f1ed5e",
+     "0000950170-23-041717/C_8e471ad1-bda0-4b71-8faa-56ae460385d4/ROW-b8843962c17af722"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-041717/C_23656c4e-1791-492e-945a-5a19b92dbb85/ROW-81876ec81bd6a6db",
+     "0000950170-23-041717/C_3c108da5-7115-436f-acc3-a444200d8984/ROW-938f3b108d47c5b1",
+     "0000950170-23-041717/C_d6cfd188-f1af-4c73-97ba-a2a5e5b1663e/ROW-e7b0f1a5f65ec589",
+     "0000950170-23-041717/C_f841cc70-dd61-42f2-82e1-107db990704f/ROW-2ea18714a921a74f",
+     "0000950170-23-041717/C_05744a47-e22b-4af1-947f-c470aae68ad8/ROW-acaee7f945483b49",
+     "0000950170-23-041717/C_88bb6196-dfcc-4a74-8763-bc74722f820e/ROW-ef722c94f3f1ed5e",
+     "0000950170-23-041717/C_8e471ad1-bda0-4b71-8faa-56ae460385d4/ROW-b8843962c17af722"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041717",
+     "text": "KL Bronco Acquisition, Inc. Personal Products Delayed Draw Term Loan N/A 0.00 % 06/30/28 - ( 15 ) ( 80 )"
+    },
+    {
+     "accession": "0000950170-23-041717",
+     "text": "Krayden Holdings, Inc. Trading Companies & Distributors Revolver N/A 0.00 % 03/01/29 - ( 11 ) ( 6 )"
+    },
+    {
+     "accession": "0000950170-23-041717",
+     "text": "Accupac, LLC Personal Products Delayed Draw Term Loan N/A 0.00 % 01/16/26 - - ( 15 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Negative cost is an extraction remap (verdict): rejected, the page prints the cost in brackets on all seven rows.",
+    "Accupac and Techmer (the verdict's rows): Accupac now publishes a blank cost for the printed dash; neither is flagged."
+   ],
+   "next_action": "Proposed disposition c107-negative-cost-undrawn; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_a2572aaa9bf1",
+   "coverage": {
+    "affected_rows": [
+     "0001784700|2026-08-11|F28|fund_financials_without_holdings"
+    ],
+    "reviewed_rows": [
+     "0001784700|2026-08-11|F28|fund_financials_without_holdings"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344075",
+     "text": "As of August 11, 2026, the registrant had 41,538,726 sha res of common stock"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A missing quarter of holdings: rejected, 2026-08-11 is the cover-page share-count date of the 2026-06-30 10-Q."
+   ],
+   "next_action": "Proposed disposition f28-cover-page-unit-count-date-not-a-quarter."
+  },
+  {
+   "finding_id": "RVQ_REV_11f080c6c7a7",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-021632/C_e88f9962-b269-4d6c-96b3-8bc1ea3c5dd0/ROW-bac5f63a53427da3",
+     "0000950170-23-021632/C_d6b1aee9-6133-41e8-8397-f0df5a74cc08/ROW-ffe0f46dccffe739",
+     "0000950170-23-021632/C_fd75769f-c266-4aed-8677-1b3b56ab8529/ROW-099d282955968750",
+     "0000950170-23-021632/C_7f73a514-c995-4c51-8358-55dd1221c1fb/ROW-f163454325018497",
+     "0000950170-23-021632/C_b6cd206f-e625-4f69-95ce-55a33a52d8b7/ROW-5a61145e52d9d3b4",
+     "0000950170-23-021632/C_e8b4d9d1-24a6-4130-8b16-0adca7f2d2d3/ROW-e8e22093a782193f"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-021632/C_e88f9962-b269-4d6c-96b3-8bc1ea3c5dd0/ROW-bac5f63a53427da3",
+     "0000950170-23-021632/C_d6b1aee9-6133-41e8-8397-f0df5a74cc08/ROW-ffe0f46dccffe739",
+     "0000950170-23-021632/C_fd75769f-c266-4aed-8677-1b3b56ab8529/ROW-099d282955968750",
+     "0000950170-23-021632/C_7f73a514-c995-4c51-8358-55dd1221c1fb/ROW-f163454325018497",
+     "0000950170-23-021632/C_b6cd206f-e625-4f69-95ce-55a33a52d8b7/ROW-5a61145e52d9d3b4",
+     "0000950170-23-021632/C_e8b4d9d1-24a6-4130-8b16-0adca7f2d2d3/ROW-e8e22093a782193f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-021632",
+     "text": "KL Bronco Acquisition, Inc. Personal Products Revolver SOFR + 5.25 % (Q) 10.04 % 06/30/28 71 69 66"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_8c612911ee89",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-041717/C_1fa0240c-351f-4485-b08d-5757a2a1f155/ROW-1a694c64086abb11",
+     "0000950170-23-041717/C_add8fa6f-4185-495c-ab01-5d4ab9b22ec6/ROW-8dd4d3ce050d7964",
+     "0000950170-23-041717/C_dd39205b-74bc-4828-bc51-7162cf471b64/ROW-044b948facfdb87b",
+     "0000950170-23-041717/C_3fe9cf4f-f79d-4b74-baba-57f33d629966/ROW-15891212211b9b2c",
+     "0000950170-23-041717/C_ea780049-c450-4dca-aac2-1d404e942ebc/ROW-25ebfac941c27d02",
+     "0000950170-23-041717/C_7f6fa809-19ed-4303-a9ce-f4613e43e75e/ROW-7e1e3d022f812295",
+     "0000950170-23-041717/C_ece64cbc-8cb9-48c6-bbdf-1f019b166f7d/ROW-b5c36ec28c29dc86",
+     "0000950170-23-041717/C_94fdcd81-83d7-4ea0-9044-cf32d1a2a810/ROW-c4247e762cbff5bb",
+     "0000950170-23-041717/C_9d418224-81e6-421c-9a1d-5e68535d1866/ROW-ec35901549fa95fc",
+     "0000950170-23-041717/C_be843978-c557-4bf5-8631-f100c08e0e04/ROW-6042ecdde927d58f",
+     "0000950170-23-041717/C_f314d49d-43d4-4050-96cf-ca8e04624181/ROW-6d6adcea3c565ec1",
+     "0000950170-23-041717/C_05744a47-e22b-4af1-947f-c470aae68ad8/ROW-acaee7f945483b49",
+     "0000950170-23-041717/C_88bb6196-dfcc-4a74-8763-bc74722f820e/ROW-ef722c94f3f1ed5e",
+     "0000950170-23-041717/C_2bebb34e-91d0-45eb-b638-edbf98bf427b/ROW-71725735cefc71e1",
+     "0000950170-23-041717/C_07746673-e84b-4f27-a7f9-0813fa3f46d0/ROW-788a3c333ee82cef",
+     "0000950170-23-041717/C_a70ddd3d-7f0b-409c-a381-8b829a3f33b0/ROW-531a6432cfd68e3a",
+     "0000950170-23-041717/C_a9590c5e-f166-4f7d-ac8f-ee76eaf54b6e/ROW-db02567a3d1f6b26",
+     "0000950170-23-041717/C_5e5f49a2-42a7-42e7-982a-cbbac2fd6d0e/ROW-f108746238f26e69",
+     "0000950170-23-041717/C_97c66f85-59fc-4a7a-8f47-991206807f99/ROW-fe44d55874fc887e"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-041717/C_1fa0240c-351f-4485-b08d-5757a2a1f155/ROW-1a694c64086abb11",
+     "0000950170-23-041717/C_add8fa6f-4185-495c-ab01-5d4ab9b22ec6/ROW-8dd4d3ce050d7964",
+     "0000950170-23-041717/C_dd39205b-74bc-4828-bc51-7162cf471b64/ROW-044b948facfdb87b",
+     "0000950170-23-041717/C_3fe9cf4f-f79d-4b74-baba-57f33d629966/ROW-15891212211b9b2c",
+     "0000950170-23-041717/C_ea780049-c450-4dca-aac2-1d404e942ebc/ROW-25ebfac941c27d02",
+     "0000950170-23-041717/C_7f6fa809-19ed-4303-a9ce-f4613e43e75e/ROW-7e1e3d022f812295",
+     "0000950170-23-041717/C_ece64cbc-8cb9-48c6-bbdf-1f019b166f7d/ROW-b5c36ec28c29dc86",
+     "0000950170-23-041717/C_94fdcd81-83d7-4ea0-9044-cf32d1a2a810/ROW-c4247e762cbff5bb",
+     "0000950170-23-041717/C_9d418224-81e6-421c-9a1d-5e68535d1866/ROW-ec35901549fa95fc",
+     "0000950170-23-041717/C_be843978-c557-4bf5-8631-f100c08e0e04/ROW-6042ecdde927d58f",
+     "0000950170-23-041717/C_f314d49d-43d4-4050-96cf-ca8e04624181/ROW-6d6adcea3c565ec1",
+     "0000950170-23-041717/C_05744a47-e22b-4af1-947f-c470aae68ad8/ROW-acaee7f945483b49",
+     "0000950170-23-041717/C_88bb6196-dfcc-4a74-8763-bc74722f820e/ROW-ef722c94f3f1ed5e",
+     "0000950170-23-041717/C_2bebb34e-91d0-45eb-b638-edbf98bf427b/ROW-71725735cefc71e1",
+     "0000950170-23-041717/C_07746673-e84b-4f27-a7f9-0813fa3f46d0/ROW-788a3c333ee82cef",
+     "0000950170-23-041717/C_a70ddd3d-7f0b-409c-a381-8b829a3f33b0/ROW-531a6432cfd68e3a",
+     "0000950170-23-041717/C_a9590c5e-f166-4f7d-ac8f-ee76eaf54b6e/ROW-db02567a3d1f6b26",
+     "0000950170-23-041717/C_5e5f49a2-42a7-42e7-982a-cbbac2fd6d0e/ROW-f108746238f26e69",
+     "0000950170-23-041717/C_97c66f85-59fc-4a7a-8f47-991206807f99/ROW-fe44d55874fc887e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-041717",
+     "text": "Integrity Marketing Acquisition, LLC Insurance Delayed Draw Term Loan SOFR + 6.05 % (Q) 11.41 % 08/27/25 5,430 5,430 5,335"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_8a538a3c0d38",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-063476/C_33b7c6c5-0153-4fb0-a574-e8f94d397413/ROW-8654c2336cb4dfb0",
+     "0000950170-23-063476/C_de8c5536-b3c9-4b16-88fe-86063c379a8b/ROW-fba5a32f97c60c47",
+     "0000950170-23-063476/C_a8121db3-f751-42a0-9d9a-fbed4b0ddd5f/ROW-54fdffeb4bfd1d79",
+     "0000950170-23-063476/C_78ba7473-da82-42ad-9ad8-002cc88fdbd8/ROW-95aa8e3029d1bebc",
+     "0000950170-23-063476/C_ea59bb33-5c49-4707-a5d1-2268fbaaf281/ROW-c275508336f716d5",
+     "0000950170-23-063476/C_2a40956c-f83f-4808-906f-ba44d04fedf4/ROW-c80dc74e71d6689d",
+     "0000950170-23-063476/C_5956d245-29e5-4a70-b5b5-e8b6f26f0979/ROW-e040e659d844f5fa",
+     "0000950170-23-063476/C_5dbb17bd-bd87-44df-954c-c628ed2bdab7/ROW-f1be9d3786fb9af0",
+     "0000950170-23-063476/C_75c9a872-811b-44f4-934a-2feb12fd5a46/ROW-112076773235391f",
+     "0000950170-23-063476/C_cf449bf9-01a5-4daf-8672-b648776862b3/ROW-1143fc5e94e41d73",
+     "0000950170-23-063476/C_95e2dbe1-2627-4c98-b72d-5bbb14b3c62a/ROW-29cc842fc969379b",
+     "0000950170-23-063476/C_ee5eef4d-0c86-40ce-9f00-f73c89189cea/ROW-3e88f8e5ff1b6a4d",
+     "0000950170-23-063476/C_d1b6f381-f884-42b3-a771-2a07ae1744f7/ROW-875047da84f05a71",
+     "0000950170-23-063476/C_340bfe92-2f69-48cc-aec0-52c9b7220e1b/ROW-c988ef51128d1c08",
+     "0000950170-23-063476/C_b4df9f70-aa22-4c32-a113-6a722d7eb3b8/ROW-9f1a921efc9d3c35",
+     "0000950170-23-063476/C_3d50d9b4-0d84-44df-8f5b-3b7b3a9e8a26/ROW-a7c050df6207534f",
+     "0000950170-23-063476/C_e7d2e811-7290-4a91-b4e6-ac497f18ee62/ROW-72428eb9926e37e0",
+     "0000950170-23-063476/C_cc4d84c6-97e9-4778-8f0d-00afcf1ed660/ROW-dc3f6ac9bf3a6f00",
+     "0000950170-23-063476/C_437d8efb-0606-4e2e-84dd-9157a0c9a120/ROW-105a60a22897febd",
+     "0000950170-23-063476/C_2d5d40fb-99ac-4013-a67b-bfb5310f074e/ROW-1f377fffee40d2d6",
+     "0000950170-23-063476/C_d918165a-9448-46c3-ab29-e2ea86486465/ROW-227027cff64d15c6",
+     "0000950170-23-063476/C_9f43a020-9361-4e1c-9c23-61fd7d224f42/ROW-272eaf27d3993ca2",
+     "0000950170-23-063476/C_a7d66b39-7fee-4966-a922-8701acbc51d5/ROW-5b750966fd857178",
+     "0000950170-23-063476/C_c4675d36-6635-49f5-b35f-0ded271f42bb/ROW-c717f3900eb35f9e",
+     "0000950170-23-063476/C_86c25458-741e-4294-9b87-083400f64476/ROW-cfbcddd2a6fb44cf",
+     "0000950170-23-063476/C_7892f784-23d7-49a2-8da3-845934761e2e/ROW-f62ada5999cea32c"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-063476/C_33b7c6c5-0153-4fb0-a574-e8f94d397413/ROW-8654c2336cb4dfb0",
+     "0000950170-23-063476/C_de8c5536-b3c9-4b16-88fe-86063c379a8b/ROW-fba5a32f97c60c47",
+     "0000950170-23-063476/C_a8121db3-f751-42a0-9d9a-fbed4b0ddd5f/ROW-54fdffeb4bfd1d79",
+     "0000950170-23-063476/C_78ba7473-da82-42ad-9ad8-002cc88fdbd8/ROW-95aa8e3029d1bebc",
+     "0000950170-23-063476/C_ea59bb33-5c49-4707-a5d1-2268fbaaf281/ROW-c275508336f716d5",
+     "0000950170-23-063476/C_2a40956c-f83f-4808-906f-ba44d04fedf4/ROW-c80dc74e71d6689d",
+     "0000950170-23-063476/C_5956d245-29e5-4a70-b5b5-e8b6f26f0979/ROW-e040e659d844f5fa",
+     "0000950170-23-063476/C_5dbb17bd-bd87-44df-954c-c628ed2bdab7/ROW-f1be9d3786fb9af0",
+     "0000950170-23-063476/C_75c9a872-811b-44f4-934a-2feb12fd5a46/ROW-112076773235391f",
+     "0000950170-23-063476/C_cf449bf9-01a5-4daf-8672-b648776862b3/ROW-1143fc5e94e41d73",
+     "0000950170-23-063476/C_95e2dbe1-2627-4c98-b72d-5bbb14b3c62a/ROW-29cc842fc969379b",
+     "0000950170-23-063476/C_ee5eef4d-0c86-40ce-9f00-f73c89189cea/ROW-3e88f8e5ff1b6a4d",
+     "0000950170-23-063476/C_d1b6f381-f884-42b3-a771-2a07ae1744f7/ROW-875047da84f05a71",
+     "0000950170-23-063476/C_340bfe92-2f69-48cc-aec0-52c9b7220e1b/ROW-c988ef51128d1c08",
+     "0000950170-23-063476/C_b4df9f70-aa22-4c32-a113-6a722d7eb3b8/ROW-9f1a921efc9d3c35",
+     "0000950170-23-063476/C_3d50d9b4-0d84-44df-8f5b-3b7b3a9e8a26/ROW-a7c050df6207534f",
+     "0000950170-23-063476/C_e7d2e811-7290-4a91-b4e6-ac497f18ee62/ROW-72428eb9926e37e0",
+     "0000950170-23-063476/C_cc4d84c6-97e9-4778-8f0d-00afcf1ed660/ROW-dc3f6ac9bf3a6f00",
+     "0000950170-23-063476/C_437d8efb-0606-4e2e-84dd-9157a0c9a120/ROW-105a60a22897febd",
+     "0000950170-23-063476/C_2d5d40fb-99ac-4013-a67b-bfb5310f074e/ROW-1f377fffee40d2d6",
+     "0000950170-23-063476/C_d918165a-9448-46c3-ab29-e2ea86486465/ROW-227027cff64d15c6",
+     "0000950170-23-063476/C_9f43a020-9361-4e1c-9c23-61fd7d224f42/ROW-272eaf27d3993ca2",
+     "0000950170-23-063476/C_a7d66b39-7fee-4966-a922-8701acbc51d5/ROW-5b750966fd857178",
+     "0000950170-23-063476/C_c4675d36-6635-49f5-b35f-0ded271f42bb/ROW-c717f3900eb35f9e",
+     "0000950170-23-063476/C_86c25458-741e-4294-9b87-083400f64476/ROW-cfbcddd2a6fb44cf",
+     "0000950170-23-063476/C_7892f784-23d7-49a2-8da3-845934761e2e/ROW-f62ada5999cea32c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-063476",
+     "text": "SGA Dental Partners Opco, LLC Health Care Providers & Services Delayed Draw Term Loan SOFR + 6.00 % (Q) 11.60 % 12/30/26 68 67 67"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_429026b34b67",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-035857/C_739646b8-41fc-42ec-8ea4-df7f6cfa11c4/ROW-3490bd326cf4fe55",
+     "0000950170-24-035857/C_1cea7127-fb2e-4744-a156-f133f359f85a/ROW-c2bf004c47d4d425",
+     "0000950170-24-035857/C_0ed30662-a36f-4ad4-b9c8-248d275cf23e/ROW-0145333cffe0d9a0",
+     "0000950170-24-035857/C_4bc8b89e-5d8a-4b4e-8c34-0dd1b9177c29/ROW-33342c39b56cc7ed",
+     "0000950170-24-035857/C_82f5a03a-9ba5-4b41-9c65-fc5613bdd643/ROW-a88f687d403608c8",
+     "0000950170-24-035857/C_495e99cc-6553-4714-880a-35d88838d4cc/ROW-bcd1de92aa45daea",
+     "0000950170-24-035857/C_df217c19-4c09-4af8-ad56-203e89557b08/ROW-c89dc86d12bd46d1",
+     "0000950170-24-035857/C_94946059-332c-4674-8b1c-31883c04be08/ROW-db5bfb181be01a15",
+     "0000950170-24-035857/C_5ada95a6-6c45-448d-a1c3-77bb752bd922/ROW-87bf6144eb1ba0b9",
+     "0000950170-24-035857/C_2e2a2c49-b69c-442d-a9ed-2d943b8bd9d5/ROW-929dc4cca49a7091",
+     "0000950170-24-035857/C_b69e5ac3-c799-4725-b4f8-438eba4071ba/ROW-7fb399ae7d1bad81",
+     "0000950170-24-035857/C_b519185b-abb5-4abc-a02f-103f0e1b3eb1/ROW-b8f6ecd0453dfe60",
+     "0000950170-24-035857/C_c85c6f20-600b-4dd8-bff8-f621f9bb94e4/ROW-0f1e2455a19e592c",
+     "0000950170-24-035857/C_a16406ba-d5c8-425e-b664-55daf1ce8cc1/ROW-13fa5026996e99af",
+     "0000950170-24-035857/C_430f480f-36bc-44d9-8803-ba4c90239acc/ROW-3705148e316ebbda",
+     "0000950170-24-035857/C_e0d67e5a-f7ad-434f-b41a-0a439b4e2271/ROW-3d6c1857d330aebc",
+     "0000950170-24-035857/C_3044481c-c4c5-4691-bcc0-01adad748c2a/ROW-41a8e07e99485bdc",
+     "0000950170-24-035857/C_8a261189-39b5-46fe-a5c3-5e272474121a/ROW-7896c4ecfef3b24e",
+     "0000950170-24-035857/C_a99d5ada-855e-4290-950e-f09e459cc307/ROW-b596e789a57c5388",
+     "0000950170-24-035857/C_2c4917ab-ca77-4887-a559-c1228e2ed4b5/ROW-c5251fd788501c93",
+     "0000950170-24-035857/C_27bf6243-6523-4618-bf73-96d1cbdb16e9/ROW-dae67a60277f2f73",
+     "0000950170-24-035857/C_581bc19b-85bb-4874-b236-18064fbf9d65/ROW-dc501d8e1b1b057d",
+     "0000950170-24-035857/C_a5c00c6b-fdb7-448f-a8f6-7eccedb69908/ROW-c63052787452c7dc",
+     "0000950170-24-035857/C_265b2ba9-00e9-4cd0-804d-e3ab8526f131/ROW-d970e3c8b231e09b",
+     "0000950170-24-035857/C_92b78991-2d88-41e4-bd8c-d6a4a0face2f/ROW-cd5dccbd89063200",
+     "0000950170-24-035857/C_dfab501d-4d26-4256-923e-b293ded02de8/ROW-ff12b4e6a90edc17",
+     "0000950170-24-035857/C_3be5ca14-6ab9-4f75-b3a6-5dd27ead8913/ROW-1bdb581d88f8b6c1",
+     "0000950170-24-035857/C_8383b024-2c0c-40ca-aaeb-fe04fd897466/ROW-20cd847c0f98231a",
+     "0000950170-24-035857/C_94221cdb-9905-4bfe-90d3-784c43a375db/ROW-21526220cfa8b05c",
+     "0000950170-24-035857/C_b63fd6b8-cc2e-4f0b-944e-12c9234ae8dc/ROW-53bb795bcae4cd67",
+     "0000950170-24-035857/C_91d0549b-6463-4d3a-8748-dacf6dbc73d1/ROW-5db76751b8135958",
+     "0000950170-24-035857/C_a13e8311-ac65-4803-87e5-027aba7e0df8/ROW-67c46295d0d2f149",
+     "0000950170-24-035857/C_0b2dae52-e2d5-4dbf-83c7-72faf0dfb9c1/ROW-7f0fd9bb4bae0a9a",
+     "0000950170-24-035857/C_59144067-dc65-45a3-947c-6430b3f7c2b5/ROW-87a2a71dd43e9b30",
+     "0000950170-24-035857/C_3469762a-78de-4edb-a893-8d508407875a/ROW-8bf6b69d9956f0f8",
+     "0000950170-24-035857/C_e1076bee-8ef5-40a8-83c9-781be126a3e9/ROW-8de688bf2c2ba522",
+     "0000950170-24-035857/C_1f494679-9309-4470-9dde-683b23194924/ROW-90276efe067a4ef4",
+     "0000950170-24-035857/C_c8bbb632-4048-4ac3-82e9-58471cc6cc16/ROW-96727070bbbd352b",
+     "0000950170-24-035857/C_183d21d3-0022-4c7a-b6d2-2c93a25b2b37/ROW-9ed3f86e6a5f93f4",
+     "0000950170-24-035857/C_d98038e9-3126-42ab-9063-feeae24d30d2/ROW-b56fd7ad83d73b1a",
+     "0000950170-24-035857/C_916ade92-cbc2-4958-bb15-fa172c89297b/ROW-f3e5f7fd88a99fa4",
+     "0000950170-24-035857/C_8db66f00-fdba-4231-a3e9-c97c52da3c2c/ROW-f4ebf3ffd350786e"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-035857/C_739646b8-41fc-42ec-8ea4-df7f6cfa11c4/ROW-3490bd326cf4fe55",
+     "0000950170-24-035857/C_1cea7127-fb2e-4744-a156-f133f359f85a/ROW-c2bf004c47d4d425",
+     "0000950170-24-035857/C_0ed30662-a36f-4ad4-b9c8-248d275cf23e/ROW-0145333cffe0d9a0",
+     "0000950170-24-035857/C_4bc8b89e-5d8a-4b4e-8c34-0dd1b9177c29/ROW-33342c39b56cc7ed",
+     "0000950170-24-035857/C_82f5a03a-9ba5-4b41-9c65-fc5613bdd643/ROW-a88f687d403608c8",
+     "0000950170-24-035857/C_495e99cc-6553-4714-880a-35d88838d4cc/ROW-bcd1de92aa45daea",
+     "0000950170-24-035857/C_df217c19-4c09-4af8-ad56-203e89557b08/ROW-c89dc86d12bd46d1",
+     "0000950170-24-035857/C_94946059-332c-4674-8b1c-31883c04be08/ROW-db5bfb181be01a15",
+     "0000950170-24-035857/C_5ada95a6-6c45-448d-a1c3-77bb752bd922/ROW-87bf6144eb1ba0b9",
+     "0000950170-24-035857/C_2e2a2c49-b69c-442d-a9ed-2d943b8bd9d5/ROW-929dc4cca49a7091",
+     "0000950170-24-035857/C_b69e5ac3-c799-4725-b4f8-438eba4071ba/ROW-7fb399ae7d1bad81",
+     "0000950170-24-035857/C_b519185b-abb5-4abc-a02f-103f0e1b3eb1/ROW-b8f6ecd0453dfe60",
+     "0000950170-24-035857/C_c85c6f20-600b-4dd8-bff8-f621f9bb94e4/ROW-0f1e2455a19e592c",
+     "0000950170-24-035857/C_a16406ba-d5c8-425e-b664-55daf1ce8cc1/ROW-13fa5026996e99af",
+     "0000950170-24-035857/C_430f480f-36bc-44d9-8803-ba4c90239acc/ROW-3705148e316ebbda",
+     "0000950170-24-035857/C_e0d67e5a-f7ad-434f-b41a-0a439b4e2271/ROW-3d6c1857d330aebc",
+     "0000950170-24-035857/C_3044481c-c4c5-4691-bcc0-01adad748c2a/ROW-41a8e07e99485bdc",
+     "0000950170-24-035857/C_8a261189-39b5-46fe-a5c3-5e272474121a/ROW-7896c4ecfef3b24e",
+     "0000950170-24-035857/C_a99d5ada-855e-4290-950e-f09e459cc307/ROW-b596e789a57c5388",
+     "0000950170-24-035857/C_2c4917ab-ca77-4887-a559-c1228e2ed4b5/ROW-c5251fd788501c93",
+     "0000950170-24-035857/C_27bf6243-6523-4618-bf73-96d1cbdb16e9/ROW-dae67a60277f2f73",
+     "0000950170-24-035857/C_581bc19b-85bb-4874-b236-18064fbf9d65/ROW-dc501d8e1b1b057d",
+     "0000950170-24-035857/C_a5c00c6b-fdb7-448f-a8f6-7eccedb69908/ROW-c63052787452c7dc",
+     "0000950170-24-035857/C_265b2ba9-00e9-4cd0-804d-e3ab8526f131/ROW-d970e3c8b231e09b",
+     "0000950170-24-035857/C_92b78991-2d88-41e4-bd8c-d6a4a0face2f/ROW-cd5dccbd89063200",
+     "0000950170-24-035857/C_dfab501d-4d26-4256-923e-b293ded02de8/ROW-ff12b4e6a90edc17",
+     "0000950170-24-035857/C_3be5ca14-6ab9-4f75-b3a6-5dd27ead8913/ROW-1bdb581d88f8b6c1",
+     "0000950170-24-035857/C_8383b024-2c0c-40ca-aaeb-fe04fd897466/ROW-20cd847c0f98231a",
+     "0000950170-24-035857/C_94221cdb-9905-4bfe-90d3-784c43a375db/ROW-21526220cfa8b05c",
+     "0000950170-24-035857/C_b63fd6b8-cc2e-4f0b-944e-12c9234ae8dc/ROW-53bb795bcae4cd67",
+     "0000950170-24-035857/C_91d0549b-6463-4d3a-8748-dacf6dbc73d1/ROW-5db76751b8135958",
+     "0000950170-24-035857/C_a13e8311-ac65-4803-87e5-027aba7e0df8/ROW-67c46295d0d2f149",
+     "0000950170-24-035857/C_0b2dae52-e2d5-4dbf-83c7-72faf0dfb9c1/ROW-7f0fd9bb4bae0a9a",
+     "0000950170-24-035857/C_59144067-dc65-45a3-947c-6430b3f7c2b5/ROW-87a2a71dd43e9b30",
+     "0000950170-24-035857/C_3469762a-78de-4edb-a893-8d508407875a/ROW-8bf6b69d9956f0f8",
+     "0000950170-24-035857/C_e1076bee-8ef5-40a8-83c9-781be126a3e9/ROW-8de688bf2c2ba522",
+     "0000950170-24-035857/C_1f494679-9309-4470-9dde-683b23194924/ROW-90276efe067a4ef4",
+     "0000950170-24-035857/C_c8bbb632-4048-4ac3-82e9-58471cc6cc16/ROW-96727070bbbd352b",
+     "0000950170-24-035857/C_183d21d3-0022-4c7a-b6d2-2c93a25b2b37/ROW-9ed3f86e6a5f93f4",
+     "0000950170-24-035857/C_d98038e9-3126-42ab-9063-feeae24d30d2/ROW-b56fd7ad83d73b1a",
+     "0000950170-24-035857/C_916ade92-cbc2-4958-bb15-fa172c89297b/ROW-f3e5f7fd88a99fa4",
+     "0000950170-24-035857/C_8db66f00-fdba-4231-a3e9-c97c52da3c2c/ROW-f4ebf3ffd350786e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-035857",
+     "text": "Castleworks Home Services Company Revolver SOFR + 5.50 % (M) 12.95 % ( 2.00 % PIK) 06/29/28 136 134 112"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_2cd6dfe0f88a",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-058847/C_a7fa106b-99eb-4309-8b34-a4953dc25f67/ROW-000edbf3b06b52bc",
+     "0000950170-24-058847/C_15bc1454-a0d9-4307-9bfa-aca0a57fe4f6/ROW-2986bf40ef226bbe",
+     "0000950170-24-058847/C_7315cf8c-f182-4b8b-8023-a6e8777d56f5/ROW-32b5d9c205734fb9",
+     "0000950170-24-058847/C_74fa8adb-97b8-411b-959c-ab905540276b/ROW-58db572aa8321fbe",
+     "0000950170-24-058847/C_6e812941-47a1-4899-8ce0-12cc5f59ffb4/ROW-bfd34320b7f5aaf0",
+     "0000950170-24-058847/C_97985ebd-183a-4ce9-8fcd-3d9acd5bafd8/ROW-c4e22c61112a1a17",
+     "0000950170-24-058847/C_6752e275-4b41-46f7-9f6e-fca07caf7590/ROW-37b68c9321ddefaa",
+     "0000950170-24-058847/C_9e603acf-f8f0-4f63-ba0a-b2becaaeaee8/ROW-52e18cadfd0dc9a6",
+     "0000950170-24-058847/C_1b8ef49d-c027-4506-a7b1-e39ea506e85d/ROW-688b4fa6bea4dfec",
+     "0000950170-24-058847/C_19c9cdf7-7ea3-4ea8-9178-949baf25199d/ROW-78282f5e56196800",
+     "0000950170-24-058847/C_10909cd7-1279-4847-9043-f42146ddef89/ROW-805f3a9111fd96ea",
+     "0000950170-24-058847/C_0ae35689-3916-450a-a7fa-9287aa9d7052/ROW-cbca421c81443d17",
+     "0000950170-24-058847/C_b0772687-99e7-433f-ad86-2de1ca75e937/ROW-70437a7796c0ec88",
+     "0000950170-24-058847/C_244e8f6b-4be5-4972-96eb-f5f1bb8ec35d/ROW-c2591c2dfd56934e",
+     "0000950170-24-058847/C_60d1ece2-88d0-4d56-b570-c7e63f1f102c/ROW-02a3d9226e3218cd",
+     "0000950170-24-058847/C_afb51fc7-bac3-4551-a5dc-0af3788df7a4/ROW-593fd080c0e95bbf",
+     "0000950170-24-058847/C_7b740fc7-94b2-435d-b933-5c3f592a35a4/ROW-60b7ca98e999005f",
+     "0000950170-24-058847/C_1e063a56-d5e6-4f2f-b70e-212bfb2fcb3e/ROW-97ac35a62380d18f",
+     "0000950170-24-058847/C_5a2a0f6e-de8e-4630-ad43-6f6d878371a3/ROW-9dc73495fa7fa041",
+     "0000950170-24-058847/C_e2f20949-f1d8-4e15-b99a-ca9b837e4cfe/ROW-ebaa592ff473a617",
+     "0000950170-24-058847/C_3678d3c7-cc07-471e-9651-2ff90a5a7ec4/ROW-fea8827ade94309f",
+     "0000950170-24-058847/C_a8302558-b80b-41e7-9a31-a5543a00ea5a/ROW-2c9a00d477c7a633",
+     "0000950170-24-058847/C_2c85033a-b222-4da7-979f-927d5fc332d3/ROW-beacdf5647b1d24e",
+     "0000950170-24-058847/C_41e77183-1437-446f-970c-a1403bc79a28/ROW-089398ade30a5dd2",
+     "0000950170-24-058847/C_fa30321d-55b3-4bd5-b9f9-80c194bcb658/ROW-17bf6ea0fd7314bd",
+     "0000950170-24-058847/C_5fd81abc-4e25-4d5d-a600-c4ea0c5889d8/ROW-06e48cdd74a74a53",
+     "0000950170-24-058847/C_1583e16d-b7b7-461f-858b-abb9a581fdb2/ROW-0c76f067f377757a",
+     "0000950170-24-058847/C_fa5330c5-ae48-4ac2-b430-e4975a30fccb/ROW-1e227382fb1e6414",
+     "0000950170-24-058847/C_e80f78fd-4569-4663-ac4b-fb7fcc750a36/ROW-2dc97bd9092fab69",
+     "0000950170-24-058847/C_017efc10-996b-4e4b-912d-df874eebe8f7/ROW-4789f4debe42e0ee",
+     "0000950170-24-058847/C_f9d7ac98-3c7d-40b2-b99d-a46bcac0f6dd/ROW-67dcefd43d5f2037",
+     "0000950170-24-058847/C_ea0de1c5-3b7d-40e5-8756-d33329179321/ROW-6dbdc40aad8eab70",
+     "0000950170-24-058847/C_16bbea7b-f143-4948-a371-8277a74a2682/ROW-7547c96c8f5278ba",
+     "0000950170-24-058847/C_4c88fe36-e05f-4978-9cfa-45837665c39f/ROW-98152be1d69b7064",
+     "0000950170-24-058847/C_62d3346d-0357-48a6-afe7-e795ef01c55d/ROW-a7016aa0b272810c",
+     "0000950170-24-058847/C_6e42d9e2-e989-4fcb-9a57-336674633d3f/ROW-a81fc5cc9b9ee1d8",
+     "0000950170-24-058847/C_8d2a27e2-96ba-4f28-9a4a-fe1689dd511c/ROW-a82c9b39a6f33b73",
+     "0000950170-24-058847/C_9e82a7c1-01c2-46ab-b491-a2cc01060d7d/ROW-dad0568d2f0a98d2",
+     "0000950170-24-058847/C_f32f8a0a-8e42-4580-8d23-0ace6661a544/ROW-ed6507d4ec4a0134",
+     "0000950170-24-058847/C_a32ac3b2-5b36-4150-914e-ae89493ab8cd/ROW-f34ee617bc56a094"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-058847/C_a7fa106b-99eb-4309-8b34-a4953dc25f67/ROW-000edbf3b06b52bc",
+     "0000950170-24-058847/C_15bc1454-a0d9-4307-9bfa-aca0a57fe4f6/ROW-2986bf40ef226bbe",
+     "0000950170-24-058847/C_7315cf8c-f182-4b8b-8023-a6e8777d56f5/ROW-32b5d9c205734fb9",
+     "0000950170-24-058847/C_74fa8adb-97b8-411b-959c-ab905540276b/ROW-58db572aa8321fbe",
+     "0000950170-24-058847/C_6e812941-47a1-4899-8ce0-12cc5f59ffb4/ROW-bfd34320b7f5aaf0",
+     "0000950170-24-058847/C_97985ebd-183a-4ce9-8fcd-3d9acd5bafd8/ROW-c4e22c61112a1a17",
+     "0000950170-24-058847/C_6752e275-4b41-46f7-9f6e-fca07caf7590/ROW-37b68c9321ddefaa",
+     "0000950170-24-058847/C_9e603acf-f8f0-4f63-ba0a-b2becaaeaee8/ROW-52e18cadfd0dc9a6",
+     "0000950170-24-058847/C_1b8ef49d-c027-4506-a7b1-e39ea506e85d/ROW-688b4fa6bea4dfec",
+     "0000950170-24-058847/C_19c9cdf7-7ea3-4ea8-9178-949baf25199d/ROW-78282f5e56196800",
+     "0000950170-24-058847/C_10909cd7-1279-4847-9043-f42146ddef89/ROW-805f3a9111fd96ea",
+     "0000950170-24-058847/C_0ae35689-3916-450a-a7fa-9287aa9d7052/ROW-cbca421c81443d17",
+     "0000950170-24-058847/C_b0772687-99e7-433f-ad86-2de1ca75e937/ROW-70437a7796c0ec88",
+     "0000950170-24-058847/C_244e8f6b-4be5-4972-96eb-f5f1bb8ec35d/ROW-c2591c2dfd56934e",
+     "0000950170-24-058847/C_60d1ece2-88d0-4d56-b570-c7e63f1f102c/ROW-02a3d9226e3218cd",
+     "0000950170-24-058847/C_afb51fc7-bac3-4551-a5dc-0af3788df7a4/ROW-593fd080c0e95bbf",
+     "0000950170-24-058847/C_7b740fc7-94b2-435d-b933-5c3f592a35a4/ROW-60b7ca98e999005f",
+     "0000950170-24-058847/C_1e063a56-d5e6-4f2f-b70e-212bfb2fcb3e/ROW-97ac35a62380d18f",
+     "0000950170-24-058847/C_5a2a0f6e-de8e-4630-ad43-6f6d878371a3/ROW-9dc73495fa7fa041",
+     "0000950170-24-058847/C_e2f20949-f1d8-4e15-b99a-ca9b837e4cfe/ROW-ebaa592ff473a617",
+     "0000950170-24-058847/C_3678d3c7-cc07-471e-9651-2ff90a5a7ec4/ROW-fea8827ade94309f",
+     "0000950170-24-058847/C_a8302558-b80b-41e7-9a31-a5543a00ea5a/ROW-2c9a00d477c7a633",
+     "0000950170-24-058847/C_2c85033a-b222-4da7-979f-927d5fc332d3/ROW-beacdf5647b1d24e",
+     "0000950170-24-058847/C_41e77183-1437-446f-970c-a1403bc79a28/ROW-089398ade30a5dd2",
+     "0000950170-24-058847/C_fa30321d-55b3-4bd5-b9f9-80c194bcb658/ROW-17bf6ea0fd7314bd",
+     "0000950170-24-058847/C_5fd81abc-4e25-4d5d-a600-c4ea0c5889d8/ROW-06e48cdd74a74a53",
+     "0000950170-24-058847/C_1583e16d-b7b7-461f-858b-abb9a581fdb2/ROW-0c76f067f377757a",
+     "0000950170-24-058847/C_fa5330c5-ae48-4ac2-b430-e4975a30fccb/ROW-1e227382fb1e6414",
+     "0000950170-24-058847/C_e80f78fd-4569-4663-ac4b-fb7fcc750a36/ROW-2dc97bd9092fab69",
+     "0000950170-24-058847/C_017efc10-996b-4e4b-912d-df874eebe8f7/ROW-4789f4debe42e0ee",
+     "0000950170-24-058847/C_f9d7ac98-3c7d-40b2-b99d-a46bcac0f6dd/ROW-67dcefd43d5f2037",
+     "0000950170-24-058847/C_ea0de1c5-3b7d-40e5-8756-d33329179321/ROW-6dbdc40aad8eab70",
+     "0000950170-24-058847/C_16bbea7b-f143-4948-a371-8277a74a2682/ROW-7547c96c8f5278ba",
+     "0000950170-24-058847/C_4c88fe36-e05f-4978-9cfa-45837665c39f/ROW-98152be1d69b7064",
+     "0000950170-24-058847/C_62d3346d-0357-48a6-afe7-e795ef01c55d/ROW-a7016aa0b272810c",
+     "0000950170-24-058847/C_6e42d9e2-e989-4fcb-9a57-336674633d3f/ROW-a81fc5cc9b9ee1d8",
+     "0000950170-24-058847/C_8d2a27e2-96ba-4f28-9a4a-fe1689dd511c/ROW-a82c9b39a6f33b73",
+     "0000950170-24-058847/C_9e82a7c1-01c2-46ab-b491-a2cc01060d7d/ROW-dad0568d2f0a98d2",
+     "0000950170-24-058847/C_f32f8a0a-8e42-4580-8d23-0ace6661a544/ROW-ed6507d4ec4a0134",
+     "0000950170-24-058847/C_a32ac3b2-5b36-4150-914e-ae89493ab8cd/ROW-f34ee617bc56a094"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-058847",
+     "text": "Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.46 % 12/28/2025 414 412 400"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_488afe85422d",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-094111/C_48e5f2ef-d10d-4333-a429-1880ecdf7c0c/ROW-1067171ee7f16a39",
+     "0000950170-24-094111/C_548169ed-7b5e-49db-846c-7d981483f10e/ROW-1790876dbafbdec0",
+     "0000950170-24-094111/C_cdf0a767-a8ee-4e71-86fc-36267b0ed7fb/ROW-409d384eea6bacfc",
+     "0000950170-24-094111/C_d7e20187-24c1-4926-9824-ef6c831e689e/ROW-e6ed51230c076ef5",
+     "0000950170-24-094111/C_c5111b5e-1ac5-4f85-a070-7d9575b5c2ac/ROW-9d7b213267388353",
+     "0000950170-24-094111/C_7c130ed1-0eb4-46a6-831a-3eb430f65f98/ROW-b8d23cf980d3b076",
+     "0000950170-24-094111/C_3da09cf7-832b-4d8e-ba57-66089f8e7964/ROW-4021a9a645919a04",
+     "0000950170-24-094111/C_de56732f-b043-44ed-bbfb-f597e2c042b6/ROW-7ae8769e7f7fded9",
+     "0000950170-24-094111/C_577f856b-1641-40c8-92dc-ec7b4b87dda3/ROW-f0d093bb23580431",
+     "0000950170-24-094111/C_7903e802-d8db-48d1-97a9-ddfff296b52e/ROW-f29895a33a3c2ad7",
+     "0000950170-24-094111/C_4917d729-1a56-4eb7-933b-2799bcbde42a/ROW-fa4ec5aca3e5671e",
+     "0000950170-24-094111/C_ae108a44-7d13-4a7b-9535-4342fa78e5e4/ROW-5013696a7ec5c01f",
+     "0000950170-24-094111/C_1c238460-dccf-4cfe-8ead-571a7be3a703/ROW-e99c397a74811c83",
+     "0000950170-24-094111/C_5d442bd2-4c5a-43f7-adcf-1486a9dbb1d6/ROW-0150a5a1cf4e2c89",
+     "0000950170-24-094111/C_475ddc18-0085-470b-8e1c-3d37ffd40485/ROW-7e42186dc196d05f",
+     "0000950170-24-094111/C_939283a8-85cf-4db2-b51b-ce19d90af71b/ROW-82d29d858f638e78",
+     "0000950170-24-094111/C_b46a0d76-2e5f-4c1c-abba-5855ba678427/ROW-421dbfb1c548e2ba",
+     "0000950170-24-094111/C_a012948e-6768-48e2-9616-93833dd8da81/ROW-5a0f92da182b4d1e",
+     "0000950170-24-094111/C_60ec50f1-50d9-4604-b408-49201d229954/ROW-040aaa827ac63271",
+     "0000950170-24-094111/C_14586597-11ee-439c-9169-8a1b7232c028/ROW-270fabab45f20126",
+     "0000950170-24-094111/C_20016f89-1e2d-4ffa-a841-9412a547d584/ROW-5e4667f7930d2fa0",
+     "0000950170-24-094111/C_0cfdb05a-326e-4405-8167-f591e3135c9e/ROW-6d324437bb5c77c7",
+     "0000950170-24-094111/C_c61a86f6-9e82-4dff-8439-fd40dbb8b413/ROW-7badbefb1e729e92",
+     "0000950170-24-094111/C_856e3f86-dc5c-474f-8ac5-eb6e4efb579b/ROW-84140c1b7ff97e05",
+     "0000950170-24-094111/C_42e8c9cd-d594-4571-a2b1-5396b2820ab1/ROW-9a09b8e5960d55bd",
+     "0000950170-24-094111/C_10b98665-6150-4c75-9b5a-453ead13d75d/ROW-b409b982e33229a8",
+     "0000950170-24-094111/C_c17a4561-698e-430b-9937-7de9cb8dfa49/ROW-bb1ee8893b94be62",
+     "0000950170-24-094111/C_b1a70e2c-fe23-4179-8db1-633fe512cfee/ROW-d3ee2475c8124a80",
+     "0000950170-24-094111/C_5d188e9b-c0a6-4867-a54b-9839765814cd/ROW-e38b3a8f281ea8c9",
+     "0000950170-24-094111/C_836e9358-45f2-4d7b-a07d-993450b55364/ROW-e7c05dea2100ccd5"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-094111/C_48e5f2ef-d10d-4333-a429-1880ecdf7c0c/ROW-1067171ee7f16a39",
+     "0000950170-24-094111/C_548169ed-7b5e-49db-846c-7d981483f10e/ROW-1790876dbafbdec0",
+     "0000950170-24-094111/C_cdf0a767-a8ee-4e71-86fc-36267b0ed7fb/ROW-409d384eea6bacfc",
+     "0000950170-24-094111/C_d7e20187-24c1-4926-9824-ef6c831e689e/ROW-e6ed51230c076ef5",
+     "0000950170-24-094111/C_c5111b5e-1ac5-4f85-a070-7d9575b5c2ac/ROW-9d7b213267388353",
+     "0000950170-24-094111/C_7c130ed1-0eb4-46a6-831a-3eb430f65f98/ROW-b8d23cf980d3b076",
+     "0000950170-24-094111/C_3da09cf7-832b-4d8e-ba57-66089f8e7964/ROW-4021a9a645919a04",
+     "0000950170-24-094111/C_de56732f-b043-44ed-bbfb-f597e2c042b6/ROW-7ae8769e7f7fded9",
+     "0000950170-24-094111/C_577f856b-1641-40c8-92dc-ec7b4b87dda3/ROW-f0d093bb23580431",
+     "0000950170-24-094111/C_7903e802-d8db-48d1-97a9-ddfff296b52e/ROW-f29895a33a3c2ad7",
+     "0000950170-24-094111/C_4917d729-1a56-4eb7-933b-2799bcbde42a/ROW-fa4ec5aca3e5671e",
+     "0000950170-24-094111/C_ae108a44-7d13-4a7b-9535-4342fa78e5e4/ROW-5013696a7ec5c01f",
+     "0000950170-24-094111/C_1c238460-dccf-4cfe-8ead-571a7be3a703/ROW-e99c397a74811c83",
+     "0000950170-24-094111/C_5d442bd2-4c5a-43f7-adcf-1486a9dbb1d6/ROW-0150a5a1cf4e2c89",
+     "0000950170-24-094111/C_475ddc18-0085-470b-8e1c-3d37ffd40485/ROW-7e42186dc196d05f",
+     "0000950170-24-094111/C_939283a8-85cf-4db2-b51b-ce19d90af71b/ROW-82d29d858f638e78",
+     "0000950170-24-094111/C_b46a0d76-2e5f-4c1c-abba-5855ba678427/ROW-421dbfb1c548e2ba",
+     "0000950170-24-094111/C_a012948e-6768-48e2-9616-93833dd8da81/ROW-5a0f92da182b4d1e",
+     "0000950170-24-094111/C_60ec50f1-50d9-4604-b408-49201d229954/ROW-040aaa827ac63271",
+     "0000950170-24-094111/C_14586597-11ee-439c-9169-8a1b7232c028/ROW-270fabab45f20126",
+     "0000950170-24-094111/C_20016f89-1e2d-4ffa-a841-9412a547d584/ROW-5e4667f7930d2fa0",
+     "0000950170-24-094111/C_0cfdb05a-326e-4405-8167-f591e3135c9e/ROW-6d324437bb5c77c7",
+     "0000950170-24-094111/C_c61a86f6-9e82-4dff-8439-fd40dbb8b413/ROW-7badbefb1e729e92",
+     "0000950170-24-094111/C_856e3f86-dc5c-474f-8ac5-eb6e4efb579b/ROW-84140c1b7ff97e05",
+     "0000950170-24-094111/C_42e8c9cd-d594-4571-a2b1-5396b2820ab1/ROW-9a09b8e5960d55bd",
+     "0000950170-24-094111/C_10b98665-6150-4c75-9b5a-453ead13d75d/ROW-b409b982e33229a8",
+     "0000950170-24-094111/C_c17a4561-698e-430b-9937-7de9cb8dfa49/ROW-bb1ee8893b94be62",
+     "0000950170-24-094111/C_b1a70e2c-fe23-4179-8db1-633fe512cfee/ROW-d3ee2475c8124a80",
+     "0000950170-24-094111/C_5d188e9b-c0a6-4867-a54b-9839765814cd/ROW-e38b3a8f281ea8c9",
+     "0000950170-24-094111/C_836e9358-45f2-4d7b-a07d-993450b55364/ROW-e7c05dea2100ccd5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-094111",
+     "text": "Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.49 % 12/28/2025 414 412 400"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_5f9b6be7d129",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-125262/C_fe74354e-a426-474b-b9dd-f69944e81f21/ROW-47e5732ce90ac65d",
+     "0000950170-24-125262/C_860be281-c1c8-4860-82c2-b56feff8c933/ROW-6d2bc441525c6a33",
+     "0000950170-24-125262/C_72a613c6-421c-406e-a61d-7fb398f176ec/ROW-6f1e8c92f0495df9",
+     "0000950170-24-125262/C_5fdc00af-7222-4764-b78c-407b856ee12e/ROW-ac736b8cb2e2cdad",
+     "0000950170-24-125262/C_d2f3d2d6-2aa9-4481-8388-5dd718f9bff5/ROW-089fd78f3f011fed",
+     "0000950170-24-125262/C_f2fb8d78-844e-4dd3-90e8-85fdc77d9087/ROW-125208d0961ae2cd",
+     "0000950170-24-125262/C_44413d1c-f819-49ce-8d27-54a5449232eb/ROW-32dfcd7674d3cbdb",
+     "0000950170-24-125262/C_a2dfd5ea-9230-46c0-9a72-704cf72ec841/ROW-af3bdee1a81bee36",
+     "0000950170-24-125262/C_d2020054-4993-422e-9e5e-3b06ae567cf6/ROW-0da1827a25c84265",
+     "0000950170-24-125262/C_51879ae9-d9a1-4b82-ab2f-77d8b033c999/ROW-6f3aed3cccf7c04d",
+     "0000950170-24-125262/C_194b683e-6e56-4a4d-8834-4d90f350c1f5/ROW-1310a94c15668a5b",
+     "0000950170-24-125262/C_418ee1a9-5938-4e2f-8735-5a4c285f751e/ROW-6e0c4d41c7847892",
+     "0000950170-24-125262/C_8f96ddfa-79d1-4ce0-9357-1ba97137e1ba/ROW-a0e78eda299ee111",
+     "0000950170-24-125262/C_5b42c0f7-1ac7-41ba-8bb0-24a4cd3209e2/ROW-cc5018de77a0d55c",
+     "0000950170-24-125262/C_9bbb1729-9b56-4fff-a569-9d68f69ed886/ROW-de0ed84459ccd27f",
+     "0000950170-24-125262/C_bd1dd986-090f-4ee6-af6d-0f24f6dbcac3/ROW-c766c18cb872b905",
+     "0000950170-24-125262/C_cde3f6bf-39cd-4ead-b00f-cdd13ac89d45/ROW-ebd7dafa3fca02b6",
+     "0000950170-24-125262/C_f2984883-6c9c-41c5-871c-7e4f39b7de84/ROW-b6f4f3207565bad3",
+     "0000950170-24-125262/C_a2bd3eec-a667-4dec-80b2-f4b02c587bf7/ROW-ba5f8dc55f7acbda",
+     "0000950170-24-125262/C_51c76c5f-9224-49d0-a511-3148ee3074c5/ROW-f951949c757fe40c",
+     "0000950170-24-125262/C_873da7fe-2084-4fdf-91ed-b4d764cac012/ROW-030abcf35f25746f",
+     "0000950170-24-125262/C_120e5caf-db54-4a9e-b56d-4a435cfa3b28/ROW-9779fc702a48845e",
+     "0000950170-24-125262/C_42315117-e9eb-444c-8094-c658be65e2c7/ROW-9a7ac483db962cfc",
+     "0000950170-24-125262/C_5bf96002-ae09-4298-ab6c-d5518f4a71bf/ROW-c2fd78bc63889ee6",
+     "0000950170-24-125262/C_2a65af42-03c3-4baa-92b4-a61104212cfb/ROW-aee5b0efe1d31c66",
+     "0000950170-24-125262/C_7481de46-9862-4e65-8f67-0702081d4000/ROW-c23c0b8dd8326708",
+     "0000950170-24-125262/C_6d7673a7-8a9b-4d2d-8a8f-b14a788dfe31/ROW-05027b6b164edd80",
+     "0000950170-24-125262/C_9db60b7a-b6cc-401d-b4bf-b4c11bd3045e/ROW-104b77c06a6d87e4",
+     "0000950170-24-125262/C_d84ed458-58bb-4c19-a493-3c8569fcc9e4/ROW-452fbbfac7ec9165",
+     "0000950170-24-125262/C_c723971a-b954-4553-afbb-357c779204f7/ROW-8200e4ad984796eb",
+     "0000950170-24-125262/C_3bfdc159-c8b1-4c2b-b45b-0cc7eabc79ec/ROW-934b38b94dc41684",
+     "0000950170-24-125262/C_f50c6e45-15c2-4389-9ac0-4d9266b74b4e/ROW-a66ed0dcbf167823",
+     "0000950170-24-125262/C_34c28130-128c-4c66-add3-b73c6acbbf8a/ROW-ad5960194b7add93",
+     "0000950170-24-125262/C_c02ce374-1b17-4c51-acba-d886f83e3121/ROW-b6bf315e1ef0927c",
+     "0000950170-24-125262/C_00b20bc2-189f-4e14-a201-4b8bc981534c/ROW-e92a2be4120cafd6",
+     "0000950170-24-125262/C_402f588d-59f0-43d8-8a5e-ded1e1336177/ROW-342951c9d2057acc",
+     "0000950170-24-125262/C_ad150cec-d6cf-433c-afc2-cc7fc6f4bff4/ROW-f50c8bd8fc4cff89"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-125262/C_fe74354e-a426-474b-b9dd-f69944e81f21/ROW-47e5732ce90ac65d",
+     "0000950170-24-125262/C_860be281-c1c8-4860-82c2-b56feff8c933/ROW-6d2bc441525c6a33",
+     "0000950170-24-125262/C_72a613c6-421c-406e-a61d-7fb398f176ec/ROW-6f1e8c92f0495df9",
+     "0000950170-24-125262/C_5fdc00af-7222-4764-b78c-407b856ee12e/ROW-ac736b8cb2e2cdad",
+     "0000950170-24-125262/C_d2f3d2d6-2aa9-4481-8388-5dd718f9bff5/ROW-089fd78f3f011fed",
+     "0000950170-24-125262/C_f2fb8d78-844e-4dd3-90e8-85fdc77d9087/ROW-125208d0961ae2cd",
+     "0000950170-24-125262/C_44413d1c-f819-49ce-8d27-54a5449232eb/ROW-32dfcd7674d3cbdb",
+     "0000950170-24-125262/C_a2dfd5ea-9230-46c0-9a72-704cf72ec841/ROW-af3bdee1a81bee36",
+     "0000950170-24-125262/C_d2020054-4993-422e-9e5e-3b06ae567cf6/ROW-0da1827a25c84265",
+     "0000950170-24-125262/C_51879ae9-d9a1-4b82-ab2f-77d8b033c999/ROW-6f3aed3cccf7c04d",
+     "0000950170-24-125262/C_194b683e-6e56-4a4d-8834-4d90f350c1f5/ROW-1310a94c15668a5b",
+     "0000950170-24-125262/C_418ee1a9-5938-4e2f-8735-5a4c285f751e/ROW-6e0c4d41c7847892",
+     "0000950170-24-125262/C_8f96ddfa-79d1-4ce0-9357-1ba97137e1ba/ROW-a0e78eda299ee111",
+     "0000950170-24-125262/C_5b42c0f7-1ac7-41ba-8bb0-24a4cd3209e2/ROW-cc5018de77a0d55c",
+     "0000950170-24-125262/C_9bbb1729-9b56-4fff-a569-9d68f69ed886/ROW-de0ed84459ccd27f",
+     "0000950170-24-125262/C_bd1dd986-090f-4ee6-af6d-0f24f6dbcac3/ROW-c766c18cb872b905",
+     "0000950170-24-125262/C_cde3f6bf-39cd-4ead-b00f-cdd13ac89d45/ROW-ebd7dafa3fca02b6",
+     "0000950170-24-125262/C_f2984883-6c9c-41c5-871c-7e4f39b7de84/ROW-b6f4f3207565bad3",
+     "0000950170-24-125262/C_a2bd3eec-a667-4dec-80b2-f4b02c587bf7/ROW-ba5f8dc55f7acbda",
+     "0000950170-24-125262/C_51c76c5f-9224-49d0-a511-3148ee3074c5/ROW-f951949c757fe40c",
+     "0000950170-24-125262/C_873da7fe-2084-4fdf-91ed-b4d764cac012/ROW-030abcf35f25746f",
+     "0000950170-24-125262/C_120e5caf-db54-4a9e-b56d-4a435cfa3b28/ROW-9779fc702a48845e",
+     "0000950170-24-125262/C_42315117-e9eb-444c-8094-c658be65e2c7/ROW-9a7ac483db962cfc",
+     "0000950170-24-125262/C_5bf96002-ae09-4298-ab6c-d5518f4a71bf/ROW-c2fd78bc63889ee6",
+     "0000950170-24-125262/C_2a65af42-03c3-4baa-92b4-a61104212cfb/ROW-aee5b0efe1d31c66",
+     "0000950170-24-125262/C_7481de46-9862-4e65-8f67-0702081d4000/ROW-c23c0b8dd8326708",
+     "0000950170-24-125262/C_6d7673a7-8a9b-4d2d-8a8f-b14a788dfe31/ROW-05027b6b164edd80",
+     "0000950170-24-125262/C_9db60b7a-b6cc-401d-b4bf-b4c11bd3045e/ROW-104b77c06a6d87e4",
+     "0000950170-24-125262/C_d84ed458-58bb-4c19-a493-3c8569fcc9e4/ROW-452fbbfac7ec9165",
+     "0000950170-24-125262/C_c723971a-b954-4553-afbb-357c779204f7/ROW-8200e4ad984796eb",
+     "0000950170-24-125262/C_3bfdc159-c8b1-4c2b-b45b-0cc7eabc79ec/ROW-934b38b94dc41684",
+     "0000950170-24-125262/C_f50c6e45-15c2-4389-9ac0-4d9266b74b4e/ROW-a66ed0dcbf167823",
+     "0000950170-24-125262/C_34c28130-128c-4c66-add3-b73c6acbbf8a/ROW-ad5960194b7add93",
+     "0000950170-24-125262/C_c02ce374-1b17-4c51-acba-d886f83e3121/ROW-b6bf315e1ef0927c",
+     "0000950170-24-125262/C_00b20bc2-189f-4e14-a201-4b8bc981534c/ROW-e92a2be4120cafd6",
+     "0000950170-24-125262/C_402f588d-59f0-43d8-8a5e-ded1e1336177/ROW-342951c9d2057acc",
+     "0000950170-24-125262/C_ad150cec-d6cf-433c-afc2-cc7fc6f4bff4/ROW-f50c8bd8fc4cff89"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-125262",
+     "text": "BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (M) 10.45 % 8/31/2027 3,381 3,334 3,339"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_23592773874b",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-043295/C_534b1fb2-faa2-43d6-aa49-5370ef31dd78/ROW-22c906d9d30d39b1",
+     "0000950170-25-043295/C_31868bdc-e1c4-4922-bd84-ab029c9548a5/ROW-3248900488f3211d",
+     "0000950170-25-043295/C_72a516d2-20dd-4e3b-959a-c193bc35739f/ROW-7af60946c1b05aab",
+     "0000950170-25-043295/C_94f5be39-2869-4c22-a348-866d00e5c04c/ROW-e6569b12dce86312",
+     "0000950170-25-043295/C_f7e05e88-516e-4970-a0fb-79c287e85e48/ROW-469212c7e53f075f",
+     "0000950170-25-043295/C_f91dbb2a-a370-4527-b048-604a2eec0983/ROW-6709ea62c6b26684",
+     "0000950170-25-043295/C_ebfeb38c-8311-44eb-8f64-ef1d68a71925/ROW-377ef25082c027b0",
+     "0000950170-25-043295/C_681da72a-0460-4bf4-a464-4b4d6ae57c26/ROW-9d8db716b65bbcb6",
+     "0000950170-25-043295/C_a5ecd575-ca06-4622-9ea0-6f9eabee3c06/ROW-0718b5530ef8dc93",
+     "0000950170-25-043295/C_5344853a-935e-4e40-8481-297a6b9e3216/ROW-0ddfb09f64017410",
+     "0000950170-25-043295/C_a571c333-e8bd-406f-a65e-5c71f5fe4604/ROW-551c31c50cc7be39",
+     "0000950170-25-043295/C_5302c2fd-d493-4fed-85b5-3b9162b5f7cc/ROW-6c43b9666f396a4f",
+     "0000950170-25-043295/C_4f4b3c5b-fc74-4659-8ec7-766ab2afbfb5/ROW-6ea3c9a8f5a7b335",
+     "0000950170-25-043295/C_aac2a390-aae0-4b2e-b65c-602db135ef89/ROW-7b810a39ad5000e7",
+     "0000950170-25-043295/C_a5d3f9ee-e371-491a-a466-6a368e501c38/ROW-81754d2ad7d5a909",
+     "0000950170-25-043295/C_12b9d757-a006-44f1-b156-ad211a0e7172/ROW-48901206c97c864a",
+     "0000950170-25-043295/C_f0174319-03ba-40da-b4af-421a7921182d/ROW-6eee52e7aca795c8",
+     "0000950170-25-043295/C_4f7a40b4-2fb1-4302-b819-224d97d8feb6/ROW-2c3d1f2145853a3b",
+     "0000950170-25-043295/C_18eb6cd0-da49-4d06-9128-3bb982d6d328/ROW-921cf43a97fa0d4f",
+     "0000950170-25-043295/C_78371ffd-4c57-477e-9292-cc8c67059580/ROW-27b33e7e4914d525",
+     "0000950170-25-043295/C_32a66537-2740-4137-b722-45d3ad67dd52/ROW-e558dd951ed94874",
+     "0000950170-25-043295/C_3835745b-3828-468e-b2bc-9126f089eeb1/ROW-1c637a8a30d0f490",
+     "0000950170-25-043295/C_43835f0e-e761-4c81-8a1d-a496a9e26ec3/ROW-2441add8564ad419",
+     "0000950170-25-043295/C_36d34300-5110-48a9-b8bc-b7171cee46e0/ROW-2595401800e132aa",
+     "0000950170-25-043295/C_75cb0327-7e46-403b-9921-24d949c28f4d/ROW-98a960313c34bef6",
+     "0000950170-25-043295/C_5b376dfe-8ee4-4525-b237-cee7f67a1d68/ROW-a341499174058dff",
+     "0000950170-25-043295/C_018a057c-5837-4f7b-9ba0-867daecf0b88/ROW-bb6ce5117188d971",
+     "0000950170-25-043295/C_4449ddcf-4258-446c-bb16-36873719206c/ROW-be781728736c8fd3",
+     "0000950170-25-043295/C_10833f61-6045-4350-8edf-1afc1de50757/ROW-e9a422986b7db0a8",
+     "0000950170-25-043295/C_c09927f6-5288-468d-8f11-d3685ab4632b/ROW-f1d2a4913c387a72",
+     "0000950170-25-043295/C_c9c90634-a832-4653-b47d-0e1e058a4b28/ROW-57f9303d2988285f",
+     "0000950170-25-043295/C_eb67e7c6-a686-4184-b2f6-4e0dcd193dca/ROW-e152adb96fce7f11"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-043295/C_534b1fb2-faa2-43d6-aa49-5370ef31dd78/ROW-22c906d9d30d39b1",
+     "0000950170-25-043295/C_31868bdc-e1c4-4922-bd84-ab029c9548a5/ROW-3248900488f3211d",
+     "0000950170-25-043295/C_72a516d2-20dd-4e3b-959a-c193bc35739f/ROW-7af60946c1b05aab",
+     "0000950170-25-043295/C_94f5be39-2869-4c22-a348-866d00e5c04c/ROW-e6569b12dce86312",
+     "0000950170-25-043295/C_f7e05e88-516e-4970-a0fb-79c287e85e48/ROW-469212c7e53f075f",
+     "0000950170-25-043295/C_f91dbb2a-a370-4527-b048-604a2eec0983/ROW-6709ea62c6b26684",
+     "0000950170-25-043295/C_ebfeb38c-8311-44eb-8f64-ef1d68a71925/ROW-377ef25082c027b0",
+     "0000950170-25-043295/C_681da72a-0460-4bf4-a464-4b4d6ae57c26/ROW-9d8db716b65bbcb6",
+     "0000950170-25-043295/C_a5ecd575-ca06-4622-9ea0-6f9eabee3c06/ROW-0718b5530ef8dc93",
+     "0000950170-25-043295/C_5344853a-935e-4e40-8481-297a6b9e3216/ROW-0ddfb09f64017410",
+     "0000950170-25-043295/C_a571c333-e8bd-406f-a65e-5c71f5fe4604/ROW-551c31c50cc7be39",
+     "0000950170-25-043295/C_5302c2fd-d493-4fed-85b5-3b9162b5f7cc/ROW-6c43b9666f396a4f",
+     "0000950170-25-043295/C_4f4b3c5b-fc74-4659-8ec7-766ab2afbfb5/ROW-6ea3c9a8f5a7b335",
+     "0000950170-25-043295/C_aac2a390-aae0-4b2e-b65c-602db135ef89/ROW-7b810a39ad5000e7",
+     "0000950170-25-043295/C_a5d3f9ee-e371-491a-a466-6a368e501c38/ROW-81754d2ad7d5a909",
+     "0000950170-25-043295/C_12b9d757-a006-44f1-b156-ad211a0e7172/ROW-48901206c97c864a",
+     "0000950170-25-043295/C_f0174319-03ba-40da-b4af-421a7921182d/ROW-6eee52e7aca795c8",
+     "0000950170-25-043295/C_4f7a40b4-2fb1-4302-b819-224d97d8feb6/ROW-2c3d1f2145853a3b",
+     "0000950170-25-043295/C_18eb6cd0-da49-4d06-9128-3bb982d6d328/ROW-921cf43a97fa0d4f",
+     "0000950170-25-043295/C_78371ffd-4c57-477e-9292-cc8c67059580/ROW-27b33e7e4914d525",
+     "0000950170-25-043295/C_32a66537-2740-4137-b722-45d3ad67dd52/ROW-e558dd951ed94874",
+     "0000950170-25-043295/C_3835745b-3828-468e-b2bc-9126f089eeb1/ROW-1c637a8a30d0f490",
+     "0000950170-25-043295/C_43835f0e-e761-4c81-8a1d-a496a9e26ec3/ROW-2441add8564ad419",
+     "0000950170-25-043295/C_36d34300-5110-48a9-b8bc-b7171cee46e0/ROW-2595401800e132aa",
+     "0000950170-25-043295/C_75cb0327-7e46-403b-9921-24d949c28f4d/ROW-98a960313c34bef6",
+     "0000950170-25-043295/C_5b376dfe-8ee4-4525-b237-cee7f67a1d68/ROW-a341499174058dff",
+     "0000950170-25-043295/C_018a057c-5837-4f7b-9ba0-867daecf0b88/ROW-bb6ce5117188d971",
+     "0000950170-25-043295/C_4449ddcf-4258-446c-bb16-36873719206c/ROW-be781728736c8fd3",
+     "0000950170-25-043295/C_10833f61-6045-4350-8edf-1afc1de50757/ROW-e9a422986b7db0a8",
+     "0000950170-25-043295/C_c09927f6-5288-468d-8f11-d3685ab4632b/ROW-f1d2a4913c387a72",
+     "0000950170-25-043295/C_c9c90634-a832-4653-b47d-0e1e058a4b28/ROW-57f9303d2988285f",
+     "0000950170-25-043295/C_eb67e7c6-a686-4184-b2f6-4e0dcd193dca/ROW-e152adb96fce7f11"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-043295",
+     "text": "BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (Q) 9.98 % 7/26/2022 7/26/2028 3,372 3,328 3,322"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_0f71ab4a3c50",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-071178/C_909ac9f2-6e2d-4cd3-9abf-12306d8b4471/ROW-b8ecd2429b065554",
+     "0000950170-25-071178/C_eeafab0d-a7ba-478d-8316-209556922226/ROW-c8831e56a83cb884",
+     "0000950170-25-071178/C_3848eedb-d927-43e7-82b2-26e1a614a54d/ROW-0ec5a3bc217f5841",
+     "0000950170-25-071178/C_816839ac-13fb-427a-8e17-f8311995dab1/ROW-33850b884f33f1a7",
+     "0000950170-25-071178/C_5103902f-25f5-48ed-a13f-cee358423c0c/ROW-652ce157eebceacf",
+     "0000950170-25-071178/C_aa653a69-28ba-4163-809d-2477fdcdcf4b/ROW-ee18be4cbfa8b496",
+     "0000950170-25-071178/C_51c8a8df-262c-4f4c-8348-fab61bbbacbd/ROW-741edb5cfb8212ab",
+     "0000950170-25-071178/C_21ad2cc2-c855-4d43-8dad-4b88da7f4227/ROW-fb62c0d82ec21a6a",
+     "0000950170-25-071178/C_5823fcf0-4733-4333-b587-d3254e8f12a8/ROW-083e67d6173b7646",
+     "0000950170-25-071178/C_3cae0b61-4234-41e3-b1cc-8b218ce2c142/ROW-579eb074c9167358",
+     "0000950170-25-071178/C_1ba74d7c-d915-44c8-96d4-b68527bc4198/ROW-0f9a7b6171e0c46a",
+     "0000950170-25-071178/C_842dfd49-a69c-483f-833d-69da5acf09a7/ROW-dd5d80c352f42307",
+     "0000950170-25-071178/C_bff6f614-f270-4733-8690-4131e00b27f8/ROW-6b2611c807711056",
+     "0000950170-25-071178/C_40c62df4-29ba-4354-90c5-5a945adaa979/ROW-99f6b5b8df347aee",
+     "0000950170-25-071178/C_a4c7b796-c0a4-4c7d-8ed7-f3fc825ec6da/ROW-11a8b4c24a3471d9",
+     "0000950170-25-071178/C_bd5db6a9-e33a-4179-b423-0094388ec304/ROW-2dbc19da8acf2c31",
+     "0000950170-25-071178/C_d1b8d881-e123-4989-9ec4-6f5da1565d99/ROW-509f79c693dba079",
+     "0000950170-25-071178/C_0007e2b2-0050-491c-bc8d-42f5aa7c4a6c/ROW-6af3c67268ce673f",
+     "0000950170-25-071178/C_7af5691d-4f25-46ca-8b42-be8af9e22002/ROW-747c793eb0507d46",
+     "0000950170-25-071178/C_c7247569-1dcf-484b-b22e-79865a5018ea/ROW-9e74817a61d8cd71",
+     "0000950170-25-071178/C_d9b0aa46-a703-44f1-b12c-f553d349baed/ROW-a30065dc09d5aa6f",
+     "0000950170-25-071178/C_fa1a10c5-eaf8-4fde-a530-7acc594b06d6/ROW-c76609d097d16a89",
+     "0000950170-25-071178/C_aba58782-cdc6-4d04-a8f2-55d290f1fa2b/ROW-f8b876a3058432f9",
+     "0000950170-25-071178/C_c7e8f60b-8075-4b90-9ad7-e9ab9ae933fc/ROW-39274cc747d63e56",
+     "0000950170-25-071178/C_cf68c50d-0024-4d6c-b879-da639b0b2ee6/ROW-f362eee7a7f11b0f"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-071178/C_909ac9f2-6e2d-4cd3-9abf-12306d8b4471/ROW-b8ecd2429b065554",
+     "0000950170-25-071178/C_eeafab0d-a7ba-478d-8316-209556922226/ROW-c8831e56a83cb884",
+     "0000950170-25-071178/C_3848eedb-d927-43e7-82b2-26e1a614a54d/ROW-0ec5a3bc217f5841",
+     "0000950170-25-071178/C_816839ac-13fb-427a-8e17-f8311995dab1/ROW-33850b884f33f1a7",
+     "0000950170-25-071178/C_5103902f-25f5-48ed-a13f-cee358423c0c/ROW-652ce157eebceacf",
+     "0000950170-25-071178/C_aa653a69-28ba-4163-809d-2477fdcdcf4b/ROW-ee18be4cbfa8b496",
+     "0000950170-25-071178/C_51c8a8df-262c-4f4c-8348-fab61bbbacbd/ROW-741edb5cfb8212ab",
+     "0000950170-25-071178/C_21ad2cc2-c855-4d43-8dad-4b88da7f4227/ROW-fb62c0d82ec21a6a",
+     "0000950170-25-071178/C_5823fcf0-4733-4333-b587-d3254e8f12a8/ROW-083e67d6173b7646",
+     "0000950170-25-071178/C_3cae0b61-4234-41e3-b1cc-8b218ce2c142/ROW-579eb074c9167358",
+     "0000950170-25-071178/C_1ba74d7c-d915-44c8-96d4-b68527bc4198/ROW-0f9a7b6171e0c46a",
+     "0000950170-25-071178/C_842dfd49-a69c-483f-833d-69da5acf09a7/ROW-dd5d80c352f42307",
+     "0000950170-25-071178/C_bff6f614-f270-4733-8690-4131e00b27f8/ROW-6b2611c807711056",
+     "0000950170-25-071178/C_40c62df4-29ba-4354-90c5-5a945adaa979/ROW-99f6b5b8df347aee",
+     "0000950170-25-071178/C_a4c7b796-c0a4-4c7d-8ed7-f3fc825ec6da/ROW-11a8b4c24a3471d9",
+     "0000950170-25-071178/C_bd5db6a9-e33a-4179-b423-0094388ec304/ROW-2dbc19da8acf2c31",
+     "0000950170-25-071178/C_d1b8d881-e123-4989-9ec4-6f5da1565d99/ROW-509f79c693dba079",
+     "0000950170-25-071178/C_0007e2b2-0050-491c-bc8d-42f5aa7c4a6c/ROW-6af3c67268ce673f",
+     "0000950170-25-071178/C_7af5691d-4f25-46ca-8b42-be8af9e22002/ROW-747c793eb0507d46",
+     "0000950170-25-071178/C_c7247569-1dcf-484b-b22e-79865a5018ea/ROW-9e74817a61d8cd71",
+     "0000950170-25-071178/C_d9b0aa46-a703-44f1-b12c-f553d349baed/ROW-a30065dc09d5aa6f",
+     "0000950170-25-071178/C_fa1a10c5-eaf8-4fde-a530-7acc594b06d6/ROW-c76609d097d16a89",
+     "0000950170-25-071178/C_aba58782-cdc6-4d04-a8f2-55d290f1fa2b/ROW-f8b876a3058432f9",
+     "0000950170-25-071178/C_c7e8f60b-8075-4b90-9ad7-e9ab9ae933fc/ROW-39274cc747d63e56",
+     "0000950170-25-071178/C_cf68c50d-0024-4d6c-b879-da639b0b2ee6/ROW-f362eee7a7f11b0f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071178",
+     "text": "Boulder Scientific Company, LLC Term Loan SOFR + 4.75 % (Q) 9.05 % 6/2/2022 12/31/2027 414 412 408"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_d137ab632df2",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-106434/C_ee443e67-88c0-4760-be41-f69305ba2221/ROW-7d4a88dbedbc65c7",
+     "0000950170-25-106434/C_bbedd601-35b1-4378-a19f-66923cdcf1bd/ROW-9ed8a783d3c54a0d",
+     "0000950170-25-106434/C_24e69ad3-d666-41e8-9011-50065f6c523e/ROW-5e95f7fc59d70843",
+     "0000950170-25-106434/C_2d752329-72ac-4897-8926-8bb52c740fc6/ROW-f663396bd5282c3f",
+     "0000950170-25-106434/C_dfb2075f-5b2f-4a03-9d56-493de927c832/ROW-08f13182390010a3",
+     "0000950170-25-106434/C_8f618046-7b96-4f40-8ad6-6b24bd0b7c68/ROW-b61f8dddcacb1e9b",
+     "0000950170-25-106434/C_4c3cb297-d8b1-42d7-9d6a-ce0f98cb80e2/ROW-41eea7355ebdc999",
+     "0000950170-25-106434/C_14e472e7-5ad0-460b-ab5e-25144237265e/ROW-57d22761c56a72fc",
+     "0000950170-25-106434/C_db4a0cb8-61e0-4e2a-9708-9c24ae7e924d/ROW-bb6079540a79fbf4",
+     "0000950170-25-106434/C_d6612c8a-a5a3-449c-b755-5107e7779d97/ROW-19e19f7fb58ff775",
+     "0000950170-25-106434/C_dedb407c-4db9-4880-b428-0dcc0948d02f/ROW-2dc34f04043de6b6",
+     "0000950170-25-106434/C_e2a78e43-ba4c-4ebe-9bb2-0470dd83276a/ROW-73efa366ccae7433",
+     "0000950170-25-106434/C_6d67094b-9542-4538-a97c-808762422899/ROW-de00e7ea604b05b7",
+     "0000950170-25-106434/C_57c10e5a-3013-4752-be05-d83d9084fb69/ROW-059000d0e616ebe2",
+     "0000950170-25-106434/C_204396ab-0af4-4467-ac55-e040c4e66f18/ROW-08e49d944d1f7df0",
+     "0000950170-25-106434/C_cba2f1bc-5d92-4919-ae6b-8d2657f4b99b/ROW-7c6d2a08c89f1661",
+     "0000950170-25-106434/C_f7d6d917-ee34-48eb-85d2-316569e689c5/ROW-f8936c67928b43b2",
+     "0000950170-25-106434/C_b87fe11a-3c39-4130-8672-784465d869d0/ROW-86f76586c189cd13",
+     "0000950170-25-106434/C_4861d353-9c08-4b7b-be8b-0c458b3e0a9b/ROW-b636299ed7b2128e",
+     "0000950170-25-106434/C_756e25e2-115a-43d7-a0f7-fdbfd8595094/ROW-94df5ea7d766181e",
+     "0000950170-25-106434/C_30065d7d-62ea-4c91-9ac1-81afaa727dfb/ROW-eeaf8e1684837dbe",
+     "0000950170-25-106434/C_6705cf42-aa64-43c0-ab46-d4a26e456a73/ROW-81e38732a4927986",
+     "0000950170-25-106434/C_cf82bd20-a86b-411d-90a4-660c725a8b83/ROW-b0caa705a0767aed",
+     "0000950170-25-106434/C_2dde9fe3-6976-452a-8d50-7132b3531647/ROW-d0e56eef9a555c3d",
+     "0000950170-25-106434/C_c3a5348d-7f93-462e-a7ae-4404ca295e31/ROW-18e26af2bc452324",
+     "0000950170-25-106434/C_2da8dc3f-6b13-46c7-839f-44162c905257/ROW-4dd79a0e94d6c9bb",
+     "0000950170-25-106434/C_fc326e20-082e-44a4-8ca8-45b78790a43f/ROW-130552590d0fd3e0",
+     "0000950170-25-106434/C_ed536184-5c72-40bc-8630-4ebbe9e9ff9d/ROW-252a01f767de8006",
+     "0000950170-25-106434/C_aaf527d5-6663-472f-b564-7c7e2cb8fd38/ROW-2d2c533fb50c6713",
+     "0000950170-25-106434/C_0ba77a39-04a5-4024-8f60-ddf96718ad8f/ROW-333ce7dbe54bac76",
+     "0000950170-25-106434/C_66ede4f0-67d2-46d0-acc9-6fba06feba49/ROW-5803c92b0cc5735b",
+     "0000950170-25-106434/C_66f2fdd1-5fb0-405e-955b-aaa775a52141/ROW-9db4e6b49114da0f",
+     "0000950170-25-106434/C_9f6b3dd2-8eea-4f81-b06d-640e9d9ad9fa/ROW-bad59ec8c82ca1bb",
+     "0000950170-25-106434/C_4da7423c-324b-46d2-b8e6-62c05b47ce97/ROW-da5497bc25f6082d",
+     "0000950170-25-106434/C_c2f046f7-a881-42e8-858c-beeaf1e80b4c/ROW-816617c3ad8a5cf9",
+     "0000950170-25-106434/C_1e33b910-8c01-40ef-9316-3cfac0677d16/ROW-8a239186470e5ef7",
+     "0000950170-25-106434/C_3bca36da-4b96-4f97-97c0-e8c8aef51ec4/ROW-413ecbf31ce69caf",
+     "0000950170-25-106434/C_9a909935-6cfe-4788-a3c5-1fec6f1c3fb1/ROW-e2ea9d13cd40da65"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-106434/C_ee443e67-88c0-4760-be41-f69305ba2221/ROW-7d4a88dbedbc65c7",
+     "0000950170-25-106434/C_bbedd601-35b1-4378-a19f-66923cdcf1bd/ROW-9ed8a783d3c54a0d",
+     "0000950170-25-106434/C_24e69ad3-d666-41e8-9011-50065f6c523e/ROW-5e95f7fc59d70843",
+     "0000950170-25-106434/C_2d752329-72ac-4897-8926-8bb52c740fc6/ROW-f663396bd5282c3f",
+     "0000950170-25-106434/C_dfb2075f-5b2f-4a03-9d56-493de927c832/ROW-08f13182390010a3",
+     "0000950170-25-106434/C_8f618046-7b96-4f40-8ad6-6b24bd0b7c68/ROW-b61f8dddcacb1e9b",
+     "0000950170-25-106434/C_4c3cb297-d8b1-42d7-9d6a-ce0f98cb80e2/ROW-41eea7355ebdc999",
+     "0000950170-25-106434/C_14e472e7-5ad0-460b-ab5e-25144237265e/ROW-57d22761c56a72fc",
+     "0000950170-25-106434/C_db4a0cb8-61e0-4e2a-9708-9c24ae7e924d/ROW-bb6079540a79fbf4",
+     "0000950170-25-106434/C_d6612c8a-a5a3-449c-b755-5107e7779d97/ROW-19e19f7fb58ff775",
+     "0000950170-25-106434/C_dedb407c-4db9-4880-b428-0dcc0948d02f/ROW-2dc34f04043de6b6",
+     "0000950170-25-106434/C_e2a78e43-ba4c-4ebe-9bb2-0470dd83276a/ROW-73efa366ccae7433",
+     "0000950170-25-106434/C_6d67094b-9542-4538-a97c-808762422899/ROW-de00e7ea604b05b7",
+     "0000950170-25-106434/C_57c10e5a-3013-4752-be05-d83d9084fb69/ROW-059000d0e616ebe2",
+     "0000950170-25-106434/C_204396ab-0af4-4467-ac55-e040c4e66f18/ROW-08e49d944d1f7df0",
+     "0000950170-25-106434/C_cba2f1bc-5d92-4919-ae6b-8d2657f4b99b/ROW-7c6d2a08c89f1661",
+     "0000950170-25-106434/C_f7d6d917-ee34-48eb-85d2-316569e689c5/ROW-f8936c67928b43b2",
+     "0000950170-25-106434/C_b87fe11a-3c39-4130-8672-784465d869d0/ROW-86f76586c189cd13",
+     "0000950170-25-106434/C_4861d353-9c08-4b7b-be8b-0c458b3e0a9b/ROW-b636299ed7b2128e",
+     "0000950170-25-106434/C_756e25e2-115a-43d7-a0f7-fdbfd8595094/ROW-94df5ea7d766181e",
+     "0000950170-25-106434/C_30065d7d-62ea-4c91-9ac1-81afaa727dfb/ROW-eeaf8e1684837dbe",
+     "0000950170-25-106434/C_6705cf42-aa64-43c0-ab46-d4a26e456a73/ROW-81e38732a4927986",
+     "0000950170-25-106434/C_cf82bd20-a86b-411d-90a4-660c725a8b83/ROW-b0caa705a0767aed",
+     "0000950170-25-106434/C_2dde9fe3-6976-452a-8d50-7132b3531647/ROW-d0e56eef9a555c3d",
+     "0000950170-25-106434/C_c3a5348d-7f93-462e-a7ae-4404ca295e31/ROW-18e26af2bc452324",
+     "0000950170-25-106434/C_2da8dc3f-6b13-46c7-839f-44162c905257/ROW-4dd79a0e94d6c9bb",
+     "0000950170-25-106434/C_fc326e20-082e-44a4-8ca8-45b78790a43f/ROW-130552590d0fd3e0",
+     "0000950170-25-106434/C_ed536184-5c72-40bc-8630-4ebbe9e9ff9d/ROW-252a01f767de8006",
+     "0000950170-25-106434/C_aaf527d5-6663-472f-b564-7c7e2cb8fd38/ROW-2d2c533fb50c6713",
+     "0000950170-25-106434/C_0ba77a39-04a5-4024-8f60-ddf96718ad8f/ROW-333ce7dbe54bac76",
+     "0000950170-25-106434/C_66ede4f0-67d2-46d0-acc9-6fba06feba49/ROW-5803c92b0cc5735b",
+     "0000950170-25-106434/C_66f2fdd1-5fb0-405e-955b-aaa775a52141/ROW-9db4e6b49114da0f",
+     "0000950170-25-106434/C_9f6b3dd2-8eea-4f81-b06d-640e9d9ad9fa/ROW-bad59ec8c82ca1bb",
+     "0000950170-25-106434/C_4da7423c-324b-46d2-b8e6-62c05b47ce97/ROW-da5497bc25f6082d",
+     "0000950170-25-106434/C_c2f046f7-a881-42e8-858c-beeaf1e80b4c/ROW-816617c3ad8a5cf9",
+     "0000950170-25-106434/C_1e33b910-8c01-40ef-9316-3cfac0677d16/ROW-8a239186470e5ef7",
+     "0000950170-25-106434/C_3bca36da-4b96-4f97-97c0-e8c8aef51ec4/ROW-413ecbf31ce69caf",
+     "0000950170-25-106434/C_9a909935-6cfe-4788-a3c5-1fec6f1c3fb1/ROW-e2ea9d13cd40da65"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-106434",
+     "text": "Boulder Scientific Company, LLC Term Loan SOFR + 4.50 % (Q) 8.80 % 6/2/2022 12/31/2027 414 412 413"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_a8c42a48b6dc",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-272093/C_46edfc9b-a9e5-49f7-b9f8-f76d6018e1e9/ROW-8831bd2d05d27e0f",
+     "0001193125-25-272093/C_c5ba18cf-54ce-46a3-9f13-9f6ad08158d3/ROW-975d07107cd4431b",
+     "0001193125-25-272093/C_f52ccc66-8349-4f77-956c-4084c43b5079/ROW-0260a31ea236d659",
+     "0001193125-25-272093/C_37f1d9c9-56e0-465f-88a3-69de78544a53/ROW-9f1f8b4ad6fa922f",
+     "0001193125-25-272093/C_b9415095-c66d-4987-93f9-3f6260e9e67e/ROW-19122bf3747c87c3",
+     "0001193125-25-272093/C_a244f291-3cf9-49c5-a3bb-3265b9b3e359/ROW-e3abc3da388ec40c",
+     "0001193125-25-272093/C_ab43a17f-9d60-44b5-8280-611b68177b6f/ROW-0844cd3bc4ee841a",
+     "0001193125-25-272093/C_25100ab3-032e-41b2-85e6-08286877f242/ROW-889114adabb92768",
+     "0001193125-25-272093/C_4242864e-d90f-4fc9-96d7-18bff2f7b5c6/ROW-ac2f07a6c7934eb5",
+     "0001193125-25-272093/C_fe3ddf27-ab0e-46d9-af6f-fbc47c06c5ee/ROW-a5688ba7b75c93eb",
+     "0001193125-25-272093/C_02292c18-b3fd-4bd7-a99f-18879f043aee/ROW-c01e46ddbb605557",
+     "0001193125-25-272093/C_7d645973-8723-42bd-8caa-d9ac28458f28/ROW-1b331c8275b2621e",
+     "0001193125-25-272093/C_76b98aab-5bfd-4aaa-8538-0dde638eba3f/ROW-ec239ede3569e583",
+     "0001193125-25-272093/C_34b20df5-9523-48b1-ae3c-266bde8b39da/ROW-e1a0d2ca0c341113",
+     "0001193125-25-272093/C_47c991ce-ef7a-4862-a9eb-d621deeed133/ROW-e2f9ca29511e8ebd",
+     "0001193125-25-272093/C_ab578576-7ea2-4a0a-9fcf-087d5f3d6691/ROW-047711d47b0a07f8",
+     "0001193125-25-272093/C_ea302408-ae37-4a45-959b-9d16e8e28357/ROW-8d1b6511651a749c",
+     "0001193125-25-272093/C_72d0fd93-286f-4263-b1c4-254b319360a2/ROW-840653d91ba97b39",
+     "0001193125-25-272093/C_f8306749-881a-4455-ac4a-b9d20f58468b/ROW-976253935e2d1de0",
+     "0001193125-25-272093/C_ceebf19a-6c30-424d-8f7d-bf14ae11bf2e/ROW-2975c0eef7624a1b",
+     "0001193125-25-272093/C_90241fc4-31cb-4c8b-9394-6ac07382543a/ROW-2afe0d125e6b4099",
+     "0001193125-25-272093/C_c064f85c-bdc1-4f0e-9d2a-57a8fdcf21ef/ROW-38f880f66772929f",
+     "0001193125-25-272093/C_2a6ad60a-2971-4d45-ae3d-425658464255/ROW-39ab851928c5abc3",
+     "0001193125-25-272093/C_e334db52-7042-4de9-8ac6-aa6e5c92f541/ROW-cf78afd2cb9ddb4a",
+     "0001193125-25-272093/C_51963c8c-4ae5-4f07-9e1d-8665a57d965e/ROW-db233b1c33c17341",
+     "0001193125-25-272093/C_9c8c3149-3cd5-40c2-a7ba-d230c7292023/ROW-e2dd1f602b30b10b",
+     "0001193125-25-272093/C_4e9247d8-ecae-4a0b-8c31-2504635f255e/ROW-f029d257b6d635bd",
+     "0001193125-25-272093/C_12f91947-2751-43ae-9526-976b9466e01c/ROW-a9923f7d004d1e0a",
+     "0001193125-25-272093/C_f341e624-ea1b-466b-b69c-b0f848866a58/ROW-c24a014c4e667b3e"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-272093/C_46edfc9b-a9e5-49f7-b9f8-f76d6018e1e9/ROW-8831bd2d05d27e0f",
+     "0001193125-25-272093/C_c5ba18cf-54ce-46a3-9f13-9f6ad08158d3/ROW-975d07107cd4431b",
+     "0001193125-25-272093/C_f52ccc66-8349-4f77-956c-4084c43b5079/ROW-0260a31ea236d659",
+     "0001193125-25-272093/C_37f1d9c9-56e0-465f-88a3-69de78544a53/ROW-9f1f8b4ad6fa922f",
+     "0001193125-25-272093/C_b9415095-c66d-4987-93f9-3f6260e9e67e/ROW-19122bf3747c87c3",
+     "0001193125-25-272093/C_a244f291-3cf9-49c5-a3bb-3265b9b3e359/ROW-e3abc3da388ec40c",
+     "0001193125-25-272093/C_ab43a17f-9d60-44b5-8280-611b68177b6f/ROW-0844cd3bc4ee841a",
+     "0001193125-25-272093/C_25100ab3-032e-41b2-85e6-08286877f242/ROW-889114adabb92768",
+     "0001193125-25-272093/C_4242864e-d90f-4fc9-96d7-18bff2f7b5c6/ROW-ac2f07a6c7934eb5",
+     "0001193125-25-272093/C_fe3ddf27-ab0e-46d9-af6f-fbc47c06c5ee/ROW-a5688ba7b75c93eb",
+     "0001193125-25-272093/C_02292c18-b3fd-4bd7-a99f-18879f043aee/ROW-c01e46ddbb605557",
+     "0001193125-25-272093/C_7d645973-8723-42bd-8caa-d9ac28458f28/ROW-1b331c8275b2621e",
+     "0001193125-25-272093/C_76b98aab-5bfd-4aaa-8538-0dde638eba3f/ROW-ec239ede3569e583",
+     "0001193125-25-272093/C_34b20df5-9523-48b1-ae3c-266bde8b39da/ROW-e1a0d2ca0c341113",
+     "0001193125-25-272093/C_47c991ce-ef7a-4862-a9eb-d621deeed133/ROW-e2f9ca29511e8ebd",
+     "0001193125-25-272093/C_ab578576-7ea2-4a0a-9fcf-087d5f3d6691/ROW-047711d47b0a07f8",
+     "0001193125-25-272093/C_ea302408-ae37-4a45-959b-9d16e8e28357/ROW-8d1b6511651a749c",
+     "0001193125-25-272093/C_72d0fd93-286f-4263-b1c4-254b319360a2/ROW-840653d91ba97b39",
+     "0001193125-25-272093/C_f8306749-881a-4455-ac4a-b9d20f58468b/ROW-976253935e2d1de0",
+     "0001193125-25-272093/C_ceebf19a-6c30-424d-8f7d-bf14ae11bf2e/ROW-2975c0eef7624a1b",
+     "0001193125-25-272093/C_90241fc4-31cb-4c8b-9394-6ac07382543a/ROW-2afe0d125e6b4099",
+     "0001193125-25-272093/C_c064f85c-bdc1-4f0e-9d2a-57a8fdcf21ef/ROW-38f880f66772929f",
+     "0001193125-25-272093/C_2a6ad60a-2971-4d45-ae3d-425658464255/ROW-39ab851928c5abc3",
+     "0001193125-25-272093/C_e334db52-7042-4de9-8ac6-aa6e5c92f541/ROW-cf78afd2cb9ddb4a",
+     "0001193125-25-272093/C_51963c8c-4ae5-4f07-9e1d-8665a57d965e/ROW-db233b1c33c17341",
+     "0001193125-25-272093/C_9c8c3149-3cd5-40c2-a7ba-d230c7292023/ROW-e2dd1f602b30b10b",
+     "0001193125-25-272093/C_4e9247d8-ecae-4a0b-8c31-2504635f255e/ROW-f029d257b6d635bd",
+     "0001193125-25-272093/C_12f91947-2751-43ae-9526-976b9466e01c/ROW-a9923f7d004d1e0a",
+     "0001193125-25-272093/C_f341e624-ea1b-466b-b69c-b0f848866a58/ROW-c24a014c4e667b3e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-272093",
+     "text": "Krayden Holdings, Inc. Delayed Draw Term Loan SOFR + 4.75 % (M) 8.91 % 3/1/2023 3/1/2029 385 377 384"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_043316c16d52",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-114266/C_51c56290-ae59-4608-806b-330f699e4c77/ROW-a0add2cd6577a681",
+     "0001193125-26-114266/C_ec5d2278-f9e0-4871-bb53-f45f372842a6/ROW-a274800c34584bdc",
+     "0001193125-26-114266/C_7350834a-b0cb-4c31-89d4-6368fd30b0bb/ROW-5deb3de868d20f8d",
+     "0001193125-26-114266/C_cf0f1725-44b8-4b8c-9c5d-b51c38614482/ROW-f1ee1970fe3a6f70",
+     "0001193125-26-114266/C_d31eb984-9ea8-461d-acc4-8717d08cf7f2/ROW-37e35bb8fa90055b",
+     "0001193125-26-114266/C_cb36eacd-b4b0-4580-911f-1f0ef0ccf71c/ROW-b72ca503a12dfcfb",
+     "0001193125-26-114266/C_cccc0700-8802-4e16-98fb-a7e827c6c5fd/ROW-dd0aa52b7ea79c0f",
+     "0001193125-26-114266/C_4e58ae9e-7aa3-4bd7-888d-54fe93c18944/ROW-1a8e08f3d838f596",
+     "0001193125-26-114266/C_f6ae2f9b-18e8-4268-9095-683f69de4fb8/ROW-291bae2c3ff4f2c6",
+     "0001193125-26-114266/C_b84dbc94-af32-4f67-bad0-eb34f282475c/ROW-876302d6fe4ba737",
+     "0001193125-26-114266/C_cc35bffa-8be4-4671-8f21-792ee59bb11c/ROW-b7d665577bf65734",
+     "0001193125-26-114266/C_ae6e3add-ae9c-478c-8966-4dd400dfa973/ROW-6de966ca5f405179",
+     "0001193125-26-114266/C_de039d9a-8d34-4536-b040-fc7a239e5d50/ROW-c299be291d2ebc49",
+     "0001193125-26-114266/C_825dbfb9-da07-492b-bd5c-1c75ccdc5a1d/ROW-62b86d215b4915be",
+     "0001193125-26-114266/C_0e7480a1-2de4-4c40-be77-fc0120670720/ROW-a2e0abcc0b2a80b9",
+     "0001193125-26-114266/C_32eaf9c9-e6ab-4280-ba4a-cc2d83c09f36/ROW-4d31b5b8a965dfed",
+     "0001193125-26-114266/C_255ad403-7b73-45fe-b0db-032062779f3a/ROW-c32caf3b3029a5e9",
+     "0001193125-26-114266/C_2f9bb85e-49ff-4345-b2c3-aa1f6b13c653/ROW-8ca5488c51bc2260",
+     "0001193125-26-114266/C_c15c3ee5-dcd6-4394-80b0-0f99e1733c82/ROW-ec98e83f99a169bc",
+     "0001193125-26-114266/C_283e3c02-3e99-4b08-aedd-3d818dbb9efd/ROW-d0c8d68b00e4c58a",
+     "0001193125-26-114266/C_22389577-bee6-4827-b7c7-6ccbaf23e841/ROW-e9b490781c5aa481",
+     "0001193125-26-114266/C_df263d77-adf3-4e50-acaa-9e81ec7c41d9/ROW-2369b9c0d0f1a49e",
+     "0001193125-26-114266/C_6be9c4ff-fc6b-4e57-8d23-fcda0b8a12d7/ROW-fab67517b77bb35e"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-114266/C_51c56290-ae59-4608-806b-330f699e4c77/ROW-a0add2cd6577a681",
+     "0001193125-26-114266/C_ec5d2278-f9e0-4871-bb53-f45f372842a6/ROW-a274800c34584bdc",
+     "0001193125-26-114266/C_7350834a-b0cb-4c31-89d4-6368fd30b0bb/ROW-5deb3de868d20f8d",
+     "0001193125-26-114266/C_cf0f1725-44b8-4b8c-9c5d-b51c38614482/ROW-f1ee1970fe3a6f70",
+     "0001193125-26-114266/C_d31eb984-9ea8-461d-acc4-8717d08cf7f2/ROW-37e35bb8fa90055b",
+     "0001193125-26-114266/C_cb36eacd-b4b0-4580-911f-1f0ef0ccf71c/ROW-b72ca503a12dfcfb",
+     "0001193125-26-114266/C_cccc0700-8802-4e16-98fb-a7e827c6c5fd/ROW-dd0aa52b7ea79c0f",
+     "0001193125-26-114266/C_4e58ae9e-7aa3-4bd7-888d-54fe93c18944/ROW-1a8e08f3d838f596",
+     "0001193125-26-114266/C_f6ae2f9b-18e8-4268-9095-683f69de4fb8/ROW-291bae2c3ff4f2c6",
+     "0001193125-26-114266/C_b84dbc94-af32-4f67-bad0-eb34f282475c/ROW-876302d6fe4ba737",
+     "0001193125-26-114266/C_cc35bffa-8be4-4671-8f21-792ee59bb11c/ROW-b7d665577bf65734",
+     "0001193125-26-114266/C_ae6e3add-ae9c-478c-8966-4dd400dfa973/ROW-6de966ca5f405179",
+     "0001193125-26-114266/C_de039d9a-8d34-4536-b040-fc7a239e5d50/ROW-c299be291d2ebc49",
+     "0001193125-26-114266/C_825dbfb9-da07-492b-bd5c-1c75ccdc5a1d/ROW-62b86d215b4915be",
+     "0001193125-26-114266/C_0e7480a1-2de4-4c40-be77-fc0120670720/ROW-a2e0abcc0b2a80b9",
+     "0001193125-26-114266/C_32eaf9c9-e6ab-4280-ba4a-cc2d83c09f36/ROW-4d31b5b8a965dfed",
+     "0001193125-26-114266/C_255ad403-7b73-45fe-b0db-032062779f3a/ROW-c32caf3b3029a5e9",
+     "0001193125-26-114266/C_2f9bb85e-49ff-4345-b2c3-aa1f6b13c653/ROW-8ca5488c51bc2260",
+     "0001193125-26-114266/C_c15c3ee5-dcd6-4394-80b0-0f99e1733c82/ROW-ec98e83f99a169bc",
+     "0001193125-26-114266/C_283e3c02-3e99-4b08-aedd-3d818dbb9efd/ROW-d0c8d68b00e4c58a",
+     "0001193125-26-114266/C_22389577-bee6-4827-b7c7-6ccbaf23e841/ROW-e9b490781c5aa481",
+     "0001193125-26-114266/C_df263d77-adf3-4e50-acaa-9e81ec7c41d9/ROW-2369b9c0d0f1a49e",
+     "0001193125-26-114266/C_6be9c4ff-fc6b-4e57-8d23-fcda0b8a12d7/ROW-fab67517b77bb35e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-114266",
+     "text": "NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 9.07 % 9/9/2025 8/6/2030 3,507 3,457 3,455"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_3ab8b4a26526",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-219643/C_daaff943-3ddb-4c7a-b3e4-6d917fd73f2f/ROW-1097caa0c0674078",
+     "0001193125-26-219643/C_243ca2a1-25e3-4651-aa29-25a9908afe98/ROW-2f8e265e42199a70",
+     "0001193125-26-219643/C_c752d6f5-d406-460b-8da5-a2b5391ce84b/ROW-369179cfdb9a54bb",
+     "0001193125-26-219643/C_1b37193a-6413-4ee3-b961-b59187e49073/ROW-7f907fa623686cf2",
+     "0001193125-26-219643/C_480af8b9-3ea6-4847-83c5-fb2276e96030/ROW-a6dcc2a7ca4bed65",
+     "0001193125-26-219643/C_41e27031-f61f-4c2e-be51-6f8e41fce80d/ROW-326bd13875bd1572",
+     "0001193125-26-219643/C_291e6ea4-61e9-43cd-a973-b23633da8a9f/ROW-91e46f204ed3409b",
+     "0001193125-26-219643/C_2022a7e3-1e56-418e-b2bc-151b9c8c22d3/ROW-7f667ed701c5b207",
+     "0001193125-26-219643/C_79e14eed-4bdf-4600-bdbb-3d3813f9f3e0/ROW-c09bae2bbc7f445e",
+     "0001193125-26-219643/C_8b86f5a6-9085-4ffd-9436-18b814ba3051/ROW-50c1c797f7944958",
+     "0001193125-26-219643/C_8c6ff151-2194-4267-82ff-1b5b3c0401dd/ROW-d6ab2ac3976f554a",
+     "0001193125-26-219643/C_bca9f014-d084-4db3-925f-7e34b2ca2825/ROW-2dbff4d875fed848",
+     "0001193125-26-219643/C_4e540607-6473-41eb-b026-062516ce7f13/ROW-9c6afe1f2facc517",
+     "0001193125-26-219643/C_31261aeb-d040-4085-8b79-3687dc08cf4e/ROW-0dc02d95722938ae",
+     "0001193125-26-219643/C_ffab2b1d-a691-4fa7-bc56-566934680a37/ROW-8f43465bc6e620c4",
+     "0001193125-26-219643/C_08abcd4b-3ec8-4b16-b838-732a48117004/ROW-9015c73a10b65515",
+     "0001193125-26-219643/C_f2404c78-b070-4426-8e93-e59b625de249/ROW-b7599936722b792e",
+     "0001193125-26-219643/C_434f1178-8dc8-4baf-858c-356cc5527319/ROW-bb119e651a60f76d",
+     "0001193125-26-219643/C_af8528f2-7676-4b27-ae5a-f319bda6aff5/ROW-d108ed47bd384fe3",
+     "0001193125-26-219643/C_b12e69a8-5185-4873-a547-6c1b9be7cf59/ROW-54805f2b857f9b58",
+     "0001193125-26-219643/C_47885b0f-5eab-476c-8fe4-4d99b2f388e9/ROW-62d3d84c804c01da",
+     "0001193125-26-219643/C_44b2039c-4388-4103-8e92-efebedc321ad/ROW-aff0d5896aea4146"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-219643/C_daaff943-3ddb-4c7a-b3e4-6d917fd73f2f/ROW-1097caa0c0674078",
+     "0001193125-26-219643/C_243ca2a1-25e3-4651-aa29-25a9908afe98/ROW-2f8e265e42199a70",
+     "0001193125-26-219643/C_c752d6f5-d406-460b-8da5-a2b5391ce84b/ROW-369179cfdb9a54bb",
+     "0001193125-26-219643/C_1b37193a-6413-4ee3-b961-b59187e49073/ROW-7f907fa623686cf2",
+     "0001193125-26-219643/C_480af8b9-3ea6-4847-83c5-fb2276e96030/ROW-a6dcc2a7ca4bed65",
+     "0001193125-26-219643/C_41e27031-f61f-4c2e-be51-6f8e41fce80d/ROW-326bd13875bd1572",
+     "0001193125-26-219643/C_291e6ea4-61e9-43cd-a973-b23633da8a9f/ROW-91e46f204ed3409b",
+     "0001193125-26-219643/C_2022a7e3-1e56-418e-b2bc-151b9c8c22d3/ROW-7f667ed701c5b207",
+     "0001193125-26-219643/C_79e14eed-4bdf-4600-bdbb-3d3813f9f3e0/ROW-c09bae2bbc7f445e",
+     "0001193125-26-219643/C_8b86f5a6-9085-4ffd-9436-18b814ba3051/ROW-50c1c797f7944958",
+     "0001193125-26-219643/C_8c6ff151-2194-4267-82ff-1b5b3c0401dd/ROW-d6ab2ac3976f554a",
+     "0001193125-26-219643/C_bca9f014-d084-4db3-925f-7e34b2ca2825/ROW-2dbff4d875fed848",
+     "0001193125-26-219643/C_4e540607-6473-41eb-b026-062516ce7f13/ROW-9c6afe1f2facc517",
+     "0001193125-26-219643/C_31261aeb-d040-4085-8b79-3687dc08cf4e/ROW-0dc02d95722938ae",
+     "0001193125-26-219643/C_ffab2b1d-a691-4fa7-bc56-566934680a37/ROW-8f43465bc6e620c4",
+     "0001193125-26-219643/C_08abcd4b-3ec8-4b16-b838-732a48117004/ROW-9015c73a10b65515",
+     "0001193125-26-219643/C_f2404c78-b070-4426-8e93-e59b625de249/ROW-b7599936722b792e",
+     "0001193125-26-219643/C_434f1178-8dc8-4baf-858c-356cc5527319/ROW-bb119e651a60f76d",
+     "0001193125-26-219643/C_af8528f2-7676-4b27-ae5a-f319bda6aff5/ROW-d108ed47bd384fe3",
+     "0001193125-26-219643/C_b12e69a8-5185-4873-a547-6c1b9be7cf59/ROW-54805f2b857f9b58",
+     "0001193125-26-219643/C_47885b0f-5eab-476c-8fe4-4d99b2f388e9/ROW-62d3d84c804c01da",
+     "0001193125-26-219643/C_44b2039c-4388-4103-8e92-efebedc321ad/ROW-aff0d5896aea4146"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 8.90 % 9/9/2025 8/6/2030 3,498 3,451 3,455"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_3732c22b7d60",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-344075/C_be8d0c09-78f5-4125-bad6-86a6c0a12dd4/ROW-7515a28900d4a8fd",
+     "0001193125-26-344075/C_20be1e72-ec4d-4d5f-b8d7-81da8c0ac67c/ROW-8ea09eb9d2b3d121",
+     "0001193125-26-344075/C_269dce8b-e037-4aa4-b314-b39eefad523a/ROW-9c29f224669bf940",
+     "0001193125-26-344075/C_46697122-a051-4110-b23d-6b12dc315eff/ROW-9f5d10b9b6fdd9ba",
+     "0001193125-26-344075/C_f5c13344-02bb-4a4e-8b78-1eb65370d1be/ROW-b6ade829bf567007",
+     "0001193125-26-344075/C_2f21ed04-34ff-411e-8086-3d06431d2fe9/ROW-36246f66fae9672d",
+     "0001193125-26-344075/C_88534d53-c54b-4989-ad40-02075738000d/ROW-b7760a6c9789f60a",
+     "0001193125-26-344075/C_1c1575b4-51a4-47ef-979a-f68772a7d592/ROW-06fbfdde0123370c",
+     "0001193125-26-344075/C_242e999d-7b1b-4f82-8e67-ca9d3599e51f/ROW-26fde16ce42a12a8",
+     "0001193125-26-344075/C_6d9d0801-0be0-4afe-ba9e-e0004395582c/ROW-57575db268ebb397",
+     "0001193125-26-344075/C_c7d745da-9684-4878-8af5-4f786687c8f3/ROW-69a0c121864728d1",
+     "0001193125-26-344075/C_f93c28d0-ef8c-436b-995d-96338ecf5628/ROW-6a8be58fa98b7205",
+     "0001193125-26-344075/C_86287b4a-29b2-4947-9164-b82b3039db63/ROW-801821e0b7ebad10",
+     "0001193125-26-344075/C_1037a802-919c-4a07-a9eb-e46f3d9ac0e1/ROW-120f758f26e743a2",
+     "0001193125-26-344075/C_693fc194-fecb-45c8-8e39-95e60d6d40ab/ROW-a8d0beb16dc56e44"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-344075/C_be8d0c09-78f5-4125-bad6-86a6c0a12dd4/ROW-7515a28900d4a8fd",
+     "0001193125-26-344075/C_20be1e72-ec4d-4d5f-b8d7-81da8c0ac67c/ROW-8ea09eb9d2b3d121",
+     "0001193125-26-344075/C_269dce8b-e037-4aa4-b314-b39eefad523a/ROW-9c29f224669bf940",
+     "0001193125-26-344075/C_46697122-a051-4110-b23d-6b12dc315eff/ROW-9f5d10b9b6fdd9ba",
+     "0001193125-26-344075/C_f5c13344-02bb-4a4e-8b78-1eb65370d1be/ROW-b6ade829bf567007",
+     "0001193125-26-344075/C_2f21ed04-34ff-411e-8086-3d06431d2fe9/ROW-36246f66fae9672d",
+     "0001193125-26-344075/C_88534d53-c54b-4989-ad40-02075738000d/ROW-b7760a6c9789f60a",
+     "0001193125-26-344075/C_1c1575b4-51a4-47ef-979a-f68772a7d592/ROW-06fbfdde0123370c",
+     "0001193125-26-344075/C_242e999d-7b1b-4f82-8e67-ca9d3599e51f/ROW-26fde16ce42a12a8",
+     "0001193125-26-344075/C_6d9d0801-0be0-4afe-ba9e-e0004395582c/ROW-57575db268ebb397",
+     "0001193125-26-344075/C_c7d745da-9684-4878-8af5-4f786687c8f3/ROW-69a0c121864728d1",
+     "0001193125-26-344075/C_f93c28d0-ef8c-436b-995d-96338ecf5628/ROW-6a8be58fa98b7205",
+     "0001193125-26-344075/C_86287b4a-29b2-4947-9164-b82b3039db63/ROW-801821e0b7ebad10",
+     "0001193125-26-344075/C_1037a802-919c-4a07-a9eb-e46f3d9ac0e1/ROW-120f758f26e743a2",
+     "0001193125-26-344075/C_693fc194-fecb-45c8-8e39-95e60d6d40ab/ROW-a8d0beb16dc56e44"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344075",
+     "text": "NS and Associates LLC Term Loan SOFR + 5.00 % (Q) 8.65 % 9/9/2025 8/6/2030 3,490 3,444 3,446"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows are affiliation-axis copies of one position: rejected, each row has its own context and the page prints one line per row (pp02_check.py: for 160 of 162 groups printed lines >= published rows; the other two read by hand).",
+    "Twins were dropped before this run (excluded_affiliation_dedup 3 to 27 a quarter) and totals were short; with staging.distinct_member_suffix_re they are published and the 14 quarters tie, so no row is double counted."
+   ],
+   "next_action": "Proposed disposition pp02-twin-lines-printed-separately (owner queue); no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_873b83c9818c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-125262/C_eedc4586-9e16-406d-b873-c3821497ad19/ROW-979bb52b80581ac9",
+     "0000950170-24-125262/C_b083ff0f-c632-4909-a3a4-ebe0ee7512a0/ROW-69086d2a72c7e565",
+     "0000950170-24-125262/C_bb94e646-ab6a-4c06-928b-31ccbe3608ad/ROW-c149c98e00823b7c",
+     "0000950170-24-125262/C_860be281-c1c8-4860-82c2-b56feff8c933/ROW-6d2bc441525c6a33",
+     "0000950170-24-125262/C_ccfdc7b4-1632-4c2e-85ad-022443d257a1/ROW-e13eb429455f87cb",
+     "0000950170-24-125262/C_72a613c6-421c-406e-a61d-7fb398f176ec/ROW-6f1e8c92f0495df9",
+     "0000950170-24-125262/C_e59ca94f-2549-4c83-a3fe-1e5ff6f1a24b/ROW-dfc43c8f09768064",
+     "0000950170-24-125262/C_07c40ea9-1a8a-4fc1-a81b-f10b181f703f/ROW-d508542ed3dd40ba",
+     "0000950170-24-125262/C_73a491ae-ebc6-47d4-83a1-8d19928613a2/ROW-da37c885a28e6845",
+     "0000950170-24-125262/C_71ce4651-e7b6-4aa5-b665-4cc63c7ea907/ROW-3dc92fd6c44594ca",
+     "0000950170-24-125262/C_46e759a9-2b77-4af6-ab01-9c3d9e4d4d69/ROW-5408c24f16255145",
+     "0000950170-24-125262/C_b4d056a0-b089-47b3-a253-edc9f06013b0/ROW-c1e37e08e90c6957",
+     "0000950170-24-125262/C_87601c48-ba5b-4fac-ad47-94f3ba1abfb5/ROW-dc39beaf41ef08f4",
+     "0000950170-24-125262/C_f3ed2e71-07df-4d35-bc6a-81786b7107b7/ROW-be39a33edb23e8c0",
+     "0000950170-24-125262/C_a512a515-8ed2-47d1-8bc1-bc818ac6fc39/ROW-cd7a73094fde2acb",
+     "0000950170-24-125262/C_881cbf42-cc4f-4f00-90d9-8cddf3ccf6e1/ROW-8761b124a4f3424f",
+     "0000950170-24-125262/C_9a3f9c8f-dd54-4766-a964-69c157e99cf5/ROW-48ae7cbdc7367824",
+     "0000950170-24-125262/C_851aef3c-9261-4345-84a6-9b30563d356f/ROW-850fd7bff9ba8629",
+     "0000950170-24-125262/C_51879ae9-d9a1-4b82-ab2f-77d8b033c999/ROW-6f3aed3cccf7c04d",
+     "0000950170-24-125262/C_d2020054-4993-422e-9e5e-3b06ae567cf6/ROW-0da1827a25c84265",
+     "0000950170-24-125262/C_582d5f59-f419-4541-a27a-6e3303937df9/ROW-600af5f729cfe928",
+     "0000950170-24-125262/C_5f5e350b-0d0c-4a87-8493-08195b9fd3cb/ROW-5c66d68018c509cc",
+     "0000950170-24-125262/C_bd1dd986-090f-4ee6-af6d-0f24f6dbcac3/ROW-c766c18cb872b905",
+     "0000950170-24-125262/C_cde3f6bf-39cd-4ead-b00f-cdd13ac89d45/ROW-ebd7dafa3fca02b6",
+     "0000950170-24-125262/C_cfc2de55-6c15-4cd4-bda5-5f6a35276e7e/ROW-df451262c59f5a31",
+     "0000950170-24-125262/C_f9bccada-4e30-42ee-b643-fd883b584519/ROW-d4be397e2327f0b7",
+     "0000950170-24-125262/C_d5153753-8501-4439-abe9-d33b96670e43/ROW-9c7dba94e16e40df",
+     "0000950170-24-125262/C_d45ab433-896a-4025-8a9d-403f11bb60e9/ROW-ed47e099f5592c9f",
+     "0000950170-24-125262/C_1bbb5bb9-c7ec-4989-83e9-cfd6fce3cba4/ROW-05442f7dd478a4a4",
+     "0000950170-24-125262/C_120e5caf-db54-4a9e-b56d-4a435cfa3b28/ROW-9779fc702a48845e",
+     "0000950170-24-125262/C_873da7fe-2084-4fdf-91ed-b4d764cac012/ROW-030abcf35f25746f",
+     "0000950170-24-125262/C_a432e12d-bbc5-4aa6-a41c-4a5ff9c134be/ROW-9a95fdb2ed4bd4d7",
+     "0000950170-24-125262/C_5073b04a-6d91-48d5-948e-800528a762ad/ROW-72e67c61c9f90f71",
+     "0000950170-24-125262/C_333b7b5b-7cc0-40d2-b761-0faa22cc9fe6/ROW-a8709b03ec3b9b04",
+     "0000950170-24-125262/C_cfa243b2-cc7c-4a71-a6e1-9e5d81bb4566/ROW-1961bc36c995ce94",
+     "0000950170-24-125262/C_402f588d-59f0-43d8-8a5e-ded1e1336177/ROW-342951c9d2057acc",
+     "0000950170-24-125262/C_ad150cec-d6cf-433c-afc2-cc7fc6f4bff4/ROW-f50c8bd8fc4cff89",
+     "0000950170-24-125262/C_a1df0257-2ea3-4683-b056-dcf3fdf4444a/ROW-20682b8d6c824112",
+     "0000950170-24-125262/C_994a048b-f361-40e3-a82d-0814d2d8d019/ROW-6d145da8978f4f6c",
+     "0000950170-24-125262/C_eb660389-e3e4-4986-90c9-f1ee2d565d06/ROW-6cc540d5cb513c68",
+     "0000950170-24-125262/C_eb086072-d15a-4fce-9da1-c5269b9eb7a0/ROW-72f1d045c2c6da5d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-125262/C_eedc4586-9e16-406d-b873-c3821497ad19/ROW-979bb52b80581ac9",
+     "0000950170-24-125262/C_b083ff0f-c632-4909-a3a4-ebe0ee7512a0/ROW-69086d2a72c7e565",
+     "0000950170-24-125262/C_bb94e646-ab6a-4c06-928b-31ccbe3608ad/ROW-c149c98e00823b7c",
+     "0000950170-24-125262/C_860be281-c1c8-4860-82c2-b56feff8c933/ROW-6d2bc441525c6a33",
+     "0000950170-24-125262/C_ccfdc7b4-1632-4c2e-85ad-022443d257a1/ROW-e13eb429455f87cb",
+     "0000950170-24-125262/C_72a613c6-421c-406e-a61d-7fb398f176ec/ROW-6f1e8c92f0495df9",
+     "0000950170-24-125262/C_e59ca94f-2549-4c83-a3fe-1e5ff6f1a24b/ROW-dfc43c8f09768064",
+     "0000950170-24-125262/C_07c40ea9-1a8a-4fc1-a81b-f10b181f703f/ROW-d508542ed3dd40ba",
+     "0000950170-24-125262/C_73a491ae-ebc6-47d4-83a1-8d19928613a2/ROW-da37c885a28e6845",
+     "0000950170-24-125262/C_71ce4651-e7b6-4aa5-b665-4cc63c7ea907/ROW-3dc92fd6c44594ca",
+     "0000950170-24-125262/C_46e759a9-2b77-4af6-ab01-9c3d9e4d4d69/ROW-5408c24f16255145",
+     "0000950170-24-125262/C_b4d056a0-b089-47b3-a253-edc9f06013b0/ROW-c1e37e08e90c6957",
+     "0000950170-24-125262/C_87601c48-ba5b-4fac-ad47-94f3ba1abfb5/ROW-dc39beaf41ef08f4",
+     "0000950170-24-125262/C_f3ed2e71-07df-4d35-bc6a-81786b7107b7/ROW-be39a33edb23e8c0",
+     "0000950170-24-125262/C_a512a515-8ed2-47d1-8bc1-bc818ac6fc39/ROW-cd7a73094fde2acb",
+     "0000950170-24-125262/C_881cbf42-cc4f-4f00-90d9-8cddf3ccf6e1/ROW-8761b124a4f3424f",
+     "0000950170-24-125262/C_9a3f9c8f-dd54-4766-a964-69c157e99cf5/ROW-48ae7cbdc7367824",
+     "0000950170-24-125262/C_851aef3c-9261-4345-84a6-9b30563d356f/ROW-850fd7bff9ba8629",
+     "0000950170-24-125262/C_51879ae9-d9a1-4b82-ab2f-77d8b033c999/ROW-6f3aed3cccf7c04d",
+     "0000950170-24-125262/C_d2020054-4993-422e-9e5e-3b06ae567cf6/ROW-0da1827a25c84265",
+     "0000950170-24-125262/C_582d5f59-f419-4541-a27a-6e3303937df9/ROW-600af5f729cfe928",
+     "0000950170-24-125262/C_5f5e350b-0d0c-4a87-8493-08195b9fd3cb/ROW-5c66d68018c509cc",
+     "0000950170-24-125262/C_bd1dd986-090f-4ee6-af6d-0f24f6dbcac3/ROW-c766c18cb872b905",
+     "0000950170-24-125262/C_cde3f6bf-39cd-4ead-b00f-cdd13ac89d45/ROW-ebd7dafa3fca02b6",
+     "0000950170-24-125262/C_cfc2de55-6c15-4cd4-bda5-5f6a35276e7e/ROW-df451262c59f5a31",
+     "0000950170-24-125262/C_f9bccada-4e30-42ee-b643-fd883b584519/ROW-d4be397e2327f0b7",
+     "0000950170-24-125262/C_d5153753-8501-4439-abe9-d33b96670e43/ROW-9c7dba94e16e40df",
+     "0000950170-24-125262/C_d45ab433-896a-4025-8a9d-403f11bb60e9/ROW-ed47e099f5592c9f",
+     "0000950170-24-125262/C_1bbb5bb9-c7ec-4989-83e9-cfd6fce3cba4/ROW-05442f7dd478a4a4",
+     "0000950170-24-125262/C_120e5caf-db54-4a9e-b56d-4a435cfa3b28/ROW-9779fc702a48845e",
+     "0000950170-24-125262/C_873da7fe-2084-4fdf-91ed-b4d764cac012/ROW-030abcf35f25746f",
+     "0000950170-24-125262/C_a432e12d-bbc5-4aa6-a41c-4a5ff9c134be/ROW-9a95fdb2ed4bd4d7",
+     "0000950170-24-125262/C_5073b04a-6d91-48d5-948e-800528a762ad/ROW-72e67c61c9f90f71",
+     "0000950170-24-125262/C_333b7b5b-7cc0-40d2-b761-0faa22cc9fe6/ROW-a8709b03ec3b9b04",
+     "0000950170-24-125262/C_cfa243b2-cc7c-4a71-a6e1-9e5d81bb4566/ROW-1961bc36c995ce94",
+     "0000950170-24-125262/C_402f588d-59f0-43d8-8a5e-ded1e1336177/ROW-342951c9d2057acc",
+     "0000950170-24-125262/C_ad150cec-d6cf-433c-afc2-cc7fc6f4bff4/ROW-f50c8bd8fc4cff89",
+     "0000950170-24-125262/C_a1df0257-2ea3-4683-b056-dcf3fdf4444a/ROW-20682b8d6c824112",
+     "0000950170-24-125262/C_994a048b-f361-40e3-a82d-0814d2d8d019/ROW-6d145da8978f4f6c",
+     "0000950170-24-125262/C_eb660389-e3e4-4986-90c9-f1ee2d565d06/ROW-6cc540d5cb513c68",
+     "0000950170-24-125262/C_eb086072-d15a-4fce-9da1-c5269b9eb7a0/ROW-72f1d045c2c6da5d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-125262",
+     "text": "3G Intermediate, Inc. Delayed Draw Term Loan N/A 9/30/2030 $ - $ ( 27 ) $ ( 13 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A rate or margin is printed but not published: rejected for every flagged row of the quarter (x02_scan.py found 'N/A' on each; the rows it could not tie by regex were read by hand: US Health, Boulder, MES, National Safety Apparel, RBS, RFI, VTC, Zavation)."
+   ],
+   "next_action": "Proposed disposition x02-rate-columns-printed-n-a; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_3d73c99fa23e",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-043295/C_37916645-6164-46c0-b27e-ca3b73cf22a7/ROW-0f84d3b12c10feb8",
+     "0000950170-25-043295/C_9fd9f643-8acc-41d3-be99-646a540ff5b8/ROW-9d23a7dec775ddc9",
+     "0000950170-25-043295/C_58d5904b-d111-4ac9-ae9e-11ab989f2f7f/ROW-f927338b43bab4e3",
+     "0000950170-25-043295/C_1928dd73-c3aa-4711-8bf1-1e2bccee6af8/ROW-14bef3ae4bf2f2fe",
+     "0000950170-25-043295/C_72a516d2-20dd-4e3b-959a-c193bc35739f/ROW-7af60946c1b05aab",
+     "0000950170-25-043295/C_534b1fb2-faa2-43d6-aa49-5370ef31dd78/ROW-22c906d9d30d39b1",
+     "0000950170-25-043295/C_2e9193d3-9c2b-48ef-b41f-c163e33b56e0/ROW-aad80334211947ef",
+     "0000950170-25-043295/C_f746aac0-21db-4711-8331-22c982a63153/ROW-cfec3bf4e92050d8",
+     "0000950170-25-043295/C_71f79c94-7fcf-4d7a-8d9f-f8d2ac5f7641/ROW-92f03a479ca9b93d",
+     "0000950170-25-043295/C_8a42b2df-626d-4261-9ea8-ef2b92b06080/ROW-4dfe0fa475561544",
+     "0000950170-25-043295/C_6ef0e66e-07c6-41b9-a699-64461cb966e4/ROW-5f419c79fa7a82c2",
+     "0000950170-25-043295/C_b2b290e4-9491-43a1-bb6f-3223b5e4c53f/ROW-e6c8f425a90c0c65",
+     "0000950170-25-043295/C_9a2c6033-86fc-420f-bc60-a7f137f70c07/ROW-176b40f503de0acb",
+     "0000950170-25-043295/C_93b5f0b9-5a32-4d10-91ef-7ac6da942e78/ROW-594622f90c8e1b73",
+     "0000950170-25-043295/C_15818dbb-e557-4819-849e-bd95d131a994/ROW-9b4573130582ce23",
+     "0000950170-25-043295/C_629382ac-30b2-458c-a1c0-5a1f61c89ba9/ROW-000bb7d605e5e19e",
+     "0000950170-25-043295/C_e2185a4d-8f67-4cce-ae7f-48850b02a987/ROW-fd0b46ab7b89a12a",
+     "0000950170-25-043295/C_a935f602-eb89-4fce-abef-a6241c95f8a0/ROW-85abd8b7718ed30f",
+     "0000950170-25-043295/C_01926bd6-b4c3-43c0-95bb-9f51ec237983/ROW-8578728bdc4c54fc",
+     "0000950170-25-043295/C_2aba6b95-c052-4bb1-8d41-2722494e854b/ROW-a1488d3f676ae96b",
+     "0000950170-25-043295/C_0ad8cd02-cebe-4630-b791-8b5623f82aa9/ROW-edaa22ddc27787f2",
+     "0000950170-25-043295/C_c4ce1168-4086-4cb8-a45c-017b23393463/ROW-f3e0f2e573efbb10",
+     "0000950170-25-043295/C_de64a5b9-744f-4d8b-951c-13139e7e86ce/ROW-3dc99b5888183927",
+     "0000950170-25-043295/C_10ff1377-bae9-4667-bbeb-812a2824b246/ROW-f10857d2814f7341",
+     "0000950170-25-043295/C_3f7fe38b-e5fd-48fc-9040-bf8e2df074eb/ROW-18702f17c4efc27d",
+     "0000950170-25-043295/C_2b688723-18c7-44bf-9e21-9c7403c80761/ROW-e85bcab00698c9c6",
+     "0000950170-25-043295/C_76807e05-26d5-4f05-b2eb-f0726c57776c/ROW-76ea7ef1947db62d",
+     "0000950170-25-043295/C_56381c69-2521-40b7-8f51-34023626d49f/ROW-55b2e43345450593",
+     "0000950170-25-043295/C_d36a600d-afc2-4600-9613-24af59b0d5ff/ROW-c9d03745546a60db",
+     "0000950170-25-043295/C_a5ecd575-ca06-4622-9ea0-6f9eabee3c06/ROW-0718b5530ef8dc93",
+     "0000950170-25-043295/C_5344853a-935e-4e40-8481-297a6b9e3216/ROW-0ddfb09f64017410",
+     "0000950170-25-043295/C_8b595535-f116-4740-8427-734dcf1ee504/ROW-acefe56abfa8ca14",
+     "0000950170-25-043295/C_86876d4b-d955-42fe-8336-89dc400d2ea7/ROW-9ebc231560bceb49",
+     "0000950170-25-043295/C_c741647a-75a9-425f-a5ad-a2d8b16d26d8/ROW-16c2657fc154b017",
+     "0000950170-25-043295/C_f0174319-03ba-40da-b4af-421a7921182d/ROW-6eee52e7aca795c8",
+     "0000950170-25-043295/C_12b9d757-a006-44f1-b156-ad211a0e7172/ROW-48901206c97c864a",
+     "0000950170-25-043295/C_8061fc40-1a76-496d-a0de-5464fbe82c48/ROW-dfd778f5993658af",
+     "0000950170-25-043295/C_4d63f3c4-ea7b-4cca-ab92-adacb55b2bef/ROW-a50a137bafa63f24",
+     "0000950170-25-043295/C_c47e35a6-b210-4dd8-8d85-b624256d6f8f/ROW-f65e202f36fe1e97",
+     "0000950170-25-043295/C_c6553aea-f594-42ad-a8d4-6266606a4037/ROW-2ef941b745aa1478",
+     "0000950170-25-043295/C_8501571b-be89-4efc-9b8c-46e367e6e45f/ROW-5cb1ca3826d90f63",
+     "0000950170-25-043295/C_4b0f099a-e4b5-482c-8a04-6c9b5fc988af/ROW-824f9c05032b45ae",
+     "0000950170-25-043295/C_6fd37b20-909c-4330-93c0-81880f89dd78/ROW-5e1b736051c9b710",
+     "0000950170-25-043295/C_5fbfff74-4eca-4908-9d9a-78e99b2690b2/ROW-0bd40f5883315f2b",
+     "0000950170-25-043295/C_4f7a40b4-2fb1-4302-b819-224d97d8feb6/ROW-2c3d1f2145853a3b",
+     "0000950170-25-043295/C_18eb6cd0-da49-4d06-9128-3bb982d6d328/ROW-921cf43a97fa0d4f",
+     "0000950170-25-043295/C_3d0212eb-3143-45d4-ad87-0a3d21c8c395/ROW-260d565b9a4fd19f",
+     "0000950170-25-043295/C_f3507cf3-2723-4a07-9c33-278f73c44cf9/ROW-9cd00fd7e808b8a6",
+     "0000950170-25-043295/C_5df65925-edd0-430a-9d16-a711b0738e45/ROW-464bc4f268c80335",
+     "0000950170-25-043295/C_5c9f7f88-1ad8-4a66-bc54-2fd6e3862ef7/ROW-1c205fa3820477a8",
+     "0000950170-25-043295/C_8ee639b1-3dc6-4e00-905b-028a4e087d62/ROW-86c417a0a0eb4495",
+     "0000950170-25-043295/C_fd6d7a75-15cb-446b-98b1-3c186b2dc329/ROW-2fdb8ff8567006ae",
+     "0000950170-25-043295/C_c9c90634-a832-4653-b47d-0e1e058a4b28/ROW-57f9303d2988285f",
+     "0000950170-25-043295/C_eb67e7c6-a686-4184-b2f6-4e0dcd193dca/ROW-e152adb96fce7f11",
+     "0000950170-25-043295/C_c9fcfd62-7ef3-40dc-a164-b7c22260de5a/ROW-a0fd2c31be5fbeaa",
+     "0000950170-25-043295/C_c687f831-bfb4-4d85-8b63-6b7aed82e31e/ROW-0976cefd59f545fb",
+     "0000950170-25-043295/C_6f1fa220-4aa9-47eb-b696-03f036558fae/ROW-3f2667101baccf51"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-043295/C_37916645-6164-46c0-b27e-ca3b73cf22a7/ROW-0f84d3b12c10feb8",
+     "0000950170-25-043295/C_9fd9f643-8acc-41d3-be99-646a540ff5b8/ROW-9d23a7dec775ddc9",
+     "0000950170-25-043295/C_58d5904b-d111-4ac9-ae9e-11ab989f2f7f/ROW-f927338b43bab4e3",
+     "0000950170-25-043295/C_1928dd73-c3aa-4711-8bf1-1e2bccee6af8/ROW-14bef3ae4bf2f2fe",
+     "0000950170-25-043295/C_72a516d2-20dd-4e3b-959a-c193bc35739f/ROW-7af60946c1b05aab",
+     "0000950170-25-043295/C_534b1fb2-faa2-43d6-aa49-5370ef31dd78/ROW-22c906d9d30d39b1",
+     "0000950170-25-043295/C_2e9193d3-9c2b-48ef-b41f-c163e33b56e0/ROW-aad80334211947ef",
+     "0000950170-25-043295/C_f746aac0-21db-4711-8331-22c982a63153/ROW-cfec3bf4e92050d8",
+     "0000950170-25-043295/C_71f79c94-7fcf-4d7a-8d9f-f8d2ac5f7641/ROW-92f03a479ca9b93d",
+     "0000950170-25-043295/C_8a42b2df-626d-4261-9ea8-ef2b92b06080/ROW-4dfe0fa475561544",
+     "0000950170-25-043295/C_6ef0e66e-07c6-41b9-a699-64461cb966e4/ROW-5f419c79fa7a82c2",
+     "0000950170-25-043295/C_b2b290e4-9491-43a1-bb6f-3223b5e4c53f/ROW-e6c8f425a90c0c65",
+     "0000950170-25-043295/C_9a2c6033-86fc-420f-bc60-a7f137f70c07/ROW-176b40f503de0acb",
+     "0000950170-25-043295/C_93b5f0b9-5a32-4d10-91ef-7ac6da942e78/ROW-594622f90c8e1b73",
+     "0000950170-25-043295/C_15818dbb-e557-4819-849e-bd95d131a994/ROW-9b4573130582ce23",
+     "0000950170-25-043295/C_629382ac-30b2-458c-a1c0-5a1f61c89ba9/ROW-000bb7d605e5e19e",
+     "0000950170-25-043295/C_e2185a4d-8f67-4cce-ae7f-48850b02a987/ROW-fd0b46ab7b89a12a",
+     "0000950170-25-043295/C_a935f602-eb89-4fce-abef-a6241c95f8a0/ROW-85abd8b7718ed30f",
+     "0000950170-25-043295/C_01926bd6-b4c3-43c0-95bb-9f51ec237983/ROW-8578728bdc4c54fc",
+     "0000950170-25-043295/C_2aba6b95-c052-4bb1-8d41-2722494e854b/ROW-a1488d3f676ae96b",
+     "0000950170-25-043295/C_0ad8cd02-cebe-4630-b791-8b5623f82aa9/ROW-edaa22ddc27787f2",
+     "0000950170-25-043295/C_c4ce1168-4086-4cb8-a45c-017b23393463/ROW-f3e0f2e573efbb10",
+     "0000950170-25-043295/C_de64a5b9-744f-4d8b-951c-13139e7e86ce/ROW-3dc99b5888183927",
+     "0000950170-25-043295/C_10ff1377-bae9-4667-bbeb-812a2824b246/ROW-f10857d2814f7341",
+     "0000950170-25-043295/C_3f7fe38b-e5fd-48fc-9040-bf8e2df074eb/ROW-18702f17c4efc27d",
+     "0000950170-25-043295/C_2b688723-18c7-44bf-9e21-9c7403c80761/ROW-e85bcab00698c9c6",
+     "0000950170-25-043295/C_76807e05-26d5-4f05-b2eb-f0726c57776c/ROW-76ea7ef1947db62d",
+     "0000950170-25-043295/C_56381c69-2521-40b7-8f51-34023626d49f/ROW-55b2e43345450593",
+     "0000950170-25-043295/C_d36a600d-afc2-4600-9613-24af59b0d5ff/ROW-c9d03745546a60db",
+     "0000950170-25-043295/C_a5ecd575-ca06-4622-9ea0-6f9eabee3c06/ROW-0718b5530ef8dc93",
+     "0000950170-25-043295/C_5344853a-935e-4e40-8481-297a6b9e3216/ROW-0ddfb09f64017410",
+     "0000950170-25-043295/C_8b595535-f116-4740-8427-734dcf1ee504/ROW-acefe56abfa8ca14",
+     "0000950170-25-043295/C_86876d4b-d955-42fe-8336-89dc400d2ea7/ROW-9ebc231560bceb49",
+     "0000950170-25-043295/C_c741647a-75a9-425f-a5ad-a2d8b16d26d8/ROW-16c2657fc154b017",
+     "0000950170-25-043295/C_f0174319-03ba-40da-b4af-421a7921182d/ROW-6eee52e7aca795c8",
+     "0000950170-25-043295/C_12b9d757-a006-44f1-b156-ad211a0e7172/ROW-48901206c97c864a",
+     "0000950170-25-043295/C_8061fc40-1a76-496d-a0de-5464fbe82c48/ROW-dfd778f5993658af",
+     "0000950170-25-043295/C_4d63f3c4-ea7b-4cca-ab92-adacb55b2bef/ROW-a50a137bafa63f24",
+     "0000950170-25-043295/C_c47e35a6-b210-4dd8-8d85-b624256d6f8f/ROW-f65e202f36fe1e97",
+     "0000950170-25-043295/C_c6553aea-f594-42ad-a8d4-6266606a4037/ROW-2ef941b745aa1478",
+     "0000950170-25-043295/C_8501571b-be89-4efc-9b8c-46e367e6e45f/ROW-5cb1ca3826d90f63",
+     "0000950170-25-043295/C_4b0f099a-e4b5-482c-8a04-6c9b5fc988af/ROW-824f9c05032b45ae",
+     "0000950170-25-043295/C_6fd37b20-909c-4330-93c0-81880f89dd78/ROW-5e1b736051c9b710",
+     "0000950170-25-043295/C_5fbfff74-4eca-4908-9d9a-78e99b2690b2/ROW-0bd40f5883315f2b",
+     "0000950170-25-043295/C_4f7a40b4-2fb1-4302-b819-224d97d8feb6/ROW-2c3d1f2145853a3b",
+     "0000950170-25-043295/C_18eb6cd0-da49-4d06-9128-3bb982d6d328/ROW-921cf43a97fa0d4f",
+     "0000950170-25-043295/C_3d0212eb-3143-45d4-ad87-0a3d21c8c395/ROW-260d565b9a4fd19f",
+     "0000950170-25-043295/C_f3507cf3-2723-4a07-9c33-278f73c44cf9/ROW-9cd00fd7e808b8a6",
+     "0000950170-25-043295/C_5df65925-edd0-430a-9d16-a711b0738e45/ROW-464bc4f268c80335",
+     "0000950170-25-043295/C_5c9f7f88-1ad8-4a66-bc54-2fd6e3862ef7/ROW-1c205fa3820477a8",
+     "0000950170-25-043295/C_8ee639b1-3dc6-4e00-905b-028a4e087d62/ROW-86c417a0a0eb4495",
+     "0000950170-25-043295/C_fd6d7a75-15cb-446b-98b1-3c186b2dc329/ROW-2fdb8ff8567006ae",
+     "0000950170-25-043295/C_c9c90634-a832-4653-b47d-0e1e058a4b28/ROW-57f9303d2988285f",
+     "0000950170-25-043295/C_eb67e7c6-a686-4184-b2f6-4e0dcd193dca/ROW-e152adb96fce7f11",
+     "0000950170-25-043295/C_c9fcfd62-7ef3-40dc-a164-b7c22260de5a/ROW-a0fd2c31be5fbeaa",
+     "0000950170-25-043295/C_c687f831-bfb4-4d85-8b63-6b7aed82e31e/ROW-0976cefd59f545fb",
+     "0000950170-25-043295/C_6f1fa220-4aa9-47eb-b696-03f036558fae/ROW-3f2667101baccf51"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-043295",
+     "text": "3G Intermediate, Inc. Delayed Draw Term Loan N/A 9/30/2024 9/30/2030 - ( 26 ) ( 13 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A rate or margin is printed but not published: rejected for every flagged row of the quarter (x02_scan.py found 'N/A' on each; the rows it could not tie by regex were read by hand: US Health, Boulder, MES, National Safety Apparel, RBS, RFI, VTC, Zavation)."
+   ],
+   "next_action": "Proposed disposition x02-rate-columns-printed-n-a; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_d206d62833ed",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-106434/C_2d752329-72ac-4897-8926-8bb52c740fc6/ROW-f663396bd5282c3f",
+     "0000950170-25-106434/C_0dbe6980-75a5-48e1-adea-61122430de52/ROW-025a223d92287c49",
+     "0000950170-25-106434/C_24e69ad3-d666-41e8-9011-50065f6c523e/ROW-5e95f7fc59d70843",
+     "0000950170-25-106434/C_3df78ee6-5b79-476e-8392-b9d8f31fab1d/ROW-dcaa720961e25245",
+     "0000950170-25-106434/C_1557b7d4-bd29-4301-a104-e0be368bac0a/ROW-004371b9391e7385",
+     "0000950170-25-106434/C_09780951-a1c1-45ef-9b5f-d453a44c46f9/ROW-9b8c59973d99b6c9",
+     "0000950170-25-106434/C_08c589c2-893f-467e-8f7c-a2aeedb04c25/ROW-32c4aab4466784b4",
+     "0000950170-25-106434/C_d52c939b-0454-46c0-9a43-ce31a846b008/ROW-1a315da46a29969b",
+     "0000950170-25-106434/C_cc24f7c6-357f-4a40-934f-1ccc64a3740f/ROW-f514a41d9c0a4c29",
+     "0000950170-25-106434/C_033fc091-8635-43e5-9990-6d2d7c4ef4a9/ROW-89cea5037d84ffe0",
+     "0000950170-25-106434/C_ebd010c2-65d9-4546-a831-31119cc56327/ROW-47496ca5a9202c00",
+     "0000950170-25-106434/C_6b7c5b1a-e1d8-4318-9144-ce2114eda704/ROW-492e74ad3b25cd32",
+     "0000950170-25-106434/C_8129b2d3-87ad-45e4-9e11-0824783fd0e9/ROW-ed5053b59efbee58",
+     "0000950170-25-106434/C_3a35beea-a3b7-48a9-94f8-efcfde43f731/ROW-493cd0bf4fd2bf87",
+     "0000950170-25-106434/C_225699b9-bb7f-4251-9d51-cbd99b50f503/ROW-194d1404d50a8f8e",
+     "0000950170-25-106434/C_801210cb-c8ee-4bd1-a3a7-ad6c35d019f5/ROW-96e6f41cf4c2398e",
+     "0000950170-25-106434/C_8a7faf9a-b86c-463d-b3d1-a98dc223f3ea/ROW-4f8cb206452c7039",
+     "0000950170-25-106434/C_0c38becb-8ec7-4a5e-b5d3-6fe960c80651/ROW-4d3dc1bb1a7d3bcd",
+     "0000950170-25-106434/C_966fbdd6-bb62-468a-ad85-70748333a776/ROW-140cc19903a05bff",
+     "0000950170-25-106434/C_679168d3-5613-4a89-a63c-ada19432aa5e/ROW-5cace50da7e16daa",
+     "0000950170-25-106434/C_3091ca81-41e3-4e17-8a6b-ddfb312ac095/ROW-2c94aa31b47704a5",
+     "0000950170-25-106434/C_368dd6a3-83af-462d-9144-81c11ac9db99/ROW-94c7ba31fbbed325",
+     "0000950170-25-106434/C_0aecca24-e590-4d41-8ad2-1a7dfa1e4ed2/ROW-4533a5ba08579da1",
+     "0000950170-25-106434/C_40b931bf-4380-4680-b299-ccd62c2554a6/ROW-74b32095da24556e",
+     "0000950170-25-106434/C_1bdcf13a-bdb0-40c8-a423-65cc7584b8df/ROW-1f096cc63d1d0b07",
+     "0000950170-25-106434/C_ac22405e-d68f-4f12-ab41-a53033a51ea8/ROW-75c6dc2625520404",
+     "0000950170-25-106434/C_c9ab653f-a641-4cf9-a961-ac2f15b8c80a/ROW-ccac43f1a9803bd6",
+     "0000950170-25-106434/C_d975fc84-1b88-4848-8ae6-5a4c1617f7b8/ROW-6f43cd2d67e84599",
+     "0000950170-25-106434/C_41a8ba5e-b9bc-4827-a23a-b0f8e4c2102d/ROW-5b31aa9f878ec9c0",
+     "0000950170-25-106434/C_f7d6d917-ee34-48eb-85d2-316569e689c5/ROW-f8936c67928b43b2",
+     "0000950170-25-106434/C_cba2f1bc-5d92-4919-ae6b-8d2657f4b99b/ROW-7c6d2a08c89f1661",
+     "0000950170-25-106434/C_2e63e585-7a5f-4416-8764-a6bb58b1be7f/ROW-a230a09015f8a806",
+     "0000950170-25-106434/C_9b6d21f8-55d6-429b-9b2e-b7ee13ad46ce/ROW-6d1e35f19419c23a",
+     "0000950170-25-106434/C_c3eb7f0f-7a98-4c8e-958e-43176af82f99/ROW-c103624a10710e3a",
+     "0000950170-25-106434/C_658d8fb5-c3e3-44af-bb5c-9fc14d6dc3df/ROW-6ad74463a7af765b",
+     "0000950170-25-106434/C_90add28a-dcde-45b7-8636-7c406e9dd140/ROW-516eb7babcbc1075",
+     "0000950170-25-106434/C_274252cb-a3b7-4364-a324-6b68b697fcf7/ROW-ef7b334dd6c3aaeb",
+     "0000950170-25-106434/C_db29ba49-4ed2-49c9-8ffe-953ba9c4ef2b/ROW-653447eadd6dcaba",
+     "0000950170-25-106434/C_7d7d2839-fa87-4a9c-b9c2-d24a0a6ead60/ROW-ada3d5f6a198eb86",
+     "0000950170-25-106434/C_7961e4b1-499f-4566-981c-7db1b4bb996b/ROW-09d43beb464cdda2",
+     "0000950170-25-106434/C_6af8d006-7a32-4ac5-aa5f-eb0f0d825430/ROW-ad85831786ee2e84",
+     "0000950170-25-106434/C_a1724ad5-a8c7-4a27-ba83-152f608f8e5c/ROW-5823ee3a1d9a9db5",
+     "0000950170-25-106434/C_0137ecc3-78d5-4bc3-acf7-5036e3eacf22/ROW-37d5ae2eb423a913",
+     "0000950170-25-106434/C_df28b81f-149c-4145-81a1-c946f8ca24d1/ROW-446de7393e226b52",
+     "0000950170-25-106434/C_d065e8dd-1bf4-48f3-868f-672ff2e36fa6/ROW-6106edb755a6ac6d",
+     "0000950170-25-106434/C_6fee6681-a940-46c6-85ce-d8d02cc2f925/ROW-701ccaa07ac40488",
+     "0000950170-25-106434/C_8f63886e-7f5d-4bea-ab2b-f8b84276c816/ROW-79fd7c01ac85dd97",
+     "0000950170-25-106434/C_3a9e3e9e-6a13-4e2c-ae5d-5312448a4cfe/ROW-9611fdce7e31d40c",
+     "0000950170-25-106434/C_5f972c12-25dd-4fc7-91f1-b922f095e5ef/ROW-1239e14714d7fc47",
+     "0000950170-25-106434/C_1e33b910-8c01-40ef-9316-3cfac0677d16/ROW-8a239186470e5ef7",
+     "0000950170-25-106434/C_c2f046f7-a881-42e8-858c-beeaf1e80b4c/ROW-816617c3ad8a5cf9",
+     "0000950170-25-106434/C_e2e20a26-4c91-46e5-93ff-b44ef9afc84a/ROW-3a13f90b87c7288c",
+     "0000950170-25-106434/C_21cb3036-0391-4725-af5d-8c1b41f79c03/ROW-ce8f6d9b4e11eb7d",
+     "0000950170-25-106434/C_26e34a64-fa0e-45c1-bde3-06e94f1bd201/ROW-fd21c3423b5e17bb",
+     "0000950170-25-106434/C_7b6ba0b5-4e36-4cc6-8768-fc5c0ec845c0/ROW-348c4dae57722d8d",
+     "0000950170-25-106434/C_83c7becb-7e4d-4d2a-a043-2e5a995c9809/ROW-9fcc3024860c869a",
+     "0000950170-25-106434/C_a1713a52-684f-44ef-9b5f-28f02de79019/ROW-b71e22a0ce6541b4",
+     "0000950170-25-106434/C_30e1f8d7-4bda-48ba-944f-9a9ab21634c1/ROW-2b077fc1ca5a5209"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-106434/C_2d752329-72ac-4897-8926-8bb52c740fc6/ROW-f663396bd5282c3f",
+     "0000950170-25-106434/C_0dbe6980-75a5-48e1-adea-61122430de52/ROW-025a223d92287c49",
+     "0000950170-25-106434/C_24e69ad3-d666-41e8-9011-50065f6c523e/ROW-5e95f7fc59d70843",
+     "0000950170-25-106434/C_3df78ee6-5b79-476e-8392-b9d8f31fab1d/ROW-dcaa720961e25245",
+     "0000950170-25-106434/C_1557b7d4-bd29-4301-a104-e0be368bac0a/ROW-004371b9391e7385",
+     "0000950170-25-106434/C_09780951-a1c1-45ef-9b5f-d453a44c46f9/ROW-9b8c59973d99b6c9",
+     "0000950170-25-106434/C_08c589c2-893f-467e-8f7c-a2aeedb04c25/ROW-32c4aab4466784b4",
+     "0000950170-25-106434/C_d52c939b-0454-46c0-9a43-ce31a846b008/ROW-1a315da46a29969b",
+     "0000950170-25-106434/C_cc24f7c6-357f-4a40-934f-1ccc64a3740f/ROW-f514a41d9c0a4c29",
+     "0000950170-25-106434/C_033fc091-8635-43e5-9990-6d2d7c4ef4a9/ROW-89cea5037d84ffe0",
+     "0000950170-25-106434/C_ebd010c2-65d9-4546-a831-31119cc56327/ROW-47496ca5a9202c00",
+     "0000950170-25-106434/C_6b7c5b1a-e1d8-4318-9144-ce2114eda704/ROW-492e74ad3b25cd32",
+     "0000950170-25-106434/C_8129b2d3-87ad-45e4-9e11-0824783fd0e9/ROW-ed5053b59efbee58",
+     "0000950170-25-106434/C_3a35beea-a3b7-48a9-94f8-efcfde43f731/ROW-493cd0bf4fd2bf87",
+     "0000950170-25-106434/C_225699b9-bb7f-4251-9d51-cbd99b50f503/ROW-194d1404d50a8f8e",
+     "0000950170-25-106434/C_801210cb-c8ee-4bd1-a3a7-ad6c35d019f5/ROW-96e6f41cf4c2398e",
+     "0000950170-25-106434/C_8a7faf9a-b86c-463d-b3d1-a98dc223f3ea/ROW-4f8cb206452c7039",
+     "0000950170-25-106434/C_0c38becb-8ec7-4a5e-b5d3-6fe960c80651/ROW-4d3dc1bb1a7d3bcd",
+     "0000950170-25-106434/C_966fbdd6-bb62-468a-ad85-70748333a776/ROW-140cc19903a05bff",
+     "0000950170-25-106434/C_679168d3-5613-4a89-a63c-ada19432aa5e/ROW-5cace50da7e16daa",
+     "0000950170-25-106434/C_3091ca81-41e3-4e17-8a6b-ddfb312ac095/ROW-2c94aa31b47704a5",
+     "0000950170-25-106434/C_368dd6a3-83af-462d-9144-81c11ac9db99/ROW-94c7ba31fbbed325",
+     "0000950170-25-106434/C_0aecca24-e590-4d41-8ad2-1a7dfa1e4ed2/ROW-4533a5ba08579da1",
+     "0000950170-25-106434/C_40b931bf-4380-4680-b299-ccd62c2554a6/ROW-74b32095da24556e",
+     "0000950170-25-106434/C_1bdcf13a-bdb0-40c8-a423-65cc7584b8df/ROW-1f096cc63d1d0b07",
+     "0000950170-25-106434/C_ac22405e-d68f-4f12-ab41-a53033a51ea8/ROW-75c6dc2625520404",
+     "0000950170-25-106434/C_c9ab653f-a641-4cf9-a961-ac2f15b8c80a/ROW-ccac43f1a9803bd6",
+     "0000950170-25-106434/C_d975fc84-1b88-4848-8ae6-5a4c1617f7b8/ROW-6f43cd2d67e84599",
+     "0000950170-25-106434/C_41a8ba5e-b9bc-4827-a23a-b0f8e4c2102d/ROW-5b31aa9f878ec9c0",
+     "0000950170-25-106434/C_f7d6d917-ee34-48eb-85d2-316569e689c5/ROW-f8936c67928b43b2",
+     "0000950170-25-106434/C_cba2f1bc-5d92-4919-ae6b-8d2657f4b99b/ROW-7c6d2a08c89f1661",
+     "0000950170-25-106434/C_2e63e585-7a5f-4416-8764-a6bb58b1be7f/ROW-a230a09015f8a806",
+     "0000950170-25-106434/C_9b6d21f8-55d6-429b-9b2e-b7ee13ad46ce/ROW-6d1e35f19419c23a",
+     "0000950170-25-106434/C_c3eb7f0f-7a98-4c8e-958e-43176af82f99/ROW-c103624a10710e3a",
+     "0000950170-25-106434/C_658d8fb5-c3e3-44af-bb5c-9fc14d6dc3df/ROW-6ad74463a7af765b",
+     "0000950170-25-106434/C_90add28a-dcde-45b7-8636-7c406e9dd140/ROW-516eb7babcbc1075",
+     "0000950170-25-106434/C_274252cb-a3b7-4364-a324-6b68b697fcf7/ROW-ef7b334dd6c3aaeb",
+     "0000950170-25-106434/C_db29ba49-4ed2-49c9-8ffe-953ba9c4ef2b/ROW-653447eadd6dcaba",
+     "0000950170-25-106434/C_7d7d2839-fa87-4a9c-b9c2-d24a0a6ead60/ROW-ada3d5f6a198eb86",
+     "0000950170-25-106434/C_7961e4b1-499f-4566-981c-7db1b4bb996b/ROW-09d43beb464cdda2",
+     "0000950170-25-106434/C_6af8d006-7a32-4ac5-aa5f-eb0f0d825430/ROW-ad85831786ee2e84",
+     "0000950170-25-106434/C_a1724ad5-a8c7-4a27-ba83-152f608f8e5c/ROW-5823ee3a1d9a9db5",
+     "0000950170-25-106434/C_0137ecc3-78d5-4bc3-acf7-5036e3eacf22/ROW-37d5ae2eb423a913",
+     "0000950170-25-106434/C_df28b81f-149c-4145-81a1-c946f8ca24d1/ROW-446de7393e226b52",
+     "0000950170-25-106434/C_d065e8dd-1bf4-48f3-868f-672ff2e36fa6/ROW-6106edb755a6ac6d",
+     "0000950170-25-106434/C_6fee6681-a940-46c6-85ce-d8d02cc2f925/ROW-701ccaa07ac40488",
+     "0000950170-25-106434/C_8f63886e-7f5d-4bea-ab2b-f8b84276c816/ROW-79fd7c01ac85dd97",
+     "0000950170-25-106434/C_3a9e3e9e-6a13-4e2c-ae5d-5312448a4cfe/ROW-9611fdce7e31d40c",
+     "0000950170-25-106434/C_5f972c12-25dd-4fc7-91f1-b922f095e5ef/ROW-1239e14714d7fc47",
+     "0000950170-25-106434/C_1e33b910-8c01-40ef-9316-3cfac0677d16/ROW-8a239186470e5ef7",
+     "0000950170-25-106434/C_c2f046f7-a881-42e8-858c-beeaf1e80b4c/ROW-816617c3ad8a5cf9",
+     "0000950170-25-106434/C_e2e20a26-4c91-46e5-93ff-b44ef9afc84a/ROW-3a13f90b87c7288c",
+     "0000950170-25-106434/C_21cb3036-0391-4725-af5d-8c1b41f79c03/ROW-ce8f6d9b4e11eb7d",
+     "0000950170-25-106434/C_26e34a64-fa0e-45c1-bde3-06e94f1bd201/ROW-fd21c3423b5e17bb",
+     "0000950170-25-106434/C_7b6ba0b5-4e36-4cc6-8768-fc5c0ec845c0/ROW-348c4dae57722d8d",
+     "0000950170-25-106434/C_83c7becb-7e4d-4d2a-a043-2e5a995c9809/ROW-9fcc3024860c869a",
+     "0000950170-25-106434/C_a1713a52-684f-44ef-9b5f-28f02de79019/ROW-b71e22a0ce6541b4",
+     "0000950170-25-106434/C_30e1f8d7-4bda-48ba-944f-9a9ab21634c1/ROW-2b077fc1ca5a5209"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-106434",
+     "text": "ACP Oak Buyer, Inc. Revolver N/A 6/12/2025 5/16/2031 $ - $ ( 19 ) $ ( 7 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A rate or margin is printed but not published: rejected for every flagged row of the quarter (x02_scan.py found 'N/A' on each; the rows it could not tie by regex were read by hand: US Health, Boulder, MES, National Safety Apparel, RBS, RFI, VTC, Zavation)."
+   ],
+   "next_action": "Proposed disposition x02-rate-columns-printed-n-a; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_0c6c7aa4de16",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-114266/C_55167de3-3a5f-442f-951a-c2ed1c7ca5e1/ROW-8c1f9b8965b8e9b6",
+     "0001193125-26-114266/C_ed1a1a26-125d-4d42-8a2b-b013fb81c328/ROW-a77e24b58fb1f88f",
+     "0001193125-26-114266/C_a4c868f9-dfae-4673-b769-8efd2d202692/ROW-1c9b2e4223f5933f",
+     "0001193125-26-114266/C_2c259423-d06c-4051-8137-5a6678f66632/ROW-88d2b5dc232da521",
+     "0001193125-26-114266/C_68a9fb5f-7efb-4678-91ce-2ec99b0c54f0/ROW-d79c94d5a44c9a43",
+     "0001193125-26-114266/C_dac01bdc-6a98-4145-bba0-bd1ee9e254cf/ROW-16b1d4f1cba0b201",
+     "0001193125-26-114266/C_a95a7283-7429-4272-9cca-65c4a822eb27/ROW-c421cc8c89df6921",
+     "0001193125-26-114266/C_f614b7e6-e57e-4cd8-9660-1ee9c4e1c3a0/ROW-316f068906ad0e2f",
+     "0001193125-26-114266/C_93d35a41-c764-4c0c-9234-f3fb69d089d2/ROW-dbc07b6d5e91dab7",
+     "0001193125-26-114266/C_6614bf37-0fb5-4998-8aa2-a3a9ab9a36d5/ROW-2cd2d28ea5d8f415",
+     "0001193125-26-114266/C_fcf41fca-1fcf-4e01-83d5-d256d02eee8f/ROW-a3e7b51d948eb41c",
+     "0001193125-26-114266/C_36d7bb97-7a82-4e73-bbe4-4d7693d2f976/ROW-c640aa17c616fed4",
+     "0001193125-26-114266/C_343ce23b-5938-4c20-98ba-2a1581663e21/ROW-b958d423a13e123a",
+     "0001193125-26-114266/C_7ad82a53-0450-42ae-8a0b-350811c902da/ROW-1542a04c7cdcf459",
+     "0001193125-26-114266/C_52d7556f-80fc-4689-a63e-7c740ece9f8b/ROW-376f79e250174c06",
+     "0001193125-26-114266/C_b6482604-4ae7-407e-ae33-5f8b51551a7f/ROW-65583004a9a8c78a",
+     "0001193125-26-114266/C_ca353129-01a0-4309-8dfb-35e12621934d/ROW-0c3e4af5be8141ff",
+     "0001193125-26-114266/C_3099985a-7932-4eee-860f-f592ab46b200/ROW-83bd5c0ffd68cd06",
+     "0001193125-26-114266/C_d9f7b41a-e06b-40d0-b5c9-5fafd6a3b17e/ROW-f4b285673f14b551",
+     "0001193125-26-114266/C_08b728ec-a0de-4d0c-a2d7-0a534a749a1d/ROW-4d53d8f4dee21ea2",
+     "0001193125-26-114266/C_b84dbc94-af32-4f67-bad0-eb34f282475c/ROW-876302d6fe4ba737",
+     "0001193125-26-114266/C_cc35bffa-8be4-4671-8f21-792ee59bb11c/ROW-b7d665577bf65734",
+     "0001193125-26-114266/C_39d290bb-c5af-4ddc-bb51-3e94ca1adf21/ROW-2d1f2e128ea63187",
+     "0001193125-26-114266/C_95095e44-d2a1-4834-8bce-0cbebd7a8171/ROW-4089182d9c48d3e8",
+     "0001193125-26-114266/C_c4dd74c3-0a44-44ab-841a-5a3b42a0cec0/ROW-82a9168c8f6a7e1a",
+     "0001193125-26-114266/C_190d0857-69b0-455a-a6a4-4be452b4c0e4/ROW-0eaa61b30d6d8b84",
+     "0001193125-26-114266/C_e45bcefe-30db-4a08-a4c0-b10084ae9f9b/ROW-b527a290305d1683",
+     "0001193125-26-114266/C_919bd121-1712-4a59-9768-6c965570ae0f/ROW-1b664508f7920acb",
+     "0001193125-26-114266/C_8049155a-69fa-40b1-b82a-f36b0a79e434/ROW-7653d3d0703106ec",
+     "0001193125-26-114266/C_57427aba-c964-4539-afb8-adb32a7408cb/ROW-f2841e13d052af41",
+     "0001193125-26-114266/C_c2ea48ea-5251-428d-8437-fce8895fabf6/ROW-864df73f37dac6c6",
+     "0001193125-26-114266/C_8ed30926-b4f1-4c5f-a8d3-7f76259a42a7/ROW-ec12734fcfa05a35",
+     "0001193125-26-114266/C_32dac3f6-3ab3-4391-8713-9ec23db88d0f/ROW-9279e73492182b2b",
+     "0001193125-26-114266/C_0ed0fc9c-b84f-458e-96d8-4c1f0695fcaf/ROW-45eea2c199b1696b",
+     "0001193125-26-114266/C_7978d9f3-4d60-4659-9990-059749c7f37a/ROW-e2aeaaade32e28ee",
+     "0001193125-26-114266/C_6f1b0b29-99d8-4e42-85f9-e2b32c864896/ROW-a24f4e25414b998f",
+     "0001193125-26-114266/C_24a95009-e92e-433e-9816-8490d9a2f461/ROW-5ffabac391bf79c2",
+     "0001193125-26-114266/C_25257ad8-6b2b-4067-9eb6-d2bf0eb81722/ROW-c4456203a943e166",
+     "0001193125-26-114266/C_aad5ca31-00ae-43ee-822f-936e74d9b95e/ROW-a602d00561b596aa",
+     "0001193125-26-114266/C_3a5a178f-7aff-4d13-a18b-9cb5e117c064/ROW-08781c7414b0bcd5",
+     "0001193125-26-114266/C_b820312c-78ed-46c7-af42-ba6c909712c2/ROW-a7344934b317d304",
+     "0001193125-26-114266/C_799f4221-7f7c-47ad-91ca-9950f067aca1/ROW-cef464699b4c3d87",
+     "0001193125-26-114266/C_94604446-a18c-4578-8fe0-7b619c08d973/ROW-84bba38b68642187",
+     "0001193125-26-114266/C_461aed64-2dec-424f-bea1-608752046fd0/ROW-57e9e359b7ce7fa7",
+     "0001193125-26-114266/C_af056db9-015c-4e7b-83e0-c9b21aa7d4cc/ROW-abd4430a8c5ef9a8",
+     "0001193125-26-114266/C_226b3bf1-2460-4b6c-938e-8972e01d554a/ROW-a2b7456a4abf900a",
+     "0001193125-26-114266/C_dedcb61e-8542-4e98-a7e5-9e4da5bccf4f/ROW-8fd26dc5732176a6",
+     "0001193125-26-114266/C_91ea8cbe-1820-4e60-80d6-209ad9b8111b/ROW-ab80837725944232",
+     "0001193125-26-114266/C_17abba0f-2d4b-4039-a8f3-461b0c17d1d1/ROW-03323e63b7da3e7d",
+     "0001193125-26-114266/C_b80c692d-e018-43f6-897e-4f88b9d690d6/ROW-6e3a61d3399b28ed",
+     "0001193125-26-114266/C_38ccdacb-4618-462b-97db-28e01ebcc9ad/ROW-3fcba4c84ba1e5b2",
+     "0001193125-26-114266/C_9c2dfd93-2ee8-496b-841c-415b2643e621/ROW-e5c28e8851bbfef6",
+     "0001193125-26-114266/C_11f6c0a9-057a-4124-9632-f6a374009a16/ROW-82582623d517b0cd",
+     "0001193125-26-114266/C_76dcbe10-5bbe-414f-84f1-08257243d5b1/ROW-33a51186237caa6d",
+     "0001193125-26-114266/C_0872b16e-e443-42b3-889f-4ba083889585/ROW-a5ae101434a4327a",
+     "0001193125-26-114266/C_01cfa69c-742d-4b0f-9b7a-593b5e104f6f/ROW-a73b227a4c3b3e6f",
+     "0001193125-26-114266/C_22389577-bee6-4827-b7c7-6ccbaf23e841/ROW-e9b490781c5aa481",
+     "0001193125-26-114266/C_283e3c02-3e99-4b08-aedd-3d818dbb9efd/ROW-d0c8d68b00e4c58a",
+     "0001193125-26-114266/C_25cce29e-9562-4a77-92de-01d05c1694e8/ROW-51ca4f3a82ae8005",
+     "0001193125-26-114266/C_eb0d34bd-a334-4873-9c12-e67b340f616f/ROW-2b816fa6f20cc64e",
+     "0001193125-26-114266/C_39910552-931c-49c1-ae36-635ea58232fc/ROW-1f7cf0edbd77e2ca",
+     "0001193125-26-114266/C_dd77055f-b3ff-4b7c-afec-86241b59ca7d/ROW-67a790c2fd6c84ab",
+     "0001193125-26-114266/C_78f47dd1-db4e-40b7-8b8a-8a6ba2fe96f4/ROW-cb23b9059aace455",
+     "0001193125-26-114266/C_af19ff10-1af6-448a-86b8-6133203f8ffb/ROW-fdb97bf112d21f13",
+     "0001193125-26-114266/C_e86fa738-4cc9-439c-a379-60bee3dfa606/ROW-6d320d3ab02c2714"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-114266/C_55167de3-3a5f-442f-951a-c2ed1c7ca5e1/ROW-8c1f9b8965b8e9b6",
+     "0001193125-26-114266/C_ed1a1a26-125d-4d42-8a2b-b013fb81c328/ROW-a77e24b58fb1f88f",
+     "0001193125-26-114266/C_a4c868f9-dfae-4673-b769-8efd2d202692/ROW-1c9b2e4223f5933f",
+     "0001193125-26-114266/C_2c259423-d06c-4051-8137-5a6678f66632/ROW-88d2b5dc232da521",
+     "0001193125-26-114266/C_68a9fb5f-7efb-4678-91ce-2ec99b0c54f0/ROW-d79c94d5a44c9a43",
+     "0001193125-26-114266/C_dac01bdc-6a98-4145-bba0-bd1ee9e254cf/ROW-16b1d4f1cba0b201",
+     "0001193125-26-114266/C_a95a7283-7429-4272-9cca-65c4a822eb27/ROW-c421cc8c89df6921",
+     "0001193125-26-114266/C_f614b7e6-e57e-4cd8-9660-1ee9c4e1c3a0/ROW-316f068906ad0e2f",
+     "0001193125-26-114266/C_93d35a41-c764-4c0c-9234-f3fb69d089d2/ROW-dbc07b6d5e91dab7",
+     "0001193125-26-114266/C_6614bf37-0fb5-4998-8aa2-a3a9ab9a36d5/ROW-2cd2d28ea5d8f415",
+     "0001193125-26-114266/C_fcf41fca-1fcf-4e01-83d5-d256d02eee8f/ROW-a3e7b51d948eb41c",
+     "0001193125-26-114266/C_36d7bb97-7a82-4e73-bbe4-4d7693d2f976/ROW-c640aa17c616fed4",
+     "0001193125-26-114266/C_343ce23b-5938-4c20-98ba-2a1581663e21/ROW-b958d423a13e123a",
+     "0001193125-26-114266/C_7ad82a53-0450-42ae-8a0b-350811c902da/ROW-1542a04c7cdcf459",
+     "0001193125-26-114266/C_52d7556f-80fc-4689-a63e-7c740ece9f8b/ROW-376f79e250174c06",
+     "0001193125-26-114266/C_b6482604-4ae7-407e-ae33-5f8b51551a7f/ROW-65583004a9a8c78a",
+     "0001193125-26-114266/C_ca353129-01a0-4309-8dfb-35e12621934d/ROW-0c3e4af5be8141ff",
+     "0001193125-26-114266/C_3099985a-7932-4eee-860f-f592ab46b200/ROW-83bd5c0ffd68cd06",
+     "0001193125-26-114266/C_d9f7b41a-e06b-40d0-b5c9-5fafd6a3b17e/ROW-f4b285673f14b551",
+     "0001193125-26-114266/C_08b728ec-a0de-4d0c-a2d7-0a534a749a1d/ROW-4d53d8f4dee21ea2",
+     "0001193125-26-114266/C_b84dbc94-af32-4f67-bad0-eb34f282475c/ROW-876302d6fe4ba737",
+     "0001193125-26-114266/C_cc35bffa-8be4-4671-8f21-792ee59bb11c/ROW-b7d665577bf65734",
+     "0001193125-26-114266/C_39d290bb-c5af-4ddc-bb51-3e94ca1adf21/ROW-2d1f2e128ea63187",
+     "0001193125-26-114266/C_95095e44-d2a1-4834-8bce-0cbebd7a8171/ROW-4089182d9c48d3e8",
+     "0001193125-26-114266/C_c4dd74c3-0a44-44ab-841a-5a3b42a0cec0/ROW-82a9168c8f6a7e1a",
+     "0001193125-26-114266/C_190d0857-69b0-455a-a6a4-4be452b4c0e4/ROW-0eaa61b30d6d8b84",
+     "0001193125-26-114266/C_e45bcefe-30db-4a08-a4c0-b10084ae9f9b/ROW-b527a290305d1683",
+     "0001193125-26-114266/C_919bd121-1712-4a59-9768-6c965570ae0f/ROW-1b664508f7920acb",
+     "0001193125-26-114266/C_8049155a-69fa-40b1-b82a-f36b0a79e434/ROW-7653d3d0703106ec",
+     "0001193125-26-114266/C_57427aba-c964-4539-afb8-adb32a7408cb/ROW-f2841e13d052af41",
+     "0001193125-26-114266/C_c2ea48ea-5251-428d-8437-fce8895fabf6/ROW-864df73f37dac6c6",
+     "0001193125-26-114266/C_8ed30926-b4f1-4c5f-a8d3-7f76259a42a7/ROW-ec12734fcfa05a35",
+     "0001193125-26-114266/C_32dac3f6-3ab3-4391-8713-9ec23db88d0f/ROW-9279e73492182b2b",
+     "0001193125-26-114266/C_0ed0fc9c-b84f-458e-96d8-4c1f0695fcaf/ROW-45eea2c199b1696b",
+     "0001193125-26-114266/C_7978d9f3-4d60-4659-9990-059749c7f37a/ROW-e2aeaaade32e28ee",
+     "0001193125-26-114266/C_6f1b0b29-99d8-4e42-85f9-e2b32c864896/ROW-a24f4e25414b998f",
+     "0001193125-26-114266/C_24a95009-e92e-433e-9816-8490d9a2f461/ROW-5ffabac391bf79c2",
+     "0001193125-26-114266/C_25257ad8-6b2b-4067-9eb6-d2bf0eb81722/ROW-c4456203a943e166",
+     "0001193125-26-114266/C_aad5ca31-00ae-43ee-822f-936e74d9b95e/ROW-a602d00561b596aa",
+     "0001193125-26-114266/C_3a5a178f-7aff-4d13-a18b-9cb5e117c064/ROW-08781c7414b0bcd5",
+     "0001193125-26-114266/C_b820312c-78ed-46c7-af42-ba6c909712c2/ROW-a7344934b317d304",
+     "0001193125-26-114266/C_799f4221-7f7c-47ad-91ca-9950f067aca1/ROW-cef464699b4c3d87",
+     "0001193125-26-114266/C_94604446-a18c-4578-8fe0-7b619c08d973/ROW-84bba38b68642187",
+     "0001193125-26-114266/C_461aed64-2dec-424f-bea1-608752046fd0/ROW-57e9e359b7ce7fa7",
+     "0001193125-26-114266/C_af056db9-015c-4e7b-83e0-c9b21aa7d4cc/ROW-abd4430a8c5ef9a8",
+     "0001193125-26-114266/C_226b3bf1-2460-4b6c-938e-8972e01d554a/ROW-a2b7456a4abf900a",
+     "0001193125-26-114266/C_dedcb61e-8542-4e98-a7e5-9e4da5bccf4f/ROW-8fd26dc5732176a6",
+     "0001193125-26-114266/C_91ea8cbe-1820-4e60-80d6-209ad9b8111b/ROW-ab80837725944232",
+     "0001193125-26-114266/C_17abba0f-2d4b-4039-a8f3-461b0c17d1d1/ROW-03323e63b7da3e7d",
+     "0001193125-26-114266/C_b80c692d-e018-43f6-897e-4f88b9d690d6/ROW-6e3a61d3399b28ed",
+     "0001193125-26-114266/C_38ccdacb-4618-462b-97db-28e01ebcc9ad/ROW-3fcba4c84ba1e5b2",
+     "0001193125-26-114266/C_9c2dfd93-2ee8-496b-841c-415b2643e621/ROW-e5c28e8851bbfef6",
+     "0001193125-26-114266/C_11f6c0a9-057a-4124-9632-f6a374009a16/ROW-82582623d517b0cd",
+     "0001193125-26-114266/C_76dcbe10-5bbe-414f-84f1-08257243d5b1/ROW-33a51186237caa6d",
+     "0001193125-26-114266/C_0872b16e-e443-42b3-889f-4ba083889585/ROW-a5ae101434a4327a",
+     "0001193125-26-114266/C_01cfa69c-742d-4b0f-9b7a-593b5e104f6f/ROW-a73b227a4c3b3e6f",
+     "0001193125-26-114266/C_22389577-bee6-4827-b7c7-6ccbaf23e841/ROW-e9b490781c5aa481",
+     "0001193125-26-114266/C_283e3c02-3e99-4b08-aedd-3d818dbb9efd/ROW-d0c8d68b00e4c58a",
+     "0001193125-26-114266/C_25cce29e-9562-4a77-92de-01d05c1694e8/ROW-51ca4f3a82ae8005",
+     "0001193125-26-114266/C_eb0d34bd-a334-4873-9c12-e67b340f616f/ROW-2b816fa6f20cc64e",
+     "0001193125-26-114266/C_39910552-931c-49c1-ae36-635ea58232fc/ROW-1f7cf0edbd77e2ca",
+     "0001193125-26-114266/C_dd77055f-b3ff-4b7c-afec-86241b59ca7d/ROW-67a790c2fd6c84ab",
+     "0001193125-26-114266/C_78f47dd1-db4e-40b7-8b8a-8a6ba2fe96f4/ROW-cb23b9059aace455",
+     "0001193125-26-114266/C_af19ff10-1af6-448a-86b8-6133203f8ffb/ROW-fdb97bf112d21f13",
+     "0001193125-26-114266/C_e86fa738-4cc9-439c-a379-60bee3dfa606/ROW-6d320d3ab02c2714"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-114266",
+     "text": "360 Partners, LLC Revolver N/A 8/7/2025 8/7/2031 $ - $( 24 ) $( 13 )"
+    },
+    {
+     "accession": "0001193125-26-114266",
+     "text": "M&D MidCo, Inc. Term Loan SOFR + 6.00 % (Q) 8/31/2022 8/31/2028 63 63 63"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A rate or margin is printed but not published: rejected for every flagged row of the quarter (x02_scan.py found 'N/A' on each; the rows it could not tie by regex were read by hand: US Health, Boulder, MES, National Safety Apparel, RBS, RFI, VTC, Zavation)."
+   ],
+   "next_action": "Proposed disposition x02-rate-columns-printed-n-a; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_e227a274ea01",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-344075/C_fbce2024-2229-472d-bc58-ba29e7af1cff/ROW-7e082ef19c77631c"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-344075/C_fbce2024-2229-472d-bc58-ba29e7af1cff/ROW-7e082ef19c77631c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344075",
+     "text": "Allergy & Clinical MidCo, LLC Delayed Draw Term Loan SOFR + 4.75 % (S) 8.37 % 1/29/2025 1/29/2031 88 7 85"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Fair value above ten times cost from a scale or column error: rejected, the page prints 88 / 7 / 85."
+   ],
+   "next_action": "Proposed disposition x07-fair-value-above-cost-on-a-small-draw; no data change."
+  },
+  {
+   "finding_id": "RVQ_BLK_18298df297d6",
+   "coverage": {
+    "affected_rows": [
+     "0001784700|2025-09-30|derivative_role_notional_contradiction|swap_notional_vs_debt"
+    ],
+    "reviewed_rows": [
+     "0001784700|2025-09-30|derivative_role_notional_contradiction|swap_notional_vs_debt"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-272093",
+     "text": "Interest rate swap 2026 Notes 8.10 % USD-SOFR-Compound + 4.226% CIBC Bank USA 12/21/2026 $ 25,000 $ 61 $ - $ 61 (7) Interest rate swap 2028 Notes 8.20 % USD-SOFR-Compound + 4.595% CIBC Bank USA 12/21/2028 25,000 106 - 106 (7) Total $ 50,000 $ 167"
+    },
+    {
+     "accession": "0001193125-25-272093",
+     "text": "Revolving credit facility payable (Note 6) $ 31,600 $ 50,000 Notes payable (net of debt issuance costs of $ 2,633 , and $ 2,870 , respectively) (Note 6) 425,019 424,009"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Swap notional above debt: rejected, the swaps hedge the notes (425,019); the check used the stale revolver-only borrowings (derivative step runs before financials applies the corrected figure); revolver (31,600) as debt."
+   ],
+   "next_action": "Proposed disposition derivative-swap-notional-hedges-unsecured-notes."
+  }
+ ]
+}

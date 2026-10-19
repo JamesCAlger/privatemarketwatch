@@ -289,6 +289,37 @@ def test_pik_guards():
     assert out.empty, out[["row_id", "kind", "printed"]]
 
 
+def test_pik_figure_with_no_leading_zero_reads_as_a_fraction():
+    # Varagon (CIK 1784700) prints a PIK figure as '( .50 % PIK)', which the rule read as 50.
+    # '.50', '0.50' and '5.0' must each read as printed.
+    out = _run(cr.pik_printed_not_published, [
+        {"row_id": "dot", "pik_rate": None, "printed_row": "Acme | Term Loan | SOFR + 6.00 % (M) | 11.43 % ( .50 % PIK) | 1,000"},
+        {"row_id": "zero", "pik_rate": None, "printed_row": "Acme | Term Loan | SOFR + 6.00 % | 11.43 % ( 0.50 % PIK) | 1,000"},
+        {"row_id": "five", "pik_rate": None, "printed_row": "Acme | Term Loan | SOFR + 6.00 % | 11.43 % ( 5.0 % PIK) | 1,000"},
+        {"row_id": "bare", "pik_rate": None, "printed_row": "Acme | Term Loan | S + 600 (including .50 PIK) | 1,000"},
+    ])
+    assert dict(zip(out["row_id"], out["printed"])) == {"dot": "0.5", "zero": "0.5", "five": "5.0", "bare": "0.5"}
+    # a published 0.50 agrees with '.50'; false-positive guard: a whole '5 %' is still 5, not 0.5
+    out = _run(cr.pik_printed_not_published, [
+        {"row_id": "dot_ok", "pik_rate": 0.5, "printed_row": "Acme | Term Loan | 11.43 % ( .50 % PIK) | 1,000"},
+        {"row_id": "whole", "pik_rate": 0.5, "printed_row": "Acme | Term Loan | 11.43 % ( 5 % PIK) | 1,000"},
+        {"row_id": "whole_ok", "pik_rate": 5.0, "printed_row": "Acme | Term Loan | 11.43 % ( 5 % PIK) | 1,000"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"whole": "pik_value_mismatch"}
+    assert list(out["printed"]) == ["5.0"]
+
+
+def test_units_figure_with_no_leading_zero_is_not_read_as_a_whole_number():
+    # '.50 %' on a row is 0.5: a proxy count of 50 is not on the row; 1,250 printed still is
+    out = _run(cr.unit_count_differs_from_row_text, [
+        {"row_id": "dot", "asset_category": "EQUITY_COMMON", "shares_held": 50, "shares_held_source": "derived_proxy",
+         "printed_row": "Acme Holdings | Class A Units | .50 % | 1,250 | 900"},
+        {"row_id": "ok", "asset_category": "EQUITY_COMMON", "shares_held": 1250, "shares_held_source": "derived_proxy",
+         "printed_row": "Acme Holdings | Class A Units | .50 % | 1,250 | 900"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {"dot": "proxy_count_not_on_row"}
+
+
 # ---------------------------------------------------------------- rule 4: industry coverage
 
 def _funded(n, missing, report_date, extra=None):

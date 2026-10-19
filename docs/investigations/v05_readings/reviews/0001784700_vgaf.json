@@ -1,0 +1,583 @@
+{
+ "reviewer_id": "independent-reviewer-vgaf-0001784700-2026-10-19",
+ "report_digest": "80a37a358c2dec7d2a092922ec4a188c3901d5f33d218908193c803d3b79c565",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_18298df297d6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001784700|2025-09-30|derivative_role_notional_contradiction matches the single row of derivative_role_review.csv (notional 50,000,000, ir_ratio 1.58 = 50,000 / 31,600). Source: the two 25,000 swaps hedge the 2026 and 2028 notes; the balance sheet prints revolver 31,600 plus notes 425,019, so debt 456,619 far exceeds the notional. Conclusion false_alarm is supported, but the mechanism is more specific than the report states: the derivative extract ran at 17:33:54 inside the add-quarter rebuild, before the highlights/financials stages rewrote fund_financials (17:34:37), so it read the pre-fix revolver-only borrowings (31.6M, the same value sponfb holds). vgaf fund_financials now holds 456,619,000 for 2025-09-30, which gives ratio 0.11 and role financing_hedge. Recommended: re-run bdc_derivatives after financials so the finding clears on the filed debt rather than by disposition; the disposition text stays true either way.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-272093",
+     "text": "Revolving credit facility payable (Note 6) $ 31,600 $ 50,000 Notes payable (net of debt issuance costs of $ 2,633 , and $ 2,870 , respectively) (Note 6) 425,019 424,009"
+    },
+    {
+     "accession": "0001193125-25-272093",
+     "text": "Interest rate swap 2026 Notes 8.10 % USD-SOFR-Compound + 4.226% CIBC Bank USA 12/21/2026 $ 25,000 $ 61 $ - $ 61"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1c660535cbf2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001784700|2025-03-31|A01|apparel luxury goods matches check_failures.csv (rollup 7,396 vs child sum 7,094). Source: published Textiles, Apparel & Luxury Goods rows 2025-03-31 are 874 + 0 + 6,504 = 7,378, the printed subtotal; 7,396 is the 2024-12-31 comparative subtotal printed in the same 10-Q ('7,274 7,396 1.88 %'). The oracle compares a comparative-period figure under a comma-split key. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071178",
+     "text": "BPCP NSA Intermedco, Inc. Term Loan SOFR + 4.75 % (Q) 9.05 % 5/17/2024 5/17/2030 6,503 6,417 6,504 (1)(6) 7,260 7,378"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5c282bd57e71",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter key 0001784700|2023-12-31|A01|instruments components matches oracle/check_failures.csv (parent_key 'instruments components', rollup 19,414 vs child sum 23,999). Source: published rows with extracted_industry 'Electronic Equipment, Instruments & Components' at 2023-12-31 are BC Group 795 + 6,516 and Wildcat 189 + 1,894 + 535 + 3,581 = 13,510, equal to the printed subtotal. 19,414 is printed elsewhere in the 10-K (another group's subtotal), so the oracle's comma-split key 'instruments components' mixes groups. Data correct; false_alarm supported. The A01 key for labels containing a comma is a rule defect worth a detector fix.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035857",
+     "text": "Wildcat Buyerco, Inc. Term Loan SOFR + 5.75 % (Q) 11.10 % 02/26/27 3,590 3,590 3,581 (1)(6) 13,579 13,510"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_043316c16d52",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 23 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: 3G Intermediate, Inc. Revolver 48000.0/46000.0/46000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-114266",
+     "text": "3G Intermediate, Inc. Revolver SOFR + 5.50 % (Q) 9.46 % 9/30/2024 9/30/2030 48 46 46 (6)(9) 3G Intermediate, Inc. Revolver SOFR + 5.50 % (Q) 9.19 % 9/30/2024 9/30/2030 48 46 46"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0c6c7aa4de16",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: 65 affected ROW ids equal the X02 rows for this quarter in row_validation_issues.csv (missing 0, extra 0). Source: every flagged row was matched by issuer and par/cost/fair-value cells to its printed line; all print 'N/A' in the reference-rate and rate columns (reviewer x02_c107.py; the one US Health revolver row the regex mis-windowed was read by hand: 'Revolver N/A'). Nothing printed is unpublished, so false_alarm / as_filed is supported. The earlier real-error verdict (M&D MidCo 63 term loan printed 'SOFR + 6.00 %' with no rate) is answered: vgaf publishes basis_spread 6.0 / SOFR on that row and it is no longer flagged.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-114266",
+     "text": "360 Partners, LLC Delayed Draw Term Loan N/A 8/7/2025 8/7/2031 - ( 21 ) ( 23 )"
+    },
+    {
+     "accession": "0001193125-26-114266",
+     "text": "M&D MidCo, Inc. Term Loan SOFR + 6.00 % (Q) 8/31/2022 8/31/2028 63 63 63"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0f71ab4a3c50",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 25 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: Boulder Scientific Company, LLC Term Loan 414000.0/412000.0/408000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071178",
+     "text": "Boulder Scientific Company, LLC Term Loan SOFR + 4.75 % (Q) 9.05 % 6/2/2022 12/31/2027 414 412 408 (1)(6) Boulder Scientific Company, LLC Term Loan SOFR + 4.75 % (Q) 9.05 % 6/2/2022 12/31/2027 414 412 408"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_11f080c6c7a7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 6 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: KL Bronco Acquisition, Inc. Revolver 71000.0/69000.0/66000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021632",
+     "text": "KL Bronco Acquisition, Inc. Personal Products Revolver SOFR + 5.25 % (Q) 10.04 % 06/30/28 71 69 66 (2)(6)(9) KL Bronco Acquisition, Inc. Personal Products Revolver SOFR + 5.25 % (Q) 10.07 % 06/30/28 71 69 66"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_23592773874b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 32 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: BRG Acquisition Co., LLC Term Loan 3372000.0/3328000.0/3322000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-043295",
+     "text": "BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (Q) 9.98 % 7/26/2022 7/26/2028 3,372 3,328 3,322 (1)(6) BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (Q) 9.98 % 7/26/2022 7/26/2028 3,372 3,328 3,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2cd6dfe0f88a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 40 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: Boulder Scientific Company, LLC Term Loan 414000.0/412000.0/400000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-058847",
+     "text": "Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.46 % 12/28/2025 414 412 400 (6)(9) Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.46 % 12/28/2025 414 412 400"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3732c22b7d60",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 15 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: Accupac, LLC Revolver 217000.0/142000.0/124000.0 (rows=3, printed=3). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344075",
+     "text": "Accupac, LLC Revolver SOFR + 3.00 % ( 6.00 % PIK) (Q) 10.65 % 12/31/2024 12/31/2029 217 142 124 (6)(9)(13) Accupac, LLC Revolver SOFR + 3.00 % ( 6.00 % PIK) (Q) 10.67 % 12/31/2024 12/31/2029 217 142 124"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3ab8b4a26526",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 22 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: Accupac, LLC Revolver 217000.0/142000.0/152000.0 (rows=3, printed=3). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Accupac, LLC Revolver SOFR + 7.00 % (Q) 10.67 % 12/31/2024 12/31/2029 $ 217 $ 142 $ 152 (6)(9) Accupac, LLC Revolver SOFR + 7.00 % (Q) 10.65 % 12/31/2024 12/31/2029 217 142 152"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3d73c99fa23e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: 57 affected ROW ids equal the X02 rows for this quarter in row_validation_issues.csv (missing 0, extra 0). Source: every flagged row was matched by issuer and par/cost/fair-value cells to its printed line; all print 'N/A' in the reference-rate and rate columns (reviewer x02_c107.py; the one US Health revolver row the regex mis-windowed was read by hand: 'Revolver N/A'). Nothing printed is unpublished, so false_alarm / as_filed is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-043295",
+     "text": "3G Intermediate, Inc. Delayed Draw Term Loan N/A 9/30/2024 9/30/2030 - ( 26 ) ( 13 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_429026b34b67",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 42 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: Castleworks Home Services Company Revolver 136000.0/134000.0/112000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035857",
+     "text": "Castleworks Home Services Company Revolver SOFR + 5.50 % (M) 12.95 % ( 2.00 % PIK) 06/29/28 136 134 112 (2)(6)(9) Castleworks Home Services Company Revolver SOFR + 5.50 % (M) 12.96 % ( 2.00 % PIK) 06/29/28 136 134 112"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_488afe85422d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 30 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: Boulder Scientific Company, LLC Term Loan 414000.0/412000.0/400000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094111",
+     "text": "Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.49 % 12/28/2025 414 412 400 (6)(9) Boulder Scientific Company, LLC Term Loan SOFR + 5.00 % (Q) 10.49 % 12/28/2025 414 412 400"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5f9b6be7d129",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 37 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: BRG Acquisition Co., LLC Term Loan 3381000.0/3334000.0/3339000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125262",
+     "text": "BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (M) 10.45 % 8/31/2027 3,381 3,334 3,339 (1)(6) BRG Acquisition Co., LLC Term Loan SOFR + 5.50 % (S) 10.00 % 8/31/2027 3,381 3,334 3,339"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_873b83c9818c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: 41 affected ROW ids equal the X02 rows for this quarter in row_validation_issues.csv (missing 0, extra 0). Source: every flagged row was matched by issuer and par/cost/fair-value cells to its printed line; all print 'N/A' in the reference-rate and rate columns (reviewer x02_c107.py; the one US Health revolver row the regex mis-windowed was read by hand: 'Revolver N/A'). Nothing printed is unpublished, so false_alarm / as_filed is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125262",
+     "text": "US Health Partners Management, LLC Revolver N/A 10/30/2027"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8a538a3c0d38",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 26 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: North Haven Stallone Buyer, LLC Revolver 42000.0/39000.0/42000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-063476",
+     "text": "North Haven Stallone Buyer, LLC Diversified Consumer Services Revolver SOFR + 5.75 % (Q) 11.39 % 05/24/27 42 39 42 (2)(6)(9) North Haven Stallone Buyer, LLC Diversified Consumer Services Revolver SOFR + 5.75 % (Q) 11.39 % 05/24/27 42 39 42"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8c612911ee89",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 19 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: Center for Autism and Related Disorders, LLC Delayed Draw Term Loan 436000.0/423000.0/327000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041717",
+     "text": "Center for Autism and Related Disorders, LLC Health Care Providers & Services Delayed Draw Term Loan SOFR + 10.00 % (Q) 15.53 % (ALL PIK) 10/11/23 436 423 327 (6)(9)(10) Center for Autism and Related Disorders, LLC Health Care Providers & Services Delayed Draw Term Loan SOFR + 10.00 % (Q) 15.51 % (ALL PIK) 10/11/23 436 423 327"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a2572aaa9bf1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001784700|2026-08-11|F28 matches the only fund_financials row dated 2026-08-11 (report_quarter 2026q3), which carries only shares_outstanding 41,538,726 and no balance-sheet or income figure. Source: that count and date are the cover page of the 10-Q for 2026-06-30. Not a reporting period; not_applicable supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344075",
+     "text": "As of August 11, 2026, the registrant had 41,538,726 sha res of common stock"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a8c42a48b6dc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 29 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: Accupac, LLC Revolver 217000.0/210000.0/175000.0 (rows=3, printed=3). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-272093",
+     "text": "Accupac, LLC Revolver SOFR + 7.00 % (Q) 11.32 % 12/31/2024 12/31/2029 $ 217 $ 210 $ 175 (6)(9) Accupac, LLC Revolver SOFR + 7.00 % (Q) 11.25 % 12/31/2024 12/31/2029 217 210 175"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d137ab632df2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 38 affected ROW ids equal the holdings rows whose (report_date, bdc_investment_identifier) carry a PP02 issue in sandbox vgaf row_validation_issues.csv (missing 0, extra 0; reviewer coverage2.py). Source: across all 14 PP02 findings, 163 groups / 384 rows were matched to the cached pages by issuer and par/cost/fair-value cells; in every group the page prints at least as many separate lines as published rows (0 groups short), the twins carry different printed rates, and each row has its own context. Independent filed check: with the twins restored, published non-cash fair value ties the filed investments total in 14 of 14 quarters (fund_gate.check_totals vgaf; sponfb tied 3), so no restored twin is double counted. Example this quarter: 3G Intermediate, Inc. Revolver 167000.0/162000.0/163000.0 (rows=2, printed=2). Conclusion false_alarm and the as_filed proposal are supported. Caveat: the printed-line count can include comparative-schedule lines with the same cells; the filed-total tie is the stronger evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-106434",
+     "text": "3G Intermediate, Inc. Revolver SOFR + 5.50 % (Q) 9.82 % 9/30/2024 9/30/2030 167 162 163 (6)(9) 3G Intermediate, Inc. Revolver PRIME + 4.50 % (Q) 12.00 % 9/30/2024 9/30/2030 167 162 163"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d206d62833ed",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: 58 affected ROW ids equal the X02 rows for this quarter in row_validation_issues.csv (missing 0, extra 0). Source: every flagged row was matched by issuer and par/cost/fair-value cells to its printed line; all print 'N/A' in the reference-rate and rate columns (reviewer x02_c107.py; the one US Health revolver row the regex mis-windowed was read by hand: 'Revolver N/A'). Nothing printed is unpublished, so false_alarm / as_filed is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-106434",
+     "text": "ACP Oak Buyer, Inc. Delayed Draw Term Loan N/A 6/12/2025 5/16/2031 - ( 10 ) ( 8 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e227a274ea01",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the one affected ROW id equals the single X07 row for 2026-06-30 (missing 0, extra 0). Source: the row's par 88,000 / cost 7,000 / fair value 85,000 equal the printed line; fair value above 10x cost is as filed (partly funded delayed draw). as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344075",
+     "text": "Allergy & Clinical MidCo, LLC Delayed Draw Term Loan SOFR + 4.75 % (S) 8.37 % 1/29/2025 1/29/2031 88 7 85"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f5c5cb6cb726",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the 7 affected ROW ids equal the C107 rows for 2023-06-30 in row_validation_issues.csv (missing 0, extra 0). Source: all 7 rows were matched to printed lines whose cost prints in brackets on an undrawn '-' par (KL Bronco ( 15 ), Krayden ( 11 ), BRG, Boulder, OIS); published cost equals the printed negative cost. The earlier real-error verdict cited Accupac's delayed draw printed '- - ( 15 )': vgaf now publishes cost blank and fair value -15,000 for it, matching the page, and it is not flagged. as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041717",
+     "text": "KL Bronco Acquisition, Inc. Personal Products Delayed Draw Term Loan N/A 0.00 % 06/30/28 - ( 15 ) ( 80 )"
+    },
+    {
+     "accession": "0000950170-23-041717",
+     "text": "Accupac, LLC Personal Products Delayed Draw Term Loan N/A 0.00 % 01/16/26 - - ( 15 )"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "principal-tag-omits-thousand-scale",
+   "outcome": "supported",
+   "rationale": "Independently parsed the 9 listed instances: 618 principal, 10 cost and 9 fair value values changed vgaf vs sponfb, every one by exactly x1000 and all in listed accessions (2023 Q1/Q3 and 10-K 2023: 195/202/216 principal rows); spot checks against the printed thousands (A&R 5,010; Q-Centrix 1,057 / 4,836; VRC 11,725; JTM 70) agree. Unlisted filings' current-period decimals-0 facts are only unit counts (2023-06-30: 500,000 / 804,569 / 5,050 / 3,000 / 333) and no-member subtotals, so nothing already right was rescaled; equity unit counts no longer publish as principal. Proposed detector (funded loans with principal below 1 pct of fair value) is concrete and low false-positive.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021632",
+     "text": "A&R Logistics Holdings, Inc. Road & Rail Term Loan SOFR + 5.50 % (Q) 10.24 % 05/03/25 5,010 $ 4,973 $ 4,872"
+    }
+   ]
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "outcome": "supported",
+   "rationale": "Totals tie 14/14 ex cash in vgaf (3/13 in sponfb) by fund_gate.check_totals; 163 PP02 groups (384 rows) all have at least as many printed lines as rows. The three pulled row_add rules are under _pulled_1784700_fundloop_2026-10-19 (README: nothing reads it) and no vgaf row lacks a source context, so no plug remains. Suggested check (compare member tail after 'Type of' for excluded_affiliation_dedup rows) is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "NS and Associates LLC Term Loan SOFR + 5.25 % (Q) 8.90 % 9/9/2025 8/6/2030 3,498 3,451 3,455"
+    }
+   ]
+  },
+  {
+   "observation_key": "spread-tag-is-cash-leg-of-printed-total-margin",
+   "outcome": "supported",
+   "rationale": "Reviewer line scan (line_scan2.py) matched 3,374 funded loan rows to unique printed lines: every PIK row publishes basis_spread = printed A + B. One deliberate exception: LAV Gear 2025-03-31 'SOFR + 0 % ( 10.00 % PIK)' publishes spread 0 / Fixed, which the proposed detector would flag; record it as a known exception. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Walnut Parent, Inc. Term Loan SOFR + 2.88 % ( 3.38 % PIK) (Q) 9.94 % 6/2/2022 11/9/2029 $ 9,314 $ 9,297 $ 8,755"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "issuer_name_printed fired on these rows in vgaa, so an existing detector covers recurrence. No vgaf name keeps 'Type of', 'Industry' or an instrument word. Residual punctuation variants from member text remain (e.g. 'Q-Centrix, LLC.' and 'VRC Companies,LLC' 2023-12-31, 'TheKey LLC' 2025-06-30, page 'TheKey, LLC'); cosmetic, not identity errors.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041717",
+     "text": "North Haven USHC Acquisition, Inc. Diversified Consumer Services Delayed Draw Term Loan SOFR + 6.50 % (S) 11.46 % 10/30/25 706 706 686"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Round 3 (field diff vgaf vs vgaf1, r3_diff.py: 0 rows added/removed, 8 rows with value changes, 6 more position_id only): Titan 2024-09-30 C_cfa243b2 is Revolver again, matching the printed 'Revolver N/A 5/24/2027 26 79 85'. National Safety Apparel 2025-12-31 now publishes Term Loan 6,454 (C_35813bd0) and Delayed Draw Term Loan 2,273 (C_db3cbc27), as printed. The three newly reverted rows match the page: Accupac 2023-12-31 Term Loan 10,804 / 10,804 / 10,452, Accupac 2024-03-31 Term Loan 10,776 / 10,776 / 10,479, Turbo 2023-12-31 Term Loan 1,235 / 1,222 / 1,219 (each the issuer's only line with those cells; the DDTL lines print other cells). The proposed printed-instrument detector is concrete; anchoring on the full issuer name (instr_check2.py) answers the false matches.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125262",
+     "text": "Titan Group Holdco, LLC Revolver N/A 5/24/2027 26 79 85"
+    },
+    {
+     "accession": "0001193125-26-114266",
+     "text": "National Safety Apparel LLC (fka BPCP NSA Intermedco, Inc.) Term Loan SOFR + 4.75 % (Q) 8.42 % 11/26/2024 5/17/2030 6,454 6,378 6,454"
+    },
+    {
+     "accession": "0000950170-24-035857",
+     "text": "Accupac, LLC Term Loan SOFR + 6.00 % (Q) 11.52 % 01/16/26 10,804 10,804 10,452"
+    },
+    {
+     "accession": "0000950170-24-058847",
+     "text": "Accupac, LLC Term Loan SOFR + 6.00 % (Q) 11.48 % 1/16/2026 10,776 10,776 10,479"
+    },
+    {
+     "accession": "0000950170-24-035857",
+     "text": "Turbo Buyer, Inc. Term Loan SOFR + 6.00 % (Q) 11.50 % 12/02/25 1,235 1,222 1,219"
+    }
+   ]
+  },
+  {
+   "observation_key": "derivative-check-runs-before-borrowings-correction",
+   "outcome": "supported",
+   "rationale": "Matches the reviewer's finding: bdc_derivatives ran at 17:33:54 in the add-quarter rebuild, before financials rewrote fund_financials, so ir_ratio 1.58 = 50,000 / 31,600 (sponfb's revolver-only borrowings). vgaf fund_financials holds 456,619,000 for 2025-09-30 (ratio 0.11). The proposed ordering fix with a test is concrete and does not hide a real excess notional.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-272093",
+     "text": "Revolving credit facility payable (Note 6) $ 31,600 $ 50,000 Notes payable (net of debt issuance costs of $ 2,633 , and $ 2,870 , respectively) (Note 6) 425,019 424,009"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-is-pre-tax-figure",
+   "outcome": "supported",
+   "rationale": "Confirmed on the page: 2023-09-30 published NII 11,224 is the pre-tax line; printed NII after 2 of excise tax is 11,222. Left unfixed and recorded; 0.02 pct. Detector (prefer the after-tax concept when both are filed) is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-063476",
+     "text": "Net investment income before taxes 11,224 8,625 31,614 10,934 Excise tax expense 2 - 2 - Net investment income (loss) 11,222"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "outcome": "supported",
+   "rationale": "vgaf fund_financials TII / NII equal the printed quarter figures in all 14 quarters (10-K quarters derived as year minus nine months: 2023 Q4 21,843 / 11,026; 2024 Q4 23,522 / 12,748; 2025 Q4 22,440 / 10,428). One small residual: 2023-09-30 NII 11,224 is the printed 'Net investment income before taxes'; printed NII after excise tax is 11,222. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-063476",
+     "text": "Net investment income before taxes 11,224 8,625 31,614 10,934 Excise tax expense 2 - 2 - Net investment income (loss) 11,222"
+    }
+   ]
+  },
+  {
+   "observation_key": "borrowings-exclude-securitization-and-notes",
+   "outcome": "supported",
+   "rationale": "vgaf borrowings equal printed revolver + notes payable in all 11 quarters from 2023-12-31 (e.g. 241,670 + 49,638 = 291,308; 31,600 + 425,019 = 456,619; 72,100 + 424,812 = 496,912) and the revolver alone in 2023 Q1-Q3 when no notes existed. F26 is an existing detector. Note: bdc_derivatives ran before this fix reached fund_financials, which is why the derivative finding exists.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344075",
+     "text": "Revolving credit facility payable (Note 6) $ 72,100 $ 67,100 Notes payable (net of debt issuance costs of $ 2,395 , and $ 2,553 , respectively) (Note 6) 424,812 425,112"
+    }
+   ]
+  },
+  {
+   "observation_key": "equity-units-tagged-as-principal",
+   "outcome": "supported",
+   "rationale": "2023 Q1-Q3 equity rows (KLC, FS NU, M&D Parent, MDI, Oliver Investors, RFI Group, Techmer) publish shares_held equal to the printed units and no principal. C04 is the existing detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021632",
+     "text": "KLC Fund 1-C1 LP Personal Products Limited Partnership Units 500,000 500 500"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "vgaf publishes M&D Parent 5,144 and Chimney Rock 125,000 units (2025-09-30, 2026-06-30), equal to the page. units_printed fired on one row only, so the proposed detector is justified.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344075",
+     "text": "M&D Parent Holdings, LLC Class B Units 5,144 518 467"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Royal Holdco 2023-03-31 and Walnut 2023-06-30 now publish SOFR as printed; Krayden 2023-06-30 revolver publishes no spread (page 'N/A'). The line scan found no other reference-rate mismatch on 3,374 matched rows. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041717",
+     "text": "Walnut Parent, Inc. Household Products Term Loan SOFR + 5.50 % (M) 10.70 % 11/09/27 9,446 9,407 9,115"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-coupon-tagged-as-cash-or-plain-rate",
+   "outcome": "supported",
+   "rationale": "Round 3: Oliver Packaging 2025-12-31 term loans (C_f30c0b4f 3,936 par; C_aaab077b 578 par) now publish interest_rate 9.82 all_in and interest_rate_cash 8.82 = printed 8.82 cash + 1.00 PIK; no other rate row changed vs vgaf1. The remaining cash-kind rows publish printed rate + PIK (reviewer q_ratekind.sql in round 2: Arrowhead 6.34 + 2.75 = 9.09, Castleworks 9.34 + 2.00, TheKey 8.92 + 1.00, LAV 6.22 + 3.44). Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-114266",
+     "text": "Oliver Packaging, LLC Term Loan SOFR + 5.00 % (1.00% PIK) (Q) 8.82 % 7/6/2022 7/6/2028 3,936 3,900 3,267"
+    },
+    {
+     "accession": "0001193125-26-114266",
+     "text": "Oliver Packaging, LLC Term Loan SOFR + 5.00 % (1.00% PIK) (Q) 8.82 % 8/30/2024 7/6/2028 578 574 480"
+    }
+   ]
+  },
+  {
+   "observation_key": "default-interest-tagged-as-pik",
+   "outcome": "supported",
+   "rationale": "Both Premier Imaging 2024-06-30 term loans publish pik_rate blank with spread 6.0 / rate 13.60 as printed. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094111",
+     "text": "Premier Imaging, LLC Term Loan SOFR + 6.00 % ( 2.00 % Default) (Q) 13.60 % 1/2/2025 3,679 3,667 3,347"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rule-misreads-leading-point-decimal",
+   "outcome": "supported",
+   "rationale": "The working-tree diff of pipeline/candidate_rules.py adds the leading-dot alternative to _PIK_PERCENT / _PIK_BARE and _ANY_NUMBER; pik_printed no longer fires for the fund in vgaf.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125262",
+     "text": "Oliver Packaging, LLC Term Loan SOFR + 5.00 % ( .50 % PIK) (Q) 10.25 % 9/1/2028 3,945 3,898 3,906"
+    }
+   ]
+  },
+  {
+   "observation_key": "filer-printed-spread-and-rate-swapped",
+   "outcome": "supported",
+   "rationale": "Page prints the 408 / 403 / 393 revolver as 'SOFR + 10.49 % (Q) 5.00 %' while its sibling prints 'SOFR + 5.00 % (Q) 10.48 %'; vgaf publishes spread 10.49 / rate 5.00 as printed. Leaving it is defensible; the 'spread above all-in rate' detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094111",
+     "text": "Oliver Packaging, LLC Revolver SOFR + 10.49 % (Q) 5.00 % 7/6/2028 408 403 393"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-keeps-member-words",
+   "outcome": "supported",
+   "rationale": "US Health 2024-09-30, Boulder 2025-06-30, BRG 2024-09-30 and RBS 2025-12-31 now publish clean instrument text; no vgaf row for the fund has a digit, comma or '|' in instrument_description. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125262",
+     "text": "US Health Partners Management, LLC Revolver N/A 10/30/2027"
+    }
+   ]
+  },
+  {
+   "observation_key": "verification-reader-ignores-thousands-scale-filings",
+   "outcome": "supported",
+   "rationale": "VGA-R1 is in the working tree (source_reconciliation.py passes thousands_scale_filing) with tests: listed filing scaled, unlisted filing of the same filer not scaled, metadata hash changes only for the listed accession. The clearance is not circular: the listing is backed by the printed thousands and by the 14/14 tie with filed totals.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-021632",
+     "text": "Del Real, LLC Food Products Term Loan SOFR + 7.00 % (M) 13.53 % ( 1.50 % PIK) 03/28/28 3,504 3,451 3,478"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_resolution_history_reviews": [
+  {
+   "request_id": "VGA-R1",
+   "outcome": "supported",
+   "rationale": "Verification bug, not an acceptance change: the reconciliation reader now applies the same listed-filing thousands scale as the extractor, with a false-positive test for an unlisted filing. SRC_BDC03 x5, blocking x5 and A01 2024-06-30 no longer fire. The scale itself is independently backed by the printed page (all 637 changed values are exact x1000 of the tagged figure and match printed thousands in spot checks) and by the filed totals, so cleared findings clear on filed figures.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094111",
+     "text": "EIS Legacy, LLC Term Loan SOFR + 6.00 % (Q) 11.43 % 11/1/2027 3,793 3,720 3,793"
+    }
+   ]
+  },
+  {
+   "request_id": "VGA-R2",
+   "outcome": "supported",
+   "rationale": "Verification bug: the pulled agent anchor (825,525, ex cash) outranked the deterministic anchor while the published rows include the money-market row. The automatic anchor is companyfacts 825,525 + cash 15,531 = 841,056, the printed 'Total Investments and Cash Equivalents'; published 2026-03-31 rows sum to 841,056. This compares published rows with a filed figure, not with themselves.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219643",
+     "text": "Total Investments and Cash Equivalents $ 874,482 $ 841,056 224.18 %"
+    }
+   ]
+  }
+ ],
+ "rerun_log_check": "scratch/fund_runs/vgaf.rerun.log: rebuild, nonaccrual, validate, oracle, provenance, shadow, queue exit 0, ledger exit 1 (= findings remain, accepted by fund_ledger_trial and fund_gate.check_stages); 'published files touched: none' and CHAIN_DONE; round-3 run (vgaf.log tail) ends --from ledger exit 1, 24 outstanding, published files touched: none, CHAIN_DONE. run.json stages complete; no traceback in sandbox logs; 0 unmatched corrections. Highlights/financials/add-quarter were not re-run (declared in not_done).",
+ "residuals_outside_findings": [
+  "Round 3 fixed Oliver Packaging rates, Titan, National Safety Apparel, Accupac x2, Turbo and RFI Buyer 2026-03-31 revolver cost (now 9,000 = printed '10 9 10').",
+  "2023-09-30 net_investment_income 11,224 (before excise tax) vs printed NII 11,222: recorded, not fixed.",
+  "bdc_derivatives runs before the financials stage in a fund sandbox, so it reads the previous borrowings (recorded as an observation).",
+  "Findings cleared is not data correct: offsetting errors and meaning changes are not tested by these checks."
+ ],
+ "method": "Reviewer scripts and outputs in scratch/fund_runs/0001784700/reviewer_vgaf/: thousands_check.py / thousands_check2.py (all decimals-0 position facts by filing and period, changed values vgaf vs sponfb), coverage2.py (rule population vs affected_rows; PP02 groups vs printed lines), x02_c107.py, line_scan.py / line_scan2.py (3,374 funded loan rows vs printed reference, margin, PIK, rate, maturity, instrument, currency), corr_sample.py (49 of 593 context corrections, stratified by field), fin_check.py (TII / NII / borrowings per quarter), totals.py. Round 3: r3_diff.py (vgaf vs vgaf1 field diff) and page reads of every changed row."
+}

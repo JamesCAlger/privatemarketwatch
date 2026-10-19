@@ -361,7 +361,8 @@ def issuer_name_blind_spots(con: duckdb.DuckDBPyConnection) -> pd.DataFrame:
 _LABELLED_COUNT = (r"(?i)(?:^|[\s(])([0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?)\s+"
                    r"(?:(?:preferred|common|ordinary|voting|non-voting|restricted|lp|llc|partnership|membership|"
                    r"class [a-z0-9-]+|series [a-z0-9-]+)\s+){0,3}(?:units?|shares?|interests?)\b")
-_ANY_NUMBER = r"[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?"
+# '.50' is 0.5, not 50 (a figure printed with no leading zero; same reading as rule 3's _PIK_NUMBER)
+_ANY_NUMBER = r"[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?|[0-9]+(?:\.[0-9]+)?|\.[0-9]+"
 _DATE_WORDS = (r"(?i)\b(january|february|march|april|may|june|july|august|september|october|november|december|"
                r"jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)\.?\s+[0-9]{1,2},?\s+[0-9]{4}")
 
@@ -441,9 +442,12 @@ def unit_count_differs_from_row_text(con: duckdb.DuckDBPyConnection, table: str 
 # Rule 3
 # ---------------------------------------------------------------------------------------------
 
-_PIK_PERCENT = r"(?i)([0-9]+(?:\.[0-9]+)?)\s*%\s*\)?\s*PIK\b"
+# A figure may be printed with no leading zero: Varagon '( .50 % PIK)' is 0.50, not 50. The
+# leading-dot alternative matches first at the dot, so the digits after it are never read alone.
+_PIK_NUMBER = r"([0-9]+(?:\.[0-9]+)?|\.[0-9]+)"
+_PIK_PERCENT = r"(?i)" + _PIK_NUMBER + r"\s*%\s*\)?\s*PIK\b"
 # a figure without a percent sign: basis points from 25 up ('including 75 PIK', '1350 PIK', 'S+450 PIK')
-_PIK_BARE = r"(?i)(?:^|[^a-z0-9.%,])([0-9]+(?:\.[0-9]+)?)\s*\)?\s*PIK\b"
+_PIK_BARE = r"(?i)(?:^|[^a-z0-9.%,])" + _PIK_NUMBER + r"\s*\)?\s*PIK\b"
 _PIK_NOT_A_FIGURE = r"(?i)\b(class|series|tranche|notes?)\s+[0-9]+"
 
 
