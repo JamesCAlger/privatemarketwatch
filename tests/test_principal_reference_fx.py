@@ -79,9 +79,12 @@ def test_loader_rejects_any_other_reference(tmp_path, value):
         source_encodings.load_encodings(_wrapper(tmp_path, {"principal_usd_reference": value}))
 
 
-def test_only_the_five_sample_funds_opt_in():
+def test_the_five_sample_funds_opt_in():
+    # Started as the five v0.5 funds only (74beff5, 2026-10-06). The setting was rolled out per fund from
+    # 2026-10-08 (1cfe335, 8bf71b0, fb441d8 and the fund-clearing runs), so the guard now checks that the
+    # five are still opted in, not that no other fund is.
     from pathlib import Path
     store = Path(__file__).resolve().parents[1] / "data" / "overrides" / "bdc_xbrl_wrappers"
     opted = {cik for cik, enc in source_encodings.load_encodings(store).items() if "principal_usd_reference" in enc}
-    assert opted <= {"0001287750", "0001803498", "0001812554", "0001837532", "0001838126"}
+    assert {"0001287750", "0001803498", "0001812554", "0001837532", "0001838126"} <= opted
     assert HPS in opted
