@@ -1,0 +1,1136 @@
+{
+ "cik": "0002052153",
+ "label": "aoud",
+ "before": "spon3",
+ "investigator_id": "fund-agent-apollo-orig2-ul-2026-10-19",
+ "shared_code": false,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 572,
+   "why": "group heading stripped from the company name by an exact guarded pair list (91 page-checked pairs; issuer_name_strip_re) on every row, plus 16 rows set by row corrections where the member names another printed line (Arcwood/Encore, Gannett, Kroll->Jensen Hughes x4, GSI->Altern->Golden Hippo Pet->Protein For Pets, Curia Receivables, HIG preferred, Clearwater x3). Count is rows present in both spon3 and aouc."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 12,
+   "why": "trailing 'Maturity Date ...' cut by the wrapper (HIG preferred) and 9 row corrections where the member names another facility or keeps rate text (Thg, ISC x2, Gannett bond, Arcwood 'Term Loan One', Saber x2, Yucca, HIG 2026-06-30)."
+  },
+  {
+   "column": "shares_held",
+   "rows": 6,
+   "why": "unit counts printed in the Par/Shares column: Valor 760,892 / 1,084,671 and HIG 15,000 at 2026-03-31, HIG 15 at 2025-03-31 / 06-30 / 09-30."
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 4,
+   "why": "currency against the printed marker: CAD and JPY 2025-03-31 (tagged USD), Vantive pair 2026-03-31 (tags swapped), Omega 2026-06-30 (tagged CAD, printed dollars; row not in spon3)."
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 4,
+   "why": "same rows: par times the H.10 rate the build applies on that date (CAD/JPY), or par (USD)."
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 4,
+   "why": "same rows."
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 4,
+   "why": "same rows: reference_converted or source_usd."
+  },
+  {
+   "column": "interest_rate",
+   "rows": 1,
+   "why": "Tivity 2025-09-30: tagged 0.0075 is the printed floor; withdrawn (floating loan, no all-in rate printed)."
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 1,
+   "why": "same Tivity row."
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 1,
+   "why": "same Tivity row (all_in -> unresolved once the rate is withdrawn)."
+  },
+  {
+   "column": "basis_spread",
+   "rows": 8,
+   "why": "total margin counted once (D-031): printed_margin_reading cash_plus_pik adds the PIK where the printed X is the cash leg; 13 row corrections set the total where X is already the total (11) or where 'includes' carried the cash leg (Legends, Titan 2025-09-30). 8 of the spon3 rows end with a different value."
+  },
+  {
+   "column": "src_transforms",
+   "rows": 17,
+   "why": "rows where the cash_plus_pik transform event is recorded (value may since be corrected back to the printed X)."
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 5,
+   "why": "T code read from the dated footnote: TORF to 2025-12-31, TONAR from 2026-01-01 (was SOFR guessed from the date); 6 rows in aouc incl. 2026-06-30."
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 5,
+   "why": "same rows: inferred_post_libor -> ixbrl_field_status."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 42,
+   "why": "marker of the row corrections (row_correction_specs/0002052153.json)."
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 1,
+   "why": "Altern Marketing 2026-03-31 (member named GSI under Construction & Engineering); Invited 2026-06-30 is a June row (not in spon3)."
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 1,
+   "why": "follows the Altern industry correction (Construction & Engineering -> Food Retail)."
+  },
+  {
+   "column": "gics_sector",
+   "rows": 1,
+   "why": "same row (Industrials -> Consumer Staples)."
+  },
+  {
+   "column": "position_id",
+   "rows": 105,
+   "why": "70 rows already differ in the untouched aoua (new quarter); the rest follow the corrected issuers (chains checked in chains.sql: each term-loan chain now carries one issuer)."
+  }
+ ],
+ "rows_added": 180,
+ "rows_removed": 4,
+ "fixes": [
+  {
+   "what": "Dash-printed undrawn lines published at fair value 0 from their own contexts (22 contexts: 8, 6, 8 in the first three quarters); replaces the row_add plug rule that added four of them at 1,000 with no context.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "Polywood Poly-Wood, LLC First Lien Secured Debt - Delayed Draw S + 575 , 1.00 % Floor 3/20/2030 - $ - $ - (7)(10)(14)(16)"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 7/2/2031 - 1 - (7)(10)(14)(16)"
+    },
+    {
+     "accession": "0000950170-25-107409",
+     "text": "First Lien Secured Debt - Revolver S + 500 , 0.00 % Floor 6/6/2031 1,490 - - (7)(11)(14)(16)"
+    }
+   ]
+  },
+  {
+   "what": "Co-investment footnote total (ctx with fair value, cost and percent only) dispatched as an aggregate, not a 'fund' leaf: fund family, leaf marker and archetype removed; the exclusion rule that hid it was pulled (it no longer matches).",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "These are co-investments made with the Company"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Total Investments before Cash Equivalents $ 646,293 $ 640,752"
+    }
+   ]
+  },
+  {
+   "what": "Total margin counted once (D-031), round two: 13 basis_spread row corrections decided from the same loan's lines in other quarters at the same maturity. 11 rows where 'S + X Cash plus Y % PIK' prints X as the total (cash_plus_pik had added Y twice): Curia 2025-12-31 6.25, Zeus 2025-12-31 / 2026-03-31 6.00, Vantage 2025-12-31 / 2026-03-31 6.75, Deerfield 2025-12-31 / 2026-03-31 5.75, Titan 2025-12-31 5.25, Saber 4.75, Legends 5.50, Russell 6.25 (2026-03-31). 2 rows where 'Cash (includes Y % PIK)' prints X as the cash leg: Legends 2025-09-30 5.50, Titan 2025-09-30 5.26.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash (includes 3.00 % PIK), 0.75 % Floor 2/28/2031"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Zeus Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,784 $ 6,544 $ 6,173 (7)(12)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "First Lien Secured Debt - Bank Debt Term Loan S + 400 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,814 $ 6,554 $ 6,190 (7)(13)"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Legends Hospitality Holding Company, LLC First Lien Secured Debt - Term Loan S + 275 Cash (includes 2.75 % PIK), 0.75 % Floor 8/22/2031 10,140 9,861 10,039 (7)(10)"
+    }
+   ]
+  },
+  {
+   "what": "printed_margin_reading cash_plus_pik (owner convention D-031): spread = printed cash margin + PIK where the tag holds the cash leg; 26 rows touched, 15 keep the sum.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-107409",
+     "text": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 300 Cash plus 3.25 % PIK 12/6/2029 $ 20,021 $ 19,543 $ 19,671 (7)(11)"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 625 Cash plus 3.25 % PIK, 0.00 % Floor 12/6/2029 20,351 19,599 19,792 (7)(11)"
+    }
+   ]
+  },
+  {
+   "what": "Reference code T read from the dated footnotes: TORF to 2025-12-31, TONAR from 2026-01-01 (6 yen rows were SOFR guessed from the date).",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-104513",
+     "text": "The interest rate on these loans is subject to 3 months Tokyo Term Risk Free Rate (TORF)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "The interest rate on these loans is subject to 3 months Japan Tokyo Overnight Average Rate (TONAR or I)"
+    }
+   ]
+  },
+  {
+   "what": "Issuer group heading removed from every name by exact guarded pairs (91, each split read on the page; dry run strip_dry_run.json: 91 of 92 names changed, the 92nd by row correction); trailing 'Maturity Date' cut from instruments.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "Polywood Poly-Wood, LLC First Lien Secured Debt - Delayed Draw S + 575 , 1.00 % Floor 3/20/2030 - $ - $ - (7)(10)(14)(16)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "GSI Geotechnical Merger Sub, Inc. First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 10/15/2031 7,744 7,678 7,686 (7)(12)"
+    }
+   ]
+  },
+  {
+   "what": "Principal currency set to the printed marker on 5 rows (CAD and JPY 2025-03-31, the swapped Vantive pair 2026-03-31, Omega 2026-06-30), USD at the H.10 rate the build applies on that date.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Term Loan T + 525 , 0.75 % Floor 2/2/2032 JPY 107,358 705 705 (3)(9)(10)"
+    },
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Term Loan C + 500 , 0.75 % Floor 1/30/2032 C$ 1,002 686 686 (3)(8)(10)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Term Loan C + 475 , 0.75 % Floor 1/30/2032 C$ 997 676 709 (3)(9)(12)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 1/30/2032 $ 5,504 $ 5,432 $ 5,407 (7)(12)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "First Lien Secured Debt - Bank Debt Term Loan S + 425 , 1.00 % Floor 4/1/2030 13,038 13,014 12,682 (8)(13)"
+    }
+   ]
+  },
+  {
+   "what": "Issuer corrected where the member names another printed line: Arcwood/Encore swap 2025-09-30 (2), Gannett bond 2025-09-30, Kroll members on the four Jensen Hughes lines 2025-12-31, the GSI -> Altern -> Golden Hippo Pet -> Protein For Pets run 2026-03-31 (4, one with its industry), Curia Receivables II revolver 2026-06-30.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Encore AVSC Holding Corp. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 12/5/2031 $ 19,699 $ 19,333 $ 19,500 (7)(10)"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Arcwood Environmental, Inc. First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 1/31/2031 5,074 5,118 5,124 (7)(10)"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Media Gannett Gannett Co., Inc. First Lien Secured Debt - Convertible Bond 6.00 % 12/1/2031 $ 10 $ 13 $ 13 (10)(12)"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Jensen Hughes Jensen Hughes, Inc First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 9/1/2031 7,983 7,876 7,923 (7)(11)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "GSI Geotechnical Merger Sub, Inc. First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 10/15/2031 7,744 7,678 7,686 (7)(12)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Golden Hippo Altern Marketing, LLC First Lien Secured Debt - Term Loan S + 425 , 2.00 % Floor 2/5/2031 $ 1,156 1,138 $ 1,138 (7)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Curia Receivables II SPV, LLC First Lien Secured Debt - Revolver S + 625 , 1.00 % Floor 1/29/2029 445 445 444 (7)(13)(17)(19)"
+    }
+   ]
+  },
+  {
+   "what": "Instrument corrected where the member names another facility or keeps rate text (9 rows) and the HIG 2026-06-30 preferred whose member had no 'Investment Type' separator.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Revolver P+ 350 , 0.00 % Floor 12/16/2032 343 337 337 (11)(12)(16)(18)"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.50 % Floor 11/20/2032 - ( 7 ) ( 7 ) (7)(11)(14)(15)(17)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Insurance Higginbotham HIG Intermediate, Inc. Preferred Equity- Cumulative Preferred N/A N/A 15 Units $ 15 $ 15"
+    }
+   ]
+  },
+  {
+   "what": "Floor tagged as the rate withdrawn (Tivity 2025-09-30, 14.4M).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Tivity Health Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/28/2029"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts printed in the Par/Shares column (Valor x2 and HIG at 2026-03-31; HIG 15 in the three 2025 10-Qs, as printed).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "VCI Intermediate Topco 1 LLC Common Equity - Membership Interest N/A N/A 760,892 761 769 (12)(14)"
+    },
+    {
+     "accession": "0000950170-25-070633",
+     "text": "HIG Intermediate, Inc. Preferred Equity - Cumulative Preferred Equity N/A 15 15 15"
+    }
+   ]
+  },
+  {
+   "what": "Member industry spelled 'Hotels, Restaurants And Leisure' set to the printed heading (Invited delayed draw 2026-06-30).",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Hotels, Restaurants & Leisure Invited Invited, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 525"
+    }
+   ]
+  },
+  {
+   "what": "income_yield_pct 2025-12-31 restored to the printed annualised ratio 8.56 (was 2.14, the ratio divided by four), new highlights wrapper.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Annualized ratio of net investment income to average net assets (4) 8.56 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "AOU-R1",
+   "file": "tests/test_source_encodings.py",
+   "what": "Add '0002052153' to the expected set in test_printed_margin_reading_is_set_for_the_two_blue_owl_funds_and_apollo_alone (opt-in guard), as f44309f did for MidCap Apollo Institutional.",
+   "why": "The fund now sets printed_margin_reading cash_plus_pik (Apollo layout, page prints the cash and PIK margins apart); the guard lists opted-in funds and fails (1 failed, 96 passed).",
+   "quotes": [
+    {
+     "accession": "0000950170-25-107409",
+     "text": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 300 Cash plus 3.25 % PIK 12/6/2029 $ 20,021 $ 19,543 $ 19,671 (7)(11)"
+    }
+   ],
+   "classification": "verification_bug",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107409",
+     "text": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 300 Cash plus 3.25 % PIK 12/6/2029 $ 20,021 $ 19,543 $ 19,671 (7)(11)"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 625 Cash plus 3.25 % PIK, 0.00 % Floor 12/6/2029 20,351 19,599 19,792 (7)(11)"
+    }
+   ],
+   "next_action": "Orchestrator updates the expected set and re-runs tests/test_source_encodings.py; no check is weakened.",
+   "resolution": "done by the orchestrator, 2026-10-19 (round two): guard test updated as requested; snapshot_r2 taken after the change.",
+   "authority": "orchestrator"
+  },
+  {
+   "request_id": "AOU-R2",
+   "file": "tests/test_bdc_xbrl_wrapper.py",
+   "what": "test_apollo_origination_ii_ul_coinvestment_is_fund_leaf asserts the Co-investment member is a fund_position_leaf; with the wrapper change it is an aggregate (family debt). Replace the assertion with wrapper_disposition == 'aggregate' and != 'fund_position_leaf'.",
+   "why": "The member is the footnote total of co-investments (fair value, cost, percent only; equal to the sum of footnote-(12) lines), not a position; as a leaf it produced SRC_BDC01 and blocking_source_short_plain_unresolved in every quarter and needed a scope-all exclusion rule.",
+   "quotes": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "These are co-investments made with the Company"
+    }
+   ],
+   "classification": "verification_bug",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "These are co-investments made with the Company"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Total Investments before Cash Equivalents $ 646,293 $ 640,752"
+    }
+   ],
+   "next_action": "Orchestrator edits the test expectation (it pins the old dispatch), re-runs the fund's wrapper tests (11 passed, 1 failed now).",
+   "resolution": "done by the orchestrator, 2026-10-19 (round two): guard test updated as requested; snapshot_r2 taken after the change.",
+   "authority": "orchestrator"
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 3494.9,
+   "what": "Every issuer name carried the company group heading in front of the company ('Polywood Poly-Wood, LLC'); fixed with 91 page-checked guarded pairs (730 rows differ from aoua, all of the fund's FV). issuer_name_printed fired only at 2026-03-31 (62 rows), the one quarter where the page reader reads the company cell (page_rules_name_blind_spots: 88 of 88 rows blind at 2025-03-31).",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a published issuer name that equals a word group followed by another published issuer name of the same fund-quarter, or whose suffix is a name printed alone in the unfunded-commitment table.",
+   "quote": {
+    "accession": "0000950170-25-070633",
+    "text": "Polywood Poly-Wood, LLC First Lien Secured Debt - Delayed Draw S + 575 , 1.00 % Floor 3/20/2030 - $ - $ - (7)(10)(14)(16)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed is blind where the page reader reads no company cell (five of six quarters here, and all dash rows); the suffix test needs no page cell."
+   }
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 57.4,
+   "what": "12 rows published under the wrong company because the filer's member names another printed line while the facts are this line's: Arcwood/Encore swapped 2025-09-30 (24.6M), four Jensen Hughes lines tagged on Kroll members 2025-12-31, a run GSI -> Altern -> Golden Hippo Pet -> Protein For Pets 2026-03-31, Gannett bond 2025-09-30, Curia Receivables II revolver 2026-06-30. Fixed by row corrections; term-loan chains then carry one issuer each (chains.sql). No rule fired on them in aoua.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Compare the maturity and margin written in the member text with the tagged maturity and spread (memmat.sql flags 5 of the 12); for the rest compare the published issuer with the company heading printed above the line (row_audit.py).",
+   "quote": {
+    "accession": "0001193125-25-278012",
+    "text": "Encore AVSC Holding Corp. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 12/5/2031 $ 19,699 $ 19,333 $ 19,500 (7)(10)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No existing rule compares member text with the tagged facts or the printed heading; the maturity test is cheap and found the Arcwood/Encore swap and the GSI run."
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2025-03-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 20.2,
+   "what": "Five pars in the wrong currency: C$ 1,002 and JPY 107,358 (thousands) 2025-03-31 tagged USD (JPY par published as 107.4M dollars); the Vantive CAD and USD term loans 2026-03-31 with their unit tags swapped; Omega 2026-06-30 printed in dollars and tagged CAD. X06 fired only on the JPY row.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "For every printed line with a currency marker (C$, JPY, EUR, GBP) compare the marker with principal_amount_currency, and flag a non-USD currency on a line printed without a marker (fx_scan.py).",
+   "quote": {
+    "accession": "0000950170-25-070633",
+    "text": "First Lien Secured Debt - Term Loan T + 525 , 0.75 % Floor 2/2/2032 JPY 107,358 705 705 (3)(9)(10)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "X06 caught the 1 of 5 rows whose par/value ratio was absurd; CAD-for-USD swaps keep plausible ratios."
+   }
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "field": "fair_value",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "what": "22 undrawn lines printed with a dash for fair value were dropped (excluded_no_fair_value); four had been re-added by a row_add plug at 1,000 each with no context. Published now at 0 from their own contexts; cost of 2025-09-30 ties exactly (542,025).",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "B01 already reports a position context with no fair value.",
+   "quote": {
+    "accession": "0001193125-25-278012",
+    "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 7/2/2031 - 1 - (7)(10)(14)(16)"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 fired on all three quarters in aoua (8, 6, 8 contexts).",
+    "reference": "oracle B01"
+   }
+  },
+  {
+   "observation_key": "spread-tag-holds-cash-leg-of-pik-margin",
+   "field": "basis_spread",
+   "quarters": [
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 239.8,
+   "what": "Loans printed 'S + X Cash plus Y % PIK' are tagged with X as spread. Where X is the cash leg (Curia 2025-06-30 / 2026-03-31, Legends 2025-06-30 / 2025-12-31 / 2026-06-30, Uft Buyer, Titan 2026, Saber / Deerfield / Vantage / Russell 2026-06-30) the wrapper's printed_margin_reading publishes X + Y, the total (D-031). But the same wording is also used with X already the total: in aouc the setting added the PIK a second time on 11 rows of 2025-12-31 / 2026-03-31 (Curia 9.50, Zeus 9.00 x2, Vantage 15.74 / 9.50, Deerfield 8.50 x2, Saber 7.00, Legends 8.25, Russell 7.50, Titan 8.13; independent review of aouc). spread_printed could not catch it: it compares with the same literal reading. Fixed in aoud by row corrections from cross-quarter evidence (see pik-margin-wording-not-consistent-within-a-filing); 2 more rows corrected upward where 'includes' carried the cash leg. Of the 26 rows the setting touches, 15 keep the sum, 11 are corrected to X. Left: Curia 2026-06-30 12.92 (S + 300 plus 9.92 % PIK) and Russell 2026-06-30 5.75 have no other quarter to settle them.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "After the cash-plus-PIK sum, flag a loan whose total margin differs from the same position's total in the neighbouring quarter by exactly its PIK rate with unchanged maturity.",
+   "quote": {
+    "accession": "0000950170-25-107409",
+    "text": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 300 Cash plus 3.25 % PIK 12/6/2029 $ 20,021 $ 19,543 $ 19,671 (7)(11)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "spread_printed fired in aoua where the cash leg was published, but it repeats the literal reading and passed the 11 double counts in aouc; it now fires on the 11 corrected rows (proposed false alarms). The cross-quarter PIK-step test needs no page; run on aouc (pikstep.sql) it flags 8 of the 13 rows corrected in aoud and no other row, and nothing on aoud. It misses a run of two double-counted quarters (Zeus 2026-03-31, Deerfield 2025-12-31 sit next to an equally wrong quarter or a maturity-text change), a PIK that changes between quarters (Vantage 2025-12-31) and Titan; legitimate repricings that coincide with the PIK are its known false positives."
+   }
+  },
+  {
+   "observation_key": "pik-margin-wording-not-consistent-within-a-filing",
+   "field": "basis_spread",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 141.5,
+   "what": "This filer writes the PIK margin as 'S + X Cash plus Y % PIK' or 'S + X Cash (includes Y % PIK)' and neither wording fixes what X is. 'Includes' with X = total: Curia, Zeus 2025-09-30. 'Includes' with X = cash leg: Legends (275, total 550) and Titan (238 + 288) 2025-09-30, published 2.75 / 2.38 until aoud. 'Cash plus' with X = total: Zeus, Deerfield, Vantage, Curia 2025-12-31 and Zeus, Deerfield, Vantage, Saber, Legends, Russell 2026-03-31. 'Cash plus' with X = cash leg: Curia, Uft Buyer, Titan 2026-03-31 and all 2026-06-30 lines. Mechanism: the cash/PIK split changes between quarters (the margin is constant or steps by a repricing) and the label does not follow it. Decided per loan from the same position at the same maturity in other quarters (pik_history_aouc.txt); 13 row corrections. The same layout setting (printed_margin_reading cash_plus_pik) is set for: MidCap Apollo Institutional 0002006758 ('Cash plus' only, e.g. 'S+115 Cash plus 5.25% PIK' in 0001193125-26-349327; no 'includes'), MidCap Financial 0001278752 (neither wording in its seven 2025-2026 filings), Apollo Debt Solutions 0001837532 ('Cash plus' only; prints the same Vantage 'S + 675 Cash plus 2.75 % PIK' and Deerfield 'S + 575 Cash plus 2.75 % PIK' lines at 2026-03-31 as here, so it very likely publishes the same double counts) and 0002052152 (both wordings, 'includes' in 2025-09-30 to 2026-06-30). wording_scan.txt; their files were not edited.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a loan whose published spread moves by exactly its pik_rate (within 0.02) between consecutive quarters with unchanged maturity, and a loan whose 'includes' X is smaller than its own Y.",
+   "quote": {
+    "accession": "0001193125-25-278012",
+    "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash (includes 3.00 % PIK), 0.75 % Floor 2/28/2031"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reads the label. The PIK-step test (pikstep.sql) on aouc flags 8 of the 13 corrected rows (Curia 2025-12-31, Zeus 2025-12-31, Deerfield, Legends x2, Russell, Saber, Vantage 2026-03-31) and no other row; it misses Zeus 2026-03-31, Deerfield 2025-12-31, Vantage 2025-12-31 and both Titan rows, so it is a review flag, not a complete check; the 'includes X smaller than Y' test adds Titan 2025-09-30. Recommended run on 0001837532 and 0002006758 first."
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 4.2,
+   "what": "Yen loans printed 'T + 525' were published SOFR guessed from the date (code T not mapped). Fixed with the dated mapping from the footnotes.",
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a printed rate code letter that is not in the fund's reference_rate_codes while the row's reference rate is inferred_post_libor.",
+   "quote": {
+    "accession": "0000950170-25-070633",
+    "text": "First Lien Secured Debt - Term Loan T + 525 , 0.75 % Floor 2/2/2032 JPY 107,358 705 705 (3)(9)(10)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "reference_rate_printed did not fire: the printed code had no mapping, so no comparison was made."
+   }
+  },
+  {
+   "observation_key": "floor-rate-published-as-interest-rate",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 14.4,
+   "what": "Tivity 2025-09-30 published interest_rate 0.75: the filer tagged the printed floor as the rate on a floating loan. Withdrawn.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag interest_rate on a Floating loan that is below 2 percent and equals the floor printed on its line.",
+   "quote": {
+    "accession": "0001193125-25-278012",
+    "text": "Tivity Health Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/28/2029"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; X02/C1xx test ranges, not floor equality."
+   }
+  },
+  {
+   "observation_key": "fund-income-ratio-published-is-not-the-printed-ratio",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "what": "2025-12-31 income_yield_pct 2.14 = printed annualised year ratio 8.56 divided by 4 (same defect as the sister fund). Restored by a highlights wrapper figure correction.",
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "F16 compares distribution rate with income yield.",
+   "quote": {
+    "accession": "0001193125-26-104513",
+    "text": "Annualized ratio of net investment income to average net assets (4) 8.56 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "F16 fired at 2025-12-31 in aoua (distribution rate 6.18 > 1.5 x 2.14) and clears with 8.56.",
+    "reference": "fund_financials F16"
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-page",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 5.5,
+   "what": "Members naming another facility than the printed line (Thg delayed draw tagged on a 'Revolver' member, Saber delayed draw and revolver on 'Term Loan' members, Gannett bond on a 'Delayed Draw' member, 'Term Loan One', 'First Lien - Delayed Draw') and ISC members without 'Interest Rate' that kept rate text. 9 rows corrected.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Compare the facility word (term loan / delayed draw / revolver / bond) of the printed line holding the row's values with the published instrument.",
+   "quote": {
+    "accession": "0001193125-26-221829",
+    "text": "First Lien Secured Debt - Revolver P+ 350 , 0.00 % Floor 12/16/2032 343 337 337 (11)(12)(16)(18)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the instrument with the printed line."
+   }
+  },
+  {
+   "observation_key": "industry-in-member-spelled-off-pattern",
+   "field": "extracted_industry",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "what": "One Invited delayed draw member spells 'Hotels, Restaurants And Leisure'; the industry pattern does not read it, so no industry and no standard label. Corrected.",
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a row with no extracted_industry whose issuer has an industry on its other rows in the same quarter.",
+   "quote": {
+    "accession": "0001193125-26-347347",
+    "text": "Hotels, Restaurants & Leisure Invited Invited, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 525"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on this row in aoua: no existing check compares a row without an industry against the industry its issuer carries on its other rows of the same quarter; the proposed check needs no page and has a natural negative (an issuer whose every row lacks the industry)."
+   }
+  },
+  {
+   "observation_key": "pik-included-margin-printed-inconsistently",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 23.2,
+   "what": "Left. Two PIK figures cannot be settled from the pages: Vantage 2025-12-31 prints 8.99 % PIK (2.75 the quarter after, total margin 6.75 in every quarter; 8.99 is probably an all-in PIK coupon) and Curia 2026-06-30 prints 'S + 300 Cash Plus 9.92 % PIK' (spread published 12.92; 9.92 is about SOFR plus 6.25, so the loan may have gone to an all-in PIK coupon; no later quarter). Both pik_rate values are published as printed; Vantage's spread is corrected to 6.75, Curia's left at 12.92.",
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Flag a pik_rate larger than the row's total margin, or one that moves by more than 3 points between quarters at unchanged maturity.",
+   "quote": {
+    "accession": "0001193125-26-347347",
+    "text": "S + 300 Cash Plus 9.92 % PIK, 0.00 % Floor 12/6/2029 21,033 19,699 16,721 (7)(13)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares pik_rate with the margin or across quarters; both rows would be flagged by the proposed test, with genuine PIK step-ups on amended loans as its false positives."
+   }
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "field": "index_classification",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 39.1,
+   "what": "Left. The schedule prints a Goldman Sachs money market fund under 'Total Investments after Cash Equivalents' in every quarter (39,144 at 2026-06-30); it is published in no quarter (non_private_markers). The filed total is the before-cash total, so totals tie; publishing it as CASH every quarter (as D-215) is a consistency choice across the Apollo funds (the sister publishes it in two quarters only).",
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Flag a printed money-market line inside the schedule that is published in some quarters of a fund family and not others.",
+   "quote": {
+    "accession": "0001193125-26-347347",
+    "text": "Money Market Fund Goldman Sachs Financial Square Government Fund Institutional Shares N/A N/A 39,144 39,144 39,144 (18)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares cash rows across quarters or sister funds."
+   }
+  },
+  {
+   "observation_key": "fourth-quarter-income-derived-from-sum-of-quarters",
+   "field": "total_investment_income",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "what": "Left. 2025-12-31 total_investment_income 12,947 and net_investment_income 11,226 equal the year (47,298; 41,003) less the sum of the three 10-Q quarters (34,351; 29,777). The 10-Q for 2025-09-30 prints a nine-month figure of 34,442 (NII 29,868), 91 more than the quarters' sum, so year less year-to-date gives 12,856 / 11,135; the same row's gross_investment_income is 12,856. The fourth quarter is not printed; which derivation is right depends on what the 91 is (not found). TII / NII are not correctable fields in the highlights wrapper.",
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a quarter where total_investment_income and gross_investment_income of the same row differ.",
+   "quote": {
+    "accession": "0001193125-25-278012",
+    "text": "Total Investment Income $ 12,688 $ 34,442"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the two income fields of one row."
+   }
+  },
+  {
+   "observation_key": "unit-count-basis-changes-between-filings",
+   "field": "shares_held",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.015,
+   "what": "HIG cumulative preferred prints 15 in the Par/Shares column in the three 2025 10-Qs, 15,000 at 2025-12-31 and 2026-03-31, '15 Units' at 2026-06-30, with cost 15 thousand throughout. Valor's membership interests print 760,892 and 1,084,671 at 2026-03-31 and '761 Units', '1,085 Units' (and Valor 3 '29 Units') at 2026-06-30, cost 761 / 1,085 thousand unchanged: a 1000x basis change. The 2026-06-30 page heads the table '(In thousands, except share data)', so the page does not say the units are in thousands; the printed counts are published as printed each quarter. Which basis is right is not on the page.",
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Flag an equity position whose unit count changes by 1000x between quarters while cost is unchanged.",
+   "quote": {
+    "accession": "0001193125-26-347347",
+    "text": "VCI Intermediate Topco 1 LLC Common Equity - Membership Interest N/A N/A 761 Units 761 722 (13)(15)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C04 only tests that most equity rows carry some count, so it passes on 15 and on 15,000 alike; a quarter-to-quarter ratio test on the same position with unchanged cost would flag the 1000x basis change, with splits and add-ons as known false positives to exclude by cost movement."
+   }
+  },
+  {
+   "observation_key": "canonical-name-picks-member-variant",
+   "field": "canonical_name",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "what": "Left (shared entity naming). canonical_name still carries the group heading on many rows ('Clarience Technologies Truck-Lite Co., LLC') after the issuer names were cleaned.",
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a canonical_name that is not one of the entity's published issuer names.",
+   "quote": {
+    "accession": "0000950170-25-070633",
+    "text": "Polywood Poly-Wood, LLC First Lien Secured Debt - Delayed Draw S + 575 , 1.00 % Floor 3/20/2030 - $ - $ - (7)(10)(14)(16)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Same as the MidCap Apollo Institutional observation; no rule reads canonical_name."
+   }
+  },
+  {
+   "observation_key": "position-chain-breaks-at-issuer-rename",
+   "field": "position_id",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 6.8,
+   "what": "Left. The two Heritage Environmental Services term loans (5,086 and 1,260 at 2025-06-30) continue under the renamed Arcwood Environmental (f/k/a Heritage ...) from 2025-09-30 but start new position chains there (chains.sql). The 1,260 to 1,749 par change may also be an add-on; not settled.",
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Report chains that end and start in consecutive quarters for one fund with the same maturity and a printed 'f/k/a' naming the old issuer.",
+   "quote": {
+    "accession": "0001193125-26-221829",
+    "text": "Commercial Services & Supplies Heritage Environmental Services Arcwood Environmental, Inc. (f/k/a Heritage Environmental Services, Inc.) First Lien Secured Debt - Term Loan S + 500"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Match-quality metrics count singletons but do not read f/k/a names."
+   }
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_3f46748fb206",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-070633/C_87cd5782-e42b-459c-ad39-0f33a1a360d1/ROW-424513c20f5978df",
+     "0000950170-25-070633/C_2c290027-cc31-4d69-928a-c9cff4d77e20/ROW-076507e65d1f9db2"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-070633/C_87cd5782-e42b-459c-ad39-0f33a1a360d1/ROW-424513c20f5978df",
+     "0000950170-25-070633/C_2c290027-cc31-4d69-928a-c9cff4d77e20/ROW-076507e65d1f9db2"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 $ - $ ( 6 ) $ 6 (7)(10)(14)(16)"
+    },
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/19/2031 - 19 28 (4)(6)(14)(16)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: row_validation_issues X11 joined to holdings for 2025-03-31 in aouc gives exactly these 2 rows (flagged_aouc.txt).",
+    "Par printed on the line: no, both print '-' in Par/Shares with a cost and a fair value; published principal null equals the page.",
+    "Par available elsewhere (unfunded-commitment table, next quarter): not a funded par for this line; not used."
+   ],
+   "next_action": "Proposal PD-AOU-RVQ_REV_3f46748fb206 (x11-undrawn-line-par-printed-as-dash); see data/overrides/finding_dispositions_proposed/fund_0002052153.json"
+  },
+  {
+   "finding_id": "RVQ_REV_824dfbd5463d",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-070633/C_5dcaf6ae-e56c-4af9-b141-23bab3e1593e/ROW-0ad673c45917dfb3",
+     "0000950170-25-070633/C_eb433ebe-7d43-432d-b787-9b8b910fb053/ROW-a2d9736edcdfd3d6"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-070633/C_5dcaf6ae-e56c-4af9-b141-23bab3e1593e/ROW-0ad673c45917dfb3",
+     "0000950170-25-070633/C_eb433ebe-7d43-432d-b787-9b8b910fb053/ROW-a2d9736edcdfd3d6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 - - - (7)(10)(14)(16)"
+    },
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 - - - (7)(10)(14)(16)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: PP02 rows for 2025-03-31 (rule emits no row_id; matched by identifier value) are these two Heritage revolvers, new in aoub because dash rows are now published.",
+    "Duplicate dimension path of one position: rejected, the page prints two lines (500 bps / 0.75 % floor and 550 bps / 4.50 % floor) and two contexts are tagged.",
+    "Same amounts imply same position: no, both are zero (undrawn)."
+   ],
+   "next_action": "Proposal PD-AOU-RVQ_REV_824dfbd5463d (pp02-distinct-zero-valued-commitments-have-different-rate-terms); see data/overrides/finding_dispositions_proposed/fund_0002052153.json"
+  },
+  {
+   "finding_id": "RVQ_REV_e74c794eb037",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-221829/C_a6a3053f-2a20-4a60-8c2d-02bde1839201/ROW-6b6dc8c45f583a1d",
+     "0001193125-26-221829/C_ef498c88-f78b-4a85-8a89-c2b755607d5c/ROW-d4f720f121f4faeb"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-221829/C_a6a3053f-2a20-4a60-8c2d-02bde1839201/ROW-6b6dc8c45f583a1d",
+     "0001193125-26-221829/C_ef498c88-f78b-4a85-8a89-c2b755607d5c/ROW-d4f720f121f4faeb"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Revolver S + 550 , 0.75 % Floor 1/31/2030 - - - (7)(12)(16)(18)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 1/31/2030 - - - (7)(12)(16)(18)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: PP02 rows for 2026-03-31 are these two Arcwood revolvers (member S+525 and S+550), published spreads 5.25 and 5.5 match their members.",
+    "Duplicate: rejected, the page prints two dash lines at 550 and 525 bps; two contexts are tagged."
+   ],
+   "next_action": "Proposal PD-AOU-RVQ_REV_e74c794eb037 (pp02-distinct-zero-valued-commitments-have-different-rate-terms); see data/overrides/finding_dispositions_proposed/fund_0002052153.json"
+  },
+  {
+   "finding_id": "RVQ_BLK_827896d407f9",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-104513/C_39c31138-e00d-44a9-9d07-807aa1d71e09/ROW-cfd8e1551aea57a6",
+     "0001193125-26-104513/C_68b762a8-77ac-4a48-bdb3-22a619e6d2bf/ROW-b6ea0752a4f99e4c",
+     "0001193125-26-104513/C_84869cc4-860b-4b60-b4cd-94055492af2b/ROW-1d2a3d4d381bd4a7",
+     "0001193125-26-104513/C_a3a2498f-fe8d-41ce-a3e8-8fdda87aa504/ROW-c9957ca2e511a09e",
+     "0001193125-26-104513/C_a8c26202-8d1f-4d3c-8120-17dd3efb7cb2/ROW-0ce7e2f02c905cdf"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-104513/C_39c31138-e00d-44a9-9d07-807aa1d71e09/ROW-cfd8e1551aea57a6",
+     "0001193125-26-104513/C_68b762a8-77ac-4a48-bdb3-22a619e6d2bf/ROW-b6ea0752a4f99e4c",
+     "0001193125-26-104513/C_84869cc4-860b-4b60-b4cd-94055492af2b/ROW-1d2a3d4d381bd4a7",
+     "0001193125-26-104513/C_a3a2498f-fe8d-41ce-a3e8-8fdda87aa504/ROW-c9957ca2e511a09e",
+     "0001193125-26-104513/C_a8c26202-8d1f-4d3c-8120-17dd3efb7cb2/ROW-0ce7e2f02c905cdf"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Zeus Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash (includes 3.00 % PIK), 0.75 % Floor 2/28/2031"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 625 Cash plus 3.25 % PIK, 0.00 % Floor 12/6/2029 20,351 19,599 19,792 (7)(11)"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 625 Cash (includes 3.25 % PIK), 0.00 % Floor 12/6/2029 20,186 19,567 19,832 (7)(10)"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "First Lien Secured Debt - Term Loan S + 575 Cash plus 2.75 % PIK 9/13/2032 5,658 5,603 5,601 (7)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "First Lien Secured Debt - Bank Debt Term Loan S + 300 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032 5,706 5,533 5,622 (7)"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 6,754 $ 6,598 $ 6,484 (7)(11)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "First Lien Secured Debt - Bank Debt Term Loan S + 400 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,814 $ 6,554 $ 6,190 (7)(13)"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "First Lien Secured Debt - Term Loan S + 525 Cash plus 2.88 % PIK, 0.50 % Floor 7/24/2032 9,412 9,232 9,318 (7)(11)"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Triumph Titan BW Borrower L.P. First Lien Secured Debt - Term Loan S + 238 Cash (includes 2.88 % PIK), 0.50 % Floor 7/24/2032 9,343 9,228 9,249 (7)(10)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: spread.sql (published spread vs page-reader printed_margin, rule tolerance 0.011) in aoud gives exactly these 5 rows, all corrected to the printed X (sp_rows_aoud.txt). The rule fires because printed_margin is the literal X + Y.",
+    "X is the cash leg (sum X + Y): rejected for each row by the same loan at the same maturity in another quarter: Zeus and Curia print the same X as 'Cash (includes Y % PIK)' at 2025-09-30; Deerfield prints 575 all cash at 2025-09-30 and 300 + 275 at 2026-06-30; Vantage 400 + 275 at 2026-06-30; Titan 238 + 288 at 2025-09-30 and 525 here. The sum would make each margin jump by exactly its PIK and fall back.",
+    "Wording filing-wide (narrow the wrapper setting by filing): rejected; the 10-K also prints Legends 'S + 275 Cash plus 2.75 % PIK' where X is the cash leg (total 5.50 in 2025-06-30 and in the member of 2025-03-31).",
+    "Vantage pik_rate 8.99 (printed only in this filing; 2.75 before and after) kept as printed; likely an all-in PIK coupon, not provable."
+   ],
+   "next_action": "Proposal PD-AOU-RVQ_BLK_827896d407f9 (spread-printed-cash-plus-figure-is-already-the-total-margin, new reason key); detector proposed in observation pik-margin-wording-not-consistent-within-a-filing. see data/overrides/finding_dispositions_proposed/fund_0002052153.json"
+  },
+  {
+   "finding_id": "RVQ_BLK_417611e05fe7",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-221829/C_01b692d6-1744-4077-8c09-363dbdd96087/ROW-21f35ca1f8280682",
+     "0001193125-26-221829/C_16085f20-f512-4043-a069-290377d9c36c/ROW-4a0bc15f0c5fe8a1",
+     "0001193125-26-221829/C_52e5c935-6d09-4445-947e-1a2780870af0/ROW-3c0d3f0416295c18",
+     "0001193125-26-221829/C_80f4a797-3a86-477b-a0dd-226b12871778/ROW-ce06df07d76676fb",
+     "0001193125-26-221829/C_a0df34dd-cc21-4632-8e05-f9011fe3e881/ROW-c91cb4bba2e9c3be",
+     "0001193125-26-221829/C_e006aab6-46e0-402d-ac81-a2a114668f17/ROW-84d88f98439887de"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-221829/C_01b692d6-1744-4077-8c09-363dbdd96087/ROW-21f35ca1f8280682",
+     "0001193125-26-221829/C_16085f20-f512-4043-a069-290377d9c36c/ROW-4a0bc15f0c5fe8a1",
+     "0001193125-26-221829/C_52e5c935-6d09-4445-947e-1a2780870af0/ROW-3c0d3f0416295c18",
+     "0001193125-26-221829/C_80f4a797-3a86-477b-a0dd-226b12871778/ROW-ce06df07d76676fb",
+     "0001193125-26-221829/C_a0df34dd-cc21-4632-8e05-f9011fe3e881/ROW-c91cb4bba2e9c3be",
+     "0001193125-26-221829/C_e006aab6-46e0-402d-ac81-a2a114668f17/ROW-84d88f98439887de"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,784 $ 6,544 $ 6,173 (7)(12)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "First Lien Secured Debt - Bank Debt Term Loan S + 400 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,814 $ 6,554 $ 6,190 (7)(13)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Term Loan S + 475 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 8,522 8,433 8,479 (7)(12)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "First Lien Secured Debt - Bank Debt Term Loan S + 250 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 8,571 8,436 8,622 (7)(13)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Term Loan S + 575 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032 5,681 5,544 5,596 (7)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "First Lien Secured Debt - Bank Debt Term Loan S + 300 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032 5,706 5,533 5,622 (7)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Term Loan S+ 550 Cash plus 2.75 % PIK, 0.75 % Floor 8/22/2031 $ 10,217 $ 9,825 $ 10,063 (7)(12)"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "First Lien Secured Debt - Bank Debt Term Loan S + 275 Cash plus 2.75 % PIK, 0.75 % Floor 8/22/2031 $ 12,508 $ 12,008 $ 12,367 (7)(13)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Term Loan S + 625 Cash plus 1.25 % PIK, 2.00 % Floor 12/29/2032 $ 13,551 $ 13,310 $ 13,349 (7)(12)"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "First Lien Secured Debt - Term Loan S + 625 , 2.00 % Floor 12/29/2032 $ 13,508 $ 13,306 $ 13,306 (7)(11)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031 3,519 3,498 3,106 (7)(12)"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash (includes 3.00 % PIK), 0.75 % Floor 2/28/2031"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: spread.sql in aoud gives exactly these 6 rows, all corrected to the printed X.",
+    "X is the cash leg: rejected by the 2026-06-30 lines of the same loans (cash + PIK = this quarter's X: Vantage 400 + 275, Saber 250 + 225, Deerfield 300 + 275, Legends 275 + 275) and Zeus 'includes' at 2025-09-30.",
+    "Russell: no later quarter repeats 625; 625 equals the all-cash margin of 2025-12-31 at the same maturity. Least certain row; the alternative (7.50) would be a 125 bps step exactly equal to the PIK.",
+    "Wording filing-wide: rejected; this filing uses X as the cash leg for Curia (300 + 325), Uft Buyer (225 + 275, after 450 all cash) and Titan (250 + 288)."
+   ],
+   "next_action": "Proposal PD-AOU-RVQ_BLK_417611e05fe7 (spread-printed-cash-plus-figure-is-already-the-total-margin); see data/overrides/finding_dispositions_proposed/fund_0002052153.json"
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "round two, after the orchestrator's AOU-R1/R2 updates: tests/test_source_encodings.py + tests/test_bdc_xbrl_wrapper.py -k 'source_encodings or apollo_origination_ii_ul or printed_margin': 109 passed",
+  "round one: tests/test_source_encodings.py 96 passed, 1 failed (AOU-R1); tests/test_bdc_xbrl_wrapper.py -k apollo_origination_ii_ul 11 passed, 1 failed (AOU-R2)",
+  "tests/test_issuer_name_strip.py tests/test_fund_highlights_wrapper.py tests/test_agent_promoted.py: 107 passed",
+  "tests/test_programme_rule_snapshot.py tests/test_programme_current_snapshot.py tests/test_ares_apollo_supplemental_rules.py tests/test_printed_industry.py: 39 passed",
+  "No pipeline code changed; test_unified_holdings and the full suite not run."
+ ],
+ "not_done": [
+  "20-row independent page sample and independent investigation review (orchestrator).",
+  "Fund financials checked against the page for net assets, NAV, total assets, TII/NII and the NII ratio in all six quarters; expense lines, distributions and shares outstanding not read one by one.",
+  "The money market fund is left unpublished (observation); no cash publication decided.",
+  "Floors are not published by the schema; floor values in tags were not audited (sister found tag-scale errors there).",
+  "Position-id stability across rebuilds not measured beyond the corrected issuers' chains (chains.sql).",
+  "pct_of_net_assets is not printed per row by this filer; the calculated percent was not checked.",
+  "The 91 thousand difference between Q1 + Q2 and the printed six-month income (observation) not traced."
+ ],
+ "reconciliation": {
+  "basis": "filed investments before cash equivalents (ex cash); fund_gate totals: 6 of 6 quarters tie",
+  "published_fair_value_thousands": {
+   "2025-03-31": 475610,
+   "2025-06-30": 499808,
+   "2025-09-30": 544302,
+   "2025-12-31": 640076,
+   "2026-03-31": 640752,
+   "2026-06-30": 694385
+  },
+  "printed_fair_value_thousands": {
+   "2025-03-31": 475610,
+   "2025-06-30": 499809,
+   "2025-09-30": 544304,
+   "2025-12-31": 640076,
+   "2026-03-31": 640752,
+   "2026-06-30": 694385
+  },
+  "published_cost_thousands": {
+   "2025-03-31": 475586,
+   "2025-06-30": 499939,
+   "2025-09-30": 542025,
+   "2025-12-31": 638563,
+   "2026-03-31": 646293,
+   "2026-06-30": 699873
+  },
+  "note": "-1 and -2 thousand at 2025-06-30 / 2025-09-30 are rounding of thousand-dollar lines (the plug that closed them was pulled)."
+ },
+ "build_history": [
+  "aoua untouched (46 outstanding)",
+  "aoub wrapper + 51 corrections + pulled rules + highlights (11)",
+  "aouc + 3 corrections (ISC x2, Invited industry) (11; 5 after check-accepted C107 x6 written)",
+  "aoud round two: + 13 basis_spread corrections (total margin once); C115 and fmt_basis_spread gone, spread_printed x2 on the 11 corrected rows (5 outstanding, all proposed)"
+ ]
+}

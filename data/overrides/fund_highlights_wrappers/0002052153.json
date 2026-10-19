@@ -1,0 +1,15 @@
+{
+  "schema_version": "fund-highlights-wrapper.v1",
+  "cik": "0002052153",
+  "entity_name": "Apollo Origination II (UL) Capital Trust",
+  "version": 1,
+  "notes": "Fund-clearing loop 2026-10-19. One printed ratio the company-facts duration step divides by four.",
+  "figure_corrections": [
+    {
+      "report_date": "2025-12-31",
+      "field": "income_yield_pct",
+      "value": 8.56,
+      "evidence": "0001193125-26-104513 (10-K): Annualized ratio of net investment income to average net assets (4) 8.56 %. The duration normalisation divides the annualised year ratio by 4 (published 2.14); restore the printed ratio, as for the sister fund 0002052152 (9.96)."
+    }
+  ]
+}

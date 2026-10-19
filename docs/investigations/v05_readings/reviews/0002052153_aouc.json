@@ -1,0 +1,409 @@
+{
+ "reviewer_id": "independent-reviewer-claude-opus-aouc-2026-10-19",
+ "report_digest": "0a97895b6ec79a791077cd826573d124691322064ed885aca22595bfcf96816c",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_3f46748fb206",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Rule output row_validation_issues X11 for the fund at 2025-03-31 has exactly 2 rows, ROW-424513c20f5978df (Advarra delayed draw) and ROW-076507e65d1f9db2 (Databricks delayed draw), equal to affected_rows. Both printed lines show '-' in Par/Shares with a cost and a fair value; published principal is null, fair value 6k / 28k and cost -6k / 19k match the page (my line match: all 96 published rows of the quarter tie to a printed line on maturity, cost and fair value). Principal from the commitment table would not be a par printed on the line. as_filed proposal is supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 $ - $ ( 6 ) $ 6 (7)(10)(14)(16)"
+    },
+    {
+     "accession": "0000950170-25-070633",
+     "text": "Delayed Draw S + 450 , 0.00 % Floor 1/19/2031 - 19 28 (4)(6)(14)(16)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_824dfbd5463d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PP02 at 2025-03-31 emits two identifier values (no row_id): the Heritage revolvers 'S+500, 0.75% Floor' and 'S+550, 4.50% Floor', 1/31/2030; they map to C_5dcaf6ae / C_eb433ebe, published spreads 5.0 and 5.5, fair value 0, cost null. The page prints two separate dash lines with different margins and floors, so they are two facilities, not a duplicate dimension path. Both are among the 22 dash rows I matched line by line.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 - - - (7)(10)(14)(16)"
+    },
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 - - - (7)(10)(14)(16)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e74c794eb037",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PP02 at 2026-03-31 emits the two Arcwood revolver identifiers 'S+525' and 'S+550' (1/31/2030); published rows C_a6a3053f (5.25) and C_ef498c88 (5.5), zero par/cost/fair value. The page prints both dash lines one after the other (550 then 525). Distinct margins = distinct facilities; the multiset of published spreads equals the printed one. Keep both.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Revolver S + 550 , 0.75 % Floor 1/31/2030 - - - (7)(12)(16)(18) First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 1/31/2030 - - - (7)(12)(16)(18)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_091fa7b77868",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Coverage is right (C115 2025-12-31 = one row, Vantage ROW-cfd8e1551aea57a6, 15.74) but the conclusion false_alarm / proposal as_filed is not supported. The investigation tested only a decimal slip and the cash leg alone; it did not test the hypothesis that this filer's 'S + X Cash plus Y % PIK' figure is the ALL-IN margin in the 2025-12-31 and 2026-03-31 schedules. The same filer's pages show it is: Vantage prints 675 + 2.75 at 2026-03-31 and 400 + 2.75 at 2026-06-30 (same 8/29/2029 maturity, all-in 6.75 both times if 675 is all-in); Zeus and Curia print the very same figures 'Cash (includes X % PIK)' at 2025-09-30 and 'Cash plus X % PIK' at 2025-12-31. So 15.74 is very probably a double count of PIK (and 8.99 PIK is itself out of line with 2.75 in the next quarter). The flagged value is most likely wrong, not as filed. Conclusion should be confirmed_error or at least source_ambiguity, with a next action to read the 2025-12-31 / 2026-03-31 'Cash plus' lines as all-in (or an owner ruling on D-031 for this filer) across the affected rows. Rows whose 'Cash plus' figure is very probably the all-in margin, so the cash_plus_pik reading adds the PIK twice (published spread in brackets, my likely all-in in braces): Curia 2025-12-31 [9.5]{6.25: Q3 prints the same 625 as 'Cash (includes 3.25 % PIK)', Q1-2026 prints 300 + 3.25}; Zeus 2025-12-31 and 2026-03-31 [9.0]{6.0: Q3 prints 600 'includes 3.00 % PIK'}; Vantage 2025-12-31 [15.74] and 2026-03-31 [9.5]{6.75: 2026-06-30 prints 400 + 2.75}; Deerfield Dakota 2025-12-31 and 2026-03-31 [8.5]{5.75: 2026-06-30 prints 300 + 2.75}; Saber 2026-03-31 [7.0]{4.75: 2026-06-30 prints 250 + 2.25}; Legends 2026-03-31 [8.25]{5.5: every other quarter prints 275 + 2.75}; Titan 2025-12-31 [8.13] (525 vs 250 + 2.88 in 2026; not exact, less certain); Russell 2026-03-31 [7.5] (PIK changed 1.25 -> 0.75, unclear). Same maturity on every pair; the Q1->Q2 2026 drop of exactly the PIK rate on five loans at once is a presentation change, not five amendments.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 6,754 $ 6,598 $ 6,484 (7)(11)"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash (includes 3.00 % PIK), 0.75 % Floor 2/28/2031 3,510 3,523 3,501"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031 3,528 3,506 3,272"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Term Loan S + 625 Cash (includes 3.25 % PIK), 0.00 % Floor 12/6/2029 20,186 19,567 19,832"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Term Loan S + 625 Cash plus 3.25 % PIK, 0.00 % Floor 12/6/2029 20,351 19,599 19,792"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,784 $ 6,544 $ 6,173"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 400 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Deerfield Dakota Holding, LLC First Lien Secured Debt - Term Loan S + 575 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Deerfield Dakota Holding, LLC First Lien Secured Debt - Bank Debt Term Loan S + 300 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ec2c564cc4ad",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Same row as RVQ_REV_091fa7b77868 (weak fmt_basis_spread, 1 of 134 rows at 2025-12-31 outside 0-15 = Vantage 15.74); coverage verified. Rejected for the same reason: the as_filed disposition rests on the literal cash + PIK reading, which the filer's own cross-quarter lines contradict for the 2025-12-31 schedule. Re-investigate with the all-in hypothesis before any disposition.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Term Loan S + 675 Cash plus 8.99 % PIK 8/29/2029 $ 6,754 $ 6,598 $ 6,484 (7)(11)"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,784 $ 6,544 $ 6,173"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 400 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Independently: all 752 aouc rows' issuer names occur on their quarter's page; compared with spon3 by context, every changed name is an exact suffix of the spon3 name (64 distinct prefixes observed in the data, all group headings), except the 16 row-corrected rows, each of which I matched to its printed line (maturity, cost, fair value) and the nearest printed company above it. No company was cut; the only nearest-name mismatches are case/punctuation (CCI Buyer, Inc. vs Inc; VICTORS PURCHASER; TopCo; Titan BW). The suffix detector needs no page cell and is feasible.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "GSI Geotechnical Merger Sub, Inc. First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 10/15/2031 7,744 7,678 7,686 (7)(12)"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Checked each corrected row against the printed line holding its values: Arcwood/Encore 2025-09-30, Gannett bond 2025-09-30 (printed first under Gannett Co., Inc.), Jensen Hughes x4 2025-12-31, GSI->Altern->Golden Hippo Pet->Protein For Pets 2026-03-31, Curia Receivables II 2026-06-30 (tagged maturity 1/29/2029 = printed). After the corrections no row's issuer differs from the printed company above its line. Altern industry now Consumer Staples Distribution & Retail, the printed heading. Detector proposal is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Total Construction & Engineering $ 23,584 $ 23,512 Consumer Staples Distribution & Retail Golden Hippo Altern Marketing, LLC"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Encore AVSC Holding Corp. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 12/5/2031 $ 19,699 $ 19,333 $ 19,500 (7)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Every published row's currency compared with the marker printed before its par: no mismatch in any quarter (CAD/JPY 2025-03-31, Vantive pair 2026-03-31, Omega 2026-06-30 now agree). principal_amount_usd = par x rate checked: 1,002,000 x 0.69546 = 696,850; 107,358,000 x 0.0066711 = 716,197; 997,000 x 0.71669 = 714,542 (same rate the build applies to Aryeh CAD that date). Pars tie to the printed Par column.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Term Loan T + 525 , 0.75 % Floor 2/2/2032 JPY 107,358 705 705 (3)(9)(10)"
+    },
+    {
+     "accession": "0000950170-25-070633",
+     "text": "First Lien Secured Debt - Term Loan C + 500 , 0.75 % Floor 1/30/2032 C$ 1,002 686 686 (3)(8)(10)"
+    }
+   ]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "I found exactly 8 / 6 / 8 printed lines with a dash fair value in the first three schedules; each is published at 0 from its own context with the printed margin, maturity, par and cost (e.g. Heritage 706 / cost 1, Zeus 492 / cost 1 at 2025-06-30, which the pulled plug had set to fair value 1,000 against a printed dash). Published fair value equals the sum of printed lines (2025-06-30 499,808; 2025-09-30 544,302 excluding the money market line); the 1k and 2k gaps to the printed totals are the filer's rounding, no plug remains. Dash rows carry SOFR and spreads like their siblings (no settings skipped). Minor: fair_value_source reads 'xbrl_field' on these untagged values.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107409",
+     "text": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 706 1 -"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Revolver S + 500 , 0.75 % Floor 5/13/2032 - ( 2 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "spread-tag-holds-cash-leg-of-pik-margin",
+   "outcome": "rejected",
+   "rationale": "The fix is right where the filer prints the cash leg (2025-06-30, 2026-06-30 and most of 2025-12-31/2026-03-31 lines that match those quarters), but it is applied to every 'Cash plus' line and over-states the spread where the same filer prints the all-in margin with the 'Cash plus' wording. 'fixed' is not supported for all 26 rows, and spread_printed cannot catch it because it compares with the same literal reading. Rows whose 'Cash plus' figure is very probably the all-in margin, so the cash_plus_pik reading adds the PIK twice (published spread in brackets, my likely all-in in braces): Curia 2025-12-31 [9.5]{6.25: Q3 prints the same 625 as 'Cash (includes 3.25 % PIK)', Q1-2026 prints 300 + 3.25}; Zeus 2025-12-31 and 2026-03-31 [9.0]{6.0: Q3 prints 600 'includes 3.00 % PIK'}; Vantage 2025-12-31 [15.74] and 2026-03-31 [9.5]{6.75: 2026-06-30 prints 400 + 2.75}; Deerfield Dakota 2025-12-31 and 2026-03-31 [8.5]{5.75: 2026-06-30 prints 300 + 2.75}; Saber 2026-03-31 [7.0]{4.75: 2026-06-30 prints 250 + 2.25}; Legends 2026-03-31 [8.25]{5.5: every other quarter prints 275 + 2.75}; Titan 2025-12-31 [8.13] (525 vs 250 + 2.88 in 2026; not exact, less certain); Russell 2026-03-31 [7.5] (PIK changed 1.25 -> 0.75, unclear). Same maturity on every pair; the Q1->Q2 2026 drop of exactly the PIK rate on five loans at once is a presentation change, not five amendments.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash (includes 3.00 % PIK), 0.75 % Floor 2/28/2031 3,510 3,523 3,501"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031 3,528 3,506 3,272"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Term Loan S + 625 Cash (includes 3.25 % PIK), 0.00 % Floor 12/6/2029 20,186 19,567 19,832"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Term Loan S + 625 Cash plus 3.25 % PIK, 0.00 % Floor 12/6/2029 20,351 19,599 19,792"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,784 $ 6,544 $ 6,173"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 400 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Deerfield Dakota Holding, LLC First Lien Secured Debt - Term Loan S + 575 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Deerfield Dakota Holding, LLC First Lien Secured Debt - Bank Debt Term Loan S + 300 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed",
+   "outcome": "supported",
+   "rationale": "Yen rows now TORF to 2025-12-31 and TONAR from 2026-03-31, matching the dated footnotes; source ixbrl_field_status. Detector (unmapped printed code letter with inferred reference rate) is concrete and cheap.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104513",
+     "text": "The interest rate on these loans is subject to 3 months Tokyo Term Risk Free Rate (TORF)"
+    }
+   ]
+  },
+  {
+   "observation_key": "floor-rate-published-as-interest-rate",
+   "outcome": "supported",
+   "rationale": "Tivity interest_rate is null in all six quarters now; the printed line is floating S + 500 with a 0.75 % floor, so 0.75 was the floor. Detector (floating, rate < 2 and = printed floor) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Tivity Health Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/28/2029 14,428 14,501 14,428 (7)"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-income-ratio-published-is-not-the-printed-ratio",
+   "outcome": "supported",
+   "rationale": "The 10-K prints the annualized NII ratio 8.56 % for the year; the highlights wrapper sets income_yield_pct 8.56. F16 (distribution rate vs income yield) is the existing detector that caught 2.14.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Annualized ratio of net investment income to average net assets (4) 8.56 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Facility word of every published row compared with its printed line across all six quarters: no mismatch left (delayed draw/term loan treated as compatible). The proposed detector is the same test.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "First Lien Secured Debt - Revolver P+ 350 , 0.00 % Floor 12/16/2032 343 337 337 (11)(12)(16)(18)"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-in-member-spelled-off-pattern",
+   "outcome": "supported",
+   "rationale": "No issuer-quarter now has mixed or missing industry; Invited 2026-06-30 rows all Hotels, Restaurants & Leisure. Detector concrete with a natural negative case.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Hotels, Restaurants & Leisure Invited Invited, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 525"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-included-margin-printed-inconsistently",
+   "outcome": "rejected",
+   "rationale": "The inconsistency is real but the observation understates it and draws the wrong conclusion. It names only Curia and Titan (49.3M) and says published values 'follow the page literally', so 'left'. The filer's own 'includes' wording at 2025-09-30 and the 2026-06-30 cash legs show the 2025-12-31 / 2026-03-31 'Cash plus' figure is the all-in margin on several loans; this is provable from the pages by cross-quarter comparison, not merely a possible filer error. Scope and action need redoing. Rows whose 'Cash plus' figure is very probably the all-in margin, so the cash_plus_pik reading adds the PIK twice (published spread in brackets, my likely all-in in braces): Curia 2025-12-31 [9.5]{6.25: Q3 prints the same 625 as 'Cash (includes 3.25 % PIK)', Q1-2026 prints 300 + 3.25}; Zeus 2025-12-31 and 2026-03-31 [9.0]{6.0: Q3 prints 600 'includes 3.00 % PIK'}; Vantage 2025-12-31 [15.74] and 2026-03-31 [9.5]{6.75: 2026-06-30 prints 400 + 2.75}; Deerfield Dakota 2025-12-31 and 2026-03-31 [8.5]{5.75: 2026-06-30 prints 300 + 2.75}; Saber 2026-03-31 [7.0]{4.75: 2026-06-30 prints 250 + 2.25}; Legends 2026-03-31 [8.25]{5.5: every other quarter prints 275 + 2.75}; Titan 2025-12-31 [8.13] (525 vs 250 + 2.88 in 2026; not exact, less certain); Russell 2026-03-31 [7.5] (PIK changed 1.25 -> 0.75, unclear). Same maturity on every pair; the Q1->Q2 2026 drop of exactly the PIK rate on five loans at once is a presentation change, not five amendments. The proposed detector (total margin moves by exactly the PIK rate with unchanged maturity) would catch these and is supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash (includes 3.00 % PIK), 0.75 % Floor 2/28/2031 3,510 3,523 3,501"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031 3,528 3,506 3,272"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Term Loan S + 625 Cash (includes 3.25 % PIK), 0.00 % Floor 12/6/2029 20,186 19,567 19,832"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Term Loan S + 625 Cash plus 3.25 % PIK, 0.00 % Floor 12/6/2029 20,351 19,599 19,792"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,784 $ 6,544 $ 6,173"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Vantage Specialty Chemicals Holdings, Inc. First Lien Secured Debt - Bank Debt Term Loan S + 400 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Deerfield Dakota Holding, LLC First Lien Secured Debt - Term Loan S + 575 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Deerfield Dakota Holding, LLC First Lien Secured Debt - Bank Debt Term Loan S + 300 Cash plus 2.75 % PIK, 0.75 % Floor 9/13/2032"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-and-money-market-rows-not-published",
+   "outcome": "supported",
+   "rationale": "Money market line printed after the before-cash total in every quarter (20,976 / 36,745 / 28,771 / 49,170 / 39,144 seen), not published, totals tie to the before-cash figure. Left as a consistency question; fine.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-347347",
+     "text": "Money Market Fund Goldman Sachs Financial Square Government Fund Institutional Shares N/A N/A 39,144 39,144 39,144"
+    }
+   ]
+  },
+  {
+   "observation_key": "fourth-quarter-income-derived-from-sum-of-quarters",
+   "outcome": "supported",
+   "rationale": "Traced further than the report: the 91 sits entirely in 'Interest income (excluding PIK)'. Q1-2025 printed 8,716 (and reprinted unchanged as the comparative in the 2026-03-31 10-Q); Q2 three-month 11,757; six-month 20,564 = 8,716 + 11,848, so the Q2 three-month column is 91 below YTD less Q1. PIK (76 + 272 = 348), dividends (226 + 212 = 438), other income (157 + 247 = 404), every expense line (total 1,006 + 1,641 = 2,647), realized (73 + 546 = 619) and unrealized (24 - 153 = -129) all tie; nine-month 34,442 = 21,754 + 12,688 exactly. So the cumulative columns are internally consistent and the year less nine months (12,856 / 11,135) uses only cumulative printed figures; the sum-of-quarters derivation (12,947 / 11,226) carries the Q2 three-month column's 91. Which column the filer got wrong is not printed; noted coincidence: net assets at 2024-12-31 were (91), not proven related. Detector proposal (TII vs gross income of the same row) is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107409",
+     "text": "Interest income (excluding payment-in-kind (PIK) interest income) $ 11,757 $ 20,564"
+    },
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Interest income (excluding payment-in-kind (PIK) interest income) $ 13,023 $ 8,716"
+    },
+    {
+     "accession": "0001193125-25-278012",
+     "text": "Total Investment Income $ 12,688 $ 34,442"
+    },
+    {
+     "accession": "0001193125-26-104513",
+     "text": "Net Assets at End of Period $ 672,944 $ ( 91 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-basis-changes-between-filings",
+   "outcome": "supported",
+   "rationale": "HIG prints 15 / 15,000 / '15 Units' as stated. The same 1000x basis change also hits Valor: 760,892 and 1,084,671 at 2026-03-31 vs '761 Units' and '1,085 Units' at 2026-06-30 (published as printed both times); the proposed detector would catch it, so the decision stands, but the observation should name Valor too.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "VCI Intermediate Topco 1 LLC Common Equity - Membership Interest N/A N/A 760,892 761 769"
+    },
+    {
+     "accession": "0001193125-26-347347",
+     "text": "VCI Intermediate Topco 1 LLC Common Equity - Membership Interest N/A N/A 761 Units 761 722"
+    }
+   ]
+  },
+  {
+   "observation_key": "canonical-name-picks-member-variant",
+   "outcome": "supported",
+   "rationale": "178 of 752 aouc rows have a canonical_name equal to a group heading followed by the published issuer name. Shared entity naming, informational column; detector concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "Polywood Poly-Wood, LLC First Lien Secured Debt - Delayed Draw S + 575 , 1.00 % Floor 3/20/2030 - $ - $ - (7)(10)(14)(16)"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-at-issuer-rename",
+   "outcome": "supported",
+   "rationale": "Confirmed: Heritage term loans (1/31/2031) carry ids bf4025f7 / 998d289b to 2025-06-30 and new ids 85894239 / a0663b90 from 2025-09-30 under Arcwood, which the page prints as f/k/a Heritage. The 1,260 -> 1,749 par step is not settled, as stated.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221829",
+     "text": "Commercial Services & Supplies Heritage Environmental Services Arcwood Environmental, Inc. (f/k/a Heritage Environmental Services, Inc.) First Lien Secured Debt - Term Loan S + 500"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "AOU-R1",
+   "outcome": "supported",
+   "rationale": "Guard-list bookkeeping: the fund does opt in to printed_margin_reading and the page prints cash and PIK apart in several quarters, so listing it is a verification fix, not a weakening; test now passes (1 passed). It must not be read as validating the 2025-12-31 / 2026-03-31 rows, where the reading double-counts PIK (see the rejected observation spread-tag-holds-cash-leg-of-pik-margin).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107409",
+     "text": "Term Loan S + 300 Cash plus 3.25 % PIK 12/6/2029 $ 20,021 $ 19,543 $ 19,671 (7)(11)"
+    }
+   ]
+  },
+  {
+   "request_id": "AOU-R2",
+   "outcome": "supported",
+   "rationale": "The Co-investment member is the total of the lines carrying the co-investment footnote, not a position: sum of printed lines with that footnote = member value at 2025-03-31 exactly (382,018 FV / 381,970 cost), 2025-09-30 439,647 vs 439,650, 2025-12-31 525,971 vs 525,968, 2026-03-31 527,747 vs 527,743 (rounding). Publishing it would add ~80 pct of the portfolio twice. Totals tie without it in all six quarters; aouc row counts equal spon3 plus the 22 dash rows minus the 4 plug rows, so no real position was dropped. (2025-06-30: the filing's footnote numbering is inconsistent, member 391,798 vs 399,702 on footnote-(11) lines; irrelevant to the aggregate call.) Updated test passes (12 passed).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070633",
+     "text": "These are co-investments made with the Companys affiliates in accordance with the terms of the exemptive order"
+    },
+    {
+     "accession": "0000950170-25-070633",
+     "text": "$ 475,586 $ 475,610 Money Market Fund Goldman Sachs Financial Square Government Fund Institutional Shares"
+    }
+   ]
+  }
+ ]
+}

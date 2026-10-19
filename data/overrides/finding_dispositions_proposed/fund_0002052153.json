@@ -1,0 +1,190 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "aoud",
+ "dispositions": [
+  {
+   "disposition_id": "PD-AOU-RVQ_REV_3f46748fb206",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0002052153"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "reason_key": "x11-undrawn-line-par-printed-as-dash",
+   "statement": "Reconstructed every X11 row of 2025-03-31 by row_id: 2 rows, Advarra Holdings delayed draw (C_87cd5782, ROW-424513c20f5978df, cost -6,000, fair value 6,000) and Databricks delayed draw (C_2c290027, ROW-076507e65d1f9db2, cost 19,000, fair value 28,000). Both printed lines show a dash in the Par/Shares column with a cost and fair value; the contexts carry no principal fact. Rejected filling principal from fair value, the commitment table or the next quarter: none is a par printed on these rows. Principal stays null; fair value and cost are as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070633",
+     "verbatim": "First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 $ - $ ( 6 ) $ 6 (7)(10)(14)(16)",
+     "quote": "First Lien Secured Debt - Delayed Draw S + 450 , 0.75 % Floor 9/15/2031 $ - $ ( 6 ) $ 6 (7)(10)(14)(16) -- Advarra delayed draw: par printed '-', cost (6), fair value 6"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070633",
+     "verbatim": "First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/19/2031 - 19 28 (4)(6)(14)(16)",
+     "quote": "First Lien Secured Debt - Delayed Draw S + 450 , 0.00 % Floor 1/19/2031 - 19 28 (4)(6)(14)(16) -- Databricks delayed draw: par printed '-', cost 19, fair value 28"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002052153.json",
+   "decided_by": "PROPOSED by fund-agent-apollo-orig2-ul-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-AOU-RVQ_REV_824dfbd5463d",
+   "class": "false_alarm",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "ciks": [
+    "0002052153"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "reason_key": "pp02-distinct-zero-valued-commitments-have-different-rate-terms",
+   "statement": "Reconstructed both PP02 issue rows (the rule emits no row_id; matched by identifier value): Heritage Environmental Services revolvers C_5dcaf6ae (S+500, 0.75 % floor, ROW-0ad673c45917dfb3) and C_eb433ebe (S+550, 4.50 % floor, ROW-a2d9736edcdfd3d6), both newly published at fair value 0 from the page (dash rows). Same issuer and maturity and zero amounts, but the page prints two separate lines with different margins and floors, and the filer tags two contexts. Rejected removing one as a duplicate: equal zero amounts are not a position identity. Both kept.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070633",
+     "verbatim": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 - - - (7)(10)(14)(16)",
+     "quote": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 1/31/2030 - - - (7)(10)(14)(16) -- first Heritage revolver, 500 bps / 0.75 % floor"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070633",
+     "verbatim": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 - - - (7)(10)(14)(16)",
+     "quote": "First Lien Secured Debt - Revolver S + 550 , 4.50 % Floor 1/31/2030 - - - (7)(10)(14)(16) -- second Heritage revolver, 550 bps / 4.50 % floor"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002052153.json",
+   "decided_by": "PROPOSED by fund-agent-apollo-orig2-ul-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-AOU-RVQ_REV_e74c794eb037",
+   "class": "false_alarm",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "ciks": [
+    "0002052153"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "reason_key": "pp02-distinct-zero-valued-commitments-have-different-rate-terms",
+   "statement": "Reconstructed both PP02 issue rows (matched by identifier value): Arcwood Environmental revolvers C_a6a3053f (member S+525, ROW-6b6dc8c45f583a1d, spread 5.25) and C_ef498c88 (member S+550, ROW-d4f720f121f4faeb, spread 5.5), both zero par, cost and fair value. The page prints two lines, S + 550 and S + 525, each with dashes; two contexts are tagged. Rejected removing one: distinct margins prove two facilities. Both kept.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221829",
+     "verbatim": "First Lien Secured Debt - Revolver S + 550 , 0.75 % Floor 1/31/2030 - - - (7)(12)(16)(18)",
+     "quote": "First Lien Secured Debt - Revolver S + 550 , 0.75 % Floor 1/31/2030 - - - (7)(12)(16)(18) -- Arcwood revolver at 550 bps"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221829",
+     "verbatim": "First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 1/31/2030 - - - (7)(12)(16)(18)",
+     "quote": "First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 1/31/2030 - - - (7)(12)(16)(18) -- Arcwood revolver at 525 bps"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002052153.json",
+   "decided_by": "PROPOSED by fund-agent-apollo-orig2-ul-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-AOU-RVQ_BLK_827896d407f9",
+   "class": "false_alarm",
+   "engine": "identity",
+   "rule_name": "spread_printed",
+   "ciks": [
+    "0002052153"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "reason_key": "spread-printed-cash-plus-figure-is-already-the-total-margin",
+   "statement": "Reconstructed the flagged population (published spread vs the page reader's printed_margin, spread.sql): 5 rows, Curia C_84869cc4, Deerfield C_68b762a8, Titan C_a3a2498f, Vantage C_39c31138, Zeus C_a8c26202; exactly the 5 rows of this quarter whose spread was corrected to the printed X of 'S + X Cash plus Y % PIK'. The reader adds Y to X; the same loans at the same maturity show X is already the total: Curia and Zeus print the same X as 'Cash (includes Y % PIK)' at 2025-09-30, Deerfield prints S + 575 all cash at 2025-09-30 and 'S + 300 Cash plus 2.75 % PIK' at 2026-06-30, Vantage 'S + 400 Cash plus 2.75 % PIK' at 2026-06-30, Titan 'S + 238 Cash (includes 2.88 % PIK)' at 2025-09-30. Owner convention D-031 is the total margin counted once. Tested: X as the cash leg (the reader's sum) - margins would jump by exactly the PIK for one or two quarters and fall back with unchanged maturity, rejected. No fix applies: the check compares with the literal sum.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104513",
+     "verbatim": "Zeus Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031",
+     "quote": "Zeus Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash plus 3.00 % PIK, 0.75 % Floor 2/28/2031 -- 2025-12-31: X = 600 with 3.00 PIK"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-278012",
+     "verbatim": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash (includes 3.00 % PIK), 0.75 % Floor 2/28/2031",
+     "quote": "Zeus Company LLC First Lien Secured Debt - Term Loan S + 600 Cash (includes 3.00 % PIK), 0.75 % Floor 2/28/2031 -- 2025-09-30: the same 600 printed as including the PIK, so 600 is the total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104513",
+     "verbatim": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 625 Cash plus 3.25 % PIK, 0.00 % Floor 12/6/2029",
+     "quote": "Curia Curia Global, Inc. First Lien Secured Debt - Term Loan S + 625 Cash plus 3.25 % PIK, 0.00 % Floor 12/6/2029 -- 2025-12-31: X = 625 with 3.25 PIK"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-278012",
+     "verbatim": "Curia Global, Inc. First Lien Secured Debt - Term Loan S + 625 Cash (includes 3.25 % PIK), 0.00 % Floor 12/6/2029",
+     "quote": "Curia Global, Inc. First Lien Secured Debt - Term Loan S + 625 Cash (includes 3.25 % PIK), 0.00 % Floor 12/6/2029 -- 2025-09-30: the same 625 printed as including the PIK"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002052153.json",
+   "decided_by": "PROPOSED by fund-agent-apollo-orig2-ul-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-AOU-RVQ_BLK_417611e05fe7",
+   "class": "false_alarm",
+   "engine": "identity",
+   "rule_name": "spread_printed",
+   "ciks": [
+    "0002052153"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "reason_key": "spread-printed-cash-plus-figure-is-already-the-total-margin",
+   "statement": "Reconstructed the flagged population (spread.sql): 6 rows, Deerfield C_52e5c935, Legends C_80f4a797, Russell C_a0df34dd, Saber C_16085f20, Vantage C_e006aab6, Zeus C_01b692d6; exactly the 6 rows of this quarter corrected to the printed X. At 2026-06-30 the same loans (same maturity) print the cash leg: Vantage 'S + 400 Cash plus 2.75 % PIK' (400 + 275 = 675), Saber 'S + 250 Cash plus 2.25 % PIK' (250 + 225 = 475), Deerfield 'S + 300 Cash plus 2.75 % PIK' (575), Legends 'S + 275 Cash plus 2.75 % PIK' (550); Zeus printed 600 as 'includes 3.00 % PIK' at 2025-09-30. Russell is the least certain: 625 equals its all-cash margin of 2025-12-31 at the same maturity. The same filing uses X as the cash leg for Curia, Uft Buyer and Titan, so the wording is not filing-wide and the rows are corrected one by one.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221829",
+     "verbatim": "First Lien Secured Debt - Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,784 $ 6,544 $ 6,173 (7)(12)",
+     "quote": "First Lien Secured Debt - Term Loan S + 675 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,784 $ 6,544 $ 6,173 (7)(12) -- 2026-03-31: Vantage X = 675"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-347347",
+     "verbatim": "First Lien Secured Debt - Bank Debt Term Loan S + 400 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,814 $ 6,554 $ 6,190 (7)(13)",
+     "quote": "First Lien Secured Debt - Bank Debt Term Loan S + 400 Cash plus 2.75 % PIK, 1.00 % Floor 8/29/2029 $ 6,814 $ 6,554 $ 6,190 (7)(13) -- 2026-06-30: same loan, cash 400 + PIK 275 = 675, so 675 was the total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221829",
+     "verbatim": "First Lien Secured Debt - Term Loan S + 475 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 8,522 8,433 8,479 (7)(12)",
+     "quote": "First Lien Secured Debt - Term Loan S + 475 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 8,522 8,433 8,479 (7)(12) -- 2026-03-31: Saber X = 475"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-347347",
+     "verbatim": "First Lien Secured Debt - Bank Debt Term Loan S + 250 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 8,571 8,436 8,622 (7)(13)",
+     "quote": "First Lien Secured Debt - Bank Debt Term Loan S + 250 Cash plus 2.25 % PIK, 0.00 % Floor 12/16/2032 8,571 8,436 8,622 (7)(13) -- 2026-06-30: same loan, 250 + 225 = 475"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002052153.json",
+   "decided_by": "PROPOSED by fund-agent-apollo-orig2-ul-2026-10-19; not accepted",
+   "decided_on": "2026-10-19"
+  }
+ ]
+}

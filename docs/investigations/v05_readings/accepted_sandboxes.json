@@ -298,5 +298,10 @@
   "label": "vgaf",
   "accepted_on": "2026-10-19",
   "basis": "D-216, gate PASS with investigation COMPLETE: 58 findings, 24 outstanding, all proposed; 14/14 quarters tie (3 before); sample 0/20; six builds plus two re-runs"
+ },
+ "0002052153": {
+  "label": "aoud",
+  "accepted_on": "2026-10-19",
+  "basis": "D-217, gate PASS with investigation COMPLETE: 12 findings, 5 outstanding, all proposed; 6/6 quarters tie; sample 0/20; 13 PIK spreads corrected row by row; four builds"
  }
 }

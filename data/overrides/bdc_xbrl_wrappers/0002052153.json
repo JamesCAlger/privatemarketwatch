@@ -48,9 +48,6 @@
       "warrant": [
         "warrant",
         "warrants"
-      ],
-      "fund": [
-        "co-investment"
       ]
     },
     "aggregate_markers": [
@@ -84,7 +81,7 @@
       },
       {
         "regex": "(?i)^Co-investment$",
-        "family": "fund"
+        "family": "debt"
       },
       {
         "regex": "(?i)^(?:Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Automobile\\s+Components|Beverages|Building\\s+Products|Capital\\s+Markets|Chemicals|Commercial\\s+Services\\s+&\\s+Supplies|Communications\\s+Equipment|Construction\\s+&\\s+Engineering|Consumer\\s+Finance|Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail|Containers\\s+&\\s+Packaging|Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+REITs|Electric\\s+Utilities|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Energy\\s+Equipment\\s+&\\s+Services|Entertainment|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Financial\\s+Services|Food\\s+Products|Ground\\s+Transportation|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Independent\\s+Power\\s+&\\s+Renewable\\s+Electricity\\s+Producers|IT\\s+Services|Insurance|Leisure\\s+Products|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Marine\\s+Transportation|Media|Multi-Utilities|Personal\\s+Care\\s+Products|Pharmaceuticals|Professional\\s+Services|Semiconductors\\s+&\\s+Semiconductor\\s+Equipment|Software|Specialty\\s+Retail|Technology\\s+Hardware,\\s+Storage\\s+&\\s+Peripherals|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+&\\s+Distributors|Transportation\\s+Infrastructure|Wireless\\s+Telecommunication\\s+Services)(?:\\b|$)",
@@ -104,7 +101,8 @@
     "category_marker_re": "^(?:(?:Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Automobile\\s+Components|Beverages|Building\\s+Products|Capital\\s+Markets|Chemicals|Commercial\\s+Services\\s+&\\s+Supplies|Communications\\s+Equipment|Construction\\s+&\\s+Engineering|Consumer\\s+Finance|Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail|Containers\\s+&\\s+Packaging|Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+REITs|Electric\\s+Utilities|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Energy\\s+Equipment\\s+&\\s+Services|Entertainment|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Financial\\s+Services|Food\\s+Products|Ground\\s+Transportation|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Independent\\s+Power\\s+&\\s+Renewable\\s+Electricity\\s+Producers|IT\\s+Services|Insurance|Leisure\\s+Products|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Marine\\s+Transportation|Media|Multi-Utilities|Personal\\s+Care\\s+Products|Pharmaceuticals|Professional\\s+Services|Semiconductors\\s+&\\s+Semiconductor\\s+Equipment|Software|Specialty\\s+Retail|Technology\\s+Hardware,\\s+Storage\\s+&\\s+Peripherals|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+&\\s+Distributors|Transportation\\s+Infrastructure|Wireless\\s+Telecommunication\\s+Services)|Investments\\s+(?:after|before)\\s+Cash\\s+Equivalents|Investments|Total\\s+.+)$",
     "canonical_strip_re": "(?i)^(?:Aerospace\\s+&\\s+Defense|Air\\s+Freight\\s+&\\s+Logistics|Automobile\\s+Components|Beverages|Building\\s+Products|Capital\\s+Markets|Chemicals|Commercial\\s+Services\\s+&\\s+Supplies|Communications\\s+Equipment|Construction\\s+&\\s+Engineering|Consumer\\s+Finance|Consumer\\s+Staples\\s+Distribution\\s+&\\s+Retail|Containers\\s+&\\s+Packaging|Distributors|Diversified\\s+Consumer\\s+Services|Diversified\\s+REITs|Electric\\s+Utilities|Electrical\\s+Equipment|Electronic\\s+Equipment,\\s+Instruments\\s+&\\s+Components|Energy\\s+Equipment\\s+&\\s+Services|Entertainment|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Financial\\s+Services|Food\\s+Products|Ground\\s+Transportation|Health\\s+Care\\s+Equipment\\s+&\\s+Supplies|Health\\s+Care\\s+Providers\\s+&\\s+Services|Health\\s+Care\\s+Technology|Hotels,\\s+Restaurants\\s+&\\s+Leisure|Household\\s+Durables|Independent\\s+Power\\s+&\\s+Renewable\\s+Electricity\\s+Producers|IT\\s+Services|Insurance|Leisure\\s+Products|Life\\s+Sciences\\s+Tools\\s+&\\s+Services|Machinery|Marine\\s+Transportation|Media|Multi-Utilities|Personal\\s+Care\\s+Products|Pharmaceuticals|Professional\\s+Services|Semiconductors\\s+&\\s+Semiconductor\\s+Equipment|Software|Specialty\\s+Retail|Technology\\s+Hardware,\\s+Storage\\s+&\\s+Peripherals|Textiles,\\s+Apparel\\s+&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+&\\s+Distributors|Transportation\\s+Infrastructure|Wireless\\s+Telecommunication\\s+Services)\\s+|(?:Investment|Security)\\s+Type\\s+|\\s+Interest\\s+Rate\\s+.*?(?=\\s+Maturity\\s+Date|$)",
     "industry_from_identifier_re": "(?i)^\\s*(Independent\\s+Power\\s+\\&\\s+Renewable\\s+Electricity\\s+Producers|Electronic\\s+Equipment,\\s+Instruments\\s+\\&\\s+Components|Equity\\s+Real\\s+Estate\\s+Investment\\s+Trusts\\s+\\(REITs\\)|Technology\\s+Hardware,\\s+Storage\\s+\\&\\s+Peripherals|Semiconductors\\s+\\&\\s+Semiconductor\\s+Equipment|Consumer\\s+Staples\\s+Distribution\\s+\\&\\s+Retail|Wireless\\s+Telecommunication\\s+Services|Health\\s+Care\\s+Equipment\\s+\\&\\s+Supplies|Health\\s+Care\\s+Providers\\s+\\&\\s+Services|Textiles,\\s+Apparel\\s+\\&\\s+Luxury\\s+Goods|Trading\\s+Companies\\s+\\&\\s+Distributors|Commercial\\s+Services\\s+\\&\\s+Supplies|Life\\s+Sciences\\s+Tools\\s+\\&\\s+Services|Diversified\\s+Consumer\\s+Services|Hotels,\\s+Restaurants\\s+\\&\\s+Leisure|Transportation\\s+Infrastructure|Energy\\s+Equipment\\s+\\&\\s+Services|Construction\\s+\\&\\s+Engineering|Communications\\s+Equipment|Air\\s+Freight\\s+\\&\\s+Logistics|Asset\\s+Backed\\s+Securities|Containers\\s+\\&\\s+Packaging|Health\\s+Care\\s+Technology|Personal\\s+Care\\s+Products|Special\\s+Purpose\\s+Entity|Automobile\\s+Components|Ground\\s+Transportation|Marine\\s+Transportation|Professional\\s+Services|Electrical\\s+Equipment|Aerospace\\s+\\&\\s+Defense|Electric\\s+Utilities|Financial\\s+Services|Household\\s+Durables|Building\\s+Products|Diversified\\s+REITs|Consumer\\s+Finance|Leisure\\s+Products|Specialty\\s+Retail|Capital\\s+Markets|Multi\\-Utilities|Pharmaceuticals|Entertainment|Food\\s+Products|Distributors|IT\\s+Services|Beverages|Chemicals|Financing|Insurance|Machinery|Software|Media)\\s",
-    "instrument_description_strip_re": "(?i)\\s+Interest\\s+Rate\\b.*$"
+    "instrument_description_strip_re": "(?i)\\s+(?:Interest\\s+Rate|Maturity\\s+Date)\\b.*$",
+    "issuer_name_strip_re": "(?i)(?:^AProtein\\ for\\ Pets\\ (?=Protein\\ For\\ Pets\\ Opco,\\ LLC$)|^ASC\\ Engineered\\ Solutions\\ (?=Fire\\ Flow\\ Intermediate\\ Corporation$)|^AVI\\-SPL\\ (?=A\\&V\\ Holdings\\ Midco,\\ LLC$)|^Advarra\\ (?=Advarra\\ Holdings,\\ Inc\\.$)|^Alteryx\\ (?=Azurite\\ Intermediate\\ Holdings,\\ Inc\\.$)|^BDO\\ USA\\ (?=BDO\\ USA,\\ P\\.A\\.$)|^Cambrex\\ (?=Cambrex\\ Corp\\.$)|^Catalent\\ (?=Creek\\ Parent,\\ Inc\\.$)|^Champions\\ Group\\ (?=LIDO\\ Purchaser,\\ Inc$)|^Clarience\\ Technologies\\ (?=Truck\\-Lite\\ Co\\.,\\ LLC$)|^Clearwater\\ Analytics\\ Holdings\\ Inc\\ (?=Clearwater\\ Analytics\\ Holdings\\ Inc\\.$)|^CommScope\\ (?=Commscope,\\ LLC$)|^CommScope\\ (?=Commscope,\\ LLC\\ \\(f/k/a\\ Commscope,\\ Inc\\.\\)$)|^Consumer\\ Cellular\\ (?=CCI\\ Buyer,\\ Inc$)|^Cumming\\ Group\\ (?=Chartwell\\ Cumming\\ Holding\\ Corp$)|^Curia\\ (?=Curia\\ Global,\\ Inc\\.$)|^Databricks\\ (?=Databricks,\\ Inc\\.$)|^Datavant\\ (?=CT\\ Technologies\\ Intermediate\\ Holdings$)|^Datavant\\ (?=CT\\ Technologies\\ Intermediate\\ Holdings\\ \\(Topco\\),\\ Inc\\.$)|^Dental\\ Corp\\ (?=Aryeh\\ Bidco\\ Investment\\ Ltd\\.$)|^Eagle\\ Railcar\\ (?=Elk\\ Bidco,\\ Inc$)|^Encore\\ (?=AVSC\\ Holding\\ Corp\\.$)|^Enverus\\ (?=Edition\\ Holdings,\\ Inc\\.$)|^Everbridge\\ (?=Everbridge\\ Holdings,\\ LLC$)|^G2CI\\ (?=Evergreen\\ IX\\ Borrower\\ 2023,\\ LLC$)|^GSI\\ (?=Geotechnical\\ Merger\\ Sub,\\ Inc\\.$)|^Gannett\\ (?=Gannett\\ Co\\.,\\ Inc\\.$)|^Gannett\\ (?=Gannett\\ Holdings,\\ LLC$)|^Gannett\\ (?=USA\\ TODAY\\ Co\\ Inc\\ \\(fka\\ Gannett\\ Co\\.,\\ Inc\\.\\)$)|^Golden\\ Hippo\\ (?=Altern\\ Marketing,\\ LLC$)|^Golden\\ Hippo\\ (?=Golden\\ Hippo\\ Pet,\\ LLC$)|^Heritage\\ Environmental\\ Services\\ (?=Arcwood\\ Environmental,\\ Inc\\.$)|^Heritage\\ Environmental\\ Services\\ (?=Arcwood\\ Environmental,\\ Inc\\.\\ \\(f/k/a\\ Heritage\\ Environmental\\ Services,\\ Inc\\.\\)$)|^Heritage\\ Environmental\\ Services\\ (?=Heritage\\ Environmental\\ Services,\\ Inc\\.$)|^Higginbotham\\ (?=HIG\\ Intermediate,\\ Inc\\.$)|^Higginbotham\\ (?=Higginbotham\\ Insurance\\ Agency,\\ Inc\\.$)|^Hilb\\ Group\\ (?=Thg\\ Acquisition,\\ LLC$)|^ISC\\ (?=IRIS\\ Specialty\\ Acquisition\\ LLC$)|^Invited\\ (?=Invited,\\ Inc\\.$)|^Jensen\\ Hughes\\ (?=Jensen\\ Hughes,\\ Inc$)|^Jeppesen\\ (?=JEPPESEN\\ HOLDINGS,\\ LLC$)|^Keystone\\ (?=Koala\\ Investment\\ Holdings,\\ Inc\\.$)|^Kroll\\ (?=Deerfield\\ Dakota\\ Holding,\\ LLC$)|^Leaf\\ Home\\ (?=LHS\\ Borrower\\ LLC$)|^Legends\\ (?=Legends\\ Hospitality\\ Holding\\ Company,\\ LLC$)|^LendingTree\\ (?=LendingTree,\\ Inc\\.$)|^MRO\\ Holdings\\ (?=MRO\\ Holdings,\\ Inc\\.$)|^Omega\\ Healthcare\\ (?=OMH\\-Healthedge\\ Holdings,\\ Inc\\.$)|^One\\ Call\\ Medical\\ (?=One\\ Call\\ Corporation$)|^One\\ Call\\ Medical\\ (?=One\\ Call\\ Corporation\\ \\(fka\\ Opal\\ Acquisition,\\ Inc\\.\\)$)|^Oracle\\ Corp\\ (?=Yucca\\ Growth\\ Infrastructure,\\ LLC$)|^PDC\\ Brands\\ (?=Parfums\\ Holding\\ Company,\\ Inc\\.$)|^PDC\\ Brands\\ (?=Silk\\ Holdings\\ III\\ Corp\\.$)|^Polywood\\ (?=Poly\\-Wood,\\ LLC$)|^Protein\\ for\\ Pets\\ (?=Protein\\ For\\ Pets\\ Opco,\\ LLC$)|^Qualus\\ (?=Qinetic,\\ Inc\\.$)|^Quorum\\ (?=QBS\\ Parent,\\ Inc\\.$)|^R\\.R\\.\\ Donnelley\\ (?=R\\.\\ R\\.\\ Donnelley\\ \\&\\ Sons\\ Company$)|^Redwood\\ (?=Runway\\ Bidco,\\ LLC$)|^Rise\\ Baking\\ (?=Viking\\ Baked\\ Goods\\ Acquisition\\ Corporation$)|^Russell\\ (?=Russell\\ Investments\\ US\\ Institutional\\ Holdco\\ Inc$)|^Safe\\-Guard\\ (?=SG\\ Acquisition,\\ Inc\\.$)|^Service\\ Express\\ (?=Victors\\ Purchaser,\\ LLC$)|^Service\\ Logic\\ (?=Saber\\ Parent\\ Holdings\\ Corp$)|^Stamps\\.com\\ (?=Auctane,\\ Inc\\.\\ \\(fka\\ Stamps\\.com\\ Inc\\.\\)$)|^Suave\\ (?=Silk\\ Holdings\\ III\\ Corp\\.$)|^Suvoda\\ (?=Goldeneye\\ Parent,\\ LLC$)|^Tailored\\ Brands\\ (?=The\\ Men's\\ Wearhouse,\\ LLC$)|^Tivity\\ Health\\ (?=Tivity\\ Health,\\ Inc\\.$)|^Triumph\\ (?=TITAN\\ BW\\ BORROWER\\ L\\.P\\.$)|^US\\ LBM\\ (?=LBM\\ Acquisition,\\ LLC$)|^United\\ Flow\\ Technologies\\ (?=Uft\\ Buyer\\ LLC$)|^Valor\\ 1\\ (?=VCI\\ Asset\\ Holdings\\ 1\\ LLC$)|^Valor\\ 1\\ (?=VCI\\ Intermediate\\ Topco\\ 1\\ LLC$)|^Valor\\ 2\\ (?=VCI\\ Asset\\ Holdings\\ 2\\ LLC$)|^Valor\\ 2\\ (?=VCI\\ Intermediate\\ Topco\\ 2\\ LLC$)|^Valor\\ 3\\ (?=VCI\\ Asset\\ Holdings\\ 3\\ LLC$)|^Valor\\ 3\\ (?=VCI\\ Intermediate\\ Topco\\ 3\\ LLC$)|^Valor\\ (?=VCI\\ Asset\\ Holdings\\ 1\\ LLC$)|^Valor\\ (?=VCI\\ Asset\\ Holdings\\ 2\\ LLC$)|^Valor\\ (?=VCI\\ Intermediate\\ Topco\\ 1\\ LLC$)|^Valor\\ (?=VCI\\ Intermediate\\ Topco\\ 2\\ LLC$)|^Vantage\\ Specialty\\ Chemicals\\ (?=Vantage\\ Specialty\\ Chemicals\\ Holdings,\\ Inc\\.$)|^Vantive\\ (?=Spruce\\ Bidco\\ II\\ Inc\\.$)|^Vensure\\ (?=Vensure\\ Employer\\ Services,\\ Inc\\.$)|^Wealth\\ Enhancement\\ Group\\ (?=Wealth\\ Enhancement\\ Group,\\ LLC$)|^Wealth\\ Enhancement\\ Group,\\ LLC\\ (?=Wealth\\ Enhancement\\ Group,\\ LLC$)|^Wolfspeed\\ (?=Wolfspeed\\ Inc$)|^Wolfspeed\\ (?=Wolfspeed,\\ Inc\\.$)|^Wolfspeed,\\ Inc\\.\\ (?=Wolfspeed,\\ Inc\\.$)|^Zeus\\ (?=Zeus\\ Company\\ LLC$))"
   },
   "staging": {
     "strategy": "hierarchy_extract",
@@ -219,23 +217,6 @@
           "max": 1000000000000
         }
       }
-    },
-    "fund": {
-      "description": "Apollo Origination II UL disclosed co-investment row carried as a fund-style position.",
-      "detection_rules": {
-        "keywords": [
-          "Co-investment"
-        ],
-        "keyword_mode": "any"
-      },
-      "field_signatures": {
-        "fair_value": {
-          "type": "numeric_range",
-          "constraint": "required",
-          "min": -1000000000,
-          "max": 1000000000000
-        }
-      }
     }
   },
   "invariants": {
@@ -261,7 +242,36 @@
     ],
     "reference_rate_codes": [
       "C=CORRA",
-      "BBSW=BBSW"
+      "BBSW=BBSW",
+      "T=TORF to 2025-12-31",
+      "T=TONAR from 2026-01-01"
+    ],
+    "printed_margin_reading": [
+      "cash_plus_pik"
+    ],
+    "untagged_values": [
+      "0000950170-25-070633 C_e2651b8f-defe-45cf-a827-10e8c1a92175 fair_value 0",
+      "0000950170-25-070633 C_5dcaf6ae-e56c-4af9-b141-23bab3e1593e fair_value 0",
+      "0000950170-25-070633 C_eb433ebe-7d43-432d-b787-9b8b910fb053 fair_value 0",
+      "0000950170-25-070633 C_04eb5737-0d03-45e0-9244-e55dca1656bd fair_value 0",
+      "0000950170-25-070633 C_16dabb56-bc63-4b2e-8149-7e1a0d54e134 fair_value 0",
+      "0000950170-25-070633 C_bf7799cf-6274-4056-b8e3-72a730b88e10 fair_value 0",
+      "0000950170-25-070633 C_41ec1847-60a1-4713-9b26-f234278b2ac3 fair_value 0",
+      "0000950170-25-070633 C_e870783f-8760-4fab-8189-3d0ba66663da fair_value 0",
+      "0000950170-25-107409 C_e8464c75-4854-4b9b-bb49-1d7a84dfea65 fair_value 0",
+      "0000950170-25-107409 C_2a69506c-3ff8-49a6-a1b1-ea746b37afba fair_value 0",
+      "0000950170-25-107409 C_f2af3fcc-3889-40a5-838d-961a7ebe060c fair_value 0",
+      "0000950170-25-107409 C_ffbab15f-8c0d-475f-81cd-c349d90b7fca fair_value 0",
+      "0000950170-25-107409 C_1d587af4-a0ac-41a3-8393-58f3b3bcb596 fair_value 0",
+      "0000950170-25-107409 C_d3e9abea-3d97-4dae-b3be-b3107a2e7713 fair_value 0",
+      "0001193125-25-278012 C_17110e98-6522-4f26-a96b-0e951167a39e fair_value 0",
+      "0001193125-25-278012 C_ccc780b6-1a85-4e68-9cb1-a6aebb8a1073 fair_value 0",
+      "0001193125-25-278012 C_c35341f5-08c8-4cb9-8af1-21f0dacffabd fair_value 0",
+      "0001193125-25-278012 C_94c57847-d8ab-459e-8ff8-3b408488fb86 fair_value 0",
+      "0001193125-25-278012 C_d9e6f974-3b2d-46a1-9b9f-7544e369199d fair_value 0",
+      "0001193125-25-278012 C_fefc88bf-41cd-4219-8285-956cfa2d24d5 fair_value 0",
+      "0001193125-25-278012 C_a5ec2c2c-5af8-4756-b6f9-cc4d29cd8f6e fair_value 0",
+      "0001193125-25-278012 C_1700aa0a-e61e-47ab-9685-c0ab98ac2ba2 fair_value 0"
     ]
   }
 }

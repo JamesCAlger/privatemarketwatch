@@ -437,8 +437,9 @@ def test_printed_margin_reading_is_set_for_the_two_blue_owl_funds_and_apollo_alo
     # Apollo Origination II (Levered) (0002052152, added 2026-10-10): the adviser's layout, 'S+275 Cash plus 2.75% PIK'.
     # MidCap Financial (0001278752, added 2026-10-15, D-174): the same Apollo layout, cash plus PIK margin printed.
     # MidCap Apollo Institutional (0002006758, added 2026-10-19, D-213): the same Apollo layout.
+    # Apollo Origination II (UL) (0002052153, added 2026-10-19, D-217): the same Apollo layout.
     assert source_encodings.printed_margin_funds() == {OWL, '0001837532', '0001869453', '0002052152', '0001278752',
-                                                       '0002006758'}
+                                                       '0002006758', '0002052153'}
     assert source_encodings.printed_margin_funds({OWL: {'reference_rate_columns': ['Interest']}}) == set()
 
 

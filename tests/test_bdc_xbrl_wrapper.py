@@ -3750,12 +3750,13 @@ def test_apollo_origination_ii_ul_money_market_is_non_private():
     assert result.get("wrapper_disposition", "") == "non_private_market"
 
 
-def test_apollo_origination_ii_ul_coinvestment_is_fund_leaf():
-    """Repeated disclosed Co-investment rows are fund-style position leaves."""
+def test_apollo_origination_ii_ul_coinvestment_is_an_aggregate():
+    """The Co-investment member is a footnote total ("These are co-investments made with the
+    Company", 10-Q 0001193125-26-221829), not a position: it carries only fair value, cost and
+    percent. Changed from fund_position_leaf on 2026-10-19 (D-217)."""
     result = classify_identifier(APOLLO_ORIGINATION_II_UL_CIK, "Co-investment")
-    assert result["wrapper_family"] == "fund"
-    assert result["wrapper_disposition"] == "fund_position_leaf"
-    assert result["wrapper_position_key"] == "co investment"
+    assert result["wrapper_disposition"] == "aggregate"
+    assert result["wrapper_disposition"] != "fund_position_leaf"
 
 
 def test_apollo_origination_ii_ul_position_key_ignores_rate_drift():
