@@ -588,8 +588,21 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
                 r"(?i)\s+(?:Interest|Reference)\s+Rate\b.*$", "", regex=True).str.strip()
     # A filer that carries the industry inside the member text (dispatch.industry_from_identifier_re):
     # read it where the row has none yet.
-    from pipeline.staging_bdc import industry_from_identifier_patterns
+    from pipeline.staging_bdc import industry_from_identifier_patterns, industry_label_gics_maps
     member_patterns = industry_from_identifier_patterns() if {"cik", "bdc_investment_identifier"} <= set(combined.columns) else {}
+    # A filer's own label map (dispatch.industry_label_gics), for that filer's rows only.
+    fund_maps = industry_label_gics_maps() if "cik" in combined.columns else {}
+
+    def map_labels(label: pd.Series, rows: pd.Series) -> pd.Series:
+        mapping = printed_industry_gics(label[rows].unique().tolist())
+        out = label.map({key: value[0] for key, value in mapping.items()}).astype(object)
+        for fund, table in fund_maps.items():
+            mine = rows & (_normalize_cik_series(combined["cik"]) == fund)
+            if mine.any():
+                own = label[mine].map(lambda text: table.get(" ".join(str(text).lower().split())))
+                own = own[own.notna()]
+                out.loc[own.index] = own
+        return out
 
     def fill_from_member() -> None:
         for cik, pattern in member_patterns.items():
@@ -602,7 +615,9 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
                 # Loan', an issuer). Such a catch is rare for the fund and maps to nothing; a real industry
                 # the table does not know yet is frequent. Rare and unmapped is not taken.
                 counts = found[found != ""].value_counts()
-                known = printed_industry_gics(counts.index.tolist())
+                known = set(printed_industry_gics(counts.index.tolist()))
+                own = fund_maps.get(cik, {})
+                known |= {text for text in counts.index if " ".join(str(text).lower().split()) in own}
                 rare = {text for text, n in counts.items() if n < 20 and text not in known}
                 found = found.where(~found.isin(rare), "")
                 combined.loc[found[found != ""].index, "extracted_industry"] = found[found != ""]
@@ -614,8 +629,7 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
         rows &= combined["index_classification"].astype("string").fillna("") != "CASH"
     if not rows.any():
         return combined
-    mapping = printed_industry_gics(label[rows].unique().tolist())
-    mapped = label.map({key: value[0] for key, value in mapping.items()})
+    mapped = map_labels(label, rows)
     # Where most of a filing's labels map to nothing, the labels are not industries: in the Apollo
     # layout the heading above a row is the company group ('Paladone', 'FingerPaint Marketing'), the
     # industry sits one heading higher. Such a filing's unmapped labels are withdrawn, not published.
@@ -635,8 +649,7 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
             rows = (combined["source"] == "bdc") & (label != "")
             if "index_classification" in combined.columns:
                 rows &= combined["index_classification"].astype("string").fillna("") != "CASH"
-            mapping = printed_industry_gics(label[rows].unique().tolist())
-            mapped = label.map({key: value[0] for key, value in mapping.items()})
+            mapped = map_labels(label, rows)
     take = rows & mapped.notna()
     changed = take & (combined["gics_sub_industry"].astype("string").fillna("") != mapped.fillna(""))
     combined.loc[take, "gics_sub_industry"] = mapped[take]

@@ -1,0 +1,2228 @@
+{
+ "cik": "0001646614",
+ "label": "splf",
+ "before": "spon3",
+ "investigator_id": "fund-agent-silverpoint-2026-10-19",
+ "shared_code": true,
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 50,
+   "why": "hierarchy regex covers member prefixes '1st Lien Revolver', '2nd Lien Delayed Draw Term Loan', 'Subordinated and Unsecured Bonds', 'Senior Secured Debt', the 'US-GAAP Investment, Identifier [Axis] >' label, '31st' typo and 'United Sates'; issuer strip of cash prefixes and ' Instrument Money Market Fund'; 17 issuer row corrections from the printed line; 2 names with superscript footnote residue (OLA, BayMark) and 5 unrestricted money-market rows set to the printed name"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 15,
+   "why": "instrument read for the newly parsed member prefixes; 4 corrections (Wesco equity printed 'Common Equities'; three 2024-03-31 equity rows lose the 'Maturity Date' text)"
+  },
+  {
+   "column": "pct_of_net_assets",
+   "rows": 260,
+   "why": "not caused by this run: 0.0 -> -0.0 (signed zero) on undrawn lines, already present in the untouched spla build of current code against spon3"
+  },
+  {
+   "column": "shares_held",
+   "rows": 30,
+   "why": "units_tagged_as_par for 12 filings (equity unit counts tagged with the principal concept); 4 unit counts set by correction (Monomoy x3, Wesco); SP-CREH '70 %' withdrawn"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 10,
+   "why": "principal withdrawn on 5 equity / trust rows whose tagged principal is a unit count or an ownership percent"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 30,
+   "why": "21 rows corrected to the printed currency (16 printed foreign tagged USD; Inspired EUR -> GBP; Wesco, BayMark foreign -> USD); 5 equity rows withdrawn"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 95,
+   "why": "principal_usd_reference fred_h10 converts foreign par at H.10; 21 corrected rows at the build's H.10 rate; 5 withdrawn"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 95,
+   "why": "as principal_amount_usd"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 95,
+   "why": "missing_reference_fx -> reference_fx; corrected rows reference_fx / source_usd; 5 withdrawn"
+  },
+  {
+   "column": "asset_category",
+   "rows": 6,
+   "why": "5 equity / trust rows classed LOAN set to the fund's class for the same instrument (row corrections)"
+  },
+  {
+   "column": "index_classification",
+   "rows": 6,
+   "why": "as asset_category"
+  },
+  {
+   "column": "asset_class",
+   "rows": 6,
+   "why": "as asset_category"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 50,
+   "why": "39 fixed-coupon loans: coupon no longer published as spread (row corrections); 3 more fixed-coupon rows at 2024-12-31 (Wesco, Takko GmbH, Takko Sarl) whose member carried 'S+'"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 115,
+   "why": "reference_rate_columns ['Rate'] + legend codes: the printed code replaces date guesses (C -> CDOR, P -> PRIME, BBSY, SONIA, and three member-code mismatches where the page prints S+ or P+); 39 fixed-coupon loans withdrawn"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 120,
+   "why": "as reference_rate_type (ixbrl_field_status; blank on the fixed-coupon rows)"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 50,
+   "why": "39 fixed-coupon loans Floating -> Fixed (row corrections); 3 more fixed-coupon rows at 2024-12-31 (Wesco, Takko GmbH, Takko Sarl) whose member carried 'S+'"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 5,
+   "why": "3 equity rows at 2024-03-31: acquisition date labelled 'Maturity Date' in the member withdrawn"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 5,
+   "why": "follows maturity_date on the same 3 rows"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 30,
+   "why": "shares_held:from_principal_tag on the units_tagged_as_par rows"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 170,
+   "why": "rows touched by the context-keyed row corrections"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 1900,
+   "why": "industry_from_identifier_re reads the printed industry from the member ('Industry X Rate ...'; 2023 form ', X, Rate'); 2 rows (Wesco 2023-12-31, Gibson 2025-09-30) set to the printed heading where the member's industry differs"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 1400,
+   "why": "printed industry mapped (owner ruling 2026-10-11) through the fund's own label map (new opt-in wrapper key dispatch.industry_label_gics, 14 labels; Staples Retail -> Food Retail), not the shared alias table"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 1150,
+   "why": "printed industry mapped (owner ruling 2026-10-11) through the fund's own label map (new opt-in wrapper key dispatch.industry_label_gics, 14 labels; Staples Retail -> Food Retail), not the shared alias table"
+  },
+  {
+   "column": "position_key",
+   "rows": 10,
+   "why": "issuer / instrument text changed on the newly parsed members"
+  },
+  {
+   "column": "position_id",
+   "rows": 260,
+   "why": "follows the key and issuer changes, and the 2026-06-30 quarter"
+  },
+  {
+   "column": "cost",
+   "rows": 50,
+   "why": "47 unfunded lines in the 2023 quarters printed with a bracketed (negative) cost and tagged unsigned: printed sign set by row correction"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 50,
+   "why": "follows cost on the same 47 rows"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 25,
+   "why": "21 SP-CREH loan rows 2023-12-31 to 2026-06-30: rate set to the tagged and printed us-gaap:InvestmentInterestRate (the 5.00 cap had been published)"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 25,
+   "why": "follows interest_rate on the same 21 rows"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 420,
+   "why": "follows issuer_name (name changes above, money-market rows)"
+  },
+  {
+   "column": "entity_id",
+   "rows": 600,
+   "why": "follows canonical_name"
+  }
+ ],
+ "rows_added": 201,
+ "rows_added_why": "the 2026-06-30 quarter (0001193125-26-337440), added by --add-quarter; no row was added inside an existing quarter",
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Industry read from the member text (dispatch.industry_from_identifier_re) and mapped through the fund's own label map, new opt-in wrapper key dispatch.industry_label_gics (14 labels; pipeline/staging_bdc.py industry_label_gics_maps, pipeline/unified_holdings.py _apply_printed_industry, schema, 3 tests incl. another fund unchanged). The 14 shared aliases added earlier in this run were removed from pipeline/gics_mapping.py (ruling: 'Power Generation' would relabel Ares 148 rows and 0001918712 19 rows). industry_coverage 13 -> 0.",
+   "kind": "shared_code",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-218912",
+     "text": "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (17) Maturity Date"
+    },
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Allentown LLC(7)(9) 1st Lien Term Loan Healthcare Equipment & Supplies S+ 6.10 %, 1.00 % Floor 11.43 4/22/2022 4/22/2027 11,569,721 11,404,128 11,641,729"
+    }
+   ]
+  },
+  {
+   "what": "Member prefixes not in the hierarchy regex ('1st Lien Revolver <country>', '2nd Lien Delayed Draw Term Loan', 'Subordinated and Unsecured Bonds', 'Senior Secured Debt', the 'US-GAAP Investment, Identifier [Axis] >' label, the '31st Lien' and 'United Sates' typos) and issuer_name_strip_re for the cash rows' 'Cash Equivalents ..., ' prefix and ' Instrument Money Market Fund' suffix and the Takko '1st Lien Term Loan, ' prefix. issuer_name_printed 11 -> 0, C201/C206/C203 10 -> 0.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "NP Gaming Acquisition LLC(7)(8) 1st Lien Term Loan Gaming & Entertainment S+ 6.50 %, 1.00 % Floor 10.17 4/21/2026 4/21/2031 14,297,413 13,951,476 13,939,978"
+    },
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Cash Equivalents and Restricted Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class(8)(9) Money Market Fund 61,754,179"
+    }
+   ]
+  },
+  {
+   "what": "17 issuer names from the printed line where the member names another borrower or is cut (NP Gaming revolver member 'Resistance Holdings Inc'; Takko Sarl member 'Takko Fashion GmbH'; 'PaperWorks' member 'Paper & Packaging'; 'GI Inotiv', 'Mad Engine Global, LL', 'Takko Fashion Sar', doubled A Stucki name, SP-CREH, TH Liquidating Trust and UserZoom members with no issuer, 4 money-market name typos).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "NP Gaming Acquisition LLC(6)(7)(12)(13) 1st Lien Revolver Gaming & Entertainment S+ 6.50 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 4/21/2026 4/21/2031 742,723 ( 17,846 ) ( 18,568 )"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Takko Fashion Sarl(10)(20)(32) Subordinated Unsecured Debt Specialty Retail 15.00 % 15.00 8/8/2023 10/15/2030 EUR 3,576,263 3,909,351 8,036,760"
+    }
+   ]
+  },
+  {
+   "what": "Foreign par converted at H.10 (source_encodings.principal_usd_reference fred_h10): 70 foreign-tagged debt rows (87 rows reference_fx in all with the corrections; none left missing_reference_fx). FX01 12 -> 0.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Artisan Bidco Inc(7) 1st Lien Term Loan Technology E+ 7.00 %, 1.00 % Floor 10.54 11/7/2023 11/7/2029 EUR 7,118,991 7,447,434 7,787,322"
+    }
+   ]
+  },
+  {
+   "what": "21 rows whose principal unit tag disagrees with the printed currency mark: 16 printed C$, EUR, GBP and tagged USD (all foreign rows of 2023-09-30, Neon, Artisan, Takko, WeTransfer in later quarters) get the printed currency and the build's H.10 rate; Inspired 2023-12-31 printed GBP tagged EUR; Wesco 2025-03-31 and BayMark 2025-09-30 printed in dollars tagged EUR.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Dye & Durham Corp(7)(10) Software & Services C+ 5.75 %, 0.75 % Floor 11.26 12/3/2021 12/3/2027 C$ 4,728,658 3,650,956 3,417,541"
+    },
+    {
+     "accession": "0001193125-25-277009",
+     "text": "BayMark Health Services Inc(7)(27)(30) 2nd Lien Term Loan Healthcare Providers & Services S+ 8.76 %, 1.00 % Floor 12.76 % 6/10/2021 6/11/2028 $ 3,333,333 $ 3,307,639 $ 1,962,525"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Inspired Entertainment Inc(10) Senior Secured Bonds Technology 7.88 % 7.88 5/13/2021 6/1/2026 GBP 4,268,000 5,894,323 5,111,091"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts tagged with the principal concept published as unit counts (source_encodings.units_tagged_as_par, 12 filings 2023-06-30 to 2026-03-31); 4 rows whose class was corrected after that step get the printed count by correction and lose the principal; SP-CREH '70 %' (ownership) and TH Liquidating Trust '14 %' withdrawn. C04 9 -> 6 (the 6 left are the SP-CREH ownership row).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Beauty Health Co(26) Common Equities Consumer Services N/A N/A 7/7/2023 N/A 913,460 - 1,224,036"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Monomoy Capital Partners IV-Titan, L.P. (Waupaca Foundry)(7)(10)(25) Partnership Interests Industrial Products & Services N/A N/A 2/23/2024 N/A 313,577 313,577 410,472"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "SP-CREH 19 Highline LLC(7)(25)(33) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,564,654"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "TH Liquidating Trust(7)(25)(33) Trust Interest Other N/A N/A 12/7/2019 12/6/2026 14 % 3,153,474 969,500"
+    }
+   ]
+  },
+  {
+   "what": "NAV per share (6 period-ends) and shares outstanding (2024-12-31) from each period's own filing (new fund highlights wrapper data/overrides/fund_highlights_wrappers/0001646614.json); company facts had kept the 10-K 2025 split-adjusted restatement beside unadjusted share counts. nav_identity, E04, F11 12 -> 0.",
+   "kind": "wrapper",
+   "quarters": [
+    "2021-12-31",
+    "2022-12-31",
+    "2023-12-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Net asset value, end of period $ 14.69 $ 14.75 Shares outstanding, end of period 36,907,451 36,907,451"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Net asset value per share $ 14.76 $ 14.64"
+    },
+    {
+     "accession": "0001193125-26-114381",
+     "text": "implement a one-for-two reverse share split of the Funds common shares, which was effective as of the close of business on December 26, 2025"
+    },
+    {
+     "accession": "0001193125-26-114381",
+     "text": "Net asset value, end of period $ 27.96 $ 29.53 $ 29.29 $ 28.77 $ 30.55 Shares outstanding, end of period 21,240,388 18,453,726 18,453,726"
+    }
+   ]
+  },
+  {
+   "what": "5 equity / trust rows classed LOAN set to the class the fund's same instrument has in its other quarters (Monomoy x3, Wesco common equity 2025-03-31, TH Liquidating Trust N/A interest 2024-12-31). X02 5 -> 2.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Wesco Aircraft Holdings Inc(7)(26)(34) Common Equities Industrial Products & Services N/A N/A 1/31/2025 N/A 195,566 7,459,569 7,396,306"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Monomoy Capital Partners IV-Titan, L.P. (Waupaca Foundry)(7)(10)(25) Partnership Interests Industrial Products & Services N/A N/A 2/23/2024 N/A 313,577 313,577 410,472"
+    }
+   ]
+  },
+  {
+   "what": "Reference rate from the printed 'Rate' column with the filer's legend codes (reference_rate_columns ['Rate'], reference_rate_codes S, L, E, C, P, SONIA, BBSY): 70 rows from a date guess or a wrong member code to the printed benchmark (C 20 -> CDOR, P 33 -> PRIME, BBSY 3, SONIA 14).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-218912",
+     "text": "Variable rate investments bear interest at a rate that may be determined by reference to either Secured Overnight Financing Rate (SOFR or S), Euro Interbank Offer Rate (Euribor or E), Canadian Dollar Offered Rate (CDOR or C), Prime Rate (P), Sterling Overnight Index Average (\"SONIA\") or the Australian Dollar Bank Bill Swap Bid Rate (\"BBSY\")"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "TH Liquidating Trust(7)(14)(31) Trust Interest Other P+ 10.50 %, 0.50 % Floor 19.00 12/7/2019 12/6/2024 $ 473,766 473,766 466,903"
+    }
+   ]
+  },
+  {
+   "what": "42 fixed-coupon loans (printed 'Rate' column holds the coupon, no code) no longer published as floating with a guessed SOFR/LIBOR and the coupon as spread (row corrections, each with its printed line). The 3 at 2024-12-31 (Wesco 10.50, Takko GmbH 10.25, Takko Sarl 15.00) carried 'S+' in the member, which the first scan required to be absent; the scan now selects every floating row whose spread equals its rate and reads its printed line.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Universal Entertainment Corp(10) Senior Secured Bonds Gaming & Leisure 8.75 % 8.75 10/29/2020 12/11/2024 20,298,000 21,814,213 21,878,098"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Wesco Aircraft Holdings Inc(12)(28) Senior Secured Bonds Industrial Products & Services 10.50 % 10.50 3/28/2022 11/15/2026 17,332,429 15,976,413 13,865,943 2.54"
+    }
+   ]
+  },
+  {
+   "what": "3 equity rows at 2024-03-31 whose member labels the acquisition date 'Maturity Date': maturity withdrawn, instrument as printed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Beauty Health Co(22) Common Equities Consumer Services N/A N/A 7/7/2023 N/A 913,460 - 4,015,205"
+    }
+   ]
+  },
+  {
+   "what": "Cost sign: 47 unfunded lines in the 2023 quarters (12 / 15 / 20) print a bracketed cost and are tagged without a sign; printed sign set by row correction. Published cost ex cash now equals the filed total in all three quarters (residue 559,476 / 647,674 / 813,304 = twice the cost of those rows). bracketed_unsigned_values not used (D-210 window defect). 2026 residues (15.5K, 13.8K) checked: no bracketed cost published positive there.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(19)(20) Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 19,323 )"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    }
+   ]
+  },
+  {
+   "what": "SP-CREH 19 Highline loans: interest_rate published 5.00 (the cap) on 21 rows 2023-12-31 to 2026-06-30. Mechanism: the filer tags the cap with the custom concept ck0001646614:InvestmentInterestRateCap ahead of us-gaap:InvestmentInterestRate in each context; the extractor's concept match (pipeline/bdc_filings.py CONCEPT_MAP 'investmentinterestrate' substring) takes the cap as interest_rate and keeps the first fact. Fixed by row correction to the tagged and printed rate (7.00 / 6.53 / 6.38 / 5.84 / 5.67 / 5.62).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "SP-CREH 19 Highline LLC(7)(33) 1st Lien Term Loan Multi-Family S+ 2.00 %, 3.00 % Floor , 5.00 % Cap 6.53 6/28/2021 7/1/2025 7,640,570 7,640,570 7,639,424"
+    }
+   ]
+  },
+  {
+   "what": "Printed industry where the member's differs: Wesco senior secured bonds 2023-12-31 (member 'Healthcare Providers & Services') and Gibson Brands 2025-09-30 (member 'Consumer Products') take the printed heading.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Wesco Aircraft Holdings Inc(12)(26) Senior Secured Bonds Industrial Products & Services 10.50 % 10.50 3/28/2022 11/15/2026 17,332,429 15,976,413 15,794,176"
+    },
+    {
+     "accession": "0001193125-25-277009",
+     "text": "Gibson Brands Inc(7)(9) 1st Lien Term Loan Consumer Brands S+ 5.26 %, 0.75 % Floor 9.58 2/16/2024 8/11/2028 4,881,284 4,735,975 4,705,571"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names with superscript footnote residue (OLA 2024-09-30, BayMark 2026-06-30; searched every name of the fund for non-ASCII characters, these two were the only ones) and the unrestricted money-market row 2025-06-30 to 2026-06-30 set to the printed names.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-124813",
+     "text": "OLA Netherlands BV (aka Olacabs / ANI Tech)(7)(8)(10) 1st Lien Term Loan Technology S+ 6.35 %, 0.75 %"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "fund_financials F23 2025-06-30",
+   "hypotheses": [
+    "Percent mis-scaled on schedule rows: rejected, the published percents sum to 171.41, the printed total.",
+    "Cash row percent not published: confirmed, the money-market row prints 19.57 and is tagged ck0001646614:MoneyMarketFundsPercentOfNetAssets 0.1957, a filer concept the extractor does not read; published pct is blank (also 2025-09-30 to 2026-06-30)."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "industry-printed-in-member-not-read",
+   "what": "The filer's industry column is carried in the member ('... Instrument 1st Lien Term Loan Industry Power Generation Rate S+...'); before this run 1,848 of 1,856 rows had no filer industry and the public sector partition used name-keyed guesses. Fixed by the wrapper pattern and 14 aliases; 4 labels left unmapped on purpose (Multi-Family 36 rows, Other 30, Government Services 20, Airline & Airport Services 19). Round three: mapped through the fund's own label map (dispatch.industry_label_gics) instead of shared aliases; the reviewer found 2 rows whose member industry differs from the printed heading (Wesco 2023-12-31, Gibson 2025-09-30), fixed by correction.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1148.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A published extracted_industry that differs from the industry printed on the row's line (member versus page), and blank industry where the member carries 'Industry <label>'.",
+   "quote": {
+    "accession": "0001193125-26-218912",
+    "text": "Portfolio Company (1) Instrument Industry Rate (2) Interest Rate Original Acquisition Date (17) Maturity Date"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "industry_coverage counts blanks only; it cannot see a member industry that differs from the page.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "foreign-par-tagged-with-the-usd-unit",
+   "what": "16 debt rows print a currency mark (C$, EUR, GBP) and tag the principal in USD, so principal_amount_usd held the local amount; 3 rows the other way (Wesco, BayMark printed in dollars tagged EUR; Inspired printed GBP tagged EUR). No rule saw the USD-tagged ones (FX01 only tests foreign-tagged rows). Fixed by row corrections; a later filing with the same slip is not caught.",
+   "field": "principal_amount_usd",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 95.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Principal unit tag differs from the currency mark printed before the par on the row's printed line.",
+   "quote": {
+    "accession": "0000950170-23-060746",
+    "text": "Dye & Durham Corp(7)(10) Software & Services C+ 5.75 %, 0.75 % Floor 11.26 12/3/2021 12/3/2027 C$ 4,728,658 3,650,956 3,417,541"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "FX01 tests only foreign-tagged rows; a USD-tagged foreign par is invisible to it.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "nav-per-share-restated-after-reverse-split",
+   "what": "A one-for-two reverse split (2025-12-26) made the 10-K 2025 restate NAV per share and shares for earlier year-ends; company facts kept the restated NAV beside unadjusted share counts at five period-ends, and a consistent restated pair at 2024-12-31 (29.53 x 18,453,726) that no identity check can see. Fixed from each period's filing. The published NAV series now steps from 14.17 to 27.96 at the split.",
+   "field": "nav_per_share",
+   "quarters": [
+    "2021-12-31",
+    "2022-12-31",
+    "2023-12-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "NAV per share or shares outstanding at a period-end differ from the figure printed in that period's own filing.",
+   "quote": {
+    "accession": "0001193125-26-114381",
+    "text": "Net asset value, end of period $ 27.96 $ 29.53 $ 29.29 $ 28.77 $ 30.55 Shares outstanding, end of period 21,240,388 18,453,726 18,453,726"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "nav_identity caught only the quarters where one figure was restated and the other not; 2024-12-31 passed while both were restated.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "nav-series-break-at-share-split",
+   "what": "Left: NAV per share is published as printed in each period (14.17 at 2025-09-30, 27.96 at 2025-12-31); any return or growth computed from consecutive NAV per share across the split is wrong by a factor of two.",
+   "field": "nav_per_share",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Quarter-on-quarter NAV per share change above 40 pct with shares outstanding moving inversely by the same factor flags a split for the returns step.",
+   "quote": {
+    "accession": "0001193125-26-114381",
+    "text": "implement a one-for-two reverse share split of the Funds common shares, which was effective as of the close of business on December 26, 2025"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule looks at NAV per share continuity.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "ownership-percent-read-as-unit-count",
+   "what": "units_tagged_as_par took SP-CREH's tagged 70 (printed '70 %', ownership) as a unit count at 2024-12-31, and TH Liquidating Trust's tagged 14 ('14 %') stayed as principal. Both withdrawn by correction.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 2.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A unit count or principal equal to the percent printed in the same cell with a '%' sign.",
+   "quote": {
+    "accession": "0000950170-25-039264",
+    "text": "SP-CREH 19 Highline LLC(7)(25)(33) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,564,654"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "unit-count rules compare numbers, not the '%' mark beside them.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "acquisition-date-published-as-maturity",
+   "what": "At 2024-03-31 the member labels three equity rows' acquisition date 'Maturity Date'; maturity 2020-06-25 to 2024-02-23 was published on Beauty Health, Impala RGIS and Monomoy equity. Withdrawn.",
+   "field": "maturity_date",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 13.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "An equity row with a maturity date where its printed maturity cell is N/A.",
+   "quote": {
+    "accession": "0000950170-24-056367",
+    "text": "Beauty Health Co(22) Common Equities Consumer Services N/A N/A 7/7/2023 N/A 913,460 - 4,015,205"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "maturity_not_past is a quarter-share weak check and did not fire at 2024-03-31.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-with-guessed-benchmark",
+   "what": "42 fixed-coupon loans and bonds (Universal Entertainment, Wesco, Takko, Inspired, Avianca, Amerijet, Toll Northeast) were published Floating with a date-guessed LIBOR/SOFR and basis_spread equal to the coupon. Fixed by row corrections. Three more at 2024-12-31 had 'S+' in the member while the page prints a bare coupon (Wesco 10.50, Takko GmbH 10.25, Takko Sarl 15.00); fixed.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": 61.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "basis_spread equal to interest_rate on a Floating row whose printed rate column carries no reference-rate code, whatever the member text says.",
+   "quote": {
+    "accession": "0000950170-24-056367",
+    "text": "Universal Entertainment Corp(10) Senior Secured Bonds Gaming & Leisure 8.75 % 8.75 10/29/2020 12/11/2024 20,298,000 21,814,213 21,878,098"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares spread with rate; the shared staging step makes the guess.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-report-date",
+   "what": "Before reference_rate_columns, codes C, P, BBSY were published as a date-guessed SOFR/LIBOR and SONIA blank (70 rows); 3 rows had a member code differing from the printed one (TH Liquidating Trust member L+, page P+; Gateway member C+, page S+; Allentown revolver member P+, page S+). Fixed by the wrapper setting.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 120.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Inferred benchmark on a row whose member or printed line carries a reference-rate code.",
+   "quote": {
+    "accession": "0000950170-24-034390",
+    "text": "TH Liquidating Trust(7)(14)(31) Trust Interest Other P+ 10.50 %, 0.50 % Floor 19.00 12/7/2019 12/6/2024 $ 473,766 473,766 466,903"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the guessed benchmark with the printed code.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "what": "Members naming another borrower than the printed line: NP Gaming revolver ('Resistance Holdings Inc'), Takko Sarl subordinated debt ('Takko Fashion GmbH'), PaperWorks ('Paper & Packaging Industries'). Fixed by context corrections.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 28.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "issuer name differs from the printed name on the row (page rule 1).",
+   "quote": {
+    "accession": "0001193125-26-337440",
+    "text": "NP Gaming Acquisition LLC(6)(7)(12)(13) 1st Lien Revolver Gaming & Entertainment S+ 6.50 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 4/21/2026 4/21/2031 742,723 ( 17,846 ) ( 18,568 )"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed caught NP Gaming and PaperWorks; Takko Sarl was found by the currency read.",
+    "reference": "pipeline/candidate_rules.py issuer_name_differs_from_page"
+   }
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "what": "Left: rows printed '( S+ 3.75 % PIK)' (Circle Graphics, National Dentex DDTL, Wesco senior secured, Inotiv 2026-06-30) publish pik_rate = the margin (3.75) while the whole floating coupon (7.75) is paid in kind. The rate convention for 'S+x% PIK' is a cohort question (HPS has the same form); not changed here.",
+   "field": "pik_rate",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 18.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "pik_rate equal to basis_spread on a row whose printed PIK part names the reference rate ('S+ x % PIK').",
+   "quote": {
+    "accession": "0001193125-26-337440",
+    "text": "Circle Graphics Inc(7) 1st Lien Term Loan E-Commerce S+ 3.25 %, 4.00 % Floor 7.25 6/30/2025"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed (page rule 3) compares the figure, which matches the printed 3.75; the meaning differs.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "money-market-percent-on-filer-concept-not-read",
+   "what": "Parked: from 2025-06-30 the money-market rows tag their percent with ck0001646614:MoneyMarketFundsPercentOfNetAssets; the extractor does not read it, so the cash rows publish no percent (19.57 printed at 2025-06-30). F23 2025-06-30 is the only finding it raises.",
+   "field": "pct_of_net_assets",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 105.9,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "A printed percent on a published cash row with pct_of_net_assets blank.",
+   "quote": {
+    "accession": "0000950170-25-107200",
+    "text": "Cash Equivalents and Restricted Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class(8)(9) Money Market Fund 105,914,964 105,914,964 105,914,964 19.57"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "F23 fired at 2025-06-30, where the cash row is large enough to move the sum.",
+    "reference": "validate_fund_financials F23"
+   }
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "what": "Left: Delos Living LLC warrants (printed 'Warrants', 2 units) published EQUITY_COMMON; the cohort has no warrant class yet (D-207 item 3, pending).",
+   "field": "asset_category",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.1,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "An equity row whose printed instrument is 'Warrant(s)' classed as common equity.",
+   "quote": {
+    "accession": "0001193125-26-114381",
+    "text": "Delos Living LLC(7)(28) Warrants Real Estate Development & Management N/A N/A 10/9/2025 N/A 2 106,385 138,299"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Shared decision already open (D-207 item 3, warrant asset class).",
+    "reference": "docs/investigations/v05_decision_log.md D-207 item 3"
+   }
+  },
+  {
+   "observation_key": "printed-negative-cost-tagged-unsigned",
+   "what": "Fixed: the 2023 residues (559.5K / 647.7K / 813.3K) were 47 unfunded lines whose cost is printed in brackets and tagged without a sign, published positive; printed sign set by correction, cost ex cash now equals the filed total. Left: 2026-03-31 and 2026-06-30 cost residues of 15.5K and 13.8K, not this cause, not located.",
+   "field": "cost",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A cost printed in brackets on the row's line published positive; and published cost ex cash differing from the filed cost of investments by more than 0.05 pct.",
+   "quote": {
+    "accession": "0000950170-23-042115",
+    "text": "A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(19)(20) Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 19,323 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "cost_conservation's 5 pct band cannot see a 0.06 pct residue, and no rule compares a printed bracket with the published sign.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "interest-rate-cap-concept-read-as-rate",
+   "what": "SP-CREH 19 Highline loans published interest_rate 5.00 (the cap) on 21 rows from 2023-12-31: the custom concept ck0001646614:InvestmentInterestRateCap matches the extractor's 'investmentinterestrate' substring and is filed before the real rate, and the first fact wins. Fixed for this fund by correction. Shared mechanism left: the cached filings of one other filer (1280784) also carry an InterestRateCap concept; a CONCEPT_MAP entry for '...ratecap' ahead of the generic match needs a cohort measurement first.",
+   "field": "interest_rate",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 18.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A published interest_rate equal to a cap printed on the row ('x % Cap') or taken from a concept whose name contains 'Cap'.",
+   "quote": {
+    "accession": "0000950170-25-039264",
+    "text": "SP-CREH 19 Highline LLC(7)(33) 1st Lien Term Loan Multi-Family S+ 2.00 %, 3.00 % Floor , 5.00 % Cap 6.53 6/28/2021 7/1/2025 7,640,570 7,640,570 7,639,424"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "src_facts records the concept; no rule reads it for a cap.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "superscript-footnote-marks-in-issuer-name",
+   "what": "Two members carry the printed footnote marks as superscript characters ('OLA Netherlands BV (aka Olacabs / ANI Tech)' with three, 'BayMark Health Services Inc' with a closing one); published in the names. Fixed by correction. The gate's ASCII normalisation hides them.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 8.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "An issuer name containing superscript digits or parentheses (U+2070 to U+209F).",
+   "quote": {
+    "accession": "0000950170-24-124813",
+    "text": "OLA Netherlands BV (aka Olacabs / ANI Tech)(7)(8)(10) 1st Lien Term Loan Technology S+ 6.35 %, 0.75 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed and the gate's name shapes compare normalised text.",
+    "reference": "suggested_check"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_adf6636d2d94",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-034390/C_c680cd43-e0ae-4677-bcd3-4e7c8503232f"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-034390/C_c680cd43-e0ae-4677-bcd3-4e7c8503232f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total United States of America 1st Lien/Secured Loans 619,308,102 614,516,645 115.73"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Current-period subtotal broken: rejected, the failing rollup's period is 2022-12-31.",
+    "Comparative leaves keyed differently: confirmed, 87 children matched of the 2022 schedule."
+   ],
+   "next_action": "Proposal under a01-subtotal-of-the-comparative-schedule."
+  },
+  {
+   "finding_id": "RVQ_BLK_f8ad0700716b",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2023-06-30|A04|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2023-06-30|A04|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund 84,630,043 84,630,043 84,630,043 15.92 Total Cash Equivalents 84,630,043"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 847.4M = filed 847.4M.",
+    "Cash rows in the numerator: confirmed, 932.0M - 847.4M = 84.6M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_0c1a42270eff",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2023-09-30|A04|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2023-09-30|A04|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %"
+    },
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 862.9M = filed 862.9M.",
+    "Cash rows in the numerator: confirmed, 955.0M - 862.9M = 92.1M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_c20f0528364c",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2023-12-31|A04|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2023-12-31|A04|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 101,331,843 $ 101,331,843 18.75 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 876.2M = filed 876.2M.",
+    "Cash rows in the numerator: confirmed, 977.5M - 876.2M = 101.3M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_d08d42251311",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2024-03-31|A04|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2024-03-31|A04|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Total Investments, March 31, 2024 $ 925,175,902 $ 917,425,138 168.55 %"
+    },
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 75,425,559 $ 75,425,559 13.86 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 917.4M = filed 917.4M.",
+    "Cash rows in the numerator: confirmed, 992.9M - 917.4M = 75.4M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_5bc144452126",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2024-06-30|A04|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2024-06-30|A04|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095339",
+     "text": "Total Investments, June 30, 2024 $ 952,451,230 $ 931,158,200 171.54 %"
+    },
+    {
+     "accession": "0000950170-24-095339",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 47,089,692 $ 47,089,692 8.67 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 931.2M = filed 931.2M.",
+    "Cash rows in the numerator: confirmed, 978.2M - 931.2M = 47.1M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_a0c34b9c7bb1",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2024-09-30|A04|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2024-09-30|A04|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Total Investments, September 30, 2024 $ 934,886,747 $ 909,124,118 167.66 %"
+    },
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 61,754,179 $ 61,754,179 11.39 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 909.1M = filed 909.1M.",
+    "Cash rows in the numerator: confirmed, 970.9M - 909.1M = 61.8M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_2e459f29910b",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2024-12-31|A04|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2024-12-31|A04|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Total Investments, December 31, 2024 $ 919,774,172 $ 891,045,657 163.51 %"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 82,522,423 $ 82,522,423 15.14 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 891.0M = filed 891.0M.",
+    "Cash rows in the numerator: confirmed, 973.6M - 891.0M = 82.5M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_605be1cc82f1",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2025-03-31|A04|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2025-03-31|A04|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Total Investments, March 31, 2025 $ 922,634,556 $ 891,256,739 164.48 %"
+    },
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 78,134,546 $ 78,134,546 14.41 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 891.3M = filed 891.3M.",
+    "Cash rows in the numerator: confirmed, 969.4M - 891.3M = 78.1M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_d8327889cad0",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2025-06-30|A04|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2025-06-30|A04|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %"
+    },
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 105,914,964 $ 105,914,964 19.57 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 927.7M = filed 927.7M.",
+    "Cash rows in the numerator: confirmed, 1033.6M - 927.7M = 105.9M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_REV_ab344dc5d302",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-042115/C_8d06bd95-9837-4b8d-835b-6d8af9fb72a1",
+     "0000950170-23-042115/C_a3d493a8-ed30-4571-b337-fc3989c5d9bd",
+     "0000950170-23-042115/C_585d2261-577b-4e6f-b3b6-fa50a3d74f69",
+     "0000950170-23-042115/C_3604b674-c7d6-407c-aa52-3a5dfc41c0a1",
+     "0000950170-23-042115/C_febd4ff0-330e-41aa-a1a3-1852f54d78db",
+     "0000950170-23-042115/C_c115983b-eed0-44bc-bed1-866d1b1ae014",
+     "0000950170-23-042115/C_eb71b4ff-e365-4617-ab39-a796089bc0f5",
+     "0000950170-23-042115/C_52a72d2b-b5bc-4365-afe7-7afd116abc3b",
+     "0000950170-23-042115/C_a4bf33c7-d3b0-4f3e-922a-78f129571e2a",
+     "0000950170-23-042115/C_534efe64-a57f-4dd8-a3e6-83368978f2be",
+     "0000950170-23-042115/C_9532ad46-5cc2-4e06-8ac9-2f142c0dd204",
+     "0000950170-23-042115/C_a72f37b7-a011-42cc-8258-40f3cf6e6357"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-042115/C_8d06bd95-9837-4b8d-835b-6d8af9fb72a1",
+     "0000950170-23-042115/C_a3d493a8-ed30-4571-b337-fc3989c5d9bd",
+     "0000950170-23-042115/C_585d2261-577b-4e6f-b3b6-fa50a3d74f69",
+     "0000950170-23-042115/C_3604b674-c7d6-407c-aa52-3a5dfc41c0a1",
+     "0000950170-23-042115/C_febd4ff0-330e-41aa-a1a3-1852f54d78db",
+     "0000950170-23-042115/C_c115983b-eed0-44bc-bed1-866d1b1ae014",
+     "0000950170-23-042115/C_eb71b4ff-e365-4617-ab39-a796089bc0f5",
+     "0000950170-23-042115/C_52a72d2b-b5bc-4365-afe7-7afd116abc3b",
+     "0000950170-23-042115/C_a4bf33c7-d3b0-4f3e-922a-78f129571e2a",
+     "0000950170-23-042115/C_534efe64-a57f-4dd8-a3e6-83368978f2be",
+     "0000950170-23-042115/C_9532ad46-5cc2-4e06-8ac9-2f142c0dd204",
+     "0000950170-23-042115/C_a72f37b7-a011-42cc-8258-40f3cf6e6357"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "SP-CREH 19 Highline LLC Equities 4,037,355 805,079 - ( 2,471,569 ) - 2,370,865 - - 70 %"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A current position whose value was lost: rejected, no current-period context carries a fair value or cost fact (concepts: InvestmentAcquisitionDate, UnrealizedGainLossOnInvestments).",
+    "Comparative-period leaves counted: confirmed, 7 contexts with period 2022-12-31 (concepts: InvestmentAcquisitionDate, InvestmentMaturityDate, UnrealizedGainLossOnInvestments)."
+   ],
+   "next_action": "Proposal under b01-contexts-without-value-carry-no-position-value."
+  },
+  {
+   "finding_id": "RVQ_REV_d8db9a1dcaf6",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-060746/C_cc450391-0a1f-43fc-93d1-7d515f7ae2ba",
+     "0000950170-23-060746/C_27a54a72-4201-48ca-a5c0-32c7f83ac995",
+     "0000950170-23-060746/C_54cd8455-a369-4a99-b440-e310118e3742",
+     "0000950170-23-060746/C_8031fadb-0c1e-45d7-836e-aaaefcf6accd",
+     "0000950170-23-060746/C_5fafabc3-3eb1-43ba-ae6b-f4b898308239",
+     "0000950170-23-060746/C_f1d3cc9d-9d79-4a99-81a4-3c259f622c67",
+     "0000950170-23-060746/C_1d699428-cd57-4790-bed8-72ec0f5d2257",
+     "0000950170-23-060746/C_f191d160-9ed8-42cc-a5cb-dcdf268eb98c",
+     "0000950170-23-060746/C_7c17b710-c43c-4aba-b860-5b321ab280dc",
+     "0000950170-23-060746/C_ae3fb5bd-2d5e-43af-a900-8c6c81d2135c",
+     "0000950170-23-060746/C_95ab2c13-6851-49a4-80ab-a9c912c2708b",
+     "0000950170-23-060746/C_f637c0a7-739f-472d-8b41-a2558d1d0c39",
+     "0000950170-23-060746/C_565a9edd-55bc-4875-ab94-279e2619fd38"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-060746/C_cc450391-0a1f-43fc-93d1-7d515f7ae2ba",
+     "0000950170-23-060746/C_27a54a72-4201-48ca-a5c0-32c7f83ac995",
+     "0000950170-23-060746/C_54cd8455-a369-4a99-b440-e310118e3742",
+     "0000950170-23-060746/C_8031fadb-0c1e-45d7-836e-aaaefcf6accd",
+     "0000950170-23-060746/C_5fafabc3-3eb1-43ba-ae6b-f4b898308239",
+     "0000950170-23-060746/C_f1d3cc9d-9d79-4a99-81a4-3c259f622c67",
+     "0000950170-23-060746/C_1d699428-cd57-4790-bed8-72ec0f5d2257",
+     "0000950170-23-060746/C_f191d160-9ed8-42cc-a5cb-dcdf268eb98c",
+     "0000950170-23-060746/C_7c17b710-c43c-4aba-b860-5b321ab280dc",
+     "0000950170-23-060746/C_ae3fb5bd-2d5e-43af-a900-8c6c81d2135c",
+     "0000950170-23-060746/C_95ab2c13-6851-49a4-80ab-a9c912c2708b",
+     "0000950170-23-060746/C_f637c0a7-739f-472d-8b41-a2558d1d0c39",
+     "0000950170-23-060746/C_565a9edd-55bc-4875-ab94-279e2619fd38"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "SP-CREH 19 Highline LLC Equities 4,037,355 967,993 - ( 3,074,083 ) - 1,931,265 - - 70 %"
+    },
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A current position whose value was lost: rejected, no current-period context carries a fair value or cost fact (concepts: InvestmentAcquisitionDate, InvestmentMaturityDate, UnrealizedGainLossOnInvestments).",
+    "Comparative-period leaves counted: confirmed, 7 contexts with period 2022-12-31 (concepts: InvestmentAcquisitionDate, InvestmentMaturityDate, UnrealizedGainLossOnInvestments)."
+   ],
+   "next_action": "Proposal under b01-contexts-without-value-carry-no-position-value."
+  },
+  {
+   "finding_id": "RVQ_REV_9b99652f112c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-034390/C_5754f1a9-27f0-47d2-975f-e0d44b685a56",
+     "0000950170-24-034390/C_6cbae2a7-e08c-4ee7-a247-eeff29e81eff",
+     "0000950170-24-034390/C_f130463e-eacc-4e0b-8bbc-c187b68c9260",
+     "0000950170-24-034390/C_1b7f5d79-2165-453f-b536-d9ea11b54713",
+     "0000950170-24-034390/C_475a67b0-08a4-46e6-b52f-7ffa72c79b81",
+     "0000950170-24-034390/C_64b2a209-8ba1-4b82-898c-2914ff31d1c4",
+     "0000950170-24-034390/C_1478f888-7d1d-4c70-ac26-b1e5f33062e1",
+     "0000950170-24-034390/C_181c3b4c-7c8b-4275-9f82-577e7e33a137",
+     "0000950170-24-034390/C_c140f2c3-21af-4059-a6cf-c161e37421cb",
+     "0000950170-24-034390/C_64598cf7-4d10-4447-aeb6-a2cb1f2e858d",
+     "0000950170-24-034390/C_bacb89ab-82f2-4791-b6ac-1db21a38ce89",
+     "0000950170-24-034390/C_a42d0dcf-bb4a-4367-8f00-fa3fd0631be6",
+     "0000950170-24-034390/C_ec88f495-1db1-49e6-855b-615e7acbbec4",
+     "0000950170-24-034390/C_4d66f63b-c05b-4715-a156-61a467bac59b",
+     "0000950170-24-034390/C_a94ad87b-f9aa-4ebd-8e1e-8e365dcf210c",
+     "0000950170-24-034390/C_37d0a993-bbe9-49c7-81f7-deefce1e1c1f",
+     "0000950170-24-034390/C_5dc5e10c-3406-4a1b-a861-83848c57a3cb",
+     "0000950170-24-034390/C_8903945c-150f-4350-abe0-a839e3598288",
+     "0000950170-24-034390/C_cb874ac4-7c9a-4171-86ed-1607ac7906ff",
+     "0000950170-24-034390/C_a6789ed7-18a3-47d5-9179-ee0c36553bec",
+     "0000950170-24-034390/C_572eef14-80a3-4331-ba49-065c7ab1eabc",
+     "0000950170-24-034390/C_6e5051b1-de58-40f5-8669-8ddc5ba5fa3a",
+     "0000950170-24-034390/C_9daff55f-252d-4f1f-a31b-5f6edb8c2128",
+     "0000950170-24-034390/C_43ffe4f1-ee14-4098-a9d4-2c4b1b5a0066",
+     "0000950170-24-034390/C_a5f8b7ec-c929-4216-9f33-e401ee95bbdf"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-034390/C_5754f1a9-27f0-47d2-975f-e0d44b685a56",
+     "0000950170-24-034390/C_6cbae2a7-e08c-4ee7-a247-eeff29e81eff",
+     "0000950170-24-034390/C_f130463e-eacc-4e0b-8bbc-c187b68c9260",
+     "0000950170-24-034390/C_1b7f5d79-2165-453f-b536-d9ea11b54713",
+     "0000950170-24-034390/C_475a67b0-08a4-46e6-b52f-7ffa72c79b81",
+     "0000950170-24-034390/C_64b2a209-8ba1-4b82-898c-2914ff31d1c4",
+     "0000950170-24-034390/C_1478f888-7d1d-4c70-ac26-b1e5f33062e1",
+     "0000950170-24-034390/C_181c3b4c-7c8b-4275-9f82-577e7e33a137",
+     "0000950170-24-034390/C_c140f2c3-21af-4059-a6cf-c161e37421cb",
+     "0000950170-24-034390/C_64598cf7-4d10-4447-aeb6-a2cb1f2e858d",
+     "0000950170-24-034390/C_bacb89ab-82f2-4791-b6ac-1db21a38ce89",
+     "0000950170-24-034390/C_a42d0dcf-bb4a-4367-8f00-fa3fd0631be6",
+     "0000950170-24-034390/C_ec88f495-1db1-49e6-855b-615e7acbbec4",
+     "0000950170-24-034390/C_4d66f63b-c05b-4715-a156-61a467bac59b",
+     "0000950170-24-034390/C_a94ad87b-f9aa-4ebd-8e1e-8e365dcf210c",
+     "0000950170-24-034390/C_37d0a993-bbe9-49c7-81f7-deefce1e1c1f",
+     "0000950170-24-034390/C_5dc5e10c-3406-4a1b-a861-83848c57a3cb",
+     "0000950170-24-034390/C_8903945c-150f-4350-abe0-a839e3598288",
+     "0000950170-24-034390/C_cb874ac4-7c9a-4171-86ed-1607ac7906ff",
+     "0000950170-24-034390/C_a6789ed7-18a3-47d5-9179-ee0c36553bec",
+     "0000950170-24-034390/C_572eef14-80a3-4331-ba49-065c7ab1eabc",
+     "0000950170-24-034390/C_6e5051b1-de58-40f5-8669-8ddc5ba5fa3a",
+     "0000950170-24-034390/C_9daff55f-252d-4f1f-a31b-5f6edb8c2128",
+     "0000950170-24-034390/C_43ffe4f1-ee14-4098-a9d4-2c4b1b5a0066",
+     "0000950170-24-034390/C_a5f8b7ec-c929-4216-9f33-e401ee95bbdf"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "TH Liquidating Trust(6)(7)(23)(31) Trust Interest Other N/A N/A 10/9/2020 12/6/2024 14 % - - -"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A current position whose value was lost: rejected, no current-period context carries a fair value or cost fact (concepts: InvestmentAcquisitionDate, InvestmentBasisSpreadVariableRate, InvestmentMaturityDate, UnrealizedGainLossOnInvestments).",
+    "Comparative-period leaves counted: confirmed, 13 contexts with period 2022-12-31 (concepts: InvestmentAcquisitionDate, InvestmentBasisSpreadVariableRate, InvestmentInterestRate, InvestmentInterestRateFloor, InvestmentMaturityDate, InvestmentOwnedAtCost, InvestmentOwnedBalancePrincipalAmount, InvestmentOwnedPercentOfNetAssets, UnrealizedGainLossOnInvestments)."
+   ],
+   "next_action": "Proposal under b01-contexts-without-value-carry-no-position-value."
+  },
+  {
+   "finding_id": "RVQ_REV_25de8a3c7ed6",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-042115/C_0c71c9ca-e7a1-4f3a-a934-3b616c5282e1",
+     "0000950170-23-042115/C_774298a6-f1f7-47b0-a184-1d73877e46bf",
+     "0000950170-23-042115/C_58e40f98-1240-49eb-8163-cb13ea4c803c"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-042115/C_0c71c9ca-e7a1-4f3a-a934-3b616c5282e1",
+     "0000950170-23-042115/C_774298a6-f1f7-47b0-a184-1d73877e46bf",
+     "0000950170-23-042115/C_58e40f98-1240-49eb-8163-cb13ea4c803c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "SP-CREH 19 Highline LLC(7)(18) Multi-Family N/A N/A 6/28/2021 N/A 70 % 7,445,836 2,370,865"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Unit count printed but not extracted: rejected for SP-CREH, the cell prints '70 %'.",
+    "Other equity rows lack counts: rejected, Impala RGIS Holdings LLC, LCP Edge Holdco, LLC carry the printed count."
+   ],
+   "next_action": "Proposal under c04-equity-interest-printed-without-unit-count."
+  },
+  {
+   "finding_id": "RVQ_REV_f6a595655377",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-060746/C_934523c8-30a4-422a-a6b2-ebf4ffe1e33e",
+     "0000950170-23-060746/C_ddd7529d-20d2-4ed3-80c6-b673fd5ab503",
+     "0000950170-23-060746/C_cdf012c6-62cd-44e1-af41-2557645d4a66"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-060746/C_934523c8-30a4-422a-a6b2-ebf4ffe1e33e",
+     "0000950170-23-060746/C_ddd7529d-20d2-4ed3-80c6-b673fd5ab503",
+     "0000950170-23-060746/C_cdf012c6-62cd-44e1-af41-2557645d4a66"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "SP-CREH 19 Highline LLC(7)(19) Multi-Family N/A N/A 6/28/2021 N/A 70 % 7,608,751 1,931,265"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Unit count printed but not extracted: rejected for SP-CREH, the cell prints '70 %'.",
+    "Other equity rows lack counts: rejected, Beauty Health Co, Impala RGIS Holdings LLC carry the printed count."
+   ],
+   "next_action": "Proposal under c04-equity-interest-printed-without-unit-count."
+  },
+  {
+   "finding_id": "RVQ_REV_20d0ea1426df",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-034390/C_d62e3282-7486-4072-afbe-32755d194404",
+     "0000950170-24-034390/C_e97e3416-31ac-4dd9-8ce1-0287dfa50a59",
+     "0000950170-24-034390/C_546364dc-c548-4783-ae4f-0d651c9b903d"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-034390/C_d62e3282-7486-4072-afbe-32755d194404",
+     "0000950170-24-034390/C_e97e3416-31ac-4dd9-8ce1-0287dfa50a59",
+     "0000950170-24-034390/C_546364dc-c548-4783-ae4f-0d651c9b903d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 7,613,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Unit count printed but not extracted: rejected for SP-CREH, the cell prints '70 %'.",
+    "Other equity rows lack counts: rejected, Beauty Health Co, Impala RGIS Holdings LLC carry the printed count."
+   ],
+   "next_action": "Proposal under c04-equity-interest-printed-without-unit-count."
+  },
+  {
+   "finding_id": "RVQ_REV_8f3ecb6e71c6",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-095339/C_1801016c-061d-4ba6-b7f5-cec2a3534423",
+     "0000950170-24-095339/C_290879d9-f2c5-478e-a147-c81dc12b0a7b",
+     "0000950170-24-095339/C_bcef8f0e-c98c-495b-a1cf-cc5141c54d89"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-095339/C_1801016c-061d-4ba6-b7f5-cec2a3534423",
+     "0000950170-24-095339/C_290879d9-f2c5-478e-a147-c81dc12b0a7b",
+     "0000950170-24-095339/C_bcef8f0e-c98c-495b-a1cf-cc5141c54d89"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095339",
+     "text": "SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 4,330,900"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Unit count printed but not extracted: rejected for SP-CREH, the cell prints '70 %'.",
+    "Other equity rows lack counts: rejected, Beauty Health Co, Monomoy Capital Partners IV-Ti carry the printed count."
+   ],
+   "next_action": "Proposal under c04-equity-interest-printed-without-unit-count."
+  },
+  {
+   "finding_id": "RVQ_REV_fc223df78b5d",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-124813/C_1068b5ce-4859-4db4-a237-cab1644ffb30",
+     "0000950170-24-124813/C_acd9bc8a-ef3d-40f9-9e62-b4ad01e508e8",
+     "0000950170-24-124813/C_fac84725-4a5e-4b00-8b71-9cb406dafa68"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-124813/C_1068b5ce-4859-4db4-a237-cab1644ffb30",
+     "0000950170-24-124813/C_acd9bc8a-ef3d-40f9-9e62-b4ad01e508e8",
+     "0000950170-24-124813/C_fac84725-4a5e-4b00-8b71-9cb406dafa68"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124813",
+     "text": "SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,724,450"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Unit count printed but not extracted: rejected for SP-CREH, the cell prints '70 %'.",
+    "Other equity rows lack counts: rejected, Beauty Health Co, Monomoy Capital Partners IV-Ti carry the printed count."
+   ],
+   "next_action": "Proposal under c04-equity-interest-printed-without-unit-count."
+  },
+  {
+   "finding_id": "RVQ_REV_44a5aefd18f1",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-039264/C_3d9fb335-cbea-4319-a633-3cc4de98c3a1",
+     "0000950170-25-039264/C_fb76301e-2299-4274-ad87-a3c8745afc8e",
+     "0000950170-25-039264/C_bbdb5184-c90f-4869-88bf-d3318c8fba12"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-039264/C_3d9fb335-cbea-4319-a633-3cc4de98c3a1",
+     "0000950170-25-039264/C_fb76301e-2299-4274-ad87-a3c8745afc8e",
+     "0000950170-25-039264/C_bbdb5184-c90f-4869-88bf-d3318c8fba12"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "SP-CREH 19 Highline LLC(7)(25)(33) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,564,654"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Unit count printed but not extracted: rejected for SP-CREH, the cell prints '70 %'.",
+    "Other equity rows lack counts: rejected, Beauty Health Co, Monomoy Capital Partners IV-Ti carry the printed count."
+   ],
+   "next_action": "Proposal under c04-equity-interest-printed-without-unit-count."
+  },
+  {
+   "finding_id": "RVQ_REV_3ae455c128b3",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-042115/C_6379100e-7731-45a6-aa6a-77d51926da03",
+     "0000950170-23-042115/C_04ea2588-e4c1-4608-8b80-a23afd5fc73d",
+     "0000950170-23-042115/C_129147f6-89b2-4189-a747-9b9f59b36fa4",
+     "0000950170-23-042115/C_dae7f093-d00d-4bc7-969f-13da8b51abd8",
+     "0000950170-23-042115/C_a56cfd47-601c-4eae-b24d-4fd946b930b4",
+     "0000950170-23-042115/C_426de556-aa31-4371-88f6-7990c111a9f6",
+     "0000950170-23-042115/C_13bae484-3746-4d78-9275-523a41513742",
+     "0000950170-23-042115/C_acee5c54-954e-4222-a950-19fbaef838aa",
+     "0000950170-23-042115/C_70d3d515-c752-402c-aba6-a9c09f33c0bf",
+     "0000950170-23-042115/C_437f9685-decd-4b99-ad62-e95257c3f314",
+     "0000950170-23-042115/C_4ef5a608-b945-4801-99b0-1c049dfc52b7",
+     "0000950170-23-042115/C_7857de48-e031-4aaf-809b-a2fe467077ba"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-042115/C_6379100e-7731-45a6-aa6a-77d51926da03",
+     "0000950170-23-042115/C_04ea2588-e4c1-4608-8b80-a23afd5fc73d",
+     "0000950170-23-042115/C_129147f6-89b2-4189-a747-9b9f59b36fa4",
+     "0000950170-23-042115/C_dae7f093-d00d-4bc7-969f-13da8b51abd8",
+     "0000950170-23-042115/C_a56cfd47-601c-4eae-b24d-4fd946b930b4",
+     "0000950170-23-042115/C_426de556-aa31-4371-88f6-7990c111a9f6",
+     "0000950170-23-042115/C_13bae484-3746-4d78-9275-523a41513742",
+     "0000950170-23-042115/C_acee5c54-954e-4222-a950-19fbaef838aa",
+     "0000950170-23-042115/C_70d3d515-c752-402c-aba6-a9c09f33c0bf",
+     "0000950170-23-042115/C_437f9685-decd-4b99-ad62-e95257c3f314",
+     "0000950170-23-042115/C_4ef5a608-b945-4801-99b0-1c049dfc52b7",
+     "0000950170-23-042115/C_7857de48-e031-4aaf-809b-a2fe467077ba"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(19)(20) Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 19,323 )"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Sign error introduced by the correction: rejected, each corrected cost is printed in brackets; published cost ex cash now equals the filed total.",
+    "Funded loan with negative cost: rejected, every row is an unfunded line ('on unfunded')."
+   ],
+   "next_action": "Proposal under undrawn-line-negative-cost-from-unamortized-fees (owner-accepted reason R-C107; the check cannot see the printed sign)."
+  },
+  {
+   "finding_id": "RVQ_REV_79ae1f6ffab5",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-060746/C_7e27964f-5c7e-4db1-b76a-a3978cc9ee93",
+     "0000950170-23-060746/C_6af96b7f-35c3-428d-a74f-85038d8cb46a",
+     "0000950170-23-060746/C_6faf7f0c-2fc7-40bf-b76d-c44142ddd8b8",
+     "0000950170-23-060746/C_3bf02e17-db40-4ce9-aec1-af5a13fd3413",
+     "0000950170-23-060746/C_f0061e61-904b-4b7b-92fe-bfb1fc7bb241",
+     "0000950170-23-060746/C_cf61fd07-dce3-4ee1-a02f-34f1c4079f5a",
+     "0000950170-23-060746/C_78fec619-c6e6-4fd7-8745-da41e7af5b6a",
+     "0000950170-23-060746/C_77f7d3f8-d5d4-4770-b704-2c6a951c5430",
+     "0000950170-23-060746/C_10cd0cff-8000-4cd0-a45b-2b66da2e7d63",
+     "0000950170-23-060746/C_ebe89428-e3fd-47dc-a988-d441fd2430f6",
+     "0000950170-23-060746/C_59382e81-130d-49cc-9ff4-ebfff96c378c",
+     "0000950170-23-060746/C_5a5717a0-8349-4550-9bc2-a5c1200c41a1",
+     "0000950170-23-060746/C_5c27b041-5c7e-44a5-9eee-060475a2e5e6",
+     "0000950170-23-060746/C_03707239-5f55-4ad9-b04e-593ce239de72",
+     "0000950170-23-060746/C_9bcbc89e-d4c3-4f7a-bbe3-5b0147d85e54"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-060746/C_7e27964f-5c7e-4db1-b76a-a3978cc9ee93",
+     "0000950170-23-060746/C_6af96b7f-35c3-428d-a74f-85038d8cb46a",
+     "0000950170-23-060746/C_6faf7f0c-2fc7-40bf-b76d-c44142ddd8b8",
+     "0000950170-23-060746/C_3bf02e17-db40-4ce9-aec1-af5a13fd3413",
+     "0000950170-23-060746/C_f0061e61-904b-4b7b-92fe-bfb1fc7bb241",
+     "0000950170-23-060746/C_cf61fd07-dce3-4ee1-a02f-34f1c4079f5a",
+     "0000950170-23-060746/C_78fec619-c6e6-4fd7-8745-da41e7af5b6a",
+     "0000950170-23-060746/C_77f7d3f8-d5d4-4770-b704-2c6a951c5430",
+     "0000950170-23-060746/C_10cd0cff-8000-4cd0-a45b-2b66da2e7d63",
+     "0000950170-23-060746/C_ebe89428-e3fd-47dc-a988-d441fd2430f6",
+     "0000950170-23-060746/C_59382e81-130d-49cc-9ff4-ebfff96c378c",
+     "0000950170-23-060746/C_5a5717a0-8349-4550-9bc2-a5c1200c41a1",
+     "0000950170-23-060746/C_5c27b041-5c7e-44a5-9eee-060475a2e5e6",
+     "0000950170-23-060746/C_03707239-5f55-4ad9-b04e-593ce239de72",
+     "0000950170-23-060746/C_9bcbc89e-d4c3-4f7a-bbe3-5b0147d85e54"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(20)(21) Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 18,216 )"
+    },
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Sign error introduced by the correction: rejected, each corrected cost is printed in brackets; published cost ex cash now equals the filed total.",
+    "Funded loan with negative cost: rejected, every row is an unfunded line ('on unfunded')."
+   ],
+   "next_action": "Proposal under undrawn-line-negative-cost-from-unamortized-fees (owner-accepted reason R-C107; the check cannot see the printed sign)."
+  },
+  {
+   "finding_id": "RVQ_REV_0859985ceca2",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-034390/C_82568baf-38de-4c89-9957-34fb2cd59d09",
+     "0000950170-24-034390/C_9ce1b7c1-4c25-46e3-925c-c35fd0c84bde",
+     "0000950170-24-034390/C_70de3f53-5f2b-4484-8de4-dc73b5792a8f",
+     "0000950170-24-034390/C_bc5cf0bd-a3ea-4834-bfee-d3c714609c8c",
+     "0000950170-24-034390/C_f420f0d2-600f-437d-b5e5-4e1ed25e1a30",
+     "0000950170-24-034390/C_50652c5c-829d-471a-b8df-3c5f4d3f1c8e",
+     "0000950170-24-034390/C_d4a5f6bf-038f-4a78-8bdb-79e43b872972",
+     "0000950170-24-034390/C_aaa68f4b-d3f7-4ddc-ac28-44a11dddbbc5",
+     "0000950170-24-034390/C_9f855a13-af7c-45fd-adce-d0355d8352d9",
+     "0000950170-24-034390/C_13efc019-41bf-4940-ba62-c0ce6c0f8d21",
+     "0000950170-24-034390/C_674f0137-31cf-4cdc-8162-4d3911304866",
+     "0000950170-24-034390/C_03548a45-38b4-472c-9283-22c7f9053193",
+     "0000950170-24-034390/C_c717c475-da05-4b78-8d84-f327c6cbd7ec",
+     "0000950170-24-034390/C_faf585ac-4e9d-4da8-8755-1882f328d924",
+     "0000950170-24-034390/C_3f4e7ab2-e122-4295-849d-c744f6ced856",
+     "0000950170-24-034390/C_2accc5f1-07f3-4739-87d1-b31811b7f620",
+     "0000950170-24-034390/C_331fd6ca-45da-48ab-a356-c6a0985f2098",
+     "0000950170-24-034390/C_57fd6251-c5b1-497d-b15e-f8cdabd1ec75",
+     "0000950170-24-034390/C_108f5db9-204f-43ee-abbb-fa2c44adb2f1",
+     "0000950170-24-034390/C_01de37b9-5984-40b7-aca4-9a308819258c"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-034390/C_82568baf-38de-4c89-9957-34fb2cd59d09",
+     "0000950170-24-034390/C_9ce1b7c1-4c25-46e3-925c-c35fd0c84bde",
+     "0000950170-24-034390/C_70de3f53-5f2b-4484-8de4-dc73b5792a8f",
+     "0000950170-24-034390/C_bc5cf0bd-a3ea-4834-bfee-d3c714609c8c",
+     "0000950170-24-034390/C_f420f0d2-600f-437d-b5e5-4e1ed25e1a30",
+     "0000950170-24-034390/C_50652c5c-829d-471a-b8df-3c5f4d3f1c8e",
+     "0000950170-24-034390/C_d4a5f6bf-038f-4a78-8bdb-79e43b872972",
+     "0000950170-24-034390/C_aaa68f4b-d3f7-4ddc-ac28-44a11dddbbc5",
+     "0000950170-24-034390/C_9f855a13-af7c-45fd-adce-d0355d8352d9",
+     "0000950170-24-034390/C_13efc019-41bf-4940-ba62-c0ce6c0f8d21",
+     "0000950170-24-034390/C_674f0137-31cf-4cdc-8162-4d3911304866",
+     "0000950170-24-034390/C_03548a45-38b4-472c-9283-22c7f9053193",
+     "0000950170-24-034390/C_c717c475-da05-4b78-8d84-f327c6cbd7ec",
+     "0000950170-24-034390/C_faf585ac-4e9d-4da8-8755-1882f328d924",
+     "0000950170-24-034390/C_3f4e7ab2-e122-4295-849d-c744f6ced856",
+     "0000950170-24-034390/C_2accc5f1-07f3-4739-87d1-b31811b7f620",
+     "0000950170-24-034390/C_331fd6ca-45da-48ab-a356-c6a0985f2098",
+     "0000950170-24-034390/C_57fd6251-c5b1-497d-b15e-f8cdabd1ec75",
+     "0000950170-24-034390/C_108f5db9-204f-43ee-abbb-fa2c44adb2f1",
+     "0000950170-24-034390/C_01de37b9-5984-40b7-aca4-9a308819258c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(24)(25) 1st Lien Revolver Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 17,109 )"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Sign error introduced by the correction: rejected, each corrected cost is printed in brackets; published cost ex cash now equals the filed total.",
+    "Funded loan with negative cost: rejected, every row is an unfunded line ('on unfunded')."
+   ],
+   "next_action": "Proposal under undrawn-line-negative-cost-from-unamortized-fees (owner-accepted reason R-C107; the check cannot see the printed sign)."
+  },
+  {
+   "finding_id": "RVQ_BLK_aa5938679cda",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2023-06-30|E01|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2023-06-30|E01|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund 84,630,043 84,630,043 84,630,043 15.92 Total Cash Equivalents 84,630,043"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 847.4M = filed 847.4M.",
+    "Cash rows in the numerator: confirmed, 932.0M - 847.4M = 84.6M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_55fa0a331edb",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2023-09-30|E01|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2023-09-30|E01|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %"
+    },
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 862.9M = filed 862.9M.",
+    "Cash rows in the numerator: confirmed, 955.0M - 862.9M = 92.1M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_6357826fe9be",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2023-12-31|E01|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2023-12-31|E01|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 101,331,843 $ 101,331,843 18.75 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 876.2M = filed 876.2M.",
+    "Cash rows in the numerator: confirmed, 977.5M - 876.2M = 101.3M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_bf1a4ac90172",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2024-03-31|E01|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2024-03-31|E01|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Total Investments, March 31, 2024 $ 925,175,902 $ 917,425,138 168.55 %"
+    },
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 75,425,559 $ 75,425,559 13.86 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 917.4M = filed 917.4M.",
+    "Cash rows in the numerator: confirmed, 992.9M - 917.4M = 75.4M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_c7341e48acfa",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2024-06-30|E01|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2024-06-30|E01|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095339",
+     "text": "Total Investments, June 30, 2024 $ 952,451,230 $ 931,158,200 171.54 %"
+    },
+    {
+     "accession": "0000950170-24-095339",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 47,089,692 $ 47,089,692 8.67 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 931.2M = filed 931.2M.",
+    "Cash rows in the numerator: confirmed, 978.2M - 931.2M = 47.1M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_98c6ab47f154",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2024-09-30|E01|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2024-09-30|E01|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Total Investments, September 30, 2024 $ 934,886,747 $ 909,124,118 167.66 %"
+    },
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 61,754,179 $ 61,754,179 11.39 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 909.1M = filed 909.1M.",
+    "Cash rows in the numerator: confirmed, 970.9M - 909.1M = 61.8M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_d201091c98eb",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2024-12-31|E01|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2024-12-31|E01|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Total Investments, December 31, 2024 $ 919,774,172 $ 891,045,657 163.51 %"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 82,522,423 $ 82,522,423 15.14 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 891.0M = filed 891.0M.",
+    "Cash rows in the numerator: confirmed, 973.6M - 891.0M = 82.5M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_c951337ab0f3",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2025-03-31|E01|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2025-03-31|E01|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Total Investments, March 31, 2025 $ 922,634,556 $ 891,256,739 164.48 %"
+    },
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 78,134,546 $ 78,134,546 14.41 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 891.3M = filed 891.3M.",
+    "Cash rows in the numerator: confirmed, 969.4M - 891.3M = 78.1M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_BLK_2d0b61b43f51",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2025-06-30|E01|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001646614|2025-06-30|E01|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %"
+    },
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 105,914,964 $ 105,914,964 19.57 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion of non-position rows: rejected, ex-cash published 927.7M = filed 927.7M.",
+    "Cash rows in the numerator: confirmed, 1033.6M - 927.7M = 105.9M, the printed cash total."
+   ],
+   "next_action": "Proposal under oracle-holdings-with-cash-rows-against-ex-cash-investments-total (as proposed for three other funds)."
+  },
+  {
+   "finding_id": "RVQ_REV_f256cb20fc81",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2025-06-30|F23|pct_sum_vs_fv_over_net_assets",
+     "0000950170-25-107200/C_79e494be-7157-4596-a320-2d95ca5d39ed"
+    ],
+    "reviewed_rows": [
+     "0001646614|2025-06-30|F23|pct_sum_vs_fv_over_net_assets",
+     "0000950170-25-107200/C_79e494be-7157-4596-a320-2d95ca5d39ed"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Cash Equivalents and Restricted Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class(8)(9) Money Market Fund 105,914,964 105,914,964 105,914,964 19.57"
+    },
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Percent mis-scaled on schedule rows: rejected, the published percents sum to 171.41, the printed total.",
+    "Cash row percent not published: confirmed, the money-market row prints 19.57 and is tagged ck0001646614:MoneyMarketFundsPercentOfNetAssets 0.1957, a filer concept the extractor does not read; published pct is blank (also 2025-09-30 to 2026-06-30)."
+   ],
+   "next_action": "Parked: needs a per-filer percent concept (new opt-in wrapper key read by the extractor, source reconciliation and re-verifier), not available within this run's build budget."
+  },
+  {
+   "finding_id": "RVQ_REV_4699af922dc7",
+   "coverage": {
+    "affected_rows": [
+     "0001646614|2026-06-30|F27|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001646614|2026-06-30|F27|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Total Investments, June 30, 2026 $ 1,204,832,727 $ 1,148,378,501 180.14 %"
+    },
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Total expenses (9) 8.53 % 8.12 % Net investment income (3)(9) 12.07 % 11.82 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income overstated: rejected, net investment income 17,639,412 is the printed figure.",
+    "Leverage: confirmed, investments 180.14 pct of net assets."
+   ],
+   "next_action": "Proposal under f27-income-over-net-assets-of-a-levered-fund."
+  },
+  {
+   "finding_id": "RVQ_REV_0ada77b2e47d",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-218912/C_b7f8c66f-922b-4e72-9bb2-d565b6e25aa0"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-218912/C_b7f8c66f-922b-4e72-9bb2-d565b6e25aa0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-218912",
+     "text": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Rate not tagged: rejected, InvestmentInterestRate 0.115 is tagged.",
+    "Cash leg plus PIK (23.5 all-in): rejected as implausible for a fixed loan printed 11.50.",
+    "Toggle loan: plausible, not stated on the page."
+   ],
+   "next_action": "Proposal under convention-printed-pik-above-printed-rate (as for two other funds)."
+  },
+  {
+   "finding_id": "RVQ_REV_08642aa62221",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-337440/C_012c60cc-531e-486b-a9c2-5475cd92c5a1"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-337440/C_012c60cc-531e-486b-a9c2-5475cd92c5a1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Rate not tagged: rejected, InvestmentInterestRate 0.115 is tagged.",
+    "Cash leg plus PIK (23.5 all-in): rejected as implausible for a fixed loan printed 11.50.",
+    "Toggle loan: plausible, not stated on the page."
+   ],
+   "next_action": "Proposal under convention-printed-pik-above-printed-rate (as for two other funds)."
+  },
+  {
+   "finding_id": "RVQ_REV_a3010fc62a7f",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-218912/C_b7f8c66f-922b-4e72-9bb2-d565b6e25aa0"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-218912/C_b7f8c66f-922b-4e72-9bb2-d565b6e25aa0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-218912",
+     "text": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Rate not tagged: rejected, InvestmentInterestRate 0.115 is tagged.",
+    "Cash leg plus PIK (23.5 all-in): rejected as implausible for a fixed loan printed 11.50.",
+    "Toggle loan: plausible, not stated on the page."
+   ],
+   "next_action": "Proposal under convention-printed-pik-above-printed-rate (as for two other funds)."
+  },
+  {
+   "finding_id": "RVQ_REV_0176e44269ba",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-337440/C_012c60cc-531e-486b-a9c2-5475cd92c5a1"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-337440/C_012c60cc-531e-486b-a9c2-5475cd92c5a1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Rate not tagged: rejected, InvestmentInterestRate 0.115 is tagged.",
+    "Cash leg plus PIK (23.5 all-in): rejected as implausible for a fixed loan printed 11.50.",
+    "Toggle loan: plausible, not stated on the page."
+   ],
+   "next_action": "Proposal under convention-printed-pik-above-printed-rate (as for two other funds)."
+  },
+  {
+   "finding_id": "RVQ_REV_2890c8fbaba8",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-042115/C_209c74b0-a288-4b99-9582-3cacb1442915"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-042115/C_209c74b0-a288-4b99-9582-3cacb1442915"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Odlum Data Lender, LLC(7)(10)(21) Telecommunications L+ 6.35 %, 10.72 6/23/2021 2/1/2023 15,581,221 15,581,221 13,758,218"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Acquisition date read as maturity: rejected, the printed maturity column shows the same date.",
+    "Comparative-period row: rejected, the row is on the current schedule."
+   ],
+   "next_action": "Proposal under maturity-not-past-loan-held-past-printed-maturity."
+  },
+  {
+   "finding_id": "RVQ_REV_3171d95b547f",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-337440/C_beade257-78f2-4ecf-8bf5-0bbc61c187c7",
+     "0001193125-26-337440/C_f660915d-219d-4ec3-9aa5-cffe847fdabb"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-337440/C_beade257-78f2-4ecf-8bf5-0bbc61c187c7",
+     "0001193125-26-337440/C_f660915d-219d-4ec3-9aa5-cffe847fdabb"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "BEL USA LLC(7)(11)(14)(16) 1st Lien Term Loan E-Commerce S+ 9.15 %, 2.50 % Floor 12.82 12/13/2018 6/2/2026 8,821,421 8,719,947 1,036,271"
+    },
+    {
+     "accession": "0001193125-26-337440",
+     "text": "BEL USA LLC(7) 1st Lien Term Loan E-Commerce S+ 9.15 %, 2.50 % Floor 12.82 1/13/2026 6/2/2026 223,491 223,491 221,378"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Acquisition date read as maturity: rejected, the printed maturity column shows the same date.",
+    "Comparative-period row: rejected, the row is on the current schedule."
+   ],
+   "next_action": "Proposal under maturity-not-past-loan-held-past-printed-maturity."
+  }
+ ],
+ "tests_run": [
+  "tests/test_printed_industry.py + tests/test_gics_mapping.py: 111 passed (3 tests for industry_label_gics, incl. another fund unchanged and a non-GICS target refused; the 2 shared-alias tests replaced)",
+  "orchestrator's tests/test_filer_cash_and_subtotal_keys.py not run by the fund agent (orchestrator's file)"
+ ],
+ "first_reading": "Untouched build spla (current code, with 2026-06-30): 188 findings, 155 outstanding (152 after reasons accepted by check). Against spon3 (143/116): +45 from the five page rules (industry_coverage 13, issuer_name_printed 11) and the 2026-06-30 quarter. Rebuild sple after SPL-R1..R3: 72 findings, 36 outstanding (spld 123/87); 51 findings stopped firing (cash anchor 30, cost 8, source subtotals 10, E07 3). No published value changed between spld and sple. Final build splf after the sple review rulings: 75 findings, 39 outstanding; +3 C107 (2023 unfunded lines now carry their printed negative cost; the accepted check reads the unsigned tag), proposed.",
+ "not_done": [
+  "A04 x9 and E01 x9 still fire: the oracle has no cash anchor; proposals kept (oracle-holdings-with-cash-rows-against-ex-cash-investments-total).",
+  "F23 2025-06-30 parked: money-market percent on a filer concept not read (shared extractor change needed).",
+  "pik_rate on 'S+x% PIK' rows left as the margin (cohort convention question).",
+  "Only rows found by the printed-currency scan were corrected; rows whose printed line the scan could not match to a fair value (about 1,890 rows matched no foreign mark, most of them dollar loans) were not each read.",
+  "Pre-2022 fund-level figures: 2020-12-31 NAV 30.00 not read (outside the ledger window); 2021-12-31 corrected from the 10-K 2023 highlights.",
+  "Non-accrual flags, acquisition dates and percent of net assets on schedule rows were not compared row by row with the page.",
+  "Two accidental bare 'python -' commands with an empty heredoc were started during this run (PIDs 2060 and 10888); both were killed by process id with no other effect.",
+  "2026-03-31 / 2026-06-30 cost residues (15.5K / 13.8K) not located (no bracketed cost published positive there).",
+  "Shared CONCEPT_MAP fix for '...InterestRateCap' not made (cohort measurement needed; 1280784 also carries the concept).",
+  "A third accidental bare 'python -' (PID 9948) was started in round three and killed by process id."
+ ],
+ "request_resolution_history": [
+  {
+   "request_id": "SPL-R1",
+   "classification": "verification_bug",
+   "resolution": "implemented",
+   "response": "Verified on the filings and implemented by the orchestrator as an opt-in wrapper key in data/overrides/bdc_xbrl_wrappers/0001646614.json source_encodings: cash_rows_include_concepts ['RestrictedCashEquivalents'] (conservation cash anchor and GAV/F20). Code: pipeline/source_encodings.py, pipeline/source_reconciliation.py, pipeline/validate_holdings.py, scripts/shadow_conservation_engine.py, wrapper schema, tests/test_filer_cash_and_subtotal_keys.py (orchestrator's files). Result: fv_conservation x12, gav_reconciliation x6, F20 x6, GAV_BDC02 x5, GAV_BDC03 x1 no longer fire in sple; their proposals withdrawn.",
+   "authority": "orchestrator, 2026-10-19 (verification bug, implemented)",
+   "original_request": {
+    "file": "scripts/shadow_conservation_engine.py; GAV reconciliation (holdings_gav_reconciliation, F20, GAV_BDC02/03)",
+    "what": "For a filer whose schedule cash rows are 'Cash Equivalents and Restricted Cash Equivalents', add the filed restricted cash equivalents (us-gaap:RestrictedCashEquivalents, printed on the balance sheet) to the filed cash-equivalents figure the cash anchor uses.",
+    "why": "fv_conservation x12, gav_reconciliation x6, F20 x6, GAV_BDC02 x5, GAV_BDC03 x1 all fail by exactly the restricted cash equivalents (2023-09-30: printed cash 92.1M = filed 49.9M + restricted 42.2M). Published values equal the page; the anchor reads part of the printed cash total."
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %"
+    },
+    {
+     "accession": "0000950170-23-060746",
+     "text": "restricted cash equivalents of $ 42.2 million consist of highly liquid investments with an original maturity of generally 90 days or less"
+    }
+   ],
+   "next_action": "none"
+  },
+  {
+   "request_id": "SPL-R2",
+   "classification": "verification_bug",
+   "resolution": "implemented",
+   "response": "Verified on the filings and implemented by the orchestrator as an opt-in wrapper key in data/overrides/bdc_xbrl_wrappers/0001646614.json source_encodings: subtotal_members (four patterns; matched unpublished source rows become non-blocking excluded_aggregate_candidate). Code: pipeline/source_encodings.py, pipeline/source_reconciliation.py, pipeline/validate_holdings.py, scripts/shadow_conservation_engine.py, wrapper schema, tests/test_filer_cash_and_subtotal_keys.py (orchestrator's files). Result: SRC_BDC01 x4, blocking_source x6 and E07 x3 no longer fire in sple; their proposals withdrawn.",
+   "authority": "orchestrator, 2026-10-19 (verification bug, implemented)",
+   "original_request": {
+    "file": "pipeline/source_reconciliation.py (source-side total detection)",
+    "what": "Treat members of the forms '<affiliation>, <category>, Total <...>' (2023 filings) and '<affiliation> <country> <category>' with no instrument word (2024-06-30 onward) as subtotals, not positions.",
+    "why": "E07 x3 counts 15 to 21 printed totals per 2023 quarter as positions missing from the pipeline; SRC_BDC01 x4 and blocking_source x6 call the printed 'Total United States of America Equities' and 'Total Trust Interest' subtotals unpublished positions. Every child row is published and the subtotals equal their sums."
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total United States of America 1st Lien Term Loan 660,831,089 652,835,717 122.76"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    }
+   ],
+   "next_action": "none"
+  },
+  {
+   "request_id": "SPL-R3",
+   "classification": "verification_bug",
+   "resolution": "implemented",
+   "response": "Verified on the filings and implemented by the orchestrator as an opt-in wrapper key in data/overrides/bdc_xbrl_wrappers/0001646614.json source_encodings: cost_total_excludes ['cash_rows'] (cost_conservation compares ex-cash cost). Code: pipeline/source_encodings.py, pipeline/source_reconciliation.py, pipeline/validate_holdings.py, scripts/shadow_conservation_engine.py, wrapper schema, tests/test_filer_cash_and_subtotal_keys.py (orchestrator's files). Result: cost_conservation x8 no longer fires in sple; their proposals withdrawn.",
+   "authority": "orchestrator, 2026-10-19 (verification bug, implemented)",
+   "original_request": {
+    "file": "scripts/shadow_conservation_engine.py",
+    "what": "Apply the like-for-like cash split (investments_total_excludes = cash_rows) to cost_conservation as it is applied to fv_conservation.",
+    "why": "cost_conservation x8 fails by the cost of the printed cash rows (2023-06-30: 948.4M published with cash against 863.2M filed; ex cash 863.8M). The fair-value split exists; the cost rule compares unlike totals."
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    }
+   ],
+   "next_action": "none"
+  }
+ ]
+}

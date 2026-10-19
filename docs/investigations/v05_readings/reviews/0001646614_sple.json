@@ -1,0 +1,824 @@
+{
+ "reviewer_id": "claude-opus-5.5-independent-reviewer-sple-2026-10-19",
+ "report_digest": "96fae97d1a9c441bd92d0b0623384837d7a3f1664df0b44ee67fd4a2060a64b8",
+ "scope_note": "Read-only review of sandbox sple (before spon3) for 0001646614 against the 13 cached filings. Scripts and outputs: scratch/fund_runs/0001646614/reviewer_sple/. Full-population scans, not samples: printed industry (ind_check.py, 2,020 rows), printed currency (fx_check.py, 1,931 rows), printed reference-rate code (rr_check.py, 1,930 rows), printed negative cost (cost_sign.py). Not checked: non-accrual flags, acquisition dates and pct of net assets row by row; the 2026 cost residues; the 20-row random page sample. A clean ledger would not establish data correctness.",
+ "checks_requested": {
+  "a_gics_aliases": "Partly supported. Printed industry is published as printed for 2,015 of 2,020 rows; two rows carry a member industry that differs from the page (Wesco 2023-12-31 -> Health Care Services; Gibson 2025-09-30 -> Household Products). Cross-fund: 'power generation' will relabel Ares Capital (v0.5, 148 rows) and 0001918712 (19 rows) to Independent Power Producers & Energy Traders on the next build; unmeasured. Several other keys are broad enough to mislabel future filers. See the industry observation.",
+  "b_foreign_par": "Supported. All located rows carry the printed currency; USD par = par x H.10 rate; rates equal the cached H.10 series.",
+  "c_nav_split": "Supported for 2022-12-31 to 2026-06-30, each equal to its own filing. 2023-03-31 (14.39) unverifiable from cache; 2020-12-31 (30.00) not read.",
+  "d_reference_rates": "Partly supported. Printed codes match on 1,901 of 1,930 located lines; three fixed-coupon rows at 2024-12-31 (Wesco, Takko GmbH, Takko Sarl) are still Floating/SOFR with spread = coupon. Separate pre-existing defect: SP-CREH loans publish interest_rate 5.00 (the cap) instead of the printed rate from 2023-12-31.",
+  "e_proposals": "A04/E01 x18, C04, A01, Amerijet (X02, financial_convention_unresolved), maturity_not_past, F27: factually right on the page. B01: the listed contexts are right but the statement and coverage omit the 7/7/13 comparative-period contexts in the rule's residual.",
+  "f_orchestrator_keys": "Supported: the cash anchor now equals the printed cash total from filed concepts, the subtotal patterns only match issuerless printed subtotals, and the cost split compares like with like; each has negative tests (50 passed, reviewer run). None hides a real error, but the cost check's 5 pct band leaves the 2023 cost-sign error invisible."
+ },
+ "additional_defects_found": [
+  "Cost sign 2023: 47 unfunded lines (12/15/20 at 2023-06-30/09-30/12-31) publish positive cost where the page prints negative; equals the reported cost residue exactly.",
+  "Three fixed-coupon rows at 2024-12-31 published Floating/SOFR (contexts C_7b384fb0..., C_74c5abc0..., C_fb2a1d67...).",
+  "SP-CREH 19 Highline loans: interest_rate 5.00 (cap) published from 2023-12-31; printed/tagged 7.00, 6.53, 6.38, 5.84, 5.67.",
+  "Industry from member differs from print on Wesco 2023-12-31 and Gibson 2025-09-30.",
+  "Issuer names with superscript footnote residue (BayMark 2026-06-30, OLA 2024-09-30); one money-market name not as printed (2025-06-30 onward).",
+  "Global alias 'power generation' changes Ares Capital and 0001918712 labels; cohort diff not run."
+ ],
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_0c1a42270eff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2023-09-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2023-09-30|A04|holdings_fv_vs_investments. Reviewer sum of sple holdings: 955.028M with cash, 862.914M ex cash, cash rows 92.114M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the A04 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %"
+    },
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2d0b61b43f51",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2025-06-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2025-06-30|E01|holdings_fv_vs_investments. Reviewer sum of sple holdings: 1033.604M with cash, 927.689M ex cash, cash rows 105.915M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the E01 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %"
+    },
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 105,914,964 $ 105,914,964 19.57 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2e459f29910b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2024-12-31 is fund-level (check_results residual_rows 0); affected key 0001646614|2024-12-31|A04|holdings_fv_vs_investments. Reviewer sum of sple holdings: 973.568M with cash, 891.046M ex cash, cash rows 82.522M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the A04 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Total Investments, December 31, 2024 $ 919,774,172 $ 891,045,657 163.51 %"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 82,522,423 $ 82,522,423 15.14 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_55fa0a331edb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2023-09-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2023-09-30|E01|holdings_fv_vs_investments. Reviewer sum of sple holdings: 955.028M with cash, 862.914M ex cash, cash rows 92.114M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the E01 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %"
+    },
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5bc144452126",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2024-06-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2024-06-30|A04|holdings_fv_vs_investments. Reviewer sum of sple holdings: 978.248M with cash, 931.158M ex cash, cash rows 47.090M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the A04 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095339",
+     "text": "Total Investments, June 30, 2024 $ 952,451,230 $ 931,158,200 171.54 %"
+    },
+    {
+     "accession": "0000950170-24-095339",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 47,089,692 $ 47,089,692 8.67 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_605be1cc82f1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2025-03-31 is fund-level (check_results residual_rows 0); affected key 0001646614|2025-03-31|A04|holdings_fv_vs_investments. Reviewer sum of sple holdings: 969.391M with cash, 891.257M ex cash, cash rows 78.135M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the A04 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Total Investments, March 31, 2025 $ 922,634,556 $ 891,256,739 164.48 %"
+    },
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 78,134,546 $ 78,134,546 14.41 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6357826fe9be",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2023-12-31 is fund-level (check_results residual_rows 0); affected key 0001646614|2023-12-31|E01|holdings_fv_vs_investments. Reviewer sum of sple holdings: 977.529M with cash, 876.197M ex cash, cash rows 101.332M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the E01 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 101,331,843 $ 101,331,843 18.75 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_98c6ab47f154",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2024-09-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2024-09-30|E01|holdings_fv_vs_investments. Reviewer sum of sple holdings: 970.878M with cash, 909.124M ex cash, cash rows 61.754M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the E01 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Total Investments, September 30, 2024 $ 934,886,747 $ 909,124,118 167.66 %"
+    },
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 61,754,179 $ 61,754,179 11.39 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a0c34b9c7bb1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2024-09-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2024-09-30|A04|holdings_fv_vs_investments. Reviewer sum of sple holdings: 970.878M with cash, 909.124M ex cash, cash rows 61.754M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the A04 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Total Investments, September 30, 2024 $ 934,886,747 $ 909,124,118 167.66 %"
+    },
+    {
+     "accession": "0000950170-24-124813",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 61,754,179 $ 61,754,179 11.39 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_aa5938679cda",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2023-06-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2023-06-30|E01|holdings_fv_vs_investments. Reviewer sum of sple holdings: 932.011M with cash, 847.381M ex cash, cash rows 84.630M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the E01 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund 84,630,043 84,630,043 84,630,043 15.92 Total Cash Equivalents 84,630,043"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_adf6636d2d94",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "oracle check_failures for A01 2023-12-31 holds one rollup (parent 'non controlled non affiliated investments 1st lien secured loans unite...', rollup 614.52M, 87 children 324.54M), matching affected_rows. 614,516,645 is 115.73 pct of net assets: 115.73 pct of the 2022-12-31 net assets (815.42M investments at 153.5x pct, about 531.0M) and not of 2023-12-31 (540.4M gives 113.7 pct), so the failing rollup is the comparative schedule's subtotal, as the investigation says. The other 38 rollups pass and A01 passes in every other quarter. The 'older member format' explanation for the unmatched comparative leaves was not independently traced row by row.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total United States of America 1st Lien/Secured Loans 619,308,102 614,516,645 115.73"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Investments, December 31, 2022 $ 831,480,274 $ 815,424,661"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bf1a4ac90172",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2024-03-31 is fund-level (check_results residual_rows 0); affected key 0001646614|2024-03-31|E01|holdings_fv_vs_investments. Reviewer sum of sple holdings: 992.851M with cash, 917.425M ex cash, cash rows 75.426M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the E01 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Total Investments, March 31, 2024 $ 925,175,902 $ 917,425,138 168.55 %"
+    },
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 75,425,559 $ 75,425,559 13.86 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c20f0528364c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2023-12-31 is fund-level (check_results residual_rows 0); affected key 0001646614|2023-12-31|A04|holdings_fv_vs_investments. Reviewer sum of sple holdings: 977.529M with cash, 876.197M ex cash, cash rows 101.332M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the A04 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 101,331,843 $ 101,331,843 18.75 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c7341e48acfa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2024-06-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2024-06-30|E01|holdings_fv_vs_investments. Reviewer sum of sple holdings: 978.248M with cash, 931.158M ex cash, cash rows 47.090M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the E01 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095339",
+     "text": "Total Investments, June 30, 2024 $ 952,451,230 $ 931,158,200 171.54 %"
+    },
+    {
+     "accession": "0000950170-24-095339",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 47,089,692 $ 47,089,692 8.67 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c951337ab0f3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2025-03-31 is fund-level (check_results residual_rows 0); affected key 0001646614|2025-03-31|E01|holdings_fv_vs_investments. Reviewer sum of sple holdings: 969.391M with cash, 891.257M ex cash, cash rows 78.135M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the E01 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Total Investments, March 31, 2025 $ 922,634,556 $ 891,256,739 164.48 %"
+    },
+    {
+     "accession": "0000950170-25-070278",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 78,134,546 $ 78,134,546 14.41 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d08d42251311",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2024-03-31 is fund-level (check_results residual_rows 0); affected key 0001646614|2024-03-31|A04|holdings_fv_vs_investments. Reviewer sum of sple holdings: 992.851M with cash, 917.425M ex cash, cash rows 75.426M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the A04 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Total Investments, March 31, 2024 $ 925,175,902 $ 917,425,138 168.55 %"
+    },
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 75,425,559 $ 75,425,559 13.86 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d201091c98eb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2024-12-31 is fund-level (check_results residual_rows 0); affected key 0001646614|2024-12-31|E01|holdings_fv_vs_investments. Reviewer sum of sple holdings: 973.568M with cash, 891.046M ex cash, cash rows 82.522M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the E01 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Total Investments, December 31, 2024 $ 919,774,172 $ 891,045,657 163.51 %"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 82,522,423 $ 82,522,423 15.14 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d8327889cad0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2025-06-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2025-06-30|A04|holdings_fv_vs_investments. Reviewer sum of sple holdings: 1033.604M with cash, 927.689M ex cash, cash rows 105.915M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the A04 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %"
+    },
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents $ 105,914,964 $ 105,914,964 19.57 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f8ad0700716b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2023-06-30 is fund-level (check_results residual_rows 0); affected key 0001646614|2023-06-30|A04|holdings_fv_vs_investments. Reviewer sum of sple holdings: 932.011M with cash, 847.381M ex cash, cash rows 84.630M (1 row). Ex-cash equals the printed Total Investments fair value to the dollar and the cash rows equal the printed cash total, so the A04 gap is the cash rows in the numerator against an ex-cash comparison figure; no position is over-included. A04 stops firing from 2025-09-30 where cash is under 2.5 pct, consistent with the mechanism. The disposition is a proposal shared with three other funds and still needs owner acceptance; the published basis (cash rows inside the holdings total) is the owner's existing published-basis question, not a defect of this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund 84,630,043 84,630,043 84,630,043 15.92 Total Cash Equivalents 84,630,043"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0176e44269ba",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "financial_convention_unresolved 2026-06-30 flags one row (row_validation_issues / review_queue n_units 1): Amerijet term loan context C_012c60cc-531e-486b-a9c2-5475cd92c5a1, published interest_rate blank, pik_rate 12.0, Fixed. Tags verified in the cached iXBRL: InvestmentInterestRate 11.50, InvestmentInterestRatePaidInKind 12.00 (plus a filer spread tag 11.50). Reviewer addition: par was flat at 6,907,617 from 2025-06-30 to 2026-03-31 while printed '11.50 % 11.50' (cash), and rose to 7,116,344 at 2026-06-30 (+3.02 pct, a quarter of 12 pct) after the '( 12.00 % PIK)' mark first appears, which supports the toggle reading (12 pct paid in kind instead of 11.50 cash). The figures are the filer's; withholding the cash rate is the build's convention choice, and the same convention question is open for two other funds, so routing to the shared proposal is reasonable. Note for the owner: under the all-in convention the par evidence points to an all-in 12.0, so 'as_filed' leaves a resolvable blank, not a wrong number.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562"
+    },
+    {
+     "accession": "0001193125-26-114381",
+     "text": "Amerijet Holdings Inc(7)(14) 1st Lien Term Loan Transportation & Logistics 11.50 % 11.50 12/19/2023 6/30/2027 6,907,617 6,895,666 12,202,306"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_08642aa62221",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2026-06-30 flags one row (row_validation_issues / review_queue n_units 1): Amerijet term loan context C_012c60cc-531e-486b-a9c2-5475cd92c5a1, published interest_rate blank, pik_rate 12.0, Fixed. Tags verified in the cached iXBRL: InvestmentInterestRate 11.50, InvestmentInterestRatePaidInKind 12.00 (plus a filer spread tag 11.50). Reviewer addition: par was flat at 6,907,617 from 2025-06-30 to 2026-03-31 while printed '11.50 % 11.50' (cash), and rose to 7,116,344 at 2026-06-30 (+3.02 pct, a quarter of 12 pct) after the '( 12.00 % PIK)' mark first appears, which supports the toggle reading (12 pct paid in kind instead of 11.50 cash). The figures are the filer's; withholding the cash rate is the build's convention choice, and the same convention question is open for two other funds, so routing to the shared proposal is reasonable. Note for the owner: under the all-in convention the par evidence points to an all-in 12.0, so 'as_filed' leaves a resolvable blank, not a wrong number.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562"
+    },
+    {
+     "accession": "0001193125-26-114381",
+     "text": "Amerijet Holdings Inc(7)(14) 1st Lien Term Loan Transportation & Logistics 11.50 % 11.50 12/19/2023 6/30/2027 6,907,617 6,895,666 12,202,306"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0ada77b2e47d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2026-03-31 flags one row (row_validation_issues / review_queue n_units 1): Amerijet term loan context C_b7f8c66f-922b-4e72-9bb2-d565b6e25aa0, published interest_rate blank, pik_rate 12.0, Fixed. Tags verified in the cached iXBRL: InvestmentInterestRate 11.50, InvestmentInterestRatePaidInKind 12.00 (plus a filer spread tag 11.50). Reviewer addition: par was flat at 6,907,617 from 2025-06-30 to 2026-03-31 while printed '11.50 % 11.50' (cash), and rose to 7,116,344 at 2026-06-30 (+3.02 pct, a quarter of 12 pct) after the '( 12.00 % PIK)' mark first appears, which supports the toggle reading (12 pct paid in kind instead of 11.50 cash). The figures are the filer's; withholding the cash rate is the build's convention choice, and the same convention question is open for two other funds, so routing to the shared proposal is reasonable. Note for the owner: under the all-in convention the par evidence points to an all-in 12.0, so 'as_filed' leaves a resolvable blank, not a wrong number.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-218912",
+     "text": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181"
+    },
+    {
+     "accession": "0001193125-26-114381",
+     "text": "Amerijet Holdings Inc(7)(14) 1st Lien Term Loan Transportation & Logistics 11.50 % 11.50 12/19/2023 6/30/2027 6,907,617 6,895,666 12,202,306"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_20d0ea1426df",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2023-12-31: check_results '66.7% of 3 equity rows have shares' (fund-level, residual_rows 0). Reviewer query of sple equity rows for 2023-12-31: 3 EQUITY_COMMON rows, two with a unit count and SP-CREH 19 Highline LLC common equity with none; the affected contexts are SP-CREH's. The page prints '70 %' (ownership) in the par/shares cell for SP-CREH in every quarter, so no unit count exists to publish; counts on the other rows match the page where checked (Impala 325,652 and LCP Edge 1,148 at 2023-06-30; Monomoy 474,538 at 2024-06-30). As filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 7,613,410"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_25de8a3c7ed6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2023-06-30: check_results '66.7% of 3 equity rows have shares' (fund-level, residual_rows 0). Reviewer query of sple equity rows for 2023-06-30: 3 EQUITY_COMMON rows, two with a unit count and SP-CREH 19 Highline LLC common equity with none; the affected contexts are SP-CREH's. The page prints '70 %' (ownership) in the par/shares cell for SP-CREH in every quarter, so no unit count exists to publish; counts on the other rows match the page where checked (Impala 325,652 and LCP Edge 1,148 at 2023-06-30; Monomoy 474,538 at 2024-06-30). As filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "SP-CREH 19 Highline LLC(7)(18) Multi-Family N/A N/A 6/28/2021 N/A 70 % 7,445,836 2,370,865"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Impala RGIS Holdings LLC (7)(18) Business Services N/A N/A 6/25/2020 N/A 325,652"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2890c8fbaba8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "weak maturity_not_past 2023-06-30: validation_results_ledger metric 0.9 pct of 111 DL rows = 1 row(s), matching affected_rows. Published maturities (Odlum 2023-02-01 at 2023-06-30; BEL USA 2026-06-02 x2 at 2026-06-30) equal the printed maturity column on the current schedule; the loans are held past maturity as filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Odlum Data Lender, LLC(7)(10)(21) Telecommunications L+ 6.35 %, 10.72 6/23/2021 2/1/2023 15,581,221 15,581,221 13,758,218"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3171d95b547f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "weak maturity_not_past 2026-06-30: validation_results_ledger metric 1.08 pct of 186 DL rows = 2 row(s), matching affected_rows. Published maturities (Odlum 2023-02-01 at 2023-06-30; BEL USA 2026-06-02 x2 at 2026-06-30) equal the printed maturity column on the current schedule; the loans are held past maturity as filed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "BEL USA LLC(7)(11)(14)(16) 1st Lien Term Loan E-Commerce S+ 9.15 %, 2.50 % Floor 12.82 12/13/2018 6/2/2026 8,821,421 8,719,947 1,036,271"
+    },
+    {
+     "accession": "0001193125-26-337440",
+     "text": "BEL USA LLC(7) 1st Lien Term Loan E-Commerce S+ 9.15 %, 2.50 % Floor 12.82 1/13/2026 6/2/2026 223,491 223,491 221,378"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_44a5aefd18f1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2024-12-31: check_results '66.7% of 3 equity rows have shares' (fund-level, residual_rows 0). Reviewer query of sple equity rows for 2024-12-31: 3 EQUITY_COMMON rows, two with a unit count and SP-CREH 19 Highline LLC common equity with none; the affected contexts are SP-CREH's. The page prints '70 %' (ownership) in the par/shares cell for SP-CREH in every quarter, so no unit count exists to publish; counts on the other rows match the page where checked (Impala 325,652 and LCP Edge 1,148 at 2023-06-30; Monomoy 474,538 at 2024-06-30). As filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "SP-CREH 19 Highline LLC(7)(25)(33) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,564,654"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4699af922dc7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2026-06-30 fund-level (metric 2.40 over WAC+200bp). Net investment income 17,639,412 is printed in the statement of operations and the equity roll-forward; investments are 180.14 pct of net assets, so income over net assets exceeds the holdings coupon by leverage. No published value differs from the page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Net investment income 17,639,412 14,561,388 34,582,074 30,203,433"
+    },
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Total Investments, June 30, 2026 $ 1,204,832,727 $ 1,148,378,501 180.14 %"
+    },
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Total expenses (9) 8.53 % 8.12 % Net investment income (3)(9) 12.07 % 11.82 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8f3ecb6e71c6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2024-06-30: check_results '66.7% of 3 equity rows have shares' (fund-level, residual_rows 0). Reviewer query of sple equity rows for 2024-06-30: 3 EQUITY_COMMON rows, two with a unit count and SP-CREH 19 Highline LLC common equity with none; the affected contexts are SP-CREH's. The page prints '70 %' (ownership) in the par/shares cell for SP-CREH in every quarter, so no unit count exists to publish; counts on the other rows match the page where checked (Impala 325,652 and LCP Edge 1,148 at 2023-06-30; Monomoy 474,538 at 2024-06-30). As filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095339",
+     "text": "SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 4,330,900"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9b99652f112c",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Coverage incomplete. B01 2023-12-31 reports residual_rows 25 ('leaves have fair_value'); oracle check_failures lists 12 excluded_no_fair_value plus 13 excluded_comparative_period contexts (period 2022-12-31). affected_rows lists only the 12 no-fair-value contexts; the 13 comparative contexts are part of the flagged population and are neither listed nor explained, contrary to the contract (compare affected coverage with the rule's actual flagged population; the precedent reviews required the full residual). The 12 listed contexts do check out: they carry only InvestmentAcquisitionDate / InvestmentMaturityDate / InvestmentBasisSpreadVariableRate / UnrealizedGainLossOnInvestments; at 2023-12-31 the spread-only contexts are Thunder Grandparent x2, Touchstone and Avianca (each published with fair value under another context) and Tops MBO, which is printed only on the 2022-12-31 comparative schedule (L+ 8.00 %, fair value 10,243,180) and is not on the current one. The proposal statement also counts '12 contexts' against a rule residual of 25. Fix: add the comparative contexts to affected_rows with their period, and restate the proposal against the full residual.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "TH Liquidating Trust(6)(7)(23)(31) Trust Interest Other N/A N/A 10/9/2020 12/6/2024 14 % - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a3010fc62a7f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "financial_convention_unresolved 2026-03-31 flags one row (row_validation_issues / review_queue n_units 1): Amerijet term loan context C_b7f8c66f-922b-4e72-9bb2-d565b6e25aa0, published interest_rate blank, pik_rate 12.0, Fixed. Tags verified in the cached iXBRL: InvestmentInterestRate 11.50, InvestmentInterestRatePaidInKind 12.00 (plus a filer spread tag 11.50). Reviewer addition: par was flat at 6,907,617 from 2025-06-30 to 2026-03-31 while printed '11.50 % 11.50' (cash), and rose to 7,116,344 at 2026-06-30 (+3.02 pct, a quarter of 12 pct) after the '( 12.00 % PIK)' mark first appears, which supports the toggle reading (12 pct paid in kind instead of 11.50 cash). The figures are the filer's; withholding the cash rate is the build's convention choice, and the same convention question is open for two other funds, so routing to the shared proposal is reasonable. Note for the owner: under the all-in convention the par evidence points to an all-in 12.0, so 'as_filed' leaves a resolvable blank, not a wrong number.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-218912",
+     "text": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181"
+    },
+    {
+     "accession": "0001193125-26-114381",
+     "text": "Amerijet Holdings Inc(7)(14) 1st Lien Term Loan Transportation & Logistics 11.50 % 11.50 12/19/2023 6/30/2027 6,907,617 6,895,666 12,202,306"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ab344dc5d302",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Coverage incomplete. B01 2023-06-30 reports residual_rows 12 ('leaves have fair_value'); oracle check_failures lists 5 excluded_no_fair_value plus 7 excluded_comparative_period contexts (period 2022-12-31). affected_rows lists only the 5 no-fair-value contexts; the 7 comparative contexts are part of the flagged population and are neither listed nor explained, contrary to the contract (compare affected coverage with the rule's actual flagged population; the precedent reviews required the full residual). The 5 listed contexts do check out: they carry only InvestmentAcquisitionDate / InvestmentMaturityDate / InvestmentBasisSpreadVariableRate / UnrealizedGainLossOnInvestments; at 2023-12-31 the spread-only contexts are Thunder Grandparent x2, Touchstone and Avianca (each published with fair value under another context) and Tops MBO, which is printed only on the 2022-12-31 comparative schedule (L+ 8.00 %, fair value 10,243,180) and is not on the current one. The proposal statement also counts '5 contexts' against a rule residual of 12. Fix: add the comparative contexts to affected_rows with their period, and restate the proposal against the full residual.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "SP-CREH 19 Highline LLC Equities 4,037,355 805,079 - ( 2,471,569 ) - 2,370,865 - - 70 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d8db9a1dcaf6",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Coverage incomplete. B01 2023-09-30 reports residual_rows 13 ('leaves have fair_value'); oracle check_failures lists 6 excluded_no_fair_value plus 7 excluded_comparative_period contexts (period 2022-12-31). affected_rows lists only the 6 no-fair-value contexts; the 7 comparative contexts are part of the flagged population and are neither listed nor explained, contrary to the contract (compare affected coverage with the rule's actual flagged population; the precedent reviews required the full residual). The 6 listed contexts do check out: they carry only InvestmentAcquisitionDate / InvestmentMaturityDate / InvestmentBasisSpreadVariableRate / UnrealizedGainLossOnInvestments; at 2023-12-31 the spread-only contexts are Thunder Grandparent x2, Touchstone and Avianca (each published with fair value under another context) and Tops MBO, which is printed only on the 2022-12-31 comparative schedule (L+ 8.00 %, fair value 10,243,180) and is not on the current one. The proposal statement also counts '6 contexts' against a rule residual of 13. Fix: add the comparative contexts to affected_rows with their period, and restate the proposal against the full residual.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "SP-CREH 19 Highline LLC Equities 4,037,355 967,993 - ( 3,074,083 ) - 1,931,265 - - 70 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f256cb20fc81",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2025-06-30 (metric 0.1024). Verified in the cached iXBRL: context C_79e494be-7157-4596-a320-2d95ca5d39ed carries ck0001646614:MoneyMarketFundsPercentOfNetAssets 19.57; the published cash row's pct_of_net_assets is blank (sple), and so are the cash rows 2025-09-30 to 2026-06-30. 19.57 / (171.41 + 19.57) = 10.2 pct, the size of the F23 gap. confirmed_error with a concrete repair (per-filer percent concept) is the right conclusion; it stays an outstanding real error, which the gate must count.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Cash Equivalents and Restricted Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class(8)(9) Money Market Fund 105,914,964 105,914,964 105,914,964 19.57"
+    },
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f6a595655377",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2023-09-30: check_results '66.7% of 3 equity rows have shares' (fund-level, residual_rows 0). Reviewer query of sple equity rows for 2023-09-30: 3 EQUITY_COMMON rows, two with a unit count and SP-CREH 19 Highline LLC common equity with none; the affected contexts are SP-CREH's. The page prints '70 %' (ownership) in the par/shares cell for SP-CREH in every quarter, so no unit count exists to publish; counts on the other rows match the page where checked (Impala 325,652 and LCP Edge 1,148 at 2023-06-30; Monomoy 474,538 at 2024-06-30). As filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "SP-CREH 19 Highline LLC(7)(19) Multi-Family N/A N/A 6/28/2021 N/A 70 % 7,608,751 1,931,265"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fc223df78b5d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2024-09-30: check_results '66.7% of 3 equity rows have shares' (fund-level, residual_rows 0). Reviewer query of sple equity rows for 2024-09-30: 3 EQUITY_COMMON rows, two with a unit count and SP-CREH 19 Highline LLC common equity with none; the affected contexts are SP-CREH's. The page prints '70 %' (ownership) in the par/shares cell for SP-CREH in every quarter, so no unit count exists to publish; counts on the other rows match the page where checked (Impala 325,652 and LCP Edge 1,148 at 2023-06-30; Monomoy 474,538 at 2024-06-30). As filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124813",
+     "text": "SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,724,450"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "industry-printed-in-member-not-read",
+   "outcome": "rejected",
+   "rationale": "Mostly right, two claims fail. (1) 'Reads the printed industry': reviewer scan of all 2,020 non-cash sple rows with an extracted industry against the printed schedule line finds the label on the line for 2,015 (1 name not located; Sintec differs only by the printed colon). Two rows publish the member's industry where the page prints another: Wesco Aircraft senior secured bonds 2023-12-31 (C_818ef837..., 15.8M) member 'Healthcare Providers & Services', page 'Industrial Products & Services', now published Health Care Services (spon3 had Aerospace & Defense); Gibson Brands 2025-09-30 (C_f2fc77ed..., 4.7M) member 'Consumer Products', page 'Consumer Brands', published Household Products. industry_coverage cannot see this class (it counts blanks). (2) 'Shared aliases, none lose a label': true for this fund, but the alias table is global and printed_industry_gics lets an alias override the label cache. In the 2026-10-18 regression builds of the 53 accepted funds (scratch/fund_sandbox/rgA1..rgA6) two other funds print a label the new aliases catch: Ares Capital (0001287750, a v0.5 fund) 'Power Generation' on 148 rows now labelled Renewable Electricity, and 0001918712 'Power Generation' on 19 rows now Electric Utilities. On the next build all 167 become Independent Power Producers & Energy Traders (same Utilities sector; Ares' Sunrun/Heelstone/Apex rows lose the more precise Renewable Electricity, Ferrellgas is neither). The cohort effect was not measured, contrary to the global-fix rule. The other 13 aliases match no other fund in those builds, but several are broad keys that would mislabel other filers' rows on arrival: 'transportation and logistics' -> Air Freight & Logistics (trucking, rail, marine), 'e commerce' -> Broadline Retail (e-commerce software), 'gaming and entertainment' -> Casinos & Gaming (non-gaming entertainment), 'insurance and insurance services' -> Insurance Brokers (carriers); within this fund 'Industrial Products & Services' -> Industrial Machinery puts Covanta, Wesco Aircraft, 48Forty and Stryten in one machinery sub-industry, and 'Staples Retail' -> Consumer Staples Merchandise Retail for a grocer (Tops) where Food Retail is the GICS fit. Needed: restrict these aliases to this filer (per-CIK label map) or measure and accept the cohort diff; add a member-versus-printed industry check.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Wesco Aircraft Holdings Inc(12)(26) Senior Secured Bonds Industrial Products & Services 10.50 % 10.50 3/28/2022 11/15/2026 17,332,429 15,976,413 15,794,176"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "Wesco Aircraft Holdings Inc Instrument Senior Secured Bonds Industry Healthcare Providers & Services Rate 10.50%"
+    },
+    {
+     "accession": "0001193125-25-277009",
+     "text": "Gibson Brands Inc(7)(9) 1st Lien Term Loan Consumer Brands S+ 5.26 %, 0.75 % Floor 9.58 2/16/2024 8/11/2028 4,881,284 4,735,975 4,705,571"
+    }
+   ]
+  },
+  {
+   "observation_key": "foreign-par-tagged-with-the-usd-unit",
+   "outcome": "supported",
+   "rationale": "Reviewer scan of all 1,931 sple debt rows with principal and fair value: the printed line was located by its 'par cost fair value' run for 1,930; the published principal currency equals the currency mark printed before the par on all of them (83 foreign rows; 19 of the corrected rows located, the rest withdrawn equity rows). Meta Buyer's 'AU$' rows are AUD as published. principal_amount_usd = par x rate on every foreign row, and the rates equal the cached H.10 series (EUR 1.0920 at 2023-06-30, 1.0584 at 2023-09-29, 1.0351 at 2024-12-31; GBP 1.2709; CAD 0.75574). The proposed detector (unit tag versus printed mark) is feasible from the page and would have caught the 2023-09-30 slips; its mark list must include 'AU$'.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Dye & Durham Corp(7)(10) Software & Services C+ 5.75 %, 0.75 % Floor 11.26 12/3/2021 12/3/2027 C$ 4,728,658 3,650,956 3,417,541"
+    },
+    {
+     "accession": "0001193125-26-114381",
+     "text": "BBSY+ 5.25 %, 0.75 % Floor 9.02 12/22/2025 12/22/2031 AU$ 3,848,352 2,518,079 2,542,325"
+    }
+   ]
+  },
+  {
+   "observation_key": "nav-per-share-restated-after-reverse-split",
+   "outcome": "supported",
+   "rationale": "Every period-end from 2022-12-31 to 2026-06-30 in sple fund_financials equals the figure printed in that period's own filing (or, for 2022 quarters, the pre-split comparative in a pre-split filing): 14.41 (2023-06-30), 14.63, 14.64, 14.75, 14.71, 14.70, 14.76 with 36,907,451 shares, 14.69, 14.41 / 37,566,942, 14.17 / 38,056,601, 27.96 / 21,240,388, 27.47 / 22,604,966, 27.17 / 23,456,779; NAV x shares equals net assets in each. Residual: 2023-03-31 publishes 14.39 (the 2022-12-31 figure) and no cached filing for that quarter confirms it; 2020-12-31 publishes 30.00 (outside the ledger window, not read). The proposed detector is a sound check.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-218912",
+     "text": "Net asset value, end of period $ 27.47 $ 29.38 Shares outstanding, end of period 22,604,966 18,453,726"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Net asset value per share $ 14.76 $ 14.64"
+    }
+   ]
+  },
+  {
+   "observation_key": "nav-series-break-at-share-split",
+   "outcome": "supported",
+   "rationale": "The 1-for-2 split is printed; published NAV per share steps 14.17 -> 27.96 as each filing prints it. Leaving per-period figures as printed is right; the returns step must not chain across it. The proposed continuity check (ratio near 2 with shares moving inversely) would catch a recurrence with few false alarms.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-114381",
+     "text": "implement a one-for-two reverse share split of the Funds common shares, which was effective as of the close of business on December 26, 2025"
+    }
+   ]
+  },
+  {
+   "observation_key": "ownership-percent-read-as-unit-count",
+   "outcome": "supported",
+   "rationale": "sple 2024-12-31: SP-CREH common equity shares_held blank (corrected), TH Liquidating Trust N/A interest has no principal. The page prints '70 %' and '14 %' in the par/shares cell. The '%'-beside-the-number detector is feasible and narrow.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "SP-CREH 19 Highline LLC(7)(25)(33) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,564,654"
+    }
+   ]
+  },
+  {
+   "observation_key": "acquisition-date-published-as-maturity",
+   "outcome": "supported",
+   "rationale": "sple 2024-03-31: Beauty Health, Impala RGIS and Monomoy equity rows now have no maturity; the page prints N/A in the maturity column. Detector (equity row with maturity where the page prints N/A) is feasible.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056367",
+     "text": "Beauty Health Co(22) Common Equities Consumer Services N/A N/A 7/7/2023 N/A 913,460 - 4,015,205"
+    }
+   ]
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-with-guessed-benchmark",
+   "outcome": "rejected",
+   "rationale": "The 39 corrected rows are right, but the class is not fully fixed and the proposed detector would miss what is left. Reviewer scan of 1,930 located debt lines (printed code before the date pair versus published reference_rate_type) finds three fixed-coupon rows at 2024-12-31 still published Floating / SOFR with basis_spread equal to the coupon (reference_rate_source identifier_text, unchanged from spon3): Wesco Aircraft senior secured bonds C_7b384fb0-e803-4c85-aac9-4aadff6b5878 (10.50, 13.9M), Takko Fashion GmbH senior secured bonds C_74c5abc0-b215-4cc3-b3ec-3e02f091c23e (10.25, 4.1M), Takko Fashion Sarl subordinated debt C_fb2a1d67-e7f6-440a-baec-ef5af801bb3b (15.00, 8.0M). Their members carry 'Rate S+10.25%' / 'S+15.00%' / 'S+10.50%' while the page prints a bare coupon, so the benchmark is not date-guessed and the suggested check ('benchmark inferred from the report date') does not see them. Fix the three rows; widen the detector to basis_spread equal to interest_rate on any Floating row, or printed Rate cell without a code.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Takko Fashion GmbH(10)(32) Senior Secured Bonds Specialty Retail 10.25 % 10.25 % 10/30/2024 4/15/2030 EUR 3,811,000"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Wesco Aircraft Holdings Inc(12)(28) Senior Secured Bonds Industrial Products & Services 10.50 % 10.50 3/28/2022 11/15/2026 17,332,429 15,976,413 13,865,943"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Takko Fashion Sarl(10)(20)(32) Subordinated Unsecured Debt Specialty Retail 15.00 % 15.00 8/8/2023 10/15/2030 EUR 3,576,263 3,909,351 8,036,760"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-report-date",
+   "outcome": "supported",
+   "rationale": "Reviewer scan: on 1,901 of 1,930 located debt lines the published benchmark equals the printed code (S, L, E, C, P, SONIA, BBSY, or none for fixed). The other 29: 26 SP-CREH rows whose printed form 'S+ 2.00 %, 3.00 % Floor , 5.00 % Cap' my parser did not read (SOFR is right), and the three member-S+ fixed rows reported under the fixed-coupon observation. Separate defect seen on the same rows, not caused by this run: SP-CREH loans publish interest_rate 5.00 (the 5.00 % cap) from 2023-12-31 onward while the page prints and tags 7.00 / 6.53 / 6.38 / 5.84 / 5.67 (e.g. InvestmentInterestRate 6.53 on C_ccf59dbb-2841-4d35-bb9c-895a02ddd164 at 2024-12-31); no rule flags it.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-039264",
+     "text": "SP-CREH 19 Highline LLC(7)(33) 1st Lien Term Loan Multi-Family S+ 2.00 %, 3.00 % Floor , 5.00 % Cap 6.53 6/28/2021 7/1/2025 7,640,570 7,640,570 7,639,424"
+    },
+    {
+     "accession": "0000950170-24-034390",
+     "text": "TH Liquidating Trust(7)(14)(31) Trust Interest Other P+ 10.50 %, 0.50 % Floor 19.00 12/7/2019 12/6/2024 $ 473,766 473,766 466,903"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "outcome": "supported",
+   "rationale": "sple 2026-06-30 publishes both NP Gaming lines as NP Gaming Acquisition LLC; Resistance Holdings Inc remains as its own printed borrower (separate revolver and term loan). issuer_name_printed is the right existing detector. Gap noted: the gate's ASCII normalisation hides footnote residue in names; sple publishes 'BayMark Health Services Inc' with a trailing superscript parenthesis at 2026-06-30 and 'OLA Netherlands BV (aka Olacabs / ANI Tech)' with superscript footnote marks at 2024-09-30, and the non-restricted money-market row is published as 'JP Morgan US Treasury Securities Money Market Fund Capital Class' where the page prints 'JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class'.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "NP Gaming Acquisition LLC(6)(7)(12)(13) 1st Lien Revolver Gaming & Entertainment S+ 6.50 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 4/21/2026 4/21/2031 742,723 ( 17,846 ) ( 18,568 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "outcome": "supported",
+   "rationale": "Circle Graphics 2026-06-30 prints 'S+ 3.75 %, 4.00 % Floor (S+ 3.75 % PIK) 7.75'; sple publishes interest_rate 7.75, pik_rate 3.75, spread 3.75. The whole coupon is PIK, so pik_rate understates it; leaving it for the cohort convention is reasonable and the proposed detector is specific.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-337440",
+     "text": "Circle Graphics Inc(7)(16) 1st Lien Term Loan E-Commerce S+ 3.75 %, 4.00 % Floor (S+ 3.75 % PIK) 7.75 6/30/2025 3/31/2029 10,575,951 7,998,464 6,375,183"
+    }
+   ]
+  },
+  {
+   "observation_key": "money-market-percent-on-filer-concept-not-read",
+   "outcome": "supported",
+   "rationale": "Verified: ck0001646614:MoneyMarketFundsPercentOfNetAssets 19.57 on the 2025-06-30 cash context; cash rows 2025-06-30 to 2026-06-30 publish no percent. F23 is the existing detector at 2025-06-30 only; later quarters' cash is too small to trip it, so the detector would not catch the gap there.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107200",
+     "text": "Cash Equivalents and Restricted Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund, Capital Class(8)(9) Money Market Fund 105,914,964 105,914,964 105,914,964 19.57"
+    }
+   ]
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "outcome": "supported",
+   "rationale": "sple 2026-06-30 Delos Living LLC 'Warrant', 2 units, EQUITY_COMMON. Correctly tied to the open D-207 item 3.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-114381",
+     "text": "Delos Living LLC(7)(28) Warrants Real Estate Development & Management N/A N/A 10/9/2025 N/A 2 106,385 138,299"
+    }
+   ]
+  },
+  {
+   "observation_key": "published-cost-above-filed-total-unlocated",
+   "outcome": "rejected",
+   "rationale": "The 2023 residue is locatable and is a real error, so 'left, not located' is wrong. In the 2023 filings unfunded revolver and delayed-draw lines print a negative cost ('( 19,323 )') but the InvestmentOwnedAtCost tag carries no sign, and the build publishes the cost positive. Reviewer scan (cost_sign.py): rows whose printed cost is in parentheses but published positive number 12 / 15 / 20 at 2023-06-30 / 09-30 / 12-31, and twice their published cost is 559,476 / 647,674 / 813,304, equal to the residues the observation reports (559.5K, 647.7K, 813.3K). From 2024-03-31 the tags carry the sign and the build publishes negative cost. Next action should be a repair (sign from the printed cell for those 47 rows, or a wrapper reading for the 2023 filings), not 'left'. The 2026 residues (15.5K, 13.8K) are not explained by this and remain unlocated. The proposed 0.05 pct cost check is sound.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "11/23/2027 878,780 ( 19,323 ) ( 19,982 ) ( 0.00 )"
+    },
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_resolution_history_reviews": [
+  {
+   "request_id": "SPL-R1",
+   "outcome": "supported",
+   "rationale": "Verification bug, correctly classified. The filing prints 'Total Cash Equivalents and Restricted Cash Equivalents 92,114,292' and tags CashEquivalentsAtCarryingValue 49.9M and RestrictedCashEquivalents 42.2M (2023-09-30), so the anchor read only part of the printed cash. The implementation is opt-in (cash_rows_include_concepts, schema-validated local names), adds a filed value only, keeps LEAST(cash rows, filed + restricted) so cash rows above the filed figure still fail, and has negative tests (without the key the restricted part fails; cash above filed plus restricted fails; nothing added where no cash figure is filed). Reviewer ran tests/test_filer_cash_and_subtotal_keys.py + tests/test_printed_industry.py: 50 passed. The cleared conservation and GAV findings clear because the anchor now equals the printed cash total, not by widening a tolerance.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060746",
+     "text": "Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %"
+    },
+    {
+     "accession": "0000950170-23-060746",
+     "text": "restricted cash equivalents of $ 42.2 million consist of highly liquid investments with an original maturity of generally 90 days or less"
+    }
+   ]
+  },
+  {
+   "request_id": "SPL-R2",
+   "outcome": "supported",
+   "rationale": "Verification bug. The four subtotal_members patterns are anchored and only match members with no issuer (affiliation + optional country + category, or 'Total ...'). Reviewer listing of all 186 sple source rows now excluded_aggregate_candidate or category rollup: every one is an issuerless 'Total ...' or affiliation/country/category member; none names a borrower. A01 (rollup arithmetic) passes in every quarter except the comparative-schedule case, which independently supports that the printed subtotals equal their children. Tests include a negative case (positions are left alone; a missing leaf stays blocking).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total United States of America 1st Lien Term Loan 660,831,089 652,835,717 122.76"
+    },
+    {
+     "accession": "0000950170-25-039264",
+     "text": "Total United States of America 1st Lien/Secured Loans 805,347,852 790,454,952"
+    }
+   ]
+  },
+  {
+   "request_id": "SPL-R3",
+   "outcome": "supported",
+   "rationale": "Verification bug: cost_conservation compared cost including the cash rows with the filed ex-cash cost total. Opt-in key requires investments_total_excludes cash_rows; test shows a non-cash cost that is off still fails. Caveat: with the 5 pct band the split cost check still cannot see the 2023 cost-sign error (0.06-0.09 pct of cost) reported under the cost observation; clearing cost_conservation is right, but it is not evidence that cost is correct.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-042115",
+     "text": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %"
+    }
+   ]
+  }
+ ]
+}

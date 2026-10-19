@@ -165,14 +165,32 @@
         "family": "mixed"
       }
     ],
+    "industry_from_identifier_re": "(?i)(?:\\sIndustry\\s+|,\\s+(?=[^,]+,\\s+(?:Rate\\s|Original\\s+Acquisition\\s+Date|Maturity\\s+Date|Instrument\\s)))([^,]+?)(?:\\s+One)?,?\\s+(?:Rate\\s|Rate$|Interest\\s+Rate|Original\\s+Acquisition|Maturity\\s+Date|Instrument\\s|[A-Z]{1,5}\\+|\\d)",
+    "industry_label_gics": {
+      "Industrial Products & Services": "Industrial Machinery & Supplies & Components",
+      "Real Estate Development & Management": "Real Estate Development",
+      "Oilfield Services": "Oil & Gas Equipment & Services",
+      "E-Commerce": "Broadline Retail",
+      "Transportation & Logistics": "Air Freight & Logistics",
+      "Pharmaceuticals & Life Sciences": "Pharmaceuticals",
+      "Gaming & Entertainment": "Casinos & Gaming",
+      "Insurance & Insurance Services": "Insurance Brokers",
+      "Environmental Solutions": "Environmental & Facilities Services",
+      "Consumer Apparel": "Apparel, Accessories & Luxury Goods",
+      "Staples Retail": "Food Retail",
+      "Power Generation": "Independent Power Producers & Energy Traders",
+      "Telecommunication": "Integrated Telecommunication Services",
+      "Industrial Aerospace & Defense": "Aerospace & Defense"
+    },
+    "issuer_name_strip_re": "^Cash Equivalents(?: and Restricted Cash Equivalents)?,\\s*|^1st Lien Term Loan,\\s*|\\s+Instrument\\s+Mone?t?y?\\s+Market\\s+Fund$",
     "canonical_strip_re": "(?i),?\\s*Industry\\s+.*?(?=\\s+(?:Rate|Original\\s+Acquisition\\s+Date|Maturity\\s+Date)\\b)|,?\\s*Interest\\s+Rate\\s+\\d+\\.?\\d*\\s*%|,?\\s*Original\\s+Acquisition\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}"
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^(?:(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments,?\\s+)?(?:Secured\\s+Loans,?\\s+(?:1st|2nd)\\s+Lien\\s+(?:Term\\s+Loan|Revolver)|Secured\\s+Bonds\\s*,?\\s*Senior\\s+Secured\\s+Bonds|(?:1st|2nd)\\s+Lien/\\s?Secured\\s+Loans|Senior\\s+Secured\\s+Bonds|Unsecured\\s+Bonds|Subordinated\\s+(?:Notes|Debt)|Senior\\s+Secured\\s+Debt|Unsecured\\s+Debt|Equities,?\\s+Common\\s+Equities|Equities|Warrants|Real\\s+Estate\\s+Properties|Trust\\s+Interest),?\\s+(?:United\\s+States\\s+of\\s+America|United\\s+States|Luxembourg|Netherlands|Canada|Germany|Japan|United\\s+Kingdom|Singapore|Cayman\\s+Islands|Australia|France|Ireland|Sweden|Spain|Italy|Switzerland|Bermuda|Jersey|Denmark|Norway|Finland|Belgium|Austria|Israel|Mexico|Brazil|India|China|Hong\\s+Kong|New\\s+Zealand|Puerto\\s+Rico),?\\s+(.+?)(?:,\\s+[^,]+,\\s+(?:Rate|[SLEP]\\+|\\d[\\d.]*%|Original\\s+Acquisition\\s+Date|Maturity\\s+Date)|\\s+Instrument\\s+)",
+    "hierarchy_issuer_re": "(?i)^(?:US-GAAP\\s+Investment,\\s+Identifier\\s+\\[Axis\\]\\s+>\\s+)?(?:(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments,?\\s+)?\\d?(?:Secured\\s+Loans,?\\s+(?:1st|2nd)\\s+Lien\\s+(?:Term\\s+Loan|Revolver)|(?:1st|2nd)\\s+Lien\\s+(?:Delayed\\s+Draw\\s+)?(?:Term\\s+Loan|Revolver)|Subordinated\\s+and\\s+Unsecured\\s+Bonds|Secured\\s+Bonds\\s*,?\\s*Senior\\s+Secured\\s+Bonds|(?:1st|2nd)\\s+Lien/\\s?Secured\\s+Loans|Senior\\s+Secured\\s+Bonds|Unsecured\\s+Bonds|Subordinated\\s+(?:Notes|Debt)|Senior\\s+Secured\\s+Debt|Unsecured\\s+Debt|Equities,?\\s+Common\\s+Equities|Equities|Warrants|Real\\s+Estate\\s+Properties|Trust\\s+Interest),?\\s+(?:United\\s+States\\s+of\\s+America|United\\s+Sates\\s+of\\s+America|United\\s+States|Luxembourg|Netherlands|Canada|Germany|Japan|United\\s+Kingdom|Singapore|Cayman\\s+Islands|Australia|France|Ireland|Sweden|Spain|Italy|Switzerland|Bermuda|Jersey|Denmark|Norway|Finland|Belgium|Austria|Israel|Mexico|Brazil|India|China|Hong\\s+Kong|New\\s+Zealand|Puerto\\s+Rico),?\\s+(.+?)(?:,\\s+[^,]+,\\s+(?:Rate|[SLEP]\\+|\\d[\\d.]*%|Original\\s+Acquisition\\s+Date|Maturity\\s+Date)|\\s+Instrument\\s+)",
     "hierarchy_instrument_re": "(?i)^(?:.*?\\s+Instrument\\s+|(?:(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments,?\\s+)?)(.+?)(?:\\s+Industry\\s+|,?\\s+(?:United\\s+States\\s+of\\s+America|United\\s+States|Luxembourg|Netherlands|Canada|Germany|Japan|United\\s+Kingdom|Singapore|Cayman\\s+Islands|Australia|France|Ireland|Sweden|Spain|Italy|Switzerland|Bermuda|Jersey|Denmark|Norway|Finland|Belgium|Austria|Israel|Mexico|Brazil|India|China|Hong\\s+Kong|New\\s+Zealand|Puerto\\s+Rico)\\b)",
     "hierarchy_trailing_re": "(?i)\\s+(Maturity\\s+Date\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}\\b)",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments|(?:1st|2nd)\\s+Lien/\\s?Secured\\s+Loans|Senior\\s+Secured\\s+Bonds|Unsecured\\s+Bonds|Subordinated\\s+Debt|Unsecured\\s+Debt|Equities|Warrants|Real\\s+Estate\\s+Properties|Trust\\s+Interest)') AND regexp_matches(_clean, '(?i)\\b(?:Rate|Interest\\s+Rate|Original\\s+Acquisition\\s+Date|Maturity\\s+Date|Instrument)\\b')"
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^(?:US-GAAP\\s+Investment,\\s+Identifier|\\d?(?:1st|2nd)\\s+Lien\\b|Senior\\s+Secured\\s+Debt|Subordinated\\s+and\\s+Unsecured\\s+Bonds|(?:Non-Controlled/Non-Affiliated|Non-Controlled/Affiliated|Controlled)\\s+Investments|(?:1st|2nd)\\s+Lien/\\s?Secured\\s+Loans|Senior\\s+Secured\\s+Bonds|Unsecured\\s+Bonds|Subordinated\\s+Debt|Unsecured\\s+Debt|Equities|Warrants|Real\\s+Estate\\s+Properties|Trust\\s+Interest)') AND regexp_matches(_clean, '(?i)\\b(?:Rate|Interest\\s+Rate|Original\\s+Acquisition\\s+Date|Maturity\\s+Date|Instrument)\\b')"
   },
   "archetypes": {
     "debt": {
@@ -279,6 +297,47 @@
     ],
     "investments_total_excludes": [
       "cash_rows"
+    ],
+    "cost_total_excludes": [
+      "cash_rows"
+    ],
+    "cash_rows_include_concepts": [
+      "RestrictedCashEquivalents"
+    ],
+    "subtotal_members": [
+      "^Total (?:(?:Non-Controlled/(?:Non-)?Affiliated|Controlled) )?Investments$",
+      "^(?:Non-Controlled/(?:Non-)?Affiliated|Controlled) Investments,? (?:[^,]+, )?Total [^,]+$",
+      "^(?:Non-Controlled/(?:Non-)?Affiliated|Controlled) Investments(?: of| (?:United States of America|Canada|Luxembourg|Netherlands|Germany|Japan|United Kingdom|Singapore|Cayman Islands|Australia|France|Ireland|Spain|Italy|Sweden|Switzerland|Bermuda|Jersey))? (?:1st Lien/ ?Secured Loans|2nd Lien/ ?Secured Loans|1st Lien Term Loan|2nd Lien Term Loan|Senior Secured Bonds|Senior Secured Debt|Unsecured Bonds|Unsecured Debt|Subordinated Debt|Subordinated Notes|Common Equities|Equities|Warrants|Trust Interest|Real Estate Properties)$",
+      "^(?:Non-Controlled/(?:Non-)?Affiliated|Controlled) Investments$"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "reference_rate_columns": [
+      "Rate"
+    ],
+    "reference_rate_codes": [
+      "S=SOFR",
+      "L=LIBOR",
+      "E=EURIBOR",
+      "C=CDOR",
+      "P=PRIME",
+      "SONIA=SONIA",
+      "BBSY=BBSY"
+    ],
+    "units_tagged_as_par": [
+      "0000950170-23-042115",
+      "0000950170-23-060746",
+      "0000950170-24-034390",
+      "0000950170-24-056367",
+      "0000950170-24-095339",
+      "0000950170-24-124813",
+      "0000950170-25-039264",
+      "0000950170-25-070278",
+      "0000950170-25-107200",
+      "0001193125-25-277009",
+      "0001193125-26-114381",
+      "0001193125-26-218912"
     ]
   }
 }

@@ -1,0 +1,624 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "splf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-A01-1646614-1",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "A01",
+   "reason_key": "a01-subtotal-of-the-comparative-schedule",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "A01 at 2023-12-31 fails on the subtotal 'Non-Controlled/Non-Affiliated Investments 1st Lien/Secured Loans United States of America' (614.5M), which is the 2022-12-31 comparative schedule's subtotal (period 2022-12-31; 115.73 pct of the 2022-12-31 net assets 531.0M). The check sums 87 comparative leaves whose parent key matches (324.5M); the rest of that schedule's leaves carry the older member format. The current-period subtotals pass.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "Total United States of America 1st Lien/Secured Loans 619,308,102 614,516,645 115.73",
+     "quote": "'Total United States of America 1st Lien/Secured Loans 619,308,102 614,516,645 115.73': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-B01-1646614-2",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "reason_key": "b01-contexts-without-value-carry-no-position-value",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "statement": "B01 at 2023-06-30 fails on 12 leaves without a fair value: (a) 5 current-period contexts holding only InvestmentAcquisitionDate, UnrealizedGainLossOnInvestments: the roll-forward note rows of the controlled and affiliated positions (unrealized gain), duration contexts with an acquisition or maturity date or a spread, and the TH Liquidating Trust interest printed '- - -'; (b) 7 contexts dated 2022-12-31 (the comparative year-end the filing re-tags: roll-forward note rows, TH Liquidating Trust date contexts), holding InvestmentAcquisitionDate, InvestmentMaturityDate, UnrealizedGainLossOnInvestments and no fair value. None is a current position with a value to publish; current fair value ties to the printed total. B01 at 2023-09-30 fails on 13 leaves without a fair value: (a) 6 current-period contexts holding only InvestmentAcquisitionDate, InvestmentMaturityDate, UnrealizedGainLossOnInvestments: the roll-forward note rows of the controlled and affiliated positions (unrealized gain), duration contexts with an acquisition or maturity date or a spread, and the TH Liquidating Trust interest printed '- - -'; (b) 7 contexts dated 2022-12-31 (the comparative year-end the filing re-tags: roll-forward note rows, TH Liquidating Trust date contexts), holding InvestmentAcquisitionDate, InvestmentMaturityDate, UnrealizedGainLossOnInvestments and no fair value. None is a current position with a value to publish; current fair value ties to the printed total. Same reading in 1 more quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "SP-CREH 19 Highline LLC Equities 4,037,355 805,079 - ( 2,471,569 ) - 2,370,865 - - 70 %",
+     "quote": "'SP-CREH 19 Highline LLC Equities 4,037,355 805,079 - ( 2,471,569 ) - 2,370,865 - - 70 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %",
+     "quote": "'Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060746",
+     "verbatim": "SP-CREH 19 Highline LLC Equities 4,037,355 967,993 - ( 3,074,083 ) - 1,931,265 - - 70 %",
+     "quote": "'SP-CREH 19 Highline LLC Equities 4,037,355 967,993 - ( 3,074,083 ) - 1,931,265 - - 70 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060746",
+     "verbatim": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %",
+     "quote": "'Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "TH Liquidating Trust(6)(7)(23)(31) Trust Interest Other N/A N/A 10/9/2020 12/6/2024 14 % - - -",
+     "quote": "'TH Liquidating Trust(6)(7)(23)(31) Trust Interest Other N/A N/A 10/9/2020 12/6/2024 14 % - - -': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %",
+     "quote": "'Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-C04-1646614-3",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "reason_key": "c04-equity-interest-printed-without-unit-count",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "statement": "C04 at 2023-06-30: 3 equity rows, 2 with a unit count. The row without one is SP-CREH 19 Highline LLC's common equity, which the page prints with an ownership percent ('70 %') in the Par Amount / Shares column, not a unit count; the build no longer publishes the 70 as a share count (it was in 2024-12-31). With one of three rows printed without a count the quarter cannot reach the 70 pct threshold. C04 at 2023-09-30: 3 equity rows, 2 with a unit count. The row without one is SP-CREH 19 Highline LLC's common equity, which the page prints with an ownership percent ('70 %') in the Par Amount / Shares column, not a unit count; the build no longer publishes the 70 as a share count (it was in 2024-12-31). With one of three rows printed without a count the quarter cannot reach the 70 pct threshold. Same reading in 4 more quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "SP-CREH 19 Highline LLC(7)(18) Multi-Family N/A N/A 6/28/2021 N/A 70 % 7,445,836 2,370,865",
+     "quote": "'SP-CREH 19 Highline LLC(7)(18) Multi-Family N/A N/A 6/28/2021 N/A 70 % 7,445,836 2,370,865': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060746",
+     "verbatim": "SP-CREH 19 Highline LLC(7)(19) Multi-Family N/A N/A 6/28/2021 N/A 70 % 7,608,751 1,931,265",
+     "quote": "'SP-CREH 19 Highline LLC(7)(19) Multi-Family N/A N/A 6/28/2021 N/A 70 % 7,608,751 1,931,265': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 7,613,410",
+     "quote": "'SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 7,613,410': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095339",
+     "verbatim": "SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 4,330,900",
+     "quote": "'SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 4,330,900': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124813",
+     "verbatim": "SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,724,450",
+     "quote": "'SP-CREH 19 Highline LLC(7)(23)(31) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,724,450': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-039264",
+     "verbatim": "SP-CREH 19 Highline LLC(7)(25)(33) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,564,654",
+     "quote": "'SP-CREH 19 Highline LLC(7)(25)(33) Common Equities Multi-Family N/A N/A 6/28/2021 N/A 70 % 14,608,750 1,564,654': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-financial_convention_unresolved-1646614-4",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "reason_key": "convention-printed-pik-above-printed-rate",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "financial_convention_unresolved at 2026-03-31: Amerijet's fixed term loan prints '11.50 % ( 12.00 % PIK) 11.50' and is tagged rate 0.115, PIK 0.12. A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the build withholds the rate (interest_rate blank, pik_rate 12.0). The figures are the filer's; the line most likely describes a cash-or-PIK toggle (11.50 cash or 12.00 PIK), which the page does not state. financial_convention_unresolved at 2026-06-30: Amerijet's fixed term loan prints '11.50 % ( 12.00 % PIK) 11.50' and is tagged rate 0.115, PIK 0.12. A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the build withholds the rate (interest_rate blank, pik_rate 12.0). The figures are the filer's; the line most likely describes a cash-or-PIK toggle (11.50 cash or 12.00 PIK), which the page does not state.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-218912",
+     "verbatim": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181",
+     "quote": "'Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-337440",
+     "verbatim": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562",
+     "quote": "'Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-X02-1646614-5",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "reason_key": "convention-printed-pik-above-printed-rate",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "X02 at 2026-03-31: Amerijet's fixed term loan prints '11.50 % ( 12.00 % PIK) 11.50' and is tagged rate 0.115, PIK 0.12. A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the build withholds the rate (interest_rate blank, pik_rate 12.0). The figures are the filer's; the line most likely describes a cash-or-PIK toggle (11.50 cash or 12.00 PIK), which the page does not state. X02 at 2026-06-30: Amerijet's fixed term loan prints '11.50 % ( 12.00 % PIK) 11.50' and is tagged rate 0.115, PIK 0.12. A PIK part above the all-in rate cannot be read under the fund's all-in convention, so the build withholds the rate (interest_rate blank, pik_rate 12.0). The figures are the filer's; the line most likely describes a cash-or-PIK toggle (11.50 cash or 12.00 PIK), which the page does not state.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-218912",
+     "verbatim": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181",
+     "quote": "'Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 6,907,617 6,897,649 12,447,181': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-337440",
+     "verbatim": "Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562",
+     "quote": "'Amerijet Holdings Inc(7) 1st Lien Term Loan Transportation & Logistics 11.50 % ( 12.00 % PIK) 11.50 12/19/2023 6/30/2027 7,116,344 7,108,381 11,160,562': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19",
+   "addresses_verdict": {
+    "2026-03-31": "The earlier reviewer listed six non-credit rows (SP-CREH equity, TH Liquidating Trust interests, cash rows) classed as private credit. None of them is flagged now: X02 at 2026-03-31 flags one row, Amerijet, whose rate is withheld by the convention step, not a classification problem."
+   }
+  },
+  {
+   "disposition_id": "PD-F27-1646614-6",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "F27 at 2026-06-30: income yield is measured on net assets; the fund holds investments of 180.14 pct of net assets (printed), so income over net assets sits above the holdings' weighted coupon plus 200bp. The printed ratio of net investment income to average net assets is 12.07 pct for the period. No published value differs from the page.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-337440",
+     "verbatim": "Total Investments, June 30, 2026 $ 1,204,832,727 $ 1,148,378,501 180.14 %",
+     "quote": "'Total Investments, June 30, 2026 $ 1,204,832,727 $ 1,148,378,501 180.14 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-337440",
+     "verbatim": "Total expenses (9) 8.53 % 8.12 % Net investment income (3)(9) 12.07 % 11.82 %",
+     "quote": "'Total expenses (9) 8.53 % 8.12 % Net investment income (3)(9) 12.07 % 11.82 %': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1646614-7",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "reason_key": "maturity-not-past-loan-held-past-printed-maturity",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2026-06-30"
+   ],
+   "statement": "maturity_not_past at 2023-06-30: Odlum Data Lender's term loan is printed with maturity 2/1/2023 and a fair value of 13.8M on the 2023-06-30 schedule; the published maturity is the printed one. maturity_not_past at 2026-06-30: BEL USA LLC's two term loans print maturity 6/2/2026 on the 2026-06-30 schedule (fair value 1.0M and 0.2M); the published maturity is the printed one.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "Odlum Data Lender, LLC(7)(10)(21) Telecommunications L+ 6.35 %, 10.72 6/23/2021 2/1/2023 15,581,221 15,581,221 13,758,218",
+     "quote": "'Odlum Data Lender, LLC(7)(10)(21) Telecommunications L+ 6.35 %, 10.72 6/23/2021 2/1/2023 15,581,221 15,581,221 13,758,218': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-337440",
+     "verbatim": "BEL USA LLC(7)(11)(14)(16) 1st Lien Term Loan E-Commerce S+ 9.15 %, 2.50 % Floor 12.82 12/13/2018 6/2/2026 8,821,421 8,719,947 1,036,271",
+     "quote": "'BEL USA LLC(7)(11)(14)(16) 1st Lien Term Loan E-Commerce S+ 9.15 %, 2.50 % Floor 12.82 12/13/2018 6/2/2026 8,821,421 8,719,947 1,036,271': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-337440",
+     "verbatim": "BEL USA LLC(7) 1st Lien Term Loan E-Commerce S+ 9.15 %, 2.50 % Floor 12.82 1/13/2026 6/2/2026 223,491 223,491 221,378",
+     "quote": "'BEL USA LLC(7) 1st Lien Term Loan E-Commerce S+ 9.15 %, 2.50 % Floor 12.82 1/13/2026 6/2/2026 223,491 223,491 221,378': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19",
+   "addresses_verdict": {
+    "2023-06-30": "The earlier reviewer read Odlum's 2/1/2023 maturity on the current schedule as a value defect. The page prints exactly that date on the current-period row; the loan is held past its printed maturity. Published as printed, not a parse error."
+   }
+  },
+  {
+   "disposition_id": "PD-A04-1646614-8",
+   "class": "false_alarm",
+   "engine": "oracle",
+   "rule_name": "A04",
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "statement": "A04 at 2023-06-30 compares the published total with the cash rows (932.0M) against the filed investments total, which excludes cash (847.4M); the difference is the printed money-market holding 84.6M. Investments ex cash equal the filed figure exactly. A04 at 2023-09-30 compares the published total with the cash rows (955.0M) against the filed investments total, which excludes cash (862.9M); the difference is the printed money-market holding 92.1M. Investments ex cash equal the filed figure exactly. Same reading in 7 more quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %",
+     "quote": "'Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund 84,630,043 84,630,043 84,630,043 15.92 Total Cash Equivalents 84,630,043",
+     "quote": "'Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund 84,630,043 84,630,043 84,630,043 15.92 Total Cash Equivalents 84,630,043': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060746",
+     "verbatim": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %",
+     "quote": "'Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060746",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %",
+     "quote": "'Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 101,331,843 $ 101,331,843 18.75 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 101,331,843 $ 101,331,843 18.75 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056367",
+     "verbatim": "Total Investments, March 31, 2024 $ 925,175,902 $ 917,425,138 168.55 %",
+     "quote": "'Total Investments, March 31, 2024 $ 925,175,902 $ 917,425,138 168.55 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056367",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 75,425,559 $ 75,425,559 13.86 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 75,425,559 $ 75,425,559 13.86 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095339",
+     "verbatim": "Total Investments, June 30, 2024 $ 952,451,230 $ 931,158,200 171.54 %",
+     "quote": "'Total Investments, June 30, 2024 $ 952,451,230 $ 931,158,200 171.54 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095339",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 47,089,692 $ 47,089,692 8.67 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 47,089,692 $ 47,089,692 8.67 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124813",
+     "verbatim": "Total Investments, September 30, 2024 $ 934,886,747 $ 909,124,118 167.66 %",
+     "quote": "'Total Investments, September 30, 2024 $ 934,886,747 $ 909,124,118 167.66 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124813",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 61,754,179 $ 61,754,179 11.39 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 61,754,179 $ 61,754,179 11.39 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-039264",
+     "verbatim": "Total Investments, December 31, 2024 $ 919,774,172 $ 891,045,657 163.51 %",
+     "quote": "'Total Investments, December 31, 2024 $ 919,774,172 $ 891,045,657 163.51 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-039264",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 82,522,423 $ 82,522,423 15.14 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 82,522,423 $ 82,522,423 15.14 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070278",
+     "verbatim": "Total Investments, March 31, 2025 $ 922,634,556 $ 891,256,739 164.48 %",
+     "quote": "'Total Investments, March 31, 2025 $ 922,634,556 $ 891,256,739 164.48 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070278",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 78,134,546 $ 78,134,546 14.41 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 78,134,546 $ 78,134,546 14.41 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107200",
+     "verbatim": "Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %",
+     "quote": "'Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107200",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 105,914,964 $ 105,914,964 19.57 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 105,914,964 $ 105,914,964 19.57 %': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-E01-1646614-9",
+   "class": "false_alarm",
+   "engine": "oracle",
+   "rule_name": "E01",
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "statement": "E01 at 2023-06-30 compares the published total with the cash rows (932.0M) against the filed investments total, which excludes cash (847.4M); the difference is the printed money-market holding 84.6M. Investments ex cash equal the filed figure exactly. E01 at 2023-09-30 compares the published total with the cash rows (955.0M) against the filed investments total, which excludes cash (862.9M); the difference is the printed money-market holding 92.1M. Investments ex cash equal the filed figure exactly. Same reading in 7 more quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %",
+     "quote": "'Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund 84,630,043 84,630,043 84,630,043 15.92 Total Cash Equivalents 84,630,043",
+     "quote": "'Cash Equivalents JPMorgan 100% US Treasury Securities Money Market Fund 84,630,043 84,630,043 84,630,043 15.92 Total Cash Equivalents 84,630,043': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060746",
+     "verbatim": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %",
+     "quote": "'Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060746",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents 92,114,292 92,114,292 17.06 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %",
+     "quote": "'Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 101,331,843 $ 101,331,843 18.75 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 101,331,843 $ 101,331,843 18.75 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056367",
+     "verbatim": "Total Investments, March 31, 2024 $ 925,175,902 $ 917,425,138 168.55 %",
+     "quote": "'Total Investments, March 31, 2024 $ 925,175,902 $ 917,425,138 168.55 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056367",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 75,425,559 $ 75,425,559 13.86 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 75,425,559 $ 75,425,559 13.86 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095339",
+     "verbatim": "Total Investments, June 30, 2024 $ 952,451,230 $ 931,158,200 171.54 %",
+     "quote": "'Total Investments, June 30, 2024 $ 952,451,230 $ 931,158,200 171.54 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095339",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 47,089,692 $ 47,089,692 8.67 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 47,089,692 $ 47,089,692 8.67 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124813",
+     "verbatim": "Total Investments, September 30, 2024 $ 934,886,747 $ 909,124,118 167.66 %",
+     "quote": "'Total Investments, September 30, 2024 $ 934,886,747 $ 909,124,118 167.66 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124813",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 61,754,179 $ 61,754,179 11.39 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 61,754,179 $ 61,754,179 11.39 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-039264",
+     "verbatim": "Total Investments, December 31, 2024 $ 919,774,172 $ 891,045,657 163.51 %",
+     "quote": "'Total Investments, December 31, 2024 $ 919,774,172 $ 891,045,657 163.51 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-039264",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 82,522,423 $ 82,522,423 15.14 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 82,522,423 $ 82,522,423 15.14 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070278",
+     "verbatim": "Total Investments, March 31, 2025 $ 922,634,556 $ 891,256,739 164.48 %",
+     "quote": "'Total Investments, March 31, 2025 $ 922,634,556 $ 891,256,739 164.48 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070278",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 78,134,546 $ 78,134,546 14.41 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 78,134,546 $ 78,134,546 14.41 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107200",
+     "verbatim": "Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %",
+     "quote": "'Total Investments, June 30, 2025 $ 955,176,546 $ 927,688,537 171.41 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107200",
+     "verbatim": "Total Cash Equivalents and Restricted Cash Equivalents $ 105,914,964 $ 105,914,964 19.57 %",
+     "quote": "'Total Cash Equivalents and Restricted Cash Equivalents $ 105,914,964 $ 105,914,964 19.57 %': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-C107-1646614-10",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
+   "ciks": [
+    "0001646614"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "statement": "C107 at 2023-06-30: 12 unfunded revolver and delayed-draw lines publish a negative cost, printed in brackets on the page (unamortized fees on an undrawn commitment). The 2023 filings tag these costs without a sign; this run sets the printed sign by row correction (cost residue against the filed total 0 after it), so the owner-accepted check 'values_as_filed' cannot clear them (the tag is unsigned). Same reason as the accepted R-C107. C107 at 2023-09-30: 15 unfunded revolver and delayed-draw lines publish a negative cost, printed in brackets on the page (unamortized fees on an undrawn commitment). The 2023 filings tag these costs without a sign; this run sets the printed sign by row correction (cost residue against the filed total 0 after it), so the owner-accepted check 'values_as_filed' cannot clear them (the tag is unsigned). Same reason as the accepted R-C107. Same reading in 1 more quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(19)(20) Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 19,323 )",
+     "quote": "'A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(19)(20) Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 19,323 )': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-042115",
+     "verbatim": "Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %",
+     "quote": "'Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975 159.38 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060746",
+     "verbatim": "A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(20)(21) Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 18,216 )",
+     "quote": "'A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(20)(21) Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 18,216 )': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060746",
+     "verbatim": "Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %",
+     "quote": "'Total Investments, September 30, 2023 $ 869,289,348 $ 862,914,087 159.63 %': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(24)(25) 1st Lien Revolver Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 17,109 )",
+     "quote": "'A Stucki TopCo Holdings LLC & Intermediate Holdings LLC(6)(7)(24)(25) 1st Lien Revolver Manufacturing S+ 7.01 %, 1.00 % Floor ( 0.50 % on unfunded) 0.50 11/23/2022 11/23/2027 878,780 ( 17,109 )': printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-034390",
+     "verbatim": "Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %",
+     "quote": "'Total Investments, December 31, 2023 $ 885,470,822 $ 876,197,259 162.15 %': printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001646614.json and scratch/fund_runs/0001646614/",
+   "decided_by": "PROPOSED by agent fund-agent-silverpoint-2026-10-19 (fund-clearing loop, sandbox splf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  }
+ ]
+}

@@ -1824,6 +1824,14 @@ def reconcile_bdc_source_to_holdings(
     ) + ")"
     source_staging_identifier = _staging_clean_identifier_sql("investment_identifier")
     output_staging_identifier = _staging_clean_identifier_sql("bdc_investment_identifier")
+    # Per-filer printed subtotal members (wrapper source_encodings.subtotal_members; Silver Point
+    # 'Non-Controlled/Non-Affiliated Investments United States of America Equities' for the
+    # printed 'Total United States of America Equities'). 'false' for every other filer.
+    if enable_bdc_xbrl_wrappers:
+        from pipeline.source_encodings import subtotal_member_expression
+        wrapper_subtotal_sql = subtotal_member_expression("source_ranked.cik", "source_ranked.raw_investment_identifier")
+    else:
+        wrapper_subtotal_sql = "false"
 
     detail = con.execute(f"""
         WITH source_base AS (
@@ -1944,6 +1952,9 @@ def reconcile_bdc_source_to_holdings(
                     ELSE {agg_filter}
                 END AS is_aggregate_candidate,
                 COALESCE(aom.exact_force_exclude, 0) = 1 AS is_exact_override_exclude,
+                -- A printed subtotal line the filer's wrapper names (source_encodings.subtotal_members);
+                -- non-blocking only where it has no published match.
+                {wrapper_subtotal_sql} AS is_wrapper_subtotal,
                 {_money_market_check_sql('lower_id')} AS is_money_market,
                 ({_bad_issuer_name_sql('staging_normalized_investment_identifier')}) AS is_bad_issuer_candidate,
                 CASE WHEN (
@@ -2868,6 +2879,7 @@ def reconcile_bdc_source_to_holdings(
                          AND (
                              COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
                              OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                             OR COALESCE(s.is_wrapper_subtotal, false)
                          )
                         THEN 'excluded_aggregate_candidate'
                     WHEN m.source_row_id IS NULL
@@ -2903,6 +2915,7 @@ def reconcile_bdc_source_to_holdings(
                              AND (
                                  COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
                                  OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                                 OR COALESCE(s.is_wrapper_subtotal, false)
                              )
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
@@ -2931,6 +2944,7 @@ def reconcile_bdc_source_to_holdings(
                              AND (
                                  COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
                                  OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                                 OR COALESCE(s.is_wrapper_subtotal, false)
                              )
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
@@ -2959,6 +2973,7 @@ def reconcile_bdc_source_to_holdings(
                              AND (
                                  COALESCE(s.source_wrapper_disposition, '') IN ('aggregate', 'non_private_market')
                                  OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                                 OR COALESCE(s.is_wrapper_subtotal, false)
                              )
                          )
                          OR (m.source_row_id IS NULL AND COALESCE(s.is_money_market, false))
@@ -2988,6 +3003,7 @@ def reconcile_bdc_source_to_holdings(
                          AND (
                              COALESCE(s.source_wrapper_disposition, '') = 'aggregate'
                              OR COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
+                             OR COALESCE(s.is_wrapper_subtotal, false)
                          )
                         THEN 'excluded_aggregate_candidate'
                     WHEN m.source_row_id IS NULL
@@ -3037,6 +3053,8 @@ def reconcile_bdc_source_to_holdings(
                     WHEN m.source_row_id IS NULL
                          AND COALESCE(s.source_wrapper_disposition, '') LIKE '%_category_rollup'
                         THEN 'category rollup source row excluded by per-CIK wrapper classification'
+                    WHEN m.source_row_id IS NULL AND COALESCE(s.is_wrapper_subtotal, false)
+                        THEN 'printed subtotal member named by the per-CIK wrapper (source_encodings.subtotal_members)'
                     WHEN m.source_row_id IS NULL
                          AND COALESCE(s.source_wrapper_disposition, '') = 'non_private_market'
                         THEN 'non-private-market source row excluded by per-CIK wrapper classification'
@@ -3207,6 +3225,8 @@ def reconcile_bdc_source_to_holdings(
                     WHEN m.source_row_id IS NULL
                          AND COALESCE(s.source_wrapper_disposition, '') LIKE '%_rollup' THEN
                         'rollup source row documented by per-CIK wrapper classification'
+                    WHEN m.source_row_id IS NULL AND COALESCE(s.is_wrapper_subtotal, false) THEN
+                        'printed subtotal member documented by per-CIK wrapper (source_encodings.subtotal_members)'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_money_market, false) THEN
                         'money market fund filtered during staging'
                     WHEN m.source_row_id IS NULL AND COALESCE(s.is_bad_issuer_candidate, false) THEN
@@ -4578,8 +4598,16 @@ def _compute_override_hash() -> str:
         f"{row.cik}:{row.field}:{row.factor}"
         for row in rescales.itertuples(index=False)
     ))
+    # Wrapper-declared subtotal members (source_encodings.subtotal_members) change row statuses
+    # too; a pattern edit must recompute that filer's cached partition.
+    from pipeline.source_encodings import load_encodings
+    subtotal_payload = "|".join(
+        f"{cik}:" + "\x1e".join(encoding["subtotal_members"])
+        for cik, encoding in sorted(load_encodings().items())
+        if encoding.get("subtotal_members")
+    )
     return hashlib.sha256(
-        (base + "\x1f" + rescale_payload).encode("utf-8")
+        (base + "\x1f" + rescale_payload + ("\x1f" + subtotal_payload if subtotal_payload else "")).encode("utf-8")
     ).hexdigest()
 
 

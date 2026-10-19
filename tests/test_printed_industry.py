@@ -159,3 +159,41 @@ def test_a_withdrawn_group_heading_gives_way_to_the_industry_in_the_member(monke
     assert out["gics_sub_industry"].tolist()[:22] == ["Application Software"] * 22
     # a rare member catch that maps to nothing is not taken: the row keeps its earlier label and no filer industry
     assert out["extracted_industry"].tolist()[22] == "" and out["gics_sub_industry"].tolist()[22] == "Advertising"
+
+
+def _fund_label_map(monkeypatch, table):
+    from pipeline import gics_mapping, staging_bdc
+    monkeypatch.setattr(gics_mapping, "_load_cache", lambda: {})
+    monkeypatch.setattr(staging_bdc, "industry_from_identifier_patterns", lambda wrapper_dir=None: {})
+    monkeypatch.setattr(staging_bdc, "industry_label_gics_maps", lambda wrapper_dir=None: table)
+
+
+def test_a_filers_own_label_map_applies_to_its_rows(monkeypatch):
+    # Silver Point (2026-10-19): 'Power Generation' and 'Oilfield Services' map through the fund's
+    # dispatch.industry_label_gics, not through the shared alias table.
+    _fund_label_map(monkeypatch, {"0001646614": {"power generation": "Independent Power Producers & Energy Traders",
+                                                 "oilfield services": "Oil & Gas Equipment & Services"}})
+    out = uh._apply_printed_industry(_holdings([
+        {"cik": "0001646614", "extracted_industry": "Power Generation", "gics_sub_industry": "Electric Utilities"},
+        {"cik": "0001646614", "extracted_industry": "Oilfield  services", "gics_sub_industry": ""}]))
+    assert out["gics_sub_industry"].tolist() == ["Independent Power Producers & Energy Traders", "Oil & Gas Equipment & Services"]
+
+
+def test_another_funds_rows_are_not_touched_by_a_filers_label_map(monkeypatch):
+    # false positive: Ares prints 'Power Generation' too; without its own map its label is unchanged,
+    # and the shared table does not know the label.
+    _fund_label_map(monkeypatch, {"0001646614": {"power generation": "Independent Power Producers & Energy Traders"}})
+    out = uh._apply_printed_industry(_holdings([
+        {"cik": "0001287750", "extracted_industry": "Power Generation", "gics_sub_industry": "Renewable Electricity"}]))
+    assert out["gics_sub_industry"].tolist() == ["Renewable Electricity"]
+    assert "Power Generation" not in uh.printed_industry_gics(["Power Generation"])
+
+
+def test_a_label_map_target_that_is_not_gics_is_refused(tmp_path):
+    import json
+    import pytest
+    from pipeline.staging_bdc import industry_label_gics_maps
+    (tmp_path / "0000000001.json").write_text(json.dumps(
+        {"cik": "0000000001", "dispatch": {"industry_label_gics": {"Widgets": "Widget Makers"}}}), encoding="utf-8")
+    with pytest.raises(ValueError):
+        industry_label_gics_maps(tmp_path)

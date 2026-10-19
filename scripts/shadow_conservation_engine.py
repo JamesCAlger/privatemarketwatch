@@ -215,13 +215,20 @@ def _anchor_table_sql(anchor: Anchor) -> str:
                 -- Join keys come from pipeline.published_basis so this anchor, _cash_rows and
                 -- _sum_<rule> normalise cik and report_date identically even if the column
                 -- parses as TIMESTAMP or the cik loses its leading zeros.
-                SELECT {CIK10_SQL} AS cik,
-                       {REPORT_DATE_KEY_SQL} AS report_date,
-                       max(TRY_CAST({anchor.column} AS DOUBLE)) AS ifv,
-                       max(TRY_CAST(cash_equivalents_at_fair_value AS DOUBLE)) AS cash
-                FROM read_csv_auto('{FUND_FINANCIALS_FILE.as_posix()}', sample_size=-1)
-                WHERE source='companyfacts'
-                GROUP BY 1, 2
+                -- The filed concepts a wrapper says the cash rows also hold
+                -- (cash_rows_include_concepts, e.g. restricted cash equivalents) are added to the
+                -- filed cash figure; _filed_cash_extra is built by run_rule.
+                SELECT ff.cik, ff.report_date, ff.ifv, ff.cash + coalesce(e.extra, 0) AS cash
+                FROM (
+                    SELECT {CIK10_SQL} AS cik,
+                           {REPORT_DATE_KEY_SQL} AS report_date,
+                           max(TRY_CAST({anchor.column} AS DOUBLE)) AS ifv,
+                           max(TRY_CAST(cash_equivalents_at_fair_value AS DOUBLE)) AS cash
+                    FROM read_csv_auto('{FUND_FINANCIALS_FILE.as_posix()}', sample_size=-1)
+                    WHERE source='companyfacts'
+                    GROUP BY 1, 2
+                ) ff
+                LEFT JOIN _filed_cash_extra e USING (cik, report_date)
             ) f
             JOIN _cash_rows c USING (cik, report_date)
             JOIN _cash_sum s USING (cik, report_date)
@@ -301,11 +308,24 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
         GROUP BY 1, 2
         """
     )
+    # Filed figures the schedule's cash rows also hold, per the wrapper's cash_rows_include_concepts
+    # (Silver Point: restricted cash equivalents). Added to the filed cash-equivalents figure
+    # where one is filed for the date; never a value the pipeline derived.
+    con.execute("CREATE OR REPLACE TEMP TABLE _filed_cash_extra(cik VARCHAR, report_date VARCHAR, extra DOUBLE)")
+    extra_rows = filed_cash_addend_rows()
+    if extra_rows:
+        con.executemany("INSERT INTO _filed_cash_extra VALUES (?, ?, ?)", extra_rows)
     con.execute(f"CREATE OR REPLACE TEMP TABLE _filed_cash AS {_filed_cash_sql()}")
+    con.execute("UPDATE _filed_cash SET filed_cash = filed_cash + e.extra FROM _filed_cash_extra e "
+                "WHERE _filed_cash.cik = e.cik AND _filed_cash.report_date = e.report_date")
     con.execute("CREATE OR REPLACE TEMP TABLE _cash_outside_total(cik VARCHAR)")
     declared = cash_outside_total_ciks()
     if declared:
         con.executemany("INSERT INTO _cash_outside_total VALUES (?)", [(c,) for c in declared])
+    con.execute("CREATE OR REPLACE TEMP TABLE _cost_cash_split(cik VARCHAR)")
+    cost_split = cost_split_ciks()
+    if cost_split:
+        con.executemany("INSERT INTO _cost_cash_split VALUES (?)", [(c,) for c in cost_split])
     anchor_ctes, coalesce_val, coalesce_label, coalesce_basis = [], [], [], []
     for i, a in enumerate(rule.anchors):
         con.execute(f"CREATE OR REPLACE TEMP TABLE _a{i}_{rule.name} AS {_anchor_table_sql(a)}")
@@ -326,8 +346,16 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
     # such a fund failed by exactly its cash row (Goldman Sachs 2025-06-30: 233.3M of 9,630.9M).
     # Not the default: on the published build of 2026-10-01 it would move 49 fund-quarters, and
     # about 20 of them from reconciled to short, because other filers count their cash funds
-    # inside the investments line. Fair value only.
-    split = "true" if rule.value_column == "fair_value" else "false"
+    # inside the investments line. Fair value by default; the cost rule splits too for a filer
+    # whose wrapper also sets cost_total_excludes = ["cash_rows"] (Silver Point 2023-06-30: cost
+    # with cash 948.4M against filed 863.2M, non-cash 863.8M). The cash rows' own status
+    # (cash_status) is read from the fair-value rule only: the filed cash figure is a fair value.
+    if rule.value_column == "fair_value":
+        split, split_status = "true", "true"
+    elif rule.value_column == "cost":
+        split, split_status = "(cik IN (SELECT cik FROM _cost_cash_split))", "false"
+    else:
+        split, split_status = "false", "false"
     con.execute(
         f"""
         CREATE OR REPLACE TABLE result_{rule.name} AS
@@ -344,7 +372,7 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
             SELECT *,
                    CASE WHEN {split} AND declared AND anchor_basis = 'investments_ex_cash' THEN value_sum - cash_sum
                         ELSE value_sum END AS compared_sum,
-                   CASE WHEN NOT ({split}) OR NOT declared OR anchor_basis <> 'investments_ex_cash' OR cash_sum = 0 THEN ''
+                   CASE WHEN NOT ({split_status}) OR NOT declared OR anchor_basis <> 'investments_ex_cash' OR cash_sum = 0 THEN ''
                         WHEN filed_cash IS NULL THEN 'no_filed_figure'
                         WHEN cash_sum > filed_cash + {tol} * abs(anchor_value) THEN 'exceeds_filed'
                         ELSE 'within_filed' END AS cash_status
@@ -382,6 +410,18 @@ def cash_outside_total_ciks() -> list[str]:
     from pipeline.source_encodings import load_encodings
     return sorted(cik for cik, encoding in load_encodings().items()
                   if encoding.get("investments_total_excludes") == ["cash_rows"])
+
+
+def cost_split_ciks() -> list[str]:
+    """Filers whose wrapper says the filed cost total also leaves the cash rows out."""
+    from pipeline.source_encodings import cost_cash_split_ciks
+    return cost_cash_split_ciks()
+
+
+def filed_cash_addend_rows() -> list[tuple[str, str, float]]:
+    """(cik, report_date, amount) of the filed concepts a wrapper says the cash rows also hold."""
+    from pipeline.source_encodings import cash_rows_filed_addends
+    return cash_rows_filed_addends()
 
 
 def _filed_cash_sql() -> str:

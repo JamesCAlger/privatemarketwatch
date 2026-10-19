@@ -1,0 +1,23 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001646614",
+ "entity_name": "Silver Point Specialty Lending Fund",
+ "version": 1,
+ "figure_corrections": [
+  {"report_date": "2021-12-31", "field": "nav_per_share", "value": 15.27,
+   "evidence": "0000950170-24-034390 (10-K 2023) financial highlights: 'asset value, end of period $ 14.64 $ 14.39 $ 15.27 N/A N/A Shares outstanding, end of period (1) 36,907,451 36,907,451 36,907,451'. Company facts keep 30.55, a later filing's split-adjusted restatement."},
+  {"report_date": "2022-12-31", "field": "nav_per_share", "value": 14.39,
+   "evidence": "0000950170-23-042115 (10-Q 2023-06-30) balance sheet: 'Net asset value per share $ 14.41 $ 14.39' (2023-06-30, 2022-12-31); shares 36,907,451. Company facts keep 28.77, the split-adjusted restatement in a later filing, while the share count stays unadjusted (NAV x shares twice net assets)."},
+  {"report_date": "2023-12-31", "field": "nav_per_share", "value": 14.64,
+   "evidence": "0000950170-24-034390 (10-K 2023) balance sheet: 'Net asset value per share $ 14.64 $ 14.39'; highlights 'Shares outstanding, end of period (1) 36,907,451'. Company facts keep 29.29 (later split-adjusted restatement)."},
+  {"report_date": "2024-12-31", "field": "nav_per_share", "value": 14.76,
+   "evidence": "0000950170-25-039264 (10-K 2024) balance sheet: 'Net asset value per share $ 14.76 $ 14.64'. Company facts keep 29.53 (later split-adjusted restatement)."},
+  {"report_date": "2024-12-31", "field": "shares_outstanding", "value": 36907451,
+   "evidence": "0000950170-25-039264 (10-K 2024) highlights: 'et value, end of period $ 14.76 $ 14.64 $ 14.39 $ 15.27 N/A Shares outstanding, end of period (1) 36,907,451 36,907,451 36,907,451 36,907,451'. Company facts keep 18,453,726 (later split-adjusted restatement); 544,912,994 / 36,907,451 = 14.76."},
+  {"report_date": "2025-03-31", "field": "nav_per_share", "value": 14.69,
+   "evidence": "0000950170-25-070278 (10-Q 2025-03-31) highlights: 'Net asset value, end of period $ 14.69 $ 14.75 Shares outstanding, end of period 36,907,451 36,907,451'. Company facts keep 29.38 (later split-adjusted restatement)."},
+  {"report_date": "2025-06-30", "field": "nav_per_share", "value": 14.41,
+   "evidence": "0000950170-25-107200 (10-Q 2025-06-30) highlights: 'Net asset value, end of period $ 14.41 $ 14.71 Shares outstanding, end of period 37,566,942 36,907,451'. Company facts keep 28.82 (later split-adjusted restatement)."}
+ ],
+ "notes": "Fund-clearing loop 2026-10-19 (fund-agent-silverpoint-2026-10-19). The fund made a one-for-two reverse share split effective 2025-12-26 (0001193125-26-114381: 'implement a one-for-two reverse share split of the Funds common shares, which was effective as of the close of business on December 26, 2025'); the 10-K 2025 restates earlier NAV per share and shares on the new basis ('Net asset value, end of period $ 27.96 $ 29.53 $ 29.29 $ 28.77 $ 30.55 Shares outstanding, end of period 21,240,388 18,453,726 ...'), and company facts keep the last filed value, so six period-ends published a split-adjusted figure beside an unadjusted one. Each period-end now carries the NAV and shares its own filing prints. No figure derived."
+}

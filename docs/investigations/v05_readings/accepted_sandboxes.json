@@ -268,5 +268,10 @@
   "label": "aglf",
   "accepted_on": "2026-10-19",
   "basis": "D-210, gate PASS with investigation COMPLETE: 25 findings, 14 outstanding, all proposed; 7/7 quarters tie; income fixed by opt-in total-income fallback; sample 2/20 errors fixed fund-wide; six builds"
+ },
+ "0001646614": {
+  "label": "splf",
+  "accepted_on": "2026-10-19",
+  "basis": "D-211, gate INCOMPLETE (F23 2025-06-30 parked, shared) with investigation COMPLETE: 71 findings, 39 outstanding, 38 proposed; 13/13 quarters tie; sample 0/20; three opt-in verification keys (SPL-R1..R3); six builds"
  }
 }

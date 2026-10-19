@@ -33,7 +33,8 @@ def load_encodings(wrapper_directory=None):
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
-                'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context'}:
+                'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context',
+                'cash_rows_include_concepts','subtotal_members','cost_total_excludes'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -120,6 +121,22 @@ def load_encodings(wrapper_directory=None):
                     raise ValueError('investments_total_includes_cash contradicts investments_total_excludes: '+str(path))
             if key=='investments_total_excludes' and values!=['cash_rows']:
                 raise ValueError('The only admitted exclusion from the investments total is cash_rows: '+str(path))
+            if key=='cash_rows_include_concepts' and any(not re.fullmatch('[A-Za-z][A-Za-z0-9]*',v) for v in values):
+                raise ValueError('A cash-rows concept is one local name, no prefix: '+str(path))
+            if key=='subtotal_members':
+                for v in values:
+                    # DuckDB reads these with RE2: no lookaround, no back-references.
+                    if re.search(r'\(\?[=!<]|\\[1-9]',v):
+                        raise ValueError('subtotal_members patterns must be RE2 (no lookaround or back-references): '+str(path))
+                    try:
+                        re.compile(v)
+                    except re.error:
+                        raise ValueError('subtotal_members lists regular expressions: '+str(path))
+            if key=='cost_total_excludes':
+                if values!=['cash_rows']:
+                    raise ValueError('The only admitted exclusion from the cost total is cash_rows: '+str(path))
+                if encoding.get('investments_total_excludes')!=['cash_rows']:
+                    raise ValueError('cost_total_excludes needs investments_total_excludes cash_rows: '+str(path))
             if key=='cost_in_two_units' and values!=['foreign_is_par']:
                 raise ValueError('The only admitted reading of a cost in two units is foreign_is_par: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
@@ -181,6 +198,57 @@ def industry_columns(cik,encodings=None):
     configured=load_encodings() if encodings is None else encodings
     encoding=configured.get(re.sub(r'[^0-9]','',str(cik or '')).zfill(10),{})
     return frozenset(' '.join(v.lower().split()) for v in encoding.get('industry_columns',[]))
+
+
+def cash_rows_filed_addends(encodings=None,cache_dir=None):
+    """[(cik10, 'YYYY-MM-DD', amount)]: for filers whose wrapper sets cash_rows_include_concepts, the
+    sum of those concepts' filed instant USD values per date, from the cached companyfacts (no network).
+
+    Added to the filed cash-equivalents figure where a check anchors the schedule's cash rows on it.
+    Silver Point Specialty Lending prints 'Total Cash Equivalents and Restricted Cash Equivalents
+    92,114,292' (10-Q 2023-09-30) and files CashEquivalentsAtCarryingValue 49.9M and
+    RestrictedCashEquivalents 42.2M. A filed figure only, never a value the pipeline derived."""
+    configured=load_encodings() if encodings is None else encodings
+    declared={cik:list(e['cash_rows_include_concepts']) for cik,e in configured.items() if e.get('cash_rows_include_concepts')}
+    if not declared:
+        return []
+    if cache_dir is None:
+        from pipeline.config import COMPANYFACTS_CACHE_DIR as cache_dir
+    from pipeline.extract_companyfacts import _extract_concept_series
+    rows=[]
+    for cik,concepts in sorted(declared.items()):
+        path=Path(cache_dir)/(cik+'.json')
+        if not path.exists():
+            continue
+        facts=json.loads(path.read_text(encoding='utf-8'))
+        totals={}
+        for concept in concepts:
+            for end,value in _extract_concept_series(facts,[concept],'USD',True).items():
+                totals[end[:10]]=totals.get(end[:10],0.0)+value
+        rows.extend((cik,end,value) for end,value in sorted(totals.items()))
+    return rows
+
+
+def subtotal_member_expression(cik,identifier,encodings=None):
+    """True for a source row whose member matches one of its filer's subtotal_members patterns.
+
+    Case-insensitive RE2 match on the whole member as written, restricted to the filing CIK.
+    'false' when no wrapper sets the key."""
+    configured=load_encodings() if encodings is None else encodings
+    parts=[]
+    for key,encoding in sorted(configured.items()):
+        patterns=encoding.get('subtotal_members',[])
+        if patterns:
+            member="trim(regexp_replace(coalesce(CAST("+identifier+" AS VARCHAR),''),'\\s+',' ','g'))"
+            tests=' OR '.join('regexp_matches('+member+','+_literal('(?i)'+p)+')' for p in patterns)
+            parts.append('('+_cik_condition(cik,key)+' AND ('+tests+'))')
+    return '('+' OR '.join(parts)+')' if parts else 'false'
+
+
+def cost_cash_split_ciks(encodings=None):
+    """Filers whose wrapper sets cost_total_excludes cash_rows: the filed cost total leaves the cash rows out."""
+    configured=load_encodings() if encodings is None else encodings
+    return sorted(cik for cik,encoding in configured.items() if encoding.get('cost_total_excludes')==['cash_rows'])
 
 
 _WHOLE_DOLLAR_CACHE={}

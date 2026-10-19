@@ -83,6 +83,12 @@
           "type": "string",
           "description": "Regex whose group 1 is the filer's industry inside the member text; fills a row with no industry (Goldman Sachs BDC, D-114). Rare captures that map to no GICS label are not taken."
         },
+        "industry_label_gics": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "string", "minLength": 1},
+          "description": "This filer's own printed industry labels mapped to a GICS sub-industry name, for this fund's rows only (Silver Point 2026-10-19: 'Industrial Products & Services', 'Oilfield Services'). Consulted before the shared alias table; labels compared case-insensitively with spaces collapsed. A target that is not a GICS sub-industry name is refused. Use instead of a shared alias where the label is broad or another fund prints it with another meaning. Evidence required: the printed label on the fund's rows."
+        },
         "lien_from_identifier": {
           "type": "object",
           "propertyNames": {"enum": ["First Lien", "Second Lien", "Unsecured"]},
@@ -715,6 +721,27 @@
           "minItems": 1,
           "items": {"type": "string", "minLength": 1},
           "description": "Issuer-name patterns (regular expressions, case-insensitive) of cash-class rows the filer counts inside its printed 'Total Investments' (Overland: the U.S. Treasury Bill printed above 'Total Investments $ 1,626,749'). The rows stay classed as cash and out of the published fair value; the fund gate's totals comparison adds them to the non-cash rows. Owner ruling 2026-10-17 (D-202). Evidence required: the printed total line in each quarter."
+        },
+        "cash_rows_include_concepts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*$"},
+          "description": "Balance-sheet concept local names (us-gaap or the filer's own) whose filed instant values the schedule's cash rows also hold, beside the cash equivalents (Silver Point Specialty Lending, 10-Q 2023-09-30: 'Total Cash Equivalents and Restricted Cash Equivalents 92,114,292' = CashEquivalentsAtCarryingValue 49.9M + RestrictedCashEquivalents 42.2M). Read from the cached companyfacts and added, for the same date, to the filed cash-equivalents figure (fund_financials.cash_equivalents_at_fair_value) wherever a check anchors the cash rows on it: the conservation engine's cash anchor and cash status, and the GAV reconciliation (gav_reconciliation, F20, GAV_BDC02/03). Added only where a cash-equivalents figure is filed for the date. The published rows are unchanged. Evidence required: the printed cash total and the filed figures that sum to it."
+        },
+        "subtotal_members": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Regular expressions (RE2: no lookaround or back-references; matched case-insensitive against the whole source member as written) naming the filer's printed subtotal lines that no shared rule recognises (Silver Point Specialty Lending: 'Non-Controlled/Non-Affiliated Investments, Secured Loans, Total United States of America 1st Lien Term Loan' in 2023, and from 2024-06-30 'Non-Controlled/Non-Affiliated Investments United States of America Equities', with no word Total, for the printed 'Total United States of America Equities 474,538 2,349,171'). Source reconciliation marks such a source row with no published match as excluded_aggregate_candidate, not missing_from_pipeline, so E07, SRC_BDC01 and the source-only blockers stop counting it as a position. A matching row that IS published is untouched. Write each pattern for a whole member (anchored), never a bare word: an issuer whose name contains 'Total' must not match. Evidence required: one printed subtotal line per pattern whose value equals the member's tagged fair value."
+        },
+        "cost_total_excludes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"enum": ["cash_rows"]},
+          "description": "Needs investments_total_excludes cash_rows. The cost conservation check then compares the filed investments cost (InvestmentOwnedAtCost) with the published cost of the rows that are not cash, as the fair-value check does; the cash rows stay in value_sum and are anchored by the fair-value check only. Set where the filed cost total leaves the cash rows out like the fair-value total (Silver Point Specialty Lending, 10-Q 2023-06-30: 'Total Investments, June 30, 2023 $ 863,202,721 $ 847,380,975' with 'Total Cash Equivalents 84,630,043' printed below it). Evidence required: published non-cash cost equal to the filed cost in each quarter."
         },
         "fair_value_concepts": {
           "type": "array",

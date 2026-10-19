@@ -418,6 +418,35 @@ def industry_from_identifier_patterns(wrapper_dir: Path | None = None) -> dict[s
     return result
 
 
+def industry_label_gics_maps(wrapper_dir: Path | None = None) -> dict[str, dict[str, str]]:
+    """CIK -> {normalised printed industry label: GICS sub-industry} (dispatch.industry_label_gics).
+
+    A filer's own label map, read for that filer's rows only and before the shared alias table
+    (Silver Point 2026-10-19: broad labels such as 'Power Generation' mean something else at other
+    funds, so they are not added to the shared table). Keys are lower case with spaces collapsed.
+    A target that is not a GICS sub-industry name raises.
+    """
+    folder = wrapper_dir or _WRAPPER_DEFINITIONS_DIR
+    result: dict[str, dict[str, str]] = {}
+    names = None
+    for path in sorted(folder.glob("*.json")) if folder.exists() else []:
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        table = raw.get("dispatch", {}).get("industry_label_gics")
+        if not table:
+            continue
+        if names is None:
+            from pipeline import gics_mapping
+            names = set(gics_mapping._load_gics_names())
+        bad = sorted(v for v in table.values() if v not in names)
+        if bad:
+            raise ValueError("industry_label_gics targets that are not GICS sub-industries in %s: %s" % (path, bad))
+        result[str(raw["cik"]).zfill(10)] = {" ".join(str(k).lower().split()): str(v) for k, v in table.items()}
+    return result
+
+
 def issuer_from_identifier_settings(wrapper_dir: Path | None = None) -> dict[str, dict]:
     """CIK -> {"when_issuer_re": str, "patterns": [str, ...]} (dispatch.issuer_from_identifier).
 
