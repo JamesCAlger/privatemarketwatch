@@ -237,7 +237,11 @@ def _extract_fund_income_facts(
         if suppress and any(part in local for part in suppress):
             continue
         col = _match_income_concept(local)
-        if col is None and local in fallback_columns:
+        if local in fallback_columns and (col is None or fallback_columns[local] == "total_investment_income"):
+            # A wrapper's total_investment_income fallback names a concept the map reads as another
+            # column (AGL: us-gaap:InvestmentIncomeNet, the printed 'Total investment income', which
+            # the 'investmentincomenet' pattern files as net investment income); it is taken from
+            # the map for that filer only.
             # held apart under a private key; applied below only where the period lacks the column
             col = _WRAPPER_FALLBACK_PREFIX + fallback_columns[local]
         if col is None:
@@ -274,6 +278,10 @@ def _extract_fund_income_facts(
                              for key in [k for k in period if k.startswith(_WRAPPER_FALLBACK_PREFIX)]}
         if not set(period) - {"start_date", "end_date", "duration_months"}:
             continue
+        # A wrapper's total investment income comes first: the period has its income statement
+        # (another income column is filed), so the after-tax and other fallbacks can then apply.
+        if "total_investment_income" in wrapper_fallbacks and "total_investment_income" not in period:
+            period["total_investment_income"] = wrapper_fallbacks.pop("total_investment_income")
         if (fallback is not None and "net_investment_income" not in period
                 and "total_investment_income" in period):
             period["net_investment_income"] = fallback

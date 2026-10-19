@@ -109,6 +109,13 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "total_investment_income": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9]{8,}$"},
+          "description": "AGL Private Credit Income: us-gaap:InvestmentIncomeNet is the printed 'Total investment income' (10-Q 2025-03-31: 13,533; 'Net investment income (loss) 5,373' is NetInvestmentIncome); the shared map reads the concept as net investment income. A concept named here is read as total investment income for this filer, ahead of the map, and only for a period that files another income column. Evidence required: the printed income statement and the concept of each line."
+        },
         "total_expenses": {
           "type": "array",
           "minItems": 1,

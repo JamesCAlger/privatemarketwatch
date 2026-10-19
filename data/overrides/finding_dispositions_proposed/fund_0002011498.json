@@ -1,0 +1,387 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "aglf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-A07-2011498-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "reason_key": "a07-outlier-percent-is-the-printed-row",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "statement": "A07 warns at 2024-12-31 because two rows carry more than 25 pct of net assets: Saturn Sound Bidco's term loan 26.8 % and Mountain Parent's term loan 25.6 %, both as printed in the fund's first year-end schedule (net assets 220,782). The percent sum, 214.4, equals the printed 'Total investments' percent and is inside the band. No fix: both published percents are the printed ones.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038042",
+     "verbatim": "Saturn Sound Bidco Limited First Lien Term Loan Aerospace & Defense SOFR + 5.25 % 9.78 % 12/2/2024 12/3/2031 60,289 59,242 59,242 26.8 %",
+     "quote": "'Saturn Sound Bidco Limited First Lien Term Loan Aerospace & Defense SOFR + 5.25 % 9.78 % 12/2/2024 12/3/2031 60,289 59,242 59,242 26.8 %': printed 26.8 pct; published 26.8"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038042",
+     "verbatim": "Mountain Parent, Inc. First Lien Term Loan Health Care Technology SOFR + 5.00 % 9.33 % 10/21/2024 6/27/2031 57,040 56,621 56,621 25.6 %",
+     "quote": "'Mountain Parent, Inc. First Lien Term Loan Health Care Technology SOFR + 5.00 % 9.33 % 10/21/2024 6/27/2031 57,040 56,621 56,621 25.6 %': printed 25.6 pct; published 25.6"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038042",
+     "verbatim": "Total investments $ 478,403 $ 472,411 $ 473,126 214.4 %",
+     "quote": "'Total investments $ 478,403 $ 472,411 $ 473,126 214.4 %': sum 214.4 printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-pct_position_concentration-2011498-2",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "reason_key": "concentration-large-loan-of-a-young-levered-fund-as-printed",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "statement": "The rows above a quarter of net assets at 2024-12-31 are the two loans printed so in the fund's first schedule (operations began 2024-10-21): Saturn Sound Bidco 59,242 (26.8 %) and Mountain Parent 56,621 (25.6 %) on net assets of 220,782; investments are 214.4 % of net assets. No fix: the published percents are the printed ones.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038042",
+     "verbatim": "Saturn Sound Bidco Limited First Lien Term Loan Aerospace & Defense SOFR + 5.25 % 9.78 % 12/2/2024 12/3/2031 60,289 59,242 59,242 26.8 %",
+     "quote": "'Saturn Sound Bidco Limited First Lien Term Loan Aerospace & Defense SOFR + 5.25 % 9.78 % 12/2/2024 12/3/2031 60,289 59,242 59,242 26.8 %': 26.8 pct as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038042",
+     "verbatim": "Mountain Parent, Inc. First Lien Term Loan Health Care Technology SOFR + 5.00 % 9.33 % 10/21/2024 6/27/2031 57,040 56,621 56,621 25.6 %",
+     "quote": "'Mountain Parent, Inc. First Lien Term Loan Health Care Technology SOFR + 5.00 % 9.33 % 10/21/2024 6/27/2031 57,040 56,621 56,621 25.6 %': 25.6 pct as printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038042",
+     "verbatim": "Total investments $ 478,403 $ 472,411 $ 473,126 214.4 %",
+     "quote": "'Total investments $ 478,403 $ 472,411 $ 473,126 214.4 %': levered fund, 214.4 pct"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-PCT01-2011498-3",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PCT01",
+   "reason_key": "pct01-percent-sum-is-the-printed-total-of-a-levered-fund",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "The sums of percent of net assets, 226.2 at 2025-06-30 and 226.1 at 2025-09-30, are the filer's printed 'Total investments' percents; the fund borrows and its investments are 214 to 254 pct of net assets in every quarter. Published fair value equals the filed investments total in all seven quarters, so no row is over-included.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-102973",
+     "verbatim": "Total investments $ 837,472 $ 837,671 226.2 %",
+     "quote": "'Total investments $ 837,472 $ 837,671 226.2 %': 226.2 printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-269116",
+     "verbatim": "Total investments 1,147,473 1,135,270 226.1 %",
+     "quote": "'Total investments 1,147,473 1,135,270 226.1 %': 226.1 printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-F30-2011498-4",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F30",
+   "reason_key": "fund-row-before-operations-began",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2024-01-17"
+   ],
+   "statement": "The fund-level row dated 2024-01-17 is the date of inception: the 10-K for 2024 tags NetAssetValuePerShare 0 and net assets 0 on it, and its highlights print 'Net asset value at beginning of period $ -' before the first issuance at 25.00. Operations began on 2024-10-21. A zero NAV on the inception date is as filed; no quarter's NAV is affected.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-038042",
+     "verbatim": "Net asset value at beginning of period $ - Issuance of shares 25.00",
+     "quote": "'Net asset value at beginning of period $ - Issuance of shares 25.00': NAV 0 at inception, as tagged"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-F27-2011498-5",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "Income yield 10.7 at 2025-12-31 and 2026-06-30 is the printed annualized ratio of net investment income to average net assets; the check compares it with the published loans' weighted coupon plus 200bp (about 8.5 to 8.7). The fund holds 224 to 254 pct of net assets in investments, so income over net assets runs above the coupon. Expense support also lifts net investment income: the adviser reimburses expenses ('Annualized ratio of net expenses before expense support' 16.8 % against 14.0 % after, 2025), so the printed ratio is above what the portfolio's coupon less the fund's gross expenses would give. Both figures are printed; total and net investment income now equal the printed statements in every quarter (fixed in this run).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-103932",
+     "verbatim": "Annualized ratio of after-tax net investment income to average net assets 10.7 % 9.8 %",
+     "quote": "'Annualized ratio of after-tax net investment income to average net assets 10.7 % 9.8 %': 10.7 pct printed for 2025"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-334994",
+     "verbatim": "Annualized ratio of after-tax net investment income to average net assets 10.7 % 10.2 %",
+     "quote": "'Annualized ratio of after-tax net investment income to average net assets 10.7 % 10.2 %': 10.7 pct printed for six months 2026"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-103932",
+     "verbatim": "Total investments 1,350,788 1,355,641 254.1 %",
+     "quote": "'Total investments 1,350,788 1,355,641 254.1 %': 254.1 pct of net assets in investments"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-C04-2011498-6",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "C04",
+   "reason_key": "c04-lp-interest-printed-with-units-n-a",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "statement": "The fund's only operating-company equity row, Firebird Co-Invest L.P. 'LP Interest', prints no unit count: the 'Par ($) / Shares' cell is empty and the maturity cell 'N/A', and no share or principal fact is tagged on it. One equity row without units is 0 pct, under the 70 pct the check wants. No fix applies: there is no unit count to publish. (AGL EPCI I is classed as a fund interest and not counted.)",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-102973",
+     "verbatim": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 4,942 1.3 %",
+     "quote": "'Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 4,942 1.3 %': no units printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-269116",
+     "verbatim": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 5,103 1.0 %",
+     "quote": "'Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 5,103 1.0 %': no units printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-334994",
+     "verbatim": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 5,836 1.0 %",
+     "quote": "'Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 5,836 1.0 %': no units printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-B02-2011498-7",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B02",
+   "reason_key": "b02-twin-undrawn-lines-printed-separately",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The four rows counted are two pairs of undrawn Coding Solutions delayed-draw lines: the fund's own two lines (acquired 10/21/2024 and 5/15/2025, par a dash, cost (12) and (47), value a dash) and the same two lines in AGL EPCI I's own portfolio (footnote (2): held by both the Company and AGL EPCI I), which are kept as underlying_schedule and not published. Each line is printed separately on its own context. The earlier verdict (Saturn delayed draw in two tables, 'comparative_leak') does not stand: the second table is 'AGL EPCI I Portfolio as of March 31, 2026', the joint venture's schedule of the same date, not a comparative period.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "verbatim": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - ( 12 ) - 0.0 %",
+     "quote": "'Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - ( 12 ) - 0.0 %'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "verbatim": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 47 ) - 0.0 %",
+     "quote": "'Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 47 ) - 0.0 %'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "verbatim": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - - - (2)",
+     "quote": "'Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - - - (2)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "verbatim": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - - - (2)",
+     "quote": "'Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - - - (2)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "verbatim": "AGL EPCI I Portfolio as of March 31, 2026 Investments Investment Type Reference Rate and Spread (1) All In Rate (1)",
+     "quote": "'AGL EPCI I Portfolio as of March 31, 2026 Investments Investment Type Reference Rate and Spread (1) All In Rate (1)': the second table is the JV's portfolio"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "verbatim": "(2) This investment was held by both the Company and AGL EPCI I as of March 31, 2026",
+     "quote": "'(2) This investment was held by both the Company and AGL EPCI I as of March 31, 2026'"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19",
+   "addresses_verdict": {
+    "2026-03-31": "The reviewer read the Saturn delayed draw in table 17 (the fund's schedule, cost (49), value (20)) and table 32 as a comparative leak. Table 32 is 'AGL EPCI I Portfolio as of March 31, 2026' (the joint venture's schedule, footnote (2) 'held by both the Company and AGL EPCI I'); its rows are underlying_schedule, not published, and carry a different accounting scope, so the Saturn pair is not a B02 duplicate. The duplicates B02 counts are the twin Coding Solutions undrawn lines, printed separately."
+   }
+  },
+  {
+   "disposition_id": "PD-B02-2011498-8",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B02",
+   "reason_key": "b02-twin-undrawn-lines-printed-separately",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "The two rows counted are the fund's two undrawn Coding Solutions delayed-draw lines (acquired 12/23/2024 and 5/15/2025, par a dash, cost (12) and (45), value a dash), printed one after the other on their own contexts. Same terms and a zero value; they are two commitments, not a repeated fact.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-334994",
+     "verbatim": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 12/23/2024 8/7/2031 - ( 12 ) - 0.0 %",
+     "quote": "'Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 12/23/2024 8/7/2031 - ( 12 ) - 0.0 %'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-334994",
+     "verbatim": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 45 ) - 0.0 %",
+     "quote": "'Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 45 ) - 0.0 %'"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-PP02-2011498-9",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "reason_key": "pp02-twin-lines-printed-separately",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "The duplicate-dimension candidates are AGL EPCI I's two undrawn Coding Solutions delayed-draw lines (acquired 10/21/2024 and 5/15/2025, each printed '- - -'), look-through rows of the joint venture's portfolio kept as underlying_schedule and not published. Two lines, two members; not a duplicated fact.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "verbatim": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - - - (2)",
+     "quote": "'Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - - - (2)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "verbatim": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - - - (2)",
+     "quote": "'Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - - - (2)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214378",
+     "verbatim": "AGL EPCI I Portfolio as of March 31, 2026 Investments Investment Type Reference Rate and Spread (1) All In Rate (1)",
+     "quote": "'AGL EPCI I Portfolio as of March 31, 2026 Investments Investment Type Reference Rate and Spread (1) All In Rate (1)'"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-PP02-2011498-10",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "reason_key": "pp02-twin-lines-printed-separately",
+   "ciks": [
+    "0002011498"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "The candidates are AGL EPCI I's two undrawn Coding Solutions delayed-draw lines (both acquired 3/25/2026, printed '- - -' one after the other; the second member ends 'One') and the Anaplan revolver printed once in the fund's schedule (acquired 5/20/2025) and once in AGL EPCI I's (acquired 6/26/2026), both '- - -'. Distinct lines with zero values; the joint-venture rows are underlying_schedule and not published.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-334994",
+     "verbatim": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 3/25/2026 8/7/2031 - - - (2)",
+     "quote": "'Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 3/25/2026 8/7/2031 - - - (2)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-334994",
+     "verbatim": "Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 5/20/2025 6/21/2028 - - - 0.0 %",
+     "quote": "'Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 5/20/2025 6/21/2028 - - - 0.0 %'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-334994",
+     "verbatim": "Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 6/26/2026 6/21/2028 - - - (2)",
+     "quote": "'Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 6/26/2026 6/21/2028 - - - (2)'"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0002011498.json and scratch/fund_runs/0002011498/",
+   "decided_by": "PROPOSED by agent fund-agent-agl-2026-10-18 (fund-clearing loop, sandbox aglf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  }
+ ]
+}

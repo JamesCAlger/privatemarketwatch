@@ -1,0 +1,24 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0002011498",
+ "entity_name": "AGL Private Credit Income Fund",
+ "version": 1,
+ "figure_corrections": [
+  {"report_date": "2025-09-30", "field": "shares_outstanding", "value": 20638669,
+   "evidence": "0001193125-25-269116 (10-Q, 2025-09-30) financial highlights: 'Net asset value at end of period $ 24.33 Common Shares outstanding, end of period 20,638,669'. The 10-K for 2025-12-31 (0001193125-26-103932) files CommonStockSharesOutstanding 8,758,495 (the 2024-12-31 count) on a 2025-09-30 instant, and company facts keep the last filed value, so 8,758,495 was published (F11, E04, nav_identity). 502,122 / 24.33 = 20,638 thousand."}
+ ],
+ "income_concept_suppress": [
+  "noninterestexpenseofferingcost",
+  "interestexpensedebt"
+ ],
+ "income_concept_fallback": {
+  "total_investment_income": ["investmentincomenet"],
+  "interest_expense": ["interestanddebtexpense"]
+ },
+ "first_income_year_ends": ["2024-12-31"],
+ "nil_income_quarters": [
+  {"report_date": "2024-06-30", "evidence": "0000950170-24-093783 (10-Q, 2024-06-30): 'Net investment income (loss) - - Net increase (decrease) in net assets resulting from operations $ - $ -' (expenses fully reimbursed). The fund commenced operations on 2024-10-21 (10-K 2024: the period's income statement runs from inception, January 18, 2024)."},
+  {"report_date": "2024-09-30", "evidence": "0000950170-24-124182 (10-Q, 2024-09-30): 'Three Months Ended September 30, 2024 For the Period from January 18, 2024 (Date of Inception) to September 30, 2024 Investment Income $ - $ - ... Net investment income (loss) - -'. Operations commenced 2024-10-21."}
+ ],
+ "notes": "First income year 2024: 0000950170-25-038042 (10-K, 2024-12-31) prints 'Interest income $ 7,388 Total investment income 7,388 Expenses: Interest and other financing expenses 3,887' for January 18 to December 31, 2024; the two 10-Qs before it print no income, so the fourth quarter is the period, not 1/4 of it (published 1,847 before). Fund-clearing loop 2026-10-19 (agl). Shares 2025-09-30 declared from the printed highlights. Income: 10-Q 2025-03-31 (0000950170-25-067853) prints 'Interest income $ 13,533 Total investment income 13,533 Expenses: Interest and other financing expenses 6,699 Base management fees 692 ... Offering costs 235' and 'Net investment income (loss) 5,373'; tagged InvestmentIncomeNet 13,533,000 (the total), InterestAndDebtExpense 6,699,000, NoninterestExpenseOfferingCost 235,000, NetInvestmentIncome 5,373,000. The shared map read InvestmentIncomeNet as net investment income (filed first, so it won in every quarter) and the offering cost as interest expense. InvestmentIncomeNet is read as total investment income (income_concept_fallback, new column), the offering cost is suppressed, and InterestAndDebtExpense (the printed 'Interest and other financing expenses') fills interest expense; InterestExpenseDebt and InterestExpenseDebtExcludingAmortization (components, e.g. 10-Q 2026-06-30 published 10,368 against the printed 11,241) are suppressed. The 10-Q for 2026-06-30 tags no NetInvestmentIncome; its net investment income comes from InvestmentIncomeOperatingAfterExpenseAndTax once total investment income is known."
+}

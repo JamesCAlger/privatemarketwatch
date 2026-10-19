@@ -193,7 +193,11 @@ CLASS_NAV_PREFERENCE = "share_class_consensus"
 # as us-gaap:InterestAndDebtExpense, which the income concept map does not read; the map's
 # 'interestexpense' substring took NoninterestExpenseDirectorsFees and the repurchase-transaction
 # interest instead (both suppressed in that wrapper). Inert for every wrapper that does not list it.
-INCOME_FALLBACK_COLUMNS = frozenset({"total_expenses", "interest_expense"})
+# total_investment_income: AGL Private Credit Income tags its printed 'Total investment income' as
+# us-gaap:InvestmentIncomeNet, which the map's 'investmentincomenet' pattern reads as net investment
+# income (filed ahead of NetInvestmentIncome, so it won). A concept named here is read as total
+# investment income for that filer, ahead of the map.
+INCOME_FALLBACK_COLUMNS = frozenset({"total_expenses", "interest_expense", "total_investment_income"})
 
 # Fund-level figures a wrapper may correct from the filing page.
 FIGURE_FIELDS = frozenset({"total_assets", "total_liabilities", "net_assets", "investments_at_fair_value",

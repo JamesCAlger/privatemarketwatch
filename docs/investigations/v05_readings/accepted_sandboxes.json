@@ -263,5 +263,10 @@
   "label": "t8zd",
   "accepted_on": "2026-10-18",
   "basis": "D-208, gate PASS with investigation COMPLETE: 20 findings, 10 outstanding, all proposed; F27 x3 under the owner-accepted reason; 14/14 quarters tie (2023-09-30 printed rows declared under D-207); sample 1/20 error (warrant class, shared, pending); four builds in round two"
+ },
+ "0002011498": {
+  "label": "aglf",
+  "accepted_on": "2026-10-19",
+  "basis": "D-210, gate PASS with investigation COMPLETE: 25 findings, 14 outstanding, all proposed; 7/7 quarters tie; income fixed by opt-in total-income fallback; sample 2/20 errors fixed fund-wide; six builds"
  }
 }

@@ -188,3 +188,4 @@ Manulife 0001988280.
 | 2026-10-18 | 0001825265 TCW Direct Lending VIII | t8yf | BLOCKED on owner (OVR-T8Y-R2; F27 x3 insufficient evidence); not accepted | 27 findings, 20 outstanding, 13 proposed, 7 parked; 13/14 quarters tie (2023-09-30 92.4M untagged rows); sample 2/20 errors | D-206 |
 | 2026-10-18 | 0001825265 TCW Direct Lending VIII | t8zd | PASS (investigation COMPLETE) | 20 findings, 10 outstanding, 10 proposed; 14/14 quarters tie; sample 1/20 errors (warrant class, shared) | D-208 |
 | 2026-10-18 | 0001803498 Blackstone Private Credit Fund (re-process, page rules) | bcpf | PASS (investigation COMPLETE) | 27 findings, 1 outstanding, proposed; 28 new page-rule findings at first reading; 16/16 quarters tie; samples 4/20 then 0/20 fresh | D-209 |
+| 2026-10-19 | 0002011498 AGL Private Credit Income Fund | aglf | PASS (investigation COMPLETE) | 25 findings, 14 outstanding, all proposed; 7/7 quarters tie; sample 2/20 errors, fixed | D-210 |

@@ -1,0 +1,424 @@
+{
+ "reviewer_id": "claude-opus-5.5-independent-reviewer-agle-2026-10-19",
+ "report_digest": "d69d92bcf480c580761a913c9744168bcd18b2533b71cfa3947f66c7ef1db947",
+ "scope_note": "Read-only review of sandbox agle (before spon3, untouched single-fund build agla) against the cached filings. Scratch scripts and outputs: scratch/fund_runs/0002011498/reviewer_agle/. All 69 accession/text quotes in the report are on their cached pages (quotes_all.py). The 20-row random page sample was not part of this review and is still owed (report not_done). A clean ledger here would not establish data correctness.",
+ "checks_requested": {
+  "income_fallback": "Supported. fund_financials (agle) equals the printed statements in all seven quarters: total investment income 7,388 / 13,533 / 17,847 / 23,613 / 31,502 (= 86,495 - 54,993) / 31,025 / 30,446; net investment income 2,558 / 5,373 / 7,580 / 9,916 / 14,254 / 13,813 / 14,808; interest expense 3,887 / 6,699 / 8,048 / 10,839 / 13,262 (= 38,848 - 25,586) / 13,046 / 11,241. Q4-2025 NII 14,254 is 37,123 less the three filed quarters (22,869); the 10-Q prints the nine-month figure rounded as 22,870, so a 1 thousand rounding difference against the printed nine months, not an error. Code: the new branch in _extract_fund_income_facts runs only when the concept is a key of the wrapper's fallback map and only re-routes it when that column is total_investment_income; for every wrapper without that key the condition reduces to the old 'col is None and local in fallback_columns', and the new pop block needs 'total_investment_income' in wrapper_fallbacks, which only a wrapper can put there. Only data/overrides/fund_highlights_wrappers/0002011498.json names it (0001772704 maps the same concept through concept_overrides, a different path). tests/test_income_total_fallback.py + tests/test_income_interest_fallback.py: 10 passed (reviewer run). Note: bdc_fund_income.csv still carries 2024q4 as 1,847 (annual/4); the first_income_year_ends correction is applied downstream in fund_financials, which is what is published. Cohort regression of other income_concept_fallback funds (Monroe, TCW VIII) was not run by me; by code reading it cannot change them.",
+  "dash_rate_corrections": "Supported for all 285, not a sample. Independent context check (ctx_rows.py): for each spec's context the printed <tr> has a dash in the cell after the spread ('-' 226, em-dash 59) and the InvestmentInterestRate fact on that row displays a dash (iXBRL zero). agla->agle diff: all 285 changed rows had rate 0 before, none has principal > 0 or fair value > 0 (68 are look-through rows); no zero rate remains in agle and no non-zero rate was changed. So no real rate was blanked. One member (Accession Risk DDTL 2024-12-31) names 'All In Rate 1.00%' while the page prints a dash; the page wins.",
+  "instrument_text_corrections": "Fix correct, count wrong. agle vs agla: 67 rows changed (47 doubled 'First Lien First Lien', 5 Firebird 'equity investments' -> 'LP Interest', 3 AGL EPCI I -> 'LP Interest', 11 look-through members with 'Reference Rate and SOFR'/'and Spread SOFR'/'All in Rate'/'Acquisition Date' text, 1 Firebird 2025-03-31 long form); 53 vs spon3. Not 82, and 11 typo members, not 17. No AGL instrument text in agle now contains rate, spread, percent, acquisition, maturity or a doubled lien word; the remaining set is 11 clean values. The declared 82 is an over-statement (the gate only checks declared as an upper bound).",
+  "flexera_eur": "Supported. Rates are data/reference/fx_fred/DEXUSEU.csv (FRED H.10, fetched 2026-09-15) on each report date: 1.1735 (2025-09-30), 1.1736 (2025-12-31), 1.1518 (2026-03-31), 1.1417 (2026-06-30); products 12,440,273.5 / 12,441,333.6 / 12,210,231.8 / 12,103,161.7 are right. EUR denomination: footnote 'This investment is denominated in Euros' at 2025-09-30, 2025-12-31 and 2026-06-30, EURIBOR benchmark in all four, and par x rate sits within 1 pct of printed fair value. The SOFR Flexera tranches and the look-through Flexera rows stay USD, correctly.",
+  "proposals": "All 11 entries are factually right on the page (details per finding). The 'levered fund' explanations are supported by printed figures, not only by investments/net assets: asset coverage ratio printed 156.4 (2024-12-31), 159.1, 170.6, 177.4, 161.7, 174.0, 178.1 (2026-06-30), i.e. debt of about 1.3x to 1.8x net assets; investments printed 214.4 to 254.1 pct of net assets; 2025 total investment income 86,495 against interest expense 38,848.",
+  "printed_sign_defect": "Supported. pipeline/printed_sign.printed_signs on 0000950170-25-102973 reads 0 of 68 bracketed cost/fair-value facts as bracketed: the ')' sits in the next <td>, 317 to 351 raw characters after the fact, beyond the 300-character window. 65 of the 68 are tagged sign='-' (34 cost, 31 fair value); line 111 then rewrites them positive. aglb vs agla confirms the effect: 21 fair values and 24 costs flipped from negative to positive. The 3 bracketed facts with no sign tag are the Elk, Cliffwater and Alliance costs, set by row correction; agle cost total ties 837,472."
+ },
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_bec22d4fc0ea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-quarter finding (A07 warn 2024-12-31: 'pct_sum=214.4%; 2 outliers > 25%'); coverage key 0002011498|2024-12-31|A07|pct_of_net_assets_sum is the whole flagged population. agle published-basis sums: 35 rows, FV 473,126, pct sum 214.4, max 26.8, equal to the printed total. The two outliers are printed 26.8 and 25.6. Asset coverage 156.4 pct confirms a levered first year-end. Proposal PD-A07-2011498-1 is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Total investments $ 478,403 $ 472,411 $ 473,126 214.4 %"
+    },
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Saturn Sound Bidco Limited First Lien Term Loan Aerospace & Defense SOFR + 5.25 % 9.78 % 12/2/2024 12/3/2031 60,289 59,242 59,242 26.8 %"
+    },
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Portfolio turnover rate 0.6 % Asset coverage ratio (6) 156.4 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_93f916985bbe",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Weak rule pct_position_concentration 2024-12-31: metric 5.71 on 35 units = 2 rows, matching the two affected rows (Saturn 26.8, Mountain Parent 25.6), both as printed. No underlying_schedule rows exist before AGL EPCI I (acquired 3/25/2026). Proposal PD-pct_position_concentration-2011498-2 accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Mountain Parent, Inc. First Lien Term Loan Health Care Technology SOFR + 5.00 % 9.33 % 10/21/2024 6/27/2031 57,040 56,621 56,621 25.6 %"
+    },
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Saturn Sound Bidco Limited First Lien Term Loan Aerospace & Defense SOFR + 5.25 % 9.78 % 12/2/2024 12/3/2031 60,289 59,242 59,242 26.8 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_43d869a47570",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT01 2025-06-30 (row_validation, value 226.2, flag high_pct_sum) is a fund-quarter finding; the key covers it. agle published sum 226.2, FV 837,671 and cost 837,472 equal the printed totals; no money-market rows. Printed asset coverage 170.6 pct (debt about 1.4x net assets) supports the leverage explanation. PCT01 also fires at 2025-12-31 and 2026-03-31; those two are adjudicated_false_alarm in the ledger and not outstanding. Proposal PD-PCT01-2011498-3 accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Total investments $ 837,472 $ 837,671 226.2 %"
+    },
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Portfolio turnover rate 4.9 % Asset coverage ratio (6) 170.6 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4657e8a94cec",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT01 2025-09-30 value 226.1 = printed total percent; agle FV 1,135,270 and cost 1,147,473 equal the printed totals. Printed asset coverage 177.4 pct. Leverage explanation supported by printed figures.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Total investments 1,147,473 1,135,270 226.1 %"
+    },
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Portfolio turnover rate 7.4 % Asset coverage ratio (6) 177.4 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2a31f0be898e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F30 FAIL 2024-01-17 value 0.0 (expected 0.01 < nav_per_share < 1000). fund_financials row 2024-01-17 (companyfacts) carries nav_per_share 0 and net_assets 0 only; it is the inception date. The 10-K highlights print a dash for opening NAV and first issuance at 25.00; operations began 2024-10-21. As filed; no quarter's NAV is affected (F30 passes 2024-12-31 onward). PD-F30-2011498-4 accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Net asset value at beginning of period $ - Issuance of shares 25.00"
+    },
+    {
+     "accession": "0000950170-25-038042",
+     "text": "The Company completed its acquisition of initial loans and commitments and commenced operations on October 21, 2024."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_41bf77679b4e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 FAIL 2025-12-31 value 2.003: income_yield_pct 10.7 (printed annualized after-tax NII ratio) less WAC 8.697 (the 10-K prints the performing-debt weighted contractual rate as about 8.7 pct). Income inputs now equal the printed statements (TII Q4 31,502, NII 14,254). Leverage mechanism checked on printed figures: asset coverage 161.7 pct (debt about 1.6x net assets), investments 254.1 pct of net assets, 2025 TII 86,495 vs interest 38,848; earning on about 2.5x net assets with debt cheaper than the assets lifts NII/NAV above the asset coupon. Residual: expense reimbursement (9,920 in 2025) also lifts NII; the statement names leverage only. Proposal PD-F27-2011498-5 factually right.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-103932",
+     "text": "Annualized ratio of after-tax net investment income to average net assets 10.7 % 9.8 %"
+    },
+    {
+     "accession": "0001193125-26-103932",
+     "text": "the weighted average contractual interest rates on our performing debt investments were approximately 8.7% and 9.0%, respectively."
+    },
+    {
+     "accession": "0001193125-26-103932",
+     "text": "Portfolio turnover rate 12.1 % 0.6 % Asset coverage ratio (6) 161.7 % 156.4 %"
+    },
+    {
+     "accession": "0001193125-26-103932",
+     "text": "Total investments 1,350,788 1,355,641 254.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5579eb377fef",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 FAIL 2026-06-30 value 2.1962: income_yield_pct 10.7 = printed six-month ratio; WAC about 8.50. TII 30,446, NII 14,808 and interest 11,241 equal the printed statement. Printed asset coverage 178.1 pct (debt about 1.3x net assets), investments 223.9 pct. Leverage explanation supported; same expense-support residual as 2025-12-31.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Annualized ratio of after-tax net investment income to average net assets 10.7 % 10.2 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Portfolio turnover rate 27.0 % 4.9 % Asset coverage ratio (6) 178.1 % 170.6 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Net expenses 15,638 10,267 32,850 18,427 Net investment income 14,808 7,580 28,621 12,953"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e44ee4f116ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2025-06-30: '0.0% of 1 equity rows have shares'. The one row is Firebird (context C_a897df37-ef24-48e8-bc7f-e57d1f3242db). Reviewer read the <tr>: Par/Shares cell empty, maturity 'N/A'; facts on the context are only cost 4,790, FV 4,942, pct 1.3 (no shares or principal fact). No unit count exists to publish.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 4,942 1.3 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2395dabaa1ae",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2025-09-30, same single Firebird row (C_7bc6415d-142f-4312-a23d-887f1b83b167); printed line has no unit count. Same mechanism as 2025-06-30.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 5,103 1.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9702289d5c7b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2026-06-30 '1 equity rows': Firebird. Reviewer read the <tr> (context C_96970938-447b-4339-af7f-dfe3733fc71e): cost, FV and pct facts only, Par/Shares cell empty. AGL EPCI I is not counted by the check (1 equity row), consistent with its fund-interest class.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 5,836 1.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_799de879d483",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2025-03-31, Firebird (C_0ef3f6ba-05b7-42fa-9161-f31990006a28). Reviewer read the facts: InvestmentOwnedBalancePrincipalAmount 4,750 unit U_USD scale 3, cost 4,790, FV 4,790; unfunded commitment 250 tagged InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount. A dollar amount, not a unit count. '5,000 commitment' in PD-C04-2011498-7 is an inference (4,750 + 250), not a printed figure.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Firebird Co-Invest L.P. LP Interest Commercial Services & Supplies 1/29/2025 N/A 4,750 4,790 4,790 1.8 %"
+    },
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Firebird Co-Invest L.P. Equity 250"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f52b4a8d5165",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B02 fail 2026-03-31 '4 duplicate position keys (coding solutions ... delayed draw term loan)'. agle rows on that key: parent C_2eed9aa4 (acq 2024-10-21, cost -12) and C_addd173e (2025-05-15, cost -47); underlying C_7a84c3a1 (2024-10-21) and C_aabc1f8a (2025-05-15), all FV 0 - exactly the four affected rows. Other keys that span parent and AGL EPCI I (term loans, revolvers, Anaplan) are not flagged, so B02 counts within a scope; the pairs are distinct printed lines with their own acquisition dates. The earlier real_error verdict (comparative leak) does not stand: the second table is the JV's portfolio of the same date. PD-B02-2011498-8 accurate.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - ( 12 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 47 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "AGL EPCI I Portfolio as of March 31, 2026 Investments Investment Type Reference Rate and Spread (1) All In Rate (1)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d77e6502d381",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B02 fail 2026-06-30 '2 duplicate position keys'. The two parent rows on the key are C_e9a97012 (acq 2024-12-23, cost -12) and C_3e97f31c (2025-05-15, cost -45) = the affected rows; the JV pair carries a different key ('... one'). Two printed commitments, not a repeated fact. PD-B02-2011498-9 accurate.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 12/23/2024 8/7/2031 - ( 12 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 45 ) - 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_577a0f9e0317",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PP02 2026-03-31: row_validation flags exactly two rows (keys 369/370), the AGL EPCI I Coding Solutions DDTLs acquired 10/21/2024 and 5/15/2025 = C_7a84c3a1 and C_aabc1f8a in the coverage. Both printed separately in the JV schedule as '- - - (2)'. Underlying_schedule, not published.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - - - (2)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0d317a0bf45a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PP02 2026-06-30 flags four rows (570, 571, 606, 710): the JV's two Coding Solutions DDTLs both acquired 3/25/2026 (C_a6ad26c9, C_4e92d1ba; the page prints two separate '- - - (2)' lines), the JV Anaplan revolver (6/26/2026) and the parent Anaplan revolver (5/20/2025). Coverage lists all four. All zero-value lines printed separately.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 3/25/2026 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 5/20/2025 6/21/2028 - - - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 6/26/2026 6/21/2028 - - - (2)"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "outcome": "supported",
+   "rationale": "Mechanism and fix verified (see checks_requested.income_fallback): published TII/NII now equal the printed statements in all seven quarters. Proposed detector (NII at or above 90 pct of TII for a BDC with interest expense) is concrete, would have fired every quarter here, and is unlikely to fire on a real levered BDC.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Interest income $ 13,533 Total investment income 13,533 Expenses: Interest and other financing expenses 6,699"
+    },
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Net expenses 8,160 Net investment income (loss) 5,373"
+    }
+   ]
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "outcome": "supported",
+   "rationale": "Published interest expense now equals the printed 'Interest and other financing expenses' every quarter (offering costs 235 at 2025-03-31 no longer read). The reference is a formal proposal: TCW VIII (0001825265) records this key as propose_detector with an equality check against InterestAndDebtExpense, which would also catch AGL's component case, and D-207 item 4 records the pending shared-map fix. Label 'existing_detector' is generous (the check is proposed, not live).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Capital gain incentive fees 30 Offering costs 235"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Total investment income 30,446 17,847 61,471 31,380 Expenses: Interest and other financing expenses 11,241 8,048 24,287 14,747"
+    }
+   ]
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "outcome": "rejected",
+   "rationale": "Fix verified (2024-12-31 now 7,388 / 2,558 / 3,887, the printed inception period). Detection decision not supported: 'existing_detector' cites only the observation key, and no rule caught the AGL instance (agla ledger has no income finding at 2024-12-31). The one other report that names a detector (0001965934) relies on income_identity, which cannot see a uniform 1/4 proration because the identity TII - expenses = NII still holds after scaling. Should be propose_detector using this observation's own suggested_check.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Date of Inception) to December 31, 2024 Total investment income $ 7,388 Net expenses 4,830 Net investment income 2,558"
+    }
+   ]
+  },
+  {
+   "observation_key": "shares-outstanding-replaced-by-later-filing-wrong-period",
+   "outcome": "supported",
+   "rationale": "agla ledger shows E04, F11 and nav_identity open at 2025-09-30; agle publishes 20,638,669 shares; 24.33 x 20,638,669 = 502.1M = net assets 502,122. Existing detectors demonstrably caught it.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Net asset value at end of period $ 24.33 Common Shares outstanding, end of period 20,638,669"
+    }
+   ]
+  },
+  {
+   "observation_key": "zero-rate-tag-on-dash-printed-row-published-as-coupon",
+   "outcome": "rejected",
+   "rationale": "Fix verified on all 285 rows (dash in the All In Rate cell and a dash-displayed InvestmentInterestRate fact on every corrected context; no non-zero rate touched). Detection decision not supported: no rule flagged any of the 285 rows in agla, and the referenced key carries no rule and no formal proposal in the other reports (0001634452 and 0002037804 give suggested checks only, with no detection decision). 'existing_detector' is wrong; it should be propose_detector with the concrete check this observation already states (rate 0, principal 0, positive spread).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Accession Risk Management Group, Inc. First Lien Delayed Draw Term Loan Insurance SOFR + 4.75 % - 10/21/2024 11/1/2029 - - - 0.0 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Verified (see checks_requested.flexera_eur). Proposed check (non-dollar benchmark with a USD principal) is concrete, would catch the Flexera row in all four quarters, and has low false-positive exposure (USD-funded EURIBOR loans are rare and would be cleared by the footnote).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.75 % 6.63 % 8/13/2025 8/16/2032 10,601 12,385 12,425 2.5 %"
+    },
+    {
+     "accession": "0001193125-25-269116",
+     "text": "(13) This investment is denominated in Euros."
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-sign-reader-misses-bracket-in-next-cell",
+   "outcome": "supported",
+   "rationale": "Verified on the raw page and in code (see checks_requested.printed_sign_defect): 0 of 68 bracketed facts read as bracketed, ')' 317-351 characters away, 65 tagged sign='-'; aglb flipped 21 FV and 24 costs. Proposed guard (refuse changing a fact already tagged sign='-') is concrete and would have blocked every wrong flip here; the window itself should also be widened or made cell-aware, which the observation does not propose.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Elk Bidco, Inc. First Lien Revolving Loan SOFR + 4.50 % - 6/13/2025 6/14/2032 - ( 17 ) ( 17 ) 0.0 %"
+    },
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Total investments $ 837,472 $ 837,671 226.2 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "acquisition-date-in-member-read-as-maturity",
+   "outcome": "supported",
+   "rationale": "agla ledger has maturity_not_past open at 2026-06-30; agle row C_e2608ea3 now 2032-08-16, matching the printed maturity. Existing detector caught it.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Flexera Software LLC First Lien Term Loan SOFR + 4.50 % 8.15 % 3/25/2026 8/16/2032 2,934 2,928 2,912 (2)"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-keeps-member-words",
+   "outcome": "rejected",
+   "rationale": "The fix is right (agle AGL instrument texts are 11 clean values), but the observation's facts and detector are not. Counts do not reproduce: 67 rows changed agla->agle (53 vs spon3), not 82; 11 'Reference Rate and'/'and Spread' members, not 17. The proposed detector (reference-rate code, percent or 'Acquisition Date' in the text) catches only those 11; it misses the doubled 'First Lien First Lien' (47 rows) and the axis words 'equity investments' (5 rows), so most of the defect would recur undetected. Needs a detector that also flags repeated lien words and schedule-axis words.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 4,942 1.3 %"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_resolution_history_reviews_note": "The report has no open orchestrator_requests (the gate's request_reviews target), so request_reviews is empty. The two request_resolution_history entries were reviewed as asked and are recorded below; the gate does not read this key.",
+ "request_resolution_history_reviews": [
+  {
+   "request_id": "agl-req-01-build-guard",
+   "outcome": "supported",
+   "rationale": "The build guard refused a build while another Python process ran; the response changed nothing in build_fund.sh or data, so no verification test is owed. Classification 'verification_bug' is loose (the guard worked as designed; this was an operational block). The pid/968-passed claim was not checked; nothing depends on it.",
+   "evidence": []
+  },
+  {
+   "request_id": "agl-req-02-income-total-fallback",
+   "outcome": "supported",
+   "rationale": "Implemented as opt-in: inert unless a highlights wrapper names a concept under total_investment_income (only AGL does), verified by code reading; 10 income-fallback tests pass including the unwrapped-fund guard; published TII/NII/interest equal the printed statements in all seven quarters. Classification 'acceptance_change' is not apt (it is a shared extractor change, no check is weakened). Outstanding: the cohort regression of income_concept_fallback funds named in next_action has not been run; by code reading it cannot change them, but the AGENTS.md semantic-diff step for a shared change is still owed, and the changelog entry is not appended.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Net expenses 8,160 Net investment income (loss) 5,373"
+    },
+    {
+     "accession": "0001193125-26-103932",
+     "text": "Interest and other financing expenses 38,848 3,887 Base management fees 4,344 263"
+    }
+   ]
+  }
+ ]
+}

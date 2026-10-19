@@ -1,0 +1,1029 @@
+{
+ "cik": "0002011498",
+ "label": "aglf",
+ "before": "spon3",
+ "investigator_id": "fund-agent-agl-2026-10-18",
+ "shared_code": true,
+ "declared_changes": [
+  {
+   "column": "interest_rate",
+   "rows": 285,
+   "why": "0 tagged on undrawn lines printed with a dash, withdrawn (row corrections)"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 285,
+   "why": "follows interest_rate"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 285,
+   "why": "no rate: all_in -> unresolved"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 305,
+   "why": "row corrections"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 67,
+   "why": "member words cut (wrapper strip and instrument pattern); EPCI LP Interest (row correction)"
+  },
+  {
+   "column": "cost",
+   "rows": 3,
+   "why": "three undrawn costs tagged without the printed bracket, 2025-06-30"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 3,
+   "why": "follows cost"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 4,
+   "why": "Flexera euro par"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 4,
+   "why": "Flexera euro par at H.10"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 4,
+   "why": "Flexera euro par"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 4,
+   "why": "Flexera euro par"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 1,
+   "why": "look-through Flexera row"
+  },
+  {
+   "column": "maturity_precision",
+   "rows": 1,
+   "why": "follows maturity_date"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 1,
+   "why": "follows maturity_date"
+  },
+  {
+   "column": "src_facts",
+   "rows": 30,
+   "why": "row corrections recorded"
+  },
+  {
+   "column": "issuer_name",
+   "rows": 20,
+   "why": "doubled legal form cut (Apex, Cliffwater, wrapper issuer_name_strip_re) and Vivos spacing (row correction)"
+  },
+  {
+   "column": "shares_held",
+   "rows": 1,
+   "why": "Firebird LP Interest units 2025-03-31 (page sample C011)"
+  },
+  {
+   "column": "position_id",
+   "rows": 85,
+   "why": "build composition only: the untouched single-fund build agla already differs from the 47-fund spon3 on these rows; agle equals agla on position_id (holdings_field_diff agle agla)"
+  }
+ ],
+ "rows_added": 210,
+ "rows_added_why": "the 2026-06-30 quarter (ADD_QUARTER), which spon3 does not hold: 210 rows, all report_date 2026-06-30",
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Highlights wrapper: shares outstanding 2025-09-30 from the printed highlights",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Net asset value at end of period $ 24.33 Common Shares outstanding, end of period 20,638,669"
+    }
+   ]
+  },
+  {
+   "what": "Income: total investment income from InvestmentIncomeNet (new opt-in shared fallback), NII from NetInvestmentIncome / after-tax concept, interest expense from InterestAndDebtExpense, offering cost and debt-interest components suppressed",
+   "kind": "shared_code",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Interest income $ 13,533 Total investment income 13,533 Expenses: Interest and other financing expenses 6,699"
+    },
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Net expenses 8,160 Net investment income (loss) 5,373"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Total investment income 30,446 17,847 61,471 31,380 Expenses: Interest and other financing expenses 11,241 8,048 24,287 14,747"
+    }
+   ]
+  },
+  {
+   "what": "First income year 2024: fourth quarter is the inception period (first_income_year_ends, nil_income_quarters)",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Interest income $ 7,388 Total investment income 7,388 Expenses: Interest and other financing expenses 3,887"
+    }
+   ]
+  },
+  {
+   "what": "Rate 0 on 285 undrawn lines printed with a dash: withdrawn",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Accession Risk Management Group, Inc. First Lien Delayed Draw Term Loan Insurance SOFR + 4.75 % - 10/21/2024 11/1/2029 - - - 0.0 %"
+    },
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Elk Bidco, Inc. First Lien Revolving Loan SOFR + 4.50 % - 6/13/2025 6/14/2032 - ( 17 ) ( 17 ) 0.0 %"
+    }
+   ]
+  },
+  {
+   "what": "Flexera euro par: currency EUR, dollars at H.10",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.75 % 6.63 % 8/13/2025 8/16/2032 10,601 12,385 12,425 2.5 %"
+    },
+    {
+     "accession": "0001193125-25-269116",
+     "text": "(13) This investment is denominated in Euros."
+    }
+   ]
+  },
+  {
+   "what": "Three undrawn costs printed in brackets and tagged unsigned (Elk, Cliffwater, Alliance): cost total now ties at 2025-06-30",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Elk Bidco, Inc. First Lien Revolving Loan SOFR + 4.50 % - 6/13/2025 6/14/2032 - ( 17 ) ( 17 ) 0.0 %"
+    },
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Total investments $ 837,472 $ 837,671 226.2 %"
+    }
+   ]
+  },
+  {
+   "what": "Instrument text: member words cut; Firebird and AGL EPCI I 'LP Interest'",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 4,942 1.3 %"
+    }
+   ]
+  },
+  {
+   "what": "Firebird Co-Invest L.P. LP Interest units 2025-03-31: 4,750 thousand units tagged as principal (footnote 4), now shares_held 4,750,000 (page sample C011; C04 2025-03-31 cleared)",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Firebird Co-Invest L.P. LP Interest Commercial Services & Supplies 1/29/2025 N/A 4,750 4,790 4,790 1.8 %"
+    },
+    {
+     "accession": "0000950170-25-067853",
+     "text": "(4) The total par amount is presented for debt investments while the number of shares or units (in thousands) owned is presented for equity investments."
+    }
+   ]
+  },
+  {
+   "what": "Issuer names with a doubled legal form: 'Apex Service Partners, LLC Inc.' and 'Cliffwater LLC Inc.' (16 rows, page sample C012) cut by issuer_name_strip_re (dry run: 2 of 52 distinct names changed); 'Vivos Holdings,LLC' set to the printed 'Vivos Holdings, LLC' (4 rows). 'Firebird Acquisition Corp, Inc.' is printed so and kept.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Diversified Consumer Services Apex Service Partners, LLC First Lien Delayed Draw Term Loan SOFR + 5.00 % 9.31 % 4/29/2025 10/24/2030"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Personal Care Products Vivos Holdings, LLC First Lien Term Loan SOFR + 6.00 % 9.64 % 8/13/2025"
+    },
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Firebird Acquisition Corp, Inc. First Lien Delayed Draw Term Loan SOFR + 4.50 % 8.81 % 1/31/2025 2/2/2032 979 961 870 0.3 %"
+    }
+   ]
+  },
+  {
+   "what": "Look-through Flexera row maturity",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Flexera Software LLC First Lien Term Loan SOFR + 4.50 % 8.15 % 3/25/2026 8/16/2032 2,934 2,928 2,912 (2)"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "agl-req-01-build-guard",
+   "classification": "verification_bug",
+   "resolution": "resolved",
+   "response": "Cause was the orchestrator's own pytest run (pid 2288); it finished (968 passed) and the tree was freed. No change to build_fund.sh.",
+   "authority": "orchestrator, 2026-10-19",
+   "evidence": [],
+   "next_action": "none"
+  },
+  {
+   "request_id": "agl-req-02-income-total-fallback",
+   "classification": "acceptance_change",
+   "resolution": "implemented",
+   "response": "Orchestrator allowed it as opt-in shared code switched on by AGL's highlights wrapper. Built: total_investment_income added to INCOME_FALLBACK_COLUMNS; a wrapper fallback for that column overrides the map for the named whole concept and is applied before the after-tax NII fallback; schema key added; tests/test_income_total_fallback.py (6 tests, one false-positive guard showing an unwrapped fund is read as before).",
+   "authority": "orchestrator, 2026-10-19",
+   "evidence": [
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Interest income $ 13,533 Total investment income 13,533 Expenses: Interest and other financing expenses 6,699"
+    },
+    {
+     "accession": "0000950170-25-067853",
+     "text": "Net expenses 8,160 Net investment income (loss) 5,373"
+    }
+   ],
+   "next_action": "Orchestrator: run the income tests and the regression of funds with income_concept_fallback (Monroe, TCW VIII) at end of run."
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "what": "The filer tags its printed 'Total investment income' as us-gaap:InvestmentIncomeNet, filed ahead of NetInvestmentIncome; the shared income map reads both as net investment income and the first wins, so total investment income was published as net investment income in every quarter (2025-03-31: 13,533 against the printed 5,373) and total investment income was blank. Fixed: new opt-in income_concept_fallback column total_investment_income (pipeline/bdc_fund_income.py, pipeline/fund_highlights_wrapper.py, schema, tests/test_income_total_fallback.py) switched on by AGL's highlights wrapper. 2026-06-30 tags no NetInvestmentIncome; net investment income now comes from the after-tax concept (14,808).",
+   "field": "net_investment_income",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Net investment income equal to total investment income (or above 90 pct of it) for a BDC with interest expense is flagged.",
+   "quote": {
+    "accession": "0000950170-25-067853",
+    "text": "Net expenses 8,160 Net investment income (loss) 5,373"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compared NII with total investment income; the identity rule could not run because total investment income was blank.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "what": "interest_expense was the offering cost (us-gaap:NoninterestExpenseOfferingCost, 235 at 2025-03-31) or the debt-interest component (InterestExpenseDebtExcludingAmortization: 10,368 at 2026-06-30 against the printed 11,241). The printed 'Interest and other financing expenses' is InterestAndDebtExpense, which the shared map does not read. Fixed in AGL's highlights wrapper (suppress both, fallback to InterestAndDebtExpense); the shared map itself is unchanged (D-207 item 4 pending).",
+   "field": "interest_expense",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Published interest expense below half of borrowings x the fund's printed weighted debt rate / 4 is flagged.",
+   "quote": {
+    "accession": "0001193125-26-334994",
+    "text": "Total investment income 30,446 17,847 61,471 31,380 Expenses: Interest and other financing expenses 11,241 8,048 24,287 14,747"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Same shared mapping fault recorded for TCW VIII; the owner's D-207 item 4 asks for the shared map fix measured on the cohort.",
+    "reference": "D-207 item 4; observation key interest-expense-reads-noninterest-expense"
+   }
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "what": "The 10-K for 2024 covers January 18 to December 31, 2024 (operations from 2024-10-21; the two 10-Qs print no income). The fourth quarter was published as one quarter of the period (total investment income 1,847, NII 639.5) instead of the period (7,388, 2,558). Fixed with first_income_year_ends and nil_income_quarters in the highlights wrapper.",
+   "field": "total_investment_income",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "For each fund, the year-end quarter of the first 10-K: if the 10-K period starts after the earliest 10-Q quarter of that year or the year's 10-Q income is nil or missing, flag when the published fourth quarter equals the annual figure divided by four (within 1 pct) while the annual figure less the filed quarters differs from it by more than 5 pct.",
+   "quote": {
+    "accession": "0000950170-25-038042",
+    "text": "Interest income $ 7,388 Total investment income 7,388 Expenses: Interest and other financing expenses 3,887"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "income_identity cannot see it: total, expenses and net investment income are all divided by the same four, so the identity still holds; no rule compares a fund's first year-end quarter with its annual statement.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "shares-outstanding-replaced-by-later-filing-wrong-period",
+   "what": "shares_outstanding at 2025-09-30 was 8,758,495, the 2024-12-31 count: the 10-K for 2025-12-31 files CommonStockSharesOutstanding 8,758,495 on a 2025-09-30 instant and company facts keep the last filed value. Printed 20,638,669. Fixed by a figure correction in the highlights wrapper (F11, E04, nav_identity cleared).",
+   "field": "shares_outstanding",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "E04 and nav_identity caught it.",
+   "quote": {
+    "accession": "0001193125-25-269116",
+    "text": "Net asset value at end of period $ 24.33 Common Shares outstanding, end of period 20,638,669"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "E04 (nav_per_share x shares_outstanding against net_assets, 5 pct) failed at 2025-09-30 because 24.33 x 8,758,495 = 213.1M against net assets of 502.1M; F11 and identity/nav_identity failed on the same product. A stale count refiled for another date always breaks that product unless NAV per share is wrong by the same factor, so recurrence on any fund is caught; all three cleared in agle.",
+    "reference": "oracle/E04, fund_financials/F11, identity/nav_identity 2025-09-30 in scratch/fund_sandbox/agla/findings_ledger.csv"
+   }
+  },
+  {
+   "observation_key": "zero-rate-tag-on-dash-printed-row-published-as-coupon",
+   "what": "285 undrawn revolver and delayed-draw rows (13 to 76 a quarter, look-through rows included) print a dash under 'All In Rate' and are tagged InvestmentInterestRate 0; 0.0 was published as a coupon. Fixed by row corrections (rate blank), each with its printed line.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a loan row published with interest_rate exactly 0 and a positive basis_spread (a floating loan cannot pay 0); on AGL it would have caught 285 rows in agla and none in aglf.",
+   "quote": {
+    "accession": "0000950170-25-038042",
+    "text": "Accession Risk Management Group, Inc. First Lien Delayed Draw Term Loan Insurance SOFR + 4.75 % - 10/21/2024 11/1/2029 - - - 0.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule flagged any of the 285 rows in agla (they hold principal 0 and fair value near 0, so X02 and the rate-fill checks pass them). Same problem recorded on AB Private Credit under this key, also found only by reading.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "The Flexera euro term loan's par 10,601 (thousand euros) is tagged with the dollar unit; the schedule footnotes it 'This investment is denominated in Euros' and par is below cost. Published as 10,601,000 dollars in four quarters. Fixed by row corrections: currency EUR, dollar amount at the H.10 rate (12.44M to 12.10M).",
+   "field": "principal_amount_usd",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 12.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A loan whose reference rate is EURIBOR, SONIA or another non-dollar benchmark and whose principal is tagged in USD is flagged.",
+   "quote": {
+    "accession": "0001193125-25-269116",
+    "text": "Flexera Software LLC First Lien Term Loan EURIBOR + 4.75 % 6.63 % 8/13/2025 8/16/2032 10,601 12,385 12,425 2.5 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the benchmark currency with the principal unit.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "printed-sign-reader-misses-bracket-in-next-cell",
+   "what": "pipeline/printed_sign.py (bracketed_unsigned_values) looks for the closing bracket within 300 characters after the fact; AGL's page puts ')' in the next <td>, beyond that window, so every bracketed value reads as unbracketed. Switched on for the 10-Q for 2025-06-30 (aglb) it flipped 21 correctly signed fair values and 24 costs positive. Not used: the three costs tagged without a sign (Elk, Cliffwater, Alliance; +254 cost gap) were set by row correction. The module is unchanged.",
+   "field": "cost",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A printed_sign run that changes facts already tagged sign='-' is refused (the module's own premise is unsigned tags).",
+   "quote": {
+    "accession": "0000950170-25-102973",
+    "text": "Elk Bidco, Inc. First Lien Revolving Loan SOFR + 4.50 % - 6/13/2025 6/14/2032 - ( 17 ) ( 17 ) 0.0 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The setting's effect was caught only by the field diff; the module has no guard against flipping a signed fact.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "acquisition-date-in-member-read-as-maturity",
+   "what": "One AGL EPCI I look-through row (Flexera term loan, 2026-06-30, not published) had maturity 2026-03-25, its acquisition date; the member and the page read 'Maturity Date 8/16/2032'. Fixed by row correction.",
+   "field": "maturity_date",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "maturity_not_past caught it.",
+   "quote": {
+    "accession": "0001193125-26-334994",
+    "text": "Flexera Software LLC First Lien Term Loan SOFR + 4.50 % 8.15 % 3/25/2026 8/16/2032 2,934 2,928 2,912 (2)"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "weak/maturity_not_past flagged the row in agla.",
+    "reference": "weak/maturity_not_past 2026-06-30 in scratch/fund_sandbox/agla"
+   }
+  },
+  {
+   "observation_key": "instrument-text-keeps-member-words",
+   "what": "Instrument text kept member words on 67 rows of agla (holdings_field_diff agle agla; 53 against spon3, which lacks 2026-06-30): 47 'First Lien First Lien ...' (2025-03-31 members repeat it), 8 'equity investments' / 'Equity investments' (Firebird LP Interest from 2025-03-31 and AGL EPCI I), and 12 rows on 12 members misspelled 'Reference Rate and SOFR ...' or '... and Spread SOFR ...' that the first strip did not cut (counted with scratch/fund_runs/0002011498/instr_count.sql on agla/aglc; 0 of each in aglf). Fixed in the wrapper (strip and instrument patterns); AGL EPCI I's member names no instrument and was set to the printed 'LP Interest' by row correction.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag an instrument_description that contains a reference-rate code (SOFR, EURIBOR, PRIME), a percent sign, 'Acquisition Date' or 'Reference Rate', that repeats its first two words ('First Lien First Lien'), or that is only a section heading ('equity investments', 'debt investments').",
+   "quote": {
+    "accession": "0000950170-25-102973",
+    "text": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 4,942 1.3 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reads the instrument text's shape.",
+    "reference": "suggested_check"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_bec22d4fc0ea",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2024-12-31|A07|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0002011498|2024-12-31|A07|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Saturn Sound Bidco Limited First Lien Term Loan Aerospace & Defense SOFR + 5.25 % 9.78 % 12/2/2024 12/3/2031 60,289 59,242 59,242 26.8 %"
+    },
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Mountain Parent, Inc. First Lien Term Loan Health Care Technology SOFR + 5.00 % 9.33 % 10/21/2024 6/27/2031 57,040 56,621 56,621 25.6 %"
+    },
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Total investments $ 478,403 $ 472,411 $ 473,126 214.4 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected, each published percent equals the printed one (26.8, 25.6).",
+    "Rows over-included: rejected, published fair value 473,126 equals the printed total.",
+    "Concentration in a new levered fund: confirmed, first year-end, investments 214.4 pct of net assets."
+   ],
+   "next_action": "Proposal PD-A07-2011498-1 (reason a07-outlier-percent-is-the-printed-row) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_93f916985bbe",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2024-12-31|Saturn Sound Bidco Limited|First Lien Term Loan",
+     "0002011498|2024-12-31|Mountain Parent, Inc.|First Lien Term Loan"
+    ],
+    "reviewed_rows": [
+     "0002011498|2024-12-31|Saturn Sound Bidco Limited|First Lien Term Loan",
+     "0002011498|2024-12-31|Mountain Parent, Inc.|First Lien Term Loan"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Saturn Sound Bidco Limited First Lien Term Loan Aerospace & Defense SOFR + 5.25 % 9.78 % 12/2/2024 12/3/2031 60,289 59,242 59,242 26.8 %"
+    },
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Mountain Parent, Inc. First Lien Term Loan Health Care Technology SOFR + 5.00 % 9.33 % 10/21/2024 6/27/2031 57,040 56,621 56,621 25.6 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected (printed 26.8 and 25.6).",
+    "Look-through rows counted: rejected, no underlying_schedule rows exist at 2024-12-31.",
+    "Large loans of a young levered fund: confirmed."
+   ],
+   "next_action": "Proposal PD-pct_position_concentration-2011498-2 (reason concentration-large-loan-of-a-young-levered-fund-as-printed) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_43d869a47570",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2025-06-30|PCT01|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0002011498|2025-06-30|PCT01|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Total investments $ 837,472 $ 837,671 226.2 %"
+    },
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Total investments 1,147,473 1,135,270 226.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion (JV, totals, cash): rejected, published-basis fair value equals the filed total in all seven quarters and money-market rows are excluded.",
+    "Percent scale error: rejected, sums equal the printed total percents 226.2 and 226.1.",
+    "Leverage: confirmed."
+   ],
+   "next_action": "Proposal PD-PCT01-2011498-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_4657e8a94cec",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2025-09-30|PCT01|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0002011498|2025-09-30|PCT01|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Total investments $ 837,472 $ 837,671 226.2 %"
+    },
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Total investments 1,147,473 1,135,270 226.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Over-inclusion (JV, totals, cash): rejected, published-basis fair value equals the filed total in all seven quarters and money-market rows are excluded.",
+    "Percent scale error: rejected, sums equal the printed total percents 226.2 and 226.1.",
+    "Leverage: confirmed."
+   ],
+   "next_action": "Proposal PD-PCT01-2011498-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_2a31f0be898e",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2024-01-17|F30|nav_per_share"
+    ],
+    "reviewed_rows": [
+     "0002011498|2024-01-17|F30|nav_per_share"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-038042",
+     "text": "Net asset value at beginning of period $ - Issuance of shares 25.00"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "NAV per share of a quarter mis-read: rejected, the row is the inception date 2024-01-17 tagged 0 in the 10-K.",
+    "Pre-operations fund: confirmed, first issuance at 25.00, operations from 2024-10-21."
+   ],
+   "next_action": "Proposal PD-F30-2011498-4 (reason fund-row-before-operations-began) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_41bf77679b4e",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2025-12-31|F27|income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0002011498|2025-12-31|F27|income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-103932",
+     "text": "Annualized ratio of after-tax net investment income to average net assets 10.7 % 9.8 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Annualized ratio of after-tax net investment income to average net assets 10.7 % 10.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income figures wrong: they were (total investment income published as net investment income); fixed in this run, and income_yield_pct still equals the printed ratio 10.7.",
+    "WAC understated by rate-0 undrawn rows: rejected as cause, those rows now publish no rate and the check still fails by 2.0 and 2.2 points.",
+    "Leverage: confirmed, income over net assets with investments 224 to 254 pct of net assets."
+   ],
+   "next_action": "Proposal PD-F27-2011498-5 (reason f27-income-over-net-assets-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_5579eb377fef",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2026-06-30|F27|income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0002011498|2026-06-30|F27|income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-103932",
+     "text": "Annualized ratio of after-tax net investment income to average net assets 10.7 % 9.8 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Annualized ratio of after-tax net investment income to average net assets 10.7 % 10.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income figures wrong: they were (total investment income published as net investment income); fixed in this run, and income_yield_pct still equals the printed ratio 10.7.",
+    "WAC understated by rate-0 undrawn rows: rejected as cause, those rows now publish no rate and the check still fails by 2.0 and 2.2 points.",
+    "Leverage: confirmed, income over net assets with investments 224 to 254 pct of net assets."
+   ],
+   "next_action": "Proposal PD-F27-2011498-5 (reason f27-income-over-net-assets-of-a-levered-fund) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_e44ee4f116ac",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2025-06-30|C04|equity_rows_with_shares",
+     "0002011498|2025-06-30|C_a897df37-ef24-48e8-bc7f-e57d1f3242db|Firebird Co-Invest L.P."
+    ],
+    "reviewed_rows": [
+     "0002011498|2025-06-30|C04|equity_rows_with_shares",
+     "0002011498|2025-06-30|C_a897df37-ef24-48e8-bc7f-e57d1f3242db|Firebird Co-Invest L.P."
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-102973",
+     "text": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 4,942 1.3 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Unit count tagged on another context or concept: rejected, the Firebird context carries principal (2025-03-31 only), cost, fair value and percent; no InvestmentOwnedBalanceShares fact.",
+    "Unit count printed: rejected, the cell is empty from 2025-06-30 and holds a dollar amount at 2025-03-31.",
+    "AGL EPCI I should count: it is classed PRIVATE_EQUITY_FUND and prints 'N/A' as well."
+   ],
+   "next_action": "Proposal PD-C04-2011498-6 (reason c04-lp-interest-printed-with-units-n-a) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_2395dabaa1ae",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2025-09-30|C04|equity_rows_with_shares",
+     "0002011498|2025-09-30|C_7bc6415d-142f-4312-a23d-887f1b83b167|Firebird Co-Invest L.P."
+    ],
+    "reviewed_rows": [
+     "0002011498|2025-09-30|C04|equity_rows_with_shares",
+     "0002011498|2025-09-30|C_7bc6415d-142f-4312-a23d-887f1b83b167|Firebird Co-Invest L.P."
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-269116",
+     "text": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 5,103 1.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Unit count tagged on another context or concept: rejected, the Firebird context carries principal (2025-03-31 only), cost, fair value and percent; no InvestmentOwnedBalanceShares fact.",
+    "Unit count printed: rejected, the cell is empty from 2025-06-30 and holds a dollar amount at 2025-03-31.",
+    "AGL EPCI I should count: it is classed PRIVATE_EQUITY_FUND and prints 'N/A' as well."
+   ],
+   "next_action": "Proposal PD-C04-2011498-6 (reason c04-lp-interest-printed-with-units-n-a) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_9702289d5c7b",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2026-06-30|C04|equity_rows_with_shares",
+     "0002011498|2026-06-30|Firebird Co-Invest L.P.|LP Interest"
+    ],
+    "reviewed_rows": [
+     "0002011498|2026-06-30|C04|equity_rows_with_shares",
+     "0002011498|2026-06-30|Firebird Co-Invest L.P.|LP Interest"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Firebird Co-Invest L.P. LP Interest 1/29/2025 N/A 4,790 5,836 1.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Unit count tagged on another context or concept: rejected, the Firebird context carries principal (2025-03-31 only), cost, fair value and percent; no InvestmentOwnedBalanceShares fact.",
+    "Unit count printed: rejected, the cell is empty from 2025-06-30 and holds a dollar amount at 2025-03-31.",
+    "AGL EPCI I should count: it is classed PRIVATE_EQUITY_FUND and prints 'N/A' as well."
+   ],
+   "next_action": "Proposal PD-C04-2011498-6 (reason c04-lp-interest-printed-with-units-n-a) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_f52b4a8d5165",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2026-03-31|C_2eed9aa4-3b5c-44b5-8f2d-b6b3802560ce|ROW-8c62ab33f92e2974",
+     "0002011498|2026-03-31|C_addd173e-9088-4043-8c6c-6b9b150fa63a|ROW-cd3ce0720ac589fb",
+     "0002011498|2026-03-31|C_7a84c3a1-a8d0-498a-81c5-53cb88fd1df8|ROW-29bff6f63cd2932a",
+     "0002011498|2026-03-31|C_aabc1f8a-d7fa-4ff6-8602-44345fd8ecb6|ROW-f5cf8df37533d455"
+    ],
+    "reviewed_rows": [
+     "0002011498|2026-03-31|C_2eed9aa4-3b5c-44b5-8f2d-b6b3802560ce|ROW-8c62ab33f92e2974",
+     "0002011498|2026-03-31|C_addd173e-9088-4043-8c6c-6b9b150fa63a|ROW-cd3ce0720ac589fb",
+     "0002011498|2026-03-31|C_7a84c3a1-a8d0-498a-81c5-53cb88fd1df8|ROW-29bff6f63cd2932a",
+     "0002011498|2026-03-31|C_aabc1f8a-d7fa-4ff6-8602-44345fd8ecb6|ROW-f5cf8df37533d455"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - ( 12 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 47 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 12/23/2024 8/7/2031 - ( 12 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 45 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "AGL EPCI I Portfolio as of March 31, 2026 Investments Investment Type Reference Rate and Spread (1) All In Rate (1)"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "(2) This investment was held by both the Company and AGL EPCI I as of March 31, 2026"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Comparative-period rows admitted: rejected, all rows are the report date's schedules (the fund's and the JV's of the same date).",
+    "Repeated fact on two contexts: rejected, each line is printed separately with its own acquisition date and cost.",
+    "Twin undrawn lines: confirmed."
+   ],
+   "next_action": "Proposal PD-B02-2011498-7 (reason b02-twin-undrawn-lines-printed-separately) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_d77e6502d381",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2026-06-30|C_e9a97012-bf87-4ed1-8aa4-8422296e2e9f|ROW-8862cbbd44a8bfe1",
+     "0002011498|2026-06-30|C_3e97f31c-8694-4345-9240-fb3201efeaf6|ROW-902a18395917b9d8"
+    ],
+    "reviewed_rows": [
+     "0002011498|2026-06-30|C_e9a97012-bf87-4ed1-8aa4-8422296e2e9f|ROW-8862cbbd44a8bfe1",
+     "0002011498|2026-06-30|C_3e97f31c-8694-4345-9240-fb3201efeaf6|ROW-902a18395917b9d8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - ( 12 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 47 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 12/23/2024 8/7/2031 - ( 12 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - ( 45 ) - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "AGL EPCI I Portfolio as of March 31, 2026 Investments Investment Type Reference Rate and Spread (1) All In Rate (1)"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "(2) This investment was held by both the Company and AGL EPCI I as of March 31, 2026"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Comparative-period rows admitted: rejected, all rows are the report date's schedules (the fund's and the JV's of the same date).",
+    "Repeated fact on two contexts: rejected, each line is printed separately with its own acquisition date and cost.",
+    "Twin undrawn lines: confirmed."
+   ],
+   "next_action": "Proposal PD-B02-2011498-8 (reason b02-twin-undrawn-lines-printed-separately) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_577a0f9e0317",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2026-03-31|C_7a84c3a1-a8d0-498a-81c5-53cb88fd1df8|ROW-29bff6f63cd2932a",
+     "0002011498|2026-03-31|C_aabc1f8a-d7fa-4ff6-8602-44345fd8ecb6|ROW-f5cf8df37533d455"
+    ],
+    "reviewed_rows": [
+     "0002011498|2026-03-31|C_7a84c3a1-a8d0-498a-81c5-53cb88fd1df8|ROW-29bff6f63cd2932a",
+     "0002011498|2026-03-31|C_aabc1f8a-d7fa-4ff6-8602-44345fd8ecb6|ROW-f5cf8df37533d455"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 3/25/2026 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 5/20/2025 6/21/2028 - - - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 6/26/2026 6/21/2028 - - - (2)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Duplicate dimension paths for one line: rejected, each candidate is printed as its own line (different acquisition dates, or a separate line in the JV's schedule).",
+    "JV look-through rows published: rejected, they are underlying_schedule and outside the published basis."
+   ],
+   "next_action": "Proposal PD-PP02-2011498-9 (reason pp02-twin-lines-printed-separately) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_0d317a0bf45a",
+   "coverage": {
+    "affected_rows": [
+     "0002011498|2026-06-30|C_a6ad26c9-a94d-44b4-90d8-6fd759ad94fc|ROW-c154465b83d4719c",
+     "0002011498|2026-06-30|C_4e92d1ba-88aa-466c-89f9-1d071653888c|ROW-fd9a4f448835c394",
+     "0002011498|2026-06-30|Anaplan, Inc.|First Lien Revolving Loan|acq 5/20/2025|parent",
+     "0002011498|2026-06-30|Anaplan, Inc.|First Lien Revolving Loan|acq 6/26/2026|AGL EPCI I"
+    ],
+    "reviewed_rows": [
+     "0002011498|2026-06-30|C_a6ad26c9-a94d-44b4-90d8-6fd759ad94fc|ROW-c154465b83d4719c",
+     "0002011498|2026-06-30|C_4e92d1ba-88aa-466c-89f9-1d071653888c|ROW-fd9a4f448835c394",
+     "0002011498|2026-06-30|Anaplan, Inc.|First Lien Revolving Loan|acq 5/20/2025|parent",
+     "0002011498|2026-06-30|Anaplan, Inc.|First Lien Revolving Loan|acq 6/26/2026|AGL EPCI I"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 10/21/2024 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-214378",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 5/15/2025 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Coding Solutions Acquisition, Inc. First Lien Delayed Draw Term Loan SOFR + 5.00 % - 3/25/2026 8/7/2031 - - - (2)"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 5/20/2025 6/21/2028 - - - 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-334994",
+     "text": "Anaplan, Inc. First Lien Revolving Loan SOFR + 4.50 % - 6/26/2026 6/21/2028 - - - (2)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Duplicate dimension paths for one line: rejected, each candidate is printed as its own line (different acquisition dates, or a separate line in the JV's schedule).",
+    "JV look-through rows published: rejected, they are underlying_schedule and outside the published basis."
+   ],
+   "next_action": "Proposal PD-PP02-2011498-10 (reason pp02-twin-lines-printed-separately) for the owner."
+  }
+ ],
+ "tests_run": [
+  "tests/test_income_total_fallback.py tests/test_income_interest_fallback.py tests/test_bdc_fund_income.py tests/test_fund_highlights_wrapper.py: 76 passed",
+  "tests/test_fund_highlights_wrapper.py tests/test_income_total_fallback.py: 35 passed (after the nil-quarter wrapper keys)"
+ ],
+ "first_reading": "agla (untouched, with 2026-06-30): 30 findings, 21 outstanding as built, 19 after reasons accepted by check; new at 2026-06-30: B02, C04, F27, PP02, maturity_not_past. Totals tied 7 of 7. agle: 26 findings, 15 outstanding, all 15 proposed. Final aglf (round two, after the page sample): 25 findings, 14 outstanding, all 14 proposed; C04 2025-03-31 cleared by the Firebird unit count.",
+ "not_done": [
+  "Page sample of agle (orchestrator): C011 and C012 fixed in aglf; the other 18 cards had no published error.",
+  "Shared printed_sign window not changed (observation printed-sign-reader-misses-bracket-in-next-cell).",
+  "Regression of other funds using income_concept_fallback not run (no existing behaviour changed for them: the new branch applies only to a concept the wrapper names for total_investment_income).",
+  "docs/agent_changelog.md not appended: it carries another session's uncommitted edits; suggested entry in scratch/fund_runs/0002011498/notes.md for the orchestrator.",
+  "A cleared ledger would not establish data correctness."
+ ]
+}
