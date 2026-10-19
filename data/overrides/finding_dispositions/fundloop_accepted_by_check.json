@@ -1806,6 +1806,29 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-pct_of_net_assets_identity-1715933",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "statement": "The percent of net assets the filer prints and tags disagrees with its own fair value over net assets (printed to one decimal, or printed on a neighbouring line). The printed figure is published as filed; the schema value, fair value over net assets, is published beside it in pct_of_net_assets_calculated.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check pct_as_filed_with_calculated passed on sandbox t7ad for each quarter listed: 2 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/pctq.py t7ad 0001715933",
+   "decided_by": "check passed on sandbox t7ad; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-pct_of_net_assets_identity-1901612",
    "class": "as_filed",
    "engine": "identity",

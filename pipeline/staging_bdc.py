@@ -538,6 +538,41 @@ def _bare_entity_position_ciks() -> set[str]:
     return result
 
 
+def _cash_identifier_position_ciks() -> set[str]:
+    """CIKs whose wrapper says its listed cash rows are positions (dispatch.cash_identifier_rows).
+
+    A prefix_rules filer names its cash rows with the section heading in front ('Cash Equivalents First
+    American Government Obligation Fund, Yield 4.65%', 'Short-term Investments U.S. Treasury Bill, Yield
+    5.08%'). Nothing after the heading is an instrument word, so the prefix-rule subtotal filter dropped
+    them as section rows; only a bill whose member happened to name its 'Maturity Date' survived (TCW
+    Direct Lending VII: printed in all 14 quarters, published in 2). With this setting a row whose full
+    identifier is listed under source_encodings.cash_identifiers is not dropped by that filter. Only the
+    listed identifiers; the bare headings and totals are never listed.
+    """
+    result: set[str] = set()
+    if not _WRAPPER_DEFINITIONS_DIR.exists():
+        return result
+    for path in sorted(_WRAPPER_DEFINITIONS_DIR.glob("*.json")):
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        if raw.get("dispatch", {}).get("cash_identifier_rows") == "positions":
+            result.add(str(raw["cik"]).lstrip("0").zfill(10))
+    return result
+
+
+def cash_identifier_rescue_sql(raw_id: str = "_raw_id") -> str:
+    """SQL true for a listed cash row of a filer that set dispatch.cash_identifier_rows = 'positions'."""
+    from pipeline.source_encodings import cash_identifier_expression
+    ciks = sorted(_cash_identifier_position_ciks())
+    if not ciks:
+        return "FALSE"
+    cik_in = ("LPAD(REGEXP_REPLACE(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') IN ("
+              + ", ".join(f"'{c}'" for c in ciks) + ")")
+    return "(" + cik_in + " AND " + cash_identifier_expression("cik", raw_id) + ")"
+
+
 def _unspaced_due_ciks() -> set[str]:
     """CIKs whose wrapper says the member text writes the maturity unspaced (staging.maturity_text_unspaced).
 
@@ -1227,6 +1262,12 @@ def _prepare_bdc(
         if _prefix_rules_hierarchy_parts
         else "FALSE"
     )
+    # Listed cash rows of a filer that declares them positions (dispatch.cash_identifier_rows) are
+    # neither subtotals nor section rows: they pass both prefix-rule filters. FALSE for every other filer.
+    _cash_rescue = cash_identifier_rescue_sql("_raw_id")
+    if _cash_rescue != "FALSE":
+        _prefix_rules_hierarchy_condition = f"(({_prefix_rules_hierarchy_condition}) OR {_cash_rescue})"
+        _prefix_hierarchy_filter = f"(({_prefix_hierarchy_filter}) AND NOT {_cash_rescue})"
 
     # CIK-scoped stripping of "Investments Investments" double-prefix in
     # strip_affil.  These CIKs declare "Investments Investments" as a

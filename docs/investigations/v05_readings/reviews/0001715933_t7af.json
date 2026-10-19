@@ -1,0 +1,1433 @@
+{
+ "reviewer_id": "independent-reviewer-t7af-claude-opus-2026-10-19",
+ "report_digest": "b7edab2d4fd7fc5da9110a9f14461a32ba46dd32352bf82c5db7f516a88939c0",
+ "summary": {
+  "findings": {
+   "supported": 81,
+   "rejected": 0,
+   "insufficient_evidence": 0
+  },
+  "observations": {
+   "supported": 14,
+   "rejected": 0
+  },
+  "checks_done": [
+   "(a) pct_tagged_as_ratio (0000950170-25-045556, 0000950170-25-070648): t7af vs t7ae changes pct_of_net_assets on exactly 2 rows (the bills, 0.562 -> 56.2, 0.577 -> 57.7). In both filings no row exceeds 100, every row's pct / (FV / net assets) is within one-decimal rounding, and the quarter sums (219.0 / 219.4) match FV / net assets (218.9 / 219.1) and the printed 'Total Investments (218.9 %)' / '(219.1 %)'. No row is 100x too large.",
+   "(b) 13 new cash rows (15 CASH rows in all, 2023-03-31 to 2025-03-31): each equals its printed line (money fund every quarter, Treasury bill from 2023-12-31) and per quarter they equal the printed 'Total Cash Equivalents' + 'Total Short-term Investments'; non-cash + cash = printed 'Total Investments' to the dollar in all 9 quarters. One name drift: 2024-09-30 money fund 'Yield 4.8%' vs printed '4.82 %'. 2025-06-30 to 2026-06-30 cash still unpublished (parked).",
+   "(c) Re-run after the orchestrator removed the 8 printed cash anchors: fund_financials t7af now equals t7ae in every field and quarter (cash_equivalents_at_fair_value back to the filed values: 0 for 2023-03-31 to 2023-09-30, blank 2023-12-31 to 2024-09-30 and 2025-03-31). No check now verifies a value against itself. The 12 new findings (fv_conservation, gav_reconciliation, F20, GAV_BDC02 at 2023-03-31 / 06-30 / 09-30) are the honest result: filed cash equivalents 0 (the word 'no' tagged numwordsen) against a printed money fund; residuals equal the money-fund row exactly. source_ambiguity supported. Bills 2023-12-31 to 2025-03-31 remain checked against the filed ShortTermInvestments; the money fund in quarters with no filed figure is not independently reconciled.",
+   "(d) New proposals: A04 / E01 2023-12-31 to 2025-03-31 are false alarms by construction (holdings incl. printed cash vs ex-cash filed investments; non-cash rows tie to the dollar). A07 (outlier > 25 pct, sum in range) and pct_position_concentration fire only on the bill (CASH), percent as printed; supported, but the reason should stay limited to CASH rows. F25 2025-06-30 now confirmed_error and parked: supported, mechanism confirmed in raw HTML (bill on InvestmentTypeAxis-only context as ShortTermInvestments, money fund on CashEquivalents concepts).",
+   "(e) Field diff t7af (re-run) vs t7ae, joined on accession + context: unchanged from the first t7af build: 13 rows added (cash), 0 removed; changed only instrument_description 2 (Twin Star 2025-03-31 '14th Amendment'; AGY Equity 2023-06-30 'Class B Preferred Units', both as printed), pct_of_net_assets 2 (bills), asset_category / index_classification 1 (AGY), corrected_fields 2. No FV, cost, rate, spread, PIK, maturity or position_id change on existing rows. fund_financials: no difference from t7ae.",
+   "Row corrections: 296 (4 new: Twin Star instrument, AGY instrument / asset class / index class); all quoted lines on the page, values present, applied in t7af.",
+   "Coverage: every row-level finding's flagged population reconstructed from t7af rule outputs equals affected_rows; F23 and F25 2024-12-31 are gone from the ledger.",
+   "Page sample (20 cards, 1 published error C014) is now recorded in the report and fixed."
+  ]
+ },
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001715933_2023-09-30_BLOCKING_FAIR_VALUE_DISAGREEMENT_6569b09c9d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population: row_validation_issues SRC_BDC03 2023-09-30 has one row (ROW-7dcabc3509c107a1, Centric Brands L.P. Class A LP Interests) and source_reconciliation_detail has the matching value_mismatch on src:0000950170-23-060966:C_b1f67d8d-7766-4361-8d82-53c8fb8e2622 = affected_rows. Raw inline HTML: us-gaap:InvestmentOwnedAtFairValue on that context has format ixt:fixed-zero and displays '134,113', so the instance reads 0 while the page prints 134,113 on the row and on the issuer subtotal (the GP LLC line beside it prints '-', published 0). Published 134,113 via row correction. source_ambiguity is the right label; the proposal makes the source check's disagreement explicit rather than hiding a value error.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Centric Brands GP LLC (3) (5) (6) Membership Interests 0.0 % 159,658 - - Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_05ba57822eb9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2024-03-31|holdings_fv_vs_investments), fund-level rule. Independent sums on t7af holdings (published basis) at 2024-03-31: non-CASH rows 860,162,606 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 119,604,047 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 979,766,653 = the printed 'Total Investments'. E01 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Debt & Equity Investments (8) 149.4 % 937,558,628 860,162,606"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Cash Equivalents 4.5 % 25,944,259 25,944,259"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Short-term Investments 16.2 % 93,659,788"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_15006ed7f8b7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2025-03-31|gav_reconciliation), fund-level rule. Independent sums on t7af holdings (published basis) at 2025-03-31: non-CASH rows 803,322,432 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 320,353,362 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 1,123,675,794 = the printed 'Total Investments'. A04 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Short-term Investments 57.7 % 295,864,750"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_38a4704eb36b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2025-03-31|holdings_fv_vs_investments), fund-level rule. Independent sums on t7af holdings (published basis) at 2025-03-31: non-CASH rows 803,322,432 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 320,353,362 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 1,123,675,794 = the printed 'Total Investments'. E01 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Short-term Investments 57.7 % 295,864,750"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3fd5e260712a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2024-03-31|gav_reconciliation), fund-level rule. Independent sums on t7af holdings (published basis) at 2024-03-31: non-CASH rows 860,162,606 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 119,604,047 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 979,766,653 = the printed 'Total Investments'. A04 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Debt & Equity Investments (8) 149.4 % 937,558,628 860,162,606"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Cash Equivalents 4.5 % 25,944,259 25,944,259"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Short-term Investments 16.2 % 93,659,788"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_4fb4e9b2d76a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-09-30|gav_residual); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-09-30 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 43,802,740. fv_conservation residual 4.853 pct = 43,802,740 / 902,515,723 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. gav_reconciliation fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "The Company had no cash equivalents as of September 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_58684237d5e7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2024-06-30|gav_reconciliation), fund-level rule. Independent sums on t7af holdings (published basis) at 2024-06-30: non-CASH rows 829,056,444 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 219,762,251 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 1,048,818,695 = the printed 'Total Investments'. A04 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444"
+    },
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890"
+    },
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Short-term Investments 33.4 % 196,776,361"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_59bb5880d4d6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2024-09-30|holdings_fv_vs_investments), fund-level rule. Independent sums on t7af holdings (published basis) at 2024-09-30: non-CASH rows 833,137,756 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 295,945,484 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 1,129,083,240 = the printed 'Total Investments'. E01 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Short-term Investments 49.1 % 270,968,462"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5e6b8c0faf8a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2024-12-31|holdings_fv_vs_investments), fund-level rule. Independent sums on t7af holdings (published basis) at 2024-12-31: non-CASH rows 847,197,092 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 308,669,608 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 1,155,866,700 = the printed 'Total Investments'. E01 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092"
+    },
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775"
+    },
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Short-term Investments 56.2 % 296,799,833"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6abd5bd76564",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-12-31|gav_reconciliation), fund-level rule. Independent sums on t7af holdings (published basis) at 2023-12-31: non-CASH rows 843,338,273 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 134,491,142 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 977,829,415 = the printed 'Total Investments'. A04 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Debt & Equity Investments (8) 148.2 % 905,318,310 843,338,273"
+    },
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Cash Equivalents 9.8 % 55,776,653 55,776,653"
+    },
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Short-term Investments 13.8 % 78,714,489"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6b9e7694151b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2024-12-31|gav_reconciliation), fund-level rule. Independent sums on t7af holdings (published basis) at 2024-12-31: non-CASH rows 847,197,092 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 308,669,608 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 1,155,866,700 = the printed 'Total Investments'. A04 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092"
+    },
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775"
+    },
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Short-term Investments 56.2 % 296,799,833"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6fe95441e913",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Population: row_validation_issues SRC_BDC03 2023-09-30 has one row (ROW-7dcabc3509c107a1, Centric Brands L.P. Class A LP Interests) and source_reconciliation_detail has the matching value_mismatch on src:0000950170-23-060966:C_b1f67d8d-7766-4361-8d82-53c8fb8e2622 = affected_rows. Raw inline HTML: us-gaap:InvestmentOwnedAtFairValue on that context has format ixt:fixed-zero and displays '134,113', so the instance reads 0 while the page prints 134,113 on the row and on the issuer subtotal (the GP LLC line beside it prints '-', published 0). Published 134,113 via row correction. source_ambiguity is the right label; the proposal makes the source check's disagreement explicit rather than hiding a value error.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Centric Brands GP LLC (3) (5) (6) Membership Interests 0.0 % 159,658 - - Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d43e39dd71a3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2024-06-30|holdings_fv_vs_investments), fund-level rule. Independent sums on t7af holdings (published basis) at 2024-06-30: non-CASH rows 829,056,444 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 219,762,251 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 1,048,818,695 = the printed 'Total Investments'. E01 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444"
+    },
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890"
+    },
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Short-term Investments 33.4 % 196,776,361"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d64195286fc6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2024-09-30|gav_reconciliation), fund-level rule. Independent sums on t7af holdings (published basis) at 2024-09-30: non-CASH rows 833,137,756 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 295,945,484 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 1,129,083,240 = the printed 'Total Investments'. A04 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Short-term Investments 49.1 % 270,968,462"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d846aa86d0ff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-03-31|gav_residual); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-03-31 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 35,887,338. fv_conservation residual 3.436 pct = 35,887,338 / 1,044,434,959 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. gav_reconciliation fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "The Company had no cash equivalents as of March 31, 2023"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e4d608146fb6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-06-30|gav_residual); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-06-30 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 45,101,237. fv_conservation residual 4.675 pct = 45,101,237 / 964,685,047 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. gav_reconciliation fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "The Company had no cash equivalents as of June 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f72f89314a51",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-03-31|fv_conservation_residual); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-03-31 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 35,887,338. fv_conservation residual 3.436 pct = 35,887,338 / 1,044,434,959 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. fv_conservation fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "The Company had no cash equivalents as of March 31, 2023"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f993127f45e8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-06-30|fv_conservation_residual); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-06-30 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 45,101,237. fv_conservation residual 4.675 pct = 45,101,237 / 964,685,047 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. fv_conservation fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "The Company had no cash equivalents as of June 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_fc77eb8bcee0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-12-31|holdings_fv_vs_investments), fund-level rule. Independent sums on t7af holdings (published basis) at 2023-12-31: non-CASH rows 843,338,273 = printed 'Total Debt & Equity Investments' to the dollar; CASH rows 134,491,142 = printed 'Total Cash Equivalents' + 'Total Short-term Investments' (money fund and bill, each row equal to its printed line); together 977,829,415 = the printed 'Total Investments'. E01 compares holdings including printed cash positions with an investments figure that excludes them (fund_financials investments_at_fair_value = the ex-cash line), so it fails by construction once the cash rows are published; no FV row is missing or extra. false_alarm supported. The 2023-12-31 to 2024-09-30 findings are new only because t7af publishes the cash rows the page prints.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Debt & Equity Investments (8) 148.2 % 905,318,310 843,338,273"
+    },
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Cash Equivalents 9.8 % 55,776,653 55,776,653"
+    },
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Short-term Investments 13.8 % 78,714,489"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_fe5892c1465c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-09-30|fv_conservation_residual); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-09-30 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 43,802,740. fv_conservation residual 4.853 pct = 43,802,740 / 902,515,723 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. fv_conservation fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "The Company had no cash equivalents as of September 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_10488ebd98cb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (row_validation_issues C115) at 2025-03-31: 3 rows, identical to affected_rows (C_21e07262, C_6f1f4d02, C_e0c66802). Rows: TorcSill protective advance (PRIME + 18.25) and the revolver and term loan (SOFR + 18.75); the published basis_spread equals the printed spread on each line. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_11bf721cbb65",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed from t7af oracle/check_failures.csv (check B01, 2025-06-30): 8 contexts, identical to affected_rows. Every one is an affiliate roll-forward member ('Controlled/Non-Controlled Affiliated Investments ...') whose only facts are InvestmentInterestRate (and maturity from 2025), status excluded_no_fair_value or excluded_comparative_period; none carries principal, cost or units. The roll-forward closing value equals the schedule row's published FV (e.g. AGY term loan 2023-03-31 27,260,661 on both), and the quarter's non-cash published FV equals the printed Total Debt & Equity Investments. The prior real_error verdict (comparative_leak in B01's own population) concerns the check's population, not published rows; no comparative row is published. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Encompass Digital Media, Inc. Term Loan - 12.05 % inc PIK 17,174,507 - - - ( 1,797,198 ) 15,377,309"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1302ed3af84e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (basis_spread > 15 on t7af holdings) at 2025-06-30: 3 rows, identical to affected_rows (C_2495e9c1, C_01f2a13e, C_43bd0c6d). Rows: TorcSill protective advance (18.25), revolver and term loan (18.75); the published basis_spread equals the printed spread on each line. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_13af1d8ddacf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-03-31|canonical_gav_status); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-03-31 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 35,887,338. fv_conservation residual 3.436 pct = 35,887,338 / 1,044,434,959 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. F20 fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "The Company had no cash equivalents as of March 31, 2023"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1d8377bb7193",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (pik_rate > 20 on t7af holdings) at 2026-03-31: 10 rows, identical to affected_rows. Rows: 7 Twin Star amendment loans at 25.00 and 3 TorcSill loans 25.00 / 23.35 / 23.35. I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported. The prior real_error verdict (missing PIK on all-PIK loans such as Navistar 14.27 all PIK) is addressed by the 271 all-PIK row corrections; Navistar 2026-03-31 now publishes pik_rate 14.27.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221880",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2329dd412374",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One key (2026-08-12 coverage). The t7af fund_financials row for 2026-08-12 carries no figure except the cover-page unit count; it is the cover date of the 10-Q for 2026-06-30, whose schedule is published at 2026-06-30. not_applicable supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346651",
+     "text": "The number of the Registrants common units outstanding at August 12, 2026 was 13,734,010"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_23729f65ef77",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2025-03-31). Reconstructed: the only t7af row above 25 pct in the quarter is the Treasury bill (CASH) at 57.7, which equals the printed percent; A07 (pipeline/oracle_checks.py check_A07) warns when any row's pct exceeds 25 while the sum is in range; the sums (178.3 / 204.3 / 219.0 / 219.4) are inside 50-250. No private position exceeds 25 pct. as_filed supported. Note the rule is meant for portfolio concentration; a cash bill trips it whenever such rows are published, so the reason is reusable but should stay limited to CASH rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Short-term Investments 57.7 % 295,864,750"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_26d7880225e3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2025-06-30 distribution_rate, value 0.0; F33 requires 0 < rate). The six-month 2025 column prints '-' against (4,980) for 2024. A zero rate is the filed position; as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Distributions to Members from distributable earnings - ( 4,980 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_35349ee3c595",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-06-30|canonical_gav_status); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-06-30 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 45,101,237. fv_conservation residual 4.675 pct = 45,101,237 / 964,685,047 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. F20 fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "The Company had no cash equivalents as of June 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_36b2e56bc398",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2025-06-30 income_yield_vs_wac, F27 value 15.00). Published income_yield_pct 27.29 equals the printed 'Ratio of net investment income to average net assets' (checked on the page). The ratio is on net assets of a fund with total assets about twice net assets (e.g. 1,166,866 vs 528,008 thousand at 2024-12-31) and large incentive-fee reversals in 2024-2025 (printed NII above total investment income in 2024-06-30 and 2025-03-31: 57,693 vs 34,674 and 54,734 vs 29,477), while WAC is a coupon on fair value; the gap is structural, not a missing coupon (all-PIK rates now published). as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Ratio of net investment income to average net assets (5) 27.29 % 29.46 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3a47caa43333",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (pik_rate > 20 on t7af holdings) at 2025-09-30: 10 rows, identical to affected_rows. Rows: 7 Twin Star amendment loans at 25.00 and 3 TorcSill loans 25.50 / 23.35 / 23.35. I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    },
+    {
+     "accession": "0001193125-25-276898",
+     "text": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3aabfad26369",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2025-03-31 distribution_rate, value 0.0; F33 requires 0 < rate). The Q1-2025 cash-flow column prints '-' against (4,980) for Q1-2024. A zero rate is the filed position; as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Distributions to Members from distributable earnings - ( 4,980 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3bbf18d7e76f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2024-06-30). Reconstructed: the only t7af row above 25 pct in the quarter is the Treasury bill (CASH) at 33.4, which equals the printed percent; A07 (pipeline/oracle_checks.py check_A07) warns when any row's pct exceeds 25 while the sum is in range; the sums (178.3 / 204.3 / 219.0 / 219.4) are inside 50-250. No private position exceeds 25 pct. as_filed supported. Note the rule is meant for portfolio concentration; a cash bill trips it whenever such rows are published, so the reason is reusable but should stay limited to CASH rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Short-term Investments 33.4 % 196,776,361"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3d26e78fa4ff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed from t7af oracle/check_failures.csv (check B01, 2023-06-30): 12 contexts, identical to affected_rows. Every one is an affiliate roll-forward member ('Controlled/Non-Controlled Affiliated Investments ...') whose only facts are InvestmentInterestRate (and maturity from 2025), status excluded_no_fair_value or excluded_comparative_period; none carries principal, cost or units. The roll-forward closing value equals the schedule row's published FV (e.g. AGY term loan 2023-03-31 27,260,661 on both), and the quarter's non-cash published FV equals the printed Total Debt & Equity Investments. The prior real_error verdict (comparative_leak in B01's own population) concerns the check's population, not published rows; no comparative row is published. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Slogic Holding Corp. Last Out Term Loan - 11.62 % $ 26,681,925 $ 25,214 $ - $ - $ ( 25,214 ) $ 26,681,925 $ 1,469,660"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3fe3d77e0d3d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2022-12-31 distribution_rate_vs_income_yield; F16 value 10.58 in t7af fund_financials_validation_current). The quarter's printed distributions include a return of capital alongside distributable earnings; F16 compares the distribution rate (both parts) with 1.5 x the NII-based income yield, so a capital-returning fund exceeds it by design. Income yield equals the printed NII ratio after the income fix (verified NII per quarter against the statements of operations). as_filed supported; it does not clear a data error.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-010240",
+     "text": "Distributions to Members from: Distributable earnings - ( 116,408 ) ( 116,408 ) Return of capital ( 116,092 ) - ( 116,092 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_43c9cd187f27",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2025-03-31 income_yield_vs_wac, F27 value 28.97). Published income_yield_pct 42.12 equals the printed 'Ratio of net investment income to average net assets' (checked on the page). The ratio is on net assets of a fund with total assets about twice net assets (e.g. 1,166,866 vs 528,008 thousand at 2024-12-31) and large incentive-fee reversals in 2024-2025 (printed NII above total investment income in 2024-06-30 and 2025-03-31: 57,693 vs 34,674 and 54,734 vs 29,477), while WAC is a coupon on fair value; the gap is structural, not a missing coupon (all-PIK rates now published). as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Ratio of net investment income to average net assets (5) 42.12 % 18.96 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_48335e858590",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed from t7af row_validation_issues (C206, 2025-03-31) joined to holdings: exactly 0000950170-25-070648/C_f8169267-b7b5-4950-9293-ad10b1496547 (the bill), = affected_rows. Published issuer 'U.S. Treasury Bill, Yield 4.29%, Maturity Date 04/03/25' is the page's name cell. false_alarm supported. Its pct is now 57.7 as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.29 %, Maturity Date 04/03/25 57.7 % 300,000,000 295,864,750 295,864,750"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_49df8b0cbcf7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2024-06-30). Reconstructed: the only t7af row above 25 pct in the quarter is the Treasury bill (CASH) at 33.4, which equals the printed percent; the weak concentration rule flags a single row above 25 pct of net assets. No private position exceeds 25 pct. as_filed supported. Note the rule is meant for portfolio concentration; a cash bill trips it whenever such rows are published, so the reason is reusable but should stay limited to CASH rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Short-term Investments 33.4 % 196,776,361"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4b16d5ecb07e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2025-03-31). Reconstructed: the only t7af row above 25 pct in the quarter is the Treasury bill (CASH) at 57.7, which equals the printed percent; the weak concentration rule flags a single row above 25 pct of net assets. No private position exceeds 25 pct. as_filed supported. Note the rule is meant for portfolio concentration; a cash bill trips it whenever such rows are published, so the reason is reusable but should stay limited to CASH rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Short-term Investments 57.7 % 295,864,750"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4d970baf6b89",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2024-09-30). Reconstructed: the only t7af row above 25 pct in the quarter is the Treasury bill (CASH) at 49.1, which equals the printed percent; the weak concentration rule flags a single row above 25 pct of net assets. No private position exceeds 25 pct. as_filed supported. Note the rule is meant for portfolio concentration; a cash bill trips it whenever such rows are published, so the reason is reusable but should stay limited to CASH rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Short-term Investments 49.1 % 270,968,462"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_530eeb8a3972",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (basis_spread > 15 on t7af holdings) at 2024-03-31: 2 rows, identical to affected_rows (C_4ffd0a43, C_5dbfbc30). Rows: Red Lobster term loan and incremental term loan (SOFR + 15.50); the published basis_spread equals the printed spread on each line. false_alarm supported. The prior real_error verdict on this id concerned AGY Holdings rows built from roll-forward text without spread; on t7af AGY Holdings 2024-03-31 publishes spread 10.0, PIK 6.0, maturity 2027-09-21 from schedule contexts and is no longer flagged.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_569bcb06ef17",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (pik_rate > 20 on t7af holdings) at 2024-03-31: 1 rows, identical to affected_rows. Rows: Red Lobster incremental term loan, 21.10 all PIK (row correction). I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5b721f255af5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2023-06-30 distribution_rate_vs_income_yield; F16 value 28.03 in t7af fund_financials_validation_current). The quarter's printed distributions include a return of capital alongside distributable earnings; F16 compares the distribution rate (both parts) with 1.5 x the NII-based income yield, so a capital-returning fund exceeds it by design. Income yield equals the printed NII ratio after the income fix (verified NII per quarter against the statements of operations). as_filed supported; it does not clear a data error.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Distributions to Members from: Distributable earnings - ( 49,000 ) ( 49,000 ) Return of capital ( 55,000 ) - ( 55,000 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5bb7c8f96c00",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (row_validation_issues C117) at 2025-06-30: 9 rows, identical to affected_rows. Rows: 6 Twin Star amendment loans at 25.00 and 3 TorcSill loans 25.75 / 23.35 / 23.35. I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    },
+    {
+     "accession": "0000950170-25-107431",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_67f8cf268c26",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (pik_rate > 20 on t7af holdings) at 2025-03-31: 6 rows, identical to affected_rows. Rows: 3 Twin Star amendment loans at 25.00 and TorcSill 25.75 / 23.35 / 23.35 all PIK. I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "01/29/25 14th Amendment Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.2 % 780,829 06/18/26 780,829 780,829"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6c0d4971953b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-09-30|gav_cash_residual); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-09-30 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 43,802,740. fv_conservation residual 4.853 pct = 43,802,740 / 902,515,723 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. GAV_BDC02 fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "The Company had no cash equivalents as of September 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_721d363c8b26",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2024-12-31 income_yield_vs_wac, F27 value 12.00). Published income_yield_pct 25.01 equals the printed 'Ratio of net investment income to average net assets' (checked on the page). The ratio is on net assets of a fund with total assets about twice net assets (e.g. 1,166,866 vs 528,008 thousand at 2024-12-31) and large incentive-fee reversals in 2024-2025 (printed NII above total investment income in 2024-06-30 and 2025-03-31: 57,693 vs 34,674 and 54,734 vs 29,477), while WAC is a coupon on fair value; the gap is structural, not a missing coupon (all-PIK rates now published). as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Ratio of net investment income to average net assets 25.01 % 14.37 % 11.64 % 8.10 % 12.59 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_77641c53921f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed independently (interest_rate > 25 on t7af holdings, the shadow_weak_engine contract max) at 2025-03-31: 0000950170-25-070648/C_21e07262-2d74-4ed2-ae99-6e07a201075a only, = affected_rows. The row is the WDE TorcSill protective advance; published interest_rate 25.75 (a row correction, the context has no rate fact) equals the printed all-in rate; my row-correction check found the quoted line on the page with the value, acquisition date and maturity. false_alarm supported (rate above the format range as printed).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7c938a99bf95",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (pik_rate > 20 on t7af holdings) at 2024-12-31: 1 rows, identical to affected_rows. Rows: Twin Star 13th Amendment Priority DDTL, 25.00 fixed all PIK (filer tag). I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 273,819 06/18/26 273,819 273,819"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7fd80cd34d44",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (pik_rate > 20 on t7af holdings) at 2026-06-30: 7 rows, identical to affected_rows. Rows: 7 Twin Star amendment loans at 25.00 fixed all PIK. I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346651",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8b0b3045bd29",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2022-09-30 distribution_rate_vs_income_yield; F16 value 12.09 in t7af fund_financials_validation_current). The quarter's printed distributions include a return of capital alongside distributable earnings; F16 compares the distribution rate (both parts) with 1.5 x the NII-based income yield, so a capital-returning fund exceeds it by design. Income yield equals the printed NII ratio after the income fix (verified NII per quarter against the statements of operations). as_filed supported; it does not clear a data error.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-023681",
+     "text": "Distributions to Members from: Distributable earnings - (24,000 ) (24,000 ) Return of capital (46,000 ) - (46,000 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_908ca1c79fe5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed independently (interest_rate > 25 on t7af holdings, the shadow_weak_engine contract max) at 2025-09-30: 0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b only, = affected_rows. The row is the WDE TorcSill protective advance; published interest_rate 25.5 (a row correction, the context has no rate fact) equals the printed all-in rate; my row-correction check found the quoted line on the page with the value, acquisition date and maturity. false_alarm supported (rate above the format range as printed).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_92c10477f63f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed independently (row_validation_issues C113) at 2025-09-30: 0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b only, = affected_rows. The row is the WDE TorcSill protective advance; published interest_rate 25.5 (a row correction, the context has no rate fact) equals the printed all-in rate; my row-correction check found the quoted line on the page with the value, acquisition date and maturity. false_alarm supported (rate above the format range as printed).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9ae30f1395c2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (row_validation_issues C117) at 2024-03-31: 1 rows, identical to affected_rows. Rows: Red Lobster incremental term loan, 21.10 all PIK (row correction). I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9c0e30b744e0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (row_validation_issues C117) at 2025-09-30: 10 rows, identical to affected_rows. Rows: 7 Twin Star amendment loans at 25.00 and 3 TorcSill loans 25.50 / 23.35 / 23.35. I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    },
+    {
+     "accession": "0001193125-25-276898",
+     "text": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9f9139ff8875",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2023-03-31 distribution_rate, value 0.0; F33 requires 0 < rate). The 2023-03-31 10-Q prints no distribution line at all (searched the cached page); six-month 2023 distributions (48,995 + 55,000) equal the second quarter's 49,000 + 55,000, so the first quarter had none. A zero rate is the filed position; as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Distributions to Members from distributable earnings ( 4,980 ) ( 48,995 ) Return of capital - ( 55,000 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9f941789c2e3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (row_validation_issues C117) at 2026-06-30: 7 rows, identical to affected_rows. Rows: 7 Twin Star amendment loans at 25.00 fixed all PIK. I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346651",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.0 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9fe513af83e7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Conclusion now confirmed_error (pipeline cash coverage), which is what the t7ae review asked for. Coverage: the fund-quarter key plus the two source contexts of the unpublished cash rows. Raw inline HTML of 0000950170-25-107431: C_14ed1332 carries the bill as us-gaap:ShortTermInvestments and ck0001715933:ShortTermInvestmentsFairValue 394,466,500 on an InvestmentTypeAxis=USTreasuryBillSecuritiesMember context; C_e23e528d carries the money fund as us-gaap:CashEquivalentsAtCarryingValue and ck0001715933:CashEquivalentsAtFairValue 7,095,586 (CashAndCashEquivalentsAxis member). Neither is read as an investment fair value, so neither row is published, while 2025-03-31 publishes both. Ex cash the growth is -13.9 pct vs total assets -3.5 pct. Parking with the stated fix (fair_value_concepts plus context and cash identifiers, and the percent concept) is a correct next action; cash for 2025-06-30 to 2026-06-30 remains unpublished meanwhile.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.30 %, Maturity Date 10/28/25 81.5 % 400,000,000 394,466,500 394,466,500"
+    },
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Total Debt & Equity Investments (7) 143.3 % 844,551,095 691,956,192"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.29 %, Maturity Date 04/03/25 57.7 % 300,000,000 295,864,750 295,864,750"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a2a0eac84203",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2023-09-30 distribution_rate_vs_income_yield; F16 value 9.61 in t7af fund_financials_validation_current). The quarter's printed distributions include a return of capital alongside distributable earnings; F16 compares the distribution rate (both parts) with 1.5 x the NII-based income yield, so a capital-returning fund exceeds it by design. Income yield equals the printed NII ratio after the income fix (verified NII per quarter against the statements of operations). as_filed supported; it does not clear a data error.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Distributions to Members from: Distributable earnings - ( 31,000 ) ( 31,000 ) Return of capital ( 29,800 ) - ( 29,800 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a5580961e525",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (row_validation_issues C117) at 2025-03-31: 6 rows, identical to affected_rows. Rows: 3 Twin Star amendment loans at 25.00 and TorcSill 25.75 / 23.35 / 23.35 all PIK. I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "01/29/25 14th Amendment Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.2 % 780,829 06/18/26 780,829 780,829"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a62379e6a57b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed independently (row_validation_issues C113) at 2025-06-30: 0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21 only, = affected_rows. The row is the WDE TorcSill protective advance; published interest_rate 25.75 (a row correction, the context has no rate fact) equals the printed all-in rate; my row-correction check found the quoted line on the page with the value, acquisition date and maturity. false_alarm supported (rate above the format range as printed).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_aa5ab73bb76e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2024-09-30 income_yield_vs_wac, F27 value 10.38). Published income_yield_pct 23.96 equals the printed 'Ratio of net investment income to average net assets' (checked on the page). The ratio is on net assets of a fund with total assets about twice net assets (e.g. 1,166,866 vs 528,008 thousand at 2024-12-31) and large incentive-fee reversals in 2024-2025 (printed NII above total investment income in 2024-06-30 and 2025-03-31: 57,693 vs 34,674 and 54,734 vs 29,477), while WAC is a coupon on fair value; the gap is structural, not a missing coupon (all-PIK rates now published). as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Ratio of net investment income to average net assets (5) 23.96 % 15.03 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_abb62dbde744",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-06-30|gav_cash_residual); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-06-30 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 45,101,237. fv_conservation residual 4.675 pct = 45,101,237 / 964,685,047 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. GAV_BDC02 fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "The Company had no cash equivalents as of June 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b134fd7c1625",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-03-31|gav_cash_residual); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-03-31 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 35,887,338. fv_conservation residual 3.436 pct = 35,887,338 / 1,044,434,959 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. GAV_BDC02 fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "The Company had no cash equivalents as of March 31, 2023"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b933ae610f95",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2023-09-30 distribution_rate, value 32.16). (31,000 + 29,800) / 13,734 x 4 / 54.98 = 32.2 pct: reproduces the published value from printed figures; above 30 pct because of the return of capital. as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Distributions to Members from: Distributable earnings - ( 31,000 ) ( 31,000 ) Return of capital ( 29,800 ) - ( 29,800 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bbd3a65a8e0e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed C206 2024-12-31 population = 0000950170-25-045556/C_bcf6752a-60de-4426-bcd2-dc8af7b57e52 only, = affected_rows. Published name equals the printed name cell. false_alarm supported. Its pct is now 56.2 as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.46 %, Maturity Date 04/03/25 56.2 % 300,000,000 296,799,833 296,799,833"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c1d4f03ce7e9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2025-09-30 income_yield_vs_wac, F27 value 9.23). Published income_yield_pct 21.39 equals the printed 'Ratio of net investment income to average net assets' (checked on the page). The ratio is on net assets of a fund with total assets about twice net assets (e.g. 1,166,866 vs 528,008 thousand at 2024-12-31) and large incentive-fee reversals in 2024-2025 (printed NII above total investment income in 2024-06-30 and 2025-03-31: 57,693 vs 34,674 and 54,734 vs 29,477), while WAC is a coupon on fair value; the gap is structural, not a missing coupon (all-PIK rates now published). as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "Ratio of net investment income to average net assets (5) 21.39 % 23.96 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c33d4fbc98ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (row_validation_issues C117) at 2024-12-31: 1 rows, identical to affected_rows. Rows: Twin Star 13th Amendment Priority DDTL, 25.00 fixed all PIK (filer tag). I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 273,819 06/18/26 273,819 273,819"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d0df1eb227ca",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2024-06-30 distribution_rate, value 0.0; F33 requires 0 < rate). Q1-2024 declared 5,000 (statement of changes); the six-month cash-flow figure is 4,980, so no Q2-2024 distribution. A zero rate is the filed position; as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Distributions to Members from: - Distributable earnings - ( 5,000 ) ( 5,000 ) Total Increase in Members Capital for the three months ended March 31, 2024"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d76c22cddef2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2024-09-30). Reconstructed: the only t7af row above 25 pct in the quarter is the Treasury bill (CASH) at 49.1, which equals the printed percent; A07 (pipeline/oracle_checks.py check_A07) warns when any row's pct exceeds 25 while the sum is in range; the sums (178.3 / 204.3 / 219.0 / 219.4) are inside 50-250. No private position exceeds 25 pct. as_filed supported. Note the rule is meant for portfolio concentration; a cash bill trips it whenever such rows are published, so the reason is reusable but should stay limited to CASH rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Short-term Investments 49.1 % 270,968,462"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_dce596b689ec",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2024-12-31). Reconstructed: the only t7af row above 25 pct in the quarter is the Treasury bill (CASH) at 56.2, which equals the printed percent; the weak concentration rule flags a single row above 25 pct of net assets. No private position exceeds 25 pct. as_filed supported. Note the rule is meant for portfolio concentration; a cash bill trips it whenever such rows are published, so the reason is reusable but should stay limited to CASH rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Short-term Investments 56.2 % 296,799,833"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e414b733de11",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (0001715933|2023-09-30|canonical_gav_status); fund-level rule. These fired after the printed cash anchors were removed (the right call: they verified the money-fund row against itself). Raw inline HTML: the filed undimensioned us-gaap:CashEquivalentsAtCarryingValue for 2023-09-30 is the word 'no' with format ixt-sec:numwordsen, i.e. 0, in the note sentence quoted; the schedule prints the First American money fund under 'Cash Equivalents' at 43,802,740. fv_conservation residual 4.853 pct = 43,802,740 / 902,515,723 exactly, so the only gap is the published money-fund row; non-cash rows tie to the printed 'Total Debt & Equity Investments' to the dollar; t7af holdings are unchanged by the re-run. The filer's text and its schedule contradict each other, so source_ambiguity is the right label, and the next action correctly says cash in this quarter is not independently reconciled. F20 fires because it reads the filed 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "The Company had no cash equivalents as of September 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e77fd7189d6b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (pik_rate > 20 on t7af holdings) at 2025-06-30: 9 rows, identical to affected_rows. Rows: 6 Twin Star amendment loans at 25.00 and 3 TorcSill loans 25.75 / 23.35 / 23.35. I checked all 272 pik_rate row corrections independently (quoted printed line present on the cached page, value in the line, 'x % inc PIK' equal to the value, acquisition date in the line): no mismatches; the filer-tagged 25.00 rows print '25.00 %, Fixed Coupon, all PIK'. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    },
+    {
+     "accession": "0000950170-25-107431",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ed3485ba4784",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2025-12-31 income_yield_vs_wac, F27 value 6.67). Published income_yield_pct 17.72 equals the printed 'Ratio of net investment income to average net assets' (checked on the page). The ratio is on net assets of a fund with total assets about twice net assets (e.g. 1,166,866 vs 528,008 thousand at 2024-12-31) and large incentive-fee reversals in 2024-2025 (printed NII above total investment income in 2024-06-30 and 2025-03-31: 57,693 vs 34,674 and 54,734 vs 29,477), while WAC is a coupon on fair value; the gap is structural, not a missing coupon (all-PIK rates now published). as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-141887",
+     "text": "Ratio of net investment income to average net assets 17.72 % 25.01 % 14.37 % 11.64 % 8.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_edb1f5eefa85",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2024-12-31). Reconstructed: the only t7af row above 25 pct in the quarter is the Treasury bill (CASH) at 56.2, which equals the printed percent; A07 (pipeline/oracle_checks.py check_A07) warns when any row's pct exceeds 25 while the sum is in range; the sums (178.3 / 204.3 / 219.0 / 219.4) are inside 50-250. No private position exceeds 25 pct. as_filed supported. Note the rule is meant for portfolio concentration; a cash bill trips it whenever such rows are published, so the reason is reusable but should stay limited to CASH rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Short-term Investments 56.2 % 296,799,833"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_edbd45744029",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one fund-quarter key (2022-06-30 distribution_rate_vs_income_yield; F16 value 3.13 in t7af fund_financials_validation_current). The quarter's printed distributions include a return of capital alongside distributable earnings; F16 compares the distribution rate (both parts) with 1.5 x the NII-based income yield, so a capital-returning fund exceeds it by design. Income yield equals the printed NII ratio after the income fix (verified NII per quarter against the statements of operations). as_filed supported; it does not clear a data error.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-016400",
+     "text": "Distributions to Members from: Distributable earnings - (33,000 ) (33,000 ) Return of capital (66,000 ) - (66,000 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ef008e0a763a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed from t7af oracle/check_failures.csv (check B01, 2023-03-31): 12 contexts, identical to affected_rows. Every one is an affiliate roll-forward member ('Controlled/Non-Controlled Affiliated Investments ...') whose only facts are InvestmentInterestRate (and maturity from 2025), status excluded_no_fair_value or excluded_comparative_period; none carries principal, cost or units. The roll-forward closing value equals the schedule row's published FV (e.g. AGY term loan 2023-03-31 27,260,661 on both), and the quarter's non-cash published FV equals the printed Total Debt & Equity Investments. The prior real_error verdict (comparative_leak in B01's own population) concerns the check's population, not published rows; no comparative row is published. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "AGY Holdings Corp. Term Loan - 14.83 % inc PIK 26,315,189 1,422,484 - - ( 477,012 ) 27,260,661 2,479,970"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f112f9e7ef88",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2023-06-30 distribution_rate, value 50.0). Printed Q2-2023 distributions 49,000 earnings + 55,000 return of capital thousand; (104,000 / 13,734 thousand units) x 4 / printed NAV 59.38 is about 51 pct, above F33's 30 pct bound. The rate is high because of a return of capital; as_filed supported. (The published 50.0 looks capped; not material to the finding.)",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Distributions to Members from: Distributable earnings - ( 49,000 ) ( 49,000 ) Return of capital ( 55,000 ) - ( 55,000 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f1476c0ab2ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed independently (interest_rate > 25 on t7af holdings, the shadow_weak_engine contract max) at 2025-06-30: 0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21 only, = affected_rows. The row is the WDE TorcSill protective advance; published interest_rate 25.75 (a row correction, the context has no rate fact) equals the printed all-in rate; my row-correction check found the quoted line on the page with the value, acquisition date and maturity. false_alarm supported (rate above the format range as printed).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f1d157ba37e6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population reconstructed (row_validation_issues C115) at 2024-03-31: 2 rows, identical to affected_rows (C_4ffd0a43, C_5dbfbc30). Rows: Red Lobster term loan and incremental term loan (SOFR + 15.50); the published basis_spread equals the printed spread on each line. false_alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f78ee83c722f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One fund-quarter key (2024-03-31 income_yield_vs_wac, F27 value 4.55). Published income_yield_pct 18.96 equals the printed 'Ratio of net investment income to average net assets' (checked on the page). The ratio is on net assets of a fund with total assets about twice net assets (e.g. 1,166,866 vs 528,008 thousand at 2024-12-31) and large incentive-fee reversals in 2024-2025 (printed NII above total investment income in 2024-06-30 and 2025-03-31: 57,693 vs 34,674 and 54,734 vs 29,477), while WAC is a coupon on fair value; the gap is structural, not a missing coupon (all-PIK rates now published). as_filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Ratio of net investment income to average net assets (5) 18.96 % 15.21 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "net-assets-concept-not-mapped",
+   "outcome": "supported",
+   "rationale": "Verified all 18 figure_corrections net assets against the printed 'Total Members Capital' (2022-03-31 918,854 ... 2026-06-30 448,193): all equal. sponfb published the paid-in line (818,068 / 721,083 / 716,388 / 711,556 repeated). F10 and balance_sheet_identity fired 15 times each in sponfb and 16 in t7aa, so existing detectors do catch recurrence.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221880",
+     "text": "Common Unitholders capital 711,556 711,556 Accumulated overdistributed earnings ( 264,701 ) ( 275,792 ) Total Members Capital 446,855 435,764"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "outcome": "supported",
+   "rationale": "sponfb fund_financials net_investment_income equals printed total investment income in every quarter (2026-03-31 19,690,000 vs printed NII 11,422) and total_investment_income is blank. t7af (unchanged from t7ae) matches the statements in all 18 quarters, including derived 10-K fourth quarters (e.g. 2024-12-31 TII 137,519 - 106,045 = 31,474; NII 142,235 - 103,097 = 39,138). Proposed same-filing concept comparison is concrete and low false-positive.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221880",
+     "text": "Total investment income 19,690 29,477 Expenses Interest and credit facilities expenses 3,403 5,336"
+    },
+    {
+     "accession": "0001193125-26-221880",
+     "text": "Net investment income 11,422 54,734"
+    }
+   ]
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "outcome": "supported",
+   "rationale": "sponfb interest_expense was 98,000/100,000 (directors' fees) to 2023 and the repurchase interest from 2024 (339,000 at 2024-06-30). t7af (unchanged from t7ae) equals the printed 'Interest and credit facilities expenses' in all 18 quarters, 10-K fourth quarters derived from the annual line (e.g. 2025-12-31 17,913 - 14,177 = 3,736). The reference is an owner-approved pending shared fix (D-207 item 4), not a detector; acceptable as a proposal reference, but until it lands a custom concept variant on another filer would not be caught. The observation's own suggested_check should be kept as the fallback.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Interest and credit facilities expenses 6,056 6,998 12,430 13,275 Management fees 3,507 3,843 6,978 7,898 Interest expense on repurchase transactions 339 - 617 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "all-pik-printed-no-pik-tag-pik-rate-not-published",
+   "outcome": "supported",
+   "rationale": "Independent check of all 272 pik_rate row corrections against the cached pages: every quoted line is on the page and prints the value; 10 revolver lines carry no maturity in the quoted text (shared row), 3 differ from the member text where the page wins (Twin Star 13th Amendment 2025-12-31 11.32, Slogic 2025-12-31 9.81, TorcSill protective advance 2026-03-31 25.00 vs member 25.50). Proposed member/printed-line 'all PIK' test is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Twin Star International, Inc. (5) 06/18/21 Term Loan - 12.89 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 4.5 % 44,489,932 06/18/26 44,197,185 29,229,885"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-after-en-dash-dropped-by-staging",
+   "outcome": "supported",
+   "rationale": "Row-level diff vs sponfb: instruments blank before are now 'Term Loan' 25, 'Last Out Term Loan' 23, 'Revolver' 16 and others; spot checks match the printed lines. The one wrong value found in t7ae (2025-03-31 Twin Star '4th Amendment') is now '14th Amendment Delayed Draw Term Loan' as printed (t7af vs t7ae diff). Proposed blank-instrument check is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Twin Star International, Inc. 01/29/25 14th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 347,392 06/18/26 347,392 347,392"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "All 55 issuer changes vs sponfb listed (Twin Star 27, TorcSill 12, WIS 6, Outform 3, Grand Circle 2, Legacy 2, bills 2, Mondee DIP 1); each new name is the printed issuer cell. issuer_name_printed fired 13 times and C206 7 times in t7aa, so existing detectors catch it.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Retail Services WIS Corporation 05/20/21 Term Loan - 12.91 % (LIBOR + 7.75 %, 1.00 % Floor) 6.1 % 45,409,275 05/20/25"
+    }
+   ]
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "outcome": "supported",
+   "rationale": "Greenfield A-1 to A-4 warrants remain EQUITY_COMMON; instrument 'Class A-n Warrant, Expires 03/25/27' as printed. Reference is the pending owner-approved shared change (D-207 item 3), acceptable as a proposal reference.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Greenfield World Trade, Inc. (5) (6) Class A-1 Warrant, expires 03/25/27 0.7 % 3,959 3,178,520 5,465,989"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-row-published-only-where-member-names-a-maturity",
+   "outcome": "supported",
+   "rationale": "t7af publishes 15 CASH rows 2023-03-31 to 2025-03-31 (13 new); each equals its printed line, and per quarter they sum to the printed 'Total Cash Equivalents' + 'Total Short-term Investments' (checked all 9 quarters). 2025-06-30 onward still unpublished (parked, mechanism confirmed in raw HTML). The proposed coverage detector is concrete. Minor: the 2024-09-30 money fund is published as 'Yield 4.8%' (member text) where the page prints 'Yield 4.82 %'. Caveat on the companion fix: the filed cash figure for 8 quarters is now the schedule's own printed 'Total Cash Equivalents' (see summary item c).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.82 % 4.5 % 24,977,022 24,977,022 24,977,022 Total Cash Equivalents 4.5 % 24,977,022 24,977,022"
+    },
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.30 %, Maturity Date 10/28/25 81.5 % 400,000,000 394,466,500 394,466,500"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-at-maturity-extension",
+   "outcome": "supported",
+   "rationale": "Twin Star 14th/15th/16th amendment loans take new position_ids at 2026-06-30 (e.g. 14th Amendment Term Loan 395a8ba3 to 57866a07) while the printed maturity moves 06/18/26 to 12/31/26; the 17th amendment keeps 4fc9def9. Proposed chain check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346651",
+     "text": "Twin Star International, Inc. (5)(8) 06/18/21 Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 64,324,394 12/31/26 44,197,191 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "fv-tag-format-fixed-zero-over-printed-value",
+   "outcome": "supported",
+   "rationale": "Raw HTML confirms ix:nonFraction us-gaap:InvestmentOwnedAtFairValue on C_b1f67d8d with format ixt:fixed-zero displaying '134,113'. The proposed inline-document test is exact.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Centric Brands GP LLC (3) (5) (6) Membership Interests 0.0 % 159,658 - - Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Facts verified (Twin Star 13th Amendment 2025-12-31 member 11.98 vs printed 11.32; Slogic 2025-12-31 member 19.81 vs printed 9.81; Twin Star 2025-03-31 member '4th Amendment' vs printed '14th', now published as printed). The detection decision is now propose_detector with a concrete same-context member-vs-tag comparison, which answers the t7ae rejection (it had cited itself).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-141887",
+     "text": "Slogic Holding Corp. (4) 06/29/18 Last Out Term Loan - 9.81 % inc PIK ( SOFR + 5.87 %, 1.00 % Floor, all PIK) 4.0 % 28,819,404 10/29/26 28,819,404 17,637,475"
+    }
+   ]
+  },
+  {
+   "observation_key": "nav-per-unit-accrual-base-includes-undrawn-commitments",
+   "outcome": "supported",
+   "rationale": "Printed NAV per unit is labelled accrual base from 2024-06-30; published nav_per_share equals the printed figure (e.g. 2026-03-31 44.58). not_feasible is acceptable while shares_outstanding is absent from quarter rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Net Asset Value Per Unit (accrual base) (Note 12) (1) $ 50.49 $ 53.53"
+    }
+   ]
+  },
+  {
+   "observation_key": "units-outstanding-only-from-cover-page",
+   "outcome": "supported",
+   "rationale": "Facts verified (balance sheet prints 13,734,010 units each quarter; only the 2026-08-12 cover row has shares_outstanding). Now propose_detector with the deterministic suggested check, as on TCW VIII; answers the t7ae rejection.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221880",
+     "text": "Common Unitholders commitment ( 13,734,010 units issued and outstanding) 1,373,401 1,373,401"
+    }
+   ]
+  },
+  {
+   "observation_key": "pct-ratio-between-half-and-fifty-not-scaled",
+   "outcome": "supported",
+   "rationale": "Verified: the shared rule scales a tagged ratio only up to 0.50 (pipeline/source_encodings.py pct_tagged_as_ratio_expression docstring; staging_bdc.py rate_x100). With the two filings listed, the bills publish 56.2 / 57.7 as printed; the t7af vs t7ae diff changes pct_of_net_assets on exactly those 2 rows; no row in either filing exceeds 100 or departs from FV / net assets beyond one-decimal rounding; quarter sums 219.0 / 219.4 vs calculated 218.9 / 219.1 and printed 'Total Investments (218.9 %)' / '(219.1 %)'. Proposed row-level detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.46 %, Maturity Date 04/03/25 56.2 % 300,000,000 296,799,833 296,799,833"
+    },
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Investments ( 218.9 %) $ 1,294,756,165 $ 1,155,866,700"
+    }
+   ]
+  }
+ ],
+ "request_reviews": []
+}

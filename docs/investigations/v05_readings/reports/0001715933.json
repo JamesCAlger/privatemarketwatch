@@ -1,0 +1,3245 @@
+{
+ "cik": "0001715933",
+ "label": "t7af",
+ "before": "sponfb",
+ "shared_code": true,
+ "investigator_id": "fund-agent-tcw7-2026-10-19",
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 55,
+   "why": "staging patterns for comma/dash members and issuer-before-industry; WIS, Outform, Mondee DIP row corrections; cash heading stripped"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 224,
+   "why": "instrument pattern: en dash before the rate, amendment and First Out words, Class X Preferred Units, class warrants with expiry; Mondee DIP correction; AGY Class B Preferred Units 2023-06-30, Twin Star 14th Amendment 2025-03-31"
+  },
+  {
+   "column": "fair_value",
+   "rows": 1,
+   "why": "Centric Brands L.P. 2023-09-30 printed 134,113 (tag format fixed-zero)"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 5,
+   "why": "rates printed on five loans whose context has no rate fact"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 5,
+   "why": "follows interest_rate on the same five rows"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 5,
+   "why": "follows interest_rate on the same five rows (all_in)"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 1,
+   "why": "Centric revolver 2023-06-30 fixed coupon tagged as spread"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 1,
+   "why": "Centric revolver 2023-06-30 guessed LIBOR withdrawn"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "Centric revolver 2023-06-30 Fixed"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 248,
+   "why": "all-PIK loans given the printed rate as PIK rate (plus Twin Star 2023-06-30)"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 252,
+   "why": "derived: all-PIK loans now have a cash leg of 0"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 264,
+   "why": "records the row corrections above"
+  },
+  {
+   "column": "src_facts",
+   "rows": 1,
+   "why": "Centric 2023-09-30 corrected fair value"
+  },
+  {
+   "column": "position_id",
+   "rows": 11,
+   "why": "Mondee common stock chain joined through the restored 2023-06-30 to 2024-06-30 rows (3), Legacy Class A Units chain joined once its 2025 issuer was read (2), Twin Star 4th/14th and 15th amendment tranches told apart by their instrument (5), Centric L.P. 2023-09-30 after its value correction (1)"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 595,
+   "why": "net assets now Total Members Capital (net_assets_concepts MembersEquity)"
+  },
+  {
+   "column": "pct_of_net_assets",
+   "rows": 2,
+   "why": "Treasury bill 2024-12-31 / 2025-03-31 tagged as a ratio above 0.50 (pct_tagged_as_ratio): 0.562 -> 56.2, 0.577 -> 57.7"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 2,
+   "why": "pct_of_net_assets:rate_x100 on the same two rows"
+  },
+  {
+   "column": "asset_category",
+   "rows": 1,
+   "why": "AGY Equity Class B Preferred Units 2023-06-30"
+  },
+  {
+   "column": "index_classification",
+   "rows": 1,
+   "why": "AGY Equity Class B Preferred Units 2023-06-30"
+  },
+  {
+   "column": "entity_id",
+   "rows": 161,
+   "why": "entity resolution re-run on the corrected issuer names (55 names) and the restored rows; recomputed per sandbox"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 60,
+   "why": "follows the corrected issuer names (e.g. 'Services WIS Corp' -> 'Retail Services WIS Corp'); recomputed per sandbox"
+  }
+ ],
+ "rows_added": 78,
+ "rows_removed": 2,
+ "fixes": [
+  {
+   "what": "Net assets were the paid-in line 'Common Unitholders capital' (us-gaap:MembersCapital) in every quarter; set from the printed 'Total Members Capital' in 18 quarters (new highlights wrapper, figure_corrections), and net_assets_concepts MembersEquity added so pct_of_net_assets_calculated uses it (595 rows). Cleared F10 x15, balance_sheet_identity x14, most of pct_of_net_assets_identity and F23.",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221880",
+     "text": "Common Unitholders capital 711,556 711,556 Accumulated overdistributed earnings ( 264,701 ) ( 275,792 ) Total Members Capital 446,855 435,764"
+    }
+   ]
+  },
+  {
+   "what": "Investments at fair value and at cost set from the printed 'Total Debt & Equity Investments' in the 8 quarters with no filed figure (2023-03-31 to 2024-09-30, 2025-03-31); the conservation checks had compared with the schedule's 'Total Investments' including cash.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047"
+    }
+   ]
+  },
+  {
+   "what": "Income: total investment income (us-gaap:InvestmentIncomeNet) had been published as net investment income and interest expense was the directors' fee or the repurchase-transaction interest (us-gaap:RepurchaseAgreementsInterestExpenseAmount, from 2024 ck0001715933:InterestExpenseOnRepurchaseTransactions). income_concept_fallback total_investment_income <- InvestmentIncomeNet, interest_expense <- InterestAndDebtExpense; the others suppressed. Published now: 2026-03-31 TII 19,690, NII 11,422, interest 3,403; 2024-06-30 interest 6,056.",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221880",
+     "text": "Other fee income 19 - Total investment income 19,690 29,477 Expenses Interest and credit facilities expenses 3,403 5,336 Management fees 3,067 3,774 Interest expense on repurchase transactions 1,360 775"
+    },
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Interest and credit facilities expenses 6,056 6,998 12,430 13,275 Management fees 3,507 3,843 6,978 7,898 Interest expense on repurchase transactions 339 - 617 -"
+    }
+   ]
+  },
+  {
+   "what": "Mondee common stock (2023-06-30 to 2024-06-30) and Shelterlogic common stock (2023-06-30) were tagged on bare issuer members and dropped by the prefix subtotal filter; named under source_encodings.context_identifiers with the filer's own identifier of other quarters. Totals now equal the printed figure in these 5 quarters (16.08M, 2.04M, 1.57M, 1.32M, 1.37M short before).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Software Mondee Holdings LLC (5) (6) (7) Common Stock 0.8 % 570,627 764,071 4,895,980"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Household Durables Shelterlogic Group Holdings, Inc (4) (5) (6) Common Stock 1.7 % 1,254,034 - 11,185,983"
+    }
+   ]
+  },
+  {
+   "what": "Staging patterns: members with ', ' or ' - ' separators from 2024-12-31 (Twin Star, Grand Circle, WDE TorcSill: issuer had been 'Debt Securities, ... Acquisition Date' or blank), an issuer printed before its industry (The Legacy Companies), amendment / First Out tranche words, 'Class X Preferred Units', class warrants with expiry, and an en dash before the rate (instrument had been blank on about 100 rows). 55 issuer names and 223 instruments changed.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Twin Star International, Inc. 01/29/25 14th Amendment Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.2 % 780,829 06/18/26 780,829 780,829"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Grand Circle Corporation 02/26/21 Term Loan - 13.19 % ( SOFR + 8.75 %, 1.25 % Floor) 7.3 % 37,282,300 02/26/26 37,147,809 37,282,300"
+    },
+    {
+     "accession": "0001193125-26-346651",
+     "text": "06/23/25 First Out Term Loan - 9.50 % ( SOFR + 5.50 %, 1.00 % Floor) 1.2 % 5,460,101 06/23/28 5,460,101 5,460,101"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Greenfield World Trade, Inc. (5) (6) Class A-1 Warrant, expires 03/25/27 0.7 % 3,959 3,178,520 5,465,989"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names corrected from the page: 'Services WIS Corporation' (industry pattern cut 'Retail') x6, Outform bracket x3, Mondee debtor-in-possession loan (facility text in the issuer cell) x1; cash rows lose the 'Short-term Investments' heading (issuer_name_strip_re).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Retail Services WIS Corporation 05/20/21 Term Loan - 12.91 % (LIBOR + 7.75 %, 1.00 % Floor) 6.1 % 45,409,275 05/20/25"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Outform Holdings LLC (fka Rapid Displays, Inc.) (4)(5)(6) Class A Common Units 0.0 % 7,872,225 39,361 -"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Software Mondee, Inc. Secured Super-Priority Debtor-In-Possession Term Loan 01/17/25 Delayed Draw Term Loan - 14.56 % inc PIK ( SOFR + 10.00 %, 1.75 % Floor, all PIK) 12.3 % 62,837,202 04/24/25 62,837,202 62,837,202"
+    }
+   ]
+  },
+  {
+   "what": "PIK rate on 'all PIK' loans: no PIK tag on the context, so pik_rate was blank on 271 loans whose printed coupon is entirely paid in kind; set to the printed all-in rate, one row correction per row with its printed line (scripts/v05_evidence/row_correction_specs/0001715933.json).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Twin Star International, Inc. (5) 06/18/21 Term Loan - 12.89 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 4.5 % 44,489,932 06/18/26 44,197,185 29,229,885"
+    }
+   ]
+  },
+  {
+   "what": "Rates of five loans whose context has no rate fact (Twin Star 2023-06-30 12.89 also PIK; Greenfield 2024-09-30 18.29; WDE TorcSill protective advance 25.75 / 25.75 / 25.50).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Greenfield World Trade, Inc. (9) 03/04/19 Last Out Term Loan - 18.29 % inc PIK (SOFR + 13.33 %, 1.50 % Floor, 7.00 % PIK) 14.1 % 88,612,435 03/31/25 87,825,188 77,890,330"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "WDE TorcSill Holdings LLC (2) 08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752"
+    }
+   ]
+  },
+  {
+   "what": "Centric Brands Inc. revolver 2023-06-30 (SOURCE AMBIGUITY): the page prints '10.83 % ( 15.00 %, Fixed Coupon, all PIK)', a 10.83 % rate beside a 15.00 % fixed coupon, and the filer tagged 15.00 % as InvestmentBasisSpreadVariableRate. Which figure is the coupon is not settled by the page; the published rate stays the tagged 10.83, and the spread and guessed LIBOR are withdrawn (coupon Fixed) because the row prints no benchmark.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Centric Brands Inc. (3) 10/09/20 Revolver - 10.83 % ( 15.00 %, Fixed Coupon, all PIK) 0.5 % 3,245,604 10/09/24 3,234,928 3,245,604"
+    }
+   ]
+  },
+  {
+   "what": "Centric Brands L.P. Class A LP Interests 2023-09-30: printed 134,113, inline fact tagged with format ixt:fixed-zero (instance value 0); fair value set from the page.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113"
+    }
+   ]
+  },
+  {
+   "what": "Twin Star 02/15/23 delayed draw loan 2026-06-30 printed with a dash for fair value and tagged with cost only; declared fair value 0 (untagged_values). Cost now ties: 794,035,320.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-346651",
+     "text": "Twin Star International, Inc. (5)(8) 02/15/23 Delayed Draw Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 1,276,216 12/31/26 1,276,216 -"
+    },
+    {
+     "accession": "0001193125-26-346651",
+     "text": "Total Debt & Equity Investments (7) 135.6 % 794,035,320 607,079,207"
+    }
+   ]
+  },
+  {
+   "what": "Cash rows: the plug rule that added the money fund and a Treasury bill without a context at 2025-06-30 is pulled (moved to agent_investigate_rules/_pulled_plug_no_context_2026-10-19/ with a README); investments_total_excludes and cost_total_excludes cash_rows declared, and us-gaap:ShortTermInvestments added to the filed cash figure (cash_rows_include_concepts), as the balance sheet prints the bills as 'Short-term investments'. Cleared fv_conservation, gav_reconciliation, F20, GAV_BDC02/03, SRC_BDC02 and no_provenance.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Cash and cash equivalents 27,151 14,501 Short-term investments 295,865 296,800"
+    },
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.30 %, Maturity Date 10/28/25 81.5 % 400,000,000 394,466,500 394,466,500"
+    }
+   ]
+  },
+  {
+   "what": "shares_pow10_normalise false: the shared normaliser relabelled the tagged Mondee unit count 570,627 at 2024-12-31 as derived_proxy once the restored 2023 rows joined its chain; the only row it touched on this fund.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Software Mondee Holdings LLC (5)(6) Common Stock 0.0 % 570,627 764,071 30,643"
+    }
+   ]
+  },
+  {
+   "what": "Cash rows published in every quarter they are extracted (2023-03-31 to 2025-03-31; 13 rows, money market fund and Treasury bills): the prefix-rule subtotal filter dropped every cash row whose member carried no instrument word after the section heading, keeping only bills whose member named a 'Maturity Date'. New opt-in dispatch key cash_identifier_rows: 'positions' (pipeline/staging_bdc.py, on only for this fund): a row whose full identifier is listed under source_encodings.cash_identifiers (14 identifiers, all money fund and bill rows) passes that filter. Cash rows now equal the printed cash totals in each quarter; published non-cash rows unchanged. No cash anchor is declared from the page (orchestrator ruling 2026-10-19 on the t7af review: the 8 cash-equivalents figure corrections were removed, as they verified the cash rows against the same printed numbers). Cash is therefore not independently reconciled in 2023-03-31 to 2023-09-30 (filer files 0) and is checked only against the filed short-term investments (bills) in 2023-12-31 to 2025-03-31. From 2025-06-30 the filer tags cash on concepts and contexts the extractor does not read: parked.",
+   "kind": "shared_code",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Total Cash Equivalents 4.8 % 35,887,338 35,887,338"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Short-term Investments 49.1 % 270,968,462"
+    }
+   ]
+  },
+  {
+   "what": "Page sample card C014: the Treasury bill's percent of net assets was published 0.562 / 0.577 (printed 56.2 % / 57.7 %): the tag is the ratio 0.562 (scale -2) and the shared row rule multiplies by 100 only up to 0.50. Fixed with the existing per-filing key source_encodings.pct_tagged_as_ratio for 0000950170-25-045556 and 0000950170-25-070648 (every percent in those filings is a ratio; the others are at most 0.50 and were scaled already). F23 2024-12-31 and 2025-03-31 now pass; the pct_of_net_assets_identity findings that DS-FUNDLOOP had accepted as filed for the same quarters are no longer raised, so that disposition no longer applies to any outstanding finding.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Short-term Investments 56.2 % 296,799,833"
+    }
+   ]
+  },
+  {
+   "what": "AGY Equity LLC 2023-06-30: the member reads 'Class B Common Units'; the page prints Class B Preferred Units (as every other filing). Instrument and class corrected (EQUITY_PREFERRED / PREFERRED_EQUITY).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "AGY Equity LLC (2) (5) (6) Class B Preferred Units 0.0 % 10,078,138 - -"
+    }
+   ]
+  },
+  {
+   "what": "Twin Star 2025-03-31: the member reads '4th Amendment Delayed Draw Term Loan'; the page prints '14th Amendment' (found by the independent review). Instrument corrected; the position chain was already continuous.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Twin Star International, Inc. 01/29/25 14th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 347,392 06/18/26 347,392"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [
+  {
+   "finding": "fund_financials F25 2025-06-30 (RVQ_REV_9fe513af83e7)",
+   "hypotheses": [
+    "Cash rows published at 2025-03-31 and not at 2025-06-30; the page prints the cash section in both (confirmed_error, independent review t7ae).",
+    "From 2025-06-30 the money fund carries only us-gaap:CashEquivalentsAtCarryingValue and ck0001715933:CashEquivalentsAtFairValue (no value read) and each Treasury bill is tagged us-gaap:ShortTermInvestments on an InvestmentTypeAxis-only context (no identifier member): no position is extracted.",
+    "Fix (needs one more build): source_encodings.fair_value_concepts [CashEquivalentsAtFairValue, ShortTermInvestmentsFairValue], context_identifiers for each bill's context in the five filings, cash_identifiers for their identifiers. The bills' percent is on the filer's ShortTermInvestmentPercentOfNetAssets, which no setting reads, so F23 would then fire unless that concept is read too."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "observations": [
+  {
+   "observation_key": "net-assets-concept-not-mapped",
+   "field": "net_assets",
+   "cause": "shared",
+   "action": "fixed",
+   "fair_value_m": 0.0,
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "Net assets were the paid-in line (us-gaap:MembersCapital) in every quarter, 711,556 against 446,855 thousand at 2026-03-31; same filer behaviour as TCW Direct Lending VIII. Fixed for this fund by figure_corrections; the shared concept order still prefers MembersCapital.",
+   "suggested_check": "Where a filing carries both MembersCapital and MembersEquity at one date, published net assets must equal total assets less total liabilities within 1 pct.",
+   "quote": {
+    "accession": "0001193125-26-221880",
+    "text": "Common Unitholders capital 711,556 711,556 Accumulated overdistributed earnings ( 264,701 ) ( 275,792 ) Total Members Capital 446,855 435,764"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "F10 and balance_sheet_identity fired in every quarter here, as on TCW VIII.",
+    "reference": "fund_financials F10; identity balance_sheet_identity"
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "field": "net_investment_income",
+   "cause": "shared",
+   "action": "fixed",
+   "fair_value_m": 0.0,
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "net_investment_income held us-gaap:InvestmentIncomeNet, the printed total investment income (19,690 against printed NII 11,422 at 2026-03-31); total_investment_income was blank. Fixed by the opt-in highlights fallback (AGL's mechanism).",
+   "suggested_check": "net_investment_income equal to a filed InvestmentIncomeNet while a NetInvestmentIncome fact of the same period differs.",
+   "quote": {
+    "accession": "0001193125-26-221880",
+    "text": "Other fee income 19 - Total investment income 19,690 29,477 Expenses Interest and credit facilities expenses 3,403 5,336 Management fees 3,067 3,774 Interest expense on repurchase transactions 1,360 775"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired; F27 moved only by chance. The check is a same-filing concept comparison with no false positive where the two facts agree.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "field": "interest_expense",
+   "cause": "shared",
+   "action": "fixed",
+   "fair_value_m": 0.0,
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "interest_expense was the directors' fee (98,000) or the repurchase-transaction interest, and from 2024 the filer's custom ck0001715933:InterestExpenseOnRepurchaseTransactions (339 thousand against printed interest 6,056 at 2024-06-30). Fixed by wrapper suppress plus InterestAndDebtExpense fallback; the shared map (substring 'interestexpense') is unchanged.",
+   "suggested_check": "interest_expense below 5 pct of borrowings times a 2 pct floor rate while InterestAndDebtExpense is filed for the period.",
+   "quote": {
+    "accession": "0000950170-24-095230",
+    "text": "Interest and credit facilities expenses 6,056 6,998 12,430 13,275 Management fees 3,507 3,843 6,978 7,898 Interest expense on repurchase transactions 339 - 617 -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "The shared map fix is already queued; this fund adds a custom-concept variant to the evidence.",
+    "reference": "D-207 item 4 (interest expense concept map, pending cohort measurement)"
+   }
+  },
+  {
+   "observation_key": "all-pik-printed-no-pik-tag-pik-rate-not-published",
+   "field": "pik_rate",
+   "cause": "fund",
+   "action": "fixed",
+   "fair_value_m": 0.0,
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "271 loans print 'x % inc PIK (..., all PIK)' and tag only the rate, spread and floor; pik_rate was blank. Fixed by row corrections from the printed lines.",
+   "suggested_check": "A loan whose member or printed line says 'all PIK' with pik_rate blank.",
+   "quote": {
+    "accession": "0000950170-23-040370",
+    "text": "Twin Star International, Inc. (5) 06/18/21 Term Loan - 12.89 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 4.5 % 44,489,932 06/18/26 44,197,185 29,229,885"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed (page rule) did not fire on these rows in t7aa; a text test on the member is exact for this filer family (TCW VII and VIII).",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "instrument-text-after-en-dash-dropped-by-staging",
+   "field": "instrument_description",
+   "cause": "fund",
+   "action": "fixed",
+   "fair_value_m": 0.0,
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "About 100 rows had no instrument where the member writes an en dash before the rate ('Term Loan \u2013 13.66%'); the fund's instrument pattern accepted only a hyphen. Fixed in the wrapper.",
+   "suggested_check": "A LOAN row with blank instrument_description whose member names Term Loan or Revolver.",
+   "quote": {
+    "accession": "0000950170-25-070648",
+    "text": "Grand Circle Corporation 02/26/21 Term Loan - 13.19 % ( SOFR + 8.75 %, 1.25 % Floor) 7.3 % 37,282,300 02/26/26 37,147,809 37,282,300"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule tests instrument fill against the member text.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "field": "issuer_name",
+   "cause": "fund",
+   "action": "fixed",
+   "fair_value_m": 0.0,
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "Issuer names held the member path ('Debt Securities, Consumer Durables & Apparel, Twin Star International, Inc. Acquisition Date') from 2024-12-31, lost 'Retail' (WIS), a bracket (Outform), or carried the facility text (Mondee DIP). Fixed by wrapper patterns and row corrections.",
+   "suggested_check": "issuer_name_printed (page rule).",
+   "quote": {
+    "accession": "0000950170-23-020312",
+    "text": "Retail Services WIS Corporation 05/20/21 Term Loan - 12.91 % (LIBOR + 7.75 %, 1.00 % Floor) 6.1 % 45,409,275 05/20/25"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed and C206 fired on these rows.",
+    "reference": "identity issuer_name_printed; row_validation C206"
+   }
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "field": "asset_category",
+   "cause": "shared",
+   "action": "left",
+   "fair_value_m": 31.72,
+   "quarters": [
+    "2023-03-31",
+    "2025-03-31"
+   ],
+   "what": "Greenfield World Trade Class A-1 to A-4 warrants (31 rows, 31.7M in all, 2023-03-31 to 2025-03-31) are EQUITY_COMMON; the asset_category enum has no warrant value. Left: shared change pending.",
+   "suggested_check": "instrument names a warrant and asset_category is EQUITY_COMMON.",
+   "quote": {
+    "accession": "0000950170-23-020312",
+    "text": "Greenfield World Trade, Inc. (5) (6) Class A-1 Warrant, expires 03/25/27 0.7 % 3,959 3,178,520 5,465,989"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "Queued as a shared change measured on the cohort.",
+    "reference": "D-207 item 3 (warrant asset class, pending)"
+   }
+  },
+  {
+   "observation_key": "cash-row-published-only-where-member-names-a-maturity",
+   "field": "fair_value",
+   "cause": "shared",
+   "action": "fixed",
+   "fair_value_m": 592.66,
+   "quarters": [
+    "2023-03-31",
+    "2025-06-30"
+   ],
+   "what": "The schedule prints the money market fund and Treasury bills in every quarter; the prefix-rule subtotal filter (pipeline/staging_bdc.py, condition 2a, _pr_instrument_re) kept only bills whose member named 'Maturity Date' (2 of 14 quarters). Fixed for 2023-03-31 to 2025-03-31 by the opt-in cash_identifier_rows; 2025-06-30 to 2026-06-30 parked (cash on filer concepts and InvestmentTypeAxis-only contexts). Other prefix_rules filers that print cash rows under a heading prefix likely lose them the same way; making the rescue the default needs a cohort measurement (proposed, not done).",
+   "suggested_check": "A fund whose CASH rows are present in some quarters and absent in others while the page prints a cash section in all of them.",
+   "quote": {
+    "accession": "0000950170-25-045556",
+    "text": "Short-term Investments U.S. Treasury Bill, Yield 4.46 %, Maturity Date 04/03/25 56.2 % 300,000,000 296,799,833 296,799,833"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Coverage test across a fund's quarters; F25 caught one quarter boundary only by chance.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "position-chain-breaks-at-maturity-extension",
+   "field": "position_id",
+   "cause": "shared",
+   "action": "left",
+   "fair_value_m": 9.31,
+   "quarters": [
+    "2026-06-30"
+   ],
+   "what": "At 2026-06-30 Twin Star's loans print a new maturity (06/18/26 to 12/31/26); 15 of the 16 tranches start new position ids (the 17th amendment loan and the restored 02/15/23 loan keep theirs). The maturity veto of the matcher reads an extension as a new loan.",
+   "suggested_check": "Positions ending at q with a new position of the same issuer, instrument and acquisition date starting at q+1, where only the maturity moved later.",
+   "quote": {
+    "accession": "0001193125-26-346651",
+    "text": "Twin Star International, Inc. (5)(8) 06/18/21 Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 64,324,394 12/31/26 44,197,191 -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Measurable from the chain table; the maturity veto itself is a promoted rule, not changed here.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "fv-tag-format-fixed-zero-over-printed-value",
+   "field": "fair_value",
+   "cause": "row",
+   "action": "fixed",
+   "fair_value_m": 0.13,
+   "quarters": [
+    "2023-09-30"
+   ],
+   "what": "Centric Brands L.P. 2023-09-30: the inline fair-value element displays 134,113 with format ixt:fixed-zero, so the instance holds 0; published from the page by row correction. The source check reports the disagreement (proposed).",
+   "suggested_check": "An ix:nonFraction with format fixed-zero whose displayed text is a non-zero amount.",
+   "quote": {
+    "accession": "0000950170-23-060966",
+    "text": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Exact test on the inline document; no false positive on dashes or blanks.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "field": "interest_rate",
+   "cause": "row",
+   "action": "fixed",
+   "fair_value_m": 0.0,
+   "quarters": [
+    "2025-03-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "what": "Members disagree with the page: Twin Star 13th Amendment Term Loan 2025-12-31 member '11.98%', printed and tagged 11.32; Slogic Last Out Term Loan 2025-12-31 member '19.81%', printed 9.81; Slogic revolver 2026-03-31 member 'all PIK', printed without. The published rates come from the tags and equal the page. The instrument is read from the member: Twin Star 2025-03-31 member '4th Amendment', printed '14th Amendment', now corrected.",
+   "suggested_check": "Compare the rate written in the member text with the tagged InvestmentInterestRate of the same context; flag a difference above 0.01, and compare the member's tranche words with the printed instrument cell.",
+   "quote": {
+    "accession": "0000950170-25-070648",
+    "text": "Twin Star International, Inc. 01/29/25 14th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 347,392 06/18/26 347,392"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A same-context comparison of member text and tag; exact, no false positive where they agree. The tranche-word half needs the page reader.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "nav-per-unit-accrual-base-includes-undrawn-commitments",
+   "field": "nav_per_share",
+   "cause": "fund",
+   "action": "left",
+   "fair_value_m": 0.0,
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "The printed NAV per unit is on the accrual base (Total Members' Capital plus undrawn commitments, per unit), e.g. 44.58 at 2026-03-31 = (446,855 + 165,401) / 13,734 thousand units; it is not net assets per unit. Published as printed.",
+   "suggested_check": "nav_per_share times units against net assets, for funds whose highlights footnote names an accrual base.",
+   "quote": {
+    "accession": "0000950170-25-045556",
+    "text": "Net Asset Value Per Unit (accrual base) (Note 12) (1) $ 50.49 $ 53.53 (1) Net Asset Value Per Unit (accrual base) equates to the aggregate of the Total Members' Capital and Common Unitholders' undrawn commi"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "shares_outstanding is published only on the cover date for this fund, so no identity check can run; the page footnote is the only evidence.",
+    "reference": "none"
+   }
+  },
+  {
+   "observation_key": "units-outstanding-only-from-cover-page",
+   "field": "shares_outstanding",
+   "cause": "shared",
+   "action": "left",
+   "fair_value_m": 0.0,
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "shares_outstanding is published only on the cover-date row (2026-08-12: 13,734,010); the balance sheet prints the units in every quarter ('13,734,010 units issued and outstanding'). Not fixed (no ledger finding; 18 quarters of figure corrections).",
+   "suggested_check": "Quarter rows with net assets and no shares_outstanding where the balance sheet prints units.",
+   "quote": {
+    "accession": "0001193125-26-221880",
+    "text": "Common Unitholders commitment ( 13,734,010 units issued and outstanding) 1,373,401 1,373,401"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "As on TCW Direct Lending VIII: a quarter row with net assets and no shares_outstanding where the balance sheet prints units is a deterministic test.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "pct-ratio-between-half-and-fifty-not-scaled",
+   "field": "pct_of_net_assets",
+   "cause": "shared",
+   "action": "fixed",
+   "fair_value_m": 592.66,
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "what": "Page sample C014: the Treasury bill prints 56.2 % (57.7 %) of net assets; the tag is the ratio 0.562 and the shared staging rule scales a ratio only up to 0.50, so 0.562 was published. Fixed per filing (pct_tagged_as_ratio). A shared change (scale any ratio when the filing's other percents are ratios) needs a cohort measurement: proposed, not done.",
+   "suggested_check": "A row whose published percent times 100 is within 1 pct of fair value over net assets, while the percent itself is not.",
+   "quote": {
+    "accession": "0000950170-25-045556",
+    "text": "Total Short-term Investments 56.2 % 296,799,833"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "F23 caught it at quarter level; a row-level test names the row and has no false positive on correctly scaled rows.",
+    "reference": "suggested_check"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_refactor_staging.py + tests/test_cash_identifier_rows.py: 10 passed",
+  "tests/test_cash_identifier_rows.py: 4 passed (rescue for a listed identifier of the opted-in fund; false positives: bare heading, total, unlisted row, same identifier of a fund that did not opt in, no opted-in fund)",
+  "wrappers validated against wrapper_v3 / fund-highlights v1 schemas (scratch/fund_runs/0001715933/check_wrappers.py)",
+  "re-run of t7af from the financials stage after the ruling (scratch/fund_runs/t7af_rerun.log); no code changed in this step"
+ ],
+ "not_done": [
+  "Twin Star Incremental / amendment tranches at 2026-06-30 start new position ids (maturity extension); matcher not changed.",
+  "Warrants classed EQUITY_COMMON (D-207 item 3).",
+  "shares_outstanding not set per quarter; NAV per unit is the printed accrual-base figure.",
+  "Pinned rules 1715933_2025q2_affiliated_duplicate_rows, exclude_affiliated_rollforward_duplicate_rows_2025h2 and 1715933_twin_star_2025q2_fv_scale kept (right result, now partly redundant with schedule_row_tags); not replaced.",
+  "A cleared or proposed ledger is not data correct: no rule tests a field whose meaning changed, a wrong rate on the right row, or offsetting errors.",
+  "rows_added 78 = 13 cash rows (2023-03-31 to 2025-03-31) + 6 restored equity rows (Mondee x5, Shelterlogic) + 59 rows of the added quarter 2026-06-30; rows_removed 2 = the plug cash rows of 2025-06-30.",
+  "Cash 2025-06-30 to 2026-06-30 not published (parked; filer moved cash to custom concepts and InvestmentTypeAxis contexts).",
+  "A04 / E01 now fire 2023-12-31 to 2025-03-31 (holdings include the published cash; filed investments exclude it): proposed. A07 and pct_position_concentration fire on the bill (> 25 % of net assets): proposed.",
+  "Proposed shared changes, not made (need cohort measurement): cash_identifier_rows behaviour as a default for prefix_rules filers; scaling ratio percents above 0.50 where a filing's other percents are ratios.",
+  "Cash rows are not independently reconciled in 2023-03-31 to 2023-09-30 (the filer files cash equivalents 0 while printing a money fund) and are anchored only on filed short-term investments (bills) in 2023-12-31 to 2025-03-31; the money fund there has no filed figure."
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_15006ed7f8b7",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-03-31|gav_reconciliation"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-03-31|gav_reconciliation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Short-term Investments 57.7 % 295,864,750"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-A04-1 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_3fd5e260712a",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-03-31|gav_reconciliation"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-03-31|gav_reconciliation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Debt & Equity Investments (8) 149.4 % 937,558,628 860,162,606"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Cash Equivalents 4.5 % 25,944,259 25,944,259"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Short-term Investments 16.2 % 93,659,788"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-A04-1 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_58684237d5e7",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-06-30|gav_reconciliation"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-06-30|gav_reconciliation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444"
+    },
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890"
+    },
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Short-term Investments 33.4 % 196,776,361"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-A04-1 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_6abd5bd76564",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-12-31|gav_reconciliation"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-12-31|gav_reconciliation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Debt & Equity Investments (8) 148.2 % 905,318,310 843,338,273"
+    },
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Cash Equivalents 9.8 % 55,776,653 55,776,653"
+    },
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Short-term Investments 13.8 % 78,714,489"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-A04-1 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_6b9e7694151b",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-12-31|gav_reconciliation"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-12-31|gav_reconciliation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092"
+    },
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775"
+    },
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Short-term Investments 56.2 % 296,799,833"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-A04-1 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_d64195286fc6",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-09-30|gav_reconciliation"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-09-30|gav_reconciliation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Short-term Investments 49.1 % 270,968,462"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-A04-1 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_05ba57822eb9",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-03-31|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-03-31|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Debt & Equity Investments (8) 149.4 % 937,558,628 860,162,606"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Cash Equivalents 4.5 % 25,944,259 25,944,259"
+    },
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Total Short-term Investments 16.2 % 93,659,788"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-E01-2 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_38a4704eb36b",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-03-31|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-03-31|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612"
+    },
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Short-term Investments 57.7 % 295,864,750"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-E01-2 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_59bb5880d4d6",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-09-30|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-09-30|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022"
+    },
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Short-term Investments 49.1 % 270,968,462"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-E01-2 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_5e6b8c0faf8a",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-12-31|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-12-31|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092"
+    },
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775"
+    },
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Short-term Investments 56.2 % 296,799,833"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-E01-2 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_d43e39dd71a3",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-06-30|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-06-30|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444"
+    },
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890"
+    },
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Short-term Investments 33.4 % 196,776,361"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-E01-2 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_fc77eb8bcee0",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-12-31|holdings_fv_vs_investments"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-12-31|holdings_fv_vs_investments"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Debt & Equity Investments (8) 148.2 % 905,318,310 843,338,273"
+    },
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Cash Equivalents 9.8 % 55,776,653 55,776,653"
+    },
+    {
+     "accession": "0000950170-24-039058",
+     "text": "Total Short-term Investments 13.8 % 78,714,489"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Non-cash rows short of or above the filed figure: rejected; published rows other than cash sum to the printed 'Total Debt & Equity Investments' to the dollar in every quarter, which is the filed InvestmentOwnedAtFairValue basis.",
+    "Cash rows wrong: rejected; the published cash rows equal the printed 'Total Cash Equivalents' plus 'Total Short-term Investments' of the quarter (money market fund and Treasury bill, index_classification CASH).",
+    "Exclude the cash rows to make the check pass: rejected; they are printed, tagged positions (published as cash since t7af, dispatch.cash_identifier_rows). The check compares holdings including cash with an investments figure that excludes it; the conservation check honours investments_total_excludes cash_rows, this one does not."
+   ],
+   "next_action": "proposal PD-0001715933-E01-2 (reason oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_23729f65ef77",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-03-31|pct_sum_outliers"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-03-31|pct_sum_outliers"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Short-term Investments 57.7 % 295,864,750"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; since t7af the bill's tagged ratio is multiplied by 100 (pct_tagged_as_ratio for 2024-12-31 and 2025-03-31) and every row's percent equals the printed one.",
+    "A private position above 25 %: rejected; the row over 25 % is the Treasury bill (CASH)."
+   ],
+   "next_action": "proposal PD-0001715933-A07-3 (reason a07-outlier-percent-is-the-printed-row) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_3bbf18d7e76f",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-06-30|pct_sum_outliers"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-06-30|pct_sum_outliers"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Short-term Investments 33.4 % 196,776,361"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; since t7af the bill's tagged ratio is multiplied by 100 (pct_tagged_as_ratio for 2024-12-31 and 2025-03-31) and every row's percent equals the printed one.",
+    "A private position above 25 %: rejected; the row over 25 % is the Treasury bill (CASH)."
+   ],
+   "next_action": "proposal PD-0001715933-A07-3 (reason a07-outlier-percent-is-the-printed-row) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_d76c22cddef2",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-09-30|pct_sum_outliers"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-09-30|pct_sum_outliers"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Short-term Investments 49.1 % 270,968,462"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; since t7af the bill's tagged ratio is multiplied by 100 (pct_tagged_as_ratio for 2024-12-31 and 2025-03-31) and every row's percent equals the printed one.",
+    "A private position above 25 %: rejected; the row over 25 % is the Treasury bill (CASH)."
+   ],
+   "next_action": "proposal PD-0001715933-A07-3 (reason a07-outlier-percent-is-the-printed-row) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_edb1f5eefa85",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-12-31|pct_sum_outliers"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-12-31|pct_sum_outliers"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Short-term Investments 56.2 % 296,799,833"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; since t7af the bill's tagged ratio is multiplied by 100 (pct_tagged_as_ratio for 2024-12-31 and 2025-03-31) and every row's percent equals the printed one.",
+    "A private position above 25 %: rejected; the row over 25 % is the Treasury bill (CASH)."
+   ],
+   "next_action": "proposal PD-0001715933-A07-3 (reason a07-outlier-percent-is-the-printed-row) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_49df8b0cbcf7",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-06-30|position_pct_over_25"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-06-30|position_pct_over_25"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Total Short-term Investments 33.4 % 196,776,361"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; since t7af the bill's tagged ratio is multiplied by 100 (pct_tagged_as_ratio for 2024-12-31 and 2025-03-31) and every row's percent equals the printed one.",
+    "A private position above 25 %: rejected; the row over 25 % is the Treasury bill (CASH)."
+   ],
+   "next_action": "proposal PD-0001715933-pct_position_concentration-4 (reason concentration-is-a-treasury-bill-held-as-cash) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_4b16d5ecb07e",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-03-31|position_pct_over_25"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-03-31|position_pct_over_25"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Short-term Investments 57.7 % 295,864,750"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; since t7af the bill's tagged ratio is multiplied by 100 (pct_tagged_as_ratio for 2024-12-31 and 2025-03-31) and every row's percent equals the printed one.",
+    "A private position above 25 %: rejected; the row over 25 % is the Treasury bill (CASH)."
+   ],
+   "next_action": "proposal PD-0001715933-pct_position_concentration-4 (reason concentration-is-a-treasury-bill-held-as-cash) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_4d970baf6b89",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-09-30|position_pct_over_25"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-09-30|position_pct_over_25"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Total Short-term Investments 49.1 % 270,968,462"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; since t7af the bill's tagged ratio is multiplied by 100 (pct_tagged_as_ratio for 2024-12-31 and 2025-03-31) and every row's percent equals the printed one.",
+    "A private position above 25 %: rejected; the row over 25 % is the Treasury bill (CASH)."
+   ],
+   "next_action": "proposal PD-0001715933-pct_position_concentration-4 (reason concentration-is-a-treasury-bill-held-as-cash) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_dce596b689ec",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-12-31|position_pct_over_25"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-12-31|position_pct_over_25"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Total Short-term Investments 56.2 % 296,799,833"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Percent mis-scaled: rejected; since t7af the bill's tagged ratio is multiplied by 100 (pct_tagged_as_ratio for 2024-12-31 and 2025-03-31) and every row's percent equals the printed one.",
+    "A private position above 25 %: rejected; the row over 25 % is the Treasury bill (CASH)."
+   ],
+   "next_action": "proposal PD-0001715933-pct_position_concentration-4 (reason concentration-is-a-treasury-bill-held-as-cash) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_9fe513af83e7",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-06-30|holdings_growth_vs_total_assets_growth",
+     "0000950170-25-107431/C_14ed1332-55eb-437f-bf3b-c1b94370218a",
+     "0000950170-25-107431/C_e23e528d-70e6-4b68-82da-12e63d0318f4"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-06-30|holdings_growth_vs_total_assets_growth",
+     "0000950170-25-107431/C_14ed1332-55eb-437f-bf3b-c1b94370218a",
+     "0000950170-25-107431/C_e23e528d-70e6-4b68-82da-12e63d0318f4"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Total Short-term Investments 57.7 % 295,864,750"
+    },
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.30 %, Maturity Date 10/28/25 81.5 % 400,000,000 394,466,500 394,466,500"
+    },
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Total Debt & Equity Investments (7) 143.3 % 844,551,095 691,956,192"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Filer presentation: rejected (independent review t7ae); the page prints the cash section in every quarter.",
+    "Same mechanism as 2023-03-31 to 2025-03-31 (prefix-rule filter): rejected; from 2025-06-30 the filer moved its cash tags. The money fund (context C_e23e528d, member 'First American Government Obligation Fund') carries only us-gaap:CashEquivalentsAtCarryingValue and ck0001715933:CashEquivalentsAtFairValue, neither read as a fair value, so it is extracted with no value; the bill's 394,466,500 is tagged us-gaap:ShortTermInvestments on context C_14ed1332 with only InvestmentTypeAxis=USTreasuryBillSecuritiesMember, no identifier member, so no position is extracted at all.",
+    "Ex cash: holdings 803.3M to 692.0M (-13.9 pct) against total assets -3.5 pct, within 30 points; the finding is the cash coverage break only."
+   ],
+   "next_action": "Parked (no build left): publish 2025-06-30 to 2026-06-30 cash with source_encodings.fair_value_concepts [CashEquivalentsAtFairValue, ShortTermInvestmentsFairValue] plus context_identifiers naming each bill's InvestmentTypeAxis context and cash_identifiers for the five quarters' money fund and bill identifiers; the bills' percent is on a filer concept (ShortTermInvestmentPercentOfNetAssets) that no setting reads, so F23 would then need it too."
+  },
+  {
+   "finding_id": "RVQ_BLK_f72f89314a51",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-03-31|fv_conservation_residual"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-03-31|fv_conservation_residual"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "The Company had no cash equivalents as of March 31, 2023"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-fv_conservation-5 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_BLK_f993127f45e8",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-06-30|fv_conservation_residual"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-06-30|fv_conservation_residual"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "The Company had no cash equivalents as of June 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-fv_conservation-5 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_BLK_fe5892c1465c",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-09-30|fv_conservation_residual"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-09-30|fv_conservation_residual"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "The Company had no cash equivalents as of September 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-fv_conservation-5 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_BLK_4fb4e9b2d76a",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-09-30|gav_residual"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-09-30|gav_residual"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "The Company had no cash equivalents as of September 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-gav_reconciliation-6 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_BLK_d846aa86d0ff",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-03-31|gav_residual"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-03-31|gav_residual"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "The Company had no cash equivalents as of March 31, 2023"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-gav_reconciliation-6 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_BLK_e4d608146fb6",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-06-30|gav_residual"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-06-30|gav_residual"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "The Company had no cash equivalents as of June 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-gav_reconciliation-6 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_REV_13af1d8ddacf",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-03-31|canonical_gav_status"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-03-31|canonical_gav_status"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "The Company had no cash equivalents as of March 31, 2023"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-F20-7 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_REV_35349ee3c595",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-06-30|canonical_gav_status"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-06-30|canonical_gav_status"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "The Company had no cash equivalents as of June 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-F20-7 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_REV_e414b733de11",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-09-30|canonical_gav_status"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-09-30|canonical_gav_status"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "The Company had no cash equivalents as of September 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-F20-7 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_REV_6c0d4971953b",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-09-30|gav_cash_residual"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-09-30|gav_cash_residual"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "The Company had no cash equivalents as of September 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740"
+    },
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-GAV_BDC02-8 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_REV_abb62dbde744",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-06-30|gav_cash_residual"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-06-30|gav_cash_residual"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "The Company had no cash equivalents as of June 30, 2023"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237"
+    },
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-GAV_BDC02-8 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_REV_b134fd7c1625",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-03-31|gav_cash_residual"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-03-31|gav_cash_residual"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "The Company had no cash equivalents as of March 31, 2023"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338"
+    },
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published cash row wrong: rejected; it is the printed money fund line, value as printed.",
+    "Non-cash rows off: rejected; they equal the printed 'Total Debt & Equity Investments' to the dollar; the residual equals the cash row exactly.",
+    "Anchor the cash rows on the printed cash total: not allowed (orchestrator ruling 2026-10-19: a value cannot be verified against itself); the declaration was removed and this outcome is the result.",
+    "Filed 0 is the filer's statement: confirmed; the note's word 'no' is tagged CashEquivalentsAtCarryingValue (numwordsen) for the date."
+   ],
+   "next_action": "proposal PD-0001715933-GAV_BDC02-8 (reason filed-cash-equivalents-zero-while-schedule-prints-money-fund) for the owner; cash in this quarter is not independently reconciled"
+  },
+  {
+   "finding_id": "RVQ_REV_48335e858590",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-070648/C_f8169267-b7b5-4950-9293-ad10b1496547"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-070648/C_f8169267-b7b5-4950-9293-ad10b1496547"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.29 %, Maturity Date 04/03/25 57.7 % 300,000,000 295,864,750 295,864,750"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Parse leak of the member path: fixed for all loan rows in this run (comma and dash separators); the bill's name no longer carries 'Short-term Investments'.",
+    "Maturity text in the name is a leak: rejected; the page prints it in the name cell of the bill."
+   ],
+   "next_action": "proposal PD-0001715933-C206-9 (reason c206-treasury-bill-printed-name-holds-its-maturity) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_bbd3a65a8e0e",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-045556/C_bcf6752a-60de-4426-bcd2-dc8af7b57e52"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-045556/C_bcf6752a-60de-4426-bcd2-dc8af7b57e52"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Short-term Investments U.S. Treasury Bill, Yield 4.46 %, Maturity Date 04/03/25 56.2 % 300,000,000 296,799,833 296,799,833"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Parse leak of the member path: fixed for all loan rows in this run (comma and dash separators); the bill's name no longer carries 'Short-term Investments'.",
+    "Maturity text in the name is a leak: rejected; the page prints it in the name cell of the bill."
+   ],
+   "next_action": "proposal PD-0001715933-C206-9 for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_92c10477f63f",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693 6.9 % 45,693,591"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published interest_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C113-10 (reason c113-rate-above-25-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_a62379e6a57b",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published interest_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C113-10 (reason c113-rate-above-25-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_77641c53921f",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-070648/C_21e07262-2d74-4ed2-ae99-6e07a201075a"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-070648/C_21e07262-2d74-4ed2-ae99-6e07a201075a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752 6.4 % 40,595,37"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published interest_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_interest_rate-11 (reason fmt-interest-rate-above-25-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_908ca1c79fe5",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693 6.9 % 45,693,591"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published interest_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_interest_rate-11 (reason fmt-interest-rate-above-25-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_f1476c0ab2ac",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published interest_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_interest_rate-11 (reason fmt-interest-rate-above-25-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_10488ebd98cb",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-070648/C_21e07262-2d74-4ed2-ae99-6e07a201075a",
+     "0000950170-25-070648/C_6f1f4d02-0919-4fd9-a39f-7d0c50caa3b8",
+     "0000950170-25-070648/C_e0c66802-e2f1-4a7c-abb6-ab15828f52a1"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-070648/C_21e07262-2d74-4ed2-ae99-6e07a201075a",
+     "0000950170-25-070648/C_6f1f4d02-0919-4fd9-a39f-7d0c50caa3b8",
+     "0000950170-25-070648/C_e0c66802-e2f1-4a7c-abb6-ab15828f52a1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752 6.4 % 40,595,37"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published basis_spread.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C115-12 (reason c115-spread-above-15-is-the-printed-spread) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_f1d157ba37e6",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-056554/C_4ffd0a43-54c8-494f-80f9-a968e88f2421",
+     "0000950170-24-056554/C_5dbfbc30-ee29-497c-9580-f84dd5ca10eb"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-056554/C_4ffd0a43-54c8-494f-80f9-a968e88f2421",
+     "0000950170-24-056554/C_5dbfbc30-ee29-497c-9580-f84dd5ca10eb"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78,"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published basis_spread.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C115-12 (reason c115-spread-above-15-is-the-printed-spread) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_1302ed3af84e",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21",
+     "0000950170-25-107431/C_01f2a13e-b39e-46e9-8f7f-36368de007fb",
+     "0000950170-25-107431/C_43bd0c6d-0040-4fca-9bd7-05ccd087ab4c"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21",
+     "0000950170-25-107431/C_01f2a13e-b39e-46e9-8f7f-36368de007fb",
+     "0000950170-25-107431/C_43bd0c6d-0040-4fca-9bd7-05ccd087ab4c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published basis_spread.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_basis_spread-13 (reason fmt-basis-spread-above-15-is-the-printed-spread) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_530eeb8a3972",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-056554/C_4ffd0a43-54c8-494f-80f9-a968e88f2421",
+     "0000950170-24-056554/C_5dbfbc30-ee29-497c-9580-f84dd5ca10eb"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-056554/C_4ffd0a43-54c8-494f-80f9-a968e88f2421",
+     "0000950170-24-056554/C_5dbfbc30-ee29-497c-9580-f84dd5ca10eb"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78,"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published basis_spread.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_basis_spread-13 (reason fmt-basis-spread-above-15-is-the-printed-spread) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_5bb7c8f96c00",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107431/C_143c4eb4-45e3-44c2-ba28-947c78f0c22d",
+     "0000950170-25-107431/C_c7cefe4f-2f5c-4ae8-91e4-2fe2486451f7",
+     "0000950170-25-107431/C_d6ff2d19-fd4b-4239-a03c-b14fef8102fa",
+     "0000950170-25-107431/C_3d9bc34b-73bc-4778-8fbb-17ac9aa44f7e",
+     "0000950170-25-107431/C_299a5153-590c-43b3-ba32-fa9c9705582b",
+     "0000950170-25-107431/C_22cc213f-8cd6-4820-b3a5-056c85ccb092",
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21",
+     "0000950170-25-107431/C_01f2a13e-b39e-46e9-8f7f-36368de007fb",
+     "0000950170-25-107431/C_43bd0c6d-0040-4fca-9bd7-05ccd087ab4c"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107431/C_143c4eb4-45e3-44c2-ba28-947c78f0c22d",
+     "0000950170-25-107431/C_c7cefe4f-2f5c-4ae8-91e4-2fe2486451f7",
+     "0000950170-25-107431/C_d6ff2d19-fd4b-4239-a03c-b14fef8102fa",
+     "0000950170-25-107431/C_3d9bc34b-73bc-4778-8fbb-17ac9aa44f7e",
+     "0000950170-25-107431/C_299a5153-590c-43b3-ba32-fa9c9705582b",
+     "0000950170-25-107431/C_22cc213f-8cd6-4820-b3a5-056c85ccb092",
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21",
+     "0000950170-25-107431/C_01f2a13e-b39e-46e9-8f7f-36368de007fb",
+     "0000950170-25-107431/C_43bd0c6d-0040-4fca-9bd7-05ccd087ab4c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C117-14 (reason pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_9ae30f1395c2",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-056554/C_5dbfbc30-ee29-497c-9580-f84dd5ca10eb"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-056554/C_5dbfbc30-ee29-497c-9580-f84dd5ca10eb"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250 Red Lobster Manag"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C117-14 (reason pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_9c0e30b744e0",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-276898/C_d411852d-5087-425c-88aa-9ed47273df2a",
+     "0001193125-25-276898/C_b6a9b8db-a811-4456-b22d-d51480ba95a2",
+     "0001193125-25-276898/C_e264a0aa-4668-4ab2-a940-f41af5f3f67a",
+     "0001193125-25-276898/C_1b45fc85-f970-4de9-8978-6fe407cd745e",
+     "0001193125-25-276898/C_017fdaa7-d2cb-4c93-ad3e-36b2d779621a",
+     "0001193125-25-276898/C_77eee0de-2afb-42ea-b1e1-ce54d2f9d8e4",
+     "0001193125-25-276898/C_504782d2-8fff-40c2-b0f9-ee75019d7900",
+     "0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b",
+     "0001193125-25-276898/C_78463278-8f89-489d-b08f-6bf2e145eb40",
+     "0001193125-25-276898/C_78474a6a-50ab-406b-8ed8-eca6cb77ffb5"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-276898/C_d411852d-5087-425c-88aa-9ed47273df2a",
+     "0001193125-25-276898/C_b6a9b8db-a811-4456-b22d-d51480ba95a2",
+     "0001193125-25-276898/C_e264a0aa-4668-4ab2-a940-f41af5f3f67a",
+     "0001193125-25-276898/C_1b45fc85-f970-4de9-8978-6fe407cd745e",
+     "0001193125-25-276898/C_017fdaa7-d2cb-4c93-ad3e-36b2d779621a",
+     "0001193125-25-276898/C_77eee0de-2afb-42ea-b1e1-ce54d2f9d8e4",
+     "0001193125-25-276898/C_504782d2-8fff-40c2-b0f9-ee75019d7900",
+     "0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b",
+     "0001193125-25-276898/C_78463278-8f89-489d-b08f-6bf2e145eb40",
+     "0001193125-25-276898/C_78474a6a-50ab-406b-8ed8-eca6cb77ffb5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C117-14 (reason pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_9f941789c2e3",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-346651/C_c39a774f-08b5-4f01-801b-1b73f1950083",
+     "0001193125-26-346651/C_3cb9ead9-5007-4e79-89a6-8e03efaed753",
+     "0001193125-26-346651/C_66ebcba5-50ab-4848-8e36-d8ae71b64511",
+     "0001193125-26-346651/C_6491916c-0f3e-44c7-bb2e-3fa77930b316",
+     "0001193125-26-346651/C_c8863af5-bc76-4e5d-af0b-089a72e9c398",
+     "0001193125-26-346651/C_4b5ad078-df95-44d8-a7ae-228133a1a656",
+     "0001193125-26-346651/C_854c4352-c9ed-4270-bc45-cd38116564e6"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-346651/C_c39a774f-08b5-4f01-801b-1b73f1950083",
+     "0001193125-26-346651/C_3cb9ead9-5007-4e79-89a6-8e03efaed753",
+     "0001193125-26-346651/C_66ebcba5-50ab-4848-8e36-d8ae71b64511",
+     "0001193125-26-346651/C_6491916c-0f3e-44c7-bb2e-3fa77930b316",
+     "0001193125-26-346651/C_c8863af5-bc76-4e5d-af0b-089a72e9c398",
+     "0001193125-26-346651/C_4b5ad078-df95-44d8-a7ae-228133a1a656",
+     "0001193125-26-346651/C_854c4352-c9ed-4270-bc45-cd38116564e6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346651",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C117-14 (reason pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_a5580961e525",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-070648/C_f57ad1e4-6ce7-4e2e-a265-d6a7b9627511",
+     "0000950170-25-070648/C_b3dae41b-4cee-4072-ab1e-e88da3450616",
+     "0000950170-25-070648/C_0ab89e06-b007-4506-8ad4-d2b6f9986a77",
+     "0000950170-25-070648/C_21e07262-2d74-4ed2-ae99-6e07a201075a",
+     "0000950170-25-070648/C_6f1f4d02-0919-4fd9-a39f-7d0c50caa3b8",
+     "0000950170-25-070648/C_e0c66802-e2f1-4a7c-abb6-ab15828f52a1"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-070648/C_f57ad1e4-6ce7-4e2e-a265-d6a7b9627511",
+     "0000950170-25-070648/C_b3dae41b-4cee-4072-ab1e-e88da3450616",
+     "0000950170-25-070648/C_0ab89e06-b007-4506-8ad4-d2b6f9986a77",
+     "0000950170-25-070648/C_21e07262-2d74-4ed2-ae99-6e07a201075a",
+     "0000950170-25-070648/C_6f1f4d02-0919-4fd9-a39f-7d0c50caa3b8",
+     "0000950170-25-070648/C_e0c66802-e2f1-4a7c-abb6-ab15828f52a1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C117-14 (reason pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_c33d4fbc98ac",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-045556/C_31aae277-e513-4ca2-a72c-cb3166835e14"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-045556/C_31aae277-e513-4ca2-a72c-cb3166835e14"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 273,819 06/18/26 273,819 273,819 2.3 % 64,205,734 54,380,119 1"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-C117-14 (reason pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_1d8377bb7193",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-221880/C_d5e7a056-ffc0-4f3b-a063-315d622220b4",
+     "0001193125-26-221880/C_c99caa9b-0159-4659-862e-63f7a91e5d8a",
+     "0001193125-26-221880/C_482b9c6e-a4c6-4216-8059-d82dc395cc4a",
+     "0001193125-26-221880/C_38554589-00cf-4f63-b37f-46d5d00a8053",
+     "0001193125-26-221880/C_1718ed75-83df-4981-a8f0-f8806ba79a74",
+     "0001193125-26-221880/C_33864c85-d3c6-4c3c-92ea-26a09ad86663",
+     "0001193125-26-221880/C_813bed9e-6268-4d1b-aaed-78a256847ccd",
+     "0001193125-26-221880/C_8a86a68e-1781-4656-a56f-b063d5be72b1",
+     "0001193125-26-221880/C_090a8bd2-33df-43dd-85dc-309d9bc56f94",
+     "0001193125-26-221880/C_ddd9db47-9907-4e92-bc0d-460ac7b96f63"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-221880/C_d5e7a056-ffc0-4f3b-a063-315d622220b4",
+     "0001193125-26-221880/C_c99caa9b-0159-4659-862e-63f7a91e5d8a",
+     "0001193125-26-221880/C_482b9c6e-a4c6-4216-8059-d82dc395cc4a",
+     "0001193125-26-221880/C_38554589-00cf-4f63-b37f-46d5d00a8053",
+     "0001193125-26-221880/C_1718ed75-83df-4981-a8f0-f8806ba79a74",
+     "0001193125-26-221880/C_33864c85-d3c6-4c3c-92ea-26a09ad86663",
+     "0001193125-26-221880/C_813bed9e-6268-4d1b-aaed-78a256847ccd",
+     "0001193125-26-221880/C_8a86a68e-1781-4656-a56f-b063d5be72b1",
+     "0001193125-26-221880/C_090a8bd2-33df-43dd-85dc-309d9bc56f94",
+     "0001193125-26-221880/C_ddd9db47-9907-4e92-bc0d-460ac7b96f63"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-221880",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.2 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_pik_rate-15 (reason fmt-pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_3a47caa43333",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-276898/C_d411852d-5087-425c-88aa-9ed47273df2a",
+     "0001193125-25-276898/C_b6a9b8db-a811-4456-b22d-d51480ba95a2",
+     "0001193125-25-276898/C_e264a0aa-4668-4ab2-a940-f41af5f3f67a",
+     "0001193125-25-276898/C_1b45fc85-f970-4de9-8978-6fe407cd745e",
+     "0001193125-25-276898/C_017fdaa7-d2cb-4c93-ad3e-36b2d779621a",
+     "0001193125-25-276898/C_77eee0de-2afb-42ea-b1e1-ce54d2f9d8e4",
+     "0001193125-25-276898/C_504782d2-8fff-40c2-b0f9-ee75019d7900",
+     "0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b",
+     "0001193125-25-276898/C_78463278-8f89-489d-b08f-6bf2e145eb40",
+     "0001193125-25-276898/C_78474a6a-50ab-406b-8ed8-eca6cb77ffb5"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-276898/C_d411852d-5087-425c-88aa-9ed47273df2a",
+     "0001193125-25-276898/C_b6a9b8db-a811-4456-b22d-d51480ba95a2",
+     "0001193125-25-276898/C_e264a0aa-4668-4ab2-a940-f41af5f3f67a",
+     "0001193125-25-276898/C_1b45fc85-f970-4de9-8978-6fe407cd745e",
+     "0001193125-25-276898/C_017fdaa7-d2cb-4c93-ad3e-36b2d779621a",
+     "0001193125-25-276898/C_77eee0de-2afb-42ea-b1e1-ce54d2f9d8e4",
+     "0001193125-25-276898/C_504782d2-8fff-40c2-b0f9-ee75019d7900",
+     "0001193125-25-276898/C_14c951b2-a2fb-4ae8-b605-cb7948a3578b",
+     "0001193125-25-276898/C_78463278-8f89-489d-b08f-6bf2e145eb40",
+     "0001193125-25-276898/C_78474a6a-50ab-406b-8ed8-eca6cb77ffb5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_pik_rate-15 (reason fmt-pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_569bcb06ef17",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-056554/C_5dbfbc30-ee29-497c-9580-f84dd5ca10eb"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-056554/C_5dbfbc30-ee29-497c-9580-f84dd5ca10eb"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250 Red Lobster Manag"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_pik_rate-15 (reason fmt-pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_67f8cf268c26",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-070648/C_f57ad1e4-6ce7-4e2e-a265-d6a7b9627511",
+     "0000950170-25-070648/C_b3dae41b-4cee-4072-ab1e-e88da3450616",
+     "0000950170-25-070648/C_0ab89e06-b007-4506-8ad4-d2b6f9986a77",
+     "0000950170-25-070648/C_21e07262-2d74-4ed2-ae99-6e07a201075a",
+     "0000950170-25-070648/C_6f1f4d02-0919-4fd9-a39f-7d0c50caa3b8",
+     "0000950170-25-070648/C_e0c66802-e2f1-4a7c-abb6-ab15828f52a1"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-070648/C_f57ad1e4-6ce7-4e2e-a265-d6a7b9627511",
+     "0000950170-25-070648/C_b3dae41b-4cee-4072-ab1e-e88da3450616",
+     "0000950170-25-070648/C_0ab89e06-b007-4506-8ad4-d2b6f9986a77",
+     "0000950170-25-070648/C_21e07262-2d74-4ed2-ae99-6e07a201075a",
+     "0000950170-25-070648/C_6f1f4d02-0919-4fd9-a39f-7d0c50caa3b8",
+     "0000950170-25-070648/C_e0c66802-e2f1-4a7c-abb6-ab15828f52a1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_pik_rate-15 (reason fmt-pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_7c938a99bf95",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-045556/C_31aae277-e513-4ca2-a72c-cb3166835e14"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-045556/C_31aae277-e513-4ca2-a72c-cb3166835e14"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 273,819 06/18/26 273,819 273,819 2.3 % 64,205,734 54,380,119 1"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_pik_rate-15 (reason fmt-pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_7fd80cd34d44",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-346651/C_c39a774f-08b5-4f01-801b-1b73f1950083",
+     "0001193125-26-346651/C_3cb9ead9-5007-4e79-89a6-8e03efaed753",
+     "0001193125-26-346651/C_66ebcba5-50ab-4848-8e36-d8ae71b64511",
+     "0001193125-26-346651/C_6491916c-0f3e-44c7-bb2e-3fa77930b316",
+     "0001193125-26-346651/C_c8863af5-bc76-4e5d-af0b-089a72e9c398",
+     "0001193125-26-346651/C_4b5ad078-df95-44d8-a7ae-228133a1a656",
+     "0001193125-26-346651/C_854c4352-c9ed-4270-bc45-cd38116564e6"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-346651/C_c39a774f-08b5-4f01-801b-1b73f1950083",
+     "0001193125-26-346651/C_3cb9ead9-5007-4e79-89a6-8e03efaed753",
+     "0001193125-26-346651/C_66ebcba5-50ab-4848-8e36-d8ae71b64511",
+     "0001193125-26-346651/C_6491916c-0f3e-44c7-bb2e-3fa77930b316",
+     "0001193125-26-346651/C_c8863af5-bc76-4e5d-af0b-089a72e9c398",
+     "0001193125-26-346651/C_4b5ad078-df95-44d8-a7ae-228133a1a656",
+     "0001193125-26-346651/C_854c4352-c9ed-4270-bc45-cd38116564e6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346651",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_pik_rate-15 (reason fmt-pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_e77fd7189d6b",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107431/C_143c4eb4-45e3-44c2-ba28-947c78f0c22d",
+     "0000950170-25-107431/C_c7cefe4f-2f5c-4ae8-91e4-2fe2486451f7",
+     "0000950170-25-107431/C_d6ff2d19-fd4b-4239-a03c-b14fef8102fa",
+     "0000950170-25-107431/C_3d9bc34b-73bc-4778-8fbb-17ac9aa44f7e",
+     "0000950170-25-107431/C_299a5153-590c-43b3-ba32-fa9c9705582b",
+     "0000950170-25-107431/C_22cc213f-8cd6-4820-b3a5-056c85ccb092",
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21",
+     "0000950170-25-107431/C_01f2a13e-b39e-46e9-8f7f-36368de007fb",
+     "0000950170-25-107431/C_43bd0c6d-0040-4fca-9bd7-05ccd087ab4c"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107431/C_143c4eb4-45e3-44c2-ba28-947c78f0c22d",
+     "0000950170-25-107431/C_c7cefe4f-2f5c-4ae8-91e4-2fe2486451f7",
+     "0000950170-25-107431/C_d6ff2d19-fd4b-4239-a03c-b14fef8102fa",
+     "0000950170-25-107431/C_3d9bc34b-73bc-4778-8fbb-17ac9aa44f7e",
+     "0000950170-25-107431/C_299a5153-590c-43b3-ba32-fa9c9705582b",
+     "0000950170-25-107431/C_22cc213f-8cd6-4820-b3a5-056c85ccb092",
+     "0000950170-25-107431/C_2495e9c1-df93-403d-9876-1a7e7275ec21",
+     "0000950170-25-107431/C_01f2a13e-b39e-46e9-8f7f-36368de007fb",
+     "0000950170-25-107431/C_43bd0c6d-0040-4fca-9bd7-05ccd087ab4c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Value read at the wrong scale or from another row: rejected; each flagged row's printed line (matched by acquisition date and printed rate) prints the published pik_rate.",
+    "Value introduced by this run's row corrections: checked; the 25.75 / 25.50 rates of the TorcSill protective advance and the all-PIK PIK rates are corrections copied from the printed lines, and the other values are the filer's tags."
+   ],
+   "next_action": "proposal PD-0001715933-fmt_pik_rate-15 (reason fmt-pik-rate-above-20-as-printed) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_11bf721cbb65",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107431/C_7703218e-d252-4ec3-b776-41b6802d0023",
+     "0000950170-25-107431/C_8248fed6-045e-4221-a1a7-f6ebdfd82f0e",
+     "0000950170-25-107431/C_a3f770f3-2af0-434c-b358-ad0a9a4ccdfa",
+     "0000950170-25-107431/C_00a2ddb3-dcda-4da2-a08d-fa3c94d46517",
+     "0000950170-25-107431/C_c30beba0-5a8f-4186-87e8-ecd1e48681ee",
+     "0000950170-25-107431/C_6db2ab69-ffa2-48d0-9b39-baf1c29b52c4",
+     "0000950170-25-107431/C_f194f751-859f-43a3-a3e9-5b5d62a95f01",
+     "0000950170-25-107431/C_a866d270-e33d-4ee0-9221-a2f19b2db84b"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107431/C_7703218e-d252-4ec3-b776-41b6802d0023",
+     "0000950170-25-107431/C_8248fed6-045e-4221-a1a7-f6ebdfd82f0e",
+     "0000950170-25-107431/C_a3f770f3-2af0-434c-b358-ad0a9a4ccdfa",
+     "0000950170-25-107431/C_00a2ddb3-dcda-4da2-a08d-fa3c94d46517",
+     "0000950170-25-107431/C_c30beba0-5a8f-4186-87e8-ecd1e48681ee",
+     "0000950170-25-107431/C_6db2ab69-ffa2-48d0-9b39-baf1c29b52c4",
+     "0000950170-25-107431/C_f194f751-859f-43a3-a3e9-5b5d62a95f01",
+     "0000950170-25-107431/C_a866d270-e33d-4ee0-9221-a2f19b2db84b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "RL Investor Holdings LLC Term Loan - 11.80 % inc PIK 46,026,991 7,088,027 - - - 53,115,018 2,811,828"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Current position without a value: rejected; every listed context is a roll-forward member (affiliation prefix) and carries no principal, cost or units (scripts/v05_evidence/b01.py, scratch/fund_runs/0001715933/b01rows.py).",
+    "Comparative leak into published rows: rejected; the 2022-12-31 / prior-quarter contexts are excluded_comparative_period and not published; totals tie to the printed figures."
+   ],
+   "next_action": "proposal PD-0001715933-B01-16 (reason b01-contexts-without-value-are-category-rows-rollforward-or-split-twins) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_3d26e78fa4ff",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-040370/C_03a1366e-3519-4379-a5bf-fb8ccf701a02",
+     "0000950170-23-040370/C_804e522a-9c31-4d06-ab27-4b1e1e33221b",
+     "0000950170-23-040370/C_424b1ec0-064f-434e-8301-4e5bc8578b2f",
+     "0000950170-23-040370/C_4f8a167e-dc2d-401f-bae9-18a69e9d7852",
+     "0000950170-23-040370/C_6f8503af-ce87-40c1-8252-801ba064200a",
+     "0000950170-23-040370/C_0bed8dc0-e91c-41f4-9d72-f41ccf22c640",
+     "0000950170-23-040370/C_1fbd9cb1-feb5-4348-b0ad-00fda9b33823",
+     "0000950170-23-040370/C_35cdf7d7-d674-44f8-a68a-bc4b1e712f15",
+     "0000950170-23-040370/C_d98c63fa-143e-4e97-8dc5-835782447dbb",
+     "0000950170-23-040370/C_66126907-1827-4bc7-a924-5358797b3ae2",
+     "0000950170-23-040370/C_8c1e17ac-f769-4145-8704-9b517b75becd",
+     "0000950170-23-040370/C_8425c9ac-8d68-4435-85aa-21190fa1a3dd"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-040370/C_03a1366e-3519-4379-a5bf-fb8ccf701a02",
+     "0000950170-23-040370/C_804e522a-9c31-4d06-ab27-4b1e1e33221b",
+     "0000950170-23-040370/C_424b1ec0-064f-434e-8301-4e5bc8578b2f",
+     "0000950170-23-040370/C_4f8a167e-dc2d-401f-bae9-18a69e9d7852",
+     "0000950170-23-040370/C_6f8503af-ce87-40c1-8252-801ba064200a",
+     "0000950170-23-040370/C_0bed8dc0-e91c-41f4-9d72-f41ccf22c640",
+     "0000950170-23-040370/C_1fbd9cb1-feb5-4348-b0ad-00fda9b33823",
+     "0000950170-23-040370/C_35cdf7d7-d674-44f8-a68a-bc4b1e712f15",
+     "0000950170-23-040370/C_d98c63fa-143e-4e97-8dc5-835782447dbb",
+     "0000950170-23-040370/C_66126907-1827-4bc7-a924-5358797b3ae2",
+     "0000950170-23-040370/C_8c1e17ac-f769-4145-8704-9b517b75becd",
+     "0000950170-23-040370/C_8425c9ac-8d68-4435-85aa-21190fa1a3dd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Slogic Holding Corp. Last Out Term Loan - 11.62 % $ 26,681,925 $ 25,214 $ - $ - $ ( 25,214 ) $ 26,681,925 $ 1,469,660"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Current position without a value: rejected; every listed context is a roll-forward member (affiliation prefix) and carries no principal, cost or units (scripts/v05_evidence/b01.py, scratch/fund_runs/0001715933/b01rows.py).",
+    "Comparative leak into published rows: rejected; the 2022-12-31 / prior-quarter contexts are excluded_comparative_period and not published; totals tie to the printed figures."
+   ],
+   "next_action": "proposal PD-0001715933-B01-16 (reason b01-contexts-without-value-are-category-rows-rollforward-or-split-twins) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_ef008e0a763a",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-020312/C_0eef35f9-1abb-468f-93a0-8b0d8756b50a",
+     "0000950170-23-020312/C_8ed0c6b9-d7eb-4a91-8428-b0fa3206573b",
+     "0000950170-23-020312/C_da789586-c0c7-487a-b63f-555874d20872",
+     "0000950170-23-020312/C_1f44a342-2db9-433b-badb-5867239de5d9",
+     "0000950170-23-020312/C_fa53c425-d20c-41f1-87fd-cbb1c9fb4d7e",
+     "0000950170-23-020312/C_d54c31d8-f9b8-4d1b-ac07-0b0b4d346f67",
+     "0000950170-23-020312/C_4d627f5c-681b-4f69-bd69-a915d25708d1",
+     "0000950170-23-020312/C_3209aa22-27d1-412f-a98b-b10dbe7a9e80",
+     "0000950170-23-020312/C_65c42d6d-d92a-4135-af83-686a9cee2a42",
+     "0000950170-23-020312/C_2c0204c2-1817-4ac1-a353-8fe27aedca15",
+     "0000950170-23-020312/C_ca7362a6-d486-4e03-973a-ccb631680917",
+     "0000950170-23-020312/C_1fc32654-5200-4d61-ad70-0509d7d7d6c9"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-020312/C_0eef35f9-1abb-468f-93a0-8b0d8756b50a",
+     "0000950170-23-020312/C_8ed0c6b9-d7eb-4a91-8428-b0fa3206573b",
+     "0000950170-23-020312/C_da789586-c0c7-487a-b63f-555874d20872",
+     "0000950170-23-020312/C_1f44a342-2db9-433b-badb-5867239de5d9",
+     "0000950170-23-020312/C_fa53c425-d20c-41f1-87fd-cbb1c9fb4d7e",
+     "0000950170-23-020312/C_d54c31d8-f9b8-4d1b-ac07-0b0b4d346f67",
+     "0000950170-23-020312/C_4d627f5c-681b-4f69-bd69-a915d25708d1",
+     "0000950170-23-020312/C_3209aa22-27d1-412f-a98b-b10dbe7a9e80",
+     "0000950170-23-020312/C_65c42d6d-d92a-4135-af83-686a9cee2a42",
+     "0000950170-23-020312/C_2c0204c2-1817-4ac1-a353-8fe27aedca15",
+     "0000950170-23-020312/C_ca7362a6-d486-4e03-973a-ccb631680917",
+     "0000950170-23-020312/C_1fc32654-5200-4d61-ad70-0509d7d7d6c9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020312",
+     "text": "Navistar Defense, LLC Term Loan - 13.61 % inc PIK 34,632,469 - - - 208,679 34,841,148 794"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Current position without a value: rejected; every listed context is a roll-forward member (affiliation prefix) and carries no principal, cost or units (scripts/v05_evidence/b01.py, scratch/fund_runs/0001715933/b01rows.py).",
+    "Comparative leak into published rows: rejected; the 2022-12-31 / prior-quarter contexts are excluded_comparative_period and not published; totals tie to the printed figures."
+   ],
+   "next_action": "proposal PD-0001715933-B01-16 (reason b01-contexts-without-value-are-category-rows-rollforward-or-split-twins) for the owner"
+  },
+  {
+   "finding_id": "RVQ_BLK_6fe95441e913",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-060966/C_b1f67d8d-7766-4361-8d82-53c8fb8e2622"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-060966/C_b1f67d8d-7766-4361-8d82-53c8fb8e2622"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published value wrong: rejected; the page prints 134,113 on the row and in the subtotal beside it.",
+    "Instance value right and page wrong: rejected; the inline element displays 134,113 and its fixed-zero format is the only reason the instance reads 0 (cached HTML, ix:nonFraction on the context)."
+   ],
+   "next_action": "proposal PD-0001715933-SRC_BDC03-17 (reason fv-corrected-from-page-where-tag-format-is-fixed-zero) for the owner"
+  },
+  {
+   "finding_id": "BDCSRC_0001715933_2023-09-30_BLOCKING_FAIR_VALUE_DISAGREEMENT_6569b09c9d",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-060966/C_b1f67d8d-7766-4361-8d82-53c8fb8e2622"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-060966/C_b1f67d8d-7766-4361-8d82-53c8fb8e2622"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Published value wrong: rejected; the page prints 134,113 on the row and in the subtotal beside it.",
+    "Instance value right and page wrong: rejected; the inline element displays 134,113 and its fixed-zero format is the only reason the instance reads 0 (cached HTML, ix:nonFraction on the context)."
+   ],
+   "next_action": "proposal PD-0001715933-blocking_fair_value_disagreement-18 (reason fv-corrected-from-page-where-tag-format-is-fixed-zero) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_3fe3d77e0d3d",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2022-12-31|distribution_rate_vs_income_yield"
+    ],
+    "reviewed_rows": [
+     "0001715933|2022-12-31|distribution_rate_vs_income_yield"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-010240",
+     "text": "Distributions to Members from: Distributable earnings - ( 116,408 ) ( 116,408 ) Return of capital ( 116,092 ) - ( 116,092 ) Total Decrease in Members Capital for the year ended December 31, 2022"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution per unit misread: rejected; the quarter's printed distributions divided by 13,734,010 units give the published figure (e.g. 2023-06-30: (49,000 + 55,000) / 13,734 = 7.57).",
+    "Income understated: rejected; net investment income is the printed figure (fund_financials after the income fix)."
+   ],
+   "next_action": "proposal PD-0001715933-F16-19 (reason f16-return-of-capital-distribution-in-the-quarter) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_5b721f255af5",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-06-30|distribution_rate_vs_income_yield"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-06-30|distribution_rate_vs_income_yield"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Distributions to Members from: Distributable earnings - ( 49,000 ) ( 49,000 ) Return of capital ( 55,000 ) - ( 55,000 ) Total Decrease in Members Capital for the three months ended June 30, 2023"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution per unit misread: rejected; the quarter's printed distributions divided by 13,734,010 units give the published figure (e.g. 2023-06-30: (49,000 + 55,000) / 13,734 = 7.57).",
+    "Income understated: rejected; net investment income is the printed figure (fund_financials after the income fix)."
+   ],
+   "next_action": "proposal PD-0001715933-F16-19 (reason f16-return-of-capital-distribution-in-the-quarter) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_8b0b3045bd29",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2022-09-30|distribution_rate_vs_income_yield"
+    ],
+    "reviewed_rows": [
+     "0001715933|2022-09-30|distribution_rate_vs_income_yield"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-023681",
+     "text": "Distributions to Members from: Distributable earnings - (24,000 ) (24,000 ) Return of capital (46,000 ) - (46,000 ) Total Decrease in Members Capital for the three months ended September 30, 2022"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution per unit misread: rejected; the quarter's printed distributions divided by 13,734,010 units give the published figure (e.g. 2023-06-30: (49,000 + 55,000) / 13,734 = 7.57).",
+    "Income understated: rejected; net investment income is the printed figure (fund_financials after the income fix)."
+   ],
+   "next_action": "proposal PD-0001715933-F16-19 (reason f16-return-of-capital-distribution-in-the-quarter) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_a2a0eac84203",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-09-30|distribution_rate_vs_income_yield"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-09-30|distribution_rate_vs_income_yield"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Distributions to Members from: Distributable earnings - ( 31,000 ) ( 31,000 ) Return of capital ( 29,800 ) - ( 29,800 ) Total Decrease in Members Capital for the three months ended September 30, 2023"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution per unit misread: rejected; the quarter's printed distributions divided by 13,734,010 units give the published figure (e.g. 2023-06-30: (49,000 + 55,000) / 13,734 = 7.57).",
+    "Income understated: rejected; net investment income is the printed figure (fund_financials after the income fix)."
+   ],
+   "next_action": "proposal PD-0001715933-F16-19 (reason f16-return-of-capital-distribution-in-the-quarter) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_edbd45744029",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2022-06-30|distribution_rate_vs_income_yield"
+    ],
+    "reviewed_rows": [
+     "0001715933|2022-06-30|distribution_rate_vs_income_yield"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-016400",
+     "text": "Distributions to Members from: Distributable earnings - (33,000 ) (33,000 ) Return of capital (66,000 ) - (66,000 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution per unit misread: rejected; the quarter's printed distributions divided by 13,734,010 units give the published figure (e.g. 2023-06-30: (49,000 + 55,000) / 13,734 = 7.57).",
+    "Income understated: rejected; net investment income is the printed figure (fund_financials after the income fix)."
+   ],
+   "next_action": "proposal PD-0001715933-F16-19 (reason f16-return-of-capital-distribution-in-the-quarter) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_b933ae610f95",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-09-30|distribution_rate"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-09-30|distribution_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060966",
+     "text": "Distributions to Members from: Distributable earnings - ( 31,000 ) ( 31,000 ) Return of capital ( 29,800 ) - ( 29,800 ) Total Decrease in Members Capital for the three months ended September 30, 2023"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rate inflated by a wrong NAV: checked; the rate uses the printed NAV per unit (accrual base, which includes undrawn commitments), so it is if anything understated.",
+    "Distribution double counted: rejected; printed earnings plus return of capital equal the published amount."
+   ],
+   "next_action": "proposal PD-0001715933-F33-20 (reason f33-return-of-capital-distribution-of-a-fund-in-wind-down) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_f112f9e7ef88",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-06-30|distribution_rate"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-06-30|distribution_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-040370",
+     "text": "Distributions to Members from: Distributable earnings - ( 49,000 ) ( 49,000 ) Return of capital ( 55,000 ) - ( 55,000 ) Total Decrease in Members Capital for the three months ended June 30, 2023"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rate inflated by a wrong NAV: checked; the rate uses the printed NAV per unit (accrual base, which includes undrawn commitments), so it is if anything understated.",
+    "Distribution double counted: rejected; printed earnings plus return of capital equal the published amount."
+   ],
+   "next_action": "proposal PD-0001715933-F33-20 (reason f33-return-of-capital-distribution-of-a-fund-in-wind-down) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_26d7880225e3",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-06-30|distribution_rate"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-06-30|distribution_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Distributions to Members from distributable earnings - ( 4,980 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution missed by the extractor: rejected; the statement of changes / cash flows print none for the quarter."
+   ],
+   "next_action": "proposal PD-0001715933-F33-21 (reason f33-no-distribution-declared-in-the-quarter) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_3aabfad26369",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-03-31|distribution_rate"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-03-31|distribution_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Distributions to Members from distributable earnings - ( 4,980 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution missed by the extractor: rejected; the statement of changes / cash flows print none for the quarter."
+   ],
+   "next_action": "proposal PD-0001715933-F33-21 (reason f33-no-distribution-declared-in-the-quarter) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_9f9139ff8875",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2023-03-31|distribution_rate"
+    ],
+    "reviewed_rows": [
+     "0001715933|2023-03-31|distribution_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Distributions to Members from distributable earnings ( 4,980 ) ( 48,995 ) Return of capital - ( 55,000 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution missed by the extractor: rejected; the statement of changes / cash flows print none for the quarter."
+   ],
+   "next_action": "proposal PD-0001715933-F33-21 (reason f33-no-distribution-declared-in-the-quarter) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_d0df1eb227ca",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-06-30|distribution_rate"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-06-30|distribution_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095230",
+     "text": "Distributions to Members from distributable earnings ( 4,980 ) ( 48,995 ) Return of capital - ( 55,000 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution missed by the extractor: rejected; the statement of changes / cash flows print none for the quarter."
+   ],
+   "next_action": "proposal PD-0001715933-F33-21 (reason f33-no-distribution-declared-in-the-quarter) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_36b2e56bc398",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-06-30|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-06-30|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107431",
+     "text": "Ratio of net investment income to average net assets (5) 27.29 % 29.46 % Ratio of incentive fees to average net assets (5) ( 13.85"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; income_yield_pct equals the printed 'Ratio of net investment income to average net assets'.",
+    "Coupons missing from WAC: checked; after the all-PIK and rate corrections every loan with a printed rate publishes it; WAC is a coupon on fair value, the ratio is on net assets.",
+    "Leverage and incentive-fee reversal explain the gap: supported by the printed borrowings and incentive-fee ratios."
+   ],
+   "next_action": "proposal PD-0001715933-F27-22 (reason f27-income-over-net-assets-of-a-levered-fund) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_43c9cd187f27",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-03-31|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-03-31|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070648",
+     "text": "Ratio of net investment income to average net assets (5) 42.12 % 18.96 % Ratio of incentive fees to average net assets (5) ( 27.46"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; income_yield_pct equals the printed 'Ratio of net investment income to average net assets'.",
+    "Coupons missing from WAC: checked; after the all-PIK and rate corrections every loan with a printed rate publishes it; WAC is a coupon on fair value, the ratio is on net assets.",
+    "Leverage and incentive-fee reversal explain the gap: supported by the printed borrowings and incentive-fee ratios."
+   ],
+   "next_action": "proposal PD-0001715933-F27-22 (reason f27-income-over-net-assets-of-a-levered-fund) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_721d363c8b26",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-12-31|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-12-31|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045556",
+     "text": "Ratio of incentive fees to average net assets ( 8.28 )% 0.97 % 2.10 % 4.51 % 0.40 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; income_yield_pct equals the printed 'Ratio of net investment income to average net assets'.",
+    "Coupons missing from WAC: checked; after the all-PIK and rate corrections every loan with a printed rate publishes it; WAC is a coupon on fair value, the ratio is on net assets.",
+    "Leverage and incentive-fee reversal explain the gap: supported by the printed borrowings and incentive-fee ratios."
+   ],
+   "next_action": "proposal PD-0001715933-F27-22 (reason f27-income-over-net-assets-of-a-levered-fund) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_aa5ab73bb76e",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-09-30|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-09-30|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-124902",
+     "text": "Ratio of net investment income to average net assets (5) 23.96 % 15.03 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; income_yield_pct equals the printed 'Ratio of net investment income to average net assets'.",
+    "Coupons missing from WAC: checked; after the all-PIK and rate corrections every loan with a printed rate publishes it; WAC is a coupon on fair value, the ratio is on net assets.",
+    "Leverage and incentive-fee reversal explain the gap: supported by the printed borrowings and incentive-fee ratios."
+   ],
+   "next_action": "proposal PD-0001715933-F27-22 (reason f27-income-over-net-assets-of-a-levered-fund) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_c1d4f03ce7e9",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-09-30|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-09-30|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-276898",
+     "text": "Ratio of net investment income to average net assets (5) 21.39 % 23.96 % Ratio of incentive fees to average net assets (5) ( 9.46"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; income_yield_pct equals the printed 'Ratio of net investment income to average net assets'.",
+    "Coupons missing from WAC: checked; after the all-PIK and rate corrections every loan with a printed rate publishes it; WAC is a coupon on fair value, the ratio is on net assets.",
+    "Leverage and incentive-fee reversal explain the gap: supported by the printed borrowings and incentive-fee ratios."
+   ],
+   "next_action": "proposal PD-0001715933-F27-22 (reason f27-income-over-net-assets-of-a-levered-fund) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_ed3485ba4784",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2025-12-31|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001715933|2025-12-31|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-141887",
+     "text": "Ratio of incentive fees to average net assets ( 7.26 )% ( 8.28 )% 0.97 % 2.10 % 4.51 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; income_yield_pct equals the printed 'Ratio of net investment income to average net assets'.",
+    "Coupons missing from WAC: checked; after the all-PIK and rate corrections every loan with a printed rate publishes it; WAC is a coupon on fair value, the ratio is on net assets.",
+    "Leverage and incentive-fee reversal explain the gap: supported by the printed borrowings and incentive-fee ratios."
+   ],
+   "next_action": "proposal PD-0001715933-F27-22 (reason f27-income-over-net-assets-of-a-levered-fund) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_f78ee83c722f",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2024-03-31|income_yield_vs_wac"
+    ],
+    "reviewed_rows": [
+     "0001715933|2024-03-31|income_yield_vs_wac"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056554",
+     "text": "Ratio of net investment income to average net assets (5) 18.96 % 15.21 % Ratio of incentive fees to average net assets (5) ( 1.92"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield misread: rejected; income_yield_pct equals the printed 'Ratio of net investment income to average net assets'.",
+    "Coupons missing from WAC: checked; after the all-PIK and rate corrections every loan with a printed rate publishes it; WAC is a coupon on fair value, the ratio is on net assets.",
+    "Leverage and incentive-fee reversal explain the gap: supported by the printed borrowings and incentive-fee ratios."
+   ],
+   "next_action": "proposal PD-0001715933-F27-22 (reason f27-income-over-net-assets-of-a-levered-fund) for the owner"
+  },
+  {
+   "finding_id": "RVQ_REV_2329dd412374",
+   "coverage": {
+    "affected_rows": [
+     "0001715933|2026-08-12|coverage"
+    ],
+    "reviewed_rows": [
+     "0001715933|2026-08-12|coverage"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346651",
+     "text": "The number of the Registrants common units outstanding at August 12, 2026 was 13,734,010"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A missing holdings quarter: rejected; 2026-08-12 is the cover-page date of the 2026-06-30 10-Q, whose schedule is published at 2026-06-30."
+   ],
+   "next_action": "proposal PD-0001715933-F28-23 (reason f28-cover-page-unit-count-date-not-a-quarter) for the owner"
+  }
+ ],
+ "page_sample": {
+  "sandbox": "t7ae",
+  "source": "docs/investigations/v05_readings/samples/0001715933/results.md",
+  "cards": 20,
+  "published_errors": [
+   {
+    "card": "C014",
+    "quarter": "2024-12-31",
+    "field": "pct_of_net_assets",
+    "cause": "pipeline",
+    "note": "prints 56.2%; tag 0.562 correct; published 0.562 (no x100 scaling applied)",
+    "action": "fixed in t7af (pct_tagged_as_ratio); 2025-03-31 bill the same"
+   }
+  ],
+  "note": "Twenty cards can miss a problem on under about 15 pct of rows."
+ },
+ "orchestrator_rulings": [
+  {
+   "date": "2026-10-19",
+   "on": "review of t7af, check (c)",
+   "ruling": "Remove the 8 cash_equivalents_at_fair_value figure corrections (printed cash totals declared as the filed cash figure): they made the conservation check compare the published cash rows with the same printed numbers, and in 2023-03-31 to 2023-09-30 overwrote the filer's filed 0. Keep the independent part (bills against filed ShortTermInvestments, 2023-12-31 to 2025-03-31). One re-run allowed.",
+   "done": "Removed (highlights wrapper). Re-run in place on t7af from the financials stage (fund_financials is written there; a validate-only re-run would not read the change), then rebuild, validate, oracle, provenance, shadow, queue, ledger. New findings fv_conservation, gav_reconciliation, F20, GAV_BDC02 x3 each (2023-03-31 to 2023-09-30): investigated as source_ambiguity and proposed (filed-cash-equivalents-zero-while-schedule-prints-money-fund). Nothing else changed."
+  }
+ ]
+}

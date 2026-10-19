@@ -179,6 +179,10 @@
           "enum": ["positions"],
           "description": "The filer names a position by its company alone (Lord Abbett: 'Spark Buyer LLC' is the main term loan, 46.2M at 2025-03-31, beside 'Spark Buyer LLC Delayed Draw' and 'Spark Buyer LLC Revolver'). Without this, a filer with prefix_rules has every bare company name holding 'llc', 'group', 'limited' and the like dropped as an issuer subtotal. Evidence required: printed rows, and the quarter totals with the rows restored."
         },
+        "cash_identifier_rows": {
+          "enum": ["positions"],
+          "description": "A prefix_rules filer whose cash rows carry the section heading in front ('Cash Equivalents First American Government Obligation Fund, Yield 4.65%', 'Short-term Investments U.S. Treasury Bill, Yield 5.08%') has them dropped by the prefix-rule subtotal filter, since no instrument word follows the heading (TCW Direct Lending VII: printed in 14 quarters, published only where the member named a 'Maturity Date'). With this setting a row whose full identifier is listed under source_encodings.cash_identifiers passes that filter and is published as cash. Only the listed identifiers; never a heading or a total. Evidence required: the printed cash rows and the filed cash figures they equal."
+        },
         "flat_schedule": {
           "type": "boolean",
           "description": "When true, the schedule has no subtotal or category rows: a named identifier without a leaf marker is a position, not a category rollup"

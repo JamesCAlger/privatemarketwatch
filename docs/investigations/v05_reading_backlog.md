@@ -190,3 +190,4 @@ Manulife 0001988280.
 | 2026-10-18 | 0001803498 Blackstone Private Credit Fund (re-process, page rules) | bcpf | PASS (investigation COMPLETE) | 27 findings, 1 outstanding, proposed; 28 new page-rule findings at first reading; 16/16 quarters tie; samples 4/20 then 0/20 fresh | D-209 |
 | 2026-10-19 | 0002011498 AGL Private Credit Income Fund | aglf | PASS (investigation COMPLETE) | 25 findings, 14 outstanding, all proposed; 7/7 quarters tie; sample 2/20 errors, fixed | D-210 |
 | 2026-10-19 | 0001646614 Silver Point Specialty Lending Fund | splf | INCOMPLETE (investigation COMPLETE) | 71 findings, 39 outstanding, 38 proposed, F23 parked; 13/13 quarters tie; sample 0/20 | D-211 |
+| 2026-10-19 | 0001715933 TCW Direct Lending VII | t7af | INCOMPLETE (investigation COMPLETE) | 96 findings, 81 outstanding, 80 proposed, F25 parked; 14/14 quarters tie; sample 1/20 fixed | D-212 |

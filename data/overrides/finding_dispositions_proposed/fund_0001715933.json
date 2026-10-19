@@ -1,0 +1,1397 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "t7af",
+ "dispositions": [
+  {
+   "disposition_id": "PD-0001715933-A04-1",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A04",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "The published total includes the money market fund and Treasury bill rows the schedule prints under 'Cash Equivalents' and 'Short-term Investments'; the filed investments figure (printed 'Total Debt & Equity Investments') leaves them out. Ex cash, published equals the filed figure to the dollar. The cash rows are printed, tagged positions, published as cash; the wrapper declares investments_total_excludes cash_rows, which the conservation check honours and A04 does not.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-039058",
+     "verbatim": "Total Debt & Equity Investments (8) 148.2 % 905,318,310 843,338,273",
+     "quote": "Total Debt & Equity Investments (8) 148.2 % 905,318,310 843,338,273 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-039058",
+     "verbatim": "Total Cash Equivalents 9.8 % 55,776,653 55,776,653",
+     "quote": "Total Cash Equivalents 9.8 % 55,776,653 55,776,653 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-039058",
+     "verbatim": "Total Short-term Investments 13.8 % 78,714,489",
+     "quote": "Total Short-term Investments 13.8 % 78,714,489 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "Total Debt & Equity Investments (8) 149.4 % 937,558,628 860,162,606",
+     "quote": "Total Debt & Equity Investments (8) 149.4 % 937,558,628 860,162,606 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "Total Cash Equivalents 4.5 % 25,944,259 25,944,259",
+     "quote": "Total Cash Equivalents 4.5 % 25,944,259 25,944,259 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "Total Short-term Investments 16.2 % 93,659,788",
+     "quote": "Total Short-term Investments 16.2 % 93,659,788 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444",
+     "quote": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890",
+     "quote": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Short-term Investments 33.4 % 196,776,361",
+     "quote": "Total Short-term Investments 33.4 % 196,776,361 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756",
+     "quote": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022",
+     "quote": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Short-term Investments 49.1 % 270,968,462",
+     "quote": "Total Short-term Investments 49.1 % 270,968,462 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092",
+     "quote": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775",
+     "quote": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Short-term Investments 56.2 % 296,799,833",
+     "quote": "Total Short-term Investments 56.2 % 296,799,833 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432",
+     "quote": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612",
+     "quote": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Short-term Investments 57.7 % 295,864,750",
+     "quote": "Total Short-term Investments 57.7 % 295,864,750 (Treasury bill, published as CASH)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-E01-2",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "E01",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "As A04: holdings include the printed money market fund and Treasury bill (CASH), the filed investments figure excludes them; ex cash they are equal.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-039058",
+     "verbatim": "Total Debt & Equity Investments (8) 148.2 % 905,318,310 843,338,273",
+     "quote": "Total Debt & Equity Investments (8) 148.2 % 905,318,310 843,338,273 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-039058",
+     "verbatim": "Total Cash Equivalents 9.8 % 55,776,653 55,776,653",
+     "quote": "Total Cash Equivalents 9.8 % 55,776,653 55,776,653 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-039058",
+     "verbatim": "Total Short-term Investments 13.8 % 78,714,489",
+     "quote": "Total Short-term Investments 13.8 % 78,714,489 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "Total Debt & Equity Investments (8) 149.4 % 937,558,628 860,162,606",
+     "quote": "Total Debt & Equity Investments (8) 149.4 % 937,558,628 860,162,606 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "Total Cash Equivalents 4.5 % 25,944,259 25,944,259",
+     "quote": "Total Cash Equivalents 4.5 % 25,944,259 25,944,259 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "Total Short-term Investments 16.2 % 93,659,788",
+     "quote": "Total Short-term Investments 16.2 % 93,659,788 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444",
+     "quote": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890",
+     "quote": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Short-term Investments 33.4 % 196,776,361",
+     "quote": "Total Short-term Investments 33.4 % 196,776,361 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756",
+     "quote": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022",
+     "quote": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Short-term Investments 49.1 % 270,968,462",
+     "quote": "Total Short-term Investments 49.1 % 270,968,462 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092",
+     "quote": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775",
+     "quote": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Short-term Investments 56.2 % 296,799,833",
+     "quote": "Total Short-term Investments 56.2 % 296,799,833 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432",
+     "quote": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612",
+     "quote": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Short-term Investments 57.7 % 295,864,750",
+     "quote": "Total Short-term Investments 57.7 % 295,864,750 (Treasury bill, published as CASH)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-A07-3",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "a07-outlier-percent-is-the-printed-row",
+   "statement": "A07 warns because one row prints above 25 % of net assets: the Treasury bill held as cash (printed 33.4 %, 49.1 %, 56.2 %, 57.7 %). The percent sum (178 % to 219 %) is within A07's band; the outlier is the printed row, published as cash.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444",
+     "quote": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890",
+     "quote": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Short-term Investments 33.4 % 196,776,361",
+     "quote": "Total Short-term Investments 33.4 % 196,776,361 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756",
+     "quote": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022",
+     "quote": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Short-term Investments 49.1 % 270,968,462",
+     "quote": "Total Short-term Investments 49.1 % 270,968,462 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092",
+     "quote": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775",
+     "quote": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Short-term Investments 56.2 % 296,799,833",
+     "quote": "Total Short-term Investments 56.2 % 296,799,833 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432",
+     "quote": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612",
+     "quote": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Short-term Investments 57.7 % 295,864,750",
+     "quote": "Total Short-term Investments 57.7 % 295,864,750 (Treasury bill, published as CASH)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-pct_position_concentration-4",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "concentration-is-a-treasury-bill-held-as-cash",
+   "statement": "The only row above 25 % of net assets is the Treasury bill held as cash, printed at 33.4 % to 57.7 % of net assets; no private position is concentrated.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444",
+     "quote": "Total Debt & Equity Investments (8) 141.0 % 951,817,563 829,056,444 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890",
+     "quote": "Total Cash Equivalents 3.9 % 22,985,890 22,985,890 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Total Short-term Investments 33.4 % 196,776,361",
+     "quote": "Total Short-term Investments 33.4 % 196,776,361 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756",
+     "quote": "Total Debt & Equity Investments (8) 150.7 % 943,795,029 833,137,756 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022",
+     "quote": "Total Cash Equivalents 4.5 % 24,977,022 24,977,022 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Total Short-term Investments 49.1 % 270,968,462",
+     "quote": "Total Short-term Investments 49.1 % 270,968,462 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092",
+     "quote": "Total Debt & Equity Investments (7) 160.6 % 986,086,557 847,197,092 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775",
+     "quote": "Total Cash Equivalents 2.2 % 11,869,775 11,869,775 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Total Short-term Investments 56.2 % 296,799,833",
+     "quote": "Total Short-term Investments 56.2 % 296,799,833 (Treasury bill, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432",
+     "quote": "Total Debt & Equity Investments (7) 156.9 % 1,007,899,654 803,322,432 (investments excluding cash = published non-cash rows)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612",
+     "quote": "Total Cash Equivalents 4.8 % 24,488,612 24,488,612 (money market fund, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Total Short-term Investments 57.7 % 295,864,750",
+     "quote": "Total Short-term Investments 57.7 % 295,864,750 (Treasury bill, published as CASH)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-fv_conservation-5",
+   "class": "as_filed",
+   "engine": "conservation",
+   "rule_name": "fv_conservation",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "reason_key": "filed-cash-equivalents-zero-while-schedule-prints-money-fund",
+   "statement": "The filer files us-gaap:CashEquivalentsAtCarryingValue 0 for the date (its note: 'The Company had no cash equivalents as of ...', tagged with ixt-sec:numwordsen on the word 'no'), while its schedule prints the First American Government Obligation Fund under 'Cash Equivalents' (35.9M, 45.1M, 43.8M). The published cash row is that printed line; the published non-cash rows equal the printed 'Total Debt & Equity Investments' to the dollar. The check compares the cash row with the filer's own filed 0 and fails by the money fund exactly. Under the orchestrator ruling of 2026-10-19 no page-derived cash figure is declared, so cash in these quarters is not independently reconciled. The filer's two statements disagree; neither can be chosen from the filing.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "The Company had no cash equivalents as of March 31, 2023",
+     "quote": "The Company had no cash equivalents as of March 31, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959",
+     "quote": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959 (non-cash rows equal this)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "The Company had no cash equivalents as of June 30, 2023",
+     "quote": "The Company had no cash equivalents as of June 30, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047",
+     "quote": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047 (non-cash rows equal this)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "The Company had no cash equivalents as of September 30, 2023",
+     "quote": "The Company had no cash equivalents as of September 30, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723",
+     "quote": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723 (non-cash rows equal this)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-gav_reconciliation-6",
+   "class": "as_filed",
+   "engine": "gav_recon",
+   "rule_name": "gav_reconciliation",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "reason_key": "filed-cash-equivalents-zero-while-schedule-prints-money-fund",
+   "statement": "The filer files us-gaap:CashEquivalentsAtCarryingValue 0 for the date (its note: 'The Company had no cash equivalents as of ...', tagged with ixt-sec:numwordsen on the word 'no'), while its schedule prints the First American Government Obligation Fund under 'Cash Equivalents' (35.9M, 45.1M, 43.8M). The published cash row is that printed line; the published non-cash rows equal the printed 'Total Debt & Equity Investments' to the dollar. The check compares the cash row with the filer's own filed 0 and fails by the money fund exactly. Under the orchestrator ruling of 2026-10-19 no page-derived cash figure is declared, so cash in these quarters is not independently reconciled. The filer's two statements disagree; neither can be chosen from the filing.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "The Company had no cash equivalents as of March 31, 2023",
+     "quote": "The Company had no cash equivalents as of March 31, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959",
+     "quote": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959 (non-cash rows equal this)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "The Company had no cash equivalents as of June 30, 2023",
+     "quote": "The Company had no cash equivalents as of June 30, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047",
+     "quote": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047 (non-cash rows equal this)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "The Company had no cash equivalents as of September 30, 2023",
+     "quote": "The Company had no cash equivalents as of September 30, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723",
+     "quote": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723 (non-cash rows equal this)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-F20-7",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F20",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "reason_key": "filed-cash-equivalents-zero-while-schedule-prints-money-fund",
+   "statement": "The filer files us-gaap:CashEquivalentsAtCarryingValue 0 for the date (its note: 'The Company had no cash equivalents as of ...', tagged with ixt-sec:numwordsen on the word 'no'), while its schedule prints the First American Government Obligation Fund under 'Cash Equivalents' (35.9M, 45.1M, 43.8M). The published cash row is that printed line; the published non-cash rows equal the printed 'Total Debt & Equity Investments' to the dollar. The check compares the cash row with the filer's own filed 0 and fails by the money fund exactly. Under the orchestrator ruling of 2026-10-19 no page-derived cash figure is declared, so cash in these quarters is not independently reconciled. The filer's two statements disagree; neither can be chosen from the filing.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "The Company had no cash equivalents as of March 31, 2023",
+     "quote": "The Company had no cash equivalents as of March 31, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959",
+     "quote": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959 (non-cash rows equal this)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "The Company had no cash equivalents as of June 30, 2023",
+     "quote": "The Company had no cash equivalents as of June 30, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047",
+     "quote": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047 (non-cash rows equal this)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "The Company had no cash equivalents as of September 30, 2023",
+     "quote": "The Company had no cash equivalents as of September 30, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723",
+     "quote": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723 (non-cash rows equal this)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-GAV_BDC02-8",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "GAV_BDC02",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "reason_key": "filed-cash-equivalents-zero-while-schedule-prints-money-fund",
+   "statement": "The filer files us-gaap:CashEquivalentsAtCarryingValue 0 for the date (its note: 'The Company had no cash equivalents as of ...', tagged with ixt-sec:numwordsen on the word 'no'), while its schedule prints the First American Government Obligation Fund under 'Cash Equivalents' (35.9M, 45.1M, 43.8M). The published cash row is that printed line; the published non-cash rows equal the printed 'Total Debt & Equity Investments' to the dollar. The check compares the cash row with the filer's own filed 0 and fails by the money fund exactly. Under the orchestrator ruling of 2026-10-19 no page-derived cash figure is declared, so cash in these quarters is not independently reconciled. The filer's two statements disagree; neither can be chosen from the filing.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "The Company had no cash equivalents as of March 31, 2023",
+     "quote": "The Company had no cash equivalents as of March 31, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 4.65 % 4.8 % 35,887,338 35,887,338 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959",
+     "quote": "Total Debt & Equity Investments (7) 139.5 % 1,057,822,445 1,044,434,959 (non-cash rows equal this)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "The Company had no cash equivalents as of June 30, 2023",
+     "quote": "The Company had no cash equivalents as of June 30, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 5.10 % 6.9 % 45,101,237 45,101,237 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047",
+     "quote": "Total Debt & Equity Investments (8) 148.2 % 1,000,727,385 964,685,047 (non-cash rows equal this)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "The Company had no cash equivalents as of September 30, 2023",
+     "quote": "The Company had no cash equivalents as of September 30, 2023 (filer's own statement, tagged 0)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740",
+     "quote": "Cash Equivalents First American Government Obligation Fund, Yield 5.26 % 7.4 % 43,802,740 43,802,740 (money fund printed under Cash Equivalents, published as CASH)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723",
+     "quote": "Total Debt & Equity Investments (8) 153.3 % 963,649,172 902,515,723 (non-cash rows equal this)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-C206-9",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C206",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "c206-treasury-bill-printed-name-holds-its-maturity",
+   "statement": "The only flagged row is the Treasury bill, published as CASH with the name the page prints in the issuer column, 'U.S. Treasury Bill, Yield 4.46 %, Maturity Date 04/03/25'; the section heading 'Short-term Investments' is cut by the wrapper. A government bill has no issuer entity besides its own description; the maturity in the name is the page's.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Short-term Investments U.S. Treasury Bill, Yield 4.29 %, Maturity Date 04/03/25 57.7 % 300,000,000 295,864,750 295,864,750",
+     "quote": "Short-term Investments U.S. Treasury Bill, Yield 4.29 %, Maturity Date 04/03/25 57.7 % 300,000,000 295,864,750 295,864,750 (printed name)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Short-term Investments U.S. Treasury Bill, Yield 4.46 %, Maturity Date 04/03/25 56.2 % 300,000,000 296,799,833 296,799,833",
+     "quote": "Short-term Investments U.S. Treasury Bill, Yield 4.46 %, Maturity Date 04/03/25 56.2 % 300,000,000 296,799,833 296,799,833 (printed name)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-C113-10",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C113",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "reason_key": "c113-rate-above-25-as-printed",
+   "statement": "The rows above 25 are the WDE TorcSill protective advance, printed at 25.75 % and 25.50 % inc PIK (PRIME + 18.25 %, all PIK); the rate is the printed all-in coupon. Every flagged row was matched to its printed line, which prints the published figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-276898",
+     "verbatim": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693 6.9 % 45,693,591",
+     "quote": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693 6.9 % 45,693,591 (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107431",
+     "verbatim": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33",
+     "quote": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33 (printed line, figure as published)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-fmt_interest_rate-11",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_interest_rate",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "reason_key": "fmt-interest-rate-above-25-as-printed",
+   "statement": "The rows above 25 are the WDE TorcSill protective advance, printed at 25.75 % and 25.50 % inc PIK (PRIME + 18.25 %, all PIK); the rate is the printed all-in coupon. Every flagged row was matched to its printed line, which prints the published figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752 6.4 % 40,595,37",
+     "quote": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752 6.4 % 40,595,37 (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-276898",
+     "verbatim": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693 6.9 % 45,693,591",
+     "quote": "08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693 6.9 % 45,693,591 (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107431",
+     "verbatim": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33",
+     "quote": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33 (printed line, figure as published)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-C115-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C115",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2025-03-31"
+   ],
+   "reason_key": "c115-spread-above-15-is-the-printed-spread",
+   "statement": "The spreads above 15 are printed on the rows: WDE TorcSill SOFR + 18.75 % and PRIME + 18.25 %, Red Lobster SOFR + 15.50 %. Every flagged row was matched to its printed line, which prints the published figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752 6.4 % 40,595,37",
+     "quote": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752 6.4 % 40,595,37 (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78,",
+     "quote": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78, (printed line, figure as published)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-fmt_basis_spread-13",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_basis_spread",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2025-06-30"
+   ],
+   "reason_key": "fmt-basis-spread-above-15-is-the-printed-spread",
+   "statement": "The spreads above 15 are printed on the rows: WDE TorcSill SOFR + 18.75 % and PRIME + 18.25 %, Red Lobster SOFR + 15.50 %. Every flagged row was matched to its printed line, which prints the published figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107431",
+     "verbatim": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33",
+     "quote": "08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894 6.4 % 42,890,33 (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78,",
+     "quote": "01/22/21 Term Loan - 21.07 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, 13.50 % PIK) 7.5 % 50,449,339 01/22/26 50,103,110 43,184,634 12.2 % 78, (printed line, figure as published)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19",
+   "addresses_verdict": {
+    "2024-03-31": "An earlier reviewer found AGY Holdings rows built from shortened affiliate roll-forward text without spread or maturity. Those roll-forward contexts are no longer published (schedule_row_tags); the two rows now above 15 are the Red Lobster term loans whose printed spread is SOFR + 15.50 %."
+   }
+  },
+  {
+   "disposition_id": "PD-0001715933-C117-14",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C117",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "reason_key": "pik-rate-above-20-as-printed",
+   "statement": "The PIK rates above 20 are printed: Twin Star amendment loans at 25.00 % (Fixed Coupon, all PIK), WDE TorcSill at 23.35 % to 25.75 % all PIK, Red Lobster's incremental loan at 21.10 % all PIK. For an all-PIK loan the PIK rate is the whole printed coupon. Every flagged row was matched to its printed line, which prints the published figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107431",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250 Red Lobster Manag",
+     "quote": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250 Red Lobster Manag (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-276898",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346651",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.0 %",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.0 % (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 273,819 06/18/26 273,819 273,819 2.3 % 64,205,734 54,380,119 1",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 273,819 06/18/26 273,819 273,819 2.3 % 64,205,734 54,380,119 1 (printed line, figure as published)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-fmt_pik_rate-15",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_pik_rate",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "fmt-pik-rate-above-20-as-printed",
+   "statement": "The PIK rates above 20 are printed: Twin Star amendment loans at 25.00 % (Fixed Coupon, all PIK), WDE TorcSill at 23.35 % to 25.75 % all PIK, Red Lobster's incremental loan at 21.10 % all PIK. For an all-PIK loan the PIK rate is the whole printed coupon. Every flagged row was matched to its printed line, which prints the published figure.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-221880",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.2 %",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.2 % (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-276898",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250 Red Lobster Manag",
+     "quote": "02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250 Red Lobster Manag (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 %",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 273,819 06/18/26 273,819 273,819 2.3 % 64,205,734 54,380,119 1",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 273,819 06/18/26 273,819 273,819 2.3 % 64,205,734 54,380,119 1 (printed line, figure as published)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346651",
+     "verbatim": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.0 %",
+     "quote": "10/03/24 13th Amendment Priority Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.0 % (printed line, figure as published)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19",
+   "addresses_verdict": {
+    "2026-03-31": "An earlier reviewer found PIK rates not extracted on all-PIK loans (Navistar 14.27 % all PIK, Live Comfortably 2.00 % PIK). Fixed: 271 all-PIK loans now carry the printed rate as PIK rate (row corrections, each with its printed line), and Live Comfortably publishes 2.0. What remains above 20 are the printed 25.00 % fixed all-PIK Twin Star amendments and the WDE TorcSill loans at 23.35 % and 25.00 %."
+   }
+  },
+  {
+   "disposition_id": "PD-0001715933-B01-16",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2025-06-30"
+   ],
+   "reason_key": "b01-contexts-without-value-are-category-rows-rollforward-or-split-twins",
+   "statement": "Every leaf B01 counts without a fair value is a context of the affiliate roll-forward note (members 'Controlled Affiliated Investments ...' / 'Non-Controlled Affiliated Investments ...'), current or comparative, carrying only interest income, dividend or rate facts; the note prints the position's opening and closing value on other contexts. None carries principal, cost or units. The schedule positions all have values and sum to the printed totals.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107431",
+     "verbatim": "RL Investor Holdings LLC Term Loan - 11.80 % inc PIK 46,026,991 7,088,027 - - - 53,115,018 2,811,828",
+     "quote": "RL Investor Holdings LLC Term Loan - 11.80 % inc PIK 46,026,991 7,088,027 - - - 53,115,018 2,811,828 (roll-forward note line, not a schedule row)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Slogic Holding Corp. Last Out Term Loan - 11.62 % $ 26,681,925 $ 25,214 $ - $ - $ ( 25,214 ) $ 26,681,925 $ 1,469,660",
+     "quote": "Slogic Holding Corp. Last Out Term Loan - 11.62 % $ 26,681,925 $ 25,214 $ - $ - $ ( 25,214 ) $ 26,681,925 $ 1,469,660 (roll-forward note line, not a schedule row)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020312",
+     "verbatim": "Navistar Defense, LLC Term Loan - 13.61 % inc PIK 34,632,469 - - - 208,679 34,841,148 794",
+     "quote": "Navistar Defense, LLC Term Loan - 13.61 % inc PIK 34,632,469 - - - 208,679 34,841,148 794 (roll-forward note line, not a schedule row)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19",
+   "addresses_verdict": {
+    "2023-03-31": "An earlier reviewer read the 12 leaves without value as comparative-period rows leaking into the quarter. Eight of the twelve are indeed 2022-12-31 contexts, but none is a schedule position: all twelve are contexts of the affiliate roll-forward note (members 'Controlled Affiliated Investments <issuer> <loan> - <rate>'), which carry income and interest-rate facts only. No current position lacks a value: published equals the printed 'Total Debt & Equity Investments' to the dollar.",
+    "2023-06-30": "As 2023-03-31: the 12 leaves are roll-forward contexts (8 dated 2022-12-31, 4 dated 2023-06-30) with no value, principal, cost or units; published equals the printed total (964,685,047)."
+   }
+  },
+  {
+   "disposition_id": "PD-0001715933-SRC_BDC03-17",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "reason_key": "fv-corrected-from-page-where-tag-format-is-fixed-zero",
+   "statement": "The page prints 134,113 for the row and for the issuer subtotal; the inline fact on C_b1f67d8d-7766-4361-8d82-53c8fb8e2622 is tagged us-gaap:InvestmentOwnedAtFairValue with format ixt:fixed-zero, which makes the instance value 0 whatever the displayed text. Published 134,113 by row correction from the printed line; the source check compares with the instance value 0, so the two disagree by construction.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113",
+     "quote": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113 (printed value; tag format fixed-zero)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-blocking_fair_value_disagreement-18",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "reason_key": "fv-corrected-from-page-where-tag-format-is-fixed-zero",
+   "statement": "The page prints 134,113 for the row and for the issuer subtotal; the inline fact on C_b1f67d8d-7766-4361-8d82-53c8fb8e2622 is tagged us-gaap:InvestmentOwnedAtFairValue with format ixt:fixed-zero, which makes the instance value 0 whatever the displayed text. Published 134,113 by row correction from the printed line; the source check compares with the instance value 0, so the two disagree by construction.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113",
+     "quote": "Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113 (printed value; tag format fixed-zero)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-F16-19",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2022-06-30",
+    "2022-09-30",
+    "2022-12-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "reason_key": "f16-return-of-capital-distribution-in-the-quarter",
+   "statement": "In each flagged quarter the fund (past its commitment period, returning capital) distributed both earnings and a return of capital; the distribution rate counts both, the income yield only net investment income, so the rate exceeds 1.5 times the yield. Distributions per unit and net investment income are as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-010240",
+     "verbatim": "Distributions to Members from: Distributable earnings - ( 116,408 ) ( 116,408 ) Return of capital ( 116,092 ) - ( 116,092 ) Total Decrease in Members Capital for the year ended December 31, 2022",
+     "quote": "Distributions to Members from: Distributable earnings - ( 116,408 ) ( 116,408 ) Return of capital ( 116,092 ) - ( 116,092 ) Total Decrease in Members Capital for the year ended December 31, 2022 (earnings plus return of capital)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Distributions to Members from: Distributable earnings - ( 49,000 ) ( 49,000 ) Return of capital ( 55,000 ) - ( 55,000 ) Total Decrease in Members Capital for the three months ended June 30, 2023",
+     "quote": "Distributions to Members from: Distributable earnings - ( 49,000 ) ( 49,000 ) Return of capital ( 55,000 ) - ( 55,000 ) Total Decrease in Members Capital for the three months ended June 30, 2023 (earnings plus return of capital)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-22-023681",
+     "verbatim": "Distributions to Members from: Distributable earnings - (24,000 ) (24,000 ) Return of capital (46,000 ) - (46,000 ) Total Decrease in Members Capital for the three months ended September 30, 2022",
+     "quote": "Distributions to Members from: Distributable earnings - (24,000 ) (24,000 ) Return of capital (46,000 ) - (46,000 ) Total Decrease in Members Capital for the three months ended September 30, 2022 (earnings plus return of capital)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Distributions to Members from: Distributable earnings - ( 31,000 ) ( 31,000 ) Return of capital ( 29,800 ) - ( 29,800 ) Total Decrease in Members Capital for the three months ended September 30, 2023",
+     "quote": "Distributions to Members from: Distributable earnings - ( 31,000 ) ( 31,000 ) Return of capital ( 29,800 ) - ( 29,800 ) Total Decrease in Members Capital for the three months ended September 30, 2023 (earnings plus return of capital)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-22-016400",
+     "verbatim": "Distributions to Members from: Distributable earnings - (33,000 ) (33,000 ) Return of capital (66,000 ) - (66,000 )",
+     "quote": "Distributions to Members from: Distributable earnings - (33,000 ) (33,000 ) Return of capital (66,000 ) - (66,000 ) (earnings plus return of capital)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-F33-20",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "reason_key": "f33-return-of-capital-distribution-of-a-fund-in-wind-down",
+   "statement": "The distribution rate exceeds 30 pct because the quarter's distribution includes a return of capital (55,000 and 29,800 thousand) on top of earnings, as the fund winds down; net assets fell from 741,665 to 589,619 thousand over the period. As printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060966",
+     "verbatim": "Distributions to Members from: Distributable earnings - ( 31,000 ) ( 31,000 ) Return of capital ( 29,800 ) - ( 29,800 ) Total Decrease in Members Capital for the three months ended September 30, 2023",
+     "quote": "Distributions to Members from: Distributable earnings - ( 31,000 ) ( 31,000 ) Return of capital ( 29,800 ) - ( 29,800 ) Total Decrease in Members Capital for the three months ended September 30, 2023 (return of capital in the quarter)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Distributions to Members from: Distributable earnings - ( 49,000 ) ( 49,000 ) Return of capital ( 55,000 ) - ( 55,000 ) Total Decrease in Members Capital for the three months ended June 30, 2023",
+     "quote": "Distributions to Members from: Distributable earnings - ( 49,000 ) ( 49,000 ) Return of capital ( 55,000 ) - ( 55,000 ) Total Decrease in Members Capital for the three months ended June 30, 2023 (return of capital in the quarter)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-040370",
+     "verbatim": "Common Unitholders capital 763,068 818,068 Accumulated loss ( 112,948 ) ( 76,403 ) Total Members Capital 650,120 741,665",
+     "quote": "Common Unitholders capital 763,068 818,068 Accumulated loss ( 112,948 ) ( 76,403 ) Total Members Capital 650,120 741,665 (members' capital falling)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-F33-21",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "reason_key": "f33-no-distribution-declared-in-the-quarter",
+   "statement": "No distribution was made in the quarter (2023-03-31: the 10-Q prints no distribution line; 2024-06-30: six-month distributions 4,980 thousand equal the first quarter's 5,000 declared; 2025: no distribution in the first half). A zero rate is as filed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107431",
+     "verbatim": "Distributions to Members from distributable earnings - ( 4,980 )",
+     "quote": "Distributions to Members from distributable earnings - ( 4,980 ) (no distribution in the quarter)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Distributions to Members from distributable earnings - ( 4,980 )",
+     "quote": "Distributions to Members from distributable earnings - ( 4,980 ) (no distribution in the quarter)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-095230",
+     "verbatim": "Distributions to Members from distributable earnings ( 4,980 ) ( 48,995 ) Return of capital - ( 55,000 )",
+     "quote": "Distributions to Members from distributable earnings ( 4,980 ) ( 48,995 ) Return of capital - ( 55,000 ) (no distribution in the quarter)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-F27-22",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "statement": "The income yield F27 reads is the filer's printed ratio of net investment income to average net assets. It exceeds the holdings' weighted coupon by more than 2 points because (a) the fund is levered (credit facilities 300.0M to 317.5M against net assets of 512.8M to 528.0M at 2024-12-31 / 2025-03-31) and (b) incentive-fee reversals lift net investment income above the coupon (printed ratios of incentive fees to average net assets -1.92 % to -27.46 %). Both ratios are as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107431",
+     "verbatim": "Ratio of net investment income to average net assets (5) 27.29 % 29.46 % Ratio of incentive fees to average net assets (5) ( 13.85",
+     "quote": "Ratio of net investment income to average net assets (5) 27.29 % 29.46 % Ratio of incentive fees to average net assets (5) ( 13.85 (printed ratio)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Ratio of net investment income to average net assets (5) 42.12 % 18.96 % Ratio of incentive fees to average net assets (5) ( 27.46",
+     "quote": "Ratio of net investment income to average net assets (5) 42.12 % 18.96 % Ratio of incentive fees to average net assets (5) ( 27.46 (printed ratio)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045556",
+     "verbatim": "Ratio of incentive fees to average net assets ( 8.28 )% 0.97 % 2.10 % 4.51 % 0.40 %",
+     "quote": "Ratio of incentive fees to average net assets ( 8.28 )% 0.97 % 2.10 % 4.51 % 0.40 % (printed ratio)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-124902",
+     "verbatim": "Ratio of net investment income to average net assets (5) 23.96 % 15.03 %",
+     "quote": "Ratio of net investment income to average net assets (5) 23.96 % 15.03 % (printed ratio)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-276898",
+     "verbatim": "Ratio of net investment income to average net assets (5) 21.39 % 23.96 % Ratio of incentive fees to average net assets (5) ( 9.46",
+     "quote": "Ratio of net investment income to average net assets (5) 21.39 % 23.96 % Ratio of incentive fees to average net assets (5) ( 9.46 (printed ratio)"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-141887",
+     "verbatim": "Ratio of incentive fees to average net assets ( 7.26 )% ( 8.28 )% 0.97 % 2.10 % 4.51 %",
+     "quote": "Ratio of incentive fees to average net assets ( 7.26 )% ( 8.28 )% 0.97 % 2.10 % 4.51 % (printed ratio)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056554",
+     "verbatim": "Ratio of net investment income to average net assets (5) 18.96 % 15.21 % Ratio of incentive fees to average net assets (5) ( 1.92",
+     "quote": "Ratio of net investment income to average net assets (5) 18.96 % 15.21 % Ratio of incentive fees to average net assets (5) ( 1.92 (printed ratio)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070648",
+     "verbatim": "Revolving credit facilities payable $ 317,500 $ 300,000",
+     "quote": "Revolving credit facilities payable $ 317,500 $ 300,000 (borrowings)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-0001715933-F28-23",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001715933"
+   ],
+   "quarters": [
+    "2026-08-12"
+   ],
+   "reason_key": "f28-cover-page-unit-count-date-not-a-quarter",
+   "statement": "The fund-level row dated 2026-08-12 holds only the unit count from the cover page of the 10-Q for 2026-06-30. It is not a reporting period; no schedule exists for it.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346651",
+     "verbatim": "The number of the Registrants common units outstanding at August 12, 2026 was 13,734,010",
+     "quote": "The number of the Registrants common units outstanding at August 12, 2026 was 13,734,010 (cover-page count)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001715933.json",
+   "decided_by": "PROPOSED by agent fund-agent-tcw7-2026-10-19 (2026-10-19, sandbox t7af); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  }
+ ]
+}

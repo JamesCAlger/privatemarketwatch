@@ -1,0 +1,2602 @@
+[
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 13.61% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 4.6% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.61"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 13.61 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 4.6 % 36,713,538 02/01/26 33,109,294 34,841,147 22.6 % 174,651,136 169,923,390' (0000950170-23-020312)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Securities Auto Components Shipston Group U.S. Inc. Acquisition Date 01/20/22 Last Out Delayed Draw Term Loan - 13.32% inc PIK (LIBOR + 8.50%, 1.00% Floor, all PIK) % of Net Assets 0.2% Maturity Date 09/28/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '01/20/22 Last Out Delayed Draw Term Loan - 13.32 % inc PIK (LIBOR + 8.50 %, 1.00 % Floor, all PIK) 0.2 % 1,649,838 09/28/24 1,649,838 1,239,029 3.3 % 32,112,076 32,071,262 24,116' (0000950170-23-020312)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Securities Auto Components Shipston Group U.S. Inc. Acquisition Date 05/18/20 Last Out Term Loan - 13.32% inc PIK (LIBOR + 8.50%, 1.00% Floor, all PIK) % of Net Assets 0.2% Maturity Date 09/28/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '05/18/20 Last Out Term Loan - 13.32 % inc PIK (LIBOR + 8.50 %, 1.00 % Floor, all PIK) 0.2 % 1,897,971 09/28/24 1,897,971 1,425,376 Shipston Group U.S. Inc. 09/28/18' (0000950170-23-020312)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Securities Auto Components Shipston Group U.S. Inc. Acquisition Date 09/28/18 Last Out Term Loan - 13.26% inc PIK (LIBOR + 8.50%, 1.00% Floor, all PIK) % of Net Assets 2.9% Maturity Date 09/28/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.26"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/28/18 Last Out Term Loan - 13.26 % inc PIK (LIBOR + 8.50 %, 1.00 % Floor, all PIK) 2.9 % 28,564,267 09/28/24 28,523,453 21,451,764 Shipston Group U.S. Inc. 01/20/' (0000950170-23-020312)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 12.55% inc PIK(SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.55"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 12.55 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 854,901 06/18/26 854,901 854,901 9.1 % 80,686,433 79,935,151 68,319,659 C' (0000950170-23-020312)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 12.55% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 4.4% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.55"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 12.55 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 4.4 % 43,113,731 06/18/26 42,796,387 32,766,436 Twin Star International, Inc. 0' (0000950170-23-020312)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 12.35% inc PIK (LIBOR + 7.50%, 1.25% Floor, all PIK) % of Net Assets 0.2% Maturity Date 09/28/23",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 12.35 % inc PIK (LIBOR + 7.50 %, 1.25 % Floor, all PIK) 0.2 %' (0000950170-23-020312)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 12.35% inc PIK (LIBOR + 7.50%, 1.25% Floor, all PIK) % of Net Assets 3.7% Maturity Date 09/28/23",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 12.35 % inc PIK (LIBOR + 7.50 %, 1.25 % Floor, all PIK) 3.7 % 31,703,796 09/28/23 31,665,556 27,550,599 3.9 % 33,544,237 33,505,997 29,' (0000950170-23-020312)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 13.61% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 5.4% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.61"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 13.61 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 5.4 % 37,991,542 02/01/26 33,131,766 34,952,219 25.6 % 171,627,530 165,809,066' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Securities Auto Components Shipston Group U.S. Inc. Acquisition Date 01/20/22 Last Out Delayed Draw Term Loan - 14.04% inc PIK (SOFR + 8.50%, 1.00% Floor, all PIK) % of Net Assets 0.2% Maturity Date 09/28/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.04"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '01/20/22 Last Out Delayed Draw Term Loan - 14.04 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK) 0.2 % 1,707,329 09/28/24 1,707,329 1,270,253 3.8 % 32,952,303 32,932,123 24,516' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Securities Auto Components Shipston Group U.S. Inc. Acquisition Date 05/18/20 Last Out Term Loan - 14.04% inc PIK (SOFR + 8.50%, 1.00% Floor, all PIK) % of Net Assets 0.2% Maturity Date 09/28/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.04"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '05/18/20 Last Out Term Loan - 14.04 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK) 0.2 % 1,964,057 09/28/24 1,964,057 1,461,258 Shipston Group U.S. Inc. (5) 09/28' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Securities Auto Components Shipston Group U.S. Inc. Acquisition Date 09/28/18 Last Out Term Loan - 14.04% inc PIK (SOFR + 8.50%, 1.00% Floor, all PIK) % of Net Assets 3.4% Maturity Date 09/28/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.04"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/28/18 Last Out Term Loan - 14.04 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK) 3.4 % 29,280,917 09/28/24 29,260,737 21,785,002 Shipston Group U.S. Inc. (5) 01' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 12.89% inc PIK(SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.89"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 12.89 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 883,209 06/18/26 883,209 883,209 Twin Star International, Inc. 06/12/23 I' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 12.90% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.90"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 12.90 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 876,542 06/18/26 876,542 876,542 9.8 % 81,163,996 80,493,425 63,913,834 3' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan \u2013 12.80% inc PIK (LIBOR + 7.50%, 1.25% Floor, all PIK) % of Net Assets 3.6% Maturity Date 09/28/23",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.80"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 12.80 % inc PIK (LIBOR + 7.50 %, 1.25 % Floor, all PIK) 3.6 % 32,728,143 09/28/23 32,709,236 23,695,176 3.8 % 34,629,227 34,610,320 25,' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands Inc. Acquisition Date 10/09/20 Revolver \u2013 10.83% (15.00%, Fixed Coupon, all PIK) % of Net Assets 0.5% Maturity Date 10/09/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.83"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/09/20 Revolver - 10.83 % ( 15.00 %, Fixed Coupon, all PIK) 0.5 % 3,245,604 10/09/24 3,234,928 3,245,604 Hollander Intermediate LLC 09/19/2' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Revolver - 16.01% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 0.6% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "16.01"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Revolver - 16.01 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) 0.6 % 3,798,939 02/01/26 3,769,118 3,798,939 Navistar Defense, LLC (2) (5) 08/0' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 14.22% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 6.2% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.22"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 14.22 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 6.2 % 39,398,558 02/01/26 33,109,294 36,640,659 28.8 % 174,299,143 167,163,587' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Auto Components Shipston Group U.S. Inc. Acquisition Date 01/20/22 Last Out Delayed Draw Term Loan - 14.01% inc PIK (SOFR + 8.50%, 1.00% Floor, all PIK) % of Net Assets 0.2% Maturity Date 09/28/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.01"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '01/20/22 Last Out Delayed Draw Term Loan - 14.01 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK) 0.2 % 1,545,446 09/28/24 1,515,964 1,217,811 4.0 % 30,101,793 29,083,483 23,735' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Auto Components Shipston Group U.S. Inc. Acquisition Date 05/18/20 Last Out Term Loan - 14.01% inc PIK (SOFR + 8.50%, 1.00% Floor, all PIK) % of Net Assets 0.2% Maturity Date 09/28/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.01"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '05/18/20 Last Out Term Loan - 14.01 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK) 0.2 % 1,778,391 09/28/24 1,765,995 1,401,372 Shipston Group U.S. Inc. (5) 09/28' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Auto Components Shipston Group U.S. Inc. Acquisition Date 09/28/18 Last Out Term Loan - 14.01% inc PIK (SOFR + 8.50%, 1.00% Floor, all PIK) % of Net Assets 3.6% Maturity Date 09/28/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.01"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/28/18 Last Out Term Loan - 14.01 % inc PIK (SOFR + 8.50 %, 1.00 % Floor, all PIK) 3.6 % 26,777,956 09/28/24 25,801,524 21,116,543 Shipston Group U.S. Inc. (5) 01' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 13.04% inc PIK(SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.04"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 13.04 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 911,991 06/18/26 911,991 911,991 Twin Star International, Inc. 06/12/23 I' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 12.93% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.93"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 12.93 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 867,948 06/18/26 867,948 867,948 Twin Star International, Inc. (5) 06/18/' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 13.06% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.06"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 13.06 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 905,440 06/18/26 905,440 905,440 8.5 % 82,579,003 80,503,212 49,514,473 3' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 13.04% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 2.6% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.04"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 13.04 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 2.6 % 45,939,760 06/18/26 44,197,185 15,252,000 Twin Star International, Inc. 0' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver \u2013 15.00% inc PIK (PRIME + 6.50%, 1.25% Floor, all PIK) % of Net Assets 0.2% Maturity Date 12/31/23",
+  "exact": true,
+  "fields": {
+   "pik_rate": "15.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 15.00 % inc PIK (PRIME + 6.50 %, 1.25 % Floor, all PIK) 0.2 % 1,946,663 12/31/23 1,946,663 1,354,877 Encompass Digital Media, Inc. 10/0' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan \u2013 15.00% inc PIK (PRIME + 6.50%, 1.25% Floor, all PIK) % of Net Assets 4.0% Maturity Date 12/31/23",
+  "exact": true,
+  "fields": {
+   "pik_rate": "15.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 15.00 % inc PIK (PRIME + 6.50 %, 1.25 % Floor, all PIK) 4.0 % 33,510,423 12/31/23 33,510,212 23,323,255 4.2 % 35,457,086 35,456,875 24,' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 16.21% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 1.8% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "16.21"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 16.21 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) 1.8 % 10,326,607 02/01/26 10,299,999 10,326,607 Navistar Defense, LLC (2) (5) 0' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 14.22% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 6.0% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.22"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 14.22 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 6.0 % 40,991,402 02/01/26 33,109,294 33,940,881 30.8 % 183,204,891 174,619,313' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 13.00% inc PIK(SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 13.00 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 942,052 06/18/26 942,052 942,052 Twin Star International, Inc. 06/12/23 I' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 13.00% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 13.00 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 921,555 06/18/26 921,555 921,555 Twin Star International, Inc. (5) 06/18/' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 13.00% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 13.00 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 940,916 06/18/26 940,916 940,916 Twin Star International, Inc. 10/19/23 7' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 13.00% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 3.4% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 13.00 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 3.4 % 47,314,794 06/18/26 44,197,185 19,351,751 Twin Star International, Inc. 0' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 13.02% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.02"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 13.02 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 681,027 06/18/26 681,027 681,027 9.2 % 81,138,149 77,757,523 51,681,731 F' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 13.00% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 13.00 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 470,312 06/18/26 470,312 470,312 Twin Star International, Inc. 10/19/23 7' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 13.13% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.4% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.13"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 13.13 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.4 % 3,823,410 09/28/25 3,823,410 2,515,804 Encompass Digital Media, Inc. (4)' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 13.13% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 3.8% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.13"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 13.13 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 3.8 % 32,974,066 09/28/25 32,974,066 21,696,936 4.2 % 36,797,476 36,797,476 24,' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Debt Securities Software Mondee Holdings LLC Acquisition Date 12/20/19 Term Loan - 14.11% inc PIK (SOFR + 8.50%, 1.75% Floor, all PIK) % of Net Assets 12.4% Maturity Date 12/23/24",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.11"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '12/20/19 Term Loan - 14.11 % inc PIK (SOFR + 8.50 %, 1.75 % Floor, all PIK) 12.4 % 69,880,068 12/23/24 69,511,764 70,369,228 12.4 % 69,880,068 69,511,764 7' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 15.98% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 4.6% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "15.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 15.98 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) 4.6 % 26,570,265 02/01/26 26,546,834 26,570,265 Navistar Defense, LLC (2) (5) 0' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 13.98% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 4.5% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 13.98 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 4.5 % 42,720,012 02/01/26 33,357,512 26,144,647 31.7 % 199,993,956 190,067,359' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 973,005 06/18/26 973,005 973,005 Twin Star International, Inc. 06/12/23 I' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 951,834 06/18/26 951,834 951,834 Twin Star International, Inc. (5) 06/18/' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 971,831 06/18/26 971,831 971,831 Twin Star International, Inc. 10/19/23 7' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 2.8% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 2.8 % 49,041,789 06/18/26 44,197,185 15,889,540 Twin Star International, Inc. 0' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.4% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.4 % 2,089,076 06/18/26 2,075,536 2,089,076 8.8 % 82,984,841 77,904,351 49,377' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 485,764 06/18/26 485,764 485,764 Twin Star International, Inc. 10/19/23 7' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure Red Lobster Management, LLC Acquisition Date 02/29/24 Incremental Term Loan \u2013 21.10% inc PIK (SOFR + 15.50%, 3.00% Floor, all PIK)) % of Net Assets 0.7% Maturity Date 01/22/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "21.10"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/29/24 Incremental Term Loan - 21.10 % inc PIK (SOFR + 15.50 %, 3.00 % Floor, all PIK) 0.7 % 4,406,834 01/22/26 4,406,834 3,772,250 Red Lobster Management, LLC 01/22/' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 13.09% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.4% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.09"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 13.09 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.4 % 3,953,491 09/28/25 3,953,491 2,273,257 Encompass Digital Media, Inc. (4)' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 13.09% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 3.4% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.09"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 13.09 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 3.4 % 34,082,664 09/28/25 34,082,664 19,597,532 3.8 % 38,036,155 38,036,155 21,' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Software Mondee Holdings LLC Acquisition Date 12/20/19 Term Loan - 14.07% inc PIK (SOFR + 8.50%, 1.75% Floor, all PIK) % of Net Assets 12.7% Maturity Date 03/31/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.07"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '12/20/19 Term Loan - 14.07 % inc PIK (SOFR + 8.50 %, 1.75 % Floor, all PIK) 12.7 % 72,634,124 03/31/25 72,359,702 73,360,466 12.7 % 72,634,124 72,359,702 7' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands Inc. Acquisition Date 02/06/24 Term Loan A-1 - 13.29% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 2.9% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.29"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-1 - 13.29 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 2.9 % 16,725,454 02/06/31 16,269,407 16,725,454 Centric Brands Inc. (3) 02/06/2' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands Inc. Acquisition Date 02/06/24 Term Loan A-2 - 13.29% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 2.4% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.29"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 13.29 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 2.4 % 13,775,609 02/06/31 13,399,994 13,775,609 Hollander Intermediate LLC 09/1' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 16.06% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 5.5% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "16.06"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 16.06 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) 5.5 % 32,191,663 02/01/26 32,171,409 32,191,663 Navistar Defense, LLC (2) (5)(9' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 13.98% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 2.1% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 13.98 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 2.1 % 44,521,106 02/01/26 33,357,512 12,643,994 29.1 % 203,673,754 192,083,698' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 973,005 06/18/26 973,005 973,005 Twin Star International, Inc. 06/12/23 I' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 951,834 06/18/26 951,834 951,834 Twin Star International, Inc. (5)(9) 06/' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 971,831 06/18/26 971,831 971,831 Twin Star International, Inc. 10/19/23 7' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 1.6% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 1.6 % 49,041,789 06/18/26 44,197,185 9,563,149 Twin Star International, Inc. 02' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/20/24 Protective Advance Term Loan - 13.00% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/20/24 Protective Advance Term Loan - 13.00 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 971,490 06/18/26 971,490 971,490 3.0 % 56,165,817 51,302,760 16,687,177 3' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.5% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.5 % 2,770,104 06/18/26 2,751,651 2,770,104 Twin Star International, Inc. 06/2' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 12.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 12.95 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 485,764 06/18/26 485,764 485,764 Twin Star International, Inc. 10/19/23 7' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure Red Lobster Management, LLC Acquisition Date 01/22/21 Term Loan \u2013 19.10% inc PIK (SOFR + 13.50%, 3.00% Floor, all PIK) % of Net Assets 0.1% Maturity Date 01/22/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "19.10"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '01/22/21 Term Loan - 19.10 % inc PIK (SOFR + 13.50 %, 3.00 % Floor, all PIK) 0.1 % 22,905,945 01/22/26 22,779,212 458,119 Red Lobster Management, LLC 05/22/' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure Red Lobster Management, LLC Acquisition Date 02/29/24 Incremental Term Loan \u2013 18.96% inc PIK (SOFR + 13.50%, 3.00% Floor, all PIK)) % of Net Assets 0.0% Maturity Date 01/22/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "18.96"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/29/24 Incremental Term Loan - 18.96 % inc PIK (SOFR + 13.50 %, 3.00 % Floor, all PIK) 0.0 % 2,172,068 01/22/26 2,172,068 43,441 Red Lobster Management, LLC (9) 01/22' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Household Durables Greenfield World Trade, Inc. Acquisition Date 03/04/19 Last Out Term Loan \u2013 18.79% inc PIK (SOFR + 13.33%, 1.50% Floor, all PIK) % of Net Assets 13.6% Maturity Date 03/31/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "18.79"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '03/04/19 Last Out Term Loan - 18.79 % inc PIK (SOFR + 13.33 %, 1.50 % Floor, all PIK) 13.6 % 86,977,969 03/31/25 85,790,574 80,106,709 18.2 % 116,761,722 115,574,327' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 13.10% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.10"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 13.10 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.3 % 4,087,912 09/28/25 4,087,912 1,925,406 Encompass Digital Media, Inc. (4)(' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 13.10% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 2.8% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.10"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 13.10 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 2.8 % 35,235,837 09/28/25 35,235,837 16,596,079 3.1 % 39,323,749 39,323,749 18,' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Software Mondee Holdings LLC Acquisition Date 12/20/19 Term Loan - 14.10% inc PIK (SOFR + 8.50%, 1.75% Floor, all PIK) % of Net Assets 12.4% Maturity Date 06/30/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.10"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '12/20/19 Term Loan - 14.10 % inc PIK (SOFR + 8.50 %, 1.75 % Floor, all PIK) 12.4 % 73,408,129 06/30/25 73,227,588 73,187,905 12.4 % 73,408,129 73,227,588 7' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands Inc. Acquisition Date 02/06/24 Term Loan A-1 - 13.34% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 2.9% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.34"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-1 - 13.34 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 2.9 % 17,281,176 02/06/31 16,841,716 17,281,176 Centric Brands Inc. (3)(9) 02/0' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands Inc. Acquisition Date 02/06/24 Term Loan A-2 - 13.34% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 2.4% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.34"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 13.34 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 2.4 % 14,233,319 02/06/31 13,871,366 14,233,319 Hollander Intermediate LLC (9)' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 15.45% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 7.2% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "15.45"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 15.45 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) 7.2 % 40,000,202 02/01/26 39,983,162 40,000,202 Navistar Defense, LLC (2)(5)(9)' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 13.45% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 1.4% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.45"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 13.45 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 1.4 % 46,355,484 02/01/26 33,357,512 7,648,655 31.5 % 212,618,442 199,287,917 1' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Revolver - 11.45% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.1% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.45"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Revolver - 11.45 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.1 % 825,866 04/13/29 825,866 726,762 Outform Group, Inc. (fka Rapid Displays,' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Term Loan - 11.80% inc PIK (SOFR + 11.80%, 1.00% Floor all PIK) % of Net Assets 2.1% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.80"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Term Loan - 11.80 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 2.1 % 13,153,670 04/13/29 13,105,726 11,575,230 Outform Group, Inc. (fka Rapid' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 09/29/22 Incremental Term Loan - 11.80% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.0% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.80"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/29/22 Incremental Term Loan - 11.80 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.0 % 232,856 04/13/29 230,727 204,914 2.2 % 14,212,392 14,162,319 12,506,906 C' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 12.25% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.25"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 12.25 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,038,929 06/18/26 1,038,929 1,038,929 Twin Star International, Inc. (9)' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 12.25% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.25"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 12.25 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,016,324 06/18/26 1,016,324 1,016,324 Twin Star International, Inc. (5)' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 12.25% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.25"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 12.25 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,037,677 06/18/26 1,037,677 1,037,677 Twin Star International, Inc. (9)' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 12.25% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.6% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.25"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 12.25 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.6 % 52,364,554 06/18/26 44,197,185 3,089,509 Twin Star International, Inc. (9' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/20/24 Protective Advance Term Loan - 12.25% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.4% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.25"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/20/24 Protective Advance Term Loan - 12.25 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.4 % 2,001,715 06/18/26 2,001,715 2,001,715 2.2 % 60,922,215 52,736,393 11,647' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 12.25% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.5% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.25"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 12.25 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.5 % 2,944,339 06/18/26 2,925,886 2,944,339 Twin Star International, Inc. (9)' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 12.25% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.25"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 12.25 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 518,677 06/18/26 518,677 518,677 Twin Star International, Inc. (9) 10/19/' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Energy Equipment & Services WDE TorcSill Holdings LLC Acquisition Date 08/13/24 Protective Advance Term Loan - 16.00% inc PIK (Prime + 8.00%, 1.75% Floor all PIK) % of Net Assets 0.2% Maturity Date 05/30/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "16.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/13/24 Protective Advance Term Loan - 16.00 % inc PIK (PRIME + 8.00 %, 1.75 % Floor, all PIK) 0.2 % 1,274,876 05/30/27 1,274,876 1,274,876 6.4 % 35,808,001 35,802,143 35,808' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Energy Equipment & Services WDE TorcSill Holdings LLC Acquisition Date 10/22/19 Revolver - 13.46% inc PIK (SOFR + 8.50%, 1.75% Floor, all PIK) % of Net Assets 1.9% Maturity Date 05/30/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.46"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Revolver - 13.46 % inc PIK (SOFR + 8.50 %, 1.75 % Floor, all PIK) 1.9 % 10,672,432 05/30/27 10,672,432 10,672,432 WDE TorcSill Holdings LLC (2)(9' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Energy Equipment & Services WDE TorcSill Holdings LLC Acquisition Date 10/22/19 Term Loan - 13.46% inc PIK (SOFR + 8.50%, 1.75% Floor all PIK) % of Net Assets 4.3% Maturity Date 05/30/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.46"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Term Loan - 13.46 % inc PIK (SOFR + 8.50 %, 1.75 % Floor, all PIK) 4.3 % 23,860,693 05/30/27 23,854,835 23,860,693 WDE TorcSill Holdings LLC (2)(9' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure RL Investor Holdings LLC (fka Red Lobster Management, LLC) Acquisition Date 09/16/24 Term Loan - 13.11% inc PIK (SOFR + 7.50%, 3.00% Floor, all PIK) % of Net Assets 6.8% Maturity Date 09/16/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.11"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/16/24 Term Loan - 13.11 % inc PIK (SOFR + 7.50 %, 3.00 % Floor, all PIK) 6.8 % 37,436,694 09/16/29 37,436,694 37,436,694 11.1 % 61,468,598 61,327,893 61' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 12.35% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 12.35 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.3 % 4,272,800 09/28/25 4,134,235 1,828,758 Encompass Digital Media, Inc. (4)(' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 12.35% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 2.9% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 12.35 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 2.9 % 36,821,945 09/28/25 35,633,236 15,759,792 3.2 % 41,094,745 39,767,471 17,' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Software Mondee Holdings LLC Acquisition Date 12/20/19 Term Loan - 13.37% inc PIK (SOFR + 8.50%, 1.75% Floor, all PIK) % of Net Assets 16.1% Maturity Date 06/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.37"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '12/20/19 Term Loan - 13.37 % inc PIK (SOFR + 8.50 %, 1.75 % Floor, all PIK) 16.1 % 89,751,165 06/30/28 89,665,537 89,033,156 16.1 % 89,751,165 89,665,537 8' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands TopCo, LLC (fka Centric Brands Inc.) Acquisition Date 02/06/24 Term Loan A-2 - 13.23% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 2.7% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.23"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 13.23 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 2.7 % 14,718,401 02/06/31 14,370,259 14,718,401 Hollander Intermediate LLC (9)' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 14.96% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 7.9% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.96"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 14.96 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) 7.9 % 41,485,621 02/01/26 41,471,793 41,485,621 Navistar Defense, LLC (2)(5)(8)' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 12.96% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 1.0% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.96"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 12.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 1.0 % 47,948,961 02/01/26 33,357,512 5,226,437 32.5 % 214,711,209 199,857,239 1' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Revolver - 11.15% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.3% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.15"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Revolver - 11.15 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.3 % 1,650,789 04/13/29 1,650,789 1,650,789 Outform Group, Inc. (fka Rapid Dis' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Term Loan - 11.15% inc PIK (SOFR + 11.80%, 1.00% Floor all PIK) % of Net Assets 2.6% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.15"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Term Loan - 11.15 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 2.6 % 13,535,325 04/13/29 13,495,272 13,535,325 Outform Group, Inc. (fka Rapid' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 09/29/22 Incremental Term Loan - 11.15% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.0% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.15"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/29/22 Incremental Term Loan - 11.15 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.0 % 239,613 04/13/29 237,835 239,613 2.9 % 15,425,727 15,383,896 15,425,727 C' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,071,463 06/18/26 1,071,463 1,071,463 Twin Star International, Inc. 06/1' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,048,151 06/18/26 1,048,151 1,048,151 Twin Star International, Inc. (5)(' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,070,171 06/18/26 1,070,171 1,070,171 Twin Star International, Inc. 10/1' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 54,004,347 06/18/26 44,197,185 1,566,126 Twin Star International, Inc. 02' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/20/24 Protective Advance Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.4% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/20/24 Protective Advance Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.4 % 2,142,232 06/18/26 2,142,232 2,142,232 Twin Star International, Inc. 10/0' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Delayed Draw Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Delayed Draw Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 705,796 06/18/26 705,796 705,796 Twin Star International, Inc. 10/03/24 1' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 318,295 06/18/26 318,295 318,295 Twin Star International, Inc. 10/03/24 1' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.6% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.6 % 3,036,541 06/18/26 3,018,088 3,036,541 Twin Star International, Inc. 06/2' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.98"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 11.98 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 534,919 06/18/26 534,919 534,919 Twin Star International, Inc. 10/19/23 7' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Energy Equipment & Services WDE TorcSill Holdings LLC Acquisition Date 08/13/24 Protective Advance Term Loan - 13.00% inc PIK (Prime + 5.50%, 4.60% Floor all PIK) % of Net Assets 0.5% Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "13.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/13/24 Protective Advance Term Loan - 13.00 % inc PIK (PRIME + 5.50 %, 4.60 % Floor, all PIK) 0.5 % 2,605,124 04/30/28 2,605,124 2,683,278 6.7 % 38,309,473 38,309,473 35,638' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Energy Equipment & Services WDE TorcSill Holdings LLC Acquisition Date 10/22/19 Revolver - 10.71% inc PIK (SOFR + 6.00%, 4.60% Floor, all PIK) % of Net Assets 1.9% Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.71"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Revolver - 10.71 % inc PIK (SOFR + 6.00 %, 4.60 % Floor, all PIK) 1.9 % 11,034,398 04/30/28 11,034,398 10,184,750 WDE TorcSill Holdings LLC (2) 1' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Energy Equipment & Services WDE TorcSill Holdings LLC Acquisition Date 10/22/19 Term Loan - 10.71% inc PIK (SOFR + 6.00%, 4.60% Floor all PIK) % of Net Assets 4.3% Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.71"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Term Loan - 10.71 % inc PIK (SOFR + 6.00 %, 4.60 % Floor, all PIK) 4.3 % 24,669,951 04/30/28 24,669,951 22,770,365 WDE TorcSill Holdings LLC (2) 0' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure RL Investor Holdings LLC (fka Red Lobster Management, LLC) Acquisition Date 09/16/24 Term Loan - 11.83% inc PIK (SOFR + 7.50%, 2.00% Floor, all PIK) % of Net Assets 8.7% Maturity Date 09/16/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.83"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/16/24 Term Loan - 11.83 % inc PIK (SOFR + 7.50 %, 2.00 % Floor, all PIK) 8.7 % 46,026,991 09/16/29 46,026,991 46,026,991 13.1 % 70,022,115 69,894,985 69' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 12.08% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.4% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.08"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 12.08 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.4 % 4,408,256 09/28/25 4,134,235 1,992,532 Encompass Digital Media, Inc. (4)(' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 12.08% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 3.3% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.08"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 12.08 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 3.3 % 37,996,697 09/28/25 35,633,236 17,174,507 3.7 % 42,404,953 39,767,471 19,' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands TopCo, LLC (fka Centric Brands Inc.) Acquisition Date 02/06/24 Term Loan A-2 - 12.53% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 2.9% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.53"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 12.53 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 2.9 % 15,215,944 02/06/31 14,881,614 15,215,944 Hollander Intermediate LLC 09/1' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 14.92% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 8.4% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.92"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 14.92 % inc PIK ( SOFR + 10.50 %, 1.50 % Floor, all PIK) 8.4 % 43,053,549 02/01/26 43,042,864 43,053,549 Navistar Defense, LLC (2)(5)(8)' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 12.92% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 2.5% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.92"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 12.92 % inc PIK ( SOFR + 8.50 %, 1.50 % Floor, all PIK) 2.5 % 49,515,830 02/01/26 33,902,502 12,874,116 33.8 % 210,384,224 194,576,040' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 05/27/22 Delayed Draw Term Loan - 14.56% inc PIK (SOFR + 10.00%, 1.50% Floor, all PIK) % of Net Assets 3.49% Maturity Date 09/21/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.56"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '05/27/22 Delayed Draw Term Loan - 14.56 % inc PIK ( SOFR + 10.00 %, 1.50 % Floor, all PIK) 3.9 % 19,843,502 09/21/27 19,843,495 19,843,502 7.6 % 38,971,727 38,971,720 38,' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 09/21/20 Term Loan - 14.55% inc PIK (SOFR + 10.00%, 1.50% Floor, all PIK) % of Net Assets 3.7% Maturity Date 09/21/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.55"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/21/20 Term Loan - 14.55 % inc PIK ( SOFR + 10.00 %, 1.50 % Floor, all PIK) 3.7 % 19,128,225 09/21/27 19,128,225 19,128,225 AGY Holdings Corp. 05/27/22 Del' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Revolver - 10.92% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.2% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.92"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Revolver - 10.92 % inc PIK ( SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.2 % 1,227,185 04/13/29 1,227,185 1,120,420 Outform Group, Inc. (fka Rapid Dis' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Term Loan - 10.92% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 2.5% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.92"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Term Loan - 10.92 % inc PIK ( SOFR + 6.50 %, 1.00 % Floor, all PIK) 2.5 % 13,915,236 04/13/29 13,882,902 12,704,610 Outform Group, Inc. (fka Rapid' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 09/29/22 Incremental Term Loan - 10.92% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.0% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.92"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/29/22 Incremental Term Loan - 10.92 % inc PIK ( SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.0 % 246,339 04/13/29 244,903 224,907 2.7 % 15,388,760 15,354,990 14,049,937 C' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,103,551 06/18/26 1,103,551 1,103,551 Twin Star International, Inc. 06/1' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,079,539 06/18/26 1,079,539 1,079,539 Twin Star International, Inc. (5)(' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,102,220 06/18/26 1,102,220 1,102,220 Twin Star International, Inc. 10/1' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 55,621,612 06/18/26 44,197,185 1,168,054 Twin Star International, Inc. 02' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/20/24 Protective Advance Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.4% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/20/24 Protective Advance Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.4 % 2,167,355 06/18/26 2,167,355 2,167,355 Twin Star International, Inc. 10/0' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Delayed Draw Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Delayed Draw Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 726,933 06/18/26 726,933 726,933 3 TCW Direct Lending VII LLC Consolidate' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 327,827 06/18/26 327,827 327,827 Twin Star International, Inc. 10/03/24 1' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.6% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.6 % 3,127,476 06/18/26 3,109,023 3,127,476 Twin Star International, Inc. 06/2' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 550,938 06/18/26 550,938 550,938 Twin Star International, Inc. 10/19/23 7' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure RL Investor Holdings LLC (fka Red Lobster Management, LLC), Acquisition Date 09/16/24, Term Loan - 11.80% inc PIK (SOFR + 7.50%, 2.00% Floor, all PIK) % of Net Assets 9.2% Maturity Date 09/16/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.80"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/16/24 Term Loan - 11.80 % inc PIK ( SOFR + 7.50 %, 2.00 % Floor, all PIK) 9.2 % 47,388,099 09/16/29 47,388,099 47,388,099 13.7 % 71,334,170 71,220,286 70' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Household Durables Greenfield World Trade, Inc. Acquisition Date 01/31/25 18th Amendment Last Out Term Loan - 17.77% inc PIK (SOFR + 13.33%, 1.50% Floor, all PIK) % of Net Assets 0.4% Maturity Date 05/22/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "17.77"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '01/31/25 18th Amendment Last Out Term Loan - 17.77 % inc PIK ( SOFR + 13.33 %, 1.50 % Floor, all PIK) 0.4 % 3,030,025 05/22/25 3,030,025 1,981,636 Greenfield World Trade, Inc. 03/04' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Household Durables Greenfield World Trade, Inc. Acquisition Date 03/04/19 Last Out Term Loan - 17.77% inc PIK (SOFR + 13.33%, 1.50% Floor, all PIK) % of Net Assets 12.6% Maturity Date 05/22/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "17.77"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '03/04/19 Last Out Term Loan - 17.77 % inc PIK ( SOFR + 13.33 %, 1.50 % Floor, all PIK) 12.6 % 98,520,241 05/22/25 98,397,895 64,432,238 18.7 % 132,109,476 131,987,130' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 12.07% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.07"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 12.07 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.3 % 3,672,937 09/28/25 3,267,678 1,520,596 Encompass Digital Media, Inc. (4)(' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 12.07% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 3.2% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.07"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 12.07 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) 3.2 % 39,155,547 09/28/25 35,633,236 16,210,396 3.5 % 42,828,484 38,900,914 17,' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Software Mondee, Inc. Secured Super-Priority Debtor-In-Possession Term Loan Acquisition Date 01/17/25 Delayed Draw Term Loan - 14.56% inc PIK (SOFR + 10.00%, 1.75% Floor, all PIK)) % of Net Assets 12.3% Maturity Date 04/24/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.56"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '01/17/25 Delayed Draw Term Loan - 14.56 % inc PIK ( SOFR + 10.00 %, 1.75 % Floor, all PIK) 12.3 % 62,837,202 04/24/25 62,837,202 62,837,202 Mondee Holdings LLC 12/20/19 T' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands TopCo, LLC (fka Centric Brands Inc.) Acquisition Date 02/06/24 Term Loan A-2 - 12.30% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 3.1% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.30"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 12.30 % inc PIK ( SOFR + 8.00 %, 1.00 % Floor, all PIK) 3.1 % 15,703,240 02/06/31 15,382,421 15,703,240 Live Comfortably Borrower LLC (' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19 Revolver - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK) % of Net Assets 1.8%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 1.8 % 11,688,203 04/30/28 11,688,203 9,245,368 WDE TorcSill Holdings LLC (2) 10' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19, Term Loan - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK), % of Net Assets 4.0%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 4.0 % 26,131,683 04/30/28 26,131,683 20,670,161 WDE TorcSill Holdings LLC (2) 0' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 14.93% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 9.2% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.93"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 14.93 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) 9.2 %' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 12.93% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 2.7% Maturity Date 02/01/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.93"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 12.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 2.7 % 51,151,201 02/01/26 33,902,510 13,043,556 11.9 % 95,849,487 78,593,288 57' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 05/27/22 Delayed Draw Term Loan - 14.56% inc PIK (SOFR + 10.00%, 1.50% Floor, all PIK) % of Net Assets 4.3% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.56"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '05/27/22 Delayed Draw Term Loan - 14.56 % inc PIK ( SOFR + 10.00 %, 1.50 % Floor, all PIK) 4.3 % 20,582,867 09/21/29 20,582,862 20,582,867 8.4 % 40,423,020 40,423,015 40,' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 09/21/20 Term Loan - 14.54% inc PIK (SOFR + 10.00%, 1.50% Floor, all PIK) % of Net Assets 4.1% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.54"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/21/20 Term Loan - 14.54 % inc PIK (SOFR + 10.00 %, 1.50 % Floor, all PIK) 4.1 % 19,840,153 09/21/29 19,840,153 19,840,153 AGY Holdings Corp. 05/27/22 Del' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Revolver - 10.92% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.2% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.92"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Revolver - 10.92 % inc PIK ( SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.2 % 1,000,281 04/13/29 1,000,281 928,261 Outform Group, Inc. (fka Rapid Displ' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Term Loan - 10.92% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 2.7% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.92"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Term Loan - 10.92 % inc PIK ( SOFR + 6.50 %, 1.00 % Floor, all PIK) 2.7 % 14,303,012 04/13/29 14,278,482 13,273,195 Outform Group, Inc. (fka Rapid' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 09/29/22 Incremental Term Loan - 10.92% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.0% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.92"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/29/22 Incremental Term Loan - 10.92 % inc PIK ( SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.0 % 253,203 04/13/29 252,114 234,973 2.9 % 15,556,496 15,530,877 14,436,429 C' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,136,883 06/18/26 1,136,883 1,136,883 Twin Star International, Inc. 06/1' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,112,147 06/18/26 1,112,147 1,112,147 Twin Star International, Inc. (5)(' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 1,135,512 06/18/26 1,135,512 1,135,512 Twin Star International, Inc. 10/1' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 1.5% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 1.5 % 57,301,653 06/18/26 44,197,191 7,391,913 Twin Star International, Inc. 02' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/20/24 Protective Advance Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.5% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/20/24 Protective Advance Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.5 % 2,232,820 06/18/26 2,232,820 2,232,820 Twin Star International, Inc. 10/0' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Delayed Draw Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Delayed Draw Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 748,889 06/18/26 748,889 748,889 3 TCW Direct Lending VII LLC Consolidate' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 337,729 06/18/26 337,729 337,729 Twin Star International, Inc. 10/03/24 1' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.7% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.7 % 3,221,941 06/18/26 3,203,514 3,221,941 Twin Star International, Inc. 06/2' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 11.95% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.95"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 11.95 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 567,579 06/18/26 567,579 567,579 Twin Star International, Inc. 10/19/23 7' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure RL Investor Holdings LLC (fka Red Lobster Management, LLC), Acquisition Date 09/16/24, Term Loan - 11.80% inc PIK (SOFR + 7.50%, 2.00% Floor, all PIK) % of Net Assets 11.0% Maturity Date 09/16/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.80"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/16/24 Term Loan - 11.80 % inc PIK ( SOFR + 7.50 %, 2.00 % Floor, all PIK) 11.0 % 53,115,018 09/16/29 53,115,018 53,115,018 15.8 % 77,015,966 76,915,433 7' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Household Durables Slogic Holding Corp. Acquisition Date 06/29/18 Last Out Term Loan \u2013 10.35% (SOFR + 5.87%, 1.00% Floor, all PIK) % of Net Assets 4.0% Maturity Date 10/29/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/29/18 Last Out Term Loan - 10.35 % inc PIK (SOFR + 5.87 %, 1.00 % Floor, all PIK) 4.0 % 27,379,216 10/29/26 27,379,216 19,165,451 The Legacy Companies, LLC (fka' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Household Durables Slogic Holding Corp. Acquisition Date 08/25/23 Revolver \u2013 10.32% (SOFR + 5.87%, 1.00% Floor all PIK) % of Net Assets 0.8% Maturity Date 06/30/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/25/23 Revolver - 10.32 % inc PIK (SOFR + 5.87 %, 1.00 % Floor, all PIK) 0.8 % 3,658,289 06/30/26 3,658,289 3,658,289 Slogic Holding Corp. (4) 06/29/18' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 06/23/25 First Out Term Loan \u2013 9.94% (SOFR + 5.50%, 1.50% Floor, all PIK) % of Net Assets 1.1% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.94"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/23/25 First Out Term Loan - 9.94 % inc PIK (SOFR + 5.50 %, 1.50 % Floor, all PIK) 1.1 % 5,314,678 06/23/28 5,314,678 5,314,678 The Legacy Companies, LLC (fka Gre' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 06/23/25 Last Out Term Loan \u2013 9.94% (SOFR + 5.50%, 1.50% Floor, all PIK) % of Net Assets 7.4% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.94"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/23/25 Last Out Term Loan - 9.94 % inc PIK (SOFR + 5.50 %, 1.00 % Floor, all PIK) 7.4 % 35,580,354 06/23/28 35,580,354 35,580,354 13.3 % 71,932,537 71,932,537 63' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 12.05% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.05"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 12.05 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.3 %' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 12.05% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 3.2% Maturity Date 09/28/25",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.05"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 12.05 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 3.2 % 40,360,392 09/28/25 35,633,236 15,377,309 3.5 % 44,148,092 38,900,914 16,' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Software Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Acquisition Date 04/03/25 Term Loan B - 10.30% (SOFR + 6.00%, 1.75% Floor, all PIK) % of Net Assets 11.1% Maturity Date 10/03/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.30"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/03/25 Term Loan B - 10.30 % inc PIK ( SOFR + 6.00 %, 1.75 % Floor, all PIK) 11.1 % 53,807,346 10/03/28 53,807,346 53,807,346 12.1 % 58,650,346 58,650,346 5' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands TopCo, LLC (fka Centric Brands Inc.) Acquisition Date 02/06/24 Term Loan A-2 - 12.26% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 3.3% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.26"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 12.26 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 3.3 % 16,180,822 02/06/31 15,873,823 16,180,822 Live Comfortably Borrower LLC (' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19 Revolver - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK) % of Net Assets 1.8%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 1.8 % 12,391,743 04/30/28 12,391,743 8,711,395 WDE TorcSill Holdings LLC (2) 10' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19, Term Loan - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK), % of Net Assets 4.0%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 4.0 % 27,538,497 04/30/28 27,538,497 19,359,563 WDE TorcSill Holdings LLC (2) 0' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 14.76% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 10.2% Maturity Date 02/01/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.76"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 14.76 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) 10.2 %' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 12.76% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 3.2% Maturity Date 02/01/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.76"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 12.76 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 3.2 % 53,052,704 02/01/27 34,088,673 14,695,599 13.4 % 99,478,465 80,510,139 61' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 05/27/22 Delayed Draw Term Loan - 14.26% inc PIK (SOFR + 10.00%, 1.50% Floor, all PIK) % of Net Assets 4.7% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.26"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '05/27/22 Delayed Draw Term Loan - 14.26 % inc PIK (SOFR + 10.00 %, 1.50 % Floor, all PIK) 4.7 % 21,358,113 09/21/29 21,358,109 21,358,113 9.2 % 41,945,682 41,945,678 41,' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 09/21/20 Term Loan - 14.57% inc PIK (SOFR + 10.00%, 1.50% Floor, all PIK) % of Net Assets 4.5% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.57"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/21/20 Term Loan - 14.57 % inc PIK (SOFR + 10.00 %, 1.50 % Floor, all PIK) 4.5 % 20,587,569 09/21/29 20,587,569 20,587,569 AGY Holdings Corp. 05/27/22 Del' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Revolver - 10.88% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.2% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.88"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Revolver - 10.88 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.2 % 1,102,247 04/13/29 1,086,516 997,533 Outform Group, Inc. (fka Rapid Displ' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Term Loan - 10.88% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 2.9% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.88"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Term Loan - 10.88 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 2.9 % 14,706,477 04/13/29 14,689,839 13,309,362 Outform Group, Inc. (fka Rapid' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 09/29/22 Incremental Term Loan - 10.88% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.1% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.88"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/29/22 Incremental Term Loan - 10.88 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.1 % 260,346 04/13/29 259,607 235,613 3.2 % 16,069,070 16,035,962 14,542,508 C' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 11.65% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 11.65 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 1,171,589 06/18/26 1,171,589 1,171,589 Twin Star International, Inc. 06/1' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 11.65% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 11.65 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 1,146,098 06/18/26 1,146,098 1,146,098 Twin Star International, Inc. (5)(' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 11.65% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 11.65 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 1,170,177 06/18/26 1,170,177 1,170,177 Twin Star International, Inc. 10/1' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 11.65% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 11.65 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 59,050,939 06/18/26 44,197,191 1,476,273 Twin Star International, Inc. 02' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/20/24 Protective Advance Term Loan - 11.65% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.5% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/20/24 Protective Advance Term Loan - 11.65 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.5 % 2,300,983 06/18/26 2,300,983 2,300,983 Twin Star International, Inc. 10/0' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Delayed Draw Term Loan - 11.65% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Delayed Draw Term Loan - 11.65 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 771,751 06/18/26 771,751 771,751 3 TCW Direct Lending VII LLC Consolidate' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Term Loan - 11.65% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Term Loan - 11.65 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 348,039 06/18/26 348,039 348,039 Twin Star International, Inc. 10/03/24 1' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.65% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.7% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.65 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.7 % 3,320,299 06/18/26 3,301,872 3,320,299 Twin Star International, Inc. 06/2' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 11.65% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 11.65 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 584,906 06/18/26 584,906 584,906 Twin Star International, Inc. 10/19/23 7' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure RL Investor Holdings LLC (fka Red Lobster Management, LLC), Acquisition Date 09/16/24, Term Loan - 11.50% inc PIK (SOFR + 7.50%, 2.00% Floor, all PIK) % of Net Assets 12.0% Maturity Date 09/16/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.50"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/16/24 Term Loan - 11.50 % inc PIK (SOFR + 7.50 %, 2.00 % Floor, all PIK) 12.0 % 54,716,135 09/16/29 54,716,135 54,716,135 17.1 % 78,564,671 78,477,594 7' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Household Durables Slogic Holding Corp. Acquisition Date 06/29/18 Last Out Term Loan \u2013 10.19% inc PIK (SOFR + 5.87%, 1.00% Floor, all PIK) % of Net Assets 3.9% Maturity Date 10/29/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.19"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/29/18 Last Out Term Loan - 10.19 % inc PIK ( SOFR + 5.87 %, 1.00 % Floor, all PIK) 3.9 % 28,103,384 10/29/26 28,103,384 17,508,408 The Legacy Companies, LLC (fka' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Household Durables Slogic Holding Corp. Acquisition Date 08/25/23 Revolver \u2013 10.02% inc PIK (SOFR + 5.87%, 1.00% Floor all PIK) % of Net Assets 0.9% Maturity Date 06/30/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.02"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/25/23 Revolver - 10.02 % inc PIK ( SOFR + 5.87 %, 1.00 % Floor, all PIK) 0.9 % 4,064,839 06/30/26 4,064,839 4,064,839 Slogic Holding Corp. (4) 06/29/18' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 06/23/25 First Out Term Loan \u2013 9.77% inc PIK (SOFR + 5.50%, 1.50% Floor, all PIK) % of Net Assets 1.2% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.77"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/23/25 First Out Term Loan - 9.77 % inc PIK ( SOFR + 5.50 %, 1.50 % Floor, all PIK) 1.2 % 5,460,101 06/23/28 5,460,101 5,460,101 The Legacy Companies, LLC (fka Gre' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 06/23/25 Last Out Term Loan \u2013 9.77% inc PIK (SOFR + 5.50%, 1.00% Floor, all PIK) % of Net Assets 8.0% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.77"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/23/25 Last Out Term Loan - 9.77 % inc PIK ( SOFR + 5.50 %, 1.00 % Floor, all PIK) 8.0 % 36,553,925 06/23/28 36,553,925 36,553,925 14.0 % 74,182,249 74,182,249 63' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 11.91% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 09/28/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.91"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 11.91 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.3 %' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 11.91% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 3.4% Maturity Date 09/28/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.91"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 11.91 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) 3.4 % 41,618,479 09/28/26 35,633,236 15,357,219 3.7 % 45,526,020 38,900,914 16,' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Software Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Acquisition Date 04/03/25 Delayed Draw Term Loan - 10.00% inc PIK (SOFR + 6.00%, 2.50% Floor, all PIK) % of Net Assets 3.0% Maturity Date 10/03/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/03/25 Delayed Draw Term Loan - 10.00 % inc PIK ( SOFR + 6.00 %, 2.50 % Floor, all PIK) 3.0 % 13,543,010 10/03/28 13,543,010 13,543,010 Tabhi Purchaser, LLC (fka Monde' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Software Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Acquisition Date 04/03/25 Term Loan B - 10.00% inc PIK (SOFR + 6.00%, 1.75% Floor, all PIK) % of Net Assets 12.1% Maturity Date 10/03/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/03/25 Term Loan B - 10.00 % inc PIK (SOFR + 6.00 %, 1.75 % Floor, all PIK) 12.1 % 55,223,071 10/03/28 55,223,071 55,223,071 15.1 % 68,766,081 68,766,081 6' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands TopCo, LLC (fka Centric Brands Inc.) Acquisition Date 02/06/24 Term Loan A-2 - 12.25% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 3.7% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.25"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 12.25 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 3.7 % 16,687,804 02/06/31 16,394,610 16,687,804 Live Comfortably Borrower LLC (' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19 Revolver - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK) % of Net Assets 1.9%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 1.9 % 13,154,336 04/30/28 13,154,336 8,800,251 WDE TorcSill Holdings LLC (2) 10' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19, Term Loan - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK), % of Net Assets 4.3%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 4.3 % 29,380,330 04/30/28 29,380,330 19,655,441 WDE TorcSill Holdings LLC (2) 0' (0001193125-25-276898)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 14.32% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 10.5% Maturity Date 02/01/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 14.32 % inc PIK ( SOFR + 10.50 %, 1.50 % Floor, all PIK) 10.5 %' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 12.32% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 3.0% Maturity Date 02/01/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 12.32 % inc PIK ( SOFR + 8.50 %, 1.50 % Floor, all PIK) 3.0 % 52,450,525 02/01/27 34,088,673 12,902,829 13.5 % 98,268,798 79,897,155 58' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 05/27/22 Delayed Draw Term Loan - 4.18% inc PIK (SOFR + 0.25%, 1.50% Floor, all PIK) % of Net Assets 5.0% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "4.18"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '05/27/22 Delayed Draw Term Loan - 4.18 % inc PIK ( SOFR + 0.25 %, 1.50 % Floor, all PIK) 5.0 % 21,868,403 09/21/29 21,868,398 21,868,403 9.8 % 42,947,622 42,947,617 42,' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 09/21/20 Term Loan - 4.35% inc PIK (SOFR + 0.25%, 1.50% Floor, all PIK) % of Net Assets 4.8% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "4.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/21/20 Term Loan - 4.35 % inc PIK ( SOFR + 0.25 %, 1.50 % Floor, all PIK) 4.8 % 21,079,219 09/21/29 21,079,219 21,079,219 AGY Holdings Corp. 05/27/22 Del' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Revolver - 10.47% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.2% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.47"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Revolver - 10.47 % inc PIK ( SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.2 % 1,086,482 04/13/29 1,060,333 1,004,996 Outform Group, Inc. (fka Rapid Dis' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Term Loan - 10.47% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 3.2% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.47"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Term Loan - 10.47 % inc PIK ( SOFR + 6.50 %, 1.00 % Floor, all PIK) 3.2 % 15,104,678 04/13/29 15,095,929 13,971,827 Outform Group, Inc. (fka Rapid' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 09/29/22 Incremental Term Loan - 10.47% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.1% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.47"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/29/22 Incremental Term Loan - 10.47 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.1 % 267,395 04/13/29 267,007 247,340 3.5 % 16,458,555 16,423,269 15,224,163 C' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 11.32% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 1,206,475 06/18/26 1,206,475 1,206,475 Twin Star International, Inc. 06/1' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 11.32% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 1,180,224 06/18/26 1,180,224 1,180,224 Twin Star International, Inc. (5)(' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 11.32% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 1,205,020 06/18/26 1,205,020 1,205,020 Twin Star International, Inc. 10/1' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 11.32% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 60,809,243 06/18/26 44,197,191 1,094,566 Twin Star International, Inc. 02' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/20/24 Protective Advance Term Loan - 11.32% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.5% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/20/24 Protective Advance Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.5 % 2,369,497 06/18/26 2,369,497 2,369,497 Twin Star International, Inc. 10/0' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Delayed Draw Term Loan - 11.32% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Delayed Draw Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 794,731 06/18/26 794,731 794,731 F- 4 TCW DIRECT LENDING VII LLC Consolid' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Term Loan - 11.98% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 358,402 06/18/26 358,402 358,402 Twin Star International, Inc. 10/03/24 1' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.32% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.8% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.8 % 3,419,165 06/18/26 3,400,738 3,419,165 Twin Star International, Inc. 06/2' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 11.32% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.32"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 11.32 % inc PIK ( SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 602,322 06/18/26 602,322 602,322 Twin Star International, Inc. 10/19/23 7' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Energy Equipment & Services WDE TorcSill Holdings LLC Acquisition Date 08/13/24 Protective Advance Term Loan - 25.00% inc PIK (Prime + 18.25%, 4.60% Floor all PIK) % of Net Assets 0.8% Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "25.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/13/24 Protective Advance Term Loan - 25.00 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.8 % 3,088,490 04/30/28 3,088,490 3,442,740 7.9 % 44,758,376 44,758,376 34,153' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Energy Equipment & Services WDE TorcSill Holdings LLC Acquisition Date 10/22/19 Revolver - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK) % of Net Assets 2.2% Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 2.2 % 12,886,962 04/30/28 12,886,962 9,497,820 WDE TorcSill Holdings LLC (2) 10' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Energy Equipment & Services WDE TorcSill Holdings LLC Acquisition Date 10/22/19 Term Loan - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor all PIK) % of Net Assets 4.9% Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 4.9 % 28,782,924 04/30/28 28,782,924 21,213,303 WDE TorcSill Holdings LLC (2) 0' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure RL Investor Holdings LLC (fka Red Lobster Management, LLC) Acquisition Date 09/16/24 Term Loan - 11.17% inc PIK (SOFR + 7.50%, 2.00% Floor, all PIK) % of Net Assets 12.9% Maturity Date 09/16/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.17"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/16/24 Term Loan - 11.17 % inc PIK ( SOFR + 7.50 %, 2.00 % Floor, all PIK) 12.9 % 56,324,391 09/16/29 56,324,391 56,324,391 18.2 % 80,132,417 80,058,757 7' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Household Durables Slogic Holding Corp. Acquisition Date 06/29/18 Last Out Term Loan \u2013 19.81% inc PIK (SOFR + 5.87%, 1.00% Floor, all PIK) % of Net Assets 4.0% Maturity Date 10/29/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.81"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/29/18 Last Out Term Loan - 9.81 % inc PIK ( SOFR + 5.87 %, 1.00 % Floor, all PIK) 4.0 % 28,819,404 10/29/26 28,819,404 17,637,475 The Legacy Companies, LLC (fka' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Household Durables Slogic Holding Corp. Acquisition Date 08/25/23 Revolver \u2013 9.69% inc PIK (SOFR + 5.87%, 1.00% Floor all PIK) % of Net Assets 1.0% Maturity Date 06/30/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.69"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/25/23 Revolver - 9.69 % inc PIK ( SOFR + 5.87 %, 1.00 % Floor, all PIK) 1.0 % 4,170,077 06/30/26 4,170,077 4,170,077 Slogic Holding Corp. (4) 06/29/18' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 06/23/25 First Out Term Loan \u2013 9.44% inc PIK (SOFR + 5.50%, 1.50% Floor, all PIK) % of Net Assets 1.3% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.44"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/23/25 First Out Term Loan - 9.44 % inc PIK ( SOFR + 5.50 %, 1.00 % Floor, all PIK) 1.3 % 5,460,101 06/23/28 5,460,101 5,460,101 The Legacy Companies, LLC (fka Gre' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 06/23/25 Last Out Term Loan \u2013 9.44% inc PIK (SOFR + 5.50%, 1.00% Floor, all PIK) % of Net Assets 8.4% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.44"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/23/25 Last Out Term Loan - 9.44 % inc PIK ( SOFR + 5.50 %, 1.00 % Floor, all PIK) 8.4 % 36,553,925 06/23/28 36,553,925 36,553,925 The Legacy Companies, LLC (fka' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 10/27/25 1st Amendment First Out Term Loan \u2013 9.44% inc PIK (SOFR + 5.50%, 1.00% Floor, all PIK) % of Net Assets 1.3% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.44"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/27/25 1st Amendment First Out Term Loan - 9.44 % inc PIK ( SOFR + 5.50 %, 1.00 % Floor, all PIK) 1.3 % 5,692,857 06/23/28 5,692,857 5,692,857 16.0 % 80,696,364 80,696,364 69,51' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 11.42% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 09/28/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.42"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 11.42 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.3 %' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 11.42% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 2.9% Maturity Date 09/28/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.42"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 11.42 % inc PIK ( SOFR + 7.75 %, 1.50 % Floor, all PIK) 2.9 % 42,880,913 09/28/26 35,633,236 12,564,108 3.2 % 46,908,757 38,900,914 13,' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Software Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Acquisition Date 04/03/25 Delayed Draw Term Loan - 9.67% inc PIK (SOFR + 6.00%, 2.50% Floor, all PIK) % of Net Assets 3.2% Maturity Date 10/03/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.67"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/03/25 Delayed Draw Term Loan - 9.67 % inc PIK ( SOFR + 6.00 %, 2.50 % Floor, all PIK) 3.2 % 13,889,161 10/03/28 13,889,161 13,889,161 Tabhi Purchaser, LLC (fka Monde' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Software Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Acquisition Date 04/03/25 Term Loan B - 9.67% inc PIK (SOFR + 6.00%, 1.75% Floor, all PIK) % of Net Assets 13.0% Maturity Date 10/03/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.67"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/03/25 Term Loan B - 9.67 % inc PIK ( SOFR + 6.00 %, 1.75 % Floor, all PIK) 13.0 % 56,634,539 10/03/28 56,634,539 56,634,539 16.2 % 70,523,700 70,523,700 7' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands TopCo, LLC (fka Centric Brands Inc.) Acquisition Date 02/06/24 Term Loan A-2 - 11.89% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 3.9% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.89"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 11.89 % inc PIK ( SOFR + 8.00 %, 1.00 % Floor, all PIK) 3.9 % 17,210,425 02/06/31 16,931,034 17,210,425 Live Comfortably Borrower LLC (' (0001193125-26-141887)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 07/27/23 Super Senior Revolver - 14.27% inc PIK (SOFR + 10.50%, 1.50% Floor, all PIK) % of Net Assets 10.3% Maturity Date 02/01/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "14.27"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '07/27/23 Super Senior Revolver - 14.27 % inc PIK (SOFR + 10.50 %, 1.50 % Floor, all PIK) 10.3 %' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 12.27% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 2.5% Maturity Date 02/01/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.27"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 12.27 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 2.5 % 52,450,525 02/01/27 34,088,673 11,381,764 12.8 % 98,268,798 79,894,831 57' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 05/27/22 Delayed Draw Term Loan - 4.21% inc PIK (SOFR + 0.25%, 1.50% Floor, all PIK) % of Net Assets 5.4% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "4.21"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '05/27/22 Delayed Draw Term Loan - 4.21 % inc PIK (SOFR + 0.25 %, 1.50 % Floor, all PIK) 5.4 % 24,246,520 09/21/29 24,246,515 24,246,520 10.2 % 45,549,772 45,549,767 45' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 09/21/20 Term Loan - 4.18% inc PIK (SOFR + 0.25%, 1.50% Floor, all PIK) % of Net Assets 4.8% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "4.18"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/21/20 Term Loan - 4.18 % inc PIK (SOFR + 0.25 %, 1.50 % Floor, all PIK) 4.8 % 21,303,252 09/21/29 21,303,252 21,303,252 AGY Holdings Corp. 05/27/22 Del' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Term Loan - 10.27% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 3.2% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.27"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Term Loan - 10.27 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 3.2 % 14,343,009 04/13/29 14,342,072 14,343,009 Outform Group, Inc. (fka Rapid' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 09/29/22 Incremental Term Loan - 10.27% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.1% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.27"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/29/22 Incremental Term Loan - 10.27 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.1 % 253,912 04/13/29 253,870 253,912 3.3 % 14,596,921 14,595,942 14,596,921 C' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 11.35% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 11.35 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 1,240,624 06/18/26 1,240,624 549,596 Twin Star International, Inc. 06/12/' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 11.35% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 11.35 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 1,213,630 06/18/26 1,213,630 537,638 Twin Star International, Inc. (5)(8)' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 11.35% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 11.35 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 1,239,128 06/18/26 1,239,128 548,934 Twin Star International, Inc. 10/19/' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 11.35% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.0% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 11.35 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 62,530,440 06/18/26 44,197,191 - Twin Star International, Inc. 02/15/23 D' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/20/24 Protective Advance Term Loan - 11.35% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.7% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/20/24 Protective Advance Term Loan - 11.35 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.7 % 3,284,503 06/18/26 3,284,503 3,284,503 Twin Star International, Inc. 10/0' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Delayed Draw Term Loan - 11.35% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.2% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Delayed Draw Term Loan - 11.35 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.2 % 817,226 06/18/26 817,226 817,226 3 TCW Direct Lending VII LLC Consolidate' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Term Loan - 11.35% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Term Loan - 11.35 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 368,547 06/18/26 368,547 368,547 Twin Star International, Inc. 10/03/24 1' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.35% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.35 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.3 % 3,515,944 06/18/26 3,400,738 1,557,563 Twin Star International, Inc. 06/2' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 11.35% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.1% Maturity Date 06/18/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 11.35 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.1 % 619,371 06/18/26 619,371 274,381 Twin Star International, Inc. 10/19/23 7' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure RL Investor Holdings LLC (fka Red Lobster Management, LLC), Acquisition Date 09/16/24, Term Loan - 11.20% inc PIK (SOFR + 7.50%, 2.00% Floor, all PIK) % of Net Assets 12.4% Maturity Date 09/16/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.20"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/16/24 Term Loan - 11.20 % inc PIK (SOFR + 7.50 %, 2.00 % Floor, all PIK) 12.4 % 57,897,523 09/16/29 57,897,523 55,228,447 RL Investor Holdings LLC (fka' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 06/23/25 First Out Term Loan \u2013 9.46% inc PIK (SOFR + 5.50%, 1.00% Floor, all PIK) % of Net Assets 1.2% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.46"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/23/25 First Out Term Loan - 9.46 % inc PIK (SOFR + 5.50 %, 1.00 % Floor, all PIK) 1.2 % 5,460,101 06/23/28 5,460,101 5,460,101 The Legacy Companies, LLC (fka Gre' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 06/23/25 Last Out Term Loan \u2013 9.46% inc PIK (SOFR + 5.50%, 1.00% Floor, all PIK) % of Net Assets 8.2% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.46"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/23/25 Last Out Term Loan - 9.46 % inc PIK (SOFR + 5.50 %, 1.00 % Floor, all PIK) 8.2 % 36,553,925 06/23/28 36,553,925 36,553,925 The Legacy Companies, LLC (fka' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Household Durables The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Acquisition Date 10/27/25 1st Amendment First Out Term Loan \u2013 9.46% inc PIK (SOFR + 5.50%, 1.00% Floor, all PIK) % of Net Assets 1.3% Maturity Date 06/23/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.46"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/27/25 1st Amendment First Out Term Loan - 9.46 % inc PIK ( SOFR + 5.50 %, 1.00 % Floor, all PIK) 1.3 % 5,692,857 06/23/28 5,692,857 5,692,857 15.8 % 81,298,118 81,298,118 70,35' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 11.45% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 09/28/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.45"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 11.45 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.3 %' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 11.45% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 2.8% Maturity Date 09/28/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.45"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 11.45 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 2.8 % 44,117,032 09/28/27 35,633,236 12,705,705 3.1 % 48,262,720 38,900,914 13,' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Software Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Acquisition Date 04/03/25 Delayed Draw Term Loan - 9.70% inc PIK (SOFR + 6.00%, 2.50% Floor, all PIK) % of Net Assets 3.2% Maturity Date 10/03/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.70"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/03/25 Delayed Draw Term Loan - 9.70 % inc PIK (SOFR + 6.00 %, 2.50 % Floor, all PIK) 3.2 % 14,224,999 10/03/28 14,224,999 14,224,999 Tabhi Purchaser, LLC (fka Monde' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Software Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Acquisition Date 04/03/25 Term Loan B - 9.70% inc PIK (SOFR + 6.00%, 1.75% Floor, all PIK) % of Net Assets 13.0% Maturity Date 10/03/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.70"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/03/25 Term Loan B - 9.70 % inc PIK (SOFR + 6.00 %, 1.75 % Floor, all PIK) 13.0 % 58,003,954 10/03/28 58,003,954 58,003,954 16.2 % 72,228,953 72,228,953 7' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands TopCo, LLC (fka Centric Brands Inc.) Acquisition Date 02/06/24 Term Loan A-2 - 11.67% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 4.0% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.67"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 11.67 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 4.0 % 17,733,224 02/06/31 17,467,338 17,733,224 Live Comfortably Borrower LLC (' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 08/13/24 , Protective Advance Term Loan - 25.50% inc PIK (PRIME + 18.25%, 4.60% Floor, all PIK), % of Net Assets 0.8%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "25.00"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/13/24 Protective Advance Term Loan - 25.00 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.8 % 3,088,490 04/30/28 3,088,490 3,635,153 7.0 % 44,758,376 44,758,376 31,595' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19 Revolver - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK) % of Net Assets 1.9%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Revolver - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 1.9 % 12,886,962 04/30/28 12,886,962 8,647,151 WDE TorcSill Holdings LLC (2) 10' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19, Term Loan - 23.35% inc PIK (SOFR + 18.75%, 4.60% Floor, all PIK), % of Net Assets 4.3%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "23.35"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Term Loan - 23.35 % inc PIK ( SOFR + 18.75 %, 4.60 % Floor, all PIK) 4.3 % 28,782,924 04/30/28 28,782,924 19,313,342 WDE TorcSill Holdings LLC (2) 0' (0001193125-26-221880)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Aerospace & Defense Navistar Defense, LLC Acquisition Date 08/01/22 Term Loan - 12.24% inc PIK (SOFR + 8.50%, 1.50% Floor, all PIK) % of Net Assets 1.7% Maturity Date 02/01/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.24"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/01/22 Term Loan - 12.24 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 1.7 % 52,450,525 02/01/27 34,088,673 7,815,128 11.9 % 98,268,798 79,895,573 53,' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 05/27/22 Delayed Draw Term Loan - 4.24% inc PIK (SOFR + 0.25%, 1.50% Floor, all PIK) % of Net Assets 5.5% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "4.24"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '05/27/22 Delayed Draw Term Loan - 4.24 % inc PIK (SOFR + 0.25 %, 1.50 % Floor, all PIK) 5.5 % 24,505,541 09/21/29 24,505,536 24,505,541 10.3 % 46,034,469 46,034,464 46' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Chemicals AGY Holdings Corp. Acquisition Date 09/21/20 Term Loan - 4.18% inc PIK (SOFR + 0.25%, 1.50% Floor, all PIK) % of Net Assets 4.8% Maturity Date 09/21/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "4.18"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/21/20 Term Loan - 4.18 % inc PIK (SOFR + 0.25 %, 1.50 % Floor, all PIK) 4.8 % 21,528,928 09/21/29 21,528,928 21,528,928 AGY Holdings Corp. 05/27/22 Del' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Revolver - 10.22% inc PIK (SOFR + 6.50%, 1.00% Floor, all PIK) % of Net Assets 0.0% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.22"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Revolver - 10.22 % inc PIK ( SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.0 % 7,437 04/13/29 7,437 7,437 Outform Group, Inc. (fka Rapid Displays, Inc.)' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 04/16/21 Term Loan - 10.22% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 3.0% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.22"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/16/21 Term Loan - 10.22 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 3.0 % 13,555,045 04/13/29 13,555,045 13,555,045 Outform Group, Inc. (fka Rapid' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Commercial & Professional Services Outform Group, Inc. (fka Rapid Displays, Inc.) Acquisition Date 09/29/22 Incremental Term Loan - 10.22% inc PIK (SOFR + 6.50%, 1.00% Floor all PIK) % of Net Assets 0.1% Maturity Date 04/13/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "10.22"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/29/22 Incremental Term Loan - 10.22 % inc PIK (SOFR + 6.50 %, 1.00 % Floor, all PIK) 0.1 % 239,963 04/13/29 239,963 239,963 3.1 % 13,802,445 13,802,445 13,802,445 C' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 02/15/23 Delayed Draw Term Loan - 11.38% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.0% Maturity Date 12/31/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.38"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/15/23 Delayed Draw Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 1,276,216 12/31/26 1,276,216 - Twin Star International, Inc. (5)(8) 06/12' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Delayed Draw Term Loan - 11.38% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.0% Maturity Date 12/31/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.38"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Delayed Draw Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 1,248,449 12/31/26 1,248,449 - Twin Star International, Inc. (5)(8) 06/18' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/12/23 Incremental Term Loan - 11.38% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.0% Maturity Date 12/31/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.38"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/12/23 Incremental Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 1,274,678 12/31/26 1,274,678 - Twin Star International, Inc. (5)(8) 10/19' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 11.38% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.0% Maturity Date 12/31/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.38"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/18/21 Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 64,324,394 12/31/26 44,197,191 - Twin Star International, Inc. (5)(8) 02/' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 06/20/24 Protective Advance Term Loan - 11.38% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 1.1% Maturity Date 12/31/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.38"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '06/20/24 Protective Advance Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 1.1 % 5,096,720 12/31/26 5,096,720 5,096,720 Twin Star International, Inc. 10/0' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Delayed Draw Term Loan - 11.38% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.0% Maturity Date 12/31/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.38"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Delayed Draw Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 840,671 12/31/26 840,671 - 3 TCW Direct Lending VII LLC Consolidated Sche' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/03/24 13th Amendment Term Loan - 11.38% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.0% Maturity Date 12/31/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.38"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/03/24 13th Amendment Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 379,120 12/31/26 379,120 - Twin Star International, Inc. 10/03/24 13th Am' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.38% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.0% Maturity Date 12/31/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.38"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Delayed Draw Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 3,616,814 12/31/26 3,501,608 - Twin Star International, Inc. 06/20/24 Pro' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Consumer Durables & Apparel Twin Star International, Inc. Acquisition Date 10/19/23 7th Amendment Incremental Term Loan - 11.38% inc PIK (SOFR + 7.50%, 1.50% Floor, all PIK) % of Net Assets 0.0% Maturity Date 12/31/26",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.38"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/19/23 7th Amendment Incremental Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 637,140 12/31/26 637,140 - Twin Star International, Inc. (5)(8) 10/19/23' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Hotels, Restaurants & Leisure RL Investor Holdings LLC (fka Red Lobster Management, LLC), Acquisition Date 09/16/24, Term Loan - 11.23% inc PIK (SOFR + 7.50%, 2.00% Floor, all PIK) % of Net Assets 12.0% Maturity Date 09/16/29",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.23"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '09/16/24 Term Loan - 11.23 % inc PIK (SOFR + 7.50 %, 2.00 % Floor, all PIK) 12.0 % 59,536,609 09/16/29 59,536,609 53,868,724 RL Investor Holdings LLC (fka' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Revolver - 11.39% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 0.3% Maturity Date 09/28/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.39"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Revolver - 11.39 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 0.3 %' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Media Encompass Digital Media, Inc. Acquisition Date 10/01/18 Term Loan - 11.39% inc PIK (SOFR + 7.75%, 1.50% Floor, all PIK) % of Net Assets 3.0% Maturity Date 09/28/27",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.39"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/01/18 Term Loan - 11.39 % inc PIK (SOFR + 7.75 %, 1.50 % Floor, all PIK) 3.0 % 45,406,218 09/28/27 35,633,236 13,304,022 3.3 % 49,307,567 38,539,848 14,' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Software Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Acquisition Date 04/03/25 Delayed Draw Term Loan - 9.73% inc PIK (SOFR + 6.00%, 2.50% Floor, all PIK) % of Net Assets 3.3% Maturity Date 10/03/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.73"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/03/25 Delayed Draw Term Loan - 9.73 % inc PIK (SOFR + 6.00 %, 2.50 % Floor, all PIK) 3.3 % 14,573,774 10/03/28 14,573,774 14,573,774 Tabhi Purchaser, LLC (fka Monde' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Software Tabhi Purchaser, LLC (fka Mondee Holdings LLC) Acquisition Date 04/03/25 Term Loan B - 9.73% inc PIK (SOFR + 6.00%, 1.75% Floor, all PIK) % of Net Assets 13.3% Maturity Date 10/03/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.73"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '04/03/25 Term Loan B - 9.73 % inc PIK (SOFR + 6.00 %, 1.75 % Floor, all PIK) 13.3 % 59,426,121 10/03/28 59,426,121 59,426,121 16.6 % 73,999,895 73,999,895 7' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities Textiles, Apparel & Luxury Goods Centric Brands TopCo, LLC (fka Centric Brands Inc.) Acquisition Date 02/06/24 Term Loan A-2 - 11.65% inc PIK (SOFR + 8.00%, 1.00% Floor, all PIK) % of Net Assets 4.1% Maturity Date 02/06/31",
+  "exact": true,
+  "fields": {
+   "pik_rate": "11.65"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '02/06/24 Term Loan A-2 - 11.65 % inc PIK (SOFR + 8.00 %, 1.00 % Floor, all PIK) 4.1 % 18,244,658 02/06/31 17,992,427 18,244,658 Live Comfortably Borrower LLC (' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 08/13/24 , Protective Advance Term Loan \u2013 12.25% inc PIK (PRIME + 5.50%, 0.00% Floor, all PIK), % of Net Assets 0.9%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "12.25"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '08/13/24 Protective Advance Term Loan - 12.25 % inc PIK (PRIME + 5.50 %, 0.00 % Floor, all PIK) 0.9 % 3,088,490 04/30/28 3,088,490 3,829,728 8.1 % 44,758,376 44,758,376 36,207' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19 Revolver \u2013 9.76% inc PIK (SOFR + 6.00%, 0.00% Floor, all PIK) % of Net Assets 2.2%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.76"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Revolver - 9.76 % inc PIK (SOFR + 6.00 %, 0.00 % Floor, all PIK) 2.2 % 12,886,962 04/30/28 12,886,962 10,013,169 WDE TorcSill Holdings LLC (2) 1' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Debt Securities, Energy Equipment & Services WDE TorcSill Holdings LLC, Acquisition Date 10/22/19, Term Loan \u2013 9.76% inc PIK (SOFR + 6.00%, 0.00% Floor, all PIK), % of Net Assets 5.0%, Maturity Date 04/30/28",
+  "exact": true,
+  "fields": {
+   "pik_rate": "9.76"
+  },
+  "reason": "Printed 'all PIK': the whole coupon is paid in kind and no PIK rate is tagged on the context (only InvestmentInterestRate, spread and floor). Printed line: '10/22/19 Term Loan - 9.76 % inc PIK (SOFR + 6.00 %, 0.00 % Floor, all PIK) 5.0 % 28,782,924 04/30/28 28,782,924 22,364,332 WDE TorcSill Holdings LLC (2) 0' (0001193125-26-346651)."
+ },
+ {
+  "quarter": "2023-03-31",
+  "identifier": "Retail Services WIS Corporation Acquisition Date 05/20/21 Term Loan",
+  "fields": {
+   "issuer_name": "Retail Services WIS Corporation"
+  },
+  "reason": "The member reads 'Debt Securities Commercial Services & Supplies Retail Services WIS Corporation ...'; the issuer pattern takes 'Retail' for an industry heading and published 'Services WIS Corporation'. Printed line: 'Retail Services WIS Corporation 05/20/21 Term Loan - 12.91 % (LIBOR + 7.75 %, 1.00 % Floor) 6.1 % 45,409,275 05/20/25' (0000950170-23-020312)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Retail Services WIS Corporation Acquisition Date 05/20/21 Term Loan",
+  "fields": {
+   "issuer_name": "Retail Services WIS Corporation"
+  },
+  "reason": "As 2023-03-31. Printed line: 'Retail Services WIS Corporation 05/20/21 Term Loan - 13.14 % (SOFR + 7.75 %, 1.00 % Floor) 6.9 % 44,804,763 05/20/25' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Retail Services WIS Corporation Acquisition Date 05/20/21 Term Loan",
+  "fields": {
+   "issuer_name": "Retail Services WIS Corporation"
+  },
+  "reason": "As 2023-03-31. Printed line: 'Retail Services WIS Corporation 05/20/21 Term Loan - 13.89 % (SOFR + 8.35 %, 1.00 % Floor) 7.5 % 44,200,251 05/20/25' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-12-31",
+  "identifier": "Retail Services WIS Corporation Acquisition Date 05/20/21 Term Loan",
+  "fields": {
+   "issuer_name": "Retail Services WIS Corporation"
+  },
+  "reason": "As 2023-03-31. Printed line: 'Retail Services WIS Corporation 05/20/21 Term Loan - 13.85 % (SOFR + 8.35 %, 1.00 % Floor) 7.7 % 43,595,738 05/20/25 43,235,918 44,031,696' (0000950170-24-039058)."
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Retail Services WIS Corporation Acquisition Date 05/20/21 Term Loan",
+  "fields": {
+   "issuer_name": "Retail Services WIS Corporation"
+  },
+  "reason": "As 2023-03-31. Printed line: 'Retail Services WIS Corporation 05/20/21 Term Loan - 13.81 % (SOFR + 8.35 %, 1.00 % Floor) 7.5 % 42,991,226 05/20/25' (0000950170-24-056554)."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Retail Services WIS Corporation Acquisition Date 05/20/21 Term Loan",
+  "fields": {
+   "issuer_name": "Retail Services WIS Corporation"
+  },
+  "reason": "As 2023-03-31. Printed line: 'Retail Services WIS Corporation (9) 05/20/21 Term Loan - 13.83 % (SOFR + 8.35 %, 1.00 % Floor) 7.2 % 42,386,714 05/20/25' (0000950170-24-095230)."
+ },
+ {
+  "quarter": "2023-09-30",
+  "identifier": "Equity Securities Textiles, Apparel & Luxury Goods Centric Brands L.P. Class A LP Interests",
+  "exact": true,
+  "fields": {
+   "fair_value": "134113"
+  },
+  "reason": "The cached XBRL fact on C_b1f67d8d-7766-4361-8d82-53c8fb8e2622 is 0; the page prints 134,113 for the row, and the issuer subtotal beside it prints the same 134,113. Printed line: 'Centric Brands L.P. (3) (5) (6) Class A LP Interests 0.0 % 159,658 - 134,113 0.0 % 319,316 - 134,113' (0000950170-23-060966)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Twin Star International, Inc. Acquisition Date 06/18/21 Term Loan - 12.89%",
+  "fields": {
+   "interest_rate": "12.89",
+   "pik_rate": "12.89"
+  },
+  "reason": "The context carries spread and floor but no rate or PIK fact. Printed line: 'Twin Star International, Inc. (5) 06/18/21 Term Loan - 12.89 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 4.5 % 44,489,932 06/18/26 44,197,185 29,229,885' (0000950170-23-040370); 'all PIK': the whole coupon is paid in kind."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Equity Securities Chemicals AGY Equity LLC Class B Common Units",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Class B Preferred Units",
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY"
+  },
+  "reason": "The member reads 'Class B Common Units' in the 10-Q for 2023-06-30 only; the page prints Class B Preferred Units, as every other filing does. Printed line: 'AGY Equity LLC (2) (5) (6) Class B Preferred Units 0.0 % 10,078,138 - -' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Twin Star International, Inc., Acquisition Date 01/29/25, 4th Amendment Delayed Draw Term Loan",
+  "fields": {
+   "instrument_description": "14th Amendment Delayed Draw Term Loan"
+  },
+  "reason": "The member reads '4th Amendment'; the page prints '14th Amendment', as the member does from 2025-06-30. Printed line: 'Twin Star International, Inc. 01/29/25 14th Amendment Delayed Draw Term Loan - 25.00 % inc PIK ( 25.00 %, Fixed Coupon, all PIK) 0.1 % 347,392 06/18/26 347,392' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2023-06-30",
+  "identifier": "Centric Brands Inc. Acquisition Date 10/09/20 Revolver",
+  "fields": {
+   "basis_spread": "",
+   "reference_rate_type": "",
+   "coupon_type": "Fixed"
+  },
+  "reason": "The page prints a fixed coupon; the filer tagged the 15.00 % coupon as InvestmentBasisSpreadVariableRate (0.15), so the row was published floating with a guessed LIBOR. Printed line: 'Centric Brands Inc. (3) 10/09/20 Revolver - 10.83 % ( 15.00 %, Fixed Coupon, all PIK) 0.5 % 3,245,604 10/09/24 3,234,928 3,245,604' (0000950170-23-040370)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Greenfield World Trade, Inc. Acquisition Date 03/04/19 Last Out Term Loan",
+  "fields": {
+   "interest_rate": "18.29"
+  },
+  "reason": "No rate fact on the context (spread and PIK only). Printed line: 'Greenfield World Trade, Inc. (9) 03/04/19 Last Out Term Loan - 18.29 % inc PIK (SOFR + 13.33 %, 1.50 % Floor, 7.00 % PIK) 14.1 % 88,612,435 03/31/25 87,825,188 77,890,330' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "WDE TorcSill Holdings LLC, Acquisition Date 08/13/24 , Protective Advance Term Loan",
+  "fields": {
+   "interest_rate": "25.75"
+  },
+  "reason": "The all-in rate is tagged as the PIK rate only (PaidInKind 0.2575, no rate fact). Printed line: 'WDE TorcSill Holdings LLC (2) 08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,775,487 04/30/28 2,775,487 2,858,752' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "WDE TorcSill Holdings LLC, Acquisition Date 08/13/24 , Protective Advance Term Loan",
+  "fields": {
+   "interest_rate": "25.75"
+  },
+  "reason": "As 2025-03-31. Printed line: 'WDE TorcSill Holdings LLC (2) 08/13/24 Protective Advance Term Loan - 25.75 % inc PIK ( PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.6 % 2,960,091 04/30/28 2,960,091 3,048,894' (0000950170-25-107431)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Mondee, Inc. Secured Super-Priority Debtor-In-Possession Term Loan Acquisition Date 01/17/25",
+  "fields": {
+   "issuer_name": "Mondee, Inc.",
+   "instrument_description": "Secured Super-Priority Debtor-In-Possession Delayed Draw Term Loan"
+  },
+  "reason": "The page prints the facility's description in the issuer column; the borrower is Mondee, Inc. and the position a debtor-in-possession delayed draw term loan. Printed line: 'Software Mondee, Inc. Secured Super-Priority Debtor-In-Possession Term Loan 01/17/25 Delayed Draw Term Loan - 14.56 % inc PIK ( SOFR + 10.00 %, 1.75 % Floor, all PIK) 12.3 % 62,837,202 04/24/25 62,837,202 62,837,202' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Outform Holdings LLC (fka Rapid Displays, Inc. Class A Common Units",
+  "exact": false,
+  "fields": {
+   "issuer_name": "Outform Holdings LLC (fka Rapid Displays, Inc.)"
+  },
+  "reason": "The member drops the closing bracket; the page prints it. Printed line: 'Outform Holdings LLC (fka Rapid Displays, Inc.) (4)(5)(6) Class A Common Units 0.0 % 7,872,225 39,361 -' (0000950170-24-124902)."
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Outform Holdings LLC (fka Rapid Displays, Inc. Class A Common Units",
+  "fields": {
+   "issuer_name": "Outform Holdings LLC (fka Rapid Displays, Inc.)"
+  },
+  "reason": "As 2024-09-30. Printed line: 'Outform Holdings LLC (fka Rapid Displays, Inc.) (4)(5)(6) Class A Common Units 0.0 % 7,872,225 39,361 -' (0000950170-25-045556)."
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Outform Holdings LLC (fka Rapid Displays, Inc. Class A Common Units",
+  "fields": {
+   "issuer_name": "Outform Holdings LLC (fka Rapid Displays, Inc.)"
+  },
+  "reason": "As 2024-09-30. Printed line: 'Outform Holdings LLC (fka Rapid Displays, Inc.) (4)(5)(6) Class A Common Units 0.0 % 7,872,225 39,361 -' (0000950170-25-070648)."
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "WDE TorcSill Holdings LLC, Acquisition Date 08/13/24 , Protective Advance Term Loan",
+  "fields": {
+   "interest_rate": "25.5"
+  },
+  "reason": "As 2025-03-31. Printed line: 'WDE TorcSill Holdings LLC (2) 08/13/24 Protective Advance Term Loan - 25.50 % inc PIK (PRIME + 18.25 %, 4.60 % Floor, all PIK) 0.7 % 3,158,925 04/30/28 3,158,925 3,253,693' (0001193125-25-276898)."
+ }
+]

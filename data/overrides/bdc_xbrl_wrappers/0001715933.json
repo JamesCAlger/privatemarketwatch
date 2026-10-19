@@ -116,7 +116,10 @@
     "category_marker_re": "(?i)^(?!.*\\b(?:Acquisition\\s+Date|Term\\s+Loan|Delayed\\s+Draw|Incremental\\s+Term\\s+Loan|Protective\\s+Advance|Revolver|Last\\s+Out|Super\\s+Senior|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b)\\s*(?:[-,]\\s*)?[A-Za-z&/,.'()\\-\\s]+(?:\\s+Net\\s+Assets\\s+[-\\d.]+%|\\s*)$",
     "category_marker_before_total": true,
     "canonical_strip_re": "(?i)\\s*[^A-Za-z0-9\\s/,]\\s*\\d+(?:\\.\\d+)?%.*?(?=\\s+Maturity(?:\\s+Date)?\\b)|\\s+(?:%\\s+of\\s+)?Net\\s+Assets\\s+[-\\d.]+%",
-    "bare_entity_rows": "positions"
+    "bare_entity_rows": "positions",
+    "shares_pow10_normalise": false,
+    "cash_identifier_rows": "positions",
+    "issuer_name_strip_re": "^(?:Short-term\\s+Investments|Cash\\s+Equivalents)\\s+"
   },
   "identifier_format": {
     "delimiter": " ",
@@ -137,9 +140,9 @@
   },
   "staging": {
     "strategy": "hierarchy_extract",
-    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Debt|Equity)\\s+Securities\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)+|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+)(.+?)\\s+(?:Acquisition\\s+Date\\s+|(?:Last\\s+Out\\s+|Delayed\\s+Draw\\s+|Incremental\\s+|Protective\\s+Advance\\s+|Super\\s+Senior\\s+)?(?:Term\\s+Loan|Revolver)|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b",
-    "hierarchy_instrument_re": "(?i)(?:\\bAcquisition\\s+Date\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s+|(?:Debt|Equity)\\s+Securities\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)+.+?\\s+|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+.+?\\s+)((?:Last\\s+Out\\s+)?(?:Delayed\\s+Draw\\s+)?(?:Incremental\\s+|Protective\\s+Advance\\s+|Super\\s+Senior\\s+)?(?:Term\\s+Loan|Revolver)(?:\\s+[A-Z])?|(?:Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Common\\s+)?Units|Class\\s+[A-Z]\\s+LP\\s+Interests|Membership\\s+Interests|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Warrants?)(?:.*?))\\s*(?:[-,]?\\s*\\d|\\s+%\\s+of\\s+Net\\s+Assets|\\s+Net\\s+Assets|\\s+Maturity\\b|$)",
-    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:(?:Debt|Equity)\\s+Securities\\s+.*\\b(?:Acquisition\\s+Date|Term\\s+Loan|Delayed\\s+Draw|Revolver|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+.*\\b(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b)')",
+    "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Debt|Equity)\\s+Securities\\s*[-,]?\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)*|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+)(.+?)(?:\\s+(?:MSD_INDUSTRY_LABELS))?,?\\s+(?:Acquisition\\s+Date\\b|(?:Last\\s+Out\\s+|Delayed\\s+Draw\\s+|Incremental\\s+|Protective\\s+Advance\\s+|Super\\s+Senior\\s+)?(?:Term\\s+Loan|Revolver)|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b",
+    "hierarchy_instrument_re": "(?i)(?:\\bAcquisition\\s+Date\\s*-?\\s*(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?)\\s*,?\\s+|(?:Debt|Equity)\\s+Securities\\s*[-,]?\\s+(?:(?:MSD_INDUSTRY_LABELS),?\\s+)*.+?\\s+|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+.+?\\s+)((?:\\d+(?:st|nd|rd|th)\\s+Amendment\\s+)?(?:Priority\\s+|Discretionary\\s+)?(?:(?:First|Last)\\s+Out\\s+)?(?:Delayed\\s+Draw\\s+)?(?:Incremental\\s+|Protective\\s+Advance\\s+|Super\\s+Senior\\s+)?(?:Term\\s+Loan|Revolver)(?:\\s+[A-Z])?|(?:Class\\s+[A-Z][A-Z0-9-]*\\s+Warrants?,?\\s+[Ee]xpires\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}|Warrants?,?\\s+[Ee]xpires\\s+\\d{1,2}/\\d{1,2}/\\d{2,4}|Class\\s+[A-Z][A-Z0-9-]*\\s+(?:Common\\s+|Preferred\\s+)?Units|Class\\s+[A-Z]\\s+LP\\s+Interests|Membership\\s+Interests|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Warrants?)(?:.*?))\\s*(?:[-,\\x{2013}\\x{2014}]?\\s*\\d|\\s+%\\s+of\\s+Net\\s+Assets|\\s+Net\\s+Assets|\\s+Maturity\\b|$)",
+    "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:(?:Debt|Equity)\\s+Securities\\s*[-,]?\\s+.*\\b(?:Acquisition\\s+Date|Term\\s+Loan|Delayed\\s+Draw|Revolver|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b|(?:Controlled\\s+Affiliated\\s+[Ii]nvestments?|Non-Controlled\\s+Affiliated\\s+Investments?)\\s+.*\\b(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Common\\s+Stock|Common\\s+Units|Preferred\\s+(?:Stock|Units)|Class\\s+[A-Z][A-Z0-9-]*|Membership\\s+Interests|LP\\s+Interests|Warrants?)\\b)')",
     "extra_industry_labels": [
       "Aerospace & Defense",
       "Auto Components",
@@ -259,6 +262,34 @@
       "first_seen_quarter": "2023-03-31",
       "detection_pattern": "Debt Securities <industry> without acquisition date or instrument terms",
       "disposition": "expected"
+    },
+    {
+      "id": "TCW_VII_MEMBER_SEPARATORS_2024Q4",
+      "description": "From the 10-K for 2024-12-31 some members separate the parts with ', ' or ' - ' ('Debt Securities, Consumer Durables & Apparel, Twin Star International, Inc. Acquisition Date - 01/29/25, 14th Amendment Term Loan - 25.00% inc PIK ...', 'Debt Securities - Consumer Durables & Apparel, Twin Star ...'), and one names the issuer before the industry ('Equity Securities The Legacy Companies, LLC (fka Greenfield World Trade, Inc.) Household Durables Class A Units'). The staging patterns accept both separators, an optional industry after the issuer, amendment and First Out tranche words and an en dash before the rate (printed 'Twin Star International, Inc. 01/29/25 14th Amendment Term Loan - 25.00 % inc PIK').",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "issuer_name holds 'Debt Securities,' or 'Acquisition Date'",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_VII_EQUITY_MEMBER_WITHOUT_INSTRUMENT",
+      "description": "10-Qs 2023-06-30 to 2024-06-30 tag the Mondee common stock on the bare member 'Equity Securities Software Mondee Holdings LLC' (printed 'Software Mondee Holdings LLC (5) (6) (7) Common Stock 0.8 % 570,627 764,071 4,895,980'), and 2023-06-30 the Shelterlogic common stock on 'Equity Securities Hou sehold Durables Shelterlogic Group Holdings, Inc' (printed 'Shelterlogic Group Holdings, Inc (4) (5) (6) Common Stock 1.7 % 1,254,034 - 11,185,983'); the prefix subtotal filter dropped them. Named under source_encodings.context_identifiers with the identifier the filer uses in its other filings.",
+      "first_seen_quarter": "2023-06-30",
+      "detection_pattern": "quarter total short of the printed 'Total Debt & Equity Investments' by an equity line",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_VII_CASH_ROWS",
+      "description": "The filed investments figure is the printed 'Total Debt & Equity Investments', which leaves out the money market fund and the Treasury bills ('Total Investments' adds them). The prefix-rule subtotal filter kept a cash row only where its member named a maturity date (Treasury bills 2024-12-31 and 2025-03-31); the money market fund and bill rows of 2023-03-31 to 2025-03-31 are listed under cash_identifiers and published as cash (dispatch.cash_identifier_rows). From 2025-06-30 the filer tags the money fund on ck0001715933:CashEquivalentsAtFairValue and the bills only on InvestmentTypeAxis contexts, so they are not extracted (parked). The bills' percent of net assets is tagged as a ratio above 0.50 in 2024-12-31 and 2025-03-31 ('56.2 %' tagged 0.562; pct_tagged_as_ratio). The cash rows are not given an anchor from the page: where the filer files no cash-equivalents figure (or files 0, 2023-03-31 to 2023-09-30) they are not independently reconciled (orchestrator ruling on the t7af review). The balance sheet prints them as 'Short-term investments 295,865 296,800' (us-gaap:ShortTermInvestments), so that concept is added to the filed cash figure (cash_rows_include_concepts). The plug rule that added cash rows without a context at 2025-06-30 is pulled.",
+      "first_seen_quarter": "2024-12-31",
+      "detection_pattern": "published total above the filed investments figure by a Treasury bill",
+      "disposition": "expected"
+    },
+    {
+      "id": "TCW_VII_DASH_FAIR_VALUE_UNTAGGED",
+      "description": "0001193125-26-346651 prints 'Twin Star International, Inc. (5)(8) 02/15/23 Delayed Draw Term Loan - 11.38 % inc PIK (SOFR + 7.50 %, 1.50 % Floor, all PIK) 0.0 % 1,276,216 12/31/26 1,276,216 -' and tags cost 1,276,216 with no fair value on C_3d1a7055-67f2-493c-abc5-5c7264af845e; the dash is a fair value of 0 (declared under untagged_values).",
+      "first_seen_quarter": "2026-06-30",
+      "detection_pattern": "context with cost and principal and no fair value",
+      "disposition": "expected"
     }
   ],
   "invariants": {
@@ -272,6 +303,49 @@
     ],
     "filed_rate_reading": [
       "all_in"
+    ],
+    "net_assets_concepts": [
+      "MembersEquity"
+    ],
+    "investments_total_excludes": [
+      "cash_rows"
+    ],
+    "cost_total_excludes": [
+      "cash_rows"
+    ],
+    "cash_rows_include_concepts": [
+      "ShortTermInvestments"
+    ],
+    "cash_identifiers": [
+      "Cash Equivalents First American Government Obligation Fund, Yield 4.27%, Class X (FGXXX)",
+      "Cash Equivalents First American Government Obligation Fund, Yield 4.39%, Class X (FGXXX)",
+      "Cash Equivalents First American Government Obligation Fund, Yield 4.65%",
+      "Cash Equivalents First American Government Obligation Fund, Yield 4.8%",
+      "Cash Equivalents First American Government Obligation Fund, Yield 5.10%",
+      "Cash Equivalents First American Government Obligation Fund, Yield 5.24%",
+      "Cash Equivalents First American Government Obligation Fund, Yield 5.26%",
+      "Cash Equivalents First American Government Obligation Fund, Yield 5.30%",
+      "Short-term Investments U.S. Treasury Bill, Yield 4.29%, Maturity Date 04/03/25",
+      "Short-term Investments U.S. Treasury Bill, Yield 4.46%, Maturity Date 04/03/25",
+      "Short-term Investments U.S. Treasury Bill, Yield 5.08%",
+      "Short-term Investments U.S. Treasury Bill, Yield 5.24%",
+      "Short-term Investments U.S. Treasury Bill, Yield 5.26%",
+      "Short-term Investments U.S. Treasury Bill, Yield 5.47%"
+    ],
+    "pct_tagged_as_ratio": [
+      "0000950170-25-045556",
+      "0000950170-25-070648"
+    ],
+    "untagged_values": [
+      "0001193125-26-346651 C_3d1a7055-67f2-493c-abc5-5c7264af845e fair_value 0"
+    ],
+    "context_identifiers": [
+      "0000950170-23-040370 C_5ba84f59-07cc-4cfa-90a3-cb353bd38fdc => Equity Securities Software Mondee Holdings LLC Common Stock",
+      "0000950170-23-040370 C_d4aee2cf-64e7-46fb-9c8f-44d235728754 => Equity Securities Household Durables Shelterlogic Group Holdings, Inc Common Stock",
+      "0000950170-23-060966 C_f66c46d5-8a9b-4961-8fe8-a00be44b0bc9 => Equity Securities Software Mondee Holdings LLC Common Stock",
+      "0000950170-24-039058 C_e49cfb93-3fa7-44ef-b79d-d752e25ba617 => Equity Securities Software Mondee Holdings LLC Common Stock",
+      "0000950170-24-056554 C_c9533b47-cec5-4f2f-b491-da2dfe6b5dd4 => Equity Securities Software Mondee Holdings LLC Common Stock",
+      "0000950170-24-095230 C_260735ff-3765-4a9d-8222-1b84d7b4e9d9 => Equity Securities Software Mondee Holdings LLC Common Stock"
     ]
   }
 }
