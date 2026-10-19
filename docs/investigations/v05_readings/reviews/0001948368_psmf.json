@@ -1,0 +1,757 @@
+{
+ "reviewer_id": "claude-opus-independent-reviewer-psmf-0001948368-2026-10-19",
+ "report_digest": "c8de3fc9dd4589075349318400605a030d4b6f7227cea6b9c57f599b8f861032",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_22cd4eae8d75",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2023-03-31 non-cash rows sum to 24,041 thousand, the money market row to 67,071 thousand; oracle check_results E01 2023-03-31 reads holdings_fv 91,112,000 vs 24,041,000 (279.0 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-23-019620 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2ff5588686ee",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2023-09-30 non-cash rows sum to 105,006 thousand, the money market row to 26,273 thousand; oracle check_results E01 2023-09-30 reads holdings_fv 131,279,000 vs 105,006,000 (25.0 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-23-060353 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_43a524f38c4b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2023-12-31 non-cash rows sum to 177,418 thousand, the money market row to 9,542 thousand; oracle check_results E01 2023-12-31 reads holdings_fv 186,960,000 vs 177,418,000 (5.4 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-24-026163 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 176,995 and $ 17,360 ) $ 177,418 $ 17,352"
+    },
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_509c12a203f1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2023-06-30 non-cash rows sum to 42,023 thousand, the money market row to 49,067 thousand; oracle check_results A04 2023-06-30 reads holdings_fv 91,090,000 vs 42,023,000 (116.8 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-23-039890 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7c3668156fc2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2024-06-30 non-cash rows sum to 312,590 thousand, the money market row to 30,420 thousand; oracle check_results E01 2024-06-30 reads holdings_fv 343,010,000 vs 312,590,000 (9.7 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-24-096233 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Total investments, at fair value (cost of $ 311,116 and $ 176,995 ) $ 312,590 $ 177,418"
+    },
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Investments in affiliated money market fund (cost of $ 30,420 and $ 9,542 ) 30,420 9,542"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7c6ab0360fa3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2023-09-30 non-cash rows sum to 105,006 thousand, the money market row to 26,273 thousand; oracle check_results A04 2023-09-30 reads holdings_fv 131,279,000 vs 105,006,000 (25.0 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-23-060353 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7dd3c4cc16bf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2023-06-30 non-cash rows sum to 42,023 thousand, the money market row to 49,067 thousand; oracle check_results E01 2023-06-30 reads holdings_fv 91,090,000 vs 42,023,000 (116.8 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-23-039890 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8914c03d721c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2023-03-31 non-cash rows sum to 24,041 thousand, the money market row to 67,071 thousand; oracle check_results A04 2023-03-31 reads holdings_fv 91,112,000 vs 24,041,000 (279.0 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-23-019620 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_cdad859f6ad0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2024-06-30 non-cash rows sum to 312,590 thousand, the money market row to 30,420 thousand; oracle check_results A04 2024-06-30 reads holdings_fv 343,010,000 vs 312,590,000 (9.7 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-24-096233 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Total investments, at fair value (cost of $ 311,116 and $ 176,995 ) $ 312,590 $ 177,418"
+    },
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Investments in affiliated money market fund (cost of $ 30,420 and $ 9,542 ) 30,420 9,542"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ceb41516565b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independent recount (r06_totals.py on psmf private_markets_holdings, published basis): 2023-12-31 non-cash rows sum to 177,418 thousand, the money market row to 9,542 thousand; oracle check_results A04 2023-12-31 reads holdings_fv 186,960,000 vs 177,418,000 (5.4 pct), i.e. with-cash rows against the ex-cash investments line. Population: one fund-quarter, matches the affected key. Conclusion (rule compares unlike totals, data as filed) holds. Re-review after the round-4 re-run: the investigation now cites the quarter's own filing 0000950170-24-026163 (non-controlled investments / total investments line and the money market line), both quotes found on the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 176,995 and $ 17,360 ) $ 177,418 $ 17,352"
+    },
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f727c5ab5640",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "One row (C_a8251175 / ROW-0aba4cd2). Page 2025-06-30 prints 'Priority Holdings, LLC'; the member reads 'Priority Technology Holdings, LLC'; the comparative 2024-12-31 line in the same filing and every other quarter print 'Priority Technology Holdings, Inc.'. psmf publishes the member name; position_id fd23552d is the same chain 2024-06-30..2025-06-30 and par 18,430 / FV 18,449 match the page. Filer's own print and tag disagree, so source_ambiguity is a fair reading (Priority Holdings, LLC is plausibly the borrower subsidiary; owner may prefer the print). New reason key, fund-specific.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107350",
+     "text": "Priority Holdings, LLC (dba Priority Payment) Financial Services 9.08 % S + 4.75 % 05/16/31 18,430 18,363 18,449"
+    },
+    {
+     "accession": "0000950170-25-107350",
+     "text": "Priority Technology Holdings, Inc. (dba Priority Payment) Financial Services 9.11 % S + 4.75 % 05/16/31 18,215 18,145 18,220"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_01dcfe6ca1b4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "XBRL 0000950170-25-070320: C_6b386940 carries InvestmentOwnedAtCost/FairValue 15,569,000 only; C_c80d0f17 (same member, same instant) carries InvestmentOwnedBalanceShares 15,568,517 only. Published shares_held 15,568,517 equals the printed count; the re-verifier excludes merged contexts by design. Both affected keys checked.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070320",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 15,568,517 $ 15,569 $ 15,569"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_021111088148",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Recount: 2023-03-31 9 non-cash + 1 cash row, 2023-06-30 23 + 1 (16 loans as in spon3 plus 7 dash lines, each verified as a printed '- -' row in r04_dash_rows.txt). FV with cash 91,112 -> 91,090; non-cash 24,041 -> 42,023 equals the balance sheet. Ramp-up redeployment, no leak.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Total Investments - 43.30 % $ 42,091 $ 42,023"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_09dea8b0125b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fund_financials 2025-12-31: distribution_per_share 0.91 (1.85 - 0.94), distribution_rate 18.356 = 0.91 x 4 / 19.83; income ratio 9.58. The 10-K distribution table shows two record dates in the quarter (October 2, 2025 at 0.47 and December 31, 2025 at 0.44), so the quarter figure is correct and the earlier unit_scale verdict reads an annual figure into a quarterly-annualised field. Not a scale error; F16 fires on timing. Answer to the earlier verdict is sound (the 18.18 it quotes is from an older build; current 18.36).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088656",
+     "text": "Distributions recorded per unit $ 1.85 $ 1.62 $ 0.59"
+    },
+    {
+     "accession": "0001193125-26-088656",
+     "text": "October 2, 2025 October 30, 2025 $ 0.47"
+    },
+    {
+     "accession": "0001193125-26-088656",
+     "text": "December 31, 2025 January 29, 2026 $ 0.44"
+    },
+    {
+     "accession": "0001193125-25-277555",
+     "text": "Distributions recorded per unit $ 0.46 $ 0.35 $ 0.94 $ 0.78"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0bd762a242a2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Published 2023-12-31 distribution 0.59 = the year's only distribution (none in nine months per the 2024-09-30 comparatives); rate 12.03 = 0.59 x 4 / 19.61. F16 fires with the printed 4.04 too, so the finding does not rest on the wrong yield. The published income_yield_pct 2.28 (4.04 - 1.76, a difference of ratios) is a real derived-field defect, disclosed and left to the owner via observation; label 'source_ambiguity' is loose (the page is clear) but the reasoning and next action are right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Distributions declared from net investment income ( 0.59 ) -"
+    },
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Ratio of net investment income to average Members' Capital 4.04 % ( 7.76 %)"
+    },
+    {
+     "accession": "0000950170-24-125398",
+     "text": "Distributions recorded per unit $ 0.35 $ - $ 0.78 $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_25d4c31bb266",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Printed '-' for the three months to 2025-03-31 and 2024-03-31; fund_financials 0.0. Record dates in the 10-K table start in April. False alarm.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070320",
+     "text": "Distributions recorded per unit $ - $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3e1bdd739a68",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "The 10-Q 2023-09-30 per-unit table: 'Net increase ... from operations $ 0.23 Total increase (decrease) in Members' Capital $ 0.23' (nine-month NAV change 19.51 -> 19.74), which the filer tagged as a distribution. The 2024-09-30 10-Q prints '-' for the three and nine months to 2023-09-30. Published 0 is the printed figure; F33 fires on the correction.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125398",
+     "text": "Distributions recorded per unit $ 0.35 $ - $ 0.78 $ -"
+    },
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Total increase (decrease) in Members' Capital $ 0.23 Members' Capital, end of period $ 19.74"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_40a2ea5a0878",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Balance sheet 2023-09-30: debt 30,000, cash 32,552, total assets 167,873, members' capital 135,473; holdings incl. money market 131,279. Debt is less than cash held, so the holdings leverage view is negative. Inputs as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Cash 32,552 104 Interest and dividends receivable 874 144"
+    },
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Liabilities Debt $ 30,000 $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_54144f3d78e2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "oracle check_failures B01 2023-09-30 lists exactly C_ae34cc53, C_3b8a5cff, C_86e46a59, status excluded_comparative_period; XBRL shows each at instant 2022-12-31 with DFS member and shares 6,201 / 1,292 / 904. The 10-Q 2023-09-30 prints the prior-year DFS undrawn lines with dashes. Coverage equals the flagged population; all current-period dash rows of the quarter are published (r04).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ - $ -"
+    },
+    {
+     "accession": "0000950170-23-060353",
+     "text": "DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 904 - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_795b2b669e7a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "First period: printed 2022 ratio -7.76 pct, no distribution in 2022. 0 > 1.5 x negative yield is the check's arithmetic.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Ratio of net investment income to average Members' Capital 4.04 % ( 7.76 %)"
+    },
+    {
+     "accession": "0000950170-25-032238",
+     "text": "Distributions recorded per unit $ 1.62 $ 0.59 $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7ce9f31e63e9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "FS02 private_credit_share 0.2639 = 24,041 / 91,112: loans over all rows with the money market row in the denominator. The orchestrator's psm-req-1 fix took CASH out of FS03 only and left the FS02 denominator unchanged by choice, so FS02 describes the ramp-up mix correctly. Note for the owner: the same principle (cash out of the strategy mix) applied to FS02 would clear this; the as_filed proposal is consistent with the current rule.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_86c8cb4bbd21",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "oracle check_failures B01 2023-03-31 lists exactly the five keys. XBRL: C_16bd2803 carries the DFS par as shares 4,787 + spread + maturity, C_05fa6136 only the 11.66 pct rate, C_4716d28d cost 4,646,000 / FV 4,715,000 (published with par 4,787,000, matches print x1000); the other three are 2022-12-31 instants (6,201 / 1,292 / 904). One printed line, no unpublished current-period row.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "DFS Holding Company, Inc. Distributors 11.66 % S + 7.00 % 01/31/29 $ 4,787 $ 4,646 $ 4,715"
+    },
+    {
+     "accession": "0000950170-23-019620",
+     "text": "DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ - $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a43b5c336e67",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fund_financials 2024-12-31: 0.84 = 1.62 - 0.78; rate 16.94 = 0.84 x 4 / 19.84 vs 1.5 x 9.08. The fund records two distributions in the fourth quarter (same record-date pattern as 2025). False alarm on timing.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032238",
+     "text": "Distributions recorded per unit $ 1.62 $ 0.59 $ -"
+    },
+    {
+     "accession": "0000950170-24-125398",
+     "text": "Distributions recorded per unit $ 0.35 $ - $ 0.78 $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_abfa4816abef",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "oracle check_failures B01 2023-06-30 lists exactly C_afab8b1c, C_d5ae9004, C_fd1ea1cd (excluded_comparative_period); XBRL instants 2022-12-31, DFS shares 6,201 / 1,292 / 904; printed as dash lines in the prior-year schedule of the same 10-Q. The quarter's 7 current dash rows are published at 0.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ - $ -"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 904 - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bc8959fb304d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results D03 2023-06-30: count_ratio 2.40, fv_ratio 1.00. Recount: rows 10 -> 24, FV with cash 91,112 -> 91,090; non-cash equals the balance sheet 42,023, so no subtotal leak. Ramp-up redeployment.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Total Investments - 43.30 % $ 42,091 $ 42,023"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c1a803643bb9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "The 10-Q 2025-03-31 comparative column prints '-' for the three months to 2024-03-31; fund_financials 0.0.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070320",
+     "text": "Distributions recorded per unit $ - $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c243d0ded8fe",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Printed '-' for the three months to 2026-03-31; published 0 via figure_corrections (checked against the page).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219873",
+     "text": "Distributions recorded per unit $ - $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_cb30f63bd147",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "FS02 private_credit_share 0.4613 = 42,023 / 91,090 with the money market row in the denominator (see the 2023-03-31 review for the FS02/FS03 asymmetry).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_dc031a68ef05",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Position count 10 -> 24; every non-cash row maps to a printed line (pars match print x1000 on all 2,155 loan rows, r02; dash rows r04).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Total Investments - 43.30 % $ 42,091 $ 42,023"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e048e63ca64a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "The 10-K 2024 prints '-' for 2022; stub first period.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032238",
+     "text": "Distributions recorded per unit $ 1.62 $ 0.59 $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f6f8b548cfc2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "The 10-Q 2024-06-30 prints '-' for the three and six months to 2023-06-30.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Distributions recorded per unit $ 0.43 $ - $ 0.43 $ -"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "one-context-for-two-printed-lines",
+   "outcome": "supported",
+   "rationale": "XBRL C_7d226e12 holds two complete value sets: USD (par 5,660,000, cost 5,606,000, FV 5,604,000) and U_AUD (par 5,600,000, cost 3,690,000, FV 3,838,000; the cost/FV are USD amounts tagged AUD). psmf 2026-06-30 non-cash FV 987,294 + 3,838 = 991,132 and cost 994,844 + 3,690 = 998,534, exactly the balance sheet. A units-per-context count is exact; propose_detector is right.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Sonar Acquisitionco, Inc. (dba SimPRO) Construction & Engineering 9.36 % B + 5.00 % 10/24/30 AUD 5,600 3,690 3,838"
+    },
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Total investments, at fair value (cost of $ 998,534 and $ 904,200 ) $ 991,132 $ 901,521"
+    }
+   ]
+  },
+  {
+   "observation_key": "loan-par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "r02_par.py: every psmf loan row's principal equals the printed par x 1,000 on its own context (2,154 rows with a par fact, plus DFS 2023-03-31 declared 4,787,000), including all six par_tagged_as_units filings; equity counts in those filings (RPC 1,992,620, VisionSafe 255) were not rescaled. psma ledger shows X11 open on the six quarters, so existing_detector with the undrawn-row extension is accurate.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "ASM Buyer, Inc. Commercial Services & Supplies S + 6.00 % 01/29/28 4,189 - -"
+    },
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Onyx CenterSource, Inc. Software 12.80 % S + 7.75 % 12/06/27 9,244 8,981 8,966"
+    }
+   ]
+  },
+  {
+   "observation_key": "value-tagged-decimals-zero-in-thousands-schedule",
+   "outcome": "supported",
+   "rationale": "All 281 loan rows of 2026-03-31 match printed par x 1,000 (r02); equity counts in the filing unchanged. I count 190 principal facts at decimals 0 in the HTML (report says 188; immaterial). Par below cost/100 is a sound, low false-positive check.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219873",
+     "text": "SpecialtyCare, Inc. Health Care Providers & Services 8.66 % S + 5.00 % 12/18/29 20,267 20,226 20,166"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-type-tag-holds-the-spread",
+   "outcome": "supported",
+   "rationale": "31 reference_rate_type corrections checked: each quote is on the page, prints 'S +', and is applied in psmf. A closed enumeration check is exact.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Onyx CenterSource, Inc. Software 12.80 % S + 7.75 % 12/06/27 9,244 8,981 8,966"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-industry-truncated-or-misspelt",
+   "outcome": "supported",
+   "rationale": "52 extracted_industry corrections checked (r05): every quote is on the page, the corrected industry is the printed one, row par/cost/FV match the quoted line, and the value is applied. Detector proposal (printed-label set, cross-quarter consistency) is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277555",
+     "text": "SpecialtyCare, Inc. Health Care Providers & Services 9.33 % S + 5.00 % 12/18/29 20,369 20,323 20,323"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-is-hierarchy-path",
+   "outcome": "supported",
+   "rationale": "psma ledger has issuer_name_printed open at 2026-03-31; PAS/QBS rows now publish the printed names. Existing detector reference is accurate.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219873",
+     "text": "PAS Parent Inc. (dba Pace Analytical) Professional Services 8.17 % S + 4.50 % 08/18/32 5,674 5,640 5,631"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "outcome": "supported",
+   "rationale": "Page 2026-06-30 prints the ML Holdco funded line 5,338 / 5,313 / 5,258; psma ledger issuer_name_printed open at 2026-06-30. Correction quote on page and applied.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344614",
+     "text": "ML Holdco, LLC (dba MeridianLink) Software 7.91 % S + 4.25 % 10/25/32 5,338 5,313 5,258"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-carries-rate-and-row-number",
+   "outcome": "supported",
+   "rationale": "25 instrument_description corrections: quotes on page, applied. Regex detector with an allow-list is adequate.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Total 1st Lien/Last-Out Unitranche 62,582 62,431"
+    }
+   ]
+  },
+  {
+   "observation_key": "equity-units-tagged-as-principal",
+   "outcome": "supported",
+   "rationale": "Unit counts RPC 1,992,620 and VisionSafe 255 published in every quarter and equal the page (r03/r05); psma ledger C04 open on the four quarters cited.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032238",
+     "text": "RPC ABC Investment Holdings LLC (dba ABC Plumbing) Diversified Consumer Services 04/26/24 1,992,620 1,993 1,993"
+    }
+   ]
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "outcome": "supported",
+   "rationale": "Page 2026-03-31 prints the line under 'Preferred Stock - 0.0 %'; asset_category, index_classification and instrument corrected and applied; 2026-06-30 publishes it as preferred without correction.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219873",
+     "text": "Preferred Stock - 0.0 % RPC ABC Investment Holdings LLC (dba ABC Plumbing) Diversified Consumer Services 01/09/26 101,574 $ 101 $ 101"
+    }
+   ]
+  },
+  {
+   "observation_key": "money-market-fund-not-published",
+   "outcome": "supported",
+   "rationale": "psmf publishes one cash row per quarter whose FV equals the balance-sheet money market line in all 14 quarters (r06); nine early quarters sum to 210,022 thousand. Round 4: the 2023-03-31 count is now 67,071,000 (correction reads the thousands Par/Shares column; at $1 a share it matches the 67,071 thousand value, and the 2023-06-30 10-Q prints whole counts, 49,067,300 for 49,067). Detector proposal (with-cash comparison) is sound.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-concept-holds-issuance-per-share",
+   "outcome": "supported",
+   "rationale": "Confirmed: the 0.23 is the nine-month NAV change (19.51 -> 19.74), not a distribution (the key name says 'issuance', the content is right). Highlights corrections 0 and 0.59 match the page; psma ledger F16 open at 2023-09-30 and 2023-12-31.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Total increase (decrease) in Members' Capital $ 0.23 Members' Capital, end of period $ 19.74"
+    },
+    {
+     "accession": "0000950170-24-125398",
+     "text": "Distributions recorded per unit $ 0.35 $ - $ 0.78 $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-per-share-period-to-date-in-quarter",
+   "outcome": "supported",
+   "rationale": "Page prints 0.44 for the quarter and the half-year 2026; psmf fund_financials 0.44 and 2026-03-31 0.0. Comparing with a three-month fact is exact where filed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Distributions recorded per unit $ 0.44 $ 0.48 $ 0.44 $ 0.48"
+    }
+   ]
+  },
+  {
+   "observation_key": "income-ratio-unannualised-compared-with-annual",
+   "outcome": "supported",
+   "rationale": "fund_financials income_yield_pct: 2023-09-30 0.84 (= 1.76 - 0.92), 2023-12-31 2.28 (= 4.04 - 1.76), while 2023-03-31/06-30 carry the printed 2.12 / 0.92 and 2024 on the printed annualised ratios. A real published-field defect left to the owner as a shared convention; the derivation check proposed is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Ratio of net investment income to average Members' Capital 4.04 % ( 7.76 %)"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-negative-cost-tagged-unsigned",
+   "outcome": "supported",
+   "rationale": "r03 bracket scan over every published row: exactly 4 cost facts printed in brackets with no sign (Arrow 2023-09-30 and 2024-03-31, VASA x2), all now negative; no fair value affected. Independent confirmation: psmf non-cash cost 104,997 (2023-09-30) and 197,053 (2024-03-31) now equal the balance sheet; spon3 was 105,079 and 197,069. Also shows the values_as_filed acceptance of C103 was wrong for these rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "VASA Fitness Buyer, Inc. Consumer Retail S + 7.50 % (Incl. 0.38 % PIK) 08/14/28 241 ( 8 ) ( 8 )"
+    },
+    {
+     "accession": "0000950170-24-056942",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 197,053 and $ 176,995 ) $ 198,430 $ 177,418"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-sign-reader-misses-bracket-in-next-cell",
+   "outcome": "supported",
+   "rationale": "The layout puts the bracket in its own cell (page text '( 46 ) ( 47 )'); a guard against flipping an already signed fact is exact. Not re-run in psme by me; psmf shows no flipped fair value (all FV facts match sign-adjusted print, r03).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Thor FinanceCo LLC (dba Harmoni Towers) Wireless Telecommunication Services S + 7.00 % 08/24/28 3,778 ( 46 ) ( 47 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "r04: all 72 untagged_values entries checked against the HTML: 62 rows with FV declared 0 have no FV fact and print a dash; 9 cost-only entries print a dash cost; DFS par equals the print. psma ledger B01 open on the six quarters cited. Per-row B01 proposal is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125398",
+     "text": "Air Comm Corporation, LLC (dba Signia Aerospace) Aerospace & Defense S + 4.75 % 07/01/27 $ 19,518 $ - $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-rounded-by-thousands-schedule",
+   "outcome": "supported",
+   "rationale": "psmf 2023-03-31 cash row C_88580b11 now shares_held 67,071,000 with FV 67,071,000 ($1 a share); the filing tags loan pars at printed thousands (':x1000') and the next 10-Q prints whole counts (49,067,300 for 49,067 thousand). A FV-per-share band on money market rows is exact and cheap; it would not have fired on equity rows, which are out of its scope.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-printed-on-the-row-and-not-tagged",
+   "outcome": "supported",
+   "rationale": "Round 4: row C_42c721b1 now publishes interest_rate 8.73 by a context-keyed correction (quote on page; spread 5.00 unchanged), matching its member text and the sibling tranche C_ec3c797f (8.73, printed 8.73 %). Detection changed to propose_detector: member-text rate vs tag, with a concrete threshold and a measured candidate rate (10 of 2,155 before, 9 after, all with the tag matching the page); acceptable false-alarm load.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Summit Buyer, LLC (dba Classic Collision) Diversified Consumer Services 8.7 3% S + 5.00 % 06/02/31 8,409 8,344 8,324"
+    },
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Summit Buyer, LLC (dba Classic Collision) Diversified Consumer Services 8.73 % S + 5.00 % 06/02/31 4,258 4,225 4,215"
+    },
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Summit Buyer, LLC (dba Classic Collision) Industry Diversified Consumer Services Interest Rate 8.73%"
+    }
+   ]
+  }
+ ],
+ "request_reviews": []
+}

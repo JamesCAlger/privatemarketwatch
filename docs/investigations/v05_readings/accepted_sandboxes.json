@@ -283,5 +283,10 @@
   "label": "maif",
   "accepted_on": "2026-10-19",
   "basis": "D-213, gate PASS with investigation COMPLETE: 32 findings, 10 outstanding, all proposed; 9/9 quarters tie; huge_tree parser (MAI-R1..R4); sample 1 real error of 20 fixed fund-wide; six builds"
+ },
+ "0001948368": {
+  "label": "psmf",
+  "accepted_on": "2026-10-19",
+  "basis": "D-214, gate PASS with investigation COMPLETE: 68 findings, 31 outstanding, all proposed; 13/14 quarters tie (2026-06-30 Sonar AUD -3.84M declared exception, shared extractor); sample 0/20; six builds plus two in-place re-runs"
  }
 }

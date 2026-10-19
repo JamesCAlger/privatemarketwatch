@@ -1,0 +1,1720 @@
+{
+ "cik": "0001948368",
+ "label": "psmf",
+ "before": "spon3",
+ "investigator_id": "fund-agent-phillipstreet-2026-10-19",
+ "shared_code": true,
+ "declared_changes": [
+  {
+   "column": "asset_category",
+   "rows": 1,
+   "why": "RPC ABC preferred stock 2026-03-31"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 96,
+   "why": "changed with the fixes listed"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 90,
+   "why": "context-keyed row corrections applied"
+  },
+  {
+   "column": "cost",
+   "rows": 12,
+   "why": "dash cost declared 0 on 9 published rows; 4 bracketed costs tagged without a sign set negative"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 12,
+   "why": "follows cost"
+  },
+  {
+   "column": "entity_id",
+   "rows": 705,
+   "why": "changed with the fixes listed"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 42,
+   "why": "printed industry where the member is garbled, truncated or wrong"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 8,
+   "why": "follows extracted_industry / cleaned names"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 24,
+   "why": "follows extracted_industry / cleaned names"
+  },
+  {
+   "column": "index_classification",
+   "rows": 1,
+   "why": "RPC ABC preferred stock 2026-03-31"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 24,
+   "why": "footnote/percent run-ins replaced by the printed section; trailing U+FFFD- stripped; RPC preferred"
+  },
+  {
+   "column": "issuer_name",
+   "rows": 19,
+   "why": "member text cut from names (issuer_name_strip_re), cash rows named from the page, ML Holdco and Rubrik corrections"
+  },
+  {
+   "column": "position_id",
+   "rows": 442,
+   "why": "identity follows cleaned names and restored rows (cash and dash rows)"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 510,
+   "why": "par read from the share-count tag in six filings (par_tagged_as_units, two at scale 1 and four ':x1000'), 2026-03-31 decimals-0 pars read in thousands (thousands_scale_filings), dash rows restored with their par, DFS 2023-03-31 par declared, money-market share counts removed from principal"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 1,
+   "why": "DFS 2023-03-31 declared par carries USD"
+  },
+  {
+   "column": "principal_amount_source",
+   "rows": 322,
+   "why": "rows that gained a principal"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 510,
+   "why": "follows principal_amount"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 322,
+   "why": "set for the rows that gained a principal"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 322,
+   "why": "set for the rows that gained a principal"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 24,
+   "why": "spread number read as the benchmark (custom tag) replaced by SOFR as printed"
+  },
+  {
+   "column": "shares_held",
+   "rows": 333,
+   "why": "loan counts moved to principal (no longer published as units); equity and money-market counts set from the page; normaliser proxies gone"
+  },
+  {
+   "column": "shares_held_source",
+   "rows": 92,
+   "why": "normaliser proxy labels gone with the loan counts"
+  },
+  {
+   "column": "src_facts",
+   "rows": 193,
+   "why": "extractor provenance of the rescaled principal facts and declared values"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 322,
+   "why": "principal_amount:from_shares_tag / count_x1000 and decimals rescale events replace shares_held:pow10_shares"
+  }
+ ],
+ "rows_added": 355,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Par of loans tagged as InvestmentOwnedBalanceShares in the six filings 2023-03-31 to 2024-06-30: counts in dollars in 2023-06-30 and 2023-09-30 (accession entries), in thousands in 2023-03-31, 2023-12-31, 2024-03-31, 2024-06-30 (new ':x1000' entries, shared code). 346 loan rows of psmf carry the transform principal_amount:from_shares_tag (852.5M summed over the six quarters; obs_fv.py), of which 322 were published before (holdings_field_diff vs psma); X11 x6 cleared.",
+   "kind": "shared_code",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "ASM Buyer, Inc. Commercial Services & Supplies S + 6.00 % 01/29/28 4,189 - -"
+    },
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Onyx CenterSource, Inc. Software 12.80 % S + 7.75 % 12/06/27 9,244 8,981 8,966"
+    }
+   ]
+  },
+  {
+   "what": "10-Q 2026-03-31 tags 188 principal facts at decimals 0 with the printed thousands figure (SpecialtyCare 20267 beside cost 20,226,000): new opt-in source_encodings.thousands_scale_filings (shared code) reads them at decimals -3. In psma 118 loans had a par below one hundredth of cost (psma_q09_health.txt); in psmf 123 funded rows carry the rescale event (655.7M; obs_fv.py) and none is below cost/100 (psmf_q09_health.txt).",
+   "kind": "shared_code",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219873",
+     "text": "SpecialtyCare, Inc. Health Care Providers & Services 8.66 % S + 5.00 % 12/18/29 20,267 20,226 20,166"
+    }
+   ]
+  },
+  {
+   "what": "2026-06-30 investments at fair value and cost tagged only on dimensioned contexts, so no filed total: highlights figure_corrections 991,132,000 / 998,534,000 (printed balance sheet).",
+   "kind": "wrapper",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Total investments, at fair value (cost of $ 998,534 and $ 904,200 ) $ 991,132 $ 901,521"
+    }
+   ]
+  },
+  {
+   "what": "Investments at cost not filed for 2023-03-31 to 2023-09-30: highlights figure_corrections from the balance sheet (24,021; 42,091; 104,997). With cost_total_excludes cash_rows, cost_conservation 2023-03-31 (-73.6 pct against a schedule total that included the money market fund) clears.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352"
+    }
+   ]
+  },
+  {
+   "what": "Money market fund: published as cash in every quarter (cash_identifiers for the nine 2023-03-31 to 2025-03-31 members + dispatch.cash_identifier_rows 'positions'); investments_total_excludes and cost_total_excludes cash_rows (the balance sheet carries it on its own line). fv_conservation 2025-06-30 to 2025-12-31 (residual = the money market row) clears. Names, share counts and par of these rows set from the page by corrections.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+    },
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725"
+    }
+   ]
+  },
+  {
+   "what": "62 undrawn lines printed with a dash for cost and value and tagged with par only (B01) published at fair value 0 (and cost 0 where untagged) via untagged_values; 9 published rows with a dash cost declared cost 0. Each entry checked against its printed row (gen_untagged.py).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Fullsteam Operations LLC Diversified Financial Services S + 8.25 % 05/01/30 9,931 - -"
+    },
+    {
+     "accession": "0000950170-24-125398",
+     "text": "Air Comm Corporation, LLC (dba Signia Aerospace) Aerospace & Defense S + 4.75 % 07/01/27 $ 19,518 $ - $ -"
+    }
+   ]
+  },
+  {
+   "what": "DFS Holding 2023-03-31 funded loan: par tagged on a second context; principal 4,787,000 declared for the valued context (untagged_values).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "DFS Holding Company, Inc. Distributors 11.66 % S + 7.00 % 01/31/29 $ 4,787 $ 4,646 $ 4,715"
+    }
+   ]
+  },
+  {
+   "what": "reference_rate_type held the spread ('0.0650', custom tag ck:InvestmentReferenceRateAndSpread) on 31 rows in 2023-03-31 and 2023-06-30 (24 published before, 7 restored dash rows): set to SOFR as printed (context-keyed corrections).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Onyx CenterSource, Inc. Software 12.80 % S + 7.75 % 12/06/27 9,244 8,981 8,966"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names holding member text: issuer_name_strip_re (industry heading run in, 'Investment ... 159.5%PAS' run-in, Thor/Circustrix industry suffix, OneStream 'Software Corporation', Eagle Family Foods 'dba ABC Fitness', Rubrik 'Software'); dry run of the wrapper's pattern on all 136 psma names changed 10 names / 22 rows (psma_strip_dryrun.txt). ML Holdco line tagged on a Summit Buyer member (2026-06-30) and 'Rubrik,Inc.' set by corrections.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070320",
+     "text": "Rubrik, Inc. Software 11.47 % S + 7.00 % 08/17/28 8,774 8,709 8,774"
+    },
+    {
+     "accession": "0001193125-26-344614",
+     "text": "ML Holdco, LLC (dba MeridianLink) Software 7.91 % S + 4.25 % 10/25/32 5,338 5,313 5,258"
+    }
+   ]
+  },
+  {
+   "what": "Industry: printed industry set where the member is garbled (2023-09-30 'Debt' + U+FFFD), truncated ('Financial Service', 'Hotels, Restaurants & Leisur', '... Maturity/', '... Rate'), missing ('Thor', 'Circustrix') or wrong (2025-09-30 three issuers tagged 'Health Care Equipment & Supplies'). 52 corrections, each checked against the printed row.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-277555",
+     "text": "SpecialtyCare, Inc. Health Care Providers & Services 9.33 % S + 5.00 % 12/18/29 20,369 20,323 20,323"
+    }
+   ]
+  },
+  {
+   "what": "Instrument text: '(11)' (footnote in the percent position of '1st Lien/Last-Out Unitranche - (11)') on 20 rows, '168.5 / 127.58 1st Lien...' and the '159.5%PAS/QBS' rows set to the printed section (corrections); trailing U+FFFD- stripped (instrument_description_strip_re).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Total 1st Lien/Last-Out Unitranche 62,582 62,431"
+    }
+   ]
+  },
+  {
+   "what": "Equity unit counts: RPC ABC (1,992,620) and VisionSafe (255) tagged as principal at 1,000 times or replaced by the share normaliser (2024-09-30 to 2025-12-31), Peppertree 2025-12-31; RPC ABC preferred stock 2026-03-31 classed common (printed under 'Preferred Stock').",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-032238",
+     "text": "RPC ABC Investment Holdings LLC (dba ABC Plumbing) Diversified Consumer Services 04/26/24 1,992,620 1,993 1,993"
+    },
+    {
+     "accession": "0001193125-26-219873",
+     "text": "Preferred Stock - 0.0 % RPC ABC Investment Holdings LLC (dba ABC Plumbing) Diversified Consumer Services 01/09/26 101,574 $ 101 $ 101"
+    }
+   ]
+  },
+  {
+   "what": "Two rows found by the independent review: the 2023-03-31 money market share count printed '67,071' in thousands ($1 shares; 2023-06-30 prints 49,067,300 for 49,067) set to 67,071,000; the Summit Buyer 2026-06-30 term loan rate printed '8.7 3%' (member and sibling tranche 8.73) set to 8.73.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+    },
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Summit Buyer, LLC (dba Classic Collision) Diversified Consumer Services 8.7 3% S + 5.00 % 06/02/31 8,409 8,344 8,324"
+    }
+   ]
+  },
+  {
+   "what": "Distribution per unit: 2023-09-30 tag sits on 'Total increase (decrease) in Members' Capital $ 0.23' (none recorded); 2023-12-31 0.36 (year-to-date split) is 0.59; 2026-03-31 none; 2026-06-30 published 0.22 against 0.44 printed. Highlights figure_corrections.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-125398",
+     "text": "Distributions recorded per unit $ 0.35 $ - $ 0.78 $ -"
+    },
+    {
+     "accession": "0001193125-26-344614",
+     "text": "Distributions recorded per unit $ 0.44 $ 0.48 $ 0.44 $ 0.48"
+    }
+   ]
+  },
+  {
+   "what": "Four published undrawn rows print cost in brackets and tag it with no sign (bracket_scan.py): cost set negative by corrections. The wrapper key bracketed_unsigned_values was tried (build psme) and pulled: it flipped 15 correctly signed fair values on this page layout (D-210 defect).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "VASA Fitness Buyer, Inc. Consumer Retail S + 7.50 % (Incl. 0.38 % PIK) 08/14/28 241 ( 8 ) ( 8 )"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [
+  {
+   "quarter": "2026-06-30",
+   "why": "Published 3.84M under filed (987,294 against 991,132 thousand): the Sonar Acquisitionco AUD tranche (cost 3,690, fair value 3,838) is tagged on the same context as the USD tranche (C_7d226e12), with its values in unit U_AUD; the extractor keeps the first value per concept and context, so the row is not published. Needs a shared extractor change (parked); printed_rows_without_context refuses a row whose issuer and instrument the filing tags.",
+   "quote": {
+    "accession": "0001193125-26-344614",
+    "text": "Sonar Acquisitionco, Inc. (dba SimPRO) Construction & Engineering 9.36 % B + 5.00 % 10/24/30 AUD 5,600 3,690 3,838"
+   }
+  }
+ ],
+ "parked": [
+  {
+   "finding": "2026-06-30 Sonar Acquisitionco AUD tranche not published (total exception; fv_conservation passes inside its tolerance at -0.39 pct, so no ledger finding names it)",
+   "hypotheses": [
+    "printed_rows_without_context: refused by design, the filing tags the issuer and instrument on a current-period context (pipeline/printed_rows.py _already_tagged).",
+    "untagged_values: fills a missing value on an existing record only; cannot add a second record for one context.",
+    "row corrections: modify published rows only.",
+    "opt-in extractor split of a context with two complete value sets in two currency units: needs a second record id per context (row_id = hash(accession + context)) and re-verifier support; not attempted with the build budget left."
+   ]
+  },
+  {
+   "finding": "income_yield_pct for 2023 quarters is a split of a year-to-date ratio (2023-12-31: 2.28 = 4.04 printed for the year less 1.76 printed to September); a shared financials step, not this fund's settings",
+   "hypotheses": [
+    "figure_corrections income_yield_pct could set a value, but the field's quarter definition for a printed year-to-date ratio is a cohort convention, not a page figure; left for the owner (observation income-ratio-split-across-quarters)."
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "psm-req-1",
+   "file": "pipeline/fund_strategy_validation.py (FS03 share)",
+   "classification": "verification_bug",
+   "authority": "orchestrator",
+   "status": "implemented",
+   "resolution": "Verified and fixed by the orchestrator: CASH rows no longer count toward the FS03 fund-of-funds share; denominator unchanged. Cohort measured: FS03 3 -> 0 fund-quarters (this fund 2023-03-31 and 2023-06-30, 0001674760 2026-03-31); fund strategy tests 36 pass. psmf re-run in place from the validate stage: FS03 gone, FS02 still fires on both quarters (money market fund stays in the denominator) and stays proposed.",
+   "what": "fund_strategy_validation counts a published money market row (index_classification CASH, issuer_category FUND) as a fund-of-funds holding (FS03).",
+   "why": "2023-03-31 and 2023-06-30 warn with fund_of_funds_share 0.74 and 0.54, which are the money market fund's share; the fund holds no fund investments. Cash rows should be left out of the strategy mix, as the conservation checks leave them out under investments_total_excludes.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+    }
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+    }
+   ],
+   "next_action": "Orchestrator: decide whether FS02/FS03 exclude index_classification CASH rows (test: a fund whose only non-loan row is a money market fund passes; a fund holding a real fund interest still warns). Until then the two findings are proposed with reason fund-strategy-money-market-held-while-fund-ramps."
+  }
+ ],
+ "checklist_recheck": [
+  "Detection decisions: each existing_detector checked against psma's shadow ledger and page_rule_findings (X11 x6, issuer_name_printed on PAS/QBS 2026-03-31 and ML Holdco 2026-06-30, C04 fail 2024-09-30/2024-12-31/2025-06-30/2025-09-30, F16 2023-09-30/2023-12-31, B01 2023-03-31..2024-03-31 and 2024-09-30); industry_coverage, units_printed and preferred_printed passed every quarter in psma, so those observations propose detectors.",
+  "Counts: every figure in fixes and observations reproduces from files in scratch/fund_runs/0001948368/ (psmf_obs_fv.txt, psma_q09_health.txt, psmf_q09_health.txt, psma_strip_dryrun.txt, psmf_diff_vs_psma.txt, psmf_diff_vs_spon3.txt, corrections_count.txt, psme_diff_vs_psmd.txt, psme_flip_fv.txt, untagged.json); recounted after the in-place re-run of psmf.",
+  "Scope searches run across all 15 filings and every row: unsigned bracketed cost/value facts (bracket_scan.py, all InvestmentOwnedAt* concepts incl. the custom NetOfCapitalizedDiscount ones: 6 found, all corrected); member-printed spread, PIK, rate and benchmark code against published on all 2,155 loan rows (q23_terms.sql: 0 PIK and 0 code mismatches; 12 spread / 10 rate differences read on the page, all where the member text is stale and the tag matches the printed row, except Summit Buyer 2026-06-30 '8.7 3%', now corrected to 8.73: 9 rate differences remain); share-count scale per filing (sh_scale.py); contexts with no fair value per filing (nofv_ctx.py); industry variants per issuer across quarters (q15_gicsmix.sql); every distinct issuer name (strip_dryrun.py); foreign-currency rows (q24_fx.sql).",
+  "New rows (62 dash rows, 9 money-market rows) went through the name, industry, instrument, reference-rate and term checks above (q18_newrows.sql, q23_terms.sql on psmf).",
+  "Accepted reasons: C103 rows read on the page (4 had unsigned bracketed cost, corrected); X06 2026-06-30 and earlier rows read (partly drawn lines, par printed above value); C107 2026-06-30 82 rows covered by bracket_scan (0 unsigned brackets in that filing).",
+  "Anchors: the declared 2026-06-30 investments total is the balance-sheet line the filer tags (InvestmentOwnedAtFairValue 991,132,000 on dimensioned contexts), not a sum of schedule rows; it exposes the 3.84M Sonar gap rather than hiding it. 2023 cost totals are balance-sheet lines.",
+  "Shared tables and defaults: none changed; both new readings are opt-in by accession in this fund's wrapper only.",
+  "Owner conventions: spread, PIK and interest_rate storage untouched."
+ ],
+ "observations": [
+  {
+   "observation_key": "one-context-for-two-printed-lines",
+   "what": "2026-06-30: the Sonar Acquisitionco USD tranche (5,660 / 5,606 / 5,604) and AUD tranche (AUD 5,600 / 3,690 / 3,838) are tagged on one context (C_7d226e12), values in U_USD and U_AUD; the extractor keeps the first value per concept and context, so the AUD tranche is not published. Published 3.84M under the filed total; fv_conservation passes inside its tolerance (-0.39 pct) so no ledger finding names it. Parked (total exception).",
+   "field": "fair_value",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 3.84,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Flag any investment context of a filing that carries two InvestmentOwnedAtFairValue facts in different currency units, and any context whose printed fair value appears on two printed rows (page_vs_flat 'contexts printed more than once').",
+   "quote": {
+    "accession": "0001193125-26-344614",
+    "text": "Sonar Acquisitionco, Inc. (dba SimPRO) Construction & Engineering 9.36 % B + 5.00 % 10/24/30 AUD 5,600 3,690 3,838"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on this row in psma or psmf: totals checks pass within 0.5 pct of a 991M fund. A unit-count check per context (two fair-value facts, two units) is exact and has no false positive on a fund that tags one value per context."
+   }
+  },
+  {
+   "observation_key": "loan-par-tagged-as-share-count",
+   "what": "2023-03-31 to 2024-06-30: the par of every loan is tagged InvestmentOwnedBalanceShares, in dollars in two filings and at the printed thousands in four. Fixed (par_tagged_as_units accession and ':x1000' entries). X11 saw the funded rows only; the undrawn rows (negative cost) had no principal and a unit count and no rule looked at them.",
+   "field": "principal_amount",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "fair_value_m": 852.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a LOAN row (any fair value sign) that has shares_held and no principal_amount.",
+   "quote": {
+    "accession": "0000950170-24-026163",
+    "text": "ASM Buyer, Inc. Commercial Services & Supplies S + 6.00 % 01/29/28 4,189 - -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "reference": "X11 (row_validation)",
+    "rationale": "X11 fired on the funded rows of all six quarters in psma (6 findings). It does not cover undrawn rows with a fair value at or below zero; the suggested check extends it to any loan row carrying a unit count and no par."
+   }
+  },
+  {
+   "observation_key": "value-tagged-decimals-zero-in-thousands-schedule",
+   "what": "10-Q 2026-03-31: 188 principal facts at decimals 0 hold the printed thousands figure beside dollar cost and value at -3; 118 funded loans published a par 1,000 times too small. Fixed with the new opt-in thousands_scale_filings. No rule fired.",
+   "field": "principal_amount",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 655.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a funded LOAN row whose principal_amount is below one hundredth of its cost.",
+   "quote": {
+    "accession": "0001193125-26-219873",
+    "text": "SpecialtyCare, Inc. Health Care Providers & Services 8.66 % S + 5.00 % 12/18/29 20,267 20,226 20,166"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired in psma: X06 tests a par far above value, not far below. A par below cost/100 on a loan with positive cost has no legitimate case on a cash-pay loan book; PIK-only or written-down loans keep par above cost."
+   }
+  },
+  {
+   "observation_key": "reference-rate-type-tag-holds-the-spread",
+   "what": "2023-03-31 and 2023-06-30: the custom tag ck:InvestmentReferenceRateAndSpread holds the spread (0.0650) and is mapped to reference_rate_type, so the benchmark read '0.0650'. 31 rows (24 published before, 7 restored dash rows) set to SOFR by corrections. The concept map is shared (pipeline/bdc_filings.py CONCEPT_MAP).",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "fair_value_m": 61.3,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag any published reference_rate_type that is not one of the benchmark names (a number, in particular).",
+   "quote": {
+    "accession": "0000950170-23-019620",
+    "text": "Onyx CenterSource, Inc. Software 12.80 % S + 7.75 % 12/06/27 9,244 8,981 8,966"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in psma. An enumeration check on reference_rate_type is exact (closed list of benchmarks) and cannot false-alarm on a correct row."
+   }
+  },
+  {
+   "observation_key": "member-industry-truncated-or-misspelt",
+   "what": "Industry read from the member is truncated ('Financial Service', 'Hotels, Restaurants & Leisur', 'Diversified Financial Service'), carries the next column ('Aerospace & Defense Maturity/', 'Air Freight & Logistics Rate'), is missing (2023-09-30 members with a garbled 'Debt' character; Thor, Circustrix with no 'Industry' word) or names another industry than the page (2025-09-30: Coding Solutions, Highfive Dental, SpecialtyCare 'Health Care Equipment & Supplies' against 'Health Care Providers & Services' printed). 52 rows corrected; GICS followed (Onyx 2023-09-30 had been Real Estate).",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-09-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 114.5,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose extracted_industry is not one of the fund's printed industry labels, or differs from the industry the same issuer has in the quarters before and after.",
+   "quote": {
+    "accession": "0001193125-25-277555",
+    "text": "SpecialtyCare, Inc. Health Care Providers & Services 9.33 % S + 5.00 % 12/18/29 20,369 20,323 20,323"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "industry_coverage passed in psma on every quarter: it tests that an industry exists, not that it is the printed one. Comparing with the fund's set of printed labels catches truncation; the issuer-across-quarters test catches a wrong member label at the cost of flagging genuine re-labels, which are rare."
+   }
+  },
+  {
+   "observation_key": "issuer-name-is-hierarchy-path",
+   "what": "2026-03-31: two members run the percent into the name ('Debt - 159.5%PAS Parent Inc.'); the whole member was published as the issuer, with instrument '% United States ...' and no industry. Fixed by issuer_name_strip_re and corrections.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 5.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag an issuer_name that begins with the fund's category prefix ('Investment Debt Investments') or contains a percent sign.",
+   "quote": {
+    "accession": "0001193125-26-219873",
+    "text": "PAS Parent Inc. (dba Pace Analytical) Professional Services 8.17 % S + 4.50 % 08/18/32 5,674 5,640 5,631"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "reference": "issuer_name_printed (identity)",
+    "rationale": "issuer_name_printed fired on the PAS Parent and QBS Parent rows at 2026-03-31 in psma (not_the_printed_name). It needs the page reader to match the row; a percent-sign test on the name would also catch rows the reader misses."
+   }
+  },
+  {
+   "observation_key": "row-tagged-on-another-issuers-member",
+   "what": "2026-06-30: the ML Holdco (MeridianLink) funded loan is tagged on a member naming Summit Buyer (Classic Collision) with Summit's rate, maturity and industry text; the values and the rate tags are MeridianLink's. Issuer and industry corrected.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 5.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose tagged rate, spread or maturity differ from the terms written in its own member text.",
+   "quote": {
+    "accession": "0001193125-26-344614",
+    "text": "ML Holdco, LLC (dba MeridianLink) Software 7.91 % S + 4.25 % 10/25/32 5,338 5,313 5,258"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "reference": "issuer_name_printed (identity)",
+    "rationale": "issuer_name_printed fired on this row at 2026-06-30 in psma (published Summit Buyer, printed ML Holdco). The member-versus-tag comparison (q23_terms.sql) found it as well and found no other such row in 2,155 loans."
+   }
+  },
+  {
+   "observation_key": "instrument-text-carries-rate-and-row-number",
+   "what": "2026-03-31 and 2026-06-30: the last-out section member reads '1st Lien/Last-Out Unitranche - (11)' (a footnote where the percent stands), so instrument_description was '(11)' on 20 rows; three rows had '168.5 / 127.58 1st Lien/Senior Secured Debt'. Set to the printed section by corrections.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 117.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag an instrument_description that is only a footnote marker or begins with a number.",
+   "quote": {
+    "accession": "0001193125-26-344614",
+    "text": "Total 1st Lien/Last-Out Unitranche 62,582 62,431"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in psma. A regex on the published instrument ('^\\(\\d+\\)$', '^\\d') is exact for this shape; instrument names that start with a digit (a '2nd lien' spelt numerically) need an allow-list."
+   }
+  },
+  {
+   "observation_key": "equity-units-tagged-as-principal",
+   "what": "RPC ABC (1,992,620 units) and VisionSafe (255) units tagged as principal at 1,000 times (2024-09-30, 2024-12-31, 2025-06-30, 2025-09-30), so no unit count was published; 2025-12-31 counts filled by the share normaliser as proxies. Set from the page by corrections.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 9.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "C04: an equity row with a value and no unit count.",
+   "quote": {
+    "accession": "0000950170-25-032238",
+    "text": "RPC ABC Investment Holdings LLC (dba ABC Plumbing) Diversified Consumer Services 04/26/24 1,992,620 1,993 1,993"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "reference": "C04 (oracle)",
+    "rationale": "C04 fired on 2024-09-30, 2024-12-31, 2025-06-30 and 2025-09-30 in psma (4 findings), the four quarters with no count. The proxy counts of 2025-12-31 passed C04 because a count existed; units_printed would catch a wrong count once the page reader reads this layout."
+   }
+  },
+  {
+   "observation_key": "preferred-equity-published-as-common",
+   "what": "2026-03-31: RPC ABC preferred stock (101,574 units, 101) printed under 'Preferred Stock' published as common equity; the 10-Q for 2026-06-30 publishes the same line as preferred. Corrected.",
+   "field": "asset_category",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.1,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag an equity row printed under a 'Preferred Stock' section heading whose asset_category is not EQUITY_PREFERRED.",
+   "quote": {
+    "accession": "0001193125-26-219873",
+    "text": "Preferred Stock - 0.0 % RPC ABC Investment Holdings LLC (dba ABC Plumbing) Diversified Consumer Services 01/09/26 101,574 $ 101 $ 101"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "preferred_printed passed at 2026-03-31 in psma (it did not read this row's section). The section-heading test is exact where the page reader assigns sections; it needs the reader to see the 'Preferred Stock - 0.0 %' heading of this layout."
+   }
+  },
+  {
+   "observation_key": "money-market-fund-not-published",
+   "what": "The affiliated money market fund was published as cash only from 2025-06-30; 2023-03-31 to 2025-03-31 its member puts the section heading in front ('Investments in Affiliated Money Market Fund - x% ... Goldman Sachs ...') and the prefix-rule filter dropped it (67,071 at 2023-03-31). Published now in every quarter; names, share counts (the tag held 1,000 times the count, or the normaliser a count from another quarter) and par (the share count tagged as principal) set from the page.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 210.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a fund-quarter where the filed investments-plus-money-market total (balance sheet) exceeds the published rows with cash by more than the tolerance.",
+   "quote": {
+    "accession": "0000950170-23-019620",
+    "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the missing rows in psma: the totals check compares ex-cash, and nothing compares the published cash rows with the printed money-market line. A with-cash comparison against the printed combined total would catch it."
+   }
+  },
+  {
+   "observation_key": "distribution-concept-holds-issuance-per-share",
+   "what": "10-Q 2023-09-30 tags 'Total increase (decrease) in Members' Capital $ 0.23' with InvestmentCompanyDistributionToShareholdersPerShare; distribution per unit published 0.23 (none recorded) and the year-to-date split then gave 0.36 for the fourth quarter (0.59 recorded). Set by highlights figure_corrections.",
+   "field": "distribution_per_share",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "F16 / F33 on the quarter; and: a quarter distribution must equal the printed 'Distributions recorded per unit' of that period where one is printed.",
+   "quote": {
+    "accession": "0000950170-24-125398",
+    "text": "Distributions recorded per unit $ 0.35 $ - $ 0.78 $ -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "reference": "F16 (fund_financials)",
+    "rationale": "F16 fired at 2023-09-30 and 2023-12-31 in psma (distribution rate above 1.5 times the income yield). It is a weak heuristic that also fires on correct catch-up quarters (2024-12-31, 2025-12-31), so a direct comparison with the printed per-unit line is the stronger check."
+   }
+  },
+  {
+   "observation_key": "distribution-per-share-period-to-date-in-quarter",
+   "what": "2026-06-30: distribution per unit published 0.22 against 0.44 printed for the quarter and the half-year (2026-03-31 had no figure: none recorded). The six-month figure appears split over two quarters. Set by figure_corrections (2026-03-31 0, 2026-06-30 0.44).",
+   "field": "distribution_per_share",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a quarter distribution per unit that differs from a three-month InvestmentCompanyDistributionToShareholdersPerShare or DistributionsPerGeneralPartnershipUnitOutstanding fact for the same quarter.",
+   "quote": {
+    "accession": "0001193125-26-344614",
+    "text": "Distributions recorded per unit $ 0.44 $ 0.48 $ 0.44 $ 0.48"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired in psma (F16 and F33 passed at 2026-06-30 with 0.22). The filer files a three-month fact (CY2026Q2 frame, 0.44); comparing the published quarter with it is exact where the fact exists."
+   }
+  },
+  {
+   "observation_key": "income-ratio-unannualised-compared-with-annual",
+   "what": "income_yield_pct for 2023 quarters is a split of the printed year-to-date ratio of net investment income to members' capital (2023-09-30: 0.84 against 1.76 printed for nine months; 2023-12-31: 2.28 = 4.04 for the year less 1.76), while 2024 on publishes the printed ratio. Left: the field's quarter definition for a year-to-date ratio is a shared financials convention; F16 at 2023-12-31 is proposed with that noted.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag an income_yield_pct that equals the difference of two printed year-to-date ratios (ratios are not additive).",
+   "quote": {
+    "accession": "0000950170-24-026163",
+    "text": "Ratio of net investment income to average Members' Capital 4.04 % ( 7.76 %)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule tests the derivation; F16 fires only incidentally. The suggested test compares the published figure with the printed ratios of the filing and its predecessor, which the highlights stage already reads."
+   }
+  },
+  {
+   "observation_key": "printed-negative-cost-tagged-unsigned",
+   "what": "Four published undrawn rows (Arrow Buyer 2023-09-30 and 2024-03-31, VASA Fitness x2 2023-09-30) print cost in brackets and tag it with no sign; published +8,000 / +25,000. Corrected to negative. C103 had flagged them and a check accepted them as filed ('small negative fair values ... as tagged').",
+   "field": "cost",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31"
+   ],
+   "fair_value_m": 0.05,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "For each cost or fair-value inline fact printed between brackets, require sign=\"-\" (bracket_scan.py logic).",
+   "quote": {
+    "accession": "0000950170-23-060353",
+    "text": "VASA Fitness Buyer, Inc. Consumer Retail S + 7.50 % (Incl. 0.38 % PIK) 08/14/28 241 ( 8 ) ( 8 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C103 fired on these rows in psma but the accepted check (values_as_filed) reads tags, not the page, so the wrong sign was accepted. A bracket-versus-sign comparison on the inline facts is exact; bracket_scan.py found 6 such facts in 15 filings of this fund."
+   }
+  },
+  {
+   "observation_key": "printed-sign-reader-misses-bracket-in-next-cell",
+   "what": "Build psme: source_encodings.bracketed_unsigned_values for 2023-09-30 and 2024-03-31 flipped 15 correctly signed fair values and 13 costs to positive (Thor '3,778 ( 46 ) ( 47 )' became +46 / +47). pipeline/printed_sign.py does not see this layout's brackets, which sit in their own cells. Setting pulled; row corrections used instead.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31"
+   ],
+   "fair_value_m": 0.37,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "In printed_sign, refuse to flip a fact that already carries sign=\"-\" and count flips per filing against the bracketed facts found; a flip of a signed fact is a reader error.",
+   "quote": {
+    "accession": "0000950170-23-060353",
+    "text": "Thor FinanceCo LLC (dba Harmoni Towers) Wireless Telecommunication Services S + 7.00 % 08/24/28 3,778 ( 46 ) ( 47 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Nothing flagged the flipped values in psme except fv_conservation at 2023-09-30 (0.7 pct). A guard that a signed fact is never flipped positive is exact and cheap; it is shared code, so it goes to the orchestrator with the D-210 defect."
+   }
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "what": "62 undrawn lines printed with a dash for cost and value, tagged with par only, were not published (1 to 18 a quarter); B01 flagged only the quarters where they exceeded 5 pct of leaves. Published at 0 from the page.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "B01 per row: every current-period leaf context with a par and no fair value, not a 95 pct rate per quarter.",
+   "quote": {
+    "accession": "0000950170-24-125398",
+    "text": "Air Comm Corporation, LLC (dba Signia Aerospace) Aerospace & Defense S + 4.75 % 07/01/27 $ 19,518 $ - $ -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "reference": "B01 (oracle)",
+    "rationale": "B01 fired on 2023-03-31 to 2024-03-31 and 2024-09-30 in psma (6 findings). Its 95 pct threshold hid the dash rows of 2024-12-31 to 2026-03-31 (1 to 10 a quarter); a per-row version would list them."
+   }
+  },
+  {
+   "observation_key": "unit-count-rounded-by-thousands-schedule",
+   "what": "2023-03-31: the money market fund's share count is printed '67,071' in the Par/Shares column of a schedule in thousands and tagged 67071 with no scale; 67,071 shares were published. The fund's shares are priced at $1 (the 10-Q for 2023-06-30 prints 49,067,300 shares for 49,067 thousand), so the count is 67,071 thousand. Found by the independent page sample review; fixed to 67,071,000 by a correction.",
+   "field": "shares_held",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 67.1,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a money market or other $1-priced fund row whose fair value divided by its share count is not within 0.9 to 1.1 dollars.",
+   "quote": {
+    "accession": "0000950170-23-019620",
+    "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on this row in psma or psmf (units_printed passed; C04 does not test cash rows). A price-per-share test on money market rows is exact: such funds hold a constant $1 price, so a ratio of 1,000 is always a scale error."
+   }
+  },
+  {
+   "observation_key": "rate-printed-on-the-row-and-not-tagged",
+   "what": "2026-06-30 Summit Buyer term loan (C_42c721b1): the page prints '8.7 3%' (8.73 split by a space); the rate tag is 0.0870 and 8.70 was published. The member reads 'Interest Rate 8.73%' and the sibling tranche of the same loan prints 8.73 %. Fixed: 8.73 published by a context-keyed correction (psmf re-run from rebuild; holdings_field_diff shows this row and the 2023-03-31 money-market count only).",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 8.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a loan row whose tagged interest rate differs by more than 0.005 from the 'Interest Rate x%' written in its own member text, and list the printed row beside it (q23_terms.sql: 10 such rows in 2,155 loans before this fix, psmf_pre_r4_q23_terms.txt; 9 after, psmf_q23_terms.txt, all stale member text where the tag matches the page).",
+   "quote": {
+    "accession": "0001193125-26-344614",
+    "text": "Summit Buyer, LLC (dba Classic Collision) Diversified Consumer Services 8.7 3% S + 5.00 % 06/02/31 8,409 8,344 8,324"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on this row in psma. The member-versus-tag rate comparison of q23_terms.sql found it; it raises few candidates (10 of 2,155 loan rows here), each settled by its printed line, so the false alarms are cheap to clear."
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_thousands_scale.py: 7 passed (new)",
+  "tests/test_whole_dollar_scale.py, test_bdc_filings.py, test_cash_identifier_rows.py, test_source_encodings.py, test_printed_sections.py, test_printed_sign.py, test_printed_rows.py, test_filer_cash_and_subtotal_keys.py, test_principal_reference_fx.py, test_explicit_contexts.py, test_provenance.py: 428 passed, 2 failed (test_source_encodings::test_printed_margin_reading_is_set_for_the_two_blue_owl_funds_and_apollo_alone and test_principal_reference_fx::test_only_the_five_sample_funds_opt_in: both list fixed fund sets that other funds' committed wrappers already exceed (0002006758 printed_margin_reading; several fred_h10 funds); not caused by this run)",
+  "tests/test_bdc_xbrl_wrapper.py, test_fund_highlights_wrapper.py, test_thousands_scale.py: 595 passed"
+ ],
+ "not_done": [
+  "Semantic diff on the full cohort for the shared code: both new readings are opt-in by accession and off for every other fund (no other wrapper lists them); not measured on the cohort.",
+  "Maturity and non-accrual checked only on rows read for other reasons; no row-by-row census of maturities against the page.",
+  "The 20-row random page sample (orchestrator).",
+  "Round 4 (reviewer's page sample and review): 2023-03-31 money market share count corrected to 67,071,000 and Summit Buyer 2026-06-30 rate to 8.73 (psmf re-run in place from stage rebuild, which applies row corrections; holdings_field_diff vs the pre-run copy psmf_pre_r4: shares_held 1, interest_rate 1, interest_rate_reported 1, corrected_fields 1, nothing else).",
+  "shares_held_source still reads derived_proxy on 5 rows whose values were set by correction (2023-03-31 cash row, 2025-12-31 four rows)."
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_22cd4eae8d75",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-03-31/E01/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-03-31/E01/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 24,041 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (67,071 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, E01 holds all published rows (91,112) against the investments line 24,041."
+   ],
+   "next_action": "Proposal PD-E01-1948368-6 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_2ff5588686ee",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-09-30/E01/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-09-30/E01/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 105,006 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (26,273 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, E01 holds all published rows (131,279) against the investments line 105,006."
+   ],
+   "next_action": "Proposal PD-E01-1948368-6 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_43a524f38c4b",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-12-31/E01/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-12-31/E01/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 176,995 and $ 17,360 ) $ 177,418 $ 17,352"
+    },
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 177,418 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (9,542 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, E01 holds all published rows (186,960) against the investments line 177,418."
+   ],
+   "next_action": "Proposal PD-E01-1948368-6 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_509c12a203f1",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-06-30/A04/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-06-30/A04/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 42,023 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (49,067 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, A04 holds all published rows (91,090) against the investments line 42,023."
+   ],
+   "next_action": "Proposal PD-A04-1948368-5 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_7c3668156fc2",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2024-06-30/E01/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2024-06-30/E01/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Total investments, at fair value (cost of $ 311,116 and $ 176,995 ) $ 312,590 $ 177,418"
+    },
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Investments in affiliated money market fund (cost of $ 30,420 and $ 9,542 ) 30,420 9,542"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 312,590 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (30,420 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, E01 holds all published rows (343,010) against the investments line 312,590."
+   ],
+   "next_action": "Proposal PD-E01-1948368-6 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_7c6ab0360fa3",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-09-30/A04/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-09-30/A04/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 105,006 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (26,273 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, A04 holds all published rows (131,279) against the investments line 105,006."
+   ],
+   "next_action": "Proposal PD-A04-1948368-5 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_7dd3c4cc16bf",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-06-30/E01/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-06-30/E01/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 42,023 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (49,067 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, E01 holds all published rows (91,090) against the investments line 42,023."
+   ],
+   "next_action": "Proposal PD-E01-1948368-6 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_8914c03d721c",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-03-31/A04/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-03-31/A04/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352"
+    },
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 24,041 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (67,071 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, A04 holds all published rows (91,112) against the investments line 24,041."
+   ],
+   "next_action": "Proposal PD-A04-1948368-5 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_cdad859f6ad0",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2024-06-30/A04/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2024-06-30/A04/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Total investments, at fair value (cost of $ 311,116 and $ 176,995 ) $ 312,590 $ 177,418"
+    },
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Investments in affiliated money market fund (cost of $ 30,420 and $ 9,542 ) 30,420 9,542"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 312,590 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (30,420 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, A04 holds all published rows (343,010) against the investments line 312,590."
+   ],
+   "next_action": "Proposal PD-A04-1948368-5 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_ceb41516565b",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-12-31/A04/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-12-31/A04/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 176,995 and $ 17,360 ) $ 177,418 $ 17,352"
+    },
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A non-cash row over-included: rejected, published non-cash rows sum to 177,418 thousand, the filed investments line of this quarter (psmf_q01_totals.txt).",
+    "The excess is the money market row (9,542 thousand) that the schedule prints after 'Total Investments' and this balance sheet carries on its own line: confirmed, A04 holds all published rows (186,960) against the investments line 177,418."
+   ],
+   "next_action": "Proposal PD-A04-1948368-5 (oracle-holdings-with-cash-rows-against-ex-cash-investments-total) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_f727c5ab5640",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107350/C_a8251175-8b45-4057-9e03-7789e31ec100/ROW-0aba4cd2ccaacec9"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107350/C_a8251175-8b45-4057-9e03-7789e31ec100/ROW-0aba4cd2ccaacec9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107350",
+     "text": "Priority Holdings, LLC (dba Priority Payment) Financial Services 9.08 % S + 4.75 % 05/16/31 18,430 18,363 18,449"
+    },
+    {
+     "accession": "0000950170-25-070320",
+     "text": "Priority Technology Holdings, Inc. (dba Priority Payment) Financial Services 9.07 % S + 4.75 % 05/16/31"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Wrong member (another issuer's values): rejected, rate, maturity and par match the Priority loan of the adjacent quarters.",
+    "Publishing the printed variant: rejected, it would split the issuer chain for one quarter; the other quarters print 'Priority Technology Holdings, Inc.'."
+   ],
+   "next_action": "Proposal PD-issuer_name_printed-1948368-10 (issuer-name-printed-variant-of-same-issuer) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_01dcfe6ca1b4",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-070320/C_6b386940-34ad-4281-b9c8-0ea1fed5370d/ROW-3192a724b12122e5",
+     "0000950170-25-070320/C_c80d0f17-5303-45d5-92c2-3d22c021c68b/merged-shares-only"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-070320/C_6b386940-34ad-4281-b9c8-0ea1fed5370d/ROW-3192a724b12122e5",
+     "0000950170-25-070320/C_c80d0f17-5303-45d5-92c2-3d22c021c68b/merged-shares-only"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070320",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 15,568,517 $ 15,569 $ 15,569"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The merged count belongs to another line: rejected, both contexts carry the same member and the count 15,568,517 is printed on the row.",
+    "The re-verifier excludes merged contexts by design: confirmed (shares_held only, value 15,568,517)."
+   ],
+   "next_action": "Proposal PD-merged_context_excluded-1948368-11 (merged-context-row-published-equals-the-printed-line) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_021111088148",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-06-30/CNT02/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-06-30/CNT02/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Total Investments - 43.30 % $ 42,091 $ 42,023"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Subtotal or duplicate rows inflating the count: rejected, the 14 new rows are 7 new loan lines and 7 undrawn dash lines, each a printed row; non-cash rows equal the filed 42,023.",
+    "Count up while total value with cash is flat because cash moved from the money market fund into loans: confirmed."
+   ],
+   "next_action": "Proposal PD-CNT02-1948368-12 (growth-heuristics-while-fund-ramps) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_09dea8b0125b",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2025-12-31/F16/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2025-12-31/F16/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-088656",
+     "text": "Distributions recorded per unit $ 1.85 $ 1.62 $ 0.59"
+    },
+    {
+     "accession": "0001193125-25-277555",
+     "text": "Distributions recorded per unit $ 0.46 $ 0.35 $ 0.94 $ 0.78"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Earlier verdict (real_error, unit_scale): the stored 18.18 pct is not a scale error; it annualises the fourth quarter alone, 1.85 less 0.94 = 0.91 per unit (0.91 x 4 / 19.83 = 18.4 pct). Rejected as an error.",
+    "Fourth quarter records two distributions (August and November): confirmed from the year and nine-month figures."
+   ],
+   "next_action": "Proposal PD-F16-1948368-4 (f16-quarter-distribution-includes-catch-up-declaration) with addresses_verdict for 2025-12-31."
+  },
+  {
+   "finding_id": "RVQ_REV_0bd762a242a2",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-12-31/F16/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-12-31/F16/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Distributions declared from net investment income ( 0.59 ) -"
+    },
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Ratio of net investment income to average Members' Capital 4.04 % ( 7.76 %)"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Distribution per unit wrong: confirmed for earlier builds (0.36, a year-to-date split of a mis-tagged 0.23) and fixed to 0.59, the year's only distribution, recorded in the fourth quarter.",
+    "Income yield: published 2.28 is the printed year ratio 4.04 less the nine-month 1.76, a split of a ratio; with the printed 4.04 the rule still fires (0.59 x 4 / 19.61 = 12.0 pct against 6.06), so the finding does not depend on it."
+   ],
+   "next_action": "Proposal PD-F16-1948368-4 (f16-quarter-distribution-includes-catch-up-declaration); the income-yield derivation is left to the owner (observation income-ratio-unannualised-compared-with-annual)."
+  },
+  {
+   "finding_id": "RVQ_REV_25d4c31bb266",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2025-03-31/F33/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2025-03-31/F33/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070320",
+     "text": "Distributions recorded per unit $ - $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution not read: rejected, printed '-' and tagged 0 (CY2025Q1).",
+    "No first-quarter distribution: confirmed."
+   ],
+   "next_action": "Proposal PD-F33-1948368-2 (f33-no-distribution-declared-in-the-quarter) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_3e1bdd739a68",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-09-30/F33/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-09-30/F33/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-125398",
+     "text": "Distributions recorded per unit $ 0.35 $ - $ 0.78 $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The published 0.23 of earlier builds was a distribution: rejected, the 10-Q for 2023-09-30 tags 'Total increase (decrease) in Members' Capital $ 0.23' with the distribution concept; the 10-Q for 2024-09-30 prints '-' for the three and nine months to 2023-09-30. Set to 0 (figure_corrections), which is what raises F33 here.",
+    "Rate 0 is printed: confirmed."
+   ],
+   "next_action": "Proposal PD-F33-1948368-1 (f33-no-distribution-in-ramp-up-quarters) for the owner; the corrected 0 replaces a mis-tagged 0.23."
+  },
+  {
+   "finding_id": "RVQ_REV_40a2ea5a0878",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-09-30/F26/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-09-30/F26/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060353",
+     "text": "Liabilities Debt $ 30,000 $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Borrowings mis-read: rejected, 30,000 printed.",
+    "Holdings below members' capital because the fund held 32,552 of cash while ramping: confirmed, so the holdings leverage view is negative."
+   ],
+   "next_action": "Proposal PD-F26-1948368-15 (f26-ramp-up-fund-holds-cash-not-borrowings) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_54144f3d78e2",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-060353/C_ae34cc53-1f7f-4495-846d-fbddda323b15/comparative-2022-12-31",
+     "0000950170-23-060353/C_3b8a5cff-213d-4cf7-930f-95f4f0fb7e92/comparative-2022-12-31",
+     "0000950170-23-060353/C_86e46a59-bf16-44d8-8519-e4c9c06288f7/comparative-2022-12-31"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-060353/C_ae34cc53-1f7f-4495-846d-fbddda323b15/comparative-2022-12-31",
+     "0000950170-23-060353/C_3b8a5cff-213d-4cf7-930f-95f4f0fb7e92/comparative-2022-12-31",
+     "0000950170-23-060353/C_86e46a59-bf16-44d8-8519-e4c9c06288f7/comparative-2022-12-31"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ - $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A current-period dash row still unpublished: rejected, the 6 dash rows of the quarter are published at 0 and B01 lists only 2022-12-31 contexts.",
+    "Comparative-period DFS undrawn lines: confirmed (same par counts 6,201 / 1,292 / 904)."
+   ],
+   "next_action": "Proposal PD-B01-1948368-8 (b01-leaves-without-value-are-the-comparative-schedule) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_795b2b669e7a",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2022-12-31/F16/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2022-12-31/F16/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-026163",
+     "text": "Ratio of net investment income to average Members' Capital 4.04 % ( 7.76 %)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield mis-read: rejected, published -7.76 equals the printed 2022 ratio.",
+    "Distribution 0 above 1.5 x a negative yield is the check's arithmetic on a first period with an operating loss: confirmed."
+   ],
+   "next_action": "Proposal PD-F16-1948368-3 (f16-no-distribution-negative-income-first-quarter) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_7ce9f31e63e9",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-03-31/fund_strategy_validation/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-03-31/fund_strategy_validation/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A fund interest published as a holding: rejected, the only non-loan row is the money market fund, published as CASH (issuer category FUND).",
+    "FS03 (fund-of-funds share 0.74, 0.54) was the money market row: confirmed; after the orchestrator's fix (psm-req-1, psmf re-run from validate) FS03 no longer fires (fund_of_funds_share 0.0).",
+    "FS02 still fires: private_credit_share 0.2639 and 0.4613 = loans 24,041 of 91,112 and 42,023 of 91,090 with the money market fund in the denominator; every loan row is classed private credit: confirmed, as printed."
+   ],
+   "next_action": "Proposal PD-fund_strategy_validation-1948368-9 (fund-strategy-money-market-held-while-fund-ramps, FS02 only) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_86c8cb4bbd21",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-019620/C_16bd2803-1cd5-4d22-9741-bad9c44aad2a/no-fair-value",
+     "0000950170-23-019620/C_05fa6136-4b96-4d83-bef0-d7cc3b37f4b4/no-fair-value",
+     "0000950170-23-019620/C_e42edbb3-e4a3-4eb9-9c16-44d515a0621d/comparative-2022-12-31",
+     "0000950170-23-019620/C_23b0404f-3a8d-4ea9-8bf0-bc1e1b5bc713/comparative-2022-12-31",
+     "0000950170-23-019620/C_19603d55-927b-4eda-8373-0c1e49230505/comparative-2022-12-31"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-019620/C_16bd2803-1cd5-4d22-9741-bad9c44aad2a/no-fair-value",
+     "0000950170-23-019620/C_05fa6136-4b96-4d83-bef0-d7cc3b37f4b4/no-fair-value",
+     "0000950170-23-019620/C_e42edbb3-e4a3-4eb9-9c16-44d515a0621d/comparative-2022-12-31",
+     "0000950170-23-019620/C_23b0404f-3a8d-4ea9-8bf0-bc1e1b5bc713/comparative-2022-12-31",
+     "0000950170-23-019620/C_19603d55-927b-4eda-8373-0c1e49230505/comparative-2022-12-31"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "DFS Holding Company, Inc. Distributors 11.66 % S + 7.00 % 01/31/29 $ 4,787 $ 4,646 $ 4,715"
+    },
+    {
+     "accession": "0000950170-23-019620",
+     "text": "DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ - $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "C_16bd2803 and C_05fa6136 are positions left unpublished: rejected, row_by_ctx.py maps all three DFS contexts (C_4716d28d with cost and value, C_16bd2803 with par, C_05fa6136 with the rate) to the one printed funded line, which is published with the par declared.",
+    "The three other contexts are 2022-12-31 comparative lines (status excluded_comparative_period): confirmed; the fund publishes no 2022-12-31 schedule."
+   ],
+   "next_action": "Proposal PD-B01-1948368-7 (b01-contexts-without-value-are-category-rows-rollforward-or-split-twins) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_a43b5c336e67",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2024-12-31/F16/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2024-12-31/F16/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-088656",
+     "text": "Distributions recorded per unit $ 1.85 $ 1.62 $ 0.59"
+    },
+    {
+     "accession": "0001193125-25-277555",
+     "text": "Distributions recorded per unit $ 0.46 $ 0.35 $ 0.94 $ 0.78"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Quarter distribution 0.84 mis-derived: rejected, 1.62 for 2024 less 0.78 to September = 0.84.",
+    "Fourth quarter records two distributions, so its annualised rate (16.9 pct) exceeds 1.5 x the 9.08 pct year ratio: confirmed."
+   ],
+   "next_action": "Proposal PD-F16-1948368-4 (f16-quarter-distribution-includes-catch-up-declaration) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_abfa4816abef",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-039890/C_afab8b1c-a6aa-498c-8777-78b402e674a5/comparative-2022-12-31",
+     "0000950170-23-039890/C_d5ae9004-347a-47e7-bd52-39c00637db6c/comparative-2022-12-31",
+     "0000950170-23-039890/C_fd1ea1cd-b5b9-47f3-b892-e3e1ba96573f/comparative-2022-12-31"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-039890/C_afab8b1c-a6aa-498c-8777-78b402e674a5/comparative-2022-12-31",
+     "0000950170-23-039890/C_d5ae9004-347a-47e7-bd52-39c00637db6c/comparative-2022-12-31",
+     "0000950170-23-039890/C_fd1ea1cd-b5b9-47f3-b892-e3e1ba96573f/comparative-2022-12-31"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ - $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A current-period dash row still unpublished: rejected, the 7 dash rows of the quarter are published at 0 (q18_newrows.sql) and B01 lists only 2022-12-31 contexts.",
+    "The three contexts are the DFS undrawn lines of the 2022-12-31 comparative schedule (6,201 / 1,292 / 904): confirmed."
+   ],
+   "next_action": "Proposal PD-B01-1948368-8 (b01-leaves-without-value-are-the-comparative-schedule) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_bc8959fb304d",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-06-30/D03/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-06-30/D03/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Total Investments - 43.30 % $ 42,091 $ 42,023"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Subtotal leak (D03's purpose): rejected, published non-cash rows equal the printed total of the loans.",
+    "Ramp-up redeployment of cash: confirmed (money market 67,071 to 49,067, loans 24,041 to 42,023)."
+   ],
+   "next_action": "Proposal PD-D03-1948368-13 (growth-heuristics-while-fund-ramps) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_c1a803643bb9",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2024-03-31/F33/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2024-03-31/F33/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070320",
+     "text": "Distributions recorded per unit $ - $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A first-quarter distribution exists on another concept: rejected, companyfacts holds 0 for CY2024Q1 and the 10-Q for 2025-03-31 prints '-' for the three months to 2024-03-31.",
+    "The fund records distributions from the second quarter of each year: confirmed in 2024, 2025 and 2026."
+   ],
+   "next_action": "Proposal PD-F33-1948368-2 (f33-no-distribution-declared-in-the-quarter) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_c243d0ded8fe",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2026-03-31/F33/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2026-03-31/F33/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219873",
+     "text": "Distributions recorded per unit $ - $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The blank figure of earlier builds hid a distribution: rejected, printed '-' and tagged 0 (CY2026Q1); this run publishes 0 (figure_corrections), which raises F33.",
+    "No first-quarter distribution: confirmed."
+   ],
+   "next_action": "Proposal PD-F33-1948368-2 (f33-no-distribution-declared-in-the-quarter) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_cb30f63bd147",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-06-30/fund_strategy_validation/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-06-30/fund_strategy_validation/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019620",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 67,071 $ 67,071 $ 67,071"
+    },
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A fund interest published as a holding: rejected, the only non-loan row is the money market fund, published as CASH (issuer category FUND).",
+    "FS03 (fund-of-funds share 0.74, 0.54) was the money market row: confirmed; after the orchestrator's fix (psm-req-1, psmf re-run from validate) FS03 no longer fires (fund_of_funds_share 0.0).",
+    "FS02 still fires: private_credit_share 0.2639 and 0.4613 = loans 24,041 of 91,112 and 42,023 of 91,090 with the money market fund in the denominator; every loan row is classed private credit: confirmed, as printed."
+   ],
+   "next_action": "Proposal PD-fund_strategy_validation-1948368-9 (fund-strategy-money-market-held-while-fund-ramps, FS02 only) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_dc031a68ef05",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-06-30/F24/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-06-30/F24/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-039890",
+     "text": "Total Investments - 43.30 % $ 42,091 $ 42,023"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows duplicated: rejected, each published row has its own printed line (dash rows read with row_by_ctx.py).",
+    "Second quarter of a fund investing its capital: confirmed (10 to 24 rows)."
+   ],
+   "next_action": "Proposal PD-F24-1948368-14 (f24-ramp-up-fund-position-count-doubles) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_e048e63ca64a",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2022-12-31/F33/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2022-12-31/F33/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-032238",
+     "text": "Distributions recorded per unit $ 1.62 $ 0.59 $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution per unit lost by the extractor: rejected, the 10-K for 2024 prints '-' for 2022 and companyfacts holds 0 for 2022-10-06 to 2022-12-31.",
+    "Stub first period (operations from 2022-10-06): confirmed, no distribution declared."
+   ],
+   "next_action": "Proposal PD-F33-1948368-1 (f33-no-distribution-in-ramp-up-quarters) for the owner."
+  },
+  {
+   "finding_id": "RVQ_REV_f6f8b548cfc2",
+   "coverage": {
+    "affected_rows": [
+     "0001948368/2023-06-30/F33/fund-quarter"
+    ],
+    "reviewed_rows": [
+     "0001948368/2023-06-30/F33/fund-quarter"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096233",
+     "text": "Distributions recorded per unit $ 0.43 $ - $ 0.43 $ -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A second-quarter distribution was recorded and not read: rejected, the comparative columns of the 10-Q for 2024-06-30 print '-' for the three and six months to 2023-06-30.",
+    "Ramp-up fund with no distribution yet: confirmed (first distribution recorded in the fourth quarter of 2023)."
+   ],
+   "next_action": "Proposal PD-F33-1948368-1 (f33-no-distribution-in-ramp-up-quarters) for the owner."
+  }
+ ]
+}

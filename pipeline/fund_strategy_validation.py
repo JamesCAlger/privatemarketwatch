@@ -361,8 +361,14 @@ def build_fund_strategy_holdings_mix(holdings_df: pd.DataFrame) -> pd.DataFrame:
                 SUM(CASE WHEN index_classification IN ('DIRECT_LENDING', 'PRIVATE_CREDIT_FUND') THEN fair_value ELSE 0 END) AS private_credit_fair_value,
                 SUM(CASE WHEN index_classification IN ('DIRECT_REAL_ESTATE', 'REAL_ESTATE_FUND')
                           OR asset_class = 'REAL_ESTATE' THEN fair_value ELSE 0 END) AS real_estate_fair_value,
-                SUM(CASE WHEN index_classification IN ('PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND', 'REAL_ESTATE_FUND', 'HEDGE_FUND')
-                          OR issuer_category = 'FUND' THEN fair_value ELSE 0 END) AS fund_of_funds_fair_value,
+                -- CASH rows (money market / liquidity funds, issuer_category FUND)
+                -- are cash equivalents, not fund-of-funds holdings (psm-req-1).
+                -- They stay in total_fair_value so every share uses the same
+                -- denominator; leaving them out of the numerator only lowers
+                -- fund_of_funds_share and can never raise a new FS03.
+                SUM(CASE WHEN COALESCE(index_classification, '') <> 'CASH'
+                          AND (index_classification IN ('PRIVATE_CREDIT_FUND', 'PRIVATE_EQUITY_FUND', 'REAL_ESTATE_FUND', 'HEDGE_FUND')
+                               OR issuer_category = 'FUND') THEN fair_value ELSE 0 END) AS fund_of_funds_fair_value,
                 SUM(CASE WHEN index_classification IN ('COMMON_EQUITY', 'PREFERRED_EQUITY', 'PRIVATE_EQUITY_FUND') THEN fair_value ELSE 0 END) AS private_equity_fair_value,
                 SUM(CASE WHEN index_classification = 'STRUCTURED_CREDIT' THEN fair_value ELSE 0 END) AS structured_credit_fair_value,
                 SUM(CASE WHEN index_classification = 'HEDGE_FUND' THEN fair_value ELSE 0 END) AS hedge_fund_fair_value

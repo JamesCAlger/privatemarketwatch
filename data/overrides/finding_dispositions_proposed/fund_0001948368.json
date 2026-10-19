@@ -1,0 +1,595 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "psmf",
+ "dispositions": [
+  {
+   "disposition_id": "PD-F33-1948368-1",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "reason_key": "f33-no-distribution-in-ramp-up-quarters",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2022-12-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "statement": "Distribution rate 0 in the fund's first quarters (operations began in 2022; first distribution recorded in the fourth quarter of 2023). F33 expects a rate above 0. The page records no distribution in these periods; the published 0 is the printed figure. At 2023-09-30 the filer had tagged 'Total increase (decrease) in Members' Capital $ 0.23' as the distribution per unit; this run sets 0 from the comparative columns (highlights figure_corrections).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032238",
+     "verbatim": "Distributions recorded per unit $ 1.62 $ 0.59 $ -",
+     "quote": "'Distributions recorded per unit $ 1.62 $ 0.59 $ -': years 2024, 2023, 2022: none in 2022"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096233",
+     "verbatim": "Distributions recorded per unit $ 0.43 $ - $ 0.43 $ -",
+     "quote": "'Distributions recorded per unit $ 0.43 $ - $ 0.43 $ -': three and six months to 2023-06-30: none"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125398",
+     "verbatim": "Distributions recorded per unit $ 0.35 $ - $ 0.78 $ -",
+     "quote": "'Distributions recorded per unit $ 0.35 $ - $ 0.78 $ -': three and nine months to 2023-09-30: none"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-F33-1948368-2",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "reason_key": "f33-no-distribution-declared-in-the-quarter",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2025-03-31",
+    "2026-03-31"
+   ],
+   "statement": "The fund records its distributions in the second to fourth quarters; the first quarter of each year records none, so the quarter's distribution rate is 0 as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070320",
+     "verbatim": "Distributions recorded per unit $ - $ -",
+     "quote": "'Distributions recorded per unit $ - $ -': three months to 2025-03-31 and to 2024-03-31: none"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219873",
+     "verbatim": "Distributions recorded per unit $ - $ -",
+     "quote": "'Distributions recorded per unit $ - $ -': three months to 2026-03-31 and to 2025-03-31: none"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-F16-1948368-3",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "reason_key": "f16-no-distribution-negative-income-first-quarter",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2022-12-31"
+   ],
+   "statement": "First period of operations (from 2022-10-06): net investment income was negative (printed ratio -7.76 pct) and no distribution was recorded, so distribution rate 0 exceeds 1.5 times a negative income yield. Both inputs are as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026163",
+     "verbatim": "Ratio of net investment income to average Members' Capital 4.04 % ( 7.76 %)",
+     "quote": "'Ratio of net investment income to average Members' Capital 4.04 % ( 7.76 %)': 2023 and 2022 ratios"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032238",
+     "verbatim": "Distributions recorded per unit $ 1.62 $ 0.59 $ -",
+     "quote": "'Distributions recorded per unit $ 1.62 $ 0.59 $ -': 2022: none"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-F16-1948368-4",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "reason_key": "f16-quarter-distribution-includes-catch-up-declaration",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-12-31",
+    "2025-12-31"
+   ],
+   "statement": "The fourth quarter records more than one quarter's distributions: 2023 records the year's only distribution, 0.59, in the fourth quarter; 2024 records 0.84 (1.62 for the year less 0.78 to September); 2025 records 0.91 (1.85 less 0.94). The distribution rate annualises that quarter (0.91 x 4 / 19.83 = 18.4 pct) against the year's income ratio (9.58 pct), so F16 fires. The quarter figure is the printed year less the printed nine months; no fix applies. At 2023-12-31 the published income yield (2.28) is itself a split of the year's ratio (4.04 less 1.76), see the observation income-ratio-split-across-quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088656",
+     "verbatim": "Distributions recorded per unit $ 1.85 $ 1.62 $ 0.59",
+     "quote": "'Distributions recorded per unit $ 1.85 $ 1.62 $ 0.59': years 2025, 2024, 2023"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277555",
+     "verbatim": "Distributions recorded per unit $ 0.46 $ 0.35 $ 0.94 $ 0.78",
+     "quote": "'Distributions recorded per unit $ 0.46 $ 0.35 $ 0.94 $ 0.78': nine months to September 2025: 0.94; 2024: 0.78"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026163",
+     "verbatim": "Distributions declared from net investment income ( 0.59 ) -",
+     "quote": "'Distributions declared from net investment income ( 0.59 ) -': 2023: 0.59, none in the nine months"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19",
+   "addresses_verdict": {
+    "2025-12-31": "The earlier reviewer (real_error, unit_scale) read the stored 18.18 pct as a scale error against 1.85 per unit for the year (9.33 pct). The stored figure annualises the fourth quarter alone, which recorded two distributions (0.47 and 0.44, 1.85 less 0.94 printed to September), so 0.91 x 4 / 19.83 = 18.4 pct is the quarter figure as defined, not a scale error; no fix applies."
+   }
+  },
+  {
+   "disposition_id": "PD-A04-1948368-5",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "A04",
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30"
+   ],
+   "statement": "A04 compares all published rows, including the Goldman Sachs Financial Square money market row the schedule prints after 'Total Investments', with the filed investments figure, which leaves that fund out (its own balance-sheet line; wrapper investments_total_excludes = cash_rows). Published non-cash rows equal the filed figure exactly in these quarters (24,041; 42,023; 105,006; 177,418; 312,590). The excess is the money market row (67,071; 49,067; 26,273; 9,542; 30,420). In the other quarters the money market row is under the check's tolerance. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019620",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352 Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352 Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725': the balance sheet prints the investments line without the affiliated money market fund, which has its own line; published non-cash rows equal the investments line exactly, and the money market row the schedule prints is published as cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725': the balance sheet prints the investments line without the affiliated money market fund, which has its own line; published non-cash rows equal the investments line exactly, and the money market row the schedule prints is published as cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060353",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352 Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352 Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725': the balance sheet prints the investments line without the affiliated money market fund, which has its own line; published non-cash rows equal the investments line exactly, and the money market row the schedule prints is published as cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026163",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 176,995 and $ 17,360 ) $ 177,418 $ 17,352 Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 176,995 and $ 17,360 ) $ 177,418 $ 17,352 Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725': the balance sheet prints the investments line without the affiliated money market fund, which has its own line; published non-cash rows equal the investments line exactly, and the money market row the schedule prints is published as cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096233",
+     "verbatim": "Total investments, at fair value (cost of $ 311,116 and $ 176,995 ) $ 312,590 $ 177,418",
+     "quote": "'Total investments, at fair value (cost of $ 311,116 and $ 176,995 ) $ 312,590 $ 177,418': investments line 312,590 equals the published non-cash rows"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096233",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 30,420,404 $ 30,420 $ 30,420",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 30,420,404 $ 30,420 $ 30,420': the money market row, 30,420, published as cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019620",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725",
+     "quote": "'Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725': this quarter's money market line, the whole excess"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725",
+     "quote": "'Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725': this quarter's money market line, the whole excess"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060353",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725",
+     "quote": "'Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725': this quarter's money market line, the whole excess"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026163",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725",
+     "quote": "'Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725': this quarter's money market line, the whole excess"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096233",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 30,420 and $ 9,542 ) 30,420 9,542",
+     "quote": "'Investments in affiliated money market fund (cost of $ 30,420 and $ 9,542 ) 30,420 9,542': this quarter's money market line, the whole excess"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-E01-1948368-6",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "E01",
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30"
+   ],
+   "statement": "E01 makes the same comparison as A04 (all published rows against the investments line without the money market fund). Published non-cash rows equal the filed figure exactly; the excess is the printed money market row. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019620",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352 Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352 Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725': the balance sheet prints the investments line without the affiliated money market fund, which has its own line; published non-cash rows equal the investments line exactly, and the money market row the schedule prints is published as cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725': the balance sheet prints the investments line without the affiliated money market fund, which has its own line; published non-cash rows equal the investments line exactly, and the money market row the schedule prints is published as cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060353",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352 Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352 Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725': the balance sheet prints the investments line without the affiliated money market fund, which has its own line; published non-cash rows equal the investments line exactly, and the money market row the schedule prints is published as cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026163",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 176,995 and $ 17,360 ) $ 177,418 $ 17,352 Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 176,995 and $ 17,360 ) $ 177,418 $ 17,352 Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725': the balance sheet prints the investments line without the affiliated money market fund, which has its own line; published non-cash rows equal the investments line exactly, and the money market row the schedule prints is published as cash"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096233",
+     "verbatim": "Total investments, at fair value (cost of $ 311,116 and $ 176,995 ) $ 312,590 $ 177,418",
+     "quote": "'Total investments, at fair value (cost of $ 311,116 and $ 176,995 ) $ 312,590 $ 177,418': investments line 312,590"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019620",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725",
+     "quote": "'Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725': this quarter's money market line, the whole excess"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725",
+     "quote": "'Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725': this quarter's money market line, the whole excess"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060353",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725",
+     "quote": "'Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725': this quarter's money market line, the whole excess"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026163",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725",
+     "quote": "'Investments in affiliated money market fund (cost of $ 9,542 and $ 79,725 ) 9,542 79,725': this quarter's money market line, the whole excess"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-096233",
+     "verbatim": "Investments in affiliated money market fund (cost of $ 30,420 and $ 9,542 ) 30,420 9,542",
+     "quote": "'Investments in affiliated money market fund (cost of $ 30,420 and $ 9,542 ) 30,420 9,542': this quarter's money market line, the whole excess"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-B01-1948368-7",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "reason_key": "b01-contexts-without-value-are-category-rows-rollforward-or-split-twins",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "statement": "The DFS Holding funded term loan is one printed line tagged across three contexts: C_4716d28d carries cost and fair value (published, with the par declared from the page), C_16bd2803 the par as a share count with spread and maturity, C_05fa6136 the interest rate only. B01 counts the two partial contexts as leaves without a value. The three other contexts it counts are the 2022-12-31 comparative schedule (status excluded_comparative_period). Every printed row of the quarter is published.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019620",
+     "verbatim": "DFS Holding Company, Inc. Distributors 11.66 % S + 7.00 % 01/31/29 $ 4,787 $ 4,646 $ 4,715",
+     "quote": "'DFS Holding Company, Inc. Distributors 11.66 % S + 7.00 % 01/31/29 $ 4,787 $ 4,646 $ 4,715': one printed line; its par, rate and values are on three contexts"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-B01-1948368-8",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "reason_key": "b01-leaves-without-value-are-the-comparative-schedule",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "statement": "The three leaves B01 counts without a value in each quarter are 2022-12-31 comparative contexts of the DFS Holding undrawn lines (printed with a dash in the prior-year schedule; status excluded_comparative_period). No current-period row of these quarters lacks a value after this run (the 13 dash rows of the two quarters are published at 0).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019620",
+     "verbatim": "DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ - $ -",
+     "quote": "'DFS Holding Company, Inc. Distributors S + 7.00 % 01/31/29 $ 6,201 $ - $ -': the 2022-12-31 comparative line (footnotes (1) (2) of the prior-year schedule)"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-fund_strategy_validation-1948368-9",
+   "class": "as_filed",
+   "engine": "fund_strategy",
+   "rule_name": "fund_strategy_validation",
+   "reason_key": "fund-strategy-money-market-held-while-fund-ramps",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "statement": "In its first two quarters the fund held more in the affiliated money market fund (67,071 and 49,067) than in loans (24,041 and 42,023). After the orchestrator's fix (psm-req-1: cash rows no longer count toward FS03) only FS02 fires: the private-credit share is the loans over all published fair value including the money market row (0.26 and 0.46), below the private-credit floor. Every loan row is printed and classed private credit; the money market row is cash held while the fund ramped. From 2023-09-30 the check passes. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019620",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352 Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 24,021 and $ 17,360 ) $ 24,041 $ 17,352 Investments in affiliated money market fund (cost of $ 67,071 and $ 79,725 ) 67,071 79,725': loans 24,041 and the money market fund 67,071"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725': loans 42,023 and the money market fund 49,067"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-issuer_name_printed-1948368-10",
+   "class": "source_ambiguity",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "reason_key": "issuer-name-printed-variant-of-same-issuer",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "statement": "The 10-Q for 2025-06-30 prints 'Priority Holdings, LLC (dba Priority Payment)'; the member names 'Priority Technology Holdings, LLC' and the other quarters print 'Priority Technology Holdings, Inc.'. Same loan (S + 4.75 %, 05/16/31, par 18,430). Publishing the printed variant would split the issuer's chain for one quarter; the published name is the member's. No fix applied.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107350",
+     "verbatim": "Priority Holdings, LLC (dba Priority Payment) Financial Services 9.08 % S + 4.75 % 05/16/31 18,430 18,363 18,449",
+     "quote": "'Priority Holdings, LLC (dba Priority Payment) Financial Services 9.08 % S + 4.75 % 05/16/31 18,430 18,363 18,449': the 2025-06-30 printed name"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070320",
+     "verbatim": "Priority Technology Holdings, Inc. (dba Priority Payment) Financial Services 9.07 % S + 4.75 % 05/16/31",
+     "quote": "'Priority Technology Holdings, Inc. (dba Priority Payment) Financial Services 9.07 % S + 4.75 % 05/16/31': the same loan printed in the quarter before"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-1948368-11",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "reason_key": "merged-context-row-published-equals-the-printed-line",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "The money market row (C_6b386940, cost and value 15,569) takes its share count from a second context of the same member (C_c80d0f17, share count only), which the re-verifier excludes. The published count, 15,568,517, is the printed one.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070320",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 15,568,517 $ 15,569 $ 15,569",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 15,568,517 $ 15,569 $ 15,569': printed count equals the published shares_held"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-CNT02-1948368-12",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "CNT02",
+   "reason_key": "growth-heuristics-while-fund-ramps",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "statement": "Second quarter of operations: published rows 10 to 24 (loans 9 to 16, undrawn dash lines 0 to 7, the money market row) while total fair value with cash stays at 91.1M because cash moved from the money market fund (67,071 to 49,067) into loans (24,041 to 42,023). Published non-cash rows equal the filed investments in both quarters.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725': loans 42,023 and the money market fund 49,067"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Total Investments - 43.30 % $ 42,091 $ 42,023",
+     "quote": "'Total Investments - 43.30 % $ 42,091 $ 42,023': printed total of the loans"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-D03-1948368-13",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "D03",
+   "reason_key": "growth-heuristics-while-fund-ramps",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "statement": "Same quarter as CNT02: the count more than doubles (10 to 24) while total fair value including the money market row is flat (91.1M) as cash is deployed into loans; no subtotal leaks (published non-cash rows equal the filed investments).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 42,091 and $ 17,360 ) $ 42,023 $ 17,352 Investments in affiliated money market fund (cost of $ 49,067 and $ 79,725 ) 49,067 79,725': loans 42,023, money market 49,067"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Total Investments - 43.30 % $ 42,091 $ 42,023",
+     "quote": "'Total Investments - 43.30 % $ 42,091 $ 42,023': printed total of the loans"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-F24-1948368-14",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F24",
+   "reason_key": "f24-ramp-up-fund-position-count-doubles",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "statement": "Second quarter of operations: position count 10 to 24 (ratio 2.4) as the fund invested; every row is a printed line.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-039890",
+     "verbatim": "Total Investments - 43.30 % $ 42,091 $ 42,023",
+     "quote": "'Total Investments - 43.30 % $ 42,091 $ 42,023': printed total of the loans"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  },
+  {
+   "disposition_id": "PD-F26-1948368-15",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F26",
+   "reason_key": "f26-ramp-up-fund-holds-cash-not-borrowings",
+   "ciks": [
+    "0001948368"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "Borrowings 30,000 of total assets 167,873 (17.9 pct) against a holdings view of (131,279 - 135,473) / 131,279 = -3.2 pct: holdings, including the money market row, are below members' capital because the fund held 32,552 of cash while ramping. Both inputs are as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060353",
+     "verbatim": "Liabilities Debt $ 30,000 $ -",
+     "quote": "'Liabilities Debt $ 30,000 $ -': borrowings 30,000"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060353",
+     "verbatim": "Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352 Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725",
+     "quote": "'Non-controlled/non-affiliated investments (cost of $ 104,997 and $ 17,360 ) $ 105,006 $ 17,352 Investments in affiliated money market fund (cost of $ 26,273 and $ 79,725 ) 26,273 79,725': investments 105,006 and money market 26,273"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001948368.json",
+   "decided_by": "PROPOSED by fund-agent-phillipstreet-2026-10-19 (sandbox psmf); not accepted by the owner",
+   "decided_on": "2026-10-19"
+  }
+ ]
+}

@@ -168,6 +168,62 @@ def test_private_credit_strategy_with_low_credit_share_triggers_fs02():
     assert "FS02" in validation.iloc[0]["rule_ids"]
 
 
+def _fs03_validation(holdings):
+    reference = build_fund_strategy_reference(
+        holdings,
+        _universe([{"vehicle_type": "bdc"}]),
+        pd.DataFrame(),
+    )
+    mix = build_fund_strategy_holdings_mix(holdings)
+    validation, _ = build_fund_strategy_validation(reference, mix)
+    return mix, validation
+
+
+def test_money_market_cash_row_is_not_a_fund_of_funds_holding():
+    # psm-req-1: Phillip Street 2023-03-31 money market fund (CASH, FUND).
+    holdings = _holdings([
+        {"fair_value": "26", "index_classification": "DIRECT_LENDING"},
+        {
+            "fair_value": "74",
+            "issuer_name": "Goldman Sachs Financial Square Government Fund",
+            "issuer_category": "FUND",
+            "index_classification": "CASH",
+        },
+    ])
+
+    mix, validation = _fs03_validation(holdings)
+
+    assert mix.iloc[0]["fund_of_funds_fair_value"] == 0
+    assert mix.iloc[0]["fund_of_funds_share"] == 0
+    assert mix.iloc[0]["total_fair_value"] == 100
+    assert "FS03" not in validation.iloc[0]["rule_ids"]
+
+
+def test_non_cash_fund_holding_still_counts_toward_fs03():
+    # False-positive guard: a real fund investment (non-CASH FUND row) still counts.
+    holdings = _holdings([
+        {"fair_value": "50", "index_classification": "DIRECT_LENDING"},
+        {
+            "fair_value": "40",
+            "issuer_name": "Senior Loan Fund JV",
+            "issuer_category": "FUND",
+            "index_classification": "PRIVATE_CREDIT_FUND",
+        },
+        {
+            "fair_value": "10",
+            "issuer_name": "Money Market Fund",
+            "issuer_category": "FUND",
+            "index_classification": "CASH",
+        },
+    ])
+
+    mix, validation = _fs03_validation(holdings)
+
+    assert mix.iloc[0]["fund_of_funds_fair_value"] == 40
+    assert abs(mix.iloc[0]["fund_of_funds_share"] - 0.40) < 1e-9
+    assert "FS03" in validation.iloc[0]["rule_ids"]
+
+
 def test_review_queue_includes_only_under_review_rows_sorted_by_affected_fv():
     holdings = _holdings([
         {

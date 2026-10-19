@@ -11,6 +11,8 @@ import re
 
 _UNTAGGED_VALUE_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ (fair_value|cost|principal_amount) -?[0-9]+(\\.[0-9]+)?( [A-Z]{3})?')
 _ACCESSION_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6}')
+# par_tagged_as_units entry for a filing whose share-count facts hold the par in thousands (printed scale)
+_ACCESSION_X1000_RE=re.compile('([0-9]{10}-[0-9]{2}-[0-9]{6}):x1000')
 _CONTEXT_IDENTIFIER_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ => .*[A-Za-z].*')
 _MISDATED_CONTEXT_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ [0-9]{4}-[0-9]{2}-[0-9]{2} -> [0-9]{4}-[0-9]{2}-[0-9]{2}')
 
@@ -34,7 +36,7 @@ def load_encodings(wrapper_directory=None):
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
                 'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context',
-                'cash_rows_include_concepts','subtotal_members','cost_total_excludes'}:
+                'cash_rows_include_concepts','subtotal_members','cost_total_excludes','thousands_scale_filings'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -76,8 +78,11 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('A net-assets concept is one local name, no prefix: '+str(path))
             if key=='whole_dollar_scale_filings' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
                 raise ValueError('whole_dollar_scale_filings lists accession numbers: '+str(path))
-            if key=='par_tagged_as_units' and any(v not in ('rows_near_cost','rows_within_twice_cost','rated_rows_near_cost') and not _ACCESSION_RE.fullmatch(v) for v in values):
-                raise ValueError('par_tagged_as_units lists accession numbers or a row mode: '+str(path))
+            if key=='par_tagged_as_units' and any(v not in ('rows_near_cost','rows_within_twice_cost','rated_rows_near_cost')
+                    and not _ACCESSION_RE.fullmatch(v) and not _ACCESSION_X1000_RE.fullmatch(v) for v in values):
+                raise ValueError('par_tagged_as_units lists accession numbers (optionally ":x1000") or a row mode: '+str(path))
+            if key=='thousands_scale_filings' and any(not _ACCESSION_RE.fullmatch(v) for v in values):
+                raise ValueError('thousands_scale_filings lists accession numbers: '+str(path))
             if key=='rate_only_contexts' and values!=['adopt_adjacent']:
                 raise ValueError('The only admitted rate-only context handling is adopt_adjacent: '+str(path))
             if key=='pik_only_tag_reading' and values not in (['coupon'],['margin'],['coupon','margin']):
@@ -271,6 +276,29 @@ def whole_dollar_scale_filing(filing_meta,encodings=None):
     return accession in listed.get(cik,frozenset())
 
 
+_THOUSANDS_CACHE={}
+
+
+def thousands_scale_filing(filing_meta,encodings=None):
+    """True for a filing listed under the filer's thousands_scale_filings: its schedule is printed in
+    thousands and part of its investment facts are tagged at decimals 0 holding the printed thousands
+    figure, while the rest are in dollars at decimals -3 (Phillip Street Middle Market Lending, 10-Q
+    2026-03-31: 188 of 279 principal facts, SpecialtyCare principal 20267 at decimals 0 beside cost
+    20,226,000 at -3; printed '20,267 20,226 20,166'). The parser reads every investment-context monetary
+    fact tagged decimals 0 or finer at decimals -3 (pipeline.bdc_filings._normalize_mixed_decimals_monetary_facts,
+    event decimals_rescale:10^3). Off for every filing not listed."""
+    cik=re.sub(r'[^0-9]','',str((filing_meta or {}).get('cik','') or '')).zfill(10)
+    accession=str((filing_meta or {}).get('accession_number','') or '').strip()
+    if encodings is None:
+        if 'listed' not in _THOUSANDS_CACHE:
+            _THOUSANDS_CACHE['listed']={c:frozenset(e['thousands_scale_filings']) for c,e in load_encodings().items()
+                                        if e.get('thousands_scale_filings')}
+        listed=_THOUSANDS_CACHE['listed']
+    else:
+        listed={c:frozenset(e['thousands_scale_filings']) for c,e in encodings.items() if e.get('thousands_scale_filings')}
+    return accession in listed.get(cik,frozenset())
+
+
 def section_total_label_first(cik,encodings=None):
     """True where the wrapper sets section_total_reading label_then_total: the filer prints a section's
     own total as '<section> Total' ('First Lien Debt Total', APS BDC), which then closes the section."""
@@ -334,6 +362,23 @@ def par_tagged_as_units_expression(cik,accession,encodings=None):
     parts=[]
     for key,encoding in sorted(configured.items()):
         filings=[v for v in encoding.get('par_tagged_as_units',[]) if _ACCESSION_RE.fullmatch(v)]
+        if filings:
+            values=','.join(_literal(v) for v in filings)
+            parts.append('('+_cik_condition(cik,key)+' AND trim(CAST('+accession+' AS VARCHAR)) IN ('+values+'))')
+    return '('+' OR '.join(parts)+')' if parts else 'false'
+
+
+def par_tagged_as_units_thousands_expression(cik,accession,encodings=None):
+    """True for a row of a filing listed as '<accession>:x1000' under par_tagged_as_units: the filer tagged
+    the par of its loans with the share-count concept AND at the printed scale, thousands, with no scale
+    attribute (Phillip Street Middle Market Lending, 10-Q 2023-12-31: 'ASM Buyer ... 01/29/28 4,189 - -'
+    tagged InvestmentOwnedBalanceShares 4189). The count is read as the par times 1,000 on every loan row
+    of the filing, drawn or not (transform principal_amount:from_shares_tag, event count_x1000). A plain
+    accession entry keeps its count unscaled; another filing is not touched."""
+    configured=load_encodings() if encodings is None else encodings
+    parts=[]
+    for key,encoding in sorted(configured.items()):
+        filings=[m.group(1) for m in (_ACCESSION_X1000_RE.fullmatch(v) for v in encoding.get('par_tagged_as_units',[])) if m]
         if filings:
             values=','.join(_literal(v) for v in filings)
             parts.append('('+_cik_condition(cik,key)+' AND trim(CAST('+accession+' AS VARCHAR)) IN ('+values+'))')

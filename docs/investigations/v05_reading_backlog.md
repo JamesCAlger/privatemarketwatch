@@ -192,3 +192,4 @@ Manulife 0001988280.
 | 2026-10-19 | 0001646614 Silver Point Specialty Lending Fund | splf | INCOMPLETE (investigation COMPLETE) | 71 findings, 39 outstanding, 38 proposed, F23 parked; 13/13 quarters tie; sample 0/20 | D-211 |
 | 2026-10-19 | 0001715933 TCW Direct Lending VII | t7af | INCOMPLETE (investigation COMPLETE) | 96 findings, 81 outstanding, 80 proposed, F25 parked; 14/14 quarters tie; sample 1/20 fixed | D-212 |
 | 2026-10-19 | 0002006758 MidCap Apollo Institutional Private Lending | maif | PASS (investigation COMPLETE) | 32 findings, 10 outstanding, all proposed; 9/9 quarters tie; sample 1 real error of 20, fixed | D-213 |
+| 2026-10-19 | 0001948368 Phillip Street Middle Market Lending Fund | psmf | PASS (investigation COMPLETE) | 68 findings, 31 outstanding, all proposed; 13/14 quarters tie (2026-06-30 Sonar AUD -3.84M declared); sample 0/20 | D-214 |

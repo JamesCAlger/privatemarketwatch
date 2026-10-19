@@ -908,7 +908,8 @@ def _prepare_bdc(
     # wrapper lists (source_encodings.par_tagged_as_units). Declared as principal_amount:from_shares_tag.
     # A fund can also declare single rows ('rows_near_cost'): there the count is taken only where it lies
     # within 0.8 to 1.25 times the row's cost, the range a par amount of a loan bought near par sits in.
-    from pipeline.source_encodings import par_tagged_as_units_expression, par_tagged_as_units_rows_expression
+    from pipeline.source_encodings import (par_tagged_as_units_expression, par_tagged_as_units_rows_expression,
+                                           par_tagged_as_units_thousands_expression)
     # The count carries no scale attribute, so a filer that prints in thousands or millions can file it
     # unscaled (Goldman Sachs Private Credit: 8,770 against a cost of 8,770,000; Ares: 1,289 against
     # 1,288.8M). The scale is the one power of a thousand that puts the count in the band; the bands of
@@ -927,7 +928,10 @@ def _prepare_bdc(
     _names_equity = ("regexp_matches(lower(coalesce(CAST(instrument_description AS VARCHAR), '') || ' ' || "
                      "coalesce(CAST(_raw_id AS VARCHAR), '')), "
                      "'(^|[^a-z])(units?|shares?|stock|membership|warrants?)([^a-z]|$)')")
+    # A filing listed as '<accession>:x1000' tags the count at the printed scale, thousands (Phillip Street
+    # Middle Market Lending 2023-03-31, 2023-12-31 to 2024-06-30): every loan row's count times 1,000.
     par_scale = ("CASE WHEN NOT (asset_category_final = 'LOAN' AND _pa IS NULL AND _sh IS NOT NULL AND _sh > 0) THEN NULL"
+                 " WHEN " + par_tagged_as_units_thousands_expression('cik', 'accession_number') + " THEN 1000.0"
                  " WHEN " + par_tagged_as_units_expression('cik', 'accession_number') + " THEN 1.0"
                  " WHEN " + _names_equity + " THEN NULL"
                  + "".join(
