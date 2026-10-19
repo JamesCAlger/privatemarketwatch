@@ -1486,7 +1486,6 @@ def propose_field_bridges_from_ixbrl(
     A filer whose wrapper names its reference-rate column (``reference_rate_columns``) has
     that column read as confirmed; ``encodings`` overrides the wrappers on disk (tests).
     """
-    from lxml import etree
     from pipeline.source_encodings import reference_rate_reading
 
     cik_norm = normalize_cik(cik)
@@ -1502,7 +1501,8 @@ def propose_field_bridges_from_ixbrl(
                 "source": "bdc_xbrl_ixbrl", "bridges": [],
                 "rejected": [{"reason": "missing_cached_html", "path": str(path)}]}
 
-    tree = etree.parse(str(path))
+    from pipeline.xbrl_instance_xml import parse_instance
+    tree = parse_instance(path)  # huge_tree: inline-XBRL document (MAI-R4)
     root = tree.getroot()
     html_sha = _sha256_file(path)
 

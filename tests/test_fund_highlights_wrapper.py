@@ -490,6 +490,37 @@ class TestFigureCorrections:
         assert out.loc[("0001930087", "2025-12-31"), "cash_equivalents_at_fair_value"] == 9794000.0
         assert pd.isna(out.loc[("0001803498", "2024-06-30"), "cash_equivalents_at_fair_value"])
 
+    def test_a_withdrawal_blanks_the_figure_for_that_fund_and_date_only(self, tmp_path, monkeypatch):
+        """MidCap Apollo Institutional 2024-03-31: NAV per share tagged 0 where the stub column prints '$ -'."""
+        import pandas as pd
+        from pipeline import fund_highlights_wrapper as fhw
+        spec = self._spec(tmp_path, [
+            {"report_date": "2024-03-31", "field": "nav_per_share", "value": None, "withdraw": True,
+             "evidence": "10-Q: 'Net asset value at end of period $ 24.25 $ -'"},
+            {"report_date": "2023-12-31", "field": "nav_per_share", "value": None, "withdraw": True,
+             "evidence": "a date the frame does not hold: no row is added"}])
+        assert spec.figure_corrections == (("2024-03-31", "nav_per_share", None), ("2023-12-31", "nav_per_share", None))
+        monkeypatch.setattr(fhw, "_WRAPPER_CACHE", {spec.cik: spec})
+        monkeypatch.setattr(fhw, "_CACHE_LOADED", True)
+        frame = pd.DataFrame([
+            {"cik": "0001930087", "report_date": "2024-03-31", "nav_per_share": 0.0, "net_assets": 307138000.0},
+            {"cik": "0001930087", "report_date": "2024-06-30", "nav_per_share": 26.13, "net_assets": 377792000.0},
+            {"cik": "0001803498", "report_date": "2024-03-31", "nav_per_share": 0.0, "net_assets": 1.0}])
+        out = fhw.apply_figure_corrections(frame)
+        assert len(out) == 3
+        out = out.set_index(["cik", "report_date"])
+        assert pd.isna(out.loc[("0001930087", "2024-03-31"), "nav_per_share"])
+        assert out.loc[("0001930087", "2024-03-31"), "net_assets"] == 307138000.0
+        assert out.loc[("0001930087", "2024-06-30"), "nav_per_share"] == 26.13
+        assert out.loc[("0001803498", "2024-03-31"), "nav_per_share"] == 0.0  # another fund keeps its filed figure
+
+    def test_a_null_value_without_the_withdraw_flag_or_evidence_is_ignored(self, tmp_path):
+        spec = self._spec(tmp_path, [
+            {"report_date": "2024-03-31", "field": "nav_per_share", "value": None, "evidence": "no flag"},
+            {"report_date": "2024-03-31", "field": "nav_per_share", "value": None, "withdraw": True, "evidence": ""},
+            {"report_date": "2024-03-31", "field": "total_investment_income", "value": None, "withdraw": True, "evidence": "not a field"}])
+        assert spec.figure_corrections == ()
+
     def test_a_nil_income_quarter_needs_a_date_and_evidence(self, tmp_path):
         from pipeline.fund_highlights_wrapper import _load_wrapper_from_path
         path = tmp_path / "0001965934.json"

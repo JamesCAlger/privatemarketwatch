@@ -1044,3 +1044,66 @@ def test_a_missing_context_that_is_not_declared_stays_provenance_wrong(ctx, fv_s
     full = full_tier(fv, xml_loader=_loader)
     assert full.iloc[0]["full_status"] == "context_missing"
     assert classify_reason(full.iloc[0]["cheap_status"], full.iloc[0]["full_status"]) == "provenance_wrong"
+
+
+# --- MAI-R1: the production loader reads instances with a >10 MB text node ------------
+
+def _write_instance(path, value="0.105", text=""):
+    body = (
+        '<xbrl xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+        f'<us-gaap:InvestmentInterestRate contextRef="ctx1">{value}'
+        '</us-gaap:InvestmentInterestRate>'
+        '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx1" unitRef="usd">'
+        '1000000</us-gaap:InvestmentOwnedAtFairValue>'
+        + (f'<us-gaap:RiskFactorsTextBlock contextRef="ctx1">{text}</us-gaap:RiskFactorsTextBlock>'
+           if text else "")
+        + '</xbrl>'
+    )
+    path.write_text(body, encoding="utf-8")
+
+
+def _index(path):
+    return pd.DataFrame([{"accession_number": "0001287750-26-000001",
+                          "xbrl_local_path": str(path)}])
+
+
+class TestDefaultLoaderHugeTree:
+    _HUGE = "x" * 10_500_000  # libxml2 default text-node limit is 10,000,000 bytes
+
+    def _cheap(self, **kw):
+        return TestFullTier()._cheap(**kw)
+
+    def test_huge_text_node_parses_and_verifies(self, tmp_path):
+        from lxml import etree
+        from pipeline.provenance_reverify import _default_xml_loader
+        p = tmp_path / "big.xml"
+        _write_instance(p, text=self._HUGE)
+        with pytest.raises(etree.XMLSyntaxError):  # fixture really exceeds the default limit
+            etree.parse(str(p))
+        loader = _default_xml_loader(_index(p))
+        assert loader("0001287750", "0001287750-26-000001") is not None
+        out = full_tier(self._cheap(), xml_loader=loader)
+        assert out.iloc[0]["full_status"] == "raw_match"
+
+    def test_huge_text_node_wrong_value_still_fails(self, tmp_path):
+        from pipeline.provenance_reverify import _default_xml_loader
+        p = tmp_path / "big.xml"
+        _write_instance(p, text=self._HUGE)
+        out = full_tier(self._cheap(published=99.0), xml_loader=_default_xml_loader(_index(p)))
+        assert out.iloc[0]["full_status"] == "published_mismatch"
+
+    def test_small_file_parses_identically(self, tmp_path):
+        from lxml import etree
+        from pipeline.provenance_reverify import _default_xml_loader
+        p = tmp_path / "small.xml"
+        _write_instance(p, text="Risk factors &amp; more")
+        tree = _default_xml_loader(_index(p))("0001287750", "0001287750-26-000001")
+        assert etree.tostring(tree) == etree.tostring(etree.parse(str(p)))
+
+    def test_malformed_file_is_source_unavailable(self, tmp_path):
+        from pipeline.provenance_reverify import _default_xml_loader
+        p = tmp_path / "bad.xml"
+        p.write_text("<xbrl>", encoding="utf-8")
+        loader = _default_xml_loader(_index(p))
+        assert loader("0001287750", "0001287750-26-000001") is None
+        assert full_tier(self._cheap(), xml_loader=loader).iloc[0]["full_status"] == "source_unavailable"

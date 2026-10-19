@@ -18,7 +18,7 @@ from typing import Any, Optional
 
 import duckdb
 import pandas as pd
-from lxml import etree
+from pipeline.xbrl_instance_xml import parse_instance
 
 from pipeline.bdc_filings import (
     _MONETARY_COLUMNS,
@@ -1583,7 +1583,8 @@ def _extract_single_xbrl_source_file(
     filing_meta: dict[str, Any],
 ) -> list[dict[str, Any]]:
     try:
-        tree = etree.parse(str(xml_path))
+        # huge_tree: a >10 MB text node fails the default parser (MAI-R2).
+        tree = parse_instance(xml_path)
     except Exception as exc:
         logger.debug("Source reconciliation XML parse failed for %s: %s", xml_path, exc)
         return []
@@ -4422,7 +4423,7 @@ def _extract_single_xbrl_source_file_cached(
     filing_meta: dict[str, Any],
 ) -> tuple[pd.DataFrame, str]:
     try:
-        etree.parse(str(xml_path))
+        parse_instance(xml_path)
     except Exception as exc:
         logger.debug("Source reconciliation XML parse failed for %s: %s", xml_path, exc)
         return pd.DataFrame(columns=SOURCE_FACT_COLUMNS), "parse_failed"
@@ -4483,6 +4484,12 @@ def extract_bdc_source_facts_cached(
             and prev.get("file_size", "") == file_size
             and prev.get("file_hash", "") == file_hash
             and prev.get("filing_metadata_hash", "") == meta_hash
+            # A cached parse failure is retried: the parser changed (huge_tree,
+            # MAI-R2) and a file that failed before may now parse. Files that
+            # parsed before parse identically, so only these need re-extraction;
+            # the new parse_status / fact count then changes that CIK's
+            # source_hash, which dirties its reconciliation partition.
+            and prev.get("parse_status", "") != "parse_failed"
             and artifact.exists()
         )
         if reuse:

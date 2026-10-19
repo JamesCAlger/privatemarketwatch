@@ -1,0 +1,319 @@
+{
+  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+  "sandbox": "maif",
+  "dispositions": [
+    {
+      "disposition_id": "PD-MAIC-issuer-ci-truncated",
+      "class": "as_filed",
+      "engine": "identity",
+      "rule_name": "issuer_name_printed",
+      "ciks": [
+        "0002006758"
+      ],
+      "quarters": [
+        "2024-06-30",
+        "2024-09-30",
+        "2025-09-30"
+      ],
+      "reason_key": "issuer-name-printed-truncated-same-issuer",
+      "statement": "In these three filings the company cell of the CI (MG) Group loans prints only 'CI' (under the group 'CI (MG) GROUP, LLC' in 2024-06-30 and 'Mariani' in 2024-09-30 and 2025-09-30). The same loans (S + 715 delayed draw maturing 3/24/2028; S + 550 term loan, delayed draw and revolver maturing 3/27/2030) are printed under the company 'CI (MG) GROUP, LLC' / 'CI (MG) Group, LLC' in 2024-12-31 to 2025-06-30 and 2025-12-31 to 2026-06-30. The build publishes the full legal name (row corrections, so the position chain stays on one issuer); the rule compares with the shortened printed cell and flags one row per quarter (2025-09-30 also flags the PAI row covered by PD-MAIC-issuer-total-label). No fix that keeps the printed spelling and the chain: publishing 'CI' would split the issuer across quarters.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-24-096134",
+          "verbatim": "CI (MG) GROUP, LLC CI First Lien Secured Debt - Delayed Draw S+ 715 , 1.00 % Floor 03/24/2028 7,940 7,790 7,787 (9)",
+          "quote": "2024-06-30: group 'CI (MG) GROUP, LLC', company cell 'CI'."
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-24-126281",
+          "verbatim": "Mariani CI First Lien Secured Debt - Delayed Draw S+ 715 , 1.00 % Floor 3/24/2028 7,920 7,778 7,733 (9)",
+          "quote": "2024-09-30: group 'Mariani', company cell 'CI', same loan."
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-040394",
+          "verbatim": "Mariani CI (MG) GROUP, LLC First Lien Secured Debt - Delayed Draw S+ 715 , 1.00 % Floor 3/24/2028 7,899 7,767 7,719 (9)",
+          "quote": "2024-12-31: the same loan printed under the company 'CI (MG) GROUP, LLC'."
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-25-274253",
+          "verbatim": "Mariani CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 4,731 4,666 4,669 (9)(17)",
+          "quote": "2025-09-30: company cell 'CI' again; 2025-06-30 and 2025-12-31 print 'CI (MG) GROUP, LLC' / 'CI (MG) Group, LLC' for these loans."
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/page_line.py 0002006758 0001193125-25-274253 \"Mariani\"",
+      "decided_by": "PROPOSED by fund-agent-midcap-inst-2026-10-19; not accepted",
+      "decided_on": "2026-10-19"
+    },
+    {
+      "disposition_id": "PD-MAIC-issuer-total-label",
+      "class": "as_filed",
+      "engine": "identity",
+      "rule_name": "issuer_name_printed",
+      "ciks": [
+        "0002006758"
+      ],
+      "quarters": [
+        "2025-03-31",
+        "2025-09-30"
+      ],
+      "reason_key": "issuer-name-cell-prints-total-investments-label",
+      "statement": "The filer printed the words 'Total Investments' in the company cell of a position row: 2025-03-31 for the three North Highland loans (group 'North Highland Company LLC'), 2025-09-30 for the PAI revolver under Pai Middle Tier, LLC's term loan. The member text carries the same words. The build publishes the borrower (The North Highland Company LLC, printed so in 2024-12-31 and 2025-06-30 and in the filing's own commitment table; Pai Middle Tier, LLC, the revolver's commitment line in the same filing) by row correction; the rule compares with the printed cell 'Total Investments' and flags it. Publishing 'Total Investments' as an issuer would be wrong; no rule fix is in the fund's reach.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-071342",
+          "verbatim": "North Highland Company LLC Total Investments First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 12/22/2031 4,788 4,742 4,740 (9)(17)",
+          "quote": "2025-03-31: 'Total Investments' printed in the company cell."
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-071342",
+          "verbatim": "The North Highland Company LLC 200 48 - 152",
+          "quote": "2025-03-31 commitment table: the borrower is The North Highland Company LLC."
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-25-274253",
+          "verbatim": "Total Investments First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 2/13/2032 ( 1 ) ( 1 ) (9)(12)(13)(14)",
+          "quote": "2025-09-30: the PAI revolver printed with 'Total Investments' in the company cell."
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-25-274253",
+          "verbatim": "Pai Middle Tier, LLC 100 - - 100",
+          "quote": "2025-09-30 commitment table: the revolver commitment is Pai Middle Tier, LLC's."
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/page_line.py 0002006758 0000950170-25-071342 \"North Highland\"",
+      "decided_by": "PROPOSED by fund-agent-midcap-inst-2026-10-19; not accepted",
+      "decided_on": "2026-10-19"
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_REV_8042302abd8a",
+      "class": "false_alarm",
+      "engine": "oracle",
+      "rule_name": "B01",
+      "ciks": [
+        "0002006758"
+      ],
+      "quarters": [
+        "2026-03-31"
+      ],
+      "reason_key": "b01-restricted-holdings-acquisition-table-contexts",
+      "statement": "After this run every schedule row of 2026-03-31 printed with a dash for fair value is published at 0 (SEKO equity unit, Brush, MRO undrawn lines, TVG Orion stock and note, SEKO delayed draw; declared from the printed lines). The 10 contexts B01 still counts without a fair value are all 'X Investment Type Common Equity - ...' members of the note table of restricted securities' acquisition dates (columns Issuer, Investment Type, Acquisition Date): they carry no value, cost, par or unit fact and are not positions. The positions they name (AWRG Parent, Eagle Aggregator x2, Justin's, LAV Gear, AKAM Group, Ronnoco x2, Xanitos) are published from their schedule contexts. The rule also counts 23 contexts of the prior-period column of the same 10-Q (period 2025-12-31): 13 of them are the same restricted-securities acquisition-date members for 2025-12-31 (no facts), and 10 are 2025-12-31 schedule rows printed with a dash (SEKO equity unit and delayed draw, Vixxo delayed draw, Lotus revolver, GC Waves revolver, Amylu delayed draw and revolver, TVG Orion stock and note, AMI revolver, F&M delayed draw and revolver - 12 rows), each published in the 2025-12-31 quarter from that quarter's 10-K at fair value 0. Comparative contexts are not positions of 2026-03-31.",
+      "basis": "read",
+      "addresses_verdict": {
+        "2026-03-31": "The earlier reviewer found 44 leaves printed with a dash in the Fair Value column left without a value (SEKO delayed draw and equity unit cited). Fixed: those rows are now published at fair value 0 through source_encodings.untagged_values (34 + 16 contexts over all quarters), including both cited SEKO rows. What remains are the restricted-securities acquisition-date table contexts, which are not positions."
+      },
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001193125-26-214580",
+          "verbatim": "Issuer Investment Type Acquisition Date AWRG Parent LLC Common Equity - Stock 6/18/2025 AWRG Parent LLC Common Equity - Stock 6/18/2025 Eagle Aggregator Ltd Common Equity - Stock 12/31/2025",
+          "quote": "The table whose members B01 counts: issuer, type and acquisition date only."
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-214580",
+          "verbatim": "First Lien Secured Debt - Delayed Draw S + 100 Cash plus 9.50 % PIK, 1.00 % Floor 11/27/29 - - - (9)(13)(14) Common Equity - Equity Unit N/A N/A 876 Shares 2,736 - (6)(9)",
+          "quote": "The two rows the earlier verdict cited, now published at fair value 0."
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/b01.py maic 0002006758",
+      "decided_by": "PROPOSED by fund-agent-midcap-inst-2026-10-19; not accepted",
+      "decided_on": "2026-10-19"
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_BLK_f5daf9d7a904",
+      "class": "false_alarm",
+      "engine": "row_validation",
+      "rule_name": "SRC_BDC01",
+      "ciks": [
+        "0002006758"
+      ],
+      "quarters": [
+        "2026-03-31"
+      ],
+      "reason_key": "src-missing-rows-are-affiliate-rollforward-note",
+      "statement": "The one source row reported unpublished (context C_86ed6f67-7863-4d7f-a2e5-750972614685, InvestmentOwnedAtFairValue 4,103,000) is 'Affiliated Investments AWRG Borrower LLC, Term Loan' (fair value 4,103), a row of the affiliated-investments roll-forward note. The schedule position is published: American West / AWRG Borrower LLC first lien term loan 8.77 %, par 5,515, cost 5,515, fair value 4,102 (context C_83883771). The note prints 4,103 against the schedule's 4,102 (rounding), so the affiliation de-duplication, which pairs the AWRG Parent stock (371 = 371), does not pair the loan. The promoted rule exclude_affiliated_awrg_duplicate_axis excludes the note rows in every quarter.",
+      "basis": "read",
+      "addresses_verdict": {
+        "2026-03-31": "The earlier reviewer read the schedule row (AWRG Borrower LLC term loan 8.77 %, fair value 4,102) and concluded it was absent from the output. It is not: the build publishes it (C_83883771, fair value 4,102,000, cost 5,515,000). The unpublished source row is the roll-forward note's twin (4,103), correctly not a second position."
+      },
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001193125-26-214580",
+          "verbatim": "American West AWRG Borrower LLC First Lien Secured Debt - Term Loan 8.77 % 06/18/30 $ 5,515 $ 5,515 $ 4,102 (5)(24)",
+          "quote": "The schedule row, published."
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-214580",
+          "verbatim": "AWRG Borrower LLC, Term Loan $ 5,343 $ - $ ( 28 ) $ ( 1,212 ) $ 4,103 $ - $ -",
+          "quote": "The affiliated-investments roll-forward note row the check reports."
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/issuer_rows.py maic 0002006758 2026-03-31 \"AWRG\"",
+      "decided_by": "PROPOSED by fund-agent-midcap-inst-2026-10-19; not accepted",
+      "decided_on": "2026-10-19"
+    },
+    {
+      "disposition_id": "PD-MAIC-BDCSRC_2026-03-31_PARSER_MISMATCH",
+      "class": "false_alarm",
+      "engine": "source_recon",
+      "rule_name": "blocking_source_position_like_parser_mismatch",
+      "ciks": [
+        "0002006758"
+      ],
+      "quarters": [
+        "2026-03-31"
+      ],
+      "reason_key": "src-missing-rows-are-affiliate-rollforward-note",
+      "statement": "Same row as PD-MAIC-RVQ_BLK_f5daf9d7a904 (context C_86ed6f67-7863-4d7f-a2e5-750972614685): the 4.103M source row is the affiliated-investments roll-forward note's 'AWRG Borrower LLC, Term Loan', twin of the published schedule row (4.102M). Published fair value equals the printed 'Total Investments before Cash Equivalents' 934,425 exactly.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001193125-26-214580",
+          "verbatim": "AWRG Borrower LLC, Term Loan $ 5,343 $ - $ ( 28 ) $ ( 1,212 ) $ 4,103 $ - $ -",
+          "quote": "The note row."
+        },
+        {
+          "source": "filing",
+          "accession": "0001193125-26-214580",
+          "verbatim": "American West AWRG Borrower LLC First Lien Secured Debt - Term Loan 8.77 % 06/18/30 $ 5,515 $ 5,515 $ 4,102 (5)(24)",
+          "quote": "The published schedule row."
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/sandbox_sql.py maic scratch/fund_runs/0002006758/srcrec.sql",
+      "decided_by": "PROPOSED by fund-agent-midcap-inst-2026-10-19; not accepted",
+      "decided_on": "2026-10-19"
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_REV_84eb7cbad040",
+      "class": "as_filed",
+      "engine": "fund_financials",
+      "rule_name": "F33",
+      "ciks": [
+        "0002006758"
+      ],
+      "quarters": [
+        "2024-06-30"
+      ],
+      "reason_key": "f33-no-distribution-in-ramp-up-quarters",
+      "statement": "Distribution rate 0 at 2024-06-30: the fund declared no distribution before September 2024 (first declaration 19 September 2024, 1.0983 a share, per the 2024 10-K). The 10-Q highlights for the period from conversion (2024-03-15) to 2024-06-30 print a dash for distributions.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-24-096134",
+          "verbatim": "Distribution of net investment income (2) (3) - Net asset value at end of period $ 26.13",
+          "quote": "No distribution in the period."
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-040394",
+          "verbatim": "September 19, 2024 September 19, 2024 September 20, 2024 $ 1.0983 $ 15,879",
+          "quote": "First declaration."
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/page_line.py 0002006758 0000950170-24-096134 \"Per Share Data\"",
+      "decided_by": "PROPOSED by fund-agent-midcap-inst-2026-10-19; not accepted",
+      "decided_on": "2026-10-19"
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_REV_092abb46cfab",
+      "class": "as_filed",
+      "engine": "fund_financials",
+      "rule_name": "F16",
+      "ciks": [
+        "0002006758"
+      ],
+      "quarters": [
+        "2024-12-31"
+      ],
+      "reason_key": "f16-quarter-distribution-includes-catch-up-declaration",
+      "statement": "The fourth quarter of 2024 carries two declarations: 12 November 2024 (0.8662 a share) and 30 December 2024 (0.8825, paid 28 January 2025), 1.75 a share in total, against 1.0983 in the third quarter and 0.75 to 0.79 a quarter in 2025. Quarter net investment income was 0.92 a share. The heuristic sees the two declarations of one quarter as one quarter's rate; the figures are as printed.",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-040394",
+          "verbatim": "November 13, 2024 November 12, 2024 December 12, 2024 0.8662 12,538 December 30, 2024 December 30, 2024 January 28, 2025 0.8825 13,169 $ 2.8470 $ 41,586",
+          "quote": "Two declarations in the fourth quarter of 2024."
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/page_line.py 0002006758 0000950170-25-040394 \"Declaration Date\"",
+      "decided_by": "PROPOSED by fund-agent-midcap-inst-2026-10-19; not accepted",
+      "decided_on": "2026-10-19"
+    },
+    {
+      "disposition_id": "PD-MAIE-RVQ_REV_4561071d2f46",
+      "class": "as_filed",
+      "engine": "fund_financials",
+      "rule_name": "F33",
+      "ciks": [
+        "0002006758"
+      ],
+      "quarters": [
+        "2024-03-31"
+      ],
+      "reason_key": "f33-no-distribution-in-ramp-up-quarters",
+      "statement": "Distribution rate 0 for the 17-day period from the BDC conversion (2024-03-15) to 2024-03-31: no distribution was declared; the highlights print 0.00 for the period. The first declaration is 19 September 2024. F33 fires only now because NAV per share for the date is no longer the filed 0 (withdrawn this run).",
+      "basis": "read",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-071342",
+          "verbatim": "Distribution of net investment income (1)(2) ( 0.75 ) 0.00 Net asset value at end of period $ 24.25 $ -",
+          "quote": "Stub period 2024-03-15 to 2024-03-31: distribution 0.00."
+        },
+        {
+          "source": "filing",
+          "accession": "0000950170-25-040394",
+          "verbatim": "September 19, 2024 September 19, 2024 September 20, 2024 $ 1.0983 $ 15,879",
+          "quote": "First declaration."
+        }
+      ],
+      "rerun": "python scripts/v05_evidence/page_line.py 0002006758 0000950170-25-071342 \"Distribution of net investment income (1)(2)\"",
+      "decided_by": "PROPOSED by fund-agent-midcap-inst-2026-10-19; not accepted",
+      "decided_on": "2026-10-19"
+    }
+  ],
+  "withdrawn": [
+    {
+      "disposition_id": "PD-MAIC-BDCSRC_2025-12-31_PIPELINE_ONLY",
+      "why": "Finding no longer raised in maid after the orchestrator's MAI-R1/R2/R3 (huge_tree parsing; anchor retired); C107 2025-12-31 accepted by its standing check."
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_BLK_299cf4c6fc87",
+      "why": "Finding no longer raised in maid after the orchestrator's MAI-R1/R2/R3 (huge_tree parsing; anchor retired); C107 2025-12-31 accepted by its standing check."
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_BLK_31d7cab174c5",
+      "why": "Finding no longer raised in maid after the orchestrator's MAI-R1/R2/R3 (huge_tree parsing; anchor retired); C107 2025-12-31 accepted by its standing check."
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_REV_6b2c357d596d",
+      "why": "Finding no longer raised in maid after the orchestrator's MAI-R1/R2/R3 (huge_tree parsing; anchor retired); C107 2025-12-31 accepted by its standing check."
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_BLK_ebb7cb93dddc",
+      "why": "Rejected by the independent review of maid (0 is not a NAV); the filed 0 is withdrawn in the highlights wrapper and the finding no longer fires in maie."
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_REV_003aa911b66e",
+      "why": "Rejected by the independent review of maid (0 is not a NAV); the filed 0 is withdrawn in the highlights wrapper and the finding no longer fires in maie."
+    },
+    {
+      "disposition_id": "PD-MAIC-RVQ_REV_1bb66bbd3469",
+      "why": "Rejected by the independent review of maid (0 is not a NAV); the filed 0 is withdrawn in the highlights wrapper and the finding no longer fires in maie."
+    }
+  ]
+}

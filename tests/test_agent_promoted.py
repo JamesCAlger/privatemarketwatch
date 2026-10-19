@@ -91,6 +91,17 @@ def test_load_anchor_overrides_skips_malformed(tmp_path):
     assert [o["cik"] for o in out] == ["0000000333"]
 
 
+def test_load_anchor_overrides_ignores_pulled_subdir(tmp_path):
+    # A retired anchor moves to <cik>/_pulled_<reason>_<date>/ (MAI-R3); neither loader reads it.
+    leaf = {"cik": "2006758", "target_quarter": "2026-03-31", "grand_total": 945613000.0,
+            "basis": "published_rows"}
+    _write_json(tmp_path / "2006758" / "_pulled_x_2026-10-19" / "2026-03-31.json", leaf)
+    assert ap.load_anchor_overrides(tmp_path) == []
+    from scripts.agent_investigate import run_investigation as ri
+    with patch.object(ri, "ANCHOR_OVERRIDES", tmp_path):
+        assert ri.load_anchor_overrides("2006758") == {}
+
+
 def test_load_anchor_overrides_missing_dir(tmp_path):
     assert ap.load_anchor_overrides(tmp_path / "nope") == []
 

@@ -377,12 +377,14 @@ def _default_xml_loader(filings_index: pd.DataFrame):
                      filings_index["xbrl_local_path"].astype(str)))
 
     def _load(cik: str, accession: str):
-        from lxml import etree
+        # huge_tree: a 10-K instance with a >10 MB text node fails the default
+        # parser and every field of the quarter became source_unavailable (MAI-R1).
+        from pipeline.xbrl_instance_xml import parse_instance
         p = paths.get(str(accession), "")
         if not p or not Path(p).exists():
             return None
         try:
-            return etree.parse(p)
+            return parse_instance(p)
         except Exception:
             return None
     return _load

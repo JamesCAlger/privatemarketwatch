@@ -32,6 +32,8 @@ from typing import Any, Optional
 import pandas as pd
 from lxml import etree
 
+from pipeline.xbrl_instance_xml import instance_parser
+
 from pipeline.config import (
     BDC_DERIVATIVES_FILE,
     BDC_FILINGS_INDEX_FILE,
@@ -372,7 +374,7 @@ def extract_bdc_derivatives(
                 and b"DerivativeFairValueOfDerivative" not in blob):
             continue
         try:
-            root = etree.fromstring(blob)
+            root = etree.fromstring(blob, instance_parser())  # huge_tree (MAI-R4)
             data = _extract_filing(root, report_date)
             parsed += 1
         except Exception as exc:  # pragma: no cover - defensive

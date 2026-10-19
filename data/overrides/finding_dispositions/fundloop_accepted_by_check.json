@@ -871,6 +871,29 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-C107-2006758",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C107",
+   "ciks": [
+    "0002006758"
+   ],
+   "quarters": [
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox maid for each quarter listed: 58 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py maid C107 3",
+   "decided_by": "check passed on sandbox maid; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-C107-2008748",
    "class": "as_filed",
    "engine": "row_validation",
@@ -1373,6 +1396,30 @@
    ],
    "rerun": "python scripts/v05_evidence/x02_page_read.py hcxe 0001989817",
    "decided_by": "check passed on sandbox hcxe; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-X02-2006758",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0002006758"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "Credit rows with no rate and no spread because no rate or spread fact is tagged for them: undrawn lines, non-accrual loans, and loans whose only rate tag is a PIK rate.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check no_rate_in_source passed on sandbox maia for each quarter listed: 10 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/x02_page_read.py maia 0002006758",
+   "decided_by": "check passed on sandbox maia; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {

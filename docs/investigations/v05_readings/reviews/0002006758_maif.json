@@ -1,0 +1,192 @@
+{
+ "reviewer_id": "claude-opus-5.5-independent-reviewer-maif-0002006758-2026-10-19",
+ "report_digest": "aa40631b4c68e2f5159896da2b3529a1757dc21522121b5d55842d8c100f114e",
+ "scope_note": "Review bound to maif (report label maif, 10 outstanding findings from fund_gate.outstanding_findings(maif, 0002006758)); field diff maie -> maif is one cell (Midwest Vision 2026-06-30 C_4e9b268b interest_rate null -> 10.48), 2094 = 2094 rows; X02 no longer fires and no row printing a fixed coupon lacks a rate. Re-checked every rejection of the maid review, all 52 FV-0 rows (50 dash rows + 2 tagged zeros), the full field diff maid -> maie (joined on accession + context, 2094 = 2094 rows, none added or removed), the highlights 'withdraw' mechanism and the derived 2024-03-31 NAV. Scratch: scratch/fund_runs/0002006758/reviewer_maid/. A clean review is not data correctness.",
+ "summary": {
+  "finding_reviews": {"supported": 10, "rejected": 0, "insufficient_evidence": 0},
+  "observation_reviews": {"supported": 19, "rejected": 0},
+  "request_resolution_history_reviews": {"supported": 4, "rejected": 0}
+ },
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_d5e3df2b1533", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "Unchanged from maid; flagged row ROW-5f6db64e14c63133 (CI delayed draw, FV 7,787,000) equals affected_rows. Page prints company cell 'CI' under 'CI (MG) GROUP, LLC'; the same loan is printed under the full name at 2024-12-31. source_ambiguity holds.",
+   "evidence": [{"accession": "0000950170-24-096134", "text": "CI (MG) GROUP, LLC CI First Lien Secured Debt - Delayed Draw S+ 715 , 1.00 % Floor 03/24/2028 7,940 7,790 7,787 (9)"}]
+  },
+  {
+   "finding_id": "RVQ_BLK_8f4b975d908b", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "Unchanged; ROW-62218ae8f10a59e9 is the only flagged row at 2024-09-30. Page prints 'Mariani CI'; next filing prints the same loan under 'CI (MG) GROUP, LLC'.",
+   "evidence": [{"accession": "0000950170-24-126281", "text": "Mariani CI First Lien Secured Debt - Delayed Draw S+ 715 , 1.00 % Floor 3/24/2028 7,920 7,778 7,733 (9)"}]
+  },
+  {
+   "finding_id": "RVQ_BLK_53eb52652b0d", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "Unchanged; ROW-f3442dbccd24b30b is the flagged row. 'Total Investments' printed in the company cell; borrower named in the commitment table.",
+   "evidence": [
+    {"accession": "0000950170-25-071342", "text": "North Highland Company LLC Total Investments First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 12/22/2031 4,788 4,742 4,740 (9)(17)"},
+    {"accession": "0000950170-25-071342", "text": "The North Highland Company LLC 200 48 - 152"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6efbafcb2c99", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "Unchanged; flagged rows ROW-f0ec665e3409fceb (PAI revolver, cell 'Total Investments') and ROW-901622bf185451ca (CI term loan, cell 'CI') equal affected_rows.",
+   "evidence": [
+    {"accession": "0001193125-25-274253", "text": "Total Investments First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 2/13/2032 ( 1 ) ( 1 ) (9)(12)(13)(14)"},
+    {"accession": "0001193125-25-274253", "text": "Mariani CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 4,731 4,666 4,669 (9)(17)"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_84eb7cbad040", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "Published distribution 0.0 at 2024-06-30 matches the printed dash; first declaration 19 September 2024. F33 fires on a true zero.",
+   "evidence": [
+    {"accession": "0000950170-24-096134", "text": "Distribution of net investment income (2) (3) - Net asset value at end of period $ 26.13"},
+    {"accession": "0000950170-25-040394", "text": "September 19, 2024 September 19, 2024 September 20, 2024 $ 1.0983 $ 15,879"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4561071d2f46", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "New in maie: F33 2024-03-31 fires now that NAV per share is no longer 0. The stub column prints distribution 0.00; published 0.0 is the printed value. Same reason as the 2024-06-30 F33.",
+   "evidence": [{"accession": "0000950170-25-071342", "text": "Distribution of net investment income (1)(2) ( 0.75 ) 0.00 Net asset value at end of period $ 24.25 $ -"}]
+  },
+  {
+   "finding_id": "RVQ_REV_092abb46cfab", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "Unchanged; 1.75 = 0.8662 + 0.8825, two Q4 2024 declarations as printed.",
+   "evidence": [{"accession": "0000950170-25-040394", "text": "November 13, 2024 November 12, 2024 December 12, 2024 0.8662 12,538 December 30, 2024 December 30, 2024 January 28, 2025 0.8825 13,169 $ 2.8470 $ 41,586"}]
+  },
+  {
+   "finding_id": "RVQ_BLK_f5daf9d7a904", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "My maid rejection is resolved: coverage now cites src:0001193125-26-214580:C_86ed6f67-7863-4d7f-a2e5-750972614685, the row maie's source_reconciliation_source_only_detail.csv lists (4,103,000), plus the published schedule row C_83883771 (4,102,000). Note row vs schedule row, 4,103 vs 4,102 rounding; published 2026-03-31 total equals the printed 934,425.",
+   "evidence": [
+    {"accession": "0001193125-26-214580", "text": "AWRG Borrower LLC, Term Loan $ 5,343 $ - $ ( 28 ) $ ( 1,212 ) $ 4,103 $ - $ -"},
+    {"accession": "0001193125-26-214580", "text": "American West AWRG Borrower LLC First Lien Secured Debt - Term Loan 8.77 % 06/18/30 $ 5,515 $ 5,515 $ 4,102 (5)(24)"}
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0002006758_2026-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_b069473753", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "Same correction as RVQ_BLK_f5daf9d7a904: C_86ed6f67 is the only 2026-03-31 row in the source-only detail (SRCONLY_POSITION_LIKE_PARSER, 4,103,000). Conclusion supported.",
+   "evidence": [
+    {"accession": "0001193125-26-214580", "text": "Total Investments before Cash Equivalents $ 968,958 $ 934,425"},
+    {"accession": "0001193125-26-214580", "text": "AWRG Borrower LLC, Term Loan $ 5,343 $ - $ ( 28 ) $ ( 1,212 ) $ 4,103 $ - $ -"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8042302abd8a", "outcome": "supported", "coverage_verified": true, "source_comparison_verified": true,
+   "rationale": "My maid rejection is resolved: maie's oracle flags 33 B01 contexts at 2026-03-31 and affected_rows lists exactly those 33 (set compared by script, none missing or extra). 10 current-period contexts are restricted-securities acquisition-table members with no facts; the 23 comparatives are 11 table members and 12 dash rows of 2025-12-31, and I found all 12 published at FV 0 in maie's 2025-12-31 quarter (SEKO x2, Vixxo DD, Lotus revolver, GC Waves revolver, Amylu x2, TVG Orion x2, AMI revolver, F&M x2).",
+   "evidence": [{"accession": "0001193125-26-214580", "text": "Issuer Investment Type Acquisition Date AWRG Parent LLC Common Equity - Stock 6/18/2025 AWRG Parent LLC Common Equity - Stock 6/18/2025 Eagle Aggregator Ltd Common Equity - Stock 12/31/2025"}]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page", "outcome": "supported",
+   "rationale": "The five prefixed dash rows are fixed (GC Waves Holdings, Inc. at 2024-12-31; TVG Orion Blocker, Inc. x4) and Accelevation 2026-06-30 is now 'Accelevation LLC' as printed; no published row of the fund keeps a group prefix in maie. Detection decision changed to propose_detector with a concrete prefix test that also reads dash rows; that answers the blind spot.",
+   "evidence": [{"accession": "0001193125-26-214580", "text": "TVG Orion Blocker, Inc. Common Equity - Stock N/A N/A 2 Shares 99 - (6)(9)"}]
+  },
+  {
+   "observation_key": "floor-rate-tag-published-as-interest-rate", "outcome": "supported",
+   "rationale": "The three remaining 2025-09-30 dash rows (AMI revolver, F&M delayed draw and revolver) now publish no rate; no row of the fund publishes interest_rate <= 1.5 in maie. Detector proposal is sound. Its rationale still says 'all 21' where the count is now 24: stale wording, not a defect.",
+   "evidence": [{"accession": "0001193125-25-274253", "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 10/17/2031 ( 1 ) - (9)(13)(14)"}]
+  },
+  {
+   "observation_key": "fixed-coupon-tagged-as-floor", "outcome": "supported",
+   "rationale": "My maie rejection is resolved: Midwest Vision 2026-06-30 C_4e9b268b now publishes 10.48 as printed (the only cell changed maie -> maif). X02 no longer fires for the fund in maif, and no published row whose member prints a fixed coupon lacks both rate and spread. The agent reports all 10 rows the check-accepted X02 reason had cleared print fixed coupons; that reason should not be relied on for this fund as a recurrence screen, since it would clear a missed coupon again.",
+   "evidence": [{"accession": "0001193125-26-349327", "text": "First Lien Secured Debt - Term Loan 10.48 % 01/12/29 3,991 3,776 - (5)(9)"}]
+  },
+  {
+   "observation_key": "dash-fair-value-row-not-published", "outcome": "supported",
+   "rationale": "Read all 52 FV-0 rows in maie. Names carry no group prefix; no rate equals a floor; SEKO delayed draw spreads are 10.5 with pik 9.5; SONIA reference set on Saffron 2025-06-30 and Brush 2026-03-31 / 2026-06-30 revolvers; spreads match the printed margins; FEV 6.00 (2025-03-31) and 13.50 (2025-06-30) as printed. The Midwest Vision 2026-06-30 coupon residual is fixed in maif. Totals still tie.",
+   "evidence": [{"accession": "0000950170-25-040394", "text": "First Lien Secured Debt - Revolver S+ 475 , 0.75 % Floor 10/4/2030 - - - (15)(19)(20)"}]
+  },
+  {
+   "observation_key": "loan-par-tagged-as-share-count", "outcome": "supported",
+   "rationale": "Pars as printed; the 9 rows now also carry principal_amount_currency USD (was null), per the field diff. X11 covers recurrence.",
+   "evidence": [{"accession": "0001193125-26-104070", "text": "Kauffman Kauffman Intermediate, LLC First Lien Secured Debt - Term Loan 10.27 % 09/30/26 8,926 8,408 5,410"}]
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged", "outcome": "supported",
+   "rationale": "Unchanged; Midwest Vision pik 6.5 x3 as printed.",
+   "evidence": [{"accession": "0001193125-26-104070", "text": "First Lien Secured Debt - Term Loan S + 650 PIK, 1 % Floor 01/12/28 417 412 417"}]
+  },
+  {
+   "observation_key": "spread-tag-is-cash-leg-of-printed-total-margin", "outcome": "supported",
+   "rationale": "SEKO delayed draw 2025-12-31 and 2026-03-31 now 10.5 (field diff 1.0 -> 10.5). Detection decision now proposes a check that reads dash rows; concrete.",
+   "evidence": [{"accession": "0001193125-26-104070", "text": "First Lien Secured Debt - Delayed Draw S + 100 Cash plus 9.50 % PIK, 1.00 % Floor 11/27/29 - - - (9)(13)(14)"}]
+  },
+  {
+   "observation_key": "net-assets-blank-though-assetsnet-filed", "outcome": "supported",
+   "rationale": "Unchanged; seven declared net-asset values equal the printed lines.",
+   "evidence": [{"accession": "0000950170-24-126281", "text": "Total Net Assets $ 371,637 $ 294,450"}]
+  },
+  {
+   "observation_key": "xbrl-instance-huge-text-node-default-parser", "outcome": "supported",
+   "rationale": "Unchanged; module docstring now records the extraction switch and the cohort measurement.",
+   "evidence": [{"accession": "0001193125-26-104070", "text": "Total Wireless Telecommunication Services $ 7,921 $ 7,877 Total Investments $ 962,492 $ 942,796"}]
+  },
+  {
+   "observation_key": "fund-income-blank-in-annual-report-quarter", "outcome": "supported",
+   "rationale": "maie 2025-12-31 TII 23,724 / NII 11,599 / interest expense 9,226 thousand, each within 1 thousand of printed year less printed nine months.",
+   "evidence": [{"accession": "0001193125-26-104070", "text": "Total Investment Income $ 98,411 $ 100,753 $ 1,326 Operating Expenses Interest and other debt expenses $ 38,762 $ 42,191 $ 638"}]
+  },
+  {
+   "observation_key": "canonical-name-picks-member-variant", "outcome": "supported",
+   "rationale": "Unchanged; shared naming, concrete detector proposal.",
+   "evidence": [{"accession": "0001193125-25-274253", "text": "Lexitas Chronicle Parent LLC First Lien Secured Debt - Term Loan S + 500 , 1.00 % Floor 4/15/2031 3,510 3,477 3,475"}]
+  },
+  {
+   "observation_key": "money-market-cash-equivalents-not-published", "outcome": "supported",
+   "rationale": "Unchanged; consistent ex-cash basis in every quarter.",
+   "evidence": [{"accession": "0001193125-26-349327", "text": "Goldman Sachs Financial Square Government Institutional Fund N/A N/A $ 8,230 $ 8,230 $ 8,230"}]
+  },
+  {
+   "observation_key": "member-industry-truncated-or-misspelt", "outcome": "supported",
+   "rationale": "My maid rejection is resolved: decision is now propose_detector with a concrete check (truncated or near-spelt label prefix with blank extracted_industry) and an honest note that industry_coverage missed 73 rows.",
+   "evidence": [{"accession": "0000950170-24-126281", "text": "Total Electrical Equipment $ 23,367 $ 23,426 Electronic Equipment, Instruments & Compone Eckhart BidCo, LLC Eckhart BidCo, LLC First Lien Secured Debt"}]
+  },
+  {
+   "observation_key": "member-keeps-prior-company-name-after-rename", "outcome": "supported",
+   "rationale": "Unchanged; valued rows, issuer_name_printed sees them.",
+   "evidence": [{"accession": "0001193125-26-214580", "text": "Project Titan Tyber Medical LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 06/12/32 3,015 2,987 2,962"}]
+  },
+  {
+   "observation_key": "value-keyed-exclusion-rule", "outcome": "supported",
+   "rationale": "Unchanged from maid: the excluded row is the printed issuer subtotal 4,877 / 4,876; fv_conservation would see a recurring subtotal as an excess.",
+   "evidence": [{"accession": "0000950170-24-126281", "text": "Vixxo Corporation Vixxo Corporation First Lien Secured Debt - Term Loan S+ 500 , 1.00 % Floor 8/1/2030 4,950 4,877 4,876 (10)(15) First Lien Secured Debt - Delayed Draw S+ 500 , 1.00 % Floor 8/1/2030 - - - (15)(19)(20) 4,877 4,876"}]
+  },
+  {
+   "observation_key": "foreign-par-published-in-usd", "outcome": "supported",
+   "rationale": "My maid rejection is resolved: decision is now propose_detector. Natus 2025-03-31 E+525 tranche set to EUR (96,000 -> 103,642 USD); the next 10-Q prints the same tranche as 'EUR 96', so the change is evidenced. Total Power SOFR revolver 2026-06-30 printed '39 38 38' without a marker, now USD 39,000 (was CAD); its C$ 19 CORRA revolver stays CAD.",
+   "evidence": [
+    {"accession": "0000950170-25-107988", "text": "First Lien Secured Debt - Term Loan E + 525 , 0.00 % Floor 1/7/2031 EUR 96 98 111 (9)(22)"},
+    {"accession": "0001193125-26-349327", "text": "First Lien Secured Debt - Revolver S + 525 , 0.75 % Floor 07/22/30 39 38 38 (9)(11)(13)(14) (17)"}
+   ]
+  },
+  {
+   "observation_key": "spread-total-margin-with-pik-separate-is-convention", "outcome": "supported",
+   "rationale": "Spread = cash + PIK margin with pik_rate separate is the owner's D-031 convention; Wellbeam 7.40 follows it, so not_feasible (no defect) is right.",
+   "evidence": [{"accession": "0000950170-25-107988", "text": "Wellbeam Consumer Health Intermediate, LLC Wellbeam Consumer Health Intermediate, LLC First Lien Secured Debt - Term Loan S + 640 Cash plus 1.00 % PIK, 1.00 % Floor 10/4/2027"}]
+  },
+  {
+   "observation_key": "dash-row-not-read-by-page-reader", "outcome": "supported",
+   "rationale": "Correct shared cause for the maid defects: dash rows are page status unfunded_commitment and the page rules and printed_margin_reading skip them. Proposed per fund-quarter listing is concrete. Left for shared code, properly flagged as shared.",
+   "evidence": [{"accession": "0001193125-26-104070", "text": "First Lien Secured Debt - Delayed Draw S + 100 Cash plus 9.50 % PIK, 1.00 % Floor 11/27/29 - - - (9)(13)(14)"}]
+  },
+  {
+   "observation_key": "nav-per-share-derived-not-printed", "outcome": "supported",
+   "rationale": "Plainly: both inputs are filed and printed. AssetsNet 307,138,000 at 2024-03-31 is tagged in 0000950170-24-096134, -25-071342 and -25-107988 and printed as 'Net assets at beginning of period 307,138'; CommonStockSharesOutstanding 12,145,597 is tagged in the same filings and printed. 25.288 itself is neither printed nor tagged (the page prints '$ -'); it is consistent with the stub column's own 25.00 + 0.29 + 0.00. Publishing it is acceptable as a derived figure, and better than the 0 it replaces, but fund_financials marks the row source 'companyfacts' with no derived flag, so a reader cannot tell. The proposed source flag is the right next step; the owner may prefer blank.",
+   "evidence": [
+    {"accession": "0000950170-25-071342", "text": "Net asset value at beginning of period $ 24.43 $ 25.00 Net investment income (1) 0.89 0.24 Net realized and change in unrealized gains (losses) (1) ( 0.32 ) 0.05 Net increase in net assets resulting from operations 0.57 0.29 Distribution of net investment income (1)(2) ( 0.75 ) 0.00 Net asset value at end of period $ 24.25 $ -"},
+    {"accession": "0000950170-24-096134", "text": "Net assets at beginning of period 307,138 294,450 Net Assets at End of Period $ 377,792 $ 377,792"}
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_resolution_history_reviews": [
+  {"request_id": "MAI-R1", "outcome": "supported", "rationale": "Unchanged from the maid review: verification bug, tested.", "evidence": [{"accession": "0001193125-26-104070", "text": "Total Wireless Telecommunication Services $ 7,921 $ 7,877 Total Investments $ 962,492 $ 942,796"}]},
+  {"request_id": "MAI-R2", "outcome": "supported", "rationale": "Unchanged: verification bug, tested.", "evidence": [{"accession": "0001193125-26-104070", "text": "Total Wireless Telecommunication Services $ 7,921 $ 7,877 Total Investments $ 962,492 $ 942,796"}]},
+  {"request_id": "MAI-R3", "outcome": "supported", "rationale": "Unchanged: anchor included unpublished cash equivalents; 2026-03-31 ties to the printed before-cash total.", "evidence": [{"accession": "0001193125-26-214580", "text": "Total Investments before Cash Equivalents $ 968,958 $ 934,425"}]},
+  {"request_id": "MAI-R4", "outcome": "supported", "rationale": "Now resolved under the owner's standing delegation D-207 (apply the recommended option on a blocking decision, measured on the cohort first, as in D-207 item 4), the module docstring records the switch and measurement, and the report sets shared_code true. The label 'acceptance_change' is still a misnomer (it is a shared extraction change; no check is weakened). maif report text now calls it an extraction change (shared) and tests_run is corrected. Residual: the cohort measurement is not reproduced in an artifact I found.", "evidence": [{"accession": "0001193125-26-104070", "text": "Net Expenses $ 47,706 $ 49,071 $ 1,696 Net Investment Income $ 50,705 $ 51,682 $ ( 370 )"}]}
+ ],
+ "other_checks": {
+  "field_diff_vs_maid": "Matches the report's declaration: issuer_name 8 (GC Waves 1, TVG Orion 4, Accelevation 3); interest_rate 3 (0.75 -> null); basis_spread 2 (SEKO 1.0 -> 10.5); reference_rate_type 3 (null -> SONIA); principal_amount_currency 11 (9 null -> USD, Natus USD -> EUR, Total Power revolver CAD -> USD); principal_amount_usd 2. No FV, cost, par, maturity, instrument or shares change; no row added or removed.",
+  "withdraw_mechanism": "pipeline/fund_highlights_wrapper.py: a figure_corrections entry is a withdrawal only with withdraw true, value null, a YYYY-MM-DD date, a known field and non-empty evidence; apply_figure_corrections masks by the wrapper's own cik and the date, blanks only where the frame already holds that fund-date, and adds no row. Only data/overrides/fund_highlights_wrappers/0002006758.json uses it. It cannot touch another fund. Tests (2 new) read, not run by me.",
+  "not_checked": "Non-accrual flags, maturity dates, GICS, the 20-row page sample, pytest runs."
+ }
+}

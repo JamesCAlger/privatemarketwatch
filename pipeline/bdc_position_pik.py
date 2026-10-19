@@ -15,6 +15,8 @@ from typing import Any
 import pandas as pd
 from lxml import etree
 
+from pipeline.xbrl_instance_xml import parse_instance
+
 from pipeline.bdc_filings import _local_name, _parse_xbrl_contexts, parse_filing_contexts
 from pipeline.config import (
     BDC_FILINGS_INDEX_FILE,
@@ -160,7 +162,7 @@ def extract_bdc_position_pik_evidence(
             "report_date": str(row.get("report_date", "")),
         }
         try:
-            tree = etree.parse(xml_path)
+            tree = parse_instance(xml_path)  # huge_tree: >10 MB text nodes (MAI-R4)
             contexts = parse_filing_contexts(tree, filing_meta)
             all_records.extend(_extract_pik_evidence_facts(tree, contexts, filing_meta))
             parsed += 1

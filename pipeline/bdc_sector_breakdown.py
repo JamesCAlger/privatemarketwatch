@@ -21,6 +21,8 @@ from typing import Any, Optional
 import pandas as pd
 from lxml import etree
 
+from pipeline.xbrl_instance_xml import parse_instance
+
 from pipeline.config import (
     BDC_FILINGS_INDEX_FILE,
     BDC_INSTRUMENT_TYPE_BREAKDOWN_FILE,
@@ -340,7 +342,7 @@ def extract_bdc_sector_breakdown(
         entity_name = str(row.get("entity_name", ""))
 
         try:
-            tree = etree.parse(xml_path)
+            tree = parse_instance(xml_path)  # huge_tree: >10 MB text nodes (MAI-R4)
             contexts = _parse_sector_contexts(tree)
             raw_facts = _extract_sector_facts(tree, contexts)
 
@@ -708,7 +710,7 @@ def extract_bdc_instrument_type_breakdown(
     ciks_with_data: set[str] = set()
     for _, row in cached.iterrows():
         try:
-            tree = etree.parse(row["xbrl_local_path"])
+            tree = parse_instance(row["xbrl_local_path"])  # huge_tree (MAI-R4)
             contexts = _parse_instrument_contexts(tree)
             facts = _extract_lien_facts(tree, contexts)  # generic: FV/cost per context
             for rec in _aggregate_instrument_types(facts):
@@ -776,7 +778,7 @@ def extract_bdc_lien_breakdown(
     ciks_with_data: set[str] = set()
     for _, row in cached.iterrows():
         try:
-            tree = etree.parse(row["xbrl_local_path"])
+            tree = parse_instance(row["xbrl_local_path"])  # huge_tree (MAI-R4)
             contexts = _parse_lien_contexts(tree)
             facts = _extract_lien_facts(tree, contexts)
             for tier in _aggregate_lien_tiers(facts):

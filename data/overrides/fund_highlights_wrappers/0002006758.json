@@ -1,0 +1,25 @@
+{
+  "schema_version": "fund-highlights-wrapper.v1",
+  "cik": "0002006758",
+  "entity_name": "MidCap Apollo Institutional Private Lending",
+  "version": 1,
+  "notes": "Net assets are published blank in seven quarters although the balance sheet prints 'Total Net Assets' (and the 10-Qs tag us-gaap:AssetsNet on an undimensioned instant context; the company-facts frame the build reads holds no value for these dates). Each figure below is the printed line. NAV per share at 2024-03-31 is not printed (the fund converted to a BDC on 2024-03-15; the highlights print 'Net asset value at Conversion Date (1) $ 25.00'), so it is not declared.",
+  "figure_corrections": [
+    {"report_date": "2023-12-31", "field": "net_assets", "value": 294450000,
+     "evidence": "0000950170-24-096134 balance sheet, December 31, 2023 column: 'Total liabilities $ 444,505 $ 496,745 Total Net Assets $ 377,792 $ 294,450'."},
+    {"report_date": "2024-03-31", "field": "net_assets", "value": 307138000,
+     "evidence": "0000950170-24-096134 statement of changes in net assets, three months ended June 30, 2024: 'Net assets at beginning of period 307,138 294,450 Net Assets at End of Period $ 377,792 $ 377,792'."},
+    {"report_date": "2024-06-30", "field": "net_assets", "value": 377792000,
+     "evidence": "0000950170-24-096134 balance sheet: 'Total liabilities $ 444,505 $ 496,745 Total Net Assets $ 377,792 $ 294,450'."},
+    {"report_date": "2024-09-30", "field": "net_assets", "value": 371637000,
+     "evidence": "0000950170-24-126281 balance sheet: 'Total Net Assets $ 371,637 $ 294,450'."},
+    {"report_date": "2025-03-31", "field": "net_assets", "value": 386454000,
+     "evidence": "0000950170-25-071342 balance sheet: 'Total Net Assets $ 386,454 $ 364,527'."},
+    {"report_date": "2025-06-30", "field": "net_assets", "value": 382979000,
+     "evidence": "0000950170-25-107988 balance sheet: 'Total Net Assets $ 382,979 $ 364,527'."},
+    {"report_date": "2024-03-31", "field": "nav_per_share", "value": null, "withdraw": true,
+     "evidence": "0000950170-25-071342 financial highlights, column 'For Period between March 15 and March 31, 2024': 'Net asset value at end of period $ 24.25 $ -'. The filer tags NetAssetValuePerShare 0 for the dash; the column's own lines are 'Net asset value at beginning of period $ 24.43 $ 25.00' and 'Net increase in net assets resulting from operations 0.57 0.29' with distributions 0.00, so 0 is not the NAV. No end-of-period NAV per share is printed for the date; the 0 is withdrawn (independent review of maid)."},
+    {"report_date": "2025-09-30", "field": "net_assets", "value": 402912000,
+     "evidence": "0001193125-25-274253 balance sheet: 'Total Net Assets $ 402,912 $ 364,527'."}
+  ]
+}

@@ -33,6 +33,8 @@ from typing import Any, Optional
 import pandas as pd
 from lxml import etree
 
+from pipeline.xbrl_instance_xml import parse_instance
+
 from pipeline.config import (
     BDC_FILINGS_INDEX_FILE,
     BDC_FUND_HIGHLIGHTS_FILE,
@@ -862,7 +864,7 @@ def extract_bdc_fund_highlights(
         }
 
         try:
-            tree = etree.parse(xml_path)
+            tree = parse_instance(xml_path)  # huge_tree: >10 MB text nodes (MAI-R4)
             contexts = _parse_highlights_contexts(tree)
             facts = _extract_highlights_facts(tree, contexts, cik=filing_meta["cik"])
 

@@ -606,3 +606,84 @@ def test_forced_reconciliation_recomputes_each_cik_partition(tmp_path, monkeypat
     assert status.iloc[0]["run_mode"] == "force"
     assert int(status.iloc[0]["dirty_cik_count"]) == 2
     assert calls == [(("123",), ("123",)), (("456",), ("456",))]
+
+
+# --- MAI-R2: instances with a >10 MB text node (huge_tree) ---------------------------
+
+# libxml2's default limit on one text node is 10,000,000 bytes.
+_HUGE_TEXT = "x" * 10_500_000
+
+
+def _mm_body_with_huge_text_node() -> str:
+    return _cash_equivalents_context(
+        "ctx_mm", "DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember"
+    ) + (
+        '<us-gaap:InvestmentOwnedAtFairValue contextRef="ctx_mm" unitRef="usd" decimals="-3">65057000</us-gaap:InvestmentOwnedAtFairValue>'
+        f'<us-gaap:RiskFactorsTextBlock contextRef="ctx_mm">{_HUGE_TEXT}</us-gaap:RiskFactorsTextBlock>'
+    )
+
+
+def test_huge_text_node_instance_is_read(tmp_path):
+    import pytest
+    from lxml import etree
+
+    path = tmp_path / "mm.xml"
+    path.write_text(_XML_HEADER + _mm_body_with_huge_text_node() + "</xbrl>", encoding="utf-8")
+    with pytest.raises(etree.XMLSyntaxError):  # the fixture really exceeds the default limit
+        etree.parse(str(path))
+
+    rows = sr._extract_single_xbrl_source_file(path, dict(_FILING_META))
+    assert len(rows) == 1
+    assert rows[0]["fair_value"] == 65057000.0
+
+    facts, status = sr._extract_single_xbrl_source_file_cached(path, dict(_FILING_META))
+    assert status == "ok"
+    assert len(facts) == 1
+
+
+def test_huge_text_node_instance_missing_row_still_reported(tmp_path):
+    # A huge-text instance with no investment fact yields no source rows (no_facts),
+    # not a phantom row.
+    body = _cash_equivalents_context(
+        "ctx_mm", "DreyfusTreasuryObligationsCashManagementMoneyMarketFundMember"
+    ) + f'<us-gaap:RiskFactorsTextBlock contextRef="ctx_mm">{_HUGE_TEXT}</us-gaap:RiskFactorsTextBlock>'
+    path = tmp_path / "mm.xml"
+    path.write_text(_XML_HEADER + body + "</xbrl>", encoding="utf-8")
+
+    facts, status = sr._extract_single_xbrl_source_file_cached(path, dict(_FILING_META))
+    assert status == "no_facts"
+    assert facts.empty
+
+
+def test_cached_parse_failure_is_retried_but_ok_is_reused(tmp_path, monkeypatch):
+    _patch_cache_paths(monkeypatch, tmp_path)
+    xml_a = tmp_path / "a.xml"
+    xml_b = tmp_path / "b.xml"
+    xml_a.write_text("<xbrl>a</xbrl>", encoding="utf-8")
+    xml_b.write_text("<xbrl>b</xbrl>", encoding="utf-8")
+    index = pd.concat([_filings_index(xml_a, "0001"), _filings_index(xml_b, "0002")],
+                      ignore_index=True)
+    calls: list[str] = []
+    status_by_file = {"a.xml": "ok", "b.xml": "parse_failed"}
+
+    def fake_extract(path, filing):
+        name = Path(path).name
+        calls.append(name)
+        if status_by_file[name] == "parse_failed":
+            return pd.DataFrame(columns=sr.SOURCE_FACT_COLUMNS), "parse_failed"
+        return _source_fact(str(filing["accession_number"])), "ok"
+
+    monkeypatch.setattr(sr, "_extract_single_xbrl_source_file_cached", fake_extract)
+    sr.extract_bdc_source_facts_cached(filings_index_df=index)
+    status_by_file["b.xml"] = "ok"  # the parser now reads it
+    facts, manifest = sr.extract_bdc_source_facts_cached(filings_index_df=index)
+
+    assert calls == ["a.xml", "b.xml", "b.xml"]
+    assert set(manifest["parse_status"]) == {"ok"}
+    assert len(facts) == 2
+    # the changed parse_status moves the CIK's source_hash, so its partition recomputes
+    first_hash = sr._compute_source_hashes(pd.DataFrame([
+        {**manifest.iloc[1].to_dict(), "parse_status": "parse_failed", "fact_row_count": "0"},
+    ]))
+    second_hash = sr._compute_source_hashes(manifest.iloc[[1]])
+    assert first_hash.iloc[0]["source_hash"] != second_hash.iloc[0]["source_hash"]

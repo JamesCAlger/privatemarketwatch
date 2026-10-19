@@ -80,9 +80,9 @@ def _cells(tr) -> list[str]:
 @lru_cache(maxsize=256)
 def sections_of_filing(html_path: str, report_date: str, heading_pattern: str) -> dict[str, str]:
     """contextRef -> printed top-level heading for the current-period fair-value facts of one filing."""
-    from lxml import etree
     heading_re = re.compile(heading_pattern)
-    root = etree.parse(html_path).getroot()
+    from pipeline.xbrl_instance_xml import parse_instance
+    root = parse_instance(html_path).getroot()  # huge_tree: inline-XBRL document (MAI-R4)
     instant: dict[str, str] = {}
     for el in root.iter():
         if _local(el.tag) == "context":

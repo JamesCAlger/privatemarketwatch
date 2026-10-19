@@ -20,6 +20,8 @@ from typing import Any, Optional
 import pandas as pd
 from lxml import etree
 
+from pipeline.xbrl_instance_xml import parse_instance
+
 from pipeline.config import (
     BDC_FILINGS_INDEX_FILE,
     BDC_FUND_INCOME_FILE,
@@ -425,7 +427,7 @@ def extract_bdc_fund_income(
         }
 
         try:
-            tree = etree.parse(xml_path)
+            tree = parse_instance(xml_path)  # huge_tree: >10 MB text nodes (MAI-R4)
             contexts = _parse_income_contexts(tree)
             from pipeline.fund_highlights_wrapper import load_highlights_wrapper
             wrapper = load_highlights_wrapper(filing_meta["cik"]) if filing_meta["cik"] else None

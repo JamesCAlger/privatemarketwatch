@@ -278,5 +278,10 @@
   "label": "t7af",
   "accepted_on": "2026-10-19",
   "basis": "D-212, gate INCOMPLETE (F25 2025-06-30 parked) with investigation COMPLETE: 96 findings, 81 outstanding, 80 proposed; 14/14 quarters tie; sample 1/20 fixed; self-comparing cash anchors removed by ruling; six builds plus one financials re-run"
+ },
+ "0002006758": {
+  "label": "maif",
+  "accepted_on": "2026-10-19",
+  "basis": "D-213, gate PASS with investigation COMPLETE: 32 findings, 10 outstanding, all proposed; 9/9 quarters tie; huge_tree parser (MAI-R1..R4); sample 1 real error of 20 fixed fund-wide; six builds"
  }
 }

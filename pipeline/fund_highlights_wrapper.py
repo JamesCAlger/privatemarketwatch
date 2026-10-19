@@ -120,6 +120,13 @@ def _load_wrapper_from_path(path: Path) -> HighlightsWrapperSpec | None:
     corrections = []
     for entry in data.get("figure_corrections", []) or []:
         day, name, value = str(entry.get("report_date", "")), str(entry.get("field", "")), entry.get("value")
+        # A withdrawal: the filed figure is not a value the page prints (MidCap Apollo Institutional
+        # 2024-03-31: NetAssetValuePerShare tagged 0 where the stub column prints '$ -'). Needs
+        # "withdraw": true, "value": null and evidence; the figure is published blank for that date.
+        if (entry.get("withdraw") is True and value is None and re.fullmatch(r"\d{4}-\d{2}-\d{2}", day)
+                and name in FIGURE_FIELDS and str(entry.get("evidence", "")).strip()):
+            corrections.append((day, name, None))
+            continue
         if (not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day) or name not in FIGURE_FIELDS
                 or not isinstance(value, (int, float)) or not str(entry.get("evidence", "")).strip()):
             logger.warning("Highlights wrapper %s: figure correction ignored: %r", path.name, entry)
@@ -246,6 +253,11 @@ def apply_figure_corrections(balance_df):
             if name not in frame.columns:
                 frame[name] = None
             hit = mine & (frame["report_date"].astype(str).str[:10] == day)
+            if value is None:  # a withdrawal blanks the figure where the frame holds the date; it adds no row
+                if hit.any():
+                    frame.loc[hit, name] = None
+                    logger.info("fund figure withdrawn (not printed): %s %s %s", cik, day, name)
+                continue
             if hit.any():
                 frame.loc[hit, name] = value
             else:

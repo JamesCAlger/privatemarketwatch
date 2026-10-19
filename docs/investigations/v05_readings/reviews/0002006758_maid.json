@@ -1,0 +1,317 @@
+{
+ "reviewer_id": "claude-opus-5.5-independent-reviewer-maid-0002006758-2026-10-19",
+ "report_digest": "a21ed9e1239940bb633edd33d093edea76e4cc4bf2afc436c8e2a7fcb25eff47",
+ "scope_note": "Reviewed all 12 outstanding ledger findings of maid / 0002006758 (fund_gate.outstanding_findings), all 17 observations and the 4 entries of request_resolution_history against the cached filings and scratch/fund_sandbox/maid/output. orchestrator_requests is empty, so request_reviews is empty; the history entries are reviewed under request_resolution_history_reviews. Scratch queries: scratch/fund_runs/0002006758/reviewer_maid/. A clean review is not data correctness.",
+ "summary": {
+  "finding_reviews": {"supported": 6, "rejected": 6, "insufficient_evidence": 0},
+  "observation_reviews": {"supported": 12, "rejected": 5},
+  "request_resolution_history_reviews": {"supported": 3, "rejected": 1}
+ },
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_d5e3df2b1533",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population (shadow/page_rule_findings.csv) at 2024-06-30 is one row, ROW-5f6db64e14c63133 (CI (MG) Group, LLC delayed draw, FV 7,787,000), equal to affected_rows. Page prints company cell 'CI' under group 'CI (MG) GROUP, LLC'; the same S+715 3/24/2028 loan is printed under 'CI (MG) GROUP, LLC' at 2024-12-31. Publishing the full printed legal name keeps one issuer; source_ambiguity is right. Proposal is as_filed, still not accepted.",
+   "evidence": [
+    {"accession": "0000950170-24-096134", "text": "CI (MG) GROUP, LLC CI First Lien Secured Debt - Delayed Draw S+ 715 , 1.00 % Floor 03/24/2028 7,940 7,790 7,787 (9)"},
+    {"accession": "0000950170-25-040394", "text": "Mariani CI (MG) GROUP, LLC First Lien Secured Debt - Delayed Draw S+ 715 , 1.00 % Floor 3/24/2028 7,899 7,767 7,719 (9)"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8f4b975d908b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population at 2024-09-30 is ROW-62218ae8f10a59e9 only (CI delayed draw FV 7,733,000), equal to affected_rows. Page prints 'Mariani CI'; the next filing prints the same loan (S+715, 3/24/2028) under 'CI (MG) GROUP, LLC'. Same mechanism as d5e3df2b1533.",
+   "evidence": [
+    {"accession": "0000950170-24-126281", "text": "Mariani CI First Lien Secured Debt - Delayed Draw S+ 715 , 1.00 % Floor 3/24/2028 7,920 7,778 7,733 (9)"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_53eb52652b0d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population at 2025-03-31 is ROW-f3442dbccd24b30b (North Highland term loan FV 4,740,000), equal to affected_rows; the two undrawn North Highland lines have no printed name cell and are not compared by the rule, as stated. Page prints 'Total Investments' in the company cell; the commitment table of the same filing names The North Highland Company LLC. Publishing the borrower, not the label, is right.",
+   "evidence": [
+    {"accession": "0000950170-25-071342", "text": "North Highland Company LLC Total Investments First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 12/22/2031 4,788 4,742 4,740 (9)(17)"},
+    {"accession": "0000950170-25-071342", "text": "The North Highland Company LLC 200 48 - 152"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6efbafcb2c99",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Flagged population at 2025-09-30 is exactly ROW-f0ec665e3409fceb (PAI revolver, printed cell 'Total Investments', FV -1,000) and ROW-901622bf185451ca (CI term loan, printed cell 'CI', FV 4,669,000), equal to affected_rows. Both read on the page; the PAI commitment line names Pai Middle Tier, LLC.",
+   "evidence": [
+    {"accession": "0001193125-25-274253", "text": "Total Investments First Lien Secured Debt - Revolver S + 450 , 0.75 % Floor 2/13/2032 ( 1 ) ( 1 ) (9)(12)(13)(14)"},
+    {"accession": "0001193125-25-274253", "text": "Mariani CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 4,731 4,666 4,669 (9)(17)"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ebb7cb93dddc",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Coverage (fund-quarter key 2024-03-31/nav_identity) is right, the conclusion false_alarm is not. The identity fails because the build publishes nav_per_share 0.0 for a fund with net assets 307,138 thousand and 12,145,597 shares: 0 is not a NAV. The cited stub column itself prints beginning NAV 25.00, net increase 0.29 and distribution 0.00, so the printed end-of-period dash is a presentation gap, not a NAV of zero; 25.00 + 0.29 = 25.29 = 307,138 / 12,145,597. The check is right that the published value is wrong. Next action should be to stop publishing 0 (publish null, or an evidenced declared value if the owner allows the arithmetic), or put the question to the owner; an as_filed disposition would accept a NAV of zero.",
+   "evidence": [
+    {"accession": "0000950170-25-071342", "text": "Net asset value at beginning of period $ 24.43 $ 25.00 Net investment income (1) 0.89 0.24 Net realized and change in unrealized gains (losses) (1) ( 0.32 ) 0.05 Net increase in net assets resulting from operations 0.57 0.29 Distribution of net investment income (1)(2) ( 0.75 ) 0.00 Net asset value at end of period $ 24.25 $ -"},
+    {"accession": "0000950170-24-096134", "text": "Net assets at beginning of period 307,138 294,450 Net Assets at End of Period $ 377,792 $ 377,792"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_003aa911b66e",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "F30 tests 0.01 < nav_per_share < 1000 (pipeline/validate_fund_financials.py); the published 0.0 fails it correctly. The tagged 0 comes from a printed dash in a column whose own lines add up to 25.29, so 'as filed' records a filer tagging artefact as a value. Not a false alarm. Same remedy as RVQ_BLK_ebb7cb93dddc: null (or evidenced value) for 2024-03-31 nav_per_share, or an owner ruling.",
+   "evidence": [
+    {"accession": "0000950170-25-071342", "text": "Net asset value at beginning of period $ 24.43 $ 25.00 Net investment income (1) 0.89 0.24 Net realized and change in unrealized gains (losses) (1) ( 0.32 ) 0.05 Net increase in net assets resulting from operations 0.57 0.29 Distribution of net investment income (1)(2) ( 0.75 ) 0.00 Net asset value at end of period $ 24.25 $ -"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1bb66bbd3469",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "F11 (NAV x shares vs net assets) fires because of the published NAV 0. Net assets 307,138 thousand (printed, now published) and 12,145,597 shares (printed) are right; the NAV is the wrong field. The investigation itself shows the identity holds at 25.29. Calling this a false alarm keeps a wrong published value; reject for the same reason as RVQ_BLK_ebb7cb93dddc.",
+   "evidence": [
+    {"accession": "0000950170-25-071342", "text": "Net asset value at end of period $ 24.25 $ - Total return (3) 2.31 % 4.31 % Shares outstanding at end of period (1) 15,938,450 12,145,597"},
+    {"accession": "0000950170-24-096134", "text": "Net assets at beginning of period 307,138 294,450 Net Assets at End of Period $ 377,792 $ 377,792"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_84eb7cbad040",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-quarter key 2024-06-30/distribution_rate. Published distribution 0.0 matches the dash printed for the period from conversion to 2024-06-30; the 2024 10-K table of declarations starts with 19 September 2024 (1.0983). F33 fires on a true zero; as_filed is right.",
+   "evidence": [
+    {"accession": "0000950170-24-096134", "text": "Distribution of net investment income (2) (3) - Net asset value at end of period $ 26.13"},
+    {"accession": "0000950170-25-040394", "text": "The following table presents distributions that were declared during the year ended December 31, 2024 : Distributions Record Date Declaration Date Payment Date Per Share Amount* September 19, 2024 September 19, 2024 September 20, 2024 $ 1.0983 $ 15,879"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_092abb46cfab",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-quarter key 2024-12-31/distribution_rate. Published distribution_per_share 1.75 = 0.8662 + 0.8825, the two declarations dated in Q4 2024 as printed (table total 2.8470 = 1.0983 + 0.8662 + 0.8825). F16 is an informational heuristic; the figure is as printed.",
+   "evidence": [
+    {"accession": "0000950170-25-040394", "text": "November 13, 2024 November 12, 2024 December 12, 2024 0.8662 12,538 December 30, 2024 December 30, 2024 January 28, 2025 0.8825 13,169 $ 2.8470 $ 41,586"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f5daf9d7a904",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Coverage cites the wrong source row. The source row the check reports is src:0001193125-26-214580:C_86ed6f67-7863-4d7f-a2e5-750972614685 ('Affiliated Investments AWRG Borrower LLC, Term Loan', source FV 4,103,000, status missing_from_pipeline in source_reconciliation_detail and the only 2026-03-31 row in source_reconciliation_source_only_detail). The investigation lists C_653f4580-d303-4bcd-8f75-bf31f79c29b4, which is a different context of the same member with status excluded_no_fair_value and no FV. The mechanism (roll-forward note twin of the published schedule row C_83883771, 4,103 vs 4,102 rounding, so affiliation dedup does not pair it) is plausible and the two quotes are on the page, but the affected and reviewed row must be C_86ed6f67. Re-state coverage with that context and confirm its facts.",
+   "evidence": [
+    {"accession": "0001193125-26-214580", "text": "AWRG Borrower LLC, Term Loan $ 5,343 $ - $ ( 28 ) $ ( 1,212 ) $ 4,103 $ - $ -"},
+    {"accession": "0001193125-26-214580", "text": "American West AWRG Borrower LLC First Lien Secured Debt - Term Loan 8.77 % 06/18/30 $ 5,515 $ 5,515 $ 4,102 (5)(24)"}
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0002006758_2026-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_b069473753",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Same coverage error as RVQ_BLK_f5daf9d7a904: source_reconciliation_source_only_detail.csv lists the blocking row as src:0001193125-26-214580:C_86ed6f67-7863-4d7f-a2e5-750972614685 (4,103,000, SRCONLY_POSITION_LIKE_PARSER); the investigation names C_653f4580 instead. Published 2026-03-31 FV sums to 934,425 thousand, equal to the printed total, which supports the no-double-count conclusion once the right context is cited.",
+   "evidence": [
+    {"accession": "0001193125-26-214580", "text": "Total Investments before Cash Equivalents $ 968,958 $ 934,425"},
+    {"accession": "0001193125-26-214580", "text": "AWRG Borrower LLC, Term Loan $ 5,343 $ - $ ( 28 ) $ ( 1,212 ) $ 4,103 $ - $ -"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8042302abd8a",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "The rule's flagged population for B01 2026-03-31 is 33 contexts (review_queue n_units 33; oracle/check_failures.csv). The 10 current-period contexts in affected_rows match exactly and all are 'X Investment Type Common Equity' members of the restricted-securities acquisition-date table with no value, cost, par or unit facts, as claimed. The other 23 flagged contexts (period 2025-12-31 comparatives in the same 10-Q, e.g. C_9f8edcc7 SEKO equity unit, C_4a0c7efe SEKO delayed draw, C_411704ba / C_6f5fd7b2 TVG Orion, C_1d79dc50 GC Waves revolver) are neither listed nor explained. List them or explain why prior-period contexts are outside this finding; conclusion is likely to hold.",
+   "evidence": [
+    {"accession": "0001193125-26-214580", "text": "Issuer Investment Type Acquisition Date AWRG Parent LLC Common Equity - Stock 6/18/2025 AWRG Parent LLC Common Equity - Stock 6/18/2025 Eagle Aggregator Ltd Common Equity - Stock 12/31/2025"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "rejected",
+   "rationale": "The strip is good on the rows I compared (all 470 spon3->maid name pairs read; no real company cut). But 'fixed' and 'issuer_name_printed found every case' are not true. Five published rows keep the group prefix: GC Waves revolver 2024-12-31 (C_05b1f39d, 'GC Waves GC Waves Holdings, Inc'; the pair list needs the trailing period) and TVG Orion stock and note at 2026-03-31 and 2026-06-30 ('Ora LLC TVG Orion Blocker, Inc.'; no Ora LLC -> TVG Orion Blocker pair). Each splits from its own earlier rows. All five are dash rows published at FV 0 in this run; issuer_name_printed did not flag them (page_rule_findings has 5 rows, none of these), so this detector does not see rows without a printed value. Minor: Accelevation 2026-06-30 published 'Accelevation, LLC' (doubled member) where the page prints company 'Accelevation LLC'.",
+   "evidence": [
+    {"accession": "0001193125-26-214580", "text": "TVG Orion Blocker, Inc. Common Equity - Stock N/A N/A 2 Shares 99 - (6)(9)"},
+    {"accession": "0000950170-25-040394", "text": "GC Waves GC Waves Holdings, Inc. First Lien Secured Debt - Term Loan S+ 485 , 0.75 % Floor 10/4/2030 9,776 9,776 9,736 (10)(15)"},
+    {"accession": "0001193125-26-349327", "text": "Accelevation, LLC Accelevation LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 01/02/31 $ 9,727 $ 9,623 $ 9,639 (9)(17)"}
+   ]
+  },
+  {
+   "observation_key": "floor-rate-tag-published-as-interest-rate",
+   "outcome": "rejected",
+   "rationale": "The 21 corrected rows all read correctly (rate withdrawn, spread kept; printed 'S + x , y % Floor' with no all-in rate). But at 2025-09-30 three more published rows still carry the floor as interest_rate 0.75: AMI Buyer revolver (C_ae84960d), F&M Buyer delayed draw (C_ab5a1eb0) and revolver (C_d0d22819). All three are dash rows newly published at FV 0. So the observation's count and 'fixed' are incomplete. The proposed detector (rate <= 1.5 with a spread) would catch them; that part is sound.",
+   "evidence": [
+    {"accession": "0001193125-25-274253", "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 10/17/2031 ( 1 ) - (9)(13)(14)"},
+    {"accession": "0001193125-25-274253", "text": "First Lien Secured Debt - Delayed Draw S + 475 , 0.75 % Floor 3/18/2032 ( 5 ) - (9)(13)(14)"}
+   ]
+  },
+  {
+   "observation_key": "fixed-coupon-tagged-as-floor",
+   "outcome": "supported",
+   "rationale": "All 15 fixed-coupon specs match one published row each and the published rate equals the printed coupon (e.g. Parcelshield 9.34, Kauffman 10.27/10.30/10.33, Veristat 10.95/10.50/10.52, FEV 11.01, SEKO 12.95). X02 (drawn loan with neither rate nor spread) fires on the same failure in a new quarter.",
+   "evidence": [
+    {"accession": "0001193125-26-214580", "text": "Parcelshield Holdings LLC Parcelshield Holdings LLC First Lien Secured Debt - Term Loan 9.34 % 09/30/27 7,743 7,420 3,357"}
+   ]
+  },
+  {
+   "observation_key": "dash-fair-value-row-not-published",
+   "outcome": "supported",
+   "rationale": "52 published rows at FV 0 in maid (50 untagged plus 2 tagged); sampled ones match printed dash lines (FEV 2025-03-31, SEKO equity unit, GC Waves revolver '- - -'). Published FV and cost tie to printed totals (e.g. 2026-03-31 934,425 / 968,958). B01 and cost_conservation would see a recurrence. Caveat: the newly published rows skip some fund-level handling, which is the cause of the defects in the issuer-name, floor-rate and spread observations (SEKO delayed draw 2025-12-31 and 2026-03-31 published spread 1.0 where the convention gives 10.5).",
+   "evidence": [
+    {"accession": "0000950170-25-071342", "text": "First Lien Secured Debt - Term Loan 6.00 % 7/15/2028 8,228 7,369 - (5)"},
+    {"accession": "0000950170-25-040394", "text": "First Lien Secured Debt - Revolver S+ 475 , 0.75 % Floor 10/4/2030 - - - (15)(19)(20)"}
+   ]
+  },
+  {
+   "observation_key": "loan-par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "Kauffman 2025-12-31 published principal 8,926,000 = printed par 8,926; CI 2024-06-30 par 7,940,000 = printed 7,940. X11 (drawn loan without principal) fires if the par moves back into shares.",
+   "evidence": [
+    {"accession": "0001193125-26-104070", "text": "Kauffman Kauffman Intermediate, LLC First Lien Secured Debt - Term Loan 10.27 % 09/30/26 8,926 8,408 5,410"}
+   ]
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "outcome": "supported",
+   "rationale": "Midwest Vision 417 rows at 2025-06-30, 2025-09-30, 2025-12-31 now publish pik_rate 6.5 and spread 6.5 against printed 'S + 650 PIK' (D-031 convention). pik_printed reads the printed PIK figure; a cash-pay row prints none, so false alarms are unlikely.",
+   "evidence": [
+    {"accession": "0001193125-26-104070", "text": "First Lien Secured Debt - Term Loan S + 650 PIK, 1 % Floor 01/12/28 417 412 417"}
+   ]
+  },
+  {
+   "observation_key": "spread-tag-is-cash-leg-of-printed-total-margin",
+   "outcome": "rejected",
+   "rationale": "The setting works on valued rows (SEKO term loan 2025-12-31 and 2026-03-31 spread 10.5, pik 9.5). It did not reach the dash rows: the SEKO delayed draw at 2025-12-31 (C_0612698d) and 2026-03-31 (C_7715606a) publishes basis_spread 1.0 with pik_rate 9.5 against the same printed 'S + 100 Cash plus 9.50 % PIK' (src_transforms lacks cash_plus_pik_margin). spread_printed did not flag them, so the existing-detector claim does not cover rows with no printed value.",
+   "evidence": [
+    {"accession": "0001193125-26-104070", "text": "First Lien Secured Debt - Delayed Draw S + 100 Cash plus 9.50 % PIK, 1.00 % Floor 11/27/29 - - - (9)(13)(14)"}
+   ]
+  },
+  {
+   "observation_key": "net-assets-blank-though-assetsnet-filed",
+   "outcome": "supported",
+   "rationale": "All seven declared net-asset values equal the printed lines: 294,450 (2023-12-31), 307,138 (2024-03-31), 377,792, 371,637, 386,454, 382,979, 402,912. A coverage test against an undimensioned AssetsNet instant is concrete and would catch a recurrence. Shared cause not traced, as the report states.",
+   "evidence": [
+    {"accession": "0000950170-24-126281", "text": "Total Net Assets $ 371,637 $ 294,450"},
+    {"accession": "0000950170-25-071342", "text": "Total Net Assets $ 386,454 $ 364,527"},
+    {"accession": "0000950170-25-107988", "text": "Total Net Assets $ 382,979 $ 364,527"}
+   ]
+  },
+  {
+   "observation_key": "xbrl-instance-huge-text-node-default-parser",
+   "outcome": "supported",
+   "rationale": "Mechanism checked in code: pipeline/xbrl_instance_xml.py lifts only libxml2 size limits; tests in tests/test_xbrl_instance_xml.py, test_provenance_reverify.py and test_source_reconciliation_cache.py show a >10 MB text node parses, a wrong value still fails and malformed XML still fails. maid 2025-12-31 published FV 942,796 = printed. A per-accession parse-failure detector is concrete. Not re-run by me: the cohort count (301 instances, 1 failure); tests not executed.",
+   "evidence": [
+    {"accession": "0001193125-26-104070", "text": "Total Wireless Telecommunication Services $ 7,921 $ 7,877 Total Investments $ 962,492 $ 942,796"}
+   ]
+  },
+  {
+   "observation_key": "fund-income-blank-in-annual-report-quarter",
+   "outcome": "supported",
+   "rationale": "Published 2025-12-31 TII 23,724 / NII 11,599 / interest expense 9,226 thousand. From the printed year less the printed nine months: 98,411 - 74,688 = 23,723; 50,705 - 39,105 = 11,600; 38,762 - 29,537 = 9,225. Each is within 1 thousand (sum of three quarterly figures vs printed nine-month rounding). Detector proposal is concrete.",
+   "evidence": [
+    {"accession": "0001193125-26-104070", "text": "Total Investment Income $ 98,411 $ 100,753 $ 1,326 Operating Expenses Interest and other debt expenses $ 38,762 $ 42,191 $ 638"},
+    {"accession": "0001193125-25-274253", "text": "Total Investment Income $ 24,994 $ 26,077 $ 74,688 $ 74,438 Operating Expenses Interest and other debt expenses $ 9,712 $ 10,929 $ 29,537 $ 31,152"}
+   ]
+  },
+  {
+   "observation_key": "canonical-name-picks-member-variant",
+   "outcome": "supported",
+   "rationale": "Shared entity naming, outside the fund's reach; canonical_name is informational in the gate. The proposed check (canonical_name not a spelling of any published issuer_name of its rows) is concrete and fund-agnostic.",
+   "evidence": [
+    {"accession": "0001193125-25-274253", "text": "Lexitas Chronicle Parent LLC First Lien Secured Debt - Term Loan S + 500 , 1.00 % Floor 4/15/2031 3,510 3,477 3,475"}
+   ]
+  },
+  {
+   "observation_key": "money-market-cash-equivalents-not-published",
+   "outcome": "supported",
+   "rationale": "No cash rows are published in any quarter (checked index_classification), and every quarter ties on the ex-cash basis, consistent with MAI-R3. Leaving it is defensible; the proposed comparison of printed after/before cash-equivalents totals with cash rows is concrete.",
+   "evidence": [
+    {"accession": "0001193125-26-349327", "text": "Goldman Sachs Financial Square Government Institutional Fund N/A N/A $ 8,230 $ 8,230 $ 8,230"}
+   ]
+  },
+  {
+   "observation_key": "member-industry-truncated-or-misspelt",
+   "outcome": "rejected",
+   "rationale": "The fix itself is evidenced. The detection decision is not: it names industry_coverage as the existing detector while its own rationale says industry_coverage did not fire here because the share stayed above 0.80. A detector that missed 73 rows will miss the recurrence. Record it as propose_detector (e.g. a member industry prefix not in the label table) or not_feasible with a reason.",
+   "evidence": [
+    {"accession": "0000950170-24-126281", "text": "Total Electrical Equipment $ 23,367 $ 23,426 Electronic Equipment, Instruments & Compone Eckhart BidCo, LLC Eckhart BidCo, LLC First Lien Secured Debt"}
+   ]
+  },
+  {
+   "observation_key": "member-keeps-prior-company-name-after-rename",
+   "outcome": "supported",
+   "rationale": "Tyber Medical x5 and Eyesouth at 2026-03-31 read on the page and published as printed. These rows carry values, so issuer_name_printed compares them and caught them, as claimed.",
+   "evidence": [
+    {"accession": "0001193125-26-214580", "text": "Project Titan Tyber Medical LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 06/12/32 3,015 2,987 2,962"}
+   ]
+  },
+  {
+   "observation_key": "value-keyed-exclusion-rule",
+   "outcome": "supported",
+   "rationale": "Page shows the issuer subtotal 4,877 / 4,876 after the Vixxo lines; excluding it is right. fv_conservation sees a subtotal recurring as an excess, so the existing-detector reference holds; the carry-forward weakness is disclosed.",
+   "evidence": [
+    {"accession": "0000950170-24-126281", "text": "Vixxo Corporation Vixxo Corporation First Lien Secured Debt - Term Loan S+ 500 , 1.00 % Floor 8/1/2030 4,950 4,877 4,876 (10)(15) First Lien Secured Debt - Delayed Draw S+ 500 , 1.00 % Floor 8/1/2030 - - - (15)(19)(20) 4,877 4,876"}
+   ]
+  },
+  {
+   "observation_key": "foreign-par-published-in-usd",
+   "outcome": "rejected",
+   "rationale": "The 14 corrections check out: each spec matches one row, the printed par and currency are set, and the rates agree with the build's other rows at the same date (CAD 0.740138 2024-09-30, 0.694444 2024-12-31, 0.734214 2025-06-30, 0.71803 2025-09-30, 0.703977 2026-06-30; GBP 1.3443; EUR 1.1417). The detection decision is inconsistent: action existing_detector with reference FX01, while the rationale says FX01 did not fire and the printed-currency check would. That is a proposed detector, not an existing one. Residual risk not mentioned: Natus 2025-03-31 E+525 tranche printed '96 98 102' with no currency marker is published USD 96,000 (footnote says par is USD unless noted; cost/FV ratio suggests EUR).",
+   "evidence": [
+    {"accession": "0001193125-25-274253", "text": "First Lien Secured Debt - Revolver CORRA + 525 , 0.75 % Floor 7/22/2030 C$ 16 9 11"},
+    {"accession": "0000950170-25-071342", "text": "First Lien Secured Debt - Term Loan E + 525 , 0.00 % Floor 1/7/2031 96 98 102 (9)(20)"}
+   ]
+  },
+  {
+   "observation_key": "spread-total-margin-with-pik-separate-is-convention",
+   "outcome": "supported",
+   "rationale": "Spread = cash + PIK margin with pik_rate separate is the owner's D-031 convention; Wellbeam 7.40 on 'S + 640 Cash plus 1.00 % PIK' follows it. not_feasible (no defect) is right.",
+   "evidence": [
+    {"accession": "0000950170-25-107988", "text": "Wellbeam Consumer Health Intermediate, LLC Wellbeam Consumer Health Intermediate, LLC First Lien Secured Debt - Term Loan S + 640 Cash plus 1.00 % PIK, 1.00 % Floor 10/4/2027"}
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_resolution_history_reviews": [
+  {
+   "request_id": "MAI-R1",
+   "outcome": "supported",
+   "rationale": "A verification bug: the re-verifier could not read the 10-K, so all 2025-12-31 fields were source_unavailable. Fixed with huge_tree; tests show a source-backed value passes, a wrong one fails (published_mismatch) and malformed XML stays source_unavailable. C107 2025-12-31 then cleared by the standing check because the facts were readable, which is the right reason. Tests not executed by me.",
+   "evidence": [{"accession": "0001193125-26-104070", "text": "Total Wireless Telecommunication Services $ 7,921 $ 7,877 Total Investments $ 962,492 $ 942,796"}]
+  },
+  {
+   "request_id": "MAI-R2",
+   "outcome": "supported",
+   "rationale": "A verification bug: source reconciliation read no 2025-12-31 source row, so all 283 published rows were pipeline-only. After the fix the published total 942,796 thousand equals the printed total; SRC_BDC02 / pipeline-only cleared because the source was read, not because a check was relaxed. Test covers both a huge-text instance being read and a no-facts instance not producing phantom rows.",
+   "evidence": [{"accession": "0001193125-26-104070", "text": "Total Wireless Telecommunication Services $ 7,921 $ 7,877 Total Investments $ 962,492 $ 942,796"}]
+  },
+  {
+   "request_id": "MAI-R3",
+   "outcome": "supported",
+   "rationale": "The pulled anchor (945,613) included 11,188 of money-market funds that are published in no quarter. Every other quarter ties on the before-cash total, and maid 2026-03-31 published FV is 934,425 = the printed 'before Cash Equivalents' total. Retiring the anchor puts the quarter on the fund's one basis; it does not weaken the check.",
+   "evidence": [{"accession": "0001193125-26-214580", "text": "Total Investments before Cash Equivalents $ 968,958 $ 934,425"}]
+  },
+  {
+   "request_id": "MAI-R4",
+   "outcome": "rejected",
+   "rationale": "The change is evidenced (fund income 2025-12-31 now matches the printed year less nine months within 1 thousand). The record is inconsistent. It is classified acceptance_change, which the contract sends to the owner, but it was resolved on orchestrator authority. In substance it is a shared extraction change that alters published fund-level data, not an acceptance change; reclassify it, or get the owner's ruling. Also: the module docstring of pipeline/xbrl_instance_xml.py still says the extraction stages are deliberately not switched; the report's shared_code false / 'no pytest run' sits beside uncommitted shared-code changes in nine pipeline modules that this build depends on; the cohort measurement (301 instances, 1 failure) is not reproduced in any artifact I found.",
+   "evidence": [{"accession": "0001193125-26-104070", "text": "Net Expenses $ 47,706 $ 49,071 $ 1,696 Net Investment Income $ 50,705 $ 51,682 $ ( 370 )"}]
+  }
+ ],
+ "other_checks": {
+  "row_corrections": "All 84 specs in scripts/v05_evidence/row_correction_specs/0002006758.json match exactly one maid row and every cited printed line is in the cached filing. Published values equal the printed lines for: 21 floor-withdrawn loans at 2025-09-30, 15 fixed coupons, Midwest Vision pik 6.5 x3 and 2025-03-31 spread 6.5 (4.50 + 2.00), Sperry 2026-03-31 spread 5.00, Mariani revolver 2025-12-31 rate withdrawn, the names (Congruex, THLP x3, Wildcat, Pavement, CI x5, North Highland x6, Amylu, Tyber x5, Eyesouth, PAI x4) and the 14 FX rows.",
+  "not_checked": "Non-accrual flags, maturity dates, reference_rate_type of every row, GICS mapping, the 20-row random page sample, pytest of the orchestrator's shared-code changes."
+ }
+}

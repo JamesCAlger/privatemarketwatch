@@ -92,6 +92,12 @@ def test_override_feeds_back_into_anchor_candidates(tmp_path, monkeypatch):
 @pytest.mark.needs_cache
 def test_override_agreeing_with_companyfacts_yields_high(tmp_path, monkeypatch):
     monkeypatch.setattr(run_investigation, "ANCHOR_OVERRIDES", tmp_path / "ov")
+    # Premise: no CASH row in the quarter, so companyfacts_fv is not swapped for
+    # companyfacts_fv_plus_cash. Stub the holdings so the test does not depend on whether the
+    # current build still carries cash rows (the pulled 1715933 plug rule's rows, 2026-10-19).
+    import pandas as pd
+    monkeypatch.setattr(run_investigation, "_load_holdings",
+                        lambda cik: pd.DataFrame(columns=["report_date", "asset_category", "fair_value"]))
     # an override that AGREES with companyfacts (692M) -> keep both -> HIGH (corroborated)
     leaf = tmp_path / "ov" / "1715933" / "2025-06-30.json"
     _write_leaf(leaf, 691_956_192.0, method="single_tag", basis="investments_ex_cash")
