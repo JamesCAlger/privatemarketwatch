@@ -869,8 +869,15 @@
           "type": "array",
           "minItems": 1,
           "maxItems": 1,
-          "items": {"enum": ["net_of_tagged_commitment"]},
-          "description": "The filer lists each undrawn commitment in its schedule as a row at the committed amount and subtracts the commitments again as one line per section (KKR FS Income Trust, 10-Q for 2026-03-31: 'Sotheby's, Revolver (i) 31,849 31,849 31,849', footnote (i) 'Security is an unfunded commitment', then 'Unfunded Loan Commitments (430,150) (430,150)'). Each such row is published net: cost and fair value less the commitment the filing tags for it in its commitments note; the principal keeps the committed amount. A row is netted only when its name starts with the commitment's name and its cost equals the tagged amount. Evidence required: the printed offset line and a commitment-note fact beside its schedule row."
+          "items": {"enum": ["net_of_tagged_commitment", "net_of_other_commitment"]},
+          "description": "The filer lists each undrawn commitment in its schedule as a row at the committed amount and subtracts the commitments again as one line per section (KKR FS Income Trust, 10-Q for 2026-03-31: 'Sotheby's, Revolver (i) 31,849 31,849 31,849', footnote (i) 'Security is an unfunded commitment', then 'Unfunded Loan Commitments (430,150) (430,150)'). Each such row is published net: cost and fair value less the commitment the filing tags for it in its commitments note; the principal keeps the committed amount. net_of_tagged_commitment: a row is netted only when its name starts with the commitment's name and its cost equals the tagged amount (InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount on the investment's member). net_of_other_commitment: the note tags us-gaap:OtherCommitment per issuer (LegalEntityAxis) and facility (CreditFacilityAxis Revolver / Delayed Draw Term Loan) and the schedule prints no per-row cost (Manulife Private Credit Fund, 10-Q for 2026-03-31: '4M Capital, Ltd., Revolver (C) - 06-18-27 528,000 528,000', 'Less unfunded loan commitments (102,864,092)'); the issuer is the first cell of the printed note row, the amount goes to that issuer's wholly undrawn rows of the facility (no rate) by par, then to its one drawn row, or its one drawn '(C)' row, of the facility; a remainder is logged, not placed. Evidence required: the printed offset line and a commitment-note fact beside its schedule row."
+        },
+        "unfunded_note_aliases": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^\\s*\\S.*?\\s*=>\\s*\\S.*$"},
+          "description": "Read with unfunded_rows net_of_other_commitment only: 'NOTE NAME => SCHEDULE NAME' for an issuer the commitments note spells differently from the schedule (Manulife 10-K for 2024-12-31: note 'PAK Quality Foods Acqusition LLC', schedule 'PAK Quality Foods Acquisition LLC'). Used only when the note's own spelling names no schedule row of that date. Evidence required: the printed note row and the printed schedule row with the same facility and amount."
         },
         "cost_in_two_units": {
           "type": "array",

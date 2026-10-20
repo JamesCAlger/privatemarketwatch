@@ -6,6 +6,11 @@
   "source": "bdc_xbrl",
   "dispatch": {
     "global_issuer_split": false,
+    "issuer_name_strip_re": "(?:,\\s*|(?<=\\bLLC)\\s*|(?<=\\bInc\\.)\\s*)(?=[^,]{0,45}?(?:Delayed\\s*Draw|Term\\s*Loan|Revolv|Class\\s+[A-Z]\\S*\\s+Units|\\bUnits\\b|\\bNote\\b))(?!\\s*(?:Inc|LLC|Ltd|Corp|L\\.P|LP)\\b).*$",
+    "issuer_name_strip_to_instrument": true,
+    "instrument_description_strip_re": "(?:^|\\s+)(?:Senior\\s+[Ll]oans?\\b|enior\\s+loans\\b|Short-term\\s+investments\\b|Industrials,|Equity\\s*\\(A\\)).*$|\\s+\\([A-F]\\)?(?=\\s|$)",
+    "instrument_description_strip_may_empty": true,
+    "cash_identifier_rows": "positions",
     "rule_prefix": "MANULIFE_PRIVATE_CREDIT",
     "prefix_rules": {
       "Senior loans": "debt",
@@ -62,8 +67,27 @@
       }
     ],
     "category_marker_re": "^\\s*(?:(?:\\(A\\)\\(B\\)\\s*)?\\d+(?:\\.\\d+)?%\\s*\\|?\\s*[A-Za-z &,()]+(?:\\s+\\d+(?:\\.\\d+)?%)?\\s*\\|?\\s*|\\|\\s*[A-Za-z &,()]+\\s+\\d+(?:\\.\\d+)?%\\s*|\\d+(?:\\.\\d+)?%\\s*\\|\\s*[A-Za-z &,()]+(?:\\s+\\d+(?:\\.\\d+)?%)?\\s*\\|\\s*[^,()]+\\b(?:LLC|L\\.L\\.C\\.|Inc\\.?|Corp\\.?|Corporation|Company|Co\\.?)\\s*)$",
+    "industry_from_identifier_re": "^[^|]*\\|\\s*([A-Za-z][A-Za-z ,&-]*?[A-Za-z])\\s*\\d+(?:\\.\\d+)?%",
     "category_marker_before_total": true,
     "canonical_strip_re": "(?i)^\\s*(?:Senior\\s+[Ll]oans?|enior\\s+loans)(?:\\s+\\(A\\)\\(B\\))?(?:\\s+\\d+(?:\\.\\d+)?%|\\s*\\(Cost\\s+\\$[\\d,]+\\))?\\s*\\|\\s*.*?\\s+\\d+(?:\\.\\d+)?%\\s*\\|?\\s*|^\\s*(?:Senior\\s+[Ll]oans?|enior\\s+loans)(?:\\s+\\(A\\)\\(B\\))?(?:\\s+\\d+(?:\\.\\d+)?%|\\s*\\(Cost\\s+\\$[\\d,]+\\))?\\s*\\|\\s*|\\s*\\([^)]*(?:CME\\s+Term\\s+SOFR|Prime\\s+rate|SOFR)[^)]*\\)|\\s*\\([A-Z]\\)?$"
+  },
+  "source_encodings": {
+    "cash_identifiers": [
+      "Senior loans 170.6% | Short-term funds 8.5% | Dreyfus Treasury Obligations Cash Management Fund, Institutional Class",
+      "Senior loans 195.3% | Short-term funds 8.5% | Dreyfus Government Cash Management Fund, Institutional Class",
+      "Senior loans 195.3% | Short-term funds 8.5% | Dreyfus Treasury Obligations Cash Management Fund, Institutional Class",
+      "Senior loans 235.6% | Short-term funds 9.6% | Dreyfus Government Cash Management Fund, Institutional Class",
+      "Senior loans 238.6% | Short-term funds 8.8%| Dreyfus Government Cash Management Fund, Institutional Class"
+    ],
+    "misdated_contexts": [
+      "0001193125-25-039332 PAsOn02_24_2025_SeniorLoans1954BuildingProducts69IntegratedOpeningsSolutionsLLCDelayedDrawTermLoanTypedMemberusgaapInvestmentIdentifierAxis 2025-02-24 -> 2024-12-31"
+    ],
+    "filed_rate_reading": ["all_in"],
+    "unfunded_rows": ["net_of_other_commitment"],
+    "unfunded_note_aliases": [
+      "PAK Quality Foods Acqusition LLC => PAK Quality Foods Acquisition LLC",
+      "WWEC Holdings II Corp. => WWEC Holdings III Corp."
+    ]
   },
   "identifier_format": {
     "delimiter": " | ",

@@ -1,0 +1,313 @@
+{
+ "reviewer_id": "manulife-independent-reviewer-2026-10-20",
+ "report_digest": "a75826abd79fa93c5488375d6bf4297387fbc864057e79b31a58119bc5a63224",
+ "final_round_check": "Final round: the report changed only in the five stale strings named in round 4 (parked[0].finding, parked[0].hypotheses[1] and [2], not_done 'Unplaced commitments ...' and not_done '2023-12-31 10-K ...'). I put the round-4 text of those five strings back in memory and recomputed the digest against the current ledger (scratch/fund_runs/0001988280/review/restore_check.py). The result reproduces the round-4 digest cee22d738d8870aea791b18ed21e88471c418f930d2b4de5ff5280f0f0d3f842 exactly: no other report field and no outstanding ledger record changed. The new text is accurate. Founders is placed (-1,567 / -3,134). 2025-12-31 is the only unplaced amount, with a declared residual of 0.00. The 2023 line now says the published TII / NII are half of the printed 2,555,900 / 2,316,852, which I verified on 0001193125-25-039332. The round-4 assessments below therefore stand unchanged.",
+ "sandbox": "mlff (round 4 in-place re-run)",
+ "baseline": "sponfb",
+ "summary": "Round 4 review, bound to the new report and ledger. 11 of 11 findings supported. 14 of 14 observations supported, including the two rejected last round (industry, undrawn netting) and the two new ones. Request history MLF-R1..R5 supported. Independent checks: (1) mlff against the pre-round-4 copy (r4diff.py): 1,982 rows on both sides, none added or removed. Changed columns: fair_value 2 and src_facts 2 (Founders Table 2026-06-30 only), extracted_industry 805, gics_sub_industry 805, gics_sector 406, corrected_fields 946. Nothing else changed. (2) Industry: my own page-heading reader (ind_page.py, nearest printed '<industry> x.x %' or '(continued)' heading above the located line) agrees with the published label on 451 of 451 rows, 0 not located. The sample has 400 seeded random rows plus every earlier example: Chemtron, In Vitro, Lockmasters, Alta, Jetson, 4M Capital, QM Buyer, Krayden, Prestige. 32 rows still differ from the member text; all are member-text defects (a pasted row label, 'Capmarkets', 'Industrials') or member wrong against the page (Alta and QM Buyer 2025-09-30, printed under Software). No row has a blank industry or GICS. (3) Founders Table: DDTL 155,094 - 156,661 = -1,567 and Revolver 153,527 - 156,661 = -3,134, as printed. (4) Residuals (resid.sql): netted equals the printed offset line in 9 of 10 quarters. 2025-12-31: published - filed = +1,393,758 = 1,813,287 unplaced - 419,529 unpublished equity. 2026-06-30: -508,384 = the unpublished equity (P.J. 390,051 + Rapid 118,333). Residual 0.00 in all 10 quarters. The stale report lines named in round 4 (parked[0], not_done[0], the 2023 not_done line) are now corrected; see final_round_check. The round-4 cache state is consistent: the manifest now carries wrapper_hash (D-223), and source statuses equal round 3. The last run (round4b) was a clean cache run after adding only industry corrections, which do not enter reconciliation. Superseded round-3 review kept at scratch/fund_runs/0001988280/review/review_round3_superseded.json.",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_99b8d228d0cc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with flagged.py mlff X02 0001988280 2025-06-30: exactly 4 rows flagged, the same 4 contexts as affected_rows (Steward Partners Revolver, In Vitro Revolver, Midwest Eye Revolver, OIS 3rd Amendment Incremental DDTL). The ledger has X02 open only at 2025-06-30. Round 4 changed no rate field (r4diff.py). Each printed line read with page_line.py: dash in the rate column, '(C)', no benchmark. filing_grep.py on the Steward context shows only maturity, principal 955881 and fair value 946322 (no rate, spread or PIK fact). Published rate blank, as printed. Conclusion false_alarm and the proposal under x02-no-rate-printed-on-the-row are supported.",
+   "evidence": [
+    {"accession": "0001193125-25-178880", "text": "Steward Partners Global Advisory LLC, Revolver (C) - 10-13-28 955,881 946,322"},
+    {"accession": "0001193125-25-178880", "text": "In Vitro Sciences LLC, Revolver (C) - 02-28-29 177,778 157,333"},
+    {"accession": "0001193125-25-178880", "text": "Midwest Eye Services LLC, Revolver (C) - 08-20-27 704,931 704,931"},
+    {"accession": "0001193125-25-178880", "text": "OIS Management Services LLC, 3rd Amendment Incremental Delayed Draw Term Loan (C) - 11-16-28 949,658 954,406"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_cac3a1399dcc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-quarter finding; key 0001988280|2024-03-31|cost_conservation|cost_sum_vs_filed_cost is the right aggregate. cost.sql: the source facts of 0001193125-24-137279 carry cost on 4 of 202 contexts, all section totals. Published cost is null on all 96 rows, and round 4 did not change cost. The schedule prints no cost column, and the total line carries cost only on the totals. The promoted cost = fair value rule is pulled. No data error; the as_filed proposal is the right route.",
+   "evidence": [
+    {"accession": "0001193125-24-137279", "text": "Rate (%) Maturity date Par value^ Value"},
+    {"accession": "0001193125-24-137279", "text": "Total investments - Non-controlled/Non-affiliated (Cost $ 130,062,720 ) 116.3 % $ 131,141,852"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3a48f632479b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2024-06-30: 0001193125-24-199764 source facts carry cost on 4 of 225 contexts (section totals only); published cost null on all 118 rows; no cost column printed. The fund-quarter key is correct.",
+   "evidence": [
+    {"accession": "0001193125-24-199764", "text": "Rate (%) Maturity date Par value^ Value"},
+    {"accession": "0001193125-24-199764", "text": "Total investments - Non-controlled/Non-affiliated (Cost $ 142,284,453 ) 127.2 % $ 143,664,723"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a7c8ec10838a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2024-09-30: 0001193125-24-255855 source facts carry cost on 4 of 241 contexts (section totals only); published cost null on all 137 rows; no cost column printed. The fund-quarter key is correct.",
+   "evidence": [
+    {"accession": "0001193125-24-255855", "text": "Rate (%) Maturity date Par value^ Value"},
+    {"accession": "0001193125-24-255855", "text": "Total investments (Cost $ 163,632,816 ) 145.9 % $ 165,207,519"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_344df1a83604",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2024-12-31: 0001193125-25-039332 source facts carry cost on 5 of 283 contexts (section totals); published cost null on all 171 rows; no cost column printed. The fund-quarter key is correct.",
+   "evidence": [
+    {"accession": "0001193125-25-039332", "text": "Rate (%) Maturity date Par value^ Value"},
+    {"accession": "0001193125-25-039332", "text": "Total investments (Cost $ 230,183,110 ) 207.0 % $ 230,780,324"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6003b6805c9f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2025-03-31: 0001193125-25-118662 source facts carry cost on 6 of 406 contexts (section totals); published cost null on all 195 rows; no cost column printed. The fund-quarter key is correct.",
+   "evidence": [
+    {"accession": "0001193125-25-118662", "text": "Rate (%) Maturity date Par value^ Value"},
+    {"accession": "0001193125-25-118662", "text": "Total investments (Cost $ 266,451,937 ) 210.5 % $ 267,431,163"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_71fdce1c4c63",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2025-06-30: 0001193125-25-178880 source facts carry cost on 6 of 410 contexts (section totals); published cost null on all 219 rows; no cost column printed. The fund-quarter key is correct.",
+   "evidence": [
+    {"accession": "0001193125-25-178880", "text": "Rate (%) Maturity date Par value^ Value"},
+    {"accession": "0001193125-25-178880", "text": "Total investments (Cost $ 307,383,302 ) 179.6 % $ 307,490,109"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0260a2f048cd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2025-09-30: 0001193125-25-276918 source facts carry cost on 6 of 425 contexts (section totals); published cost null on all 243 rows; no cost column printed. The fund-quarter key is correct.",
+   "evidence": [
+    {"accession": "0001193125-25-276918", "text": "Rate (%) Maturity date Par value^ Value"},
+    {"accession": "0001193125-25-276918", "text": "Total investments (Cost $ 347,880,375 ) 203.0 % $ 348,068,286"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_378355522101",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2025-12-31: 0001193125-26-071943 source facts carry cost on 6 of 447 contexts (section totals); published cost null on all 264 rows; no cost column printed. The fund-quarter key is correct.",
+   "evidence": [
+    {"accession": "0001193125-26-071943", "text": "Rate (%) Maturity date Par value^ Value"},
+    {"accession": "0001193125-26-071943", "text": "Total investments (Cost $ 419,789,179 ) 245.8 % $ 419,814,228"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_96dd161f54ad",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2026-03-31: 0001193125-26-219274 source facts carry cost on 6 of 542 contexts (section totals); published cost null on all 266 rows; no cost column printed. The fund-quarter key is correct.",
+   "evidence": [
+    {"accession": "0001193125-26-219274", "text": "Rate (%) Maturity date Par value^ Value"},
+    {"accession": "0001193125-26-219274", "text": "Total investments (Cost $ 417,711,887 ) 245.7 % $ 416,616,523"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e5ec3f03a3b2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "2026-06-30: 0001193125-26-348951 source facts carry cost on 6 of 549 contexts (section totals); published cost null on all 273 rows. The page prints cost only on section and fund totals. The ledger record now carries fund-quarter FV 328.843805 (after the Founders netting), consistent with the holdings. The fund-quarter key is correct.",
+   "evidence": [
+    {"accession": "0001193125-26-348951", "text": "Rate (%) Maturity date Par value^ Value Non-controlled/Non-affiliated Senior loans (A)(B) 238.6 % (Cost $ 405,674,693 ) $ 403,155,736"},
+    {"accession": "0001193125-26-348951", "text": "Total investments (Cost $ 421,706,019 ) 248.1 % $ 419,310,195"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "undrawn-commitment-rows-published-gross-of-offset-line",
+   "outcome": "supported",
+   "rationale": "Founders Table 2026-06-30 is now placed: published DDTL -1,567 and Revolver -3,134 (155,094 - 156,661 and 153,527 - 156,661), principal 156,661 each, event net_of_commitment:156661 on both. These are the only fair-value changes in round 4. resid.sql: netted equals the printed 'Less unfunded loan commitments' in 9 of 10 quarters, and the residual after unplaced and unpublished equity is 0.00 in all 10. commit_check.py (round 3) matched per-issuer amounts to the note for every other issuer. Leaving Leap (1,294,141) and OIS (519,146) at 2025-12-31 unplaced is right: each has two drawn '(C)' DDTL rows and the note prints one DDTL amount per issuer. The detection decision is now propose_detector with a concrete check (netted vs printed offset line), which answers last round's objection. The principal side effect is now recorded as its own observation. parked[0] and not_done[0] now describe Founders as placed (final round).",
+   "evidence": [
+    {"accession": "0001193125-26-348951", "text": "Founders Table Holdings LLC, Delayed Draw Term Loan (C) - 06-12-31 156,661 155,094"},
+    {"accession": "0001193125-26-348951", "text": "Founders Table Holdings LLC, Revolver (C) - 06-12-31 156,661 153,527"},
+    {"accession": "0001193125-26-348951", "text": "Founders Table Holdings LLC 156,661 156,661 ( 49 )"},
+    {"accession": "0001193125-26-348951", "text": "Less unfunded loan commitments ( 53.2 %) ( 89,958,006 )"},
+    {"accession": "0001193125-26-071943", "text": "Leap Service Partners LLC 1,294,141 588,235 752,941 517,647"},
+    {"accession": "0001193125-26-071943", "text": "OIS Management Services LLC 519,146 167,626 1,185,503 167,626"}
+   ]
+  },
+  {
+   "observation_key": "zero-rate-tag-on-dash-printed-row-published-as-coupon",
+   "outcome": "supported",
+   "rationale": "543 reproduces (zero.sql, round 3; round 4 changed no rate): 541 netted wholly undrawn rows plus the 2 Founders rows, which are now netted too. Checked on the page and in the tags: 4M Capital revolver 2026-03-31 prints a dash and carries InvestmentInterestRate = 0. It is now recorded as an INCOMPLETE item with a shared fix named for the second rule batch, and tied to 6 of 20 page-sample cards. That is an honest 'left', not a disposition. The proposed check is concrete and should have few false positives.",
+   "evidence": [
+    {"accession": "0001193125-26-219274", "text": "4M Capital, Ltd., Revolver (C) - 06-18-27 528,000 528,000"}
+   ]
+  },
+  {
+   "observation_key": "section-heading-published-as-industry",
+   "outcome": "supported",
+   "rationale": "My own heading reader (ind_page.py) agrees with the published label on 451 of 451 rows; 0 rows could not be located. The sample is 400 seeded random rows across all 10 quarters plus every example from my round-3 rejection. Examples: Chemtron 2026-06-30 now 'Chemicals'; In Vitro 2026-06-30 'Health care providers and services'; Lockmasters 2024-06-30 'Building products'; Alta 2024-06-30 'Software' and Jetson 2024-06-30 'IT services'; 4M Capital 2025-09-30 'Leisure products'; QM Buyer 2025-09-30 'Software'. Against the member text, 807 rows differed before; 32 still do. All 32 are member defects (pasted row labels for Air Buyer / Chime Holdco blocks, 'Capmarkets', 'Industrials') or the member is wrong against the page (Alta and QM Buyer 2025-09-30). So 'page wins' is the right rule. The change touched only extracted_industry, GICS and corrected_fields (r4diff.py); no row has a blank industry or GICS. The proposed detector (published industry differs from the member segment or the printed heading) is concrete.",
+   "evidence": [
+    {"accession": "0001193125-26-348951", "text": "Materials 7.6 % 12,885,699 Chemicals 7.6 % Chemtron Supply LLC, Add-On Delayed Draw"},
+    {"accession": "0001193125-24-199764", "text": "Building products 3.0 % Lockmasters Security Intermediate, Inc., Delayed"},
+    {"accession": "0001193125-24-199764", "text": "IT services 4.6 % AIDC IntermediateCo LLC, Term Loan"},
+    {"accession": "0001193125-25-276918", "text": "Leisure products 2.2 % 4M Capital, Ltd., Revolver (C) - 06-18-27 528,000 528,000"},
+    {"accession": "0001193125-25-276918", "text": "Software 5.3 % Alta Buyer LLC, Add-On Term Loan"}
+   ]
+  },
+  {
+   "observation_key": "member-holds-another-rows-values",
+   "outcome": "supported",
+   "rationale": "Chemtron 2024-03-31, read on the page and in the commitments note: the printed DDTL is drawn (rate 11.075, par 725,959) and the printed revolver is a dash at 362,979. The note prints DDTL 362,979 and revolver 362,979. mlff publishes DDTL principal 725,959, fair value 362,980, rate 11.075; revolver principal 362,979, fair value 0, rate 0. Both match. The claim that no other swap exists rests on the investigator's row audit; I did not re-run the full audit. The proposed detector is concrete.",
+   "evidence": [
+    {"accession": "0001193125-24-137279", "text": "Chemtron Supply LLC, Delayed Draw Term Loan (3 month CME Term SOFR + 5.750 %) (C) 11.075 03-02-29 725,959 725,959"},
+    {"accession": "0001193125-24-137279", "text": "Chemtron Supply LLC 362,979 362,979 16,696 725,959 362,979 25,045"}
+   ]
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "outcome": "supported",
+   "rationale": "The Chemtron 2024-03-31 instruments publish as 'Revolver' and 'Delayed Draw Term Loan (3 month CME Term SOFR + 5.750%)' under issuer 'Chemtron Supply LLC', so the workaround holds. Round 4 did not change instrument_description. Nothing compares the published value with the declared correction, so propose_detector is right.",
+   "evidence": [
+    {"accession": "0001193125-24-137279", "text": "Chemtron Supply LLC, Revolver (C) - 03-02-29 362,979 362,979"}
+   ]
+  },
+  {
+   "observation_key": "promoted-value-rule-is-a-plug",
+   "outcome": "supported",
+   "rationale": "The pulled rules sit under data/overrides/agent_investigate_rules/_pulled_1988280_fundloop_2026-10-20/. Published cost is null on every row, and the source carries cost only on section totals. Without the plug, 2025-12-31 differs from filed only by the declared unplaced amount and the unpublished equity. The proposed detector is concrete.",
+   "evidence": [
+    {"accession": "0001193125-26-071943", "text": "Total investments (Cost $ 419,789,179 ) 245.8 % $ 419,814,228"}
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "outcome": "supported",
+   "rationale": "fund_financials matches the page. 2024-03-31: TII 2,267,484, NII 1,878,088, interest 31,485 (offering cost 100,007 no longer read as interest), net assets 112,737,757. 2026-03-31: TII 7,535,177, NII 3,930,532, net assets 169,592,882. Net assets 2024-12-31 is 111,469,464. The halving of the 2023 figures is now its own observation. The proposed detector is concrete.",
+   "evidence": [
+    {"accession": "0001193125-24-137279", "text": "Total Investment income 2,267,484"},
+    {"accession": "0001193125-24-137279", "text": "Net assets $ 112,737,757 $ 66,463,119"},
+    {"accession": "0001193125-26-219274", "text": "Total investment income 7,535,177 4,417,886"}
+   ]
+  },
+  {
+   "observation_key": "money-market-fund-not-published",
+   "outcome": "supported",
+   "rationale": "One or two Dreyfus cash rows are published in every quarter, 2026-03-31 at 10,423,755 as printed. Totals tie on the with-cash basis apart from the two declared exceptions. A recurrence (a 6M to 16M drop) is far outside the fv_conservation tolerance, and that rule fired on these quarters in mlfa, so existing_detector holds.",
+   "evidence": [
+    {"accession": "0001193125-26-219274", "text": "Cash Management Fund, Institutional Class 3.5400 (E) 10,423,755 10,423,755"}
+   ]
+  },
+  {
+   "observation_key": "gics-label-keyed-on-built-issuer-name",
+   "outcome": "supported",
+   "rationale": "The label is keyed on the issuer name and industry. Round 4 moved gics_sub_industry on 805 rows, following the corrected industry. In the 451-row sample every GICS label is consistent with its printed industry (e.g. Chemicals -> Specialty Chemicals, Software -> Application Software, Leisure products -> Leisure Products). No row lost its label (0 blank). The 24 / 8 counts in the observation describe the mlfa -> mlfb step only. Left as shared, with a concrete check.",
+   "evidence": [
+    {"accession": "0001193125-26-219274", "text": "Capital Construction LLC, Add-On Term Loan (1 month CME Term SOFR + 5.750 %) (D) 9.517 10-22-26 322,466 315,210"}
+   ]
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Bandon Fitness 2024-03-31 publishes 'Term Loan 3 month CME Term SOFR + 6.000%' without parentheses. TruSource 2026-06-30 prints '1st Amendment Delayed Drawn Term Loan'. Small, row-level, left. The proposed page check is concrete.",
+   "evidence": [
+    {"accession": "0001193125-26-348951", "text": "TruSource Foods LLC, 1st Amendment Delayed Drawn Term Loan (C) - 08-01-31 1,109,256 1,059,340"}
+   ]
+  },
+  {
+   "observation_key": "bare-name-equity-row-dropped-under-section-prefix",
+   "outcome": "supported",
+   "rationale": "The source detail still has 11 current-period rows for Rapid Aggregator and P.J. Fitzpatrick with status excluded_aggregate_candidate, which does not block. Status counts are identical to round 3. Values equal the page, and their quarterly sums are exactly the published-minus-filed gaps (e.g. 508,384 at 2026-06-30 = 390,051 + 118,333). No rule fires on them, so propose_detector is right.",
+   "evidence": [
+    {"accession": "0001193125-26-071943", "text": "Machinery 0.1 % Rapid Aggregator LLC 138 105,029"},
+    {"accession": "0001193125-26-348951", "text": "Diversified consumer services 0.2 % P.J. Fitzpatrick LLC 2,833 390,051"}
+   ]
+  },
+  {
+   "observation_key": "source-reconciliation-cache-ignores-wrapper-dispatch-edits",
+   "outcome": "supported",
+   "rationale": "Round 3: the stale manifest had hashes identical to the fresh one and was marked clean after the wrapper revert; recomputing removed only the 4 A01 rows. Round 4: the manifest now carries wrapper_hash (D-223). Source statuses equal round 3, and the ledger holds no A01, B01 or E07. The proposed warning is concrete.",
+   "evidence": [
+    {"accession": "0001193125-26-219274", "text": "Machinery 0.1 % Rapid Aggregator LLC 138 111,939"}
+   ]
+  },
+  {
+   "observation_key": "principal-is-commitment-on-partly-drawn-netted-rows",
+   "outcome": "supported",
+   "rationale": "Matches my round-3 measurements (partial.sql, stress.sql). 404 partly drawn netted rows carry principal 414.1M including 260.0M undrawn, against net fair value 149.7M; 369 are below 80 pct of par. In 2026, 47-48 rows a quarter (20.0M to 23.8M) meet the fund_exports.py deep-distress shape, against 0 other rows. Round 4 did not touch these rows. The owner question is recorded in D-222, not decided under D-207, which is right because it changes a field's meaning. The proposed check (netted row with a rate, value under 80 pct of principal, value plus netted amount near principal) is concrete. It would separate these rows from real marks.",
+   "evidence": [
+    {"accession": "0001193125-26-348951", "text": "Prestige Backyards LLC, Revolver ( Prime rate + 4.250 %) (C) 11.000 08-07-31 1,393,443 1,319,590"},
+    {"accession": "0001193125-24-137279", "text": "BCTS Parent LLC, Revolver (1 month CME Term SOFR + 5.250 %) (C) 10.569 12-26-29 354,484 347,395"}
+   ]
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "outcome": "supported",
+   "rationale": "Confirmed in round 3: bdc_fund_income 2023q4 has start 2023-07-17, end 2023-12-31, duration_months 6. Published TII 1,277,950 and NII 1,158,426 are exactly half of the printed 2,555,900 and 2,316,852; the fund commenced operations on July 17, 2023. A shared step, left, with a concrete check. The not_done line now states that the published figures are half the printed ones (final round).",
+   "evidence": [
+    {"accession": "0001193125-25-039332", "text": "Total investment income $ 12,730,258 $ 2,555,900"},
+    {"accession": "0001193125-25-039332", "text": "Net investment income $ 8,590,212 $ 2,316,852"},
+    {"accession": "0001193125-25-039332", "text": "commenced operations on July 17, 2023"}
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "MLF-R1",
+   "outcome": "supported",
+   "rationale": "The recorded verification now matches what I measured. 951 rows netted; netted equals the printed line in 9 of 10 quarters. The Founders extension places -1,567 and -3,134, as printed. 2025-12-31 leaves Leap / OIS 1,813,287 unplaced (declared). The partly-drawn principal effect is quantified and sent to the owner. The WWEC II => III alias fits the page (the schedule prints III, the comparative block II). Classification acceptance_change is right. Residual risk: the owner question stays open, so this fund's credit-stress figures should not be published until it is answered.",
+   "evidence": [
+    {"accession": "0001193125-26-348951", "text": "Founders Table Holdings LLC 156,661 156,661 ( 49 )"},
+    {"accession": "0001193125-24-199764", "text": "WWEC Holdings III Corp., Revolver (C) - 10-03-28 434,020 434,020"}
+   ]
+  },
+  {
+   "request_id": "MLF-R2",
+   "outcome": "supported",
+   "rationale": "Revert confirmed: git diff HEAD on the wrapper does not touch category_marker_re and there is no bare_entity_rows key. The equity rows are still excluded_aggregate_candidate, and the ledger holds no A01.",
+   "evidence": [
+    {"accession": "0001193125-26-219274", "text": "Machinery 0.1 % Rapid Aggregator LLC 138 111,939"}
+   ]
+  },
+  {
+   "request_id": "MLF-R3",
+   "outcome": "supported",
+   "rationale": "Integrated Openings DDTL 2024-12-31 in the provenance ledger: fair_value -61,813, cheap_status misdated_context_filled, full_status raw_match / verified; principal 4,120,879 verified. -61,813 = 4,059,066 - 4,120,879, as printed. The re-verifier replays the recorded netting amount, so it does not check that amount itself; the per-issuer note comparison covers that independently.",
+   "evidence": [
+    {"accession": "0001193125-25-039332", "text": "Integrated Openings Solutions LLC, Delayed Draw Term Loan (C) - 11-20-29 4,120,879 4,059,066"}
+   ]
+  },
+  {
+   "request_id": "MLF-R4",
+   "outcome": "supported",
+   "rationale": "Deferred in D-222. The rows stay unpublished; their values match the page and are now the whole of the 2026-06-30 declared exception (-508,384). This is a quantified gap, not a disposition.",
+   "evidence": [
+    {"accession": "0001193125-26-071943", "text": "Diversified consumer services 0.2 % P.J. Fitzpatrick LLC 2,833 314,500"}
+   ]
+  },
+  {
+   "request_id": "MLF-R5",
+   "outcome": "supported",
+   "rationale": "D-223 is implemented: the mlff manifest carries a wrapper_hash column. The round-3 artifacts showed the defect (unchanged hashes across a dispatch edit, a run marked clean). Classification verification_bug is right. Per D-223, the per-filing source-fact cache still does not key on code changes; round 4 moved that cache aside, so mlff is not affected.",
+   "evidence": [
+    {"accession": "0001193125-26-219274", "text": "Machinery 0.1 % Rapid Aggregator LLC 138 111,939"}
+   ]
+  }
+ ],
+ "not_checked": [
+  "The full 1,971-row row audit was not re-run; industry was checked on 451 rows, the other fields on the rows named above.",
+  "The 20-row page sample was not re-run by me (the report cites its results).",
+  "The cohort effect of the netting reading and the D-222 Founders extension was not measured.",
+  "Non-accrual markers were not searched."
+ ]
+}

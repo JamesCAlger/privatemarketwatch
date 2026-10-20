@@ -196,6 +196,12 @@ def _misdated_by_accession() -> dict[tuple[str, str], dict[str, tuple[str, str]]
     return result
 
 
+def misdated_contexts(cik: Any, accession: Any) -> dict[str, tuple[str, str]]:
+    """The contexts a wrapper lists as misdated in one filing: context -> (filed date, correct date)."""
+    owner = re.sub(r"\D", "", str(cik or "")).zfill(10)
+    return dict(_misdated_by_accession().get((owner, str(accession or "")), {}))
+
+
 def correct_misdated_contexts(contexts: dict[str, dict[str, Any]], filing_meta: dict[str, str]) -> int:
     """Re-date contexts a filer dated to the wrong period, in place. Returns the number re-dated.
 
@@ -309,8 +315,8 @@ def encoding_signature(cik: str) -> str:
                       for context, values in listed.items() for name, number in values.items())
     untagged += sorted("%s %s par in %s" % (accession, context, currency)
                        for (owner, accession, context), currency in _untagged_currency().items() if owner == cik)
-    from pipeline.unfunded_commitments import nets_unfunded_rows
-    netting = ["unfunded:net_of_tagged_commitment"] if nets_unfunded_rows(cik) else []
+    from pipeline.unfunded_commitments import reading_signature
+    netting = reading_signature(cik)
     from pipeline.schedule_row_tags import reads_schedule_row_tags
     from pipeline.rate_tag_reading import reads_margins
     if reads_margins(cik):

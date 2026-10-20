@@ -1,0 +1,199 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "mlff",
+ "dispositions": [
+  {
+   "disposition_id": "PD-cost_conservation-1988280-1",
+   "class": "as_filed",
+   "engine": "conservation",
+   "rule_name": "cost_conservation",
+   "ciks": [
+    "0001988280"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "cost-not-printed-per-row-only-on-totals",
+   "statement": "The filer prints and tags no cost per schedule row: the columns are 'Rate (%) Maturity date Par value^ Value' in every quarter and cost appears only on the totals ('Total investments (Cost $ ...)', 'Net investments (Cost $ ...)'; two or three cost facts per filing). The published per-row cost is therefore blank, as filed, and the published cost sum (0) cannot meet the filed cost total. No fix applies: a per-row cost would be invented (the promoted rule that set cost = fair value on every row was pulled in this run). The check should be not-applicable for this filer.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-24-137279",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2024-03-31; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-137279",
+     "verbatim": "Total investments - Non-controlled/Non-affiliated (Cost $ 130,062,720 ) 116.3 % $ 131,141,852 Less unfunded loan commitments ( 15.5 %) ( 17,460,191 ) Net investments - Non-controlled/Non-affiliated (Cost $ 112,602,529 ) 100.8 % $ 113,681,661",
+     "quote": "'Total investments - Non-controlled/Non-affiliated (Cost $ 130,062,720 ) 116.3 % $ 131,141,852 Less unfunded loan commitments ( 15.5 %) ( 17,460,191 ) Net investments - Non-controlled/Non-affiliated (Cost $ 112,602,529 ) 100.8 % $ 113,681,661': cost is printed only on the totals"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-199764",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2024-06-30; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-199764",
+     "verbatim": "Total investments - Non-controlled/Non-affiliated (Cost $ 142,284,453 ) 127.2 % $ 143,664,723 Less unfunded loan commitments ( 25.4 %) ( 28,660,218 ) Net investments - Non-controlled/Non-affiliated (Cost $ 113,624,235 ) 101.8 % $ 115,004,505",
+     "quote": "'Total investments - Non-controlled/Non-affiliated (Cost $ 142,284,453 ) 127.2 % $ 143,664,723 Less unfunded loan commitments ( 25.4 %) ( 28,660,218 ) Net investments - Non-controlled/Non-affiliated (Cost $ 113,624,235 ) 101.8 % $ 115,004,505': cost is printed only on the totals"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-255855",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2024-09-30; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-255855",
+     "verbatim": "Total investments (Cost $ 163,632,816 ) 145.9 % $ 165,207,519 Less unfunded loan commitments ( 32.4 %) ( 36,716,731 ) Net investments (Cost $ 126,916,085 ) 113.5 % $ 128,490,788",
+     "quote": "'Total investments (Cost $ 163,632,816 ) 145.9 % $ 165,207,519 Less unfunded loan commitments ( 32.4 %) ( 36,716,731 ) Net investments (Cost $ 126,916,085 ) 113.5 % $ 128,490,788': cost is printed only on the totals"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-039332",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2024-12-31; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-039332",
+     "verbatim": "Total investments (Cost $ 230,183,110 ) 207.0 % $ 230,780,324 Less unfunded loan commitments ( 58.2 %) ( 64,945,968 ) Net investments (Cost $ 165,237,142 ) 148.8 % $ 165,834,356",
+     "quote": "'Total investments (Cost $ 230,183,110 ) 207.0 % $ 230,780,324 Less unfunded loan commitments ( 58.2 %) ( 64,945,968 ) Net investments (Cost $ 165,237,142 ) 148.8 % $ 165,834,356': cost is printed only on the totals"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-118662",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2025-03-31; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-118662",
+     "verbatim": "Total investments (Cost $ 266,451,937 ) 210.5 % $ 267,431,163 Less unfunded loan commitments ( 59.6 %) ( 75,746,649 ) Net investments (Cost $ 190,705,288 ) 150.9 % $ 191,684,514",
+     "quote": "'Total investments (Cost $ 266,451,937 ) 210.5 % $ 267,431,163 Less unfunded loan commitments ( 59.6 %) ( 75,746,649 ) Net investments (Cost $ 190,705,288 ) 150.9 % $ 191,684,514': cost is printed only on the totals"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-178880",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2025-06-30; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-178880",
+     "verbatim": "Total investments (Cost $ 307,383,302 ) 179.6 % $ 307,490,109 Less unfunded loan commitments ( 50.4 %) ( 86,356,872 ) Net investments (Cost $ 221,026,430 ) 129.2 % $ 221,133,237",
+     "quote": "'Total investments (Cost $ 307,383,302 ) 179.6 % $ 307,490,109 Less unfunded loan commitments ( 50.4 %) ( 86,356,872 ) Net investments (Cost $ 221,026,430 ) 129.2 % $ 221,133,237': cost is printed only on the totals"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-276918",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2025-09-30; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-276918",
+     "verbatim": "Total investments (Cost $ 347,880,375 ) 203.0 % $ 348,068,286 Less unfunded loan commitments ( 55.7 %) ( 95,426,108 ) Net investments (Cost $ 252,454,267 ) 147.3 % $ 252,642,178",
+     "quote": "'Total investments (Cost $ 347,880,375 ) 203.0 % $ 348,068,286 Less unfunded loan commitments ( 55.7 %) ( 95,426,108 ) Net investments (Cost $ 252,454,267 ) 147.3 % $ 252,642,178': cost is printed only on the totals"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-071943",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2025-12-31; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-071943",
+     "verbatim": "Total investments (Cost $ 419,789,179 ) 245.8 % $ 419,814,228 Less unfunded loan commitments ( 61.8 %) ( 105,643,990 ) Net investments (Cost $ 314,145,189 ) 184.0 % $ 314,170,238",
+     "quote": "'Total investments (Cost $ 419,789,179 ) 245.8 % $ 419,814,228 Less unfunded loan commitments ( 61.8 %) ( 105,643,990 ) Net investments (Cost $ 314,145,189 ) 184.0 % $ 314,170,238': cost is printed only on the totals"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219274",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2026-03-31; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219274",
+     "verbatim": "Total investments (Cost $ 417,711,887 ) 245.7 % $ 416,616,523 Less unfunded loan commitments ( 60.7 %) ( 102,864,092 ) Net investments (Cost $ 314,847,795 ) 185.0 % $ 313,752,431",
+     "quote": "'Total investments (Cost $ 417,711,887 ) 245.7 % $ 416,616,523 Less unfunded loan commitments ( 60.7 %) ( 102,864,092 ) Net investments (Cost $ 314,847,795 ) 185.0 % $ 313,752,431': cost is printed only on the totals"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-348951",
+     "verbatim": "Rate (%) Maturity date Par value^ Value",
+     "quote": "'Rate (%) Maturity date Par value^ Value': the schedule's columns for 2026-06-30; no cost column per row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-348951",
+     "verbatim": "Total investments (Cost $ 421,706,019 ) 248.1 % $ 419,310,195 Less unfunded loan commitments ( 53.2 %) ( 89,958,006 ) Net investments (Cost $ 331,748,013 ) 194.9 % $ 329,352,189",
+     "quote": "'Total investments (Cost $ 421,706,019 ) 248.1 % $ 419,310,195 Less unfunded loan commitments ( 53.2 %) ( 89,958,006 ) Net investments (Cost $ 331,748,013 ) 194.9 % $ 329,352,189': cost is printed only on the totals"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001988280.json",
+   "decided_by": "PROPOSED by agent manulife-fund-agent-2026-10-20; not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-X02-1988280-2",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001988280"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "statement": "The four rows X02 flags at 2025-06-30 are undrawn commitments (marker (C)) printed with a dash in the rate column and no benchmark in the label; the filing tags no rate, spread or PIK on their contexts (in the other quarters the filer tags a rate of 0 on such rows). Published rate blank, as printed. No fix applies: there is no printed rate.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-178880",
+     "verbatim": "Steward Partners Global Advisory LLC, Revolver (C) - 10-13-28 955,881 946,322",
+     "quote": "'Steward Partners Global Advisory LLC, Revolver (C) - 10-13-28 955,881 946,322': dash in the rate column; no benchmark printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-178880",
+     "verbatim": "In Vitro Sciences LLC, Revolver (C) - 02-28-29 177,778 157,333",
+     "quote": "'In Vitro Sciences LLC, Revolver (C) - 02-28-29 177,778 157,333': dash in the rate column; no benchmark printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-178880",
+     "verbatim": "OIS Management Services LLC, 3rd Amendment Incremental Delayed Draw Term Loan (C) - 11-16-28 949,658 954,406",
+     "quote": "'OIS Management Services LLC, 3rd Amendment Incremental Delayed Draw Term Loan (C) - 11-16-28 949,658 954,406': dash in the rate column; no benchmark printed"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-178880",
+     "verbatim": "Midwest Eye Services LLC, Revolver (C) - 08-20-27 704,931 704,931",
+     "quote": "'Midwest Eye Services LLC, Revolver (C) - 08-20-27 704,931 704,931': dash in the rate column; no benchmark printed"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/flagged.py <label> X02 0001988280 2025-06-30",
+   "decided_by": "PROPOSED by agent manulife-fund-agent-2026-10-20; not accepted by the owner",
+   "decided_on": "2026-10-20"
+  }
+ ]
+}

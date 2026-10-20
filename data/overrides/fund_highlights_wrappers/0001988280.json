@@ -1,0 +1,44 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001988280",
+ "entity_name": "Manulife Private Credit Fund",
+ "version": 1,
+ "income_concept_suppress": [
+  "noninterestexpense"
+ ],
+ "income_concept_fallback": {
+  "total_investment_income": [
+   "investmentincomenet"
+  ],
+  "interest_expense": [
+   "interestanddebtexpense"
+  ]
+ },
+ "notes": "Fund-clearing loop 2026-10-20 (mlf). 10-Q 2026-03-31 (0001193125-26-219274) prints 'Total investment income 7,535,177 4,417,886 Expenses Management fee ...' and 'Net investment income 3,930,532 2,489,458'; tagged us-gaap:InvestmentIncomeNet 7,535,177 (the printed total) and us-gaap:NetInvestmentIncome 3,930,532. The shared map published InvestmentIncomeNet as net investment income in every quarter and left total investment income blank. us-gaap:NoninterestExpenseOfferingCost (printed 'Offering cost - 100,007', 0001193125-25-118662) matched the interest-expense substring and was published as interest expense (100,007 at 2024-03-31); the printed interest line is 'Interest and credit facility expenses 1,035,403 31,485' (us-gaap:InterestAndDebtExpense). Net assets: us-gaap:AssetsNet is tagged on the balance sheet but fund_financials.net_assets is blank in every quarter; the printed balance-sheet figures are given below.",
+ "figure_corrections": [
+  {"report_date": "2023-12-31", "field": "net_assets", "value": 66463119,
+   "evidence": "0001193125-24-137279 balance sheet (March 31, 2024 and December 31, 2023 columns): 'Net assets $ 112,737,757 $ 66,463,119 Net assets consist of'."},
+  {"report_date": "2024-03-31", "field": "net_assets", "value": 112737757,
+   "evidence": "0001193125-24-137279 balance sheet: 'Net assets $ 112,737,757 $ 66,463,119 Net assets consist of'."},
+  {"report_date": "2024-06-30", "field": "net_assets", "value": 112933496,
+   "evidence": "0001193125-24-199764 balance sheet: 'Net assets $ 112,933,496 $ 66,463,119 Net assets consist of'."},
+  {"report_date": "2024-09-30", "field": "net_assets", "value": 113212081,
+   "evidence": "0001193125-24-255855 balance sheet: 'Net assets $ 113,212,081 $ 66,463,119 Net assets consist of'."},
+  {"report_date": "2024-12-31", "field": "net_assets", "value": 111469464,
+   "evidence": "0001193125-25-039332 (10-K) balance sheet: 'Net assets $ 111,469,464 $ 66,463,119 Net assets consist of'."},
+  {"report_date": "2025-03-31", "field": "net_assets", "value": 127026312,
+   "evidence": "0001193125-25-118662 balance sheet: 'Net assets $ 127,026,312 $ 111,469,464 Net assets consist of'."},
+  {"report_date": "2025-06-30", "field": "net_assets", "value": 171221675,
+   "evidence": "0001193125-25-178880 balance sheet: 'Net assets $ 171,221,675 $ 111,469,464 Net asset value per s'."},
+  {"report_date": "2025-09-30", "field": "net_assets", "value": 171474273,
+   "evidence": "0001193125-25-276918 balance sheet: 'Net assets $ 171,474,273 $ 111,469,464 Net assets consist of'."},
+  {"report_date": "2025-12-31", "field": "net_assets", "value": 170770087,
+   "evidence": "0001193125-26-071943 (10-K) balance sheet: 'Net assets $ 170,770,087 $ 111,469,464 Net assets consist of'."},
+  {"report_date": "2026-03-31", "field": "net_assets", "value": 169592882,
+   "evidence": "0001193125-26-219274 balance sheet: 'Net assets $ 169,592,882 $ 170,770,087 Net asset value per s'."},
+  {"report_date": "2023-12-31", "field": "income_yield_pct", "value": 4.61,
+   "evidence": "0001193125-25-039332 (10-K) financial highlights, period from July 17, 2023 (inception) through December 31, 2023: 'Net investment income 7.82 % 4.61 % (4) Portfolio turnover 15 % 10 %', footnote (4) 'Annualized'. Published 2.305 (half the printed ratio); the other quarters publish the printed annualised ratio (7.82 for 2024)."},
+  {"report_date": "2026-06-30", "field": "net_assets", "value": 168978177,
+   "evidence": "0001193125-26-348951 balance sheet: 'Net assets $ 168,978,177 $ 170,770,087 Net assets consist of'."}
+ ]
+}

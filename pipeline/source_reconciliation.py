@@ -4270,7 +4270,7 @@ SOURCE_FACT_MANIFEST_COLUMNS = [
 ]
 
 RECONCILIATION_MANIFEST_COLUMNS = [
-    "cik", "source_hash", "holdings_hash", "logic_hash", "override_hash",
+    "cik", "source_hash", "holdings_hash", "logic_hash", "override_hash", "wrapper_hash",
     "detail_row_count", "metrics_row_count", "detail_artifact_path",
     "metrics_artifact_path", "computed_at",
 ]
@@ -4627,6 +4627,27 @@ def _compute_override_hash() -> str:
     ).hexdigest()
 
 
+def _manifest_text(value: Any) -> str:
+    """A manifest cell as text: an empty cell read back from the CSV is NaN, not ''."""
+    return "" if value is None or (isinstance(value, float) and pd.isna(value)) else str(value)
+
+
+def compute_wrapper_hash(cik: Any) -> str:
+    """sha256 of the fund's BDC XBRL wrapper file, '' when it has none (MLF-R5, D-222).
+
+    The wrapper's dispatch block (category_marker_re, leaf markers, prefix rules) and its
+    source_encodings change how source and output rows are classified (A01, B01, E07,
+    source-only statuses), so a wrapper edit must recompute that fund's cached partition.
+    The whole file is hashed: any edit re-reconciles that fund and no other.
+    """
+    cik_norm = _normalize_cik(cik)
+    if not cik_norm:
+        return ""
+    from pipeline import bdc_xbrl_wrapper as _wrappers
+    path = Path(_wrappers._WRAPPER_DEFINITIONS_DIR) / f"{cik_norm}.json"
+    return _file_sha256(path) if path.is_file() else ""
+
+
 def plan_dirty_reconciliation_ciks(
     source_manifest: pd.DataFrame,
     holdings_hashes: pd.DataFrame,
@@ -4648,6 +4669,7 @@ def plan_dirty_reconciliation_ciks(
         prev = previous_by_cik.get(cik)
         detail_artifact = SOURCE_RECONCILIATION_DETAIL_BY_CIK_DIR / f"{_safe_partition_name(cik)}.parquet"
         metrics_artifact = SOURCE_RECONCILIATION_METRICS_BY_CIK_DIR / f"{_safe_partition_name(cik)}.parquet"
+        wrapper_hash = compute_wrapper_hash(cik)
         reason = []
         if force:
             reason.append("force")
@@ -4662,6 +4684,9 @@ def plan_dirty_reconciliation_ciks(
                 reason.append("logic_hash")
             if prev.get("override_hash", "") != override_hash:
                 reason.append("override_hash")
+            # a manifest written before MLF-R5 has no wrapper_hash: a fund with a wrapper recomputes once
+            if _manifest_text(prev.get("wrapper_hash", "")) != wrapper_hash:
+                reason.append("wrapper_hash")
             if not Path(prev.get("detail_artifact_path", "")).exists():
                 reason.append("missing_detail_artifact")
             if not Path(prev.get("metrics_artifact_path", "")).exists():
@@ -4672,6 +4697,7 @@ def plan_dirty_reconciliation_ciks(
             "holdings_hash": str(row.get("holdings_hash", "")),
             "logic_hash": logic_hash,
             "override_hash": override_hash,
+            "wrapper_hash": wrapper_hash,
             "dirty": bool(reason),
             "dirty_reason": "|".join(reason),
             "detail_artifact_path": str(detail_artifact),
@@ -4823,6 +4849,7 @@ def run_bdc_source_reconciliation_cached(
             "holdings_hash": row["holdings_hash"],
             "logic_hash": logic_hash,
             "override_hash": override_hash,
+            "wrapper_hash": row["wrapper_hash"],
             "detail_row_count": detail_count,
             "metrics_row_count": metrics_count,
             "detail_artifact_path": str(detail_artifact),

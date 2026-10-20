@@ -1,0 +1,1189 @@
+{
+ "cik": "0001988280",
+ "label": "mlff",
+ "before": "sponfb",
+ "shared_code": false,
+ "investigator_id": "manulife-fund-agent-2026-10-20",
+ "shared_code_note": "No shared code written by this agent; the netting reading, the misdated-context replay and the guard-test change were made by the orchestrator under D-207 (D-222).",
+ "declared_changes": [
+  {
+   "column": "issuer_name",
+   "rows": 1701,
+   "why": "issuer cut at the instrument words (wrapper issuer_name_strip_re); heading-as-issuer, '&' spacing and Hy-Tek rows by context"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 1700,
+   "why": "instrument = the cut text; section and industry heading removed (instrument_description_strip_re); Chemtron swap, spacing rows by context"
+  },
+  {
+   "column": "fair_value",
+   "rows": 829,
+   "why": "undrawn commitments netted per loan (951 rows, net_of_other_commitment, D-222)"
+  },
+  {
+   "column": "cost",
+   "rows": 1703,
+   "why": "promoted cost = fair value rule pulled: no per-row cost is printed or tagged"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 9,
+   "why": "filed_rate_reading all_in: the tagged all-in rate published on PIK loans (Beacon x6, Bandon 2025-12-31 x3)"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 7,
+   "why": "cash + PIK margin (D-031) on Bandon / Renovation; Beacon whole-coupon spread withdrawn; Chemtron swap"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 4,
+   "why": "Beacon whole-coupon PIK (no benchmark printed) x3; Chemtron revolver"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 1,
+   "why": "Chemtron revolver (swap)"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 4,
+   "why": "Beacon whole-coupon PIK Fixed x3; Chemtron revolver"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 9,
+   "why": "all_in reading transforms"
+  },
+  {
+   "column": "src_facts",
+   "rows": 829,
+   "why": "netting event net_of_commitment:<amount> recorded on the 951 netted rows"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 1703,
+   "why": "row corrections of this run"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 1030,
+   "why": "printed industry heading above each row (1,194 context corrections; blank rows from the member segment)"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 943,
+   "why": "follows extracted_industry"
+  },
+  {
+   "column": "position_id",
+   "rows": 257,
+   "why": "chains re-paired on cleaned names and the Chemtron swap"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 1703,
+   "why": "follows cost"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 9,
+   "why": "all_in reading"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 9,
+   "why": "all_in reading: cash leg = all-in minus PIK"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 519,
+   "why": "follows gics_sub_industry"
+  }
+ ],
+ "rows_added": 279,
+ "rows_removed": 4,
+ "rows_note": "Against sponfb: +273 rows of the added quarter 2026-06-30, +5 money-fund cash rows (2025-06-30 to 2026-03-31), +1 Integrated Openings 2024-12-31; -4 rows of the pulled 2025-12-31 row_add plug (the money-fund row re-enters natively with a new row_id).",
+ "fixes": [
+  {
+   "what": "Undrawn commitments netted per loan (owner ruling D-091) by source_encodings.unfunded_rows ['net_of_other_commitment'] with unfunded_note_aliases (implemented by the orchestrator, D-222): 951 rows (Founders Table 2026-06-30 placed by the D-222 extension); fair value = gross - the note's commitment, principal keeps the commitment, cost stays blank (none printed).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219274",
+     "text": "4M Capital, Ltd., Revolver (C) - 06-18-27 528,000 528,000"
+    },
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Less unfunded loan commitments ( 60.7 %) ( 102,864,092 )"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names: cut at the instrument words; the cut text becomes the instrument and the section / industry heading is removed from it (dispatch.issuer_name_strip_re, issuer_name_strip_to_instrument, instrument_description_strip_re, instrument_description_strip_may_empty). Dry run on every name (name_dry.py).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219274",
+     "text": "4M Capital, Ltd., Term Loan (3 month CME Term SOFR + 5.000 %) (D) 8.700 06-18-27 3,283,933 3,283,933"
+    }
+   ]
+  },
+  {
+   "what": "Rows whose member puts a heading in the issuer place (2024-03-31 4M Capital, 2024-06-30 CPC Lakeshirts x3, 2025-12-31 DAWGS / Integrated Openings x3 / Vybond x2, 2026-06-30 QM Buyer x2, three money-fund rows) and '&' / spacing / Hy-Tek spellings: issuer and instrument by context.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-24-199764",
+     "text": "CPC Lakeshirts Acquisition LLC, Term Loan (1 month CME Term SOFR + 5.500 %) (D) 10.958 09-04-28 1,463,389 1,441,438"
+    }
+   ]
+  },
+  {
+   "what": "Money-market fund published as cash from 2025-06-30 (member carries the 'Senior loans' prefix and was dropped): source_encodings.cash_identifiers + dispatch.cash_identifier_rows.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Cash Management Fund, Institutional Class 3.5400 (E) 10,423,755 10,423,755"
+    }
+   ]
+  },
+  {
+   "what": "Integrated Openings delayed draw 2024-12-31 tagged on a 2025-02-24 context: misdated_contexts (+4,059,066).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-039332",
+     "text": "Integrated Openings Solutions LLC, Delayed Draw Term Loan (C) - 11-20-29 4,120,879 4,059,066"
+    }
+   ]
+  },
+  {
+   "what": "filed_rate_reading all_in: the plain rate tag holds the all-in coupon (Diverzify PIK-only 11.816 = PIK 11.816); interest_rate published on the PIK loans that were blank.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-348951",
+     "text": "Diverzify Intermediate LLC, Term Loan ( 11.816 % PIK) (D) 11.816 04-30-29 1,657,229 1,577,682"
+    }
+   ]
+  },
+  {
+   "what": "Cash-plus-PIK spread (D-031) on Bandon Fitness 2025-12-31 / 2026-06-30 and Renovation Systems 2026-06-30 (6.0+0.5, 4.0+2.5); Beacon whole-coupon 15% PIK: tagged spread withdrawn, coupon Fixed, no reference rate.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-348951",
+     "text": "Renovation Systems LLC, Term Loan (3 month CME Term SOFR + 4.000 % and 2.500 % PIK) (D) 10.232 07-24-28 3,705,956 3,305,714"
+    },
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Beacon Behavioral Holdings LLC, Term Loan ( 15.000 % PIK ) 15.000 06-21-30 1,216,722 1,210,638"
+    }
+   ]
+  },
+  {
+   "what": "Industry from the printed heading above each row: 1,192 context corrections generated from the page (industry_audit.py) plus 2 by hand; blank rows filled from the member's industry segment (dispatch.industry_from_identifier_re). Check after the re-run: 0 of 1,967 located rows differ.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-348951",
+     "text": "Materials 7.6 % 12,885,699 Chemicals 7.6 % Chemtron Supply LLC, Add-On Delayed Draw"
+    },
+    {
+     "accession": "0001193125-25-276918",
+     "text": "Software 5.3 % Alta Buyer LLC, Add-On Term Loan"
+    }
+   ]
+  },
+  {
+   "what": "Chemtron Supply 2024-03-31: the filer swapped the delayed-draw and revolver members' figures (D-218); instrument names swapped back by context, revolver's benchmark withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-24-137279",
+     "text": "Chemtron Supply LLC, Delayed Draw Term Loan (3 month CME Term SOFR + 5.750 %) (C) 11.075 03-02-29 725,959 725,959"
+    }
+   ]
+  },
+  {
+   "what": "Promoted rules pulled to agent_investigate_rules/_pulled_1988280_fundloop_2026-10-20/ (README): cost = fair value on every row (invented; the page prints no per-row cost) and the 2025-12-31 row_add plug (contra line, money fund and two equity rows added by hand to tie one quarter).",
+   "kind": "exclusion",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-071943",
+     "text": "Total investments (Cost $ 419,789,179 ) 245.8 % $ 419,814,228 Less unfunded loan commitments ( 61.8 %) ( 105,643,990 ) Net investments (Cost $ 314,145,189 ) 184.0 % $ 314,170,238"
+    }
+   ]
+  },
+  {
+   "what": "Fund financials (new highlights wrapper): InvestmentIncomeNet read as total investment income (was published as NII); NoninterestExpenseOfferingCost no longer read as interest expense, InterestAndDebtExpense used; net assets from the printed balance sheet in 11 quarters (was blank); income ratio 2023-12-31 4.61 (was 2.305).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Net investment income 3,930,532 2,489,458"
+    },
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Net assets $ 169,592,882 $ 170,770,087"
+    },
+    {
+     "accession": "0001193125-25-039332",
+     "text": "Net investment income 7.82 % 4.61 % (4) Portfolio turnover"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [
+  {
+   "quarter": "2025-12-31",
+   "why": "Published minus filed +1393758 = unplaced commitment 1813287 (Leap Service Partners DDTL 1,294,141 and OIS Management Services DDTL 519,146: two drawn rows printed '(C)' each, the note gives one amount per issuer and facility) minus the two unpublished equity rows 419529 (MLF-R4 deferred). Residual 0.00.",
+   "quote": {
+    "accession": "0001193125-26-071943",
+    "text": "Leap Service Partners LLC, Delayed Draw Term Loan B (3 month CME Term SOFR + 5.250 %) (C) 9.065 03-15-29 2,013,867 2,013,867"
+   }
+  },
+  {
+   "quarter": "2026-06-30",
+   "why": "Published minus filed -508384 = the two printed equity rows not published (Rapid Aggregator, P.J. Fitzpatrick; MLF-R4 deferred, D-222). Netting equals the printed offset line. Residual 0.00.",
+   "quote": {
+    "accession": "0001193125-26-348951",
+    "text": "services 0.2 % P.J. Fitzpatrick LLC 2,833 390,051"
+   }
+  }
+ ],
+ "parked": [
+  {
+   "finding": "Unplaced commitment 2025-12-31 (Leap 1,294,141, OIS 519,146)",
+   "hypotheses": [
+    "2025-12-31: two drawn '(C)' rows per issuer, note gives one amount per issuer and facility; adjacent quarters suggest DDTL C (Leap) and the 3rd Amendment row (OIS) but the split is not printed: not placed",
+    "Founders Table 2026-06-30 (313,322, tagged on an issuer-only context) is no longer parked: placed by the D-222 extension of net_of_other_commitment (DDTL -1,567, Revolver -3,134)",
+    "2025-12-31 is a declared total exception (residual 0.00 after the unplaced amount and the two unpublished equity rows)"
+   ]
+  },
+  {
+   "finding": "Rapid Aggregator LLC / P.J. Fitzpatrick LLC not published (declared residual)",
+   "hypotheses": [
+    "MLF-R2 wrapper edit: still dropped by staging condition 2a and created false A01; reverted (D-222)",
+    "MLF-R4 (staging change to condition 2a): deferred to the second rule batch (D-222)"
+   ]
+  }
+ ],
+ "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "MLF-R1",
+   "classification": "acceptance_change",
+   "resolution": "implemented",
+   "authority": "orchestrator under D-207, recorded in D-222",
+   "what": "unfunded_rows ['net_of_other_commitment'] + unfunded_note_aliases set in the wrapper; pipeline/unfunded_commitments.py",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Total investments (Cost $ 417,711,887 ) 245.7 % $ 416,616,523 Less unfunded loan commitments ( 60.7 %) ( 102,864,092 ) Net investments (Cost $ 314,847,795 ) 185.0 % $ 313,752,431"
+    },
+    {
+     "accession": "0001193125-26-219274",
+     "text": "4M Capital, Ltd. - $ 528,000 $ 2,770 - $ 528,000 $ 3,328"
+    },
+    {
+     "accession": "0001193125-26-219274",
+     "text": "4M Capital, Ltd., Revolver (C) - 06-18-27 528,000 528,000"
+    }
+   ],
+   "verification": "mlff (round 4 re-run): 951 rows netted (event net_of_commitment:<amount>; fair value re-verified). Netted amount equals the printed 'Less unfunded loan commitments' in 9 of 10 quarters; Founders Table 2026-06-30 (commitment tagged on an issuer-only context; the note prints DDTL 156,661 and Revolver 156,661) is now placed by the D-222 extension: DDTL -1,567, Revolver -3,134. 2025-12-31 leaves 1,813,287 unplaced (Leap, OIS; declared). Not covered by D-091: 404 partly drawn netted rows keep the full commitment as principal against net fair value (414.1M principal incl. 260.0M undrawn; 47-48 rows / 20.0-23.8M a quarter in 2026 meet the deep-distress test); owner question in D-222. The totals cluster cleared in all quarters."
+  },
+  {
+   "request_id": "MLF-R2",
+   "classification": "acceptance_change",
+   "resolution": "implemented then reverted: ineffective, created false A01",
+   "authority": "orchestrator under D-207, recorded in D-222",
+   "what": "category_marker_re third alternative dropped, bare_entity_rows positions, guard test renamed",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Machinery 0.1 % Rapid Aggregator LLC 138 105,029"
+    }
+   ],
+   "verification": "mlff first pass: the two rows still dropped (staging condition 2a; bare_entity_rows lifts 2d only) and A01 x4 appeared (P.J. Fitzpatrick equity read as subtotal of its loans). Reverted: orchestrator restored the guard test to HEAD; this agent restored HEAD's category_marker_re line and removed bare_entity_rows (added by MLF-R2). In-place re-run (fund_ledger_trial --from rebuild, then --from validate after clearing the sandbox's stale reconciliation cache): the 4 A01 findings are gone, holdings identical row for row and column for column to the pre-re-run copy, no other ledger row changed."
+  },
+  {
+   "request_id": "MLF-R3",
+   "classification": "verification_bug",
+   "resolution": "implemented",
+   "authority": "orchestrator under D-207, recorded in D-222",
+   "what": "pipeline/provenance_reverify.py replays values on misdated contexts",
+   "evidence": [
+    {
+     "accession": "0001193125-25-039332",
+     "text": "Integrated Openings Solutions LLC, Delayed Draw Term Loan (C) - 11-20-29 4,120,879 4,059,066"
+    }
+   ],
+   "verification": "mlff provenance ledger: Integrated Openings 2024-12-31 fair_value raw_match verified (published -61,813 = 4,059,066 - 4,120,879 after netting), principal_amount verified 4,120,879; merged_context_excluded cleared."
+  },
+  {
+   "request_id": "MLF-R4",
+   "classification": "acceptance_change",
+   "resolution": "deferred to the second rule batch",
+   "authority": "orchestrator under D-207, recorded in D-222",
+   "what": "Publish Rapid Aggregator LLC / P.J. Fitzpatrick LLC: needs a staging change to condition 2a (prefix row with no instrument word).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219274",
+     "text": "services 0.2 % P.J. Fitzpatrick LLC 2,833 345,667"
+    },
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Machinery 0.1 % Rapid Aggregator LLC 138 111,939"
+    }
+   ],
+   "verification": "Rows stay unpublished; declared residual in bridge_mlff.json (bare_equity_unpublished, 0.13M to 0.51M a quarter from 2024-12-31)."
+  },
+  {
+   "request_id": "MLF-R5",
+   "classification": "verification_bug",
+   "resolution": "accepted; implemented separately by the orchestrator after this fund (D-223); mlff re-run from validate with the stale cache moved aside, so mlff is not stale",
+   "authority": "orchestrator under D-207, recorded in D-222/D-223",
+   "what": "The source reconciliation cache does not mark a fund dirty when its wrapper's dispatch settings change (category_marker_re, bare_entity_rows, prefix rules). After the MLF-R2 revert, fund_ledger_trial --from rebuild reported 'Source reconciliation cache: clean run, 0 dirty CIKs' and the oracle kept reading the MLF-R2 classification (A01 x4 still open). The override hash covers the aggregate-overrides file, value rescales and source_encodings.subtotal_members only.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Machinery 0.1 % Rapid Aggregator LLC 138 111,939"
+    }
+   ],
+   "verification": "A wrapper edit can leave A01 / B01 / E07 and the source-only statuses stale with no warning; here it kept 4 false findings. Clearing scratch/fund_sandbox/mlff/output/cache/source_reconciliation and resuming at validate recomputed 1 dirty partition and the 4 findings cleared. Re-run log: scratch/fund_runs/mlff_rerun_from_validate.log ('recomputing 1 dirty CIK partitions')."
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "undrawn-commitment-rows-published-gross-of-offset-line",
+   "what": "Every revolver / delayed draw row is printed at the full commitment and the schedule subtracts one 'Less unfunded loan commitments' line. Fixed by the netting reading (MLF-R1, D-222): 951 rows netted; netted amount equals the printed line in 9 of 10 quarters. Founders Table 2026-06-30 (issuer-only commitment context) is now placed by the D-222 extension: DDTL -1,567, Revolver -3,134. Left gross: 2025-12-31 1,813,287 (Leap, OIS: two drawn '(C)' rows each, split not printed).",
+   "field": "fair_value",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 105.6,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Fund-quarter: sum of netted commitments differs from the printed 'Less unfunded loan commitments' line (by more than 1) -> flag the quarter and list the unplaced issuers.",
+   "quote": {
+    "accession": "0001193125-26-219274",
+    "text": "Less unfunded loan commitments ( 60.7 %) ( 102,864,092 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the netted amount with the printed offset line: after netting, the 2026-06-30 residual (313,322) and part of 2025-12-31 sat inside fv_conservation's tolerance and no finding fired; the gap was found by the bridge and the reviewer.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "zero-rate-tag-on-dash-printed-row-published-as-coupon",
+   "what": "543 loan rows publish interest_rate 0 (541 netted wholly undrawn rows + 2 Founders Table rows, also netted undrawn): the page prints a dash and the filer tags InvestmentInterestRate 0. The independent page sample found 6 published errors in 20 cards, all this (C002, C005, C009, C010, C013, C017; cause pipeline). Left: shared fix in the second rule batch ('dash rate published as 0'); the fund is recorded INCOMPLETE with it named.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Loan row with interest_rate exactly 0 and a printed dash in the rate cell of its line -> publish blank / flag.",
+   "quote": {
+    "accession": "0001193125-26-219274",
+    "text": "4M Capital, Ltd., Revolver (C) - 06-18-27 528,000 528,000"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule flags a zero rate on its own; C01 sees these rows only because of the gross values and would stop after netting.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "section-heading-published-as-industry",
+   "what": "extracted_industry differed from the printed industry heading on 807 (reviewer count) rows before this round (sector headings, 'Page', and real industries from another block: Chemtron 2026-06-30 'Software' under 'Chemicals', In Vitro 2026-06-30 'Capital markets', Lockmasters 2024-06-30, Alta / Jetson 2024-06-30, 4M Capital 2025-09-30; 100M to 137M a quarter from 2025-06-30). Fixed: industry set by context from the printed heading above each row (industry_audit.py: label, maturity, par and value located, nearest '<Industry> x.x %' above); 1,192 context corrections plus 2 read by hand (AC Blackpoint 2025-06-30, TruSource 2026-06-30); where member and page disagree the page wins (Alta Buyer and QM Buyer 2025-09-30: member 'IT services', printed 'Software'). Check after the re-run: 0 of 1967 located rows differ from the printed heading; the 4 rows the audit cannot locate read by hand and correct; GICS follows (one GICS label per printed industry; 805 rows changed industry and GICS together, none lost).",
+   "field": "extracted_industry",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Published industry differs from the member's industry segment, or from the printed industry heading above the row's printed line -> flag.",
+   "quote": {
+    "accession": "0001193125-26-348951",
+    "text": "Materials 7.6 % 12,885,699 Chemicals 7.6 % Chemtron Supply LLC, Add-On Delayed Draw"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compared the published industry with the member text or the page; found by reading and by the reviewer.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "member-holds-another-rows-values",
+   "what": "Chemtron Supply 2024-03-31: the delayed-draw member carries the revolver's figures and the revolver member the delayed draw's (rate, par, value). Fixed by swapping the instrument names by context. Searched all 1,971 non-cash rows with row_audit.py (label then maturity, par, value, rate or dash in order): no other swap.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 1.1,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Row whose printed line shows a dash rate while its context carries a positive rate (or the reverse) -> sibling swap candidate.",
+   "quote": {
+    "accession": "0001193125-24-137279",
+    "text": "Chemtron Supply LLC, Revolver (C) - 03-02-29 362,979 362,979"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the two rows; values and totals are unchanged by a swap, so only a row-to-line comparison sees it.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "what": "Row corrections are applied before the wrapper's issuer cut, so a corrected instrument_description gets the cut text put in front again ('Delayed Draw Term Loan (...) Revolver' in mlfd). Worked around by setting issuer_name in the same correction.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-03-31"
+   ],
+   "fair_value_m": 1.1,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "After corrections and name cuts, a corrected instrument_description must equal its corrected value -> flag where it does not.",
+   "quote": {
+    "accession": "0001193125-24-137279",
+    "text": "Chemtron Supply LLC, Revolver (C) - 03-02-29 362,979 362,979"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Nothing compares the published instrument with the declared correction value; found by the row audit.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "promoted-value-rule-is-a-plug",
+   "what": "Promoted rule set cost = fair value on all rows of all quarters (the page prints no per-row cost); a quarter-pinned row_add added the contra line and three rows to tie 2025-12-31. Both pulled.",
+   "field": "cost",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 105.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A promoted value_expression that copies one column into another on every row of a fund -> flag for review.",
+   "quote": {
+    "accession": "0001193125-26-071943",
+    "text": "Rate (%) Maturity date Par value^ Value"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The rule cleared cost_conservation in its quarter; no check tests promoted rules for whole-fund column copies.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "what": "InvestmentIncomeNet (printed total investment income) was published as net investment income in every quarter; total investment income blank; offering cost read as interest expense (2024-03-31 100,007); net assets blank though AssetsNet is tagged. Fixed by a highlights wrapper.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Published NII equal to a tagged InvestmentIncomeNet while NetInvestmentIncome is also tagged with a different value -> flag.",
+   "quote": {
+    "accession": "0001193125-26-219274",
+    "text": "Net investment income 3,930,532 2,489,458"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No fund-financials rule fired on NII = TII; it was found by reading the statement.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "money-market-fund-not-published",
+   "what": "From 2025-06-30 the Dreyfus money fund member carries the 'Senior loans' prefix and was dropped (10.4M to 16.4M a quarter) although it is inside the printed net investments. Fixed with cash_identifiers.",
+   "field": "fair_value",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 16.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Source row named as a money fund excluded while the filed investments total includes the short-term block -> flag.",
+   "quote": {
+    "accession": "0001193125-26-219274",
+    "text": "Cash Management Fund, Institutional Class 3.5400 (E) 10,423,755 10,423,755"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "In mlfa the fv_conservation gap moved by the money-fund amount from 2025-06-30 (exactly bridged); the 2025-12-31 plug rule had added it by hand.",
+    "reference": "fv_conservation (mlfa)"
+   }
+  },
+  {
+   "observation_key": "gics-label-keyed-on-built-issuer-name",
+   "what": "Cleaning the issuer names changed gics_sub_industry on 24 rows and removed it from 8 (All Glass & Window Holdings, one Bandon row) between mlfa and mlfb; Capital Construction moved to 'Construction Materials'. Shared name-keyed lookup; left.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "gics_sub_industry that changes for an unchanged printed industry when only the issuer string changes -> flag.",
+   "quote": {
+    "accession": "0001193125-26-219274",
+    "text": "Capital Construction LLC, Add-On Term Loan (1 month CME Term SOFR + 5.750 %) (D) 9.517 10-22-26 322,466 315,210"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule ties the GICS label to the printed industry; the gate counts lost labels only.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "what": "Member instrument text differs from the printed label on a few rows, left: 2024-03-31 Bandon and PAK members omit the parentheses; 2026-06-30 TruSource prints '1st Amendment Delayed Drawn Term Loan' (member 'Delayed Draw Term Loan').",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 4.6,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Published instrument text not found in the row's printed line -> flag (page rule like issuer_name_printed).",
+   "quote": {
+    "accession": "0001193125-26-348951",
+    "text": "TruSource Foods LLC, 1st Amendment Delayed Drawn Term Loan (C) - 08-01-31 1,109,256 1,059,340"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed exists for names; nothing checks instrument text against the page.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "bare-name-equity-row-dropped-under-section-prefix",
+   "what": "Rapid Aggregator LLC (2024-12-31 on) and P.J. Fitzpatrick LLC (2025-09-30 on): printed equity positions with unit counts, member 'Senior loans x% | industry y% | Name LLC', classed as aggregates and not published in any quarter. Left by decision (MLF-R4 deferred, D-222); declared residual in the bridge (0.13M to 0.51M a quarter).",
+   "field": "fair_value",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.5,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Source row excluded as an aggregate that carries a fair value and a unit count, has no child rows under its name, and sits inside the printed section total -> flag as a dropped position.",
+   "quote": {
+    "accession": "0001193125-26-219274",
+    "text": "Machinery 0.1 % Rapid Aggregator LLC 138 111,939"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "With the wrapper as in HEAD no rule fires on these rows (status excluded_aggregate_candidate, non-blocking); A01 fired only under the reverted MLF-R2 reading, and falsely.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "source-reconciliation-cache-ignores-wrapper-dispatch-edits",
+   "what": "After a wrapper dispatch edit the source reconciliation cache reported a clean run and kept the old classification (A01 x4 stale) until the sandbox cache was cleared. Request MLF-R5. Implemented by the orchestrator (D-223): the cache now keys on the wrapper file.",
+   "field": "source_wrapper_disposition",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.4,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Per-CIK reconciliation cache key must change when the fund's wrapper file changes; a rebuild after a wrapper edit that reports 0 dirty CIKs for that fund -> warn.",
+   "quote": {
+    "accession": "0001193125-26-219274",
+    "text": "services 0.2 % P.J. Fitzpatrick LLC 2,833 345,667"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Nothing compares the wrapper's hash with the cache's recorded inputs; it was seen only because a known finding failed to clear.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "principal-is-commitment-on-partly-drawn-netted-rows",
+   "what": "404 partly drawn rows the netting reads keep the full commitment as principal against a net fair value (414.1M principal including 260.0M undrawn, all quarters; 369 below 80 pct of par). In 2026, 47 to 48 rows a quarter (20.0M to 23.8M) meet the deep-distress test in pipeline/export/fund_exports.py (principal within 10x of value and value below 80 pct of principal). D-091 ruled on wholly undrawn rows only. Owner question recorded in D-222: should principal on a netted partly drawn row become the drawn amount? Left.",
+   "field": "principal_amount",
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 23.8,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Netted row with a positive rate whose fair value is below 80 pct of principal while fair value plus the netted amount is near principal -> flag as commitment-in-principal, not distress.",
+   "quote": {
+    "accession": "0001193125-26-348951",
+    "text": "Prestige Backyards LLC, Revolver ( Prime rate + 4.250 %) (C) 11.000 08-07-31 1,393,443 1,319,590"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule tests principal against netted value; the distress screen would read these rows as stressed.",
+    "reference": ""
+   }
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "what": "Published 2023-12-31 total investment income 1,277,950 and net investment income 1,158,426 are half the printed figures for the period from inception (July 17, 2023) to December 31, 2023 (2,555,900 and 2,316,852): the pipeline splits the period into a quarter. Not printed values. Left (shared step).",
+   "field": "net_investment_income",
+   "quarters": [
+    "2023-12-31"
+   ],
+   "fair_value_m": null,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Fund-quarter income equal to exactly half (or a fixed fraction) of a printed period-from-inception figure -> flag as prorated.",
+   "quote": {
+    "accession": "0001193125-25-039332",
+    "text": "Net investment income 8,590,212 2,316,852 Realized and unrealized gain (loss)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No fund-financials rule compares a quarter's income with the printed inception-period figure; found by the reviewer.",
+    "reference": ""
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "tests_run": [
+  "tests/test_bdc_xbrl_wrapper.py + tests/test_fund_highlights_wrapper.py: 588 passed (mlfe wrapper)",
+  "after the MLF-R2 revert, before the re-run: tests/test_bdc_xbrl_wrapper.py -k manulife 7 passed; tests/test_unfunded_commitments.py 23 passed"
+ ],
+ "not_done": [
+  "Unplaced commitment 2025-12-31 (1,813,287; Leap, OIS) left gross; declared total exception. Founders Table 2026-06-30 is placed (D-222).",
+  "Rapid Aggregator / P.J. Fitzpatrick equity rows not published (MLF-R4 deferred, D-222): declared residual 0.13M to 0.51M a quarter.",
+  "Build exception: mlff was re-run in place after the sixth build (fund_ledger_trial --from rebuild, then --from validate after clearing the sandbox reconciliation cache; logs scratch/fund_runs/mlff_rerun_from_rebuild.log and mlff_rerun_from_validate.log), allowed by the orchestrator.",
+  "INCOMPLETE item named: interest_rate 0 published on 543 undrawn rows where the page prints a dash (6 of 20 page-sample cards); shared fix in the second rule batch ('dash rate published as 0').",
+  "Owner question (D-222): principal on 404 partly drawn netted rows keeps the full commitment; not changed.",
+  "2023-12-31 TII / NII published at half the printed inception-period figures (shared step); not changed.",
+  "Round 4 build exception: mlff re-parsed in place (rebuild_outputs --bdc-holdings for this CIK, sandbox source-fact cache moved aside) and re-run from rebuild twice (logs scratch/fund_runs/mlff_rerun_round4.log, mlff_rerun_round4b.log); the second run only added two industry corrections read by hand.",
+  "pct_of_net_assets is blank on every row: the filer prints percents per section and industry only (as filed, not changed).",
+  "Non-accrual: no non-accrual marker found printed in the schedules read; not searched quarter by quarter in the notes.",
+  "2023-12-31 10-K (0001193125-24-050871) cached page has no financial statements; the 2023 printed figures used as evidence (net assets 66,463,119; the inception-period income ratio; TII 2,555,900 and NII 2,316,852) are taken from the comparative columns of the 2024 filings. The published 2023-12-31 TII / NII are not these printed figures but half of them (observation inception-period-annual-figures-prorated-into-a-quarter).",
+  "Full wrapper test file and the full suite not run after the revert (only -k manulife and the unfunded tests); no cohort measurement by this agent.",
+  "Independent review and the 20-row page sample are the orchestrator's."
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_99b8d228d0cc",
+   "rule": "X02",
+   "quarter": "2025-06-30",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-178880/PAsOn06_30_2025_SeniorLoans1706CapitalMarkets46StewardPartnersGlobalAdvisoryLLCRevolverTypedMemberusgaapInvestmentIdentifierAxis",
+     "0001193125-25-178880/PAsOn06_30_2025_SeniorLoans1706HealthCareProvidersAndServices288InVitroSciencesLLCRevolverTypedMemberusgaapInvestmentIdentifierAxis",
+     "0001193125-25-178880/PAsOn06_30_2025_SeniorLoans1706HealthCareProvidersAndServices288MidwestEyeServicesLLCRevolverTypedMemberusgaapInvestmentIdentifierAxis",
+     "0001193125-25-178880/PAsOn06_30_2025_SeniorLoans1706HealthCareProvidersAndServices288OISManagementServicesLLC3rdAmendmentIncrementalDelayedDrawTermLoanTypedMemberusgaapInvestmentIdentifierAxis"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-178880/PAsOn06_30_2025_SeniorLoans1706CapitalMarkets46StewardPartnersGlobalAdvisoryLLCRevolverTypedMemberusgaapInvestmentIdentifierAxis",
+     "0001193125-25-178880/PAsOn06_30_2025_SeniorLoans1706HealthCareProvidersAndServices288InVitroSciencesLLCRevolverTypedMemberusgaapInvestmentIdentifierAxis",
+     "0001193125-25-178880/PAsOn06_30_2025_SeniorLoans1706HealthCareProvidersAndServices288MidwestEyeServicesLLCRevolverTypedMemberusgaapInvestmentIdentifierAxis",
+     "0001193125-25-178880/PAsOn06_30_2025_SeniorLoans1706HealthCareProvidersAndServices288OISManagementServicesLLC3rdAmendmentIncrementalDelayedDrawTermLoanTypedMemberusgaapInvestmentIdentifierAxis"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-178880",
+     "text": "Steward Partners Global Advisory LLC, Revolver (C) - 10-13-28 955,881 946,322"
+    },
+    {
+     "accession": "0001193125-25-178880",
+     "text": "Midwest Eye Services LLC, Revolver (C) - 08-20-27 704,931 704,931"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no rate printed",
+   "hypotheses_tested": [
+    "The four flagged rows (flagged.py X02) are undrawn lines printed with a dash rate and no benchmark; their contexts carry no rate, spread or PIK fact.",
+    "No neighbouring context carries a rate for them (filing_grep.py on each context)."
+   ],
+   "next_action": "Proposal PD-X02-1988280-2 under the existing reason x02-no-rate-printed-on-the-row."
+  },
+  {
+   "finding_id": "RVQ_BLK_cac3a1399dcc",
+   "rule": "cost_conservation",
+   "quarter": "2024-03-31",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2024-03-31|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2024-03-31|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-137279",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-24-137279",
+     "text": "Total investments - Non-controlled/Non-affiliated (Cost $ 130,062,720 ) 116.3 % $ 131,141,852 Less unfunded loan commitments ( 15.5 %) ( 17,460,191 ) Net investments - Non-controlled/Non-affiliated (Cost $ 112,602,529 ) 100.8 % $ 113,681,661"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  },
+  {
+   "finding_id": "RVQ_BLK_3a48f632479b",
+   "rule": "cost_conservation",
+   "quarter": "2024-06-30",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2024-06-30|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2024-06-30|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-199764",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-24-199764",
+     "text": "Total investments - Non-controlled/Non-affiliated (Cost $ 142,284,453 ) 127.2 % $ 143,664,723 Less unfunded loan commitments ( 25.4 %) ( 28,660,218 ) Net investments - Non-controlled/Non-affiliated (Cost $ 113,624,235 ) 101.8 % $ 115,004,505"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  },
+  {
+   "finding_id": "RVQ_BLK_a7c8ec10838a",
+   "rule": "cost_conservation",
+   "quarter": "2024-09-30",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2024-09-30|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2024-09-30|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-255855",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-24-255855",
+     "text": "Total investments (Cost $ 163,632,816 ) 145.9 % $ 165,207,519 Less unfunded loan commitments ( 32.4 %) ( 36,716,731 ) Net investments (Cost $ 126,916,085 ) 113.5 % $ 128,490,788"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  },
+  {
+   "finding_id": "RVQ_BLK_344df1a83604",
+   "rule": "cost_conservation",
+   "quarter": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2024-12-31|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2024-12-31|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-039332",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-25-039332",
+     "text": "Total investments (Cost $ 230,183,110 ) 207.0 % $ 230,780,324 Less unfunded loan commitments ( 58.2 %) ( 64,945,968 ) Net investments (Cost $ 165,237,142 ) 148.8 % $ 165,834,356"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  },
+  {
+   "finding_id": "RVQ_BLK_6003b6805c9f",
+   "rule": "cost_conservation",
+   "quarter": "2025-03-31",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2025-03-31|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2025-03-31|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-118662",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-25-118662",
+     "text": "Total investments (Cost $ 266,451,937 ) 210.5 % $ 267,431,163 Less unfunded loan commitments ( 59.6 %) ( 75,746,649 ) Net investments (Cost $ 190,705,288 ) 150.9 % $ 191,684,514"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  },
+  {
+   "finding_id": "RVQ_BLK_71fdce1c4c63",
+   "rule": "cost_conservation",
+   "quarter": "2025-06-30",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2025-06-30|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2025-06-30|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-178880",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-25-178880",
+     "text": "Total investments (Cost $ 307,383,302 ) 179.6 % $ 307,490,109 Less unfunded loan commitments ( 50.4 %) ( 86,356,872 ) Net investments (Cost $ 221,026,430 ) 129.2 % $ 221,133,237"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  },
+  {
+   "finding_id": "RVQ_BLK_0260a2f048cd",
+   "rule": "cost_conservation",
+   "quarter": "2025-09-30",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2025-09-30|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2025-09-30|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-276918",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-25-276918",
+     "text": "Total investments (Cost $ 347,880,375 ) 203.0 % $ 348,068,286 Less unfunded loan commitments ( 55.7 %) ( 95,426,108 ) Net investments (Cost $ 252,454,267 ) 147.3 % $ 252,642,178"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  },
+  {
+   "finding_id": "RVQ_BLK_378355522101",
+   "rule": "cost_conservation",
+   "quarter": "2025-12-31",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2025-12-31|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2025-12-31|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-071943",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-26-071943",
+     "text": "Total investments (Cost $ 419,789,179 ) 245.8 % $ 419,814,228 Less unfunded loan commitments ( 61.8 %) ( 105,643,990 ) Net investments (Cost $ 314,145,189 ) 184.0 % $ 314,170,238"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  },
+  {
+   "finding_id": "RVQ_BLK_96dd161f54ad",
+   "rule": "cost_conservation",
+   "quarter": "2026-03-31",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2026-03-31|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2026-03-31|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-26-219274",
+     "text": "Total investments (Cost $ 417,711,887 ) 245.7 % $ 416,616,523 Less unfunded loan commitments ( 60.7 %) ( 102,864,092 ) Net investments (Cost $ 314,847,795 ) 185.0 % $ 313,752,431"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  },
+  {
+   "finding_id": "RVQ_BLK_e5ec3f03a3b2",
+   "rule": "cost_conservation",
+   "quarter": "2026-06-30",
+   "coverage": {
+    "affected_rows": [
+     "0001988280|2026-06-30|cost_conservation|cost_sum_vs_filed_cost"
+    ],
+    "reviewed_rows": [
+     "0001988280|2026-06-30|cost_conservation|cost_sum_vs_filed_cost"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-348951",
+     "text": "Rate (%) Maturity date Par value^ Value"
+    },
+    {
+     "accession": "0001193125-26-348951",
+     "text": "Total investments (Cost $ 421,706,019 ) 248.1 % $ 419,310,195 Less unfunded loan commitments ( 53.2 %) ( 89,958,006 ) Net investments (Cost $ 331,748,013 ) 194.9 % $ 329,352,189"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "summary": "no per-row cost printed",
+   "hypotheses_tested": [
+    "The schedule prints no cost column ('Rate (%) Maturity date Par value^ Value'); cost is printed and tagged only on the totals. Published per-row cost is blank in every row.",
+    "Before this run a promoted rule wrote cost = fair value on every row (pulled: invented data); the check passed nowhere then either, because the gross commitments were inside the sum."
+   ],
+   "next_action": "Proposal PD-cost_conservation-1988280-1 (as filed): owner to accept that the check is not applicable for this filer."
+  }
+ ]
+}

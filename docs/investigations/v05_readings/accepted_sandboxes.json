@@ -323,5 +323,10 @@
   "label": "svce",
   "accepted_on": "2026-10-20",
   "basis": "D-221, gate PASS with investigation COMPLETE: 114 findings, 59 outstanding, all proposed; 14/14 quarters tie; sample 0/20; SVC-R1 (interest expense) and SVC-R2 (lien after instrument correction) deferred to the second rule batch; five builds"
+ },
+ "0001988280": {
+  "label": "mlff",
+  "accepted_on": "2026-10-20",
+  "basis": "D-222, gate PASS with investigation COMPLETE, recorded INCOMPLETE (page sample 6/20: dash rate published as 0, shared fix in the second rule batch): 20 findings, 11 outstanding, all proposed; 8/10 quarters tie, 2 declared exceptions; undrawn commitments netted; six builds plus three recorded re-runs"
  }
 }

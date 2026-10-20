@@ -1107,3 +1107,82 @@ class TestDefaultLoaderHugeTree:
         loader = _default_xml_loader(_index(p))
         assert loader("0001287750", "0001287750-26-000001") is None
         assert full_tier(self._cheap(), xml_loader=loader).iloc[0]["full_status"] == "source_unavailable"
+
+
+class TestMisdatedContextFill:
+    """MLF-R3: a value filled from a context the wrapper re-dates is replayed, not excluded.
+
+    Manulife 10-K 0001193125-25-039332, Integrated Openings delayed draw: printed '... (C) - 11-20-29
+    4,120,879 4,059,066'; par and rate on the 2024-12-31 context, fair value on a context dated 2025-02-24.
+    """
+    CIK = "0009999901"  # no wrapper: only the patched listing applies
+    ACC = "0009999901-25-000001"
+    MEMBER = "Senior loans 195.4% | Building products 6.9% | Integrated Openings Solutions LLC, Delayed Draw Term Loan"
+
+    def _xml(self, fv="4059066"):
+        def context(cid, date, member):
+            return (f'<xbrli:context id="{cid}"><xbrli:entity><xbrli:identifier scheme="x">1</xbrli:identifier>'
+                    '<xbrli:segment><xbrldi:typedMember dimension="us-gaap:InvestmentIdentifierAxis">'
+                    f'<us-gaap:InvestmentIdentifierAxis.domain>{member}</us-gaap:InvestmentIdentifierAxis.domain>'
+                    '</xbrldi:typedMember></xbrli:segment></xbrli:entity>'
+                    f'<xbrli:period><xbrli:instant>{date}</xbrli:instant></xbrli:period></xbrli:context>')
+        return ('<xbrli:xbrl xmlns:xbrli="http://www.xbrl.org/2003/instance" '
+                'xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:us-gaap="http://fasb.org/us-gaap/2024">'
+                + context("dated", "2024-12-31", self.MEMBER) + context("misdated", "2025-02-24", self.MEMBER)
+                + context("other", "2025-02-24", "Senior loans | Other Co LLC, Term Loan")
+                + '<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef="dated" unitRef="usd">4120879'
+                  '</us-gaap:InvestmentOwnedBalancePrincipalAmount>'
+                + f'<us-gaap:InvestmentOwnedAtFairValue contextRef="misdated" unitRef="usd">{fv}'
+                  '</us-gaap:InvestmentOwnedAtFairValue>'
+                + '<us-gaap:InvestmentOwnedAtFairValue contextRef="other" unitRef="usd">5'
+                  '</us-gaap:InvestmentOwnedAtFairValue></xbrli:xbrl>')
+
+    def _loader(self, cik, accession):
+        from lxml import etree
+        return etree.ElementTree(etree.fromstring(self._xml().encode()))
+
+    def _cheap(self, **kw):
+        base = {"row_id": "ROW-io", "cik": self.CIK, "accession_number": self.ACC, "report_date": "2024-12-31",
+                "src_context_id": "dated", "field": "fair_value", "pathway": "xbrl_field", "declared_raw": None,
+                "declared_events": "interest_rate:rate_x100", "published": 4059066.0, "expected": None,
+                "cheap_status": "filled_field", "src_facts": json.dumps({"interest_rate": {"r": 0.0}})}
+        return pd.DataFrame([{**base, **kw}])
+
+    @pytest.fixture
+    def listed(self, monkeypatch):
+        from pipeline import page_labelled_contexts as plc
+        monkeypatch.setattr(plc, "_misdated_by_accession",
+                            lambda: {(self.CIK, self.ACC): {"misdated": ("2025-02-24", "2024-12-31")}})
+
+    def test_a_value_filled_from_the_redated_context_is_verified(self, listed):
+        out = full_tier(self._cheap(), xml_loader=self._loader).iloc[0]
+        assert (out["cheap_status"], out["full_status"]) == ("misdated_context_filled", "raw_match")
+        assert out["instance_raw"] == pytest.approx(4059066.0)
+        assert classify_reason(out["cheap_status"], out["full_status"]) == "verified"
+
+    def test_a_wrong_value_fails(self, listed):
+        out = full_tier(self._cheap(published=4000000.0), xml_loader=self._loader).iloc[0]
+        assert (out["cheap_status"], out["full_status"]) == ("misdated_context_filled", "published_mismatch")
+        assert classify_reason(out["cheap_status"], out["full_status"]) == "filing_mismatch"
+
+    def test_the_netting_event_is_replayed(self, listed):
+        # with net_of_other_commitment the row publishes 4,059,066 - 4,120,879 and records the event
+        facts = json.dumps({"fair_value": {"r": 4059066.0, "x": ["net_of_commitment:4120879.0"]}})
+        out = full_tier(self._cheap(published=-61813.0, src_facts=facts), xml_loader=self._loader).iloc[0]
+        assert out["full_status"] == "raw_match"
+        out = full_tier(self._cheap(published=4059066.0, src_facts=facts), xml_loader=self._loader).iloc[0]
+        assert out["full_status"] == "published_mismatch"
+
+    def test_a_fund_without_misdated_contexts_is_unchanged(self, monkeypatch):
+        from pipeline import page_labelled_contexts as plc
+        monkeypatch.setattr(plc, "_misdated_by_accession", lambda: {})
+        calls = []
+        out = full_tier(self._cheap(), xml_loader=lambda c, a: calls.append(a) or self._loader(c, a)).iloc[0]
+        assert (out["cheap_status"], out["full_status"]) == ("filled_field", "not_checked")
+        assert classify_reason(out["cheap_status"], out["full_status"]) == "merged_context_excluded"
+        assert calls == []
+
+    def test_a_row_the_redated_context_does_not_match_is_unchanged(self, listed):
+        # another identifier on the same date: the listed context is not its source
+        out = full_tier(self._cheap(src_context_id="other"), xml_loader=self._loader).iloc[0]
+        assert (out["cheap_status"], out["full_status"]) == ("filled_field", "not_checked")

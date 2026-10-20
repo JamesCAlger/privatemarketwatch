@@ -653,6 +653,114 @@ def test_forced_reconciliation_recomputes_each_cik_partition(tmp_path, monkeypat
     assert calls == [(("123",), ("123",)), (("456",), ("456",))]
 
 
+# --- MLF-R5 (D-222): a wrapper edit recomputes that fund's partition ----------------------
+
+def _two_fund_run(monkeypatch, tmp_path):
+    """Patch a two-fund cached run; returns (run, calls, wrapper_dir)."""
+    import json
+    from pipeline import bdc_xbrl_wrapper
+    _patch_cache_paths(monkeypatch, tmp_path)
+    wrapper_dir = tmp_path / "wrappers"
+    wrapper_dir.mkdir()
+    for cik in ("0000000123", "0000000456"):
+        (wrapper_dir / f"{cik}.json").write_text(json.dumps({
+            "schema_version": "bdc-xbrl-wrapper.v3", "cik": cik,
+            "dispatch": {"category_marker_re": r"^(Senior loans|Equity)$"}}), encoding="utf-8")
+    monkeypatch.setattr(bdc_xbrl_wrapper, "_WRAPPER_DEFINITIONS_DIR", wrapper_dir)
+    source_manifest = pd.DataFrame([
+        {"accession_number": acc, "cik": cik, "file_hash": "source-" + acc, "filing_metadata_hash": "meta",
+         "parse_status": "ok", "fact_row_count": "1"}
+        for acc, cik in (("0001", "0000000123"), ("0002", "0000000456"))])
+    source_df = pd.DataFrame([
+        {**{col: "" for col in sr.SOURCE_FACT_COLUMNS}, "cik": "123", "accession_number": "0001"},
+        {**{col: "" for col in sr.SOURCE_FACT_COLUMNS}, "cik": "456", "accession_number": "0002"},
+    ], columns=sr.SOURCE_FACT_COLUMNS)
+    unified_df = pd.DataFrame([{"source": "BDC", "cik": "123", "report_date": "2025-03-31"},
+                               {"source": "BDC", "cik": "456", "report_date": "2025-03-31"}])
+    holdings_hashes = pd.DataFrame([{"cik": "0000000123", "holdings_hash": "h-a", "holdings_row_count": 1},
+                                    {"cik": "0000000456", "holdings_hash": "h-b", "holdings_row_count": 1}])
+    calls: list[str] = []
+
+    def fake_reconcile(source_part, holdings_part):
+        calls.append(str(source_part["cik"].iloc[0]))
+        return pd.DataFrame(columns=sr.DETAIL_COLUMNS), pd.DataFrame(columns=sr.METRIC_COLUMNS)
+
+    monkeypatch.setattr(sr, "extract_bdc_source_facts_cached", lambda **_: (source_df, source_manifest))
+    monkeypatch.setattr(sr, "compute_bdc_holdings_hashes", lambda _: holdings_hashes)
+    monkeypatch.setattr(sr, "compute_reconciliation_logic_hash", lambda: "logic-a")
+    monkeypatch.setattr(sr, "_compute_override_hash", lambda: "override-a")
+    monkeypatch.setattr(sr, "reconcile_bdc_source_to_holdings", fake_reconcile)
+    return (lambda: sr.run_bdc_source_reconciliation_cached(unified_df=unified_df)), calls, wrapper_dir
+
+
+def test_changing_a_wrappers_dispatch_recomputes_only_that_fund(tmp_path, monkeypatch):
+    import json
+    run, calls, wrapper_dir = _two_fund_run(monkeypatch, tmp_path)
+    run()
+    assert calls == ["123", "456"]
+    # unchanged wrappers: both funds stay clean
+    calls.clear()
+    _, _, status = run()
+    assert calls == [] and int(status.iloc[0]["dirty_cik_count"]) == 0
+    # Manulife mlff: dropping a category_marker_re alternative left 4 false A01 findings in the cache
+    path = wrapper_dir / "0000000123.json"
+    wrapper = json.loads(path.read_text(encoding="utf-8"))
+    wrapper["dispatch"]["category_marker_re"] = r"^(Senior loans)$"
+    path.write_text(json.dumps(wrapper), encoding="utf-8")
+    plan = sr.plan_dirty_reconciliation_ciks(*sr.extract_bdc_source_facts_cached()[1:],
+                                             sr.compute_bdc_holdings_hashes(None), "logic-a", "override-a")
+    by_cik = plan.set_index("cik")
+    assert by_cik.loc["0000000123", "dirty_reason"] == "wrapper_hash"
+    assert not by_cik.loc["0000000456", "dirty"]
+    _, _, status = run()
+    assert calls == ["123"]
+    # a full invalidation is not triggered by one fund's wrapper
+    assert status.iloc[0]["full_invalidation"] in (False, "False")
+    calls.clear()
+    run()
+    assert calls == []
+
+
+def test_a_source_encodings_edit_or_a_removed_wrapper_recomputes_that_fund(tmp_path, monkeypatch):
+    import json
+    run, calls, wrapper_dir = _two_fund_run(monkeypatch, tmp_path)
+    run()
+    calls.clear()
+    path = wrapper_dir / "0000000456.json"
+    wrapper = json.loads(path.read_text(encoding="utf-8"))
+    wrapper["source_encodings"] = {"unfunded_rows": ["net_of_other_commitment"]}
+    path.write_text(json.dumps(wrapper), encoding="utf-8")
+    run()
+    assert calls == ["456"]
+    calls.clear()
+    path.unlink()
+    run()
+    assert calls == ["456"]
+
+
+def test_a_manifest_from_before_the_wrapper_hash_recomputes_funds_with_a_wrapper_once(tmp_path, monkeypatch):
+    run, calls, wrapper_dir = _two_fund_run(monkeypatch, tmp_path)
+    (wrapper_dir / "0000000456.json").unlink()
+    run()
+    calls.clear()
+    manifest = pd.read_csv(sr.SOURCE_RECONCILIATION_CACHE_MANIFEST_FILE, dtype=str).drop(columns=["wrapper_hash"])
+    manifest.to_csv(sr.SOURCE_RECONCILIATION_CACHE_MANIFEST_FILE, index=False)
+    run()
+    # 123 has a wrapper file, 456 has none ('' both before and after)
+    assert calls == ["123"]
+    calls.clear()
+    run()
+    assert calls == []
+
+
+def test_wrapper_hash_is_empty_without_a_wrapper_file(tmp_path, monkeypatch):
+    from pipeline import bdc_xbrl_wrapper
+    monkeypatch.setattr(bdc_xbrl_wrapper, "_WRAPPER_DEFINITIONS_DIR", tmp_path)
+    assert sr.compute_wrapper_hash("123") == ""
+    (tmp_path / "0000000123.json").write_text("{}", encoding="utf-8")
+    assert len(sr.compute_wrapper_hash("123")) == 64 and sr.compute_wrapper_hash("") == ""
+
+
 # --- MAI-R2: instances with a >10 MB text node (huge_tree) ---------------------------
 
 # libxml2's default limit on one text node is 10,000,000 bytes.

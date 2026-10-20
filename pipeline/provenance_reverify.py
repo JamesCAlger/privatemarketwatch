@@ -611,7 +611,89 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                 )
                 out.at[i, "full_status"] = "source_unavailable"
 
+    _replay_misdated_fills(out, xml_loader)
     return out
+
+
+# A value the deduplication filled into a row from a context the wrapper re-dates
+# (source_encodings.misdated_contexts), re-read from that context (MLF-R3).
+MISDATED_FILL_STATUS = "misdated_context_filled"
+_MISDATED_FILL_FIELDS = frozenset({"fair_value", "cost", "principal_amount", "shares_held",
+                                   "interest_rate", "basis_spread", "pik_rate"})
+
+
+def _replay_misdated_fills(out: pd.DataFrame, xml_loader) -> None:
+    """Re-read filled values whose only possible source is a re-dated context, in place.
+
+    The extractor re-dates a context a wrapper lists under ``source_encodings.misdated_contexts``
+    (Manulife 10-K 0001193125-25-039332: Integrated Openings' delayed draw fair value, printed
+    '... (C) - 11-20-29 4,120,879 4,059,066', tagged on a context dated 2025-02-24), and the
+    deduplication then fills that value into the row of the dated context. The cheap tier calls the
+    field ``filled_field`` (merged_context_excluded, never checked). Here the contexts are read with
+    the same re-dating (``parse_filing_contexts``); where exactly one listed context, other than the
+    row's own, has the row's date, identifier and dimensions, the field's fact on it is replayed
+    (with the row's recorded events, e.g. ``net_of_commitment``) against the published value:
+    ``raw_match`` or ``published_mismatch``, under cheap status ``misdated_context_filled``. A row of
+    a filing with no listed context, or with no single such context or fact, is left as it was.
+    """
+    import re as _re
+    from pipeline.bdc_filings import (_local_name, _parse_fact_value, fair_value_aliases,
+                                      match_concept_for, parse_filing_contexts)
+    from pipeline.page_labelled_contexts import misdated_contexts
+    from pipeline.unfunded_commitments import net_offset
+
+    filled = (out["cheap_status"] == "filled_field") & out["field"].isin(_MISDATED_FILL_FIELDS)
+    if not filled.any():
+        return
+    for (cik, accession), grp in out.loc[filled].groupby(["cik", "accession_number"], sort=False):
+        listed = misdated_contexts(cik, accession)
+        if not listed:
+            continue
+        tree = xml_loader(str(cik), str(accession))
+        if tree is None:
+            continue
+        cik10 = _re.sub(r"\D", "", str(cik)).zfill(10)
+        contexts = parse_filing_contexts(tree, {"cik": cik10, "accession_number": str(accession)})
+        aliases = fair_value_aliases(cik)
+        facts: dict[str, dict[str, str]] = {}
+        for elem in tree.getroot().iter():
+            ctx = elem.get("contextRef")
+            if ctx not in listed or not isinstance(elem.tag, str):
+                continue
+            raw_text = (elem.text or "").strip()
+            col = match_concept_for(_local_name(elem.tag).lower(), aliases) if raw_text else None
+            if col:
+                facts.setdefault(ctx, {}).setdefault(col, raw_text)  # first-wins, as the extractor
+        for i, r in grp.iterrows():
+            own = str(r["src_context_id"])
+            src = contexts.get(own)
+            if not src:
+                continue
+            same = [c for c in listed if c != own and c in contexts
+                    and contexts[c].get("period") == src.get("period")
+                    and contexts[c].get("investment_identifier") == src.get("investment_identifier")
+                    and contexts[c].get("dimensions_raw") == src.get("dimensions_raw")]
+            field = str(r["field"])
+            raw_text = facts.get(same[0], {}).get(field) if len(same) == 1 else None
+            if raw_text is None:
+                continue
+            value = _parse_fact_value(field, raw_text)
+            if not isinstance(value, (int, float)):
+                continue
+            try:
+                x_events = list((json.loads(str(r.get("src_facts") or "") or "{}").get(field) or {}).get("x") or [])
+            except (json.JSONDecodeError, AttributeError, TypeError):
+                x_events = []
+            expected = (value * _extractor_multiplier(x_events)
+                        * _staging_multiplier(field, str(r.get("declared_events") or "")))
+            if field in ("fair_value", "cost"):
+                expected -= net_offset(x_events)
+            published = r["published"]
+            out.at[i, "cheap_status"] = MISDATED_FILL_STATUS
+            out.at[i, "instance_raw"] = value
+            out.at[i, "full_status"] = ("raw_match" if not pd.isna(published)
+                                        and _numbers_close(expected, float(published))
+                                        else "published_mismatch")
 
 
 # ---------------------------------------------------------------------------
