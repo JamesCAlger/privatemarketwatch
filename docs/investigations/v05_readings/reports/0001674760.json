@@ -1,0 +1,3295 @@
+{
+ "cik": "0001674760",
+ "label": "svce",
+ "before": "spon3",
+ "shared_code": false,
+ "investigator_id": "silver-capital-fund-agent-2026-10-20",
+ "declared_changes": [
+  {
+   "column": "basis_spread",
+   "rows": 2,
+   "why": "Hollander 2023-06-30 printed 8.75"
+  },
+  {
+   "column": "canonical_name",
+   "rows": 161,
+   "why": "follows the changes above"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 54,
+   "why": "row corrections"
+  },
+  {
+   "column": "cost",
+   "rows": 5,
+   "why": "Diligent euro cost kept; KBP / PF Atlantic cost declared; Chase 2026-03-31 cost 0; Xactly 2023-09-30 sign"
+  },
+  {
+   "column": "cost_currency",
+   "rows": 1,
+   "why": "Diligent euro cost reported in dollars"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 5,
+   "why": "with cost"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "Recipe 2024-06-30 fixed coupon"
+  },
+  {
+   "column": "entity_id",
+   "rows": 154,
+   "why": "follows the changes above"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 582,
+   "why": "industry_from_identifier_re"
+  },
+  {
+   "column": "fair_value",
+   "rows": 1,
+   "why": "Diligent euro line no longer converted twice (foreign_unit_values reported_in_usd)"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 390,
+   "why": "with gics_sub_industry"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 419,
+   "why": "from the printed industry"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 54,
+   "why": "instrument from the staging regex (equity class, 'Common Stock - Class B')"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 19,
+   "why": "Chase fixed PIK coupons (pik_only_tag_reading); Streamland 2025-03-31 undrawn rate withdrawn"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 21,
+   "why": "whole-coupon PIK rows cash leg 0; Picture Head"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 17,
+   "why": "with interest_rate"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 3,
+   "why": "with interest_rate"
+  },
+  {
+   "column": "issuer_name",
+   "rows": 99,
+   "why": "staging regexes with the fund's own industry list (equity rows, truncated loan issuers) plus the Diligent correction"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 15,
+   "why": "2023-03-31 equity acquisition dates withdrawn"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 15,
+   "why": "with maturity_date"
+  },
+  {
+   "column": "nonaccrual_footnote",
+   "rows": 4,
+   "why": "8 rows set from the printed footnote"
+  },
+  {
+   "column": "nonaccrual_status",
+   "rows": 4,
+   "why": "with nonaccrual_footnote"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 1,
+   "why": "Diligent value"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 21,
+   "why": "whole-coupon PIK rows; Picture Head withdrawn"
+  },
+  {
+   "column": "position_id",
+   "rows": 39,
+   "why": "follows the new issuer names and the 2026-06-30 quarter"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 1,
+   "why": "Khoros loan: B2 column_remap pulled"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 5,
+   "why": "EUR par of the Diligent loan given an H.10 dollar reference"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 5,
+   "why": "with principal_amount_usd"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 5,
+   "why": "with principal_amount_usd"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 4,
+   "why": "PRIME rows read from the printed column"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 10,
+   "why": "PRIME rows; 2023-06-30 stale member codes"
+  },
+  {
+   "column": "shares_held",
+   "rows": 1,
+   "why": "Khoros loan: B2 column_remap pulled"
+  },
+  {
+   "column": "src_facts",
+   "rows": 4,
+   "why": "Diligent euro facts and declared costs"
+  },
+  {
+   "column": "src_transforms",
+   "rows": 16,
+   "why": "interest_rate:pik_only on Chase rows"
+  }
+ ],
+ "rows_added": 153,
+ "rows_removed": 0,
+ "fixes": [
+  {
+   "what": "Round 2 (svce): non-accrual status set from the printed footnote on 8 rows (6 printed with the filing's current non-accrual note and published unknown: 2023-06-30 Wine.com, LLC 960 line, 2024-12-31 Lithium, 2025-03-31 Chase 12,850 and three Wine.com, Inc. tranches; 2 published non-accrual without the marker: 2024-09-30 Wine.com, LLC 2,007 line, 2026-06-30 Chase new loan); split-digit rate tags corrected (CorePower 10.83, Picture Head 11.65, 2024-09-30); Recipe unsecured 2024-06-30 fixed coupon (spread and SOFR withdrawn); Vantage last-out 2023-09-30 PIK from member withdrawn; Recipe 2023-03-31 instrument 'Unsecured Debt' as printed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-070306",
+     "text": "Chase Industries, Inc. (dba Senneca Holdings) Building Products 10.00 % PIK 11/11/27 12,850 11,531 7,517 (6) (8) (9)"
+    },
+    {
+     "accession": "0000950170-25-070306",
+     "text": "(9) The investment is on non-accrual status"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "CorePower Yoga LLC Diversified Consumer Services 1 0.83 % S + 6.00 % 05/14/26 1,070 631 531"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Picture Head Midco LLC Entertainment 1 1.65 % S + 6.75 % 12/31/24 1,514 1,514 1,817"
+    },
+    {
+     "accession": "0000950170-24-096263",
+     "text": "Recipe Acquisition Corp. (dba Roland Foods) Food Products 14.25 % 14.25 % PIK 12/21/24 8,156 8,153 7,952"
+    },
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Unsecured Debt - 1.70 % Recipe Acquisition Corp. (dba Roland Foods) Food Products 13.25 % 13.25 % PIK 12/22/23 $ 7,175 $ 7,164 $ 6,978"
+    }
+   ]
+  },
+  {
+   "what": "Dash-valued positions (cost or par tagged, value printed '-') published at fair value 0, and cost 0 where the cost is printed '-': 121 contexts 2023-06-30 to 2026-06-30 (source_encodings.untagged_values, 147 values; dash_lines.py matched each to its printed line). Cost now equals the printed Total Investments cost in 2023-09-30 to 2026-06-30 (was 7.3M to 29.5M short).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Streamland Media Holdings LLC Entertainment 03/31/25 100,941 4,055 - (6) (8) (13)"
+    }
+   ]
+  },
+  {
+   "what": "Cost of KBP BRANDS and PF Atlantic first-lien lines at 2024-12-31 tagged on a second context of the line (members 'Interest Rate 1010.00%' / '1001.00%'), declared on the valued contexts (21,538 and 8,866); Chase 2026-03-31 cost printed '-' declared 0 (was null).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2024-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "KBP BRANDS, LLC Hotels, Restaurants & Leisure 10.10 % S + 5.50 % 05/26/27 21,752 21,538 21,535"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Chase Industries, Inc. (dba Senneca Holdings) Building Products 11/11/27 16,405 - 9,351 (6) (8) (13)"
+    }
+   ]
+  },
+  {
+   "what": "Issuer, instrument and industry read from the member with this fund's own printed industry column (staging hierarchy regexes; dispatch.industry_from_identifier_re): equity rows no longer publish the whole member as issuer (C206 x11, issuer_name_printed x12), loan issuers no longer cut at shared industry words ('Streamland', 'Marquis', 'Spectrum', 'Odyssey Logistics &'), 'PIK' and 'Reference Rate and Spread ...' issuers gone; extracted_industry on every non-cash row (industry_coverage x10).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 11/14/18 337,425 $ 2,900 $ - (6) (8) (13)"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Streamland Media Midco LLC Entertainment S + 6.50 % (Incl. 5.50 % PIK) 04/02/29 $ 11,402 $ 9,383 $ 4,589"
+    }
+   ]
+  },
+  {
+   "what": "Euro Diligent loan 2023-03-31 printed in dollars but converted again (+2.2M): foreign_unit_values reported_in_usd; principal_usd_reference fred_h10 gives the EUR par a dollar reference in 2023-03-31 to 2024-03-31 (FX01 x5, FX03, SRC_BDC03, blocking_fair_value_disagreement). The member of that context names CorePower Yoga; issuer corrected to Diligent Corporation (row correction).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Diligent Corporation Professional Services 9.15 % E + 6.25 % 08/04/25 EUR 23,416 26,918 25,332 (4) (5) (6)"
+    },
+    {
+     "accession": "0000950170-23-019632",
+     "text": "CorePower Yoga LLC Diversified Consumer Services 12.16 % L + 7.00 % (incl. 5.00 % PIK) 05/14/25 $ 16,876 $ 16,768 $ 13,796"
+    }
+   ]
+  },
+  {
+   "what": "Prime-based loans ('P + 4.50 %', 'P + 5.00 %') published PRIME (reference_rate_columns / codes plus 4 row corrections where the build had guessed LIBOR/SOFR); 2023-06-30 rows whose member carries stale codes or terms published as printed (Diligent x2 SOFR, Hollander S + 8.75, Truckstop x2 SOFR, VRC SOFR).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Vantage Mobility International, LLC Health Care Equipment & Supplies P + 5.00 % 03/21/24 19,768 13,617 -"
+    },
+    {
+     "accession": "0000950170-23-039880",
+     "text": "Hollander Intermediate LLC (dba Bedding Acquisition, LLC) Household Products 13.97 % S + 8.75 % 09/21/26 25,498 24,913 22,948"
+    }
+   ]
+  },
+  {
+   "what": "PIK: fixed 'Chase ... 10.00 % PIK' loans publish interest_rate 10 (pik_only_tag_reading coupon); whole-coupon PIK Wine.com tranches publish the printed coupon as pik_rate (20 row corrections, D-092 / D-218); Picture Head 2023-03-31 PIK from the member only withdrawn; Streamland 2025-03-31 undrawn rate from a neighbour's member withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-12-31",
+    "2025-03-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Chase Industries, Inc. (dba Senneca Holdings) Building Products 10.00 % PIK 05/11/27 12,850 11,531 17,347"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Picture Head Midco LLC Entertainment 11.69 % S + 6.75 % 08/31/23 28,667 28,592 28,165"
+    }
+   ]
+  },
+  {
+   "what": "Equity rows at 2023-03-31 published their acquisition date as maturity (the member says 'Maturity' for the printed Initial Acquisition Date column): maturity_date withdrawn on 15 rows. Xactly 2023-09-30 undrawn cost sign restored (-23; the quarter's cost now equals the filed 543,030).",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Investment (1) Industry Interest Rate Initial Acquisition Date (12) Par/Shares (3) Cost Fair Value Footnotes"
+    },
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Xactly Corporation IT Services S + 7.25 % 07/31/25 2,554 ( 23 ) ( 38 ) (5) (6) (7)"
+    }
+   ]
+  },
+  {
+   "what": "Fund level (new highlights wrapper): InvestmentIncomeNet is the printed total investment income (was read as net investment income in every quarter); NoninterestExpenseDirectorsFees / FinancingInterestExpense no longer read as interest expense; distribution per unit set to the printed quarter figure in 11 quarters (was 0.69, 0.59, 0.88, -1.70, 0.295, 1.13, 0.205, 4.24, 0 ...); income_yield_pct 2024-12-31 13.53 printed (was 1.94).",
+   "kind": "wrapper",
+   "quarters": [
+    "2022-03-31",
+    "2023-09-30",
+    "2024-12-31",
+    "2025-06-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total investment income $ 8,019 $ 18,096 Expenses: Interest and other debt expenses $ 2,385 $ 4,960"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Ratio of net investment income to average Members Capital 13.53 % 10.32 %"
+    }
+   ]
+  },
+  {
+   "what": "Promoted rules pulled: row_add add_2026q1_goldman_government_fund (a plug adding the money fund to reach the total with the money fund; the money fund is published natively as CASH) to agent_investigate_rules/_pulled_1674760_fundloop_2026-10-20/; B2 column_remap (Khoros, 2025-12-31) to agent_b2_corrections/0001674760/_pulled_1674760_fundloop_2026-10-20/: its issuer selector moved the first-lien loan's par 12,518,000 into shares (X11).",
+   "kind": "exclusion",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Khoros, LLC (fka Lithium Technologies, Inc.) Interactive Media & Services 10.00 % 10.00 % 05/23/30 12,518 12,093 12,048 (6) (8)"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671"
+    }
+   ]
+  }
+ ],
+ "total_exceptions": [],
+ "parked": [],
+ "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "SVC-R1",
+   "classification": "extraction_gap (acceptance-neutral; not a verification bug, no check changes)",
+   "resolution": "deferred by the orchestrator to the second rule batch (D-221)",
+   "authority": "orchestrator under D-207",
+   "original_request": {
+    "file": "pipeline/fund_highlights_wrapper.py",
+    "what": "Add interest_expense to FIGURE_FIELDS so a highlights wrapper can declare the printed quarter figure.",
+    "why": "Four quarters publish interest_expense different from the printed 'Interest and other debt expenses'."
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Expenses: Interest and other debt expenses $ 2,912 $ 2,842"
+    },
+    {
+     "accession": "0000950170-23-039880",
+     "text": "Expenses: Interest and other debt expenses $ 2,802 $ 2,869 $ 5,714 $ 5,711"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Expenses: Interest and other debt expenses $ 2,566 $ 9,848 $ 12,379"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Expenses: Interest and other debt expenses $ - $ 2,244 $ 1,708 $ 7,958"
+    }
+   ],
+   "next_action": "Declare 2022-12-31 (12,379 less nine months), 2023-03-31 2,912, 2023-06-30 2,802 and 2024-12-31 858 in the highlights wrapper once FIGURE_FIELDS carries interest_expense."
+  },
+  {
+   "request_id": "SVC-R2",
+   "classification": "extraction_gap (acceptance-neutral; not a verification bug, no check changes)",
+   "resolution": "deferred by the orchestrator to the second rule batch (D-221)",
+   "authority": "orchestrator under D-207",
+   "original_request": {
+    "file": "pipeline/unified_holdings.py",
+    "what": "Re-derive lien_position when a row correction changes instrument_description, or make lien_position correctable.",
+    "why": "Recipe 2023-03-31 (C_76ea9a2f-582f-4940-b0ee-4e6afc3dd371) publishes instrument 'Unsecured Debt' (corrected from the page) beside lien_position 'Second Lien' derived from the member '2nd Lien/Senior Secured Debt'."
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Unsecured Debt - 1.70 % Recipe Acquisition Corp. (dba Roland Foods) Food Products 13.25 % 13.25 % PIK 12/22/23 $ 7,175 $ 7,164 $ 6,978"
+    },
+    {
+     "accession": "sandbox svce",
+     "text": "published: instrument_description 'Unsecured Debt', lien_position 'Second Lien' (ROW for C_76ea9a2f-582f-4940-b0ee-4e6afc3dd371, principal 7,175,000, fair value 6,978,000)"
+    }
+   ],
+   "next_action": "Once the shared fix lands, rebuild: lien_position Unsecured for this row."
+  }
+ ],
+ "observations": [
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "what": "117 current-period lines printed with a dash for value (and 4 Vantage common lines 2023-06-30/09-30 with no value tag) were not published; 7.3M to 29.5M of cost left the book a quarter. Fixed with untagged_values.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A current-period context with a cost or par tag and no value, whose printed line shows '-' in the value column, is a position at 0.",
+   "quote": {
+    "accession": "0001193125-26-219865",
+    "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 fired on these quarters in the untouched build svca (and cost_conservation on 2023-09-30 to 2024-12-31).",
+    "reference": "oracle B01; conservation cost_conservation"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "Equity rows published the whole member as issuer; loan issuers were cut at shared industry words (Streamland, Marquis, Spectrum, Odyssey Logistics &); 'PIK' and a garbled 'Reference Rate and Spread ...' as issuer. Fixed with the fund's own industry list in the staging regexes.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Issuer names that end in a word of the shared industry list followed by more name words.",
+   "quote": {
+    "accession": "0001193125-26-344601",
+    "text": "Streamland Media Midco LLC Entertainment S + 6.50 % (Incl. 5.50 % PIK) 04/02/29 $ 11,402 $ 9,383 $ 4,589"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C206 and issuer_name_printed fired only on the equity rows in svca (whole member as issuer); no rule flagged the truncated loan issuers ('Streamland', 'Marquis', 'Spectrum', 'Odyssey Logistics &'), so the suggested check is needed for that shape.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "industry-printed-in-member-not-read",
+   "what": "extracted_industry was blank on every row; GICS came from names (Lithium Technologies as Diversified Metals & Mining, Splash Car Wash as REITs). Fixed with industry_from_identifier_re.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Funded rows with no extracted_industry where the member text holds a printed industry label.",
+   "quote": {
+    "accession": "0000950170-23-019632",
+    "text": "Lithium Technologies, Inc. Interactive Media & Services 12.67 % S + 8.00 % 01/03/24 58,727 58,598 56,965 (4) (5) (6)"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "industry_coverage fired in 10 quarters of svca.",
+    "reference": "identity industry_coverage"
+   }
+  },
+  {
+   "observation_key": "cost-tagged-in-foreign-unit-printed-in-dollars",
+   "what": "Diligent's euro loan 2023-03-31: value and cost printed in dollars but carry the EUR unit; the build converted the value again (+2.2M) and dropped the cost. Fixed with foreign_unit_values reported_in_usd.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 2.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A row whose value over its foreign-unit par is near the exchange rate is already in dollars.",
+   "quote": {
+    "accession": "0000950170-23-019632",
+    "text": "Diligent Corporation Professional Services 9.15 % E + 6.25 % 08/04/25 EUR 23,416 26,918 25,332 (4) (5) (6)"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "blocking_fair_value_disagreement, SRC_BDC03 and FX03 fired on the row in svca.",
+    "reference": "source_recon blocking_fair_value_disagreement; row_validation FX03"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "The 2023-03-31 context carrying Diligent's euro line is tagged with a member naming CorePower Yoga LLC. Fixed by a row correction.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 25.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A member whose industry and terms disagree with the printed line of that issuer but match another issuer's line.",
+   "quote": {
+    "accession": "0000950170-23-019632",
+    "text": "CorePower Yoga LLC Diversified Consumer Services 12.16 % L + 7.00 % (incl. 5.00 % PIK) 05/14/25 $ 16,876 $ 16,768 $ 13,796"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the member's issuer with the printed line carrying the same values.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed-from-date",
+   "what": "Prime loans ('P + ') published LIBOR or SOFR guessed from the date (7 rows). Fixed with reference_rate_codes and 4 row corrections.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2023-03-31",
+    "2023-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A row whose member or printed line names a code other than the published reference rate.",
+   "quote": {
+    "accession": "0000950170-23-060346",
+    "text": "Vantage Mobility International, LLC Health Care Equipment & Supplies P + 5.00 % 03/21/24 19,768 13,617 -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the seven P rows in svca; the guessed LIBOR / SOFR passed every check.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "2023-06-30 members carry the prior quarter's codes and terms (L + 5.00% for printed S + 8.75 %, L for S, E for S); Streamland 2025-03-31 undrawn member carries a neighbour's rate; Recipe unsecured 2024-06-30 member 'S + 14.25% PIK' published a SOFR spread 14.25, Floating, where the page prints a fixed '14.25 % 14.25 % PIK'; Vantage last-out 2023-09-30 member 'P + 5.00% PIK' published pik_rate 5.0 where the page prints 'P + 5.00 %'; Recipe 2023-03-31 member '2nd Lien/Senior Secured Debt' for a line printed under 'Unsecured Debt'. Fixed by row corrections, except one field: the Recipe 2023-03-31 instrument is corrected but its lien_position still publishes 'Second Lien' (7,175 par, 7.0M value): lien is derived before row corrections and is not correctable. Left until request SVC-R2 (deferred by the orchestrator to the second rule batch, D-221). Searched (row_audit.py in svcd and svce, 739 rows): every published rate, spread, PIK, reference code, maturity and printed section heading against the row's printed line, every row with pik_rate_source or reference_rate_source identifier_text (q_round2.sql), and every all-in rate below its own spread; after svce only the Chase 2026-06-30 PIK tag (rate-tag-differs-from-printed-line) and audit pairing misses remain.",
+   "field": "basis_spread",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2024-06-30",
+    "2025-03-31"
+   ],
+   "fair_value_m": 22.9,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "Compare the published spread and reference code with the printed line's terms for every row.",
+   "quote": {
+    "accession": "0000950170-24-096263",
+    "text": "Recipe Acquisition Corp. (dba Roland Foods) Food Products 14.25 % 14.25 % PIK 12/21/24 8,156 8,153 7,952"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in svca or svcd; found by row_audit.py and the independent review.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "what": "Whole-coupon PIK Wine.com tranches published the margin as pik_rate (12 or 15) instead of the printed coupon. Fixed by row corrections (D-092).",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 12.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A loan printed '<rate> % S + m % PIK' with no cash part whose pik_rate is not the printed rate.",
+   "quote": {
+    "accession": "0001193125-26-219865",
+    "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed treats the printed margin as the PIK figure; it fires on the corrected rows, not on the error.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "acquisition-date-in-member-read-as-maturity",
+   "what": "2023-03-31 equity members say 'Maturity <date>' for the printed Initial Acquisition Date column; 15 equity rows published it as maturity. Fixed by row corrections.",
+   "field": "maturity_date",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "fair_value_m": 12.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Equity rows with a maturity before their report date and no printed maturity column.",
+   "quote": {
+    "accession": "0000950170-23-019632",
+    "text": "Investment (1) Industry Interest Rate Initial Acquisition Date (12) Par/Shares (3) Cost Fair Value Footnotes"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired in svca (maturity_not_past looks at loans).",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "what": "Xactly 2023-09-30 undrawn line: cost printed '( 23 )' published +23 (46k cost residue). Fixed by a row correction.",
+   "field": "cost",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "An undrawn line with negative value whose published cost is positive while the printed cost is bracketed.",
+   "quote": {
+    "accession": "0000950170-23-060346",
+    "text": "Xactly Corporation IT Services S + 7.25 % 07/31/25 2,554 ( 23 ) ( 38 ) (5) (6) (7)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "cost_conservation tolerance absorbs 46k; no row rule compares the sign with the page.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "what": "net_investment_income held total investment income (InvestmentIncomeNet) in every quarter; interest expense held the directors' fee. Fixed in the highlights wrapper.",
+   "field": "net_investment_income",
+   "quarters": [
+    "2022-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "net_investment_income equal to a printed 'Total investment income' or above it while expenses are positive.",
+   "quote": {
+    "accession": "0001193125-26-219865",
+    "text": "Total investment income $ 8,019 $ 18,096 Expenses: Interest and other debt expenses $ 2,385 $ 4,960"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on this in the untouched build svca; a page comparison is needed.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "distribution-per-share-period-to-date-in-quarter",
+   "what": "distribution_per_share was wrong in 11 quarters (0.69 for 2.06, 0.59 for 2.11, 0.88 for 9.00, -1.70 for 0.98, 0.295 for 3.67, 0.205 for 1.75, 4.24 for 8.89; 0 or 1.13 where none was paid). Fixed by figure corrections; the shared derivation (fund_financials) is the cause.",
+   "field": "distribution_per_share",
+   "quarters": [
+    "2022-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": null,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Published quarterly distribution per unit against the printed 'Distributions per unit' first column (quarter, or year less nine months).",
+   "quote": {
+    "accession": "0001193125-26-344601",
+    "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "F16/F33 fired only where the wrong value was extreme; none compares with the page.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "income-yield-pct-difference-of-year-to-date-ratios",
+   "what": "income_yield_pct 2024-12-31 published 1.94 against the printed annual 13.53. Fixed by a figure correction.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": null,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "income_yield_pct against the printed ratio of net investment income for the period.",
+   "quote": {
+    "accession": "0000950170-25-032226",
+    "text": "Ratio of net investment income to average Members Capital 13.53 % 10.32 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the 2024-12-31 ratio in svca; F27 passed on the wrong value.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "promoted-row-add-rule-superseded",
+   "what": "Promoted row_add add_2026q1_goldman_government_fund added the money fund to reach a total that includes it; the build already publishes the money fund as CASH. Pulled.",
+   "field": "fair_value",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A promoted row_add whose rows equal a row the build already publishes, or whose residual target includes cash.",
+   "quote": {
+    "accession": "0001193125-26-219865",
+    "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No check reads promoted rules against the published rows.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "promoted-column-remap-selector-hits-another-row",
+   "what": "The promoted B2 column_remap for Khoros 2025-12-31 moved the first-lien loan's par into shares_held (selector by issuer name hit the loan, not the preferred). Pulled.",
+   "field": "principal_amount",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 12.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A loan row with shares_held and no principal.",
+   "quote": {
+    "accession": "0001193125-26-088636",
+    "text": "Khoros, LLC (fka Lithium Technologies, Inc.) Interactive Media & Services 10.00 % 10.00 % 05/23/30 12,518 12,093 12,048 (6) (8)"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "X11 (drawn loan with no principal) fired on this Khoros row at 2025-12-31 in svca.",
+    "reference": "row_validation X11"
+   }
+  },
+  {
+   "observation_key": "interest-and-debt-expense-concept-not-mapped",
+   "what": "interest_expense is still wrong in some quarters: blank at 2023-03-31 (printed 2,912) and 2023-06-30 (printed 2,802); 2024-12-31 641,500 against Q4 858 (year 2,566 less nine months 1,708) and 2022-12-31 3,094,750 (a quarter of the year 12,379). 2025-12-31 is right (2,725). The fix needs interest_expense in FIGURE_FIELDS (pipeline/fund_highlights_wrapper.py, shared code): request SVC-R1, deferred by the orchestrator to the second rule batch (D-221); left until then.",
+   "field": "interest_expense",
+   "quarters": [
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2024-12-31"
+   ],
+   "fair_value_m": null,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "interest_expense against the printed 'Interest and other debt expenses' for the quarter (10-K: year less nine months).",
+   "quote": {
+    "accession": "0000950170-23-019632",
+    "text": "Expenses: Interest and other debt expenses $ 2,912 $ 2,842"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares interest expense with the page; the four quarters passed every check in svca to svce. See request SVC-R1.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "money-market-fund-not-published",
+   "what": "The affiliated money market fund is printed in every quarter but published as CASH only from 2025-06-30 (2023-03-31 59,846 printed, not published). Left: cash rows are an owner choice; non-cash totals are unaffected.",
+   "field": "fair_value",
+   "quarters": [
+    "2023-03-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 59.8,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Printed money-market rows below Total Investments published in some quarters and not others for one fund.",
+   "quote": {
+    "accession": "0000950170-23-019632",
+    "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 59,845,837 $ 59,846 $ 59,846"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired in svca; A04 and the totals check pass on the ex-cash basis.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "gics-sub-industry-from-printed-industry-heading",
+   "what": "The shared map gives one sub-industry per printed industry: Beverages -> Soft Drinks & Non-alcoholic Beverages (Wine.com, a wine seller), Hotels, Restaurants & Leisure -> Hotels, Resorts & Cruise Lines (KBP BRANDS, PF Atlantic Holdco 2), Road & Rail -> Rail Transportation (Odyssey Logistics). Left: shared mapping.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 20.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Sub-industry choices for a printed industry group checked against the issuer's line of business on a sample.",
+   "quote": {
+    "accession": "0001193125-26-219865",
+    "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "Needs knowledge of the issuer beyond the page; no deterministic check.",
+    "reference": "none"
+   }
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "what": "KDOR and Recipe warrants are published EQUITY_COMMON (no warrant class). Left: shared classification.",
+   "field": "asset_category",
+   "quarters": [
+    "2023-03-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.1,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Rows printed under 'Warrants' with an asset class other than a warrant class.",
+   "quote": {
+    "accession": "0001193125-26-219865",
+    "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 2,974 $ 1,096 $ -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No warrant class exists in the shared classification (D-207 item 3); a rule on the printed section is needed.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "rate-tag-differs-from-printed-line",
+   "what": "Chase Industries' new 2026-06-30 loan is printed '10.00 % 10.00 %' (no PIK word) but tagged InvestmentInterestRatePaidInKind 10.00; published pik_rate 10. Left: the page does not settle it.",
+   "field": "pik_rate",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 17.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "A PIK tag on a row whose printed line carries no PIK word.",
+   "quote": {
+    "accession": "0001193125-26-344601",
+    "text": "Chase Industries, Inc. (dba Senneca Holdings) Building Products 10.00 % 10.00 % 11/12/29 17,531 17,029 17,006"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed only fires when the page prints a PIK figure.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "rate-tag-drops-leading-digit-printed-in-own-cell",
+   "what": "2024-09-30: CorePower Yoga's undrawn line and Picture Head's second line print the coupon split over two cells ('1 0.83 %', '1 1.65 %' = 10.83 and 11.65); the rate tags hold 0.0083 and 0.0165, published 0.83 and 1.65, below their own spreads 6.00 and 6.75. Fixed by row corrections. Searched every quarter for an all-in rate below its spread and for '<digit> <digit>.<dd> %' rate cells: these two only.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": 2.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "A floating loan whose published all-in rate is below its own published spread.",
+   "quote": {
+    "accession": "0000950170-24-125375",
+    "text": "CorePower Yoga LLC Diversified Consumer Services 1 0.83 % S + 6.00 % 05/14/26 1,070 631 531"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the two rows in svca to svcd; row_audit.py read 0.83 as printed until the rate-below-spread test was added.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "nonaccrual-footnote-printed-not-published",
+   "what": "Positions printed with the filing's current-period non-accrual footnote but published as not non-accrual: 2023-06-30 Wine.com, LLC 12.00 % PIK (960) line, 2024-12-31 Lithium Technologies, 2025-03-31 Chase 12,850 loan and three Wine.com, Inc. tranches (footnote (9) in that filing); and two published non-accrual without the marker (2024-09-30 Wine.com, LLC 2,007 line, 2026-06-30 Chase new 10.00 % loan). Fixed by eight nonaccrual_footnote row corrections. Searched (nonaccrual.py): every published row of every quarter against the first '(N) The investment is on non-accrual status' note of its filing (the note number changes: 9, 11, 12, 10, 9, 10, 11, 9); all matched rows agree after svce.",
+   "field": "nonaccrual_status",
+   "quarters": [
+    "2023-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 47.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Each row's printed footnote markers against the filing's current non-accrual note number.",
+   "quote": {
+    "accession": "0000950170-25-070306",
+    "text": "Chase Industries, Inc. (dba Senneca Holdings) Building Products 10.00 % PIK 11/11/27 12,850 11,531 7,517 (6) (8) (9)"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares printed footnote markers with nonaccrual_status; found by the independent review and nonaccrual.py.",
+    "reference": "suggested_check"
+   }
+  }
+ ],
+ "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_1a4c5f4f43b1",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-09-30|A04"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-09-30|A04"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over-included: rejected, non-cash fair value equals the filed investments figure to the thousand",
+    "money-market row double counted: rejected, one CASH row per quarter equal to the printed money fund line"
+   ],
+   "next_action": "Proposed as oracle-holdings-with-cash-rows-against-ex-cash-investments-total (PD-A04-1674760-1); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_804ac2e2223a",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-12-31|A04"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-12-31|A04"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over-included: rejected, non-cash fair value equals the filed investments figure to the thousand",
+    "money-market row double counted: rejected, one CASH row per quarter equal to the printed money fund line"
+   ],
+   "next_action": "Proposed as oracle-holdings-with-cash-rows-against-ex-cash-investments-total (PD-A04-1674760-1); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_ef52eb473619",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2026-03-31|A04"
+    ],
+    "reviewed_rows": [
+     "0001674760|2026-03-31|A04"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over-included: rejected, non-cash fair value equals the filed investments figure to the thousand",
+    "money-market row double counted: rejected, one CASH row per quarter equal to the printed money fund line"
+   ],
+   "next_action": "Proposed as oracle-holdings-with-cash-rows-against-ex-cash-investments-total (PD-A04-1674760-1); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_3d1073a7ef8b",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2026-06-30|A04"
+    ],
+    "reviewed_rows": [
+     "0001674760|2026-06-30|A04"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over-included: rejected, non-cash fair value equals the filed investments figure to the thousand",
+    "money-market row double counted: rejected, one CASH row per quarter equal to the printed money fund line"
+   ],
+   "next_action": "Proposed as oracle-holdings-with-cash-rows-against-ex-cash-investments-total (PD-A04-1674760-1); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_6f0830790581",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-019632/C_3af4e08d-1afe-4057-a439-a6fe0467f9d9",
+     "0000950170-23-019632/C_e185195b-801d-4bc9-a624-12c8a8657414",
+     "0000950170-23-019632/C_3ee8885e-5e5a-43b9-bfb5-14af299d8453",
+     "0000950170-23-019632/C_3f20642d-f544-4205-98aa-e7c9f9b0a6cd",
+     "0000950170-23-019632/C_67939ebf-b914-48c5-829f-564bb216f194",
+     "0000950170-23-019632/C_a2262a9d-a50b-4b0c-b788-8636b688ac27",
+     "0000950170-23-019632/C_e99a274f-f012-4163-b199-ec73e04baa4f",
+     "0000950170-23-019632/C_e35069b8-d270-45fb-a165-dfa673b692d8",
+     "0000950170-23-019632/C_09ddabb5-9cc6-4cd5-aee8-67a6cf070e51",
+     "0000950170-23-019632/C_9610be11-b645-4dc6-81ef-37c8ca6d377f",
+     "0000950170-23-019632/C_3a5afdf5-6933-4d41-be65-4fd0a516b503",
+     "0000950170-23-019632/C_67d4284b-d82d-4a3f-a14d-e64a48a15a2c",
+     "0000950170-23-019632/C_9edbd535-9b35-46c3-89f7-3736f188a04c",
+     "0000950170-23-019632/C_f97161dc-a28b-4fa4-b430-e3f3e843061e",
+     "0000950170-23-019632/C_6f9321d0-183e-42e5-8323-b742276b3163",
+     "0000950170-23-019632/C_546d6208-fc5e-471d-b323-a28326e231e7",
+     "0000950170-23-019632/C_c4b75a82-6d45-4b80-8d2a-604212e6911a",
+     "0000950170-23-019632/C_7510f5d0-310f-4c31-bcc2-a7c72092104d",
+     "0000950170-23-019632/C_98f8e79d-ee80-4dd3-a90c-ae93bc2c4d7d",
+     "0000950170-23-019632/C_a2de9b3b-f186-4090-8bc1-6767a7c0a775"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-019632/C_3af4e08d-1afe-4057-a439-a6fe0467f9d9",
+     "0000950170-23-019632/C_e185195b-801d-4bc9-a624-12c8a8657414",
+     "0000950170-23-019632/C_3ee8885e-5e5a-43b9-bfb5-14af299d8453",
+     "0000950170-23-019632/C_3f20642d-f544-4205-98aa-e7c9f9b0a6cd",
+     "0000950170-23-019632/C_67939ebf-b914-48c5-829f-564bb216f194",
+     "0000950170-23-019632/C_a2262a9d-a50b-4b0c-b788-8636b688ac27",
+     "0000950170-23-019632/C_e99a274f-f012-4163-b199-ec73e04baa4f",
+     "0000950170-23-019632/C_e35069b8-d270-45fb-a165-dfa673b692d8",
+     "0000950170-23-019632/C_09ddabb5-9cc6-4cd5-aee8-67a6cf070e51",
+     "0000950170-23-019632/C_9610be11-b645-4dc6-81ef-37c8ca6d377f",
+     "0000950170-23-019632/C_3a5afdf5-6933-4d41-be65-4fd0a516b503",
+     "0000950170-23-019632/C_67d4284b-d82d-4a3f-a14d-e64a48a15a2c",
+     "0000950170-23-019632/C_9edbd535-9b35-46c3-89f7-3736f188a04c",
+     "0000950170-23-019632/C_f97161dc-a28b-4fa4-b430-e3f3e843061e",
+     "0000950170-23-019632/C_6f9321d0-183e-42e5-8323-b742276b3163",
+     "0000950170-23-019632/C_546d6208-fc5e-471d-b323-a28326e231e7",
+     "0000950170-23-019632/C_c4b75a82-6d45-4b80-8d2a-604212e6911a",
+     "0000950170-23-019632/C_7510f5d0-310f-4c31-bcc2-a7c72092104d",
+     "0000950170-23-019632/C_98f8e79d-ee80-4dd3-a90c-ae93bc2c4d7d",
+     "0000950170-23-019632/C_a2de9b3b-f186-4090-8bc1-6767a7c0a775"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Diligent Corporation Professional Services 9.15 % E + 6.25 % 08/04/25 EUR 23,416 26,918 25,332"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "KBP BRANDS, LLC Hotels, Restaurants & Leisure 10.10 % S + 5.50 % 05/26/27 21,752 21,538 21,535"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "PF Atlantic Holdco 2, LLC Hotels, Restaurants & Leisure 10.01 % S + 5.50 % 11/12/27 8,955 8,866 8,865"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-contexts-without-value-carry-no-position-value (PD-B01-1674760-5); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_c1c2a34d1ab9",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-039880/C_31c76d63-85e0-45d2-ad0d-09e75db12e09",
+     "0000950170-23-039880/C_371e09d9-b259-4db1-8a2e-e99f27d5ffb7",
+     "0000950170-23-039880/C_97ad4d9c-7c11-416b-a143-23ae91e77128",
+     "0000950170-23-039880/C_5cbba1cf-6317-4c7c-a709-c463c89adc08",
+     "0000950170-23-039880/C_760b3f18-4db1-4d72-9cb7-09154ef62417",
+     "0000950170-23-039880/C_698f8e03-b185-46df-9e63-11617097532e",
+     "0000950170-23-039880/C_e2b0ecb6-516a-4190-adc4-ddc91e81d439",
+     "0000950170-23-039880/C_2da3b1b8-1e4c-4013-b4f8-cf7ed80474a9",
+     "0000950170-23-039880/C_eda32866-7745-4e8c-b7cd-75438bd27d62",
+     "0000950170-23-039880/C_eed5be88-bba3-44da-ba06-3c67792fbca7",
+     "0000950170-23-039880/C_de568091-2b3d-45be-9d69-0f080f9971f9",
+     "0000950170-23-039880/C_c6ffc083-e136-4121-ae34-92da0bcd29f1",
+     "0000950170-23-039880/C_23e641c4-38cd-4fc4-8537-23fca978dbc3",
+     "0000950170-23-039880/C_673c3482-60b9-4d64-82cf-7ba5ab7a48f5",
+     "0000950170-23-039880/C_cb2b941b-3f55-4076-9b22-57d8839f9036",
+     "0000950170-23-039880/C_0e5c9224-984c-4c6a-94e0-a3ad22f9c569",
+     "0000950170-23-039880/C_d7221129-69f0-451b-9c84-1836bb5bfa8f",
+     "0000950170-23-039880/C_27d49ec3-bd48-4a79-a6bb-23686446b8b0",
+     "0000950170-23-039880/C_7e5414c3-42bf-4e6b-becd-60d0a79803f9",
+     "0000950170-23-039880/C_4b145476-20fb-4089-8775-42eb50673ad2",
+     "0000950170-23-039880/C_2f367d48-1128-46f6-9cf4-6d20135a906c",
+     "0000950170-23-039880/C_81b25e89-b98c-4132-9692-187d5ba113dd",
+     "0000950170-23-039880/C_768275e9-fd5e-45fd-bf78-ebdf6fef3889"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-039880/C_31c76d63-85e0-45d2-ad0d-09e75db12e09",
+     "0000950170-23-039880/C_371e09d9-b259-4db1-8a2e-e99f27d5ffb7",
+     "0000950170-23-039880/C_97ad4d9c-7c11-416b-a143-23ae91e77128",
+     "0000950170-23-039880/C_5cbba1cf-6317-4c7c-a709-c463c89adc08",
+     "0000950170-23-039880/C_760b3f18-4db1-4d72-9cb7-09154ef62417",
+     "0000950170-23-039880/C_698f8e03-b185-46df-9e63-11617097532e",
+     "0000950170-23-039880/C_e2b0ecb6-516a-4190-adc4-ddc91e81d439",
+     "0000950170-23-039880/C_2da3b1b8-1e4c-4013-b4f8-cf7ed80474a9",
+     "0000950170-23-039880/C_eda32866-7745-4e8c-b7cd-75438bd27d62",
+     "0000950170-23-039880/C_eed5be88-bba3-44da-ba06-3c67792fbca7",
+     "0000950170-23-039880/C_de568091-2b3d-45be-9d69-0f080f9971f9",
+     "0000950170-23-039880/C_c6ffc083-e136-4121-ae34-92da0bcd29f1",
+     "0000950170-23-039880/C_23e641c4-38cd-4fc4-8537-23fca978dbc3",
+     "0000950170-23-039880/C_673c3482-60b9-4d64-82cf-7ba5ab7a48f5",
+     "0000950170-23-039880/C_cb2b941b-3f55-4076-9b22-57d8839f9036",
+     "0000950170-23-039880/C_0e5c9224-984c-4c6a-94e0-a3ad22f9c569",
+     "0000950170-23-039880/C_d7221129-69f0-451b-9c84-1836bb5bfa8f",
+     "0000950170-23-039880/C_27d49ec3-bd48-4a79-a6bb-23686446b8b0",
+     "0000950170-23-039880/C_7e5414c3-42bf-4e6b-becd-60d0a79803f9",
+     "0000950170-23-039880/C_4b145476-20fb-4089-8775-42eb50673ad2",
+     "0000950170-23-039880/C_2f367d48-1128-46f6-9cf4-6d20135a906c",
+     "0000950170-23-039880/C_81b25e89-b98c-4132-9692-187d5ba113dd",
+     "0000950170-23-039880/C_768275e9-fd5e-45fd-bf78-ebdf6fef3889"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Diligent Corporation Professional Services 9.15 % E + 6.25 % 08/04/25 EUR 23,416 26,918 25,332"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "KBP BRANDS, LLC Hotels, Restaurants & Leisure 10.10 % S + 5.50 % 05/26/27 21,752 21,538 21,535"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "PF Atlantic Holdco 2, LLC Hotels, Restaurants & Leisure 10.01 % S + 5.50 % 11/12/27 8,955 8,866 8,865"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-contexts-without-value-carry-no-position-value (PD-B01-1674760-5); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_adb19e642ba7",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-23-060346/C_3833e040-d107-40ee-b090-c046af990942",
+     "0000950170-23-060346/C_4c637082-c904-48bc-b51f-9fd0ee0a4617",
+     "0000950170-23-060346/C_60d99e86-5b18-44ad-aae3-cd1bdf41fd32",
+     "0000950170-23-060346/C_fa8ddf63-11ce-4980-9622-263ac94a8cd3",
+     "0000950170-23-060346/C_33e5e599-39db-4066-9263-01ca1a5353aa",
+     "0000950170-23-060346/C_9179d695-cf52-4de6-a515-8e38870de530",
+     "0000950170-23-060346/C_343a3c78-91b5-47e1-92fc-2c8e536fa349",
+     "0000950170-23-060346/C_d55079b4-47c0-4fd7-a89a-cf641aeab3d2",
+     "0000950170-23-060346/C_670ee7a9-7046-42c2-bb1c-26aad97b231b",
+     "0000950170-23-060346/C_72e2c4f7-9826-4f2a-a02f-e819c9b87490",
+     "0000950170-23-060346/C_03eb0449-12f5-4bf3-b680-169435cfdc8e",
+     "0000950170-23-060346/C_0803ff08-1bad-46c8-be48-c5695203e0ee",
+     "0000950170-23-060346/C_c98a40b1-4d0f-46d7-ab08-3d2e72763566",
+     "0000950170-23-060346/C_18d7de83-833b-49b9-ba8f-22e716bb1eac",
+     "0000950170-23-060346/C_32fd8b88-bbcb-48fe-b226-335a05a31464",
+     "0000950170-23-060346/C_17833fb0-95da-44db-8b6c-0ec7f47f236e",
+     "0000950170-23-060346/C_6cb0e2d8-52f9-4886-9a79-d7559981fd71",
+     "0000950170-23-060346/C_2446b350-5dd6-41b3-9f43-2dab0aff4e6c",
+     "0000950170-23-060346/C_99401f6b-1cec-47ae-b48f-caa752198229"
+    ],
+    "reviewed_rows": [
+     "0000950170-23-060346/C_3833e040-d107-40ee-b090-c046af990942",
+     "0000950170-23-060346/C_4c637082-c904-48bc-b51f-9fd0ee0a4617",
+     "0000950170-23-060346/C_60d99e86-5b18-44ad-aae3-cd1bdf41fd32",
+     "0000950170-23-060346/C_fa8ddf63-11ce-4980-9622-263ac94a8cd3",
+     "0000950170-23-060346/C_33e5e599-39db-4066-9263-01ca1a5353aa",
+     "0000950170-23-060346/C_9179d695-cf52-4de6-a515-8e38870de530",
+     "0000950170-23-060346/C_343a3c78-91b5-47e1-92fc-2c8e536fa349",
+     "0000950170-23-060346/C_d55079b4-47c0-4fd7-a89a-cf641aeab3d2",
+     "0000950170-23-060346/C_670ee7a9-7046-42c2-bb1c-26aad97b231b",
+     "0000950170-23-060346/C_72e2c4f7-9826-4f2a-a02f-e819c9b87490",
+     "0000950170-23-060346/C_03eb0449-12f5-4bf3-b680-169435cfdc8e",
+     "0000950170-23-060346/C_0803ff08-1bad-46c8-be48-c5695203e0ee",
+     "0000950170-23-060346/C_c98a40b1-4d0f-46d7-ab08-3d2e72763566",
+     "0000950170-23-060346/C_18d7de83-833b-49b9-ba8f-22e716bb1eac",
+     "0000950170-23-060346/C_32fd8b88-bbcb-48fe-b226-335a05a31464",
+     "0000950170-23-060346/C_17833fb0-95da-44db-8b6c-0ec7f47f236e",
+     "0000950170-23-060346/C_6cb0e2d8-52f9-4886-9a79-d7559981fd71",
+     "0000950170-23-060346/C_2446b350-5dd6-41b3-9f43-2dab0aff4e6c",
+     "0000950170-23-060346/C_99401f6b-1cec-47ae-b48f-caa752198229"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_7bf500bbfcc1",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-026149/C_5ce01843-dba0-447f-b7c5-c3675e3d93df",
+     "0000950170-24-026149/C_7642e673-fadc-4e98-84a7-507d72f86e3e",
+     "0000950170-24-026149/C_8582d178-9c93-4bb5-bcb5-c1faa08f375c",
+     "0000950170-24-026149/C_b5a2d025-e8a2-452a-9540-f332ceb22b1a",
+     "0000950170-24-026149/C_a8095f38-ffd0-4a19-9a5e-5e6fb638801d",
+     "0000950170-24-026149/C_d5d31a0b-d347-4024-a22f-5abaebb7b3d4",
+     "0000950170-24-026149/C_45edc210-b321-4ddf-8f28-f6a3538e68d8",
+     "0000950170-24-026149/C_a662b94c-b7c4-4384-a46d-ab32cb69dd3f",
+     "0000950170-24-026149/C_26a301d5-cc5e-46a7-a1fa-3a6adc7d30a0",
+     "0000950170-24-026149/C_8d71da8b-86e8-457d-999e-50e6efd2cf6e",
+     "0000950170-24-026149/C_af64e08d-bde5-413b-8798-f4a0eb1cb9ca",
+     "0000950170-24-026149/C_bd820d2c-fc33-4bdc-a58e-1c15784c81aa",
+     "0000950170-24-026149/C_3387ee91-868b-4fae-b668-d05ebc9ae0d3",
+     "0000950170-24-026149/C_bbc5d921-d913-4f14-9257-5b6269c0f302",
+     "0000950170-24-026149/C_1838f7bf-d1cd-4687-8301-d9e22fb7f24e",
+     "0000950170-24-026149/C_916cece5-9018-410a-9908-241a4c912248",
+     "0000950170-24-026149/C_b22559f4-b2fe-4d40-818d-ce5c3dede086",
+     "0000950170-24-026149/C_7ef92fc5-cfe9-45d0-8599-1060a6aaf67b",
+     "0000950170-24-026149/C_79fa3e26-2aa2-42b4-92d5-006b3bc2c052"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-026149/C_5ce01843-dba0-447f-b7c5-c3675e3d93df",
+     "0000950170-24-026149/C_7642e673-fadc-4e98-84a7-507d72f86e3e",
+     "0000950170-24-026149/C_8582d178-9c93-4bb5-bcb5-c1faa08f375c",
+     "0000950170-24-026149/C_b5a2d025-e8a2-452a-9540-f332ceb22b1a",
+     "0000950170-24-026149/C_a8095f38-ffd0-4a19-9a5e-5e6fb638801d",
+     "0000950170-24-026149/C_d5d31a0b-d347-4024-a22f-5abaebb7b3d4",
+     "0000950170-24-026149/C_45edc210-b321-4ddf-8f28-f6a3538e68d8",
+     "0000950170-24-026149/C_a662b94c-b7c4-4384-a46d-ab32cb69dd3f",
+     "0000950170-24-026149/C_26a301d5-cc5e-46a7-a1fa-3a6adc7d30a0",
+     "0000950170-24-026149/C_8d71da8b-86e8-457d-999e-50e6efd2cf6e",
+     "0000950170-24-026149/C_af64e08d-bde5-413b-8798-f4a0eb1cb9ca",
+     "0000950170-24-026149/C_bd820d2c-fc33-4bdc-a58e-1c15784c81aa",
+     "0000950170-24-026149/C_3387ee91-868b-4fae-b668-d05ebc9ae0d3",
+     "0000950170-24-026149/C_bbc5d921-d913-4f14-9257-5b6269c0f302",
+     "0000950170-24-026149/C_1838f7bf-d1cd-4687-8301-d9e22fb7f24e",
+     "0000950170-24-026149/C_916cece5-9018-410a-9908-241a4c912248",
+     "0000950170-24-026149/C_b22559f4-b2fe-4d40-818d-ce5c3dede086",
+     "0000950170-24-026149/C_7ef92fc5-cfe9-45d0-8599-1060a6aaf67b",
+     "0000950170-24-026149/C_79fa3e26-2aa2-42b4-92d5-006b3bc2c052"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_39042012c94e",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-056919/C_d6789d4b-63ff-40a0-9c5c-aed023062f35",
+     "0000950170-24-056919/C_dabff6ce-30bf-463d-82bd-3ed09a7f6b76",
+     "0000950170-24-056919/C_e264ac91-4fa2-42ad-b101-d7835fed6e31",
+     "0000950170-24-056919/C_811b1489-efcd-4d3b-a867-171102eac3e4",
+     "0000950170-24-056919/C_ac0caaa3-4594-4311-99b0-b5483c3cf413",
+     "0000950170-24-056919/C_606ad29f-7741-467a-aa44-cca14d1b1e66",
+     "0000950170-24-056919/C_d82826c9-59e1-4695-9632-0f8dad619c8a",
+     "0000950170-24-056919/C_6a9c595c-4008-4cd2-8391-0e247a3f3da9",
+     "0000950170-24-056919/C_5fbd9e1b-69a8-42bf-9422-cf8113432d75",
+     "0000950170-24-056919/C_2ed97b9e-9ab8-4568-9668-d65cb42336f9",
+     "0000950170-24-056919/C_22862645-93bb-431a-a6b5-abbe657be6a0",
+     "0000950170-24-056919/C_facd7334-5f8b-432a-906b-36292d4f5dc5",
+     "0000950170-24-056919/C_3e16ab48-03c8-4f11-a948-79aa74ec7bf4",
+     "0000950170-24-056919/C_afbd8a70-915a-4325-a5e9-44215cff8d75"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-056919/C_d6789d4b-63ff-40a0-9c5c-aed023062f35",
+     "0000950170-24-056919/C_dabff6ce-30bf-463d-82bd-3ed09a7f6b76",
+     "0000950170-24-056919/C_e264ac91-4fa2-42ad-b101-d7835fed6e31",
+     "0000950170-24-056919/C_811b1489-efcd-4d3b-a867-171102eac3e4",
+     "0000950170-24-056919/C_ac0caaa3-4594-4311-99b0-b5483c3cf413",
+     "0000950170-24-056919/C_606ad29f-7741-467a-aa44-cca14d1b1e66",
+     "0000950170-24-056919/C_d82826c9-59e1-4695-9632-0f8dad619c8a",
+     "0000950170-24-056919/C_6a9c595c-4008-4cd2-8391-0e247a3f3da9",
+     "0000950170-24-056919/C_5fbd9e1b-69a8-42bf-9422-cf8113432d75",
+     "0000950170-24-056919/C_2ed97b9e-9ab8-4568-9668-d65cb42336f9",
+     "0000950170-24-056919/C_22862645-93bb-431a-a6b5-abbe657be6a0",
+     "0000950170-24-056919/C_facd7334-5f8b-432a-906b-36292d4f5dc5",
+     "0000950170-24-056919/C_3e16ab48-03c8-4f11-a948-79aa74ec7bf4",
+     "0000950170-24-056919/C_afbd8a70-915a-4325-a5e9-44215cff8d75"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_b607c384f4da",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096263/C_6e9f0c6c-5c4e-4c17-b820-05d5de9cd744",
+     "0000950170-24-096263/C_b7f6312a-a11b-472b-be9c-7b8d072da563",
+     "0000950170-24-096263/C_bf3d0466-e204-4071-9394-0ea5d3617a62",
+     "0000950170-24-096263/C_336b005b-1c00-46f6-aa3d-4dd523b6e98a",
+     "0000950170-24-096263/C_fa8480cf-3eb2-4e2b-a007-38a71ad59438",
+     "0000950170-24-096263/C_6024de82-4515-49f6-a1b2-b4914975c0c4",
+     "0000950170-24-096263/C_a8fdaf91-a2ac-46a2-92d5-a5c1d82e8181",
+     "0000950170-24-096263/C_5bf4db7c-8cd6-43c8-a14d-baf61cfda5e3",
+     "0000950170-24-096263/C_b5bcf47b-5f31-4546-b800-2811b80028d0",
+     "0000950170-24-096263/C_eb667e85-861e-4cfd-9f25-54903f40c7ce",
+     "0000950170-24-096263/C_8d53c8c1-dbf4-4268-badd-d9fdc90791d2",
+     "0000950170-24-096263/C_0f560c91-31ee-4755-b5d4-0ce8dbb86d0a",
+     "0000950170-24-096263/C_77396f58-2196-44f9-b840-dfb79a7cb144",
+     "0000950170-24-096263/C_0f525515-0165-4baf-a13f-c1b253963299"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096263/C_6e9f0c6c-5c4e-4c17-b820-05d5de9cd744",
+     "0000950170-24-096263/C_b7f6312a-a11b-472b-be9c-7b8d072da563",
+     "0000950170-24-096263/C_bf3d0466-e204-4071-9394-0ea5d3617a62",
+     "0000950170-24-096263/C_336b005b-1c00-46f6-aa3d-4dd523b6e98a",
+     "0000950170-24-096263/C_fa8480cf-3eb2-4e2b-a007-38a71ad59438",
+     "0000950170-24-096263/C_6024de82-4515-49f6-a1b2-b4914975c0c4",
+     "0000950170-24-096263/C_a8fdaf91-a2ac-46a2-92d5-a5c1d82e8181",
+     "0000950170-24-096263/C_5bf4db7c-8cd6-43c8-a14d-baf61cfda5e3",
+     "0000950170-24-096263/C_b5bcf47b-5f31-4546-b800-2811b80028d0",
+     "0000950170-24-096263/C_eb667e85-861e-4cfd-9f25-54903f40c7ce",
+     "0000950170-24-096263/C_8d53c8c1-dbf4-4268-badd-d9fdc90791d2",
+     "0000950170-24-096263/C_0f560c91-31ee-4755-b5d4-0ce8dbb86d0a",
+     "0000950170-24-096263/C_77396f58-2196-44f9-b840-dfb79a7cb144",
+     "0000950170-24-096263/C_0f525515-0165-4baf-a13f-c1b253963299"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_75dc33dd9f5e",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-125375/C_5b83fa42-defe-4ffc-8cbc-e821491e28a9",
+     "0000950170-24-125375/C_bdea06c2-7ec7-4284-ab51-c4063ac86c1c",
+     "0000950170-24-125375/C_69bebc5d-1bd5-4f3c-ac58-b6567271c52f",
+     "0000950170-24-125375/C_74a55901-8ef8-4f27-a58c-07dda29fc1fb",
+     "0000950170-24-125375/C_c7a34d4f-ba9d-4998-b1fb-3eb10863f1a2",
+     "0000950170-24-125375/C_a7bdc66c-2180-49ef-991e-dfeaa4a72d08",
+     "0000950170-24-125375/C_3aa1c762-5771-4991-b961-da400a4a0bcf",
+     "0000950170-24-125375/C_3130e849-310d-43a1-8fcb-1a19aa33b84f",
+     "0000950170-24-125375/C_1d8b8aff-b2f6-4ca6-8624-e9138f0066b3",
+     "0000950170-24-125375/C_5bd11b5e-eac3-4b19-9dfd-6edfee88a2b8",
+     "0000950170-24-125375/C_d1354a86-ca54-4c04-b92b-fefad9fb01a2",
+     "0000950170-24-125375/C_0ffc8521-fa6f-4ccf-8b56-2e11a56bf6a0",
+     "0000950170-24-125375/C_244c4248-fc38-4cb7-8f41-ccfd32c89adb",
+     "0000950170-24-125375/C_609fcf99-cae5-45e8-a10c-c6e657cd5835"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-125375/C_5b83fa42-defe-4ffc-8cbc-e821491e28a9",
+     "0000950170-24-125375/C_bdea06c2-7ec7-4284-ab51-c4063ac86c1c",
+     "0000950170-24-125375/C_69bebc5d-1bd5-4f3c-ac58-b6567271c52f",
+     "0000950170-24-125375/C_74a55901-8ef8-4f27-a58c-07dda29fc1fb",
+     "0000950170-24-125375/C_c7a34d4f-ba9d-4998-b1fb-3eb10863f1a2",
+     "0000950170-24-125375/C_a7bdc66c-2180-49ef-991e-dfeaa4a72d08",
+     "0000950170-24-125375/C_3aa1c762-5771-4991-b961-da400a4a0bcf",
+     "0000950170-24-125375/C_3130e849-310d-43a1-8fcb-1a19aa33b84f",
+     "0000950170-24-125375/C_1d8b8aff-b2f6-4ca6-8624-e9138f0066b3",
+     "0000950170-24-125375/C_5bd11b5e-eac3-4b19-9dfd-6edfee88a2b8",
+     "0000950170-24-125375/C_d1354a86-ca54-4c04-b92b-fefad9fb01a2",
+     "0000950170-24-125375/C_0ffc8521-fa6f-4ccf-8b56-2e11a56bf6a0",
+     "0000950170-24-125375/C_244c4248-fc38-4cb7-8f41-ccfd32c89adb",
+     "0000950170-24-125375/C_609fcf99-cae5-45e8-a10c-c6e657cd5835"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_8866a1bfc481",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-032226/C_7c8bbec8-cab3-4a8a-b3bc-e8e7f46a0549",
+     "0000950170-25-032226/C_72f9a55e-50a4-42f0-a05c-4e01c8b8ceb2",
+     "0000950170-25-032226/C_76121877-c98d-4bc6-b5dd-b34a302a9f15",
+     "0000950170-25-032226/C_c7d1c674-e8dd-43c2-8277-87ba56594032",
+     "0000950170-25-032226/C_2d90b249-7811-482c-be57-c4f78c510d82",
+     "0000950170-25-032226/C_4a11d7eb-2d90-4169-b896-9ce4b6065946",
+     "0000950170-25-032226/C_f7ba0358-8efd-4aa1-8f58-a75674b811c4",
+     "0000950170-25-032226/C_53ae0618-f7f3-4681-b536-70308796129e",
+     "0000950170-25-032226/C_d90c8b3b-0e24-423b-a231-ecfa6f7c8952",
+     "0000950170-25-032226/C_4dfa9669-3557-4dd5-9d97-d30b7b323951",
+     "0000950170-25-032226/C_5edb8825-3a64-4abc-8dbd-204615e9dbed",
+     "0000950170-25-032226/C_5da99793-2336-4e55-9c04-49127369f090",
+     "0000950170-25-032226/C_a8e5d9bd-d90e-4993-9b57-5a9dd3b574f4",
+     "0000950170-25-032226/C_c64b661e-5e9a-42dd-97fa-7786f40e452c",
+     "0000950170-25-032226/C_6844fd35-8767-4d33-bdbe-f18be1e24d33",
+     "0000950170-25-032226/C_b0a77c8a-71db-47cf-aee7-bfc7ae12b889"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-032226/C_7c8bbec8-cab3-4a8a-b3bc-e8e7f46a0549",
+     "0000950170-25-032226/C_72f9a55e-50a4-42f0-a05c-4e01c8b8ceb2",
+     "0000950170-25-032226/C_76121877-c98d-4bc6-b5dd-b34a302a9f15",
+     "0000950170-25-032226/C_c7d1c674-e8dd-43c2-8277-87ba56594032",
+     "0000950170-25-032226/C_2d90b249-7811-482c-be57-c4f78c510d82",
+     "0000950170-25-032226/C_4a11d7eb-2d90-4169-b896-9ce4b6065946",
+     "0000950170-25-032226/C_f7ba0358-8efd-4aa1-8f58-a75674b811c4",
+     "0000950170-25-032226/C_53ae0618-f7f3-4681-b536-70308796129e",
+     "0000950170-25-032226/C_d90c8b3b-0e24-423b-a231-ecfa6f7c8952",
+     "0000950170-25-032226/C_4dfa9669-3557-4dd5-9d97-d30b7b323951",
+     "0000950170-25-032226/C_5edb8825-3a64-4abc-8dbd-204615e9dbed",
+     "0000950170-25-032226/C_5da99793-2336-4e55-9c04-49127369f090",
+     "0000950170-25-032226/C_a8e5d9bd-d90e-4993-9b57-5a9dd3b574f4",
+     "0000950170-25-032226/C_c64b661e-5e9a-42dd-97fa-7786f40e452c",
+     "0000950170-25-032226/C_6844fd35-8767-4d33-bdbe-f18be1e24d33",
+     "0000950170-25-032226/C_b0a77c8a-71db-47cf-aee7-bfc7ae12b889"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Diligent Corporation Professional Services 9.15 % E + 6.25 % 08/04/25 EUR 23,416 26,918 25,332"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "KBP BRANDS, LLC Hotels, Restaurants & Leisure 10.10 % S + 5.50 % 05/26/27 21,752 21,538 21,535"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "PF Atlantic Holdco 2, LLC Hotels, Restaurants & Leisure 10.01 % S + 5.50 % 11/12/27 8,955 8,866 8,865"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-contexts-without-value-carry-no-position-value (PD-B01-1674760-5); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_90e722d67aab",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-070306/C_d4c0b15d-6825-4f23-944e-0a42ca0b4313",
+     "0000950170-25-070306/C_c54869be-b659-4a33-af71-a361915b400f",
+     "0000950170-25-070306/C_38bc5e27-ef95-4d5c-9182-615dfab5233d",
+     "0000950170-25-070306/C_1f2f01f7-8500-4f45-9de5-f2e4a151084e",
+     "0000950170-25-070306/C_4d4dd7fa-1de3-46b6-ae4b-8ed4a5d76146",
+     "0000950170-25-070306/C_5af797ad-8036-4299-990b-a27fa4575d68",
+     "0000950170-25-070306/C_8cf17805-439f-49c7-b3ab-6105fdb49cba",
+     "0000950170-25-070306/C_e1f45eba-d397-45fa-8be0-3f045251a0e9",
+     "0000950170-25-070306/C_0adcfa1c-d6bc-477e-a725-1f8b692a9245",
+     "0000950170-25-070306/C_9aaeb7e8-f0e6-41be-a532-34d076472c85",
+     "0000950170-25-070306/C_0f68e754-9d3b-46bc-8c65-3823c96dc03d",
+     "0000950170-25-070306/C_69b024c9-d103-48ee-b55d-0d9f92315c6f",
+     "0000950170-25-070306/C_d272b219-2b9f-4e50-a061-6b3212eb18f3",
+     "0000950170-25-070306/C_eb6b7359-e018-4fbf-ab23-5437e63bfd87",
+     "0000950170-25-070306/C_d9d722fb-17ef-4bae-a1cb-6ef8cb12c047",
+     "0000950170-25-070306/C_854575f9-f2d9-4bdb-9261-b5fdc912d7ed"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-070306/C_d4c0b15d-6825-4f23-944e-0a42ca0b4313",
+     "0000950170-25-070306/C_c54869be-b659-4a33-af71-a361915b400f",
+     "0000950170-25-070306/C_38bc5e27-ef95-4d5c-9182-615dfab5233d",
+     "0000950170-25-070306/C_1f2f01f7-8500-4f45-9de5-f2e4a151084e",
+     "0000950170-25-070306/C_4d4dd7fa-1de3-46b6-ae4b-8ed4a5d76146",
+     "0000950170-25-070306/C_5af797ad-8036-4299-990b-a27fa4575d68",
+     "0000950170-25-070306/C_8cf17805-439f-49c7-b3ab-6105fdb49cba",
+     "0000950170-25-070306/C_e1f45eba-d397-45fa-8be0-3f045251a0e9",
+     "0000950170-25-070306/C_0adcfa1c-d6bc-477e-a725-1f8b692a9245",
+     "0000950170-25-070306/C_9aaeb7e8-f0e6-41be-a532-34d076472c85",
+     "0000950170-25-070306/C_0f68e754-9d3b-46bc-8c65-3823c96dc03d",
+     "0000950170-25-070306/C_69b024c9-d103-48ee-b55d-0d9f92315c6f",
+     "0000950170-25-070306/C_d272b219-2b9f-4e50-a061-6b3212eb18f3",
+     "0000950170-25-070306/C_eb6b7359-e018-4fbf-ab23-5437e63bfd87",
+     "0000950170-25-070306/C_d9d722fb-17ef-4bae-a1cb-6ef8cb12c047",
+     "0000950170-25-070306/C_854575f9-f2d9-4bdb-9261-b5fdc912d7ed"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_b2502b6d7e04",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107354/C_4da2ca69-d8a4-4c1f-8f67-1d11e933ad48",
+     "0000950170-25-107354/C_392ce94f-e873-4b53-b3f7-a6902380f32f",
+     "0000950170-25-107354/C_8fd3a111-beb8-493e-b1ca-27fa99cd869d",
+     "0000950170-25-107354/C_737a0741-f7e0-4d63-b135-e63dbe2fd57e",
+     "0000950170-25-107354/C_194bca8a-b6bc-4306-bf9f-085656187d77",
+     "0000950170-25-107354/C_1fbdfd73-54ba-401f-8c2e-5840b9781f0f",
+     "0000950170-25-107354/C_0aa17eeb-8381-4d54-a59d-e6ac8e83d4d3",
+     "0000950170-25-107354/C_db3c2bfa-d97b-4ad8-9d7a-98e0749588f0",
+     "0000950170-25-107354/C_87182eb8-f13a-4d5b-b0ab-748d90602200",
+     "0000950170-25-107354/C_acdb2431-caa1-4bb8-9d4d-053d9cfadc3f",
+     "0000950170-25-107354/C_00bc4bbb-5d80-4280-a12d-56afb5612f7a",
+     "0000950170-25-107354/C_a8e0364a-786f-4384-b742-1e82635d510f",
+     "0000950170-25-107354/C_ca290f31-ca7e-4ffc-b28c-27b74851be6a",
+     "0000950170-25-107354/C_b0115c49-bde3-44d9-8668-fe3bfc5fd9ea",
+     "0000950170-25-107354/C_1b8f77f2-3919-49c8-9e49-c5b67b4b3444",
+     "0000950170-25-107354/C_8ee19adb-3a81-46cc-9c62-9d79a64e2abd"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107354/C_4da2ca69-d8a4-4c1f-8f67-1d11e933ad48",
+     "0000950170-25-107354/C_392ce94f-e873-4b53-b3f7-a6902380f32f",
+     "0000950170-25-107354/C_8fd3a111-beb8-493e-b1ca-27fa99cd869d",
+     "0000950170-25-107354/C_737a0741-f7e0-4d63-b135-e63dbe2fd57e",
+     "0000950170-25-107354/C_194bca8a-b6bc-4306-bf9f-085656187d77",
+     "0000950170-25-107354/C_1fbdfd73-54ba-401f-8c2e-5840b9781f0f",
+     "0000950170-25-107354/C_0aa17eeb-8381-4d54-a59d-e6ac8e83d4d3",
+     "0000950170-25-107354/C_db3c2bfa-d97b-4ad8-9d7a-98e0749588f0",
+     "0000950170-25-107354/C_87182eb8-f13a-4d5b-b0ab-748d90602200",
+     "0000950170-25-107354/C_acdb2431-caa1-4bb8-9d4d-053d9cfadc3f",
+     "0000950170-25-107354/C_00bc4bbb-5d80-4280-a12d-56afb5612f7a",
+     "0000950170-25-107354/C_a8e0364a-786f-4384-b742-1e82635d510f",
+     "0000950170-25-107354/C_ca290f31-ca7e-4ffc-b28c-27b74851be6a",
+     "0000950170-25-107354/C_b0115c49-bde3-44d9-8668-fe3bfc5fd9ea",
+     "0000950170-25-107354/C_1b8f77f2-3919-49c8-9e49-c5b67b4b3444",
+     "0000950170-25-107354/C_8ee19adb-3a81-46cc-9c62-9d79a64e2abd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_26ce1891a9b8",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-277520/C_eb3ecc5e-0aec-4fa2-a64a-e06785c916e0",
+     "0001193125-25-277520/C_cd02cfbc-988f-43d2-8938-701f5c3d5757",
+     "0001193125-25-277520/C_0288e8f4-dba7-4093-923b-864842970813",
+     "0001193125-25-277520/C_22155b55-fa7c-4cde-a54d-5995e3f9e350",
+     "0001193125-25-277520/C_6f6cfb66-6882-487e-8efe-759853168f0e",
+     "0001193125-25-277520/C_3601d635-ee2e-4730-9f80-5bd12f475d78",
+     "0001193125-25-277520/C_ec195ca7-e577-4c0d-8338-63165126b049",
+     "0001193125-25-277520/C_8020b2de-5263-4b1d-87b5-2dd82b7c8fe2",
+     "0001193125-25-277520/C_0723236f-00c0-4140-8c07-5c1226e18453",
+     "0001193125-25-277520/C_f7c5603e-bdad-44b8-b988-8a81adb13eae",
+     "0001193125-25-277520/C_6f2be6b1-a29b-4484-9c1a-f02225c4b577",
+     "0001193125-25-277520/C_986915ab-4fed-41d4-914c-24743dcb03b3",
+     "0001193125-25-277520/C_c989d502-9667-4a8e-b5fd-6cf5eab45347",
+     "0001193125-25-277520/C_4c2d9b75-6840-40aa-a3e6-fb918eb34f45",
+     "0001193125-25-277520/C_4f3f86b5-2a3a-4314-9363-acfe69b63795",
+     "0001193125-25-277520/C_7ad690eb-5930-4b5a-b48f-d4788b6adaf7"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-277520/C_eb3ecc5e-0aec-4fa2-a64a-e06785c916e0",
+     "0001193125-25-277520/C_cd02cfbc-988f-43d2-8938-701f5c3d5757",
+     "0001193125-25-277520/C_0288e8f4-dba7-4093-923b-864842970813",
+     "0001193125-25-277520/C_22155b55-fa7c-4cde-a54d-5995e3f9e350",
+     "0001193125-25-277520/C_6f6cfb66-6882-487e-8efe-759853168f0e",
+     "0001193125-25-277520/C_3601d635-ee2e-4730-9f80-5bd12f475d78",
+     "0001193125-25-277520/C_ec195ca7-e577-4c0d-8338-63165126b049",
+     "0001193125-25-277520/C_8020b2de-5263-4b1d-87b5-2dd82b7c8fe2",
+     "0001193125-25-277520/C_0723236f-00c0-4140-8c07-5c1226e18453",
+     "0001193125-25-277520/C_f7c5603e-bdad-44b8-b988-8a81adb13eae",
+     "0001193125-25-277520/C_6f2be6b1-a29b-4484-9c1a-f02225c4b577",
+     "0001193125-25-277520/C_986915ab-4fed-41d4-914c-24743dcb03b3",
+     "0001193125-25-277520/C_c989d502-9667-4a8e-b5fd-6cf5eab45347",
+     "0001193125-25-277520/C_4c2d9b75-6840-40aa-a3e6-fb918eb34f45",
+     "0001193125-25-277520/C_4f3f86b5-2a3a-4314-9363-acfe69b63795",
+     "0001193125-25-277520/C_7ad690eb-5930-4b5a-b48f-d4788b6adaf7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_cdf010931814",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-219865/C_d2c96bb2-d566-4b44-bfa6-24a84b9f97af",
+     "0001193125-26-219865/C_15ab1138-6ac0-4bc6-8e1d-e47911e9b9a3",
+     "0001193125-26-219865/C_08a78b88-fffd-47ae-97c2-425104fbb48d",
+     "0001193125-26-219865/C_ed2dcb14-4167-4b3e-b64f-c1db09a8e394",
+     "0001193125-26-219865/C_b74b67b4-2417-4f03-9be4-f9c0814be6a6",
+     "0001193125-26-219865/C_5cf9b78f-3b94-4018-9503-9e5bd6b77170",
+     "0001193125-26-219865/C_a16e6c95-12af-446d-8c0f-360bc680e529",
+     "0001193125-26-219865/C_2c8d9159-13af-43f4-849c-544324ce0a44",
+     "0001193125-26-219865/C_8f36b336-5a0b-4c8f-9bb9-7ec64edd35a4",
+     "0001193125-26-219865/C_1c84a818-f084-47a1-aa3e-2e9ed179110b",
+     "0001193125-26-219865/C_13b95c2f-0717-4cca-8f1b-cb0fc6889316",
+     "0001193125-26-219865/C_75999421-90ff-4749-a620-aaf80822558f",
+     "0001193125-26-219865/C_0bce75ba-d0a0-44ca-b952-8b75789e3444",
+     "0001193125-26-219865/C_e5c39536-a04e-4eb6-b341-6a0e467b835c",
+     "0001193125-26-219865/C_97016fda-a365-442f-af48-60dba32ac73b",
+     "0001193125-26-219865/C_7363f12c-930f-4423-882f-04108938dd61",
+     "0001193125-26-219865/C_3956b35e-1705-4c79-bd0d-008e1f1776df",
+     "0001193125-26-219865/C_ef511c62-fb2b-4ded-965f-d002edb85e8c",
+     "0001193125-26-219865/C_39863bc4-bcac-46e4-9b51-d2e7aa9df766"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-219865/C_d2c96bb2-d566-4b44-bfa6-24a84b9f97af",
+     "0001193125-26-219865/C_15ab1138-6ac0-4bc6-8e1d-e47911e9b9a3",
+     "0001193125-26-219865/C_08a78b88-fffd-47ae-97c2-425104fbb48d",
+     "0001193125-26-219865/C_ed2dcb14-4167-4b3e-b64f-c1db09a8e394",
+     "0001193125-26-219865/C_b74b67b4-2417-4f03-9be4-f9c0814be6a6",
+     "0001193125-26-219865/C_5cf9b78f-3b94-4018-9503-9e5bd6b77170",
+     "0001193125-26-219865/C_a16e6c95-12af-446d-8c0f-360bc680e529",
+     "0001193125-26-219865/C_2c8d9159-13af-43f4-849c-544324ce0a44",
+     "0001193125-26-219865/C_8f36b336-5a0b-4c8f-9bb9-7ec64edd35a4",
+     "0001193125-26-219865/C_1c84a818-f084-47a1-aa3e-2e9ed179110b",
+     "0001193125-26-219865/C_13b95c2f-0717-4cca-8f1b-cb0fc6889316",
+     "0001193125-26-219865/C_75999421-90ff-4749-a620-aaf80822558f",
+     "0001193125-26-219865/C_0bce75ba-d0a0-44ca-b952-8b75789e3444",
+     "0001193125-26-219865/C_e5c39536-a04e-4eb6-b341-6a0e467b835c",
+     "0001193125-26-219865/C_97016fda-a365-442f-af48-60dba32ac73b",
+     "0001193125-26-219865/C_7363f12c-930f-4423-882f-04108938dd61",
+     "0001193125-26-219865/C_3956b35e-1705-4c79-bd0d-008e1f1776df",
+     "0001193125-26-219865/C_ef511c62-fb2b-4ded-965f-d002edb85e8c",
+     "0001193125-26-219865/C_39863bc4-bcac-46e4-9b51-d2e7aa9df766"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_09a88ddfb1d7",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-344601/C_264e3039-73ba-45a3-a5f8-d23a4c1a1a71",
+     "0001193125-26-344601/C_7f4110f8-2d5d-41a3-8307-ea4cf9b591e5",
+     "0001193125-26-344601/C_92fa55af-197d-4933-a2fb-522880ae10c1",
+     "0001193125-26-344601/C_ab5504b3-1ecf-4b5e-b575-b57d7e5e9aab",
+     "0001193125-26-344601/C_eb1ce8de-35c2-4059-acc3-1c2f464099ef",
+     "0001193125-26-344601/C_2c8284cb-c381-4c96-a2e6-76c245303a40",
+     "0001193125-26-344601/C_ed25787a-1ba2-40e9-86ab-a2a2e1b783b1",
+     "0001193125-26-344601/C_2ab833b4-778a-43a2-861c-cec44756599d",
+     "0001193125-26-344601/C_961db442-1bb9-43da-9fc4-3396cdc11e6a",
+     "0001193125-26-344601/C_258c5833-44a8-4cee-ba8f-e317c280e031",
+     "0001193125-26-344601/C_dcb48344-11b0-4305-a872-f56791bd5046",
+     "0001193125-26-344601/C_98ad9cb0-b389-497a-9139-a0d8dd99534f",
+     "0001193125-26-344601/C_3f00f982-3e1d-4188-ba13-87de8c53b0c8",
+     "0001193125-26-344601/C_4086c6cc-4747-4977-be5f-d07e9aa93171",
+     "0001193125-26-344601/C_2307e539-ee78-4aaa-979c-d90373941604",
+     "0001193125-26-344601/C_13121dc3-a352-4a6e-b02b-9d5591d7c70f",
+     "0001193125-26-344601/C_6c61aeee-e9c6-404c-bb2c-5350bff935ac",
+     "0001193125-26-344601/C_5e157317-01cd-4fa7-93bd-56916d64bba6",
+     "0001193125-26-344601/C_57694894-c969-4eb7-aad7-2092468442b4"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-344601/C_264e3039-73ba-45a3-a5f8-d23a4c1a1a71",
+     "0001193125-26-344601/C_7f4110f8-2d5d-41a3-8307-ea4cf9b591e5",
+     "0001193125-26-344601/C_92fa55af-197d-4933-a2fb-522880ae10c1",
+     "0001193125-26-344601/C_ab5504b3-1ecf-4b5e-b575-b57d7e5e9aab",
+     "0001193125-26-344601/C_eb1ce8de-35c2-4059-acc3-1c2f464099ef",
+     "0001193125-26-344601/C_2c8284cb-c381-4c96-a2e6-76c245303a40",
+     "0001193125-26-344601/C_ed25787a-1ba2-40e9-86ab-a2a2e1b783b1",
+     "0001193125-26-344601/C_2ab833b4-778a-43a2-861c-cec44756599d",
+     "0001193125-26-344601/C_961db442-1bb9-43da-9fc4-3396cdc11e6a",
+     "0001193125-26-344601/C_258c5833-44a8-4cee-ba8f-e317c280e031",
+     "0001193125-26-344601/C_dcb48344-11b0-4305-a872-f56791bd5046",
+     "0001193125-26-344601/C_98ad9cb0-b389-497a-9139-a0d8dd99534f",
+     "0001193125-26-344601/C_3f00f982-3e1d-4188-ba13-87de8c53b0c8",
+     "0001193125-26-344601/C_4086c6cc-4747-4977-be5f-d07e9aa93171",
+     "0001193125-26-344601/C_2307e539-ee78-4aaa-979c-d90373941604",
+     "0001193125-26-344601/C_13121dc3-a352-4a6e-b02b-9d5591d7c70f",
+     "0001193125-26-344601/C_6c61aeee-e9c6-404c-bb2c-5350bff935ac",
+     "0001193125-26-344601/C_5e157317-01cd-4fa7-93bd-56916d64bba6",
+     "0001193125-26-344601/C_57694894-c969-4eb7-aad7-2092468442b4"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Schedule of Investments as of December 31, 2022"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Schedule of Investments as of December 31, 2025"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a current-period position printed with a value but not published: rejected, every published quarter ties to the printed total",
+    "dash-valued current lines still dropped: rejected after untagged_values (121 contexts published at fair value 0)",
+    "remaining no-value contexts are comparative-period or rate-only/cost-only siblings: confirmed by period and context facts"
+   ],
+   "next_action": "Proposed as b01-leaves-without-value-are-the-comparative-schedule (PD-B01-1674760-4); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_01a03ae21896",
+   "coverage": {
+    "affected_rows": [
+     "ROW-8870cb039fcf21c5/C_02cf311f-027d-476c-bb45-45aef780b3f5"
+    ],
+    "reviewed_rows": [
+     "ROW-8870cb039fcf21c5/C_02cf311f-027d-476c-bb45-45aef780b3f5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "PIK rate scaled wrong: rejected, 20.53 is printed as the coupon"
+   ],
+   "next_action": "Proposed as pik-rate-above-20-as-printed (PD-C117-1674760-7); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_b8828a870c64",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2024-12-31|CNT01"
+    ],
+    "reviewed_rows": [
+     "0001674760|2024-12-31|CNT01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "the Buyer contributed its wholly-owned subsidiary, Pantheon Silver LLC, a Delaware limited liability company (Pantheon Silver), to us in exchange for 8,394,088 Units at a price of $24.05 per Unit (the In-Kind Contribution)"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Total Investments - 166.5 % $ 663,661 $ 582,495"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rows over-included at 2024-12-31: rejected, published equals printed Total Investments 582,495"
+   ],
+   "next_action": "Proposed as schedule-growth-printed-positions-total-ties (PD-CNT01-1674760-14); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_56524176424f",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2024-12-31|D01"
+    ],
+    "reviewed_rows": [
+     "0001674760|2024-12-31|D01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "the Buyer contributed its wholly-owned subsidiary, Pantheon Silver LLC, a Delaware limited liability company (Pantheon Silver), to us in exchange for 8,394,088 Units at a price of $24.05 per Unit (the In-Kind Contribution)"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Total Investments - 166.5 % $ 663,661 $ 582,495"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Total Investments - 94.79 % $ 340,614 $ 253,875"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rows over-included at 2024-12-31: rejected, published equals printed Total Investments 582,495"
+   ],
+   "next_action": "Proposed as schedule-growth-printed-positions-total-ties (PD-D01-1674760-13); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_6544af458a44",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-09-30|E01"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-09-30|E01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over-included: rejected, non-cash fair value equals the filed figure",
+    "a second cash row: rejected, one CASH row"
+   ],
+   "next_action": "Proposed as oracle-holdings-with-cash-rows-against-ex-cash-investments-total (PD-E01-1674760-2); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_241243385c07",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-12-31|E01"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-12-31|E01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over-included: rejected, non-cash fair value equals the filed figure",
+    "a second cash row: rejected, one CASH row"
+   ],
+   "next_action": "Proposed as oracle-holdings-with-cash-rows-against-ex-cash-investments-total (PD-E01-1674760-2); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_ff859a92499e",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2026-03-31|E01"
+    ],
+    "reviewed_rows": [
+     "0001674760|2026-03-31|E01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over-included: rejected, non-cash fair value equals the filed figure",
+    "a second cash row: rejected, one CASH row"
+   ],
+   "next_action": "Proposed as oracle-holdings-with-cash-rows-against-ex-cash-investments-total (PD-E01-1674760-2); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_94e870bc557a",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2026-06-30|E01"
+    ],
+    "reviewed_rows": [
+     "0001674760|2026-06-30|E01"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over-included: rejected, non-cash fair value equals the filed figure",
+    "a second cash row: rejected, one CASH row"
+   ],
+   "next_action": "Proposed as oracle-holdings-with-cash-rows-against-ex-cash-investments-total (PD-E01-1674760-2); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_e3784ed571f3",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2022-03-31|F16"
+    ],
+    "reviewed_rows": [
+     "0001674760|2022-03-31|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: was true in svcb (0.69, 0.59, 0.88, -1.70, 0.295, 0.205); fixed to the printed figures",
+    "income yield mis-derived: 2024-12-31 was 1.94 (fixed to the printed 13.53); others equal the printed ratio"
+   ],
+   "next_action": "Proposed as f16-return-of-capital-distribution-in-the-quarter (PD-F16-1674760-16); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_a99a0c71014b",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2022-06-30|F16"
+    ],
+    "reviewed_rows": [
+     "0001674760|2022-06-30|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: was true in svcb (0.69, 0.59, 0.88, -1.70, 0.295, 0.205); fixed to the printed figures",
+    "income yield mis-derived: 2024-12-31 was 1.94 (fixed to the printed 13.53); others equal the printed ratio"
+   ],
+   "next_action": "Proposed as f16-return-of-capital-distribution-in-the-quarter (PD-F16-1674760-16); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_6566f781a24b",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2023-09-30|F16"
+    ],
+    "reviewed_rows": [
+     "0001674760|2023-09-30|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Distributions per unit $ 2.06 $ - $ 2.06 $ 14.97"
+    },
+    {
+     "accession": "0000950170-24-026149",
+     "text": "Distributions per unit $ 4.73 $ 14.97 $ 27.94"
+    },
+    {
+     "accession": "0000950170-24-026149",
+     "text": "Distributions declared: From return of capital - ( 10.73 ) ( 23.41 ) ( 0.09 ) ( 4.61 ) From net investment income ( 4.73 ) ( 4.24 )"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "return of capital in 2023: rejected, the 10-K for 2023 and the 10-K for 2025 print '-' for 2023 return of capital",
+    "distribution per unit mis-derived: was true in svcb (0.69 for 2.06); fixed to the printed 2.06 and 2.67 (4.73 less 2.06)",
+    "income yield mis-derived: rejected, 10.96 % and 10.32 % are the printed year-to-date ratios",
+    "the fund paid nothing in Q1 and Q2 2023: confirmed, the 10-Q for 2023-09-30 prints nine months 2.06 = the quarter"
+   ],
+   "next_action": "Proposed as f16-income-distribution-paid-in-one-quarter-annualised (PD-F16-1674760-17); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_acff3019c249",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2023-12-31|F16"
+    ],
+    "reviewed_rows": [
+     "0001674760|2023-12-31|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Distributions per unit $ 2.06 $ - $ 2.06 $ 14.97"
+    },
+    {
+     "accession": "0000950170-24-026149",
+     "text": "Distributions per unit $ 4.73 $ 14.97 $ 27.94"
+    },
+    {
+     "accession": "0000950170-24-026149",
+     "text": "Distributions declared: From return of capital - ( 10.73 ) ( 23.41 ) ( 0.09 ) ( 4.61 ) From net investment income ( 4.73 ) ( 4.24 )"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "return of capital in 2023: rejected, the 10-K for 2023 and the 10-K for 2025 print '-' for 2023 return of capital",
+    "distribution per unit mis-derived: was true in svcb (0.69 for 2.06); fixed to the printed 2.06 and 2.67 (4.73 less 2.06)",
+    "income yield mis-derived: rejected, 10.96 % and 10.32 % are the printed year-to-date ratios",
+    "the fund paid nothing in Q1 and Q2 2023: confirmed, the 10-Q for 2023-09-30 prints nine months 2.06 = the quarter"
+   ],
+   "next_action": "Proposed as f16-income-distribution-paid-in-one-quarter-annualised (PD-F16-1674760-17); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_65768931b8df",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2024-06-30|F16"
+    ],
+    "reviewed_rows": [
+     "0001674760|2024-06-30|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: was true in svcb (0.69, 0.59, 0.88, -1.70, 0.295, 0.205); fixed to the printed figures",
+    "income yield mis-derived: 2024-12-31 was 1.94 (fixed to the printed 13.53); others equal the printed ratio"
+   ],
+   "next_action": "Proposed as f16-return-of-capital-distribution-in-the-quarter (PD-F16-1674760-16); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_07fa7f2bf08b",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2024-09-30|F16"
+    ],
+    "reviewed_rows": [
+     "0001674760|2024-09-30|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: was true in svcb (0.69, 0.59, 0.88, -1.70, 0.295, 0.205); fixed to the printed figures",
+    "income yield mis-derived: 2024-12-31 was 1.94 (fixed to the printed 13.53); others equal the printed ratio"
+   ],
+   "next_action": "Proposed as f16-return-of-capital-distribution-in-the-quarter (PD-F16-1674760-16); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_09db7446ee50",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-06-30|F16"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-06-30|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: was true in svcb (0.69, 0.59, 0.88, -1.70, 0.295, 0.205); fixed to the printed figures",
+    "income yield mis-derived: 2024-12-31 was 1.94 (fixed to the printed 13.53); others equal the printed ratio"
+   ],
+   "next_action": "Proposed as f16-return-of-capital-distribution-in-the-quarter (PD-F16-1674760-16); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_7752f7d31c78",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2026-06-30|F16"
+    ],
+    "reviewed_rows": [
+     "0001674760|2026-06-30|F16"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: was true in svcb (0.69, 0.59, 0.88, -1.70, 0.295, 0.205); fixed to the printed figures",
+    "income yield mis-derived: 2024-12-31 was 1.94 (fixed to the printed 13.53); others equal the printed ratio"
+   ],
+   "next_action": "Proposed as f16-return-of-capital-distribution-in-the-quarter (PD-F16-1674760-16); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_d9751d28526e",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2024-12-31|F24"
+    ],
+    "reviewed_rows": [
+     "0001674760|2024-12-31|F24"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Units ( 14,884,897 and 10,687,877 units issued and outstanding as of December 31, 2024 and December 31, 2023) 506,006 548,420"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Total Investments - 166.5 % $ 663,661 $ 582,495"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rows over-included at 2024-12-31: rejected, published equals printed Total Investments 582,495"
+   ],
+   "next_action": "Proposed as schedule-growth-printed-positions-total-ties (PD-F24-1674760-15); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_478761732bc4",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2024-12-31|F27"
+    ],
+    "reviewed_rows": [
+     "0001674760|2024-12-31|F27"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Ratio of net investment income to average Members Capital 13.53 % 10.32 %"
+    },
+    {
+     "accession": "0000950170-25-070306",
+     "text": "Ratio of net investment income to average Members Capital 13.26 % 12.70 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "income yield mis-derived: rejected, equals the printed ratio (2024-12-31 after the figure correction)",
+    "holdings coupon understated: rejected, published rates match their printed lines (row_audit.py)"
+   ],
+   "next_action": "Proposed as f27-income-over-net-assets-of-a-levered-fund (PD-F27-1674760-19); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_1d0e2afe725e",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-03-31|F27"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-03-31|F27"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Ratio of net investment income to average Members Capital 13.53 % 10.32 %"
+    },
+    {
+     "accession": "0000950170-25-070306",
+     "text": "Ratio of net investment income to average Members Capital 13.26 % 12.70 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "income yield mis-derived: rejected, equals the printed ratio (2024-12-31 after the figure correction)",
+    "holdings coupon understated: rejected, published rates match their printed lines (row_audit.py)"
+   ],
+   "next_action": "Proposed as f27-income-over-net-assets-of-a-levered-fund (PD-F27-1674760-19); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_276f51bf1f3f",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2022-03-31|F33"
+    ],
+    "reviewed_rows": [
+     "0001674760|2022-03-31|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-22-016029",
+     "text": "Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: fixed to the printed figures; the rate still exceeds 30 on the printed figures"
+   ],
+   "next_action": "Proposed as f33-one-quarter-distribution-annualised-above-30-pct (PD-F33-1674760-18); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_f45f70923bba",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2022-06-30|F33"
+    ],
+    "reviewed_rows": [
+     "0001674760|2022-06-30|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-22-016029",
+     "text": "Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: fixed to the printed figures; the rate still exceeds 30 on the printed figures"
+   ],
+   "next_action": "Proposed as f33-one-quarter-distribution-annualised-above-30-pct (PD-F33-1674760-18); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_9fba2dffca8d",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2024-09-30|F33"
+    ],
+    "reviewed_rows": [
+     "0001674760|2024-09-30|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-22-016029",
+     "text": "Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: fixed to the printed figures; the rate still exceeds 30 on the printed figures"
+   ],
+   "next_action": "Proposed as f33-one-quarter-distribution-annualised-above-30-pct (PD-F33-1674760-18); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_66ab0587b197",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-06-30|F33"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-06-30|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-22-016029",
+     "text": "Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: fixed to the printed figures; the rate still exceeds 30 on the printed figures"
+   ],
+   "next_action": "Proposed as f33-one-quarter-distribution-annualised-above-30-pct (PD-F33-1674760-18); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_2e0fdf3c28ea",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2026-06-30|F33"
+    ],
+    "reviewed_rows": [
+     "0001674760|2026-06-30|F33"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0000950170-22-016029",
+     "text": "Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "distribution per unit mis-derived: fixed to the printed figures; the rate still exceeds 30 on the printed figures"
+   ],
+   "next_action": "Proposed as f33-one-quarter-distribution-annualised-above-30-pct (PD-F33-1674760-18); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_07a04cc4f183",
+   "coverage": {
+    "affected_rows": [
+     "ROW-9857a812497743d3/C_4060842f-5c6f-44d0-b8d0-53c28b706677"
+    ],
+    "reviewed_rows": [
+     "ROW-9857a812497743d3/C_4060842f-5c6f-44d0-b8d0-53c28b706677"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Chase Industries, Inc. (dba Senneca Holdings) Building Products 11/11/27 16,405 - 9,351 (6) (8) (13)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a rate or spread printed and not read: rejected, the Chase line prints maturity, par, cost and value only",
+    "the verdict's CDM / HAI rows still lack the spread: rejected, they publish 6.25 / 5.50 in the final build"
+   ],
+   "next_action": "Proposed as x02-no-rate-printed-on-the-row (PD-X02-1674760-9); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_db069a5851d6",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-09-30|cost_conservation"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-09-30|cost_conservation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "cost of a dash row invented: rejected, non-cash cost equals the printed Total Investments cost exactly",
+    "money-market cost counted twice: rejected, one CASH row whose cost equals its printed cost"
+   ],
+   "next_action": "Proposed as cost-conservation-cash-rows-against-ex-cash-cost-total (PD-cost_conservation-1674760-3); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_d28c87fc1860",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-12-31|cost_conservation"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-12-31|cost_conservation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "cost of a dash row invented: rejected, non-cash cost equals the printed Total Investments cost exactly",
+    "money-market cost counted twice: rejected, one CASH row whose cost equals its printed cost"
+   ],
+   "next_action": "Proposed as cost-conservation-cash-rows-against-ex-cash-cost-total (PD-cost_conservation-1674760-3); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_006ed5103e9b",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2026-03-31|cost_conservation"
+    ],
+    "reviewed_rows": [
+     "0001674760|2026-03-31|cost_conservation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "cost of a dash row invented: rejected, non-cash cost equals the printed Total Investments cost exactly",
+    "money-market cost counted twice: rejected, one CASH row whose cost equals its printed cost"
+   ],
+   "next_action": "Proposed as cost-conservation-cash-rows-against-ex-cash-cost-total (PD-cost_conservation-1674760-3); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_7f2375ad0f6a",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2026-06-30|cost_conservation"
+    ],
+    "reviewed_rows": [
+     "0001674760|2026-06-30|cost_conservation"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "cost of a dash row invented: rejected, non-cash cost equals the printed Total Investments cost exactly",
+    "money-market cost counted twice: rejected, one CASH row whose cost equals its printed cost"
+   ],
+   "next_action": "Proposed as cost-conservation-cash-rows-against-ex-cash-cost-total (PD-cost_conservation-1674760-3); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_9524fbe52a32",
+   "coverage": {
+    "affected_rows": [
+     "ROW-fd6c6f0b80021546/C_d950e1a6-a653-4ea4-9522-c85878ae38a9/interest_rate"
+    ],
+    "reviewed_rows": [
+     "ROW-fd6c6f0b80021546/C_d950e1a6-a653-4ea4-9522-c85878ae38a9/interest_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 10,990 10,809 10,551 (5) (7)"
+    },
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Streamland Media Midco LLC Entertainment 10.00 % S + 5.50 % (Incl. 9.07 % PIK) 04/0"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "all-in reading: rejected, PIK 10.06 above rate 9.76",
+    "cash-leg reading: rejected, 9.76 + 10.06 = 19.82 is not plausible against S + 6.50"
+   ],
+   "next_action": "Proposed as convention-printed-pik-above-printed-rate (PD-financial_convention_unresolved-1674760-11); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_233a6976cbff",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2024-03-31|fmt_pik_rate",
+     "ROW-8870cb039fcf21c5/C_02cf311f-027d-476c-bb45-45aef780b3f5"
+    ],
+    "reviewed_rows": [
+     "0001674760|2024-03-31|fmt_pik_rate",
+     "ROW-8870cb039fcf21c5/C_02cf311f-027d-476c-bb45-45aef780b3f5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "PIK rate scaled wrong: rejected, 20.53 is printed as the coupon"
+   ],
+   "next_action": "Proposed as fmt-pik-rate-above-20-as-printed (PD-fmt_pik_rate-1674760-8); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_d74d5cf2f80a",
+   "coverage": {
+    "affected_rows": [
+     "0001674760|2025-03-31|maturity_not_past",
+     "ROW-ca404590b39b4671/C_f908a7f6-9cd7-4cfb-b839-eb3496039070"
+    ],
+    "reviewed_rows": [
+     "0001674760|2025-03-31|maturity_not_past",
+     "ROW-ca404590b39b4671/C_f908a7f6-9cd7-4cfb-b839-eb3496039070"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-070306",
+     "text": "Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 72,618 64,001 17,791 (6) (8) (9) (10)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "comparative row leaking (earlier verdict): rejected, no 03/31/25 Streamland row at 2025-03-31",
+    "maturity mis-read: rejected, the 2025-03-31 schedule prints 01/03/25 for Lithium"
+   ],
+   "next_action": "Proposed as maturity-not-past-defaulted-loan-printed-with-original-maturity (PD-maturity_not_past-1674760-12); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_REV_686f7c7a8845",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e9cb08323a5cc613/C_ac7592ca-9ba1-4ef4-8dc3-64d0fb74e341/interest_rate"
+    ],
+    "reviewed_rows": [
+     "ROW-e9cb08323a5cc613/C_ac7592ca-9ba1-4ef4-8dc3-64d0fb74e341/interest_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Lithium Technologies, Inc. Interactive Media & Services 12.67 % S + 8.00 % 01/03/24 58,727 58,598 56,965 (4) (5) (6)"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "merged rate differs from the page: rejected, 12.67 printed on the line"
+   ],
+   "next_action": "Proposed as merged-context-value-equals-printed-row (PD-merged_context_excluded-1674760-10); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_b86bf3e69175",
+   "coverage": {
+    "affected_rows": [
+     "ROW-06b6d759ef3a7b7a",
+     "ROW-6f645e000f93e994"
+    ],
+    "reviewed_rows": [
+     "ROW-06b6d759ef3a7b7a",
+     "ROW-6f645e000f93e994"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_c7f5c4751955",
+   "coverage": {
+    "affected_rows": [
+     "ROW-8870cb039fcf21c5",
+     "ROW-d698b0d70f4dba61"
+    ],
+    "reviewed_rows": [
+     "ROW-8870cb039fcf21c5",
+     "ROW-d698b0d70f4dba61"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_6e782396cc17",
+   "coverage": {
+    "affected_rows": [
+     "ROW-5957724f5c81e5c0",
+     "ROW-aefdc425746fcd2d"
+    ],
+    "reviewed_rows": [
+     "ROW-5957724f5c81e5c0",
+     "ROW-aefdc425746fcd2d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_f2a6c49e1d32",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d0fec4b157c3cc03",
+     "ROW-fc6421adeed58f74"
+    ],
+    "reviewed_rows": [
+     "ROW-d0fec4b157c3cc03",
+     "ROW-fc6421adeed58f74"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_40f1615f49e7",
+   "coverage": {
+    "affected_rows": [
+     "ROW-32ac38058345c1bc",
+     "ROW-ac6d9eeba418e45d"
+    ],
+    "reviewed_rows": [
+     "ROW-32ac38058345c1bc",
+     "ROW-ac6d9eeba418e45d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_4a6fd20d1210",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a8976560b4fd3b2a",
+     "ROW-c964394b38505f57"
+    ],
+    "reviewed_rows": [
+     "ROW-a8976560b4fd3b2a",
+     "ROW-c964394b38505f57"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_44fcd0ffddfe",
+   "coverage": {
+    "affected_rows": [
+     "ROW-442b2da34e587918",
+     "ROW-e138ece2196e359c"
+    ],
+    "reviewed_rows": [
+     "ROW-442b2da34e587918",
+     "ROW-e138ece2196e359c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_2fff3ab431b4",
+   "coverage": {
+    "affected_rows": [
+     "ROW-04c993d02278b59e",
+     "ROW-14c0a3ce5ba39437"
+    ],
+    "reviewed_rows": [
+     "ROW-04c993d02278b59e",
+     "ROW-14c0a3ce5ba39437"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_1979462235cf",
+   "coverage": {
+    "affected_rows": [
+     "ROW-61f8cc95a0fd4e00",
+     "ROW-9f0c69eca4f76c2f"
+    ],
+    "reviewed_rows": [
+     "ROW-61f8cc95a0fd4e00",
+     "ROW-9f0c69eca4f76c2f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  },
+  {
+   "finding_id": "RVQ_BLK_35618ef28a16",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2ccdde128a35b282",
+     "ROW-c321b104bb85054e"
+    ],
+    "reviewed_rows": [
+     "ROW-2ccdde128a35b282",
+     "ROW-c321b104bb85054e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
+    "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
+   ],
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+  }
+ ],
+ "tests_run": [
+  "tests/test_bdc_xbrl_wrapper.py + tests/test_fund_highlights_wrapper.py: 588 passed (before svcb, svcc)"
+ ],
+ "not_done": [
+  "No full pytest suite and no cohort semantic diff: only this fund's wrapper, highlights wrapper, its row corrections and two pulled promoted overrides changed (no shared code or shared table).",
+  "Interest expense in 2022-12-31, 2023-03-31, 2023-06-30, 2024-12-31 left (request SVC-R1, deferred, D-221); total_expenses blank.",
+  "Recipe 2023-03-31 lien_position stays 'Second Lien' for a line printed under Unsecured Debt (request SVC-R2, deferred, D-221).",
+  "2022 quarters have no published holdings; F16 / F33 there were read from the 2022 10-Q statements only.",
+  "row_audit.py residue (29 rows) read by hand only where the pattern missed: EUR prefix, SugarCRM drawn/undrawn pairing, Peppertree 'Towers, LLC' comma in 2026, equity lines with no date; no value difference found among them.",
+  "Position chains after the issuer renames (position_id changed on rows) not checked.",
+  "The 20-row random page sample is the orchestrator's.",
+  "A cleared ledger would not establish data correctness."
+ ]
+}

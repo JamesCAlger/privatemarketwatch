@@ -1,0 +1,96 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001674760",
+ "entity_name": "Silver Capital Holdings LLC",
+ "version": 1,
+ "income_concept_suppress": [
+  "noninterestexpense",
+  "financinginterestexpense"
+ ],
+ "income_concept_fallback": {
+  "total_investment_income": [
+   "investmentincomenet"
+  ],
+  "interest_expense": [
+   "interestanddebtexpense"
+  ]
+ },
+ "notes": "Fund-clearing loop 2026-10-20 (svc). 10-Q 2026-03-31 (0001193125-26-219865) prints 'Total investment income $ 8,019 $ 18,096 Expenses: Interest and other debt expenses $ 2,385 $ 4,960 ... Directors fees 51 51 ... Total expenses $ 4,156 $ 7,039 Net investment income $ 3,863 $ 11,057'; tagged us-gaap:InvestmentIncomeNet 8,019 (the printed total), us-gaap:NetInvestmentIncome 3,863, us-gaap:InterestAndDebtExpense 2,385, us-gaap:FinancingInterestExpense 2,250 (a component in the credit-facility note), us-gaap:NoninterestExpenseDirectorsFees 51. The shared map read InvestmentIncomeNet as net investment income (published 8,019 as NII, total investment income blank) and the directors fee as interest expense (published 51,000). InvestmentIncomeNet is read as total investment income (as AGL), NoninterestExpense* and FinancingInterestExpense are suppressed, and InterestAndDebtExpense (the printed 'Interest and other debt expenses') fills interest expense.",
+ "figure_corrections": [
+  {
+   "report_date": "2022-03-31",
+   "field": "distribution_per_share",
+   "value": 8.89,
+   "evidence": "0000950170-22-008936 (10-Q, 2022-03-31) statement of changes in members' capital: 'Distributions per unit $ 8.89 $ -' (three months 2022, 2021). Published 4.24."
+  },
+  {
+   "report_date": "2022-06-30",
+   "field": "distribution_per_share",
+   "value": 6.08,
+   "evidence": "0000950170-22-016029 (10-Q, 2022-06-30) statement of changes in members' capital: 'Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31' (three months 2022, 2021; six months 2022, 2021). Published 0."
+  },
+  {
+   "report_date": "2022-09-30",
+   "field": "distribution_per_share",
+   "value": null,
+   "withdraw": true,
+   "evidence": "0000950170-22-023303 (10-Q, 2022-09-30) statement of changes in members' capital: 'Distributions per unit $ - $ 15.63 $ 14.97 $ 27.94': no distribution in the quarter (nine months 14.97 = 8.89 + 6.08). Published 0; blank as in other quarters with none."
+  },
+  {
+   "report_date": "2022-12-31",
+   "field": "distribution_per_share",
+   "value": null,
+   "withdraw": true,
+   "evidence": "0000950170-23-005850 (10-K, 2022-12-31) statement of changes in members' capital: 'Distributions per unit $ 14.97 $ 27.94 $ 16.65': the year equals the nine months (14.97), no fourth-quarter distribution. Published 0."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "distribution_per_share",
+   "value": 2.06,
+   "evidence": "0000950170-23-060346 (10-Q, 2023-09-30) statement of changes in members' capital: 'Distributions per unit $ 2.06 $ - $ 2.06' (three months 2023; three months 2022; nine months 2023). Published 0.6867."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "distribution_per_share",
+   "value": 2.11,
+   "evidence": "0000950170-24-096263 (10-Q, 2024-06-30) statement of changes in members' capital: 'Distributions per unit $ 2.11 $ - $ 2.11' (three months 2024; three months 2023; six months 2024). Published 0.59."
+  },
+  {
+   "report_date": "2024-09-30",
+   "field": "distribution_per_share",
+   "value": 9.0,
+   "evidence": "0000950170-24-125375 (10-Q, 2024-09-30) statement of changes in members' capital: 'Distributions per unit $ 9.00 $ 2.06 $ 11.11' (three months 2024; three months 2023; nine months 2024). Published 0.88."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "distribution_per_share",
+   "value": 0.98,
+   "evidence": "0000950170-25-032226 (10-K, 2024-12-31) statement of changes in members' capital: 'Distributions per unit $ 12.09 $ 4.73 $ 14.97' (year 2024); nine months 2024 printed 11.11 in 0000950170-24-125375, so the fourth quarter is 12.09 - 11.11 = 0.98. Published -1.70."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "distribution_per_share",
+   "value": 3.67,
+   "evidence": "0000950170-25-107354 (10-Q, 2025-06-30) statement of changes in members' capital: 'Distributions per unit $ 3.67 $ 2.11 $ 3.67' (three months 2025; three months 2024; six months 2025). Published 0.295."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "distribution_per_share",
+   "value": null,
+   "withdraw": true,
+   "evidence": "0001193125-26-088636 (10-K, 2025-12-31) statement of changes in members' capital: 'Distributions per unit $ 4.10 $ 12.09 $ 4.73' (year 2025); nine months 2025 printed 4.10 in 0001193125-25-277520 ('$ 0.43 $ 9.00 $ 4.10'), so no fourth-quarter distribution. Published 1.13."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "distribution_per_share",
+   "value": 1.75,
+   "evidence": "0001193125-26-344601 (10-Q, 2026-06-30) statement of changes in members' capital: 'Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67' (three months 2026, 2025; six months 2026, 2025); the 10-Q for 2026-03-31 prints no distribution. Published 0.205."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "income_yield_pct",
+   "value": 13.53,
+   "evidence": "0000950170-25-032226 (10-K, 2024-12-31) financial highlights: 'Ratio of net investment income to average Members Capital 13.53 % 10.32 %' (2024, 2023); the 10-K for 2025-12-31 (0001193125-26-088636) repeats 13.53 % for 2024. The other quarters publish the printed year-to-date ratio; 2024-12-31 published 1.94 (a difference of year-to-date ratios)."
+  }
+ ]
+}

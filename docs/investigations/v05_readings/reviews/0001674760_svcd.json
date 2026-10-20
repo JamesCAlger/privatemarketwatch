@@ -1,0 +1,1172 @@
+{
+ "reviewer_id": "silver-capital-independent-reviewer-2026-10-20",
+ "report_digest": "0a6201639afc5f6cd3df408f80198e741f8b4e8d65c0694ff8f59956917e78a1",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_006ed5103e9b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "cost_conservation fails at 2026-03-31 with residual 50.8 pct on basis ff_investments_at_cost:investments_ex_cash (validation_results_ledger). Reviewer totals.sql: published cost with the CASH row 467,835k, without it 310,164k, equal to the printed Total Investments cost on the quoted line; the gap is the one CASH row (the affiliated money-market fund) whose cost equals its printed line. Coverage key 0001674760|2026-03-31|cost_conservation is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1979462235cf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2025-12-31) flags exactly ROW-61f8cc95a0fd4e00 and ROW-9f0c69eca4f76c2f, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Wine.com, LLC Beverages 16.15 % S + 12.00 % PIK 04/03/27 $ 8,364 $ 8,513 $ 8,824"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1a4c5f4f43b1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 fails at 2025-09-30: oracle check_results holdings_fv 461,605k vs comparison 334,010k (38.2 pct). Reviewer totals.sql: non-CASH fair value 334,010k equals the printed Total Investments value on the quoted line to the thousand; the difference is exactly one CASH row of 127,595k, the Goldman Sachs Financial Square Government Fund printed below Total Investments. Coverage key 0001674760|2025-09-30|A04 is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_241243385c07",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 fails at 2025-12-31: oracle check_results holdings_fv 469,099k vs comparison 329,255k (42.5 pct). Reviewer totals.sql: non-CASH fair value 329,255k equals the printed Total Investments value on the quoted line to the thousand; the difference is exactly one CASH row of 139,844k, the Goldman Sachs Financial Square Government Fund printed below Total Investments. Coverage key 0001674760|2025-12-31|E01 is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2fff3ab431b4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2025-09-30) flags exactly ROW-04c993d02278b59e and ROW-14c0a3ce5ba39437, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Wine.com, LLC Beverages 16.52 % S + 12.00 % PIK 04/03/27 $ 8,025 $ 8,202 $ 8,266"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_35618ef28a16",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2026-03-31) flags exactly ROW-2ccdde128a35b282 and ROW-c321b104bb85054e, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3d1073a7ef8b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 fails at 2026-06-30: oracle check_results holdings_fv 294,957k vs comparison 260,641k (13.2 pct). Reviewer totals.sql: non-CASH fair value 260,641k equals the printed Total Investments value on the quoted line to the thousand; the difference is exactly one CASH row of 34,316k, the Goldman Sachs Financial Square Government Fund printed below Total Investments. Coverage key 0001674760|2026-06-30|A04 is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_40f1615f49e7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2024-12-31) flags exactly ROW-32ac38058345c1bc and ROW-ac6d9eeba418e45d, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Wine.com, LLC Beverages 16.79 % S + 12.00 % PIK 04/03/27 $ 7,093 $ 7,346 $ 7,447"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_44fcd0ffddfe",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2025-06-30) flags exactly ROW-442b2da34e587918 and ROW-e138ece2196e359c, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Wine.com, LLC Beverages 16.52 % S + 12.00 % PIK 04/03/27 $ 7,700 $ 7,903 $ 7,777"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_4a6fd20d1210",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2025-03-31) flags exactly ROW-a8976560b4fd3b2a and ROW-c964394b38505f57, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070306",
+     "text": "Wine.com, LLC Beverages 16.56 % S + 12.00 % PIK 04/03/27 $ 7,397 $ 7,625 $ 7,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6544af458a44",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 fails at 2025-09-30: oracle check_results holdings_fv 461,605k vs comparison 334,010k (38.2 pct). Reviewer totals.sql: non-CASH fair value 334,010k equals the printed Total Investments value on the quoted line to the thousand; the difference is exactly one CASH row of 127,595k, the Goldman Sachs Financial Square Government Fund printed below Total Investments. Coverage key 0001674760|2025-09-30|E01 is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6e782396cc17",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2024-06-30) flags exactly ROW-5957724f5c81e5c0 and ROW-aefdc425746fcd2d, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096263",
+     "text": "Wine.com, LLC Beverages 17.32 % S + 12.00 % PIK 04/03/27 1,918 1,055 3,021"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7f2375ad0f6a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "cost_conservation fails at 2026-06-30 with residual 11.3 pct on basis ff_investments_at_cost:investments_ex_cash (validation_results_ledger). Reviewer totals.sql: published cost with the CASH row 337,376k, without it 303,060k, equal to the printed Total Investments cost on the quoted line; the gap is the one CASH row (the affiliated money-market fund) whose cost equals its printed line. Coverage key 0001674760|2026-06-30|cost_conservation is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_804ac2e2223a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 fails at 2025-12-31: oracle check_results holdings_fv 469,099k vs comparison 329,255k (42.5 pct). Reviewer totals.sql: non-CASH fair value 329,255k equals the printed Total Investments value on the quoted line to the thousand; the difference is exactly one CASH row of 139,844k, the Goldman Sachs Financial Square Government Fund printed below Total Investments. Coverage key 0001674760|2025-12-31|A04 is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_94e870bc557a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 fails at 2026-06-30: oracle check_results holdings_fv 294,957k vs comparison 260,641k (13.2 pct). Reviewer totals.sql: non-CASH fair value 260,641k equals the printed Total Investments value on the quoted line to the thousand; the difference is exactly one CASH row of 34,316k, the Goldman Sachs Financial Square Government Fund printed below Total Investments. Coverage key 0001674760|2026-06-30|E01 is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b86bf3e69175",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2023-12-31) flags exactly ROW-06b6d759ef3a7b7a and ROW-6f645e000f93e994, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026149",
+     "text": "Wine.com, LLC Beverages 17.38 % S + 12.00 % PIK 04/03/27 5,950 $ 6,335 $ 6,307"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c7f5c4751955",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2024-03-31) flags exactly ROW-8870cb039fcf21c5 and ROW-d698b0d70f4dba61, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d28c87fc1860",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "cost_conservation fails at 2025-12-31 with residual 40.0 pct on basis ff_investments_at_cost:investments_ex_cash (validation_results_ledger). Reviewer totals.sql: published cost with the CASH row 489,209k, without it 349,365k, equal to the printed Total Investments cost on the quoted line; the gap is the one CASH row (the affiliated money-market fund) whose cost equals its printed line. Coverage key 0001674760|2025-12-31|cost_conservation is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_db069a5851d6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "cost_conservation fails at 2025-09-30 with residual 35.7 pct on basis ff_investments_at_cost:investments_ex_cash (validation_results_ledger). Reviewer totals.sql: published cost with the CASH row 485,013k, without it 357,418k, equal to the printed Total Investments cost on the quoted line; the gap is the one CASH row (the affiliated money-market fund) whose cost equals its printed line. Coverage key 0001674760|2025-09-30|cost_conservation is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ef52eb473619",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 fails at 2026-03-31: oracle check_results holdings_fv 447,150k vs comparison 289,479k (54.5 pct). Reviewer totals.sql: non-CASH fair value 289,479k equals the printed Total Investments value on the quoted line to the thousand; the difference is exactly one CASH row of 157,671k, the Goldman Sachs Financial Square Government Fund printed below Total Investments. Coverage key 0001674760|2026-03-31|A04 is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f2a6c49e1d32",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "shadow/page_rule_findings (pik_printed, 2024-09-30) flags exactly ROW-d0fec4b157c3cc03 and ROW-fc6421adeed58f74, equal to affected_rows. Joined to holdings (rows.sql) each publishes pik_rate = interest_rate = the printed coupon, basis_spread = the printed margin and interest_rate_cash 0 (float noise only), for a line printed '<coupon> % S + <margin> % PIK' with no cash part (quoted). That is the owner's whole-coupon convention (D-092) and D-031 (spread counted once, pik_rate separate); the rule compares pik_rate with the printed margin. Data correct; false_alarm supported. Non-blocking: the proposal invents a new key for the reason already proposed for Commonwealth (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, class rule_problem, D-218); it should reuse that key and class so the owner is asked once.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Wine.com, LLC Beverages 17.49 % S + 12.00 % PIK 04/03/27 $ 6,789 $ 7,066 $ 7,265"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ff859a92499e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 fails at 2026-03-31: oracle check_results holdings_fv 447,150k vs comparison 289,479k (54.5 pct). Reviewer totals.sql: non-CASH fair value 289,479k equals the printed Total Investments value on the quoted line to the thousand; the difference is exactly one CASH row of 157,671k, the Goldman Sachs Financial Square Government Fund printed below Total Investments. Coverage key 0001674760|2026-03-31|E01 is the only flagged unit (fund-quarter check). The money-market fund is published as CASH only from 2025-06-30 (13,619k, printed line quoted; A04/E01 pass there at 3.1 pct); earlier quarters print it and publish no CASH row (observation money-market-fund-not-published). No over-inclusion and no second cash row: conclusion false_alarm and the reused reason key are supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_01a03ae21896",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C117 at 2024-03-31: the population is the one row ROW-8870cb039fcf21c5 / C_02cf311f (row_validation_issues for C117; weak ledger metric 7.14 pct = 1 of 14 PIK rows for fmt_pik_rate, plus its fund-quarter key), equal to affected_rows. The row publishes pik_rate 20.53, interest_rate 20.53, spread 15.00, cash 0; the page prints '20.53 % S + 15.00 % PIK' with no cash part, so 20.53 is the printed whole PIK coupon (D-092). As filed; supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_07a04cc4f183",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 at 2026-03-31 flags one row, ROW-9857a812497743d3 / C_4060842f (Chase second lien, 16,405 par), equal to affected_rows. The printed line carries maturity, par, cost '-' and value only; the build publishes no rate or spread, as printed, and cost 0 from the declared dash. The earlier real-error verdict (CDM Fitness and HAI Hospitality undrawn lines missing S + 6.25 / S + 5.50) is answered: rows3.sql shows CDM 1,083 par and HAI 4,362 / 1,636 par publishing basis_spread 6.25 / 5.50 SOFR at 2026-03-31 and they are not flagged.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Chase Industries, Inc. (dba Senneca Holdings) Building Products 11/11/27 16,405 - 9,351 (6) (8) (13)"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "CDM Fitness Holdings, LLC Consumer Staples Distribution & Retail S + 6.25 % 06/17/26 1,083 ( 2 ) ( 5 )"
+    },
+    {
+     "accession": "0001193125-26-219865",
+     "text": "HAI Hospitality, Inc. Hotels, Restaurants & Leisure S + 5.50 % 12/06/28 4,362 ( 29 ) ( 44 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_07fa7f2bf08b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F16 (distribution_rate > 1.5 x income_yield_pct, validate_fund_financials.py) fails at 2024-09-30 on the fund-quarter key 0001674760|2024-09-30|F16, the only unit. Published distribution_per_share 9.00 equals the printed figure (quoted), distribution_rate 50.0 (cap) against income_yield_pct 11.59. The value is the printed one, so false_alarm on the data is right. The stated mechanism (lumpy, largely return-of-capital distribution) holds for this quarter. 2024 printed sources: return of capital 11.73 of 12.09 (column 2 of the quoted sources line).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_09a88ddfb1d7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2026-06-30): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 19 contexts excluded_comparative_period with period 2025-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Wine.com, LLC Beverages 03/03/21 78,199 1,933 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_09db7446ee50",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F16 (distribution_rate > 1.5 x income_yield_pct, validate_fund_financials.py) fails at 2025-06-30 on the fund-quarter key 0001674760|2025-06-30|F16, the only unit. Published distribution_per_share 3.67 equals the printed figure (quoted), distribution_rate 50.0 (cap) against income_yield_pct 11.30. The value is the printed one, so false_alarm on the data is right. The stated mechanism (lumpy, largely return-of-capital distribution) holds for this quarter. Caveat for the proposal text: 2025 was 1.95 of 4.10 return of capital (quoted), under half, so 'mostly as return of capital' overstates 2025; the quarter's own split is not printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1d0e2afe725e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 (income_yield_pct <= WAC + 2) fails at 2025-03-31, key 0001674760|2025-03-31|F27 only. Published income_yield_pct 13.26 equals the printed ratio (quoted; 2024-12-31 via the highlights figure_correction from 1.94, which was a difference of year-to-date ratios). The ratio is NII over average members' capital while investments are about 1.6x capital (582.5M vs 349.7M at 2024-12-31, 512.2M vs 356.8M at 2025-03-31, totals.sql / ff.sql), so it can exceed the asset coupon by more than 2 points without any coupon error. Reused key; supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070306",
+     "text": "Ratio of net investment income to average Members Capital 13.26 % 12.70 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_233a6976cbff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fmt_pik_rate at 2024-03-31: the population is the one row ROW-8870cb039fcf21c5 / C_02cf311f (row_validation_issues for C117; weak ledger metric 7.14 pct = 1 of 14 PIK rows for fmt_pik_rate, plus its fund-quarter key), equal to affected_rows. The row publishes pik_rate 20.53, interest_rate 20.53, spread 15.00, cash 0; the page prints '20.53 % S + 15.00 % PIK' with no cash part, so 20.53 is the printed whole PIK coupon (D-092). As filed; supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_26ce1891a9b8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2025-09-30): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 16 contexts excluded_comparative_period with period 2024-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 2,974 $ 1,096 $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_276f51bf1f3f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 (0 < distribution_rate < 30) fails at 2022-03-31, fund-quarter key 0001674760|2022-03-31|F33 only. Published distribution_per_share 8.89 equals the printed figure (quoted) and NAV per unit 46.54 equals the printed NAV (investigator nav_check, consistent with ff.sql); 8.89 x 4 / 46.54 is above 30 pct, and the derivation caps at 50. Data correct; false_alarm supported. Note on the new reason key f33-wind-down-return-of-capital-distribution-above-30-pct: 'wind down of the fund' is printed only in the 2022 10-Q MD&A; for 2025/2026 the printed support is the per-unit figure and the return-of-capital split (2025 1.95 of 4.10, 2026 1.34 of 1.75), so the key should describe a one-quarter distribution annualised above 30 pct rather than a wind-down.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2e0fdf3c28ea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 (0 < distribution_rate < 30) fails at 2026-06-30, fund-quarter key 0001674760|2026-06-30|F33 only. Published distribution_per_share 1.75 equals the printed figure (quoted) and NAV per unit 20.03 equals the printed NAV (investigator nav_check, consistent with ff.sql); 1.75 x 4 / 20.03 is above 30 pct, and the derivation caps at 50. Data correct; false_alarm supported. Note on the new reason key f33-wind-down-return-of-capital-distribution-above-30-pct: 'wind down of the fund' is printed only in the 2022 10-Q MD&A; for 2025/2026 the printed support is the per-unit figure and the return-of-capital split (2025 1.95 of 4.10, 2026 1.34 of 1.75), so the key should describe a one-quarter distribution annualised above 30 pct rather than a wind-down.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_39042012c94e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2024-03-31): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 14 contexts excluded_comparative_period with period 2023-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056919",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 8,527 $ - $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_478761732bc4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 (income_yield_pct <= WAC + 2) fails at 2024-12-31, key 0001674760|2024-12-31|F27 only. Published income_yield_pct 13.53 equals the printed ratio (quoted; 2024-12-31 via the highlights figure_correction from 1.94, which was a difference of year-to-date ratios). The ratio is NII over average members' capital while investments are about 1.6x capital (582.5M vs 349.7M at 2024-12-31, 512.2M vs 356.8M at 2025-03-31, totals.sql / ff.sql), so it can exceed the asset coupon by more than 2 points without any coupon error. Reused key; supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Ratio of net investment income to average Members Capital 13.53 % 10.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_56524176424f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "D01 at 2024-12-31 is a fund-quarter check (key 0001674760|2024-12-31|D01; D01 metric 2.61 = 86/33 rows). Reviewer totals.sql: 33 rows / 253,875k at 2024-09-30 and 86 rows / 582,495k (cost 663,661k) at 2024-12-31, each equal to the printed Total Investments line (quoted). The growth is the In-Kind Contribution at the 2024-12-17 merger (investigator's quote of the 10-K, gate-verified; units 10,687,877 to 14,884,897). Not over-inclusion; as filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Total Investments - 166.5 % $ 663,661 $ 582,495"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Total Investments - 94.79 % $ 340,614 $ 253,875"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6566f781a24b",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "F16 (distribution_rate > 1.5 x income_yield_pct, validate_fund_financials.py) fails at 2023-09-30 on the fund-quarter key 0001674760|2023-09-30|F16, the only unit. Published distribution_per_share 2.06 equals the printed figure (quoted), distribution_rate 20.9 against income_yield_pct 10.96. The value is the printed one, so false_alarm on the data is right. REJECTED on the mechanism: the investigation and proposal PD-F16-1674760-16 explain this quarter as a return-of-capital distribution, but the 10-K for 2025 prints the sources by year and 2023 has no return of capital ('From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 )': 2025, 2024, 2023 = '-', 2022), all 4.73 of 2023 came from net investment income. The 2023 distributions fail F16 because a semi-annual NII distribution is annualised from one quarter, not because capital was returned. The investigation's evidence quotes no 2023 filing and its hypotheses (income-yield derivation) do not test the stated reason. Fix: move 2023-09-30 and 2023-12-31 to a reason that matches the page (lumpy NII distribution annualised from one quarter; reuse a queue key if one exists), cite the 2023 lines, and drop 'mostly as return of capital' from the 2023 part of the statement.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Distributions per unit $ 2.06 $ - $ 2.06 $ 14.97"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_65768931b8df",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F16 (distribution_rate > 1.5 x income_yield_pct, validate_fund_financials.py) fails at 2024-06-30 on the fund-quarter key 0001674760|2024-06-30|F16, the only unit. Published distribution_per_share 2.11 equals the printed figure (quoted), distribution_rate 24.5 against income_yield_pct 12.09. The value is the printed one, so false_alarm on the data is right. The stated mechanism (lumpy, largely return-of-capital distribution) holds for this quarter. 2024 printed sources: return of capital 11.73 of 12.09 (column 2 of the quoted sources line).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096263",
+     "text": "Distributions per unit $ 2.11 $ - $ 2.11 $ -"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_66ab0587b197",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 (0 < distribution_rate < 30) fails at 2025-06-30, fund-quarter key 0001674760|2025-06-30|F33 only. Published distribution_per_share 3.67 equals the printed figure (quoted) and NAV per unit 21.01 equals the printed NAV (investigator nav_check, consistent with ff.sql); 3.67 x 4 / 21.01 is above 30 pct, and the derivation caps at 50. Data correct; false_alarm supported. Note on the new reason key f33-wind-down-return-of-capital-distribution-above-30-pct: 'wind down of the fund' is printed only in the 2022 10-Q MD&A; for 2025/2026 the printed support is the per-unit figure and the return-of-capital split (2025 1.95 of 4.10, 2026 1.34 of 1.75), so the key should describe a one-quarter distribution annualised above 30 pct rather than a wind-down.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_686f7c7a8845",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "provenance_ledger merged_context_excluded at 2023-03-31 has one entry, ROW-e9cb08323a5cc613 / C_ac7592ca / interest_rate, equal to affected_rows. The row (58,727 par) publishes interest_rate 12.67, spread 8.00 SOFR; the printed line prints 12.67 % S + 8.00 % (quoted). Compared with the page, not with the merged fact itself. Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Lithium Technologies, Inc. Interactive Media & Services 12.67 % S + 8.00 % 01/03/24 58,727 58,598 56,965 (4) (5) (6)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6f0830790581",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2023-03-31): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 19 contexts excluded_comparative_period with period 2022-12-31 (the prior year-end comparative schedule printed in the same filing) and 1 current-period rate-only context C_a2de9b3b (member 'Diligent ... Interest Rate 9.15%', InvestmentInterestRate only) beside the valued euro line. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Diligent Corporation Professional Services 9.15 % E + 6.25 % 08/04/25 EUR 23,416 26,918 25,332"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_75dc33dd9f5e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2024-09-30): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 14 contexts excluded_comparative_period with period 2023-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 20,286 $ - $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7752f7d31c78",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F16 (distribution_rate > 1.5 x income_yield_pct, validate_fund_financials.py) fails at 2026-06-30 on the fund-quarter key 0001674760|2026-06-30|F16, the only unit. Published distribution_per_share 1.75 equals the printed figure (quoted), distribution_rate 34.9 against income_yield_pct 4.50. The value is the printed one, so false_alarm on the data is right. The stated mechanism (lumpy, largely return-of-capital distribution) holds for this quarter. 2026 six months: 1.34 of 1.75 return of capital (investigator's quote, gate-verified).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7bf500bbfcc1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2023-12-31): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 19 contexts excluded_comparative_period with period 2022-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026149",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 8,095 - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8866a1bfc481",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2024-12-31): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 14 contexts excluded_comparative_period with period 2023-12-31 (the prior year-end comparative schedule printed in the same filing) and 2 current-period cost-only contexts C_6844fd35 (KBP, cost 21,538,000) and C_b0a77c8a (PF Atlantic, cost 8,866,000) whose cost is now declared on the valued contexts C_45fc19bd / C_9aed8815 (untagged_values) and matches the printed line. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "KBP BRANDS, LLC Hotels, Restaurants & Leisure 10.10 % S + 5.50 % 05/26/27 21,752 21,538 21,535"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_90e722d67aab",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2025-03-31): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 16 contexts excluded_comparative_period with period 2024-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070306",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 22,428 $ - $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9524fbe52a32",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "provenance_ledger reason financial_convention_unresolved at 2025-09-30 has one entry, ROW-fd6c6f0b80021546 / C_d950e1a6 / interest_rate, equal to affected_rows. The page prints '9.76 % S + 6.50 % (Incl. 10.06 % PIK)' for the 10,990 first-lien line: the PIK part exceeds the all-in rate, so neither reading fits; the build publishes no interest_rate, spread 6.50, pik 10.06 (rows2.sql). The same filing also prints the last-out line 'S + 5.50 % (Incl. 9.06 % PIK)' while every other quarter prints the last-out at S + 6.50 and the first lien at S + 5.50, which suggests the filer swapped terms in this quarter; the page cannot settle it. source_ambiguity with an owner reading is the right outcome; reused key.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 10,990 10,809 10,551 (5) (7)"
+    },
+    {
+     "accession": "0001193125-25-277520",
+     "text": "Streamland Media Midco LLC Entertainment S + 5.50 % (Incl. 9.06 % PIK) 04/02/29 $ 10,614 $ 9,463 $ 7,775"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9fba2dffca8d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 (0 < distribution_rate < 30) fails at 2024-09-30, fund-quarter key 0001674760|2024-09-30|F33 only. Published distribution_per_share 9.00 equals the printed figure (quoted) and NAV per unit 25.06 equals the printed NAV (investigator nav_check, consistent with ff.sql); 9.00 x 4 / 25.06 is above 30 pct, and the derivation caps at 50. Data correct; false_alarm supported. Note on the new reason key f33-wind-down-return-of-capital-distribution-above-30-pct: 'wind down of the fund' is printed only in the 2022 10-Q MD&A; for 2025/2026 the printed support is the per-unit figure and the return-of-capital split (2025 1.95 of 4.10, 2026 1.34 of 1.75), so the key should describe a one-quarter distribution annualised above 30 pct rather than a wind-down.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a99a0c71014b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F16 (distribution_rate > 1.5 x income_yield_pct, validate_fund_financials.py) fails at 2022-06-30 on the fund-quarter key 0001674760|2022-06-30|F16, the only unit. Published distribution_per_share 6.08 equals the printed figure (quoted), distribution_rate 50.0 (cap) against income_yield_pct 9.18. The value is the printed one, so false_alarm on the data is right. The stated mechanism (lumpy, largely return-of-capital distribution) holds for this quarter. 2022 printed sources: return of capital 10.73 of 14.97 (column 4 of the quoted sources line).",
+   "evidence": [
+    {
+     "accession": "0000950170-22-016029",
+     "text": "Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_acff3019c249",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "F16 (distribution_rate > 1.5 x income_yield_pct, validate_fund_financials.py) fails at 2023-12-31 on the fund-quarter key 0001674760|2023-12-31|F16, the only unit. Published distribution_per_share 2.67 (4.73 less 2.06) equals the printed figure (quoted), distribution_rate 28.2 against income_yield_pct 10.32. The value is the printed one, so false_alarm on the data is right. REJECTED on the mechanism: the investigation and proposal PD-F16-1674760-16 explain this quarter as a return-of-capital distribution, but the 10-K for 2025 prints the sources by year and 2023 has no return of capital ('From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 )': 2025, 2024, 2023 = '-', 2022), all 4.73 of 2023 came from net investment income. The 2023 distributions fail F16 because a semi-annual NII distribution is annualised from one quarter, not because capital was returned. The investigation's evidence quotes no 2023 filing and its hypotheses (income-yield derivation) do not test the stated reason. Fix: move 2023-09-30 and 2023-12-31 to a reason that matches the page (lumpy NII distribution annualised from one quarter; reuse a queue key if one exists), cite the 2023 lines, and drop 'mostly as return of capital' from the 2023 part of the statement.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026149",
+     "text": "Distributions per unit $ 4.73 $ 14.97 $ 27.94"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_adb19e642ba7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2023-09-30): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 19 contexts excluded_comparative_period with period 2022-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Vantage Mobility International, LLC Health Care Equipment & Supplies P + 5.00 % 03/21/24 7,260 1,703 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b2502b6d7e04",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2025-06-30): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 16 contexts excluded_comparative_period with period 2024-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 $ 23,513 $ - $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b607c384f4da",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2024-06-30): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 14 contexts excluded_comparative_period with period 2023-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096263",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 04/03/27 5,173 1,881 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b8828a870c64",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "CNT01 at 2024-12-31 is a fund-quarter check (key 0001674760|2024-12-31|CNT01; D01 metric 2.61 = 86/33 rows). Reviewer totals.sql: 33 rows / 253,875k at 2024-09-30 and 86 rows / 582,495k (cost 663,661k) at 2024-12-31, each equal to the printed Total Investments line (quoted). The growth is the In-Kind Contribution at the 2024-12-17 merger (investigator's quote of the 10-K, gate-verified; units 10,687,877 to 14,884,897). Not over-inclusion; as filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Total Investments - 166.5 % $ 663,661 $ 582,495"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Total Investments - 94.79 % $ 340,614 $ 253,875"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c1c2a34d1ab9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2023-06-30): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 19 contexts excluded_comparative_period with period 2022-12-31 (the prior year-end comparative schedule printed in the same filing) and 4 current-period rate/spread-only contexts C_2f367d48 and C_81b25e89 (Diligent 11.45% / 11.48%), C_768275e9 (Hollander 13.97%), C_4b145476 (Truckstop 10.89%), each tagged InvestmentBasisSpreadVariableRate only beside its valued context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039880",
+     "text": "Vantage Mobility International, LLC Health Care Equipment & Supplies 10/15/21 426,294 - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_cdf010931814",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from oracle/check_failures.csv (check B01, this CIK, 2026-03-31): the flagged contexts equal affected_rows exactly (pops.py EXACT). Status split (b01.sql): 19 contexts excluded_comparative_period with period 2025-12-31 (the prior year-end comparative schedule printed in the same filing) and no current-period context. No current-period position printed with a value is unpublished: published non-cash FV and cost equal the printed totals (totals.sql). The quoted line is a current-period line of this filing that the build now publishes (dash value at FV 0, or the KBP cost declared on its valued context); 16 of 16 randomly drawn untagged_values contexts (dash_sample.py, seed 20261020) match a printed '-' line with the declared cost. Earlier real-error verdict (Wine.com, Inc. and Streamland Media Holdings dashes left null) is answered: in svcd Wine.com, Inc. three unsecured tranches (9,535 / 15,680 / 27,186 par) and Streamland Media Holdings common (100,941 units) publish FV 0; the 19 remaining contexts are all 2025-12-31 comparatives.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Streamland Media Holdings LLC Entertainment 03/31/25 100,941 4,055 - (6) (8) (13)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d74d5cf2f80a",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Substance is right: the weak metric is 1.49 pct of 67 loans = 1 row, and rows2.sql finds exactly one loan past maturity at 2025-03-31, ROW-ca404590b39b4671 / C_f908a7f6 (Lithium first lien, maturity 2025-01-03, non-accrual, FV 17,791k), printed '01/03/25' (quoted). The earlier comparative-leak verdict is answered: Streamland's 03/31/25 lines are published only at 2024-12-31 (5 rows) and the 2025-03-31 Streamland loans mature 2029-04-02. REJECTED on coverage: affected_rows/reviewed_rows hold a free-text label ('lithium-2025-03-31-first-lien (the one loan past its printed maturity)') instead of a stable row key, so coverage cannot be verified mechanically. Fix: replace it with 'ROW-ca404590b39b4671/C_f908a7f6-9cd7-4cfb-b839-eb3496039070' in both lists (keep the fund-quarter key).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070306",
+     "text": "Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 72,618 64,001 17,791 (6) (8) (9) (10)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d9751d28526e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F24 at 2024-12-31 is a fund-quarter check (key 0001674760|2024-12-31|F24; D01 metric 2.61 = 86/33 rows). Reviewer totals.sql: 33 rows / 253,875k at 2024-09-30 and 86 rows / 582,495k (cost 663,661k) at 2024-12-31, each equal to the printed Total Investments line (quoted). The growth is the In-Kind Contribution at the 2024-12-17 merger (investigator's quote of the 10-K, gate-verified; units 10,687,877 to 14,884,897). Not over-inclusion; as filed supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Total Investments - 166.5 % $ 663,661 $ 582,495"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Total Investments - 94.79 % $ 340,614 $ 253,875"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e3784ed571f3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F16 (distribution_rate > 1.5 x income_yield_pct, validate_fund_financials.py) fails at 2022-03-31 on the fund-quarter key 0001674760|2022-03-31|F16, the only unit. Published distribution_per_share 8.89 equals the printed figure (quoted), distribution_rate 50.0 (cap) against income_yield_pct 9.22. The value is the printed one, so false_alarm on the data is right. The stated mechanism (lumpy, largely return-of-capital distribution) holds for this quarter. 2022 printed sources: return of capital 10.73 of 14.97 (column 4 of the quoted sources line).",
+   "evidence": [
+    {
+     "accession": "0000950170-22-008936",
+     "text": "Distributions per unit $ 8.89 $ -"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f45f70923bba",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 (0 < distribution_rate < 30) fails at 2022-06-30, fund-quarter key 0001674760|2022-06-30|F33 only. Published distribution_per_share 6.08 equals the printed figure (quoted) and NAV per unit 40.21 equals the printed NAV (investigator nav_check, consistent with ff.sql); 6.08 x 4 / 40.21 is above 30 pct, and the derivation caps at 50. Data correct; false_alarm supported. Note on the new reason key f33-wind-down-return-of-capital-distribution-above-30-pct: 'wind down of the fund' is printed only in the 2022 10-Q MD&A; for 2025/2026 the printed support is the per-unit figure and the return-of-capital split (2025 1.95 of 4.10, 2026 1.34 of 1.75), so the key should describe a one-quarter distribution annualised above 30 pct rather than a wind-down.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-016029",
+     "text": "Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31"
+    },
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "Independently confirmed: svca oracle B01 counted 20, 22, 14, 14, 16, 16, 18, 14, 14, 16, 19, 18, 9 current-period no-value contexts from 2023-06-30 to 2026-06-30 (svca_rules.sql) and cost_conservation fired in svca at 2023-09-30, 2024-09-30, 2024-12-31, 2025-09-30, 2025-12-31, 2026-03-31; so existing_detector is a rule that actually fired. svcd: 121 FV-0 contexts and 26 cost-0 values in untagged_values (147), all published (dash_sample.py: 0 declared contexts unpublished); 16 of 16 random contexts match a printed '-' line; non-cash cost now equals printed Total Investments cost 2023-09-30 to 2026-06-30 (totals.sql).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)"
+    },
+    {
+     "accession": "0000950170-23-039880",
+     "text": "Vantage Mobility International, LLC Health Care Equipment & Supplies 10/15/21 426,294 - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "rejected",
+   "rationale": "The fix is verified: every published non-cash issuer name (744 rows, names.py) appears verbatim in its own filing; equity rows no longer carry the whole member. The detection decision is not supported: the observation itself states the truncated loan issuers ('Streamland', 'Marquis', 'Spectrum', 'Odyssey Logistics &') were flagged by neither C206 nor issuer_name_printed in svca (C206 rows in svca are all equity members). existing_detector is allowed only where a named rule fired on these rows. Fix: split the truncated-loan part into its own observation with action propose_detector using the suggested_check already written, or change this one to propose_detector.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Streamland Media Midco LLC Entertainment S + 6.50 % (Incl. 5.50 % PIK) 04/02/29 $ 11,402 $ 9,383 $ 4,589"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-printed-in-member-not-read",
+   "outcome": "supported",
+   "rationale": "industry_coverage fired in 10 quarters of svca (svca_rules.sql); svcd has extracted_industry on every non-cash row (names.py: no row without it). existing_detector supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Lithium Technologies, Inc. Interactive Media & Services 12.67 % S + 8.00 % 01/03/24 58,727 58,598 56,965 (4) (5) (6)"
+    }
+   ]
+  },
+  {
+   "observation_key": "cost-tagged-in-foreign-unit-printed-in-dollars",
+   "outcome": "supported",
+   "rationale": "svca published the 2023-03-31 euro line at FV 27,540,950 (= 25,332k x 1.0872) with no cost; svcd publishes FV 25,332k and cost 26,918k USD as printed, EUR par 23,416k with an H.10 reference (1.0872) (dil.sql). FX03, SRC_BDC03 and blocking_fair_value_disagreement fired on that row at 2023-03-31 in svca (svca_rules.sql). Supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Diligent Corporation Professional Services 9.15 % E + 6.25 % 08/04/25 EUR 23,416 26,918 25,332 (4) (5) (6)"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "svca named the euro context C_df468d2d 'CorePower Yoga LLC'; svcd names it Diligent Corporation (row correction, corrected_fields issuer_name) and CorePower keeps its own two printed rows (16,876 and 1,070 par). No rule compares member issuer with the printed line; propose_detector with a concrete check is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "CorePower Yoga LLC Diversified Consumer Services 12.16 % L + 7.00 % (incl. 5.00 % PIK) 05/14/25 $ 16,876 $ 16,768 $ 13,796"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed-from-date",
+   "outcome": "supported",
+   "rationale": "Checked on the page: VRC undrawn 443 par prints 'P + 4.50 %' at 2023-03-31, 2023-09-30 and 2023-12-31 and Vantage prints 'P + 5.00 %' at 2023-09-30; svcd publishes PRIME on those rows and SOFR where 'S + 5.50 %' is printed (2023-06-30, 2024 on) (rows3.sql). No rule fired on the guessed codes; propose_detector supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Vantage Mobility International, LLC Health Care Equipment & Supplies P + 5.00 % 03/21/24 19,768 13,617 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "rejected",
+   "rationale": "The rows named are fixed (Hollander 2023-06-30 8.75, Truckstop 5.00 drawn / 5.50 undrawn as printed, Diligent SOFR; rows3.sql). But the scope search was incomplete: the same shape (published term taken from a member that disagrees with the printed line) remains on other rows. (1) Recipe unsecured 2024-06-30 (C_2128e037, 8,156 par): member 'S + 14.25% PIK', page '14.25 % 14.25 % PIK' (fixed); published basis_spread 14.25, SOFR, coupon_type Floating, while every other quarter of the same loan publishes Fixed with no spread (recipe.sql). (2) Vantage last-out 2023-09-30 (C_9e013350): pik_rate 5.0 from member 'P + 5.00% PIK' (pik_rate_source identifier_text), page prints 'P + 5.00 %' with no PIK, the same case as the Picture Head PIK the run withdrew. (3) Recipe 2023-03-31 (C_76ea9a2f, 7,175 par): published instrument '2nd Lien/Senior Secured Debt' from the member, page prints it under 'Unsecured Debt - 1.70 %'. Fix: row corrections for these three with the printed lines, rerun the stale-member search over every member-sourced field (pik_rate_source / reference_rate_source = identifier_text, instrument from member), and list what was searched.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096263",
+     "text": "Recipe Acquisition Corp. (dba Roland Foods) Food Products 14.25 % 14.25 % PIK 12/21/24 8,156 8,153 7,952"
+    },
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Unsecured Debt - 1.70 % Recipe Acquisition Corp. (dba Roland Foods) Food Products 13.25 % 13.25 % PIK 12/22/23 $ 7,175 $ 7,164 $ 6,978"
+    },
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Vantage Mobility International, LLC Health Care Equipment & Supplies P + 5.00 % 03/21/24 19,768 13,617 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "outcome": "supported",
+   "rationale": "All 20 corrected rows (2023-12-31 to 2026-03-31) publish pik_rate = printed coupon, spread = margin, cash 0 (rows.sql); whole-PIK rows with no printed coupon (Wine.com, Inc. dash tranches, Lithium 'S + 11.00 % PIK', Chase 2025-06-30 'S + 11.00 % PIK', Wine.com, LLC 2026-06-30 'S + 12.00 % PIK') keep the margin, the only printed figure. pik_printed fires on the corrected rows, not on the error, so propose_detector is right.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Wine.com, LLC Beverages S + 12.00 % PIK 04/01/28 $ 9,052 $ 9,085 $ 4,815"
+    }
+   ]
+  },
+  {
+   "observation_key": "acquisition-date-in-member-read-as-maturity",
+   "outcome": "supported",
+   "rationale": "svca: all 15 equity rows at 2023-03-31 carried a maturity equal to the member's 'Maturity <date>' (e.g. Elah 05/09/18, KDOR 05/29/20); svcd: 0 of 15 with maturity, 15 corrected (eq.sql). The printed column is Initial Acquisition Date (quoted header). No rule fired; propose_detector supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Investment (1) Industry Interest Rate Initial Acquisition Date (12) Par/Shares (3) Cost Fair Value Footnotes"
+    }
+   ]
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "outcome": "supported",
+   "rationale": "Printed cost '( 23 )'; 2023-09-30 non-cash cost now equals the printed 543,030k (totals.sql). No row rule compares the sign with the page; propose_detector supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060346",
+     "text": "Xactly Corporation IT Services S + 7.25 % 07/31/25 2,554 ( 23 ) ( 38 ) (5) (6) (7)"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-holds-total-investment-income",
+   "outcome": "supported",
+   "rationale": "svca published total_investment_income blank and net_investment_income = the printed total investment income in every quarter (e.g. 2026-03-31 8,019k); svcd publishes TII 8,019k and NII 3,863k (ff.sql). NII above TII at 2024-06-30 (13,278 vs 12,139) and 2024-12-31 (Q4 14,060 vs 10,048) is as printed: incentive-fee reversal '( 3,815 )' made total expenses negative. No rule fired; propose_detector supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Total investment income $ 8,019 $ 18,096 Expenses: Interest and other debt expenses $ 2,385 $ 4,960"
+    },
+    {
+     "accession": "0000950170-24-096263",
+     "text": "Total investment income $ 12,139 $ 17,931 $ 28,511 $ 35,360 Expenses: Interest and other debt expenses $ 645 $ 2,802 $ 1,708 $ 5,714"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-per-share-period-to-date-in-quarter",
+   "outcome": "supported",
+   "rationale": "svca vs svcd (ff.sql): 4.24 -> 8.89, 0 -> 6.08, 0.687 -> 2.06, 0.59 -> 2.11, 0.88 -> 9.00, -1.70 -> 0.98 (12.09 - 11.11), 0.295 -> 3.67, 1.13 -> blank (year 4.10 = nine months), 0.205 -> 1.75; each checked against the printed per-unit lines. F16/F33 did not compare with the page; propose_detector supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06"
+    },
+    {
+     "accession": "0001193125-26-344601",
+     "text": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67"
+    }
+   ]
+  },
+  {
+   "observation_key": "income-yield-pct-difference-of-year-to-date-ratios",
+   "outcome": "supported",
+   "rationale": "svca 1.94 at 2024-12-31, svcd 13.53 = printed 2024 ratio; neighbours publish the printed YTD ratio (12.09, 11.59, 13.26). F27 passed on 1.94; propose_detector supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Ratio of net investment income to average Members Capital 13.53 % 10.32 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "promoted-row-add-rule-superseded",
+   "outcome": "supported",
+   "rationale": "The pulled row_add added the money fund at 2026-03-31 (157,671,000) to reach the total including cash; svcd publishes exactly one CASH row of 157,671k natively at that date (totals.sql), so keeping the rule would double it. No check reads promoted rules against published rows; propose_detector supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671"
+    }
+   ]
+  },
+  {
+   "observation_key": "promoted-column-remap-selector-hits-another-row",
+   "outcome": "supported",
+   "rationale": "X11 fired in svca at 2025-12-31 on ROW-58f403d770d0fb18, the Khoros first-lien loan (svca_rules.sql). In svcd the loan publishes principal 12,518k and the preferred keeps 133,523 units from its own tags (rows2.sql), so the remap was not needed for the preferred either. existing_detector supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088636",
+     "text": "Khoros, LLC (fka Lithium Technologies, Inc.) Interactive Media & Services 10.00 % 10.00 % 05/23/30 12,518 12,093 12,048 (6) (8)"
+    }
+   ]
+  },
+  {
+   "observation_key": "interest-and-debt-expense-concept-not-mapped",
+   "outcome": "rejected",
+   "rationale": "Facts confirmed on the page (ff.sql): 2023-03-31 blank vs printed 2,912; 2023-06-30 blank vs printed 2,802; 2024-12-31 641,500 vs Q4 858 (year 2,566 less nine months 1,708, the Q3 column prints '-'); 2022-12-31 3,094,750 (= 12,379 / 4). 2025-12-31 is correct (2,725 = 14,979 - 12,254), so not_done wrongly lists it. Not supported as 'left': these are printed figures the build publishes wrong, which the brief says are fixed or parked, never left; and the fix is small and opt-in: add interest_expense to FIGURE_FIELDS in pipeline/fund_highlights_wrapper.py (it only acts where a wrapper declares a figure_correction) with a focused test and a false-positive test, then declare the four quarters with their printed lines (shared_code true). If the run will not touch shared code, set action parked and add an orchestrator_requests entry with these quotes. Correct the not_done list either way.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039880",
+     "text": "Expenses: Interest and other debt expenses $ 2,802 $ 2,869 $ 5,714 $ 5,711"
+    },
+    {
+     "accession": "0000950170-25-032226",
+     "text": "Expenses: Interest and other debt expenses $ 2,566 $ 9,848 $ 12,379"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Expenses: Interest and other debt expenses $ - $ 2,244 $ 1,708 $ 7,958"
+    }
+   ]
+  },
+  {
+   "observation_key": "money-market-fund-not-published",
+   "outcome": "supported",
+   "rationale": "Confirmed: CASH rows exist only from 2025-06-30 (13,619k, printed) to 2026-06-30 (totals.sql, names.py); 2023-03-31 prints 59,846k and publishes none. A04/E01 pass on the ex-cash basis before 2025-06-30, so no rule fires; propose_detector with a concrete check is right. Whether cash rows are published is a cohort choice, not a fund fix.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019632",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 59,845,837 $ 59,846 $ 59,846"
+    },
+    {
+     "accession": "0000950170-25-107354",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 13,619,186 $ 13,619 $ 13,619"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-sub-industry-from-printed-industry-heading",
+   "outcome": "supported",
+   "rationale": "The shared map gives one sub-industry per printed heading (Beverages -> Soft Drinks for a wine retailer); a deterministic check cannot know the issuer's line of business from the page alone. not_feasible supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572"
+    }
+   ]
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "outcome": "supported",
+   "rationale": "KDOR warrants publish EQUITY_COMMON with instrument 'Warrants' (names.py asset_category has no warrant class). No rule fired; propose_detector on the printed section is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219865",
+     "text": "KDOR Holdings Inc. (dba Senneca Holdings) Building Products 05/29/20 2,974 $ 1,096 $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-tag-differs-from-printed-line",
+   "outcome": "rejected",
+   "rationale": "The Chase 2026-06-30 case is read correctly (printed '10.00 % 10.00 %', tagged PIK). But the scope search missed two rows of the same shape that are plainly wrong: CorePower Yoga undrawn 2024-09-30 (C_697bf555) publishes interest_rate 0.83 from tag 0.0083 where the page prints '1 0.83 %' (10.83, S + 6.00); Picture Head 2024-09-30 (C_b1d6a348, 1,514 par, FV 1,817k) publishes 1.65 from tag 0.0165 where the page prints '1 1.65 %' (11.65, S + 6.75; sibling 11.39). Both passed row_audit because the split digit reads as 0.83 / 1.65. Fix: row corrections to 10.83 and 11.65 with these lines, list them in this observation (or a new key for tag dropped a leading digit), and add a check for an all-in rate below its own printed spread.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125375",
+     "text": "CorePower Yoga LLC Diversified Consumer Services 1 0.83 % S + 6.00 % 05/14/26 1,070 631 531"
+    },
+    {
+     "accession": "0000950170-24-125375",
+     "text": "Picture Head Midco LLC Entertainment 1 1.65 % S + 6.75 % 12/31/24 1,514 1,514 1,817"
+    }
+   ]
+  }
+ ],
+ "request_reviews": []
+}

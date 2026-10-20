@@ -199,3 +199,4 @@ Manulife 0001988280.
 | 2026-10-19 | 0001841514 Commonwealth Credit Partners BDC I | cwaf | PASS (investigation COMPLETE) | 47 findings, 13 outstanding, all proposed; 14/14 quarters tie; sample 0/20; filer swapped Kent first-out/last-out terms | D-218 |
 | 2026-10-19 | 0001959568 Senior Credit Investments, LLC | scie | PASS (investigation COMPLETE) | 40 findings, 31 outstanding, all proposed; 11/11 quarters tie; sample 0/20; 306 whole-member issuer names fixed; SCI-R1 deferred | D-219 |
 | 2026-10-20 | 0001603480 TCW Direct Lending LLC | tdle | INCOMPLETE (investigation COMPLETE; 2 parked 2022) | 87 findings, 80 outstanding, 78 proposed; 14/14 quarters tie (4 before); sample 2/20 (warrant); 323M cash plug pulled | D-220 |
+| 2026-10-20 | 0001674760 Silver Capital Holdings LLC | svce | PASS (investigation COMPLETE) | 114 findings, 59 outstanding, all proposed; 14/14 quarters tie; sample 0/20; non-accrual footnote renumbered per filing; SVC-R1/R2 deferred | D-221 |

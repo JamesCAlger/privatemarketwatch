@@ -1,0 +1,843 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "svce",
+ "dispositions": [
+  {
+   "disposition_id": "PD-A04-1674760-1",
+   "class": "false_alarm",
+   "engine": "oracle",
+   "rule_name": "A04",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "A04: At 2025-09-30 the published total with the money-market row is 461.6M against the filed investments 334.0M; the difference is the printed Goldman Sachs Financial Square Government Fund holding 127.6M, printed below 'Total Investments'. Non-cash fair value equals the filed figure to the thousand. At 2025-12-31 the published total with the money-market row is 469.1M against the filed investments 329.3M; the difference is the printed Goldman Sachs Financial Square Government Fund holding 139.8M, printed below 'Total Investments'. Non-cash fair value equals the filed figure to the thousand. At 2026-03-31 the published total with the money-market row is 447.1M against the filed investments 289.5M; the difference is the printed Goldman Sachs Financial Square Government Fund holding 157.7M, printed below 'Total Investments'. Non-cash fair value equals the filed figure to the thousand. At 2026-06-30 the published total with the money-market row is 295.0M against the filed investments 260.6M; the difference is the printed Goldman Sachs Financial Square Government Fund holding 34.3M, printed below 'Total Investments'. Non-cash fair value equals the filed figure to the thousand. No fix applies: the money-market row is a printed holding the build publishes as cash; the check compares it with a total that excludes it.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %",
+     "quote": "'Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088636",
+     "verbatim": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %",
+     "quote": "'Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %",
+     "quote": "'Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %",
+     "quote": "'Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 127,594,846 $ 127,595 $ 127,595",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 127,594,846 $ 127,595 $ 127,595': the money-market row published as the CASH row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088636",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 139,844,206 $ 139,844 $ 139,844",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 139,844,206 $ 139,844 $ 139,844': the money-market row published as the CASH row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671': the money-market row published as the CASH row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 34,316,276 $ 34,316 $ 34,316",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 34,316,276 $ 34,316 $ 34,316': the money-market row published as the CASH row"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-E01-1674760-2",
+   "class": "false_alarm",
+   "engine": "oracle",
+   "rule_name": "E01",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
+   "statement": "E01: At 2025-09-30 the published total with the money-market row is 461.6M against the filed investments 334.0M; the difference is the printed Goldman Sachs Financial Square Government Fund holding 127.6M, printed below 'Total Investments'. Non-cash fair value equals the filed figure to the thousand. At 2025-12-31 the published total with the money-market row is 469.1M against the filed investments 329.3M; the difference is the printed Goldman Sachs Financial Square Government Fund holding 139.8M, printed below 'Total Investments'. Non-cash fair value equals the filed figure to the thousand. At 2026-03-31 the published total with the money-market row is 447.1M against the filed investments 289.5M; the difference is the printed Goldman Sachs Financial Square Government Fund holding 157.7M, printed below 'Total Investments'. Non-cash fair value equals the filed figure to the thousand. At 2026-06-30 the published total with the money-market row is 295.0M against the filed investments 260.6M; the difference is the printed Goldman Sachs Financial Square Government Fund holding 34.3M, printed below 'Total Investments'. Non-cash fair value equals the filed figure to the thousand. No fix applies: the money-market row is a printed holding the build publishes as cash; the check compares it with a total that excludes it.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %",
+     "quote": "'Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088636",
+     "verbatim": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %",
+     "quote": "'Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %",
+     "quote": "'Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %",
+     "quote": "'Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 127,594,846 $ 127,595 $ 127,595",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 127,594,846 $ 127,595 $ 127,595': the money-market row published as the CASH row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088636",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 139,844,206 $ 139,844 $ 139,844",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 139,844,206 $ 139,844 $ 139,844': the money-market row published as the CASH row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671': the money-market row published as the CASH row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 34,316,276 $ 34,316 $ 34,316",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 34,316,276 $ 34,316 $ 34,316': the money-market row published as the CASH row"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-cost_conservation-1674760-3",
+   "class": "false_alarm",
+   "engine": "conservation",
+   "rule_name": "cost_conservation",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "cost-conservation-cash-rows-against-ex-cash-cost-total",
+   "statement": "At 2025-09-30 published cost with the money-market row is 485.0M against the filed cost 357.4M (printed 'Total Investments' cost); the difference is the money fund's printed cost 127.6M. Non-cash cost equals the filed cost to the thousand. At 2025-12-31 published cost with the money-market row is 489.2M against the filed cost 349.4M (printed 'Total Investments' cost); the difference is the money fund's printed cost 139.8M. Non-cash cost equals the filed cost to the thousand. At 2026-03-31 published cost with the money-market row is 467.8M against the filed cost 310.2M (printed 'Total Investments' cost); the difference is the money fund's printed cost 157.7M. Non-cash cost equals the filed cost to the thousand. At 2026-06-30 published cost with the money-market row is 337.4M against the filed cost 303.1M (printed 'Total Investments' cost); the difference is the money fund's printed cost 34.3M. Non-cash cost equals the filed cost to the thousand. No fix applies: the cost check compares a total that includes the cash row with one that excludes it.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %",
+     "quote": "'Total Investments - 107.2 % $ 357,418 $ 334,010 Investments in Affiliated Money Market Fund - 41.0 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088636",
+     "verbatim": "Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %",
+     "quote": "'Total Investments - 103.1 % $ 349,365 $ 329,255 Investments in Affiliated Money Market Fund - 43.8 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %",
+     "quote": "'Total Investments - 89.7 % $ 310,164 $ 289,479 Investments in Affiliated Money Market Fund - 48.8 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %",
+     "quote": "'Total Investments - 87.4 % $ 303,060 $ 260,641 Investments in Affiliated Money Market Fund - 11.5 %': printed; the filed investments figure is the first total"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 127,594,846 $ 127,595 $ 127,595",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 127,594,846 $ 127,595 $ 127,595': the money-market row published as the CASH row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088636",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 139,844,206 $ 139,844 $ 139,844",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 139,844,206 $ 139,844 $ 139,844': the money-market row published as the CASH row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 157,670,638 $ 157,671 $ 157,671': the money-market row published as the CASH row"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Goldman Sachs Financial Square Government Fund - Institutional Shares 34,316,276 $ 34,316 $ 34,316",
+     "quote": "'Goldman Sachs Financial Square Government Fund - Institutional Shares 34,316,276 $ 34,316 $ 34,316': the money-market row published as the CASH row"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-B01-1674760-4",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "b01-leaves-without-value-are-the-comparative-schedule",
+   "statement": "Every leaf the oracle counts without a fair value in these quarters is a context of the prior year-end comparative schedule that each filing prints after the current one (14 to 19 contexts a quarter: rate-only, acquisition-date and dash-valued lines of the prior period). No current-period position is counted. The current-period lines printed with a dash (Wine.com, Inc. unsecured tranches, Wine.com, LLC preferred, KDOR warrants, Streamland Media Holdings common, Chase second lien, Vantage 2023 lines) are now published at fair value 0 (source_encodings.untagged_values, 121 contexts) and no longer counted. No fix applies: comparative contexts are not positions of the quarter.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060346",
+     "verbatim": "Schedule of Investments as of December 31, 2022",
+     "quote": "'Schedule of Investments as of December 31, 2022': the comparative schedule heading printed in the filing for 2023-09-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Schedule of Investments as of December 31, 2025",
+     "quote": "'Schedule of Investments as of December 31, 2025': the comparative schedule heading printed in the filing for 2026-03-31"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Schedule of Investments as of December 31, 2025",
+     "quote": "'Schedule of Investments as of December 31, 2025': the comparative schedule heading printed in the filing for 2026-06-30"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)",
+     "quote": "'Wine.com, Inc. Beverages S + 15.00 % PIK 11/03/23 04/01/28 $ 27,186 $ - $ - (6) (8) (11) (12)': printed with a dash for cost and value; published at fair value 0 and cost 0 in svce"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Streamland Media Holdings LLC Entertainment 03/31/25 100,941 4,055 - (6) (8) (13)",
+     "quote": "'Streamland Media Holdings LLC Entertainment 03/31/25 100,941 4,055 - (6) (8) (13)': printed with a dash for value; published at fair value 0 in svce"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20",
+   "addresses_verdict": {
+    "2026-03-31": "The reviewer found dash-valued positions (Wine.com, Inc.; Streamland Media Holdings LLC) left with no fair value. Fixed: these lines are declared from the page at fair value 0 (untagged_values) and published in svce (2026-03-31: Wine.com, Inc. three tranches, Streamland Media Holdings, Wine.com, LLC preferred x2, KDOR warrants x3). The 19 contexts still counted at 2026-03-31 are all 2025-12-31 comparative-schedule contexts."
+   }
+  },
+  {
+   "disposition_id": "PD-B01-1674760-5",
+   "class": "not_applicable",
+   "engine": "oracle",
+   "rule_name": "B01",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2024-12-31"
+   ],
+   "reason_key": "b01-contexts-without-value-carry-no-position-value",
+   "statement": "Besides the prior year-end comparative contexts (19, 19 and 14), the oracle counts current-period contexts that carry no position value: 2023-03-31 one and 2023-06-30 four rate-only contexts (members 'Diligent ... Interest Rate 9.15%', '11.45%', '11.48%', 'Hollander ... 13.97%', 'Internet Truckstop ... 10.89%' tagged with InvestmentInterestRate only, beside the valued context of the same printed line), and 2024-12-31 two cost-only contexts (members 'KBP BRANDS ... Interest Rate 1010.00%' and 'PF Atlantic ... 1001.00%') whose cost belongs to the valued line printed 'KBP BRANDS ... 21,752 21,538 21,535' and 'PF Atlantic ... 8,955 8,866 8,865'; that cost is declared on the valued contexts (untagged_values) and published. No fix applies: none of these contexts is a separate printed position.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019632",
+     "verbatim": "Diligent Corporation Professional Services 9.15 % E + 6.25 % 08/04/25 EUR 23,416 26,918 25,332",
+     "quote": "'Diligent Corporation Professional Services 9.15 % E + 6.25 % 08/04/25 EUR 23,416 26,918 25,332': the one printed Diligent euro line; the rate-only context repeats its rate"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "KBP BRANDS, LLC Hotels, Restaurants & Leisure 10.10 % S + 5.50 % 05/26/27 21,752 21,538 21,535",
+     "quote": "'KBP BRANDS, LLC Hotels, Restaurants & Leisure 10.10 % S + 5.50 % 05/26/27 21,752 21,538 21,535': one printed line; its cost is tagged on a second context"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "PF Atlantic Holdco 2, LLC Hotels, Restaurants & Leisure 10.01 % S + 5.50 % 11/12/27 8,955 8,866 8,865",
+     "quote": "'PF Atlantic Holdco 2, LLC Hotels, Restaurants & Leisure 10.01 % S + 5.50 % 11/12/27 8,955 8,866 8,865': one printed line; its cost is tagged on a second context"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-pik_printed-1674760-6",
+   "class": "rule_problem",
+   "engine": "identity",
+   "rule_name": "pik_printed",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "reason_key": "pik-printed-rule-reads-margin-of-whole-coupon-pik-loan",
+   "statement": "The flagged rows are the Wine.com, LLC second-lien tranches (2023-12-31 to 2026-03-31, two a quarter) and the Wine.com, Inc. unsecured tranche (2023-12-31, 2024-03-31), printed '<rate> % S + 12.00 % PIK' / 'S + 15.00 % PIK': the whole coupon is paid in kind and the printed PIK figure is the margin. Under the owner's convention (D-031, D-092 / D-218) a whole-coupon PIK loan publishes the whole printed coupon as pik_rate, the margin as basis_spread and interest_rate_cash 0, so the published pik_rate (e.g. 15.93) differs from the printed margin (12.00) by design: the rule reads the margin printed before the word PIK as the PIK rate (as Commonwealth, D-218). No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572",
+     "quote": "'Wine.com, LLC Beverages 15.93 % S + 12.00 % PIK 04/01/28 $ 8,709 $ 8,877 $ 7,572': coupon 15.93 printed, all of it PIK; published pik_rate 15.93, spread 12.00"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056919",
+     "verbatim": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410",
+     "quote": "'Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410': coupon 20.53, margin 15.00, all PIK; published pik_rate 20.53"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-C117-1674760-7",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "C117",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "reason_key": "pik-rate-above-20-as-printed",
+   "statement": "The one row flagged is Wine.com, Inc.'s unsecured tranche at 2024-03-31, printed '20.53 % S + 15.00 % PIK' (the whole coupon paid in kind); its published pik_rate 20.53 is the printed coupon (D-092). No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056919",
+     "verbatim": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410",
+     "quote": "'Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410': printed coupon 20.53, all PIK"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-fmt_pik_rate-1674760-8",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "fmt_pik_rate",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "reason_key": "fmt-pik-rate-above-20-as-printed",
+   "statement": "The PIK rate above 20 in this quarter is Wine.com, Inc.'s printed all-PIK coupon of 20.53 % (the C117 row). Published as printed under D-092. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-056919",
+     "verbatim": "Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410",
+     "quote": "'Wine.com, Inc. Beverages 20.53 % S + 15.00 % PIK 04/03/27 6,426 9,283 6,410': printed coupon 20.53, all PIK"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-X02-1674760-9",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "reason_key": "x02-no-rate-printed-on-the-row",
+   "statement": "The one row still flagged is the Chase Industries second-lien line printed '11/11/27 16,405 - 9,351': no interest rate, reference rate or spread is printed and none is tagged. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-219865",
+     "verbatim": "Chase Industries, Inc. (dba Senneca Holdings) Building Products 11/11/27 16,405 - 9,351 (6) (8) (13)",
+     "quote": "'Chase Industries, Inc. (dba Senneca Holdings) Building Products 11/11/27 16,405 - 9,351 (6) (8) (13)': no rate or spread printed; cost printed '-'"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20",
+   "addresses_verdict": {
+    "2026-03-31": "The reviewer found the CDM Fitness and HAI Hospitality undrawn lines published without the printed spread (S + 6.25 %, S + 5.50 %). It no longer stands: in svce those rows publish basis_spread 6.25 and 5.50 (SOFR) and are not flagged; the only X02 row at 2026-03-31 is the Chase line, which prints no rate."
+   }
+  },
+  {
+   "disposition_id": "PD-merged_context_excluded-1674760-10",
+   "class": "false_alarm",
+   "engine": "provenance_reverify",
+   "rule_name": "merged_context_excluded",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "reason_key": "merged-context-value-equals-printed-row",
+   "statement": "Lithium Technologies' first-lien loan at 2023-03-31 publishes interest_rate 12.67 filled from a sibling rate-only context of the same printed line (member '... Interest Rate 12.67% ...'); the re-verifier excludes merged-context values from its check. The printed line prints 12.67 %. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-019632",
+     "verbatim": "Lithium Technologies, Inc. Interactive Media & Services 12.67 % S + 8.00 % 01/03/24 58,727 58,598 56,965 (4) (5) (6)",
+     "quote": "'Lithium Technologies, Inc. Interactive Media & Services 12.67 % S + 8.00 % 01/03/24 58,727 58,598 56,965 (4) (5) (6)': printed rate 12.67, published 12.67"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-financial_convention_unresolved-1674760-11",
+   "class": "source_ambiguity",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "reason_key": "convention-printed-pik-above-printed-rate",
+   "statement": "Streamland Media Midco's line prints an interest rate of 9.76 % and 'S + 6.50 % (Incl. 10.06 % PIK)': the PIK part exceeds the all-in rate, so neither all-in nor cash-leg reading fits and the build publishes no interest_rate (spread 6.50, pik_rate 10.06 as tagged). The sibling line prints '10.00 % S + 5.50 % (Incl. 9.07 % PIK)'. Which figure is the coupon is not settled by the page. No fix applies without the owner's reading.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 10,990 10,809 10,551 (5) (7)",
+     "quote": "'Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK) 04/02/29 10,990 10,809 10,551 (5) (7)': PIK 10.06 above the printed rate 9.76"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277520",
+     "verbatim": "Streamland Media Midco LLC Entertainment 10.00 % S + 5.50 % (Incl. 9.07 % PIK) 04/0",
+     "quote": "'Streamland Media Midco LLC Entertainment 10.00 % S + 5.50 % (Incl. 9.07 % PIK) 04/0': sibling line, PIK 9.07 against 10.00"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1674760-12",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "reason_key": "maturity-not-past-defaulted-loan-printed-with-original-maturity",
+   "statement": "The one row past maturity at 2025-03-31 is Lithium Technologies' first-lien loan, printed with its original maturity 01/03/25, held past maturity on non-accrual (no rate printed; value 17,791 against cost 64,001). Published as printed.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070306",
+     "verbatim": "Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 72,618 64,001 17,791 (6) (8) (9) (10)",
+     "quote": "'Lithium Technologies, Inc. Interactive Media & Services S + 11.00 % PIK 01/03/25 72,618 64,001 17,791 (6) (8) (9) (10)': printed maturity 01/03/25 in the 2025-03-31 schedule"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20",
+   "addresses_verdict": {
+    "2025-03-31": "The reviewer read a comparative leak: a Streamland row maturing 03/31/25 from the 2024-12-31 schedule. It does not stand in svce: no Streamland row with that maturity is published at 2025-03-31 (the 2025-03-31 Streamland lines mature 04/02/29); the 03/31/25 lines are published at 2024-12-31, where they are current. The row the check counts now is Lithium Technologies (1 of 67 loans)."
+   }
+  },
+  {
+   "disposition_id": "PD-D01-1674760-13",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "D01",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "reason_key": "schedule-growth-printed-positions-total-ties",
+   "statement": "Rows 33 to 86 and fair value 253.9M to 582.5M between 2024-09-30 and 2024-12-31: on 2024-12-17 the fund was acquired (the Merger) and the buyer contributed Pantheon Silver LLC's portfolio for 8,394,088 units (the In-Kind Contribution); units went from 10,687,877 to 14,884,897. The published rows equal the printed 'Total Investments' (663,661 cost, 582,495 value). No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "the Buyer contributed its wholly-owned subsidiary, Pantheon Silver LLC, a Delaware limited liability company (Pantheon Silver), to us in exchange for 8,394,088 Units at a price of $24.05 per Unit (the In-Kind Contribution)",
+     "quote": "'the Buyer contributed its wholly-owned subsidiary, Pantheon Silver LLC, a Delaware limited liability company (Pantheon Silver), to us in exchange for 8,394,088 Units at a price of $24.05 per Unit (the In-Kind Contribution)': the portfolio contributed at the merger"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "Total Investments - 166.5 % $ 663,661 $ 582,495",
+     "quote": "'Total Investments - 166.5 % $ 663,661 $ 582,495': published 582,495 equals it"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125375",
+     "verbatim": "Total Investments - 94.79 % $ 340,614 $ 253,875",
+     "quote": "'Total Investments - 94.79 % $ 340,614 $ 253,875': the quarter before"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-CNT01-1674760-14",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "CNT01",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "reason_key": "schedule-growth-printed-positions-total-ties",
+   "statement": "Position count unstable at 2024-12-31 (33 to 86 rows): the In-Kind Contribution of Pantheon Silver LLC at the merger of 2024-12-17 brought in the buyer's portfolio; the published rows tie to the printed Total Investments. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "the Buyer contributed its wholly-owned subsidiary, Pantheon Silver LLC, a Delaware limited liability company (Pantheon Silver), to us in exchange for 8,394,088 Units at a price of $24.05 per Unit (the In-Kind Contribution)",
+     "quote": "'the Buyer contributed its wholly-owned subsidiary, Pantheon Silver LLC, a Delaware limited liability company (Pantheon Silver), to us in exchange for 8,394,088 Units at a price of $24.05 per Unit (the In-Kind Contribution)': the portfolio contributed at the merger"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "Total Investments - 166.5 % $ 663,661 $ 582,495",
+     "quote": "'Total Investments - 166.5 % $ 663,661 $ 582,495': published 582,495 equals it"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-F24-1674760-15",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F24",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "reason_key": "schedule-growth-printed-positions-total-ties",
+   "statement": "Position count ratio 2.61 at 2024-12-31: the merger and In-Kind Contribution of 2024-12-17; units 10,687,877 to 14,884,897. The published rows tie to the printed Total Investments. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "Units ( 14,884,897 and 10,687,877 units issued and outstanding as of December 31, 2024 and December 31, 2023) 506,006 548,420",
+     "quote": "'Units ( 14,884,897 and 10,687,877 units issued and outstanding as of December 31, 2024 and December 31, 2023) 506,006 548,420': units issued at the merger"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "Total Investments - 166.5 % $ 663,661 $ 582,495",
+     "quote": "'Total Investments - 166.5 % $ 663,661 $ 582,495': published 582,495 equals it"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-F16-1674760-16",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "reason_key": "f16-return-of-capital-distribution-in-the-quarter",
+   "statement": "In these years the fund paid its distributions mostly as return of capital, in lumps: printed distributions per unit 8.89 (Q1 2022), 6.08 (Q2 2022), 2.11 (Q2 2024), 9.00 (Q3 2024), 3.67 (Q2 2025), 1.75 (Q2 2026), against an annualised net investment income ratio of 4.5 to 13.5 %. Sources as printed: 2022 return of capital 10.73 of 14.97, 2024 11.73 of 12.09, six months 2025 3.08 of 3.67, six months 2026 1.34 of 1.75. The distribution figures are the printed ones (highlights wrapper figure_corrections). No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-22-008936",
+     "verbatim": "Distributions per unit $ 8.89 $ -",
+     "quote": "'Distributions per unit $ 8.89 $ -': printed distribution per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125375",
+     "verbatim": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06",
+     "quote": "'Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06': printed distribution per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107354",
+     "verbatim": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11",
+     "quote": "'Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11': printed distribution per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67",
+     "quote": "'Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67': printed distribution per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026149",
+     "verbatim": "Distributions declared: From return of capital - ( 10.73 ) ( 23.41 ) ( 0.09 ) ( 4.61 ) From net investment income ( 4.73 ) ( 4.24 )",
+     "quote": "'Distributions declared: From return of capital - ( 10.73 ) ( 23.41 ) ( 0.09 ) ( 4.61 ) From net investment income ( 4.73 ) ( 4.24 )': 2022: return of capital 10.73 (2023: none)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "Distributions recorded: From return of capital ( 11.73 ) - ( 10.73 ) ( 23.41 ) ( 0.09 ) From net investment income ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 ) ( 16.56 ) Total distributions recorded ( 12.09 )",
+     "quote": "'Distributions recorded: From return of capital ( 11.73 ) - ( 10.73 ) ( 23.41 ) ( 0.09 ) From net investment income ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 ) ( 16.56 ) Total distributions recorded ( 12.09 )': 2024: return of capital 11.73 of 12.09"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Distributions recorded: From return of capital ( 1.34 ) ( 3.08 ) From net investment income ( 0.41 ) ( 0.59 )",
+     "quote": "'Distributions recorded: From return of capital ( 1.34 ) ( 3.08 ) From net investment income ( 0.41 ) ( 0.59 )': six months 2026: 1.34 of 1.75; six months 2025: 3.08 of 3.67"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-F16-1674760-17",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F16",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "reason_key": "f16-income-distribution-paid-in-one-quarter-annualised",
+   "statement": "2023: the fund declared no distribution in the first two quarters and paid the year's net investment income in two payments, 2.06 a unit in Q3 and 2.67 in Q4 (year 4.73 less nine months 2.06), all from net investment income: the 10-K for 2023 and the 10-K for 2025 print no return of capital for 2023. Annualised from one quarter each payment is 20.9 % and 28.2 % of NAV, against the printed year-to-date income ratios 10.96 % and 10.32 %; per unit the year printed net investment income 4.01 and distributions 4.73. The figures are the printed ones. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060346",
+     "verbatim": "Distributions per unit $ 2.06 $ - $ 2.06 $ 14.97",
+     "quote": "'Distributions per unit $ 2.06 $ - $ 2.06 $ 14.97': Q3 2023 2.06 a unit; nine months 2.06 (none in the first half)"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026149",
+     "verbatim": "Distributions per unit $ 4.73 $ 14.97 $ 27.94",
+     "quote": "'Distributions per unit $ 4.73 $ 14.97 $ 27.94': year 2023 4.73 a unit, so Q4 2.67"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026149",
+     "verbatim": "Distributions declared: From return of capital - ( 10.73 ) ( 23.41 ) ( 0.09 ) ( 4.61 ) From net investment income ( 4.73 ) ( 4.24 )",
+     "quote": "'Distributions declared: From return of capital - ( 10.73 ) ( 23.41 ) ( 0.09 ) ( 4.61 ) From net investment income ( 4.73 ) ( 4.24 )': 2023: return of capital '-', all 4.73 from net investment income"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-088636",
+     "verbatim": "Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )",
+     "quote": "'Distributions recorded: From return of capital ( 1.95 ) ( 11.73 ) - ( 10.73 ) ( 23.41 ) From net investment income ( 2.15 ) ( 0.36 ) ( 4.73 ) ( 4.24 ) ( 4.53 )': 2023 column: return of capital '-'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-060346",
+     "verbatim": "Ratio of net investment income to average Members Capital 10.96 % 9.84 %",
+     "quote": "'Ratio of net investment income to average Members Capital 10.96 % 9.84 %': printed nine-month ratio 10.96 %"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-026149",
+     "verbatim": "Ratio of net investment income to average Members Capital 10.32 % 11.11 %",
+     "quote": "'Ratio of net investment income to average Members Capital 10.32 % 11.11 %': printed 2023 ratio 10.32 %"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-F33-1674760-18",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30",
+    "2024-09-30",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "reason_key": "f33-one-quarter-distribution-annualised-above-30-pct",
+   "statement": "Distribution rate above 30 % (the derivation caps it at 50): the quarter's printed distribution per unit annualised over NAV per unit, where the fund pays several quarters' worth in one quarter (8.89 and 6.08 a unit in Q1 and Q2 2022 at NAV about 46 to 49; 9.00 at Q3 2024, NAV 25.06; 3.67 at Q2 2025, NAV 21.01; 1.75 at Q2 2026, NAV 20.03) and nothing in other quarters. The figures are the printed ones. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-22-008936",
+     "verbatim": "Distributions per unit $ 8.89 $ -",
+     "quote": "'Distributions per unit $ 8.89 $ -': printed distribution per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-22-016029",
+     "verbatim": "Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31",
+     "quote": "'Distributions per unit $ 6.08 $ 12.31 $ 14.97 $ 12.31': printed distribution per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-125375",
+     "verbatim": "Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06",
+     "quote": "'Distributions per unit $ 9.00 $ 2.06 $ 11.11 $ 2.06': printed distribution per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-107354",
+     "verbatim": "Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11",
+     "quote": "'Distributions per unit $ 3.67 $ 2.11 $ 3.67 $ 2.11': printed distribution per unit"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-344601",
+     "verbatim": "Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67",
+     "quote": "'Distributions per unit $ 1.75 $ 3.67 $ 1.75 $ 3.67': printed distribution per unit"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-F27-1674760-19",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F27",
+   "ciks": [
+    "0001674760"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
+   "statement": "Income yield is the printed ratio of net investment income to average members' capital (13.53 % for 2024, 13.26 % for Q1 2025, annualised); the fund held 582.5M and 512.2M of investments against members' capital of 349.7M and 356.8M, so the ratio exceeds the holdings' weighted coupon (about 10.9 % and 10.5 %) by more than 2 points. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-032226",
+     "verbatim": "Ratio of net investment income to average Members Capital 13.53 % 10.32 %",
+     "quote": "'Ratio of net investment income to average Members Capital 13.53 % 10.32 %': printed 2024 ratio 13.53 %"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-070306",
+     "verbatim": "Ratio of net investment income to average Members Capital 13.26 % 12.70 %",
+     "quote": "'Ratio of net investment income to average Members Capital 13.26 % 12.70 %': printed Q1 2025 ratio 13.26 %"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001674760.json",
+   "decided_by": "PROPOSED by agent silver-capital-fund-agent-2026-10-20 (2026-10-20); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  }
+ ]
+}
