@@ -1,0 +1,254 @@
+{
+  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+  "sandbox": "nvboe",
+  "dispositions": [
+    {
+      "disposition_id": "PD-PP02-1812554-2024-06-30",
+      "class": "not_applicable",
+      "engine": "row_validation",
+      "rule_name": "PP02",
+      "ciks": [
+        "0001812554"
+      ],
+      "quarters": [
+        "2024-06-30"
+      ],
+      "basis": "read",
+      "reason_key": "pp02-distinct-fund-and-jv-schedules",
+      "statement": "The two zero-value Chrysaor delayed-draw rows are separately printed on the parent schedule and the ORCIC Senior Loan Fund schedule. Their dimension paths and accounting scopes differ. Both must remain; underlying_schedule is excluded from the published basis. No row deletion applies to PP02. Q2 maturity was separately corrected; Q3 context-specific maturities remain parked. Same printed facility type and zero facts are not evidence of duplicate disclosure within one ownership scope.",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001812554-24-000043",
+          "verbatim": "Chrysaor Bidco s.a r.l. (dba AlterDomus)(6)(16)(18)(20)(21)(22) First lien senior secured delayed draw term loan SR + 3.50 % 05/2026 - - - 0.0 % Computer Services, Inc.(7) First lien senior secured loan SR + 5.25 % 11/2029 52,787 52,155 52,787 0.0 % Computer S",
+          "quote": "Chrysaor Bidco s.a r.l. (dba AlterDomus)(6)(16)(18)(20)(21)(22) First lien senior secured delayed draw term loan SR + 3.50 % 05/2026 - - - 0.0 % Computer Services, Inc.(7) First lien senior secured loan SR + 5.25 % 11/2029 52,787 52,155 52,787 0.0 % Computer S Read as two distinct ownership schedules, not duplicate facts within one schedule."
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-24-000043",
+          "verbatim": "Chrysaor Bidco s.a r.l. (dba AlterDomus)(5)(10)(11) First lien senior secured delayed draw term loan SR + 3.50 % 05/2026 - - - - % Citadel Securities, LP(5) First lien senior secured loan SR + 2.25 % 07/2030 9,919 9,923 9,944 2.8 % Citco Funding LLC(6) First l",
+          "quote": "Chrysaor Bidco s.a r.l. (dba AlterDomus)(5)(10)(11) First lien senior secured delayed draw term loan SR + 3.50 % 05/2026 - - - - % Citadel Securities, LP(5) First lien senior secured loan SR + 2.25 % 07/2030 9,919 9,923 9,944 2.8 % Citco Funding LLC(6) First l Read as two distinct ownership schedules, not duplicate facts within one schedule."
+        }
+      ],
+      "rerun": "scratch/fund_runs/0001812554/read_fund_findings.py; pp02_population.csv",
+      "decided_by": "PROPOSED by /root/blueowl_sol; owner acceptance pending",
+      "decided_on": "2026-10-20"
+    },
+    {
+      "disposition_id": "PD-PP02-1812554-2024-09-30",
+      "class": "not_applicable",
+      "engine": "row_validation",
+      "rule_name": "PP02",
+      "ciks": [
+        "0001812554"
+      ],
+      "quarters": [
+        "2024-09-30"
+      ],
+      "basis": "read",
+      "reason_key": "pp02-distinct-fund-and-jv-schedules",
+      "statement": "The two zero-value Chrysaor delayed-draw rows are separately printed on the parent schedule and the ORCIC Senior Loan Fund schedule. Their dimension paths and accounting scopes differ. Both must remain; underlying_schedule is excluded from the published basis. No row deletion applies to PP02. Q2 maturity was separately corrected; Q3 context-specific maturities remain parked. Same printed facility type and zero facts are not evidence of duplicate disclosure within one ownership scope.",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001812554-24-000062",
+          "verbatim": "Chrysaor Bidco s.a r.l. (dba AlterDomus)(17)(19)(22)(23) First lien senior secured delayed draw term loan SR + 3.50 % 05/2026 - - - 0.0 % Computer Services, Inc. (dba CSI)(7) First lien senior secured loan SR + 5.25 % 11/2029 52,652 52,045 52,652 0.3 % Compute",
+          "quote": "Chrysaor Bidco s.a r.l. (dba AlterDomus)(17)(19)(22)(23) First lien senior secured delayed draw term loan SR + 3.50 % 05/2026 - - - 0.0 % Computer Services, Inc. (dba CSI)(7) First lien senior secured loan SR + 5.25 % 11/2029 52,652 52,045 52,652 0.3 % Compute Read as two distinct ownership schedules, not duplicate facts within one schedule."
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-24-000062",
+          "verbatim": "Chrysaor Bidco s.a r.l. (dba AlterDomus)(6)(9)(10) First lien senior secured delayed draw term loan SR + 3.50 % 05/2031 - - - - % Citadel Securities, LP(5) First lien senior secured loan SR + 2.25 % 07/2030 7,913 7,918 7,906 2.2 % Citco Funding LLC(7) First li",
+          "quote": "Chrysaor Bidco s.a r.l. (dba AlterDomus)(6)(9)(10) First lien senior secured delayed draw term loan SR + 3.50 % 05/2031 - - - - % Citadel Securities, LP(5) First lien senior secured loan SR + 2.25 % 07/2030 7,913 7,918 7,906 2.2 % Citco Funding LLC(7) First li Read as two distinct ownership schedules, not duplicate facts within one schedule."
+        }
+      ],
+      "rerun": "scratch/fund_runs/0001812554/read_fund_findings.py; pp02_population.csv",
+      "decided_by": "PROPOSED by /root/blueowl_sol; owner acceptance pending",
+      "decided_on": "2026-10-20"
+    },
+    {
+      "disposition_id": "PD-COVERAGE-1812554-202503",
+      "class": "as_filed",
+      "engine": "identity",
+      "rule_name": "field_coverage_drop",
+      "ciks": [
+        "0001812554"
+      ],
+      "quarters": [
+        "2025-03-31"
+      ],
+      "basis": "read",
+      "reason_key": "coverage-percent-of-net-assets-no-longer-printed",
+      "statement": "The percent-of-net-assets coverage falls from 490/490 funded published rows to 0/506. The March 2025 filing still has the column heading but prints percentage figures on aggregate lines instead of individual positions. The tagged position facts and printed position cells supply no percent to extract. Do not allocate an aggregate percent or relabel calculated percent as filed. No source-backed position-value correction applies.",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001812554-25-000030",
+          "verbatim": "IRI Group Holdings, Inc. (f/k/a Circana Group, L.P. (f/k/a The NPD Group, L.P.))(7) First lien senior secured loan S+ 5.00 % 12/2028 228,932 $ 228,932 $ 228,932 IRI Group Holdings, Inc. (f/k/a Circana Group, L.P. (f/k/a The NPD Group, L.P.))(6)(18) First lien senior secured revolving loan S+ 5.00 % 12/2027 1,598 1,598 1,598 Monotype Imaging Holdings Inc.(6)(18) First lien senior secured loan S+ 5.50 % 2/2031 170,317 169,141 170,317 Project Boost Purchaser, LLC (dba J.D. Power)(7)(21) First lien ",
+          "quote": "IRI Group Holdings, Inc. (f/k/a Circana Group, L.P. (f/k/a The NPD Group, L.P.))(7) First lien senior secured loan S+ 5.00 % 12/2028 228,932 $ 228,932 $ 228,932 IRI Group Holdings, Inc. (f/k/a Circana Group, L.P. (f/k/a The NPD Group, L.P.))(6)(18) First lien senior secured revolving loan S+ 5.00 % 12/2027 1,598 1,598 1,598 Monotype Imaging Holdings Inc.(6)(18) First lien senior secured loan S+ 5.50 % 2/2031 170,317 169,141 170,317 Project Boost Purchaser, LLC (dba J.D. Power)(7)(21) First lien  Individual position rows end at fair value; no row percent is printed."
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-25-000030",
+          "verbatim": "Boxer Parent Company Inc. (f/k/a BMC)(7)(21) First lien senior secured loan S+ 3.00 % 7/2031 68,250 68,213 66,981 Capstone Acquisition Holdings, Inc.(6) First lien senior secured loan S+ 4.50 % 11/2029 85,142 84,581 84,716 ConnectWise, LLC(7)(21) First lien senior secured loan S+ 3.50 % 9/2028 44,282 44,360 44,198 CoolSys, Inc.(8)(21) First lien senior secured loan S+ 4.75 % 8/2028 13,701 12,987 12,331 CoreTrust Purchasing Group LLC(6) First lien senior secured loan S+ 5.25 % 10/2029 112,333 111",
+          "quote": "Boxer Parent Company Inc. (f/k/a BMC)(7)(21) First lien senior secured loan S+ 3.00 % 7/2031 68,250 68,213 66,981 Capstone Acquisition Holdings, Inc.(6) First lien senior secured loan S+ 4.50 % 11/2029 85,142 84,581 84,716 ConnectWise, LLC(7)(21) First lien senior secured loan S+ 3.50 % 9/2028 44,282 44,360 44,198 CoolSys, Inc.(8)(21) First lien senior secured loan S+ 4.75 % 8/2028 13,701 12,987 12,331 CoreTrust Purchasing Group LLC(6) First lien senior secured loan S+ 5.25 % 10/2029 112,333 111 Individual position rows end at fair value; no row percent is printed."
+        }
+      ],
+      "rerun": "scratch/fund_runs/0001812554/read_fund_findings.py; coverage_population.csv",
+      "decided_by": "PROPOSED by /root/blueowl_sol; owner acceptance pending",
+      "decided_on": "2026-10-20"
+    },
+    {
+      "disposition_id": "PD-C04-1812554-202606",
+      "class": "as_filed",
+      "engine": "oracle",
+      "rule_name": "C04",
+      "ciks": [
+        "0001812554"
+      ],
+      "quarters": [
+        "2026-06-30"
+      ],
+      "basis": "read",
+      "reason_key": "c04-no-units-printed-on-equity-capital-and-commitment-rows",
+      "statement": "Exact C04 population72,50 nonzero counts. All22 missing source reviewed:17 Units dashes and five commitment rows without units column. No printed positive quantity is omitted. Do not fabricate unit counts or retain dollar capital as units.",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Valor CI Blocker Feeder LP(3)(4)(22)(29)(30)(31) Investment partnership N/A N/A 9,912 - 9,640 10,345 VCI Intermediate TopCo 1 LLC(3)(4)(29)(30)(31) Class B Units N/A N/A 10,716 - 10,382 10,930 20,022 21,275 0.1 % Internet software and services AlphaSense, LLC(3)(4)(29)(30) Series E Preferred Shares N/A N/A - 84,645 765 1,291 Bird Holding B.V. (fka MessageBird Holding B.V.)(3)(4)(29)(30)(31) Extended Series C Warrants N/A N/A - 7,980 49 9 Brooklyn Lender Co-Invest 2, L.P. (dba Boomi)(3)(4)(29)(30",
+          "quote": "Valor CI Blocker Feeder LP(3)(4)(22)(29)(30)(31) Investment partnership N/A N/A 9,912 - 9,640 10,345 VCI Intermediate TopCo 1 LLC(3)(4)(29)(30)(31) Class B Units N/A N/A 10,716 - 10,382 10,930 20,022 21,275 0.1 % Internet software and services AlphaSense, LLC(3)(4)(29)(30) Series E Preferred Shares N/A N/A - 84,645 765 1,291 Bird Holding B.V. (fka MessageBird Holding B.V.)(3)(4)(29)(30)(31) Extended Series C Warrants N/A N/A - 7,980 49 9 Brooklyn Lender Co-Invest 2, L.P. (dba Boomi)(3)(4)(29)(30"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Blue Owl Leasing LLC(3)(5)(29)(30)(31) LLC Interest N/A N/A 1,900 - 1,900 1,876 429,322 353,272 1.9 % Pharmaceuticals LSI Financing LLC(3)(5)(22)(30)(31) Specialty finance equity investment N/A N/A 493,187 - 493,187 527,175 493,187 527,175 2.9 % Specialty retail Notorious Purchaser II, Inc. (dba Beauty Industry Group)(3)(4)(29)(30) Class B Common Stock N/A N/A - 4,063 49,564 48,053 49,564 48,053 0.3 % Total controlled/affiliated portfolio company equity investments $ 1,724,579 $ 1,735,705 9.4 % ",
+          "quote": "Blue Owl Leasing LLC(3)(5)(29)(30)(31) LLC Interest N/A N/A 1,900 - 1,900 1,876 429,322 353,272 1.9 % Pharmaceuticals LSI Financing LLC(3)(5)(22)(30)(31) Specialty finance equity investment N/A N/A 493,187 - 493,187 527,175 493,187 527,175 2.9 % Specialty retail Notorious Purchaser II, Inc. (dba Beauty Industry Group)(3)(4)(29)(30) Class B Common Stock N/A N/A - 4,063 49,564 48,053 49,564 48,053 0.3 % Total controlled/affiliated portfolio company equity investments $ 1,724,579 $ 1,735,705 9.4 % "
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Valor CI Blocker Feeder LP Investment partnership N/A 9,912 804 - Total non-controlled/non-affiliated - equity commitments $ 97,485 $ 16,288 $ - Non-controlled/affiliated - debt commitments Pluralsight, LLC First lien senior secured delayed draw term loan 8/2029 $ - $ 496 $ ( 52 ) 41 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Unaudited Unfunded Portfolio Company Commitment Type Commitment Expirat",
+          "quote": "Valor CI Blocker Feeder LP Investment partnership N/A 9,912 804 - Total non-controlled/non-affiliated - equity commitments $ 97,485 $ 16,288 $ - Non-controlled/affiliated - debt commitments Pluralsight, LLC First lien senior secured delayed draw term loan 8/2029 $ - $ 496 $ ( 52 ) 41 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Unaudited Unfunded Portfolio Company Commitment Type Commitment Expirat"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "OWL-HP FINANCE LLC(3)(5)(22)(29)(30)(31) Specialty finance equity investment N/A N/A 104,365 - 104,367 104,234 104,367 104,234 0.6 % Insurance Fifth Season Investments LLC(3)(4)(30) Specialty finance equity investment N/A N/A - 33 333,200 365,639 333,200 365,639 2.0 % 30 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Unaudited Company(1)(25) Investment Interest Maturity Date Par Amortized Cost(2)(27)",
+          "quote": "OWL-HP FINANCE LLC(3)(5)(22)(29)(30)(31) Specialty finance equity investment N/A N/A 104,365 - 104,367 104,234 104,367 104,234 0.6 % Insurance Fifth Season Investments LLC(3)(4)(30) Specialty finance equity investment N/A N/A - 33 333,200 365,639 333,200 365,639 2.0 % 30 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Unaudited Company(1)(25) Investment Interest Maturity Date Par Amortized Cost(2)(27)"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "VCI Intermediate TopCo 1 LLC(3)(4)(29)(30)(31) Class B Units N/A N/A 10,716 - 10,382 10,930 20,022 21,275 0.1 % Internet software and services AlphaSense, LLC(3)(4)(29)(30) Series E Preferred Shares N/A N/A - 84,645 765 1,291 Bird Holding B.V. (fka MessageBird Holding B.V.)(3)(4)(29)(30)(31) Extended Series C Warrants N/A N/A - 7,980 49 9 Brooklyn Lender Co-Invest 2, L.P. (dba Boomi)(3)(4)(29)(30) Common Units N/A N/A - 1,729,439 1,729 2,679 Chrome Investors LP(3)(4)(22)(29)(30)(31) LP Interest ",
+          "quote": "VCI Intermediate TopCo 1 LLC(3)(4)(29)(30)(31) Class B Units N/A N/A 10,716 - 10,382 10,930 20,022 21,275 0.1 % Internet software and services AlphaSense, LLC(3)(4)(29)(30) Series E Preferred Shares N/A N/A - 84,645 765 1,291 Bird Holding B.V. (fka MessageBird Holding B.V.)(3)(4)(29)(30)(31) Extended Series C Warrants N/A N/A - 7,980 49 9 Brooklyn Lender Co-Invest 2, L.P. (dba Boomi)(3)(4)(29)(30) Common Units N/A N/A - 1,729,439 1,729 2,679 Chrome Investors LP(3)(4)(22)(29)(30)(31) LP Interest "
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Polar Investors LP (dba Dentalcorp)(3)(4)(22)(29)(30)(31) Common equity N/A N/A 8,520 - 8,520 8,520 Romulus Intermediate Holdings 1 Inc. (dba PetVet Care Centers)(3)(4)(6)(30) Series A Preferred Stock N/A 15.00 % N/A - 27,355 39,218 31,030 XOMA Corporation(3)(4)(29)(30) Warrants N/A N/A - 54,000 369 1,039 77,895 75,825 0.4 % Healthcare technology BEHP Co-Investor II, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 1,270 - 157 2,543 Minerva Holdco, Inc.(3)(4)(6)(30) Senior A Preferred Stock N/A 10.75 ",
+          "quote": "Polar Investors LP (dba Dentalcorp)(3)(4)(22)(29)(30)(31) Common equity N/A N/A 8,520 - 8,520 8,520 Romulus Intermediate Holdings 1 Inc. (dba PetVet Care Centers)(3)(4)(6)(30) Series A Preferred Stock N/A 15.00 % N/A - 27,355 39,218 31,030 XOMA Corporation(3)(4)(29)(30) Warrants N/A N/A - 54,000 369 1,039 77,895 75,825 0.4 % Healthcare technology BEHP Co-Investor II, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 1,270 - 157 2,543 Minerva Holdco, Inc.(3)(4)(6)(30) Senior A Preferred Stock N/A 10.75 "
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "VEPF VIII Co-Invest 8-A, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,367 - 2,367 2,367 WMC Bidco, Inc. (dba West Monroe)(3)(4)(6)(30) Senior Preferred Stock N/A 11.25 % N/A - 33,385 55,495 54,614 WP Silver Co-Invest, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,882 - 2,882 2,882 Zoro TopCo, Inc.(3)(4)(9)(30) Series A Preferred Equity S+ 9.50 % N/A - 3,986 6,169 6,096 Zoro TopCo, L.P.(3)(4)(29)(30) Class A Common Units N/A N/A - 1,380,129 13,801 11,139 144,005 169,690 0.9 % Manufacturing Gloves ",
+          "quote": "VEPF VIII Co-Invest 8-A, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,367 - 2,367 2,367 WMC Bidco, Inc. (dba West Monroe)(3)(4)(6)(30) Senior Preferred Stock N/A 11.25 % N/A - 33,385 55,495 54,614 WP Silver Co-Invest, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,882 - 2,882 2,882 Zoro TopCo, Inc.(3)(4)(9)(30) Series A Preferred Equity S+ 9.50 % N/A - 3,986 6,169 6,096 Zoro TopCo, L.P.(3)(4)(29)(30) Class A Common Units N/A N/A - 1,380,129 13,801 11,139 144,005 169,690 0.9 % Manufacturing Gloves "
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Project Hotel California Co-Invest Fund, L.P.(3)(29)(30)(31) LP Interest N/A N/A 3,522 - 3,508 3,779 Thunder Topco L.P. (dba Vector Solutions)(3)(4)(29)(30) Common Units N/A N/A - 712,884 713 749 VEPF VIII Co-Invest 8-A, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,367 - 2,367 2,367 WMC Bidco, Inc. (dba West Monroe)(3)(4)(6)(30) Senior Preferred Stock N/A 11.25 % N/A - 33,385 55,495 54,614 WP Silver Co-Invest, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,882 - 2,882 2,882 Zoro TopCo, Inc.(3)(4)(",
+          "quote": "Project Hotel California Co-Invest Fund, L.P.(3)(29)(30)(31) LP Interest N/A N/A 3,522 - 3,508 3,779 Thunder Topco L.P. (dba Vector Solutions)(3)(4)(29)(30) Common Units N/A N/A - 712,884 713 749 VEPF VIII Co-Invest 8-A, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,367 - 2,367 2,367 WMC Bidco, Inc. (dba West Monroe)(3)(4)(6)(30) Senior Preferred Stock N/A 11.25 % N/A - 33,385 55,495 54,614 WP Silver Co-Invest, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,882 - 2,882 2,882 Zoro TopCo, Inc.(3)(4)("
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "LSI Financing LLC(3)(5)(22)(30)(31) Specialty finance equity investment N/A N/A 493,187 - 493,187 527,175 493,187 527,175 2.9 % Specialty retail Notorious Purchaser II, Inc. (dba Beauty Industry Group)(3)(4)(29)(30) Class B Common Stock N/A N/A - 4,063 49,564 48,053 49,564 48,053 0.3 % Total controlled/affiliated portfolio company equity investments $ 1,724,579 $ 1,735,705 9.4 % Total controlled/affiliated portfolio company investments $ 1,950,870 $ 1,960,847 10.6 % Total Investments $ 36,258,68",
+          "quote": "LSI Financing LLC(3)(5)(22)(30)(31) Specialty finance equity investment N/A N/A 493,187 - 493,187 527,175 493,187 527,175 2.9 % Specialty retail Notorious Purchaser II, Inc. (dba Beauty Industry Group)(3)(4)(29)(30) Class B Common Stock N/A N/A - 4,063 49,564 48,053 49,564 48,053 0.3 % Total controlled/affiliated portfolio company equity investments $ 1,724,579 $ 1,735,705 9.4 % Total controlled/affiliated portfolio company investments $ 1,950,870 $ 1,960,847 10.6 % Total Investments $ 36,258,68"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Blue Owl Cross-Strategy Opportunities 2025-1 LLC (fka Blue Owl Cross-Strategy Opportunities LLC)(3)(5)(30)(31)(34) Specialty finance equity investment N/A N/A 248,045 - 256,595 255,925 314,939 337,332 1.8 % Buildings and real estate OWL-HP FINANCE LLC(3)(5)(22)(29)(30)(31) Specialty finance equity investment N/A N/A 104,365 - 104,367 104,234 104,367 104,234 0.6 % Insurance Fifth Season Investments LLC(3)(4)(30) Specialty finance equity investment N/A N/A - 33 333,200 365,639 333,200 365,639 2.0 ",
+          "quote": "Blue Owl Cross-Strategy Opportunities 2025-1 LLC (fka Blue Owl Cross-Strategy Opportunities LLC)(3)(5)(30)(31)(34) Specialty finance equity investment N/A N/A 248,045 - 256,595 255,925 314,939 337,332 1.8 % Buildings and real estate OWL-HP FINANCE LLC(3)(5)(22)(29)(30)(31) Specialty finance equity investment N/A N/A 104,365 - 104,367 104,234 104,367 104,234 0.6 % Insurance Fifth Season Investments LLC(3)(4)(30) Specialty finance equity investment N/A N/A - 33 333,200 365,639 333,200 365,639 2.0 "
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "LSI Financing 1 DAC(3)(4)(30)(31) Specialty finance equity investment N/A N/A 3,260 - 3,310 3,245 3,310 3,245 - % Total non-controlled/affiliated portfolio company equity investments $ 49,363 $ 53,631 0.3 % Total non-controlled/affiliated portfolio company investments $ 51,920 $ 54,761 0.3 % Controlled/affiliated portfolio company investments(24) Debt Investments(7) Asset based lending and fund finance AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(3)(4)(6)(31) Specialty finance debt in",
+          "quote": "LSI Financing 1 DAC(3)(4)(30)(31) Specialty finance equity investment N/A N/A 3,260 - 3,310 3,245 3,310 3,245 - % Total non-controlled/affiliated portfolio company equity investments $ 49,363 $ 53,631 0.3 % Total non-controlled/affiliated portfolio company investments $ 51,920 $ 54,761 0.3 % Controlled/affiliated portfolio company investments(24) Debt Investments(7) Asset based lending and fund finance AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(3)(4)(6)(31) Specialty finance debt in"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "AAM Series 2.1 Aviation Feeder, LLC(3)(4)(29)(30)(31) Specialty finance equity investment N/A N/A 30,900 - 30,941 47,467 Blue Owl Cross-Strategy Opportunities 2025-1 LLC (fka Blue Owl Cross-Strategy Opportunities LLC)(3)(5)(30)(31)(34) Specialty finance equity investment N/A N/A 248,045 - 256,595 255,925 314,939 337,332 1.8 % Buildings and real estate OWL-HP FINANCE LLC(3)(5)(22)(29)(30)(31) Specialty finance equity investment N/A N/A 104,365 - 104,367 104,234 104,367 104,234 0.6 % Insurance Fif",
+          "quote": "AAM Series 2.1 Aviation Feeder, LLC(3)(4)(29)(30)(31) Specialty finance equity investment N/A N/A 30,900 - 30,941 47,467 Blue Owl Cross-Strategy Opportunities 2025-1 LLC (fka Blue Owl Cross-Strategy Opportunities LLC)(3)(5)(30)(31)(34) Specialty finance equity investment N/A N/A 248,045 - 256,595 255,925 314,939 337,332 1.8 % Buildings and real estate OWL-HP FINANCE LLC(3)(5)(22)(29)(30)(31) Specialty finance equity investment N/A N/A 104,365 - 104,367 104,234 104,367 104,234 0.6 % Insurance Fif"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "BEHP Co-Investor II, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 1,270 - 157 2,543 Minerva Holdco, Inc.(3)(4)(6)(30) Senior A Preferred Stock N/A 10.75 % N/A - 100,000 158,979 154,490 27 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Unaudited Company(1)(25) Investment Interest Maturity Date Par Amortized Cost(2)(27) Fair Value % of Net Assets Ref. Rate Cash PIK Units ModMed Software Midco Holdings, I",
+          "quote": "BEHP Co-Investor II, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 1,270 - 157 2,543 Minerva Holdco, Inc.(3)(4)(6)(30) Senior A Preferred Stock N/A 10.75 % N/A - 100,000 158,979 154,490 27 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Unaudited Company(1)(25) Investment Interest Maturity Date Par Amortized Cost(2)(27) Fair Value % of Net Assets Ref. Rate Cash PIK Units ModMed Software Midco Holdings, I"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC Specialty finance equity investment N/A $ 27,363 $ 26,282 $ - LSI Financing LLC Specialty finance equity investment N/A 493,187 134,400 - OWL-HP FINANCE LLC Specialty finance equity investment N/A 104,365 111,135 - Total controlled/affiliated - equity commitments $ 624,915 $ 271,817 $ - Total Portfolio Company Commitments $ 1,672,196 $ 4,736,027 $ ( 23,330 ) *Fully funded (23) The negative cost and fair value results from unamortized fees, ",
+          "quote": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC Specialty finance equity investment N/A $ 27,363 $ 26,282 $ - LSI Financing LLC Specialty finance equity investment N/A 493,187 134,400 - OWL-HP FINANCE LLC Specialty finance equity investment N/A 104,365 111,135 - Total controlled/affiliated - equity commitments $ 624,915 $ 271,817 $ - Total Portfolio Company Commitments $ 1,672,196 $ 4,736,027 $ ( 23,330 ) *Fully funded (23) The negative cost and fair value results from unamortized fees, "
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "WP Silver Co-Invest, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,882 - 2,882 2,882 Zoro TopCo, Inc.(3)(4)(9)(30) Series A Preferred Equity S+ 9.50 % N/A - 3,986 6,169 6,096 Zoro TopCo, L.P.(3)(4)(29)(30) Class A Common Units N/A N/A - 1,380,129 13,801 11,139 144,005 169,690 0.9 % Manufacturing Gloves Holdings, LP (dba Protective Industrial Products)(3)(4)(29)(30) LP Interest N/A N/A - 1,218 134 189 134 189 - % Telecommunications Equity NewCo S.A. (dba Netceed)(3)(4)(29)(30)(31) Common equity N/",
+          "quote": "WP Silver Co-Invest, L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 2,882 - 2,882 2,882 Zoro TopCo, Inc.(3)(4)(9)(30) Series A Preferred Equity S+ 9.50 % N/A - 3,986 6,169 6,096 Zoro TopCo, L.P.(3)(4)(29)(30) Class A Common Units N/A N/A - 1,380,129 13,801 11,139 144,005 169,690 0.9 % Manufacturing Gloves Holdings, LP (dba Protective Industrial Products)(3)(4)(29)(30) LP Interest N/A N/A - 1,218 134 189 134 189 - % Telecommunications Equity NewCo S.A. (dba Netceed)(3)(4)(29)(30)(31) Common equity N/"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "OWL-HP FINANCE LLC Specialty finance equity investment N/A 104,365 111,135 - Total controlled/affiliated - equity commitments $ 624,915 $ 271,817 $ - Total Portfolio Company Commitments $ 1,672,196 $ 4,736,027 $ ( 23,330 ) *Fully funded (23) The negative cost and fair value results from unamortized fees, which are capitalized to the investment cost of unfunded commitments, if any. (24) As defined in the Investment Company Act of 1940, as amended (the 1940 Act), the Company is deemed to control a",
+          "quote": "OWL-HP FINANCE LLC Specialty finance equity investment N/A 104,365 111,135 - Total controlled/affiliated - equity commitments $ 624,915 $ 271,817 $ - Total Portfolio Company Commitments $ 1,672,196 $ 4,736,027 $ ( 23,330 ) *Fully funded (23) The negative cost and fair value results from unamortized fees, which are capitalized to the investment cost of unfunded commitments, if any. (24) As defined in the Investment Company Act of 1940, as amended (the 1940 Act), the Company is deemed to control a"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(3)(4)(22)(29)(30)(31) Specialty finance equity investment N/A N/A 27,363 - $ 27,403 $ 33,940 AAM Series 2.1 Aviation Feeder, LLC(3)(4)(29)(30)(31) Specialty finance equity investment N/A N/A 30,900 - 30,941 47,467 Blue Owl Cross-Strategy Opportunities 2025-1 LLC (fka Blue Owl Cross-Strategy Opportunities LLC)(3)(5)(30)(31)(34) Specialty finance equity investment N/A N/A 248,045 - 256,595 255,925 314,939 337,332 1.8 % Buildings and real esta",
+          "quote": "AAM Series 1.1 Rail and Domestic Intermodal Feeder, LLC(3)(4)(22)(29)(30)(31) Specialty finance equity investment N/A N/A 27,363 - $ 27,403 $ 33,940 AAM Series 2.1 Aviation Feeder, LLC(3)(4)(29)(30)(31) Specialty finance equity investment N/A N/A 30,900 - 30,941 47,467 Blue Owl Cross-Strategy Opportunities 2025-1 LLC (fka Blue Owl Cross-Strategy Opportunities LLC)(3)(5)(30)(31)(34) Specialty finance equity investment N/A N/A 248,045 - 256,595 255,925 314,939 337,332 1.8 % Buildings and real esta"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Polar Investors LP (dba Dentalcorp) Common equity N/A 8,520 2,130 - Valor CI Blocker Feeder LP Investment partnership N/A 9,912 804 - Total non-controlled/non-affiliated - equity commitments $ 97,485 $ 16,288 $ - Non-controlled/affiliated - debt commitments Pluralsight, LLC First lien senior secured delayed draw term loan 8/2029 $ - $ 496 $ ( 52 ) 41 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Una",
+          "quote": "Polar Investors LP (dba Dentalcorp) Common equity N/A 8,520 2,130 - Valor CI Blocker Feeder LP Investment partnership N/A 9,912 804 - Total non-controlled/non-affiliated - equity commitments $ 97,485 $ 16,288 $ - Non-controlled/affiliated - debt commitments Pluralsight, LLC First lien senior secured delayed draw term loan 8/2029 $ - $ 496 $ ( 52 ) 41 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Una"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Blue Owl Credit SLF LLC(3)(5)(30)(31) LLC interest N/A N/A 99,489 - 99,489 90,568 Blue Owl Leasing LLC(3)(5)(29)(30)(31) LLC Interest N/A N/A 1,900 - 1,900 1,876 429,322 353,272 1.9 % Pharmaceuticals LSI Financing LLC(3)(5)(22)(30)(31) Specialty finance equity investment N/A N/A 493,187 - 493,187 527,175 493,187 527,175 2.9 % Specialty retail Notorious Purchaser II, Inc. (dba Beauty Industry Group)(3)(4)(29)(30) Class B Common Stock N/A N/A - 4,063 49,564 48,053 49,564 48,053 0.3 % Total control",
+          "quote": "Blue Owl Credit SLF LLC(3)(5)(30)(31) LLC interest N/A N/A 99,489 - 99,489 90,568 Blue Owl Leasing LLC(3)(5)(29)(30)(31) LLC Interest N/A N/A 1,900 - 1,900 1,876 429,322 353,272 1.9 % Pharmaceuticals LSI Financing LLC(3)(5)(22)(30)(31) Specialty finance equity investment N/A N/A 493,187 - 493,187 527,175 493,187 527,175 2.9 % Specialty retail Notorious Purchaser II, Inc. (dba Beauty Industry Group)(3)(4)(29)(30) Class B Common Stock N/A N/A - 4,063 49,564 48,053 49,564 48,053 0.3 % Total control"
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Insight CP (Blocker) Holdings, L.P. (dba CivicPlus, LLC)(3)(4)(29)(30)(31) LP Interest N/A N/A 992 - 992 1,199 Nscale Limited(3)(4)(29)(30)(31) Preferred equity N/A N/A - 11,840 13,037 15,876 Nscale Limited(3)(4)(29)(30)(31) Series B Preferred Shares N/A N/A - 1,372,740 8,691 22,031 Project Alpine Co-Invest Fund, LP(3)(4)(29)(30)(31) LP Interest N/A N/A 17,000 - 17,012 19,454 Project Hotel California Co-Invest Fund, L.P.(3)(29)(30)(31) LP Interest N/A N/A 3,522 - 3,508 3,779 Thunder Topco L.P. (",
+          "quote": "Insight CP (Blocker) Holdings, L.P. (dba CivicPlus, LLC)(3)(4)(29)(30)(31) LP Interest N/A N/A 992 - 992 1,199 Nscale Limited(3)(4)(29)(30)(31) Preferred equity N/A N/A - 11,840 13,037 15,876 Nscale Limited(3)(4)(29)(30)(31) Series B Preferred Shares N/A N/A - 1,372,740 8,691 22,031 Project Alpine Co-Invest Fund, LP(3)(4)(29)(30)(31) LP Interest N/A N/A 17,000 - 17,012 19,454 Project Hotel California Co-Invest Fund, L.P.(3)(29)(30)(31) LP Interest N/A N/A 3,522 - 3,508 3,779 Thunder Topco L.P. ("
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "Elliott Alto Co-Investor Aggregator L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 6,530 - 6,572 14,937 GT Silver Co-Invest SCSp(3)(4)(29)(30)(31) LP Interest N/A N/A 2,882 - 2,882 2,882 28 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Unaudited Company(1)(25) Investment Interest Maturity Date Par Amortized Cost(2)(27) Fair Value % of Net Assets Ref. Rate Cash PIK Units Insight CP (Blocker) Holdings, L.",
+          "quote": "Elliott Alto Co-Investor Aggregator L.P.(3)(4)(29)(30)(31) LP Interest N/A N/A 6,530 - 6,572 14,937 GT Silver Co-Invest SCSp(3)(4)(29)(30)(31) LP Interest N/A N/A 2,882 - 2,882 2,882 28 Blue Owl Credit Income Corp. Consolidated Schedules of Investments - Continued As of June 30, 2026 (Amounts in thousands, except share amounts) Unaudited Company(1)(25) Investment Interest Maturity Date Par Amortized Cost(2)(27) Fair Value % of Net Assets Ref. Rate Cash PIK Units Insight CP (Blocker) Holdings, L."
+        },
+        {
+          "source": "filing",
+          "accession": "0001812554-26-000047",
+          "verbatim": "LSI Financing LLC Specialty finance equity investment N/A 493,187 134,400 - OWL-HP FINANCE LLC Specialty finance equity investment N/A 104,365 111,135 - Total controlled/affiliated - equity commitments $ 624,915 $ 271,817 $ - Total Portfolio Company Commitments $ 1,672,196 $ 4,736,027 $ ( 23,330 ) *Fully funded (23) The negative cost and fair value results from unamortized fees, which are capitalized to the investment cost of unfunded commitments, if any. (24) As defined in the Investment Compan",
+          "quote": "LSI Financing LLC Specialty finance equity investment N/A 493,187 134,400 - OWL-HP FINANCE LLC Specialty finance equity investment N/A 104,365 111,135 - Total controlled/affiliated - equity commitments $ 624,915 $ 271,817 $ - Total Portfolio Company Commitments $ 1,672,196 $ 4,736,027 $ ( 23,330 ) *Fully funded (23) The negative cost and fair value results from unamortized fees, which are capitalized to the investment cost of unfunded commitments, if any. (24) As defined in the Investment Compan"
+        }
+      ],
+      "rerun": "scratch/fund_runs/0001812554/c04_audit.py",
+      "decided_by": "PROPOSED by /root/blueowl_sol; owner pending",
+      "decided_on": "2026-10-20"
+    }
+  ]
+}

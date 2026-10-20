@@ -1262,6 +1262,15 @@ SPECS.extend([
 ])
 EXACT.update(('Athenahealth, Inc.', 'athenahealth, Inc.'))
 
+# Blue Owl Credit Income: page-backed names, preferred classes and PIK components.
+# The separate printed spec preserves every exact identifier and source line.
+OWL_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001812554.json"
+if OWL in held and OWL_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(OWL_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((OWL, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1812554-fundloop"))
+        EXACT.add(spec["identifier"])
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue
