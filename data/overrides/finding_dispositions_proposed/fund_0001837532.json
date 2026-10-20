@@ -1,0 +1,68 @@
+{
+  "dispositions": [
+    {
+      "disposition_id": "PROPOSED-nvapf-fmt_basis_spread-1837532-20241231",
+      "class": "as_filed",
+      "engine": "weak",
+      "rule_name": "fmt_basis_spread",
+      "reason_key": "fmt-basis-spread-above-15-is-the-printed-spread",
+      "ciks": [
+        "0001837532"
+      ],
+      "quarters": [
+        "2024-12-31"
+      ],
+      "statement": "The source-correct current-period spread is 16.0, printed S+1600 and current fact0.16. The historical D0166.1 correction relied on stale member text and a0.061 comparative2023-12-31 context, not a current sibling. Independent source reading confirms supersession. This range flag is as filed, not grounds to reduce the value; PIK8.03 and coupon unchanged.",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-038785",
+          "verbatim": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)",
+          "quote": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)"
+        },
+        {
+          "source": "investigation",
+          "path": "scratch/fund_runs/0001837532/material_independent_review.json"
+        }
+      ],
+      "addresses_verdict": {
+        "2024-12-31": "The source-correct current-period spread is 16.0, printed S+1600 and current fact0.16. The historical D0166.1 correction relied on stale member text and a0.061 comparative2023-12-31 context, not a current sibling. Independent source reading confirms supersession. This range flag is as filed, not grounds to reduce the value; PIK8.03 and coupon unchanged."
+      },
+      "rerun": "python scripts/v05_evidence/flagged.py nvapf fmt_basis_spread 1837532 2024-12-31",
+      "proposed_by": "/root/apollo_sol",
+      "proposed_on": "2026-10-20"
+    },
+    {
+      "disposition_id": "PROPOSED-nvapf-C115-1837532-20241231",
+      "class": "as_filed",
+      "engine": "row_validation",
+      "rule_name": "C115",
+      "reason_key": "c115-spread-above-15-is-the-printed-spread",
+      "ciks": [
+        "0001837532"
+      ],
+      "quarters": [
+        "2024-12-31"
+      ],
+      "statement": "The source-correct current-period spread is 16.0, printed S+1600 and current fact0.16. The historical D0166.1 correction relied on stale member text and a0.061 comparative2023-12-31 context, not a current sibling. Independent source reading confirms supersession. This range flag is as filed, not grounds to reduce the value; PIK8.03 and coupon unchanged.",
+      "evidence": [
+        {
+          "source": "filing",
+          "accession": "0000950170-25-038785",
+          "verbatim": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)",
+          "quote": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)"
+        },
+        {
+          "source": "investigation",
+          "path": "scratch/fund_runs/0001837532/material_independent_review.json"
+        }
+      ],
+      "addresses_verdict": {
+        "2024-12-31": "The source-correct current-period spread is 16.0, printed S+1600 and current fact0.16. The historical D0166.1 correction relied on stale member text and a0.061 comparative2023-12-31 context, not a current sibling. Independent source reading confirms supersession. This range flag is as filed, not grounds to reduce the value; PIK8.03 and coupon unchanged."
+      },
+      "rerun": "python scripts/v05_evidence/flagged.py nvapf C115 1837532 2024-12-31",
+      "proposed_by": "/root/apollo_sol",
+      "proposed_on": "2026-10-20"
+    }
+  ]
+}

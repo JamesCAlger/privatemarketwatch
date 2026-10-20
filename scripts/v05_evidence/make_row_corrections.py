@@ -1289,6 +1289,14 @@ if HPS in held and HPS_LOOP_FILE.exists():
         SPECS.append((HPS, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1838126-fundloop"))
         EXACT.add(spec["identifier"])
 
+# Apollo Debt Solutions: source-reviewed company-column names, counts and PIK margins.
+APOLLO_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001837532.json"
+if APOLLO in held and APOLLO_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(APOLLO_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((APOLLO, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1837532-navscope"))
+        EXACT.add(spec["identifier"])
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue

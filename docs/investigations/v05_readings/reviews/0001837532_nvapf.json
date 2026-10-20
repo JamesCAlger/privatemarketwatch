@@ -1,0 +1,3685 @@
+{
+  "reviewer_id": "/root/apollo_review_sol",
+  "report_digest": "8c04bc133ab19e14ea0caefe6baa5ff873fdc885f4987d4d00d4a0fe6fac32f8",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_002974133379",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 14 exact row IDs for 2023-03-31; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Corporate Bond 6.00 % 11/1/2026 16,000 12,702 13,510 (8)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Pavement Partners Interco, LLC First Lien Secured Debt S+ 675 , 1.00 % Floor 2/7/2028 $ 27,395 $ 23,217 $ 23,200 (4)(9)(11) (17)(26)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_0cb91d765604",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 43 exact row IDs for 2025-12-31; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 7/11/2029 EUR - - ( 32 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan P + 150 , 0.00 % Floor 4/15/2027 $ 62,969 $ 61,399 $ 55,188 (8)(24)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_0d897294eebd",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 40 exact row IDs for 2026-06-30; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-341358",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 12/17/2032 $ 15,620 $ 15,583 $ 15,658 (16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Quito First Lien Secured Debt - Term Loan E + 500 , 0.00 % Floor 01/22/2033 EUR 95,313 109,849 107,129 (3)(4)(8)(10)(22)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_384e01068bca",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 49 exact row IDs for 2025-09-30; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Vybond Buyer, LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 2/3/2032 20,748 20,459 20,593 (4)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S + 410 , 0.75 % Floor 10/1/2027 118,419 116,087 116,761 (16)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_479b0a9e5a2a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 50 exact row IDs for 2025-03-31; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Celsius Holdings Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 3/21/2032 $ 26,000 $ 25,871 $ 26,081 (8)(15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Space Parent, LP Preferred Equity - Preferred Stocks N/A N/A 99,000 Shares 99 99 (4)(8)(33)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6c8019668645",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 36 exact row IDs for 2024-03-31; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-058684",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S+ 450 , 3.00 % Floor 6/30/2026 70,000 ( 3,473 ) ( 3,500 ) (4)(5)(8)(9)(11)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt S+ 500 , 0.50 % Floor 6/15/2028 $ 95,000 $ 93,594 $ 94,525 (8)(9)(15)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7ab0693ee9d4",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 42 exact row IDs for 2026-03-31; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 07/11/2029 EUR - - ( 159 ) (3)(4)(5)(8)(9)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan P + 150 , 0.00 % Floor 04/15/2027 $ 62,802 $ 61,527 $ 55,501 (8)(26)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7dfbf6db93b7",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 42 exact row IDs for 2024-09-30; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-124223",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan S+ 450 , 0.00 % Floor 1/18/2028 116,651 112,750 113,610 (8)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "CPI Buyer, LLC First Lien Secured Debt - Term Loan S+ 576 , 0.75 % Floor 11/1/2028 $ 30,827 $ 30,827 $ 30,518 (4)(15)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a0962818f16b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 20 exact row IDs for 2023-06-30; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt S+ 665 , 0.75 % Floor 9/22/2026 89,227 85,003 84,289 (4)(11)(17) (26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt S+ 675 , 0.75 % Floor 10/1/2029 37,101 31,401 31,251 (4)(11)(17) (26)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_da633c9b20b9",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 46 exact row IDs for 2024-12-31; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S+ 625 , 1.00 % Floor 8/1/2029 4,913 4,812 4,950 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "EchoStar Corporation First Lien Secured Debt - Corporate Bond 10.75 % 11/30/2029 72,552 73,313 78,108 (8)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ddc1b455b5b5",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 25 exact row IDs for 2023-09-30; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-061985",
+          "text": "First Lien Secured Debt E+ 625 , 0.00 % Floor 7/11/2029 EUR 6,000 ( 98 ) ( 190 ) (3)(4)(5) (8)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt S+ 665 , 0.75 % Floor 9/22/2026 92,630 87,931 88,012 (4)(11)(17) (27)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e741d2ec00c7",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 28 exact row IDs for 2023-12-31; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt S+ 511 , 0.50 % Floor 10/15/2026 51,807 51,658 50,868 (8)(14)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt S+ 641 , 0.75 % Floor 4/3/2028 2,452 2,452 2,452 (4)(15)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_f8735779a837",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 39 exact row IDs for 2024-06-30; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Mercury Borrower, Inc. First Lien Secured Debt - Term Loan S+ 361 , 0.50 % Floor 8/2/2028 41,780 41,498 41,864 (14)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E+ 600 , 0.00 % Floor 4/19/2031 EUR 137,000 143,109 143,786 (3)(4)(8)(10)(19)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_f951651e820c",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed final rule population: 50 exact row IDs for 2025-06-30; every claimed row independently matched its raw context-bearing source tr. The source/current-company assessment and withheld identity-sensitive repair are supported. Mixed false-positive rows do not justify clearing a quarter finding. All exact keys are retained in reviewer_sol_raw_audit.json and report row_assessments.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-105984",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S + 200, 0.50 % Floor 5/17/2029 10,578 10,557 10,608 (15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S+ 450 , 1.00 % Floor 9/15/2031 $ 187,316 $ 186,461 $ 188,253 (4)(9)(15)(16)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_6f9b030af39e",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "The complete current-quarter >15 spread population is exactly the declared one-row Material context. Independently parsed original current source row prints S+1600 Includes8.03%PIK; inline basis1600 scale-4 equals0.16 decimal/16 percentage points, matching final source-correct holdings. The former6.1 correction used comparative-period0.061 evidence. Both applicable proposals now have reusable reason_key values matching the same rule semantics in existing fund0001508655 proposals. Independently verified that only these two metadata fields changed and prior report/ledger/proposal content remains identical. The as-filed range interpretation is supported; this review does not register owner acceptance or resolve other findings.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_74d35ec4e40f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "The complete current-quarter >15 spread population is exactly the declared one-row Material context. Independently parsed original current source row prints S+1600 Includes8.03%PIK; inline basis1600 scale-4 equals0.16 decimal/16 percentage points, matching final source-correct holdings. The former6.1 correction used comparative-period0.061 evidence. Both applicable proposals now have reusable reason_key values matching the same rule semantics in existing fund0001508655 proposals. Independently verified that only these two metadata fields changed and prior report/ledger/proposal content remains identical. The as-filed range interpretation is supported; this review does not register owner acceptance or resolve other findings.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "issuer-name-from-member-differs-from-page",
+      "outcome": "supported",
+      "rationale": "Reconstructed all 524 final page_rule_findings rows, grouped by the fourteen exact ledger quarters. All 474 nonliteral names remain disclosed as errors, with 38 literal Investment Company names and 12 qualified CI names separated. The existing rule fires, but source-row/company comparison is required before cleanup; retaining distinct facilities is justified.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Corporate Bond 6.00 % 11/1/2026 16,000 12,702 13,510 (8)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Pavement Partners Interco, LLC First Lien Secured Debt S+ 675 , 1.00 % Floor 2/7/2028 $ 27,395 $ 23,217 $ 23,200 (4)(9)(11) (17)(26)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 43 (4)(9)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "CNSI Holdings, LLC First Lien Secured Debt S+ 650 , 0.50 % Floor 12/17/2028 35,910 34,703 34,653 (4)(9)(17)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "CPI Buyer, LLC First Lien Secured Debt S+ 550 , 0.75 % Floor 11/1/2028 $ 31,301 $ 31,301 $ 30,831 (4)(16)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt S+ 350 , 0.50 % Floor 2/15/2029 46,895 40,472 38,892 (11)(17) (26)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Carvana Co. Unsecured Debt - Corporate Bond 10.25 % 5/1/2030 $ 56,858 $ 51,893 $ 32,705 (8)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt L+ 550 , 0.75 % Floor 8/2/2028 4,960 4,960 4,910 (4)(14)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt S+ 641 , 0.75 % Floor 4/3/2028 2,472 2,472 2,472 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt S+ 675 , 0.75 % Floor 10/1/2029 37,182 31,454 31,330 (4)(11)(17) (26)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt L+ 550 , 0.75 % Floor 11/10/2028 35,205 35,205 34,677 (4)(14)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt L+ 500 , 0.50 % Floor 10/15/2026 59,606 59,417 58,674 (8)(13)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Mavis Tire Express Services Corp. First Lien Secured Debt S+ 400 , 0.75 % Floor 5/4/2028 $ 22,443 $ 22,468 $ 22,061 (17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt S+ 665 , 0.75 % Floor 9/22/2026 89,227 85,003 84,289 (4)(11)(17) (26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt S+ 675 , 0.75 % Floor 10/1/2029 37,101 31,401 31,251 (4)(11)(17) (26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "IW Buyer LLC First Lien Secured Debt S+ 675 , 1.00 % Floor 6/28/2029 16,854 16,349 16,348 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt S+ 641 , 0.75 % Floor 4/3/2028 2,466 2,466 2,466 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt S+ 575 , 0.75 % Floor 8/24/2029 $ 199,083 $ 179,413 $ 180,516 (4)(9)(11) (17)(26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Pavement Partners Interco, LLC First Lien Secured Debt S+ 690 , 1.00 % Floor 2/7/2028 27,335 23,188 23,227 (4)(9)(11) (17)(26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt S+ 410 , 0.75 % Floor 10/1/2027 22,941 22,341 22,626 (17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt S+ 350 , 0.50 % Floor 2/15/2029 49,783 42,940 42,582 (11)(17) (26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Mavis Tire Express Services Corp. First Lien Secured Debt S+ 400 , 0.75 % Floor 5/4/2028 $ 31,363 $ 31,269 $ 31,138 (17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "CPI Buyer, LLC First Lien Secured Debt S+ 576 , 0.75 % Floor 11/1/2028 $ 34,343 $ 34,338 $ 33,999 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "CNSI Holdings, LLC First Lien Secured Debt S+ 650 , 0.50 % Floor 12/17/2028 35,820 34,654 34,566 (4)(9)(17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt E+ 650 , 0.00 % Floor 5/2/2030 EUR 39,482 30,000 29,752 (3)(4)(8) (9)(11)(22)(26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt S+ 500 , 0.50 % Floor 10/15/2026 57,393 57,218 56,625 (8)(16)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt S+ 576 , 0.75 % Floor 11/10/2028 35,112 35,112 34,761 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "G Treasury SS LLC First Lien Secured Debt S+ 600 , 1.00 % Floor 6/29/2029 17,857 8,307 8,214 (4)(11)(17)(26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Tivity Health, Inc. First Lien Secured Debt S+ 600 , 0.75 % Floor 6/28/2029 114,138 112,589 112,996 (4)(9)(17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 43 (4)(9)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt S+ 460 plus 1.25 % PIK 8/2/2028 4,969 4,969 4,919 (4)(16)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt S+ 665 , 0.75 % Floor 9/22/2026 92,630 87,931 88,012 (4)(11)(17) (27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "CNSI Holdings, LLC First Lien Secured Debt S+ 650 , 0.50 % Floor 12/15/2028 35,730 34,606 34,479 (4)(9)(17)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt S+ 576 , 0.75 % Floor 11/10/2028 34,928 34,928 34,317 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt S+ 675 , 0.75 % Floor 10/1/2029 37,019 31,350 31,172 (4)(11)(16) (27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt S+ 410 , 0.75 % Floor 10/1/2027 25,875 25,226 25,309 (17)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt S+ 500 , 0.00 % Floor 8/15/2028 28,276 27,436 27,329 (8)(16)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "IW Buyer LLC First Lien Secured Debt S+ 685 , 1.00 % Floor 6/28/2029 16,812 16,323 16,392 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt S+ 325 , 0.50 % Floor 2/15/2029 35,235 34,187 34,673 (16)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt E+ 650 , 0.00 % Floor 5/2/2030 EUR 39,482 30,031 28,857 (3)(4)(8) (9)(11)(22)(27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Tivity Health, Inc. First Lien Secured Debt S+ 600 , 0.75 % Floor 6/28/2029 113,850 112,352 112,427 (4)(9)(17)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Carvana Co. First Lien Secured Debt - Corporate Bond 14.00 % PIK 6/1/2031 $ 21,781 $ 22,232 $ 16,908 (8)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt S+ 641 , 0.75 % Floor 4/3/2028 2,459 2,459 2,459 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Accela, Inc. First Lien Secured Debt S+ 600 , 0.75 % Floor 9/3/2030 $ 18,286 $ 17,923 $ 17,920 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "G Treasury SS LLC First Lien Secured Debt S+ 600 , 1.00 % Floor 6/29/2029 17,857 8,316 8,215 (4)(9)(11)(17) (27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Pave America Interco, LLC First Lien Secured Debt S+ 690 , 1.00 % Floor 2/7/2028 $ 33,952 $ 33,018 $ 32,934 (4)(9)(17) (18)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "CPI Buyer, LLC First Lien Secured Debt S+ 576 , 0.75 % Floor 11/1/2028 $ 34,256 $ 34,251 $ 33,828 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Mavis Tire Express Services Corp. First Lien Secured Debt S+ 411 , 0.75 % Floor 5/4/2028 $ 31,283 $ 31,191 $ 31,244 (16)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt S+ 525 , 0.75 % Floor 8/24/2029 $ 198,624 $ 179,057 $ 181,055 (4)(9)(11) (16)(27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 46 (4)(9)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt S+ 511 , 0.50 % Floor 10/15/2026 53,021 52,861 51,983 (8)(16)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Rochester Midland Corporation First Lien Secured Debt S+ 600 , 1.00 % Floor 8/1/2029 17,910 4,696 4,689 (4)(9)(11) (16)(27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Shares 100 100 (4)(9)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt S+ 560 , 0.75 % Floor 8/2/2028 4,962 4,962 4,900 (4)(16)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt S+ 511 , 0.50 % Floor 10/15/2026 51,807 51,658 50,868 (8)(14)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt S+ 641 , 0.75 % Floor 4/3/2028 2,452 2,452 2,452 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt S+ 525 , 0.75 % Floor 10/31/2030 93,000 77,354 77,331 (4)(9)(11) (15)(27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Pave America Interco, LLC First Lien Secured Debt S+ 690 , 1.00 % Floor 2/7/2028 $ 33,867 $ 32,977 $ 32,852 (4)(9)(15) (16)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt S+ 525 , 0.75 % Floor 8/24/2029 $ 198,166 $ 178,701 $ 180,599 (4)(9)(11) (14)(27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt S+ 650 , 0.50 % Floor 12/15/2028 35,640 34,559 34,927 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Shares 100 102 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Accela, Inc. First Lien Secured Debt S+ 600 , 0.75 % Floor 9/3/2030 $ 18,286 $ 17,932 $ 18,057 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt S+ 500 , 0.00 % Floor 8/15/2028 16,870 16,381 16,756 (8)(15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt S+ 560 , 0.75 % Floor 8/2/2028 4,949 4,949 4,850 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt S+ 675 , 0.75 % Floor 10/1/2029 36,938 31,299 31,093 (4)(11)(14) (27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "G Treasury SS LLC First Lien Secured Debt S+ 600 , 1.00 % Floor 6/29/2029 17,857 8,326 8,215 (4)(9)(11)(15) (27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "IW Buyer LLC First Lien Secured Debt S+ 685 , 1.00 % Floor 6/28/2029 16,770 16,297 16,434 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt E+ 650 , 0.00 % Floor 5/2/2030 EUR 39,482 34,723 34,813 (3)(4)(8) (9)(11)(19)(27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Tivity Health, Inc. First Lien Secured Debt S+ 600 , 0.75 % Floor 6/28/2029 113,563 112,116 112,143 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt S+ 576 , 0.75 % Floor 11/10/2028 35,301 35,301 32,654 (15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "CPI Buyer, LLC First Lien Secured Debt S+ 576 , 0.75 % Floor 11/1/2028 $ 34,169 $ 34,165 $ 33,827 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt S+ 665 , 0.75 % Floor 9/22/2026 92,407 91,962 91,946 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt S+ 600 , 1.00 % Floor 10/8/2029 108,271 105,636 105,564 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt S+ 325 , 0.50 % Floor 2/15/2029 34,459 33,764 34,356 (14)(15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Rochester Midland Corporation First Lien Secured Debt S+ 600 , 1.00 % Floor 8/1/2029 17,898 5,433 5,396 (4)(9)(11) (14)(27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt S+ 410 , 0.75 % Floor 10/1/2027 32,790 31,965 31,970 (15)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S+ 450 , 3.00 % Floor 6/30/2026 70,000 ( 3,845 ) ( 4,200 ) (4)(5)(8) (9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Carvana Co. First Lien Secured Debt - Corporate Bond 13.00 % PIK 6/1/2030 $ 18,406 $ 18,777 $ 15,542 (8)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Mavis Tire Express Services Corp. First Lien Secured Debt S+ 411 , 0.75 % Floor 5/4/2028 $ 23,509 $ 23,437 $ 23,583 (14)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 50 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S+ 450 , 3.00 % Floor 6/30/2026 70,000 ( 3,473 ) ( 3,500 ) (4)(5)(8)(9)(11)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt S+ 500 , 0.50 % Floor 6/15/2028 $ 95,000 $ 93,594 $ 94,525 (8)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt S+ 326 (includes 3.25 % PIK) 11/9/2028 35,020 35,020 28,191 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Rochester Midland Corporation First Lien Secured Debt S+ 600 , 1.00 % Floor 8/1/2029 17,883 8,612 8,655 (4)(9)(11)(14)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 44 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt S+ 375 , 0.75 % Floor 5/4/2028 26,443 26,374 26,518 (14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Mercury Borrower, Inc. First Lien Secured Debt S+ 361 , 0.50 % Floor 8/2/2028 41,890 41,592 41,791 (14)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "CPI Buyer, LLC First Lien Secured Debt S+ 576 , 0.75 % Floor 11/1/2028 $ 34,082 $ 34,078 $ 33,742 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt S+ 650 , 0.75 % Floor 10/1/2029 32,120 31,334 31,317 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt S+ 525 , 0.75 % Floor 10/31/2030 93,000 77,387 78,386 (4)(9)(11)(14)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Carvana Co. First Lien Secured Debt - Corporate Bond 13.00 % PIK 6/1/2030 $ 10,629 $ 10,807 $ 10,268 (8)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt S+ 641 , 0.75 % Floor 4/3/2028 2,445 2,445 2,445 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Heritage Environmental Services, Inc. First Lien Secured Debt S+ 550 , 0.75 % Floor 1/31/2031 88,425 87,120 87,099 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt E+ 550 , 0.00 % Floor 4/29/2030 EUR 28,282 30,253 30,054 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt S+ 500 , 0.00 % Floor 8/15/2028 29,870 29,376 29,963 (8)(14)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt S+ 650 , 0.50 % Floor 12/17/2029 35,550 34,512 35,017 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt S+ 511 , 0.50 % Floor 10/15/2026 51,551 51,415 50,649 (8)(14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt S+ 560 , 0.75 % Floor 8/2/2028 4,937 4,937 4,887 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Shares 100 100 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt S+ 600 , 1.00 % Floor 10/8/2029 108,271 105,718 106,647 (4)(9)(15)(16)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Accela, Inc. First Lien Secured Debt S+ 600 , 0.75 % Floor 9/3/2030 $ 18,286 $ 17,941 $ 18,149 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "IW Buyer LLC First Lien Secured Debt S+ 685 , 1.00 % Floor 6/28/2029 16,728 16,272 16,435 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Phoenix Newco, Inc. First Lien Secured Debt S+ 336 , 0.50 % Floor 11/15/2028 19,949 19,900 20,017 (14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt S+ 525 , 0.75 % Floor 8/24/2029 $ 197,707 $ 178,347 $ 182,037 (4)(9)(11)(14)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Wand Newco 3, Inc. First Lien Secured Debt S+ 375 , 0.00 % Floor 1/30/2031 35,000 34,914 35,139 (14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt S+ 325 , 0.50 % Floor 2/15/2029 49,334 48,579 48,991 (14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt S+ 410 , 0.75 % Floor 10/1/2027 44,448 43,512 42,598 (15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Tivity Health, Inc. First Lien Secured Debt S+ 600 , 0.75 % Floor 6/28/2029 113,275 111,881 113,275 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "G Treasury SS LLC First Lien Secured Debt S+ 600 , 1.00 % Floor 6/29/2029 17,857 8,335 8,215 (4)(9)(11)(15)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Pave America Interco, LLC First Lien Secured Debt S+ 690 , 1.00 % Floor 2/7/2028 33,782 32,937 32,769 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Imprivata, Inc. First Lien Secured Debt S+ 401 , 0.50 % Floor 12/1/2027 7,979 8,009 8,014 (15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt S+ 615 , 0.75 % Floor 9/22/2026 92,174 91,831 92,174 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt S+ 525 , 1.00 % Floor 3/1/2030 $ 28,037 $ 20,284 $ 20,196 (4)(9)(11)(15)(28)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Mercury Borrower, Inc. First Lien Secured Debt - Term Loan S+ 361 , 0.50 % Floor 8/2/2028 41,780 41,498 41,864 (14)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E+ 600 , 0.00 % Floor 4/19/2031 EUR 137,000 143,109 143,786 (3)(4)(8)(10)(19)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S+ 550 , 1.00 % Floor 5/1/2030 6,957 6,820 6,817 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Imprivata, Inc. First Lien Secured Debt - Term Loan S+ 350 , 0.50 % Floor 12/1/2027 7,959 7,987 8,009 (15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S+ 625 , 1.00 % Floor 8/1/2029 4,938 4,828 4,925 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Pave America Interco, LLC First Lien Secured Debt - Term Loan S+ 690 , 1.00 % Floor 2/7/2028 $ 30,307 $ 29,585 $ 29,397 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "EG Group Limited First Lien Secured Debt - Term Loan S+ 550 , 0.00 % Floor 2/7/2028 5,844 5,766 5,783 (8)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt - Term Loan S+ 325 , 0.50 % Floor 2/15/2029 54,196 53,453 54,086 (14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Phoenix Newco, Inc. First Lien Secured Debt - Term Loan S+ 336 , 0.50 % Floor 11/15/2028 24,885 24,854 24,967 (14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Term Loan S+ 600 , 1.00 % Floor 10/8/2029 108,000 105,539 107,460 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Term Loan S+ 511 , 0.50 % Floor 10/15/2026 48,435 48,312 47,648 (8)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt - Term Loan S+ 525 , 1.00 % Floor 3/1/2030 $ 19,715 $ 19,337 $ 19,321 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Tivity Health, Inc. First Lien Secured Debt - Term Loan S+ 600 , 0.75 % Floor 6/28/2029 112,988 111,647 112,423 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt - Term Loan S+ 560 , 0.75 % Floor 8/2/2028 4,924 4,924 4,924 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "CPI Buyer, LLC First Lien Secured Debt - Term Loan S+ 576 , 0.75 % Floor 11/1/2028 $ 30,906 $ 30,906 $ 30,597 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 34 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S+ 600 , 0.75 % Floor 9/3/2030 $ 18,286 $ 17,950 $ 18,377 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Shares 100 114 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt - Term Loan S+ 525 , 0.75 % Floor 10/31/2030 78,422 77,326 78,422 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S+ 500 , 0.50 % Floor 6/15/2028 $ 94,763 $ 93,427 $ 94,644 (9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S+ 685 , 1.00 % Floor 6/28/2029 15,154 14,756 15,079 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt - Term Loan S+ 565 , 0.75 % Floor 9/22/2026 84,982 84,807 84,982 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt - Term Loan E+ 550 , 0.00 % Floor 4/29/2030 EUR 28,282 30,279 29,834 (3)(4)(8)(9)(19)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S+ 450 , 3.00 % Floor 6/30/2026 - ( 3,100 ) ( 3,150 ) (4)(5)(8)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Wand Newco 3, Inc. First Lien Secured Debt - Term Loan S+ 375 , 0.00 % Floor 1/30/2031 $ 35,000 $ 34,916 $ 35,272 (14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S+ 410 , 0.75 % Floor 10/1/2027 50,318 49,201 48,849 (15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "G Treasury SS LLC First Lien Secured Debt - Term Loan S+ 600 , 1.00 % Floor 6/29/2029 8,571 8,422 8,443 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt - Term Loan S+ 326 Cash (includes 3.25 % PIK) 11/9/2028 35,020 35,020 21,975 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan S+ 450 , 0.00 % Floor 1/18/2028 116,947 112,803 112,686 (8)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S+ 525 , 0.75 % Floor 8/24/2029 $ 180,673 $ 178,149 $ 180,673 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S+ 450 , 0.00 % Floor 8/15/2028 32,795 32,324 32,925 (8)(10)(14)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt - Term Loan S+ 550 , 0.50 % Floor 12/17/2029 37,898 36,870 37,424 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt - Term Loan S+ 641 , 0.75 % Floor 4/3/2028 2,438 2,438 2,438 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt - Term Loan S+ 525 , 0.75 % Floor 10/1/2029 37,800 36,957 37,422 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Heritage Environmental Services, Inc. First Lien Secured Debt - Term Loan S+ 550 , 0.75 % Floor 1/31/2031 88,425 87,153 88,204 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt - Term Loan S+ 375 , 0.75 % Floor 5/4/2028 31,364 31,317 31,473 (14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan S+ 450 , 0.00 % Floor 1/18/2028 116,651 112,750 113,610 (8)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "CPI Buyer, LLC First Lien Secured Debt - Term Loan S+ 576 , 0.75 % Floor 11/1/2028 $ 30,827 $ 30,827 $ 30,518 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt - Term Loan S+ 525 , 0.75 % Floor 10/31/2030 78,225 77,164 78,225 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S+ 625 , 1.00 % Floor 8/1/2029 4,925 4,820 4,962 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S+ 450 , 3.00 % Floor 6/30/2026 - ( 2,721 ) ( 3,150 ) (4)(5)(8)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Mercury Borrower, Inc. First Lien Secured Debt - Term Loan S+ 361 , 0.50 % Floor 8/2/2028 41,670 41,404 41,723 (10)(14)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Shares 100 121 (4)(9)(30)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt - Term Loan S+ 565 , 0.75 % Floor 9/22/2026 84,766 84,329 84,766 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S+ 550 , 1.00 % Floor 5/1/2030 6,939 6,807 6,904 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S+ 600 , 0.75 % Floor 9/3/2030 $ 18,286 $ 17,960 $ 18,286 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Wand Newco 3, Inc. First Lien Secured Debt - Term Loan S+ 325 , 0.00 % Floor 1/30/2031 $ 19,950 $ 19,903 $ 19,950 (14)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Imprivata, Inc. First Lien Secured Debt - Term Loan S+ 350 , 0.50 % Floor 12/1/2027 7,939 7,965 7,981 (14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Dragon Buyer Inc First Lien Secured Debt - Term Loan S+ 325 , 0.00 % Floor 9/30/2031 13,000 12,935 12,955 (14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt - Term Loan E+ 550 , 0.00 % Floor 4/29/2030 EUR 28,282 30,306 31,009 (3)(4)(8)(9)(19)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S+ 450 , 0.75 % Floor 9/13/2031 $ 188,735 $ 187,798 $ 187,792 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Ardagh Metal Packaging Finance plc First Lien Secured Debt - Term Loan E+ 450 , 1.00 % Floor 9/24/2029 EUR 59,921 $ 66,473 $ 66,200 (3)(4)(8)(9)(10)(19)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "EG Group Limited First Lien Secured Debt - Term Loan S+ 576 , 0.00 % Floor 2/7/2028 5,829 5,756 5,834 (8)(16)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Pave America Interco, LLC First Lien Secured Debt - Term Loan S+ 675 , 1.00 % Floor 2/7/2028 37,004 36,134 35,894 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Heritage Environmental Services, Inc. First Lien Secured Debt - Term Loan S+ 525 , 0.75 % Floor 1/31/2031 88,204 86,970 88,865 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Term Loan S+ 600 , 1.00 % Floor 10/8/2029 107,729 105,362 107,191 (4)(9)(15)(16)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S+ 500 , 0.50 % Floor 6/15/2028 94,525 93,264 94,407 (9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S+ 410 , 0.75 % Floor 10/1/2027 57,359 55,690 54,742 (15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "G Treasury SS LLC First Lien Secured Debt - Term Loan S+ 550 , 1.00 % Floor 6/29/2029 8,571 8,427 8,486 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt - Term Loan S+ 525 , 1.00 % Floor 3/1/2030 $ 19,666 $ 19,301 $ 19,371 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 31 (4)(9)(30)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt - Term Loan S+ 550 , 0.50 % Floor 12/17/2029 37,801 36,822 37,423 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S+ 450 , 0.00 % Floor 8/15/2028 32,795 32,347 32,863 (8)(14)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Tivity Health, Inc. First Lien Secured Debt - Term Loan S+ 500 , 0.75 % Floor 6/28/2029 112,705 111,420 112,142 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt - Term Loan S+ 302 (includes 3.25 % PIK) 11/9/2028 35,308 35,308 20,831 (4)(15)(24)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 550 , 1.00 % Floor 5/1/2030 - ( 16 ) ( 9 ) (4)(5)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt - Term Loan S+ 560 , 0.75 % Floor 8/2/2028 4,912 4,912 4,863 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S+ 500 , 1.00 % Floor 6/28/2029 22,344 21,895 22,120 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Term Loan S+ 511 , 0.50 % Floor 10/15/2026 44,195 44,085 44,214 (8)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt - Term Loan S+ 525 , 0.75 % Floor 10/1/2029 37,705 36,896 37,328 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E+ 611 , 0.00 % Floor 4/19/2031 EUR 137,000 143,182 151,358 (3)(4)(8)(9)(10)(19)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt - Term Loan S+ 641 , 0.75 % Floor 4/3/2028 2,431 2,431 2,419 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt - Term Loan S+ 325 , 0.50 % Floor 2/15/2029 48,564 47,886 48,342 (14)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Phoenix Newco, Inc. First Lien Secured Debt - Term Loan S+ 300 , 0.50 % Floor 11/15/2028 19,619 19,600 19,645 (14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt - Term Loan S+ 350 , 0.75 % Floor 5/4/2028 21,550 21,560 21,565 (14)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S+ 625 , 1.00 % Floor 8/1/2029 4,913 4,812 4,950 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "EchoStar Corporation First Lien Secured Debt - Corporate Bond 10.75 % 11/30/2029 72,552 73,313 78,108 (8)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "CPI Buyer, LLC First Lien Secured Debt - Term Loan S+ 576 , 0.75 % Floor 11/1/2028 $ 30,748 $ 30,748 $ 30,440 (4)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt - Term Loan S+ 525 , 1.00 % Floor 3/1/2030 $ 19,616 $ 19,265 $ 19,322 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "HIG Intermediate, Inc. Preferred Equity - Preferred Stocks N/A N/A 50,000 Shares 49 49 (4)(31)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt - Term Loan S+ 625 (Includes 3.25 % PIK) 11/9/2028 35,308 35,308 13,505 (4)(15)(25)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt - Term Loan E+ 550 , 0.00 % Floor 4/29/2030 EUR 28,282 30,333 28,857 (3)(4)(8)(9)(19)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S+ 400 , 0.00 % Floor 8/15/2028 36,295 35,872 36,584 (14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Term Loan S+ 600 , 1.00 % Floor 10/8/2029 107,459 105,189 107,459 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan S+ 450 , 0.00 % Floor 1/18/2028 116,355 112,729 114,383 (8)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Wand Newco 3, Inc. First Lien Secured Debt - Term Loan S+ 325 , 0.00 % Floor 1/30/2031 $ 23,449 $ 23,413 $ 23,575 (14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S+ 500 , 1.00 % Floor 6/28/2029 20,165 19,777 19,964 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt - Term Loan S+ 285 , 0.75 % Floor 8/2/2028 4,924 4,924 4,850 (4)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "EG Group Limited First Lien Secured Debt - Term Loan S+ 425 , 0.00 % Floor 2/7/2028 9,505 9,444 9,603 (8)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt - Term Loan S+ 525 , 0.75 % Floor 10/31/2030 78,029 77,002 78,029 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S+ 450 , 0.75 % Floor 9/13/2031 $ 134,261 $ 133,611 $ 133,590 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Term Loan S+ 500 , 1.50 % Floor 10/15/2029 211,385 208,324 208,214 (4)(8)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E+ 611 , 0.00 % Floor 4/19/2031 EUR 137,000 143,261 140,847 (3)(4)(8)(9)(19)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Cube A&D Buyer Inc First Lien Secured Debt - Term Loan S+ 350 , 0.00 % Floor 10/17/2031 14,000 13,991 14,111 (9)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Dragon Buyer Inc First Lien Secured Debt - Term Loan S+ 325 , 0.00 % Floor 9/30/2031 6,368 6,337 6,390 (15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S+ 600 , 0.75 % Floor 9/3/2030 $ 18,286 $ 17,970 $ 18,286 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Ardagh Metal Packaging Finance plc First Lien Secured Debt - Term Loan E+ 450 , 1.00 % Floor 9/24/2029 EUR 59,921 $ 66,493 $ 61,603 (3)(4)(8)(19)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Phoenix Newco, Inc. First Lien Secured Debt - Term Loan S+ 300 , 0.50 % Floor 11/15/2028 19,568 19,550 19,727 (14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt - Term Loan S+ 525 , 0.75 % Floor 10/1/2029 37,611 36,836 37,235 (4)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Heritage Environmental Services, Inc. First Lien Secured Debt - Term Loan S+ 525 , 0.75 % Floor 1/31/2031 87,983 86,787 88,642 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Imprivata, Inc. First Lien Secured Debt - Term Loan S+ 350 , 0.50 % Floor 12/1/2027 11,909 11,957 12,005 (15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 32 (4)(9)(31)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S+ 275 , 0.50 % Floor 5/17/2029 $ 5,000 $ 5,024 $ 5,040 (14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S+ 450 , 3.00 % Floor 6/30/2026 5,600 3,259 3,500 (4)(8)(9)(11)(14)(28)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt - Term Loan S+ 641 , 0.75 % Floor 4/3/2028 2,424 2,424 2,352 (4)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt - Term Loan S+ 475 , 0.75 % Floor 9/22/2028 64,583 64,278 64,260 (4)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt - Term Loan S+ 550 , 0.50 % Floor 12/17/2029 37,705 36,776 37,328 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S+ 475 , 0.50 % Floor 6/15/2028 94,288 93,102 94,641 (9)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S+ 550 , 1.00 % Floor 5/1/2030 6,922 6,795 6,887 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Gannett Co., Inc. First Lien Secured Debt - Convertible Bond 6.00 % 12/1/2031 500 528 665 (4)(8)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Shares 100 118 (4)(9)(31)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "G Treasury SS LLC First Lien Secured Debt - Term Loan S+ 550 , 1.00 % Floor 6/29/2029 8,571 8,434 8,443 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Tivity Health, Inc. First Lien Secured Debt - Term Loan S+ 500 , 0.75 % Floor 6/28/2029 112,423 111,196 112,985 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt - Term Loan S+ 350 , 0.75 % Floor 5/4/2028 24,489 24,510 24,683 (14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt - Term Loan S+ 325 , 0.50 % Floor 2/15/2029 51,433 50,787 51,662 (14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Pave America Interco, LLC First Lien Secured Debt - Term Loan S+ 675 , 1.00 % Floor 2/7/2028 36,910 36,097 36,356 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S+ 410 , 0.75 % Floor 10/1/2027 57,210 55,652 55,558 (15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Celsius Holdings Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 3/21/2032 $ 26,000 $ 25,871 $ 26,081 (8)(15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Space Parent, LP Preferred Equity - Preferred Stocks N/A N/A 99,000 Shares 99 99 (4)(8)(33)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Ardagh Metal Packaging Finance plc First Lien Secured Debt - Term Loan E + 450 , 1.00 % Floor 9/24/2029 EUR 59,921 66,513 64,468 (3)(4)(8)(10)(20)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/28/2029 112,140 110,973 112,140 (4)(9)(15)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "WC ORS Holdings, L.P. Common Equity - Limited Partnership N/A N/A 90,443 Shares 90 98 (4)(9)(33)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 500 , 1.00 % Floor 6/28/2029 19,700 19,338 19,602 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Imprivata, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.50 % Floor 12/1/2027 11,879 11,923 11,900 (16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S + 400 , 0.00 % Floor 8/15/2028 36,295 35,897 36,337 (15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "AL GCX Fund VIII Holdings LLC First Lien Secured Debt - Term Loan S + 200 , 0.00 % Floor 1/30/2032 $ 10,000 $ 9,975 $ 9,948 (15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt - Term Loan 5.50 % PIK 3/31/2030 10,239 36,167 10,159 (4)(16)(28)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E + 600 , 0.00 % Floor 4/19/2031 EUR 137,000 143,339 147,027 (3)(4)(8)(9)(10)(20)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Phoenix Newco, Inc. First Lien Secured Debt - Term Loan S + 250 , 0.50 % Floor 11/15/2028 22,512 22,494 22,487 (15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Dragon Buyer Inc First Lien Secured Debt - Term Loan S + 300 , 0.00 % Floor 9/30/2031 6,352 6,322 6,313 (16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt - Term Loan S + 550 , 0.50 % Floor 12/17/2029 $ 37,609 $ 36,679 $ 37,233 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt - Term Loan E + 550 , 0.00 % Floor 4/29/2030 EUR 28,282 30,361 30,352 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Pave America Interco, LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 2/7/2029 32,420 31,809 31,935 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S + 475 , 0.50 % Floor 6/15/2028 94,050 92,942 94,344 (9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt - Term Loan S + 275 (Includes 3.25 % PIK), 0.75 % Floor 8/2/2028 4,964 4,964 4,864 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt - Term Loan S + 525 , 1.00 % Floor 3/1/2030 28,411 27,944 27,984 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Heritage Environmental Services, Inc. First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 1/31/2031 87,762 86,606 88,420 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 43 (4)(9)(33)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "EchoStar Corporation First Lien Secured Debt - Corporate Bond 10.75 % 11/30/2029 72,552 73,279 76,220 (8)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "EG Group Limited First Lien Secured Debt - Term Loan S + 425 , 0.00 % Floor 2/7/2028 10,078 10,023 10,095 (8)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Cube A&D Buyer Inc First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 10/17/2031 14,000 13,990 13,924 (9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Term Loan S + 500 , 1.50 % Floor 10/15/2029 187,903 185,295 186,024 (8)(15)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 10/1/2029 37,516 36,776 37,140 (4)(15)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 10/31/2030 77,832 76,842 77,833 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan S + 450 , 0.00 % Floor 1/18/2028 $ 116,059 $ 112,704 $ 112,432 (8)(15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Term Loan S + 600 , 1.00 % Floor 10/8/2029 107,188 105,018 107,188 (4)(9)(16)(17)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S + 410 , 0.75 % Floor 10/1/2027 54,060 52,467 50,851 (16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "G Treasury SS LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 6/29/2029 8,571 8,440 8,464 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt - Term Loan S + 300 , 0.50 % Floor 2/15/2029 59,933 59,329 59,333 (15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S + 600 , 0.75 % Floor 9/3/2030 $ 18,286 $ 17,981 $ 18,286 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Shares 100 143 (4)(9)(33)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "CPI Buyer, LLC First Lien Secured Debt - Term Loan S + 576 , 0.75 % Floor 11/1/2028 $ 30,669 $ 30,669 $ 30,362 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S + 450 , 3.00 % Floor 6/30/2026 $ 34,720 $ 32,758 $ 32,795 (4)(8)(9)(12)(15)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 5/1/2030 6,904 6,782 6,904 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 9/22/2028 69,929 69,418 69,580 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "PEX Holdings LLC First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 11/26/2031 20,357 20,305 20,255 (16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 9/13/2031 $ 133,923 $ 133,293 $ 134,594 (4)(9)(15)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt - Term Loan S + 641 , 0.75 % Floor 4/3/2028 2,417 2,417 2,357 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S + 200 , 0.50 % Floor 5/17/2029 4,980 5,002 4,969 (15)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt - Term Loan S + 300 , 0.75 % Floor 5/4/2028 28,489 28,502 28,343 (16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Vybond Buyer, LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 2/3/2032 20,800 20,495 20,488 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 8/1/2029 12,550 12,342 12,362 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S + 200, 0.50 % Floor 5/17/2029 10,578 10,557 10,608 (15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S+ 450 , 1.00 % Floor 9/15/2031 $ 187,316 $ 186,461 $ 188,253 (4)(9)(15)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S + 410 , 0.75 % Floor 10/1/2027 69,486 67,449 67,106 (16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S + 450 , 3.00 % Floor 6/30/2026 $ - $ ( 1,573 ) $ ( 1,925 ) (4)(5)(8)(9)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Celsius Holdings Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 4/1/2032 $ 2,500 $ 2,488 $ 2,518 (8)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Pave America Interco, LLC First Lien Secured Debt - Term Loan S + 565 , 1.00 % Floor 8/9/2030 25,609 25,175 25,225 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt - Term Loan S + 285 Cash plus 3.25 % PIK, 0.75 % Floor 8/2/2028 5,005 5,005 4,867 (4)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Ardagh Metal Packaging Finance plc First Lien Secured Debt - Term Loan E + 450 , 1.00 % Floor 9/24/2029 EUR 59,921 66,536 70,231 (3)(4)(8)(10)(20)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt - Term Loan S + 275 , 0.50 % Floor 2/15/2029 54,101 53,514 54,108 (15)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 42 (4)(9)(33)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Dragon Buyer Inc First Lien Secured Debt - Term Loan S + 300 , 0.00 % Floor 9/30/2031 6,337 6,307 6,356 (16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "WC ORS Holdings, L.P. Common Equity - Limited Partnership N/A N/A 90,443 Shares 90 121 (4)(9)(33)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Aurelia Netherlands BV First Lien Secured Debt - Term Loan E + 475 , 0.00 % Floor 5/29/2031 EUR 212,000 $ 231,872 $ 247,228 (3)(4)(8)(9)(10)(21)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Term Loan S + 500 , 1.50 % Floor 10/15/2029 185,521 183,098 184,826 (8)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 5/1/2030 6,887 6,770 6,818 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 10/1/2029 37,421 36,718 37,047 (4)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Imprivata, Inc. First Lien Secured Debt - Term Loan S + 300 , 0.00 % Floor 12/1/2027 11,879 11,920 11,948 (16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Term Loan S + 450 , 1.00 % Floor 4/1/2030 250,388 249,712 249,138 (4)(9)(16)(17)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan S + 450 , 0.00 % Floor 1/18/2028 $ 142,686 $ 139,273 $ 140,983 (8)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt - Term Loan E + 550 , 0.00 % Floor 4/29/2030 EUR 28,282 30,392 32,815 (3)(4)(8)(9)(21)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "AL GCX Fund VIII Holdings LLC First Lien Secured Debt - Term Loan S + 200 , 0.00 % Floor 1/30/2032 $ 12,000 $ 11,976 $ 12,016 (15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S + 400 , 0.00 % Floor 8/15/2028 46,795 46,320 46,901 (15)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 6/28/2029 $ 19,700 $ 19,356 $ 19,504 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt - Term Loan 7.50 % PIK 3/29/2030 10,415 34,037 5,911 (4)(16)(28)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "EchoStar Corporation First Lien Secured Debt - Corporate Bond 6.75 % PIK 11/30/2030 100 99 91 (8)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Cube A&D Buyer Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 10/17/2031 24,439 24,341 24,599 (9)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 8/1/2029 12,519 12,320 12,331 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Shares 100 132 (4)(9)(33)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 9/22/2028 84,766 84,287 84,344 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Vybond Buyer, LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 2/3/2032 20,800 20,502 20,488 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Heritage Environmental Services, Inc. First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 1/31/2031 87,541 86,425 88,197 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt - Term Loan S + 525 , 1.00 % Floor 3/1/2030 28,339 27,893 27,914 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S + 475 , 0.50 % Floor 6/15/2028 96,556 95,527 96,375 (9)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Space Parent, LP Preferred Equity - Preferred Stocks N/A N/A 99,000 Shares 99 99 (4)(8)(33)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "EG Group Limited First Lien Secured Debt - Term Loan S + 425 , 0.00 % Floor 2/7/2028 10,053 10,002 10,111 (8)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Phoenix Newco, Inc. First Lien Secured Debt - Term Loan S + 250 , 0.50 % Floor 11/15/2028 38,415 38,295 38,468 (15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt - Term Loan S + 550 , 0.50 % Floor 12/17/2029 $ 37,513 $ 36,624 $ 37,232 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt - Term Loan S + 641 , 0.75 % Floor 4/3/2028 2,411 2,411 2,326 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt - Term Loan S + 300 , 0.75 % Floor 5/4/2028 46,456 46,348 46,492 (16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/28/2029 111,858 110,750 111,857 (4)(9)(15)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 10/31/2030 77,636 76,683 77,635 (4)(9)(15)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Propulsion BC Newco LLC First Lien Secured Debt - Term Loan S + 275 , 0.50 % Floor 9/14/2029 3,491 3,491 3,504 (8)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E + 600 , 0.00 % Floor 4/19/2031 EUR 126,725 132,670 148,156 (3)(4)(8)(9)(10)(21)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 9/3/2030 $ 18,240 $ 17,947 $ 18,240 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "G Treasury SS LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 6/29/2029 8,571 8,446 8,464 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Vybond Buyer, LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 2/3/2032 20,748 20,459 20,593 (4)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S + 410 , 0.75 % Floor 10/1/2027 118,419 116,087 116,761 (16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/28/2029 111,575 110,571 111,575 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Term Loan S + 500 , 1.50 % Floor 10/15/2029 181,037 178,787 180,170 (8)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt - Term Loan S+ 275 , 0.50 % Floor 2/15/2029 53,965 53,483 53,926 (15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt - Term Loan S + 285 Cash plus 3.25 % PIK, 0.75 % Floor 8/2/2028 5,046 5,046 4,580 (4)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Phoenix Newco, Inc. First Lien Secured Debt - Term Loan S + 250 , 0.50 % Floor 11/15/2028 38,319 38,214 38,394 (15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Shares 50 45 (4)(9)(34)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 5/1/2030 6,870 6,757 6,835 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Dragon Buyer Inc First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 9/30/2031 6,321 6,292 6,335 (16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "AL GCX Fund VIII Holdings LLC First Lien Secured Debt - Term Loan S + 200 , 0.50 % Floor 1/30/2032 $ 8,607 $ 8,591 $ 8,604 (15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S + 450 , 3.00 % Floor 6/30/2028 $ - $ ( 7,500 ) $ ( 7,500 ) (4)(5)(9)(12)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "ACP Tara Holdings, Inc. First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 9/17/2032 22,000 21,945 22,055 (15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "G Treasury SS LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 6/29/2029 8,571 8,453 8,464 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Term Loan S + 425 , 1.00 % Floor 4/1/2030 249,762 249,116 249,762 (4)(9)(17)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 10/31/2030 77,439 76,523 77,439 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "EchoStar Corporation First Lien Secured Debt - Corporate Bond 10.75 % 11/30/2029 64,979 66,471 71,579 (8)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Arcwood Environmental, Inc. First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 1/31/2031 87,320 86,246 88,193 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt - Term Loan S + 300 , 0.75 % Floor 5/4/2028 46,339 46,236 46,387 (16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Shares 100 132 (4)(9)(34)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 9/15/2031 $ 186,843 $ 186,016 $ 188,711 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Propulsion BC Newco LLC First Lien Secured Debt - Term Loan S + 275 , 0.50 % Floor 9/14/2029 $ 3,482 $ 3,482 $ 3,499 (8)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Celsius Holdings Inc First Lien Secured Debt - Term Loan S + 300 , 0.00 % Floor 4/1/2032 $ 2,494 $ 2,482 $ 2,503 (8)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 6/28/2029 $ 25,092 $ 24,727 $ 24,841 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Higginbotham Insurance Agency, Inc. First Lien Secured Debt - Term Loan S + 450 , 1.00 % Floor 11/24/2028 122,032 121,877 122,032 (4)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 9/3/2030 $ 18,194 $ 17,913 $ 18,194 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 9/22/2028 84,766 84,319 84,342 (4)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "QTS Project Ram First Lien Secured Debt - Mortgage Loan (DD) S + 225 , 0.00 % Floor 5/29/2028 $ 17,756 $ 17,060 $ 17,025 (4)(12)(15)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Cube A&D Buyer Inc First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 10/17/2031 24,378 24,282 24,515 (9)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Imprivata, Inc. First Lien Secured Debt - Term Loan S + 300 , 0.50 % Floor 12/1/2027 11,850 11,886 11,914 (16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E + 600 , 0.00 % Floor 4/19/2031 EUR 126,725 132,757 147,666 (3)(4)(8)(9)(10)(21)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 8/1/2029 12,487 12,299 12,362 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Ardagh Metal Packaging Finance plc First Lien Secured Debt - Term Loan E + 450 , 1.00 % Floor 9/24/2029 EUR 59,921 66,559 70,350 (3)(4)(8)(10)(20)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Space Parent, LP Preferred Equity - Preferred Stocks N/A N/A 99,000 Shares 99 99 (4)(8)(34)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 8/15/2028 49,678 49,231 49,851 (15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "WC ORS Holdings, L.P. Common Equity - Limited Partnership N/A N/A 90,443 Shares 90 132 (4)(9)(34)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan S+ 450 , 0.00 % Floor 1/18/2028 $ 153,862 $ 150,710 $ 153,255 (8)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt - Term Loan S + 550 , 0.50 % Floor 12/17/2029 $ 37,417 $ 36,571 $ 37,230 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 10/1/2029 37,326 36,658 36,953 (4)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt - Term Loan S + 641 , 0.75 % Floor 4/3/2028 2,404 2,404 2,163 (4)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt - Term Loan S + 525 , 1.00 % Floor 3/1/2030 $ 28,268 $ 27,840 $ 27,845 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt - Term Loan 11.81 % PIK 3/29/2030 10,710 32,324 5,462 (4)(16)(30)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "EG Finco Ltd First Lien Secured Debt - Term Loan E + 388, 0.00 % Floor 2/7/2028 EUR 9,975 11,594 11,821 (3)(8)(10)(21)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S + 425 , 0.50 % Floor 6/15/2028 117,680 116,690 117,828 (9)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan P + 150 , 0.00 % Floor 4/15/2027 $ 62,969 $ 61,399 $ 55,188 (8)(24)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt - Term Loan 10.43 % 3/29/2030 11,004 31,138 3,741 (4)(16)(30)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Units 50 37 (4)(9)(33)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 12/17/2032 $ 15,659 $ 15,620 $ 15,693 (8)(15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "WC ORS Holdings, L.P. Common Equity - Limited Partnership N/A N/A 90,443 Units 90 160 (4)(9)(33)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/28/2029 111,293 110,350 111,293 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "QTS Project Ram First Lien Secured Debt - Mortgage Loan (DD) S + 225 , 0.00 % Floor 5/29/2028 $ 31,192 $ 30,559 $ 30,672 (4)(12)(14)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt - Term Loan S + 525 , 1.00 % Floor 3/1/2030 28,196 27,791 27,773 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt - Term Loan S + 275 , 0.50 % Floor 2/15/2029 26,715 26,516 26,799 (15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt - Term Loan S + 285 Cash plus 3.25 % PIK, 0.75 % Floor 8/2/2028 5,088 5,088 4,376 (4)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Higginbotham Insurance Agency, Inc. First Lien Secured Debt - Term Loan S + 450 , 1.00 % Floor 6/11/2031 138,425 138,164 137,733 (15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 8/1/2029 12,456 12,278 12,331 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S + 450 , 3.00 % Floor 6/30/2028 $ - $ ( 6,804 ) $ ( 6,875 ) (4)(5)(9)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "AL GCX Fund VIII Holdings LLC First Lien Secured Debt - Term Loan S + 200 , 0.50 % Floor 1/30/2032 8,529 8,514 8,534 (15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 6/28/2029 $ 25,092 $ 24,749 $ 24,967 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Vybond Buyer, LLC First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 2/3/2032 20,696 20,417 20,542 (4)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 9/3/2030 $ 18,149 $ 17,880 $ 18,149 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt - Term Loan S + 550 , 0.50 % Floor 12/17/2029 $ 37,321 $ 36,519 $ 37,321 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Term Loan S + 450 , 1.00 % Floor 4/1/2030 249,136 248,522 247,891 (16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 5/1/2030 6,852 6,746 6,818 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt - Term Loan S + 300 , 0.75 % Floor 5/4/2028 48,765 48,660 48,998 (15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Arcwood Environmental, Inc. First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 1/31/2031 87,099 86,067 87,099 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "ACP Tara Holdings, Inc. First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 12/15/2032 22,000 21,945 22,151 (16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E + 600 , 0.00 % Floor 4/19/2031 EUR 126,725 132,847 147,810 (3)(4)(8)(9)(10)(21)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Legacy Merger Sub, LLC First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 11/10/2031 81,667 81,615 81,035 (4)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 8/15/2028 49,678 49,284 49,120 (15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "EchoStar Corporation First Lien Secured Debt - Corporate Bond 10.75 % 11/30/2029 64,979 66,394 71,924 (8)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S + 410 , 0.75 % Floor 10/1/2027 118,108 116,048 116,248 (16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 10/31/2030 159,043 157,782 158,248 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Dragon Buyer Inc First Lien Secured Debt - Term Loan S+ 275 , 0.00 % Floor 9/30/2031 $ 6,305 $ 6,278 $ 6,317 (16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 9/22/2028 84,551 84,139 84,128 (4)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S + 425 , 0.50 % Floor 6/15/2030 146,759 145,778 145,291 (9)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Units 100 126 (4)(33)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Term Loan S + 500 , 1.50 % Floor 10/15/2029 176,402 174,386 175,299 (16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 9/15/2031 $ 217,165 $ 216,219 $ 216,079 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 10/1/2029 43,109 42,479 42,678 (4)(15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt - Term Loan 12.40 % 4/3/2028 2,397 2,397 1,822 (4)(17)(30)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Cube Industrials Buyer, Inc. First Lien Secured Debt - Term Loan S + 300 , 0.00 % Floor 10/17/2031 24,317 24,225 24,504 (9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan P + 150 , 0.00 % Floor 04/15/2027 $ 62,802 $ 61,527 $ 55,501 (8)(26)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Term Loan S +4 50 , 1.00 % Floor 04/01/2030 248,510 247,928 241,055 (4)(9)(17)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt - Term Loan S + 550 , 0.50 % Floor 12/17/2029 37,224 36,467 37,224 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 10/01/2029 43,000 42,407 42,570 (4)(15)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "ACP Tara Holdings, Inc. First Lien Secured Debt - Term Loan S + 325 , 0.00 % Floor 12/15/2032 22,000 21,946 22,128 (16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "QTS Project Ram First Lien Secured Debt - Mortgage Loan (DD) S + 225 , 0.00 % Floor 05/29/2028 $ 37,280 $ 36,711 $ 36,812 (4)(12)(14)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 10/31/2030 158,645 157,427 157,455 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Dragon Buyer Inc First Lien Secured Debt - Term Loan S + 275 , 0.00 % Floor 09/30/2031 $ 3,206 $ 3,192 $ 3,062 (16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Higginbotham Insurance Agency, Inc. First Lien Secured Debt - Term Loan S + 450 , 1.00 % Floor 06/11/2031 138,069 137,823 135,307 (4)(15)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 12/17/2032 $ 15,659 $ 15,621 $ 15,691 (15)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Quito First Lien Secured Debt - Term Loan E + 500 , 0.00 % Floor 01/22/2033 EUR 95,313 109,786 107,964 (3)(4)(8)(10)(22)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt - Term Loan S + 300 , 0.75 % Floor 05/04/2028 45,649 45,552 45,667 (15)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 06/28/2029 $ 25,092 $ 24,780 $ 24,967 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S + 410 , 0.75 % Floor 10/01/2027 117,798 116,024 114,608 (16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 05/01/2030 6,835 6,734 6,784 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Cube Industrials Buyer, Inc. First Lien Secured Debt - Term Loan S + 300 , 0.00 % Floor 10/17/2031 24,256 24,167 24,296 (9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S + 450 , 3.00 % Floor 06/30/2028 $ - $ ( 6,148 ) $ ( 6,875 ) (4)(5)(9)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Legacy Service Partners, LLC First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 11/10/2031 99,159 99,109 99,159 (4)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Units 50 35 (4)(9)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 09/03/2030 $ 18,103 $ 17,847 $ 17,786 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Vybond Buyer, LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 02/03/2032 $ 20,644 $ 20,374 $ 20,283 (4)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Term Loan S + 450 , 1.50 % Floor 10/15/2029 190,409 188,525 189,457 (8)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 08/01/2029 12,424 12,258 12,269 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S + 425 , 0.50 % Floor 06/15/2030 146,391 145,421 145,568 (9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 08/15/2028 50,719 50,164 50,359 (15)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt - Term Loan 3.50 % 08/02/2028 $ 5,130 $ 5,130 $ 3,527 (4)(16)(33)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt - Term Loan 1.00 % 03/29/2030 11,291 31,136 1,581 (4)(16)(33)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt - Term Loan S + 525 , 1.00 % Floor 03/01/2030 28,125 27,734 27,703 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Tivity Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 06/28/2029 111,010 110,127 110,455 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Space Parent, LP Common Equity - Stock N/A N/A 1,000 Shares 1 1 (4)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Arcwood Environmental, Inc. First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 01/31/2031 86,877 85,898 86,877 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt - Term Loan 12.09 % 04/03/2028 2,397 2,397 1,873 (4)(16)(33)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Units 100 156 (4)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E + 600 , 0.00 % Floor 04/19/2031 EUR 126,725 132,938 145,303 (3)(4)(8)(9)(10)(23)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 09/22/2028 84,336 83,959 83,703 (4)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 09/15/2031 $ 216,614 $ 215,568 $ 213,365 (4)(9)(15)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "AL GCX Fund VIII Holdings LLC First Lien Secured Debt - Term Loan S + 200 , 0.50 % Floor 01/30/2032 8,472 8,458 8,478 (15)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S + 225 , 0.50 % Floor 12/17/2032 $ 15,620 $ 15,583 $ 15,658 (16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Quito First Lien Secured Debt - Term Loan E + 500 , 0.00 % Floor 01/22/2033 EUR 95,313 109,849 107,129 (3)(4)(8)(10)(22)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E + 600 , 0.00 % Floor 04/19/2031 EUR 126,725 133,031 143,985 (3)(4)(8)(9)(10)(23)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "K Hovnanian Enterprises Inc First Lien Secured Debt - Revolver S + 450 , 3.00 % Floor 06/30/2028 $ - $ ( 5,486 ) $ ( 5,888 ) (4)(5)(9)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt - Term Loan 7.50 % 03/29/2030 11,590 31,136 1,507 (4)(17)(33)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "MGP Holdings III Corp. First Lien Secured Debt - Term Loan S + 525 , 1.00 % Floor 03/01/2030 28,053 27,690 27,660 (4)(9)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 09/22/2028 84,120 83,779 83,574 (4)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Rochester Midland Corporation First Lien Secured Debt - Term Loan S + 575 , 1.00 % Floor 08/01/2029 12,393 12,232 12,213 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Legacy Service Partners, LLC First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 11/10/2031 98,911 98,863 98,911 (4)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "QTS Project Ram First Lien Secured Debt - Mortgage Loan (DD) S + 225 , 0.00 % Floor 05/29/2028 $ 47,015 $ 46,509 $ 46,651 (4)(12)(15)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt - Term Loan S + 450 , 0.75 % Floor 09/15/2031 $ 216,063 $ 215,014 $ 213,081 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 06/28/2029 $ 22,705 $ 22,443 $ 22,705 (4)(9)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "RMC Topco LLC Common Equity - Equity Unit N/A N/A 100 Units 100 136 (4)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "All Star Recruiting Locums, LLC First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 05/01/2030 6,817 6,722 6,762 (4)(9)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Trench Safety Solutions Holdings, LLC Common Equity - Equity Unit N/A N/A 331 Units 50 30 (4)(9)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Space Parent, LP Common Equity - Stock N/A N/A 1,000 Shares 1 1 (4)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "ACP Tara Holdings Inc First Lien Secured Debt - Term Loan S + 250 , 0.00 % Floor 12/15/2032 $ 21,945 $ 21,893 $ 22,011 (17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Mavis Tire Express Services TopCo, L.P. First Lien Secured Debt - Term Loan S + 300 , 0.75 % Floor 05/04/2028 45,534 45,448 45,520 (18)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "AL GCX Fund VIII Holdings LLC First Lien Secured Debt - Term Loan S + 200 , 0.50 % Floor 01/30/2032 8,336 8,323 8,348 (16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Pathfinder Power LLC First Lien Secured Debt - Term Loan S + 200 , 0.00 % Floor 06/22/2033 50,000 49,875 49,953 (16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 10/31/2030 158,246 157,086 156,901 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Gannett Holdings, LLC First Lien Secured Debt - Term Loan S + 450 , 1.50 % Floor 10/15/2029 14,644 14,640 14,569 (8)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt - Term Loan 10.16 % 06/02/2031 1,285 1,285 1,160 (4)(17)(33)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt - Term Loan S + 410 , 0.75 % Floor 10/01/2027 120,604 119,115 118,996 (17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Vybond Buyer, LLC First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 02/03/2032 $ 20,592 $ 20,331 $ 20,359 (4)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 09/03/2030 $ 18,057 $ 17,814 $ 17,756 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Cube Industrials Buyer, Inc. First Lien Secured Debt - Term Loan S + 300 , 0.00 % Floor 10/17/2031 24,195 24,110 24,248 (9)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Health, Inc. First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 06/28/2029 110,728 109,906 110,728 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt - Term Loan S + 525 , 0.75 % Floor 10/01/2029 42,891 42,337 42,449 (4)(16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt - Term Loan S + 550 , 0.50 % Floor 12/17/2029 37,128 36,416 37,128 (4)(9)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt - Term Loan S + 425 , 1.00 % Floor 04/01/2030 247,884 247,335 241,117 (4)(9)(18)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "365RM Holdco, LLC First Lien Secured Debt - Term Loan S + 475 , 0.75 % Floor 05/06/2033 $ 46,093 $ 45,639 $ 45,632 (4)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "AMCP Clean Acqusition Company, LLC First Lien Secured Debt - Term Loan S + 425 , 0.50 % Floor 06/15/2030 146,024 145,104 148,762 (9)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 08/15/2028 44,592 44,140 44,626 (16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "CSC Holdings, LLC First Lien Secured Debt - Term Loan P + 150 , 0.00 % Floor 04/15/2027 $ 62,635 $ 61,662 $ 44,095 (8)(25)"
+        }
+      ]
+    },
+    {
+      "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+      "outcome": "supported",
+      "rationale": "Compared all thirteen changed counts with their literal Shares/Units columns. Examples include Oshun 11 versus 11111 in different quarters, Fortis 9 Units versus 90000 Shares, and Ishtar 38889. This supports exact source quantities rather than applying the filing monetary-thousands caption. Proposed detector explicitly excludes principal and ownership percentages.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Ishtar Co-Invest-B LP Common Equity - Stock N/A N/A 38,889 Shares 39 56 (4)(9)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Ishtar Co-Invest-B LP Common Equity - Stock N/A N/A 38,889 Shares 39 102 (4)(9)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Oshun Co-Invest-B LP Common Equity - Stock N/A N/A 11,111 Shares 11 29 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Oshun Co-Invest-B LP Common Equity - Stock N/A N/A 11 Shares 11 29 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Preferred Equity - Equity Unit N/A N/A 1,176 Shares 1 1 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Preferred Equity - Equity Unit N/A N/A 1,176 Shares 1 1 (4)(9)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Preferred Equity - Equity Unit N/A N/A 1,176 Shares 1 2 (4)(9)(30)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Fortis Fire & Safety Holdings LP Common Equity - Equity Unit N/A N/A 9 Units $ 90 $ 138 (4)(9)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "HIG Intermediate, Inc. Preferred Equity - Cumulative Preferred N/A N/A 50,000 Units 49 50 (4)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "TZ Parent LLC Common Equity - Equity Unit N/A N/A 50 Units 50 73 (4)(9)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Common Equity - Stock N/A N/A 82,735 Shares 101 117 (4)(35)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Oshun Co-Invest-B LP Common Equity - Stock N/A N/A 11,111 Shares 11 16 (4)(9)"
+        }
+      ]
+    },
+    {
+      "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+      "outcome": "supported",
+      "rationale": "Compared final 116 currency changes with actual source principal columns and inspected the 935-row foreign population. The rule must use principal currency rather than issuer geography or fair-value units, and atomic cached-FX status is necessary. Delivery Hero is separately withdrawn rather than concealed. A blank undrawn amount is not evidence for a funded currency error.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Esdec Solar Group B.V. First Lien Secured Debt E+ 600 , 0.50 % Floor 8/30/2028 EUR 65,000 $ 53,447 $ 50,510 (3)(4)(8) (9)(21)(27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "First Lien Secured Debt - Delayed Draw Note E+ 625 , 0.00 % Floor 4/18/2030 EUR 7,462 ( 83 ) ( 138 ) (3)(4)(5) (8)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Speed Midco 3 S.A R.L. First Lien Secured Debt E+ 640 , 0.00 % Floor 5/16/2029 EUR 111,776 114,331 118,175 (3)(4)(8) (9)(21)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Armstrong Bidco Limited First Lien Secured Debt SONIA+ 500 , 0.00 % Floor 6/28/2029 GBP 42,000 50,108 50,347 (3)(4)(8)(19)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "First Lien Secured Debt - Delayed Draw Note E+ 650 , 0.00 % Floor 4/18/2030 EUR 10,000 10,653 10,846 (3)(4)(8) (9)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Vita Global FinCo Limited First Lien Secured Debt - Term Loan SONIA+ 700 , 0.00 % Floor 7/6/2027 GBP 16,807 22,778 20,715 (3)(4)(8)(17)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Term Loan S+ 575 , 0.75 % Floor 3/23/2028 A$ 9,775 7,122 6,521 (3)(4)(8)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 550 , 0.00 % Floor 6/24/2031 GBP - ( 10 ) ( 67 ) (3)(4)(5)(8)(10)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 525, 0.00 % Floor 5/31/2031 GBP - ( 52 ) ( 54 ) (3)(4)(5)(8)(10)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Delayed Draw E+ 600 , 0.50 % Floor 8/30/2028 EUR - ( 168 ) ( 566 ) (3)(4)(5)(8)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Speed Midco 3 S.A R.L. First Lien Secured Debt - Term Loan E+ 495 , 0.00 % Floor 5/16/2029 EUR 115,020 123,134 123,180 (3)(4)(8)(9)(19)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Term Loan SONIA+ 495 , 0.00 % Floor 5/16/2029 GBP 31,767 40,229 40,157 (3)(4)(8)(9)(17)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Vita Global FinCo Limited First Lien Secured Debt - Term Loan SONIA+ 710 , 0.00 % Floor 7/6/2027 GBP 16,471 22,328 20,314 (3)(4)(8)(17)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "SumUp Holdings Luxembourg S.a.r.l. First Lien Secured Debt - Delayed Draw E+ 661 , 1.50 % Floor 4/25/2031 EUR 40,000 42,870 43,552 (3)(4)(8)(10)(11)(20)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw E+ 500 , 0.00 % Floor 4/29/2030 EUR - 2 ( 205 ) (3)(4)(5)(8)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+550 , 0.00 % Floor 6/24/2031 GBP - ( 32 ) ( 71 ) (3)(4)(5)(8)(9)(10)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+525 , 0.00 % Floor 8/30/2031 GBP - ( 233 ) ( 240 ) (3)(4)(5)(8)(10)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 525 , 0.00 % Floor 5/31/2031 GBP - ( 50 ) ( 57 ) (3)(4)(5)(8)(9)(10)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 575 , 0.00 % Floor 9/30/2031 GBP - ( 655 ) ( 642 ) (3)(4)(5)(8)(10)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw E+ 600 , 0.50 % Floor 8/30/2028 EUR - ( 160 ) ( 904 ) (3)(4)(5)(8)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 525 , 0.00 % Floor 6/28/2029 GBP 14,400 17,244 18,915 (3)(4)(8)(17)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Armstrong Bidco Limited First Lien Secured Debt - Term Loan SONIA+ 525 , 0.00 % Floor 6/28/2029 GBP 27,600 33,014 36,254 (3)(4)(8)(17)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 550 , 1.00 % Floor 12/7/2029 GBP - ( 42 ) ( 144 ) (3)(4)(5)(8)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 600 , 0.00 % Floor 4/5/2031 GBP - ( 232 ) ( 424 ) (3)(4)(5)(8)(9)(10)(11)(27)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "International Schools Partnership Limited First Lien Secured Debt - Delayed Draw E+ 525 , 0.00 % Floor 7/6/2028 EUR - ( 1,373 ) ( 1,373 ) (3)(4)(5)(8)(11)(28)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 550 , 0.00 % Floor 6/24/2031 GBP - ( 31 ) ( 67 ) (3)(4)(5)(8)(9)(11)(28)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 525 , 0.00 % Floor 8/30/2031 GBP - ( 225 ) ( 112 ) (3)(4)(5)(8)(11)(28)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 525 , 0.00 % Floor 10/25/2031 GBP - ( 62 ) ( 61 ) (3)(4)(5)(8)(11)(28)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 625 , 0.00 % Floor 12/5/2031 GBP - ( 239 ) ( 235 ) (3)(4)(5)(8)(11)(28)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw E+ 575 , 0.00 % Floor 7/11/2029 EUR - 425 ( 43 ) (3)(4)(5)(8)(9)(11)(28)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 550 , 1.00 % Floor 12/7/2029 GBP - ( 40 ) ( 135 ) (3)(4)(5)(8)(9)(11)(28)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 600 , 0.00 % Floor 4/5/2031 GBP - ( 207 ) ( 397 ) (3)(4)(5)(8)(9)(11)(28)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 525 , 0.00 % Floor 8/30/2031 GBP - ( 218 ) ( 116 ) (3)(4)(5)(8)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 600 , 0.00 % Floor 4/25/2031 GBP - ( 215 ) ( 410 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 625 , 0.00 % Floor 12/5/2031 GBP - ( 229 ) ( 161 ) (3)(4)(5)(8)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 7/11/2029 EUR - - ( 45 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw E + 600 , 0.50 % Floor 8/30/2028 EUR - ( 23 ) ( 223 ) (3)(4)(5)(8)(9)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 550 , 0.00 % Floor 6/24/2031 GBP - ( 29 ) ( 69 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Revolver E + 550 , 0.75 % Floor 11/27/2030 EUR - 4 ( 46 ) (3)(4)(5)(8)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 475 , 0.00 % Floor 1/15/2032 GBP - ( 180 ) ( 195 ) (3)(4)(5)(8)(10)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Rocket Bidco Limited First Lien Secured Debt - Term Loan SONIA + 475 , 0.00 % Floor 1/15/2032 GBP 85,925 104,162 109,884 (3)(4)(8)(10)(18)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 550 , 1.00 % Floor 12/7/2029 GBP - ( 38 ) ( 199 ) (3)(4)(5)(8)(9)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 600 , 0.00 % Floor 4/25/2031 GBP - ( 206 ) ( 435 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Hurricane Cleanco Limited First Lien Secured Debt - Term Loan 12.50 % Cash plus 6.25 % PIK, 1.00 % Floor 11/21/2029 GBP 51,630 61,518 70,161 (3)(4)(8)(9)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 7/11/2029 EUR - - ( 32 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw E + 600 , 0.50 % Floor 8/30/2028 EUR - ( 21 ) ( 317 ) (3)(4)(5)(8)(9)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 550 , 0.00 % Floor 6/24/2031 GBP - ( 28 ) ( 73 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw STIBOR + 475 , 0.00 % Floor 6/18/2032 kr - ( 46 ) ( 47 ) (3)(4)(5)(8)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Revolver E + 550 , 0.75 % Floor 11/27/2030 EUR - 6 ( 50 ) (3)(4)(5)(8)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 550 , 1.00 % Floor 12/7/2029 GBP - ( 36 ) ( 169 ) (3)(4)(5)(8)(9)(12)(32)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Corporate Bond SONIA + 500 , 0.00 % Floor 3/21/2030 GBP 61,000 77,734 81,218 (3)(4)(8)(9)(18)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Kane Bidco Limited First Lien Secured Debt - Corporate Bond SONIA + 625 , 0.00 % Floor 2/15/2028 GBP 69,000 86,769 92,798 (3)(4)(8)(9)(18)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Eagle Bidco Limited First Lien Secured Debt - Term Loan SONIA + 475 , 0.00 % Floor 2/20/2032 GBP 129,900 173,387 175,649 (3)(8)(10)(18)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 600 , 0.00 % Floor 4/25/2031 GBP - ( 199 ) ( 373 ) (3)(4)(5)(8)(9)(10)(12)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 550 , 0.00 % Floor 6/24/2031 GBP - ( 28 ) ( 54 ) (3)(4)(5)(8)(9)(10)(12)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 625 , 0.00 % Floor 12/5/2031 GBP - 55 ( 75 ) (3)(4)(5)(8)(9)(10)(12)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw E + 550 , 0.50 % Floor 6/28/2030 EUR - ( 28 ) ( 57 ) (3)(4)(5)(8)(9)(10)(12)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw E + 650 , 0.00 % Floor 4/25/2031 EUR 20,626 21,620 23,910 (3)(4)(8)(9)(10)(12)(20)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 7/11/2029 EUR - - ( 32 ) (3)(4)(5)(8)(9)(10)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 490 , 0.00 % Floor 7/11/2029 GBP 2,248 2,233 2,596 (3)(4)(8)(9)(12)(18)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Term Loan E + 490 , 0.00 % Floor 7/11/2029 EUR 4,029 3,989 4,707 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Investment Company 24 Bidco Limited First Lien Secured Debt - Term Loan SONIA + 490 , 0.00 % Floor 7/11/2029 GBP 6,559 7,685 8,777 (3)(4)(8)(9)(18)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw E + 475 , 0.00 % Floor 8/26/2032 EUR - - ( 78 ) (3)(4)(5)(8)(9)(10)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Revolver E + 550 , 0.75 % Floor 11/27/2030 EUR - ( 63 ) ( 50 ) (3)(4)(5)(8)(12)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw C + 475 , 1.00 % Floor 8/29/2031 C$ - ( 9 ) ( 9 ) (3)(4)(5)(12)(26)(33)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Vita Global FinCo Limited First Lien Secured Debt - Term Loan 11.96 % 6/8/2029 GBP 18,598 25,145 16,796 (3)(4)(8)(10)(18)(30)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw E + 600 , 0.00 % Floor 11/13/2032 EUR - ( 485 ) ( 497 ) (3)(4)(5)(8)(10)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 600 , 0.00 % Floor 4/25/2031 GBP - 32 ( 321 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 525 , 0.00 % Floor 6/24/2031 GBP - ( 26 ) ( 54 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 625 , 0.00 % Floor 12/5/2031 GBP - 54 ( 75 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw E + 650 , 0.50 % Floor 6/28/2030 EUR - ( 26 ) ( 57 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Intralot Capital Luxembourg SA First Lien Secured Debt - Term Loan SONIA + 550 , 0.00 % Floor 9/18/2031 GBP 86,000 113,185 113,605 (3)(4)(8)(10)(18)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Nottingham Forest Football Club Limited First Lien Secured Debt - Term Loan 8.75 % 12/27/2027 GBP 24,063 30,067 32,273 (3)(4)(8)(10)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 7/11/2029 EUR - - ( 32 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw E + 475 , 0.00 % Floor 8/26/2032 EUR - 706 ( 157 ) (3)(4)(5)(8)(9)(10)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Neinor DMP BidCo, S.A.U. First Lien Secured Debt - Delayed Draw E + 525 , 2.00 % Floor 12/31/2029 EUR - 225 ( 254 ) (3)(4)(5)(8)(10)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw C + 475 , 1.00 % Floor 8/29/2031 C$ - ( 9 ) ( 16 ) (3)(4)(5)(9)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 550 , 0.00 % Floor 04/25/2031 GBP - 41 ( 420 ) (3)(4)(5)(8)(9)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 625 , 0.00 % Floor 12/05/2031 GBP - 52 ( 99 ) (3)(4)(5)(8)(9)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 350 , 0.00 % Floor 05/07/2031 GBP - ( 53 ) ( 517 ) (3)(4)(5)(8)(9)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw E + 550 , 0.50 % Floor 06/28/2030 EUR - ( 24 ) ( 94 ) (3)(4)(5)(8)(9)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw C + 500 , 0.75 % Floor 01/14/2033 C$ 2,658 1,840 1,777 (3)(4)(8)(30)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Revolver C+ 500 , 0.75 % Floor 01/14/2033 C$ - ( 83 ) ( 96 ) (3)(4)(5)(8)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Aryeh Bidco Investment Ltd. First Lien Secured Debt - Term Loan C + 500 , 0.75 % Floor 01/14/2033 C$ 99,924 71,265 71,112 (3)(4)(8)(30)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw E + 490 , 0.00 % Floor 01/21/2033 EUR - ( 341 ) ( 346 ) (3)(4)(5)(8)(9)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Revolver E + 490 , 0.00 % Floor 10/21/2032 EUR - ( 95 ) ( 96 ) (3)(4)(5)(8)(9)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Opseo Holding B.V. First Lien Secured Debt - Term Loan E + 490 , 0.00 % Floor 01/21/2033 EUR 248,408 286,055 282,815 (3)(4)(8)(9)(10)(22)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Practice Plus Group Bidco Limited / Practice Plus Group Holdings Limited First Lien Secured Debt - Term Loan SONIA + 625 , 0.50 % Floor 11/19/2029 GBP 11,111 13,271 14,449 (3)(4)(8)(9)(10)(19)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Aardvark Bidco Pty LTD / Barrel Bidco Pty LTD First Lien Secured Debt - Term Loan BBSW + 425 , 0.00 % Floor 11/24/2030 A$ 60,000 42,028 40,983 (3)(4)(8)(10)(28)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw BBSW + 425 , 0.00 % Floor 11/24/2030 A$ - ( 104 ) ( 42 ) (3)(4)(5)(8)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 07/11/2029 EUR - - ( 159 ) (3)(4)(5)(8)(9)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw E + 475 , 0.00 % Floor 08/26/2032 EUR - 706 ( 308 ) (3)(4)(5)(8)(9)(10)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 500 , 0.00 % Floor 03/04/2033 GBP - ( 392 ) ( 389 ) (3)(4)(5)(8)(10)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Consult Bidco Ltd First Lien Secured Debt - Term Loan SONIA + 500 , 0.00 % Floor 03/04/2033 GBP 71,568 93,737 92,833 (3)(4)(8)(10)(19)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Term Loan E + 625 , 0.00 % Floor 04/03/2031 EUR 8,869 9,500 10,226 (3)(4)(8)(10)(23)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "BBD Bidco Limited First Lien Secured Debt - Term Loan SONIA + 625 , 0.00 % Floor 03/21/2031 GBP 21,455 $ 27,489 $ 28,327 (3)(4)(8)(10)(19)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Made in Italy 2 S.P.A. First Lien Secured Debt - Corporate Bond E + 700 , 0.00 % Floor 10/17/2030 EUR 74,500 77,420 74,916 (3)(4)(8)(9)(23)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw C + 475 , 1.00 % Floor 08/29/2031 C$ - ( 8 ) ( 31 ) (3)(4)(5)(9)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Revolver C + 475 , 1.00 % Floor 08/29/2031 C$ - ( 45 ) ( 86 ) (3)(4)(5)(9)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Kane Bidco Limited First Lien Secured Debt - Corporate Bond SONIA + 500 , 0.00 % Floor 03/21/2030 GBP 61,000 77,892 80,913 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 550 , 0.00 % Floor 04/25/2031 GBP - 51 ( 238 ) (3)(4)(5)(8)(9)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 500 , 0.00 % Floor 04/08/2033 GBP - ( 137 ) ( 137 ) (3)(4)(5)(8)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 625 , 0.00 % Floor 12/05/2031 GBP - 50 ( 51 ) (3)(4)(5)(8)(9)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 550 , 0.00 % Floor 05/07/2031 GBP - ( 50 ) ( 554 ) (3)(4)(5)(8)(9)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw E + 490 , 0.00 % Floor 01/21/2033 EUR - ( 328 ) ( 652 ) (3)(4)(5)(8)(9)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Revolver E + 490 , 0.00 % Floor 10/21/2032 EUR - ( 91 ) ( 90 ) (3)(4)(5)(8)(9)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw BBSW + 425 , 0.00 % Floor 11/24/2030 A$ - ( 97 ) ( 81 ) (3)(4)(5)(8)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 07/11/2029 EUR - - ( 158 ) (3)(4)(5)(8)(9)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Foresight US Bidco, Inc First Lien Secured Debt - Revolver E + 500 , 0.00 % Floor 03/23/2033 EUR - ( 231 ) ( 236 ) (3)(4)(5)(8)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw BBSW + 475 , 0.50 % Floor 03/19/2033 A$ - ( 48 ) ( 47 ) (3)(4)(5)(8)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw E + 475 , 0.00 % Floor 08/26/2032 EUR - 706 ( 131 ) (3)(4)(5)(8)(9)(10)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 500 , 0.00 % Floor 03/07/2033 GBP - ( 752 ) ( 522 ) (3)(4)(5)(8)(10)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 525 , 0.00 % Floor 06/28/2029 GBP 10,672 12,909 13,028 (3)(4)(8)(20)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Armstrong Bidco Limited First Lien Secured Debt - Term Loan SONIA + 525 , 0.00 % Floor 06/28/2029 GBP 21,677 26,185 26,462 (3)(4)(8)(20)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw E + 525 , 0.00 % Floor 04/09/2033 EUR - ( 228 ) ( 230 ) (3)(4)(5)(8)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw C + 475 , 1.00 % Floor 08/29/2031 C$ - ( 8 ) ( 63 ) (3)(4)(5)(9)(12)(34)"
+        }
+      ]
+    },
+    {
+      "observation_key": "industry-heading-not-read-from-the-page",
+      "outcome": "supported",
+      "rationale": "Reviewed all 101 original-neighbor repairs and complete source-row population, including Uniti/Specialized REITs and the three broad printed labels. A heading discovery check that breaks inheritance on unknown headings addresses the actual missed-heading mechanism. Company-group and cash boundaries are necessary false-positive exclusions; broad source labels do not justify an invented precise GICS class.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 525 , 0.00 % Floor 8/30/2031 GBP - ( 218 ) ( 116 ) (3)(4)(5)(8)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 600 , 0.00 % Floor 4/25/2031 GBP - ( 215 ) ( 410 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "First Lien Secured Debt S+ 525 , 0.00 % Floor 7/16/2026 2,000 2,000 1,968 (4)(8)(9) (17)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Roaring Fork III-B, LLC First Lien Secured Debt S+ 540 , 0.00 % Floor 7/16/2026 $ 48,000 $ 25,748 $ 25,366 (4)(8)(9) (11)(17)(26)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "TI Intermediate Holdings, LLC First Lien Secured Debt L+ 425 , 1.00 % Floor 12/18/2024 $ 7,443 $ 7,443 $ 7,406 (4)(14)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Alpine Acquisition Corp II First Lien Secured Debt S+ 550 , 1.00 % Floor 11/30/2026 $ 7,444 $ 7,444 $ 7,407 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Carvana Co. Unsecured Debt - Corporate Bond 10.25 % 5/1/2030 $ 56,858 $ 51,893 $ 32,705 (8)"
+        },
+        {
+          "accession": "0000950170-23-021206",
+          "text": "Unsecured Debt - Corporate Bond 4.88 % 9/1/2029 3,300 2,074 1,384 (8)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Roaring Fork III-B, LLC First Lien Secured Debt S+ 540 , 0.00 % Floor 7/16/2026 $ 49,667 $ 27,441 $ 26,733 (4)(8)(9) (11)(17)(26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "First Lien Secured Debt S+ 361 , 0.50 % Floor 10/15/2028 5,823 5,836 5,749 (17)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "TI Intermediate Holdings, LLC First Lien Secured Debt L+ 425 , 1.00 % Floor 12/18/2024 $ 7,406 $ 7,406 $ 7,369 (4)(14)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "Alpine Acquisition Corp II First Lien Secured Debt S+ 575 , 1.00 % Floor 11/30/2026 $ 7,425 $ 7,425 $ 7,351 (4)(17)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Roaring Fork III-B, LLC First Lien Secured Debt S+ 540 , 0.00 % Floor 7/16/2026 $ 49,667 $ 27,468 $ 27,130 (4)(8)(9) (11)(17)(27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Alpine Acquisition Corp II First Lien Secured Debt S+ 585 , 1.00 % Floor 11/30/2026 $ 7,406 $ 7,406 $ 7,258 (4)(16)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "First Lien Secured Debt - Corporate Bond 12.00 % PIK 12/1/2028 12,270 12,665 9,636 (8)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "First Lien Secured Debt - Corporate Bond 13.00 % PIK 6/1/2030 18,406 18,786 14,495 (8)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "Carvana Co. First Lien Secured Debt - Corporate Bond 14.00 % PIK 6/1/2031 $ 21,781 $ 22,232 $ 16,908 (8)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Roaring Fork III-B, LLC First Lien Secured Debt S+ 540 , 0.00 % Floor 7/16/2026 $ 49,667 $ 27,496 $ 26,877 (4)(8)(9) (11)(15)(16)(27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Alpine Acquisition Corp II First Lien Secured Debt S+ 610 , 1.00 % Floor 11/30/2026 $ 7,388 $ 7,388 $ 7,240 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "First Lien Secured Debt - Corporate Bond 12.00 % PIK 12/1/2028 12,270 12,650 10,449 (8)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "Carvana Co. First Lien Secured Debt - Corporate Bond 13.00 % PIK 6/1/2030 $ 18,406 $ 18,777 $ 15,542 (8)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "First Lien Secured Debt - Corporate Bond 14.00 % PIK 6/1/2031 11,781 12,010 10,093 (8)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Roaring Fork III-B, LLC First Lien Secured Debt S+ 540 , 0.00 % Floor 7/16/2026 $ 49,667 $ 27,523 $ 27,617 (4)(8)(9)(15)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Caesars Entertainment, Inc. First Lien Secured Debt S+ 275 , 0.50 % Floor 2/6/2031 $ 34,000 $ 33,915 $ 34,069 (8)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Advarra Holdings, Inc. First Lien Secured Debt S+ 525 , 0.75 % Floor 8/24/2029 $ 197,707 $ 178,347 $ 182,037 (4)(9)(11)(14)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "ACI Group Holdings, Inc. First Lien Secured Debt S+ 560 , 0.75 % Floor 8/2/2028 4,937 4,937 4,887 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Allied Benefit Systems Intermediate LLC First Lien Secured Debt S+ 525 , 0.75 % Floor 10/31/2030 93,000 77,387 78,386 (4)(9)(11)(14)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Athenahealth Group Inc. First Lien Secured Debt S+ 325 , 0.50 % Floor 2/15/2029 49,334 48,579 48,991 (14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt S+ 550 , 0.50 % Floor 12/17/2029 9,894 2,351 2,295 (4)(9)(11)(15)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt S+ 575 , 0.50 % Floor 12/17/2028 2,957 2,900 2,927 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Acentra Holdings, LLC First Lien Secured Debt S+ 650 , 0.50 % Floor 12/17/2029 35,550 34,512 35,017 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt - Revolver S+ 550 , 0.50 % Floor 12/17/2029 4,000 668 713 (4)(9)(11)(15)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Coretrust Purchasing Group LLC First Lien Secured Debt S+ 650 , 0.75 % Floor 10/1/2029 32,120 31,334 31,317 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt S+ 675 , 0.75 % Floor 10/1/2029 4,737 ( 56 ) ( 118 ) (4)(5)(11)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt - Revolver S+ 675 , 0.75 % Floor 10/1/2029 4,737 ( 112 ) ( 118 ) (4)(5)(11)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "DCA Investment Holding LLC First Lien Secured Debt S+ 641 , 0.75 % Floor 4/3/2028 2,445 2,445 2,445 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt S+ 300 , 0.75 % Floor 11/10/2028 281 281 227 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "ERC Topco Holdings, LLC First Lien Secured Debt S+ 326 (includes 3.25 % PIK) 11/9/2028 35,020 35,020 28,191 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt S+ 550 , 0.75 % Floor 11/10/2027 19 19 16 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt - Revolver S+ 326 (includes 3.25 % PIK) 11/10/2027 3,195 2,412 1,877 (4)(11)(15)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Gainwell Acquisition Corp. First Lien Secured Debt S+ 410 , 0.75 % Floor 10/1/2027 44,448 43,512 42,598 (15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Gateway US Holdings, Inc. First Lien Secured Debt S+ 615 , 0.75 % Floor 9/22/2026 92,174 91,831 92,174 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt - Revolver S+ 600 , 1.00 % Floor 10/8/2029 11,729 ( 270 ) ( 176 ) (4)(5)(9)(11)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "OMH-Healthedge Holdings, Inc. First Lien Secured Debt S+ 600 , 1.00 % Floor 10/8/2029 108,271 105,718 106,647 (4)(9)(15)(16)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Phoenix Newco, Inc. First Lien Secured Debt S+ 336 , 0.50 % Floor 11/15/2028 19,949 19,900 20,017 (14)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "Alpine Acquisition Corp II First Lien Secured Debt S+ 610 , 1.00 % Floor 11/30/2026 $ 7,369 $ 7,369 $ 7,129 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 540 , 0.00 % Floor 7/16/2026 18,074 17,981 18,074 (4)(8)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Roaring Fork III-B, LLC First Lien Secured Debt - Term Loan S+ 540 , 0.00 % Floor 7/16/2026 $ 1,153 $ 1,153 $ 1,153 (4)(8)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "AssuredPartners, Inc. First Lien Secured Debt - Term Loan S+ 350 , 0.50 % Floor 2/14/2031 45,750 45,681 45,921 (14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Pluto Holdco Limited First Lien Secured Debt - Term Loan E+ 385 , 0.00 % Floor 11/30/2024 EUR 12,500 $ 13,495 $ 13,286 (3)(4)(8)(10)(19)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Joker Holdco 3 S.a r.l. First Lien Secured Debt - Term Loan E+ 600 , 0.00 % Floor 4/19/2031 EUR 137,000 143,109 143,786 (3)(4)(8)(10)(19)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "JPW Industries Holding Corporation First Lien Secured Debt - Term Loan S+ 588 , 2.00 % Floor 11/22/2028 116,415 113,781 114,087 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Revolver S+ 600 , 0.75 % Floor 9/3/2030 400 370 400 (4)(9)(11)(14)(27)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Accela, Inc. First Lien Secured Debt - Term Loan S+ 600 , 0.75 % Floor 9/3/2030 $ 18,286 $ 17,950 $ 18,377 (4)(9)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Alpine Acquisition Corp II First Lien Secured Debt - Term Loan S+ 610 , 1.00 % Floor 11/30/2026 $ 7,350 $ 7,350 $ 6,725 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Titan Acquisition Ltd of Canada First Lien Secured Debt - Term Loan S+ 500 , 0.00 % Floor 2/15/2029 40,436 39,910 40,579 (8)(16)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 540 , 0.00 % Floor 7/16/2026 17,036 16,958 17,036 (4)(8)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Roaring Fork III-B, LLC First Lien Secured Debt - Term Loan S+ 540 , 0.00 % Floor 7/16/2026 $ 1,087 $ 1,087 $ 1,087 (4)(8)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Wand Newco 3, Inc. First Lien Secured Debt - Term Loan S+ 325 , 0.00 % Floor 1/30/2031 $ 19,950 $ 19,903 $ 19,950 (14)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Pluto Holdco Limited First Lien Secured Debt - Term Loan 7.60 % PIK 11/30/2024 EUR 12,748 $ 13,771 $ 14,155 (3)(4)(8)(9)(10)(19)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 550 , 1.00 % Floor 5/1/2030 - ( 16 ) ( 9 ) (4)(5)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "JPW Industries Holding Corporation First Lien Secured Debt - Term Loan S+ 588 , 2.00 % Floor 11/22/2028 116,123 113,614 115,542 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Alpine Acquisition Corp II First Lien Secured Debt - Term Loan S+ 610 , 1.00 % Floor 11/30/2026 $ 7,331 $ 7,331 $ 6,232 (4)(14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Pluto Holdco Limited First Lien Secured Debt - Term Loan 7.32 % PIK 6/9/2025 EUR 12,976 $ 14,018 $ 13,408 (3)(4)(8)(9)(19)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Alpine Acquisition Corp II First Lien Secured Debt - Term Loan S+ 610 (Includes 8.65 % PIK) 11/30/2029 $ 7,133 $ 7,133 $ 5,706 (4)(14)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw S + 576 , 0.75 % Floor 11/1/2028 4,533 4,525 4,486 (4)(12)(16)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Revolver S + 550 , 0.75 % Floor 10/30/2026 - - ( 33 ) (4)(5)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "CPI Buyer, LLC First Lien Secured Debt - Term Loan S + 576 , 0.75 % Floor 11/1/2028 $ 30,669 $ 30,669 $ 30,362 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 1.00 % Floor 6/28/2029 - ( 67 ) ( 16 ) (4)(5)(9)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 500 , 1.00 % Floor 6/28/2029 19,700 19,338 19,602 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt - Term Loan E + 550 , 0.00 % Floor 4/29/2030 EUR 28,282 30,361 30,352 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Term Loan S + 550 , 0.50 % Floor 4/29/2030 11,498 11,224 11,498 (4)(8)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw E + 500 , 0.50 % Floor 4/29/2030 EUR 7,003 7,625 7,473 (3)(4)(8)(9)(12)(20)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw E + 650 , 0.00 % Floor 4/29/2030 EUR 11,200 12,087 12,020 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Janus Bidco Limited First Lien Secured Debt - Term Loan S + 600 , 0.00 % Floor 4/25/2031 68,523 66,965 67,153 (4)(8)(9)(10)(17)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "ExactCare Parent, Inc. First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 11/5/2029 40,168 39,264 40,168 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Revolver S + 510 , 1.00 % Floor 6/28/2029 - ( 63 ) ( 31 ) (4)(5)(9)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 6/28/2029 $ 19,700 $ 19,356 $ 19,504 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Ruler Bidco S.A R.L. First Lien Secured Debt - Term Loan E + 550 , 0.00 % Floor 4/29/2030 EUR 28,282 30,392 32,815 (3)(4)(8)(9)(21)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Term Loan S + 550 , 0.50 % Floor 4/29/2030 11,498 11,236 11,383 (4)(8)(9)(17)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw E + 500 , 0.50 % Floor 4/29/2030 EUR 7,003 7,625 7,997 (3)(4)(8)(9)(12)(21)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw E+ 650 , 0.00 % Floor 4/29/2030 EUR 11,200 12,097 12,995 (3)(4)(8)(9)(21)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Bausch + Lomb Corporation First Lien Secured Debt - Term Loan S + 425 , 0.00 % Floor 1/15/2031 $ 17,310 $ 17,224 $ 17,364 (8)(15)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Uniti Group LP / Uniti Group Finance Inc / CSL Capital LLC First Lien Secured Debt - Corporate Bond 10.50 % 2/15/2028 $ 23,162 $ 24,170 $ 24,537 (8)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Revolver S+ 500 , 0.75 % Floor 12/5/2030 - ( 21 ) ( 18 ) (4)(5)(12)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Revolver S + 400 , 0.50 % Floor 7/1/2032 - ( 96 ) ( 100 ) (4)(5)(11)(12)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Revolver S + 510 , 1.00 % Floor 6/28/2029 449 390 418 (4)(9)(12)(15)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 6/28/2029 $ 25,092 $ 24,727 $ 24,841 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Outfront Media Capital LLC First Lien Secured Debt - Term Loan S + 200 , 0.00 % Floor 9/24/2032 4,000 3,995 4,004 (8)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Alpine Acquisition Corp II First Lien Secured Debt - Term Loan S + 615 Cash plus 1.24 % PIK, 1.00 % Floor 11/30/2029 $ 7,571 $ 7,275 $ 3,786 (4)(16)(30)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Revolver S + 400 , 0.50 % Floor 7/1/2032 - ( 93 ) ( 100 ) (4)(5)(11)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Revolver S + 510 , 1.00 % Floor 6/28/2029 899 843 883 (4)(9)(12)(15)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 6/28/2029 $ 25,092 $ 24,749 $ 24,967 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Revolver S + 510 , 1.00 % Floor 06/28/2029 - ( 52 ) ( 16 ) (4)(5)(9)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 06/28/2029 $ 25,092 $ 24,780 $ 24,967 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Revolver S + 500 , 0.75 % Floor 09/01/2031 - ( 103 ) ( 110 ) (4)(5)(11)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 08/15/2028 50,719 50,164 50,359 (15)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "IW Buyer LLC First Lien Secured Debt - Term Loan S + 510 , 1.00 % Floor 06/28/2029 $ 22,705 $ 22,443 $ 22,705 (4)(9)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Pathfinder Power LLC First Lien Secured Debt - Term Loan S + 200 , 0.00 % Floor 06/22/2033 50,000 49,875 49,953 (16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw S + 500 , 1.50 % Floor 06/09/2031 - - ( 721 ) (4)(5)(9)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "KDC/ONE Development Corporation, Inc. First Lien Secured Debt - Term Loan S + 350 , 0.00 % Floor 08/15/2028 44,592 44,140 44,626 (16)"
+        }
+      ]
+    },
+    {
+      "observation_key": "interest-floor-published-as-pik",
+      "outcome": "supported",
+      "rationale": "All nine removed positive PIK values correspond to explicit Floor wording in current source cells, while the proposed check preserves current explicit PaidInKind facts such as DISH June2024. Null means no supported PIK value, not confirmed cash-only status. This is a sound review detector rather than a blanket no-PIK-word exclusion.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Houghton Mifflin Harcourt Company First Lien Secured Debt - Term Loan S+ 535 , 0.50 % Floor 4/9/2029 42,592 40,956 40,640 (15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 610 , 1.00 % Floor 12/18/2028 11,533 11,377 11,341 (4)(11)(15)(27)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "One Silver Serve, LLC First Lien Secured Debt - Term Loan S+ 610 , 1.00 % Floor 12/18/2028 21,209 21,014 20,996 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "BGIF IV Fearless Utility Services, Inc. First Lien Secured Debt - Term Loan S+ 500 , 0.50 % Floor 6/7/2031 135,396 134,051 134,042 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 550 , 1.00 % Floor 8/13/2027 32,181 31,968 31,586 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Trident TPI Holdings, Inc. First Lien Secured Debt - Term Loan S+ 400 , 0.50 % Floor 9/15/2028 38,286 38,229 38,391 (14)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "WC ORS Buyer, Inc. First Lien Secured Debt - Term Loan S+ 500 , 0.75 % Floor 8/7/2031 $ 75,317 $ 74,203 $ 74,188 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Revolver S+ 500 , 0.75 % Floor 8/7/2031 859 808 807 (4)(11)(14)(27)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Revolver S+ 500 , 0.50 % Floor 6/7/2030 - ( 214 ) ( 235 ) (4)(5)(9)(11)(28)"
+        }
+      ]
+    },
+    {
+      "observation_key": "spread-or-floor-published-as-coupon",
+      "outcome": "supported",
+      "rationale": "Inspected all fourteen withdrawn coupon cells. Each source shows a benchmark-plus-margin or floor without an independently supported all-in coupon. Proposed current-fact comparison protects legitimate separately tagged coupons such as Heubach and SK Neptune. A benchmark floor alone cannot establish the realised base rate.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 690 , 1.00% Floor 2/7/2028 3,390 3,313 3,288 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Houghton Mifflin Harcourt Company First Lien Secured Debt - Term Loan S+ 535 , 0.50 % Floor 4/9/2029 42,592 40,956 40,640 (15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 610 , 1.00 % Floor 12/18/2028 11,533 11,377 11,341 (4)(11)(15)(27)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "One Silver Serve, LLC First Lien Secured Debt - Term Loan S+ 610 , 1.00 % Floor 12/18/2028 21,209 21,014 20,996 (4)(15)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "BGIF IV Fearless Utility Services, Inc. First Lien Secured Debt - Term Loan S+ 500 , 0.50 % Floor 6/7/2031 135,396 134,051 134,042 (4)(14)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Brookfield WEC Holdings Inc. First Lien Secured Debt - Term Loan S+ 275 , 0.00 % Floor 1/27/2031 5,000 5,006 5,010 (14)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 675 , 1.00 % Floor 2/7/2028 3,382 3,309 3,280 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 550 , 1.00 % Floor 8/13/2027 32,181 31,968 31,586 (4)(9)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Trident TPI Holdings, Inc. First Lien Secured Debt - Term Loan S+ 400 , 0.50 % Floor 9/15/2028 38,286 38,229 38,391 (14)(15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "WC ORS Buyer, Inc. First Lien Secured Debt - Term Loan S+ 500 , 0.75 % Floor 8/7/2031 $ 75,317 $ 74,203 $ 74,188 (4)(9)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Term Loan S + 250 , 0.50 % Floor 8/15/2030 1,806 1,805 1,810 (15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "IBG Borrower LLC First Lien Secured Debt - Term Loan S + 515 , 1.00 % Floor 8/22/2029 135,466 134,118 132,756 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Term Loan S + 515 , 1.00 % Floor 8/22/2031 79,669 78,074 78,075 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Revolver S + 550 , 1.00 % Floor 05/01/2030 848 831 837 (4)(9)(12)(17)(34)"
+        }
+      ]
+    },
+    {
+      "observation_key": "fixed-coupon-mis-scaled-or-treated-as-margin",
+      "outcome": "supported",
+      "rationale": "Compared final standalone fixed rate repairs with current columns: Bellis3.25, ERC6.70, Cascade13.00, ERC10.36, Esdec7.00 and8.94. Clearing stale floating spreads and rescaling 100x errors follows the printed current column. Equity-plus-PIK and ambiguous multiple components remain exclusions from automatic repair.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-041830",
+          "text": "First Lien Secured Debt - Corporate Bond 3.25 % 2/16/2026 GBP 2,000 2,135 2,133 (3)(8)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Second Lien Secured Debt - Term Loan 6.70 % 10/18/2027 38,156 37,998 16,121 (4)(8)(15)(24)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Cascade Intermediate II, Inc. First Lien Secured Debt - Term Loan 13.00 % 9/24/2033 22,942 22,484 22,484 (4)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Second Lien Secured Debt - Term Loan 10.36 % 12/17/2028 35,864 33,700 5,236 (9)(16)(30)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Esdec Solar Group B.V. First Lien Secured Debt - Term Loan 7.00 % 08/30/2028 EUR 62,693 66,457 32,971 (3)(4)(8)(9)(22)(33)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Term Loan 8.94 % 08/30/2028 708 296 305 (8)(9)(16)(33)"
+        }
+      ]
+    },
+    {
+      "observation_key": "rate-or-spread-read-from-stale-member-text",
+      "outcome": "supported",
+      "rationale": "Current ERC9.43 and DISH3.88 ordinary coupon columns do not support the old member-only PIK values. Withdrawing unsupported PIK to null is justified, while DISH June2024 current PaidInKind evidence remains a false-positive guard. The detector correctly proposes review rather than setting absent PIK to zero.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Term Loan 9.43 % 3/31/2030 107 - 107 (4)(16)(30)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Convertible Bond 3.88 % 11/30/2030 19,028 45,550 63,706 (8)"
+        }
+      ]
+    },
+    {
+      "observation_key": "fixed-cash-plus-pik-treated-as-all-in",
+      "outcome": "supported",
+      "rationale": "Both Soho source rows explicitly print5.38 Cash plus5.38PIK. Final10.76 all-in and5.38 cash follows the implemented financial convention; no coupon-to-spread inference is needed. Restricting this repair to fixed explicit components avoids falsely summing ambiguous floating disclosures.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Soho House Bond Limited First Lien Secured Debt - Corporate Bond 5.38 % Cash plus 5.38 % PIK, 0.00 % Floor 01/29/2032 84,716 83,887 83,072 (4)(8)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Soho House Bond Limited First Lien Secured Debt - Corporate Bond 5.38 % Cash plus 5.38 % PIK, 0.00 % Floor 01/29/2032 85,854 85,051 84,798 (4)(8)"
+        }
+      ]
+    },
+    {
+      "observation_key": "old-row-correction-overrides-current-printed-spread",
+      "outcome": "supported",
+      "rationale": "Independently parsed raw inline facts and original tr for current C_6237440e-e6ad-460e-909b-c200abfa03f3. Printed1600 with scale-4 is0.16 decimal/16percentage points, par/cost6375/FV5642; current PIK8.03 is separate. Prior0.061 is comparative, so the narrow exact-key supersession is supported. Historical audit remains preserved; recurring corrections need source conflict checks.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Material Holdings, LLC First Lien Secured Debt - Term Loan S+ 1600 (Includes 8.03 % PIK) 8/19/2027 6,375 6,375 5,642 (4)(15)(25)"
+        }
+      ]
+    },
+    {
+      "observation_key": "source-currency-repair-induces-unsafe-facility-join",
+      "outcome": "supported",
+      "rationale": "Raw source confirms Delivery Hero KRW on the June2024 facility versus the distinct EUR December2029-maturity facility. Reject replay records one rejected B2 pair but surviving shared identity. Withdrawal is an acceptable bounded fallback preserving existing distinct positions, leaving a documented real error. Proposed detector must apply across all matching paths and check maturity/currency/reference compatibility.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-094137",
+          "text": "Delivery Hero Finco Germany GmbH First Lien Secured Debt - Term Loan K+ 575 , 0.00 % Floor 8/12/2027 195,000,000 138,436 141,664 (3)(4)(8)(9)(18)"
+        }
+      ]
+    },
+    {
+      "observation_key": "cash-plus-pik-wording-does-not-establish-component-semantics",
+      "outcome": "supported",
+      "rationale": "Reviewed complete139 cash-plus cells and the Yellow Castle, UFT, Material and Hurricane exceptions. Same arithmetic does not settle whether PIK is included, additive or conditional. Parking with facility-level terms evidence is supported; multiple-token and wording-transition detectors should flag review without changing the economic convention.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Term Loan SARON+ 475 Cash plus 5.46 % PIK, 0.00 % Floor 7/7/2029 3,326 3,367 4,182 (3)(4)(8)(9)(22)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Term Loan STIBOR+ 475 Cash plus 8.63 % PIK, 0.00 % Floor 7/7/2029 kr 35,257 3,292 3,717 (3)(4)(8)(9)(23)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Term Loan SARON + 475 Cash plus 4.75 % PIK, 0.00 % Floor 7/9/2029 9 11 11 (3)(4)(8)(9)(22)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Term Loan SARON + 475 Cash plus 5.46 % PIK, 0.00 % Floor 7/9/2029 3,353 3,404 4,201 (3)(4)(8)(9)(22)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Term Loan STIBOR + 475 Cash plus 6.85 % PIK, 0.00 % Floor 7/9/2029 Skr 35,658 3,337 3,778 (3)(4)(8)(9)(23)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "Uft Buyer LLC First Lien Secured Debt - Term Loan S + 225 Cash plus 2.75 % PIK, 0.50 % PIK 12/06/2032 68,328 67,674 67,645 (4)(16)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "Uft Buyer LLC First Lien Secured Debt - Term Loan S + 225 Cash plus 2.75 % PIK, 0.50 % PIK 12/06/2032 68,803 68,130 68,803 (4)(17)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Hurricane Cleanco Limited First Lien Secured Debt - Term Loan 12.50 % Cash plus 6.25 % PIK, 1.00 % Floor 11/21/2029 GBP 51,630 61,518 70,161 (3)(4)(8)(9)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Hurricane Cleanco Limited First Lien Secured Debt - Term Loan 12.50 % Cash plus 6.25 % PIK, 1.00 % Floor 11/21/2029 GBP 52,443 62,702 70,178 (3)(4)(8)(9)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "Material Holdings, LLC First Lien Secured Debt - Term Loan S + 610 Cash plus 9.77 % PIK, 0.00 % Floor 8/19/2027 6,621 6,368 3,261 (4)(16)(28)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "Material Holdings, LLC First Lien Secured Debt - Term Loan S + 610 Cash plus 9.77 % PIK, 0.00 % Floor 8/19/2027 6,621 6,306 3,013 (4)(16)(30)(33)"
+        }
+      ]
+    },
+    {
+      "observation_key": "cash-industry-inherits-preceding-borrower-group",
+      "outcome": "supported",
+      "rationale": "All eighteen cash-equivalent source rows now have direct original-context evidence, including eight AfterCashEquivalents rows omitted by the initial parser. Ten stale group labels remain visible and eight null labels are distinguished. Cash-section-aware metadata review catches inheritance without imposing noncash industry/GICS or changing the reconciliation basis.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-021206",
+          "text": "State Street Institutional US Government Money Market Fund 2 2 (7)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "State Street Institutional US Government Money Market Fund 2 2 (7)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "State Street Institutional US Government Money Market Fund 240,002 240,002 (7)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "State Street Institutional US Government Money Market Fund 55,000 55,000 (7)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "State Street Institutional US Government Money Market Fund 400,000 400,000 (7)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "Goldman Sachs Financial Square Government Fund Institutional 65,405 65,405 (7)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "Goldman Sachs Financial Square Government Fund Institutional N/A N/A 154,584 154,584 154,584 (7)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "Goldman Sachs Financial Square Government Fund Institutional N/A N/A 293,062 293,062 293,062 (7)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "State Street Institutional U.S. Government Money Market Fund Opportunity N/A N/A 300,000 300,000 300,000 (7)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "US Bank GCTS0095 N/A N/A 31,914 31,914 31,914 (7)"
+        }
+      ]
+    },
+    {
+      "observation_key": "legal-company-starts-with-section-word",
+      "outcome": "supported",
+      "rationale": "The38 Investment Company24Bidco flags are literal legal-company names, not evidence of category leakage. This supports row-level detector refinement only; fourteen mixed quarter findings still contain real errors. Cross-checking carried source company preserves legal words and numeric identifiers while continuing to flag genuine group/category prefixes.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-021206",
+          "text": "First Lien Secured Debt E+ 575 , 0.00 % Floor 7/11/2029 EUR 5,406 4,646 4,976 (3)(4)(8) (9)(22)(26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "First Lien Secured Debt E+ 575 , 0.00 % Floor 7/11/2029 EUR 1,377 694 742 (3)(4)(8) (9)(22)(26)"
+        },
+        {
+          "accession": "0000950170-23-041830",
+          "text": "First Lien Secured Debt E+ 565 , 0.00 % Floor 7/11/2029 EUR 4,029 3,958 4,265 (3)(4)(8) (9)(22)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "First Lien Secured Debt E+ 625 , 0.00 % Floor 7/11/2029 EUR 6,000 ( 98 ) ( 190 ) (3)(4)(5) (8)(9)(11)(27)"
+        },
+        {
+          "accession": "0000950170-23-061985",
+          "text": "First Lien Secured Debt E+ 540 , 0.00 % Floor 7/11/2029 EUR 5,406 4,656 4,850 (3)(4)(8) (9)(11)(21)(27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "First Lien Secured Debt SONIA+ 575 , 0.00 % Floor 7/11/2029 EUR 7,377 1,248 1,439 (3)(4)(8) (9)(11)(17)(27)"
+        },
+        {
+          "accession": "0000950170-24-031479",
+          "text": "First Lien Secured Debt E+ 540 , 0.00 % Floor 7/11/2029 EUR 4,029 3,964 4,404 (3)(4)(8) (9)(19)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt E+ 540 , 0.00 % Floor 7/11/2029 EUR 4,029 3,967 4,304 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt SONIA+ 625 , 0.00 % Floor 7/11/2029 EUR 6,000 ( 90 ) ( 65 ) (3)(4)(5)(8)(9)(11)(28)"
+        },
+        {
+          "accession": "0000950170-24-058684",
+          "text": "First Lien Secured Debt SONIA+ 575 , 0.00 % Floor 7/11/2029 EUR 1,377 1,343 1,470 (3)(4)(8)(9)(17)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Delayed Draw E+ 625, 0.00 % Floor 7/11/2029 EUR 872 857 869 (3)(4)(8)(9)(11)(20)(27)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Delayed Draw E+ 575 , 0.00 % Floor 7/11/2029 EUR 1,377 1,345 1,460 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0000950170-24-094137",
+          "text": "First Lien Secured Debt - Term Loan E+ 515 , 0.00 % Floor 7/11/2029 EUR 4,029 3,971 4,272 (3)(4)(8)(9)(19)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 575 , 0.00 % Floor 7/11/2029 GBP 1,377 1,346 1,517 (3)(4)(8)(9)(17)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 651 , 0.00 % Floor 7/11/2029 GBP 872 717 842 (3)(4)(8)(9)(10)(11)(27)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Term Loan E+ 515 , 0.00 % Floor 7/11/2029 EUR 4,029 3,974 4,440 (3)(4)(8)(9)(19)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Term Loan E+ 515 , 0.00 % Floor 7/11/2029 EUR 4,029 3,978 4,143 (3)(4)(8)(9)(19)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 651 , 0.00 % Floor 7/11/2029 GBP 872 767 856 (3)(4)(8)(9)(11)(17)(28)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA+ 575 , 0.00 % Floor 7/11/2029 GBP 1,377 1,348 1,415 (3)(4)(8)(9)(11)(17)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "First Lien Secured Debt - Delayed Draw E+ 575 , 0.00 % Floor 7/11/2029 EUR - 425 ( 43 ) (3)(4)(5)(8)(9)(11)(28)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 515 , 0.00 % Floor 7/11/2029 GBP 2,189 2,057 2,307 (3)(4)(8)(9)(12)(18)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 7/11/2029 EUR - - ( 45 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "First Lien Secured Debt - Term Loan E + 515 , 0.00 % Floor 7/11/2029 EUR 4,029 3,981 4,324 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Term Loan E + 515 , 0.00 % Floor 7/11/2029 EUR 4,029 3,985 4,723 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 515 , 0.00 % Floor 7/11/2029 EUR 2,248 2,129 2,604 (3)(4)(8)(9)(12)(18)(32)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 7/11/2029 EUR - - ( 32 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 7/11/2029 EUR - - ( 32 ) (3)(4)(5)(8)(9)(10)(33)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Term Loan E + 490 , 0.00 % Floor 7/11/2029 EUR 4,029 3,989 4,707 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 490 , 0.00 % Floor 7/11/2029 GBP 2,248 2,233 2,596 (3)(4)(8)(9)(12)(18)(33)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 7/11/2029 EUR - - ( 32 ) (3)(4)(5)(8)(9)(10)(12)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 490 , 0.00 % Floor 7/11/2029 GBP 2,248 2,630 2,728 (3)(4)(8)(9)(12)(18)(32)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "First Lien Secured Debt - Term Loan E + 490 , 0.00 % Floor 7/11/2029 EUR 4,029 3,994 4,711 (3)(4)(8)(9)(20)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 07/11/2029 EUR - - ( 159 ) (3)(4)(5)(8)(9)(10)(12)(35)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Term Loan E + 465 , 0.00 % Floor 07/11/2029 EUR 4,029 3,998 4,541 (3)(4)(8)(9)(22)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 465 , 0.00 % Floor 07/11/2029 GBP 2,248 2,637 2,508 (3)(4)(8)(9)(12)(19)(35)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Term Loan E + 465 , 0.00 % Floor 07/11/2029 EUR 4,029 4,002 4,487 (3)(4)(8)(9)(22)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw E + 575 , 0.00 % Floor 07/11/2029 EUR - - ( 158 ) (3)(4)(5)(8)(9)(10)(12)(34)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "First Lien Secured Debt - Delayed Draw SONIA + 465 , 0.00 % Floor 07/11/2029 GBP 5,379 6,618 6,666 (3)(4)(8)(9)(12)(20)(34)"
+        }
+      ]
+    },
+    {
+      "observation_key": "group-qualified-equity-identity-would-collapse-to-ci",
+      "outcome": "supported",
+      "rationale": "The twelve source CI rows belong to two different group-qualified facilities, with different June2031/March2030 maturities and margins. Removing their qualifiers would erase an identity distinction. Detecting generic carried company text is appropriate, but requires group/facility anchors rather than assuming generic names identify one issuer position.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-068013",
+          "text": "CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 23,716 23,362 23,361 (4)(17)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/6/2031 17,242 17,083 16,800 (4)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 23,716 23,376 23,361 (4)(9)(16)"
+        },
+        {
+          "accession": "0000950170-25-105984",
+          "text": "CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/6/2031 17,201 17,027 16,996 (4)(15)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 23,657 23,331 23,347 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-25-277723",
+          "text": "CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/6/2031 17,160 16,993 16,954 (4)(15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 6/6/2031 17,117 16,955 16,905 (4)(15)"
+        },
+        {
+          "accession": "0001193125-26-102386",
+          "text": "CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 3/27/2030 23,598 23,288 23,281 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 03/27/2030 23,538 23,244 23,148 (4)(9)(16)"
+        },
+        {
+          "accession": "0001193125-26-215667",
+          "text": "CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 06/06/2031 17,077 16,922 16,653 (4)(15)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "CI First Lien Secured Debt - Term Loan S + 500 , 0.75 % Floor 06/06/2031 17,351 17,202 16,945 (4)(17)"
+        },
+        {
+          "accession": "0001193125-26-341358",
+          "text": "CI First Lien Secured Debt - Term Loan S + 550 , 1.00 % Floor 03/27/2030 23,479 23,201 23,155 (4)(9)(17)"
+        }
+      ]
+    },
+    {
+      "observation_key": "accepted-no-fv-exclusions-omit-visible-zero-value-instruments",
+      "outcome": "supported",
+      "rationale": "Independently matched all738 excluded context evidence lines to original raw context rows. The classification separates auxiliary acquisition tables, published split contexts, current zero/dash/blank instruments and comparative contexts. The243 visible current instruments are an explicit inclusion-policy limitation, not a positive-FV disappearance or authority to restore duplicates. Proposed separate coverage measure preserves DS010 and requires owner ruling.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Revolver S+ 500 , 0.75 % Floor 1/31/2030 - ( 5 ) - (4)(9)(11)(27)"
+        }
+      ]
+    },
+    {
+      "observation_key": "matched-pair-has-null-unanchored-endpoint",
+      "outcome": "supported",
+      "rationale": "Seventeen match records have insufficient endpoint anchors; source alternatives cannot uniquely identify the missing facility. This supports a provenance limitation, not seventeen proven wrong matches. An anchor detector should distinguish deliberate unmatched entry/exit records and require source keys for purported pairs, preventing company/maturity-only guessing.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-124223",
+          "text": "First Lien Secured Debt - Delayed Draw S+ 575 , 1.00 % Floor 3/20/2030 - ( 237 ) ( 230 ) (4)(5)(9)(11)(27)"
+        }
+      ]
+    },
+    {
+      "observation_key": "untouched-rebuild-position-id-and-chain-drift",
+      "outcome": "supported",
+      "rationale": "ALGCX September/December2024 source rows have matching USD term-loan maturityMay17,2029 and S+275 floor0.50, with5m principal and near-identical cost/FV. Untouched registry drift predates these repairs; matching terms support consistency without proving a narrative continuation. A full membership/edge replay is stronger than PID-string comparison and preserves later separate FundVIII facilities.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-105984",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S + 200, 0.50 % Floor 5/17/2029 10,578 10,557 10,608 (15)"
+        },
+        {
+          "accession": "0000950170-24-124223",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S+ 275 , 0.50 % Floor 5/17/2029 $ 5,000 $ 5,025 $ 5,017 (14)"
+        },
+        {
+          "accession": "0000950170-25-038785",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S+ 275 , 0.50 % Floor 5/17/2029 $ 5,000 $ 5,024 $ 5,040 (14)"
+        },
+        {
+          "accession": "0000950170-25-068013",
+          "text": "AL GCX Holdings, LLC First Lien Secured Debt - Term Loan S + 200 , 0.50 % Floor 5/17/2029 4,980 5,002 4,969 (15)"
+        }
+      ]
+    },
+    {
+      "observation_key": "total-margin-field-differs-from-printed-cash-margin",
+      "outcome": "supported",
+      "rationale": "Checked complete139-row cash-plus population against original-context source lines:130 mechanical sums, five Yellow Castle exceptions and four fixed/complex cells. Homecare prints263bp cash plus2.93PIK versus published5.56 total margin. C009 remains a source/presentation discrepancy; D031 arithmetic is not economic proof. A component-labelled detector with multi-token/D217 guards addresses recurrence without silently migrating conventions.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-102386",
+          "text": "Homecare Software Solutions LLC First Lien Secured Debt - Term Loan S + 263 Cash plus 2.93 % PIK, 0.00 % Floor 6/14/2031 77,720 77,720 77,720 (4)(15)"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "overall_verdict": "SUPPORTED_INVESTIGATION_ONLY",
+  "limitations": [
+    "Investigation completeness is not fund clearance, correctness proof, or approval of proposed detector changes. Fourteen name findings and parked source/identity ambiguities remain unresolved.",
+    "Raw-source checks cover7254 published rows,738 excluded source contexts and1371 report/proposal quotes; negative-column arithmetic independently checked1122 flagged records with no mismatch.",
+    "No pytest, rebuild, production write or network download was run."
+  ],
+  "required_changes": [],
+  "metadata_followup": {
+    "only_added_fields": {
+      "fmt_basis_spread": "fmt-basis-spread-above-15-is-the-printed-spread",
+      "C115": "c115-spread-above-15-is-the-printed-spread"
+    },
+    "prior_digest": "a78cdd0301c920b00c8e458790b1936e2b3706c4a5d8545d19f8b87ffe3e685d",
+    "all_prior_content_equal": true
+  }
+}
