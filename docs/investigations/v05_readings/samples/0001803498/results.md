@@ -8,14 +8,14 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 | Field | n | Published wrong | of which tag | of which pipeline | Tag wrong (any) | wrong label | wrong value | wrong row | untagged |
 |---|---|---|---|---|---|---|---|---|---|
 | row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| issuer_name | 20 | 10.0% (2.8-30.1) | 0 | 2 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
+| issuer_name | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | instrument_and_class | 20 | 10.0% (2.8-30.1) | 0 | 2 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | fair_value | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | cost | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| principal_amount | 19 | 0.0% (0.0-16.8) | 0 | 0 | 5.3% (0.9-24.6) | 1 | 0 | 0 | 0 |
-| shares_held | 2 | 0.0% (0.0-65.8) | 0 | 0 | 50.0% (9.5-90.5) | 1 | 0 | 0 | 0 |
+| principal_amount | 19 | 0.0% (0.0-16.8) | 0 | 0 | 0.0% (0.0-17.6) | 0 | 0 | 0 | 0 |
+| shares_held | 2 | 0.0% (0.0-65.8) | 0 | 0 | 0.0% (0.0-79.3) | 0 | 0 | 0 | 0 |
 | pct_of_net_assets | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| interest_rate | 19 | 0.0% (0.0-16.8) | 0 | 0 | 0.0% (0.0-16.8) | 0 | 0 | 0 | 0 |
+| interest_rate | 19 | 10.5% (2.9-31.4) | 2 | 0 | 10.5% (2.9-31.4) | 2 | 0 | 0 | 0 |
 | basis_spread | 17 | 0.0% (0.0-18.4) | 0 | 0 | 0.0% (0.0-18.4) | 0 | 0 | 0 | 0 |
 | reference_rate_type | 17 | 0.0% (0.0-18.4) | 0 | 0 | 100.0% (81.6-100.0) | 0 | 0 | 0 | 17 |
 | pik_rate | 1 | 0.0% (0.0-79.3) | 0 | 0 | 0.0% (0.0-79.3) | 0 | 0 | 0 | 0 |
@@ -23,18 +23,18 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 
 | Fund | cards | cards with any published error | with any tag error |
 |---|---|---|---|
-| 0001803498 | 20 | 15.0% (5.2-36.0) | 95.0% (76.4-99.1) |
+| 0001803498 | 20 | 10.0% (2.8-30.1) | 95.0% (76.4-99.1) |
 
 | Era | cards | with any published error | with any tag error |
 |---|---|---|---|
-| to 2023-12-31 | 6 | 16.7% (3.0-56.4) | 83.3% (43.6-97.0) |
+| to 2023-12-31 | 6 | 0.0% (0.0-39.0) | 83.3% (43.6-97.0) |
 | 2024 on | 14 | 14.3% (4.0-39.9) | 100.0% (78.5-100.0) |
 
 Published errors: 4
 
 | Card | Quarter | Field | Published | Cause | Note |
 |---|---|---|---|---|---|
-| C007 | 2024-12-31 | instrument_and_class | wrong | pipeline | printed under Structured Finance Obligations - Equity Instruments (CLO subordinated notes); published asset_category LOAN |
-| C014 | 2023-03-31 | issuer_name | wrong | pipeline | prints Shelf Holdco Ltd Common Equity; published issuer keeps the class text Common Equity |
-| C019 | 2025-06-30 | issuer_name | wrong | pipeline | prints Pikes Peak CLO 10; published Pikes Peak CLO drops the series number that identifies the vehicle |
-| C019 | 2025-06-30 | instrument_and_class | wrong | pipeline | printed under Structured Finance Obligations - Equity Instruments (CLO subordinated notes); published asset_category LOAN |
+| C007 | 2024-12-31 | instrument_and_class | wrong | pipeline | Prints Structured Finance Obligations - Equity Instruments; published category is LOAN. |
+| C007 | 2024-12-31 | interest_rate | extra | tag | Prints Estimated Yield: 14.36 %, not a coupon; tagged InvestmentInterestRate. |
+| C019 | 2025-06-30 | instrument_and_class | wrong | pipeline | Prints Structured Finance Obligations - Equity Instruments; published category is LOAN. |
+| C019 | 2025-06-30 | interest_rate | extra | tag | Prints Estimated Yield: 11.65 %, not a coupon; tagged InvestmentInterestRate. |

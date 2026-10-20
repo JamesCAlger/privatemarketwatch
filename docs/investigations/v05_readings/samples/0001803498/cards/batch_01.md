@@ -708,8 +708,8 @@
 **Member (identifier text):** `Shelf Holdco Ltd Common Equity`
 
 **Published:**
-- issuer_name = Shelf Holdco Ltd Common Equity
-- instrument_description = 
+- issuer_name = Shelf Holdco Ltd
+- instrument_description = Common Equity
 - asset_category = EQUITY_COMMON
 - fair_value = 1430000.0  (tag: equal, differs)
 - cost = 1300000.0  (tag: equal, equal)
@@ -723,7 +723,7 @@
 - coupon_type = 
 - pik_rate = 
 - maturity_date = 
-- corrected_fields = 
+- corrected_fields = issuer_name;instrument_description
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 
@@ -972,7 +972,7 @@
 **Member (identifier text):** `Pikes Peak CLO 10 - Subordinated Notes`
 
 **Published:**
-- issuer_name = Pikes Peak CLO
+- issuer_name = Pikes Peak CLO 10
 - instrument_description = Subordinated Notes
 - asset_category = LOAN
 - fair_value = 3198000.0  (tag: equal, differs)

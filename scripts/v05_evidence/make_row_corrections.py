@@ -1242,6 +1242,26 @@ if TCWDL_LOOP in held and TCWDL_LOOP_FILE.exists():
         if spec.get("exact"):
             EXACT.add(spec["identifier"])
 
+# BCRED: the old member combines issuer and abbreviated partnership-interest class.
+# Exact identifier excludes the separate Emerald JV look-through positions.
+for bcred_pigments_quarter in ('2023-06-30', '2023-09-30', '2023-12-31', '2024-03-31', '2024-06-30'):
+    SPECS.append((BCRED, bcred_pigments_quarter, 'Pigments LP Int',
+                  {'issuer_name': 'Pigments LP', 'instrument_description': 'LP Interest'},
+                  "Printed parent schedule: 'Chemicals Pigments LP Int (4)(6)(16)' followed by zero cost and value; "
+                  "LP Int is the abbreviated partnership-interest class, split from the issuer. Unit counts retained as filed.",
+                  'D-1803498-pigments-class-split'))
+EXACT.add('Pigments LP Int')
+SPECS.extend([
+    (BCRED, '2022-12-31', 'Athenahealth, Inc.', {'maturity_date': '2030-02-15'},
+     "Printed unsecured-debt line: 'Athenahealth, Inc. (8) 6.50 % 6.50 % 2/15/2030 3,297 3,297 2,436'.",
+     'D-1803498-athenahealth-maturity'),
+    (BCRED, '2022-12-31', 'athenahealth, Inc.', {'maturity_date': '2029-02-15'},
+     "Printed parent loan: 'athenahealth, Inc. (7)(9) SOFR + 3.50 % 7.82 % 2/15/2029 36,931 36,518 33,015'; "
+     "same identifier also matches the JV loan, printed with the same maturity and par/cost/value 3,577/3,197/3,189. Both checked.",
+     'D-1803498-athenahealth-maturity'),
+])
+EXACT.update(('Athenahealth, Inc.', 'athenahealth, Inc.'))
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue
