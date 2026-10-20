@@ -330,6 +330,8 @@ added = 0
 # A sandbox holds some funds only: specs for a fund it does not hold are left alone, not failed.
 held = {r[0] for r in con.execute(
     f"SELECT DISTINCT lpad(CAST(cik AS VARCHAR),10,'0') FROM read_parquet('{S}/private_markets_holdings.parquet')").fetchall()}
+if "--cik" in sys.argv:
+    held &= {sys.argv[sys.argv.index("--cik") + 1].zfill(10)}
 # decision D-101: Monroe Capital Income Plus, one row (2026-10-11)
 MONROE = "0001742313"
 SPECS.append((MONROE, "2025-12-31", "FLEET Response, LLC (fka RS Acquisition, LLC) 1 | Senior Secured Loans", {"interest_rate": ""},
@@ -1277,6 +1279,14 @@ if ARES in held and ARES_LOOP_FILE.exists():
     import json
     for spec in json.loads(ARES_LOOP_FILE.read_text(encoding="utf-8")):
         SPECS.append((ARES, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1287750-fundloop"))
+        EXACT.add(spec["identifier"])
+
+# HPS: exact printed PIK terms and issuer labels (2026-10-20 fund clearing).
+HPS_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001838126.json"
+if HPS in held and HPS_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(HPS_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((HPS, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1838126-fundloop"))
         EXACT.add(spec["identifier"])
 
 for cik, quarter, phrase, fields, reason, *decision in SPECS:

@@ -1,0 +1,473 @@
+{
+ "reviewer_id": "/root/hps_review_sol",
+ "report_digest": "0b3180ebcbdb18bf0af466ffeb46079c2541300ad6795da2d6cb56ab04d27c41",
+ "verdict": "SUPPORTED_INVESTIGATION_NOT_ACCEPTANCE",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_553d8ea092b8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independently reconstructed 2023-03-31 industry_coverage population from current flag output and ledger: all 65 row keys equal affected_rows and reviewed_rows. Each source row was matched by its own fair-value context and displayed value, not issuer alone. Nearest actual printed industry headings reproduce the retained broad labels; these do not establish the exact GICS subtype. Missing exact classification is therefore a confirmed coverage error. Parking for independently evidenced issuer-business mapping is supported; broad-to-exact automatic assignment would overstate the source. Row keys: ROW-01514bd92c6aaa4c, ROW-015eea6641c8a1da, ROW-0375c75ac744edba, ROW-0500e50c07493958, ROW-11abf417a62fcc65, ROW-11b893ce139b6c51, ROW-1701729f5cabeac2, ROW-1771eed7ed77e67e, ROW-17c22344ad32e487, ROW-18aac635d43636af, ROW-1a298f320fe4899f, ROW-1a7f627ee04f2627, ROW-1c49995e29124028, ROW-2910dd161bd7200e, ROW-2a14f8b88a340c55, ROW-2f87ac12f72adfc6, ROW-339f59b0ac6c76fa, ROW-36ef98cb8b09df97, ROW-3b317d7fc9d4dab2, ROW-3c12b466350c3488, ROW-43d1c626a6e22447, ROW-449d2e3146ee105f, ROW-47329c727cac7a8e, ROW-482029ec1bb2344b, ROW-490fc1094432f7b1, ROW-50a79ab850b92003, ROW-5d91c4b9bd7e7795, ROW-61bf3408658bd158, ROW-62f177114bf7ec4a, ROW-6c1c3f7e42cabf56, ROW-6ca156a5d2fe89a4, ROW-6d317e6fc0f3f6ac, ROW-73e2197c370ab296, ROW-74af2536065c5fe9, ROW-75081539cab7c81e, ROW-76a7a3fa983c07aa, ROW-81702ed9a93de48c, ROW-8d816c29828add63, ROW-92c901da714a9598, ROW-97831b2858b705e5, ROW-9c4f60b1c8678122, ROW-a38bd2a82afd6c1a, ROW-a3b81ded8e4dce33, ROW-a548a4645e8f4dda, ROW-ac191c4a979f05ff, ROW-b1cf1b084bc2ce4b, ROW-ba72ccbeb2b9447b, ROW-bdc5b64f78609721, ROW-c1fe7dd8f3ac0931, ROW-c3641aa41c16d555, ROW-c5636b0b08711e7e, ROW-c7e5aa3ff6c0939d, ROW-c9e3f372c9037ef6, ROW-d2c15733a6ef0fbd, ROW-d7e3606be9fb099b, ROW-dd6a47c14678f1ba, ROW-df8aef6f4cba9ffe, ROW-e330195c3eaf20b3, ROW-ef665b5d03320baf, ROW-f076258cf4ea61ec, ROW-f60f1440e17aff01, ROW-f71fd36ff76752a5, ROW-fb1b0ce301aaf66e, ROW-fdede3e0af144f6c, ROW-ff62bfc7035ff631.",
+   "evidence": [
+    {
+     "accession": "0001838126-23-000040",
+     "text": "Huskies Parent, Inc. (4)(11) L + 5.50 % 10.49 % 11/3/2028 25,346 24,932 23,785",
+     "row_id": "ROW-01514bd92c6aaa4c"
+    },
+    {
+     "accession": "0001838126-23-000040",
+     "text": "E.S.G. Movilidad, S.L.U. (4)(6)(8) E + 6.75 % 9.19 % 5/31/2029 EUR 8,096 8,455 8,393",
+     "row_id": "ROW-015eea6641c8a1da"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6382e92eedfe",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independently reconstructed 2024-09-30 industry_coverage population from current flag output and ledger: all 91 row keys equal affected_rows and reviewed_rows. Each source row was matched by its own fair-value context and displayed value, not issuer alone. Nearest actual printed industry headings reproduce the retained broad labels; these do not establish the exact GICS subtype. Missing exact classification is therefore a confirmed coverage error. Parking for independently evidenced issuer-business mapping is supported; broad-to-exact automatic assignment would overstate the source. Row keys: ROW-01151ded842b43b1, ROW-0141eabd33d8ff06, ROW-01a9d33ed079ca8c, ROW-033aa583cca5db89, ROW-037bbf73666f45b0, ROW-04893b05c9b7dc0e, ROW-0743eec67273d669, ROW-09c0adab32b57a97, ROW-0aa86a084243362f, ROW-10d3d5f8fc5e7be0, ROW-14f2e135189c5a2a, ROW-159a85490051d33f, ROW-15e0b5627cbc5f57, ROW-1671f7f558e5edb6, ROW-1aeea4741dff12f7, ROW-287e168d40e774a0, ROW-2b8202451add5bab, ROW-2c45f66c2c3c8bf8, ROW-30bdd47394616d79, ROW-31ce1fafdb4e276d, ROW-37c682022d4c080c, ROW-38c7d832138365b0, ROW-3d45da0d730f74fe, ROW-400b7600f0995648, ROW-42e0b086be3dbf1b, ROW-44543f56fc960220, ROW-4505c6aec26f78eb, ROW-49a1c0bd6b8771bc, ROW-4dc175d9b4ddb68f, ROW-4e601e379dbb1512, ROW-5097011991046b11, ROW-562e0d25d60e7900, ROW-5d04e1995bd519af, ROW-603042ffada57e8e, ROW-6105d619c7d377b1, ROW-63a54a7d99873ba6, ROW-684a0c4ab7e95e6c, ROW-68f2bc883ba3e732, ROW-766fede5b1861d9b, ROW-7737b327cf3105e8, ROW-776ecb59d129a3b3, ROW-797651cf3cbc2c7a, ROW-7b7ec965c6b170bf, ROW-7c4b83f52ae352ed, ROW-7ccb39c24632e2bd, ROW-8201dfd8474bfbe2, ROW-82c7c68713cf9256, ROW-88c9cca0e34abe27, ROW-8ab23319956ce7c8, ROW-8ed9ab4e39163306, ROW-97008283197b9237, ROW-9855511bcf1b6f03, ROW-9fd780ea86c5e0dc, ROW-a1762a6155e603a1, ROW-a3ad3090dd22ff28, ROW-a4e889f3895e9316, ROW-a5c2b7ae3ebad0ce, ROW-a8c5f39b1a210b4a, ROW-aa156b47bfc6b37d, ROW-b05b5f84701fe7bc, ROW-b0b56ab7883fcea5, ROW-b24d72e9938971e0, ROW-b291ccbe7275bb04, ROW-b2f3d77a35ca0a55, ROW-b6455f95dbf224de, ROW-b7897950bd863aad, ROW-b81edaafbd901814, ROW-bc066c741f573958, ROW-c4a269e80d31be9d, ROW-c7682948f7dfa5e5, ROW-c808c2ae9310f204, ROW-c82522b2ae48ff57, ROW-c9af4ffb079b068f, ROW-caf241c9cd5ff5bf, ROW-cbab1e24764f48c0, ROW-ce56382ab3777806, ROW-d0de8603677eb32e, ROW-d55298384d52981c, ROW-d7330999332cabe0, ROW-d91dc6c27c9e0828, ROW-ddb4887c0caa1d92, ROW-de2eef1abda3ab45, ROW-df61531e7ac003c4, ROW-e34072902babbc7e, ROW-e3d8d6a976652011, ROW-e79112623426e4f7, ROW-ef175affc11c1aff, ROW-f1580f5ed67c9e3d, ROW-f7d3c1551d181730, ROW-f90cf453d53ce48d, ROW-f97f2f3095e611d5.",
+   "evidence": [
+    {
+     "accession": "0001838126-24-000079",
+     "text": "Elements Finco Limited (4)(5)(7) SN + 5.00 % 9.95 % 4/29/2031 GBP 33,323 41,467 45,133",
+     "row_id": "ROW-01151ded842b43b1"
+    },
+    {
+     "accession": "0001838126-24-000079",
+     "text": "Rad CLO Ltd (5)(7) SF + 6.51 % 11.81 % 4/15/2034 2,500 2,504 2,507",
+     "row_id": "ROW-0141eabd33d8ff06"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_6eb15948eae6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independently reconstructed 2025-03-31 industry_coverage population from current flag output and ledger: all 140 row keys equal affected_rows and reviewed_rows. Each source row was matched by its own fair-value context and displayed value, not issuer alone. Nearest actual printed industry headings reproduce the retained broad labels; these do not establish the exact GICS subtype. Missing exact classification is therefore a confirmed coverage error. Parking for independently evidenced issuer-business mapping is supported; broad-to-exact automatic assignment would overstate the source. Row keys: ROW-008d742a06a28b2e, ROW-06a364200d176c68, ROW-093d17583bd32875, ROW-0a92a8ec24167526, ROW-0d80ae0722771af0, ROW-0e98d18171394a88, ROW-0f5c1323f80fd469, ROW-110df25f1c4e593b, ROW-1421da6c4a119417, ROW-17d77cc12332abab, ROW-18d32266efb0b67d, ROW-1b141c8c5fe509f2, ROW-1d0dc3764df4080f, ROW-1e89d4b482a52ece, ROW-1f1c314a5d9eb8e6, ROW-1f933e6d6ba016ff, ROW-2494dfdf2c272d53, ROW-2bb304e43147f410, ROW-2cf40c7de80c8f70, ROW-2d39a7eab68bea4f, ROW-2d64fdc9d0a19baf, ROW-306c7867e099ff61, ROW-313e556225c643fe, ROW-31a0a35629577184, ROW-326e8eed6173b59b, ROW-32ca2552b557706f, ROW-372a2b30cf3d0bb7, ROW-3b2d6d68262ff7f7, ROW-3b7d0ac8b5e8c2a8, ROW-3cb6a70e98791a52, ROW-430a09280ed38ea1, ROW-43c7e7c9a989fedb, ROW-442daefc2306fb3b, ROW-46d8f1c658d2261d, ROW-47ea6a52db9bb8b2, ROW-49ebbe226531c096, ROW-4e2f84742675133f, ROW-4edba01593961ea7, ROW-504ce91165c955ed, ROW-50bcf613a3df871f, ROW-53eb73330b568ae0, ROW-55842eed21cf7dfd, ROW-55b15bac11f6c60d, ROW-55c4dd9b864fe7a9, ROW-56dc52634cb4d88c, ROW-5760b926a60541c8, ROW-5968e598677892ea, ROW-59c45c66cad5af9a, ROW-5e901099ccf8953c, ROW-5f8fbd8306f0367f, ROW-60644efe6c6e7f11, ROW-6191dd77b92b912d, ROW-61a8724d1cc9146b, ROW-650f65ee9daf9def, ROW-663fc9b4417a8140, ROW-694b34efcada6482, ROW-6a19226fb5815a56, ROW-6b0e85aa075b825f, ROW-6b73fdfd907508bc, ROW-6bf66b3e8e719c7e, ROW-6f1708f7bfd016a4, ROW-701bcff6d116425c, ROW-71fc5c1ed53c6b5e, ROW-739ac26b4569a59c, ROW-74351ff33847b835, ROW-756129710de59c86, ROW-7568684a51407d23, ROW-7d0c5d37c416423c, ROW-849706ba322b3de7, ROW-87bbedefd4a66e65, ROW-88b1919be1d83ef4, ROW-88c1b2e3b4b8ba65, ROW-88d3fe551715f754, ROW-893d3a7316d0262c, ROW-8a590c0612c02d4c, ROW-8c01206bab08b84c, ROW-8c69bf18dd7383c2, ROW-90ec8cf2397ce7db, ROW-91809eeb2b9f11fd, ROW-91e199ab29da348c, ROW-9246dddb32067a7d, ROW-9307ed02694e34f9, ROW-9491d7b9272033c9, ROW-978f3fb5f973a87e, ROW-981114311749c15c, ROW-99137ee843d928ec, ROW-9975b8f5a96fd76b, ROW-9ac15491502a7129, ROW-9b226274e0b0dcda, ROW-9b5258f3a8e2639e, ROW-9c6df47c96970ca6, ROW-9d411dd47b9f484c, ROW-a047ffb5fd785d6b, ROW-a1b7225a67e31c1e, ROW-a47d62c1950f9529, ROW-a697c0300635cdc2, ROW-a7c57e6beb365281, ROW-acfcc8c5fddaf860, ROW-af2119c34685fcad, ROW-af4a8d5a5590ff22, ROW-b3b5091cefd926b8, ROW-b75afb957f294478, ROW-bbb0e2594f49427d, ROW-be959c12b3208b18, ROW-bfc255bc9a2ba606, ROW-c1ad0a3b084228d0, ROW-c1d2a815a4345ebd, ROW-c258c2ee1f7234f7, ROW-c3cc18ff7db745f1, ROW-c513f50b47754c8e, ROW-c71af4eee439c0d1, ROW-ca5eb94574c5a920, ROW-cae0479f070afb56, ROW-ce3bee623e35f51f, ROW-ce763497920b2ea1, ROW-cee6b9cf990574e1, ROW-d15d5703a2cc9fe0, ROW-d24221a5c9e8e129, ROW-d2c38935be17806b, ROW-d3db4c64daf41c58, ROW-d5b9ca3b91413a5a, ROW-d65e5940d374b479, ROW-d6649e93d473560a, ROW-d82560644dbf7f55, ROW-de6ba82e46ce8ace, ROW-e0152ca3e7c1fcb0, ROW-e0b19e735455fa43, ROW-e5743a8842d1f7cd, ROW-e7b2590dff53d06c, ROW-eb0bd800fb9890d7, ROW-f00d087ce22d019f, ROW-f1224cf615d03c62, ROW-f18b2e32fb537a16, ROW-f1966f3f6aae8864, ROW-f32df88153cb5c3f, ROW-f41a369c396a60c5, ROW-f75ba0d5ffa52474, ROW-f86c7f38f0a3e931, ROW-fb707afa25919a19, ROW-fedbaf5514e84d8c.",
+   "evidence": [
+    {
+     "accession": "0001838126-25-000031",
+     "text": "PTSH Intermediate Holdings, LLC (4)(9) SF + 5.50 % 9.95 % 12/17/2027 3,892 3,852 3,892",
+     "row_id": "ROW-008d742a06a28b2e"
+    },
+    {
+     "accession": "0001838126-25-000031",
+     "text": "CIFC Falcon 2020 Ltd (5)(7) SF + 7.67 % 11.96 % 1/20/2033 2,000 2,006 2,014",
+     "row_id": "ROW-06a364200d176c68"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_7839396eef8c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independently reconstructed 2025-06-30 industry_coverage population from current flag output and ledger: all 150 row keys equal affected_rows and reviewed_rows. Each source row was matched by its own fair-value context and displayed value, not issuer alone. Nearest actual printed industry headings reproduce the retained broad labels; these do not establish the exact GICS subtype. Missing exact classification is therefore a confirmed coverage error. Parking for independently evidenced issuer-business mapping is supported; broad-to-exact automatic assignment would overstate the source. Row keys: ROW-0050a2173c88a977, ROW-04139c2290e9e398, ROW-04a04736a94c1d00, ROW-0e02fb0598be7610, ROW-0ebf9325bd894027, ROW-122263ff7602a674, ROW-129a153472d2b940, ROW-12c713cdb8c6e27c, ROW-135b2c7839262dca, ROW-13905e31ae1a2006, ROW-139292ce33cce885, ROW-16e35e17d18987c8, ROW-18b25ea8677a5de9, ROW-1af0476f9966065f, ROW-1b1036cc57ed08b5, ROW-1cd8dfa82bc8483f, ROW-20065a67609841ed, ROW-217791e6dca86c19, ROW-22b3a9acdeb36c90, ROW-230d8bcc7af96a93, ROW-23b3874d008e90da, ROW-276f0d03ab92c332, ROW-2baeac77182a1274, ROW-2e030d3fe7c15972, ROW-344250ae6033a24b, ROW-36746b07dec54c23, ROW-3954a499869f6d09, ROW-395ea58986ee6c0c, ROW-3c43980a8e468001, ROW-3ec4a93b8d267b55, ROW-40350adaf6b7a1a1, ROW-41b0c7e39066f685, ROW-4323b44aff3b8153, ROW-4330390ebe7c43d8, ROW-4605a856aa809c8e, ROW-47b1101d0508a9bf, ROW-48b4238ffb18ead0, ROW-49e605084a350707, ROW-4ae21e7244f44640, ROW-4b18b912926cea48, ROW-4cb7b24a5c66b3c8, ROW-4ed1ccda1fd8c73c, ROW-4f55f272902d5ef5, ROW-50e2b149e41f5474, ROW-51441b01e08cea3b, ROW-521147f0633fb418, ROW-550292c6076b6bb6, ROW-5531384b959f0f45, ROW-57e0ee7b5674b57d, ROW-5c064a75920caa77, ROW-5cca851ec4233a4e, ROW-5e1708ccb8a188ac, ROW-6033b7ec990566d7, ROW-603cc105c7e8a2f4, ROW-61e3fe6685ca1fcf, ROW-6244a35e8ee2ce09, ROW-62c73f30369e865b, ROW-637aa88f5c8fc140, ROW-69265a4681394d23, ROW-696bd25c14f8da67, ROW-69b5ca4d68e97393, ROW-69fd4e48d644cb2b, ROW-6d1efd9874bda9e5, ROW-6d8a9f9842a2482e, ROW-6e0def9fdf167328, ROW-6e21587dbb9460d9, ROW-71f418838b5ac04b, ROW-74e9e9b90e473201, ROW-752632b8c869c2f6, ROW-78878275a27d5284, ROW-842c5129bcd59f8b, ROW-851ada077466bcbc, ROW-87779be95dbed83c, ROW-891579887b1ce303, ROW-8d4d6ea7e88df8b6, ROW-90665a4a034789ca, ROW-92063e5bb9aae6fa, ROW-94c509946717987d, ROW-95c90f15d073a15f, ROW-9740fb4b51581f2e, ROW-97d7c5bad328b228, ROW-982e21193dea6d5d, ROW-992e6d9f9cd52aa1, ROW-9a85b74f8c832b56, ROW-9af2854c27d9dabb, ROW-9b5462466ddab584, ROW-9cacf49c55fe6147, ROW-9e446493ab1353b7, ROW-a35fff01e66bad41, ROW-a38e2b63de43c6e6, ROW-a4d4a8173ff31fe9, ROW-a948d7837d3a0041, ROW-a990a3b20a841ac3, ROW-ab74bdb30d1241c7, ROW-ac1b3b8dbe3a9cc0, ROW-acfa6d2e0cdd1440, ROW-b1259bac4661a03b, ROW-b32c03bd674e6370, ROW-b7753ee0def2a4c1, ROW-b7bf0fd4714a8bfd, ROW-b8aaac4afee0042c, ROW-bb32a380f2b74c26, ROW-c0da3ed7b3483625, ROW-c25c8b47c171f215, ROW-c2d670fbe5fbf079, ROW-c350fbcc6a02d6e2, ROW-c54166ba62a3e6a3, ROW-c76b605dff445d61, ROW-c865f77ebcf19823, ROW-c99f392ee61bd7a7, ROW-caebabbcc303b488, ROW-cb390d6bbc140b59, ROW-d57d33f3a5364ba5, ROW-d5dc3299aa227efe, ROW-d602540821cae133, ROW-d645b553095c697f, ROW-d852e388bedfedac, ROW-db082841c6a4572b, ROW-db1900bfc84fbdaf, ROW-de25558627f1ea48, ROW-e1fd377d5e5a9eeb, ROW-e2883ef3cb9a2370, ROW-e2ed0b2af0322c34, ROW-e41cdb884d7f82ad, ROW-e46694c23e9e3114, ROW-e54c368b3f263019, ROW-e56b0ef7cd39ecc2, ROW-e69d5728c6480fa5, ROW-e7033e41c9de3cc3, ROW-e89f09955cece709, ROW-e8a1eb19d2b6a3ea, ROW-eaadd29fd358e15b, ROW-eb1675876575f7e2, ROW-ed4c6d975d2e8148, ROW-edc7a89c6ec3af44, ROW-edd487ce2ca36d77, ROW-ee2501386eea2bca, ROW-ee504ecaa7438851, ROW-ee554d482280fcf2, ROW-ee70027882843ab8, ROW-efcae2362673ee37, ROW-f369a9b5faf836c7, ROW-f41eb8b3ac0de3db, ROW-f45f594321cdf03a, ROW-f599528c3007e60a, ROW-f6673afb25ba5eec, ROW-f88132749f5e0273, ROW-f994a8b9b2bc6fec, ROW-fdc22c24083821d5, ROW-ffbdaa1acffb7c2a.",
+   "evidence": [
+    {
+     "accession": "0001838126-25-000055",
+     "text": "Artemis Bidco Limited(4)(5)(6)(7)(20)(21) SN + 6.00 % PIK 9/8/2028 GBP 1,461 70 91",
+     "row_id": "ROW-0050a2173c88a977"
+    },
+    {
+     "accession": "0001838126-25-000055",
+     "text": "Meralm Bidco AB (4)(5)(8) SF + 5.50 % (incl 2.25 % PIK) 10.02 % 8/29/2031 13,851 13,670 13,384",
+     "row_id": "ROW-04139c2290e9e398"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_792760ae2dce",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independently reconstructed 2024-03-31 issuer_name_printed population from current flag output and ledger: all 1 row keys equal affected_rows and reviewed_rows. Each source row was matched by its own fair-value context and displayed value, not issuer alone. The page names differ from the published member-derived names on every cited row. The five unsafe name edits are absent from final corrections, and final IDs and full row membership exactly equal rg1b. Repairing the competing-edge matcher before reinstating these names is supported; this rollback does not prove baseline chains correct. Row keys: ROW-746afa871a4c485c.",
+   "evidence": [
+    {
+     "accession": "0001838126-24-000038",
+     "text": "Illuminate Buyer, LLC (7) SF + 3.50 % 8.94 % 12/31/2029 15,111 14,906 15,147",
+     "row_id": "ROW-746afa871a4c485c"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_90142553dfd5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independently reconstructed 2024-09-30 issuer_name_printed population from current flag output and ledger: all 1 row keys equal affected_rows and reviewed_rows. Each source row was matched by its own fair-value context and displayed value, not issuer alone. The page names differ from the published member-derived names on every cited row. The five unsafe name edits are absent from final corrections, and final IDs and full row membership exactly equal rg1b. Repairing the competing-edge matcher before reinstating these names is supported; this rollback does not prove baseline chains correct. Row keys: ROW-626d162056212d96.",
+   "evidence": [
+    {
+     "accession": "0001838126-24-000079",
+     "text": "Integrity Marketing Acquisition LLC (4)(9) SF + 5.00 % 10.08 % 8/27/2028 64,951 64,555 64,930",
+     "row_id": "ROW-626d162056212d96"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d47f9d966107",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independently reconstructed 2026-03-31 issuer_name_printed population from current flag output and ledger: all 3 row keys equal affected_rows and reviewed_rows. Each source row was matched by its own fair-value context and displayed value, not issuer alone. The page names differ from the published member-derived names on every cited row. The five unsafe name edits are absent from final corrections, and final IDs and full row membership exactly equal rg1b. Repairing the competing-edge matcher before reinstating these names is supported; this rollback does not prove baseline chains correct. Row keys: ROW-234e80d1853c0e9d, ROW-e49f3e3d0645ac47, ROW-f550e952493b88c1.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-033248",
+     "text": "NP Kaba Megersub, Inc. (4)(6)(8) 1/31/2033 11,480 ( 57 ) ( 125 )",
+     "row_id": "ROW-234e80d1853c0e9d"
+    },
+    {
+     "accession": "0001628280-26-033248",
+     "text": "NP Kaba Megersub, Inc. (4)(6)(8)(25) SF + 4.50 % 8.15 % 1/31/2033 20,394 3,979 3,857",
+     "row_id": "ROW-e49f3e3d0645ac47"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f2908e2960ee",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independently reconstructed 2025-09-30 industry_coverage population from current flag output and ledger: all 159 row keys equal affected_rows and reviewed_rows. Each source row was matched by its own fair-value context and displayed value, not issuer alone. Nearest actual printed industry headings reproduce the retained broad labels; these do not establish the exact GICS subtype. Missing exact classification is therefore a confirmed coverage error. Parking for independently evidenced issuer-business mapping is supported; broad-to-exact automatic assignment would overstate the source. Row keys: ROW-08baf3269878b8bb, ROW-0a553fe3595f5dad, ROW-0a7cb1a89b6f0773, ROW-0cc6bffbd1a5a655, ROW-10a003dcefb37ee4, ROW-128854d224b81c3d, ROW-129dae1beb2050d0, ROW-130f427fb70e93e3, ROW-13d12655f1ea4147, ROW-141cfb93d33d5e0d, ROW-1535dd7ec0cfefbf, ROW-173436a760e47317, ROW-175e10b926a35b6a, ROW-18659d5bb5543ea2, ROW-1ac2247cf7b8cb10, ROW-1d109d3cf78d4019, ROW-1dc0a03e1f0f08b3, ROW-1e5d2f789bd5b0d0, ROW-219edfcdb8df1b27, ROW-246cb99cece9f46f, ROW-27087cc8e843186e, ROW-279561b65ed92d6e, ROW-280cd623d8a3559c, ROW-2a828dd25ef20f5a, ROW-2c3a427001ea9f13, ROW-2d3bec744af627b0, ROW-2ebea27a5a5a9549, ROW-31b0bac25496f61f, ROW-3353d25a558b5085, ROW-342893a9c70160e6, ROW-36eb42dbf634be3d, ROW-3a271dee223e9c9e, ROW-3af28177fa47ca35, ROW-3bfd2cd1ce160a1f, ROW-3c80390c7d8a8e9a, ROW-3d71434c2f925b3a, ROW-3e258846b8e3b316, ROW-3f49aabaed36443e, ROW-435f41388c9c1dca, ROW-44857d36579d3f31, ROW-44d902d53b1dd60e, ROW-4950c67209f13c8e, ROW-4b4fbbef4cd21108, ROW-4b74b0c38ef21eaf, ROW-4c3d17c158cbb220, ROW-4dd2d397f4917555, ROW-523e6a4a5bdc49fd, ROW-5766785da55287a4, ROW-5a9704389468e3b7, ROW-5c2ac195364dca2c, ROW-5dd72d96e90a7617, ROW-5dda82fb38a0fab1, ROW-61283dd69d5e08ef, ROW-623a805a76a76bd1, ROW-643e130c145b3ce0, ROW-659fbcd891567090, ROW-66ae0a6f73822f22, ROW-67a2f9644d1307ab, ROW-6a2027eeecc1a286, ROW-6b4e789d36ddcf96, ROW-6c0bf1a690755e7f, ROW-6d06ff5ffa15b683, ROW-6ddb2572023543b4, ROW-6f2b2fcd5b1d2311, ROW-6f64acc63bcc4b90, ROW-6f70205c1c68d8bb, ROW-7120f0adc4b4c958, ROW-71894db78b242593, ROW-72d2808a6b066474, ROW-73518da31a9de13d, ROW-7443c2529bd9eeb4, ROW-75cf12977b4f569b, ROW-76e0fb0411665618, ROW-76ec084392d6d8b4, ROW-774e116ebae3dd87, ROW-780db57e02319d7b, ROW-7858bbcb2abd29b9, ROW-79c2baf12ef73548, ROW-79e3abab2191a04c, ROW-7a2be836025226e8, ROW-809a766c331b4d39, ROW-81deba655e0991ed, ROW-8414448930e2b4e6, ROW-842f16c5594c76be, ROW-85765cd39f82568d, ROW-8789cf3dad72818e, ROW-8afd0e2f030bc897, ROW-8d7b189fe124ff8f, ROW-9407facb933cb685, ROW-94e6ad699128f88e, ROW-965eef7bf220fb11, ROW-9c1540b711c3fdec, ROW-9d4a735b51a6c4af, ROW-a133d71976717623, ROW-a1545d27f3bf2047, ROW-a5c7d9298d20e586, ROW-a5f1ae6f4e5bcae6, ROW-a5fbb7c744f33400, ROW-a702ff31dc513117, ROW-a78c85c3ead9f73c, ROW-a7dcb95abbf3565c, ROW-a9d6f089adebf56d, ROW-aa972cb9655f2878, ROW-ae04dca898b9addc, ROW-aea49e0303f8da67, ROW-af456d6227e2faba, ROW-b73b469d2e39cb63, ROW-b8326cdda0bf2d8f, ROW-bdfb8ef53e828020, ROW-bfc35f8e8a8c151e, ROW-c255b10177fe7288, ROW-c456e9936d140510, ROW-c8677101c4f4499c, ROW-c8c725e6637a8907, ROW-c92f7a9021f87f4d, ROW-cbdb05a52f3dd570, ROW-cec9cf60020b9bc9, ROW-cfaf5c3d846cbe68, ROW-cfe2ba37586b5c59, ROW-cfe597aea3ed6655, ROW-d198c1a77e0849c9, ROW-d1999f64269ba57a, ROW-d24cb7c91f2c8d6f, ROW-d3080e6917edde9f, ROW-d3312f0f6c6af498, ROW-d36972d2069b92be, ROW-d9787fe22bda2d2f, ROW-db94906c8dbe4937, ROW-def96058fee4bb36, ROW-e04f6e64762da609, ROW-e1137d8e6b8606dd, ROW-e17302f04f358b53, ROW-e46322c1093a2000, ROW-e543b544ed165ec9, ROW-e83eaafbd6e2eee9, ROW-e864384a817b7f8d, ROW-eabac2618ac3d751, ROW-eba4eb4c0ff2c5a5, ROW-ee7705a8a09a0b92, ROW-eefae2326c3ecc5f, ROW-f0961ce652a134e0, ROW-f1a510468e777884, ROW-f31cc2a74713c793, ROW-f5b531ba88b623b2, ROW-f605224905d34301, ROW-f6adefe92edb02bd, ROW-f7dc004d104d9837, ROW-f7fc61277d575105, ROW-f85765840ed52d21, ROW-f8e453bd07daa21d, ROW-f9468b93c81e3060, ROW-f9598da95744c81e, ROW-face2973c2e6293e, ROW-fad01545bded8490, ROW-fb05e05c125ad637, ROW-fc108700b7cb2d20, ROW-fc634973819682a5, ROW-ff093be9f1482e00, ROW-ff624652c2c9799e.",
+   "evidence": [
+    {
+     "accession": "0001838126-25-000073",
+     "text": "Stack Sports Buyer, LLC (4)(9) SF + 5.25 % 9.25 % 3/31/2031 131,871 130,059 130,263",
+     "row_id": "ROW-08baf3269878b8bb"
+    },
+    {
+     "accession": "0001838126-25-000073",
+     "text": "PF Finco PTY LTD (4)(5)(10) B + 6.25 % 10.07 % 5/30/2030 AUD 41,852 26,411 27,299",
+     "row_id": "ROW-0a553fe3595f5dad"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f6182fccd86d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Independently reconstructed 2024-12-31 industry_coverage population from current flag output and ledger: all 132 row keys equal affected_rows and reviewed_rows. Each source row was matched by its own fair-value context and displayed value, not issuer alone. Nearest actual printed industry headings reproduce the retained broad labels; these do not establish the exact GICS subtype. Missing exact classification is therefore a confirmed coverage error. Parking for independently evidenced issuer-business mapping is supported; broad-to-exact automatic assignment would overstate the source. Row keys: ROW-0173954ff1dc7f92, ROW-03e893b8cc77a485, ROW-03fb171cd095e272, ROW-04595924630f321b, ROW-08a1dd47ea380166, ROW-0c8c5e9deb2883e0, ROW-17e8769c6aa9106f, ROW-188bf6a5df4f767c, ROW-25f5bb1a4ad12cb3, ROW-2984d22b89512523, ROW-2a3345a84ef319eb, ROW-2aa285b07925e93a, ROW-2bcf8596430abd25, ROW-2d7aacf65c6eb60b, ROW-2dc4f45add87c77b, ROW-2e2ef1bbe5f4a9f5, ROW-2f52d4825710d7a3, ROW-3290ac0550c61b5d, ROW-34e8ca7b85fd63c3, ROW-350179c9b8db95ae, ROW-35fde4ee7af4e494, ROW-3638839a3f3edbf3, ROW-37ca0575507b5226, ROW-389a327cc51159dd, ROW-3acbd8fe27a1d742, ROW-3b8db7ec649e37b9, ROW-3d8f6485272c4e54, ROW-41b66ec5e3943e81, ROW-42836a7000b002b6, ROW-44c02cebee7d83b1, ROW-469ec4c23e31c715, ROW-4a07284419958252, ROW-4a6c475d232856c6, ROW-4bb5743470c76ce1, ROW-4f8da634b6c35a61, ROW-51ce115f81984551, ROW-520fb3dd5f7b9000, ROW-522ab3a622906940, ROW-54518489e9a25041, ROW-58fab2d61124e0d9, ROW-5cc857086c91cbf8, ROW-5cf8d67ff86b05bd, ROW-608dc8fcc13fb72d, ROW-65c6ac3cd2370826, ROW-69df1c424a4b1d3a, ROW-6e400f57c85ca773, ROW-7250e866cc26d5da, ROW-73d1a793f8914df8, ROW-75c621908a6a30df, ROW-7a32f51f159f7173, ROW-7cbdc91a008b94f7, ROW-7d7fbbb3934e64d9, ROW-7eec62bbcaa490c8, ROW-801678063dfdb6ad, ROW-80d7aa9d30bd62f5, ROW-8192adb0bdbc831b, ROW-82d82603c4ee51dd, ROW-8568e119d7bd7602, ROW-860b2082f422d46e, ROW-87c16d8a3ac93659, ROW-8886a98ae3f066ee, ROW-88e47e080e1c6921, ROW-8a36aed500960d83, ROW-8a5928988a9270ce, ROW-8ac3dfd2a89df1c6, ROW-8acf825f2cbb733a, ROW-8bad57a967816b9c, ROW-8c85e65091c3edd7, ROW-8d990973c1a82f9d, ROW-8dbdfa409b2af641, ROW-8f6b6e89b042b0b0, ROW-903d71fc3feb3bbe, ROW-9364caa1aac86a32, ROW-939f0ddac3edad26, ROW-941ec03b5bb7a56a, ROW-9523be72b1780417, ROW-992fbb7e6bd41f45, ROW-9a55618059ac9b97, ROW-9aadb08f7c42d86c, ROW-a004b2fa213f26e5, ROW-a163f7f91e109e30, ROW-a4054b799fd65ecf, ROW-a8d47844b80764a1, ROW-ac9ab20f40637122, ROW-acbb2bc210d9607c, ROW-af1e87310a73a751, ROW-affb5ce80ff65201, ROW-b287a247a1acb3e7, ROW-b50e4e066cc9aa6c, ROW-b5f7e5c763663006, ROW-b765eb0a79c2a873, ROW-bb30c44f620186ac, ROW-bb70af8909aa6c5e, ROW-c258651014fc9768, ROW-c3eb1b8101a6acae, ROW-c403958a9527061a, ROW-c7ec419010ee91f1, ROW-c813438368d042b6, ROW-ca205ef0d96a1832, ROW-cb0d3e895044d7c1, ROW-cbb3236f05221be0, ROW-ce877d557888e256, ROW-cee672686eacbf18, ROW-d05977603ebe0e3d, ROW-d2658eec9e81133a, ROW-d41a58cd03a9b166, ROW-d51eadb1e6e9745c, ROW-d5385bb42c89058c, ROW-d6932bb5c1fa4d98, ROW-d92fd1cc951dd5de, ROW-da3595da890a013c, ROW-da91c7d00f85192f, ROW-dc9b057423be7474, ROW-dcaa26dfb3368986, ROW-def8c5e7096dc793, ROW-e0b805b21e9cc7be, ROW-e0fa37ec0525178c, ROW-e1328f0ad63bafb1, ROW-e16869a2f1349103, ROW-e19b37381e473532, ROW-e43304bec248a1b9, ROW-e9027b9c32ac42e5, ROW-e96f369a4684a4c9, ROW-eb71b4ba018c947b, ROW-f0f163e836315319, ROW-f382b8c812a97c3f, ROW-f849bfc883ffb2bf, ROW-f907c5da19c0a4ac, ROW-f9bac1391b89d7c6, ROW-fd445e1110b7afc1, ROW-fdd4d6a613267334, ROW-fe49b0c2d0384887.",
+   "evidence": [
+    {
+     "accession": "0001838126-25-000017",
+     "text": "Vibrant CLO XII Ltd (5)(7) SF + 6.94 % 11.56 % 4/20/2034 2,000 2,000 2,000",
+     "row_id": "ROW-0173954ff1dc7f92"
+    },
+    {
+     "accession": "0001838126-25-000017",
+     "text": "Marcone Group Inc (4)(9) SF + 7.00 % 11.74 % 6/23/2028 4,362 4,336 4,099",
+     "row_id": "ROW-03e893b8cc77a485"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "The 28 specified source-equity contexts and 25 value changes are consistent with the displayed whole-unit convention and actual Equity Investments section; the total 140 net quantity changes all match displayed counts. The proposed complete source-equity comparison would catch issuer-neighbor rescaling; debt/CLO false positives must be rejected using printed section and column semantics.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-020206",
+     "text": "BCPE Virginia Holdco, Inc. (4)(22) - Preferred Stock 2,000 1,960 2,691"
+    }
+   ]
+  },
+  {
+   "observation_key": "share-concept-holds-principal",
+   "outcome": "supported",
+   "rationale": "All 138 withdrawn rows reproduce monetary principal in debt or structured-finance sections, despite share concepts. Every final shares value equals rg1b on these exact keys. The 119 retained count specifications belong to actual Equity Investments and match displayed units. A section/column-first detector is necessary; this rollback is restoration, not certification of the baseline shares/principal semantics.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-033248",
+     "text": "2080 Media, Inc. (4)(6)(9) 3/14/2028 13,795 ( 90 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-debt-classified-as-equity-or-fund",
+   "outcome": "supported",
+   "rationale": "Independent complete 8593-row context/FV source join reproduces 181 apparent debt/category conflicts. Exactly 32 are in real subsidiary unfunded-commitment tables with verified captions, leaving 149 funded-debt conflicts: 136 EQUITY_COMMON and 13 FUND TruGreen rows. The proposed cross-check must use table boundaries and exclude subsidiary commitment tables; a last-seen section alone would generate 32 false positives.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-033248",
+     "text": "DCA Acquisition Holdings LLC (4)(7)(19) 13.13 % PIK 12/28/2032 1,398 1,176 73"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-concept-holds-whole-coupon",
+   "outcome": "supported",
+   "rationale": "All 59 affected final rows match actual bare fixed PIK loan coupons in the printed debt schedules with no benchmark-plus-spread syntax. Existing coupon/margin convention supports these fills. The three DCA Q1 2026 debt rows remain wrongly equity-classified and unfilled; actual preferred equities stay outside loan treatment. Benchmark-plus-margin evidence cannot supply an all-in rate under this rule, so D092 cases require separate resolution.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-033248",
+     "text": "DCA Acquisition Holdings LLC (4)(7)(19) 13.13 % PIK 12/28/2032 1,398 1,176 73"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-name-repair-creates-cross-tranche-chain",
+   "outcome": "supported",
+   "rationale": "The 56 old/new component source cards exist verbatim in cached filings and show conflicting maturities/tranches. Null shares on these debt identity cards are missing optional values, not affirmative quantity evidence. With all five edits and both attempted rejects withdrawn, zero final raw-ID and membership difference from rg1b is independently reproduced across all 8593 rows. A complete competing-edge/tranche check is needed; pair-specific rejects alone do not establish safe components.",
+   "evidence": [
+    {
+     "accession": "0001838126-24-000038",
+     "text": "Illuminate Buyer, LLC (7) SF + 3.50 % 8.94 % 12/31/2029 15,111 14,906 15,147"
+    }
+   ]
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "outcome": "supported",
+   "rationale": "All 737 current industry-flag rows and 3874 retained broad labels independently match their actual nearest printed headings. Exact GICS remains unsupported; the existing industry_coverage detector continues to expose this gap. Code inspection confirms exact-label per-fund retention is default absent elsewhere and does not write a GICS value. The focused tests include an issuer-heading and another-fund negative control; broader integration tests remain incomplete.",
+   "evidence": [
+    {
+     "accession": "0001838126-23-000040",
+     "text": "850 Third Avenue Owner LLC (4)(9)(15) L + 6.50 % 10/1/2024 4,726 4,702 4,726"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-label-depends-on-build-composition",
+   "outcome": "supported",
+   "rationale": "The 26 exact GICS labels lost versus rg1b are already missing in untouched nvhpa. This supports temporal precedence over the HPS changes, not a proven cache/build-composition cause; the report correctly leaves cause unresolved. Repeated identical-input composition tests plus full-cohort classification deltas are appropriate. Source broad headings alone cannot justify restoring exact GICS.",
+   "evidence": [
+    {
+     "accession": "0001838126-23-000056",
+     "text": "Summit Acquisition Inc. (4)(7)(11) 5/1/2029 6,685 ( 196 ) ( 195 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "spread-tagged-as-pik",
+   "outcome": "supported",
+   "rationale": "Printed Wash & Wax and Daphne rows place the tagged values in Reference Rate and Spread, without PIK wording; the separate Interest Rate cells supply the coupons. Withdrawing four PIK fields to missing, retaining displayed spreads, Daphne 8.75 and three floating-rate classifications is source-supported. Proposed cell-aware marker validation needs positive bare-PIK and reference-plus-PIK cases to avoid suppressing genuine terms.",
+   "evidence": [
+    {
+     "accession": "0001838126-25-000073",
+     "text": "Wash & Wax Systems LLC (4)(6)(10)(20) SF + 5.50 % 9.81 % 4/30/2028 947 ( 1 ) 19"
+    }
+   ]
+  },
+  {
+   "observation_key": "cached-html-schedule-without-structured-holdings",
+   "outcome": "supported",
+   "rationale": "The historical coverage distinction is correctly limited to missing structured extraction, not missing filing schedules. The proposed cached-schedule/extraction comparison addresses the blind spot that an accepted F28 structured-only exemption cannot detect. Historical accepted exemptions are not new evidence of source absence and must not imply all-quarter extraction completeness.",
+   "evidence": [
+    {
+     "accession": "0001838126-22-000028",
+     "text": "Consolidated Schedule of Investments June 30, 2022 (in thousands) (Unaudited) Company (1) . Reference Rate and Spread (2) . Interest Rate (2) . Maturity Date . Par Amount/Units . Amortized Cost (3) . Fair Value . Percentage of Net Assets Non-Controlled/Non-Aff"
+    }
+   ]
+  },
+  {
+   "observation_key": "loan-par-recovered-from-share-tag-loses-currency",
+   "outcome": "supported",
+   "rationale": "C019 is independently upheld: Orthrus printed par 12,133 thousand is numerically 12,133,000; the published currency label is blank. Complete 8137 principal screening reproduces 524 blank labels (1 in 2025Q1, 522 in 2026Q1, 1 in 2026Q2). Each is a loan with same-row share-tagged monetary par, matches numeric principal, lacks an explicit foreign-currency row marker, and is governed by the cached schedule dollar-default and debt-par footnotes. This is a label/provenance error; numeric USD is supported. Cause shared is supported by direct inspection of common staging_bdc.py principal_amount_currency derivation and blank-as-USD numerical fallback; HPS share-tagged par exposes this shared path, rather than establishing a new fund-only rule. The proposed explicit-row-before-schedule-default check plus genuine equity and foreign-currency controls is appropriate. No repair is approved by this review.",
+   "evidence": [
+    {
+     "accession": "0001628280-26-033248",
+     "text": "Orthrus Ltd (4)(5)(10)(25) SF + 6.25 % (incl 2.75 % PIK) 9.92 % 12/5/2031 12,133 11,958 11,989"
+    },
+    {
+     "accession": "0001838126-23-000040",
+     "text": "Unless otherwise indicated, issuers of debt and equity investments held by the Company (which such term Company shall include the Companys consolidated subsidiaries for purposes of this Consolidated Schedule of Investments) are denominated in dollars."
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "HPS-CACHED-Q2-001",
+   "outcome": "supported",
+   "rationale": "Sandbox Q2 index row exactly equals rg1b donor; cached XML hash independently matches e2a6ddd351a954b5ee86cb1ff5336c144c7e8a0542a004e1ec1bc069fe622aa7. This is sandbox evidence restoration under recorded root authorization, not production manifest repair. No download was needed. The absent production quarter-manifest entry remains unresolved."
+  },
+  {
+   "request_id": "HPS-QUANTITY-SAFETY-ROLLBACK-001",
+   "outcome": "supported",
+   "rationale": "All 138 quantities restored exactly to rg1b; 119 actual-equity specifications retained; context corrections file byte-for-byte equals pre-append backup, hash 6fd6168fb4dca1aa18b823b8534809d7f2b55d6851281e3d6fe12f2b7781bba7. One extra rollback build is recorded as root-authorized safety restoration, not a new repair budget."
+  }
+ ],
+ "independent_checks": {
+  "report_digest": "0b3180ebcbdb18bf0af466ffeb46079c2541300ad6795da2d6cb56ab04d27c41",
+  "coverage": [
+   {
+    "id": "RVQ_BLK_553d8ea092b8",
+    "rule": "industry_coverage",
+    "quarter": "2023-03-31",
+    "flagged": 65,
+    "affected": 65,
+    "equal": true,
+    "reviewed_equal": true,
+    "source_matched": 65
+   },
+   {
+    "id": "RVQ_BLK_6382e92eedfe",
+    "rule": "industry_coverage",
+    "quarter": "2024-09-30",
+    "flagged": 91,
+    "affected": 91,
+    "equal": true,
+    "reviewed_equal": true,
+    "source_matched": 91
+   },
+   {
+    "id": "RVQ_BLK_6eb15948eae6",
+    "rule": "industry_coverage",
+    "quarter": "2025-03-31",
+    "flagged": 140,
+    "affected": 140,
+    "equal": true,
+    "reviewed_equal": true,
+    "source_matched": 140
+   },
+   {
+    "id": "RVQ_BLK_7839396eef8c",
+    "rule": "industry_coverage",
+    "quarter": "2025-06-30",
+    "flagged": 150,
+    "affected": 150,
+    "equal": true,
+    "reviewed_equal": true,
+    "source_matched": 150
+   },
+   {
+    "id": "RVQ_BLK_792760ae2dce",
+    "rule": "issuer_name_printed",
+    "quarter": "2024-03-31",
+    "flagged": 1,
+    "affected": 1,
+    "equal": true,
+    "reviewed_equal": true,
+    "source_matched": 1
+   },
+   {
+    "id": "RVQ_BLK_90142553dfd5",
+    "rule": "issuer_name_printed",
+    "quarter": "2024-09-30",
+    "flagged": 1,
+    "affected": 1,
+    "equal": true,
+    "reviewed_equal": true,
+    "source_matched": 1
+   },
+   {
+    "id": "RVQ_BLK_d47f9d966107",
+    "rule": "issuer_name_printed",
+    "quarter": "2026-03-31",
+    "flagged": 3,
+    "affected": 3,
+    "equal": true,
+    "reviewed_equal": true,
+    "source_matched": 3
+   },
+   {
+    "id": "RVQ_BLK_f2908e2960ee",
+    "rule": "industry_coverage",
+    "quarter": "2025-09-30",
+    "flagged": 159,
+    "affected": 159,
+    "equal": true,
+    "reviewed_equal": true,
+    "source_matched": 159
+   },
+   {
+    "id": "RVQ_BLK_f6182fccd86d",
+    "rule": "industry_coverage",
+    "quarter": "2024-12-31",
+    "flagged": 132,
+    "affected": 132,
+    "equal": true,
+    "reviewed_equal": true,
+    "source_matched": 132
+   }
+  ],
+  "quote_errors": [],
+  "source_rows": 8593,
+  "filings": 14,
+  "changed_industry": 3874,
+  "industry_bad": [],
+  "rollback_count": 138,
+  "rollback_bad": [],
+  "changed_quantity_count": 140,
+  "units_bad": [],
+  "retained_quantity_specs": 119,
+  "spec_bad": [],
+  "caption_count": 32,
+  "caption_bad": [],
+  "category_mismatches": 149,
+  "category_breakdown": {
+   "FUND": 13,
+   "EQUITY_COMMON": 136
+  },
+  "footnote_missing": [],
+  "context_bytes_equal": true,
+  "context_hash": "6fd6168fb4dca1aa18b823b8534809d7f2b55d6851281e3d6fe12f2b7781bba7",
+  "log_decoded_equal": true,
+  "blank_currency_count": 524,
+  "blank_currency_quarters": {
+   "2025-03-31": 1,
+   "2026-03-31": 522,
+   "2026-06-30": 1
+  },
+  "currency_bad": [],
+  "bare_count": 59,
+  "bare_bad": [],
+  "position_id_changes": 0,
+  "added": 0,
+  "removed": 0,
+  "section_counts": {
+   "First Lien Debt": 7772,
+   "Equity Investments": 286,
+   "Structured Finance Investments": 270,
+   "Unsecured Debt": 121,
+   "Second Lien Debt": 68,
+   "Investments in Joint Ventures": 11,
+   "Other Secured Debt": 65
+  },
+  "gics_loss_nvhpa": 26
+ },
+ "extra_checks": {
+  "accepted_rows": 1690,
+  "accepted_bad": [],
+  "positive_pik_rows": 883,
+  "pik_marker_bad": [],
+  "identity_cards": 56,
+  "history_quote_bad": []
+ },
+ "sample_adjudication": {
+  "cards": 20,
+  "reader_id": "/root/hps_sample_sol",
+  "published_errors": 1,
+  "card": "C019",
+  "outcome": "supported",
+  "numeric_principal_correct": true,
+  "currency_label_error": true,
+  "labels_edited": false
+ },
+ "limitations": [
+  "Investigation completeness is not data correctness or fund acceptance: all nine findings remain unresolved and no disposition proposals were added.",
+  "No tests, builds, downloads or production writes run by reviewer. Targeted historical passes were inspected; interrupted unified and broader industry tests are not passes. Full-cohort regression remains required.",
+  "Semantic backstop exit1 reflects existing canonical/baseline drift; sandbox verification cannot establish a globally clean result.",
+  "8593 source context/value matches do not certify every field. Positive PIK text establishes terms, not current PIK accrual or distressed amendment evidence.",
+  "26 GICS losses predate these fixes, but causal enrichment/cache mechanism remains unresolved.",
+  "Historical 2022 cached HTML schedules remain unextracted; structured-coverage exemptions are not source-absence claims.",
+  "20-card sample has shares coverage1, pctNAV0, PIK3 and interest18; it cannot certify all fields or low-prevalence errors.",
+  "56 optional identity-card shares placeholders were NaN before root formatting repair and are now null. No quantity or matching conclusion relies on these nulls."
+ ],
+ "provenance": {
+  "diagnostics": "scratch/fund_runs/0001838126/reviewer/independent_audit.json",
+  "source_filings": 14,
+  "source_holdings": 8593,
+  "physical_ledger_rows": 90,
+  "outstanding": 9,
+  "cached_q2_xml_sha256": "e2a6ddd351a954b5ee86cb1ff5336c144c7e8a0542a004e1ec1bc069fe622aa7",
+  "build_log_decoded_equal": true
+ }
+}

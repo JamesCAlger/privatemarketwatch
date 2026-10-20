@@ -640,6 +640,15 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
         weak = set(share[(share["size"] >= 20) & (share["mean"] < 0.5)].index)
         if weak:
             withdraw = rows & filing.isin(weak) & mapped.isna()
+            # Explicitly reviewed filer headings can be genuine broad industries that
+            # have no defensible one-to-one GICS subtype. Keep their filed text only;
+            # this setting neither supplies GICS nor bypasses industry validation.
+            from pipeline.source_encodings import load_encodings
+            for fund, encoding in load_encodings().items():
+                reviewed = encoding.get("printed_industry_labels", [])
+                if reviewed:
+                    keep_printed = (_normalize_cik_series(combined["cik"]) == fund) & label.isin(reviewed)
+                    withdraw &= ~keep_printed
             combined.loc[withdraw, "extracted_industry"] = ""
             logger.info("  Printed industry: %d labels withdrawn in %d filings where under half map (not industry headings)",
                         int(withdraw.sum()), len(weak))

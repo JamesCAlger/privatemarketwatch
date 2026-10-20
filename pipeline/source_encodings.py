@@ -33,7 +33,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','unfunded_note_aliases','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','unfunded_note_aliases','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns','printed_industry_labels',
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
                 'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context',
                 'cash_rows_include_concepts','subtotal_members','cost_total_excludes','thousands_scale_filings','rate_verification_anchors'}:

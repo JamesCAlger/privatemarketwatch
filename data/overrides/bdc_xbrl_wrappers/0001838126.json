@@ -99,7 +99,8 @@
       }
     ],
     "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated Issuer|Affiliated Issuer|\\|\\s*Non-Affiliated Issuer|\\|\\s*Affiliated Issuer)\\s*$",
-    "issuer_name_strip_re": "\\s+\\d{1,2}$"
+    "issuer_name_strip_re": "\\s+\\d{1,2}$",
+    "shares_pow10_normalise": false
   },
   "archetypes": {
     "warrant": {
@@ -277,6 +278,7 @@
       "all_in"
     ],
     "pik_only_tag_reading": [
+      "coupon",
       "margin"
     ],
     "foreign_unit_values": [
@@ -299,6 +301,42 @@
     "par_tagged_as_units": [
       "0001628280-26-033248",
       "rows_near_cost"
+    ],
+    "printed_industry_labels": [
+      "Aerospace and Defense",
+      "Alternative Energy",
+      "Automobiles and Parts",
+      "Construction and Materials",
+      "Consumer Services",
+      "Electricity",
+      "Electronic and Electrical Equipment",
+      "Finance and Credit Services",
+      "Food Producers",
+      "Gas, Water and Multi-utilities",
+      "General Industrials",
+      "Health Care Providers",
+      "Household Goods and Home Construction",
+      "Industrial Engineering",
+      "Industrial Metals and Mining",
+      "Industrial Support Services",
+      "Industrial Transportation",
+      "Investment Banking and Brokerage Services",
+      "Leisure Goods",
+      "Life Insurance",
+      "Medical Equipment and Services",
+      "Non-life Insurance",
+      "Oil, Gas and Coal",
+      "Personal Care, Drug and Grocery Stores",
+      "Personal Goods",
+      "Pharmaceuticals and Biotechnology",
+      "Real Estate and Investment Services",
+      "Real Estate Investment and Services",
+      "Retailers",
+      "Software and Computer Services",
+      "Technology Hardware and Equipment",
+      "Telecommunications Equipment",
+      "Telecommunications Service Providers",
+      "Travel and Leisure"
     ]
   },
   "invariants": {

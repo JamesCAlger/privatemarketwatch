@@ -678,6 +678,13 @@
           "items": {"enum": ["coupon", "margin"]},
           "description": "Set where a loan filed with a PIK rate tag, no plain rate tag and no spread carries its whole coupon in the PIK tag. The finalizer then publishes that rate as interest_rate (transform interest_rate:pik_only). Evidence required: printed schedule lines showing the PIK figure in the coupon column. Use margin where the PIK tag on such a row holds the margin over the reference rate: the finalizer then publishes it as basis_spread (transform basis_spread:pik_margin) on rows whose reference rate is known, and leaves pik_rate as filed. Evidence required for margin: printed lines of the form reference + margin PIK. Use coupon then margin where the filer has both kinds and names its reference-rate column (reference_rate_columns): a known reference rate makes the figure a margin, and it is the coupon only where that column prints N/A or nothing (coupon_type Fixed). Any other row stays as filed."
         },
+        "printed_industry_labels": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1},
+          "description": "Exact source-reviewed industry headings to retain as extracted_industry even when most headings in a filing do not map to GICS. HPS prints broad FTSE-style headings such as Real Estate Investment and Services and Travel and Leisure. This list supplies no GICS subtype, does not bypass the industry coverage detector and does not admit section or issuer headings. Evidence required: each exact heading printed above portfolio rows. Default absent: existing unmapped-heading withdrawal remains."
+        },
         "industry_columns": {
           "type": "array",
           "minItems": 1,
