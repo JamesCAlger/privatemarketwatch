@@ -1,0 +1,15 @@
+{
+  "cik": "1918712",
+  "rule_id": "exclude_oakc_2025q1_subtotal",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {"quarters": ["2025-03-31"]},
+  "predicate_sql": "report_date = '2025-03-31' AND accession_number = '0001918712-25-000030' AND src_context_id = 'c-804' AND bdc_investment_identifier = 'OAKC 2021-9, Collaterized loan obligation 2'",
+  "evidence": [
+    {"source": "filing", "accession": "0001918712-25-000030", "quote": "OAKC 2021-9 Collaterized loan obligation 9.79 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,054.8 (5)(12) Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12) 3,545.0 3,477.2 OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)"},
+    {"source": "query", "quote": "c-804 tags the two OAKC 2021-9 positions' subtotal: 2,050.0 + 1,495.0 = 3,545.0 cost and 2,054.8 + 1,422.4 = 3,477.2 fair value, all in thousands. The subtotal has no separate principal, rate, maturity or instrument on the printed row. c-802 and c-803 remain the two real positions. c-806 carries the separate OAKC 2021-16 cost/fair value and is adopted by the wrapper."}
+  ],
+  "rationale": "Exact source context is a printed subtotal, not a third tranche. Remove only this accession/context/member; retain the two constituent tranches and restore the separate issuer-axis-only OAKC 2021-16 position from its own tagged facts. The same source topology was checked across all 10,175 published positions in 14 cached filings; this is the sole numeric-only published source row.",
+  "confidence": 0.99,
+  "measured_impact": {"2025-03-31": {"rows": 1, "fv": -3477200.0}}
+}

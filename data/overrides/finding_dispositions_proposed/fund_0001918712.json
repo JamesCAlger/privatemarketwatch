@@ -1,0 +1,162 @@
+{
+ "status": "PROPOSED only; no ledger acceptance",
+ "sandbox": "nvasd",
+ "dispositions": [
+  {
+   "disposition_id": "PD-ASIF-X11-20261020",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "reason_key": "x11-count-in-units-column-no-principal",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2026-03-31"
+   ],
+   "statement": "All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13)",
+     "quote": "JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 10,145.4 10,145.4 (6)(13)",
+     "quote": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 10,145.4 10,145.4 (6)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "TI VI Holdings 1, L.P. (12) Private asset-backed investment 9.31 % PIK 06/2025 4,145 4,336.8 4,406.5 (6)(13)",
+     "quote": "TI VI Holdings 1, L.P. (12) Private asset-backed investment 9.31 % PIK 06/2025 4,145 4,336.8 4,406.5 (6)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "Tikehau Green Diamond II CFO Equity LP (12) Private asset-backed investment 9.77 % Euribor (Q) 7.75 % 12/2024 12/2030 3,405,672 2,419.3 2,865.6 (6)(13)",
+     "quote": "Tikehau Green Diamond II CFO Equity LP (12) Private asset-backed investment 9.77 % Euribor (Q) 7.75 % 12/2024 12/2030 3,405,672 2,419.3 2,865.6 (6)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "Tikehau Ruby CLO Equity LP (12) Private asset-backed investment 12.02 % Euribor (Q) 10.00 % 03/2024 1,815,364 424.6 491.0 (6)(8)(13)",
+     "quote": "Tikehau Ruby CLO Equity LP (12) Private asset-backed investment 12.02 % Euribor (Q) 10.00 % 03/2024 1,815,364 424.6 491.0 (6)(8)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-26-034133",
+     "verbatim": "Tikehau Topaz LP (12) Private asset-backed investment 12.67 % SOFR (Q) 9.00 % 06/2024 3,314,856 2,240.3 2,278.6 (6)(8)(13)",
+     "quote": "Tikehau Topaz LP (12) Private asset-backed investment 12.67 % SOFR (Q) 9.00 % 06/2024 3,314,856 2,240.3 2,278.6 (6)(8)(13) Reading: All144 source lines distinguish unit counts from debt principal. JPMMT Q12026 count1,405,613,866 was restored; the row prints units but no debt principal. Other cases are count-only equity/CLO/residual rows."
+    }
+   ],
+   "addresses_verdict": {
+    "2026-03-31": "Prior proposal hid a missing printed JPMMT count and was rejected as insufficient; count now repaired. Owner D151/D152 explicitly preserve counts as units rather than inventing principal. Q22026 separate JPMMT36,628.1K principal tranche and1,276,413,070-unit tranche remain separate. Propose existing x11-count-in-units-column-no-principal after repair; automatic acceptance not run because authorized fundloop accepted store was pre-dirty and gate line72 forbids a unique store."
+   },
+   "rerun": "nvasd; report docs/investigations/v05_readings/reports/0001918712.json",
+   "decided_by": "PROPOSED by /root/asif_sol; not accepted",
+   "decided_on": "2026-10-20",
+   "execution_restriction": "Authorized accepted store pre-dirty and immutable; gate line72 forbids unique accepted store. Subtotal additionally requires owner acceptance-standard decision."
+  },
+  {
+   "disposition_id": "PD-ASIF-SRC_BDC01-20261020",
+   "class": "false_alarm",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC01",
+   "reason_key": "numeric-only-exact-source-subtotal",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001918712-25-000030",
+     "verbatim": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12) 3,545.0 3,477.2 OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)",
+     "quote": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12) 3,545.0 3,477.2 OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12) Reading: Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess."
+    },
+    {
+     "source": "filing",
+     "accession": "0001918712-25-000030",
+     "verbatim": "OAKC 2021-9 Collaterized loan obligation 9.79 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,054.8 (5)(12)",
+     "quote": "OAKC 2021-9 Collaterized loan obligation 9.79 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,054.8 (5)(12) Reading: Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess."
+    },
+    {
+     "source": "filing",
+     "accession": "0001918712-25-000030",
+     "verbatim": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12)",
+     "quote": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12) Reading: Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess."
+    },
+    {
+     "source": "filing",
+     "accession": "0001918712-25-000030",
+     "verbatim": "OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)",
+     "quote": "OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12) Reading: Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess."
+    }
+   ],
+   "addresses_verdict": {
+    "2025-03-31": "Read all10175 published source contexts: exactly one numeric-only subtotal candidate. Member-wide exemption rejected because the same member occurs in7 cached contexts including real positions in later quarters. c805 has only rate/principal and no separate FV; c806 is the single actual restored investment. Owner acceptance-standard decision for exact-context subtotal disposition; no broad member exclusion and no check relaxation. Keep outstanding until authorized."
+   },
+   "rerun": "nvasd; report docs/investigations/v05_readings/reports/0001918712.json",
+   "decided_by": "PROPOSED by /root/asif_sol; not accepted",
+   "decided_on": "2026-10-20",
+   "execution_restriction": "Authorized accepted store pre-dirty and immutable; gate line72 forbids unique accepted store. Subtotal additionally requires owner acceptance-standard decision."
+  },
+  {
+   "disposition_id": "PD-ASIF-blocking_source_short_plain_unresolved-20261020",
+   "class": "false_alarm",
+   "engine": "source_recon",
+   "rule_name": "blocking_source_short_plain_unresolved",
+   "reason_key": "numeric-only-exact-source-subtotal",
+   "ciks": [
+    "0001918712"
+   ],
+   "quarters": [
+    "2025-03-31"
+   ],
+   "statement": "Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001918712-25-000030",
+     "verbatim": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12) 3,545.0 3,477.2 OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)",
+     "quote": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12) 3,545.0 3,477.2 OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12) Reading: Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess."
+    },
+    {
+     "source": "filing",
+     "accession": "0001918712-25-000030",
+     "verbatim": "OAKC 2021-9 Collaterized loan obligation 9.79 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,054.8 (5)(12)",
+     "quote": "OAKC 2021-9 Collaterized loan obligation 9.79 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,054.8 (5)(12) Reading: Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess."
+    },
+    {
+     "source": "filing",
+     "accession": "0001918712-25-000030",
+     "verbatim": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12)",
+     "quote": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12) Reading: Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess."
+    },
+    {
+     "source": "filing",
+     "accession": "0001918712-25-000030",
+     "verbatim": "OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)",
+     "quote": "OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12) Reading: Exact numeric-only subtotal is not an investment: cost2,050,000+1,495,000=3,545,000; FV2,054,800+1,422,400=3,477,200. c806 is a separate real OAKC2021-16 position, not part of that subtotal. Removing subtotal and restoring953,100FV repairs the inherited2,524,100 total excess."
+    }
+   ],
+   "addresses_verdict": {
+    "2025-03-31": "Read all10175 published source contexts: exactly one numeric-only subtotal candidate. Member-wide exemption rejected because the same member occurs in7 cached contexts including real positions in later quarters. c805 has only rate/principal and no separate FV; c806 is the single actual restored investment. Owner acceptance-standard decision for exact-context subtotal disposition; no broad member exclusion and no check relaxation. Keep outstanding until authorized."
+   },
+   "rerun": "nvasd; report docs/investigations/v05_readings/reports/0001918712.json",
+   "decided_by": "PROPOSED by /root/asif_sol; not accepted",
+   "decided_on": "2026-10-20",
+   "execution_restriction": "Authorized accepted store pre-dirty and immutable; gate line72 forbids unique accepted store. Subtotal additionally requires owner acceptance-standard decision."
+  }
+ ]
+}

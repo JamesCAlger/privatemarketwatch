@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 
 import duckdb
+from correction_csv import correction_key, append_record, spec_context
 
 REPO = Path(__file__).resolve().parents[2]
 label = sys.argv[1]
@@ -322,10 +323,11 @@ con = duckdb.connect()
 target = REPO / "data/overrides/row_corrections.csv"
 data = target.read_bytes()
 eol = "\r\n" if b"\r\n" in data else "\n"
-existing = {(r["cik"].zfill(10), r["report_date"], r["accession_number"], r["bdc_investment_identifier"], r["field"])
-            for r in csv.DictReader(io.StringIO(data.decode("utf-8")))}
+reader = csv.DictReader(io.StringIO(data.decode("utf-8")))
+columns = reader.fieldnames
+existing = {correction_key(r) for r in reader}
 buffer = io.StringIO()
-writer = csv.writer(buffer, lineterminator=eol)
+writer = csv.DictWriter(buffer, fieldnames=columns, lineterminator=eol)
 added = 0
 # A sandbox holds some funds only: specs for a fund it does not hold are left alone, not failed.
 held = {r[0] for r in con.execute(
@@ -1297,30 +1299,45 @@ if APOLLO in held and APOLLO_LOOP_FILE.exists():
         SPECS.append((APOLLO, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1837532-navscope"))
         EXACT.add(spec["identifier"])
 
+# Ares Strategic Income: printed company-column, missing PIK and mislabeled unit facts.
+ASIF_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001918712.json"
+context_by_spec = {}
+if ASIF in held and ASIF_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(ASIF_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((ASIF, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1918712-navscope"))
+        EXACT.add(spec["identifier"])
+        context_by_spec[(ASIF, spec["quarter"], spec["identifier"], tuple(sorted(spec["fields"])))] = spec_context(spec)
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue
+    context = context_by_spec.get((cik, quarter, phrase, tuple(sorted(fields))), "")
     author, added_on = (("v05-decision-" + decision[0],
                          "2026-10-13" if "D-145" <= decision[0] < "D-999" and decision[0][2:3] != "0" else
                          "2026-10-11" if decision[0] >= "D-099" or decision[0][2:3] != "0" else
                          "2026-10-09" if decision[0] >= "D-074" else "2026-10-08" if decision[0] >= "D-046" else "2026-10-07")
                         if decision else ("v05-decision-D-021", "2026-10-06"))
+    if cik == ASIF and decision and decision[0] == "D-1918712-navscope":
+        added_on = "2026-10-20"
     rows = con.execute(f"""SELECT DISTINCT accession_number, CAST(bdc_investment_identifier AS VARCHAR)
         FROM read_parquet('{S}/private_markets_holdings.parquet') WHERE lpad(CAST(cik AS VARCHAR),10,'0') = ?
           AND CAST(report_date AS VARCHAR)[:10] = ?
           AND (contains(CAST(bdc_investment_identifier AS VARCHAR), ?) AND NOT ? OR CAST(bdc_investment_identifier AS VARCHAR) = ?)
-          AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL""", [cik, quarter, phrase, phrase in EXACT, phrase]).fetchall()
+          AND (? = '' OR src_context_id = ?)
+          AND TRY_CAST(fair_value AS DOUBLE) IS NOT NULL""", [cik, quarter, phrase, phrase in EXACT, phrase, context, context]).fetchall()
     # the JV schedule may repeat a name; keep the row the finding is about (cost of 1,000 for Amergin)
     if len(rows) != 1:
         raise SystemExit("expected one row for %s %s %r, found %d: %s" % (cik, quarter, phrase, len(rows), rows[:4]))
     accession, identifier = rows[0]
     for field, value in fields.items():
-        key = (cik, quarter, accession, identifier, field)
+        key = (cik, quarter, accession, identifier, field, context)
         if key in existing:
             continue
-        writer.writerow([cik, quarter, accession, identifier, field, value, reason,
-                         "data/raw/filings/bdc_html/%s/%s.html" % (cik.lstrip("0"), accession.replace("-", "")),
-                         author, added_on])
+        writer.writerow(append_record(columns, cik=cik, quarter=quarter, accession=accession,
+            identifier=identifier, field=field, value=value, reason=reason,
+            evidence="data/raw/filings/bdc_html/%s/%s.html" % (cik.lstrip("0"), accession.replace("-", "")),
+            author=author, added_on=added_on, context=context))
         added += 1
     print("  %s %s %-60s %s" % (cik, quarter, identifier[:60], ", ".join("%s=%s" % kv for kv in fields.items())))
 print("corrections to add:", added)

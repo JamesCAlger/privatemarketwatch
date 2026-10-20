@@ -6,6 +6,7 @@
   "source": "bdc_xbrl",
   "dispatch": {
     "rule_prefix": "ARES_STRATEGIC_INCOME",
+    "shares_pow10_normalise": false,
     "prefix_rules": {},
     "flat_schedule": true,
     "leaf_markers_by_family": {},
@@ -281,6 +282,23 @@
       "SARON=SARON",
       "CIBOR=CIBOR",
       "STIBOR=STIBOR"
+    ],
+    "context_identifiers": [
+      "0001918712-25-000030 c-806 => OAKC 2021-16, Collaterized loan obligation"
+    ],
+    "untagged_values": [
+      "0001918712-25-000030 c-806 principal_amount 1210000"
+    ],
+    "rate_verification_anchors": [
+      {
+        "accession": "0001918712-25-000030",
+        "context": "c-806",
+        "field": "interest_rate",
+        "source_context": "c-805",
+        "source_concept": "InvestmentInterestRate",
+        "source_units": "fraction",
+        "evidence": "OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)"
+      }
     ]
   }
 }

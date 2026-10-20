@@ -1,0 +1,1544 @@
+{
+  "reviewer_id": "/root/asif_review_sol",
+  "report_digest": "ecebd7ce97b84140c87a04d821e45f0dd4a602b06fe55f7c719711f80b502054",
+  "finding_reviews": [
+    {
+      "finding_id": "BDCSRC_0001918712_2025-03-31_BLOCKING_SOURCE_SHORT_PLAIN_UNRESOLVED_c19cff51cf",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the single source-only residual from source_reconciliation_source_only_detail.csv and source_reconciliation_detail.csv: 0001918712-25-000030/c-804, 3,477,200 FV. Original HTML has blank Company/Investment cells and only 3,545.0 cost/3,477.2 FV. Adjacent c802/c803 real OAKC 2021-9 tranches sum exactly to these amounts, while next named OAKC 2021-16 has c805 rate/principal and c806 cost/FV on the same physical printed row. Final output removes only c804, restores c806 953,100 FV/1,053,600 cost/1,210,000 principal/11.50%/10-2034, and preserves c802 OAKC 2021-9 through explicit context scope. This supports false_alarm for a missing-position detector, not automatic disposition. A member-wide exemption would reach real later positions; exact-context acceptance changes remain for the owner.",
+      "verified_row_keys": [
+        "0001918712-25-000030/c-804/source-only"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-25-000030",
+          "text": "3,545.0 3,477.2"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_380f28aac563",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 23 rows for 2025-06-30. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001918712-25-000065/c-651/ROW-fb75c6de4c56e3cc",
+        "0001918712-25-000065/c-702/ROW-e38a048d454dd7e5",
+        "0001918712-25-000065/c-929/ROW-0c97fb9bd8eb9d39",
+        "0001918712-25-000065/c-953/ROW-03f8f0749ab96411",
+        "0001918712-25-000065/c-955/ROW-0826a1c1317a7a17",
+        "0001918712-25-000065/c-761/ROW-d95139b543ad80ae",
+        "0001918712-25-000065/c-964/ROW-57d31c3b79041901",
+        "0001918712-25-000065/c-793/ROW-0db4d21177747195",
+        "0001918712-25-000065/c-795/ROW-137de1f5e1bee54c",
+        "0001918712-25-000065/c-849/ROW-6cb89109e3297cf5",
+        "0001918712-25-000065/c-1043/ROW-9e6941cd308a7daa",
+        "0001918712-25-000065/c-855/ROW-0c1cea7689b7fe11",
+        "0001918712-25-000065/c-1263/ROW-b069ba6fd52e2351",
+        "0001918712-25-000065/c-1272/ROW-f3d1a2353e0da4ba",
+        "0001918712-25-000065/c-1266/ROW-d71287bb64580c56",
+        "0001918712-25-000065/c-1267/ROW-69817709040ffbc2",
+        "0001918712-25-000065/c-990/ROW-da3e61a5773cec84",
+        "0001918712-25-000065/c-183/ROW-fa6c0d41a80ef276",
+        "0001918712-25-000065/c-904/ROW-0005574c35e65ea0",
+        "0001918712-25-000065/c-905/ROW-f09189fe3e1ed0a7",
+        "0001918712-25-000065/c-906/ROW-0641f52ddc476812",
+        "0001918712-25-000065/c-907/ROW-6b864cb83e8e29b4",
+        "0001918712-25-000065/c-189/ROW-3abeeb6e51e19ad5"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-25-000065",
+          "text": "BX 2024-SLCT Commercial mortgage-backed security 7.72 % SOFR (M) 3.39 % 01/2042 24,185.0 24,130.5 24,080.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "CPFTR 2025-1 Commercial mortgage-backed security 8.38 % 07/2026 35,507.4 35,507.4 35,770.7 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Cannon Bridge Designated Activity Company (10) Private asset-backed investment 5.40 % PIK Euribor (Q) 2.65 % 10/2033 1,296.7 1,200.2 1,291.8 (2)(5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Harbourvest Global Private Equity Limited (10) Private asset-backed investment 7.82 % SOFR (Q) 3.50 % 06/2029 30,929.2 30,162.9 30,929.2 (12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2030 1,290.8 1,279.4 1,290.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "MCF CLO 12 LLC Private asset-backed investment 8.37 % SOFR (Q) 4.05 % 02/2034 19,900.0 19,900.0 19,900.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 29,990.3 15,672.1 15,678.7 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "MidOcean CLO Equity Fund I, LP (11) Private asset-backed investment 9.00 % 6,330.4 6,330.4 6,324.1 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "NCMF 2025-MFS Private asset-backed investment 7.53 % 06/2033 24,530.0 24,250.6 24,715.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "OKANAGAN 2024-1 Private asset-backed investment 12.13 % SOFR (M) 8.25 % 12/2032 23,591.9 23,631.5 23,591.9 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Orange Barrel Media, LLC/IKE Smart City, LLC (10) Private asset-backed investment 10.08 % SOFR (M) 5.75 % 03/2027 2,852.0 2,831.9 2,852.0 (2)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "PROSE 2024-3 Private asset-backed investment 8.85 % 10/2054 25,000.0 25,000.0 25,413.7 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Pallas Funding Trust No.2 Private asset-backed investment 11.62 % BBSY (M) 7.85 % 02/2027 1,407.1 1,388.2 1,407.1 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "WhiteWater Matterhorn Holdings, LLC First lien senior secured loan 6.57 % SOFR (Q) 2.25 % 06/2032 4,000.0 3,980.1 3,994.2 (2)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Pallas NZ Funding Trust No. 1 (10) Private asset-backed investment 9.90 % BBSY (M) 6.15 % 07/2026 2,283.0 2,230.6 2,283.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Quintain Investments Holdings Limited (11) Private asset-backed investment 08/2031 32,775.6 42,469.6 48,861.1 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Sunbit Receivables Trust IV (10) Private asset-backed investment 11.33 % SOFR (M) 7.00 % 04/2029 1,638.0 1,618.5 1,617.5 (7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Switch BBF, LLC Private asset-backed investment 11.42 % SOFR (S) 7.17 % 08/2027 1,957.2 1,957.2 1,957.2 (2)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "THPT 2023-THL Commercial mortgage-backed security 10.40 % 12/2034 5,000.0 4,989.8 5,047.1 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Tikehau Green Diamond II CFO Equity LP (11) Private asset-backed investment 9.99 % Euribor (Q) 7.75 % 3,268.2 3,341.0 3,786.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Tikehau Ruby CLO Equity LP (11) Private asset-backed investment 12.16 % Euribor (Q) 10.00 % 1,613.5 780.4 805.5 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Tikehau Topaz LP (11) Private asset-backed investment 13.27 % SOFR (Q) 9.00 % 3,104.6 2,480.3 2,501.7 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Vantage Data Centers Europe S.a r.l. (10) Private asset-backed investment 8.87 % Euribor (M) 6.85 % 05/2029 2,529.4 2,283.8 2,529.4 (2)(5)(12)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6a62c3cf4cf9",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 27 rows for 2025-09-30. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001918712-25-000092/c-648/ROW-1e3c39bd64977cd0",
+        "0001918712-25-000092/c-714/ROW-33b411503091a0a7",
+        "0001918712-25-000092/c-716/ROW-24a154105b4924a4",
+        "0001918712-25-000092/c-779/ROW-db2a499941f2a6b3",
+        "0001918712-25-000092/c-541/ROW-e4af0456d4f50a3f",
+        "0001918712-25-000092/c-1422/ROW-e2cb0c04a5cc2c30",
+        "0001918712-25-000092/c-566/ROW-0a8e346cc30eca73",
+        "0001918712-25-000092/c-569/ROW-3fafc026685125d4",
+        "0001918712-25-000092/c-847/ROW-ffc733af3f72755e",
+        "0001918712-25-000092/c-577/ROW-897997225db5f7bb",
+        "0001918712-25-000092/c-880/ROW-1c4d6e3bad8b20f8",
+        "0001918712-25-000092/c-882/ROW-1054f16512ff226a",
+        "0001918712-25-000092/c-938/ROW-016df6b99b3c887f",
+        "0001918712-25-000092/c-1230/ROW-ed621e8c9c50837a",
+        "0001918712-25-000092/c-949/ROW-f438595704c2704a",
+        "0001918712-25-000092/c-1492/ROW-b2c1434dacb88920",
+        "0001918712-25-000092/c-1495/ROW-a9bc88a1a6800068",
+        "0001918712-25-000092/c-1496/ROW-41f1834cab973de5",
+        "0001918712-25-000092/c-614/ROW-0994b86d5b197856",
+        "0001918712-25-000092/c-201/ROW-be68d69ac9fb1184",
+        "0001918712-25-000092/c-1005/ROW-810ea3362e5cfaa5",
+        "0001918712-25-000092/c-619/ROW-ec0bf5e1b682dd00",
+        "0001918712-25-000092/c-1006/ROW-724aef6d968f3686",
+        "0001918712-25-000092/c-1007/ROW-e71e60698a689d62",
+        "0001918712-25-000092/c-1008/ROW-c35ce1b41530f33b",
+        "0001918712-25-000092/c-212/ROW-f343d6ee6d8d7bc7",
+        "0001918712-25-000092/c-630/ROW-957b5b6c6729363a"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-25-000092",
+          "text": "ALP CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P. (11) Private asset-backed investment 12.24 % 07/2037 9,770.0 9,770.0 9,770.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "BX 2024-SLCT Commercial mortgage-backed security 7.54 % Euribor (M) 5.29 % 01/2042 24,185.0 24,127.1 24,125.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "CAIF 1 Commercial mortgage-backed security 9.72 % SONIA (Q) 5.75 % 19,938.0 26,125.1 26,700.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "CPFTR 2025-1 Commercial mortgage-backed security 8.38 % 07/2026 34,976.6 34,976.6 35,081.6 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Cannon Bridge Designated Activity Company (10) Private asset-backed investment 4.90 % PIK Euribor (Q) 2.65 % 10/2033 1,309.2 1,222.9 1,304.0 (2)(5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Dynamo Midco B.V. First lien senior secured loan 7.78 % SOFR (M) 3.50 % 10/2031 13,476.7 13,480.3 13,510.4 (2)(5)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Harbourvest Global Private Equity Limited (10) Private asset-backed investment 7.65 % SOFR (Q) 3.50 % 06/2029 32,500.0 31,782.9 32,500.0 (12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2030 1,184.0 1,174.1 1,184.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "MCF CLO 12 LLC Private asset-backed investment 8.38 % SOFR (Q) 4.05 % 02/2034 19,900.0 19,900.0 19,900.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 13,620.9 13,620.9 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "MidOcean CLO Equity Fund I, LP Private asset-backed investment 9.00 % 10/2024 35,996,269 35,966.6 35,996.3 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "NCMF 2025-MFS Private asset-backed investment 7.78 % 06/2033 24,530.0 24,253.3 24,878.3 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "OKANAGAN 2024-1 Private asset-backed investment 12.48 % SOFR (M) 8.25 % 12/2032 22,439.1 22,476.8 21,988.1 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Orange Barrel Media, LLC/IKE Smart City, LLC (10) Private asset-backed investment 10.11 % SOFR (M) 5.75 % 10/2027 3,111.1 3,083.8 3,111.1 (2)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "PROSE 2024-3 Private asset-backed investment 8.85 % 10/2054 25,000.0 25,000.0 25,831.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Pallas Funding Trust No.2 Private asset-backed investment 11.42 % BBSY (M) 7.85 % 02/2027 1,415.3 1,388.9 1,415.3 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Pallas NZ Funding Trust No. 1 Private asset-backed investment 9.36 % BBSY (M) 6.15 % 07/2026 2,172.5 2,231.3 2,172.5 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Quintain Investments Holdings Limited (11) Private asset-backed investment 08/2024 08/2031 34,132,865 44,309.2 51,150.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Sunbit Receivables Trust IV (10) Private asset-backed investment 11.17 % SOFR (M) 7.00 % 04/2029 1,472.1 1,453.9 1,472.1 (7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Switch BBF, LLC Private asset-backed investment 11.42 % SOFR (S) 7.17 % 08/2027 1,957.2 1,957.2 1,957.2 (2)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "THPT 2023-THL Commercial mortgage-backed security 10.74 % 12/2034 5,000.0 4,988.9 5,051.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "TI VI Holdings 1, L.P. (11) Private asset-backed investment 9.31 % PIK 06/2025 3,292 3,387.8 3,341.7 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Tikehau Green Diamond II CFO Equity LP (11) Private asset-backed investment 9.73 % Euribor (Q) 7.75 % 12/2024 3,268,225 2,823.7 3,318.4 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Tikehau Ruby CLO Equity LP (11) Private asset-backed investment 12.02 % Euribor (Q) 10.00 % 03/2024 1,815,364 705.3 781.9 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Tikehau Topaz LP (11) Private asset-backed investment 13.30 % SOFR (Q) 9.00 % 06/2024 3,104,580 2,382.7 2,417.2 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Vantage Data Centers Europe S.a r.l. (10) Private asset-backed investment 8.66 % Euribor (M) 6.75 % 05/2029 2,263.0 2,052.7 2,263.0 (2)(5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "WPCG Aspire Holdings, LLC (10) Private asset-backed investment 11.50 % 07/2033 4,657.6 4,004.7 3,987.1 (2)(5)(12)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7183b366f41a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the single source-only residual from source_reconciliation_source_only_detail.csv and source_reconciliation_detail.csv: 0001918712-25-000030/c-804, 3,477,200 FV. Original HTML has blank Company/Investment cells and only 3,545.0 cost/3,477.2 FV. Adjacent c802/c803 real OAKC 2021-9 tranches sum exactly to these amounts, while next named OAKC 2021-16 has c805 rate/principal and c806 cost/FV on the same physical printed row. Final output removes only c804, restores c806 953,100 FV/1,053,600 cost/1,210,000 principal/11.50%/10-2034, and preserves c802 OAKC 2021-9 through explicit context scope. This supports false_alarm for a missing-position detector, not automatic disposition. A member-wide exemption would reach real later positions; exact-context acceptance changes remain for the owner.",
+      "verified_row_keys": [
+        "0001918712-25-000030/c-804/source-only"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-25-000030",
+          "text": "3,545.0 3,477.2"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_83e77dc773bc",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 7 rows for 2024-03-31. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001918712-24-000069/c-263/ROW-541e0156b19c464c",
+        "0001918712-24-000069/c-264/ROW-747ee53b9acf87ca",
+        "0001918712-24-000069/c-269/ROW-391842f4c33c6fb1",
+        "0001918712-24-000069/c-343/ROW-b710469ba4cd1215",
+        "0001918712-24-000069/c-536/ROW-13adb8027baf5767",
+        "0001918712-24-000069/c-290/ROW-cff7aeb55f17737b",
+        "0001918712-24-000069/c-470/ROW-f56e518485662337"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-24-000069",
+          "text": "HV Chimera LLC Private asset-backed investment 8.33 % SOFR (Q) 2.80 % 08/2026 2,200.5 2,171.9 2,184.0 (3)(6)"
+        },
+        {
+          "accession": "0001918712-24-000069",
+          "text": "Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2030 1,802.9 1,782.9 1,802.9 (3)(6)"
+        },
+        {
+          "accession": "0001918712-24-000069",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 29,990,339 28,711.9 28,437.0 (3)(6)"
+        },
+        {
+          "accession": "0001918712-24-000069",
+          "text": "Orange Barrel Media, LLC/IKE Smart City, LLC (10) Private asset-backed investment 11.08 % SOFR (M) 5.75 % 03/2027 2,852.0 2,817.3 2,816.4 (5)(6)"
+        },
+        {
+          "accession": "0001918712-24-000069",
+          "text": "Pallas Funding Trust No.2 (10) Private asset-backed investment 2.75 % 02/2027 2,646.4 2,622.3 2,631.3 (3)(6)"
+        },
+        {
+          "accession": "0001918712-24-000069",
+          "text": "Sunbit Receivables Trust IV (10) Private asset-backed investment 12.59 % SOFR (M) 7.25 % 12/2026 1,106.1 1,081.6 1,092.6 (5)(6)"
+        },
+        {
+          "accession": "0001918712-24-000069",
+          "text": "THPT 2023-THL Commercial mortgage-backed security 10.40 % SOFR (M) 5.00 % 12/2034 5,000.0 4,987.7 5,042.5 (3)(6)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_879a09eaf0ee",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 12 rows for 2024-06-30. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001918712-24-000099/c-57/ROW-7c8c77cc6311303f",
+        "0001918712-24-000099/c-332/ROW-d9c3f5c95a5f88ee",
+        "0001918712-24-000099/c-330/ROW-30873ae2ef9f6b9f",
+        "0001918712-24-000099/c-333/ROW-005c8e0957bf70ae",
+        "0001918712-24-000099/c-337/ROW-d8fb5f24144bcfdb",
+        "0001918712-24-000099/c-470/ROW-27b554e1e886dc96",
+        "0001918712-24-000099/c-658/ROW-ee263ab96404acb5",
+        "0001918712-24-000099/c-354/ROW-f7150c638732eecf",
+        "0001918712-24-000099/c-577/ROW-121310082dc38f72",
+        "0001918712-24-000099/c-578/ROW-517c1a2dbe012688",
+        "0001918712-24-000099/c-579/ROW-fd100965cbeee47b",
+        "0001918712-24-000099/c-674/ROW-87e42e6f7a10d00c"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Corporate bond 8.25 % 06/2032 100.0 100.0 101.9 (2)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "HV Chimera LLC Private asset-backed investment 8.33 % SOFR (Q) 2.80 % 08/2026 2,200.5 2,174.9 2,195.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Harbourvest Global Private Equity Limited (10) Private asset-backed investment 8.84 % SOFR (Q) 3.50 % 06/2029 26,000.0 25,038.9 25,025.0 (12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2030 1,638.8 1,621.4 1,638.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 25,940.5 25,966.4 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Orange Barrel Media, LLC/IKE Smart City, LLC (10) Private asset-backed investment 11.09 % SOFR (M) 5.75 % 03/2027 3,472.0 3,416.7 3,441.0 (7)(12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Pallas Funding Trust No.2 (10) Private asset-backed investment 7.04 % BBSY (M) 2.75 % 02/2027 2,707.6 2,623.6 2,707.6 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Sunbit Receivables Trust IV (10) Private asset-backed investment 12.60 % SOFR (M) 7.25 % 12/2026 1,323.9 1,301.6 1,323.9 (7)(12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "THPT 2023-THL Commercial mortgage-backed security 10.74 % 12/2034 5,000.0 4,988.5 5,026.3 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Tikehau Ruby CLO Equity LP (11) Private asset-backed investment 13.71 % Euribor (Q) 10.00 % 03/2024 1,427,387 1,415.0 1,397.7 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Tikehau Topaz LP (11) Private asset-backed investment 9.00 % 06/2024 2,020,160 1,989.9 1,989.9 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Vantage Data Centers Europe S.a r.l. (10) Private asset-backed investment 10.40 % Euribor (M) 6.75 % 05/2029 604.4 534.9 528.8 (5)(12)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a6977109efb4",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 15 rows for 2024-09-30. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001918712-24-000139/c-284/ROW-40fb5acc7dbf6327",
+        "0001918712-24-000139/c-445/ROW-f9e7eba5bf1ca269",
+        "0001918712-24-000139/c-443/ROW-5623830ac9d02ff0",
+        "0001918712-24-000139/c-446/ROW-406495400a32ff01",
+        "0001918712-24-000139/c-450/ROW-4c746b4cf6da690b",
+        "0001918712-24-000139/c-534/ROW-832033d8eeec0e55",
+        "0001918712-24-000139/c-762/ROW-f35deb4f182d54c3",
+        "0001918712-24-000139/c-766/ROW-7328c470441eb3ab",
+        "0001918712-24-000139/c-767/ROW-f1a2b25bfb32a4a9",
+        "0001918712-24-000139/c-468/ROW-7fbbe1c68c76e2b0",
+        "0001918712-24-000139/c-725/ROW-3b872aa91be753ec",
+        "0001918712-24-000139/c-630/ROW-9869ef0294ac9216",
+        "0001918712-24-000139/c-631/ROW-11ce8068bce36590",
+        "0001918712-24-000139/c-632/ROW-4caae89810f53ac3",
+        "0001918712-24-000139/c-792/ROW-f7b7e11cf1d8a3c9"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-24-000139",
+          "text": "GCM HVAC Holdco, LLC and GCM HVAC Topco, LLC Private asset backed investment 14.00 % 09/2031 2,702.7 2,640.2 2,639.9 (12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "HV Chimera LLC Private asset backed investment 7.60 % SOFR (Q) 2.80 % 08/2026 1,946.3 1,926.3 1,946.3 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Harbourvest Global Private Equity Limited (10) Private asset backed investment 8.51 % SOFR (Q) 3.50 % 06/2029 26,000.0 25,088.0 26,000.0 (12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Isthmus Capital LLC Private asset backed investment 9.50 % 06/2030 1,591.5 1,575.3 1,591.5 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset backed investment 11.00 % 02/2024 29,990,339 23,197.9 23,221.1 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Orange Barrel Media, LLC/IKE Smart City, LLC (10) Private asset backed investment 10.60 % SOFR (M) 5.75 % 03/2027 4,141.6 4,091.4 4,141.6 (7)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Pallas Funding Trust No.2 (10) Private asset backed investment 7.05 % BBSY (M) 2.75 % 02/2027 2,931.6 2,746.3 2,931.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Pallas NZ Funding Trust No. 1 Private asset backed investment 11.49 % BBSY (M) 6.15 % 07/2026 1,169.0 1,108.7 1,163.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Quintain Investments Holdings Limited (10)(11) Private asset backed investment 11.00 % 08/2024 08/2031 19,338,758 25,198.4 25,870.4 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Sunbit Receivables Trust IV (10) Private asset backed investment 12.27 % SOFR (M) 7.25 % 12/2026 1,620.0 1,600.0 1,620.0 (7)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Switch Master Holdco LLC Private asset backed investment 7.84 % SOFR (S) 2.50 % 12/2025 20,052.0 20,052.0 20,052.0 (12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "THPT 2023-THL Commercial mortgage-backed security 10.74 % 12/2034 5,000.0 4,987.9 5,137.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Tikehau Ruby CLO Equity LP (10)(11) Private asset backed investment 13.28 % Euribor (Q) 10.00 % 03/2024 1,613,487 1,515.1 1,462.8 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Tikehau Topaz LP (10)(11) Private asset backed investment 13.60 % SOFR (Q) 9.00 % 06/2024 2,562,960 2,366.7 2,361.0 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Vantage Data Centers Europe S.a r.l. (10) Private asset backed investment 10.13 % Euribor (M) 6.75 % 05/2029 1,690.4 1,595.1 1,611.8 (5)(12)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d01b971419cd",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 3 rows for 2026-06-30. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001628280-26-054923/c-1107/ROW-bf74169cebc9f344",
+        "0001628280-26-054923/c-623/ROW-6a2e19d0289e27f3",
+        "0001628280-26-054923/c-704/ROW-4d240bd28c914a58"
+      ],
+      "evidence": [
+        {
+          "accession": "0001628280-26-054923",
+          "text": "ASP CFO 2026, L.P. (11) Private asset-backed investment 9.00 % 03/2041 3,175.0 3,175.0 3,175.0 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-054923",
+          "text": "Commercial mortgage-backed security 10.90 % SONIA (Q) 7.15 % 08/2035 13,422.5 13,063.1 13,182.1 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-054923",
+          "text": "Residential mortgage-backed security 1.63 % 04/2066 1,276,413,070 36,154.4 36,141.1 (6)(13)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d3ec85fcac98",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 20 rows for 2024-12-31. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001918712-25-000014/c-711/ROW-5539524085c84227",
+        "0001918712-25-000014/c-501/ROW-a65cc6946bcf2a9b",
+        "0001918712-25-000014/c-432/ROW-25d5293f6740a9ce",
+        "0001918712-25-000014/c-523/ROW-0b79dbdf55ee4973",
+        "0001918712-25-000014/c-521/ROW-fba7fb1f23f4a8ca",
+        "0001918712-25-000014/c-524/ROW-b33524ef3bfa7b48",
+        "0001918712-25-000014/c-537/ROW-6b3f262f98a34f08",
+        "0001918712-25-000014/c-817/ROW-bc63e0609882198f",
+        "0001918712-25-000014/c-644/ROW-cdbad22ca3ec744c",
+        "0001918712-25-000014/c-818/ROW-0a42694d77607e9a",
+        "0001918712-25-000014/c-995/ROW-70da945550f99433",
+        "0001918712-25-000014/c-998/ROW-e02982447415c5cb",
+        "0001918712-25-000014/c-999/ROW-f6ee482872ac61ad",
+        "0001918712-25-000014/c-565/ROW-521482bca6b4a2b9",
+        "0001918712-25-000014/c-941/ROW-f17bc3cf207b047a",
+        "0001918712-25-000014/c-832/ROW-459b313154801662",
+        "0001918712-25-000014/c-833/ROW-d86eb1ecf6546d41",
+        "0001918712-25-000014/c-834/ROW-b6e5891d104e957d",
+        "0001918712-25-000014/c-835/ROW-36a2b7c18b3b50ba",
+        "0001918712-25-000014/c-1004/ROW-c8ccf6cc186d83e0"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-25-000014",
+          "text": "BX 2024-SLCT Commercial mortgage-backed security 7.84 % SOFR (M) 3.39 % 01/2040 24,185.0 24,124.5 24,139.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Cannon Bridge Designated Activity Company (10) Private asset-backed investment 10.56 % Euribor (S) 7.50 % 10/2033 678.9 695.0 680.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "GCM HVAC Holdco, LLC and GCM HVAC Topco, LLC First lien senior secured loan 14.00 % 09/2031 2,702.7 2,642.5 2,639.9 (12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "HV Chimera LLC Private asset-backed investment 7.33 % SOFR (Q) 2.80 % 11/2023 08/2026 1,504,082 1,490.8 1,504.1 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Harbourvest Global Private Equity Limited (10) Private asset-backed investment 7.97 % SOFR (Q) 3.50 % 06/2029 26,000.0 25,137.1 26,000.0 (12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2023 06/2030 1,500,888 1,486.3 1,500.9 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 20,440.1 20,393.4 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "OKANAGAN 2024-1 Private asset-backed investment 12.55 % SOFR (M) 8.25 % 12/2032 30,300.0 30,350.9 30,300.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Orange Barrel Media, LLC/IKE Smart City, LLC (10) Private asset-backed investment 10.11 % SOFR (M) 5.75 % 03/2027 2,852.0 2,826.1 2,852.0 (7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "PROSE 2024-3 Private asset-backed investment 8.85 % 10/2054 25,000.0 25,000.0 24,526.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Pallas Funding Trust No.2 (10) Private asset-backed investment 12.16 % BBSY (M) 7.85 % 02/2027 1,323.7 1,385.8 1,323.7 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Pallas NZ Funding Trust No. 1 (10) Private asset-backed investment 11.49 % BBSY (M) 6.15 % 07/2026 1,189.6 1,280.3 1,189.6 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Quintain Investments Holdings Limited (11) Private asset-backed investment 11.00 % 08/2024 08/2031 31,418,350 40,675.9 39,302.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Sunbit Receivables Trust IV (10) Private asset-backed investment 11.56 % SOFR (M) 7.25 % 12/2023 12/2026 1,620,000 1,602.3 1,620.0 (7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Switch Master Holdco LLC Private asset-backed investment 7.44 % SOFR (S) 3.00 % 12/2025 20,052.0 20,052.0 20,052.0 (12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "THPT 2023-THL Commercial mortgage-backed security 10.40 % 12/2034 5,000.0 4,987.5 5,021.5 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Tikehau Green Diamond II CFO Equity LP (11) Private asset-backed investment 10.60 % Euribor (Q) 7.75 % 12/2024 2,791,938 2,843.8 2,836.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Tikehau Ruby CLO Equity LP (11) Private asset-backed investment 13.06 % Euribor (Q) 10.00 % 03/2024 1,613,487 1,342.0 1,271.4 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Tikehau Topaz LP (11) Private asset-backed investment 13.57 % SOFR (Q) 9.00 % 06/2024 2,562,960 2,244.4 2,247.7 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Vantage Data Centers Europe S.a r.l. (10) Private asset-backed investment 9.61 % Euribor (M) 6.75 % 05/2029 1,995.6 2,029.4 1,995.6 (5)(12)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d53bef61568a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 32 rows for 2026-03-31. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001628280-26-034133/c-988/ROW-16865e8c96860e58",
+        "0001628280-26-034133/c-625/ROW-397a6741b503a837",
+        "0001628280-26-034133/c-687/ROW-6f4bcb1c8d62c357",
+        "0001628280-26-034133/c-688/ROW-a86201061178fb27",
+        "0001628280-26-034133/c-742/ROW-eadba669441e1267",
+        "0001628280-26-034133/c-994/ROW-e2c2855c848f61fa",
+        "0001628280-26-034133/c-1577/ROW-5a24472c5dbba19c",
+        "0001628280-26-034133/c-1531/ROW-062ca3fe2ccd4133",
+        "0001628280-26-034133/c-767/ROW-9120b2cacd944dde",
+        "0001628280-26-034133/c-1021/ROW-c2ce6d5520e3cf72",
+        "0001628280-26-034133/c-1024/ROW-6e03bf015baf9c73",
+        "0001628280-26-034133/c-778/ROW-ce3ebe094f11091c",
+        "0001628280-26-034133/c-1027/ROW-c9495d98703c36f2",
+        "0001628280-26-034133/c-808/ROW-61038ba1f03fa803",
+        "0001628280-26-034133/c-1034/ROW-fabcc03a163d90dd",
+        "0001628280-26-034133/c-843/ROW-974f8e6c92c06f42",
+        "0001628280-26-034133/c-892/ROW-bdd77595f0c3adb6",
+        "0001628280-26-034133/c-1333/ROW-3212525e2c9ac204",
+        "0001628280-26-034133/c-1588/ROW-d15857f4e53fcfaa",
+        "0001628280-26-034133/c-1589/ROW-073a8824a56a9a8f",
+        "0001628280-26-034133/c-1590/ROW-981b7a2a7f954d0a",
+        "0001628280-26-034133/c-942/ROW-57218ba19a72dbf5",
+        "0001628280-26-034133/c-1072/ROW-4baadccb5c34f252",
+        "0001628280-26-034133/c-1076/ROW-fa83cd9d6381cc7c",
+        "0001628280-26-034133/c-210/ROW-57e5dd687d9aff5f",
+        "0001628280-26-034133/c-956/ROW-24f0969e36b41cf0",
+        "0001628280-26-034133/c-1081/ROW-350136ba37470229",
+        "0001628280-26-034133/c-957/ROW-4b9ee87f54051d3c",
+        "0001628280-26-034133/c-958/ROW-7d7ed50ef89aba6c",
+        "0001628280-26-034133/c-959/ROW-bd02297119d37ff2",
+        "0001628280-26-034133/c-1583/ROW-b521c77c1efae4fe",
+        "0001628280-26-034133/c-1092/ROW-b55d2d07fca167f0"
+      ],
+      "evidence": [
+        {
+          "accession": "0001628280-26-034133",
+          "text": "ASP CFO 2026, L.P. (11) Private asset-backed investment 9.00 % 03/2041 2,540.0 2,540.0 2,540.0 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P. (12) Private asset-backed investment 12.24 % 07/2037 9,770.0 9,770.0 9,770.0 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "CAIF 1 Commercial mortgage-backed security 9.49 % SONIA (Q) 5.75 % 08/2035 26,378.0 26,131.8 26,221.5 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Commercial mortgage-backed security 10.89 % SONIA (Q) 7.15 % 08/2035 13,396.7 13,053.5 13,133.8 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "CPFTR 2025-1 Residential mortgage-backed security 8.38 % 07/2026 27,865.7 27,865.7 27,941.7 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Cannon Bridge Designated Activity Company (11) Private asset-backed investment 14.10 % Euribor (Q) 12.00 % 07/2027 2,449.1 2,483.4 2,374.4 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Dobson Ventures, LLC Private asset-backed investment 11.50 % 03/2029 4,960.0 4,935.8 4,935.2 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Dynamo Midco B.V. First lien senior secured loan 6.92 % SOFR (M) 3.25 % 09/2031 18,384.4 18,416.1 15,971.5 (2)(6)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "HarbourVest Structured Solutions 2025 L.P. and HarbourVest Structured Solutions 2025 Feeder L.P. (11)(12) Private asset-backed investment 12.25 % 03/2041 3,489.9 3,421.2 3,420.1 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Harbourvest Global Private Equity Limited (11) Private asset-backed investment 7.26 % SOFR (Q) 3.50 % 06/2029 30,875.0 30,255.1 30,875.0 (13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2030 965.8 958.5 965.8 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Kohlberg Private Credit Investors Rated Feeder-L, L.L.C. (11)(12) Private asset-backed investment 13.02 % SOFR (S) 9.25 % 12/2036 3,966.2 3,870.0 3,867.1 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "MCF CLO 12 LLC Private asset-backed investment 7.72 % SOFR (Q) 4.05 % 02/2034 19,900.0 19,900.0 19,820.4 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 10,145.4 10,145.4 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "MidOcean CLO Equity Fund I, LP Private asset-backed investment 9.00 % 10/2024 35,996,269 35,966.6 35,996.3 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "OKANAGAN 2024-1 Private asset-backed investment 10.80 % SOFR (M) 8.25 % 12/2032 17,856.5 17,886.5 17,231.5 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Orange Barrel Media, LLC/IKE Smart City, LLC (11) Private asset-backed investment 9.42 % SOFR (M) 5.75 % 10/2027 3,908.0 3,887.3 3,908.0 (2)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Pallas Australia Feeder Trust Private asset-backed investment 10.03 % BBSY (M) 6.46 % 01/2028 2,844.9 2,706.3 2,844.9 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Pallas NZ Funding Trust No. 1 Private asset-backed investment 9.36 % BBSY (M) 6.15 % 07/2026 2,150.0 2,232.9 2,150.0 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Quintain Investments Holdings Limited (12) Private asset-backed investment 08/2024 08/2031 38,801,830 50,541.2 59,636.3 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "StepStone Boulder II, L.P. and StepStone Boulder II Equity, L.P. (11)(12) Private asset-backed investment 12.08 % SOFR (S) 8.38 % 04/2041 7,976.4 7,976.4 7,976.4 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC, and Steward Partners New Holdings, LLC (11) First lien senior secured loan 8.42 % SOFR (M) 4.75 % 10/2028 14,131.7 14,031.1 14,131.7 (2)(6)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Sunbit Receivables Trust IV (11) Private asset-backed investment 10.67 % SOFR (M) 7.00 % 04/2029 1,677.9 1,662.3 1,677.9 (8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Switch BBF, LLC Private asset-backed investment 10.84 % SOFR (S) 7.17 % 08/2027 1,957.2 1,957.2 1,957.2 (2)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "THPT 2023-THL Commercial mortgage-backed security 10.40 % 12/2034 5,000.0 4,990.2 5,045.1 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "TI VI Holdings 1, L.P. (12) Private asset-backed investment 9.31 % PIK 06/2025 4,145 4,336.8 4,406.5 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Tikehau Green Diamond II CFO Equity LP (12) Private asset-backed investment 9.77 % Euribor (Q) 7.75 % 12/2024 12/2030 3,405,672 2,419.3 2,865.6 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Tikehau Ruby CLO Equity LP (12) Private asset-backed investment 12.02 % Euribor (Q) 10.00 % 03/2024 1,815,364 424.6 491.0 (6)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Tikehau Topaz LP (12) Private asset-backed investment 12.67 % SOFR (Q) 9.00 % 06/2024 3,314,856 2,240.3 2,278.6 (6)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Vantage Data Centers Europe S.a r.l. (11) Private asset-backed investment 8.64 % Euribor (M) 6.75 % 05/2029 2,225.0 2,059.8 2,225.0 (2)(6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "WPCG Aspire Holdings, LLC (11) Private asset-backed investment 11.50 % 07/2033 25,178.9 24,567.8 24,841.6 (2)(6)(13)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_dd84118d0209",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 24 rows for 2025-03-31. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001918712-25-000030/c-670/ROW-8d04cdd9b46dd8a9",
+        "0001918712-25-000030/c-709/ROW-a6713ba3ed5e7823",
+        "0001918712-25-000030/c-560/ROW-e20d9efe10c762b2",
+        "0001918712-25-000030/c-581/ROW-4a15b3940e32cf97",
+        "0001918712-25-000030/c-541/ROW-658784fd1786f841",
+        "0001918712-25-000030/c-583/ROW-5ebfec0645d84773",
+        "0001918712-25-000030/c-542/ROW-d04aa99d1d551b1b",
+        "0001918712-25-000030/c-759/ROW-38b7fb92f6ce6237",
+        "0001918712-25-000030/c-591/ROW-a9ea9f9af14fdd11",
+        "0001918712-25-000030/c-782/ROW-4abb5f819e8e5272",
+        "0001918712-25-000030/c-817/ROW-6f90e8e88136d116",
+        "0001918712-25-000030/c-906/ROW-c413cb80879ac9a1",
+        "0001918712-25-000030/c-823/ROW-f5dc18b8c1bc8abc",
+        "0001918712-25-000030/c-1107/ROW-1978d0c2354a00b2",
+        "0001918712-25-000030/c-1110/ROW-42f0a85342291512",
+        "0001918712-25-000030/c-1111/ROW-3a1fde56ddc2547b",
+        "0001918712-25-000030/c-613/ROW-2e6c774fcbeb28b7",
+        "0001918712-25-000030/c-161/ROW-9a6423ac0dab1d69",
+        "0001918712-25-000030/c-1092/ROW-24be8110f481b66e",
+        "0001918712-25-000030/c-859/ROW-ccd4efdaea7a0c66",
+        "0001918712-25-000030/c-860/ROW-587f4fae195ef6f6",
+        "0001918712-25-000030/c-861/ROW-a6ee08845075a348",
+        "0001918712-25-000030/c-862/ROW-59c4f927ad7ea6c7",
+        "0001918712-25-000030/c-1118/ROW-c140cce825fb33a8"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-25-000030",
+          "text": "BX 2024-SLCT Commercial mortgage-backed security 7.71 % SOFR (M) 3.39 % 01/2042 24,185.0 24,131.0 24,124.7 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "CPFTR 2025-1 Commercial mortgage-backed security 8.38 % 07/2026 36,181.4 36,181.4 36,317.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Cannon Bridge Designated Activity Company (10) Private asset-backed investment 10.57 % Euribor (S) 7.50 % 10/2033 723.2 708.4 722.4 (2)(5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Harbourvest Global Private Equity Limited (10) Private asset-backed investment 7.81 % SOFR (Q) 3.50 % 06/2029 26,000.0 25,185.2 26,000.0 (12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Hub International Limited First lien senior secured loan 6.79 % SOFR (S) 2.50 % 06/2030 64,514.5 64,534.8 64,194.5 (2)(7)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2030 1,398.3 1,385.3 1,398.3 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Hyperion Refinance S.a r.l. First lien senior secured loan 7.32 % SOFR (M) 3.00 % 02/2031 41,709.7 41,715.8 41,367.7 (2)(5)(7)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "MCF CLO 12 LLC (10) Private asset-backed investment 8.38 % SOFR (Q) 4.05 % 02/2034 9,950.0 9,950.0 9,950.0 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 18,051.2 18,051.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "MidOcean CLO Equity Fund I, LP (11) Private asset-backed investment 9.00 % 10/2024 6,286,761 6,286.8 6,286.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "OKANAGAN 2024-1 Private asset-backed investment 13.01 % SOFR (M) 8.25 % 12/2032 27,011.2 27,056.6 27,011.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Orange Barrel Media, LLC/IKE Smart City, LLC (10) Private asset-backed investment 10.07 % SOFR (M) 5.75 % 03/2027 2,852.0 2,829.0 2,852.0 (2)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "PROSE 2024-3 Private asset-backed investment 8.85 % 10/2054 25,000.0 25,000.0 25,351.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Pallas Funding Trust No.2 Private asset-backed investment 11.94 % BBSY (M) 7.85 % 02/2027 1,336.8 1,387.5 1,336.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Pallas NZ Funding Trust No. 1 Private asset-backed investment 10.11 % BBSY (M) 6.15 % 07/2026 1,350.9 1,425.5 1,350.9 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Quintain Investments Holdings Limited (11) Private asset-backed investment 11.00 % 08/2024 31,418,350 40,675.9 42,958.0 (2)(5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Sunbit Receivables Trust IV (10) Private asset-backed investment 11.57 % SOFR (M) 7.25 % 12/2026 1,620.0 1,604.5 1,620.0 (7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Switch BBF, LLC Private asset-backed investment 11.91 % SOFR (S) 7.17 % 08/2027 2,487.4 2,487.4 2,487.4 (2)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Switch Master Holdco LLC Private asset-backed investment 7.32 % SOFR (M) 3.00 % 12/2025 6,745.9 6,682.6 6,745.9 (2)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "THPT 2023-THL Commercial mortgage-backed security 10.40 % 12/2034 5,000.0 4,989.4 5,052.6 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Tikehau Green Diamond II CFO Equity LP (11) Private asset-backed investment 10.11 % Euribor (Q) 7.75 % 12/2024 3,268,225 3,341.0 3,468.2 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Tikehau Ruby CLO Equity LP (11) Private asset-backed investment 12.36 % Euribor (Q) 10.00 % 03/2024 1,613,487 1,070.7 1,045.1 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Tikehau Topaz LP (11) Private asset-backed investment 13.31 % SOFR (Q) 9.00 % 06/2024 3,104,580 2,617.6 2,532.4 (5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Vantage Data Centers Europe S.a r.l. (10) Private asset-backed investment 9.11 % Euribor (M) 6.75 % 05/2029 2,084.3 2,033.6 2,084.3 (2)(5)(12)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ef1c70908764",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh nvasf rule-output reconstruction gives exactly 28 rows for 2025-12-31. All affected/reviewed keys agree. Independently re-read original cached HTML Company/Investment cells and preceding named company for blank continuations. Published labels still mix genuine member-name contamination and harmless continuation/ordinal cases; aggregate confirmed_error remains appropriate, with row-specific ambiguity retained. Withdrawn issuer corrections restore source/output discrepancies to the outstanding population rather than accepting them. Next repair requires accession/context identity declarations preserving raw provenance and facility-level evidence; suffix stripping and label-only identity repair are unsafe. Reviewed all58 membership records,5 endpoint changes and48 introduced pairs independently; see identity assessment.",
+      "verified_row_keys": [
+        "0001918712-26-000018/c-505/ROW-ac871622ea1e94e7",
+        "0001918712-26-000018/c-572/ROW-467bb971c1b3c2ec",
+        "0001918712-26-000018/c-577/ROW-f0329318fd8095ab",
+        "0001918712-26-000018/c-637/ROW-625c404658dbcee7",
+        "0001918712-26-000018/c-1491/ROW-2ab1a440978dd9ec",
+        "0001918712-26-000018/c-1002/ROW-b13c91b1576fb0e0",
+        "0001918712-26-000018/c-1005/ROW-3f03800979a79cc4",
+        "0001918712-26-000018/c-708/ROW-2425723c80ca6696",
+        "0001918712-26-000018/c-1017/ROW-099801670fd04ed2",
+        "0001918712-26-000018/c-743/ROW-05075299e60bc03b",
+        "0001918712-26-000018/c-745/ROW-9b8e16aee2565bad",
+        "0001918712-26-000018/c-802/ROW-533b6b644624d9ab",
+        "0001918712-26-000018/c-1470/ROW-012c5ce1305e0d56",
+        "0001918712-26-000018/c-1283/ROW-e853a38c66afeedd",
+        "0001918712-26-000018/c-813/ROW-74fb92d7bab7fc01",
+        "0001918712-26-000018/c-1535/ROW-2a17e8c528a65f94",
+        "0001918712-26-000018/c-1536/ROW-8347eb238230e144",
+        "0001918712-26-000018/c-1539/ROW-8b903e096f0cdce0",
+        "0001918712-26-000018/c-1540/ROW-bb90bcdd44418330",
+        "0001918712-26-000018/c-1053/ROW-291b1f72f871e766",
+        "0001918712-26-000018/c-1057/ROW-38cc75d765e56524",
+        "0001918712-26-000018/c-211/ROW-e0c8babace1beae6",
+        "0001918712-26-000018/c-868/ROW-2090bc7b61d4e2e5",
+        "0001918712-26-000018/c-1062/ROW-f2859608851af0fa",
+        "0001918712-26-000018/c-869/ROW-c06e8dc84c0e0ded",
+        "0001918712-26-000018/c-870/ROW-b13b3cd4ea4870ba",
+        "0001918712-26-000018/c-871/ROW-654b6a3db99809a8",
+        "0001918712-26-000018/c-1072/ROW-374d203602f6bd18"
+      ],
+      "evidence": [
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Alp CFO 2025, L.P. and Alp CFO 2025 (Offshore Feeder) A, L.P. (11)(12) Private asset-backed investment 12.24 % 07/2037 9,770.0 9,770.0 9,770.0 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "BX 2024-SLCT Commercial mortgage-backed security 7.14 % SOFR (M) 3.39 % 01/2042 24,185.0 24,126.1 24,128.8 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "CAIF 1 Commercial mortgage-backed security 9.48 % SONIA (Q) 5.75 % 08/2035 26,829.6 26,125.1 26,781.1 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "CPFTR 2025-1 Commercial mortgage-backed security 8.38 % 07/2026 34,411.8 34,411.8 34,506.1 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Dynamo Midco B.V. First lien senior secured loan 7.09 % SOFR (M) 3.25 % 09/2031 18,430.5 18,462.6 18,591.8 (2)(6)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Harbourvest Global Private Equity Limited (11) Private asset-backed investment 7.65 % SOFR (Q) 3.50 % 06/2029 30,875.0 30,207.0 30,875.0 (13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Isthmus Capital LLC Private asset-backed investment 9.50 % 06/2030 1,076.4 1,067.9 1,076.4 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "MCF CLO 12 LLC Private asset-backed investment 7.93 % SOFR (Q) 4.05 % 02/2034 19,900.0 19,900.0 19,900.0 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 11,827.8 11,827.9 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "MidOcean CLO Equity Fund I, LP Limited partnership interest 9.00 % 10/2024 35,996,269 35,966.6 35,996.3 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "NCMF 2025-MFS Private asset-backed investment 7.53 % 06/2033 24,530.0 24,257.0 24,915.3 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "OKANAGAN 2024-1 Private asset-backed investment 11.74 % SOFR (M) 8.25 % 12/2032 20,343.7 20,377.9 19,936.8 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Opal Bidco SAS First lien senior secured loan 6.69 % SOFR (Q) 3.00 % 04/2032 60,525.4 60,429.6 60,846.8 (2)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Orange Barrel Media, LLC/IKE Smart City, LLC (11) Private asset-backed investment 9.47 % SOFR (M) 5.75 % 10/2027 3,625.2 3,601.2 3,625.2 (2)(8)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "PROSE 2024-3 Private asset-backed investment 8.85 % 10/2054 25,000.0 25,000.0 25,834.4 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Pallas Australia Feeder Trust Private asset-backed investment 11.40 % BBSY (M) 7.85 % 07/2028 511.7 503.4 511.7 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Pallas Funding Trust No.2 Private asset-backed investment 11.40 % BBSY (M) 7.85 % 02/2027 1,427.0 1,389.5 1,427.0 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Pallas NZ Funding Trust No. 1 Private asset-backed investment 9.36 % BBSY (M) 6.15 % 07/2026 2,154.9 2,232.1 2,154.9 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Quintain Investments Holdings Limited (12) Private asset-backed investment 08/2024 08/2031 37,444,573 48,715.0 57,205.3 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC and Steward Partners New Holdings, LLC (11) First lien senior secured loan 8.47 % SOFR (M) 4.75 % 10/2028 6,887.2 6,777.4 6,887.2 (2)(6)(8)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Sunbit Receivables Trust IV (11) Private asset-backed investment 10.79 % SOFR (M) 7.00 % 04/2029 1,364.6 1,347.7 1,364.6 (8)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Switch BBF, LLC Private asset-backed investment 11.37 % SOFR (S) 7.17 % 08/2027 1,957.2 1,957.2 1,957.2 (2)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "THPT 2023-THL Commercial mortgage-backed security 10.40 % 12/2034 5,000.0 4,988.2 5,045.2 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "TI VI Holdings 1, L.P. (12) Preferred shares 9.31 % PIK 06/2025 3,292 3,387.2 3,450.6 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Tikehau Green Diamond II CFO Equity LP (12) Preferred shares 9.77 % Euribor (Q) 7.75 % 12/2024 12/2030 3,405,672 2,419.3 2,914.1 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Tikehau Ruby CLO Equity LP (12) Preferred shares 12.02 % Euribor (Q) 10.00 % 03/2024 1,815,364 514.6 588.9 (6)(8)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Tikehau Topaz LP (12) Preferred shares 12.67 % SOFR (Q) 9.00 % 06/2024 3,314,856 2,436.9 2,474.2 (6)(8)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "WPCG Aspire Holdings, LLC (11) Private asset-backed investment 11.50 % PIK 07/2033 11,638.5 11,006.8 10,963.8 (2)(6)(13)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_57fa172b49f8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed all six 2026-03-31 X11 rows from current row_validation_issues, not the proposal list. Original schedule header separates Shares/Units from Principal. c778 JPMMT count 1,405,613,866 is in Shares/Units and final shares_held is restored; c1034 Mars, c1081 TI VI, c957/c958/c959 Tikehau likewise print counts and blank principal. The full 144-row X11 population independently has printed counts retained and no invented principal. Q2 JPMMT c703 debt-principal tranche and c704 unit tranche are distinct printed rows. Existing owner count-versus-principal reason is applicable after repair, but this review does not accept the proposal or clear the ledger.",
+      "verified_row_keys": [
+        "0001628280-26-034133/c-778/ROW-ce3ebe094f11091c",
+        "0001628280-26-034133/c-1034/ROW-fabcc03a163d90dd",
+        "0001628280-26-034133/c-1081/ROW-350136ba37470229",
+        "0001628280-26-034133/c-957/ROW-4b9ee87f54051d3c",
+        "0001628280-26-034133/c-958/ROW-7d7ed50ef89aba6c",
+        "0001628280-26-034133/c-959/ROW-bd02297119d37ff2"
+      ],
+      "evidence": [
+        {
+          "accession": "0001628280-26-034133",
+          "text": "JPMMT 2026-ACES1 Residential mortgage-backed security 4.66 % 04/2066 1,405,613,866 75,618.2 75,244.4 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Mars Downstop Loan Purchaser Trust Private asset-backed investment 11.00 % 02/2024 29,990,339 10,145.4 10,145.4 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "TI VI Holdings 1, L.P. (12) Private asset-backed investment 9.31 % PIK 06/2025 4,145 4,336.8 4,406.5 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Tikehau Green Diamond II CFO Equity LP (12) Private asset-backed investment 9.77 % Euribor (Q) 7.75 % 12/2024 12/2030 3,405,672 2,419.3 2,865.6 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Tikehau Ruby CLO Equity LP (12) Private asset-backed investment 12.02 % Euribor (Q) 10.00 % 03/2024 1,815,364 424.6 491.0 (6)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Tikehau Topaz LP (12) Private asset-backed investment 12.67 % SOFR (Q) 9.00 % 06/2024 3,314,856 2,240.3 2,278.6 (6)(8)(13)"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+      "outcome": "supported",
+      "rationale": "The normalizer's count-rescaling failure and fund opt-out are supported by explicit Shares/Units columns, not FV magnitude alone. FIC 684 and JPMMT 1,405,613,866 require exact count corrections independently of the heuristic opt-out. Existing page units_printed has a source-visible-count comparison and distinguishes scale-unclear cases; it is a relevant recurrence detector for the documented heuristic corruption, not a guarantee for every missing unit count. Principal and ownership percentages must stay outside this check.",
+      "evidence": [
+        {
+          "accession": "0001918712-24-000069",
+          "text": "Warrant to purchase shares of Series B preferred stock 07/2023 07/2033 10,142 - 64.2 (6)"
+        }
+      ]
+    },
+    {
+      "observation_key": "numeric-subtotal-published-as-position",
+      "outcome": "supported",
+      "rationale": "Read original c802/c803/c804/c805/c806 cells and separate physical rows. c804 is the blank numeric subtotal of the two OAKC2021-9 tranches; c806 is the separately named OAKC2021-16. Source total arithmetic alone would hide this offsetting error. Proposed adjacent numeric-subtotal detector has a concrete positive mechanism and expressly protects genuine zero/dash positions. No member-wide exclusion or accepted-store change is justified.",
+      "evidence": [
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12) 3,545.0 3,477.2 OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)"
+        }
+      ]
+    },
+    {
+      "observation_key": "raw-identifier-correction-crosses-contexts",
+      "outcome": "supported",
+      "rationale": "Original c802 and c806 belong to distinct named CLOs despite inherited raw identifier collision. Existing pipeline correction consumer already honors optional src_context_id in the main CSV. Independent CSV comparison preserves 20,938 non-own records, every old field, and protected separate context-file hash; 54 own fields each match exactly one final holding. c802 issuer scope and c806 fields remain separate. Reviewed helper tests cover blank legacy scope, exact/sibling/missing contexts, dedup and metadata versus correction_context; saved final log reports 5 passed. Proposed pre-application physical-match enumeration would prevent recurrence, with blank legacy scope still a disclosed risk. Fresh nvasf54 field corrections independently match exactly one physical holding each; all54 original context source rows and column/header context read. Eleven optional issuer fields removed; independent PIK repairs retained.",
+      "evidence": [
+        {
+          "accession": "0001918712-25-000030",
+          "text": "OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)"
+        }
+      ]
+    },
+    {
+      "observation_key": "printed-clo-misclassified-as-direct-lending",
+      "outcome": "supported",
+      "rationale": "Independently selected current output rows whose instrument contains collat, then parsed their original HTML instrument cells: 1,805/1,805 print exact Collaterized/Collateralized loan obligation. Reproduced 1,774 DIRECT_LENDING, 4 COMMON_EQUITY, 27 STRUCTURED_CREDIT; these counts alone were not used as source proof. This is a systematic classifier gap, and the proposed exact instrument-cell cross-reference with subtype policy and corporate-name/fund-interest false-positive protection is appropriate. No isolated c806 override is warranted.",
+      "evidence": [
+        {
+          "accession": "0001918712-25-000030",
+          "text": "OAKC 2021-9 Collaterized loan obligation 9.79 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,054.8 (5)(12)"
+        }
+      ]
+    },
+    {
+      "observation_key": "name-cleanup-changes-facility-identity",
+      "outcome": "supported",
+      "rationale": "Fresh independent SQL reconstructed 16 changed PIDs,58 before/after membership records,5 concrete endpoint changes (2 removed/3 added), and ALL48 introduced co-membership pairs, including singleton/nonadjacent links. Original HTML cells and preceding company rows were parsed independently, not accepted from investigator quotes. OAKC38 pairs preserve separate 2.05m SOFR(Q)+5.50 Oct2037 tranche,1.5m no-benchmark Oct2037 continuation tranche, and1.21m Oct2034 OAKC2021-16; Q22026 unit/principal header change is retained as filed. SYMP6 pairs retain Jan2038 SOFR(Q)+5.35 fingerprints, with2.5m to1.25m balance change; Demakes4 pairs retain Dec2029 SOFR(Q)+6.00 and smoothly amortizing balances. No same-quarter competing incompatible tranche is introduced. Two removed edges connected real OAKC2021-9 to OAKC2021-8 and numeric subtotal to a real1.5m tranche. Three added mapped edges are source-compatible SYMP/OAKC/Demakes continuity. Independently selected873 published revolving descriptions, checked every source instrument cell, and reconstructed the exact13 printed generic-loan/member-revolver conflicts with0missing contexts. Original HTML context member text independently confirms revolver metadata. Generic printed loan does not prove nonrevolver; the prior review's stronger subtype-error interpretation is narrowed accordingly. Independently checked all19Steward rows/11quarters: all PIDs equal nvasa, zero introduced Steward co-membership pairs; loan/warrant merge introduced in nvasd is withdrawn. Inherited Q32025 first-lien Oct2028 versus later subordinated Dec2032 membership remains explicitly unresolved, as do generic/revolver continuity ambiguities. Source-backed but unsafe/unproven Pallas/WhiteWater/Dynamo/Opal issuer corrections are withdrawn, not accepted. Suggested detector targets incompatible instrument membership and contemporaneous contested tranches, includes conversion/generic-label boundaries, and avoids treating string mismatch or equal issuer/maturity alone as proof. This adequately addresses prior rejection without claiming inherited defects fixed.",
+      "evidence": [
+        {
+          "accession": "0001918712-24-000139",
+          "text": "OAKC 2021-9 Collaterized loan obligation 10.34 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,060.7 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "OAKC 2021-9 Collaterized loan obligation 9.79 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,054.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,069.0 1,079.9 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,020.8 917.9 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "SYMP 2022-33 Collaterized loan obligation 9.69 % SOFR (Q) 5.35 % 01/2038 2,500.0 2,500.0 2,512.5 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "SYMP 2022-33 Collaterized loan obligation 9.67 % SOFR (Q) 5.35 % 01/2038 1,250.0 1,250.0 1,221.7 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "OAKC 2021-9 Collaterized loan obligation 9.83 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,067.9 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,495.0 1,422.4 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,454.7 1,396.6 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "SYMP 2022-33 Collaterized loan obligation 9.63 % SOFR (Q) 5.35 % 01/2038 2,500.0 2,500.0 2,462.5 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "OAKC 2021-9 Collaterized loan obligation 10.12 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,107.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Collaterized loan obligation 13.10 % 10/2037 1,500.0 1,527.2 1,526.1 (5)(12)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "SYMP 2022-33 Collaterized loan obligation 9.22 % SOFR (Q) 5.35 % 01/2038 1,250.0 1,250.0 1,195.1 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Collaterized loan obligation 9.86 % 10/2037 1,500.0 1,401.0 1,193.0 (6)(13)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Collaterized loan obligation 10.27 % 10/2037 1,500.0 1,438.1 1,378.0 (5)(12)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "SYMP 2022-33 Collaterized loan obligation 9.02 % SOFR (Q) 5.35 % 01/2038 1,250.0 1,250.0 1,154.5 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-054923",
+          "text": "SYMP 2022-33 Collaterized loan obligation 9.02 % SOFR (Q) 5.35 % 01/2038 1,250.0 1,250.0 1,215.5 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Collaterized loan obligation 9.86 % 10/2037 1,500.0 1,382.4 1,046.3 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-054923",
+          "text": "Collaterized loan obligation 9.48 % 10/2037 1,500,000 1,368.8 963.0 (6)(13)(17)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "OAKC 2021-9 Collaterized loan obligation 9.79 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,070.3 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "SYMP 2022-33 Collaterized loan obligation 9.63 % SOFR (Q) 5.35 % 01/2038 2,500.0 2,500.0 2,452.2 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "OAKC 2021-16 Collaterized loan obligation 8.57 % 10/2034 1,210.0 1,004.5 846.8 (5)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Demakes Enterprises, LLC First lien senior secured loan 10.00 % SOFR (Q) 6.00 % 12/2029 11,502.4 11,300.5 11,502.4 (2)(7)(12)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Demakes Enterprises, LLC First lien senior secured loan 9.70 % SOFR (Q) 6.00 % 12/2029 11,443.9 11,266.8 11,443.9 (2)(8)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "OAKC 2021-16 Collaterized loan obligation 8.14 % 10/2034 1,210.0 986.0 786.5 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "OAKC 2021-9 Collaterized loan obligation 9.38 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,063.9 (6)(13)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Demakes Enterprises, LLC (10) First lien senior secured loan 10.30 % SOFR (Q) 6.00 % 12/2029 11,561.0 11,333.8 11,561.0 (2)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Demakes Enterprises, LLC First lien senior secured loan 10.30 % SOFR (Q) 6.00 % 12/2029 11,531.7 11,317.1 11,531.7 (2)(7)(12)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Demakes Enterprises, LLC First lien senior secured loan 9.67 % SOFR (Q) 6.00 % 12/2029 11,473.2 11,283.8 11,473.2 (2)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "OAKC 2021-16 Collaterized loan obligation 8.14 % 10/2034 1,210.0 973.5 693.8 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "OAKC 2021-9 Collaterized loan obligation 9.17 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,038.0 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-054923",
+          "text": "OAKC 2021-16 Collaterized loan obligation 7.77 % 10/2034 1,210,000 963.4 693.3 (6)(13)(17)"
+        },
+        {
+          "accession": "0001628280-26-054923",
+          "text": "OAKC 2021-9 Collaterized loan obligation 9.18 % SOFR (Q) 5.50 % 10/2037 2,050.0 2,050.0 2,030.1 (6)(13)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "OAKC 2021-16 Collaterized loan obligation 11.50 % 10/2034 1,210.0 1,053.6 953.1 (5)(12)"
+        },
+        {
+          "accession": "0001918712-24-000048",
+          "text": "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC (8) First lien senior secured loan 10.78 % SOFR (S) 5.25 % 10/2028 1,917.7 1,879.6 1,879.3 (3)(5)(6)"
+        },
+        {
+          "accession": "0001918712-24-000069",
+          "text": "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC (10) First lien senior secured loan 10.73 % SOFR (Q) 5.25 % 10/2028 2,031.1 1,968.0 1,935.4 (3)(5)(6)"
+        },
+        {
+          "accession": "0001918712-24-000099",
+          "text": "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC (10) First lien senior secured loan 11.08 % SOFR (Q) 5.50 % 10/2028 2,348.9 2,289.3 2,348.9 (2)(5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC (10) First lien senior secured loan 10.36 % SOFR (Q) 5.50 % 10/2028 2,343.0 2,287.0 2,343.0 (2)(5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC (10) First lien senior secured loan 9.08 % SOFR (Q) 4.75 % 10/2028 2,621.5 2,574.7 2,621.5 (2)(5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000014",
+          "text": "First lien senior secured loan 9.80 % SOFR (Q) 5.25 % 10/2028 236.5 231.0 236.5 (2)(5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC (10) First lien senior secured loan 9.05 % SOFR (Q) 4.75 % 10/2028 3,234.4 3,185.5 3,234.4 (2)(5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000065",
+          "text": "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC (10) First lien senior secured loan 9.05 % SOFR (Q) 4.75 % 10/2028 4,843.1 4,713.1 4,757.2 (2)(5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "First lien senior secured loan 8.92 % SOFR (M) 4.75 % 10/2028 5,862.2 5,742.2 5,684.7 (2)(5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000092",
+          "text": "Steward Partners Global Advisory, LLC and Steward Partners Investment Advisory, LLC (10) First lien senior secured revolving loan 8.91 % SOFR (S) 4.75 % 10/2028 182.2 161.1 182.2 (2)(5)(7)(12)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Warrant to purchase Class W units 12/2025 12/2032 138,674 2,644.6 2,644.6 (6)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC and Steward Partners New Holdings, LLC (11) First lien senior secured loan 8.47 % SOFR (M) 4.75 % 10/2028 6,887.2 6,777.4 6,887.2 (2)(6)(8)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Senior subordinated loan 11.00 % PIK 12/2032 25,443.0 22,310.1 22,278.2 (2)(6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Warrant to purchase common stock 12/2025 12/2032 138,674 2,644.6 2,727.3 (6)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC, and Steward Partners New Holdings, LLC (11) First lien senior secured loan 8.42 % SOFR (M) 4.75 % 10/2028 14,131.7 14,031.1 14,131.7 (2)(6)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Senior subordinated loan 11.00 % PIK 12/2032 26,142.6 23,120.7 23,528.4 (2)(6)(13)"
+        },
+        {
+          "accession": "0001628280-26-054923",
+          "text": "Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC, and Steward Partners New Holdings, LLC (11) First lien senior secured loan 8.64 % SOFR (M) 5.00 % 10/2028 21,400.9 21,310.8 21,400.9 (2)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-054923",
+          "text": "Senior subordinated loan 11.00 % PIK 12/2032 26,869.5 23,959.8 24,451.3 (2)(13)"
+        },
+        {
+          "accession": "0001628280-26-054923",
+          "text": "Warrant to purchase common stock 12/2025 12/2032 138,674 2,629.4 2,687.2 (13)"
+        },
+        {
+          "accession": "0001918712-24-000139",
+          "text": "The Hiller Companies, LLC (10) First lien senior secured loan 10.15 % SOFR (Q) 5.00 % 06/2030 25,676.7 25,412.8 25,393.1 (2)(7)(12)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "CPPIB OVM Member U.S. LLC First lien senior secured loan 7.05 % SOFR (M) 2.75 % 08/2031 18,793.4 18,724.8 18,652.4 (2)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "Freeport LNG Investments, LLLP First lien senior secured loan 7.55 % SOFR (Q) 3.00 % 11/2026 45,393.0 45,352.9 45,317.1 (2)"
+        },
+        {
+          "accession": "0001918712-25-000030",
+          "text": "First lien senior secured loan 7.54 % SOFR (Q) 3.25 % 12/2028 4,966.4 4,970.1 4,896.0 (2)(7)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Bamboo US BidCo LLC (11) First lien senior secured loan 8.83 % SOFR (Q) 5.00 % 09/2030 19,508.0 19,225.3 19,508.0 (2)(8)(13)"
+        },
+        {
+          "accession": "0001918712-26-000018",
+          "text": "Gestion ABS Bidco Inc. / ABS Bidco Holdings Inc. (11) First lien senior secured loan 7.25 % CORRA (M) 5.00 % 03/2031 13,153.4 13,139.5 13,153.4 (2)(6)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "15484880 Canada Inc. and 15484910 Canada Inc. (11) First lien senior secured loan 7.82 % CORRA (Q) 5.25 % 04/2031 12,258.8 12,052.5 12,258.8 (2)(6)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Birdie Bidco, Inc. (11) First lien senior secured loan 8.45 % ( 2.25 % PIK) SOFR (Q) 4.75 % 11/2032 74,702.6 74,109.7 73,762.5 (2)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "FlyWheel Acquireco, Inc. (11) First lien senior secured loan 10.17 % SOFR (M) 6.50 % 05/2030 13,058.0 12,827.8 13,058.0 (2)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Gestion ABS Bidco Inc. / ABS Bidco Holdings Inc. (11) First lien senior secured loan 7.31 % CORRA (Q) 5.00 % 03/2031 13,336.7 13,520.5 13,336.7 (2)(6)(8)(13)"
+        },
+        {
+          "accession": "0001628280-26-034133",
+          "text": "Mustang Prospects Purchaser, LLC, Senske Acquisition, Inc., and Mustang Prospects Holdco, LLC (11) First lien senior secured loan 8.94 % SOFR (Q) 5.25 % 06/2031 28,061.9 27,864.6 28,061.9 (2)(8)(13)"
+        }
+      ]
+    },
+    {
+      "observation_key": "net-investment-income-pretax-aftertax-ambiguity",
+      "outcome": "supported",
+      "rationale": "Original 2023/2022 comparative statement distinguishes NII before income taxes 69,433/192, tax 946/9 and NII 68,487/183; expense support gives net expenses (9) in 2022. Published 192 is pretax, while printed after-tax is 183. Existing support acceptance cannot settle an unspecified field definition. Proposed taxonomy/schema check is appropriate and must preserve pretax/aftertax distinctions until owner meaning is established.",
+      "evidence": [
+        {
+          "accession": "0001918712-24-000048",
+          "text": "Net expenses 40,376 (9) Net investment income before income taxes 69,433 192 Income tax expense, including excise tax 946 9 Net investment income 68,487 183"
+        }
+      ]
+    },
+    {
+      "observation_key": "classification-cache-drift-on-untouched-build",
+      "outcome": "supported",
+      "rationale": "Independent rg1b versus untouched nvasa comparison reproduces six BradyPlus GICS losses before retained corrections. Original source identifies issuer/instrument but does not establish a GICS label or cache cause. Proposed repeated build with fixed source/config/artifact hashes measures determinism; report correctly treats the cause as unproven. This is separate from a source-backed classification assignment.",
+      "evidence": [
+        {
+          "accession": "0001918712-25-000014",
+          "text": "BradyPlus Holdings, LLC (10) First lien senior secured loan 9.52 % SOFR (M) 5.00 % 10/2029 31,287.1 30,800.2 31,287.1 (2)(7)(12)"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "request_resolution_history_reviews": [
+    {
+      "request_id": "asif-exact-subtotal-disposition",
+      "outcome": "supported",
+      "rationale": "Acceptance-change classification is correct: exact-context subtotal treatment changes check reach. Root response rejects implementation under delegated authority; it does not invent owner acceptance/rejection/deferral of the proposed reasons. Existing proposals remain outstanding. Same numeric-only reason_key across row_validation SRC_BDC01 and source_recon is scoped to distinct engine/rule contracts; reuse does not create acceptance.",
+      "evidence": [
+        {
+          "accession": "0001918712-25-000030",
+          "text": "3,545.0 3,477.2"
+        }
+      ]
+    }
+  ],
+  "audit_summary": {
+    "review_status": "INVESTIGATION_COMPLETE",
+    "finding_reviews_supported": 13,
+    "observations_supported": 7,
+    "outstanding_findings_still": 13,
+    "physical_ledger_records": 46,
+    "active_ledger_records": 44,
+    "proposals": 3,
+    "name_flags": 191,
+    "holdings_rows": 10175,
+    "source_schedule_files": 14,
+    "accepted_populations": {
+      "X02": 163,
+      "X06": 20,
+      "X11": 144
+    },
+    "identity_memberships": 58,
+    "concrete_edge_delta": {
+      "removed": 2,
+      "added": 3
+    },
+    "introduced_pairs": 48,
+    "introduced_pair_groups": {
+      "OAKC": 38,
+      "SYMP": 6,
+      "Demakes": 4
+    },
+    "source_shape_population": 873,
+    "source_shape_conflicts": 13,
+    "steward_positions": 19,
+    "steward_quarters": 11,
+    "full_history_entries_read": 46,
+    "nonown_corrections_unchanged": 20938,
+    "own_exact_one_match_corrections": 54,
+    "source_quote_failures": 0,
+    "original_sample_label": "nvasd",
+    "original_sample_rows": 20,
+    "original_sample_fields_compared": 18,
+    "original_sample_field_deltas": 0,
+    "fresh_artifacts": [
+      "scratch/fund_runs/0001918712/independent_review/audit_f.json",
+      "scratch/fund_runs/0001918712/independent_review/populations_f.json",
+      "scratch/fund_runs/0001918712/independent_review/correction_sources_f.json",
+      "scratch/fund_runs/0001918712/independent_review/identity_f.json"
+    ]
+  },
+  "limitations": [
+    "Investigation completeness only:13 findings remain outstanding and3proposals unaccepted. No fund/quarter quality sign-off or claim all holdings correct.",
+    "Prior nvasd rejected review preserved. Current disclosure, source metadata nuance and unsafe correction withdrawal address its omissions; inherited identity conflicts remain.",
+    "175 missing match endpoints limit edge attribution; complete co-membership review supplements but does not repair missing endpoints.",
+    "Accepted reason populations independently rechecked against original cells: blank coupons X02, source-printed extreme ratios X06, units without invented principal X11. Reasons certify neither other fields nor whole fund.",
+    "Original20-card random sample remains nvasd; all20x18 reviewed fields unchanged in nvasf.175 applicable judgments/zero observed errors with zero PIK/pctNAV coverage is limited sample evidence.",
+    "No tests, builds, network calls or production/report changes by reviewer. Existing correction mechanism/tests inspected in prior review; no full suite run.",
+    "Root semantic backstop reports682 baseline divergences,45993checked,18548skipped and14/7/12/9/1 groups; separate baseline-drift result does not certify correctness."
+  ]
+}
