@@ -1271,6 +1271,14 @@ if OWL in held and OWL_LOOP_FILE.exists():
         SPECS.append((OWL, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1812554-fundloop"))
         EXACT.add(spec["identifier"])
 
+# Ares Capital: direct printed-context PIK, preference-share and missing-unit readings.
+ARES_LOOP_FILE = Path(__file__).resolve().parent / "row_correction_specs" / "0001287750.json"
+if ARES in held and ARES_LOOP_FILE.exists():
+    import json
+    for spec in json.loads(ARES_LOOP_FILE.read_text(encoding="utf-8")):
+        SPECS.append((ARES, spec["quarter"], spec["identifier"], spec["fields"], spec["reason"], "D-1287750-fundloop"))
+        EXACT.add(spec["identifier"])
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue

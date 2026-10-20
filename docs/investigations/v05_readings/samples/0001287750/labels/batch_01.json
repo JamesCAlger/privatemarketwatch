@@ -1,0 +1,1682 @@
+[
+    {
+        "card":  "C001",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 05/2029; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C002",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 07/2032; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C003",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "not_printed",
+                                                "cause":  "",
+                                                "note":  "No principal_amount printed for this position; published blank."
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No interest_rate printed for this position; published blank."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "not_printed",
+                                            "cause":  "",
+                                            "note":  "No basis_spread printed for this position; published blank."
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "not_printed",
+                                                   "cause":  "",
+                                                   "note":  "No reference_rate_type printed for this position; published blank."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No maturity_date printed for this position; published blank."
+                                         }
+                   }
+    },
+    {
+        "card":  "C004",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 10/2030; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C005",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "not_printed",
+                                                "cause":  "",
+                                                "note":  "No principal_amount printed for this position; published blank."
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No interest_rate printed for this position; published blank."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "not_printed",
+                                            "cause":  "",
+                                            "note":  "No basis_spread printed for this position; published blank."
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "not_printed",
+                                                   "cause":  "",
+                                                   "note":  "No reference_rate_type printed for this position; published blank."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No maturity_date printed for this position; published blank."
+                                         }
+                   }
+    },
+    {
+        "card":  "C006",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 05/2029; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C007",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No interest_rate printed for this position; published blank."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "not_printed",
+                                            "cause":  "",
+                                            "note":  "No basis_spread printed for this position; published blank."
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "not_printed",
+                                                   "cause":  "",
+                                                   "note":  "No reference_rate_type printed for this position; published blank."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 12/2026; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C008",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 05/2029; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C009",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 05/2029; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C010",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 08/2029; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C011",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 05/2028; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C012",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "not_printed",
+                                                "cause":  "",
+                                                "note":  "No principal_amount printed for this position; published blank."
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No interest_rate printed for this position; published blank."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "not_printed",
+                                            "cause":  "",
+                                            "note":  "No basis_spread printed for this position; published blank."
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "not_printed",
+                                                   "cause":  "",
+                                                   "note":  "No reference_rate_type printed for this position; published blank."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No maturity_date printed for this position; published blank."
+                                         }
+                   }
+    },
+    {
+        "card":  "C013",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 01/2030; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C014",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 01/2027; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C015",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "convention",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  "Prints 12.25 % PIK beside 7.25 % spread; interest blank under open D-092, PIK 12.25 published."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "right",
+                                        "cause":  "",
+                                        "note":  ""
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 06/2027; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C016",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "not_printed",
+                                                "cause":  "",
+                                                "note":  "No principal_amount printed for this position; published blank."
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 01/2029; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C017",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "not_printed",
+                                            "cause":  "",
+                                            "note":  "No basis_spread printed for this position; published blank."
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "not_printed",
+                                                   "cause":  "",
+                                                   "note":  "No reference_rate_type printed for this position; published blank."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "right",
+                                        "cause":  "",
+                                        "note":  ""
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 06/2027; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C018",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "not_printed",
+                                                "cause":  "",
+                                                "note":  "No principal_amount printed for this position; published blank."
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No interest_rate printed for this position; published blank."
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "not_printed",
+                                            "cause":  "",
+                                            "note":  "No basis_spread printed for this position; published blank."
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "not_printed",
+                                                   "cause":  "",
+                                                   "note":  "No reference_rate_type printed for this position; published blank."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "not_printed",
+                                             "cause":  "",
+                                             "note":  "No maturity_date printed for this position; published blank."
+                                         }
+                   }
+    },
+    {
+        "card":  "C019",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 12/2032; no maturity fact on this context."
+                                         }
+                   }
+    },
+    {
+        "card":  "C020",
+        "reader":  "/root/ares_sample_sol",
+        "fields":  {
+                       "row_identity":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "issuer_name":  {
+                                           "published":  "ok",
+                                           "tag":  "right",
+                                           "cause":  "",
+                                           "note":  ""
+                                       },
+                       "instrument_and_class":  {
+                                                    "published":  "ok",
+                                                    "tag":  "right",
+                                                    "cause":  "",
+                                                    "note":  ""
+                                                },
+                       "fair_value":  {
+                                          "published":  "ok",
+                                          "tag":  "right",
+                                          "cause":  "",
+                                          "note":  ""
+                                      },
+                       "cost":  {
+                                    "published":  "ok",
+                                    "tag":  "right",
+                                    "cause":  "",
+                                    "note":  ""
+                                },
+                       "principal_amount":  {
+                                                "published":  "ok",
+                                                "tag":  "right",
+                                                "cause":  "",
+                                                "note":  ""
+                                            },
+                       "shares_held":  {
+                                           "published":  "ok",
+                                           "tag":  "not_printed",
+                                           "cause":  "",
+                                           "note":  "No shares_held printed for this position; published blank."
+                                       },
+                       "pct_of_net_assets":  {
+                                                 "published":  "ok",
+                                                 "tag":  "not_printed",
+                                                 "cause":  "",
+                                                 "note":  "No pct_of_net_assets printed for this position; published blank."
+                                             },
+                       "interest_rate":  {
+                                             "published":  "ok",
+                                             "tag":  "right",
+                                             "cause":  "",
+                                             "note":  ""
+                                         },
+                       "basis_spread":  {
+                                            "published":  "ok",
+                                            "tag":  "right",
+                                            "cause":  "",
+                                            "note":  ""
+                                        },
+                       "reference_rate_type":  {
+                                                   "published":  "ok",
+                                                   "tag":  "untagged",
+                                                   "cause":  "",
+                                                   "note":  "Prints SOFR; no reference-rate fact on this context."
+                                               },
+                       "pik_rate":  {
+                                        "published":  "ok",
+                                        "tag":  "not_printed",
+                                        "cause":  "",
+                                        "note":  "No pik_rate printed for this position; published blank."
+                                    },
+                       "maturity_date":  {
+                                             "published":  "ok",
+                                             "tag":  "untagged",
+                                             "cause":  "",
+                                             "note":  "Prints 09/2028; no maturity fact on this context."
+                                         }
+                   }
+    }
+]

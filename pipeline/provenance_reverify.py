@@ -404,6 +404,8 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
     """
     from pipeline.bdc_filings import (_local_name, _match_concept, _parse_fact_value,
                                       fair_value_aliases, match_concept_for)
+    from pipeline.rate_verification_anchors import load_anchors
+    rate_anchors = load_anchors()
 
     if xml_loader is None:
         if filings_index is None:
@@ -429,6 +431,10 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
 
         # Single pass over the tree for all wanted contexts in this accession.
         wanted_ctx = set(grp["src_context_id"].astype(str))
+        wanted_ctx.update(
+            e["source_context"] for (owner, acc, context, _field), e in rate_anchors.items()
+            if owner == str(cik) and acc == str(accession) and context in wanted_ctx
+        )
         # facts[ctx][col] = (local_name, raw_text)  first-wins per col
         facts: dict[str, dict[str, tuple[str, str]]] = {}
         fact_variants: dict[tuple[str,str],set[tuple[str,str]]] = {}
@@ -461,6 +467,34 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
 
             try:
                 field = str(r["field"])
+                rate_anchor = rate_anchors.get((str(cik), str(accession), ctx, field))
+                if rate_anchor is not None:
+                    source_key = (rate_anchor["source_context"],
+                                  rate_anchor["source_concept"].lower())
+                    variants = fact_variants.get(source_key, set())
+                    if not variants:
+                        out.at[i, "full_status"] = "anchor_missing"
+                        continue
+                    if len(variants) != 1:
+                        out.at[i, "full_status"] = "source_unavailable"
+                        continue
+                    raw_text, _unit = next(iter(variants))
+                    instance_raw = _parse_fact_value(field, raw_text)
+                    if not isinstance(instance_raw, (int, float)):
+                        out.at[i, "full_status"] = "source_unavailable"
+                        continue
+                    out.at[i, "instance_raw"] = instance_raw
+                    # This is the explicitly selected source fact, not a replay of
+                    # the old, mislabelled field's PIK/cash/scale transforms.
+                    if pd.isna(r["published"]) or not _numbers_close(
+                            instance_raw * 100.0, float(r["published"])):
+                        out.at[i, "full_status"] = "published_mismatch"
+                    elif pd.isna(r.get("declared_raw")) or _numbers_close(
+                            float(r["declared_raw"]), instance_raw):
+                        out.at[i, "full_status"] = "raw_match"
+                    else:
+                        out.at[i, "full_status"] = "raw_stale"
+                    continue
 
                 # Resolve declared concept + x events from src_facts JSON.
                 declared_c = ""

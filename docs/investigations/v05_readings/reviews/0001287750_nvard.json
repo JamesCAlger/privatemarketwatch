@@ -1,0 +1,699 @@
+{
+  "reviewer_id": "/root/ares_review_sol",
+  "report_digest": "807e22cc87267221c412ad6de3af70cec4cdd441f1d725863fb9ee3e1a933436",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_025a8155c6fc",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-743994c2da334caf, ROW-92387b1949aa7a57, ROW-b3618e79efac3798, ROW-95182b19a3967ba0, ROW-af0af5faa5dc727b, ROW-b688924aee41262e, ROW-d1f333aa71788b92, ROW-14a12cb2fbbdc1e4, ROW-b5e94ebedff432ee, ROW-350011f5c036882a, ROW-f67aa78083e5486b, ROW-11688b200b4348f6, ROW-b8bd5f823ab6d669, ROW-a9711f923926885e, ROW-8eac25f911d6bca6, ROW-2a7a876822967628, ROW-5d42fa039f4b906c, ROW-d7acc849a7e7c4fb, ROW-0e3478bdc6071267. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001287750-26-000006",
+          "text": "t solutions to hospitals Series A preferred shares 12.75 % PIK 07/2022 07/2028 35,000 53.8 53.8 (2) Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 13.0 12.1 (2) Class B common units 07/2022 100,000 0.1 - (2) 66.9 65.9 Alcresta Therapeutics, Inc. (13) A commerc"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "ien senior secured loan 8.67 % SOFR (Q) 5.00 % 07/2024 07/2031 116.7 116.7 116.7 (2)(9) 118.6 118.6 Ardonagh Midco 3 Limited, Ardonagh Group Finco Pty Limited, Ardonagh Finco LLC, Ardonagh Finco B.V., and MDCP Co-Investors (Jade I), L.P. Insurance broker and underwriting servicer Limited partnership interest 06/2025 17,510,000 24.1 26.3 (2)(6) Bellwether Buyer, L.L.C. and Bellwether Topco V Buyer, Inc. (13) Insurance program administrator Fi"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": " provider First lien senior secured loan 10.92 % SOFR (Q) 7.25 % 12/2025 12/2030 9.9 9.9 9.7 (2)(9) Creek Parent, Inc. and Creek Feeder, L.P. (13) Provider of delivery technologies, development, drug manufacturing, biologics, gene therapies and consumer health products First lien senior secured revolving loan 12/2024 12/2031 - - - (2)(11) First lien senior secured loan 8.73 % SOFR (M) 5.00 % 12/2024 12/2031 207.1 207.1 207.1 (2)(9) Limi"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": " First lien senior secured loan 8.54 % SOFR (Q) 4.75 % 09/2025 09/2031 31.0 31.0 30.7 (2) 31.7 31.4 Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (13) Outsourced supply chain solutions provider to operators of distribution centers First lien senior secured revolving loan 08/2024 05/2029 - - - (2)(11) First lien senior secured loan 8.32 % SOFR (M) 4.50 % 08/2024 11/2029 8.1 8.1 8.1 (2)(9) Second lie"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "ntent management provider First lien senior secured revolving loan 09/2025 11/2027 - - - (2)(6)(11) First lien senior secured loan 10.22 % SOFR (M) 6.50 % 09/2025 11/2027 84.7 84.7 83.9 (2)(6)(9) 84.7 83.9 DriveCentric Holdings, LLC (13) Provider of CRM software to the automotive dealership ind"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "24 08/2030 23.5 23.4 23.3 (2)(9) Preferred stock 10.50 % PIK 04/2021 13,140 20.6 20.3 (2) 44.5 44.1 Doxim Inc. (13) Enterprise content management provider First lien senior secured revolving loan 09/2025 11/2027 - - - (2)(6)(11) First lien senior secured loan 10.22 % SOFR (M) 6.50 % 09/2025 11/2027 84.7 84.7 83.9 (2)(6)(9) 84."
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "181.9 181.9 181.9 (2)(9) Limited partnership interest 01/2020 3,988,000 4.5 10.1 (2)(6) 186.4 192.0 ESHA Intermediate, LLC (13) Provider of nutritional information and software as a services (SaaS) compliance solutions First lien senior secured loan 8.44 % SOFR (Q) 4.75 % 12/2025 12/2032 22.3 22.3 22.2 (2)(9) Extrahop Networks, Inc. (13) Provider of real-time wire data analytics solutions for application an"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "rst lien senior secured loan 7.27 % CDOR (Q) 5.00 % 03/2024 03/2031 0.3 0.3 0.3 (2)(6)(9) 10.1 10.0 Higginbotham Insurance Agency, Inc., HIG Operations Holdings, Inc., and HIG Intermediate, Inc. (13) Independent retail insurance broker First lien senior secured loan 8.22 % SOFR (M) 4.50 % 08/2023 06/2031 9.1 9.1 9.1 (2)(9) Series A preferred shares 10.50 % 12/2024 1,000 1.0 1.0 (2) 10.1 10.1 High Street Buyer, Inc. and H"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "rst lien senior secured loan 8.42 % SOFR (Q) 4.75 % 06/2025 08/2031 2.1 2.1 2.1 (2)(6)(9) 15.6 15.6 MC Accelerate Co-Invest Feeder LP and MC CIF Wealth Management (UK) Ltd. Global wealth management firm Z1 preferred shares 12.00 % PIK 08/2025 08/2031 12,901 13.4 13.4 (2)(6) Z2 preferred shares 12.00 % ( 6.00 % PIK) 08/2025 08/2031 12,901 13.1 13.1 (2)(6) See accompanying "
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "OFR (Q) 6.75 % 02/2024 02/2030 32.0 32.0 29.7 (2)(9) Common units 02/2024 440,000 0.4 0.3 33.0 30.5 MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.34 % SOFR (Q) 6.50 % 03/2025 03/2030 8.9 8.9 9.0 (2)(9)(16) Common units 03/2025 639,359 4.8 9.7 (2)(16) 13.7 18.7 NCP-MSI Buyer, Inc. and NCP MSI Co-Invest, L"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "eferred units 14.00 % PIK 05/2025 82 0.9 0.9 (2) Class A units 08/2022 1,001 9.7 10.0 (2) 29.1 29.4 Mustang Prospects Purchaser, LLC, Senske Acquisition, Inc., and Mustang Prospects Holdco, LLC (13) Provider of lawn care, tree care and pest control services First lien senior secured revolving loan 8.72 % SOFR (M) 5.00 % 06/2024 06/2031 0.3 0.3 0.3 (2)(9)(12) First lien senior secured loan 8.69 % SOFR (Q) 5.00 % 06/2024 06/2031 27.9 27.9 27.9 (2)(9) First l"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": " communication systems for mass transportation markets Class A membership units 01/2017 5,000 5.1 - NCWS Holdings LP Manufacturer and supplier of car wash equipment, parts and supplies to the conveyorized car wash market Class A-2 common units 12/2020 12,296,000 12.9 2.3 (2) OPH NEP Investment, LLC (4) Provider of energy services for multi-family property owners, developer"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "ings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.8 8.8 8.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.8 8.2 PestCo Holdings, LLC and PestCo, LLC (13) Provider of pest control services to the resident"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "tment, L.P. (4) Investment partnership Limited partnership interest 05/2014 99.80 % 4.5 0.5 (6)(16) PCG-TAC-CV, LP (5) Investment partnership Limited partnership interest 01/2025 99.80 % - 6.8 (2)(6)(16) Piper Jaffray Merchant Banking Fund I, L.P. Investment partnership Limited partnership interest 08/"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "lien senior secured revolving loan 8.98 % SOFR (M) 5.25 % 12/2024 12/2030 2.3 2.2 2.2 (2)(6)(9)(12) First lien senior secured loan 7.77 % CDOR (M) 5.50 % 12/2024 12/2030 36.6 35.0 36.6 (2)(6)(9) 37.2 38.8 St Athena Global LLC and St Athena Global Holdings Limited (13) Designer and manufacturer"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": ".00 % 06/2024 07/2029 3.8 3.8 3.8 (2)(9) Class A common units 06/2024 8,474 10.5 11.4 (2) 22.0 22.9 Sport Maska Inc. (13) Manufacturer of hockey equipment and related accessories First lien senior secured revolving loan 8.98 % SOFR (M) 5.25 % 12/2024 12/2030 2.3 2.2 2.2 (2)(6)(9)(12) First lien senior secured loan 7.77 % CDOR (M) 5.50 % 12/2024 12/2030 36.6 35.0 36.6 (2)(6)(9) 37.2"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": "ervices First lien senior secured loan 8.61 % SOFR (Q) 4.75 % 11/2024 11/2030 9.2 9.2 9.2 (2)(6)(9) Steward Partners Global Advisory, LLC, Steward Partners Investment Advisory, LLC, Steward Partners Intermediate II, LLC, and Steward Partners New Holdings, LLC (13) Wealth management platform First lien senior secured loan 8.47 % SOFR (M) 4.75 % 12/2023 10/2028 4.9 4.8 4.9 (2)(6)(9) First lien senior secured loan 8.47 % SOFR (M) 4.75 % 06/2025 10/2028 1.2 1.2 1.2 (2)(6)(9) Senior "
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": " % 07/2025 03/2031 3.1 3.1 3.1 (2)(9) Limited partnership interests 03/2025 330,000 0.3 0.4 7.4 7.5 Truck-Lite Co., LLC, ECCO Holdings Corp., and Clarity Technologies Holdings, LP (13) Provider of global transportation safety and productivity applications First lien senior secured revolving loan 06/2025 02/2031 - - - (2)(11) First lien senior secured loan 8.48 % SOFR (M) 4.75 % 06/2025 02/2032 149.7 149.7 149.7 (2)(9) Clas"
+        },
+        {
+          "accession": "0001287750-26-000006",
+          "text": " (2)(6) Senior subordinated loan 9.23 % NIBOR (Q) 5.00 % 11/2024 11/2031 0.1 0.1 0.1 (2)(6) 0.2 0.2 Zeppelin US Buyer Inc. and Providence Equity Partners IX-C L.P. (13)(14) Specialty logistics platform for high-stakes projects in music, sports, production, fine art, and automotive industries First lien senior secured loan 8.42 % SOFR (Q) 4.75 % 07/2025 08/2032 11.0 11.0 10.9 (2)(9) Limited partnership interest 07/2025 1,418,569 1.4 1.4 (2) 12.4 12.3 12.6 12.5 0.09 % Total Investm"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_341d2ddc90a6",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-43f7b16bce102ebd, ROW-23784f6253722c05, ROW-9927511d0cf3b445. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000021",
+          "text": " the pharmaceutical and biotechnology industries Ordinary A shares 05/2021 2,476,744 5.7 5.7 (2)(6) Alcami Corporation and ACM Note Holdings, LLC (15) Outsourced drug development services provider First lien senior secured loan 11.91 % SOFR (M) 7.00 % 12/2022 12/2028 9.5 9.5 9.1 (2)(11) Senior subordinated loan 8.00 % PIK 12/2022 06/2029 19.9 19.9 19.9 (2) 29.4 29.0 Amryt Pharmaceutic"
+        },
+        {
+          "accession": "0001287750-23-000021",
+          "text": "R (Q) 6.00 % 08/2022 08/2028 2.8 2.8 2.8 (2)(11) Class A units 08/2022 1,001 9.7 11.8 (2) 12.9 15.0 Pyramid-BMC IntermediateCo I, LLC and Pyramid Investors, LLC (15) Hotel operator First lien senior secured loan 12.85 % SOFR (Q) 8.00 % 01/2023 01/2027 7.7 7.7 7.5 (2)(11) Preferred membership units 07/2016 996,833 1.0 1.0 8.7 8.5 Redwood Services, LLC and Redwood Servic"
+        },
+        {
+          "accession": "0001287750-23-000021",
+          "text": "BOR (M) 4.00 % 12/2019 06/2024 1.6 1.6 1.6 (2)(11) Common stock 12/2019 861,000 6.0 0.3 (2) 9.8 3.8 Varsity Brands Holding Co., Inc., Hercules Achievement, Inc. and BCPE Hercules Holdings, LP Leading manufacturer and distributor of textiles, apparel & luxury goods First lien senior secured loan 9.87 % SOFR (M) 5.00 % 12/2017 12/2026 14.7 14.1 13.7 (2)(11)(18) Second lien senior secured loan 15.17 % ( 2.03 % PIK) SOFR (M) 10.25 % 07/2018 04/2027 144.1 144.1 "
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_5842e1a34f2e",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-2446ae370954592c, ROW-06546d42fa1089b9, ROW-8704f9105506a971, ROW-4400ac80c0a97bb6, ROW-47bfb0a649b581dc, ROW-524aad83ed1c45bd. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000007",
+          "text": "3 (6) CMW Parent LLC (fka Black Arrow, Inc.) Multiplatform media firm Series A units 09/2015 32 - - Dundee Eros, LP Catalog of premier music intellectual property Limited partnership interest 11/2024 4,234,000 4.2 4.2 (2) Eagle Football Holdings BidCo Limited and Eagle Football Holdings Limited Multi-club sports platfor"
+        },
+        {
+          "accession": "0001287750-25-000007",
+          "text": "t lien senior secured loan 10.12 % SOFR (M) 5.75 % 12/2024 12/2029 55.3 55.3 54.5 (2)(11) 59.6 58.7 Infinity Home Services Holdco, Inc., D'Angelo & Sons Construction Limited and IHS Parent Holdings, L.P. (15) Provider of residential roofing and exterior repair and replacement services First lien senior secured revolving loan 12.00 % Base Rate (Q) 4.50 % 12/2022 12/2028 0.7 0.7 0.7 (2)(6)(11) First lien senior secured loan 9.84 % SOFR (M) 5.50 % 12/2022 12/2028 14.7 14.7 14.7 (2)(6)(11) Fir"
+        },
+        {
+          "accession": "0001287750-25-000007",
+          "text": "ny First lien senior secured loan 11.98 % SOFR (Q) 7.50 % 09/2023 09/2026 82.7 81.4 82.7 (2)(6)(11) Murchison Holdings, LLC Exploration and production company Preferred units 06/2022 41,000 - 6.7 Offen, Inc. Distributor of fuel, lubricants, diesel exhaust fluid, and premium additives First lien"
+        },
+        {
+          "accession": "0001287750-25-000007",
+          "text": "irst lien senior secured loan 11.24 % SOFR (Q) 6.50 % 05/2022 06/2025 1.3 1.3 1.3 (2)(11) 11.2 11.0 NBLY 2021-1 and KKR Nest Co-Invest L.P. Operator of multiple franchise concepts primarily related to home maintenance or repairs Limited partner interest 09/2021 9,725,000 9.7 12.1 (2) Neptune Bidco US Inc. and Elliott Metron Co-Investor Aggregator L.P. (15) Provider of audience insi"
+        },
+        {
+          "accession": "0001287750-25-000007",
+          "text": "ings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.0 8.0 7.0 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.0 PestCo Holdings, LLC and PestCo, LLC (15) Provider of pest control services to the resident"
+        },
+        {
+          "accession": "0001287750-25-000007",
+          "text": "analytics First lien senior secured loan 9.87 % SOFR (Q) 5.25 % 11/2022 10/2029 5.9 5.9 5.9 (2)(11) Priority Technology Holdings, Inc. Provider of merchant acquiring and payment processing solutions Warrant to purchase shares of common stock 04/2021 04/2031 527,226 4.0 6.2 (2)(6)(18) RFS Opco LLC (15) Provider of wealth management services First lien senior secured loan 9.08 % SOFR"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_69cff9b0d03b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-35571ac127f4cc08, ROW-a64ff5ddaf0633a8, ROW-4fc45b7f582fe37a, ROW-94ba1ab18f1fc445. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000020",
+          "text": "orm Senior subordinated loan 12.24 % PIK SONIA (S) 7.50 % 08/2023 08/2033 62.5 61.6 62.5 (2)(6)(10) 3 Step Sports LLC (14) Provider of integrated youth sports solutions First lien senior secured loan 12.30 % ( 1.50 % PIK) SOFR (Q) 8.00 % 10/2023 10/2029 12.5 12.5 11.7 (2)(10) Aventine Intermediate LLC & Aventine Holdings II LLC Media and production company First lien senior"
+        },
+        {
+          "accession": "0001287750-25-000020",
+          "text": "FR (Q) 4.75 % 01/2025 01/2031 6.9 6.9 6.9 (2)(10) Class A-1 units 01/2025 1,368 1.4 1.4 (2) 8.3 8.3 Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (14) Outsourced supply chain solutions provider to operators of distribution centers First lien senior secured revolving loan 08/2024 05/2029 - - - (2)(10)(12) First lien senior secured loan 8.92 % SOFR (M) 4.50 % 08/2024 11/2029 6.6 6.6 6.6 (2)(10) Second li"
+        },
+        {
+          "accession": "0001287750-25-000020",
+          "text": "ings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.8 8.8 7.9 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.8 7.9 PestCo Holdings, LLC and PestCo, LLC (14) Provider of pest control services to the resident"
+        },
+        {
+          "accession": "0001287750-25-000020",
+          "text": "tment, L.P. (4)(15) Investment partnership Limited partnership interest 05/2014 99.80 % 4.4 0.5 (6) PCG-TAC-CV, LP. (4) Investment partnership Limited partnership interest 01/2025 6,720,248 - 6.7 (2)(6) Piper Jaffray Merchant Banking Fund I, L.P. Investment partnership Limited partnership interest 08/"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_84ce425fbf99",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-dbabc5a83a301f2a, ROW-83ecf0d7f2593766, ROW-4f41fc5cda306314, ROW-680e2a3a1d789731, ROW-3198b4875d6d6071, ROW-22c28c221097388e. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000038",
+          "text": "orm Senior subordinated loan 12.16 % PIK SONIA (S) 7.50 % 08/2023 08/2033 66.4 61.6 66.4 (2)(6)(10) 3 Step Sports LLC (14) Provider of integrated youth sports solutions First lien senior secured revolving loan 12.32 % SOFR (M) 8.00 % 10/2023 10/2028 1.3 1.3 1.2 (2)(10) First lien senior secured loan 12.30 % ( 1.50 % PIK) SOFR (Q) 8.00 % 10/2023 10/2029 12.5 12.5 11.9"
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "9.9 49.9 49.4 (2)(6)(17) Limited partnership interest 06/2025 17,510,000 24.1 24.0 (2)(6) 74.0 73.4 Bellwether Buyer, L.L.C. and Bellwether Topco V Buyer, Inc. (14) Insurance program administrator First lien senior secured loan 8.81 % SOFR (M) 4.50 % 04/2025 04/2032 14.7 14.7 14.7 (2)(10) Benecon Midco II LLC and Benecon Holdings, LLC (14) Employee benefits provider for small and mid-si"
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "incipal Amortized Cost Fair Value % of Net Assets Class A-1 units 01/2025 1,368 1.4 1.4 (2) 8.3 8.2 Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (14) Outsourced supply chain solutions provider to operators of distribution centers First lien senior secured revolving loan 08/2024 05/2029 - - - (2)(12) First lien senior secured loan 8.93 % SOFR (M) 4.50 % 08/2024 11/2029 6.6 6.6 6.6 (2)(10) Second li"
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "FR (M) 5.75 % 02/2024 02/2030 31.8 31.8 31.1 (2)(10) Common units 02/2024 440,000 0.4 0.3 33.9 33.1 MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.83 % SOFR (M) 6.50 % 03/2025 03/2030 9.6 9.6 9.7 (2)(10)(17) Common units 03/2025 639,359 5.1 12.2 (2)(17) 14.7 21.9 NCP-MSI Buyer, Inc. and NCP MSI Co-Invest, "
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "ings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.8 8.8 8.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.8 8.2 PestCo Holdings, LLC and PestCo, LLC (14) Provider of pest control services to the resident"
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "t, L.P. (4)(15) Investment partnership Limited partnership interest 05/2014 99.80 % 4.4 0.4 (6)(17) PCG-TAC-CV, LP (5) Investment partnership Limited partnership interest 01/2025 99.80 % - 6.7 (2)(6)(17) Piper Jaffray Merchant Banking Fund I, L.P. Investment partnership Limited partnership interest 08/"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_90b4580dc765",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-39d129f34637a07c, ROW-187238af91b05c14, ROW-f9046893d48efd4d, ROW-ae6d658ffa3f35a8, ROW-9dc0aff9e061d384, ROW-c4ea83248326e3d5, ROW-17c2c86910a7f01e, ROW-e46eb4e2d19161e9, ROW-65a9d0038c5893d7, ROW-c55da5d355678972, ROW-8e82d60abf73d693, ROW-ba5ad5681ef87d8c, ROW-af60f99a3d5f90d8, ROW-8ae09a8932fbc556, ROW-f6e4eb4bb0b841b0, ROW-dc67b4399febad88, ROW-8e6052966517082a, ROW-95f195c356ef015d, ROW-0b6e4a69c95d3c00, ROW-4b3a8399ac057e3b, ROW-ed57a8769c611398. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000046",
+          "text": "form Senior subordinated loan 11.75 % PIK SONIA (S) 7.50 % 08/2023 08/2033 69.1 65.5 69.1 (2)(6)(9) 3 Step Sports LLC (13) Provider of integrated youth sports solutions First lien senior secured loan 12.01 % ( 1.50 % PIK) SOFR (Q) 8.00 % 10/2023 10/2029 12.5 12.5 12.3 (2)(9) Aventine Intermediate LLC & Aventine Holdings II LLC Media and production company First lien senior"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "t solutions to hospitals Series A preferred shares 12.75 % PIK 07/2022 07/2028 35,000 52.1 52.1 (2) Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 12.7 11.6 (2) Class B common units 07/2022 100,000 0.1 - (2) 64.9 63.7 Amerivet Partners Management, Inc. and AVE"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "ien senior secured loan 9.25 % SOFR (Q) 5.25 % 07/2024 07/2031 115.1 115.1 115.1 (2)(9) 117.0 117.0 Ardonagh Midco 3 Limited, Ardonagh Group Finco Pty Limited, Ardonagh Finco LLC, Ardonagh Finco B.V., and MDCP Co-Investors (Jade I), L.P. Insurance broker and underwriting servicer First lien senior secured loan 6.94 % SOFR (Q) 2.75 % 01/2025 02/2031 35.9 35.9 35.7 (2)(6)(16) Limited partnership interest 06/2025 17,510,000 24.1 26.7 (2)(6) 60.0 62.4 Bellwether Buyer, L.L.C."
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": " 13.75 % PIK 10/2021 60,236 104.2 102.1 (2) Class A common units 10/2021 30,500 - - (2) 159.5 152.8 Creek Parent, Inc. and Creek Feeder, L.P. (13) Provider of delivery technologies, development, drug manufacturing, biologics, gene therapies and consumer health products First lien senior secured revolving loan 12/2024 12/2031 - - - (2)(9) First lien senior secured loan 9.14 % SOFR (M) 5.00 % 12/2024 12/2031 207.6 207.6 207.6 (2)(9) Limi"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": " First lien senior secured loan 8.92 % SOFR (M) 4.75 % 09/2025 09/2031 28.3 28.3 28.0 (2) 28.5 28.2 Capstone Acquisition Holdings, Inc., Capstone Logistics Holdings, Inc. and Capstone Parent Holdings, LP (13) Outsourced supply chain solutions provider to operators of distribution centers First lien senior secured revolving loan 08/2024 05/2029 - - - (2)(9)(11) First lien senior secured loan 8.76 % SOFR (M) 4.50 % 08/2024 11/2029 6.5 6.5 6.5 (2)(9) Second lie"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "ien senior secured revolving loan 10.65 % SOFR (M) 6.50 % 09/2025 11/2027 0.3 0.3 0.3 (2)(6)(9)(12) First lien senior secured loan 10.65 % SOFR (M) 6.50 % 09/2025 11/2027 84.7 84.7 83.9 (2)(6)(9) 85.0 84.2 DriveCentric Holdings, LLC (13) Provider of CRM software to the automotive dealership ind"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "24 08/2030 23.5 23.4 23.3 (2)(9) Preferred stock 10.50 % PIK 04/2021 13,140 20.6 20.1 (2) 44.2 43.6 Doxim Inc. (13) Enterprise content management provider First lien senior secured revolving loan 10.65 % SOFR (M) 6.50 % 09/2025 11/2027 0.3 0.3 0.3 (2)(6)(9)(12) First lien senior secured loan 10.65 % SOFR (M) 6.50 % 09/2025 11/2027 84.7 84.7 83.9 (2)(6)(9) 85."
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": " lien senior secured loan 8.75 % SOFR (Q) 4.75 % 08/2024 08/2031 10.8 10.8 10.8 (2)(6)(9) 11.2 11.2 MC Accelerate Co-Invest Feeder LP and MC CIF Wealth Management (UK) Ltd. Global wealth management firm Z1 preferred shares 12.00 % PIK 08/2025 08/2031 12,901 12.8 12.8 (2)(6) Z2 preferred shares 12.00 % ( 6.00 % PIK) 08/2025 08/2031 12,901 12.8 12.8 (2)(6) Membership intere"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "OFR (Q) 5.75 % 02/2024 02/2030 31.7 31.7 29.8 (2)(9) Common units 02/2024 440,000 0.4 0.2 33.9 31.7 MP Midco Holdings, LLC and MP Topco Holdings, LLC Food contract manufacturer First lien senior secured loan 10.81 % SOFR (Q) 6.50 % 03/2025 03/2030 9.6 9.6 9.7 (2)(9)(16) Common units 03/2025 639,359 5.1 12.9 (2)(16) 14.7 22.6 NCP-MSI Buyer, Inc. and NCP MSI Co-Invest, "
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "ings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.8 8.8 8.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.8 8.2 PestCo Holdings, LLC and PestCo, LLC (13) Provider of pest control services to the resident"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "t, L.P. (4)(14) Investment partnership Limited partnership interest 05/2014 99.80 % 4.5 0.4 (6)(16) PCG-TAC-CV, LP (5) Investment partnership Limited partnership interest 01/2025 99.80 % - 6.9 (2)(6)(16) Piper Jaffray Merchant Banking Fund I, L.P. Investment partnership Limited partnership interest 08/"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "tor First lien senior secured loan 10.16 % SOFR (M) 6.00 % 11/2023 11/2030 130.5 130.5 114.8 (2)(9) Premise Health Holding Corp. and OMERS Bluejay Investment Holdings LP (13) Provider of employer-sponsored onsite health and wellness clinics and pharmacies First lien senior secured revolving loan 02/2024 03/2030 - - - (2)(9)(11) First lien senior secured loan 9.25 % SOFR (Q) 5.25 % 02/2024 03/2031 53.8 53.8 53.8 (2)(9) Class A"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "and Murchison Holdings, LLC Exploration and production company Preferred units 06/2022 41,000 - 0.8 Phoenix Operating LLC Oil and gas investment company First lien senior secured loan 11.10 % SOFR (Q) 7.00 % 08/2025 12/2027 46.0 43.2 43.0 (2)(9) VPROP Operating, LLC and V SandCo, LLC (5)(13) Sand-based proppant producer and distributor to the "
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "2) Preferred units 05/2025 26,025 0.4 0.4 (2) Co-Invest units 12/2018 5,969 0.6 0.1 (2) 266.1 260.2 Precision Concepts Parent Inc., Precision Concepts International LLC, and Precision Concepts Canada Corporation (13) Manufacturer of diversified packaging solutions and plastic injection molded products First lien senior secured loan 8.95 % SOFR (Q) 4.75 % 07/2025 08/2032 18.6 18.6 18.4 (2)(6)(9) Reagent Chemical & Research, LLC (13) Supplier of liquid hydrochloric acid First lien senior secure"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "lien senior secured revolving loan 9.43 % SOFR (M) 5.25 % 12/2024 12/2030 8.9 9.3 9.3 (2)(6)(9)(12) First lien senior secured loan 8.04 % CDOR (M) 5.50 % 12/2024 12/2030 36.2 35.1 36.2 (2)(6)(9) 45.0 46.1 St Athena Global LLC and St Athena Global Holdings Limited (13) Designer and manufacturer"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": ".00 % 06/2024 07/2029 3.8 3.8 3.8 (2)(9) Class A common units 06/2024 8,474 10.5 11.7 (2) 22.0 23.2 Sport Maska Inc. (13) Manufacturer of hockey equipment and related accessories First lien senior secured revolving loan 8.23 % CORRA (M) 5.50 % 12/2024 12/2030 0.6 0.6 0.6 (2)(6)(9)(12) First lien senior secured revolving loan 9.43 % SOFR (M) 5.25 % 12/2024 12/2030 8.9 9.3 9.3 (2)(6)("
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "ien senior secured revolving loan 8.23 % CORRA (M) 5.50 % 12/2024 12/2030 0.6 0.6 0.6 (2)(6)(9)(12) First lien senior secured revolving loan 9.43 % SOFR (M) 5.25 % 12/2024 12/2030 8.9 9.3 9.3 (2)(6)(9)(12) First lien senior secured loan 8.04 % CDOR (M) 5.50 % 12/2024 12/2030 36.2 35.1 36.2 (2)(6)(9) 45.0"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "0 % 05/2024 05/2031 38.7 38.7 38.7 (2)(9) Series A common units 05/2024 1,042 1.0 1.7 (2) 39.7 40.4 Titan BW Borrower L.P. (13) Provider of aftermarket and OEM solutions to the commercial and military aerospace industry First lien senior secured loan 9.45 % ( 2.88 % PIK) SOFR (Q) 5.25 % 07/2025 07/2032 62.7 62.7 62.0 (2)(9) Two Six Labs, LLC (13) Provider of information operations, cyber, and data analytics products and s"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": " % 07/2025 03/2031 2.5 2.5 2.5 (2)(9) Limited partnership interests 03/2025 330,000 0.3 0.3 6.8 6.8 Truck-Lite Co., LLC, ECCO Holdings Corp., and Clarity Technologies Holdings, LP (13) Provider of global transportation safety and productivity applications First lien senior secured revolving loan 06/2025 02/2031 - - - (2)(9)(11) First lien senior secured loan 9.14 % SOFR (M) 5.00 % 06/2025 02/2032 147.4 147.4 147.4 (2)(9) Clas"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": " First lien senior secured revolving loan 8.92 % SOFR (M) 4.75 % 07/2025 08/2032 0.6 0.6 0.6 (2)(9) First lien senior secured loan 8.93 % SOFR (Q) 4.75 % 07/2025 08/2032 11.0 11.0 10.9 (2)(9) Limited partnership interest 07/2025 1,392,000 1.4 1.4 (2) 13.0 12.9 13.2 13.1 0.09 % Total Investm"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": " (2)(6) Senior subordinated loan 9.29 % NIBOR (Q) 5.00 % 11/2024 11/2031 0.1 0.1 0.1 (2)(6) 0.2 0.2 Zeppelin US Buyer Inc. and Providence Equity Partners IX-C L.P. (13)(14) Specialty logistics platform for high-stakes projects in music, sports, production, fine art, and automotive industries First lien senior secured revolving loan 8.92 % SOFR (M) 4.75 % 07/2025 08/2032 0.6 0.6 0.6 (2)(9) First lien senior secured loan 8.93 % SOFR (Q) 4.75 % 07/2025 08/2032 11.0 11.0 10.9 (2)(9) Limited"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a0182d6e8c91",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-5ad062ab8e389c12, ROW-f12123258d8f85ba, ROW-c65e2fd90d103f09, ROW-4baf254a71f11451. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000054",
+          "text": " platform First lien senior secured loan 9.38 % SOFR (Q) 4.25 % 08/2024 08/2029 6.1 6.1 6.0 (2)(11) Trading platform for securities finance Class A common units 08/2024 1,859 1.9 1.9 8.0 7.9 Envestnet, Inc. Provider of comprehensive wealth management software, services, and solutio"
+        },
+        {
+          "accession": "0001287750-24-000054",
+          "text": "tions First lien senior secured loan 9.22 % CORRA (Q) 5.25 % 07/2024 07/2030 5.2 5.1 5.1 (2)(6)(11) GSV Purchaser, Inc. (15) Provider of maintenance, repair, and sales services for commercial emergency power backup generators First lien senior secured loan 10.00 % SOFR (Q) 4.75 % 08/2024 08/2031 38.6 38.6 38.6 (2)(11) Harvey Tool Company, LLC (15) Manufacturer of cutting tools used in the metalworking industry First"
+        },
+        {
+          "accession": "0001287750-24-000054",
+          "text": "dustry Class A-1 units 08/2022 96,897 2.3 1.6 (2) Class A-2 units 12/2016 3,500 3.5 2.4 (2) 5.8 4.0 Generator Buyer, Inc. (15) Provider of generator-based power solutions First lien senior secured loan 9.22 % CORRA (Q) 5.25 % 07/2024 07/2030 5.2 5.1 5.1 (2)(6)(11) GSV Purchaser, Inc. (15) Provider of maintenance, repair, and sales services for commercial emergen"
+        },
+        {
+          "accession": "0001287750-24-000054",
+          "text": "ings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.0 8.0 7.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.2 PestCo Holdings, LLC and PestCo, LLC (15) Provider of pest control services to the resident"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_bba6b0998b9f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-17c860bedf56f223, ROW-e74774628443e37c, ROW-0c096671554c3cad, ROW-8755243e66aca46f, ROW-908468be9ba9e5cb. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001628280-26-027688",
+          "text": "rst lien senior secured loan 8.45 % SOFR (Q) 4.75 % 02/2024 02/2031 26.5 26.5 26.5 (2)(9) 28.2 28.2 Einstein Parent, Inc. (13) Provider of SaaS based collaborative work management software First lien senior secured loan 8.92 % SOFR (Q) 5.25 % 01/2025 01/2031 45.9 45.9 45.0 (2)(9) Elemica, Inc. and EZ Elemica Holdings, Inc. (13) SaaS based supply chain management software provid"
+        },
+        {
+          "accession": "0001628280-26-027688",
+          "text": "oftware First lien senior secured loan 8.92 % SOFR (Q) 5.25 % 01/2025 01/2031 45.9 45.9 45.0 (2)(9) Elemica, Inc. and EZ Elemica Holdings, Inc. (13) SaaS based supply chain management software provider focused on chemical markets First lien senior secured loan 8.45 % SOFR (Q) 4.75 % 02/2026 02/2032 113.0 113.0 110.8 (2)(9) Preferred equity 09/2019 4,599 4.6 5.0 (2) 117.6 115.8 EP Purchaser, LLC and TPG VIII EP Co-Invest "
+        },
+        {
+          "accession": "0001628280-26-027688",
+          "text": "ition Date Maturity Date Shares/Units Principal Amortized Cost Fair Value % of Net Assets 11.0 10.9 GHX Ultimate Parent Corporation and Nexus TopCo LP (13) On-demand supply chain automation solutions provider to the healthcare industry First lien senior secured loan 8.70 % ( 2.50 % PIK) SOFR (Q) 5.00 % 12/2024 02/2033 92.0 92.0 90.2 (2)(9) First lien senior secured loan 8.70 % ( 2.50 % PIK) SOFR (Q) 5.00 % 02/2026 02/2033 16.8 16.8 16.4 "
+        },
+        {
+          "accession": "0001628280-26-027688",
+          "text": " lien senior secured loan 6.52 % Euribor (Q) 4.50 % 12/2024 05/2032 33.3 32.7 33.3 (2)(6) 59.6 60.1 Merit Financial Group, LLC and CWC Fund I (MFA) LP (13) Registered investment adviser platform First lien senior secured revolving loan 8.42 % SOFR (Q) 4.75 % 08/2025 08/2032 0.8 0.8 0.8 (2)(6)(9) First lien senior secured revolving loan 10.50 % Base Rate (Q) 3.75 % 08/2025 08/2032 0.5 0.5 0.5 ("
+        },
+        {
+          "accession": "0001628280-26-027688",
+          "text": "ings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 9.7 9.7 8.7 (2) Participation rights 02/2024 02/2054 1 - - (2) 9.7 8.7 See accompanying notes to consolidated financial statements. 40 ARES CAPITAL CORPORATION AN"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_c0f022200d85",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-d92b14c3db5ff953, ROW-94d0cbf0b747e7fc. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000011",
+          "text": " First lien senior secured loan 11.87 % SOFR (Q) 6.25 % 08/2023 03/2027 7.6 7.6 7.4 (2)(11) 7.8 7.6 Infinity Home Services HoldCo, Inc., D&S Amalco and IHS Parent Holdings, L.P. (15) Provider of residential roofing and exterior repair and replacement services First lien senior secured loan 12.20 % SOFR (Q) 6.75 % 12/2022 12/2028 13.8 13.8 13.8 (2)(6)(11) First lien senior secured loan 11.50 % CDOR (Q) 6.00 % 11/2023 12/2028 1.1 1.1 1.2 (2)(6)(11) Class"
+        },
+        {
+          "accession": "0001287750-24-000011",
+          "text": "t lien senior secured loan 11.50 % CDOR (Q) 6.00 % 09/2023 02/2028 1.0 1.0 1.0 (2)(6)(11) 70.2 68.4 Riser Interco, LLC (15) Insurance program administrator First lien senior secured loan 11.19 % SONIA (Q) 6.00 % 10/2023 10/2029 1.1 1.0 1.1 (2)(11) First lien senior secured loan 11.35 % SOFR (Q) 6.00 % 10/2023 10/2029 7.6 7.6 7.4 (2)(11) 8.6 8.5 "
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_c3c2666634a7",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-9db68e8a9ef6ffe7. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. All flagged rows in this quarter are business-description or participation-right continuations inheriting the adjoining issuer header. The actual published issuer is supported. Repairing the detector is appropriate; a blanket issuer-name exemption would not be justified.",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000028",
+          "text": "ings, LLC Airport restaurant operator Second lien notes 10.00 % PIK 02/2024 02/2031 8.0 8.0 7.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.2 PestCo Holdings, LLC and PestCo, LLC (15) Provider of pest control services to the resident"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_cab275031954",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-9bdb8e5b5bca7a2f. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. All flagged rows in this quarter are business-description or participation-right continuations inheriting the adjoining issuer header. The actual published issuer is supported. Repairing the detector is appropriate; a blanket issuer-name exemption would not be justified.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000045",
+          "text": "t solutions to hospitals Series A preferred shares 12.75 % PIK 07/2022 07/2028 35,000 40.6 40.6 (2) Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 10.9 12.7 (2) Class B common units 07/2022 100,000 0.1 0.1 (2) 51.6 53.4 AthenaHealth Group Inc., Minerva Holdco,"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d1fa4e536429",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-9e915f66f980dba4, ROW-7816323a4a05ffe3. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. All flagged rows in this quarter are business-description or participation-right continuations inheriting the adjoining issuer header. The actual published issuer is supported. Repairing the detector is appropriate; a blanket issuer-name exemption would not be justified.",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000039",
+          "text": "t solutions to hospitals Series A preferred shares 12.75 % PIK 07/2022 07/2028 35,000 44.7 44.7 (2) Provider of Revenue Cycle Management solutions to hospitals Preferred units 8.00 % PIK 07/2022 9,900 11.5 12.2 (2) Class B common units 07/2022 100,000 0.1 0.1 (2) 56.3 57.0 Amerivet Partners Management, Inc. and A"
+        },
+        {
+          "accession": "0001287750-24-000039",
+          "text": "Holdings, LLC Airport restaurant operator Second lien notes 10.00 % 02/2024 02/2031 8.0 8.0 7.2 (2) Participation rights 02/2024 02/2054 1 - - (2) 8.0 7.2 PestCo Holdings, LLC and PestCo, LLC (15) Provider of pest control services to the resident"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e8bc75fbdf5d",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-7a4b13d45d7662af, ROW-b54027f8357f1219, ROW-24f57db18696412f, ROW-3bf372af9e5cdae7. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001628280-26-050307",
+          "text": "senior secured loan 8.66 % ( 2.75 % PIK) SOFR (Q) 5.00 % 01/2025 02/2032 4.2 4.2 4.2 (2)(9) 4.2 4.2 FlyWheel Acquireco, Inc. (13) Professional employer organization offering human resources, compliance and risk management services First lien senior secured revolving loan 9.88 % SOFR (M) 6.25 % 05/2023 05/2028 7.4 7.4 7.4 (2)(9) First lien senior secured loan 9.89 % SOFR (M) 6.25 % 05/2023 05/2030 51.2 51.2 51.2 (2)(9) 58.6 58"
+        },
+        {
+          "accession": "0001628280-26-050307",
+          "text": "rent Holdings, LLC Airport restaurant operator Second lien notes 02/2024 02/2031 9.7 9.7 7.3 (2)(8) Participation rights 02/2024 02/2054 1 - - (2) 9.7 7.3 PestCo Holdings, LLC and PestCo, LLC (13) Provider of pest control services to the resident"
+        },
+        {
+          "accession": "0001628280-26-050307",
+          "text": "cture Second lien senior secured loan 10.51 % SOFR (M) 6.75 % 06/2021 06/2029 55.3 55.3 54.7 (2)(9) Paris US Holdco, Inc. and Trimaster Manufacturing Inc. (13) Manufacturer of high-tolerance precision machined components and assemblies for the aerospace and defense industry First lien senior secured revolving loan 8.39 % SOFR (M) 4.75 % 12/2024 12/2031 0.3 0.3 0.3 (2)(6)(9) First lien senior secured loan 8.39 % SOFR (M) 4.75 % 12/2024 12/2031 20.1 20.1 20.1 (2)(6)(9) Firs"
+        },
+        {
+          "accession": "0001628280-26-050307",
+          "text": "tutions First lien senior secured loan 8.42 % SOFR (Q) 4.75 % 09/2025 09/2031 32.8 32.8 32.1 (2)(9) YE Brands Holdings, LLC (13) Sports camp operator First lien senior secured loan 8.48 % SOFR (Q) 4.75 % 10/2021 10/2027 0.1 0.1 0.1 (2)(9) First lien senior secured loan 8.48 % SOFR (Q) 4.75 % 09/2023 10/2027 3.6 3.6 3.6 (2)(9) 3.7 3.7 ZB"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_fc83027d0a56",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Fresh issuer_name_differs_from_page reconstruction matches all affected rows for this quarter: ROW-805313e54fbbe696. Independently compared each direct FV-context printed row and preceding issuer headers with the published issuer. The population includes genuine printed-header/member differences; business descriptions, reordered legal entities and cosmetic punctuation differences must not be equated with wrong economic borrowers. The confirmed-error rows are explicitly enumerated and the 15 continuation/participation false positives are separated across the full population. Name repairs remain withdrawn because they introduced unsupported position joins. Parking until tranche-continuity validation is appropriate, not a finding disposition.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000010",
+          "text": "5/2021 5/2026 61.0 61.0 59.8 (2)(6)(11) A ordinary shares 5/2021 2,476,744 5.7 6.5 (2)(6) 66.7 66.3 Alcami Corporation and ACM Note Holdings, LLC (15) Outsourced drug development services provider First lien senior secured loan 11.42 % SOFR (M) 7.00 % 12/2022 12/2028 9.5 9.5 9.0 (2)(11) Senior subordinated loan 8.00 % PIK 12/2022 6/2029 19.5 19.5 19.5 (2) 29.0 28.5 Amryt Pharmaceutica"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_0f1fbe5f6cb8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently read raw row_validation_issues X11 population and cached schedule row. The exact flagged row is ROW-325de23fde34df67. The printed count is in Shares/Units, not Principal; December 2022 prints20.0 whereas later quarters print20,000,000. A subordinated-note name alone does not authorize inventing principal or rescaling the printed count. The proposed as-filed response is source-supported and remains unaccepted; this does not prove economic units are consistent across filings.",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000011",
+          "text": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest (8.50% inte"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_3881dc9a1f9a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently read raw row_validation_issues X11 population and cached schedule row. The exact flagged row is ROW-acfa1fc0b44026df. The printed count is in Shares/Units, not Principal; December 2022 prints20.0 whereas later quarters print20,000,000. A subordinated-note name alone does not authorize inventing principal or rescaling the printed count. The proposed as-filed response is source-supported and remains unaccepted; this does not prove economic units are consistent across filings.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000021",
+          "text": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_4977fb8ad759",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently read raw row_validation_issues X11 population and cached schedule row. The exact flagged row is ROW-ab271ae4111d90b2. The printed count is in Shares/Units, not Principal; December 2022 prints20.0 whereas later quarters print20,000,000. A subordinated-note name alone does not authorize inventing principal or rescaling the printed count. The proposed as-filed response is source-supported and remains unaccepted; this does not prove economic units are consistent across filings.",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000028",
+          "text": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Constellation Wealth Capital Fund, L.P. (16) Specialist alternative asset management platform Limit"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_71a069e41abd",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently read raw row_validation_issues X11 population and cached schedule row. The exact flagged row is ROW-ab3eaca2a5c8973e. The printed count is in Shares/Units, not Principal; December 2022 prints20.0 whereas later quarters print20,000,000. A subordinated-note name alone does not authorize inventing principal or rescaling the printed count. The proposed as-filed response is source-supported and remains unaccepted; this does not prove economic units are consistent across filings.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000045",
+          "text": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_a86a87b1dd2a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently read raw row_validation_issues X11 population and cached schedule row. The exact flagged row is ROW-db0c83dcbb4ad428. The printed count is in Shares/Units, not Principal; December 2022 prints20.0 whereas later quarters print20,000,000. A subordinated-note name alone does not authorize inventing principal or rescaling the printed count. The proposed as-filed response is source-supported and remains unaccepted; this does not prove economic units are consistent across filings.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000010",
+          "text": " Assets ACAS Equity Holdings Corporation (5) Investment company Common stock 1/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 1/2017 4/2021 20.0 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 1/2017 8.50"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_bff7c7dfe609",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently read raw row_validation_issues X11 population and cached schedule row. The exact flagged row is ROW-4155959b91275eab. The printed count is in Shares/Units, not Principal; December 2022 prints20.0 whereas later quarters print20,000,000. A subordinated-note name alone does not authorize inventing principal or rescaling the printed count. The proposed as-filed response is source-supported and remains unaccepted; this does not prove economic units are consistent across filings.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000036",
+          "text": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "ownership-percentage-stored-as-share-count",
+      "outcome": "supported",
+      "rationale": "Cached direct rows distinguish ownership percentages from unit counts. Fresh source comparison reproduces all saved equity comparisons, with the Evolent monetary-column exception explicitly excluded. A detector keyed to the actual Shares/Units cell containing percent and allowing independently anchored separate counts would catch recurrence without converting ownership to units. This is a proposed check, not permission to infer quantity from value.",
+      "evidence": [
+        {
+          "accession": "0001287750-24-000028",
+          "text": "(2)(11) Senior subordinated loan 13.29 % PIK SOFR (Q) 8.00 % 02/2024 02/2031 53.4 50.0 53.3 (2)(11) Class A LP interests 02/2024 6.27 % 2.9 8.2 (2) 79.5 89.9 DRS Holdings III, Inc. and DRS Holdings I, Inc. (15) Footwear and orthopedic foot-care br"
+        }
+      ]
+    },
+    {
+      "observation_key": "member-instrument-differs-from-printed-row",
+      "outcome": "supported",
+      "rationale": "ROW-d5d49f29d740874d directly prints a second lien senior secured loan with principal3.8m, cost3.7m and FV3.8m, despite the Series A preferred member label. The instrument/category/principal repair follows the printed row. The proposed context-owned instrument comparison catches this mismatch; it must use header column ownership rather than searching arbitrary nearby loan words.",
+      "evidence": [
+        {
+          "accession": "0001287750-25-000046",
+          "text": "ions First lien senior secured loan 9.96 % SOFR (Q) 5.50 % 12/2024 12/2029 31.2 31.2 31.2 (2)(6)(9) Second lien senior secured loan 10.39 % SOFR (M) 6.00 % 08/2025 12/2029 3.8 3.7 3.8 (2)(6)(9) 34.9 35.0 See accompanying notes to consolidated financial statements. 19 ARES CAPITAL CORPORATION "
+        }
+      ]
+    },
+    {
+      "observation_key": "printed-name-repair-creates-cross-tranche-chain",
+      "outcome": "supported",
+      "rationale": "Source-header changes can be valid text corrections while causing invalid position matches. Independent SQL confirms nvard and nvarb have identical IDs and membership over19779rows; withdrawal is therefore effective. The failed nvarc artifacts document the candidate joins rather than proving every differing edge wrong. Requiring source-backed lien/class/tranche continuity and reviewing all changed edges is appropriate; same issuer and maturity alone are insufficient.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000010",
+          "text": "provider First lien senior secured loan 11.42 % SOFR (M) 7.00 % 12/2022 12/2028 9.5 9.5 9.0 (2)(11) Senior subordinated loan 8.00 % PIK 12/2022 6/2029 19.5 19.5 19.5 (2) 29.0 28.5 Amryt Pharmaceuticals, Inc. Biopharmaceutical company dedicated to acquiring, developing "
+        }
+      ]
+    },
+    {
+      "observation_key": "preexisting-cross-tranche-position-chain",
+      "outcome": "supported",
+      "rationale": "Independently reproduced untouched nvara versus rg1b:3264changedIDs,607splits,558merges,6658membership-unionrows. The bounded AI Fire source rows distinguish simultaneous second-lien acquisitions with matching maturities. Acquisition date is useful competing-tranche evidence, not a universal identity key or proof every changed edge is wrong. The report correctly limits source review to19rows and leaves970lost/839gained adjacency edges unaudited. Proposed checks should flag ambiguities for review rather than automatically relink them.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000021",
+          "text": "(3) Acquisition Date Maturity Date Shares/Units Principal Amortized Cost Fair Value % of Net Assets Second lien senior secured loan 16.11 % PIK SOFR (S) 11.00 % 06/2022 09/2027 10.4 10.4 10.4 (2)(11) Common units 03/2021 46,990 4.7 6.0 (2) 109.1 110.4 Applied Technical Services, LLC (15) Provider e"
+        }
+      ]
+    },
+    {
+      "observation_key": "printed-unit-count-missing-outside-detector",
+      "outcome": "supported",
+      "rationale": "Fresh HTML parsing agrees with all5452saved equity/proxy direct-row comparisons. These are bounded programmatic comparisons, not a full human source audit. The report excludes Evolent principal3.8m from numeric quantity validation and retains unresolved JoyceLane blank. Direct printed quantity versus published units, including null outputs, addresses detector undercoverage; it must retain header/column and percent controls rather than universally reading the third-last cell.",
+      "evidence": [
+        {
+          "accession": "0001287750-22-000052",
+          "text": "try Second lien senior secured loan 9.63 % LIBOR (Q) 6.75 % 5/2021 5/2029 114.1 114.1 110.7 (2)(11) Class A units 6/2017 14,853,569 15.7 28.5 (2) 129.8 139.2 Global Medical Response, Inc. and GMR Buyer Corp. Emergency air medical services provid"
+        }
+      ]
+    },
+    {
+      "observation_key": "pik-concept-holds-whole-coupon",
+      "outcome": "supported",
+      "rationale": "Read the corrected coupon rows and direct-source anchor links. The printed total and parenthesized component differ from the misleading concept names; Cadence prints13.23percent including2percentPIK, not2percenttotal. Existing nvara pik_printed detects PIK-component mismatch and is an appropriate recurrence reference, but does not independently guarantee every total-coupon field; the suggested total=cash+PIK check and printed-cell comparison remain necessary. Pure PIK rows require total=PIK and cash0.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000010",
+          "text": " lien senior secured loan 12.92 % ( 2.00 % PIK) LIBOR (Q) 8.50 % 7/2018 11/2023 9.7 9.7 9.5 (2)(11) First lien senior secured loan 13.23 % ( 2.00 % PIK) LIBOR (Q) 8.50 % 2/2020 11/2023 7.8 7.8 7.6 (2)(11) First lien senior secured loan 12.92 % ( 2.00 % PIK) LIBOR (Q) 8.50 % 7/2020 11/2023 5.3 5.2 5.2 (2"
+        }
+      ]
+    },
+    {
+      "observation_key": "source-member-borrower-name-differs-from-printed-header",
+      "outcome": "supported",
+      "rationale": "Compared all131enumerated row keys against fresh cached direct rows and adjoining headers, including continuation rows, underlying borrower swaps, legal-entity additions and cosmetic differences. The related diagnostic1314rows includes194unparsedheaders, expressly outside claimed manual verification. The proposed owning-header comparison with continuation/participation false-positive controls addresses omissions from the79flag detector; safeguards on new position edges are needed before restoring withdrawn corrections.",
+      "evidence": [
+        {
+          "accession": "0001287750-23-000010",
+          "text": "5/2021 5/2026 61.0 61.0 59.8 (2)(6)(11) A ordinary shares 5/2021 2,476,744 5.7 6.5 (2)(6) 66.7 66.3 Alcami Corporation and ACM Note Holdings, LLC (15) Outsourced drug development services provider First lien senior secured loan 11.42 % SOFR (M) 7.00 % 12/2022 12/2028 9.5 9.5 9.0 (2)(11) Senior subordinated loan 8.00 % PIK 12/2022 6/2029 19.5 19.5 19.5 (2) 29.0 28.5 Amryt Pharmaceutica"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "request_resolution_reviews": [
+    {
+      "request_id": "ARES-VERIFY-PRINTED-RATES-001",
+      "outcome": "supported",
+      "rationale": "Reviewed all five implementation/schema/test files. The new declaration accepts exact fact coordinates and units, no numeric value. full_tier reads cached source facts and compares fact*100 with publication, rejects missing/conflicting facts and preserves raw_stale; it does not replay the misleading prior field transforms. Independent cached HTML inspection links each of16anchors to exactly one actual rate fact on its target FV printed row, including Centric and Eagle adjacent contexts. Printed coupon semantics, not numeric similarity alone, justify the concept choice. This is a verification repair, not a threshold exemption or an interest-rate storage migration. It still depends on independently reviewed coordinates: the code does not itself prove a chosen source fact belongs to a particular printed coupon or enforce semantic column linkage. Root201test and16correct/16wrong cached results were inspected, not rerun by this reviewer. The current all_in publication convention is evaluated as implemented; no migration authorized.",
+      "evidence": [
+        {
+          "accession": "0001287750-22-000052",
+          "text": "First lien senior secured revolving loan 8.63 % LIBOR (Q) 5.75 % 5/2020 10/2024 7.4 7.4 7.1 (2)(11) First lien senior secured loan 11.80 % PIK SOFR (Q) 9.00 % 10/2018 10/2025 74.2 74.1 71.2 (2)(11) Membership interests 10/2018 279,392 2.9 6.1 (2) 84.4 84.4 DRS Holdings III, Inc. and DRS Holdings "
+        },
+        {
+          "accession": "0001287750-22-000052",
+          "text": "First lien senior secured revolving loan 8.63 % LIBOR (Q) 5.75 % 5/2020 10/2024 7.4 7.4 7.1 (2)(11) First lien senior secured loan 11.80 % PIK SOFR (Q) 9.00 % 10/2018 10/2025 74.2 74.1 71.2 (2)(11) Membership interests 10/2018 279,392 2.9 6.1 (2) 84.4 84.4 DRS Holdings III, Inc. and DRS Holdings "
+        },
+        {
+          "accession": "0001287750-23-000010",
+          "text": " lien senior secured loan 12.92 % ( 2.00 % PIK) LIBOR (Q) 8.50 % 7/2018 11/2023 9.7 9.7 9.5 (2)(11) First lien senior secured loan 13.23 % ( 2.00 % PIK) LIBOR (Q) 8.50 % 2/2020 11/2023 7.8 7.8 7.6 (2)(11) First lien senior secured loan 12.92 % ( 2.00 % PIK) LIBOR (Q) 8.50 % 7/2020 11/2023 5.3 5.2 5.2 (2"
+        },
+        {
+          "accession": "0001287750-23-000036",
+          "text": "ecured revolving loan 10.83 % ( 2.00 % PIK) SOFR (M) 5.75 % 10/2018 02/2025 2.2 2.2 2.0 (2)(11)(14) First lien senior secured revolving loan 10.99 % ( 2.00 % PIK) SOFR (Q) 5.75 % 10/2018 02/2025 16.3 16.3 14.7 (2)(11)(14) First lien senior secured revolving loan 15.26 % ( 4.25 % PIK) SOFR (Q) 10.00 % 07/2020 02/2025 2.0"
+        },
+        {
+          "accession": "0001287750-24-000011",
+          "text": "or secured revolving loan 11.46 % ( 1.00 % PIK) SOFR (M) 6.00 % 10/2018 11/2026 1.0 1.0 0.9 (2)(11) First lien senior secured loan 11.44 % ( 1.00 % PIK) SOFR (M) 6.00 % 10/2018 11/2026 30.5 30.5 29.0 (2)(11) F-55 ARES CAPITAL CORPORATION AND SUBSIDIARIES CONSOLIDATED SCHEDULE OF INVESTMENTS As of December "
+        },
+        {
+          "accession": "0001287750-24-000054",
+          "text": "irst lien senior secured revolving loan 11.95 % SOFR (M) 7.00 % 08/2021 08/2027 1.2 1.2 1.1 (2)(11) First lien senior secured loan 11.95 % ( 3.50 % PIK) SOFR (M) 7.00 % 08/2021 08/2027 27.8 27.8 25.9 (2)(11) Limited partner interests 08/2021 3.61 % 5.0 2.6 (2) 34.0 29.6 RD Holdco Inc. (5) Manufacturer and "
+        },
+        {
+          "accession": "0001287750-24-000054",
+          "text": " 09/2021 85,000 111.1 111.1 Class B preferred units 9.50 % PIK 06/2023 42,500 47.8 47.8 158.9 158.9 Production Resource Group, L.L.C. and PRG III, LLC (4) Provider of rental equipment, labor, production management, scenery, and other products to various entertainment end-markets First lien senior secured loan 17.86 % ( 10.10 % PIK) SOFR (Q) 8.50 % 08/2018 08/2029 48.3 48.3 48.3 (2)(11) First lien senior secured loan 12.88 % ( 3.13 % PIK) SOFR (Q) 8.13 % 07/2020 08/2029 15.6 15.5 15.6"
+        },
+        {
+          "accession": "0001287750-24-000054",
+          "text": "n senior secured loan 17.86 % ( 10.10 % PIK) SOFR (Q) 8.50 % 08/2018 08/2029 48.3 48.3 48.3 (2)(11) First lien senior secured loan 12.88 % ( 3.13 % PIK) SOFR (Q) 8.13 % 07/2020 08/2029 15.6 15.5 15.6 (2)(11) See accompanying notes to consolidated financial statements 46 ARES CAPITAL CORPORATION AND SUBSIDI"
+        },
+        {
+          "accession": "0001287750-25-000020",
+          "text": "nior secured loan 11.06 % ( 2.50 % PIK) SOFR (M) 6.50 % 02/2018 06/2025 0.3 0.3 0.3 (2)(10) 2.3 2.2 Convey Health Solutions, Inc. Healthcare workforce management software provider First lien senior secured loan 9.57 % ( 4.25 % PIK) SOFR (S) 5.25 % 02/2022 07/2029 0.1 0.1 0.1 (2)(6)(10) See accompanying notes to consolidated financial statements. 18 ARES CAPITAL CORPORATION AND SUBSID"
+        },
+        {
+          "accession": "0001287750-25-000020",
+          "text": " lien senior secured loan 11.95 % ( 8.95 % PIK) SOFR (S) 7.50 % 08/2021 08/2029 8.2 8.2 8.2 (2)(10) First lien senior secured loan 11.95 % ( 8.95 % PIK) SOFR (Q) 7.50 % 05/2024 08/2029 28.2 28.0 28.2 (2)(10) First lien senior secured loan 11.95 % SOFR (Q) 7.50 % 03/2025 08/2029 2.6 2.5 2.6 (2)(10) First li"
+        },
+        {
+          "accession": "0001287750-25-000020",
+          "text": "2031 57.1 57.1 57.1 (2)(10) Limited partnership interest 06/2024 11,184,000 11.2 12.1 (2) 68.3 69.2 Radiant Intermediate Holding, LLC Provider of HVAC, plumbing and electrical services First lien senior secured loan 10.41 % ( 3.00 % PIK) SOFR (Q) 6.00 % 04/2023 11/2026 2.1 2.1 1.8 (2)(10) Redwood Services, LLC and Redwood Services Holdco, LLC (14) Provider of residential HVAC and plumbi"
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "nior secured loan 11.02 % ( 2.50 % PIK) SOFR (M) 6.50 % 02/2018 07/2025 0.3 0.3 0.3 (2)(10) 2.3 2.2 Convey Health Solutions, Inc. Healthcare workforce management software provider First lien senior secured loan 9.65 % ( 4.25 % PIK) SOFR (Q) 5.25 % 09/2019 07/2029 1.9 1.9 1.5 (2)(6)(10) First lien senior secured loan 9.52 % ( 4.25 % PIK) SOFR (S) 5.25 % 02/2022 07/2029 0.1 0.1 0.1 (2)"
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "(3) Acquisition Date Maturity Date Shares/Units Principal Amortized Cost Fair Value % of Net Assets Eagle Football Holdings BidCo Limited and Eagle Football Holdings Limited Multi-club sports platform Senior subordinated loan 19.00 % PIK 12/2022 12/2028 32.1 32.1 32.1 (2)(6) Senior subordinated loan 12.29 % PIK SOFR (S) 8.15 % 12/2022 12/2028 57.2 57.2 48.6 (2)(6)(10) Ordi"
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "(3) Acquisition Date Maturity Date Shares/Units Principal Amortized Cost Fair Value % of Net Assets Eagle Football Holdings BidCo Limited and Eagle Football Holdings Limited Multi-club sports platform Senior subordinated loan 19.00 % PIK 12/2022 12/2028 32.1 32.1 32.1 (2)(6) Senior subordinated loan 12.29 % PIK SOFR (S) 8.15 % 12/2022 12/2028 57.2 57.2 48.6 (2)(6)(10) Ordi"
+        },
+        {
+          "accession": "0001287750-25-000038",
+          "text": "06/2031 4.7 4.7 4.7 (2)(10) Limited partnership interest 06/2024 11,184,000 11.2 12.8 (2) 15.9 17.5 Radiant Intermediate Holding, LLC Provider of HVAC, plumbing and electrical services First lien senior secured loan 10.35 % ( 3.00 % PIK) SOFR (S) 6.00 % 04/2023 11/2026 2.1 2.1 1.9 (2)(10) Redwood Services LP (14) Provider of residential HVAC and plumbing services First lien senior secur"
+        },
+        {
+          "accession": "0001287750-25-000046",
+          "text": "t lien senior secured loan 12.16 % ( 4.50 % PIK) SOFR (M) 8.00 % 12/2021 12/2027 0.2 0.2 0.2 (2)(9) First lien senior secured loan 12.16 % ( 4.50 % PIK) SOFR (M) 8.00 % 08/2022 12/2027 0.2 0.2 0.2 (2)(9) First lien senior secured loan 12.16 % ( 4.50 % PIK) SOFR (M) 8.00 % 04/2023 12/2027 1.7 1.7 1.6 (2"
+        }
+      ]
+    }
+  ],
+  "review_scope": {
+    "outstanding_findings": 20,
+    "flagged_name_rows": 79,
+    "x11_rows": 6,
+    "source_comparisons_reparsed": 6785,
+    "distinct_source_rows": 6427,
+    "observations": 7,
+    "rate_anchors": 16,
+    "rate_rows": 14,
+    "source_only": "Cached local filings; no network",
+    "tests_and_builds": "Not run by reviewer",
+    "diagnostics": "scratch/fund_runs/0001287750/reviewer/"
+  },
+  "limitations": [
+    "Supported means investigated with supported conclusions, not cleared or correct.14name findings remain unresolved and6X11 dispositions are proposed only.",
+    "Baseline6658membership-unionrows are measured drift, not6658source-confirmederrors. Only19boundedbaseline source rows read; other changed edges remain unresolved.",
+    "5452equity/proxy rows were independently reparsed against saved comparisons; column heuristics are qualified, not a universal correctness proof.194relatedheaders andJoyceLane quantity remain unresolved.",
+    "The independent20card sample reports0published errors; it is not a guarantee. Shares5,PIK2,pctNAV0; Wilson upper bound16.1percent at card level. Sample labels/results inspected, not independently relabelled.",
+    "No tests, rebuild, semantic diff, quarter re-attestation or accepted-fund regression run by this reviewer. No dispositions accepted."
+  ]
+}

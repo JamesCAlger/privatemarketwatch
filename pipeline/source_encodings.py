@@ -36,12 +36,24 @@ def load_encodings(wrapper_directory=None):
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','unfunded_note_aliases','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns',
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
                 'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context',
-                'cash_rows_include_concepts','subtotal_members','cost_total_excludes','thousands_scale_filings'}:
+                'cash_rows_include_concepts','subtotal_members','cost_total_excludes','thousands_scale_filings','rate_verification_anchors'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
             raise ValueError('Invalid or duplicate encoding CIK: '+str(path))
         for key,values in encoding.items():
+            if key == 'rate_verification_anchors':
+                from pipeline.rate_verification_anchors import entry_errors
+                if not isinstance(values, list) or not values:
+                    raise ValueError('rate_verification_anchors requires explicit entries: '+str(path))
+                for entry in values:
+                    errors = entry_errors(entry)
+                    if errors:
+                        raise ValueError('Invalid rate verification anchor ('+'; '.join(errors)+'): '+str(path))
+                keys = [(e['accession'], e['context'], e['field']) for e in values]
+                if len(set(keys)) != len(keys):
+                    raise ValueError('Duplicate rate verification anchor: '+str(path))
+                continue
             if key=='printed_rows_without_context':
                 # Rows printed with no XBRL context, declared from the printed line (owner ruling
                 # 2026-10-18, OVR-T8Y-R2; pipeline.printed_rows). Objects, not strings.

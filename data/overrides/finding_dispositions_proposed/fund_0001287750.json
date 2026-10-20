@@ -1,0 +1,156 @@
+{
+ "status": "PROPOSED, not accepted",
+ "sandbox": "nvard",
+ "dispositions": [
+  {
+   "disposition_id": "PD-X11-1287750-2023-12-31",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "reason_key": "x11-count-in-units-column-no-principal",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-24-000011",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest (8.50% inte",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest (8.50% inte"
+    }
+   ],
+   "decided_by": "PROPOSED by /root/ares_sol; not accepted",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-X11-1287750-2023-03-31",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "reason_key": "x11-count-in-units-column-no-principal",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-23-000021",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5"
+    }
+   ],
+   "decided_by": "PROPOSED by /root/ares_sol; not accepted",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-X11-1287750-2024-03-31",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "reason_key": "x11-count-in-units-column-no-principal",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-24-000028",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Constellation Wealth Capital Fund, L.P. (16) Specialist alternative asset management platform Limit",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Constellation Wealth Capital Fund, L.P. (16) Specialist alternative asset management platform Limit"
+    }
+   ],
+   "decided_by": "PROPOSED by /root/ares_sol; not accepted",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-X11-1287750-2023-09-30",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "reason_key": "x11-count-in-units-column-no-principal",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-23-000045",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5"
+    }
+   ],
+   "decided_by": "PROPOSED by /root/ares_sol; not accepted",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-X11-1287750-2022-12-31",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2022-12-31"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "reason_key": "x11-count-in-units-column-no-principal",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-23-000010",
+     "verbatim": " Assets ACAS Equity Holdings Corporation (5) Investment company Common stock 1/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 1/2017 4/2021 20.0 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 1/2017 8.50",
+     "quote": " Assets ACAS Equity Holdings Corporation (5) Investment company Common stock 1/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 1/2017 4/2021 20.0 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 1/2017 8.50"
+    }
+   ],
+   "decided_by": "PROPOSED by /root/ares_sol; not accepted",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-X11-1287750-2023-06-30",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X11",
+   "ciks": [
+    "0001287750"
+   ],
+   "quarters": [
+    "2023-06-30"
+   ],
+   "statement": "Shares/Units is populated and Principal is blank on the printed ARES2007-3R subordinated-note row. Preserve the source column meaning; no principal may be invented.",
+   "basis": "read",
+   "reason_key": "x11-count-in-units-column-no-principal",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001287750-23-000036",
+     "verbatim": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5",
+     "quote": "hicles ACAS Equity Holdings Corporation (5) Investment company Common stock 01/2017 589 0.4 0.4 (6) ARES 2007-3R Investment vehicle Subordinated notes 01/2017 04/2021 20,000,000 - 0.1 (6) Blue Wolf Capital Fund II, L.P. (4) Investment partnership Limited partnership interest 01/2017 8.5"
+    }
+   ],
+   "decided_by": "PROPOSED by /root/ares_sol; not accepted",
+   "decided_on": "2026-10-20"
+  }
+ ]
+}
