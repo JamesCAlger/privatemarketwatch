@@ -1,0 +1,411 @@
+{
+  "reviewer_id": "/root/remaining_gsbd_check_sol",
+  "report_digest": "2d57541399a725d0b47f911102b9515a37a13a02b7352508439d1d246258524e",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_038da11bb2ed",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 2-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-f5c4df489006006f (C_0c6a6381-efed-4511-8e31-436d769fe1dc): The exact linked spread cell prints PIK and XML has no numeric PIK fact; null published PIK misses disclosed terms. Margin 6.75 is not independently established as the whole PIK coupon. The report appropriately stops before assigning current accrual or distress. ROW-0f1299c076094373 (C_bda595dc-3c4c-4314-8e61-4e77beec1a94): The exact linked spread cell prints PIK and XML has no numeric PIK fact; null published PIK misses disclosed terms. Margin 6.75 is not independently established as the whole PIK coupon. The report appropriately stops before assigning current accrual or distress. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-060336",
+          "text": "Gainsight, Inc. Software 12.27 % P + 6.75 % PIK 07/30/27 5,362 2,565 2,518 (6) (7) (8)"
+        },
+        {
+          "accession": "0000950170-23-060336",
+          "text": "Gainsight, Inc. Software 12.27 % L + 6.75 % PIK 07/30/27 48,665 48,162 47,692 (6) (7)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_2a33b743ac90",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 8-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-1a24deb2faee353e (C_2ce2f330-37c7-4b37-9515-a9af2362eb0a): Published issuer 'Investment, Identifier [Axis]: Investment Debt Investment' differs from the issuer cell 'PlanSource Holdings, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-750c7b43f5f5700a (C_f54e7a26-712b-4f13-94c9-059138f13617): Published issuer 'Superior Sweep Purchase LLC' differs from the issuer cell 'Sweep Purchaser LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-9ef0b356176ba288 (C_596cced9-2ef7-468f-a0e4-0d10508186ce): Published issuer 'Superior Sweep Purchase LLC' differs from the issuer cell 'Sweep Purchaser LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-1fddcdafdfdfcd73 (C_8ef41737-9d84-4bc4-aa0c-4e1f5c05b77d): Published issuer ',Two Recochem, Inc' differs from the issuer cell 'Recochem, Inc'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-b9ec9ee2c97b583b (C_104e33f9-0316-4aa1-a10c-d22ebfcd63d6): Published issuer 'Superior Sweep Purchase LLC' differs from the issuer cell 'Sweep Purchaser LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-b1f2e19be0bea0c5 (C_159a7702-6503-455d-adf9-247f12a10ca8): Published issuer 'Superior UP Acquisition Corp. (dba Unified Power)' differs from the issuer cell 'UP Acquisition Corp. (dba Unified Power)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-9852f6659f705011 (C_a1a87532-680a-4665-b847-e291eb9fcd32): Published issuer 'Trader Corporation one' differs from the issuer cell 'Trader Corporation'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-a264cd31576e1579 (C_05442829-2cf3-4567-bdcc-7d7adf911692): Published issuer 'Investment Goldman Sachs Financial Square Government Fund' differs from the issuer cell 'Goldman Sachs Financial Square Government Fund - Institutional Shares'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-123412",
+          "text": "PlanSource Holdings, Inc. Health Care Technology 11.64 % S + 6.25 % 06/30/25 56,720 56,166 56,153 (6) (8)"
+        },
+        {
+          "accession": "0000950170-24-123412",
+          "text": "Sweep Purchaser LLC Commercial Services & Supplies 10.80 % S + 5.75 % 06/30/27 10,650 10,605 10,597 (6) (8)"
+        },
+        {
+          "accession": "0000950170-24-123412",
+          "text": "Sweep Purchaser LLC Commercial Services & Supplies S + 5.75 % 06/30/27 4,541 ( 34 ) ( 23 ) (6) (8) (9)"
+        },
+        {
+          "accession": "0000950170-24-123412",
+          "text": "Recochem, Inc Chemicals 11.00 % S + 5.75 % 11/01/30 1,753 1,721 1,753 (6) (7) (8)"
+        },
+        {
+          "accession": "0000950170-24-123412",
+          "text": "Sweep Purchaser LLC Commercial Services & Supplies 10.80 % S + 5.75 % PIK 06/30/27 20,104 19,943 19,903 (6) (8)"
+        },
+        {
+          "accession": "0000950170-24-123412",
+          "text": "UP Acquisition Corp. (dba Unified Power) Commercial Services & Supplies 10.85 % S + 6.00 % 10/31/29 12,078 11,838 11,958 (6) (8)"
+        },
+        {
+          "accession": "0000950170-24-123412",
+          "text": "Trader Corporation Automobiles 10.50 % C + 5.50 % 12/21/29 CAD 74,535 $ 53,960 $ 55,111 (6) (7) (8)"
+        },
+        {
+          "accession": "0000950170-24-123412",
+          "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 1,526,880 $ 1,527 $ 1,527 (19) (20)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_33146e641b85",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 8-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-886645b0a9eb1921 (C_df0cffe6-e382-4988-a898-f12279662ab4): Published issuer 'Superior Environmental Solutions' differs from the issuer cell 'Sweep Purchaser LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-fc628dd0d4c7188c (C_248800e4-6c02-4a8f-a132-d7624f16b546): Published issuer ',Two Recochem, Inc' differs from the issuer cell 'Recochem, Inc'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-56d1a858eff6056c (C_92fa5678-86c9-45a0-a514-9e57323151d7): Published issuer 'Superior Environmental Solutions' differs from the issuer cell 'Sweep Purchaser LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-e618a63761541b5d (C_20871e50-8032-4bbf-afe5-a71babf9cb93): Published issuer 'GPS Phoenix Buyer, Inc. (dha Guidepoint)' differs from the issuer cell 'GPS Phoenix Buyer, Inc. (dba Guidepoint)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-e03dc77fb999d00a (C_f7acf9d0-b9da-489a-8b79-20dfe7eff077): Published issuer 'KPA Parent Holdings, Inc. (dba NeoGov)' differs from the issuer cell 'KPA Parent Holdings, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-27e447c23a5c9631 (C_56926a60-a91b-4794-98a2-e63f77239640): Published issuer 'Northstar Acquisition HoldCo, LLC (dba n2y)' differs from the issuer cell 'NAVEX TopCo, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-39285c1f4d04effb (C_3f69322b-b99a-4310-a1da-3307e933ae45): Published issuer 'KPA Parent Holdings, Inc. (dba NeoGov)' differs from the issuer cell 'KPA Parent Holdings, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-5f483bec141ece6c (C_9b5df1b5-73ae-4725-9f7f-eb3a127684cd): Published issuer 'Investment Goldman Sachs Financial Square Government Fund' differs from the issuer cell 'Goldman Sachs Financial Square Government Fund - Institutional Shares'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-067098",
+          "text": "Sweep Purchaser LLC Commercial Services & Supplies 10.15 % S + 5.75 % PIK 06/30/27 21,056 20,922 20,845 (6) (8)"
+        },
+        {
+          "accession": "0000950170-25-067098",
+          "text": "Recochem, Inc Chemicals 10.04 % S + 5.75 % 11/01/30 1,744 1,715 1,744 (6) (7) (8)"
+        },
+        {
+          "accession": "0000950170-25-067098",
+          "text": "Sweep Purchaser LLC Commercial Services & Supplies 10.15 % S + 5.75 % 06/30/27 10,597 10,559 10,544 (6) (8)"
+        },
+        {
+          "accession": "0000950170-25-067098",
+          "text": "GPS Phoenix Buyer, Inc. (dba Guidepoint) IT Services S + 6.00 % 10/02/29 $ 706 $ ( 11 ) $ ( 7 ) (6) (8) (9)"
+        },
+        {
+          "accession": "0000950170-25-067098",
+          "text": "KPA Parent Holdings, Inc. Software S + 4.75 % 03/12/32 113 ( 1 ) ( 1 ) (6) (9)"
+        },
+        {
+          "accession": "0000950170-25-067098",
+          "text": "NAVEX TopCo, Inc. Software 9.82 % S + 5.50 % 11/08/30 9,098 8,943 9,075 (8)"
+        },
+        {
+          "accession": "0000950170-25-067098",
+          "text": "KPA Parent Holdings, Inc. Software 9.07 % S + 4.75 % 03/12/32 788 780 780 (6)"
+        },
+        {
+          "accession": "0000950170-25-067098",
+          "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 29,241 $ 29 $ 29 (19) (20)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_69b4373e1162",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 4-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-e4831440995e9eaf (C_bd7eaf32-40b2-4736-a542-baa2aefc48f9): Printed fka explicitly supplies the published former legal name; same tranche is supported, although current display name could improve. ROW-9d03fcb037fe7dae (C_bd039fc3-628e-4c78-b967-e11cfc300efe): Printed fka explicitly supplies the published former legal name; same tranche is supported, although current display name could improve. ROW-756af320494f31ec (C_e05df70c-f71a-429b-acb0-fc1545a1d045): Published issuer 'Investment Goldman Sachs Financial Square Government Fund' differs from the issuer cell 'Goldman Sachs Financial Square Government Fund - Institutional Shares'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-c743bfdf7d0cdff7 (C_6c6050e8-8f29-4085-a9ea-aa9726458740): Printed fka explicitly supplies the published former legal name; same tranche is supported, although current display name could improve. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-105134",
+          "text": "Geo TopCo Corporation (fka Geotechnical Merger Sub, Inc.) Construction & Engineering 9.04 % S + 4.75 % 10/15/31 245 104 102 (6) (7) (9)"
+        },
+        {
+          "accession": "0000950170-25-105134",
+          "text": "Geo TopCo Corporation (fka Geotechnical Merger Sub, Inc.) Construction & Engineering 9.08 % S + 4.75 % 10/15/31 92 30 29 (6) (7) (9)"
+        },
+        {
+          "accession": "0000950170-25-105134",
+          "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 66,901 $ 67 $ 67 (18) (19)"
+        },
+        {
+          "accession": "0000950170-25-105134",
+          "text": "Geo TopCo Corporation (fka Geotechnical Merger Sub, Inc.) Construction & Engineering 8.85 % S + 4.75 % 10/15/31 663 657 653 (6) (7)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7328d632e4ec",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 6-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-1aa51f965b356a3c (C_e7773839-e81c-4d84-afab-0ce1c0dfcc6d): Published issuer 'DECA Dental Holdings LLC One' differs from the issuer cell 'DECA Dental Holdings LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-43e13f63ba6bcaeb (C_51bb9815-764a-4fe7-9421-60ec67e6c74e): Published issuer 'Rubrik,Inc.' differs from the issuer cell 'Superman Holdings, LLC (dba Foundation Software)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-5722b074fdf15217 (C_9e23f274-1e23-4111-8ce0-f83943639183): Published issuer 'Broadway Technology, LLC' differs from the issuer cell 'BSI3 Menu Buyer, Inc (dba Kydia)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-54780123eecd8c47 (C_cb9b780c-8a62-48f7-a309-ccad43c211a8): Published issuer 'Broadway Technology, LLC' differs from the issuer cell 'BSI3 Menu Buyer, Inc (dba Kydia)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-f7e0cae8fbe0ed5b (C_e69fc39f-953b-4437-9296-5e9d3bf5d6c8): Published issuer 'DECA Dental Holdings LLC One' differs from the issuer cell 'DECA Dental Holdings LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-3670238381bc6ebb (C_163a2c92-1ec8-4b46-84a9-83f176f2fbbf): Published issuer 'DECA Dental Holdings LLC One' differs from the issuer cell 'DECA Dental Holdings LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-060336",
+          "text": "DECA Dental Holdings LLC Health Care Providers & Services 11.24 % S + 5.75 % 08/28/28 21,236 20,914 20,387 (6) (7)"
+        },
+        {
+          "accession": "0000950170-23-060336",
+          "text": "Superman Holdings, LLC (dba Foundation Software) Construction & Engineering 11.52 % S + 6.13 % 08/31/27 4,027 3,935 3,947 (6) (7)"
+        },
+        {
+          "accession": "0000950170-23-060336",
+          "text": "BSI3 Menu Buyer, Inc (dba Kydia) Diversified Financial Services 11.43 % S + 6.00 % 01/25/28 962 949 895 (6) (7)"
+        },
+        {
+          "accession": "0000950170-23-060336",
+          "text": "BSI3 Menu Buyer, Inc (dba Kydia) Diversified Financial Services S + 6.00 % 01/25/28 38 ( 1 ) ( 3 ) (6) (7) (8)"
+        },
+        {
+          "accession": "0000950170-23-060336",
+          "text": "DECA Dental Holdings LLC Health Care Providers & Services 11.24 % S + 5.75 % 08/28/28 2,235 2,202 2,146 (6) (7)"
+        },
+        {
+          "accession": "0000950170-23-060336",
+          "text": "DECA Dental Holdings LLC Health Care Providers & Services 11.24 % S + 5.75 % 08/26/27 1,711 1,117 1,072 (6) (7) (8)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a7f22ecca814",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 7-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-b1711a8dff251f01 (C_62e3f6c5-1bda-4491-9833-528bdaa6b8c7): Published issuer 'Clearwater Analytics, LLC Two' differs from the issuer cell 'Clearwater Analytics, LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-6217dea7f68ea1ff (C_7dbd369d-dc6b-4d94-b4e4-1b69344747b4): Published issuer 'GS Fullsteam Operation LLC' differs from the issuer cell 'Fullsteam Operations LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-b2dcbfd5750efda7 (C_0f9d4ba8-c56c-4c66-89b8-5de271d372e3): Published issuer 'Convenient Payments Acquisition, Inc. Two, .' differs from the issuer cell 'Convenient Payments Acquisition, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-44012a4b08f33a89 (C_689c96bf-c564-4aa1-ac73-6c92b1ea86d8): Published issuer 'Edition Holdings, Inc. (dba Enverus) One' differs from the issuer cell 'Edition Holdings, Inc. (dba Enverus)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-7c810387574d751c (C_828ddd54-ab82-44f6-9eb8-d61fd74b75ee): Published issuer 'Clearwater Analytics, LLC Three' differs from the issuer cell 'Clearwater Analytics, LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-3e7c38ec52f8a028 (C_5b9aa898-57b0-4074-8ac0-473cec708f4d): Published issuer 'Convenient Payments Acquisition, Inc. One, .' differs from the issuer cell 'Convenient Payments Acquisition, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-54dbd7d8be784ee0 (C_0a64cf37-0597-4ea7-b7d6-c76414ab08e1): Published issuer 'Clearwater Analytics, LLC One' differs from the issuer cell 'Clearwater Analytics, LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-338331",
+          "text": "Clearwater Analytics, LLC Software S + 4.50 % 06/27/33 4,486 ( 22 ) ( 22 ) (6) (9)"
+        },
+        {
+          "accession": "0001193125-26-338331",
+          "text": "Fullsteam Operations LLC Financial Services 8.88 % S + 5.25 % 08/08/31 2,968 939 913 (6) (7) (9)"
+        },
+        {
+          "accession": "0001193125-26-338331",
+          "text": "Convenient Payments Acquisition, Inc. Software S + 6.00 % 12/31/26 393 ( 1 ) ( 4 ) (6) (7) (9)"
+        },
+        {
+          "accession": "0001193125-26-338331",
+          "text": "Edition Holdings, Inc. (dba Enverus) Software S + 4.50 % 12/20/32 806 ( 1 ) ( 12 ) (6) (7) (9)"
+        },
+        {
+          "accession": "0001193125-26-338331",
+          "text": "Clearwater Analytics, LLC Software S + 4.50 % 06/27/33 2,429 ( 12 ) ( 12 ) (6) (9)"
+        },
+        {
+          "accession": "0001193125-26-338331",
+          "text": "Convenient Payments Acquisition, Inc. Software 9.64 % S + 6.00 % 12/31/26 656 654 650 (6) (7)"
+        },
+        {
+          "accession": "0001193125-26-338331",
+          "text": "Clearwater Analytics, LLC Software S + 4.50 % 06/27/33 10,638 ( 27 ) ( 27 ) (6) (9)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_bb0fde8671fd",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 3-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-d313b45b16abbf53 (C_a3c8f4da-efb6-446d-8e9d-c578246480bc): Published issuer 'DECA Dental Holdings LLC One' differs from the issuer cell 'DECA Dental Holdings LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-09677b8d8603a2ed (C_640c0ad3-0994-4ab6-bb78-f12a09e8187b): Published issuer 'DECA Dental Holdings LLC One' differs from the issuer cell 'DECA Dental Holdings LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-c0509abc3ffa406b (C_403c3ac7-7e00-46d6-8c98-b2c509b3a293): Published issuer 'DECA Dental Holdings LLC One' differs from the issuer cell 'DECA Dental Holdings LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-022198",
+          "text": "DECA Dental Holdings LLC Health Care Providers & Services 11.20 % S + 5.75 % 08/26/27 1,711 1,461 1,431 (7) (8) (9)"
+        },
+        {
+          "accession": "0000950170-24-022198",
+          "text": "DECA Dental Holdings LLC Health Care Providers & Services 11.20 % S + 5.75 % 08/28/28 21,182 20,873 20,547 (7) (8)"
+        },
+        {
+          "accession": "0000950170-24-022198",
+          "text": "DECA Dental Holdings LLC Health Care Providers & Services 11.20 % S + 5.75 % 08/28/28 2,230 2,198 2,163 (7) (8)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_bb88862ae915",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 1-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-3a44352ce5966377 (C_4a5b7a8b-3688-4bcf-9887-75b64cd35666): Published issuer 'Investment Goldman Sachs Financial Square Government Fund' differs from the issuer cell 'Goldman Sachs Financial Square Government Fund - Institutional Shares'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-269840",
+          "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 32,693,213 $ 32,693 $ 32,693 (18) (19)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_c6d34bd35852",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 4-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-a542e755a9c528b6 (C_2d907732-fdbb-4c35-a97a-f6659ab57182): Published issuer 'AI Titan Parent, Inc. (dba Prometheus)' differs from the issuer cell 'AQ Helios Buyer, Inc. (dba SurePoint)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-fc7cd6c7f4b096ef (C_f2bc2f5f-7c42-4db3-9512-69792181040a): Published issuer 'Investment Goldman Sachs Financial Square Government Fund' differs from the issuer cell 'Goldman Sachs Financial Square Government Fund - Institutional Shares'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-125453207387ddf4 (C_e59f51a2-89a6-47b8-8247-9e930fc07067): Published issuer 'AI Titan Parent, Inc. (dba Prometheus)' differs from the issuer cell 'AQ Helios Buyer, Inc. (dba SurePoint)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-bfa21cb97a1b4466 (C_b4cabdde-4766-495d-9ef8-0bd0d5ee43fa): Published issuer 'AI Titan Parent, Inc. (dba Prometheus)' differs from the issuer cell 'AQ Helios Buyer, Inc. (dba SurePoint)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-077458",
+          "text": "AQ Helios Buyer, Inc. (dba SurePoint) Software 11.99 % S + 8.00 % 12/31/26 13,403 13,392 13,258 (7) (8) (10)"
+        },
+        {
+          "accession": "0001193125-26-077458",
+          "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 35,724,048 $ 35,724 $ 35,724 (19) (20)"
+        },
+        {
+          "accession": "0001193125-26-077458",
+          "text": "AQ Helios Buyer, Inc. (dba SurePoint) Software 11.99 % S + 8.00 % 12/31/26 12,500 12,500 12,375 (7) (8)"
+        },
+        {
+          "accession": "0001193125-26-077458",
+          "text": "AQ Helios Buyer, Inc. (dba SurePoint) Software 10.99 % S + 7.00 % 12/31/26 39,210 39,049 38,426 (7) (8)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_da8ac8f282c6",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 8-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-eb4c49cce63d0124 (C_9aff64c4-7cc7-4263-82e2-58c206dcd56e): Published issuer 'Northstar Acquisition HoldCo, LLC (dba n2y) In' differs from the issuer cell 'Northstar Acquisition HoldCo, LLC (dba n2y)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-7da5230d0374aeaf (C_f8528dda-da07-48b2-aacc-5e64a0dcd5e6): Published issuer 'NAVEX TopCo, In' differs from the issuer cell 'NAVEX TopCo, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-0126b826b9e16d4c (C_d82bf8d7-8eca-498d-be1f-bce7e09ce4ef): Published issuer 'Intelligent Medical Objects, Inc.' differs from the issuer cell 'MedeAnalytics, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-58811b106a62fc4c (C_50c6c132-9094-4e11-b132-395cc8e5ab8b): Published issuer 'Investment Goldman Sachs Financial Square Government Fund' differs from the issuer cell 'Goldman Sachs Financial Square Government Fund - Institutional Shares'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-1dac586678f35471 (C_7349b368-d342-4690-bf99-88bfc739655b): Published issuer 'NAVEX TopCo, In' differs from the issuer cell 'NAVEX TopCo, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-a2fc4ad5d5660806 (C_2feea45b-56bc-4ac7-98ab-f1db9654e156): Published issuer 'Northstar Acquisition HoldCo, LLC (dba n2y) In' differs from the issuer cell 'Northstar Acquisition HoldCo, LLC (dba n2y)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-006d544e634dd050 (C_50e895bb-2692-4113-b8cc-2cc1d053604b): Published issuer ',Two Recochem, Inc' differs from the issuer cell 'Recochem, Inc'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-63073c0c0fb7be22 (C_e1c39293-423f-4d7b-8847-e8f8d6672a6d): Published issuer 'Northstar Acquisition HoldCo, LLC (dba n2y) In' differs from the issuer cell 'Northstar Acquisition HoldCo, LLC (dba n2y)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-029231",
+          "text": "Northstar Acquisition HoldCo, LLC (dba n2y) Software 9.25 % S + 4.75 % 05/03/29 4,433 4,167 4,165 (6) (7) (8) (9)"
+        },
+        {
+          "accession": "0000950170-25-029231",
+          "text": "NAVEX TopCo, Inc. Software 9.88 % S + 5.50 % 11/08/30 9,121 8,960 9,098 (8)"
+        },
+        {
+          "accession": "0000950170-25-029231",
+          "text": "MedeAnalytics, Inc. Health Care Technology 3.00 % PIK 10/23/28 227 142 156 (6) (8) (10) (13)"
+        },
+        {
+          "accession": "0000950170-25-029231",
+          "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 25,238,185 $ 25,238 $ 25,238 (19) (20)"
+        },
+        {
+          "accession": "0000950170-25-029231",
+          "text": "NAVEX TopCo, Inc. Software S + 5.50 % 11/09/28 810 ( 13 ) ( 2 ) (8) (9)"
+        },
+        {
+          "accession": "0000950170-25-029231",
+          "text": "Northstar Acquisition HoldCo, LLC (dba n2y) Software 9.08 % S + 4.75 % 05/03/29 18,975 18,890 18,880 (6) (7) (8)"
+        },
+        {
+          "accession": "0000950170-25-029231",
+          "text": "Recochem, Inc Chemicals 10.32 % S + 5.75 % 11/01/30 1,749 1,718 1,749 (6) (7) (8)"
+        },
+        {
+          "accession": "0000950170-25-029231",
+          "text": "Northstar Acquisition HoldCo, LLC (dba n2y) Software 9.45 % N + 4.75 % 05/03/29 NOK 46,888 4,341 4,098 (6) (7) (8)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ecd39c330787",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 2-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-95c9457383afe92a (C_9fd6e50e-91a3-4883-9aca-75d1feabfd2a): Published issuer 'CivicPlus LLC' differs from the issuer cell 'CloudBees, Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-9637e7c0d723673a (C_58522b4e-5163-48c1-88a9-37c0d6d238ae): Published issuer 'UP Acquisition Corp. (dba Unified Power) & Supplies' differs from the issuer cell 'UP Acquisition Corp. (dba Unified Power)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-094144",
+          "text": "CloudBees, Inc. Software 12.46 % S + 7.00 % (Incl. 2.50 % PIK) 11/24/26 29,848 28,874 29,848 (6) (8)"
+        },
+        {
+          "accession": "0000950170-24-094144",
+          "text": "UP Acquisition Corp. (dba Unified Power) Commercial Services & Supplies 11.33 % S + 6.00 % 10/31/29 12,109 11,859 11,927 (6) (8)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_f81f64678bd3",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the complete 11-row rule/quarter population from rgA3 page_rule_findings.csv and holdings parquet, reopened original cached HTML/XML, read cells, contexts, numeric facts and two neighbors each side. ROW-f82c6a9b3c7b25bf (C_45561778-036e-4dad-acd1-1d8705717a1e): Published issuer 'PT Intermediate Holding III, LLC ( dba Parts Town)' differs from the issuer cell 'PT Intermediate Holdings III, LLC (dba Parts Town)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-c759eb85db2cf8db (C_e200d63e-ad81-4a7e-b8fe-744b7650b256): Published issuer 'DECA Dental Holdings LLC One' differs from the issuer cell 'DECA Dental Holdings LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-36eba0abdc9a3887 (C_7b6af902-5303-44f2-b1e7-5f6b3a7323b1): Conjunction and/& changes no borrower identity; amounts and maturity identify the same HS4 position. ROW-6020090c05115ecb (C_5b84f09f-a294-478a-af68-251810942af1): Published issuer 'Wellness AcquisitionCo, Inc.' differs from the issuer cell 'Kaseya Inc.'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-66e55590ca2f0e55 (C_03ea3d0a-5ef9-4b16-96f4-333449f0693d): Published issuer 'PT Intermediate Holding III, LLC ( dba Parts Town)' differs from the issuer cell 'PT Intermediate Holdings III, LLC (dba Parts Town)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-0aed741bc59b7a28 (C_694d6429-2b61-41da-91d3-04c5ce61b0eb): Published issuer 'DECA Dental Holdings LLC One' differs from the issuer cell 'DECA Dental Holdings LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-417c0d6e6cc827c4 (C_05e7e841-2967-4e1e-811e-c67031678f58): Published issuer 'Internet Truckstop Group, LLC ( dba Trucksto)' differs from the issuer cell 'Internet Truckstop Group, LLC (dba Truckstop)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-eaeb525ee554e733 (C_3aa15ee3-6a5c-4028-9ac6-8fad4ab67eaf): Published issuer 'DECA Dental Holdings LLC One' differs from the issuer cell 'DECA Dental Holdings LLC'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-5349231df0b15801 (C_a25123e2-b982-4b08-a827-74e2f1002f0a): Published issuer 'PT Intermediate Holding III, LLC ( dba Parts Town)' differs from the issuer cell 'PT Intermediate Holdings III, LLC (dba Parts Town)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-e1117cf1c9c2996f (C_696544cc-c9c2-49fa-ad72-59db3eaac382): Published issuer 'Internet Truckstop Group, LLC ( dba Trucksto)' differs from the issuer cell 'Internet Truckstop Group, LLC (dba Truckstop)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. ROW-d1950b7621cd08d6 (C_43abd985-c642-4783-8c81-7894ecb37a87): Published issuer 'PT Intermediate Holding III, LLC ( dba Parts Town)' differs from the issuer cell 'PT Intermediate Holdings III, LLC (dba Parts Town)'. ContextRef links original inline facts to this row; XML instant and row-specific principal/cost/FV/maturity anchor it, with adjacent rows distinguishing sibling positions. This is a supported display-name or stale-member error, rather than proof of a missing/duplicate position. Aggregate confirmed_error is supported because at least one row is erroneous; false-positive rows remain explicitly distinguished. Proposed context-specific display cleanup/source-backed overrides preserve tranches and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-054635",
+          "text": "PT Intermediate Holdings III, LLC (dba Parts Town) Trading Companies & Distributors 11.43 % S + 5.98 % 11/01/28 1,999 1,984 1,989 (7)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "DECA Dental Holdings LLC Health Care Providers & Services 11.16 % S + 5.75 % 08/28/28 2,224 2,194 2,157 (7) (8)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "HS4 AcquisitionCo, Inc. (dba HotSchedules & Fourth) Hotels, Restaurants & Leisure 11.18 % S + 5.75 % 07/09/25 4,688 3,088 3,129 (7) (8) (9)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "Kaseya Inc. IT Services 10.83 % S + 5.50 % 06/25/29 1,103 265 278 (7) (8) (9)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "PT Intermediate Holdings III, LLC (dba Parts Town) Trading Companies & Distributors 11.43 % S + 5.98 % 11/01/28 1,935 1,921 1,926 (7)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "DECA Dental Holdings LLC Health Care Providers & Services 11.16 % S + 5.75 % 08/28/28 21,128 20,833 20,494 (7) (8)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "Internet Truckstop Group, LLC (dba Truckstop) Transportation Infrastructure 10.31 % S + 5.00 % 04/02/25 50,650 49,967 50,397 (7) (8)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "DECA Dental Holdings LLC Health Care Providers & Services 11.16 % S + 5.75 % 08/26/27 1,711 1,690 1,659 (7) (8)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "PT Intermediate Holdings III, LLC (dba Parts Town) Trading Companies & Distributors 11.43 % S + 5.98 % 11/01/28 1,383 1,373 1,376 (7)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "Internet Truckstop Group, LLC (dba Truckstop) Transportation Infrastructure S + 5.00 % 04/02/25 4,400 ( 22 ) ( 22 ) (7) (8) (9)"
+        },
+        {
+          "accession": "0000950170-24-054635",
+          "text": "PT Intermediate Holdings III, LLC (dba Parts Town) Trading Companies & Distributors 11.43 % S + 5.98 % 11/01/28 22,502 22,339 22,390 (7)"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "member-pik-term-conflicts-with-printed-row",
+      "outcome": "supported",
+      "rationale": "Exact Kaseya row has rate 10.83 and S + 5.50 without PIK; two preceding Kaseya rows explicitly include 2.50% PIK. The Wellness typed member carries 2.50% PIK but its numeric facts have no PaidInKind rate. Published 2.5 therefore conflicts with the printed position cell. Source ambiguity is warranted: absence on this row does not establish zero contractual PIK. Proposed exact-cell/member comparison can detect recurrence as a flag; it must not auto-clear PIK or infer distress. The selected issuer-name detector does not assess this separate rate conflict. Detector is only proposed; implementation and false-positive testing remain future work.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-054635",
+          "text": "Kaseya Inc. IT Services 10.83 % S + 5.50 % 06/25/29 1,103 265 278 (7) (8) (9)"
+        }
+      ]
+    },
+    {
+      "observation_key": "member-coupon-on-blank-undrawn-row",
+      "outcome": "supported",
+      "rationale": "Original Clearwater interest-rate cell is empty on 10,638/(27)/(27); the funded 57,447 row above prints 8.15. Exact-context facts contain spread 0.045 and maturity but no InvestmentInterestRate. The typed member supplies 8.15 and sandbox publishes it. This supports source ambiguity, not a zero-coupon claim. Proposed blank-cell plus absent numeric-fact check would flag inferred values without automatically deleting contractual terms; distinct sibling rows must remain separate. The selected issuer-name detector does not assess this separate rate conflict. Detector is only proposed; implementation and false-positive testing remain future work.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-338331",
+          "text": "Clearwater Analytics, LLC Software S + 4.50 % 06/27/33 10,638 ( 27 ) ( 27 ) (6) (9)"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "scope": "Selected 12 findings only; not whole-fund acceptance or disposition.",
+  "coverage_summary": {
+    "selected_findings": 12,
+    "rows": 64,
+    "issuer_name_rows": 62,
+    "pik_rows": 2,
+    "confirmed_error_rows": 60,
+    "false_alarm_rows": 4,
+    "observations": 2
+  },
+  "limitations": [
+    "Historical 20-card page sample results were inspected; no new random sample or exhaustive all-field review performed for this selected-only task.",
+    "No contractual loan terms or current PIK income evidence inspected. Both rate observations remain source ambiguities.",
+    "No repairs, tests, builds, network access, ledger/disposition changes, or whole-fund acceptance.",
+    "Prior broad cash-name narrative does not establish exact 2025-09-30 name review; current manifest excludes the separately evidenced March 2026 cash finding."
+  ]
+}

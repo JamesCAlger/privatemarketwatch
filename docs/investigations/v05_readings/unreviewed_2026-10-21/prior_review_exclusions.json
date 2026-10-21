@@ -1392,5 +1392,51 @@
       }
     },
     "limitation": "Prior review does not resolve finding or accept a disposition."
+  },
+  {
+    "date": "2026-10-21",
+    "cik": "0001572694",
+    "reason": "Exact selected population already reviewed in legacy observation; user excludes prior reviews.",
+    "source": "docs/investigations/v05_readings/reports/0001572694.json",
+    "removed_findings": [
+      {
+        "review_id": "RVQ_BLK_bc987a5b10c5",
+        "state": "open",
+        "in_queue": "True",
+        "disposition_id": "",
+        "disposition_basis": "",
+        "population_origin": "live",
+        "verdict_status": "MISSING",
+        "verdict_detail": "",
+        "has_fix_route": "False",
+        "cik": "0001572694",
+        "rule_name": "issuer_name_printed",
+        "report_date": "2026-03-31",
+        "lane": "blocker",
+        "engine": "identity",
+        "fv_at_risk_m": "",
+        "fund_quarter_fv_m": "3231.416000",
+        "finding_id": "RVQ_BLK_bc987a5b10c5",
+        "proposals": []
+      }
+    ],
+    "prior_review_evidence": {
+      "observation_key": "cash-and-money-market-rows-not-published",
+      "what": "The money-market row's issuer is published as 'Investment Goldman Sachs Financial Square Government Fund' (member prefix kept) in 7 quarters. Left: cash rows are outside the published basis checked here.",
+      "field": "issuer_name",
+      "quarters": [
+        "2025-06-30",
+        "2026-03-31"
+      ],
+      "fair_value_m": 2.5,
+      "cause": "fund",
+      "action": "left",
+      "suggested_check": "An issuer name that starts with the axis word 'Investment'.",
+      "quote": {
+        "accession": "0001193125-26-212431",
+        "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 2,475,640 $ 2,476 $ 2,476"
+      }
+    },
+    "limitation": "Prior review does not resolve finding or accept a disposition."
   }
 ]

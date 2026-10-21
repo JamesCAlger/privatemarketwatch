@@ -1,8 +1,8 @@
 # Selected finding reviews - 2026-10-21
 
-User scope: review previously unreviewed findings, excluding recorded agent investigations, verdicts and disposition proposals. Initial selection: 447 findings across 40 retained funds. After excluding 43 additional findings already reviewed in substantive legacy narratives ([exclusion evidence](prior_review_exclusions.json)), current selection: 404 findings across 39 retained funds, ordered by 2026-03-31 published fair value.
+User scope: review previously unreviewed findings, excluding recorded agent investigations, verdicts and disposition proposals. Initial selection: 447 findings across 40 retained funds. After excluding 44 additional findings already reviewed in substantive legacy narratives ([exclusion evidence](prior_review_exclusions.json)), current selection: 403 findings across 39 retained funds, ordered by 2026-03-31 published fair value.
 
-142 findings independently reviewed; 262 remain. 136 findings contain confirmed errors; 4 are false alarms; 2 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
+154 findings independently reviewed; 249 remain. 148 findings contain confirmed errors; 4 are false alarms; 2 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
 
 Reviews do not resolve ledger items, accept dispositions, repair data or approve funds. Canonical data, existing reports and previously reviewed findings remain unchanged. No builds or tests required for this evidence-only work. Mechanisms and proposed detectors need implementation and validation before repairs. Original-source quotes and exact selected coverage are mechanically checked; each completed report has a separate source reviewer.
 
@@ -20,3 +20,4 @@ Reviews do not resolve ledger items, accept dispositions, repair data or approve
 | Antares Strategic Credit Fund | 16 | 15 | 1 | 0 | [Report](0001993402.json) / [independent review](reviews/0001993402.json) |
 | Ares Core Infrastructure Fund | 2 | 2 | 0 | 0 | [Report](0002031750.json) / [independent review](reviews/0002031750.json) |
 | Sixth Street Specialty Lending, Inc. | 15 | 15 | 0 | 0 | [Report](0001508655.json) / [independent review](reviews/0001508655.json) |
+| Goldman Sachs BDC, Inc. | 12 | 12 | 0 | 0 | [Report](0001572694.json) / [independent review](reviews/0001572694.json) |
