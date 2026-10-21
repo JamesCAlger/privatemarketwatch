@@ -2,7 +2,7 @@
 
 User scope: review previously unreviewed findings, excluding recorded agent investigations, verdicts and disposition proposals. Initial selection: 447 findings across 40 retained funds. After excluding 44 additional findings already reviewed in substantive legacy narratives ([exclusion evidence](prior_review_exclusions.json)), current selection: 403 findings across 39 retained funds, ordered by 2026-03-31 published fair value.
 
-210 findings independently reviewed; 193 remain. 200 findings contain confirmed errors; 7 are false alarms; 3 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
+216 findings independently reviewed; 187 remain. 206 findings contain confirmed errors; 7 are false alarms; 3 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
 
 Reviews do not resolve ledger items, accept dispositions, repair data or approve funds. Canonical data, existing reports and previously reviewed findings remain unchanged. No builds or tests required for this evidence-only work. Mechanisms and proposed detectors need implementation and validation before repairs. Original-source quotes and exact selected coverage are mechanically checked; each completed report has a separate source reviewer.
 
@@ -26,3 +26,4 @@ Reviews do not resolve ledger items, accept dispositions, repair data or approve
 | Diameter Credit Co | 8 | 8 | 0 | 0 | [Report](0001916099.json) / [independent review](reviews/0001916099.json) |
 | Carlyle Credit Solutions, Inc. | 9 | 9 | 0 | 0 | [Report](0001702510.json) / [independent review](reviews/0001702510.json) |
 | Fidelity Private Credit Fund | 11 | 10 | 1 | 0 | [Report](0001920453.json) / [independent review](reviews/0001920453.json) |
+| Trinity Capital Inc. | 6 | 6 | 0 | 0 | [Report](0001786108.json) / [independent review](reviews/0001786108.json) |

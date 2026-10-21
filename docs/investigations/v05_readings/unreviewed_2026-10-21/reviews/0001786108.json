@@ -1,0 +1,120 @@
+{
+  "reviewer_id": "/root/remaining_trinity_check_sol",
+  "report_digest": "d92bc3b16413a9e2f0c86c2337b103857f8eb07dd9d015bccf4d1858f78f3f23",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_09306f3e770a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reran issuer rule and matched exact flagged row/context, XML instant, original facts and printed schedule neighbors. Printed Tomorrow/Bestow differs substantively from published Smartly/Busbot; genuine Smartly/Busbot rows coexist, supporting bounded per-context correction rather than global rename. Exact checked row keys: ROW-e91643821d0d555d",
+      "evidence": [
+        {
+          "accession": "0000950170-23-036783",
+          "text": "The Tomorrow Companies, Inc. Secured Loan (9)(14) December 14, 2022 January 1, 2028 Variable interest rate Prime + 7.0 % or Floor rate 10.8 %; EOT 3.0 % (8) 3,250 3,202 3,231"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6c2ae125ea0b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reran issuer rule and matched exact flagged row/context, XML instant, original facts and printed schedule neighbors. Printed Tomorrow/Bestow differs substantively from published Smartly/Busbot; genuine Smartly/Busbot rows coexist, supporting bounded per-context correction rather than global rename. Exact checked row keys: ROW-0d1c0ce65eefca1e",
+      "evidence": [
+        {
+          "accession": "0000950170-24-118600",
+          "text": "Bestow, Inc. Warrant August 1, 2024 August 1, 2034 Preferred Series C-2 349,793 $ 0.01 $ 1,987 $ 1,996"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_83bd84fc33e6",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reran candidate rules and joined exact shadow population to holdings; checked all 113 original inline rows, XML current-period contexts, facts, neighboring rows and complete intervening section headings/subtotals. Reproduced 46 null raw industries and 23 schedule/region labels against industry-bearing original members and printed sections; 44 retained broad source industries cannot establish a precise GICS code. Aggregate coverage is a missing-GICS metric, with the report correctly separating raw errors from unresolved mapping. Exact checked row keys: ROW-3e9d2a9946930bd1, ROW-e2697e14e93f5a62, ROW-3573873c10c8a8af, ROW-c8f5dc4e9406fcc1, ROW-680bb68dee509499, ROW-25f0a772bba7e52f, ROW-9bacd68969f113ab, ROW-915f562cbed29265, ROW-6f87e6a18989fb81, ROW-7070bc056fa3dbdf, ROW-dfe7e81f3a4f22fe, ROW-822e8a6294daa1fe, ROW-488871b20c59d822, ROW-3e4047d7a1cc1287, ROW-93b7a5bd6cf232b3, ROW-10bdcf419049efe4, ROW-530102b6d8565b33, ROW-5a7bf616c36939b3, ROW-4c95ff247d5c6188, ROW-facaae8e78829ce0, ROW-c82ade5947d007e7, ROW-31870eebecdc413a, ROW-fb01a5477c7230c3, ROW-5bc91298220fd019, ROW-4026fbf9f89148d7, ROW-ce536e718c61fa10, ROW-936dfe08ec01b8c3, ROW-6a457bf05e9a3c22, ROW-73d53da8474ac5d3, ROW-32ab415b494d1192, ROW-a1956bf9c4890800, ROW-ad1528167bdde1bc, ROW-3abdc483b4ed7671, ROW-095797179e7f0e1f, ROW-cb8bc6a2a0c4ff87, ROW-8785d753ae8e2e95, ROW-b61a1e33cf6c6f88, ROW-b4fa5a994c48dccd, ROW-c27e793acbee2234, ROW-e9a890f5b2cd80f9, ROW-2104d425517e814e, ROW-f7e53f398164ad08, ROW-a361dd18a2bc1f93, ROW-605d148f19b1fc18, ROW-d0359f95bd12b31a, ROW-a7d07ddcfd900376, ROW-4a130eed733bef1a, ROW-702fbbed874ff085, ROW-63a320fdbd119920, ROW-89fce689c976fcfa, ROW-aea49eaef2b71e7b, ROW-adc3b277904fb555, ROW-1d8384f57af4c189, ROW-8bce4f45950d4219, ROW-80164e25c0891b88, ROW-af555892c883befc, ROW-4add46eecc03fa76, ROW-51f55e074963ae0b, ROW-972e5a3a5bc1a7d8, ROW-0aa33d746718bc42, ROW-698aa32816a106c0, ROW-9caeea1fca00f1a8, ROW-472c23deb4ae0758, ROW-99d41f599bb5401d, ROW-2284273823bb70f2, ROW-cae9f6c21b677386, ROW-ad526294feb04651, ROW-37e33bffec69c690, ROW-5817d894be567945, ROW-5f251dbbb66cbb16, ROW-88057e78878d6d89, ROW-fc44a4314812ec90, ROW-515718bb60ec5b24, ROW-31b6b221727c5e06, ROW-58ad4f80bdacd3b7, ROW-ce8f34c585e5828a, ROW-84510c30daa69662, ROW-9fb5975573aeea69, ROW-188f25a22d5fae73, ROW-a80c3395d71a2493, ROW-99bb855aceb5b5ee, ROW-2e81e34219ff578b, ROW-c6ee828100e7084a, ROW-43e23e1d61752ee4, ROW-732e4197bd23d1db, ROW-bfbee0b98899dba2, ROW-32eea8c09f99da8a, ROW-800b9a7055053ade, ROW-ef85639ea65e2c10, ROW-256a7cdd7cd9e281, ROW-578e1b7ac3e546e3, ROW-c40190e45086354d, ROW-b29e3d954c55892c, ROW-8abb52a18aa34443, ROW-d565f8612e366e14, ROW-5c8ea60608aca6b4, ROW-6e61ebe0ab926905, ROW-797041b9049a5c86, ROW-f168cd5845e80ff0, ROW-8eafd7cceae68de9, ROW-a7e0f6f5deb9659b, ROW-70c87b71acfe0d97, ROW-eb25781f97ee416f, ROW-f2f4366284663c67, ROW-113a6a502db978c4, ROW-1205d1e9e0d80fa7, ROW-e0dde7832baad0ea, ROW-2639b929085b0d02, ROW-73560fbb3e2c13c6, ROW-a960c1a18182abeb, ROW-26f06696a330841e, ROW-bd752d4d7f135c1e, ROW-db7382bfb436c351",
+      "evidence": [
+        {
+          "accession": "0001193125-26-333907",
+          "text": "Augmented Reality Concepts, Inc. Secured Loan June 17, 2024 June 18, 2029 Variable interest rate SOFR 3 Month Term + 7.3 %; EOT 0.0 % $ 14,110 $ 13,930 $ 14,015 (8)(14)(19)(22)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_9e6ee7cc6d75",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reran issuer rule and matched exact flagged row/context, XML instant, original facts and printed schedule neighbors. Printed Tomorrow/Bestow differs substantively from published Smartly/Busbot; genuine Smartly/Busbot rows coexist, supporting bounded per-context correction rather than global rename. Exact checked row keys: ROW-460c3c0498d58c50",
+      "evidence": [
+        {
+          "accession": "0000950170-23-057140",
+          "text": "The Tomorrow Companies, Inc. Secured Loan (9)(14) December 14, 2022 January 1, 2028 Variable interest rate Prime + 7.0 % or Floor rate 10.8 %; EOT 3.0 % (8) 3,250 3,217 3,218"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_deeb507fadfe",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reran issuer rule and matched exact flagged row/context, XML instant, original facts and printed schedule neighbors. Printed Tomorrow/Bestow differs substantively from published Smartly/Busbot; genuine Smartly/Busbot rows coexist, supporting bounded per-context correction rather than global rename. Exact checked row keys: ROW-03bdb5602ff00e9a",
+      "evidence": [
+        {
+          "accession": "0000950170-23-017817",
+          "text": "The Tomorrow Companies, Inc. Secured Loan(14) December 14, 2022 January 1, 2028 Variable interest rate Prime + 7.0 % or Floor rate 10.8 %; EOT 3.0 % (8) 5,000 4,895 4,895"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ed70000f2611",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reran issuer rule and matched exact flagged row/context, XML instant, original facts and printed schedule neighbors. Printed Tomorrow/Bestow differs substantively from published Smartly/Busbot; genuine Smartly/Busbot rows coexist, supporting bounded per-context correction rather than global rename. Exact checked row keys: ROW-6e6661db29b695fe",
+      "evidence": [
+        {
+          "accession": "0000950170-25-027341",
+          "text": "Bestow, Inc. Warrant August 1, 2024 August 1, 2034 Preferred Series C-2 349,793 $ 0.01 $ 1,987 $ 1,624 (17)"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "industry-lost-across-schedule-continuation",
+      "outcome": "supported",
+      "rationale": "All listed original rows and section boundaries were independently checked. Industry coverage actually flags these GICS-null rows; report explicitly discloses that it can miss bad raw headings with populated GICS. Suggested consistency check is bounded to industry-bearing member plus printed section and excludes schedule/region labels; it does not force broad headings into exact GICS codes.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-333907",
+          "text": "Sub-total: Finance and Insurance ( 23.0 %)* $ 290,176 $ 291,801 $ 291,022"
+        }
+      ]
+    },
+    {
+      "observation_key": "schedule-region-heading-published-as-industry",
+      "outcome": "supported",
+      "rationale": "All listed original rows and section boundaries were independently checked. Industry coverage actually flags these GICS-null rows; report explicitly discloses that it can miss bad raw headings with populated GICS. Suggested consistency check is bounded to industry-bearing member plus printed section and excludes schedule/region labels; it does not force broad headings into exact GICS codes.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-333907",
+          "text": "Sub-total: Energy & Resource Technology ( 0.1 %)* $ 6,941 $ 1,840"
+        }
+      ]
+    },
+    {
+      "observation_key": "dollar-safe-note-principal-published-as-shares",
+      "outcome": "supported",
+      "rationale": "Original mixed Shares / Principal header, thousands-except-shares basis, dollar-prefixed Cabernet 500 and SAFE Note establish a monetary amount rather than an ordinary count. Independently checked inline U_shares, absent scale, decimals=0 against cost/FV U_USD scale=3 and XML unit measures. This is source presentation/tag contradiction; it supports flagging stored shares, not an automatic 1000x scalar repair or a new asserted share count. Proposed source-cell detector needs ordinary unprefixed share controls.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-333907",
+          "text": "Consolidated Schedule of Investments June 30, 2026 (In thousands, except share and per share data) (Unaudited) Portfolio Company (1) Type of Investment (2) Investment Date (3) Expiration Date Series Shares Strike Price Cost Fair Value (6) Footnotes Warrant Investments- Canada Space Technology Earthdaily Constellation Holdings, LP Warrant June 10, 2025 June 10, 2035 Class B Common Stock 1,736,139 $ 0.81 $ 971 $ 301 (9)(10)(19) Sub-total: Space Technology ( 0.0 %)* $ 971 $ 301 Total: Warrant Investments- Canada ( 0.0 %)* $ 971 $ 301 Warrant Investments- Europe Consumer Products & Services Motorway Online, Ltd Warrant December 23, 2025 December 23, 2035 Ordinary 172,869 GBP 0.01 $ 391 $ 381 (10) Sub-Total: Consumer Products & Services ( 0.0 %)* $ 391 $ 381 Healthcare Technology Unmind LTD Warrant July 7, 2025 July 7, 2035 Ordinary 122,340 EUR 5.09 $ 518 $ 237 (10) Sub-total: Healthcare Technology ( 0.0 %)* $ 518 $ 237 Industrials Aledia, Inc. Warrant March 31, 2022 March 31, 2032 Ordinary 11,771 EUR 149.02 $ 130 $ 24 (10) Sub-total: Industrials ( 0.0 %)* $ 130 $ 24 Medical Devices CMR Surgical Limited Warrant March 24, 2025 March 24, 2030 Ordinary 7,520 GBP 0.01 $ 121 $ 298 (10)(19) Warrant December 16, 2025 March 24, 2030 Ordinary 3,008 GBP 0.01 127 119 (10)(19) Warrant June 2, 2026 March 24, 2030 Ordinary 3,008 GBP 0.01 100 119 (10)(19) Total CMR Surgical Limited 348 536 Sub-total: Medical Devices ( 0.0 %)* $ 348 $ 536 Other Healthcare Services Zandivio PLC Warrant October 29, 2024 October 29, 2034 Common Stock 132,042 EUR 0.01 $ 771 $ 380 (10)(19) Sub-total: Other Healthcare Services ( 0.0 %)* $ 771 $ 380 Real Estate Technology Prospire Technologies LTD Warrant January 29, 2026 January 29, 2036 Preferred Series A1 3,831 GBP 50.69 $ 62 $ 134 (10)(17) Sub-total: Real Estate Technology ( 0.0 %)* $ 62 $ 134 Space Technology All.Space Networks, Limited. Warrant August 19, 2022 August 19, 2032 Common Stock 35,602 $ 21.79 $ 113 $ - (10) Warrant August 22, 2024 August 22, 2034 Common Stock 35,601 $ 8.90 1 - (10) Total All.Space Networks, Limited. 114 - Sub-total: Space Technology ( 0.0 %)* $ 114 $ - Total: Warrant Investments- Europe ( 0.1 %)* $ 2,334 $ 1,692 Total: Warrant Investments- ( 6.4 %)* $ 54,560 $ 80,522 31 Table of Contents TRINITY CAPITAL INC. Consolidated Schedule of Investments June 30, 2026 (In thousands, except share and per share data) (Unaudited) Portfolio Company (1) Type of Investment (2) Investment Date (3) Shares / Principal Series Cost Fair Value (6) Footnotes Equity Investments- United States AI Automation & Infrastructure Cabernet AI, Inc. Equity February 27, 2025 $ 500 SAFE Note $ 500 $ 500"
+        }
+      ]
+    }
+  ],
+  "request_reviews": []
+}
