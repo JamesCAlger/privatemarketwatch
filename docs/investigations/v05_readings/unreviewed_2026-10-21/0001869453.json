@@ -1,0 +1,517 @@
+{
+  "cik": "0001869453",
+  "label": "rgA2",
+  "investigator_id": "/root/remaining_blueowltech_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_419cea873ca0",
+    "RVQ_BLK_4b897ec3a4bc",
+    "RVQ_BLK_e817fb0f2ad4",
+    "RVQ_BLK_f3f51f90c8d0",
+    "RVQ_REV_b95f4e5db838"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_419cea873ca0",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-844403be49e2e80f",
+          "ROW-3a7516a3a49d5af9"
+        ],
+        "reviewed_rows": [
+          "ROW-844403be49e2e80f",
+          "ROW-3a7516a3a49d5af9"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001869453-23-000010",
+          "text": "Zoro TopCo, Inc.(18)(22) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.6 %"
+        },
+        {
+          "accession": "0001869453-23-000010",
+          "text": "Zoro TopCo, Inc.(14)(22) Series A Preferred Equity N/A 12.50 % PIK N/A 8,057 8,142 8,209 0.7 %"
+        },
+        {
+          "accession": "0001869453-23-000010",
+          "text": "Zoro TopCo, L.P. (dba Zendesk)(18)(22) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.3 % 21,159 21,156 1.0 % Health Care Technology Mine"
+        }
+      ],
+      "conclusion": "source_ambiguity",
+      "hypotheses_tested": [
+        "Both flagged rows are in the March 31, 2023 current schedule, not December comparative: their context instants independently agree. The preferred row prints Zoro TopCo, Inc. and the context adds (dba Zendesk); this is a false-positive name suffix, not evidence of a different investment.",
+        "Common-unit ROW-844403be49e2e80f prints Zoro TopCo, Inc. while its own member says Zoro TopCo, L.P. (dba Zendesk). The same filing's December comparative prints L.P. with 671,414 units and 6,714 fair value, corroborating continuity but not conclusively settling the current legal-form contradiction. Do not silently rename the common and preferred interests into one issuer.",
+        "Shares use scale 0 and FV/cost scale 3; 671,414 common units and $6.714M FV, 8,057 preferred units and $8.209M FV reconcile independently to row facts. Preferred 12.50% PIK is printed and published. Adjacent Alpine and industry subtotal rows do not supply either position's issuer."
+      ],
+      "next_action": "Propose false-positive treatment only for preferred ROW-3a7516a3a49d5af9 after independent acceptance. Preserve the common-unit source conflict for owner/source adjudication; no legal-form correction based solely on string comparison.",
+      "row_assessments": [
+        {
+          "row_id": "ROW-844403be49e2e80f",
+          "context_id": "ia317b6a1cf6b4cafa5e33247ec732e4b_I20230331",
+          "published_issuer": "Zoro TopCo, L.P. (dba Zendesk)",
+          "printed_row": "Zoro TopCo, Inc.(18)(22) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.6 %",
+          "context_xml": "<xbrli:context id=\"ia317b6a1cf6b4cafa5e33247ec732e4b_I20230331\"><xbrli:entity><xbrli:identifier scheme=\"http://www.sec.gov/CIK\">0001869453</xbrli:identifier><xbrli:segment><xbrldi:typedmember dimension=\"us-gaap-supplement:InvestmentIdentifierAxis\"><us-gaap-supplement:investmentidentifieraxis.domain>Zoro TopCo, L.P. (dba Zendesk), Class A Common Units</us-gaap-supplement:investmentidentifieraxis.domain></xbrldi:typedmember></xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>2023-03-31</xbrli:instant></xbrli:period></xbrli:context>",
+          "source_neighbors": [
+            "Project Alpine Co-Invest, Fund, L.P.(18)(20)(22) L.P. Interest N/A N/A N/A 6,667 6,670 6,667 0.6 %",
+            "Zoro TopCo, Inc.(14)(22) Series A Preferred Equity N/A 12.50 % PIK N/A 8,057 8,142 8,209 0.7 %",
+            "Zoro TopCo, Inc.(18)(22) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.6 %",
+            "21,526 21,590 1.9 %",
+            "Health Care Technology"
+          ],
+          "source_table_heading": "Company(1)(2)(19) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets Oranje Holdco, Inc. (dba KnowBe4)(15)(16) First lien senior secured revolving loan S + 7.75 % 2/2029 - ( 8 ) ( 8 ) - % Ping Identity Holding Corp.(9) First lien senior secured loa",
+          "published_fields": {
+            "row_id": "ROW-844403be49e2e80f",
+            "report_date": "2023-03-31",
+            "issuer_name": "Zoro TopCo, L.P. (dba Zendesk)",
+            "instrument_description": "Class A Common Units",
+            "bdc_investment_identifier": "Zoro TopCo, L.P. (dba Zendesk), Class A Common Units",
+            "src_context_id": "ia317b6a1cf6b4cafa5e33247ec732e4b_I20230331",
+            "accession_number": "0001869453-23-000010",
+            "fair_value": 6714000.0,
+            "shares_held": 671414.0,
+            "principal_amount": null,
+            "basis_spread": null,
+            "pik_rate": null,
+            "maturity_date": null
+          }
+        },
+        {
+          "row_id": "ROW-3a7516a3a49d5af9",
+          "context_id": "iac4267d75e78473c9b3fea97f0e824db_I20230331",
+          "published_issuer": "Zoro TopCo, Inc. (dba Zendesk)",
+          "printed_row": "Zoro TopCo, Inc.(14)(22) Series A Preferred Equity N/A 12.50 % PIK N/A 8,057 8,142 8,209 0.7 %",
+          "context_xml": "<xbrli:context id=\"iac4267d75e78473c9b3fea97f0e824db_I20230331\"><xbrli:entity><xbrli:identifier scheme=\"http://www.sec.gov/CIK\">0001869453</xbrli:identifier><xbrli:segment><xbrldi:typedmember dimension=\"us-gaap-supplement:InvestmentIdentifierAxis\"><us-gaap-supplement:investmentidentifieraxis.domain>Zoro TopCo, Inc. (dba Zendesk), Series A Preferred Equity</us-gaap-supplement:investmentidentifieraxis.domain></xbrldi:typedmember></xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>2023-03-31</xbrli:instant></xbrli:period></xbrli:context>",
+          "source_neighbors": [
+            "Application Software",
+            "Project Alpine Co-Invest, Fund, L.P.(18)(20)(22) L.P. Interest N/A N/A N/A 6,667 6,670 6,667 0.6 %",
+            "Zoro TopCo, Inc.(14)(22) Series A Preferred Equity N/A 12.50 % PIK N/A 8,057 8,142 8,209 0.7 %",
+            "Zoro TopCo, Inc.(18)(22) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.6 %",
+            "21,526 21,590 1.9 %"
+          ],
+          "source_table_heading": "Company(1)(2)(19) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets Oranje Holdco, Inc. (dba KnowBe4)(15)(16) First lien senior secured revolving loan S + 7.75 % 2/2029 - ( 8 ) ( 8 ) - % Ping Identity Holding Corp.(9) First lien senior secured loa",
+          "published_fields": {
+            "row_id": "ROW-3a7516a3a49d5af9",
+            "report_date": "2023-03-31",
+            "issuer_name": "Zoro TopCo, Inc. (dba Zendesk)",
+            "instrument_description": "Series A Preferred Equity",
+            "bdc_investment_identifier": "Zoro TopCo, Inc. (dba Zendesk), Series A Preferred Equity",
+            "src_context_id": "iac4267d75e78473c9b3fea97f0e824db_I20230331",
+            "accession_number": "0001869453-23-000010",
+            "fair_value": 8209000.0,
+            "shares_held": 8057.0,
+            "principal_amount": null,
+            "basis_spread": null,
+            "pik_rate": 12.5,
+            "maturity_date": null
+          }
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_4b897ec3a4bc",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-04e98e488716234b",
+          "ROW-3da63cf23e4f7988",
+          "ROW-3c4175f344aeede7"
+        ],
+        "reviewed_rows": [
+          "ROW-04e98e488716234b",
+          "ROW-3da63cf23e4f7988",
+          "ROW-3c4175f344aeede7"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001869453-24-000036",
+          "text": "Cloud Software Group, Inc.(8)(14) First lien senior secured loan S + 4.00 % 03/2029 29,849 29,849 29,804 1.1 %"
+        },
+        {
+          "accession": "0001869453-24-000036",
+          "text": "Community Brands ParentCo, LLC(7) First lien senior secured loan S + 5.50 % 02/2028 6,232 6,148 6,232 0.2 %"
+        },
+        {
+          "accession": "0001869453-24-000036",
+          "text": "Community Brands ParentCo, LLC(16)(17) First lien senior secured revolving loan S + 5.50 % 02/2028 - ( 5 ) - - %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Three flagged contexts all have instant 2024-06-30 on the current schedule. Cloud c-328 member repeats Cloud Software Group, Inc. twice, which survives in published issuer. The page names it once. Its $29.804M FV, 4.00 margin and March 2029 maturity differ from the adjacent Cloud loan at $20.040M, 4.50 margin, March 2031: do not merge positions.",
+        "Community c-63 and c-64 print Community Brands ParentCo, LLC while members/published issuer use singular Brand. This is a near-spelling presentation difference, not evidence of two different borrowers; these two rows are false positives for substantive issuer misattribution. c-64 is genuinely the revolver, with fixed-zero principal/FV and signed negative cost 5 at scale 3; it is not a subtotal or a missing-value loan.",
+        "Heading and neighboring Coupa rows independently establish the continuation company column; no previous-page issuer is carried into a blank cell. Monetary scales 3 and spread scale -2 explain the published fields."
+      ],
+      "next_action": "Propose a source-backed fund-scoped correction of the duplicated Cloud issuer, preserving the March 2029 loan identity. Propose near-spelling false-positive treatment for the two Community rows, subject to independent acceptance; do not weaken the global detector.",
+      "row_assessments": [
+        {
+          "row_id": "ROW-04e98e488716234b",
+          "context_id": "c-328",
+          "published_issuer": "Cloud Software Group, Inc., Cloud Software Group, Inc.",
+          "printed_row": "Cloud Software Group, Inc.(8)(14) First lien senior secured loan S + 4.00 % 03/2029 29,849 29,849 29,804 1.1 %",
+          "context_xml": "<xbrli:context id=\"c-328\"><xbrli:entity><xbrli:identifier scheme=\"http://www.sec.gov/CIK\">0001869453</xbrli:identifier><xbrli:segment><xbrldi:typedmember dimension=\"us-gaap:InvestmentIdentifierAxis\"><us-gaap:investmentidentifieraxis.domain>Cloud Software Group, Inc., Cloud Software Group, Inc., Firs lien senior secured loan 1</us-gaap:investmentidentifieraxis.domain></xbrldi:typedmember></xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period></xbrli:context>",
+          "source_neighbors": [
+            "Barracuda Networks, Inc.(9)(14) First lien senior secured loan S + 4.50 % 08/2029 59,631 58,186 59,476 2.3 %",
+            "Barracuda Networks, Inc.(9) Second lien senior secured loan S + 7.00 % 08/2030 55,875 54,463 51,545 2.0 %",
+            "Cloud Software Group, Inc.(8)(14) First lien senior secured loan S + 4.00 % 03/2029 29,849 29,849 29,804 1.1 %",
+            "Cloud Software Group, Inc.(8)(14) First lien senior secured loan S + 4.50 % 03/2031 20,000 19,854 20,040 0.8 %",
+            "Crewline Buyer, Inc. (dba New Relic)(8) First lien senior secured loan S + 6.75 % 11/2030 90,566 89,292 90,340 3.4 %"
+          ],
+          "source_table_heading": "Company(1)(2)(20)(24) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets(5) Barracuda Networks, Inc.(9)(14) First lien senior secured loan S + 4.50 % 08/2029 59,631 58,186 59,476 2.3 % Barracuda Networks, Inc.(9) Second lien senior secured loan S +",
+          "published_fields": {
+            "row_id": "ROW-04e98e488716234b",
+            "report_date": "2024-06-30",
+            "issuer_name": "Cloud Software Group, Inc., Cloud Software Group, Inc.",
+            "instrument_description": "Firs lien senior secured loan 1",
+            "bdc_investment_identifier": "Cloud Software Group, Inc., Cloud Software Group, Inc., Firs lien senior secured loan 1",
+            "src_context_id": "c-328",
+            "accession_number": "0001869453-24-000036",
+            "fair_value": 29804000.0,
+            "shares_held": null,
+            "principal_amount": 29849000.0,
+            "basis_spread": 4.0,
+            "pik_rate": null,
+            "maturity_date": "2029-03-31"
+          }
+        },
+        {
+          "row_id": "ROW-3da63cf23e4f7988",
+          "context_id": "c-63",
+          "published_issuer": "Community Brand ParentCo, LLC",
+          "printed_row": "Community Brands ParentCo, LLC(7) First lien senior secured loan S + 5.50 % 02/2028 6,232 6,148 6,232 0.2 %",
+          "context_xml": "<xbrli:context id=\"c-63\"><xbrli:entity><xbrli:identifier scheme=\"http://www.sec.gov/CIK\">0001869453</xbrli:identifier><xbrli:segment><xbrldi:typedmember dimension=\"us-gaap:InvestmentIdentifierAxis\"><us-gaap:investmentidentifieraxis.domain>Community Brand ParentCo, LLC, First lien senior secured loan </us-gaap:investmentidentifieraxis.domain></xbrldi:typedmember></xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period></xbrli:context>",
+          "source_neighbors": [
+            "",
+            "Company(1)(2)(20)(24) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets(5)",
+            "Community Brands ParentCo, LLC(7) First lien senior secured loan S + 5.50 % 02/2028 6,232 6,148 6,232 0.2 %",
+            "Community Brands ParentCo, LLC(16)(17) First lien senior secured revolving loan S + 5.50 % 02/2028 - ( 5 ) - - %",
+            "Coupa Holdings, LLC(8) First lien senior secured loan S + 5.50 % 02/2030 785 785 785 - %"
+          ],
+          "source_table_heading": "Company(1)(2)(20)(24) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets(5) Community Brands ParentCo, LLC(7) First lien senior secured loan S + 5.50 % 02/2028 6,232 6,148 6,232 0.2 % Community Brands ParentCo, LLC(16)(17) First lien senior secured",
+          "published_fields": {
+            "row_id": "ROW-3da63cf23e4f7988",
+            "report_date": "2024-06-30",
+            "issuer_name": "Community Brand ParentCo, LLC",
+            "instrument_description": "First lien senior secured loan",
+            "bdc_investment_identifier": "Community Brand ParentCo, LLC, First lien senior secured loan",
+            "src_context_id": "c-63",
+            "accession_number": "0001869453-24-000036",
+            "fair_value": 6232000.0,
+            "shares_held": null,
+            "principal_amount": 6232000.0,
+            "basis_spread": 5.5,
+            "pik_rate": null,
+            "maturity_date": "2028-02-29"
+          }
+        },
+        {
+          "row_id": "ROW-3c4175f344aeede7",
+          "context_id": "c-64",
+          "published_issuer": "Community Brand ParentCo, LLC",
+          "printed_row": "Community Brands ParentCo, LLC(16)(17) First lien senior secured revolving loan S + 5.50 % 02/2028 - ( 5 ) - - %",
+          "context_xml": "<xbrli:context id=\"c-64\"><xbrli:entity><xbrli:identifier scheme=\"http://www.sec.gov/CIK\">0001869453</xbrli:identifier><xbrli:segment><xbrldi:typedmember dimension=\"us-gaap:InvestmentIdentifierAxis\"><us-gaap:investmentidentifieraxis.domain>Community Brand ParentCo, LLC, First lien senior secured revolving loan</us-gaap:investmentidentifieraxis.domain></xbrldi:typedmember></xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>2024-06-30</xbrli:instant></xbrli:period></xbrli:context>",
+          "source_neighbors": [
+            "Company(1)(2)(20)(24) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets(5)",
+            "Community Brands ParentCo, LLC(7) First lien senior secured loan S + 5.50 % 02/2028 6,232 6,148 6,232 0.2 %",
+            "Community Brands ParentCo, LLC(16)(17) First lien senior secured revolving loan S + 5.50 % 02/2028 - ( 5 ) - - %",
+            "Coupa Holdings, LLC(8) First lien senior secured loan S + 5.50 % 02/2030 785 785 785 - %",
+            "Coupa Holdings, LLC(16)(18) First lien senior secured delayed draw term loan S + 5.50 % 08/2025 - - - - %"
+          ],
+          "source_table_heading": "Company(1)(2)(20)(24) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets(5) Community Brands ParentCo, LLC(7) First lien senior secured loan S + 5.50 % 02/2028 6,232 6,148 6,232 0.2 % Community Brands ParentCo, LLC(16)(17) First lien senior secured",
+          "published_fields": {
+            "row_id": "ROW-3c4175f344aeede7",
+            "report_date": "2024-06-30",
+            "issuer_name": "Community Brand ParentCo, LLC",
+            "instrument_description": "First lien senior secured revolving loan",
+            "bdc_investment_identifier": "Community Brand ParentCo, LLC, First lien senior secured revolving loan",
+            "src_context_id": "c-64",
+            "accession_number": "0001869453-24-000036",
+            "fair_value": 0.0,
+            "shares_held": null,
+            "principal_amount": 0.0,
+            "basis_spread": 5.5,
+            "pik_rate": null,
+            "maturity_date": "2028-02-29"
+          }
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e817fb0f2ad4",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-c296b97992f23dd6",
+          "ROW-1d0d6dad4f78588d",
+          "ROW-5aa1c6734671b50f"
+        ],
+        "reviewed_rows": [
+          "ROW-c296b97992f23dd6",
+          "ROW-1d0d6dad4f78588d",
+          "ROW-5aa1c6734671b50f"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001869453-23-000017",
+          "text": "Zoro TopCo, Inc.(16)(24) Series A Preferred Equity N/A 12.50 % PIK N/A 8,057 8,406 8,483 0.6 %"
+        },
+        {
+          "accession": "0001869453-23-000017",
+          "text": "Covetrus Inc.(11) Second lien senior secured loan S + 9.25 % 10/2030 25,000 24,517 24,188 1.8 %"
+        },
+        {
+          "accession": "0001869453-23-000017",
+          "text": "Zoro TopCo, L.P.(20)(24) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.5 %"
+        }
+      ],
+      "conclusion": "source_ambiguity",
+      "hypotheses_tested": [
+        "All three affected contexts are June 30, 2023 instants on the current schedule. Zoro preferred and common rows print Inc. and L.P. respectively; published names preserve those forms and append a dba suffix supplied by the context. These two are harmless presentation differences, not wrong positions.",
+        "ROW-1d0d6dad4f78588d prints Covetrus Inc. but context c-117 identifies CVET Midco 2, L.P. The facts physically on that row supply 25,000 par, 24,517 cost, 24,188 FV, S+9.25%, October 2030. Neighboring Engage and OneOncology rows have different values and contexts, ruling out a row offset. The cache demonstrates a presentation-versus-member discrepancy but does not establish whether the legal borrowing entity and operating company are interchangeable for the issuer field.",
+        "FV/cost scale 3 and shares scale 0 support all three published amounts. Preferred 12.50 PIK and common 671,414 units agree. No conflation of preferred/common tranches is proposed."
+      ],
+      "next_action": "Propose false-positive treatment for the two Zoro dba-only rows; obtain legal issuer/source alias evidence or an explicit page-name policy before changing CVET to Covetrus. Do not classify an unresolved alias as a proven wrong borrower.",
+      "row_assessments": [
+        {
+          "row_id": "ROW-c296b97992f23dd6",
+          "context_id": "c-183",
+          "published_issuer": "Zoro TopCo, Inc. (dba Zendesk)",
+          "printed_row": "Zoro TopCo, Inc.(16)(24) Series A Preferred Equity N/A 12.50 % PIK N/A 8,057 8,406 8,483 0.6 %",
+          "context_xml": "<xbrli:context id=\"c-183\"><xbrli:entity><xbrli:identifier scheme=\"http://www.sec.gov/CIK\">0001869453</xbrli:identifier><xbrli:segment><xbrldi:typedmember dimension=\"us-gaap:InvestmentIdentifierAxis\"><us-gaap:investmentidentifieraxis.domain>Zoro TopCo, Inc. (dba Zendesk), Series A Preferred Equity</us-gaap:investmentidentifieraxis.domain></xbrldi:typedmember></xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>2023-06-30</xbrli:instant></xbrli:period></xbrli:context>",
+          "source_neighbors": [
+            "Application Software",
+            "Project Alpine Co-Invest Fund, L.P.(20)(22)(24) L.P. Interest N/A N/A N/A 7 6,670 7,316 0.5 %",
+            "Zoro TopCo, Inc.(16)(24) Series A Preferred Equity N/A 12.50 % PIK N/A 8,057 8,406 8,483 0.6 %",
+            "Zoro TopCo, L.P.(20)(24) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.5 %",
+            "21,790 22,513 1.7 %"
+          ],
+          "source_table_heading": "Company(1)(2)(21) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets(5) Equity Investments Application Software Project Alpine Co-Invest Fund, L.P.(20)(22)(24) L.P. Interest N/A N/A N/A 7 6,670 7,316 0.5 % Zoro TopCo, Inc.(16)(24) Series A Preferre",
+          "published_fields": {
+            "row_id": "ROW-c296b97992f23dd6",
+            "report_date": "2023-06-30",
+            "issuer_name": "Zoro TopCo, Inc. (dba Zendesk)",
+            "instrument_description": "Series A Preferred Equity",
+            "bdc_investment_identifier": "Zoro TopCo, Inc. (dba Zendesk), Series A Preferred Equity",
+            "src_context_id": "c-183",
+            "accession_number": "0001869453-23-000017",
+            "fair_value": 8483000.0,
+            "shares_held": 8057.0,
+            "principal_amount": null,
+            "basis_spread": null,
+            "pik_rate": 12.5,
+            "maturity_date": null
+          }
+        },
+        {
+          "row_id": "ROW-1d0d6dad4f78588d",
+          "context_id": "c-117",
+          "published_issuer": "CVET Midco 2, L.P.",
+          "printed_row": "Covetrus Inc.(11) Second lien senior secured loan S + 9.25 % 10/2030 25,000 24,517 24,188 1.8 %",
+          "context_xml": "<xbrli:context id=\"c-117\"><xbrli:entity><xbrli:identifier scheme=\"http://www.sec.gov/CIK\">0001869453</xbrli:identifier><xbrli:segment><xbrldi:typedmember dimension=\"us-gaap:InvestmentIdentifierAxis\"><us-gaap:investmentidentifieraxis.domain>CVET Midco 2, L.P., Second lien senior secured loan</us-gaap:investmentidentifieraxis.domain></xbrldi:typedmember></xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>2023-06-30</xbrli:instant></xbrli:period></xbrli:context>",
+          "source_neighbors": [
+            "15,336 15,486 1.2 %",
+            "Health Care Providers & Services",
+            "Covetrus Inc.(11) Second lien senior secured loan S + 9.25 % 10/2030 25,000 24,517 24,188 1.8 %",
+            "Engage Debtco Limited(11)(22) First lien senior secured loan S + 5.75 % 7/2029 12,500 12,222 12,280 0.9 %",
+            "OneOncology LLC(11) First lien senior secured loan S + 6.25 % 6/2030 14,286 14,073 14,059 1.0 %"
+          ],
+          "source_table_heading": "Company(1)(2)(21) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets(5) Inovalon Holdings, Inc.(8) First lien senior secured loan S + 6.25 % ( 2.75 %PIK) 11/2028 13,169 12,912 12,939 1.0 % Inovalon Holdings, Inc.(17)(18)(19) First lien senior secur",
+          "published_fields": {
+            "row_id": "ROW-1d0d6dad4f78588d",
+            "report_date": "2023-06-30",
+            "issuer_name": "CVET Midco 2, L.P.",
+            "instrument_description": "Second lien senior secured loan",
+            "bdc_investment_identifier": "CVET Midco 2, L.P., Second lien senior secured loan",
+            "src_context_id": "c-117",
+            "accession_number": "0001869453-23-000017",
+            "fair_value": 24188000.0,
+            "shares_held": null,
+            "principal_amount": 25000000.0,
+            "basis_spread": 9.25,
+            "pik_rate": null,
+            "maturity_date": "2030-10-31"
+          }
+        },
+        {
+          "row_id": "ROW-5aa1c6734671b50f",
+          "context_id": "c-184",
+          "published_issuer": "Zoro TopCo, L.P. (dba Zendesk)",
+          "printed_row": "Zoro TopCo, L.P.(20)(24) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.5 %",
+          "context_xml": "<xbrli:context id=\"c-184\"><xbrli:entity><xbrli:identifier scheme=\"http://www.sec.gov/CIK\">0001869453</xbrli:identifier><xbrli:segment><xbrldi:typedmember dimension=\"us-gaap:InvestmentIdentifierAxis\"><us-gaap:investmentidentifieraxis.domain>Zoro TopCo, L.P. (dba Zendesk), Class A Common Units</us-gaap:investmentidentifieraxis.domain></xbrldi:typedmember></xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>2023-06-30</xbrli:instant></xbrli:period></xbrli:context>",
+          "source_neighbors": [
+            "Project Alpine Co-Invest Fund, L.P.(20)(22)(24) L.P. Interest N/A N/A N/A 7 6,670 7,316 0.5 %",
+            "Zoro TopCo, Inc.(16)(24) Series A Preferred Equity N/A 12.50 % PIK N/A 8,057 8,406 8,483 0.6 %",
+            "Zoro TopCo, L.P.(20)(24) Class A Common Units N/A N/A N/A 671,414 6,714 6,714 0.5 %",
+            "21,790 22,513 1.7 %",
+            "Health Care Technology"
+          ],
+          "source_table_heading": "Company(1)(2)(21) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets(5) Equity Investments Application Software Project Alpine Co-Invest Fund, L.P.(20)(22)(24) L.P. Interest N/A N/A N/A 7 6,670 7,316 0.5 % Zoro TopCo, Inc.(16)(24) Series A Preferre",
+          "published_fields": {
+            "row_id": "ROW-5aa1c6734671b50f",
+            "report_date": "2023-06-30",
+            "issuer_name": "Zoro TopCo, L.P. (dba Zendesk)",
+            "instrument_description": "Class A Common Units",
+            "bdc_investment_identifier": "Zoro TopCo, L.P. (dba Zendesk), Class A Common Units",
+            "src_context_id": "c-184",
+            "accession_number": "0001869453-23-000017",
+            "fair_value": 6714000.0,
+            "shares_held": 671414.0,
+            "principal_amount": null,
+            "basis_spread": null,
+            "pik_rate": null,
+            "maturity_date": null
+          }
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_f3f51f90c8d0",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-12-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-35abfc6465f56a8d"
+        ],
+        "reviewed_rows": [
+          "ROW-35abfc6465f56a8d"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001869453-24-000012",
+          "text": "Resonetics, LLC(8)(15) First lien senior secured loan S + 4.00 % 4/2028 7,243 7,172 7,236 0.4 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "The sole flagged context c-166 is instant 2023-12-31. Its FV 7,236, par 7,243, cost 7,172, margin 4.00 and maturity 4/2028 physically occur on the row headed Resonetics, LLC. The published issuer is PerkinElmer U.S. LLC because the member erroneously says PerkinElmer ... loan 3.",
+        "The preceding two PerkinElmer rows are separate loans with FV 11,360 and 27,397 and March 2029 maturities. They cannot justify carrying their issuer into the explicitly named Resonetics row. This is not a continuation blank or a comparative-period mismatch.",
+        "All monetary values use scale 3 and match published values; the defect is issuer attribution, not amount or scaling. Adjacent subtotal 61,298 is not a position."
+      ],
+      "next_action": "In a separately authorized repair, correct issuer for this accession/context (or equivalently unique stable identifier scoped to this quarter) to Resonetics, LLC using the printed row. Preserve distinct preceding PerkinElmer loans and remeasure identity/matching effects.",
+      "row_assessments": [
+        {
+          "row_id": "ROW-35abfc6465f56a8d",
+          "context_id": "c-166",
+          "published_issuer": "PerkinElmer U.S. LLC",
+          "printed_row": "Resonetics, LLC(8)(15) First lien senior secured loan S + 4.00 % 4/2028 7,243 7,172 7,236 0.4 %",
+          "context_xml": "<xbrli:context id=\"c-166\"><xbrli:entity><xbrli:identifier scheme=\"http://www.sec.gov/CIK\">0001869453</xbrli:identifier><xbrli:segment><xbrldi:typedmember dimension=\"us-gaap:InvestmentIdentifierAxis\"><us-gaap:investmentidentifieraxis.domain>PerkinElmer U.S. LLC, First lien senior secured loan 3</us-gaap:investmentidentifieraxis.domain></xbrldi:typedmember></xbrli:segment></xbrli:entity><xbrli:period><xbrli:instant>2023-12-31</xbrli:instant></xbrli:period></xbrli:context>",
+          "source_neighbors": [
+            "PerkinElmer U.S. LLC(7) First lien senior secured loan S + 6.75 % 3/2029 11,360 11,155 11,360 0.6 %",
+            "PerkinElmer U.S. LLC(7) First lien senior secured loan S + 5.75 % 3/2029 27,674 27,403 27,397 1.5 %",
+            "Resonetics, LLC(8)(15) First lien senior secured loan S + 4.00 % 4/2028 7,243 7,172 7,236 0.4 %",
+            "60,757 61,298 3.3 %",
+            "Health Care Providers & Services"
+          ],
+          "source_table_heading": "Company(1)(2)(21) Investment Interest Maturity Date Par / Units Amortized Cost(3)(4) Fair Value Percentage of Net Assets(5) Inovalon Holdings, Inc.(7) First lien senior secured loan S + 6.25 % ( 2.75 %PIK) 11/2028 13,388 13,151 13,221 0.7 % Inovalon Holdings, Inc.(17)(18)(19) First lien senior secur",
+          "published_fields": {
+            "row_id": "ROW-35abfc6465f56a8d",
+            "report_date": "2023-12-31",
+            "issuer_name": "PerkinElmer U.S. LLC",
+            "instrument_description": "First lien senior secured loan 3",
+            "bdc_investment_identifier": "PerkinElmer U.S. LLC, First lien senior secured loan 3",
+            "src_context_id": "c-166",
+            "accession_number": "0001869453-24-000012",
+            "fair_value": 7236000.0,
+            "shares_held": null,
+            "principal_amount": 7243000.0,
+            "basis_spread": 4.0,
+            "pik_rate": null,
+            "maturity_date": "2028-04-30"
+          }
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_b95f4e5db838",
+      "rule_name": "F28",
+      "report_date": "2026-06-30",
+      "coverage": {
+        "affected_rows": [
+          "0001869453/2026-06-30/F28/holdings_coverage"
+        ],
+        "reviewed_rows": [
+          "0001869453/2026-06-30/F28/holdings_coverage"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001869453-26-000053",
+          "text": "Consolidated Statements of Assets and Liabilities (Amounts in thousands, except share and per share amounts) As of June 30, 2026 (Unaudited) As of December 31, 2025 Assets Investments at fair value: Non-controlled, non-affiliated investments (amortized cost of $ 5,145,111 and $ 6,096,076 , respectively) $ 4,927,818 $ 6,093,614 Non-controlled, affiliated investments (a"
+        },
+        {
+          "accession": "0001869453-26-000053",
+          "text": "Total investments at fair value (amortized cost of $ 5,270,199 and $ 6,206,603 , respectively) 5,056,913 6,207,136 Cash 105,307 143,140 Foreign cash (cost of $ "
+        },
+        {
+          "accession": "0001869453-26-000053",
+          "text": "Total Assets $ 5,203,686 $ 6,495,389 Liabilities Debt (net o"
+        },
+        {
+          "accession": "0001869453-26-000053",
+          "text": "Total Liabilities 2,502,368 2,915,241 Commitments and contingenci"
+        },
+        {
+          "accession": "0001869453-26-000053",
+          "text": "Total Net Assets 2,701,318 3,580,148 Total Liabilities and Net Assets $ 5,203,686 $ 6,495,"
+        },
+        {
+          "accession": "0001869453-26-000053",
+          "text": "Total Investments $ 5,270,199 $ 5,056,913 187.2 % Forward Contracts as of June 30, 2026 Notional Amo"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "F28 actual validation output is fund=True;holdings=False. An independent DuckDB count of all sandbox holdings for this CIK/date is zero; latest holdings quarter is 2026-03-31. Fund financials has exactly one June 30 row. This is a fund-quarter coverage finding, not a set of invented missing position IDs.",
+        "Original cached accession 0001869453-26-000053 contains a June 30, 2026 schedule and a distinct December 31, 2025 comparative. Current total cost/FV are 5,270,199/5,056,913 thousand, versus comparative 6,206,603/6,207,136. Therefore absence is not explained by no available cached filing or by an empty/formation fund.",
+        "Read the original balance sheet: current assets 5,203,686, liabilities 2,502,368, net assets 2,701,318 thousand; all three match published companyfacts financial values at scale 1000 and satisfy assets minus liabilities. Investments FV 5,056,913 thousand matches both balance sheet and schedule. The F28 failure is coverage, not evidence that these financial values should be deleted.",
+        "The $5,056.913M schedule is an independent source magnitude, not an estimate of output-side FV-at-risk and not a reconciled published total because no holdings are present for this quarter."
+      ],
+      "next_action": "In a separately authorized cached-data quarter expansion, extract/admit the June 30 schedule and run source reconciliation before publication. Keep F28 open until the coverage mismatch is legitimately addressed; do not delete financial data or suppress the rule. This review does not enumerate or validate every absent Q2 position.",
+      "row_assessments": []
+    }
+  ],
+  "observations": [
+    {
+      "observation_key": "blue-owl-technology-income-q2-2026-nav-printed-unpublished",
+      "what": "While reading F28 balance sheet, all three share classes print NAV per share 9.70, but the June 30 fund-financials row has nav_per_share null. Left unchanged: this is review only. The equal class values remove weighting ambiguity at this date; this does not validate all class NAVs or earlier quarters.",
+      "field": "nav_per_share",
+      "quarters": [
+        "2026-06-30"
+      ],
+      "cause": "fund",
+      "action": "left",
+      "suggested_check": "For this fund and quarter, when the source class NAV rows are all present and identical, flag a missing aggregate NAV; when class NAVs differ, require a documented aggregation basis rather than selecting one class.",
+      "quote": {
+        "accession": "0001869453-26-000053",
+        "text": "Net Asset Value Per Class S Share $ 9.70 $ 10.38 Net Asset Value Per Class D Share $ 9.70 $ 10.38 Net Asset Value Per Class I Share $ 9.70 $ 10.38 The"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "F11 and F30 skip for this quarter because NAV is absent; F28 detects holdings coverage, not missing printed NAV. No fired detector for this missing field was established.",
+        "reference": "Proposed source-backed class-consistency NAV completeness check; F11/F30 SKIP in saved fund_financials_validation_current.json"
+      }
+    }
+  ],
+  "orchestrator_requests": [],
+  "not_done": [
+    "No repairs, rebuilds, tests, network, ledger/disposition edits, acceptance or publication.",
+    "Six previously reviewed outstanding findings excluded. No whole-fund correctness claim or complete June 2026 position audit.",
+    "CVET/Covetrus legal alias and Zoro March legal-form contradictions remain unresolved source ambiguities; both sides of each source conflict were read."
+  ],
+  "counts": {
+    "selected_findings": 5,
+    "issuer_rows_affected": 9,
+    "issuer_rows_reviewed": 9,
+    "fund_quarter_metrics_reviewed": 1,
+    "confirmed_error_findings": 3,
+    "source_ambiguity_findings": 2,
+    "observations": 1
+  },
+  "diagnostics": "scratch/2026-10-21_review_queue/0001869453/; inspect.py reconstructs full rule population; source.py reads each original context physical row and neighbors; more.py verifies contexts, dates, headings, scales and Q2 coverage. Prior history read: fund MD, D-080/D-102/D-160 context; history is not source proof."
+}
