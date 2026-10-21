@@ -2,7 +2,7 @@
 
 User scope: review previously unreviewed findings, excluding recorded agent investigations, verdicts and disposition proposals. Initial selection: 447 findings across 40 retained funds. After excluding 44 additional findings already reviewed in substantive legacy narratives ([exclusion evidence](prior_review_exclusions.json)), current selection: 403 findings across 39 retained funds, ordered by 2026-03-31 published fair value.
 
-220 findings independently reviewed; 183 remain. 210 findings contain confirmed errors; 7 are false alarms; 3 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
+234 findings independently reviewed; 169 remain. 224 findings contain confirmed errors; 7 are false alarms; 3 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
 
 Reviews do not resolve ledger items, accept dispositions, repair data or approve funds. Canonical data, existing reports and previously reviewed findings remain unchanged. No builds or tests required for this evidence-only work. Mechanisms and proposed detectors need implementation and validation before repairs. Original-source quotes and exact selected coverage are mechanically checked; each completed report has a separate source reviewer.
 
@@ -29,3 +29,4 @@ Reviews do not resolve ledger items, accept dispositions, repair data or approve
 | Trinity Capital Inc. | 6 | 6 | 0 | 0 | [Report](0001786108.json) / [independent review](reviews/0001786108.json) |
 | Golub Capital BDC 4, Inc. | 3 | 3 | 0 | 0 | [Report](0001901612.json) / [independent review](reviews/0001901612.json) |
 | Nuveen Churchill Private Capital Income Fund | 1 | 1 | 0 | 0 | [Report](0001911066.json) / [independent review](reviews/0001911066.json) |
+| BlackRock Private Credit Fund | 14 | 14 | 0 | 0 | [Report](0001902649.json) / [independent review](reviews/0001902649.json) |

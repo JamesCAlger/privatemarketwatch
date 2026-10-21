@@ -1,0 +1,1868 @@
+{
+  "cik": "0001902649",
+  "label": "rgA4",
+  "investigator_id": "/root/remaining_blackrock_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_0c0d9df4a032",
+    "RVQ_BLK_1e0a5725c3c8",
+    "RVQ_BLK_35ccff6cd1f4",
+    "RVQ_BLK_6c82c275f670",
+    "RVQ_BLK_76c474c34cf2",
+    "RVQ_BLK_8564f32e1d0d",
+    "RVQ_BLK_9061ba5609a3",
+    "RVQ_BLK_9f765cef32d3",
+    "RVQ_BLK_a397d0b6853f",
+    "RVQ_BLK_a51c333ec53a",
+    "RVQ_BLK_a7254d334131",
+    "RVQ_BLK_b7390e6e6d1b",
+    "RVQ_BLK_cd1e4db5e3ce",
+    "RVQ_BLK_e33c37d86cbd"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_0c0d9df4a032",
+      "coverage": {
+        "affected_rows": [
+          "ROW-0cf057fc7245b54c",
+          "ROW-86340eb488c2908a",
+          "ROW-8cf8ee8833f526dd"
+        ],
+        "reviewed_rows": [
+          "ROW-0cf057fc7245b54c",
+          "ROW-86340eb488c2908a",
+          "ROW-8cf8ee8833f526dd"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-23-058175",
+          "text": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 9.42 % 11/2/2027 $ 481,644 470,643 459,007 0.13 %"
+        },
+        {
+          "accession": "0000950170-23-058175",
+          "text": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.07 % 1/15/2027 $ 910,293 896,905 890,380 0.25 %"
+        },
+        {
+          "accession": "0000950170-23-058175",
+          "text": "White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 % 9.07 % 10/19/2027 $ 829,558 797,643 828,990 0.24 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-0cf057fc7245b54c",
+          "accession": "0000950170-23-058175",
+          "context": "C_d426d1fb-1d98-4771-a6c4-578e82647e9b",
+          "published_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance & Security Service TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-0cf057fc7245b54c",
+            "issuer_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+            "interest_rate": 9.42,
+            "basis_spread": 4.1000000000000005,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 9.42 % 11/2/2027 $ 481,644 470,643 459,007 0.13 %"
+        },
+        {
+          "row_id": "ROW-86340eb488c2908a",
+          "accession": "0000950170-23-058175",
+          "context": "C_e3bf017e-543e-4506-abd4-5a7d710b9a13",
+          "published_name": "Sothebys",
+          "printed_name": "Sotheby's",
+          "conclusion": "false_alarm",
+          "reason": "Punctuation/spacing normalization only: Sothebys versus Sotheby's. Same context-linked position; no legal suffix or borrower substitution. Optional display fidelity correction, not a missing or wrong position.",
+          "published_other_fields": {
+            "row_id": "ROW-86340eb488c2908a",
+            "issuer_name": "Sothebys",
+            "interest_rate": 10.07,
+            "basis_spread": 4.760000000000001,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan",
+            "shares_held": null
+          },
+          "source_row": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.07 % 1/15/2027 $ 910,293 896,905 890,380 0.25 %"
+        },
+        {
+          "row_id": "ROW-8cf8ee8833f526dd",
+          "accession": "0000950170-23-058175",
+          "context": "C_8f56fc19-ca99-40c8-88c2-0e2e15d6f76e",
+          "published_name": "White Cap Supply Holdings, LLC (Numerix)",
+          "printed_name": "White Cap Supply Holdings, LLC",
+          "conclusion": "source_ambiguity",
+          "reason": "Printed row omits Numerix; context/member adds it. The position values and instrument identify the same source row, but affiliation/alias correctness is not independently established. Preserve distinction between filed display and canonical aliases; do not infer wrong borrower solely from absent parenthesis.",
+          "published_other_fields": {
+            "row_id": "ROW-8cf8ee8833f526dd",
+            "issuer_name": "White Cap Supply Holdings, LLC (Numerix)",
+            "interest_rate": 9.07,
+            "basis_spread": 3.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan",
+            "shares_held": null
+          },
+          "source_row": "White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 % 9.07 % 10/19/2027 $ 829,558 797,643 828,990 0.24 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 3 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_1e0a5725c3c8",
+      "coverage": {
+        "affected_rows": [
+          "ROW-033cf18fb62606aa",
+          "ROW-6555e93d24e2edac",
+          "ROW-0d3cece729c3bd00",
+          "ROW-fb9270dfa560544f",
+          "ROW-527b2f3eacfa39a9"
+        ],
+        "reviewed_rows": [
+          "ROW-033cf18fb62606aa",
+          "ROW-6555e93d24e2edac",
+          "ROW-0d3cece729c3bd00",
+          "ROW-fb9270dfa560544f",
+          "ROW-527b2f3eacfa39a9"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-052326",
+          "text": "Bynder Bidco, Inc. (Netherlands) First Lien Revolver A SOFR(Q) 1.00 % 7.25 % 12.57 % 1/26/2029 $ - ( 4,129 ) ( 769 ) - C/D/E"
+        },
+        {
+          "accession": "0000950170-24-052326",
+          "text": "Bynder Bidco, Inc. (Netherlands) First Lien Term Loan A SOFR(Q) 1.00 % 7.25 % 12.57 % 1/26/2029 $ 582,226 568,182 572,736 0.12 % C/E"
+        },
+        {
+          "accession": "0000950170-24-052326",
+          "text": "Pug LLC First Lien Term Loan SOFR(M) - 4.75 % 10.08 % 3/15/2030 $ 736,195 715,251 738,186 0.15 %"
+        },
+        {
+          "accession": "0000950170-24-052326",
+          "text": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 9.43 % 11/2/2027 $ 479,168 469,533 467,340 0.10 %"
+        },
+        {
+          "accession": "0000950170-24-052326",
+          "text": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.08 % 1/15/2027 $ 905,649 894,314 892,064 0.19 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-033cf18fb62606aa",
+          "accession": "0000950170-24-052326",
+          "context": "C_d969a208-5687-4d85-b44e-fa99ac0cc6e6",
+          "published_name": "Bynder Bidco B.V. (Netherlands)",
+          "printed_name": "Bynder Bidco, Inc. (Netherlands)",
+          "conclusion": "confirmed_error",
+          "reason": "Filed display is Bynder Bidco, Inc. (Netherlands) while member/published name is Bynder Bidco B.V. (Netherlands). Neighboring B tranches actually print B.V.; A tranches print Inc. Do not normalize all Bynder tranches to one legal entity; source legal-entity conflict needs retained provenance.",
+          "published_other_fields": {
+            "row_id": "ROW-033cf18fb62606aa",
+            "issuer_name": "Bynder Bidco B.V. (Netherlands)",
+            "interest_rate": 12.57,
+            "basis_spread": 7.249999999999999,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Revolver A - Maturity 1/26/2029",
+            "shares_held": null
+          },
+          "source_row": "Bynder Bidco, Inc. (Netherlands) First Lien Revolver A SOFR(Q) 1.00 % 7.25 % 12.57 % 1/26/2029 $ \u2014 ( 4,129 ) ( 769 ) \u2014 C/D/E"
+        },
+        {
+          "row_id": "ROW-6555e93d24e2edac",
+          "accession": "0000950170-24-052326",
+          "context": "C_33deee57-baa1-4ec1-9e66-80a80d5ab7a9",
+          "published_name": "Bynder Bidco B.V. (Netherlands)",
+          "printed_name": "Bynder Bidco, Inc. (Netherlands)",
+          "conclusion": "confirmed_error",
+          "reason": "Filed display is Bynder Bidco, Inc. (Netherlands) while member/published name is Bynder Bidco B.V. (Netherlands). Neighboring B tranches actually print B.V.; A tranches print Inc. Do not normalize all Bynder tranches to one legal entity; source legal-entity conflict needs retained provenance.",
+          "published_other_fields": {
+            "row_id": "ROW-6555e93d24e2edac",
+            "issuer_name": "Bynder Bidco B.V. (Netherlands)",
+            "interest_rate": 12.57,
+            "basis_spread": 7.249999999999999,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan A - Maturity 1/26/2029",
+            "shares_held": null
+          },
+          "source_row": "Bynder Bidco, Inc. (Netherlands) First Lien Term Loan A SOFR(Q) 1.00 % 7.25 % 12.57 % 1/26/2029 $ 582,226 568,182 572,736 0.12 % C/E"
+        },
+        {
+          "row_id": "ROW-0d3cece729c3bd00",
+          "accession": "0000950170-24-052326",
+          "context": "C_bd62d11b-d42a-4db6-b74e-d3a662de7d63",
+          "published_name": "Internet and Direct Marketing Retail Pug LLC",
+          "printed_name": "Pug LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Internet and Direct Marketing Retail Pug LLC; original source row prints Pug LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-0d3cece729c3bd00",
+            "issuer_name": "Internet and Direct Marketing Retail Pug LLC",
+            "interest_rate": 10.08,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/15/2030",
+            "shares_held": null
+          },
+          "source_row": "Pug LLC First Lien Term Loan SOFR(M) \u2014 4.75 % 10.08 % 3/15/2030 $ 736,195 715,251 738,186 0.15 %"
+        },
+        {
+          "row_id": "ROW-fb9270dfa560544f",
+          "accession": "0000950170-24-052326",
+          "context": "C_80b413ad-b816-4d4c-9dbd-25108526cfc4",
+          "published_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance & Security Service TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-fb9270dfa560544f",
+            "issuer_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+            "interest_rate": 9.43,
+            "basis_spread": 4.1000000000000005,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 11/2/2027",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 9.43 % 11/2/2027 $ 479,168 469,533 467,340 0.10 %"
+        },
+        {
+          "row_id": "ROW-527b2f3eacfa39a9",
+          "accession": "0000950170-24-052326",
+          "context": "C_9b1b55f0-f724-430f-ac34-4640e14e4cc5",
+          "published_name": "Sothebys",
+          "printed_name": "Sotheby's",
+          "conclusion": "false_alarm",
+          "reason": "Punctuation/spacing normalization only: Sothebys versus Sotheby's. Same context-linked position; no legal suffix or borrower substitution. Optional display fidelity correction, not a missing or wrong position.",
+          "published_other_fields": {
+            "row_id": "ROW-527b2f3eacfa39a9",
+            "issuer_name": "Sothebys",
+            "interest_rate": 10.08,
+            "basis_spread": 4.760000000000001,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 1/15/2027",
+            "shares_held": null
+          },
+          "source_row": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.08 % 1/15/2027 $ 905,649 894,314 892,064 0.19 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 5 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_35ccff6cd1f4",
+      "coverage": {
+        "affected_rows": [
+          "ROW-c0dd78795f31a00e",
+          "ROW-565aa0d9fd3ac655",
+          "ROW-3d52f144e1aaf6b8",
+          "ROW-03bec2bb82026f01"
+        ],
+        "reviewed_rows": [
+          "ROW-c0dd78795f31a00e",
+          "ROW-565aa0d9fd3ac655",
+          "ROW-3d52f144e1aaf6b8",
+          "ROW-03bec2bb82026f01"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-23-038004",
+          "text": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.00 % 9.20 % 11/2/2027 $ 740,126 724,241 683,136 0.26 %"
+        },
+        {
+          "accession": "0000950170-23-038004",
+          "text": "Sotheby's First Lien Term Loan LIBOR(Q) 0.50 % 4.50 % 9.76 % 1/15/2027 $ 912,616 898,190 893,223 0.34 %"
+        },
+        {
+          "accession": "0000950170-23-038004",
+          "text": "White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 % 8.85 % 10/19/2027 $ 831,663 797,721 826,062 0.31 %"
+        },
+        {
+          "accession": "0000950170-23-038004",
+          "text": "KKR Apple Bidco, LLC First Lien Term Loan SOFR(M) 0.50 % 2.75 % 7.97 % 9/23/2028 $ 1,478,167 1,440,468 1,467,872 0.56 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-c0dd78795f31a00e",
+          "accession": "0000950170-23-038004",
+          "context": "C_6e6db61d-1f2d-4653-9f2e-cfb04c171d50",
+          "published_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance & Security Service TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-c0dd78795f31a00e",
+            "issuer_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+            "interest_rate": 9.2,
+            "basis_spread": 4.0,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.00 % 9.20 % 11/2/2027 $ 740,126 724,241 683,136 0.26 %"
+        },
+        {
+          "row_id": "ROW-565aa0d9fd3ac655",
+          "accession": "0000950170-23-038004",
+          "context": "C_9c7f83e6-b1f2-46f0-a080-6a911edf908f",
+          "published_name": "Sothebys",
+          "printed_name": "Sotheby's",
+          "conclusion": "false_alarm",
+          "reason": "Punctuation/spacing normalization only: Sothebys versus Sotheby's. Same context-linked position; no legal suffix or borrower substitution. Optional display fidelity correction, not a missing or wrong position.",
+          "published_other_fields": {
+            "row_id": "ROW-565aa0d9fd3ac655",
+            "issuer_name": "Sothebys",
+            "interest_rate": 9.76,
+            "basis_spread": 4.5,
+            "reference_rate_type": "LIBOR",
+            "instrument_description": "First Lien Term Loan",
+            "shares_held": null
+          },
+          "source_row": "Sotheby's First Lien Term Loan LIBOR(Q) 0.50 % 4.50 % 9.76 % 1/15/2027 $ 912,616 898,190 893,223 0.34 %"
+        },
+        {
+          "row_id": "ROW-3d52f144e1aaf6b8",
+          "accession": "0000950170-23-038004",
+          "context": "C_e35fc17f-b2f0-4949-ba91-5eda2246a7b9",
+          "published_name": "White Cap Supply Holdings, LLC (Numerix)",
+          "printed_name": "White Cap Supply Holdings, LLC",
+          "conclusion": "source_ambiguity",
+          "reason": "Printed row omits Numerix; context/member adds it. The position values and instrument identify the same source row, but affiliation/alias correctness is not independently established. Preserve distinction between filed display and canonical aliases; do not infer wrong borrower solely from absent parenthesis.",
+          "published_other_fields": {
+            "row_id": "ROW-3d52f144e1aaf6b8",
+            "issuer_name": "White Cap Supply Holdings, LLC (Numerix)",
+            "interest_rate": 8.85,
+            "basis_spread": 3.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan",
+            "shares_held": null
+          },
+          "source_row": "White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 % 8.85 % 10/19/2027 $ 831,663 797,721 826,062 0.31 %"
+        },
+        {
+          "row_id": "ROW-03bec2bb82026f01",
+          "accession": "0000950170-23-038004",
+          "context": "C_c317843a-bb99-4c8d-a944-395fafcc56dc",
+          "published_name": "KKR Apple Bidco, LLC (Numerix)",
+          "printed_name": "KKR Apple Bidco, LLC",
+          "conclusion": "source_ambiguity",
+          "reason": "Printed row omits Numerix; context/member adds it. The position values and instrument identify the same source row, but affiliation/alias correctness is not independently established. Preserve distinction between filed display and canonical aliases; do not infer wrong borrower solely from absent parenthesis.",
+          "published_other_fields": {
+            "row_id": "ROW-03bec2bb82026f01",
+            "issuer_name": "KKR Apple Bidco, LLC (Numerix)",
+            "interest_rate": 7.969999999999999,
+            "basis_spread": 2.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan",
+            "shares_held": null
+          },
+          "source_row": "KKR Apple Bidco, LLC First Lien Term Loan SOFR(M) 0.50 % 2.75 % 7.97 % 9/23/2028 $ 1,478,167 1,440,468 1,467,872 0.56 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 4 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_6c82c275f670",
+      "coverage": {
+        "affected_rows": [
+          "ROW-de7cda51741be702",
+          "ROW-e96db61bc16b2d46",
+          "ROW-88daef6708087c1a"
+        ],
+        "reviewed_rows": [
+          "ROW-de7cda51741be702",
+          "ROW-e96db61bc16b2d46",
+          "ROW-88daef6708087c1a"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-094751",
+          "text": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 9.44 % 11/2/2027 $ 477,930 468,985 461,680 0.09 %"
+        },
+        {
+          "accession": "0000950170-24-094751",
+          "text": "Pug LLC First Lien Term Loan SOFR(M) - 4.75 % 10.09 % 3/15/2030 $ 725,296 705,534 726,431 0.14 %"
+        },
+        {
+          "accession": "0000950170-24-094751",
+          "text": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.09 % 1/15/2027 $ 903,327 893,030 831,436 0.16 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-de7cda51741be702",
+          "accession": "0000950170-24-094751",
+          "context": "C_9251f6b4-51ab-43b3-a44e-236bf90e49ea",
+          "published_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance and Security Services TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-de7cda51741be702",
+            "issuer_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+            "interest_rate": 9.44,
+            "basis_spread": 4.1000000000000005,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 11/2/2027",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 9.44 % 11/2/2027 $ 477,930 468,985 461,680 0.09 %"
+        },
+        {
+          "row_id": "ROW-e96db61bc16b2d46",
+          "accession": "0000950170-24-094751",
+          "context": "C_bc25001f-a3d0-47b1-aa05-66ca4560d051",
+          "published_name": "Internet and Direct Marketing Retail Pug LLC",
+          "printed_name": "Pug LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Internet and Direct Marketing Retail Pug LLC; original source row prints Pug LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-e96db61bc16b2d46",
+            "issuer_name": "Internet and Direct Marketing Retail Pug LLC",
+            "interest_rate": 10.09,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/15/2030",
+            "shares_held": null
+          },
+          "source_row": "Pug LLC First Lien Term Loan SOFR(M) \u2014 4.75 % 10.09 % 3/15/2030 $ 725,296 705,534 726,431 0.14 %"
+        },
+        {
+          "row_id": "ROW-88daef6708087c1a",
+          "accession": "0000950170-24-094751",
+          "context": "C_bcefd4bb-3acf-4439-804e-f809e513d3ad",
+          "published_name": "Sothebys",
+          "printed_name": "Sotheby's",
+          "conclusion": "false_alarm",
+          "reason": "Punctuation/spacing normalization only: Sothebys versus Sotheby's. Same context-linked position; no legal suffix or borrower substitution. Optional display fidelity correction, not a missing or wrong position.",
+          "published_other_fields": {
+            "row_id": "ROW-88daef6708087c1a",
+            "issuer_name": "Sothebys",
+            "interest_rate": 10.09,
+            "basis_spread": 4.760000000000001,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 1/15/2027",
+            "shares_held": null
+          },
+          "source_row": "Sotheby's First Lien Term Loan SOFR(Q) 0.50 % 4.76 % 10.09 % 1/15/2027 $ 903,327 893,030 831,436 0.16 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 3 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_76c474c34cf2",
+      "coverage": {
+        "affected_rows": [
+          "ROW-051200552e7abbc2",
+          "ROW-d62e6b1448b53689",
+          "ROW-fea96b0d4b2af2d6",
+          "ROW-f623dd84313ea736"
+        ],
+        "reviewed_rows": [
+          "ROW-051200552e7abbc2",
+          "ROW-d62e6b1448b53689",
+          "ROW-fea96b0d4b2af2d6",
+          "ROW-f623dd84313ea736"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-23-017976",
+          "text": "Sotheby's First Lien Term Loan LIBOR(Q) 0.50 % 4.50 % 9.33 % 1/15/2027 $ 914,938 899,471 912,367 0.37 %"
+        },
+        {
+          "accession": "0000950170-23-017976",
+          "text": "Bynder Bidco, Inc. (Netherlands) First Lien Term Loan A SOFR(S) 1.00 % 7.25 % 12.05 % 1/26/2029 $ 582,226 565,292 565,167 0.23 % C/E"
+        },
+        {
+          "accession": "0000950170-23-017976",
+          "text": "Bynder Bidco, Inc. (Netherlands) First Lien Revolver A SOFR(S) 1.00 % 7.25 % 12.05 % 1/26/2029 $ - ( 4,978 ) ( 1,382 ) - C/D/E"
+        },
+        {
+          "accession": "0000950170-23-017976",
+          "text": "TruGreen Limited Partnership First Lien Term Loan LIBOR(M) 0.75 % 4.00 % 8.84 % 11/2/2027 $ 742,023 725,194 687,069 0.28 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-051200552e7abbc2",
+          "accession": "0000950170-23-017976",
+          "context": "C_11edc717-6c7c-455e-a9c1-d06d7cac20ac",
+          "published_name": "Sothebys",
+          "printed_name": "Sotheby's",
+          "conclusion": "false_alarm",
+          "reason": "Punctuation/spacing normalization only: Sothebys versus Sotheby's. Same context-linked position; no legal suffix or borrower substitution. Optional display fidelity correction, not a missing or wrong position.",
+          "published_other_fields": {
+            "row_id": "ROW-051200552e7abbc2",
+            "issuer_name": "Sothebys",
+            "interest_rate": 9.33,
+            "basis_spread": 4.5,
+            "reference_rate_type": "LIBOR",
+            "instrument_description": "First Lien Term Loan",
+            "shares_held": null
+          },
+          "source_row": "Sotheby's First Lien Term Loan LIBOR(Q) 0.50 % 4.50 % 9.33 % 1/15/2027 $ 914,938 899,471 912,367 0.37 %"
+        },
+        {
+          "row_id": "ROW-d62e6b1448b53689",
+          "accession": "0000950170-23-017976",
+          "context": "C_a1cbd36f-8cae-42e9-ad05-0d3f2ad1a74f",
+          "published_name": "Bynder Bidco B.V. (Netherlands)",
+          "printed_name": "Bynder Bidco, Inc. (Netherlands)",
+          "conclusion": "confirmed_error",
+          "reason": "Filed display is Bynder Bidco, Inc. (Netherlands) while member/published name is Bynder Bidco B.V. (Netherlands). Neighboring B tranches actually print B.V.; A tranches print Inc. Do not normalize all Bynder tranches to one legal entity; source legal-entity conflict needs retained provenance.",
+          "published_other_fields": {
+            "row_id": "ROW-d62e6b1448b53689",
+            "issuer_name": "Bynder Bidco B.V. (Netherlands)",
+            "interest_rate": 12.049999999999999,
+            "basis_spread": 7.249999999999999,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan A",
+            "shares_held": null
+          },
+          "source_row": "Bynder Bidco, Inc. (Netherlands) First Lien Term Loan A SOFR(S) 1.00 % 7.25 % 12.05 % 1/26/2029 $ 582,226 565,292 565,167 0.23 % C/E"
+        },
+        {
+          "row_id": "ROW-fea96b0d4b2af2d6",
+          "accession": "0000950170-23-017976",
+          "context": "C_27a209c0-846b-4b69-9676-4ca1691c3261",
+          "published_name": "Bynder Bidco B.V. (Netherlands)",
+          "printed_name": "Bynder Bidco, Inc. (Netherlands)",
+          "conclusion": "confirmed_error",
+          "reason": "Filed display is Bynder Bidco, Inc. (Netherlands) while member/published name is Bynder Bidco B.V. (Netherlands). Neighboring B tranches actually print B.V.; A tranches print Inc. Do not normalize all Bynder tranches to one legal entity; source legal-entity conflict needs retained provenance.",
+          "published_other_fields": {
+            "row_id": "ROW-fea96b0d4b2af2d6",
+            "issuer_name": "Bynder Bidco B.V. (Netherlands)",
+            "interest_rate": 12.049999999999999,
+            "basis_spread": 7.249999999999999,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Revolver A",
+            "shares_held": null
+          },
+          "source_row": "Bynder Bidco, Inc. (Netherlands) First Lien Revolver A SOFR(S) 1.00 % 7.25 % 12.05 % 1/26/2029 $ \u2014 ( 4,978 ) ( 1,382 ) \u2014 C/D/E"
+        },
+        {
+          "row_id": "ROW-f623dd84313ea736",
+          "accession": "0000950170-23-017976",
+          "context": "C_c75fb376-8ad5-4823-9177-448b3029869a",
+          "published_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance & Security Service TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-f623dd84313ea736",
+            "issuer_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+            "interest_rate": 8.84,
+            "basis_spread": 4.0,
+            "reference_rate_type": "LIBOR",
+            "instrument_description": "First Lien Term Loan",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan LIBOR(M) 0.75 % 4.00 % 8.84 % 11/2/2027 $ 742,023 725,194 687,069 0.28 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 4 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_8564f32e1d0d",
+      "coverage": {
+        "affected_rows": [
+          "ROW-72e3270d1e37427c",
+          "ROW-da24c22f4369cece",
+          "ROW-744dee2efd050a4c",
+          "ROW-9b692fd16b269080"
+        ],
+        "reviewed_rows": [
+          "ROW-72e3270d1e37427c",
+          "ROW-da24c22f4369cece",
+          "ROW-744dee2efd050a4c",
+          "ROW-9b692fd16b269080"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-067060",
+          "text": "Pug LLC First Lien Term Loan SOFR(M) - 4.75 % 9.07 % 3/15/2030 $ 5,643,034 5,627,760 5,628,926 0.40 % E"
+        },
+        {
+          "accession": "0000950170-25-067060",
+          "text": "New Insight Holdings, Inc. (Dynata) Common Stock $ 22,972 402,032 539,842 0.04 % I, J"
+        },
+        {
+          "accession": "0000950170-25-067060",
+          "text": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.82 % 10/21/2028 $ 986,272 991,542 977,642 0.07 % E"
+        },
+        {
+          "accession": "0000950170-25-067060",
+          "text": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 8.42 % 11/2/2027 $ 474,215 467,329 447,740 0.03 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-72e3270d1e37427c",
+          "accession": "0000950170-25-067060",
+          "context": "C_81d2edb5-41dd-4422-9ff7-5c07fdf34c58",
+          "published_name": "Internet and Direct Marketing Retail Pug LLC",
+          "printed_name": "Pug LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Internet and Direct Marketing Retail Pug LLC; original source row prints Pug LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-72e3270d1e37427c",
+            "issuer_name": "Internet and Direct Marketing Retail Pug LLC",
+            "interest_rate": 9.07,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/15/2030",
+            "shares_held": null
+          },
+          "source_row": "Pug LLC First Lien Term Loan SOFR(M) \u2014 4.75 % 9.07 % 3/15/2030 $ 5,643,034 5,627,760 5,628,926 0.40 % E"
+        },
+        {
+          "row_id": "ROW-da24c22f4369cece",
+          "accession": "0000950170-25-067060",
+          "context": "C_b58f4fda-5076-4a75-94ae-66d872c58bd5",
+          "published_name": "New Insight Holdings, Inc. (Dyanata)",
+          "printed_name": "New Insight Holdings, Inc. (Dynata)",
+          "conclusion": "confirmed_error",
+          "reason": "Literal member typo/truncation carried into display: New Insight Holdings, Inc. (Dyanata); actual source row prints New Insight Holdings, Inc. (Dynata). This is more than a valid legal abbreviation; correct display from this source and preserve original member provenance.",
+          "published_other_fields": {
+            "row_id": "ROW-da24c22f4369cece",
+            "issuer_name": "New Insight Holdings, Inc. (Dyanata)",
+            "interest_rate": null,
+            "basis_spread": null,
+            "reference_rate_type": null,
+            "instrument_description": "Common Stock",
+            "shares_held": 22972.0
+          },
+          "source_row": "New Insight Holdings, Inc. (Dynata) Common Stock $ 22,972 402,032 539,842 0.04 % I, J"
+        },
+        {
+          "row_id": "ROW-744dee2efd050a4c",
+          "accession": "0000950170-25-067060",
+          "context": "C_d5e47f59-891a-4dbc-b554-42fa6276cd2c",
+          "published_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+          "printed_name": "Grinding Media Inc. (Molycop LTD)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Metals and Mining Grinding Media Inc. (Molycop LTD); original source row prints Grinding Media Inc. (Molycop LTD). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-744dee2efd050a4c",
+            "issuer_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+            "interest_rate": 7.82,
+            "basis_spread": 3.5000000000000004,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 10/21/2028",
+            "shares_held": null
+          },
+          "source_row": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.82 % 10/21/2028 $ 986,272 991,542 977,642 0.07 % E"
+        },
+        {
+          "row_id": "ROW-9b692fd16b269080",
+          "accession": "0000950170-25-067060",
+          "context": "C_f95bb23b-2963-448f-b156-25caa81d7147",
+          "published_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance and Security Services TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-9b692fd16b269080",
+            "issuer_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+            "interest_rate": 8.42,
+            "basis_spread": 4.1000000000000005,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 11/2/2027",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 8.42 % 11/2/2027 $ 474,215 467,329 447,740 0.03 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 4 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_9061ba5609a3",
+      "coverage": {
+        "affected_rows": [
+          "ROW-b984ba8bad61b077",
+          "ROW-14a431e019a8a4a5",
+          "ROW-65130dcfc514199c",
+          "ROW-9fa141ef13e12d6d"
+        ],
+        "reviewed_rows": [
+          "ROW-b984ba8bad61b077",
+          "ROW-14a431e019a8a4a5",
+          "ROW-65130dcfc514199c",
+          "ROW-9fa141ef13e12d6d"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-106036",
+          "text": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 8.43 % 11/2/2027 $ 472,977 466,770 449,922 0.03 %"
+        },
+        {
+          "accession": "0000950170-25-106036",
+          "text": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.83 % 10/21/2028 $ 983,794 988,680 977,645 0.06 % E"
+        },
+        {
+          "accession": "0000950170-25-106036",
+          "text": "Pug LLC First Lien Term Loan SOFR(M) - 4.75 % 9.08 % 3/15/2030 $ 5,628,605 5,614,125 5,478,490 0.31 %"
+        },
+        {
+          "accession": "0000950170-25-106036",
+          "text": "WH Borrower, LLC (WHP) First Lien Term Loan SOFR(Q) 0.50 % 4.75 % 9.09 % 2/20/2032 $ 26,782,542 26,655,242 26,824,323 1.51 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-b984ba8bad61b077",
+          "accession": "0000950170-25-106036",
+          "context": "C_15cf0b14-f643-4138-a5b8-e66944e3dbbb",
+          "published_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance and Security Services TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-b984ba8bad61b077",
+            "issuer_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+            "interest_rate": 8.43,
+            "basis_spread": 4.1000000000000005,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 11/2/2027",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 8.43 % 11/2/2027 $ 472,977 466,770 449,922 0.03 %"
+        },
+        {
+          "row_id": "ROW-14a431e019a8a4a5",
+          "accession": "0000950170-25-106036",
+          "context": "C_b307c564-1804-4efb-b910-f375f393d2f9",
+          "published_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+          "printed_name": "Grinding Media Inc. (Molycop LTD)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Metals and Mining Grinding Media Inc. (Molycop LTD); original source row prints Grinding Media Inc. (Molycop LTD). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-14a431e019a8a4a5",
+            "issuer_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+            "interest_rate": 7.829999999999999,
+            "basis_spread": 3.5000000000000004,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 10/21/2028",
+            "shares_held": null
+          },
+          "source_row": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.83 % 10/21/2028 $ 983,794 988,680 977,645 0.06 % E"
+        },
+        {
+          "row_id": "ROW-65130dcfc514199c",
+          "accession": "0000950170-25-106036",
+          "context": "C_145dc937-2b4e-49ce-8f60-7d534dddf9dc",
+          "published_name": "Internet and Direct Marketing Retail Pug LLC",
+          "printed_name": "Pug LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Internet and Direct Marketing Retail Pug LLC; original source row prints Pug LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-65130dcfc514199c",
+            "issuer_name": "Internet and Direct Marketing Retail Pug LLC",
+            "interest_rate": 9.08,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/15/2030",
+            "shares_held": null
+          },
+          "source_row": "Pug LLC First Lien Term Loan SOFR(M) \u2014 4.75 % 9.08 % 3/15/2030 $ 5,628,605 5,614,125 5,478,490 0.31 %"
+        },
+        {
+          "row_id": "ROW-9fa141ef13e12d6d",
+          "accession": "0000950170-25-106036",
+          "context": "C_8b86c7b1-4da3-43a7-b4df-7572893a7a87",
+          "published_name": "WH Borrower, LLC (WHP",
+          "printed_name": "WH Borrower, LLC (WHP)",
+          "conclusion": "confirmed_error",
+          "reason": "Literal member typo/truncation carried into display: WH Borrower, LLC (WHP; actual source row prints WH Borrower, LLC (WHP). This is more than a valid legal abbreviation; correct display from this source and preserve original member provenance.",
+          "published_other_fields": {
+            "row_id": "ROW-9fa141ef13e12d6d",
+            "issuer_name": "WH Borrower, LLC (WHP",
+            "interest_rate": 9.09,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 02/20/2032",
+            "shares_held": null
+          },
+          "source_row": "WH Borrower, LLC (WHP) First Lien Term Loan SOFR(Q) 0.50 % 4.75 % 9.09 % 2/20/2032 $ 26,782,542 26,655,242 26,824,323 1.51 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 4 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_9f765cef32d3",
+      "coverage": {
+        "affected_rows": [
+          "ROW-4c9b07a68b316475",
+          "ROW-c3e8d0feb3fe42ba",
+          "ROW-e0820c1a1f080c81"
+        ],
+        "reviewed_rows": [
+          "ROW-4c9b07a68b316475",
+          "ROW-c3e8d0feb3fe42ba",
+          "ROW-e0820c1a1f080c81"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-122470",
+          "text": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.00 % 9.32 % 11/2/2027 $ 476,692 468,450 462,153 0.06 %"
+        },
+        {
+          "accession": "0000950170-24-122470",
+          "text": "Peraton Corp. First Lien Term Loan SOFR(M) 0.75 % 3.75 % 8.70 % 2/1/2028 $ 1,355,964 1,334,149 1,307,800 0.16 %"
+        },
+        {
+          "accession": "0000950170-24-122470",
+          "text": "Pug LLC First Lien Term Loan SOFR(M) - 4.75 % 9.60 % 3/15/2030 $ 2,289,737 2,275,971 2,291,637 0.29 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-4c9b07a68b316475",
+          "accession": "0000950170-24-122470",
+          "context": "C_54804cfa-dbe2-4126-b557-694955935e2d",
+          "published_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance and Security Services TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-4c9b07a68b316475",
+            "issuer_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+            "interest_rate": 9.32,
+            "basis_spread": 4.0,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 11/2/2027",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.00 % 9.32 % 11/2/2027 $ 476,692 468,450 462,153 0.06 %"
+        },
+        {
+          "row_id": "ROW-c3e8d0feb3fe42ba",
+          "accession": "0000950170-24-122470",
+          "context": "C_a9a04409-8cce-4ed5-b149-25c5321b8d68",
+          "published_name": "Peraton Corp.Peraton Corp.",
+          "printed_name": "Peraton Corp.",
+          "conclusion": "confirmed_error",
+          "reason": "Member duplication/ordinal leaked into name: Peraton Corp.Peraton Corp.; source prints Peraton Corp.. Remove artifact from display while preserving separate tranches and source context IDs.",
+          "published_other_fields": {
+            "row_id": "ROW-c3e8d0feb3fe42ba",
+            "issuer_name": "Peraton Corp.Peraton Corp.",
+            "interest_rate": 8.7,
+            "basis_spread": 3.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 2/1/2028",
+            "shares_held": null
+          },
+          "source_row": "Peraton Corp. First Lien Term Loan SOFR(M) 0.75 % 3.75 % 8.70 % 2/1/2028 $ 1,355,964 1,334,149 1,307,800 0.16 %"
+        },
+        {
+          "row_id": "ROW-e0820c1a1f080c81",
+          "accession": "0000950170-24-122470",
+          "context": "C_b2fbcc67-f3de-48a5-8070-131068289ce4",
+          "published_name": "Internet and Direct Marketing Retail Pug LLC",
+          "printed_name": "Pug LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Internet and Direct Marketing Retail Pug LLC; original source row prints Pug LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-e0820c1a1f080c81",
+            "issuer_name": "Internet and Direct Marketing Retail Pug LLC",
+            "interest_rate": 9.6,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/15/2030",
+            "shares_held": null
+          },
+          "source_row": "Pug LLC First Lien Term Loan SOFR(M) \u2014 4.75 % 9.60 % 3/15/2030 $ 2,289,737 2,275,971 2,291,637 0.29 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 3 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_a397d0b6853f",
+      "coverage": {
+        "affected_rows": [
+          "ROW-f28e300bcde40bc5",
+          "ROW-50916c92201109ff",
+          "ROW-388cfd591581a97d",
+          "ROW-1f5c7ec45c43d175",
+          "ROW-d2e6c0d16bb72900"
+        ],
+        "reviewed_rows": [
+          "ROW-f28e300bcde40bc5",
+          "ROW-50916c92201109ff",
+          "ROW-388cfd591581a97d",
+          "ROW-1f5c7ec45c43d175",
+          "ROW-d2e6c0d16bb72900"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-024153",
+          "text": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 9.46 % 11/2/2027 $ 480,406 470,106 464,913 0.11 %"
+        },
+        {
+          "accession": "0000950170-24-024153",
+          "text": "Integrity Marketing Acquisition, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.00 % 11.39 % 8/27/2026 $ 203,761 189,910 180,420 0.04 % E"
+        },
+        {
+          "accession": "0000950170-24-024153",
+          "text": "White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 % 9.11 % 10/19/2027 $ 827,452 797,602 830,212 0.20 %"
+        },
+        {
+          "accession": "0000950170-24-024153",
+          "text": "NFP Corp. First Lien Term Loan SOFR(M) - 3.36 % 8.72 % 2/13/2027 $ 983,024 951,550 989,247 0.23 %"
+        },
+        {
+          "accession": "0000950170-24-024153",
+          "text": "Vortex Companies, LLC First Lien Term Loan SOFR(M) 1.00 % 6.00 % 11.36 % 9/4/2029 $ 962,993 941,724 943,733 0.22 % E"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-f28e300bcde40bc5",
+          "accession": "0000950170-24-024153",
+          "context": "C_3e5908de-413d-4528-b8b5-be954208f515",
+          "published_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance & Security Service TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-f28e300bcde40bc5",
+            "issuer_name": "Environmental, Maintenance & Security Service TruGreen Limited Partnership",
+            "interest_rate": 9.46,
+            "basis_spread": 4.1000000000000005,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 11/2/2027",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 9.46 % 11/2/2027 $ 480,406 470,106 464,913 0.11 %"
+        },
+        {
+          "row_id": "ROW-50916c92201109ff",
+          "accession": "0000950170-24-024153",
+          "context": "C_aa6b413f-71e3-42dc-97ae-6d315fc5ee3d",
+          "published_name": "Integrity Marketing Acquisition, LLC1",
+          "printed_name": "Integrity Marketing Acquisition, LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Member duplication/ordinal leaked into name: Integrity Marketing Acquisition, LLC1; source prints Integrity Marketing Acquisition, LLC. Remove artifact from display while preserving separate tranches and source context IDs.",
+          "published_other_fields": {
+            "row_id": "ROW-50916c92201109ff",
+            "issuer_name": "Integrity Marketing Acquisition, LLC1",
+            "interest_rate": 11.39,
+            "basis_spread": 6.0,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Delayed Draw Term Loan B - Maturity 8/27/2026",
+            "shares_held": null
+          },
+          "source_row": "Integrity Marketing Acquisition, LLC First Lien Delayed Draw Term Loan SOFR(Q) 0.75 % 6.00 % 11.39 % 8/27/2026 $ 203,761 189,910 180,420 0.04 % E"
+        },
+        {
+          "row_id": "ROW-388cfd591581a97d",
+          "accession": "0000950170-24-024153",
+          "context": "C_e4a4830d-f5b9-41c5-8ae3-e73611b3f741",
+          "published_name": "White Cap Supply Holdings, LLC (Numerix)",
+          "printed_name": "White Cap Supply Holdings, LLC",
+          "conclusion": "source_ambiguity",
+          "reason": "Printed row omits Numerix; context/member adds it. The position values and instrument identify the same source row, but affiliation/alias correctness is not independently established. Preserve distinction between filed display and canonical aliases; do not infer wrong borrower solely from absent parenthesis.",
+          "published_other_fields": {
+            "row_id": "ROW-388cfd591581a97d",
+            "issuer_name": "White Cap Supply Holdings, LLC (Numerix)",
+            "interest_rate": 9.11,
+            "basis_spread": 3.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 10/19/2027",
+            "shares_held": null
+          },
+          "source_row": "White Cap Supply Holdings, LLC First Lien Term Loan SOFR(M) 0.50 % 3.75 % 9.11 % 10/19/2027 $ 827,452 797,602 830,212 0.20 %"
+        },
+        {
+          "row_id": "ROW-1f5c7ec45c43d175",
+          "accession": "0000950170-24-024153",
+          "context": "C_00cf3784-daf2-4099-a932-970cec3a702f",
+          "published_name": "Integrity Marketing Acquisition, LLC",
+          "printed_name": "NFP Corp.",
+          "conclusion": "confirmed_error",
+          "reason": "Original inline facts on this context belong to NFP Corp., not Integrity Marketing. Adjacent Integrity revolver precedes it. This is a filer member-name error carried into issuer_name; page association is correct. Printed Ref SOFR(M) also conflicts with member SOFR(Q).",
+          "published_other_fields": {
+            "row_id": "ROW-1f5c7ec45c43d175",
+            "issuer_name": "Integrity Marketing Acquisition, LLC",
+            "interest_rate": 8.72,
+            "basis_spread": 3.36,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 2/13/2027",
+            "shares_held": null
+          },
+          "source_row": "NFP Corp. First Lien Term Loan SOFR(M) \u2014 3.36 % 8.72 % 2/13/2027 $ 983,024 951,550 989,247 0.23 %"
+        },
+        {
+          "row_id": "ROW-d2e6c0d16bb72900",
+          "accession": "0000950170-24-024153",
+          "context": "C_79c9bbd8-2140-4bd2-8240-2e30f0a475ec",
+          "published_name": "Vortex Companies, LLC1",
+          "printed_name": "Vortex Companies, LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Member duplication/ordinal leaked into name: Vortex Companies, LLC1; source prints Vortex Companies, LLC. Remove artifact from display while preserving separate tranches and source context IDs.",
+          "published_other_fields": {
+            "row_id": "ROW-d2e6c0d16bb72900",
+            "issuer_name": "Vortex Companies, LLC1",
+            "interest_rate": 11.360000000000001,
+            "basis_spread": 6.0,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 9/4/2029",
+            "shares_held": null
+          },
+          "source_row": "Vortex Companies, LLC First Lien Term Loan SOFR(M) 1.00 % 6.00 % 11.36 % 9/4/2029 $ 962,993 941,724 943,733 0.22 % E"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 5 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_a51c333ec53a",
+      "coverage": {
+        "affected_rows": [
+          "ROW-46980ebba93501e8",
+          "ROW-ad287d863791d427",
+          "ROW-acc76c9aa311dcb0",
+          "ROW-e5ac220138fa36b6",
+          "ROW-d0cbf7a0511e219d",
+          "ROW-722c4cf20bbe997a",
+          "ROW-34274b33ba174380",
+          "ROW-d0dd444668c8d628",
+          "ROW-b5ee0702f074c531"
+        ],
+        "reviewed_rows": [
+          "ROW-46980ebba93501e8",
+          "ROW-ad287d863791d427",
+          "ROW-acc76c9aa311dcb0",
+          "ROW-e5ac220138fa36b6",
+          "ROW-d0cbf7a0511e219d",
+          "ROW-722c4cf20bbe997a",
+          "ROW-34274b33ba174380",
+          "ROW-d0dd444668c8d628",
+          "ROW-b5ee0702f074c531"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-030170",
+          "text": "Cotiviti Holdings, Inc First Lien Term Loan SOFR(M) - 2.75 % 7.30 % 2/24/2031 $ 3,456,152 3,465,785 3,479,930 0.32 %"
+        },
+        {
+          "accession": "0000950170-25-030170",
+          "text": "New Insight Holdings, Inc. (Dynata) Common Stock $ 22,972 402,032 407,753 0.04 % E, I, J"
+        },
+        {
+          "accession": "0000950170-25-030170",
+          "text": "Athenahealth Group Inc. First Lien Term Loan SOFR(M) 0.50 % 3.25 % 7.61 % 2/15/2029 $ 4,935,187 4,922,934 4,957,223 0.45 %"
+        },
+        {
+          "accession": "0000950170-25-030170",
+          "text": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 8.02 % 10/21/2028 $ 498,750 499,989 501,867 0.05 %"
+        },
+        {
+          "accession": "0000950170-25-030170",
+          "text": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 8.46 % 11/2/2027 $ 475,454 467,898 464,162 0.04 %"
+        },
+        {
+          "accession": "0000950170-25-030170",
+          "text": "Polaris Newco, LLC First Lien Term Loan SOFR(Q) 0.50 % 4.00 % 8.85 % 6/2/2028 $ 3,449,921 3,417,855 3,460,495 0.32 %"
+        },
+        {
+          "accession": "0000950170-25-030170",
+          "text": "Pug LLC First Lien Term Loan SOFR(M) - 4.75 % 9.11 % 3/15/2030 $ 2,747,463 $ 2,735,065 $ 2,757,766 0.26 %"
+        },
+        {
+          "accession": "0000950170-25-030170",
+          "text": "Press Ganey Holdings Inc First Lien Term Loan SOFR(M) - 3.25 % 7.61 % 4/24/2031 $ 498,750 499,057 500,777 0.05 %"
+        },
+        {
+          "accession": "0000950170-25-030170",
+          "text": "PointClickCare Technologies Inc. (Canada) First Lien Term Loan SOFR(Q) - 3.25 % 7.58 % 10/16/2031 $ 1,588,777 1,589,002 1,600,693 0.15 % C"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-46980ebba93501e8",
+          "accession": "0000950170-25-030170",
+          "context": "C_7ea20790-2404-4672-8f97-2e90f72a5d87",
+          "published_name": "Technology Cotiviti Holdings, Inc",
+          "printed_name": "Cotiviti Holdings, Inc",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Technology Cotiviti Holdings, Inc; original source row prints Cotiviti Holdings, Inc. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-46980ebba93501e8",
+            "issuer_name": "Technology Cotiviti Holdings, Inc",
+            "interest_rate": 7.3,
+            "basis_spread": 2.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 2/24/2031",
+            "shares_held": null
+          },
+          "source_row": "Cotiviti Holdings, Inc First Lien Term Loan SOFR(M) \u2014 2.75 % 7.30 % 2/24/2031 $ 3,456,152 3,465,785 3,479,930 0.32 %"
+        },
+        {
+          "row_id": "ROW-ad287d863791d427",
+          "accession": "0000950170-25-030170",
+          "context": "C_1ae8a161-e216-4923-a2a1-15f188a6bf3f",
+          "published_name": "New Insight Holdings, Inc. (Dyanata)",
+          "printed_name": "New Insight Holdings, Inc. (Dynata)",
+          "conclusion": "confirmed_error",
+          "reason": "Literal member typo/truncation carried into display: New Insight Holdings, Inc. (Dyanata); actual source row prints New Insight Holdings, Inc. (Dynata). This is more than a valid legal abbreviation; correct display from this source and preserve original member provenance.",
+          "published_other_fields": {
+            "row_id": "ROW-ad287d863791d427",
+            "issuer_name": "New Insight Holdings, Inc. (Dyanata)",
+            "interest_rate": null,
+            "basis_spread": null,
+            "reference_rate_type": null,
+            "instrument_description": "Common Stock",
+            "shares_held": 22972.0
+          },
+          "source_row": "New Insight Holdings, Inc. (Dynata) Common Stock $ 22,972 402,032 407,753 0.04 % E, I, J"
+        },
+        {
+          "row_id": "ROW-acc76c9aa311dcb0",
+          "accession": "0000950170-25-030170",
+          "context": "C_4d001c37-fd56-4d93-a036-206960af5d1d",
+          "published_name": "Technology Athenahealth Group Inc.",
+          "printed_name": "Athenahealth Group Inc.",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Technology Athenahealth Group Inc.; original source row prints Athenahealth Group Inc.. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-acc76c9aa311dcb0",
+            "issuer_name": "Technology Athenahealth Group Inc.",
+            "interest_rate": 7.61,
+            "basis_spread": 3.25,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 2/15/2029",
+            "shares_held": null
+          },
+          "source_row": "Athenahealth Group Inc. First Lien Term Loan SOFR(M) 0.50 % 3.25 % 7.61 % 2/15/2029 $ 4,935,187 4,922,934 4,957,223 0.45 %"
+        },
+        {
+          "row_id": "ROW-e5ac220138fa36b6",
+          "accession": "0000950170-25-030170",
+          "context": "C_c6e49665-17e7-4b96-a6bd-c8582430f151",
+          "published_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+          "printed_name": "Grinding Media Inc. (Molycop LTD)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Metals and Mining Grinding Media Inc. (Molycop LTD); original source row prints Grinding Media Inc. (Molycop LTD). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-e5ac220138fa36b6",
+            "issuer_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+            "interest_rate": 8.02,
+            "basis_spread": 3.5000000000000004,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 10/21/2028",
+            "shares_held": null
+          },
+          "source_row": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 8.02 % 10/21/2028 $ 498,750 499,989 501,867 0.05 %"
+        },
+        {
+          "row_id": "ROW-d0cbf7a0511e219d",
+          "accession": "0000950170-25-030170",
+          "context": "C_11f89cca-631c-4571-ab9a-239a16936755",
+          "published_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+          "printed_name": "TruGreen Limited Partnership",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Environmental, Maintenance and Security Services TruGreen Limited Partnership; original source row prints TruGreen Limited Partnership. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-d0cbf7a0511e219d",
+            "issuer_name": "Environmental, Maintenance and Security Services TruGreen Limited Partnership",
+            "interest_rate": 8.459999999999999,
+            "basis_spread": 4.1000000000000005,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 11/2/2027",
+            "shares_held": null
+          },
+          "source_row": "TruGreen Limited Partnership First Lien Term Loan SOFR(M) 0.75 % 4.10 % 8.46 % 11/2/2027 $ 475,454 467,898 464,162 0.04 %"
+        },
+        {
+          "row_id": "ROW-722c4cf20bbe997a",
+          "accession": "0000950170-25-030170",
+          "context": "C_5f6ae5ab-3679-4d60-a8e1-3e405222e9f2",
+          "published_name": "Technology Polaris Newco, LLC",
+          "printed_name": "Polaris Newco, LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Technology Polaris Newco, LLC; original source row prints Polaris Newco, LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-722c4cf20bbe997a",
+            "issuer_name": "Technology Polaris Newco, LLC",
+            "interest_rate": 8.85,
+            "basis_spread": 4.0,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 6/2/2028",
+            "shares_held": null
+          },
+          "source_row": "Polaris Newco, LLC First Lien Term Loan SOFR(Q) 0.50 % 4.00 % 8.85 % 6/2/2028 $ 3,449,921 3,417,855 3,460,495 0.32 %"
+        },
+        {
+          "row_id": "ROW-34274b33ba174380",
+          "accession": "0000950170-25-030170",
+          "context": "C_c59c1db9-b6e2-4cfd-a7a4-f1d40a65d83d",
+          "published_name": "Internet and Direct Marketing Retail Pug LLC",
+          "printed_name": "Pug LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Internet and Direct Marketing Retail Pug LLC; original source row prints Pug LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-34274b33ba174380",
+            "issuer_name": "Internet and Direct Marketing Retail Pug LLC",
+            "interest_rate": 9.11,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/15/2030",
+            "shares_held": null
+          },
+          "source_row": "Pug LLC First Lien Term Loan SOFR(M) \u2014 4.75 % 9.11 % 3/15/2030 $ 2,747,463 $ 2,735,065 $ 2,757,766 0.26 %"
+        },
+        {
+          "row_id": "ROW-d0dd444668c8d628",
+          "accession": "0000950170-25-030170",
+          "context": "C_72879828-c274-4616-8808-80b4412f4af9",
+          "published_name": "Technology Press Ganey Holdings Inc",
+          "printed_name": "Press Ganey Holdings Inc",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Technology Press Ganey Holdings Inc; original source row prints Press Ganey Holdings Inc. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-d0dd444668c8d628",
+            "issuer_name": "Technology Press Ganey Holdings Inc",
+            "interest_rate": 7.61,
+            "basis_spread": 3.25,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 4/24/2031",
+            "shares_held": null
+          },
+          "source_row": "Press Ganey Holdings Inc First Lien Term Loan SOFR(M) \u2014 3.25 % 7.61 % 4/24/2031 $ 498,750 499,057 500,777 0.05 %"
+        },
+        {
+          "row_id": "ROW-b5ee0702f074c531",
+          "accession": "0000950170-25-030170",
+          "context": "C_a7421461-53a4-43e7-b996-7d4b2935fb2a",
+          "published_name": "Technology PointClickCare Technologies Inc. (Canada)",
+          "printed_name": "PointClickCare Technologies Inc. (Canada)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Technology PointClickCare Technologies Inc. (Canada); original source row prints PointClickCare Technologies Inc. (Canada). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-b5ee0702f074c531",
+            "issuer_name": "Technology PointClickCare Technologies Inc. (Canada)",
+            "interest_rate": 7.580000000000001,
+            "basis_spread": 3.25,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 10/16/2031",
+            "shares_held": null
+          },
+          "source_row": "PointClickCare Technologies Inc. (Canada) First Lien Term Loan SOFR(Q) \u2014 3.25 % 7.58 % 10/16/2031 $ 1,588,777 1,589,002 1,600,693 0.15 % C"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 9 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_a7254d334131",
+      "coverage": {
+        "affected_rows": [
+          "ROW-19d319fe3b966031",
+          "ROW-e97e44ecf73134bc",
+          "ROW-baa8c036acf7e511",
+          "ROW-a2e9c0ff61b19d39",
+          "ROW-e7417a7363f1b208",
+          "ROW-a3c3fab849be3be6"
+        ],
+        "reviewed_rows": [
+          "ROW-19d319fe3b966031",
+          "ROW-e97e44ecf73134bc",
+          "ROW-baa8c036acf7e511",
+          "ROW-a2e9c0ff61b19d39",
+          "ROW-e7417a7363f1b208",
+          "ROW-a3c3fab849be3be6"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-338073",
+          "text": "TEGA MC US Inc (Grinding Media Inc.) First Lien Term Loan SOFR(Q) - 3.50 % 7.16 % 3/24/2033 $ 892,000 883,160 898,137 0.03 %"
+        },
+        {
+          "accession": "0001193125-26-338073",
+          "text": "GB AIT Buyer, Inc. First Lien Term Loan SOFR(Q) - 4.25 % 7.91 % 4/22/2033 $ 441,000 436,689 441,732 0.02 %"
+        },
+        {
+          "accession": "0001193125-26-338073",
+          "text": "Boots Group Finco LP First Lien Term Loan SOFR(Q) - 3.25 % 6.92 % 7/22/2032 $ 2,045,720 2,050,475 2,055,519 0.08 %"
+        },
+        {
+          "accession": "0001193125-26-338073",
+          "text": "Gryphon Debt Merger Sub Inc. (Altera Corporation LLC) First Lien Term Loan SOFR(Q) - 2.75 % 6.41 % 8/17/2028 $ 837,900 834,047 839,995 0.03 %"
+        },
+        {
+          "accession": "0001193125-26-338073",
+          "text": "American Airlines Inc. (American Airlines Group Inc.) First Lien Term Loan SOFR(M) - 3.00 % 6.67 % 5/20/2033 $ 431,000 426,726 426,421 0.02 % L"
+        },
+        {
+          "accession": "0001193125-26-338073",
+          "text": "Creative Artists Agency, LLC. First Lien Term Loan SOFR(M) - 2.50 % 6.14 % 10/1/2031 $ 4,105,849 4,107,457 4,110,037 0.16 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-19d319fe3b966031",
+          "accession": "0001193125-26-338073",
+          "context": "C_63a3290b-b5d9-48b9-8f79-ea38b118636c",
+          "published_name": "Metals and Mining TEGA MC US Inc (Grinding Media Inc)",
+          "printed_name": "TEGA MC US Inc (Grinding Media Inc.)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Metals and Mining TEGA MC US Inc (Grinding Media Inc); original source row prints TEGA MC US Inc (Grinding Media Inc.). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-19d319fe3b966031",
+            "issuer_name": "Metals and Mining TEGA MC US Inc (Grinding Media Inc)",
+            "interest_rate": 7.16,
+            "basis_spread": 3.5000000000000004,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/24/2033",
+            "shares_held": null
+          },
+          "source_row": "TEGA MC US Inc (Grinding Media Inc.) First Lien Term Loan SOFR(Q) \u2014 3.50 % 7.16 % 3/24/2033 $ 892,000 883,160 898,137 0.03 %"
+        },
+        {
+          "row_id": "ROW-e97e44ecf73134bc",
+          "accession": "0001193125-26-338073",
+          "context": "C_03d03270-5a22-42eb-bad9-be7568c651f7",
+          "published_name": "GB ALt Buyer Inc.",
+          "printed_name": "GB AIT Buyer, Inc.",
+          "conclusion": "confirmed_error",
+          "reason": "Literal member typo/truncation carried into display: GB ALt Buyer Inc.; actual source row prints GB AIT Buyer, Inc.. This is more than a valid legal abbreviation; correct display from this source and preserve original member provenance.",
+          "published_other_fields": {
+            "row_id": "ROW-e97e44ecf73134bc",
+            "issuer_name": "GB ALt Buyer Inc.",
+            "interest_rate": 7.91,
+            "basis_spread": 4.25,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 4/22/2033",
+            "shares_held": null
+          },
+          "source_row": "GB AIT Buyer, Inc. First Lien Term Loan SOFR(Q) \u2014 4.25 % 7.91 % 4/22/2033 $ 441,000 436,689 441,732 0.02 %"
+        },
+        {
+          "row_id": "ROW-baa8c036acf7e511",
+          "accession": "0001193125-26-338073",
+          "context": "C_c6b56bbd-8a17-49cd-a8bc-5ffe2346f261",
+          "published_name": "Multiline Retail Boots Group Finco LP",
+          "printed_name": "Boots Group Finco LP",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Multiline Retail Boots Group Finco LP; original source row prints Boots Group Finco LP. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-baa8c036acf7e511",
+            "issuer_name": "Multiline Retail Boots Group Finco LP",
+            "interest_rate": 6.92,
+            "basis_spread": 3.25,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 7/22/2032",
+            "shares_held": null
+          },
+          "source_row": "Boots Group Finco LP First Lien Term Loan SOFR(Q) \u2014 3.25 % 6.92 % 7/22/2032 $ 2,045,720 2,050,475 2,055,519 0.08 %"
+        },
+        {
+          "row_id": "ROW-a2e9c0ff61b19d39",
+          "accession": "0001193125-26-338073",
+          "context": "C_9fcc6211-ef4b-4059-9455-5fd06aecd063",
+          "published_name": "Semiconductors and Semiconductor Equipment Gryphon Debt Merger Sub Inc. (Altera Corporation LLC)",
+          "printed_name": "Gryphon Debt Merger Sub Inc. (Altera Corporation LLC)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Semiconductors and Semiconductor Equipment Gryphon Debt Merger Sub Inc. (Altera Corporation LLC); original source row prints Gryphon Debt Merger Sub Inc. (Altera Corporation LLC). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-a2e9c0ff61b19d39",
+            "issuer_name": "Semiconductors and Semiconductor Equipment Gryphon Debt Merger Sub Inc. (Altera Corporation LLC)",
+            "interest_rate": 6.41,
+            "basis_spread": 2.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 8/17/2028",
+            "shares_held": null
+          },
+          "source_row": "Gryphon Debt Merger Sub Inc. (Altera Corporation LLC) First Lien Term Loan SOFR(Q) \u2014 2.75 % 6.41 % 8/17/2028 $ 837,900 834,047 839,995 0.03 %"
+        },
+        {
+          "row_id": "ROW-e7417a7363f1b208",
+          "accession": "0001193125-26-338073",
+          "context": "C_eb473ad5-6cf3-43d3-8599-00bb7f36479c",
+          "published_name": "Airlines American Airlines Group Inc",
+          "printed_name": "American Airlines Inc. (American Airlines Group Inc.)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Airlines American Airlines Group Inc; original source row prints American Airlines Inc. (American Airlines Group Inc.). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-e7417a7363f1b208",
+            "issuer_name": "Airlines American Airlines Group Inc",
+            "interest_rate": 6.67,
+            "basis_spread": 3.0,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 5/20/2033",
+            "shares_held": null
+          },
+          "source_row": "American Airlines Inc. (American Airlines Group Inc.) First Lien Term Loan SOFR(M) \u2014 3.00 % 6.67 % 5/20/2033 $ 431,000 426,726 426,421 0.02 % L"
+        },
+        {
+          "row_id": "ROW-a3c3fab849be3be6",
+          "accession": "0001193125-26-338073",
+          "context": "C_44848e2a-eef1-42e7-b2da-63362976a8ce",
+          "published_name": "Discovery Global Holdings Inc.",
+          "printed_name": "Creative Artists Agency, LLC.",
+          "conclusion": "confirmed_error",
+          "reason": "Original inline facts identify Creative Artists Agency, LLC. at 4,110,037 FV and 10/1/2031 maturity on a Discovery member. Next row is genuine Discovery at 2,814,175 FV and 6/16/2033 maturity. Wrong member carried into name; do not merge these positions.",
+          "published_other_fields": {
+            "row_id": "ROW-a3c3fab849be3be6",
+            "issuer_name": "Discovery Global Holdings Inc.",
+            "interest_rate": 6.140000000000001,
+            "basis_spread": 2.5,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 10/01/2031",
+            "shares_held": null
+          },
+          "source_row": "Creative Artists Agency, LLC. First Lien Term Loan SOFR(M) \u2014 2.50 % 6.14 % 10/1/2031 $ 4,105,849 4,107,457 4,110,037 0.16 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 6 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_b7390e6e6d1b",
+      "coverage": {
+        "affected_rows": [
+          "ROW-f12dcc2df1cc3221",
+          "ROW-b587f4b7fe41b0f8",
+          "ROW-76faf54b4a861311",
+          "ROW-3759765264e852e2"
+        ],
+        "reviewed_rows": [
+          "ROW-f12dcc2df1cc3221",
+          "ROW-b587f4b7fe41b0f8",
+          "ROW-76faf54b4a861311",
+          "ROW-3759765264e852e2"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-085372",
+          "text": "Lucky US BuyerCo, LLC (Global Payments) First Lien Term Loan SOFR(Q) 1.00 % 7.50 % 11.22 % 3/30/2029 $ 3,118,582 3,067,974 3,069,259 0.13 % E"
+        },
+        {
+          "accession": "0001193125-26-085372",
+          "text": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.34 % 10/21/2028 $ 978,838 982,953 980,673 0.04 % E"
+        },
+        {
+          "accession": "0001193125-26-085372",
+          "text": "Polaris Newco, LLC First Lien Term Loan SOFR(Q) 0.50 % 3.75 % 7.85 % 6/2/2028 $ 2,920,685 2,921,313 2,823,222 0.11 %"
+        },
+        {
+          "accession": "0001193125-26-085372",
+          "text": "Pug LLC First Lien Term Loan SOFR(M) - 4.75 % 0.00 % 3/15/2030 $ 3,698,286 3,693,285 3,672,860 0.15 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-f12dcc2df1cc3221",
+          "accession": "0001193125-26-085372",
+          "context": "C_e7e7a43f-b000-439f-ae30-b3e79ef912a6",
+          "published_name": "and Packaging Lucky US BuyerCo, LLC (Global Payments)",
+          "printed_name": "Lucky US BuyerCo, LLC (Global Payments)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: and Packaging Lucky US BuyerCo, LLC (Global Payments); original source row prints Lucky US BuyerCo, LLC (Global Payments). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-f12dcc2df1cc3221",
+            "issuer_name": "and Packaging Lucky US BuyerCo, LLC (Global Payments)",
+            "interest_rate": 11.219999999999999,
+            "basis_spread": 7.5,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/30/2029",
+            "shares_held": null
+          },
+          "source_row": "Lucky US BuyerCo, LLC (Global Payments) First Lien Term Loan SOFR(Q) 1.00 % 7.50 % 11.22 % 3/30/2029 $ 3,118,582 3,067,974 3,069,259 0.13 % E"
+        },
+        {
+          "row_id": "ROW-b587f4b7fe41b0f8",
+          "accession": "0001193125-26-085372",
+          "context": "C_a07c84d4-6b51-4875-a0f6-29e3abf98dc2",
+          "published_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+          "printed_name": "Grinding Media Inc. (Molycop LTD)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Metals and Mining Grinding Media Inc. (Molycop LTD); original source row prints Grinding Media Inc. (Molycop LTD). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-b587f4b7fe41b0f8",
+            "issuer_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+            "interest_rate": 7.340000000000001,
+            "basis_spread": 3.5000000000000004,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity Date 10/21/2028",
+            "shares_held": null
+          },
+          "source_row": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.34 % 10/21/2028 $ 978,838 982,953 980,673 0.04 % E"
+        },
+        {
+          "row_id": "ROW-76faf54b4a861311",
+          "accession": "0001193125-26-085372",
+          "context": "C_963ee387-9588-4259-be89-a2a989234335",
+          "published_name": "Technology Polaris Newco, LLC",
+          "printed_name": "Polaris Newco, LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Technology Polaris Newco, LLC; original source row prints Polaris Newco, LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-76faf54b4a861311",
+            "issuer_name": "Technology Polaris Newco, LLC",
+            "interest_rate": 7.85,
+            "basis_spread": 3.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 6/2/2028",
+            "shares_held": null
+          },
+          "source_row": "Polaris Newco, LLC First Lien Term Loan SOFR(Q) 0.50 % 3.75 % 7.85 % 6/2/2028 $ 2,920,685 2,921,313 2,823,222 0.11 %"
+        },
+        {
+          "row_id": "ROW-3759765264e852e2",
+          "accession": "0001193125-26-085372",
+          "context": "C_b3330c10-2fbe-477e-8e9e-7652c81c1099",
+          "published_name": "Internet and Direct Marketing Retail Pug LLC",
+          "printed_name": "Pug LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Internet and Direct Marketing Retail Pug LLC; original source row prints Pug LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-3759765264e852e2",
+            "issuer_name": "Internet and Direct Marketing Retail Pug LLC",
+            "interest_rate": 0.0,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity Date 3/15/2030",
+            "shares_held": null
+          },
+          "source_row": "Pug LLC First Lien Term Loan SOFR(M) \u2014 4.75 % 0.00 % 3/15/2030 $ 3,698,286 3,693,285 3,672,860 0.15 %"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 4 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_cd1e4db5e3ce",
+      "coverage": {
+        "affected_rows": [
+          "ROW-c87f31944c147a67",
+          "ROW-ee9b1b118d9c0597",
+          "ROW-4905faaa03104929"
+        ],
+        "reviewed_rows": [
+          "ROW-c87f31944c147a67",
+          "ROW-ee9b1b118d9c0597",
+          "ROW-4905faaa03104929"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-25-271826",
+          "text": "IVXS UK Limited (ComplyAdvantage) (United Kingdom) First Lien Term Loan ( 4.5 % Exit Fee) SOFR(Q) 4.00 % 2.625 % Cash + 3.125 % PIK 10.06 % 5/19/2029 $ 9,466,533 9,380,032 9,440,973 0.45 % C/E/H"
+        },
+        {
+          "accession": "0001193125-25-271826",
+          "text": "Pug LLC First Lien Term Loan SOFR(M) - 4.75 % 8.91 % 3/15/2030 $ 3,411,673 3,403,366 3,390,350 0.16 %"
+        },
+        {
+          "accession": "0001193125-25-271826",
+          "text": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.70 % 10/21/2028 $ 981,316 985,816 983,769 0.05 % E"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-c87f31944c147a67",
+          "accession": "0001193125-25-271826",
+          "context": "C_93d8b9a8-1e74-4c2f-8ca6-99f7a0eea843",
+          "published_name": "IVXS UK Limited (Comply Advantage) (United Kingdom)",
+          "printed_name": "IVXS UK Limited (ComplyAdvantage) (United Kingdom)",
+          "conclusion": "false_alarm",
+          "reason": "Punctuation/spacing normalization only: IVXS UK Limited (Comply Advantage) (United Kingdom) versus IVXS UK Limited (ComplyAdvantage) (United Kingdom). Same context-linked position; no legal suffix or borrower substitution. Optional display fidelity correction, not a missing or wrong position.",
+          "published_other_fields": {
+            "row_id": "ROW-c87f31944c147a67",
+            "issuer_name": "IVXS UK Limited (Comply Advantage) (United Kingdom)",
+            "interest_rate": 10.059999999999999,
+            "basis_spread": 2.625,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan (4.5% Exit Fee) - Maturity 05/19/2029",
+            "shares_held": null
+          },
+          "source_row": "IVXS UK Limited (ComplyAdvantage) (United Kingdom) First Lien Term Loan ( 4.5 % Exit Fee) SOFR(Q) 4.00 % 2.625 % Cash + 3.125 % PIK 10.06 % 5/19/2029 $ 9,466,533 9,380,032 9,440,973 0.45 % C/E/H"
+        },
+        {
+          "row_id": "ROW-ee9b1b118d9c0597",
+          "accession": "0001193125-25-271826",
+          "context": "C_2da30494-ff1e-4772-b959-aa14a3b020cc",
+          "published_name": "Internet and Direct Marketing Retail Pug LLC",
+          "printed_name": "Pug LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Internet and Direct Marketing Retail Pug LLC; original source row prints Pug LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-ee9b1b118d9c0597",
+            "issuer_name": "Internet and Direct Marketing Retail Pug LLC",
+            "interest_rate": 8.91,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/15/2030",
+            "shares_held": null
+          },
+          "source_row": "Pug LLC First Lien Term Loan SOFR(M) \u2014 4.75 % 8.91 % 3/15/2030 $ 3,411,673 3,403,366 3,390,350 0.16 %"
+        },
+        {
+          "row_id": "ROW-4905faaa03104929",
+          "accession": "0001193125-25-271826",
+          "context": "C_2f6ed9d9-a934-4606-aeb7-c2f3eddba0df",
+          "published_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+          "printed_name": "Grinding Media Inc. (Molycop LTD)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Metals and Mining Grinding Media Inc. (Molycop LTD); original source row prints Grinding Media Inc. (Molycop LTD). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-4905faaa03104929",
+            "issuer_name": "Metals and Mining Grinding Media Inc. (Molycop LTD)",
+            "interest_rate": 7.7,
+            "basis_spread": 3.5000000000000004,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 10/21/2028",
+            "shares_held": null
+          },
+          "source_row": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.70 % 10/21/2028 $ 981,316 985,816 983,769 0.05 % E"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 3 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_e33c37d86cbd",
+      "coverage": {
+        "affected_rows": [
+          "ROW-80aa4414970ea734",
+          "ROW-a03fcd51645f60d0",
+          "ROW-123ba93409f1b94e"
+        ],
+        "reviewed_rows": [
+          "ROW-80aa4414970ea734",
+          "ROW-a03fcd51645f60d0",
+          "ROW-123ba93409f1b94e"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-211710",
+          "text": "Pug LLC First Lien Term Loan SOFR(M) - 4.75 % 8.42 % 3/15/2030 $ 2,892,403 2,888,701 2,855,351 0.11 %"
+        },
+        {
+          "accession": "0001193125-26-211710",
+          "text": "TEGA MC US Inc (Grinding Media Inc) First Lien Term Loan SOFR(Q) - 3.50 % 7.17 % 3/24/2033 $ 892,000 883,080 887,540 0.03 % E"
+        },
+        {
+          "accession": "0001193125-26-211710",
+          "text": "TEGA MC US Inc (Grinding Media Inc) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.17 % 10/21/2028 $ 976,360 980,101 978,191 0.04 % E"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-80aa4414970ea734",
+          "accession": "0001193125-26-211710",
+          "context": "C_489268b4-083e-41af-81bb-0ee84cd56ee5",
+          "published_name": "Internet and Direct Marketing Retail Pug LLC",
+          "printed_name": "Pug LLC",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Internet and Direct Marketing Retail Pug LLC; original source row prints Pug LLC. Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-80aa4414970ea734",
+            "issuer_name": "Internet and Direct Marketing Retail Pug LLC",
+            "interest_rate": 8.42,
+            "basis_spread": 4.75,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/15/2030",
+            "shares_held": null
+          },
+          "source_row": "Pug LLC First Lien Term Loan SOFR(M) \u2014 4.75 % 8.42 % 3/15/2030 $ 2,892,403 2,888,701 2,855,351 0.11 %"
+        },
+        {
+          "row_id": "ROW-a03fcd51645f60d0",
+          "accession": "0001193125-26-211710",
+          "context": "C_6356003c-5244-4468-b45c-85f37300d740",
+          "published_name": "Metals and Mining TEGA MC US Inc (Grinding Media Inc)",
+          "printed_name": "TEGA MC US Inc (Grinding Media Inc)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Metals and Mining TEGA MC US Inc (Grinding Media Inc); original source row prints TEGA MC US Inc (Grinding Media Inc). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-a03fcd51645f60d0",
+            "issuer_name": "Metals and Mining TEGA MC US Inc (Grinding Media Inc)",
+            "interest_rate": 7.17,
+            "basis_spread": 3.5000000000000004,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 3/24/2033",
+            "shares_held": null
+          },
+          "source_row": "TEGA MC US Inc (Grinding Media Inc) First Lien Term Loan SOFR(Q) \u2014 3.50 % 7.17 % 3/24/2033 $ 892,000 883,080 887,540 0.03 % E"
+        },
+        {
+          "row_id": "ROW-123ba93409f1b94e",
+          "accession": "0001193125-26-211710",
+          "context": "C_8b28f54d-91db-49aa-ade7-82b53fa03050",
+          "published_name": "Metals and Mining TEGA MC US Inc (Grinding Media Inc)",
+          "printed_name": "TEGA MC US Inc (Grinding Media Inc)",
+          "conclusion": "confirmed_error",
+          "reason": "Industry/category prefix or wrong named entity leaked into issuer display: Metals and Mining TEGA MC US Inc (Grinding Media Inc); original source row prints TEGA MC US Inc (Grinding Media Inc). Heading/neighbor evidence separates the category from company name; use filer hierarchy configuration, not borrower aggregation.",
+          "published_other_fields": {
+            "row_id": "ROW-123ba93409f1b94e",
+            "issuer_name": "Metals and Mining TEGA MC US Inc (Grinding Media Inc)",
+            "interest_rate": 7.17,
+            "basis_spread": 3.5000000000000004,
+            "reference_rate_type": "SOFR",
+            "instrument_description": "First Lien Term Loan - Maturity 10/21/2028",
+            "shares_held": null
+          },
+          "source_row": "TEGA MC US Inc (Grinding Media Inc) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.17 % 10/21/2028 $ 976,360 980,101 978,191 0.04 % E"
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete flagged population from rgA4 shadow/page_rule_findings.csv and joined row_id to canonical sandbox holdings; 3 rows in this quarter.",
+        "Read original cached HTML context-linked inline facts, full source rows, context entity/instant and adjacent rows. All flagged context instants equal finding quarter; no comparative-period contexts in this selected population.",
+        "Separated hierarchy leakage, substantive misspellings and wrong-issuer members from harmless punctuation/spacing and unverified aliases. Per-row mixed outcomes are explicit."
+      ],
+      "next_action": "Propose source-backed display-name corrections or filer hierarchy parsing for confirmed rows; preserve distinct positions. Investigate alias evidence for source_ambiguity rows. Consider punctuation/spacing normalization for false-positive rows. No implementation or disposition in this review."
+    }
+  ],
+  "observations": [
+    {
+      "observation_key": "member-reference-rate-disagrees-with-printed-row",
+      "what": "NFP context/member says SOFR(Q), printed row SOFR(M); published reference_rate_type only stores SOFR, so tenor disagreement is a provenance issue, not proof that stored benchmark is wrong. Published fields: {\"row_id\": \"ROW-1f5c7ec45c43d175\", \"issuer_name\": \"Integrity Marketing Acquisition, LLC\", \"interest_rate\": 8.72, \"basis_spread\": 3.36, \"reference_rate_type\": \"SOFR\", \"instrument_description\": \"First Lien Term Loan - Maturity 2/13/2027\", \"shares_held\": null}",
+      "field": "bdc_investment_identifier",
+      "quarters": [
+        "2023-12-31"
+      ],
+      "cause": "fund",
+      "action": "left",
+      "suggested_check": "Compare benchmark and tenor from context member with original context-linked printed Ref cell; flag disagreement without overwriting canonical benchmark.",
+      "quote": {
+        "accession": "0000950170-24-024153",
+        "text": "NFP Corp. First Lien Term Loan SOFR(M) - 3.36 % 8.72 % 2/13/2027 $ 983,024 951,550 989,247 0.23 %"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Selected issuer-name detector does not validate context metadata against printed reference/coupon cells. Proposed comparison preserves valid abbreviations and treats tenor separately.",
+        "reference": "proposal: context-member-versus-inline-row"
+      }
+    },
+    {
+      "observation_key": "member-coupon-text-stale-versus-context-facts",
+      "what": "Grinding Media 2025-06-30 member says coupon 8.58 and SOFR(M); original row prints 7.83 and SOFR(Q). Check published rate shown below against the source rather than using identifier text as authority. Similar stale member text occurs Polaris 2025-12-31 (8.85/4.00 versus printed 7.85/3.75). Published fields: {\"row_id\": \"ROW-14a431e019a8a4a5\", \"issuer_name\": \"Metals and Mining Grinding Media Inc. (Molycop LTD)\", \"interest_rate\": 7.829999999999999, \"basis_spread\": 3.5000000000000004, \"reference_rate_type\": \"SOFR\", \"instrument_description\": \"First Lien Term Loan - Maturity 10/21/2028\", \"shares_held\": null}",
+      "field": "bdc_investment_identifier",
+      "quarters": [
+        "2025-06-30"
+      ],
+      "cause": "fund",
+      "action": "left",
+      "suggested_check": "Compare member rate/reference metadata with context-linked printed cells and tagged numeric facts; do not use the member alone as correctness evidence.",
+      "quote": {
+        "accession": "0000950170-25-106036",
+        "text": "Grinding Media Inc. (Molycop LTD) First Lien Term Loan SOFR(Q) 0.75 % 3.50 % 7.83 % 10/21/2028 $ 983,794 988,680 977,645 0.06 % E"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "Selected issuer-name detector does not validate context metadata against printed reference/coupon cells. Proposed comparison preserves valid abbreviations and treats tenor separately.",
+        "reference": "proposal: context-member-versus-inline-row"
+      }
+    }
+  ],
+  "orchestrator_requests": [],
+  "not_done": [
+    "Review only: no repairs, rebuilds, tests, data/ledger/disposition/acceptance changes.",
+    "No whole-fund correctness or acceptance claim; 60 selected name rows reviewed, not all holdings. Adjacent source rows were read for boundaries and obvious collateral inconsistencies, not a complete independent field-by-field population audit.",
+    "Alias correctness for Numerix parentheticals remains source ambiguity. Legal entity identity behind conflicting Bynder A/B labels not established beyond filed display.",
+    "No external corroboration or network. Inline XBRL contexts and facts read in original HTML; separate standalone XML instance was not needed to identify these rows and was not exhaustively scanned.",
+    "Independent review pending."
+  ],
+  "counts": {
+    "selected_findings": 14,
+    "affected_rows": 60,
+    "reviewed_rows": 60,
+    "finding_conclusions": {
+      "confirmed_error": 14
+    },
+    "row_conclusions": {
+      "confirmed_error": 50,
+      "false_alarm": 6,
+      "source_ambiguity": 4
+    },
+    "observations": 2
+  }
+}
