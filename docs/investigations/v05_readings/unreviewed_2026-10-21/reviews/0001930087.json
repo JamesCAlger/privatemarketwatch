@@ -1,0 +1,351 @@
+{
+  "reviewer_id": "/root/remaining_golub_check_sol",
+  "report_digest": "3f770a2270493ab98bc12e798f5e04761039bac344894c95a7be50d0316be92a",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_1cce54c77299",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-26-000024/c-1039/ROW-78b68c6e48e2f659. Read each original cached HTML context, its instant date and every linked schedule row/fact. The printed company/instrument cells substantiate the claimed issuer discrepancy. Raw typed member strings independently confirm that instrument/counter contamination and the Telesoft, LSF11, whole-company discrepancies already exist in the filing identifiers; these are not evidence of an extractor assigning an unrelated member. In the BrightView, Blue Bidco, Eliassen and Athenahealth cases, printed-row facts carry the misleading raw member directly. The proposed source-row bridge after testing mapping is appropriate; no global number stripping or position aggregation is justified. Retain raw identifiers and distinct position identities when cleaning displayed issuer/instrument fields.",
+      "evidence": [
+        {
+          "accession": "0001930087-26-000024",
+          "text": "Radiance Borrower, LLC&^(24) One stop SF + 5.25 % (h) 8.97 % 06/2031 41,495 41,259 0.9 41,495",
+          "row_key": "0001930087-26-000024/c-1039/ROW-78b68c6e48e2f659"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_482d4335f7a0",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-25-000030/c-170/ROW-28b3103c240ac403. Read each original cached HTML context, its instant date and every linked schedule row/fact. The printed company/instrument cells substantiate the claimed issuer discrepancy. Raw typed member strings independently confirm that instrument/counter contamination and the Telesoft, LSF11, whole-company discrepancies already exist in the filing identifiers; these are not evidence of an extractor assigning an unrelated member. In the BrightView, Blue Bidco, Eliassen and Athenahealth cases, printed-row facts carry the misleading raw member directly. The proposed source-row bridge after testing mapping is appropriate; no global number stripping or position aggregation is justified. Retain raw identifiers and distinct position identities when cleaning displayed issuer/instrument fields.",
+      "evidence": [
+        {
+          "accession": "0001930087-25-000030",
+          "text": "BrightView Landscapes, LLC^(7)(21) Senior secured SF + 2.00 % (h) 6.29 % 04/2029 2,500 2,500 0.1 2,479",
+          "row_key": "0001930087-25-000030/c-170/ROW-28b3103c240ac403"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_4943eb1a4661",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-24-000045/c-397/ROW-76292073a3c27874, 0001930087-24-000045/c-398/ROW-e0aff0973c0f33f9, 0001930087-24-000045/c-399/ROW-39291e0ebea5e823, 0001930087-24-000045/c-400/ROW-2b957f929cf833e7, 0001930087-24-000045/c-423/ROW-dc6005cebbc477f4, 0001930087-24-000045/c-424/ROW-42a2105560c9f30f, 0001930087-24-000045/c-426/ROW-2b82f4cf9cb5e36f, 0001930087-24-000045/c-497/ROW-21072fba84cfcffc, 0001930087-24-000045/c-498/ROW-534d22c6c86e2d09. Read each original cached HTML context, its instant date and every linked schedule row/fact. The printed company/instrument cells substantiate the claimed issuer discrepancy. Raw typed member strings independently confirm that instrument/counter contamination and the Telesoft, LSF11, whole-company discrepancies already exist in the filing identifiers; these are not evidence of an extractor assigning an unrelated member. In the BrightView, Blue Bidco, Eliassen and Athenahealth cases, printed-row facts carry the misleading raw member directly. The proposed source-row bridge after testing mapping is appropriate; no global number stripping or position aggregation is justified. Retain raw identifiers and distinct position identities when cleaning displayed issuer/instrument fields.",
+      "evidence": [
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Quick Quack Car Wash Holdings, LLC^ LP units N/A N/A N/A 417 $ 417 - % $ 417",
+          "row_key": "0001930087-24-000045/c-497/ROW-21072fba84cfcffc"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Dcert Buyer, Inc.^(19) Senior secured SF + 4.00 % (f) 9.34 % 10/2026 2,969 2,972 0.2 2,900",
+          "row_key": "0001930087-24-000045/c-426/ROW-2b82f4cf9cb5e36f"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Artifact Bidco, Inc.^ One stop SF + 4.50 % N/A(6) 05/2031 - - - -",
+          "row_key": "0001930087-24-000045/c-400/ROW-2b957f929cf833e7"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Artifact Bidco, Inc.^ One stop SF + 4.50 % N/A(6) 05/2030 - - - -",
+          "row_key": "0001930087-24-000045/c-399/ROW-39291e0ebea5e823"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Crewline Buyer, Inc.^(5) One stop SF + 6.75 % N/A(6) 11/2030 - ( 35 ) - -",
+          "row_key": "0001930087-24-000045/c-424/ROW-42a2105560c9f30f"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Quick Quack Car Wash Holdings, LLC^ LLC units N/A N/A N/A 83 83 - 83",
+          "row_key": "0001930087-24-000045/c-498/ROW-534d22c6c86e2d09"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Artifact Bidco, Inc.^ One stop SF + 4.50 % N/A(6) 05/2031 - - - -",
+          "row_key": "0001930087-24-000045/c-397/ROW-76292073a3c27874"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Crewline Buyer, Inc.^ One stop SF + 6.75 % (g) 12.08 % 11/2030 24,193 23,864 1.7 24,193",
+          "row_key": "0001930087-24-000045/c-423/ROW-dc6005cebbc477f4"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Artifact Bidco, Inc.^ One stop SF + 4.50 % N/A(6) 05/2030 - - - -",
+          "row_key": "0001930087-24-000045/c-398/ROW-e0aff0973c0f33f9"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_63db06580632",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-25-000050/c-669/ROW-47c86f792338eab6. Read each original cached HTML context, its instant date and every linked schedule row/fact. The printed company/instrument cells substantiate the claimed issuer discrepancy. Raw typed member strings independently confirm that instrument/counter contamination and the Telesoft, LSF11, whole-company discrepancies already exist in the filing identifiers; these are not evidence of an extractor assigning an unrelated member. In the BrightView, Blue Bidco, Eliassen and Athenahealth cases, printed-row facts carry the misleading raw member directly. The proposed source-row bridge after testing mapping is appropriate; no global number stripping or position aggregation is justified. Retain raw identifiers and distinct position identities when cleaning displayed issuer/instrument fields.",
+      "evidence": [
+        {
+          "accession": "0001930087-25-000050",
+          "text": "Blue Bidco Limited^(7)(9) One stop SF + 5.00 % (i) 9.26 % 06/2032 $ 3,300 $ 3,283 0.1 % $ 3,267",
+          "row_key": "0001930087-25-000050/c-669/ROW-47c86f792338eab6"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6e70dfe2c72b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-24-000077/c-505/ROW-ca8aea35966bff42, 0001930087-24-000077/c-506/ROW-ce609c30e885b6e4, 0001930087-24-000077/c-507/ROW-83f87b606e757053, 0001930087-24-000077/c-527/ROW-89b3061f3063f4f0, 0001930087-24-000077/c-528/ROW-ecabfb077cb5b4b5, 0001930087-24-000077/c-529/ROW-637bcc6a89220acb, 0001930087-24-000077/c-655/ROW-9d9d56a4192afd84, 0001930087-24-000077/c-656/ROW-edc5cc65b7f255f4, 0001930087-24-000077/c-629/ROW-7a0c1f1fe43b3c0e. Read each original cached HTML context, its instant date and every linked schedule row/fact. The printed company/instrument cells substantiate the claimed issuer discrepancy. Raw typed member strings independently confirm that instrument/counter contamination and the Telesoft, LSF11, whole-company discrepancies already exist in the filing identifiers; these are not evidence of an extractor assigning an unrelated member. In the BrightView, Blue Bidco, Eliassen and Athenahealth cases, printed-row facts carry the misleading raw member directly. The proposed source-row bridge after testing mapping is appropriate; no global number stripping or position aggregation is justified. Retain raw identifiers and distinct position identities when cleaning displayed issuer/instrument fields.",
+      "evidence": [
+        {
+          "accession": "0001930087-24-000077",
+          "text": "Eclipse Buyer, Inc.^(5) One stop SF + 4.75 % N/A(6) 09/2031 - ( 11 ) - ( 11 )",
+          "row_key": "0001930087-24-000077/c-529/ROW-637bcc6a89220acb"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "Telesoft Holdings LLC* One stop SF + 5.75 % (f) 10.70 % 12/2026 5,687 5,632 0.3 5,687",
+          "row_key": "0001930087-24-000077/c-629/ROW-7a0c1f1fe43b3c0e"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "AI Titan Parent, Inc.^(5) One stop SF + 4.75 % N/A(6) 08/2031 - ( 11 ) - ( 12 )",
+          "row_key": "0001930087-24-000077/c-507/ROW-83f87b606e757053"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "Eclipse Buyer, Inc.^ One stop SF + 4.75 % (g) 9.74 % 09/2031 12,644 12,518 0.7 12,517",
+          "row_key": "0001930087-24-000077/c-527/ROW-89b3061f3063f4f0"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "PPV Intermediate Holdings, LLC* One stop SF + 5.75 % (g) 10.81 % 08/2029 4,988 4,908 0.3 4,988",
+          "row_key": "0001930087-24-000077/c-655/ROW-9d9d56a4192afd84"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "AI Titan Parent, Inc.^ One stop SF + 4.75 % (g) 9.81 % 08/2031 9,302 9,211 0.5 9,209",
+          "row_key": "0001930087-24-000077/c-505/ROW-ca8aea35966bff42"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "AI Titan Parent, Inc.^(5) One stop SF + 4.75 % N/A(6) 08/2031 - ( 9 ) - ( 9 )",
+          "row_key": "0001930087-24-000077/c-506/ROW-ce609c30e885b6e4"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "Eclipse Buyer, Inc.^(5) One stop SF + 4.75 % N/A(6) 09/2031 - ( 61 ) - ( 16 )",
+          "row_key": "0001930087-24-000077/c-528/ROW-ecabfb077cb5b4b5"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "PPV Intermediate Holdings, LLC^(5) One stop SF + 5.25 % N/A(6) 08/2029 - ( 55 ) - ( 57 )",
+          "row_key": "0001930087-24-000077/c-656/ROW-edc5cc65b7f255f4"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7aec93d04723",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-25-000012/c-474/ROW-b0e16ac1493d7d62, 0001930087-25-000012/c-471/ROW-623ed168fdd39553, 0001930087-25-000012/c-472/ROW-ba49f44579b7b23c, 0001930087-25-000012/c-473/ROW-410d8f86a8bc4847, 0001930087-25-000012/c-475/ROW-f89d7f84d579d3cf, 0001930087-25-000012/c-476/ROW-4460838f877ea8da, 0001930087-25-000012/c-477/ROW-a920f43b40708052. Read each original cached HTML context, its instant date and every linked schedule row/fact. The printed company/instrument cells substantiate the claimed issuer discrepancy. Raw typed member strings independently confirm that instrument/counter contamination and the Telesoft, LSF11, whole-company discrepancies already exist in the filing identifiers; these are not evidence of an extractor assigning an unrelated member. In the BrightView, Blue Bidco, Eliassen and Athenahealth cases, printed-row facts carry the misleading raw member directly. The proposed source-row bridge after testing mapping is appropriate; no global number stripping or position aggregation is justified. Retain raw identifiers and distinct position identities when cleaning displayed issuer/instrument fields.",
+      "evidence": [
+        {
+          "accession": "0001930087-25-000012",
+          "text": "Eclipse Buyer, Inc.^(5) One stop SF + 4.75 % N/A(6) 09/2031 - ( 10 ) - -",
+          "row_key": "0001930087-25-000012/c-473/ROW-410d8f86a8bc4847"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "NBG Acquisition Corp. and NBG-P Acquisition Corp.*^ One stop SF + 5.50 % (i) 10.24 % 11/2028 15,639 15,301 0.8 15,169",
+          "row_key": "0001930087-25-000012/c-476/ROW-4460838f877ea8da"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "Eclipse Buyer, Inc.^ One stop SF + 4.75 % (h) 9.26 % 09/2031 12,644 12,523 0.6 12,644",
+          "row_key": "0001930087-25-000012/c-471/ROW-623ed168fdd39553"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "NBG Acquisition Corp. and NBG-P Acquisition Corp.^ One stop SF + 5.50 % (i) 9.98 % 11/2028 2,804 2,786 0.1 2,720",
+          "row_key": "0001930087-25-000012/c-477/ROW-a920f43b40708052"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "Eliassen Group, LLC* One stop SF + 5.75 % (i) 10.08 % 04/2028 4,844 4,843 0.2 4,746",
+          "row_key": "0001930087-25-000012/c-474/ROW-b0e16ac1493d7d62"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "Eclipse Buyer, Inc.^(5) One stop SF + 4.75 % N/A(6) 09/2031 - ( 59 ) - -",
+          "row_key": "0001930087-25-000012/c-472/ROW-ba49f44579b7b23c"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "IG Investments Holdings, LLC*^ One stop SF + 5.00 % (i) 9.57 % 09/2028 22,912 22,882 1.1 22,912",
+          "row_key": "0001930087-25-000012/c-475/ROW-f89d7f84d579d3cf"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7d9a41e347fc",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-26-000024/c-1082/ROW-5a422d081a784f11. Read each original cached HTML context, its instant date and every linked schedule row/fact. ROW-5a422d081a784f11: source shares 8 x 10^3 = 8000, versus published 1000 (derived_proxy). Numeric mismatch is supported. Prefer source units over proxy only for an exact date/context/position match; retain provenance.",
+      "evidence": [
+        {
+          "accession": "0001930087-26-000024",
+          "text": "SCP CDH Buyer, Inc. Common stock N/A N/A 12/2025 N/A 8 38 - 38",
+          "row_key": "0001930087-26-000024/c-1082/ROW-5a422d081a784f11"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_9ecdfae0817c",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-26-000060/c-92/ROW-d62148bb37ecad5e. Read each original cached HTML context, its instant date and every linked schedule row/fact. The printed company/instrument cells substantiate the claimed issuer discrepancy. Raw typed member strings independently confirm that instrument/counter contamination and the Telesoft, LSF11, whole-company discrepancies already exist in the filing identifiers; these are not evidence of an extractor assigning an unrelated member. In the BrightView, Blue Bidco, Eliassen and Athenahealth cases, printed-row facts carry the misleading raw member directly. The proposed source-row bridge after testing mapping is appropriate; no global number stripping or position aggregation is justified. Retain raw identifiers and distinct position identities when cleaning displayed issuer/instrument fields.",
+      "evidence": [
+        {
+          "accession": "0001930087-26-000060",
+          "text": "LSF11 Trinity Bidco, Inc.@^ Senior secured SF + 2.50 % (h) 6.18 % 06/2030 7,987 7,996 0.2 7,987",
+          "row_key": "0001930087-26-000060/c-92/ROW-d62148bb37ecad5e"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a5b941517f91",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-26-000099/c-1190/ROW-bc0010e77d364ff8. Read each original cached HTML context, its instant date and every linked schedule row/fact. The original row explicitly labels Eclipse Buyer preferred stock, with matching context fair-value facts; the published instrument retains Preferred stock while asset_category and index_classification are common equity. The proposed preferred-before-generic-equity precedence is justified; it still needs focused false-positive tests before promotion.",
+      "evidence": [
+        {
+          "accession": "0001930087-26-000099",
+          "text": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 2,878 0.1 2,902",
+          "row_key": "0001930087-26-000099/c-1190/ROW-bc0010e77d364ff8"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_b34c52da9e51",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-24-000010/c-192/ROW-bce25abf554e67a2. Read each original cached HTML context, its instant date and every linked schedule row/fact. The printed company/instrument cells substantiate the claimed issuer discrepancy. Raw typed member strings independently confirm that instrument/counter contamination and the Telesoft, LSF11, whole-company discrepancies already exist in the filing identifiers; these are not evidence of an extractor assigning an unrelated member. In the BrightView, Blue Bidco, Eliassen and Athenahealth cases, printed-row facts carry the misleading raw member directly. The proposed source-row bridge after testing mapping is appropriate; no global number stripping or position aggregation is justified. Retain raw identifiers and distinct position identities when cleaning displayed issuer/instrument fields.",
+      "evidence": [
+        {
+          "accession": "0001930087-24-000010",
+          "text": "PDQ Intermediate, Inc.^(16) Subordinated debt N/A 13.75 % PIK 10/2031 50 49 - 49",
+          "row_key": "0001930087-24-000010/c-192/ROW-bce25abf554e67a2"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_bd32e7e059b4",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-26-000024/c-1105/ROW-9bfa926751d26802. Read each original cached HTML context, its instant date and every linked schedule row/fact. The original row explicitly labels Eclipse Buyer preferred stock, with matching context fair-value facts; the published instrument retains Preferred stock while asset_category and index_classification are common equity. The proposed preferred-before-generic-equity precedence is justified; it still needs focused false-positive tests before promotion.",
+      "evidence": [
+        {
+          "accession": "0001930087-26-000024",
+          "text": "Eclipse Buyer, Inc.(23) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 3,894 0.1 3,952",
+          "row_key": "0001930087-26-000024/c-1105/ROW-9bfa926751d26802"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_bdbaa9e27001",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-26-000099/c-564/ROW-a3373115f1f4291d. Read each original cached HTML context, its instant date and every linked schedule row/fact. The printed company/instrument cells substantiate the claimed issuer discrepancy. Raw typed member strings independently confirm that instrument/counter contamination and the Telesoft, LSF11, whole-company discrepancies already exist in the filing identifiers; these are not evidence of an extractor assigning an unrelated member. In the BrightView, Blue Bidco, Eliassen and Athenahealth cases, printed-row facts carry the misleading raw member directly. The proposed source-row bridge after testing mapping is appropriate; no global number stripping or position aggregation is justified. Retain raw identifiers and distinct position identities when cleaning displayed issuer/instrument fields.",
+      "evidence": [
+        {
+          "accession": "0001930087-26-000099",
+          "text": "Athenahealth, Inc.@^(8)(26) Senior secured SF + 3.25 % (h) 6.89 % 02/2032 12,669 12,541 0.3 12,553",
+          "row_key": "0001930087-26-000099/c-564/ROW-a3373115f1f4291d"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_c4ea4b27d27d",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-26-000060/c-1166/ROW-4a771b342439d56f. Read each original cached HTML context, its instant date and every linked schedule row/fact. The original row explicitly labels Eclipse Buyer preferred stock, with matching context fair-value facts; the published instrument retains Preferred stock while asset_category and index_classification are common equity. The proposed preferred-before-generic-equity precedence is justified; it still needs focused false-positive tests before promotion.",
+      "evidence": [
+        {
+          "accession": "0001930087-26-000060",
+          "text": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 4,016 0.1 3,975",
+          "row_key": "0001930087-26-000060/c-1166/ROW-4a771b342439d56f"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_cc8d7f4659df",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-26-000060/c-1140/ROW-40c689cc30bfb24a. Read each original cached HTML context, its instant date and every linked schedule row/fact. ROW-40c689cc30bfb24a: source shares 8 x 10^3 = 8000, versus published 1000 (derived_proxy). Numeric mismatch is supported. Prefer source units over proxy only for an exact date/context/position match; retain provenance.",
+      "evidence": [
+        {
+          "accession": "0001930087-26-000060",
+          "text": "SCP CDH Buyer, Inc. Common stock N/A N/A 12/2025 N/A 8 38 - 74",
+          "row_key": "0001930087-26-000060/c-1140/ROW-40c689cc30bfb24a"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e873c6d12319",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed the entire rule/date population from rgA1 page_rule_findings.csv joined to the published parquet by row_id. Exact affected/reviewed sets match: 0001930087-25-000050/c-849/ROW-479c95df20c473fc, 0001930087-25-000050/c-877/ROW-fa0d08332885fc18. Read each original cached HTML context, its instant date and every linked schedule row/fact. ROW-479c95df20c473fc: source shares 1 x 10^3 = 1000, versus published 1.146e+06 (derived_proxy); ROW-fa0d08332885fc18: source shares 1 x 10^3 = 1000, versus published 1.484e+06 (derived_proxy). Numeric mismatch is supported. Prefer source units over proxy only for an exact date/context/position match; retain provenance.",
+      "evidence": [
+        {
+          "accession": "0001930087-25-000050",
+          "text": "CAP-KSI Holdings, LLC LP units N/A N/A 06/2024 N/A 1 - - 222",
+          "row_key": "0001930087-25-000050/c-849/ROW-479c95df20c473fc"
+        },
+        {
+          "accession": "0001930087-25-000050",
+          "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508",
+          "row_key": "0001930087-25-000050/c-877/ROW-fa0d08332885fc18"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "source-member-instrument-disagrees-with-printed-row",
+      "outcome": "supported",
+      "rationale": "Independently read original c-170 in 0001930087-25-000030 and c-564 in 0001930087-26-000099. Both original typed members themselves say One stop for different companies, while their unique linked visible rows say BrightView/Athenahealth Senior secured and their fair-value facts match the published holdings. This supports an instrument-family disagreement detector, not an assumed pipeline member-assignment defect. The proposed exact-one-visible-row anchor and normalized family comparison limit false positives from counters and spelling. Reject ambiguous/multirow contexts and retain comparative dates; the detector remains a proposal requiring positive and false-positive tests.",
+      "evidence": [
+        {
+          "accession": "0001930087-25-000030",
+          "text": "BrightView Landscapes, LLC^(7)(21) Senior secured SF + 2.00 % (h) 6.29 % 04/2029 2,500 2,500 0.1 2,479"
+        },
+        {
+          "accession": "0001930087-26-000099",
+          "text": "Athenahealth, Inc.@^(8)(26) Senior secured SF + 3.25 % (h) 6.89 % 02/2032 12,669 12,541 0.3 12,553"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "scope": "15 frozen selected findings / 38 claimed rows only; no sample, whole-fund acceptance or disposition.",
+  "limitations": "Source-versus-published discrepancies verified; repair implementation and recurrence tests were not run. Raw filing members can themselves be wrong. No assertion that unflagged rows or the fund as a whole are correct."
+}

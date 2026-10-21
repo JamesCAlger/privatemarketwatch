@@ -1,0 +1,1228 @@
+{
+  "cik": "0001930087",
+  "label": "rgA1",
+  "investigator_id": "/root/remaining_golub_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_1cce54c77299",
+    "RVQ_BLK_482d4335f7a0",
+    "RVQ_BLK_4943eb1a4661",
+    "RVQ_BLK_63db06580632",
+    "RVQ_BLK_6e70dfe2c72b",
+    "RVQ_BLK_7aec93d04723",
+    "RVQ_BLK_7d9a41e347fc",
+    "RVQ_BLK_9ecdfae0817c",
+    "RVQ_BLK_a5b941517f91",
+    "RVQ_BLK_b34c52da9e51",
+    "RVQ_BLK_bd32e7e059b4",
+    "RVQ_BLK_bdbaa9e27001",
+    "RVQ_BLK_c4ea4b27d27d",
+    "RVQ_BLK_cc8d7f4659df",
+    "RVQ_BLK_e873c6d12319"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_1cce54c77299",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-12-31",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-26-000024/c-1039/ROW-78b68c6e48e2f659"
+        ],
+        "reviewed_rows": [
+          "0001930087-26-000024/c-1039/ROW-78b68c6e48e2f659"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-26-000024",
+          "text": "Radiance Borrower, LLC&^(24) One stop SF + 5.25 % (h) 8.97 % 06/2031 41,495 41,259 0.9 41,495",
+          "row_key": "0001930087-26-000024/c-1039/ROW-78b68c6e48e2f659"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-26-000024/c-1039/ROW-78b68c6e48e2f659",
+          "published": {
+            "issuer_name": "Radiance Borrower, LLC One stop 1",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "41495000.0"
+          },
+          "source_context": "0001930087 Radiance Borrower, LLC One stop 1 2025-12-31",
+          "comparison": "Published issuer 'Radiance Borrower, LLC One stop 1' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Use a fund-specific issuer/instrument split that handles unseparated One stop, Senior secured and Subordinated debt suffixes, removing only terminal member counters after the instrument; preserve distinct positions and identifiers. For whole-company mismatches use accession/context-specific printed issuer AND instrument bridges after testing the source-context/member mapping. Repair dropped T / LSF11 using exact source-backed mappings, not global number stripping."
+    },
+    {
+      "finding_id": "RVQ_BLK_482d4335f7a0",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-03-31",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-25-000030/c-170/ROW-28b3103c240ac403"
+        ],
+        "reviewed_rows": [
+          "0001930087-25-000030/c-170/ROW-28b3103c240ac403"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-25-000030",
+          "text": "BrightView Landscapes, LLC^(7)(21) Senior secured SF + 2.00 % (h) 6.29 % 04/2029 2,500 2,500 0.1 2,479",
+          "row_key": "0001930087-25-000030/c-170/ROW-28b3103c240ac403"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-25-000030/c-170/ROW-28b3103c240ac403",
+          "published": {
+            "issuer_name": "FR Vision Holdings, Inc",
+            "instrument_description": "One stop 1",
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "2479000.0"
+          },
+          "source_context": "0001930087 FR Vision Holdings, Inc, One stop 1 2025-03-31",
+          "comparison": "Published FR Vision Holdings, Inc / One stop 1 is on the original BrightView Landscapes, LLC / Senior secured row. FV 2,479 agrees; issuer and instrument both disagree."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Use a fund-specific issuer/instrument split that handles unseparated One stop, Senior secured and Subordinated debt suffixes, removing only terminal member counters after the instrument; preserve distinct positions and identifiers. For whole-company mismatches use accession/context-specific printed issuer AND instrument bridges after testing the source-context/member mapping. Repair dropped T / LSF11 using exact source-backed mappings, not global number stripping."
+    },
+    {
+      "finding_id": "RVQ_BLK_4943eb1a4661",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-06-30",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-24-000045/c-497/ROW-21072fba84cfcffc",
+          "0001930087-24-000045/c-426/ROW-2b82f4cf9cb5e36f",
+          "0001930087-24-000045/c-400/ROW-2b957f929cf833e7",
+          "0001930087-24-000045/c-399/ROW-39291e0ebea5e823",
+          "0001930087-24-000045/c-424/ROW-42a2105560c9f30f",
+          "0001930087-24-000045/c-498/ROW-534d22c6c86e2d09",
+          "0001930087-24-000045/c-397/ROW-76292073a3c27874",
+          "0001930087-24-000045/c-423/ROW-dc6005cebbc477f4",
+          "0001930087-24-000045/c-398/ROW-e0aff0973c0f33f9"
+        ],
+        "reviewed_rows": [
+          "0001930087-24-000045/c-497/ROW-21072fba84cfcffc",
+          "0001930087-24-000045/c-426/ROW-2b82f4cf9cb5e36f",
+          "0001930087-24-000045/c-400/ROW-2b957f929cf833e7",
+          "0001930087-24-000045/c-399/ROW-39291e0ebea5e823",
+          "0001930087-24-000045/c-424/ROW-42a2105560c9f30f",
+          "0001930087-24-000045/c-498/ROW-534d22c6c86e2d09",
+          "0001930087-24-000045/c-397/ROW-76292073a3c27874",
+          "0001930087-24-000045/c-423/ROW-dc6005cebbc477f4",
+          "0001930087-24-000045/c-398/ROW-e0aff0973c0f33f9"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Quick Quack Car Wash Holdings, LLC^ LP units N/A N/A N/A 417 $ 417 - % $ 417",
+          "row_key": "0001930087-24-000045/c-497/ROW-21072fba84cfcffc"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Dcert Buyer, Inc.^(19) Senior secured SF + 4.00 % (f) 9.34 % 10/2026 2,969 2,972 0.2 2,900",
+          "row_key": "0001930087-24-000045/c-426/ROW-2b82f4cf9cb5e36f"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Artifact Bidco, Inc.^ One stop SF + 4.50 % N/A(6) 05/2031 - - - -",
+          "row_key": "0001930087-24-000045/c-400/ROW-2b957f929cf833e7"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Artifact Bidco, Inc.^ One stop SF + 4.50 % N/A(6) 05/2030 - - - -",
+          "row_key": "0001930087-24-000045/c-399/ROW-39291e0ebea5e823"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Crewline Buyer, Inc.^(5) One stop SF + 6.75 % N/A(6) 11/2030 - ( 35 ) - -",
+          "row_key": "0001930087-24-000045/c-424/ROW-42a2105560c9f30f"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Quick Quack Car Wash Holdings, LLC^ LLC units N/A N/A N/A 83 83 - 83",
+          "row_key": "0001930087-24-000045/c-498/ROW-534d22c6c86e2d09"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Artifact Bidco, Inc.^ One stop SF + 4.50 % N/A(6) 05/2031 - - - -",
+          "row_key": "0001930087-24-000045/c-397/ROW-76292073a3c27874"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Crewline Buyer, Inc.^ One stop SF + 6.75 % (g) 12.08 % 11/2030 24,193 23,864 1.7 24,193",
+          "row_key": "0001930087-24-000045/c-423/ROW-dc6005cebbc477f4"
+        },
+        {
+          "accession": "0001930087-24-000045",
+          "text": "Artifact Bidco, Inc.^ One stop SF + 4.50 % N/A(6) 05/2030 - - - -",
+          "row_key": "0001930087-24-000045/c-398/ROW-e0aff0973c0f33f9"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-24-000045/c-497/ROW-21072fba84cfcffc",
+          "published": {
+            "issuer_name": "Quick Quack Car Wash Holdings, LLC 1",
+            "instrument_description": null,
+            "shares_held": 417000.0,
+            "shares_held_source": null,
+            "asset_category": "EQUITY_COMMON",
+            "index_classification": "COMMON_EQUITY",
+            "fair_value": "417000.0"
+          },
+          "source_context": "0001930087 Quick Quack Car Wash Holdings, LLC 1 2024-06-30",
+          "comparison": "Published issuer 'Quick Quack Car Wash Holdings, LLC 1' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000045/c-426/ROW-2b82f4cf9cb5e36f",
+          "published": {
+            "issuer_name": "Dcert Buyer, Inc. Senior secured",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "2900000.0"
+          },
+          "source_context": "0001930087 Dcert Buyer, Inc. Senior secured 2024-06-30",
+          "comparison": "Published issuer 'Dcert Buyer, Inc. Senior secured' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000045/c-400/ROW-2b957f929cf833e7",
+          "published": {
+            "issuer_name": "Artifact Bidco, Inc. One stop 4",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "0.0"
+          },
+          "source_context": "0001930087 Artifact Bidco, Inc. One stop 4 2024-06-30",
+          "comparison": "Published issuer 'Artifact Bidco, Inc. One stop 4' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000045/c-399/ROW-39291e0ebea5e823",
+          "published": {
+            "issuer_name": "Artifact Bidco, Inc. One stop 3",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "0.0"
+          },
+          "source_context": "0001930087 Artifact Bidco, Inc. One stop 3 2024-06-30",
+          "comparison": "Published issuer 'Artifact Bidco, Inc. One stop 3' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000045/c-424/ROW-42a2105560c9f30f",
+          "published": {
+            "issuer_name": "Crewline Buyer, Inc. One stop 2",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "0.0"
+          },
+          "source_context": "0001930087 Crewline Buyer, Inc. One stop 2 2024-06-30",
+          "comparison": "Published issuer 'Crewline Buyer, Inc. One stop 2' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000045/c-498/ROW-534d22c6c86e2d09",
+          "published": {
+            "issuer_name": "Quick Quack Car Wash Holdings, LLC 2",
+            "instrument_description": null,
+            "shares_held": 83000.0,
+            "shares_held_source": null,
+            "asset_category": "EQUITY_COMMON",
+            "index_classification": "COMMON_EQUITY",
+            "fair_value": "83000.0"
+          },
+          "source_context": "0001930087 Quick Quack Car Wash Holdings, LLC 2 2024-06-30",
+          "comparison": "Published issuer 'Quick Quack Car Wash Holdings, LLC 2' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000045/c-397/ROW-76292073a3c27874",
+          "published": {
+            "issuer_name": "Artifact Bidco, Inc. One stop 1",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "0.0"
+          },
+          "source_context": "0001930087 Artifact Bidco, Inc. One stop 1 2024-06-30",
+          "comparison": "Published issuer 'Artifact Bidco, Inc. One stop 1' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000045/c-423/ROW-dc6005cebbc477f4",
+          "published": {
+            "issuer_name": "Crewline Buyer, Inc. One stop 1",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "24193000.0"
+          },
+          "source_context": "0001930087 Crewline Buyer, Inc. One stop 1 2024-06-30",
+          "comparison": "Published issuer 'Crewline Buyer, Inc. One stop 1' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000045/c-398/ROW-e0aff0973c0f33f9",
+          "published": {
+            "issuer_name": "Artifact Bidco, Inc. One stop 2",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "0.0"
+          },
+          "source_context": "0001930087 Artifact Bidco, Inc. One stop 2 2024-06-30",
+          "comparison": "Published issuer 'Artifact Bidco, Inc. One stop 2' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Use a fund-specific issuer/instrument split that handles unseparated One stop, Senior secured and Subordinated debt suffixes, removing only terminal member counters after the instrument; preserve distinct positions and identifiers. For whole-company mismatches use accession/context-specific printed issuer AND instrument bridges after testing the source-context/member mapping. Repair dropped T / LSF11 using exact source-backed mappings, not global number stripping."
+    },
+    {
+      "finding_id": "RVQ_BLK_63db06580632",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-06-30",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-25-000050/c-669/ROW-47c86f792338eab6"
+        ],
+        "reviewed_rows": [
+          "0001930087-25-000050/c-669/ROW-47c86f792338eab6"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-25-000050",
+          "text": "Blue Bidco Limited^(7)(9) One stop SF + 5.00 % (i) 9.26 % 06/2032 $ 3,300 $ 3,283 0.1 % $ 3,267",
+          "row_key": "0001930087-25-000050/c-669/ROW-47c86f792338eab6"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-25-000050/c-669/ROW-47c86f792338eab6",
+          "published": {
+            "issuer_name": "Bloomerang, LLC",
+            "instrument_description": "One stop 4",
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "3267000.0"
+          },
+          "source_context": "0001930087 Bloomerang, LLC, One stop 4 2025-06-30",
+          "comparison": "Published Bloomerang, LLC / One stop 4 is on the original Blue Bidco Limited / One stop row. FV 3,267 agrees; issuer differs."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Use a fund-specific issuer/instrument split that handles unseparated One stop, Senior secured and Subordinated debt suffixes, removing only terminal member counters after the instrument; preserve distinct positions and identifiers. For whole-company mismatches use accession/context-specific printed issuer AND instrument bridges after testing the source-context/member mapping. Repair dropped T / LSF11 using exact source-backed mappings, not global number stripping."
+    },
+    {
+      "finding_id": "RVQ_BLK_6e70dfe2c72b",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-09-30",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-24-000077/c-529/ROW-637bcc6a89220acb",
+          "0001930087-24-000077/c-629/ROW-7a0c1f1fe43b3c0e",
+          "0001930087-24-000077/c-507/ROW-83f87b606e757053",
+          "0001930087-24-000077/c-527/ROW-89b3061f3063f4f0",
+          "0001930087-24-000077/c-655/ROW-9d9d56a4192afd84",
+          "0001930087-24-000077/c-505/ROW-ca8aea35966bff42",
+          "0001930087-24-000077/c-506/ROW-ce609c30e885b6e4",
+          "0001930087-24-000077/c-528/ROW-ecabfb077cb5b4b5",
+          "0001930087-24-000077/c-656/ROW-edc5cc65b7f255f4"
+        ],
+        "reviewed_rows": [
+          "0001930087-24-000077/c-529/ROW-637bcc6a89220acb",
+          "0001930087-24-000077/c-629/ROW-7a0c1f1fe43b3c0e",
+          "0001930087-24-000077/c-507/ROW-83f87b606e757053",
+          "0001930087-24-000077/c-527/ROW-89b3061f3063f4f0",
+          "0001930087-24-000077/c-655/ROW-9d9d56a4192afd84",
+          "0001930087-24-000077/c-505/ROW-ca8aea35966bff42",
+          "0001930087-24-000077/c-506/ROW-ce609c30e885b6e4",
+          "0001930087-24-000077/c-528/ROW-ecabfb077cb5b4b5",
+          "0001930087-24-000077/c-656/ROW-edc5cc65b7f255f4"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-24-000077",
+          "text": "Eclipse Buyer, Inc.^(5) One stop SF + 4.75 % N/A(6) 09/2031 - ( 11 ) - ( 11 )",
+          "row_key": "0001930087-24-000077/c-529/ROW-637bcc6a89220acb"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "Telesoft Holdings LLC* One stop SF + 5.75 % (f) 10.70 % 12/2026 5,687 5,632 0.3 5,687",
+          "row_key": "0001930087-24-000077/c-629/ROW-7a0c1f1fe43b3c0e"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "AI Titan Parent, Inc.^(5) One stop SF + 4.75 % N/A(6) 08/2031 - ( 11 ) - ( 12 )",
+          "row_key": "0001930087-24-000077/c-507/ROW-83f87b606e757053"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "Eclipse Buyer, Inc.^ One stop SF + 4.75 % (g) 9.74 % 09/2031 12,644 12,518 0.7 12,517",
+          "row_key": "0001930087-24-000077/c-527/ROW-89b3061f3063f4f0"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "PPV Intermediate Holdings, LLC* One stop SF + 5.75 % (g) 10.81 % 08/2029 4,988 4,908 0.3 4,988",
+          "row_key": "0001930087-24-000077/c-655/ROW-9d9d56a4192afd84"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "AI Titan Parent, Inc.^ One stop SF + 4.75 % (g) 9.81 % 08/2031 9,302 9,211 0.5 9,209",
+          "row_key": "0001930087-24-000077/c-505/ROW-ca8aea35966bff42"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "AI Titan Parent, Inc.^(5) One stop SF + 4.75 % N/A(6) 08/2031 - ( 9 ) - ( 9 )",
+          "row_key": "0001930087-24-000077/c-506/ROW-ce609c30e885b6e4"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "Eclipse Buyer, Inc.^(5) One stop SF + 4.75 % N/A(6) 09/2031 - ( 61 ) - ( 16 )",
+          "row_key": "0001930087-24-000077/c-528/ROW-ecabfb077cb5b4b5"
+        },
+        {
+          "accession": "0001930087-24-000077",
+          "text": "PPV Intermediate Holdings, LLC^(5) One stop SF + 5.25 % N/A(6) 08/2029 - ( 55 ) - ( 57 )",
+          "row_key": "0001930087-24-000077/c-656/ROW-edc5cc65b7f255f4"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-24-000077/c-529/ROW-637bcc6a89220acb",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc. One stop 3",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "-11000.0"
+          },
+          "source_context": "0001930087 Eclipse Buyer, Inc. One stop 3 2024-09-30",
+          "comparison": "Published issuer 'Eclipse Buyer, Inc. One stop 3' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000077/c-629/ROW-7a0c1f1fe43b3c0e",
+          "published": {
+            "issuer_name": "elesoft Holdings LLC",
+            "instrument_description": "One stop",
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "5687000.0"
+          },
+          "source_context": "0001930087 elesoft Holdings LLC, One stop 2024-09-30",
+          "comparison": "Published elesoft Holdings LLC drops the initial T in printed Telesoft Holdings LLC."
+        },
+        {
+          "row_key": "0001930087-24-000077/c-507/ROW-83f87b606e757053",
+          "published": {
+            "issuer_name": "AI Titan Parent, Inc. One stop 3",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "-12000.0"
+          },
+          "source_context": "0001930087 AI Titan Parent, Inc. One stop 3 2024-09-30",
+          "comparison": "Published issuer 'AI Titan Parent, Inc. One stop 3' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000077/c-527/ROW-89b3061f3063f4f0",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc. One stop 1",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "12517000.0"
+          },
+          "source_context": "0001930087 Eclipse Buyer, Inc. One stop 1 2024-09-30",
+          "comparison": "Published issuer 'Eclipse Buyer, Inc. One stop 1' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000077/c-655/ROW-9d9d56a4192afd84",
+          "published": {
+            "issuer_name": "PPV Intermediate Holdings, LLC, One stop, 1",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "4988000.0"
+          },
+          "source_context": "0001930087 PPV Intermediate Holdings, LLC, One stop, 1 2024-09-30",
+          "comparison": "Published issuer 'PPV Intermediate Holdings, LLC, One stop, 1' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000077/c-505/ROW-ca8aea35966bff42",
+          "published": {
+            "issuer_name": "AI Titan Parent, Inc. One stop 1",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "9209000.0"
+          },
+          "source_context": "0001930087 AI Titan Parent, Inc. One stop 1 2024-09-30",
+          "comparison": "Published issuer 'AI Titan Parent, Inc. One stop 1' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000077/c-506/ROW-ce609c30e885b6e4",
+          "published": {
+            "issuer_name": "AI Titan Parent, Inc. One stop 2",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "-9000.0"
+          },
+          "source_context": "0001930087 AI Titan Parent, Inc. One stop 2 2024-09-30",
+          "comparison": "Published issuer 'AI Titan Parent, Inc. One stop 2' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000077/c-528/ROW-ecabfb077cb5b4b5",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc. One stop 2",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "-16000.0"
+          },
+          "source_context": "0001930087 Eclipse Buyer, Inc. One stop 2 2024-09-30",
+          "comparison": "Published issuer 'Eclipse Buyer, Inc. One stop 2' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-24-000077/c-656/ROW-edc5cc65b7f255f4",
+          "published": {
+            "issuer_name": "PPV Intermediate Holdings, LLC, One stop, 2",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "-57000.0"
+          },
+          "source_context": "0001930087 PPV Intermediate Holdings, LLC, One stop, 2 2024-09-30",
+          "comparison": "Published issuer 'PPV Intermediate Holdings, LLC, One stop, 2' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Use a fund-specific issuer/instrument split that handles unseparated One stop, Senior secured and Subordinated debt suffixes, removing only terminal member counters after the instrument; preserve distinct positions and identifiers. For whole-company mismatches use accession/context-specific printed issuer AND instrument bridges after testing the source-context/member mapping. Repair dropped T / LSF11 using exact source-backed mappings, not global number stripping."
+    },
+    {
+      "finding_id": "RVQ_BLK_7aec93d04723",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-12-31",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-25-000012/c-473/ROW-410d8f86a8bc4847",
+          "0001930087-25-000012/c-476/ROW-4460838f877ea8da",
+          "0001930087-25-000012/c-471/ROW-623ed168fdd39553",
+          "0001930087-25-000012/c-477/ROW-a920f43b40708052",
+          "0001930087-25-000012/c-474/ROW-b0e16ac1493d7d62",
+          "0001930087-25-000012/c-472/ROW-ba49f44579b7b23c",
+          "0001930087-25-000012/c-475/ROW-f89d7f84d579d3cf"
+        ],
+        "reviewed_rows": [
+          "0001930087-25-000012/c-473/ROW-410d8f86a8bc4847",
+          "0001930087-25-000012/c-476/ROW-4460838f877ea8da",
+          "0001930087-25-000012/c-471/ROW-623ed168fdd39553",
+          "0001930087-25-000012/c-477/ROW-a920f43b40708052",
+          "0001930087-25-000012/c-474/ROW-b0e16ac1493d7d62",
+          "0001930087-25-000012/c-472/ROW-ba49f44579b7b23c",
+          "0001930087-25-000012/c-475/ROW-f89d7f84d579d3cf"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-25-000012",
+          "text": "Eclipse Buyer, Inc.^(5) One stop SF + 4.75 % N/A(6) 09/2031 - ( 10 ) - -",
+          "row_key": "0001930087-25-000012/c-473/ROW-410d8f86a8bc4847"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "NBG Acquisition Corp. and NBG-P Acquisition Corp.*^ One stop SF + 5.50 % (i) 10.24 % 11/2028 15,639 15,301 0.8 15,169",
+          "row_key": "0001930087-25-000012/c-476/ROW-4460838f877ea8da"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "Eclipse Buyer, Inc.^ One stop SF + 4.75 % (h) 9.26 % 09/2031 12,644 12,523 0.6 12,644",
+          "row_key": "0001930087-25-000012/c-471/ROW-623ed168fdd39553"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "NBG Acquisition Corp. and NBG-P Acquisition Corp.^ One stop SF + 5.50 % (i) 9.98 % 11/2028 2,804 2,786 0.1 2,720",
+          "row_key": "0001930087-25-000012/c-477/ROW-a920f43b40708052"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "Eliassen Group, LLC* One stop SF + 5.75 % (i) 10.08 % 04/2028 4,844 4,843 0.2 4,746",
+          "row_key": "0001930087-25-000012/c-474/ROW-b0e16ac1493d7d62"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "Eclipse Buyer, Inc.^(5) One stop SF + 4.75 % N/A(6) 09/2031 - ( 59 ) - -",
+          "row_key": "0001930087-25-000012/c-472/ROW-ba49f44579b7b23c"
+        },
+        {
+          "accession": "0001930087-25-000012",
+          "text": "IG Investments Holdings, LLC*^ One stop SF + 5.00 % (i) 9.57 % 09/2028 22,912 22,882 1.1 22,912",
+          "row_key": "0001930087-25-000012/c-475/ROW-f89d7f84d579d3cf"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-25-000012/c-473/ROW-410d8f86a8bc4847",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc. One stop 3",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "0.0"
+          },
+          "source_context": "0001930087 Eclipse Buyer, Inc. One stop 3 2024-12-31",
+          "comparison": "Published issuer 'Eclipse Buyer, Inc. One stop 3' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-25-000012/c-476/ROW-4460838f877ea8da",
+          "published": {
+            "issuer_name": "NBG Acquisition Corp. and NBG-P Acquisition Corp. One stop",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "15169000.0"
+          },
+          "source_context": "0001930087 NBG Acquisition Corp. and NBG-P Acquisition Corp. One stop 2024-12-31",
+          "comparison": "Published issuer 'NBG Acquisition Corp. and NBG-P Acquisition Corp. One stop' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-25-000012/c-471/ROW-623ed168fdd39553",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc. One stop 1",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "12644000.0"
+          },
+          "source_context": "0001930087 Eclipse Buyer, Inc. One stop 1 2024-12-31",
+          "comparison": "Published issuer 'Eclipse Buyer, Inc. One stop 1' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-25-000012/c-477/ROW-a920f43b40708052",
+          "published": {
+            "issuer_name": "NBG Acquisition Corp. and NBG-P Acquisition Corp. One stop 2",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "2720000.0"
+          },
+          "source_context": "0001930087 NBG Acquisition Corp. and NBG-P Acquisition Corp. One stop 2 2024-12-31",
+          "comparison": "Published issuer 'NBG Acquisition Corp. and NBG-P Acquisition Corp. One stop 2' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-25-000012/c-474/ROW-b0e16ac1493d7d62",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc. One stop",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "4746000.0"
+          },
+          "source_context": "0001930087 Eclipse Buyer, Inc. One stop 2024-12-31",
+          "comparison": "Published Eclipse Buyer, Inc. One stop belongs to the printed Eliassen Group, LLC row. Printed instrument One stop and FV 4,746 agree with this context, but issuer does not."
+        },
+        {
+          "row_key": "0001930087-25-000012/c-472/ROW-ba49f44579b7b23c",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc. One stop 2",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "0.0"
+          },
+          "source_context": "0001930087 Eclipse Buyer, Inc. One stop 2 2024-12-31",
+          "comparison": "Published issuer 'Eclipse Buyer, Inc. One stop 2' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        },
+        {
+          "row_key": "0001930087-25-000012/c-475/ROW-f89d7f84d579d3cf",
+          "published": {
+            "issuer_name": "IG Investments Holdings, LLC. One stop",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "22912000.0"
+          },
+          "source_context": "0001930087 IG Investments Holdings, LLC. One stop 2024-12-31",
+          "comparison": "Published issuer 'IG Investments Holdings, LLC. One stop' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Use a fund-specific issuer/instrument split that handles unseparated One stop, Senior secured and Subordinated debt suffixes, removing only terminal member counters after the instrument; preserve distinct positions and identifiers. For whole-company mismatches use accession/context-specific printed issuer AND instrument bridges after testing the source-context/member mapping. Repair dropped T / LSF11 using exact source-backed mappings, not global number stripping."
+    },
+    {
+      "finding_id": "RVQ_BLK_7d9a41e347fc",
+      "rule_name": "units_printed",
+      "report_date": "2025-12-31",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-26-000024/c-1082/ROW-5a422d081a784f11"
+        ],
+        "reviewed_rows": [
+          "0001930087-26-000024/c-1082/ROW-5a422d081a784f11"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-26-000024",
+          "text": "SCP CDH Buyer, Inc. Common stock N/A N/A 12/2025 N/A 8 38 - 38",
+          "row_key": "0001930087-26-000024/c-1082/ROW-5a422d081a784f11"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-26-000024/c-1082/ROW-5a422d081a784f11",
+          "published": {
+            "issuer_name": "SCP CDH Buyer, Inc.",
+            "instrument_description": "Common stock",
+            "shares_held": 1000.0,
+            "shares_held_source": "derived_proxy",
+            "asset_category": "EQUITY_COMMON",
+            "index_classification": "COMMON_EQUITY",
+            "fair_value": "38000.0"
+          },
+          "source_context": "0001930087 SCP CDH Buyer, Inc., Common stock 2025-12-31",
+          "comparison": "Published shares_held=1000.0 (derived_proxy); original row prints 8 shares with explicit scale 3, i.e. 8000. This is a numeric mismatch, not merely an absent displayed proxy."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Preserve and prioritize InvestmentOwnedBalanceShares from the exact original context (1 x 10^3 for CAP-KSI and Menlo; 8 x 10^3 for SCP CDH). Prevent downstream cost/identifier-based derived_proxy from overwriting a source count; investigate where it is lost, then add focused regression tests. Do not infer unit counts from cost."
+    },
+    {
+      "finding_id": "RVQ_BLK_9ecdfae0817c",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2026-03-31",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-26-000060/c-92/ROW-d62148bb37ecad5e"
+        ],
+        "reviewed_rows": [
+          "0001930087-26-000060/c-92/ROW-d62148bb37ecad5e"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-26-000060",
+          "text": "LSF11 Trinity Bidco, Inc.@^ Senior secured SF + 2.50 % (h) 6.18 % 06/2030 7,987 7,996 0.2 7,987",
+          "row_key": "0001930087-26-000060/c-92/ROW-d62148bb37ecad5e"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-26-000060/c-92/ROW-d62148bb37ecad5e",
+          "published": {
+            "issuer_name": "LSF Trinity Bidco, Inc.",
+            "instrument_description": "Senior secured",
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "7987000.0"
+          },
+          "source_context": "0001930087 LSF Trinity Bidco, Inc. | Senior secured 2026-03-31",
+          "comparison": "Published LSF Trinity Bidco, Inc. omits 11 in printed LSF11 Trinity Bidco, Inc.; a blanket numeric removal is unsafe."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Use a fund-specific issuer/instrument split that handles unseparated One stop, Senior secured and Subordinated debt suffixes, removing only terminal member counters after the instrument; preserve distinct positions and identifiers. For whole-company mismatches use accession/context-specific printed issuer AND instrument bridges after testing the source-context/member mapping. Repair dropped T / LSF11 using exact source-backed mappings, not global number stripping."
+    },
+    {
+      "finding_id": "RVQ_BLK_a5b941517f91",
+      "rule_name": "preferred_printed",
+      "report_date": "2026-06-30",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-26-000099/c-1190/ROW-bc0010e77d364ff8"
+        ],
+        "reviewed_rows": [
+          "0001930087-26-000099/c-1190/ROW-bc0010e77d364ff8"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-26-000099",
+          "text": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 2,878 0.1 2,902",
+          "row_key": "0001930087-26-000099/c-1190/ROW-bc0010e77d364ff8"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-26-000099/c-1190/ROW-bc0010e77d364ff8",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc.",
+            "instrument_description": "Preferred stock",
+            "shares_held": 0.0,
+            "shares_held_source": null,
+            "asset_category": "EQUITY_COMMON",
+            "index_classification": "COMMON_EQUITY",
+            "fair_value": "2902000.0"
+          },
+          "source_context": "0001930087 gcred:ProfessionalServicesMember us-gaap:EquitySecuritiesMember us-gaap:InvestmentUnaffiliatedIssuerMember 2026-06-30",
+          "comparison": "Original row explicitly prints Preferred stock; published instrument_description also says Preferred stock, but asset_category=EQUITY_COMMON and index_classification=COMMON_EQUITY. FV matches the printed row."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Classify Eclipse Preferred stock as EQUITY_PREFERRED / preferred-equity classification through a fund-specific instrument override or correction to the preferred-vs-common precedence, preserving its separately disclosed PIK evidence. Add a common-stock false-positive test."
+    },
+    {
+      "finding_id": "RVQ_BLK_b34c52da9e51",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-12-31",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-24-000010/c-192/ROW-bce25abf554e67a2"
+        ],
+        "reviewed_rows": [
+          "0001930087-24-000010/c-192/ROW-bce25abf554e67a2"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-24-000010",
+          "text": "PDQ Intermediate, Inc.^(16) Subordinated debt N/A 13.75 % PIK 10/2031 50 49 - 49",
+          "row_key": "0001930087-24-000010/c-192/ROW-bce25abf554e67a2"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-24-000010/c-192/ROW-bce25abf554e67a2",
+          "published": {
+            "issuer_name": "PDQ Intermediate, Inc. Subordinated debt",
+            "instrument_description": null,
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "49000.0"
+          },
+          "source_context": "0001930087 PDQ Intermediate, Inc. Subordinated debt 2023-12-31",
+          "comparison": "Published issuer 'PDQ Intermediate, Inc. Subordinated debt' contains instrument text and/or a numbered member suffix absent from the printed company name; the original row separates the company and instrument."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Use a fund-specific issuer/instrument split that handles unseparated One stop, Senior secured and Subordinated debt suffixes, removing only terminal member counters after the instrument; preserve distinct positions and identifiers. For whole-company mismatches use accession/context-specific printed issuer AND instrument bridges after testing the source-context/member mapping. Repair dropped T / LSF11 using exact source-backed mappings, not global number stripping."
+    },
+    {
+      "finding_id": "RVQ_BLK_bd32e7e059b4",
+      "rule_name": "preferred_printed",
+      "report_date": "2025-12-31",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-26-000024/c-1105/ROW-9bfa926751d26802"
+        ],
+        "reviewed_rows": [
+          "0001930087-26-000024/c-1105/ROW-9bfa926751d26802"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-26-000024",
+          "text": "Eclipse Buyer, Inc.(23) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 3,894 0.1 3,952",
+          "row_key": "0001930087-26-000024/c-1105/ROW-9bfa926751d26802"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-26-000024/c-1105/ROW-9bfa926751d26802",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc.",
+            "instrument_description": "Preferred stock",
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "EQUITY_COMMON",
+            "index_classification": "COMMON_EQUITY",
+            "fair_value": "3952000.0"
+          },
+          "source_context": "0001930087 us-gaap:EquitySecuritiesMember gcred:ProfessionalServicesMember 2025-12-31",
+          "comparison": "Original row explicitly prints Preferred stock; published instrument_description also says Preferred stock, but asset_category=EQUITY_COMMON and index_classification=COMMON_EQUITY. FV matches the printed row."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Classify Eclipse Preferred stock as EQUITY_PREFERRED / preferred-equity classification through a fund-specific instrument override or correction to the preferred-vs-common precedence, preserving its separately disclosed PIK evidence. Add a common-stock false-positive test."
+    },
+    {
+      "finding_id": "RVQ_BLK_bdbaa9e27001",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2026-06-30",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-26-000099/c-564/ROW-a3373115f1f4291d"
+        ],
+        "reviewed_rows": [
+          "0001930087-26-000099/c-564/ROW-a3373115f1f4291d"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-26-000099",
+          "text": "Athenahealth, Inc.@^(8)(26) Senior secured SF + 3.25 % (h) 6.89 % 02/2032 12,669 12,541 0.3 12,553",
+          "row_key": "0001930087-26-000099/c-564/ROW-a3373115f1f4291d"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-26-000099/c-564/ROW-a3373115f1f4291d",
+          "published": {
+            "issuer_name": "Amberfield Acquisition Co.",
+            "instrument_description": "One stop 4",
+            "shares_held": null,
+            "shares_held_source": null,
+            "asset_category": "LOAN",
+            "index_classification": "DIRECT_LENDING",
+            "fair_value": "12553000.0"
+          },
+          "source_context": "0001930087 Amberfield Acquisition Co. | One stop 4 2026-06-30",
+          "comparison": "Published Amberfield Acquisition Co. / One stop 4 is on the original Athenahealth, Inc. / Senior secured row. FV 12,553 agrees; issuer and instrument both disagree."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Use a fund-specific issuer/instrument split that handles unseparated One stop, Senior secured and Subordinated debt suffixes, removing only terminal member counters after the instrument; preserve distinct positions and identifiers. For whole-company mismatches use accession/context-specific printed issuer AND instrument bridges after testing the source-context/member mapping. Repair dropped T / LSF11 using exact source-backed mappings, not global number stripping."
+    },
+    {
+      "finding_id": "RVQ_BLK_c4ea4b27d27d",
+      "rule_name": "preferred_printed",
+      "report_date": "2026-03-31",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-26-000060/c-1166/ROW-4a771b342439d56f"
+        ],
+        "reviewed_rows": [
+          "0001930087-26-000060/c-1166/ROW-4a771b342439d56f"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-26-000060",
+          "text": "Eclipse Buyer, Inc.(24) Preferred stock N/A 12.50 % Non-Cash 09/2024 N/A - 4,016 0.1 3,975",
+          "row_key": "0001930087-26-000060/c-1166/ROW-4a771b342439d56f"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-26-000060/c-1166/ROW-4a771b342439d56f",
+          "published": {
+            "issuer_name": "Eclipse Buyer, Inc.",
+            "instrument_description": "Preferred stock",
+            "shares_held": 0.0,
+            "shares_held_source": null,
+            "asset_category": "EQUITY_COMMON",
+            "index_classification": "COMMON_EQUITY",
+            "fair_value": "3975000.0"
+          },
+          "source_context": "0001930087 us-gaap:EquitySecuritiesMember gcred:ProfessionalServicesMember 2026-03-31",
+          "comparison": "Original row explicitly prints Preferred stock; published instrument_description also says Preferred stock, but asset_category=EQUITY_COMMON and index_classification=COMMON_EQUITY. FV matches the printed row."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Classify Eclipse Preferred stock as EQUITY_PREFERRED / preferred-equity classification through a fund-specific instrument override or correction to the preferred-vs-common precedence, preserving its separately disclosed PIK evidence. Add a common-stock false-positive test."
+    },
+    {
+      "finding_id": "RVQ_BLK_cc8d7f4659df",
+      "rule_name": "units_printed",
+      "report_date": "2026-03-31",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-26-000060/c-1140/ROW-40c689cc30bfb24a"
+        ],
+        "reviewed_rows": [
+          "0001930087-26-000060/c-1140/ROW-40c689cc30bfb24a"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-26-000060",
+          "text": "SCP CDH Buyer, Inc. Common stock N/A N/A 12/2025 N/A 8 38 - 74",
+          "row_key": "0001930087-26-000060/c-1140/ROW-40c689cc30bfb24a"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-26-000060/c-1140/ROW-40c689cc30bfb24a",
+          "published": {
+            "issuer_name": "SCP CDH Buyer, Inc.",
+            "instrument_description": "Common stock",
+            "shares_held": 1000.0,
+            "shares_held_source": "derived_proxy",
+            "asset_category": "EQUITY_COMMON",
+            "index_classification": "COMMON_EQUITY",
+            "fair_value": "74000.0"
+          },
+          "source_context": "0001930087 SCP CDH Buyer, Inc. | Common stock 2026-03-31",
+          "comparison": "Published shares_held=1000.0 (derived_proxy); original row prints 8 shares with explicit scale 3, i.e. 8000. This is a numeric mismatch, not merely an absent displayed proxy."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Preserve and prioritize InvestmentOwnedBalanceShares from the exact original context (1 x 10^3 for CAP-KSI and Menlo; 8 x 10^3 for SCP CDH). Prevent downstream cost/identifier-based derived_proxy from overwriting a source count; investigate where it is lost, then add focused regression tests. Do not infer unit counts from cost."
+    },
+    {
+      "finding_id": "RVQ_BLK_e873c6d12319",
+      "rule_name": "units_printed",
+      "report_date": "2025-06-30",
+      "coverage": {
+        "affected_rows": [
+          "0001930087-25-000050/c-849/ROW-479c95df20c473fc",
+          "0001930087-25-000050/c-877/ROW-fa0d08332885fc18"
+        ],
+        "reviewed_rows": [
+          "0001930087-25-000050/c-849/ROW-479c95df20c473fc",
+          "0001930087-25-000050/c-877/ROW-fa0d08332885fc18"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001930087-25-000050",
+          "text": "CAP-KSI Holdings, LLC LP units N/A N/A 06/2024 N/A 1 - - 222",
+          "row_key": "0001930087-25-000050/c-849/ROW-479c95df20c473fc"
+        },
+        {
+          "accession": "0001930087-25-000050",
+          "text": "Menlo Ridgeview Co-Invest, LLC LLC interest N/A N/A 05/2025 N/A 1 1,508 0.1 1,508",
+          "row_key": "0001930087-25-000050/c-877/ROW-fa0d08332885fc18"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_comparisons": [
+        {
+          "row_key": "0001930087-25-000050/c-849/ROW-479c95df20c473fc",
+          "published": {
+            "issuer_name": "CAP-KSI Holdings, LLC",
+            "instrument_description": "LP units",
+            "shares_held": 1146000.0,
+            "shares_held_source": "derived_proxy",
+            "asset_category": "EQUITY_COMMON",
+            "index_classification": "COMMON_EQUITY",
+            "fair_value": "222000.0"
+          },
+          "source_context": "0001930087 CAP-KSI Holdings, LLC, LP units 2025-06-30",
+          "comparison": "Published shares_held=1146000.0 (derived_proxy); original row prints 1 shares with explicit scale 3, i.e. 1000. This is a numeric mismatch, not merely an absent displayed proxy."
+        },
+        {
+          "row_key": "0001930087-25-000050/c-877/ROW-fa0d08332885fc18",
+          "published": {
+            "issuer_name": "Menlo Ridgeview Co-Invest, LLC",
+            "instrument_description": "LLC interest",
+            "shares_held": 1484000.0,
+            "shares_held_source": "derived_proxy",
+            "asset_category": "EQUITY_COMMON",
+            "index_classification": "COMMON_EQUITY",
+            "fair_value": "1508000.0"
+          },
+          "source_context": "0001930087 Menlo Ridgeview Co-Invest, LLC, LLC interest 2025-06-30",
+          "comparison": "Published shares_held=1484000.0 (derived_proxy); original row prints 1 shares with explicit scale 3, i.e. 1000. This is a numeric mismatch, not merely an absent displayed proxy."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete population from untouched rgA1/output/shadow/page_rule_findings.csv and joined actual published holdings by exact row_id.",
+        "Independently read original cached HTML tr carrying the exact published source context; checked visible company, instrument and/or count, rather than relying on rule printed_row.",
+        "Checked original context metadata for current/comparative period; retained every flagged row and did not filter by context date.",
+        "Matched original printed FV and context facts to the published position; the discrepancies described are field mismatches, not evidence from a different issuer selected by name."
+      ],
+      "next_action": "Preserve and prioritize InvestmentOwnedBalanceShares from the exact original context (1 x 10^3 for CAP-KSI and Menlo; 8 x 10^3 for SCP CDH). Prevent downstream cost/identifier-based derived_proxy from overwriting a source count; investigate where it is lost, then add focused regression tests. Do not infer unit counts from cost."
+    }
+  ],
+  "observations": [
+    {
+      "observation_key": "source-member-instrument-disagrees-with-printed-row",
+      "what": "Published FR Vision Holdings, Inc / One stop 1 is on the original BrightView Landscapes, LLC / Senior secured row. FV 2,479 agrees; issuer and instrument both disagree. Review only; not corrected. Published Amberfield Acquisition Co. / One stop 4 is on the original Athenahealth, Inc. / Senior secured row. FV 12,553 agrees; issuer and instrument both disagree. Review only; not corrected.",
+      "field": "instrument_description",
+      "quarters": [
+        "2025-03-31",
+        "2026-06-30"
+      ],
+      "cause": "fund",
+      "action": "left",
+      "suggested_check": "For a context independently anchored to exactly one visible schedule row, compare normalized published instrument against that row instrument; distinguish member-counter suffixes from instrument families and flag One stop versus Senior secured disagreement.",
+      "quote": {
+        "accession": "0001930087-25-000030",
+        "text": "BrightView Landscapes, LLC^(7)(21) Senior secured SF + 2.00 % (h) 6.29 % 04/2029 2,500 2,500 0.1 2,479"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "issuer_name_printed fired on these rows for the issuer discrepancy but does not independently detect wrong instrument family.",
+        "reference": "Selected issuer findings RVQ_BLK_482d4335f7a0 and RVQ_BLK_bdbaa9e27001"
+      },
+      "row_ids": [
+        "ROW-28b3103c240ac403",
+        "ROW-a3373115f1f4291d"
+      ],
+      "evidence": [
+        {
+          "accession": "0001930087-25-000030",
+          "text": "BrightView Landscapes, LLC^(7)(21) Senior secured SF + 2.00 % (h) 6.29 % 04/2029 2,500 2,500 0.1 2,479"
+        },
+        {
+          "accession": "0001930087-26-000099",
+          "text": "Athenahealth, Inc.@^(8)(26) Senior secured SF + 3.25 % (h) 6.89 % 02/2032 12,669 12,541 0.3 12,553"
+        }
+      ]
+    }
+  ],
+  "orchestrator_requests": [],
+  "not_done": [
+    "No repairs, dispositions, ledger updates, rebuilds, tests, network calls or fund acceptance performed.",
+    "Review covers only selected previously unreviewed identity-rule findings in rgA1; does not assert whole-fund data correctness.",
+    "Proposed mechanisms have not been implemented or tested. Root-cause attribution of whole-company mismatches to filer member labels versus extraction mapping remains to be diagnosed before repair.",
+    "No broader population outside these selected rule findings was searched for recurrence."
+  ],
+  "counts": {
+    "target_findings": 15,
+    "confirmed_error": 15,
+    "false_alarm": 0,
+    "source_ambiguity": 0,
+    "insufficient_evidence": 0,
+    "affected_rows": 38,
+    "reviewed_rows": 38,
+    "distinct_rows": 38,
+    "observations": 1
+  },
+  "population_artifact": "scratch/fund_sandbox/rgA1/output/shadow/page_rule_findings.csv",
+  "diagnostics": "scratch/2026-10-21_review_queue/0001930087/source_population.json",
+  "prior_history_read": [
+    "docs/investigations/v05_decision_log.md D-060 and D-064; no standalone 0001930087.md exists"
+  ]
+}
