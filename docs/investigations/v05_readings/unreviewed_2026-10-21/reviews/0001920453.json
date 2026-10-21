@@ -1,0 +1,259 @@
+{
+  "reviewer_id": "/root/remaining_fidelityfund_check_sol",
+  "report_digest": "be7cdaa1fd32d7d3fa3c4b9002b8e4a8bda95c4338ff230179be5a0abc88cde4",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_110702187f0d",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-bc3377e14adb3c96: Advertising\ufeff MMGY Global LLC -> MMGY Global LLC; ROW-e6a34a1516854fc9: BCub Financing Intermediate, LLC -> Cub Financing Intermediate, LLC. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-108923",
+          "text": "MMGY Global LLC (j)(m)(n)(o) Term Loan SOFR + 5.50 % 9.80 % 4/25/2029 8,052,871 $ 7,919,784 $ 8,004,554"
+        },
+        {
+          "accession": "0000950170-25-108923",
+          "text": "Cub Financing Intermediate, LLC (f)(l)(m) Delayed Draw Term Loan - - 6/28/2030 - ( 22,665 ) -"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_15ec470b3252",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-524f21275682988b: Application Cytracom LLC -> Cytracom LLC; ROW-03fb999f8e624e9f: Perimeter Solutions Group, LLC -> Principal Lighting Group Holdings, LLC. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-119488",
+          "text": "Cytracom LLC (i)(l)(q) Term Loan SOFR + 6.00 % 9.72 % 6/28/2027 12,428,217 12,360,293 12,353,648"
+        },
+        {
+          "accession": "0001193125-26-119488",
+          "text": "Principal Lighting Group Holdings, LLC (f)(i)(l) Revolving Credit Facility - - 11/4/2030 - ( 39,724 ) ( 9,805 )"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_183a54a8e387",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-207188b34c620a3b: Infusion Services Management LLC -> AB Centers Acquisition Corporation. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-035353",
+          "text": "AB Centers Acquisition Corporation (f)(i)(l) Delayed Draw Term Loan SOFR + 6.00 % 11.46 % 9/6/2028 3,602,586 3,414,009 3,602,586"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_58f91ac9fe46",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-886d5cf825463e76: TRXS Enterprises, LLC Senior -> RXS Enterprises LLC; ROW-f1495af33a8433b4: MFI Group Holdings LLC -> Midas Foods International, LLC; ROW-eb27c0045415d3ce: TRXS Enterprises, LLC -> RXS Enterprises LLC; ROW-bb71e75ba9ec2e5c: MFI Group Holdings LLC -> Midas Foods International, LLC; ROW-1e3f9cbe1d6e05e5: Quick Roofing Acquisition, LLC -> Quick Roofing Topco, LLC. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-125469",
+          "text": "RXS Enterprises LLC (l)(o) Senior Preferred Units 119,927 119,927 119,927"
+        },
+        {
+          "accession": "0000950170-24-125469",
+          "text": "Midas Foods International, LLC (f)(i)(l) Revolving Credit Facility - - 4/30/2029 - ( 36,980 ) ( 16,102 )"
+        },
+        {
+          "accession": "0000950170-24-125469",
+          "text": "RXS Enterprises LLC (l)(o) Preferred Units 74,735 401,494 424,492"
+        },
+        {
+          "accession": "0000950170-24-125469",
+          "text": "Midas Foods International, LLC (i)(l) Term Loan SOFR + 6.00 % 10.85 % 4/30/2029 4,015,325 3,938,724 3,983,202"
+        },
+        {
+          "accession": "0000950170-24-125469",
+          "text": "Quick Roofing Topco, LLC (l)(o) Class A Interest 426,230 426,230 664,918"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_5b095bea5165",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-2d68077a2ee4bbec: KUEGH Corp -> KUEHG Corp. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-063077",
+          "text": "KUEHG Corp (h)(k)(l) Term Loan SOFR + 5.00 % 10.39 % 6/12/2030 7,500,000 7,133,819 7,503,525"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_676d4aeae5de",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-3735f0f2fea7e518: RXS Enterprises LLC Senior -> RXS Enterprises LLC. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-070240",
+          "text": "RXS Enterprises LLC (m)(q) Senior Preferred Units 119,927 119,927 119,927"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6e037a8fcd68",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-5016188cab010066: Roofing Acquisition, LLC -> Roofing Services Solutions LLC; ROW-4be3158e71e24b1f: Quick Solid Ground Solutions Acquisitions Inc -> Solid Ground Solutions Acquisitions Inc; ROW-1a70f20a08c0579e: Roofing Acquisition, LLC -> Roofing Services Solutions LLC; ROW-f0a114295c994137: Roofing Acquisition, LLC -> Roofing Services Solutions LLC. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-346851",
+          "text": "Roofing Services Solutions LLC (i)(l) Delayed Draw Term Loan SOFR + 6.75 % ( 0.50 % PIK) 10.48 % 11/27/2029 10,830,753 10,719,634 9,942,631"
+        },
+        {
+          "accession": "0001193125-26-346851",
+          "text": "Solid Ground Solutions Acquisitions Inc (i)(l) Term Loan SOFR + 5.00 % 8.64 % 5/6/2029 5,748,891 5,685,257 5,748,891"
+        },
+        {
+          "accession": "0001193125-26-346851",
+          "text": "Roofing Services Solutions LLC (f)(i)(l) Revolving Credit Facility SOFR + 6.25 % 9.96 % 11/27/2029 4,013,658 3,955,487 3,564,858"
+        },
+        {
+          "accession": "0001193125-26-346851",
+          "text": "Roofing Services Solutions LLC (i)(l)(q)(r) Term Loan SOFR + 6.75 % ( 0.50 % PIK) 10.42 % 11/27/2029 17,986,007 $ 17,795,080 $ 16,511,154"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_bceee5640467",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-ec547330c898e3e3: Conair Holdings LLC -> Door Pro Buyer, LLC; ROW-b18834f20a00396d: Mcafe Corp -> McAfee Corp; ROW-0324e5aa2a6fe0c3: Conair Holdings LLC -> Door Pro Buyer, LLC. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-097000",
+          "text": "Door Pro Buyer, LLC (f)(i)(l) Delayed Draw Term Loan - - 11/2/2029 - ( 113,716 ) ( 295,577 )"
+        },
+        {
+          "accession": "0000950170-24-097000",
+          "text": "McAfee Corp (h)(k)(l)(n) Term Loan SOFR + 3.25 % 8.58 % 3/1/2029 4,987,310 4,981,076 4,975,639"
+        },
+        {
+          "accession": "0000950170-24-097000",
+          "text": "Door Pro Buyer, LLC (i)(l) Term Loan SOFR + 6.50 % 11.93 % 11/2/2029 12,507,660 12,219,042 12,144,938"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_cd361ada769f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-99a878a0afb3862c: Brand Industrial Services Inc America Interco, LLC -> Brand Industrial Services Inc; ROW-0c7bf0b5f0f59a7b: Peraton Corp Centers Acquisition Corporation -> Peraton Corp; ROW-0dd1d44459af5a7d: AB Centers Acquisition Corporation Trailer Rental Group, LLC -> AB Centers Acquisition Corporation; ROW-9ab4da73b4602ba7: Acproducts Holdings Inc Group, Inc -> Acproducts Holdings Inc; ROW-aad37e6976b00fd2: Infusion Services Management LLC -> AB Centers Acquisition Corporation; ROW-9feba727549f8798: Hunter Douglas Inc Holdings, LLC -> Hunter Douglas Inc; ROW-5f8d1aa6612e718a: Gainwell Acquisition Corp Parent Co Inc -> Gainwell Acquisition Corp; ROW-e1edf0197f82a0b6: Spin Holdco Inc Medical US Buyer, LLC -> Spin Holdco Inc; ROW-70272fba0a537ae9: Mcafe Corp -> Mcafee Corp; ROW-a2af30a16d8e9d38: Dcert Buyer Inc Merger Sub LLC -> Dcert Buyer Inc; ROW-5ec4250c2d761c52: Altice France Sa Centers Acquisition Corporation -> Altice France Sa; ROW-9bb8518bd5637c02: Finastra Usa Inc WQS Buyer, LLC -> Finastra USA Inc. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Brand Industrial Services Inc (h)(k)(l)(m) Term Loan SOFR + 5.50 % 10.81 % 8/1/2030 4,987,469 4,991,656 5,004,376"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Peraton Corp (h)(j)(l)(m) Term Loan SOFR + 3.75 % 9.18 % 2/1/2028 4,986,868 4,991,708 4,977,542"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "AB Centers Acquisition Corporation (j)(l) Term Loan SOFR + 6.00 % 11.43 % 9/6/2028 2,566,810 2,501,185 2,566,810"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Acproducts Holdings Inc (h)(k)(l)(m) Term Loan SOFR + 4.25 % 9.81 % 5/17/2028 997,436 871,423 907,048"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "AB Centers Acquisition Corporation (f)(i)(l) Delayed Draw Term Loan SOFR + 6.00 % 11.43 % 9/6/2028 7,824,310 7,591,582 7,824,310"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Hunter Douglas Inc (h)(k)(l)(m) Term Loan SOFR + 3.50 % 8.82 % 2/25/2029 4,987,310 4,957,797 4,921,078"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Gainwell Acquisition Corp (h)(j)(l)(m) Term Loan SOFR + 4.00 % 9.41 % 10/1/2027 4,987,113 4,928,399 4,760,200"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Spin Holdco Inc (h)(j)(l)(m) Term Loan SOFR + 4.00 % 9.59 % 3/4/2028 4,987,147 4,430,893 4,599,097"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Mcafee Corp (h)(k)(l)(m) Term Loan SOFR + 3.75 % 9.18 % 3/1/2029 4,987,310 4,981,480 4,971,400"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Dcert Buyer Inc (h)(l)(m) Term Loan SOFR + 4.00 % 9.33 % 10/16/2026 4,987,013 4,975,725 4,959,634"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Altice France Sa (h)(l)(m) Term Loan SOFR + 5.50 % 10.81 % 8/15/2028 4,987,437 4,596,208 3,943,217"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Finastra USA Inc (i)(l)(m) Term Loan SOFR + 7.25 % 12.46 % 9/13/2029 10,896,399 10,693,732 10,896,399"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e3a2f3c0a37d",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-62e2dd66ca034f14: RXS Enterprises LLC Senior -> RXS Enterprises LLC. The original inline rows show substantive printed-name defects: surplus name/heading/instrument words, missing/transposed letters, or stale member labels. Matching numeric facts do not excuse those display errors. Large member/printed conflicts establish a label discrepancy without establishing distinct economic borrowers. Source-linked corrections and bounded parsing repair are suitable proposals; position merging would be unsupported.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-041963",
+          "text": "RXS Enterprises LLC (m)(q) Senior Preferred Units 119,927 119,927 119,927"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_fc1b80e50d2e",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt the rule population from rgA3 shadow CSV and holdings parquet; verified every listed instant in original XML and its exact inline HTML row, cost/FV facts and immediate neighbors. ROW-e6bdb4ef6606db3e: Cifc Fdg Ltd -> CIFC Funding Ltd. Fdg is a conventional shortened Funding label, with CIFC and Ltd preserved; capitalization is benign. Exact context, CLO type, 250,000 cost and 250,131 FV tie to the visible CIFC Funding row. This supports a narrow proposed false-alarm disposition, not an implemented exemption.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-214226",
+          "text": "CIFC Funding Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 10.92 % 7/21/2038 250,000 $ 250,000 $ 250,131"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "instrument-type-read-from-stale-member-text",
+      "outcome": "supported",
+      "rationale": "Exact source context for ROW-5016188cab010066 attaches 10,719,634 cost and 9,942,631 FV to visible Delayed Draw Term Loan while output says Term Loan. Immediate ordinary term loan (16,511,154 FV) and revolver (3,564,858 FV) have separate rows/contexts. The proposed comparison of an identified Type cell to normalized output would catch this substitution while preserving distinct positions; it must require an exact context and mapped column, as stated. It is a proposed detector, with no claim of existing coverage or measured prevalence. The 0.50% PIK is schedule terms only.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-346851",
+          "text": "Roofing Services Solutions LLC (i)(l) Delayed Draw Term Loan SOFR + 6.75 % ( 0.50 % PIK) 10.48 % 11/27/2029 10,830,753 10,719,634 9,942,631"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "scope": "Selected findings only; no disposition, repair, acceptance or complete correctness certification.",
+  "verification_notes": [
+    "Reconstructed all 33 flagged rows, 11 current-period XML instants and original HTML contexts; inspected immediate neighbors including headings/subtotals. Original comparative rows were not substituted.",
+    "Independently verified all 15 additional claimed unflagged rows against original inline contexts, output fields and source rows; these are narrow neighbor checks rather than a random or full-fund census.",
+    "32 display defects across 10 findings; one benign Funding abbreviation finding. Spelling errors remain errors despite matching economics.",
+    "Prior income identity remains outside selection; earlier generic casing observation does not cover these missing-letter and stale-name errors. No additional excluded findings claimed.",
+    "No wider instrument/name census, external legal-entity verification, full fund metrics, source downloads, tests or builds performed."
+  ]
+}

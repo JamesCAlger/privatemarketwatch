@@ -1,0 +1,1202 @@
+{
+  "cik": "0001920453",
+  "label": "rgA3",
+  "investigator_id": "/root/remaining_fidelityfund_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_110702187f0d",
+    "RVQ_BLK_15ec470b3252",
+    "RVQ_BLK_183a54a8e387",
+    "RVQ_BLK_58f91ac9fe46",
+    "RVQ_BLK_5b095bea5165",
+    "RVQ_BLK_676d4aeae5de",
+    "RVQ_BLK_6e037a8fcd68",
+    "RVQ_BLK_bceee5640467",
+    "RVQ_BLK_cd361ada769f",
+    "RVQ_BLK_e3a2f3c0a37d",
+    "RVQ_BLK_fc1b80e50d2e"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_110702187f0d",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-bc3377e14adb3c96",
+          "ROW-e6a34a1516854fc9"
+        ],
+        "reviewed_rows": [
+          "ROW-bc3377e14adb3c96",
+          "ROW-e6a34a1516854fc9"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-108923",
+          "text": "MMGY Global LLC (j)(m)(n)(o) Term Loan SOFR + 5.50 % 9.80 % 4/25/2029 8,052,871 $ 7,919,784 $ 8,004,554"
+        },
+        {
+          "accession": "0000950170-25-108923",
+          "text": "Cub Financing Intermediate, LLC (f)(l)(m) Delayed Draw Term Loan - - 6/28/2030 - ( 22,665 ) -"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-bc3377e14adb3c96",
+          "accession": "0000950170-25-108923",
+          "context_id": "C_e294fc2c-cdde-483a-a3d9-d5127fd22e13",
+          "context_period": "2025-06-30",
+          "published_issuer": "Advertising\ufeff MMGY Global LLC",
+          "printed_row": "MMGY Global LLC (j)(m)(n)(o) Term Loan SOFR + 5.50 % 9.80 % 4/25/2029 8,052,871 $ 7,919,784 $ 8,004,554",
+          "conclusion": "confirmed_error",
+          "assessment": "Advertising is the separate industry heading. The member contains a BOM after Advertising and the parser leaves that heading attached to MMGY; printed issuer is MMGY Global LLC.",
+          "source_member": "0001920453 \n \n \n Investments -- non-controlled/ non-affiliate First Lien Debt Advertising\ufeff MMGY Global LLC Type Term Loan Reference Rate and Spread SOFR + 5.50% Interest Rate 9.80% Maturity Date 4/25/2029 \n \n \n \n \n 2025-06-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-e6a34a1516854fc9",
+          "accession": "0000950170-25-108923",
+          "context_id": "C_bdf35f84-d7ee-4bbd-ac65-4452db3fbfc9",
+          "context_period": "2025-06-30",
+          "published_issuer": "BCub Financing Intermediate, LLC",
+          "printed_row": "Cub Financing Intermediate, LLC (f)(l)(m) Delayed Draw Term Loan - - 6/28/2030 - ( 22,665 ) -",
+          "conclusion": "confirmed_error",
+          "assessment": "BCub adds B to the printed Cub issuer. Locate the undrawn delayed draw by its exact context, negative 22,665 cost and dash FV, rather than matching the many rows containing zero.",
+          "source_member": "0001920453 \n \n \n Investments -- non-controlled/ non-affiliate First Lien Debt Diversified Financial Services BCub Financing Intermediate, LLC Type Delayed Draw Term Loan Maturity Date 6/28/2030 \n \n \n \n \n 2025-06-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_15ec470b3252",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-12-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-524f21275682988b",
+          "ROW-03fb999f8e624e9f"
+        ],
+        "reviewed_rows": [
+          "ROW-524f21275682988b",
+          "ROW-03fb999f8e624e9f"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-119488",
+          "text": "Cytracom LLC (i)(l)(q) Term Loan SOFR + 6.00 % 9.72 % 6/28/2027 12,428,217 12,360,293 12,353,648"
+        },
+        {
+          "accession": "0001193125-26-119488",
+          "text": "Principal Lighting Group Holdings, LLC (f)(i)(l) Revolving Credit Facility - - 11/4/2030 - ( 39,724 ) ( 9,805 )"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-524f21275682988b",
+          "accession": "0001193125-26-119488",
+          "context_id": "C_59700edb-184c-41a5-9d4f-8c82d0c8dbdf",
+          "context_period": "2025-12-31",
+          "published_issuer": "Application Cytracom LLC",
+          "printed_row": "Cytracom LLC (i)(l)(q) Term Loan SOFR + 6.00 % 9.72 % 6/28/2027 12,428,217 12,360,293 12,353,648",
+          "conclusion": "confirmed_error",
+          "assessment": "Application is a truncated industry prefix in the member, not part of printed Cytracom LLC. The next delayed-draw position is correctly named Cytracom in output.",
+          "source_member": "0001920453 \n \n \n Investments -- non-controlled/ non-affiliate First Lien Debt Application Cytracom LLC Type Term Loan Reference Rate and Spread SOFR + 6.00% Interest Rate 9.72% Maturity Date 6/28/2027 \n \n \n \n \n 2025-12-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-03fb999f8e624e9f",
+          "accession": "0001193125-26-119488",
+          "context_id": "C_f5aee40c-9a3c-4cb1-860a-95f776f1a918",
+          "context_period": "2025-12-31",
+          "published_issuer": "Perimeter Solutions Group, LLC",
+          "printed_row": "Principal Lighting Group Holdings, LLC (f)(i)(l) Revolving Credit Facility - - 11/4/2030 - ( 39,724 ) ( 9,805 )",
+          "conclusion": "confirmed_error",
+          "assessment": "The Perimeter Solutions member directly labels the Principal Lighting revolver. This is a conflicting display name, not evidence that they are different economic borrowers; cost and FV tie to the printed row.",
+          "source_member": "0001920453 \n \n \n nvestments -- non-controlled/ non-affiliate First Lien Debt Diversified Support Services Perimeter Solutions Group, LLC Type Revolving Credit Facility Maturity Date 11/4/2030 \n \n \n \n \n 2025-12-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_183a54a8e387",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-12-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-207188b34c620a3b"
+        ],
+        "reviewed_rows": [
+          "ROW-207188b34c620a3b"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-035353",
+          "text": "AB Centers Acquisition Corporation (f)(i)(l) Delayed Draw Term Loan SOFR + 6.00 % 11.46 % 9/6/2028 3,602,586 3,414,009 3,602,586"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-207188b34c620a3b",
+          "accession": "0000950170-24-035353",
+          "context_id": "C_12b97eee-42c8-4ad2-ba91-33bb3dc7ca29",
+          "context_period": "2023-12-31",
+          "published_issuer": "Infusion Services Management LLC",
+          "printed_row": "AB Centers Acquisition Corporation (f)(i)(l) Delayed Draw Term Loan SOFR + 6.00 % 11.46 % 9/6/2028 3,602,586 3,414,009 3,602,586",
+          "conclusion": "confirmed_error",
+          "assessment": "The inline financial facts are on the Infusion Services member but visibly label an AB Centers delayed-draw position; use the printed name, not the unrelated member name.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Health Care Facilities Infusion Services Management LLC Delayed Draw Term Loan SOFR+6.00% Interest Rate 11.46% Maturity Date 9/6/2028 \n \n \n \n \n 2023-12-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_58f91ac9fe46",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-09-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-886d5cf825463e76",
+          "ROW-f1495af33a8433b4",
+          "ROW-eb27c0045415d3ce",
+          "ROW-bb71e75ba9ec2e5c",
+          "ROW-1e3f9cbe1d6e05e5"
+        ],
+        "reviewed_rows": [
+          "ROW-886d5cf825463e76",
+          "ROW-f1495af33a8433b4",
+          "ROW-eb27c0045415d3ce",
+          "ROW-bb71e75ba9ec2e5c",
+          "ROW-1e3f9cbe1d6e05e5"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-125469",
+          "text": "RXS Enterprises LLC (l)(o) Senior Preferred Units 119,927 119,927 119,927"
+        },
+        {
+          "accession": "0000950170-24-125469",
+          "text": "Midas Foods International, LLC (f)(i)(l) Revolving Credit Facility - - 4/30/2029 - ( 36,980 ) ( 16,102 )"
+        },
+        {
+          "accession": "0000950170-24-125469",
+          "text": "RXS Enterprises LLC (l)(o) Preferred Units 74,735 401,494 424,492"
+        },
+        {
+          "accession": "0000950170-24-125469",
+          "text": "Midas Foods International, LLC (i)(l) Term Loan SOFR + 6.00 % 10.85 % 4/30/2029 4,015,325 3,938,724 3,983,202"
+        },
+        {
+          "accession": "0000950170-24-125469",
+          "text": "Quick Roofing Topco, LLC (l)(o) Class A Interest 426,230 426,230 664,918"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-886d5cf825463e76",
+          "accession": "0000950170-24-125469",
+          "context_id": "C_50c623b8-74b7-4010-9283-cd1078791c6e",
+          "context_period": "2024-09-30",
+          "published_issuer": "TRXS Enterprises, LLC Senior",
+          "printed_row": "RXS Enterprises LLC (l)(o) Senior Preferred Units 119,927 119,927 119,927",
+          "conclusion": "confirmed_error",
+          "assessment": "TRXS adds T to printed RXS and the published issuer also consumes Senior from the separate instrument column.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate Equity Health Care Technology TRXS Enterprises, LLC Senior Preferred Units \n \n \n \n \n 2024-09-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-f1495af33a8433b4",
+          "accession": "0000950170-24-125469",
+          "context_id": "C_12318a87-3c3e-4b2a-8d89-08d8af07c7a8",
+          "context_period": "2024-09-30",
+          "published_issuer": "MFI Group Holdings LLC",
+          "printed_row": "Midas Foods International, LLC (f)(i)(l) Revolving Credit Facility - - 4/30/2029 - ( 36,980 ) ( 16,102 )",
+          "conclusion": "confirmed_error",
+          "assessment": "MFI Group Holdings is the member name; the same context is printed as Midas Foods International. Not a standard abbreviation equivalence; the error is the displayed issuer, with no inference about legal ownership.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Food Distributors MFI Group Holdings LLC Revolving Credit Facility Maturity Date 4/30/2029 \n \n \n \n \n 2024-09-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-eb27c0045415d3ce",
+          "accession": "0000950170-24-125469",
+          "context_id": "C_19a1c6e1-9694-4884-b243-183d0931e268",
+          "context_period": "2024-09-30",
+          "published_issuer": "TRXS Enterprises, LLC",
+          "printed_row": "RXS Enterprises LLC (l)(o) Preferred Units 74,735 401,494 424,492",
+          "conclusion": "confirmed_error",
+          "assessment": "TRXS adds T to printed RXS. Financial facts and inline context match the preferred-unit row, not a different row with similar value.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate Equity Health Care Technology TRXS Enterprises, LLC Preferred Units \n \n \n \n \n 2024-09-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-bb71e75ba9ec2e5c",
+          "accession": "0000950170-24-125469",
+          "context_id": "C_4946a66d-94a9-402f-bd52-99f595d3ddf1",
+          "context_period": "2024-09-30",
+          "published_issuer": "MFI Group Holdings LLC",
+          "printed_row": "Midas Foods International, LLC (i)(l) Term Loan SOFR + 6.00 % 10.85 % 4/30/2029 4,015,325 3,938,724 3,983,202",
+          "conclusion": "confirmed_error",
+          "assessment": "MFI Group Holdings is the member name; the same context is printed as Midas Foods International. The neighboring delayed draw is correctly named Midas in the published data, supporting a row-specific stale member label.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Food Distributors MFI Group Holdings LLC Term Loan SOFR+6.00% Interest Rate 10.85% Maturity Date 4/30/2029 \n \n \n \n \n 2024-09-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-1e3f9cbe1d6e05e5",
+          "accession": "0000950170-24-125469",
+          "context_id": "C_36d24e4a-2c95-476f-8db1-8265ccdbb006",
+          "context_period": "2024-09-30",
+          "published_issuer": "Quick Roofing Acquisition, LLC",
+          "printed_row": "Quick Roofing Topco, LLC (l)(o) Class A Interest 426,230 426,230 664,918",
+          "conclusion": "confirmed_error",
+          "assessment": "The member says Quick Roofing Acquisition while the printed equity issuer is Quick Roofing Topco. Preserve the Class A Interest position separately from debt positions; do not infer economic identity or merge.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate Equity Specialized Consumer Services Quick Roofing Acquisition, LLC Class A Interest \n \n \n \n \n 2024-09-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_5b095bea5165",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-09-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-2d68077a2ee4bbec"
+        ],
+        "reviewed_rows": [
+          "ROW-2d68077a2ee4bbec"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-23-063077",
+          "text": "KUEHG Corp (h)(k)(l) Term Loan SOFR + 5.00 % 10.39 % 6/12/2030 7,500,000 7,133,819 7,503,525"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-2d68077a2ee4bbec",
+          "accession": "0000950170-23-063077",
+          "context_id": "C_238bc2c1-161b-4161-9d00-9739398ff3fa",
+          "context_period": "2023-09-30",
+          "published_issuer": "KUEGH Corp",
+          "printed_row": "KUEHG Corp (h)(k)(l) Term Loan SOFR + 5.00 % 10.39 % 6/12/2030 7,500,000 7,133,819 7,503,525",
+          "conclusion": "confirmed_error",
+          "assessment": "KUEGH transposes the H and G of printed KUEHG; a spelling defect, not a harmless legal-form abbreviation.",
+          "source_member": "0001920453 \n \n \n Investments, Investments - non-controlled / non-affiliate, First Lien Debt, Education Services, KUEGH Corp, Term Loan, SOFR+5.00%, Interest Rate 10.39%, Maturity Date 6/12/2030 \n \n \n \n \n 2023-09-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_676d4aeae5de",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-3735f0f2fea7e518"
+        ],
+        "reviewed_rows": [
+          "ROW-3735f0f2fea7e518"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-070240",
+          "text": "RXS Enterprises LLC (m)(q) Senior Preferred Units 119,927 119,927 119,927"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-3735f0f2fea7e518",
+          "accession": "0000950170-25-070240",
+          "context_id": "C_c76c9cd1-3816-43a3-9df7-bcfeda7158ee",
+          "context_period": "2025-03-31",
+          "published_issuer": "RXS Enterprises LLC Senior",
+          "printed_row": "RXS Enterprises LLC (m)(q) Senior Preferred Units 119,927 119,927 119,927",
+          "conclusion": "confirmed_error",
+          "assessment": "Senior belongs to the separate Senior Preferred Units instrument; it is not part of the printed RXS issuer. Both current and comparative schedules were encountered and distinguished by inline context; the flagged context is 2025-03-31.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate Equity Health Care Technology RXS Enterprises LLC Senior Preferred Units \n \n \n \n \n 2025-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_6e037a8fcd68",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2026-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-5016188cab010066",
+          "ROW-4be3158e71e24b1f",
+          "ROW-1a70f20a08c0579e",
+          "ROW-f0a114295c994137"
+        ],
+        "reviewed_rows": [
+          "ROW-5016188cab010066",
+          "ROW-4be3158e71e24b1f",
+          "ROW-1a70f20a08c0579e",
+          "ROW-f0a114295c994137"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-346851",
+          "text": "Roofing Services Solutions LLC (i)(l) Delayed Draw Term Loan SOFR + 6.75 % ( 0.50 % PIK) 10.48 % 11/27/2029 10,830,753 10,719,634 9,942,631"
+        },
+        {
+          "accession": "0001193125-26-346851",
+          "text": "Solid Ground Solutions Acquisitions Inc (i)(l) Term Loan SOFR + 5.00 % 8.64 % 5/6/2029 5,748,891 5,685,257 5,748,891"
+        },
+        {
+          "accession": "0001193125-26-346851",
+          "text": "Roofing Services Solutions LLC (f)(i)(l) Revolving Credit Facility SOFR + 6.25 % 9.96 % 11/27/2029 4,013,658 3,955,487 3,564,858"
+        },
+        {
+          "accession": "0001193125-26-346851",
+          "text": "Roofing Services Solutions LLC (i)(l)(q)(r) Term Loan SOFR + 6.75 % ( 0.50 % PIK) 10.42 % 11/27/2029 17,986,007 $ 17,795,080 $ 16,511,154"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-5016188cab010066",
+          "accession": "0001193125-26-346851",
+          "context_id": "C_764435e7-4729-43e5-a01a-d8589058011e",
+          "context_period": "2026-06-30",
+          "published_issuer": "Roofing Acquisition, LLC",
+          "printed_row": "Roofing Services Solutions LLC (i)(l) Delayed Draw Term Loan SOFR + 6.75 % ( 0.50 % PIK) 10.48 % 11/27/2029 10,830,753 10,719,634 9,942,631",
+          "conclusion": "confirmed_error",
+          "assessment": "The member calls the issuer Roofing Acquisition and instrument Term Loan; the exact inline row prints Roofing Services Solutions and Delayed Draw Term Loan. The name conflict is confirmed and the instrument mismatch is separately observed.",
+          "source_member": "0001920453 \n \n \n Investments -- non-controlled/ non-affiliate First Lien Debt Specialized Consumer Services Roofing Acquisition, LLC Type Term Loan Reference Rate and Spread SOFR + 6.75% (0.50% PIK) Interest Rate 10.48% Maturity Date 11/27/2029 \n \n \n \n \n 2026-06-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-4be3158e71e24b1f",
+          "accession": "0001193125-26-346851",
+          "context_id": "C_f7c3b4a8-62d7-4593-9cb4-bfbfcde960bd",
+          "context_period": "2026-06-30",
+          "published_issuer": "Quick Solid Ground Solutions Acquisitions Inc",
+          "printed_row": "Solid Ground Solutions Acquisitions Inc (i)(l) Term Loan SOFR + 5.00 % 8.64 % 5/6/2029 5,748,891 5,685,257 5,748,891",
+          "conclusion": "confirmed_error",
+          "assessment": "Quick is a surplus prefix in the member; the printed issuer is Solid Ground Solutions Acquisitions Inc. Its adjacent delayed-draw position publishes the clean name.",
+          "source_member": "0001920453 \n \n \n Investments -- non-controlled/ non-affiliate First Lien Debt Specialized Consumer Services Quick Solid Ground Solutions Acquisitions Inc Type Term Loan Reference Rate and Spread SOFR + 5.00% Interest Rate 8.64% Maturity Date 5/6/2029 \n \n \n \n \n 2026-06-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-1a70f20a08c0579e",
+          "accession": "0001193125-26-346851",
+          "context_id": "C_2f85f12e-b2d9-442f-add2-ba7887e76e2c",
+          "context_period": "2026-06-30",
+          "published_issuer": "Roofing Acquisition, LLC",
+          "printed_row": "Roofing Services Solutions LLC (f)(i)(l) Revolving Credit Facility SOFR + 6.25 % 9.96 % 11/27/2029 4,013,658 3,955,487 3,564,858",
+          "conclusion": "confirmed_error",
+          "assessment": "The member calls the issuer Roofing Acquisition; the inline revolver is printed Roofing Services Solutions. Do not merge the revolver with either neighboring term-loan position.",
+          "source_member": "0001920453 \n \n \n Investments -- non-controlled/ non-affiliate First Lien Debt Specialized Consumer Services Roofing Acquisition, LLC Type Revolving Credit Facility Reference Rate and Spread SOFR + 6.25% Interest Rate 9.96% Maturity Date 11/27/2029 \n \n \n \n \n 2026-06-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-f0a114295c994137",
+          "accession": "0001193125-26-346851",
+          "context_id": "C_25875a7b-101d-4ca4-9a7c-49d63a249da0",
+          "context_period": "2026-06-30",
+          "published_issuer": "Roofing Acquisition, LLC",
+          "printed_row": "Roofing Services Solutions LLC (i)(l)(q)(r) Term Loan SOFR + 6.75 % ( 0.50 % PIK) 10.42 % 11/27/2029 17,986,007 $ 17,795,080 $ 16,511,154",
+          "conclusion": "confirmed_error",
+          "assessment": "The member calls the issuer Roofing Acquisition; the inline term loan is printed Roofing Services Solutions. Separate from the adjacent delayed draw despite shared maturity and PIK terms.",
+          "source_member": "0001920453 \n \n \n Investments -- non-controlled/ non-affiliate First Lien Debt Specialized Consumer Services Roofing Acquisition, LLC Type Term Loan Reference Rate and Spread SOFR + 6.75% (0.50% PIK) Interest Rate 10.42% Maturity Date 11/27/2029 \n \n \n \n \n 2026-06-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_bceee5640467",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-ec547330c898e3e3",
+          "ROW-b18834f20a00396d",
+          "ROW-0324e5aa2a6fe0c3"
+        ],
+        "reviewed_rows": [
+          "ROW-ec547330c898e3e3",
+          "ROW-b18834f20a00396d",
+          "ROW-0324e5aa2a6fe0c3"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-097000",
+          "text": "Door Pro Buyer, LLC (f)(i)(l) Delayed Draw Term Loan - - 11/2/2029 - ( 113,716 ) ( 295,577 )"
+        },
+        {
+          "accession": "0000950170-24-097000",
+          "text": "McAfee Corp (h)(k)(l)(n) Term Loan SOFR + 3.25 % 8.58 % 3/1/2029 4,987,310 4,981,076 4,975,639"
+        },
+        {
+          "accession": "0000950170-24-097000",
+          "text": "Door Pro Buyer, LLC (i)(l) Term Loan SOFR + 6.50 % 11.93 % 11/2/2029 12,507,660 12,219,042 12,144,938"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-ec547330c898e3e3",
+          "accession": "0000950170-24-097000",
+          "context_id": "C_5c9f3ad4-c6af-4b36-98b8-afcf1acc8965",
+          "context_period": "2024-06-30",
+          "published_issuer": "Conair Holdings LLC",
+          "printed_row": "Door Pro Buyer, LLC (f)(i)(l) Delayed Draw Term Loan - - 11/2/2029 - ( 113,716 ) ( 295,577 )",
+          "conclusion": "confirmed_error",
+          "assessment": "The Conair member is attached directly to the printed Door Pro delayed draw; cost and negative FV agree. This is not evidence that Conair and Door Pro are the same economic borrower.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Personal Care Products Conair Holdings LLC Delayed Draw Term Loan \n \n \n \n \n 2024-06-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-b18834f20a00396d",
+          "accession": "0000950170-24-097000",
+          "context_id": "C_86ca712c-7ecd-4315-be7d-74a32a7e802c",
+          "context_period": "2024-06-30",
+          "published_issuer": "Mcafe Corp",
+          "printed_row": "McAfee Corp (h)(k)(l)(n) Term Loan SOFR + 3.25 % 8.58 % 3/1/2029 4,987,310 4,981,076 4,975,639",
+          "conclusion": "confirmed_error",
+          "assessment": "Mcafe omits the second e in printed McAfee; casing is benign but the missing letter is a display spelling defect.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt System Software Mcafe Corp Term Loan SOFR+3.25% Interest Rate 8.58% Maturity Date 3/1/2029 \n \n \n \n \n 2024-06-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-0324e5aa2a6fe0c3",
+          "accession": "0000950170-24-097000",
+          "context_id": "C_e536adf8-ecd5-4ec8-860c-737af2a301f9",
+          "context_period": "2024-06-30",
+          "published_issuer": "Conair Holdings LLC",
+          "printed_row": "Door Pro Buyer, LLC (i)(l) Term Loan SOFR + 6.50 % 11.93 % 11/2/2029 12,507,660 12,219,042 12,144,938",
+          "conclusion": "confirmed_error",
+          "assessment": "The Conair member is attached to a Door Pro term loan. Tagged rate 11.93, spread 6.50 and maturity 2029-11-02 agree with the page, despite the stale member saying 9.21, 3.75 and 2028-05-17. Published numeric fields follow facts correctly; published issuer does not.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Personal Care Products Conair Holdings LLC Term Loan SOFR+3.75% Interest Rate 9.21% Maturity Date 5/17/2028 \n \n \n \n \n 2024-06-30",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_cd361ada769f",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-99a878a0afb3862c",
+          "ROW-0c7bf0b5f0f59a7b",
+          "ROW-0dd1d44459af5a7d",
+          "ROW-9ab4da73b4602ba7",
+          "ROW-aad37e6976b00fd2",
+          "ROW-9feba727549f8798",
+          "ROW-5f8d1aa6612e718a",
+          "ROW-e1edf0197f82a0b6",
+          "ROW-70272fba0a537ae9",
+          "ROW-a2af30a16d8e9d38",
+          "ROW-5ec4250c2d761c52",
+          "ROW-9bb8518bd5637c02"
+        ],
+        "reviewed_rows": [
+          "ROW-99a878a0afb3862c",
+          "ROW-0c7bf0b5f0f59a7b",
+          "ROW-0dd1d44459af5a7d",
+          "ROW-9ab4da73b4602ba7",
+          "ROW-aad37e6976b00fd2",
+          "ROW-9feba727549f8798",
+          "ROW-5f8d1aa6612e718a",
+          "ROW-e1edf0197f82a0b6",
+          "ROW-70272fba0a537ae9",
+          "ROW-a2af30a16d8e9d38",
+          "ROW-5ec4250c2d761c52",
+          "ROW-9bb8518bd5637c02"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Brand Industrial Services Inc (h)(k)(l)(m) Term Loan SOFR + 5.50 % 10.81 % 8/1/2030 4,987,469 4,991,656 5,004,376"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Peraton Corp (h)(j)(l)(m) Term Loan SOFR + 3.75 % 9.18 % 2/1/2028 4,986,868 4,991,708 4,977,542"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "AB Centers Acquisition Corporation (j)(l) Term Loan SOFR + 6.00 % 11.43 % 9/6/2028 2,566,810 2,501,185 2,566,810"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Acproducts Holdings Inc (h)(k)(l)(m) Term Loan SOFR + 4.25 % 9.81 % 5/17/2028 997,436 871,423 907,048"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "AB Centers Acquisition Corporation (f)(i)(l) Delayed Draw Term Loan SOFR + 6.00 % 11.43 % 9/6/2028 7,824,310 7,591,582 7,824,310"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Hunter Douglas Inc (h)(k)(l)(m) Term Loan SOFR + 3.50 % 8.82 % 2/25/2029 4,987,310 4,957,797 4,921,078"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Gainwell Acquisition Corp (h)(j)(l)(m) Term Loan SOFR + 4.00 % 9.41 % 10/1/2027 4,987,113 4,928,399 4,760,200"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Spin Holdco Inc (h)(j)(l)(m) Term Loan SOFR + 4.00 % 9.59 % 3/4/2028 4,987,147 4,430,893 4,599,097"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Mcafee Corp (h)(k)(l)(m) Term Loan SOFR + 3.75 % 9.18 % 3/1/2029 4,987,310 4,981,480 4,971,400"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Dcert Buyer Inc (h)(l)(m) Term Loan SOFR + 4.00 % 9.33 % 10/16/2026 4,987,013 4,975,725 4,959,634"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Altice France Sa (h)(l)(m) Term Loan SOFR + 5.50 % 10.81 % 8/15/2028 4,987,437 4,596,208 3,943,217"
+        },
+        {
+          "accession": "0000950170-24-057685",
+          "text": "Finastra USA Inc (i)(l)(m) Term Loan SOFR + 7.25 % 12.46 % 9/13/2029 10,896,399 10,693,732 10,896,399"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-99a878a0afb3862c",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_2b3e07fc-cbf2-406e-821e-f2389536be8c",
+          "context_period": "2024-03-31",
+          "published_issuer": "Brand Industrial Services Inc America Interco, LLC",
+          "printed_row": "Brand Industrial Services Inc (h)(k)(l)(m) Term Loan SOFR + 5.50 % 10.81 % 8/1/2030 4,987,469 4,991,656 5,004,376",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Diversified Support Services Brand Industrial Services Inc America Interco, LLC Term Loan SOFR+5.50% Interest Rate 10.81% Maturity Date 8/1/2030 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-0c7bf0b5f0f59a7b",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_74cba4be-8a07-4a9e-a7da-863d6267e1b1",
+          "context_period": "2024-03-31",
+          "published_issuer": "Peraton Corp Centers Acquisition Corporation",
+          "printed_row": "Peraton Corp (h)(j)(l)(m) Term Loan SOFR + 3.75 % 9.18 % 2/1/2028 4,986,868 4,991,708 4,977,542",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Internet Services &amp; Infrastructure Peraton Corp Centers Acquisition Corporation Term Loan SOFR+3.75% Interest Rate 9.18% Maturity Date 2/1/2028 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-0dd1d44459af5a7d",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_c64a4538-aa93-458f-868f-28ddde16afc0",
+          "context_period": "2024-03-31",
+          "published_issuer": "AB Centers Acquisition Corporation Trailer Rental Group, LLC",
+          "printed_row": "AB Centers Acquisition Corporation (j)(l) Term Loan SOFR + 6.00 % 11.43 % 9/6/2028 2,566,810 2,501,185 2,566,810",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Health Care Services AB Centers Acquisition Corporation Trailer Rental Group, LLC Term Loan SOFR+6.00% Interest Rate 11.43% Maturity Date 9/6/2028 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-9ab4da73b4602ba7",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_e85b23cb-c875-48f5-a689-a59d3597df6b",
+          "context_period": "2024-03-31",
+          "published_issuer": "Acproducts Holdings Inc Group, Inc",
+          "printed_row": "Acproducts Holdings Inc (h)(k)(l)(m) Term Loan SOFR + 4.25 % 9.81 % 5/17/2028 997,436 871,423 907,048",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Building Products Acproducts Holdings Inc Group, Inc Term Loan SOFR+4.25% Interest Rate 9.81% Maturity Date 5/17/2028 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-aad37e6976b00fd2",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_ca9f2d47-c3bc-4eef-973c-a6b8f481cbb0",
+          "context_period": "2024-03-31",
+          "published_issuer": "Infusion Services Management LLC",
+          "printed_row": "AB Centers Acquisition Corporation (f)(i)(l) Delayed Draw Term Loan SOFR + 6.00 % 11.43 % 9/6/2028 7,824,310 7,591,582 7,824,310",
+          "conclusion": "confirmed_error",
+          "assessment": "The inline financial facts are on the Infusion Services member but visibly label an AB Centers delayed-draw position; the neighboring AB Centers revolver and term loan establish the row continuation.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Health Care Facilities Infusion Services Management LLC Delayed Draw Term Loan SOFR+6.00% Interest Rate 11.43% Maturity Date 9/6/2028 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-9feba727549f8798",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_8207aa62-77f9-4f93-a893-b25454c18a2a",
+          "context_period": "2024-03-31",
+          "published_issuer": "Hunter Douglas Inc Holdings, LLC",
+          "printed_row": "Hunter Douglas Inc (h)(k)(l)(m) Term Loan SOFR + 3.50 % 8.82 % 2/25/2029 4,987,310 4,957,797 4,921,078",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Building Products Hunter Douglas Inc Holdings, LLC Term Loan SOFR+3.50% Interest Rate 8.82% Maturity Date 2/25/2029 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-5f8d1aa6612e718a",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_6aad31cd-a4cd-4978-9053-0431cc5e7b7a",
+          "context_period": "2024-03-31",
+          "published_issuer": "Gainwell Acquisition Corp Parent Co Inc",
+          "printed_row": "Gainwell Acquisition Corp (h)(j)(l)(m) Term Loan SOFR + 4.00 % 9.41 % 10/1/2027 4,987,113 4,928,399 4,760,200",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Health Care Distributors Gainwell Acquisition Corp Parent Co Inc Term Loan SOFR+4.00% Interest Rate 9.41% Maturity Date 10/1/2027 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-e1edf0197f82a0b6",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_7b744559-cdf6-49f0-aca9-d46da279d768",
+          "context_period": "2024-03-31",
+          "published_issuer": "Spin Holdco Inc Medical US Buyer, LLC",
+          "printed_row": "Spin Holdco Inc (h)(j)(l)(m) Term Loan SOFR + 4.00 % 9.59 % 3/4/2028 4,987,147 4,430,893 4,599,097",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Specialized Consumer Services Spin Holdco Inc Medical US Buyer, LLC Term Loan SOFR+4.00% Interest Rate 9.59% Maturity Date 3/4/2028 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-70272fba0a537ae9",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_f710fda0-d239-401f-8229-b3c6e46a89a9",
+          "context_period": "2024-03-31",
+          "published_issuer": "Mcafe Corp",
+          "printed_row": "Mcafee Corp (h)(k)(l)(m) Term Loan SOFR + 3.75 % 9.18 % 3/1/2029 4,987,310 4,981,480 4,971,400",
+          "conclusion": "confirmed_error",
+          "assessment": "Mcafe omits the second e in printed Mcafee; this is a spelling defect, not merely the capitalization vote.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt System Software Mcafe Corp Term Loan SOFR+3.75% Interest Rate 9.18% Maturity Date 3/1/2029 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-a2af30a16d8e9d38",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_9a311d85-da9b-4b8b-bc39-09795e50b761",
+          "context_period": "2024-03-31",
+          "published_issuer": "Dcert Buyer Inc Merger Sub LLC",
+          "printed_row": "Dcert Buyer Inc (h)(l)(m) Term Loan SOFR + 4.00 % 9.33 % 10/16/2026 4,987,013 4,975,725 4,959,634",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Application Software Dcert Buyer Inc Merger Sub LLC Term Loan SOFR+4.00% Interest Rate 9.33% Maturity Date 10/16/2026 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-5ec4250c2d761c52",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_e1de995a-57fd-4bd2-b687-300f02f2eecd",
+          "context_period": "2024-03-31",
+          "published_issuer": "Altice France Sa Centers Acquisition Corporation",
+          "printed_row": "Altice France Sa (h)(l)(m) Term Loan SOFR + 5.50 % 10.81 % 8/15/2028 4,987,437 4,596,208 3,943,217",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Integrated Telecommunication Services Altice France Sa Centers Acquisition Corporation Term Loan SOFR+5.50% Interest Rate 10.81% Maturity Date 8/15/2028 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        },
+        {
+          "row_id": "ROW-9bb8518bd5637c02",
+          "accession": "0000950170-24-057685",
+          "context_id": "C_c6e38532-86a5-4f7a-9802-e3dba440720d",
+          "context_period": "2024-03-31",
+          "published_issuer": "Finastra Usa Inc WQS Buyer, LLC",
+          "printed_row": "Finastra USA Inc (i)(l)(m) Term Loan SOFR + 7.25 % 12.46 % 9/13/2029 10,896,399 10,693,732 10,896,399",
+          "conclusion": "confirmed_error",
+          "assessment": "The raw XML member appends extra corporate-name words to the printed issuer. These words are retained in the published name although the inline row prints only the issuer before its footnotes. A source-member label defect propagates into the published display; this is not a harmless punctuation/casing difference.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate First Lien Debt Application Software Finastra Usa Inc WQS Buyer, LLC Term Loan SOFR+7.25% Interest Rate 12.46% Maturity Date 9/13/2029 \n \n \n \n \n 2024-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_e3a2f3c0a37d",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-12-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-62e2dd66ca034f14"
+        ],
+        "reviewed_rows": [
+          "ROW-62e2dd66ca034f14"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-041963",
+          "text": "RXS Enterprises LLC (m)(q) Senior Preferred Units 119,927 119,927 119,927"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_assessments": [
+        {
+          "row_id": "ROW-62e2dd66ca034f14",
+          "accession": "0000950170-25-041963",
+          "context_id": "C_28a7076b-5fd3-43b0-b7cf-aafb234e1e73",
+          "context_period": "2024-12-31",
+          "published_issuer": "RXS Enterprises LLC Senior",
+          "printed_row": "RXS Enterprises LLC (m)(q) Senior Preferred Units 119,927 119,927 119,927",
+          "conclusion": "confirmed_error",
+          "assessment": "Senior belongs to the separate Senior Preferred Units instrument; it is not part of the printed RXS issuer. The adjacent ordinary preferred units remain a distinct position.",
+          "source_member": "0001920453 \n \n \n Investments Investments - non-controlled / non-affiliate Equity Health Care Technology RXS Enterprises LLC Senior Preferred Units \n \n \n \n \n 2024-12-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Every row here has a substantive display difference beyond those benign normalizations; matching financial values does not excuse the display error."
+      ],
+      "next_action": "Propose context/accession-specific printed issuer corrections for the listed rows; where Senior or a section heading leaked into the issuer, repair the bounded parsing mechanism with false-positive protection. Verify distinct position identities and downstream label/industry impact before a later authorized repair. No repairs or ledger changes performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_fc1b80e50d2e",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2026-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-e6bdb4ef6606db3e"
+        ],
+        "reviewed_rows": [
+          "ROW-e6bdb4ef6606db3e"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-214226",
+          "text": "CIFC Funding Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 10.92 % 7/21/2038 250,000 $ 250,000 $ 250,131"
+        }
+      ],
+      "conclusion": "false_alarm",
+      "row_assessments": [
+        {
+          "row_id": "ROW-e6bdb4ef6606db3e",
+          "accession": "0001193125-26-214226",
+          "context_id": "C_db550faa-8755-4e81-903d-fb082063ffed",
+          "context_period": "2026-03-31",
+          "published_issuer": "Cifc Fdg Ltd",
+          "printed_row": "CIFC Funding Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 7.25 % 10.92 % 7/21/2038 250,000 $ 250,000 $ 250,131",
+          "conclusion": "false_alarm",
+          "assessment": "Cifc Fdg Ltd expands to CIFC Funding Ltd: Fdg is an ordinary Funding abbreviation; capitalization also differs. The acronym CIFC and legal form Ltd are preserved. Numeric facts and CLO instrument agree. No wrong issuer is demonstrated; benign abbreviation, not a spelling-error override.",
+          "source_member": "0001920453 \n \n \n Investments -- non-controlled/ non-affiliate Asset-Backed Securities Specialized Finance Cifc Fdg Ltd Type Collateralized Loan Obligation Reference Rate and Spread SOFR + 7.25% Interest Rate 11.58% Maturity Date 7/21/2038 \n \n \n \n \n 2026-03-31",
+          "numeric_and_neighbor_comparison": "Original row inline context matches the published source context; fair value and cost were checked against that row and its continuation neighbors. Other fields inspected are in source_population.json; this is not a complete correctness certification of the position."
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed the complete rule population from untouched rgA3/output/shadow/page_rule_findings.csv, then joined row_id to private_markets_holdings.parquet; no selected rows were removed.",
+        "Checked exact XML context, instant date and facts against original HTML inline context and visible schedule row. All flagged contexts are current-period instants for this finding; similarly valued comparative and acquisition-note rows were not substituted.",
+        "Compared casing, punctuation and standard abbreviation explanations separately from surplus name words, transpositions and wrong member-to-visible-name mappings. Fdg is a standard Funding abbreviation and does not establish a wrong issuer."
+      ],
+      "next_action": "Propose a source-evidenced benign-abbreviation disposition for this exact finding; retain the full printed label as provenance. No disposition is written or accepted in this review."
+    }
+  ],
+  "observations": [
+    {
+      "observation_key": "instrument-type-read-from-stale-member-text",
+      "what": "2026-06-30 ROW-5016188cab010066 publishes instrument_description Term Loan, while its original inline schedule row prints Delayed Draw Term Loan. Its adjacent ordinary term loan and revolver are separate positions. The 0.50% PIK shown is disclosed schedule terms, not proof of current PIK accrual or stress. Left untouched in this review.",
+      "field": "instrument_description",
+      "quarters": [
+        "2026-06-30"
+      ],
+      "row_ids": [
+        "ROW-5016188cab010066"
+      ],
+      "fair_value_m": 9.942631,
+      "cause": "fund",
+      "action": "left",
+      "suggested_check": "When a schedule Type column is mapped and exact inline context identifies the row, compare normalized published instrument type against that visible cell; flag Term Loan versus Delayed Draw Term Loan while ignoring formatting and preserving each position.",
+      "quote": {
+        "accession": "0001193125-26-346851",
+        "text": "Roofing Services Solutions LLC (i)(l) Delayed Draw Term Loan SOFR + 6.75 % ( 0.50 % PIK) 10.48 % 11/27/2029 10,830,753 10,719,634 9,942,631"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "The selected issuer_name_printed rule fired on this row but does not test the instrument field. A separate context-linked visible Type comparison would detect stale-member type substitutions without treating the neighboring term loan as the same position.",
+        "reference": "Proposal only; no detector implemented or asserted to have fired."
+      }
+    }
+  ],
+  "orchestrator_requests": [],
+  "prior_review_check": {
+    "sources": [
+      "docs/investigations/v05_readings/reports/0001920453.json",
+      "docs/investigations/v05_decision_log.md D-120 and D-179"
+    ],
+    "result": "Existing income_identity exclusion retained. Earlier casing-vote observation is not exact coverage of these 33 substantive name-rule rows. Earlier Conair correction narrative is not complete population coverage of 2024-06-30. Root notified; no additional selected finding excluded."
+  },
+  "coverage_method": "Original HTML rows selected using visible name/value then disambiguated by exact published src_context_id in inline tags; original XML context and facts independently extracted. source_population.json saves all 33 raw context records, facts, printed rows and neighbors. All 11 selected populations are current-period instant contexts; comparative rows encountered were distinguished. neighbors_by_context.json adds 15 unflagged context-linked neighbor comparisons across 10 quarters. Headings/subtotals alone neighbor the sole 2023-09-30 flagged row, so no extra position was checked there.",
+  "neighbor_checks": [
+    {
+      "quarter": "2023-12-31",
+      "accession": "0000950170-24-035353",
+      "row_id": "ROW-5702e9438dee81ee",
+      "context": "C_a361d8ef-005d-4e14-ab14-2cd7eab78a72",
+      "printed": "AB Centers Acquisition Corporation (f)(j)(l) Revolving Credit Facility - - 9/6/2028 - ( 55,910 ) -",
+      "published": {
+        "issuer_name": "AB Centers Acquisition Corporation",
+        "instrument_description": "Revolving Credit Facility",
+        "fair_value": "0.0",
+        "cost": "-55910.0",
+        "principal_amount": "nan",
+        "shares_held": "nan",
+        "interest_rate": "nan",
+        "basis_spread": "nan",
+        "maturity_date": "2028-09-06 00:00:00",
+        "extracted_industry": "None"
+      }
+    },
+    {
+      "quarter": "2023-12-31",
+      "accession": "0000950170-24-035353",
+      "row_id": "ROW-01d60cb6f1706f95",
+      "context": "C_24914ff5-d16d-44d6-bf4b-4685bc13d90c",
+      "printed": "AB Centers Acquisition Corporation (j)(l) Term Loan SOFR + 6.00 % 11.46 % 9/6/2028 2,573,276 2,503,835 2,573,276",
+      "published": {
+        "issuer_name": "AB Centers Acquisition Corporation",
+        "instrument_description": "Term Loan SOFR+6.00%",
+        "fair_value": "2573276.0",
+        "cost": "2503835.0",
+        "principal_amount": "2573276.0",
+        "shares_held": "nan",
+        "interest_rate": "11.459999999999999",
+        "basis_spread": "6.0",
+        "maturity_date": "2028-09-06 00:00:00",
+        "extracted_industry": "Health Care Services"
+      }
+    },
+    {
+      "quarter": "2024-03-31",
+      "accession": "0000950170-24-057685",
+      "row_id": "ROW-5c94aa919d157c0b",
+      "context": "C_b9ff9e24-78de-47aa-af7a-cdc2076306ff",
+      "printed": "Hobbs & Associates, LLC (i)(l) Term Loan SOFR + 6.25 % 11.56 % 4/11/2029 7,175,944 6,984,082 7,175,944",
+      "published": {
+        "issuer_name": "Hobbs & Associates LLC",
+        "instrument_description": "Term Loan SOFR+6.25%",
+        "fair_value": "7175944.0",
+        "cost": "6984082.0",
+        "principal_amount": "7175944.0",
+        "shares_held": "nan",
+        "interest_rate": "11.559999999999999",
+        "basis_spread": "6.25",
+        "maturity_date": "2029-04-11 00:00:00",
+        "extracted_industry": "Diversified Support Services"
+      }
+    },
+    {
+      "quarter": "2024-03-31",
+      "accession": "0000950170-24-057685",
+      "row_id": "ROW-55f601a3cbb71d91",
+      "context": "C_e701dbba-bd0a-4e55-8dec-38e1d514614e",
+      "printed": "Fertility (ITC) Investment Holdco, LLC / Fertility (ITC) Buyer, Inc. (i)(l) Term Loan SOFR + 6.50 % 11.78 % 1/3/2029 9,382,050 9,132,822 9,382,050",
+      "published": {
+        "issuer_name": "Fertility (ITC) Investment Holdco, LLC / Fertility (ITC) Buyer, Inc.",
+        "instrument_description": "Term Loan SOFR+6.50%",
+        "fair_value": "9382050.0",
+        "cost": "9132822.0",
+        "principal_amount": "9382050.0",
+        "shares_held": "nan",
+        "interest_rate": "11.78",
+        "basis_spread": "6.5",
+        "maturity_date": "2029-01-03 00:00:00",
+        "extracted_industry": "Health Care Services"
+      }
+    },
+    {
+      "quarter": "2024-06-30",
+      "accession": "0000950170-24-097000",
+      "row_id": "ROW-a67574f0ba402f19",
+      "context": "C_de5ec859-6c1e-49dc-9f25-414de030825f",
+      "printed": "COP Foundations Acquisitions Inc. (f)(i)(l) Revolving Credit Facility - - 5/6/2029 - ( 31,133 ) ( 32,081 )",
+      "published": {
+        "issuer_name": "COP Foundations Acquisitions Inc.",
+        "instrument_description": "Revolving Credit Facility",
+        "fair_value": "-32081.0",
+        "cost": "-31133.0",
+        "principal_amount": "nan",
+        "shares_held": "nan",
+        "interest_rate": "nan",
+        "basis_spread": "nan",
+        "maturity_date": "2029-05-06 00:00:00",
+        "extracted_industry": "Specialized Consumer Services"
+      }
+    },
+    {
+      "quarter": "2024-09-30",
+      "accession": "0000950170-24-125469",
+      "row_id": "ROW-dab9ae31cbb906d7",
+      "context": "C_fa4ca1aa-3b7c-42c3-b503-f4c01f5353df",
+      "printed": "Midas Foods International, LLC (f)(i)(l) Delayed Draw Term Loan - - 4/30/2029 - ( 111,132 ) ( 48,305 )",
+      "published": {
+        "issuer_name": "Midas Foods International, LLC",
+        "instrument_description": "Delayed Draw Term Loan",
+        "fair_value": "-48305.0",
+        "cost": "-111132.0",
+        "principal_amount": "nan",
+        "shares_held": "nan",
+        "interest_rate": "nan",
+        "basis_spread": "nan",
+        "maturity_date": "2029-04-30 00:00:00",
+        "extracted_industry": "Food Distributors"
+      }
+    },
+    {
+      "quarter": "2024-09-30",
+      "accession": "0000950170-24-125469",
+      "row_id": "ROW-f0b4102fc4c5d61a",
+      "context": "C_b9cf26f1-f09e-46b3-b712-b3d0a092ea01",
+      "printed": "NAM Group Holdings, LLC (o) Class A Units 282,628 282,628 288,280",
+      "published": {
+        "issuer_name": "NAM Group Holdings, LLC",
+        "instrument_description": "Class A Units",
+        "fair_value": "288280.0",
+        "cost": "282628.0",
+        "principal_amount": "nan",
+        "shares_held": "282628.0",
+        "interest_rate": "nan",
+        "basis_spread": "nan",
+        "maturity_date": "NaT",
+        "extracted_industry": "Specialized Consumer Services"
+      }
+    },
+    {
+      "quarter": "2024-12-31",
+      "accession": "0000950170-25-041963",
+      "row_id": "ROW-4f2ecadac99a2b1c",
+      "context": "C_8bf0fa39-015f-4d50-8522-df1849dc486b",
+      "printed": "RXS Enterprises LLC (m)(q) Preferred Units 74,735 401,494 414,029",
+      "published": {
+        "issuer_name": "RXS Enterprises LLC",
+        "instrument_description": "Preferred Units",
+        "fair_value": "414029.0",
+        "cost": "401494.0",
+        "principal_amount": "nan",
+        "shares_held": "74735.0",
+        "interest_rate": "nan",
+        "basis_spread": "nan",
+        "maturity_date": "NaT",
+        "extracted_industry": "Health Care Technology"
+      }
+    },
+    {
+      "quarter": "2025-03-31",
+      "accession": "0000950170-25-070240",
+      "row_id": "ROW-d251bf6d1a3c8026",
+      "context": "C_a72e74e8-f487-45ff-8c09-66b09ab74286",
+      "printed": "RXS Enterprises LLC (m)(q) Preferred Units 74,735 401,494 425,987",
+      "published": {
+        "issuer_name": "RXS Enterprises LLC",
+        "instrument_description": "Preferred Units",
+        "fair_value": "425987.0",
+        "cost": "401494.0",
+        "principal_amount": "nan",
+        "shares_held": "74735.0",
+        "interest_rate": "nan",
+        "basis_spread": "nan",
+        "maturity_date": "NaT",
+        "extracted_industry": "Health Care Technology"
+      }
+    },
+    {
+      "quarter": "2025-06-30",
+      "accession": "0000950170-25-108923",
+      "row_id": "ROW-d3533862a58eed36",
+      "context": "C_1cf5a407-55b0-4578-944b-7a767d1cc725",
+      "printed": "MMGY Global LLC (f)(j)(m) Revolving Credit Facility - - 4/25/2029 - ( 32,157 ) ( 12,266 )",
+      "published": {
+        "issuer_name": "MMGY Global LLC",
+        "instrument_description": "Revolving Credit Facility",
+        "fair_value": "-12266.0",
+        "cost": "-32157.0",
+        "principal_amount": "nan",
+        "shares_held": "nan",
+        "interest_rate": "nan",
+        "basis_spread": "nan",
+        "maturity_date": "2029-04-25 00:00:00",
+        "extracted_industry": "Advertising"
+      }
+    },
+    {
+      "quarter": "2025-06-30",
+      "accession": "0000950170-25-108923",
+      "row_id": "ROW-28ad15aefa80e3d9",
+      "context": "C_5dadd873-58b1-47df-bbac-ded08cd49c9a",
+      "printed": "Cub Financing Intermediate, LLC (l)(m)(n)(o) Term Loan SOFR + 4.75 % 9.05 % 6/28/2030 11,706,893 11,606,512 11,683,479",
+      "published": {
+        "issuer_name": "Cub Financing Intermediate, LLC",
+        "instrument_description": "Term Loan",
+        "fair_value": "11683479.0",
+        "cost": "11606512.0",
+        "principal_amount": "11706893.0",
+        "shares_held": "nan",
+        "interest_rate": "9.049999999999999",
+        "basis_spread": "4.75",
+        "maturity_date": "2030-06-28 00:00:00",
+        "extracted_industry": "Diversified Financial Services"
+      }
+    },
+    {
+      "quarter": "2025-12-31",
+      "accession": "0001193125-26-119488",
+      "row_id": "ROW-198be633cd162f06",
+      "context": "C_721382ec-6160-4926-a442-6dbdb60c224b",
+      "printed": "Atlas AU Bidco Pty Ltd / Atlas US Finco, Inc. (i)(l) Term Loan SOFR + 4.75 % 8.61 % 12/9/2029 26,863,347 26,468,497 26,863,347",
+      "published": {
+        "issuer_name": "Atlas AU Bidco Pty Ltd / Atlas US Finco, Inc.",
+        "instrument_description": "Term Loan",
+        "fair_value": "26863347.0",
+        "cost": "26468497.0",
+        "principal_amount": "26863347.0",
+        "shares_held": "nan",
+        "interest_rate": "8.61",
+        "basis_spread": "4.75",
+        "maturity_date": "2029-12-09 00:00:00",
+        "extracted_industry": "Application Software"
+      }
+    },
+    {
+      "quarter": "2025-12-31",
+      "accession": "0001193125-26-119488",
+      "row_id": "ROW-56d00b3e9e632ce6",
+      "context": "C_a850179d-08b4-4eba-99c8-2889d02d8a77",
+      "printed": "Cytracom LLC (f)(i)(l) Delayed Draw Term Loan SOFR + 6.00 % 9.72 % 6/28/2027 2,390,700 2,373,956 2,375,079",
+      "published": {
+        "issuer_name": "Cytracom LLC",
+        "instrument_description": "Delayed Draw Term Loan",
+        "fair_value": "2375079.0",
+        "cost": "2373956.0",
+        "principal_amount": "2390700.0",
+        "shares_held": "nan",
+        "interest_rate": "9.719999999999999",
+        "basis_spread": "6.0",
+        "maturity_date": "2027-06-28 00:00:00",
+        "extracted_industry": "Application Software"
+      }
+    },
+    {
+      "quarter": "2026-03-31",
+      "accession": "0001193125-26-214226",
+      "row_id": "ROW-9cff39447187059b",
+      "context": "C_31abbaea-a6ca-401e-bba9-18b385923bba",
+      "printed": "Flatiron RR CLO 30 Ltd (g)(l)(m)(w) Collateralized Loan Obligation SOFR + 5.25 % 8.92 % 4/15/2038 200,000 200,000 193,804",
+      "published": {
+        "issuer_name": "Flatiron Rr Clo 30 Ltd",
+        "instrument_description": "Collateralized Loan Obligation",
+        "fair_value": "193804.0",
+        "cost": "200000.0",
+        "principal_amount": "200000.0",
+        "shares_held": "nan",
+        "interest_rate": "8.92",
+        "basis_spread": "5.25",
+        "maturity_date": "2038-04-15 00:00:00",
+        "extracted_industry": "Specialized Finance"
+      }
+    },
+    {
+      "quarter": "2026-06-30",
+      "accession": "0001193125-26-346851",
+      "row_id": "ROW-af2f10e1c66b36f3",
+      "context": "C_24d7f329-bf7c-4650-a534-8fd2625cf5ae",
+      "printed": "Solid Ground Solutions Acquisitions Inc (i)(l) Delayed Draw Term Loan SOFR + 5.00 % 8.64 % 5/6/2029 7,264,941 7,191,482 7,264,941",
+      "published": {
+        "issuer_name": "Solid Ground Solutions Acquisitions Inc",
+        "instrument_description": "Delayed Draw Term Loan",
+        "fair_value": "7264941.0",
+        "cost": "7191482.0",
+        "principal_amount": "7264941.0",
+        "shares_held": "nan",
+        "interest_rate": "8.64",
+        "basis_spread": "5.0",
+        "maturity_date": "2029-05-06 00:00:00",
+        "extracted_industry": "Specialized Consumer Services"
+      }
+    }
+  ],
+  "counts": {
+    "selected_findings": 11,
+    "confirmed_error": 10,
+    "false_alarm": 1,
+    "source_ambiguity": 0,
+    "insufficient_evidence": 0,
+    "affected_rows": 33,
+    "reviewed_rows": 33,
+    "error_rows": 32,
+    "benign_abbreviation_rows": 1,
+    "original_filings": 11,
+    "observations": 1,
+    "orchestrator_requests": 0,
+    "additional_unflagged_neighbors": 15
+  },
+  "not_done": [
+    "No repairs, builds, tests, canonical/frontend writes, ledger changes, disposition decisions, publication or acceptance.",
+    "Independent review pending. Selected investigation completion is not whole-fund correctness or finding resolution.",
+    "No wider census of unflagged names, all instrument types or full historical positions; the additional instrument observation is a confirmed instance, not a quantified full population.",
+    "No legal-entity or economic-borrower identity claims are made from the name conflicts; fund metrics and the previously reviewed income finding were outside this selected scope.",
+    "Neighbor checks inspect displayed numeric fields and source industry labels where supplied; they do not independently establish external GICS precision or PIK accrual status.",
+    "The first diagnostic completed and saved its full JSON before its optional console dump hit a BOM encoding error; subsequent named diagnostics use ASCII-safe output and read the saved source evidence."
+  ]
+}
