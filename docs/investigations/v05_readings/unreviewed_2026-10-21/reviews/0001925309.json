@@ -1,0 +1,1701 @@
+{
+  "reviewer_id": "/root/remaining_sixth_check_sol",
+  "report_digest": "2a0a5048ea13c321c436a5c6436009fe67b409ae24cdfae5c677259546511a58",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_157a3e5bc23c",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Artisan Topco LP (9) Class A Preferred Units ( 7,882,736 units) 11/7/2023 7,883 5,892 0.1 % Insight Hideaway Aggregator, L.P. (9) Partnership Interest ( 2,170,139 units) 3/19/2024 21,701 21,918 0.5 % Newark FP Co-Invest, L.P. (9) Partnership ( 8,555,356 units) 11/8/2023 8,572 6,064 0.1 % Warrior TopCo LP (9) Class A Units ( 9,576,271 units) 7/7/2023 9,576 13,527 0.4 % 47,732 47,401 1.1 % Financial Services AF Eagle Parent, L.P. (9) Partnership Units ( 337,024 units) 11/27/2023 11,364 10,597 0.3 % Healthcare Raptor US Buyer II Corp. (9) Ordinary Shares ( 83,408 shares) 3/24/2023 12,876 13,616 0.3 % Human Resource Support Services bswift, LLC (9) Class A-1 Units ( 7,606,491 units) 11/7/2022 7,606 10,649 0.3 % Internet Services Bigtincan Holdings L.P. (9)(10) Class A Units ( 1,597,110 units) 4/16/2025 1,630 1,504 0.0 % SMA Technologies Holdings, LLC (9) Class A Units ( 244 units) 11/21/2022 244 353 0.0 % Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 % 1,884 1,872 0.0 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-5add467cdab9ea52",
+          "assessment": "Confirmed count mismatch: unscaled share tag and printed Class B count 173,048 versus published 244. Neighbor Class A has 244 units, supporting a cross-class carry-over hypothesis; exact implementation cause remains unproven."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_1d208d31e4ff",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Class B Units ( 173,048 units) 11/21/2022 10 16 0.0 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Artisan Topco LP (9) Class A Preferred Units ( 7,882,736 units) 11/7/2023 7,883 6,089 0.1 % Insight Hideaway Aggregator, L.P. (9) Partnership Interest ( 2,170,139 units) 3/19/2024 21,701 27,018 0.6 % Newark FP Co-Invest, L.P. (9) Partnership ( 8,555,356 units) 11/8/2023 8,572 5,079 0.1 % Warrior TopCo LP (9) Class A Units ( 9,576,271 units) 7/7/2023 9,576 15,657 0.3 % 47,732 53,843 1.1 % Financial Services AF Eagle Parent, L.P. (9) Partnership Units ( 337,024 units) 11/27/2023 11,364 13,636 0.3 % Healthcare Raptor US Buyer II Corp. (9) Ordinary Shares ( 83,408 shares) 3/24/2023 12,876 13,842 0.3 % Human Resource Support Services bswift, LLC (9) Class A-1 Units ( 7,606,491 units) 11/7/2022 7,606 10,687 0.2 % Internet Services Bigtincan Holdings L.P. (9)(10) Class A Units ( 1,597,110 units) 4/16/2025 1,630 1,630 0.2 % SMA Technologies Holdings, LLC (9) Class A Units ( 244 units) 11/21/2022 244 360 0.0 % Class B Units ( 173,048 units) 11/21/2022 10 16 0.0 % 1,884 2,006 0.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-d42d6bc96c794b67",
+          "assessment": "Confirmed count mismatch: unscaled share tag and printed Class B count 173,048 versus published 244. Neighbor Class A has 244 units, supporting a cross-class carry-over hypothesis; exact implementation cause remains unproven."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_2add4d4a3cde",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 3 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-016336",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 25,574 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.26 % 25,040 24,487 1.3 %"
+        },
+        {
+          "accession": "0000950170-24-016336",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 148,500 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.79 % 139,880 145,530 8.0 %"
+        },
+        {
+          "accession": "0000950170-24-016336",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.48 % 4,677 4,853 (EUR 4,393 ) 0.3 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-82dc374ba2a3cb2c",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-8a1962885223c13a",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-646a378bd7cec57c",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_30c49850a416",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-021144",
+          "text": "Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 %"
+        },
+        {
+          "accession": "0000950170-25-021144",
+          "text": "Warrior TopCo LP Class A Units ( 9,576,271 units) 7/7/2023 9,576 13,646 0.3 % 47,732 49,579 1.2 % Financial Services AF Eagle Parent, L.P. (8) Partnership Units ( 337,024 units) 11/27/2023 11,364 13,011 0.3 % CLGF Holdings, L.P. (4)(8) Warrants ( 8,358,075 warrants) 11/7/2023 4,575 8,257 0.2 % 15,939 21,268 0.5 % Healthcare Raptor US Buyer II Corp. (8) Ordinary Shares ( 83,408 shares) 3/24/2023 12,876 11,588 0.3 % Human Resource Support Services bswift, LLC (8) Class A-1 Units ( 7,606,491 units) 11/7/2022 7,606 16,088 0.4 % Internet Services SMA Technologies Holdings, LLC (8)(10) Class A Units ( 244 units) 11/21/2022 244 353 0.0 % Class B Units ( 173,048 units) 11/21/2022 10 15 0.0 % 254 368 0.0 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-8cb5aa97a5a22f9e",
+          "assessment": "Confirmed count mismatch: unscaled share tag and printed Class B count 173,048 versus published 244. Neighbor Class A has 244 units, supporting a cross-class carry-over hypothesis; exact implementation cause remains unproven."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_3215f8d8f2ae",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 9 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-051289",
+          "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 7.82 % 5,431 5,917 (EUR 5,038 ) 0.1 %"
+        },
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Acosta (3)(12) First-lien loan ($ 194,460 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 9.22 % 190,978 189,923 4.6 %"
+        },
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 10,746 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.62 % 10,645 8,651 0.2 %"
+        },
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Belk, Inc. (3) First-lien loan ($ 182,813 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 10.82 % 180,382 183,270 4.4 %"
+        },
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Blazing Star Parent, LLC (3) First-lien loan ($ 198,750 par, due 8/2030 ) 8/28/2025 SOFR + 7.00 % 10.82 % 195,927 196,266 4.7 %"
+        },
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Cordance Operations, LLC (3) First-lien loan ($ 4,326 par, due 7/2028 ) 6/12/2025 SOFR + 8.65 % 12.53 % 3,955 4,755 0.1 %"
+        },
+        {
+          "accession": "0001193125-26-051289",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 163,683 par, due 2/2031 ) 2/1/2024 SOFR + 5.50 % 9.34 % 161,838 164,093 3.9 %"
+        },
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,546 par, due 7/2029 ) 7/11/2023 E + 6.50 % 8.51 % 8,126 8,862 (EUR 7,546 ) 0.2 %"
+        },
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Tango Management Consulting, LLC (3)(5) First-lien loan ($ 12,825 par, due 6/2031 ) 6/25/2025 SOFR + 6.50 % 10.50 % 12,551 12,601 0.3 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-a92b1ecc828aea7c",
+          "assessment": "Supported row-level false alarm for issuer only: Green Shoot versus GreenShoot is whitespace variation, anchored by same currency/par/maturity/amounts. Does not certify concatenated descriptions or authorize merging positions."
+        },
+        {
+          "row_id": "ROW-24dbb182f55cb50a",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-523121dd8eaedfa5",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-4b12811e62f961b3",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-008cb0632e8a0072",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-697f963a11df0476",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-9a8c4c825b642779",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-67ac239286e37d0b",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-beb4efc55b174d22",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_3505e77a51ba",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 9 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-266848",
+          "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 7.78 % 5,426 5,936 (EUR 5,052 ) 0.1 %"
+        },
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Acosta (3)(12) First-lien loan ($ 194,950 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 9.60 % 191,326 193,488 4.5 %"
+        },
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 10,746 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.06 % 10,629 8,973 0.2 %"
+        },
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Belk, Inc. (3) First-lien loan ($ 185,250 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 11.20 % 182,707 185,713 4.3 %"
+        },
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Blazing Star Parent, LLC (3) First-lien loan ($ 200,000 par, due 8/2030 ) 8/28/2025 SOFR + 7.00 % 11.20 % 197,042 197,500 4.6 %"
+        },
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 8.65 % - ( 407 ) 225 0.0 %"
+        },
+        {
+          "accession": "0001193125-25-266848",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 164,098 par, due 2/2031 ) 2/1/2024 SOFR + 5.50 % 9.81 % 162,177 164,508 3.8 %"
+        },
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,546 par, due 7/2029 ) 7/11/2023 E + 6.50 % 8.50 % 8,103 8,893 (EUR 7,568 ) 0.2 %"
+        },
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Tango Management Consulting, LLC (3)(5) First-lien loan ($ 12,825 par, due 6/2031 ) 6/25/2025 SOFR + 6.50 % 10.50 % 12,543 12,564 0.3 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-980c866da0f457c7",
+          "assessment": "Supported row-level false alarm for issuer only: Green Shoot versus GreenShoot is whitespace variation, anchored by same currency/par/maturity/amounts. Does not certify concatenated descriptions or authorize merging positions."
+        },
+        {
+          "row_id": "ROW-29eea379ab97bdab",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-d1383a30a809c1a3",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-37c6562c9c16f277",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-d42ab18d82ee0a59",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-90d6b9bd01cd4d94",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-61a3b1a538cc4702",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-67335a50fda5f482",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-820e986625d8506e",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_3878a3427ed8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 57,277 (GBP 42,546 ) 1.3 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-8d94cb6a1f97ae46",
+          "assessment": "Confirmed taxonomy mismatch: convertible preference shares remain preferred, while published category/classification say common equity. Count is unscaled and agrees; no count fix implied."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_3c6f16805f6e",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 11 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Aurelia Netherlands B.V. (3)(4) First-lien loan (EUR 326,566 par, due 5/2031 ) 5/22/2024 E + 4.75 % 6.95 % 355,117 371,496 (EUR 324,933 ) 8.2 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Acosta (3)(12) First-lien loan ($ 193,480 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 9.28 % 190,281 191,545 4.2 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Bed Bath and Beyond Inc. (3)(11)(13) ABL FILO term loan ($ 7,084 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.54 % 7,017 5,437 0.1 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Belk, Inc. (3) First-lien loan ($ 167,164 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 10.67 % 165,095 167,582 3.7 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Blazing Star Parent, LLC (3) First-lien loan ($ 196,250 par, due 8/2030 ) 8/28/2025 SOFR + 7.00 % 10.67 % 193,746 195,759 4.3 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Cordance Operations, LLC (3) First-lien loan ($ 32,385 par, due 7/2028 ) 6/12/2025 SOFR + 8.15 % 11.79 % 31,837 31,732 0.7 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 163,876 par, due 2/2031 ) 2/1/2024 SOFR + 6.00 % 9.66 % (incl. 2.50 % PIK) 162,193 157,731 3.5 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Photo Holdings, LLC (3) First-lien loan ($ 250,000 par, due 6/2031 ) 6/22/2026 SOFR + 7.00 % 10.68 % 237,927 243,125 5.4 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,546 par, due 7/2029 ) 7/11/2023 E + 6.50 % 8.70 % 8,147 8,438 (EUR 7,381 ) 0.2 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Tango Management Consulting, LLC (3)(5) First-lien loan ($ 13,693 par, due 6/2031 ) 6/25/2025 SOFR + 6.50 % 10.18 % 13,436 13,260 0.3 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Structured Credit Partners JV, LLC (4)(6)(10) Partnership Interest ( 25.00 % ownership) 12/23/2025 25,704 26,925 0.6 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-e6d44def42d8fb0b",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-d1c229cd7e1c854e",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-79bbd2688f4905b7",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-2847a8061a854197",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-0045137b3ae2a742",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-e577c74d0bcf384e",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-18e41d335fc49ce4",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-b56c5d198f389267",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-09af18c6d96f6e88",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-3e366de7e416bb38",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-b7220108d41dc6d1",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_5bd93e0affdb",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-016336",
+          "text": "Volante Technologies, Inc. First-lien loan ($ 2,604 par, due 9/2028 ) 9/29/2023 16.50 % 16.50 % PIK 2,578 2,598 0.1 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-2707aca2183018e6",
+          "assessment": "Confirmed disclosed PIK-terms omission: printed 16.50 percent PIK versus null pik_rate. This supports terms capture only, not bad-PIK or current-payment inference, and does not authorize isolated income-convention migration."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_83d01f9d5242",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-062722",
+          "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 49,697 (GBP 38,502 ) 1.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-60943afe61f5e425",
+          "assessment": "Confirmed taxonomy mismatch: convertible preference shares remain preferred, while published category/classification say common equity. Count is unscaled and agrees; no count fix implied."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_86be7e8b4be1",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 12 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-038548",
+          "text": "SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Company (1)(9) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2) (7) Fair Value (6) Percentage of Net Assets Debt Investments Automotive Bestpass, Inc. (3)(5) First-lien loan ($ 10,000 par, due 5/2029 ) 5/26/2023 SOFR + 5.75 % 10.85 % $ 9,715 $ 9,750 1.1 % Business Services BCTO Ignition Purchaser, Inc. (3) First-lien holdco loan ($ 100,000 par, due 10/2030 ) 4/18/2023 SOFR + 9.00 % 13.98 % PIK 97,081 97,750 10.8 % Galileo Parent, Inc. (3) First-lien loan ($ 151,442 par, due 5/2030 ) 5/3/2023 SOFR + 7.25 % 12.34 % 147,004 148,792 16.4 % SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 % Hornetsecurity Holding GmbH (3)(4) First-lien loan (EUR 3,150 par, due 11/2029 ) 11/15/2022 E + 6.50 % 9.82 % 3,149 $ 3,409 (EUR 3,125 ) 0.4 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Company (1)(9) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2) (7) Fair Value (6) Percentage of Net Assets Debt Investments Automotive Bestpass, Inc. (3)(5) First-lien loan ($ 10,000 par, due 5/2029 ) 5/26/2023 SOFR + 5.75 % 10.85 % $ 9,715 $ 9,750 1.1 % Business Services BCTO Ignition Purchaser, Inc. (3) First-lien holdco loan ($ 100,000 par, due 10/2030 ) 4/18/2023 SOFR + 9.00 % 13.98 % PIK 97,081 97,750 10.8 % Galileo Parent, Inc. (3) First-lien loan ($ 151,442 par, due 5/2030 ) 5/3/2023 SOFR + 7.25 % 12.34 % 147,004 148,792 16.4 % SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 % Hornetsecurity Holding GmbH (3)(4) First-lien loan (EUR 3,150 par, due 11/2029 ) 11/15/2022 E + 6.50 % 9.82 % 3,149 $ 3,409 (EUR 3,125 ) 0.4 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 46,941 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.16 % 45,766 45,885 5.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 149,250 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.32 % 139,766 134,698 14.9 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "12,832 Class A 3/24/2023 1,288 1,288 0.2 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Company (1)(9) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2) (7) Fair Value (6) Percentage of Net Assets Retail and Consumer Products Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 46,941 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.16 % 45,766 45,885 5.1 % Roll Up DIP term loan ($ 10,168 par, due 8/2023 ) 4/24/2023 SOFR + 7.90 % 12.99 % (incl. 12.99 % PIK) 10,123 9,939 1.1 % Super-Priority DIP term loan ($ 51,533 par, due 8/2023 ) 4/24/2023 SOFR + 7.90 % 12.99 % 50,938 50,374 5.6 % Commercehub, Inc. (3) First-lien loan ($ 149,250 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.32 % 139,766 134,698 14.9 % 246,593 240,896 26.7 % Total Debt Investments 1,723,825 1,738,229 191.8 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.2 % 12,832 Class A 3/24/2023 1,288 1,288 0.2 % 12,832 Class B 3/24/2023 1,288 1,288 0.2 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "12,832 Class B 3/24/2023 1,288 1,288 0.2 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Retail and Consumer Products Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 46,941 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.16 % 45,766 45,885 5.1 % Roll Up DIP term loan ($ 10,168 par, due 8/2023 ) 4/24/2023 SOFR + 7.90 % 12.99 % (incl. 12.99 % PIK) 10,123 9,939 1.1 % Super-Priority DIP term loan ($ 51,533 par, due 8/2023 ) 4/24/2023 SOFR + 7.90 % 12.99 % 50,938 50,374 5.6 % Commercehub, Inc. (3) First-lien loan ($ 149,250 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.32 % 139,766 134,698 14.9 % 246,593 240,896 26.7 % Total Debt Investments 1,723,825 1,738,229 191.8 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.2 % 12,832 Class A 3/24/2023 1,288 1,288 0.2 % 12,832 Class B 3/24/2023 1,288 1,288 0.2 % 12,832 Class C 3/24/2023 1,288 1,288 0.2 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "12,832 Class C 3/24/2023 1,288 1,288 0.2 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 46,941 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.16 % 45,766 45,885 5.1 % Roll Up DIP term loan ($ 10,168 par, due 8/2023 ) 4/24/2023 SOFR + 7.90 % 12.99 % (incl. 12.99 % PIK) 10,123 9,939 1.1 % Super-Priority DIP term loan ($ 51,533 par, due 8/2023 ) 4/24/2023 SOFR + 7.90 % 12.99 % 50,938 50,374 5.6 % Commercehub, Inc. (3) First-lien loan ($ 149,250 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.32 % 139,766 134,698 14.9 % 246,593 240,896 26.7 % Total Debt Investments 1,723,825 1,738,229 191.8 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.2 % 12,832 Class A 3/24/2023 1,288 1,288 0.2 % 12,832 Class B 3/24/2023 1,288 1,288 0.2 % 12,832 Class C 3/24/2023 1,288 1,288 0.2 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "12,832 Class D 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Roll Up DIP term loan ($ 10,168 par, due 8/2023 ) 4/24/2023 SOFR + 7.90 % 12.99 % (incl. 12.99 % PIK) 10,123 9,939 1.1 % Super-Priority DIP term loan ($ 51,533 par, due 8/2023 ) 4/24/2023 SOFR + 7.90 % 12.99 % 50,938 50,374 5.6 % Commercehub, Inc. (3) First-lien loan ($ 149,250 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.32 % 139,766 134,698 14.9 % 246,593 240,896 26.7 % Total Debt Investments 1,723,825 1,738,229 191.8 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.2 % 12,832 Class A 3/24/2023 1,288 1,288 0.2 % 12,832 Class B 3/24/2023 1,288 1,288 0.2 % 12,832 Class C 3/24/2023 1,288 1,288 0.2 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "12,832 Class E 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Super-Priority DIP term loan ($ 51,533 par, due 8/2023 ) 4/24/2023 SOFR + 7.90 % 12.99 % 50,938 50,374 5.6 % Commercehub, Inc. (3) First-lien loan ($ 149,250 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.32 % 139,766 134,698 14.9 % 246,593 240,896 26.7 % Total Debt Investments 1,723,825 1,738,229 191.8 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.2 % 12,832 Class A 3/24/2023 1,288 1,288 0.2 % 12,832 Class B 3/24/2023 1,288 1,288 0.2 % 12,832 Class C 3/24/2023 1,288 1,288 0.2 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,287 1,287 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "12,832 Class F 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 149,250 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.32 % 139,766 134,698 14.9 % 246,593 240,896 26.7 % Total Debt Investments 1,723,825 1,738,229 191.8 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.2 % 12,832 Class A 3/24/2023 1,288 1,288 0.2 % 12,832 Class B 3/24/2023 1,288 1,288 0.2 % 12,832 Class C 3/24/2023 1,288 1,288 0.2 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,287 1,287 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.1 % 12,832 Class G 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "12,832 Class G 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "246,593 240,896 26.7 % Total Debt Investments 1,723,825 1,738,229 191.8 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.2 % 12,832 Class A 3/24/2023 1,288 1,288 0.2 % 12,832 Class B 3/24/2023 1,288 1,288 0.2 % 12,832 Class C 3/24/2023 1,288 1,288 0.2 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,287 1,287 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.1 % 12,832 Class G 3/24/2023 1,288 1,288 0.1 % 12,832 Class H 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "12,832 Class H 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Total Debt Investments 1,723,825 1,738,229 191.8 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.2 % 12,832 Class A 3/24/2023 1,288 1,288 0.2 % 12,832 Class B 3/24/2023 1,288 1,288 0.2 % 12,832 Class C 3/24/2023 1,288 1,288 0.2 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,287 1,287 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.1 % 12,832 Class G 3/24/2023 1,288 1,288 0.1 % 12,832 Class H 3/24/2023 1,287 1,287 0.1 % 12,832 Class I 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "12,832 Class I 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Total Debt Investments 1,723,825 1,738,229 191.8 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.2 % 12,832 Class A 3/24/2023 1,288 1,288 0.2 % 12,832 Class B 3/24/2023 1,288 1,288 0.2 % 12,832 Class C 3/24/2023 1,288 1,288 0.2 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,287 1,287 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.1 % 12,832 Class G 3/24/2023 1,288 1,288 0.1 % 12,832 Class H 3/24/2023 1,287 1,287 0.1 % 12,832 Class I 3/24/2023 1,287 1,287 0.1 % 12,876 12,876 1.4 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-7bae9be066147555",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-6b707617e92fd05a",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-9aae3f2c3f4621e3",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-07f9b07fe0d45aa1",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-fce9aa07d38f6195",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-67bf5b1eef3ecf6a",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-fcb70b8cb6e6b5a0",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-1e629de07479ce4e",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-e60a9c42e9427749",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-4e445a529711c306",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-83655ae3b03e3266",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-25133e5aca8939db",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_8d1957ed2197",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,313 (GBP 40,428 ) 1.3 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-809a6dda56e3654b",
+          "assessment": "Confirmed taxonomy mismatch: convertible preference shares remain preferred, while published category/classification say common equity. Count is unscaled and agrees; no count fix implied."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a0c0a3b6bd01",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 8 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-021144",
+          "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 8.66 % 5,413 5,246 (EUR 5,066 ) 0.1 %"
+        },
+        {
+          "accession": "0000950170-25-021144",
+          "text": "Scorpio Bidco (3)(4) First-lien loan (EUR 75,326 par, due 4/2031 ) 4/4/2024 E + 5.75 % 8.43 % 80,131 77,534 (EUR 74,876 ) 1.9 %"
+        },
+        {
+          "accession": "0000950170-25-021144",
+          "text": "Acosta (3)(12) First-lien loan ($ 140,000 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 10.12 % 137,318 138,950 3.4 %"
+        },
+        {
+          "accession": "0000950170-25-021144",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 16,352 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.26 % 16,104 14,962 0.4 %"
+        },
+        {
+          "accession": "0000950170-25-021144",
+          "text": "Belk, Inc. (3) First-lien loan ($ 192,563 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 11.51 % 189,683 191,118 4.7 %"
+        },
+        {
+          "accession": "0000950170-25-021144",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 147,000 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 10.90 % 140,246 143,325 3.6 %"
+        },
+        {
+          "accession": "0000950170-25-021144",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 146,333 par, due 2/2031 ) 2/1/2024 SOFR + 5.50 % 10.09 % 144,076 147,197 3.6 %"
+        },
+        {
+          "accession": "0000950170-25-021144",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,378 par, due 7/2029 ) 7/11/2023 E + 6.25 % 9.47 % (incl. 3.00 % PIK) 7,885 7,685 (EUR 7,422 ) 0.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-c5c3eed3053030ea",
+          "assessment": "Supported row-level false alarm for issuer only: Green Shoot versus GreenShoot is whitespace variation, anchored by same currency/par/maturity/amounts. Does not certify concatenated descriptions or authorize merging positions."
+        },
+        {
+          "row_id": "ROW-be6336d9eb29f05f",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-4cd73286da7efe29",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-adc5fb57f2f5074d",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-1d584760e5f8b7b1",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-192617b20ebc7531",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-1cf6104a34c29c25",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-17b5059212f0abb3",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a21cf71c377e",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-021144",
+          "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 49,063 (GBP 39,175) 1.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-dcc480b724fd81e9",
+          "assessment": "Confirmed taxonomy mismatch: convertible preference shares remain preferred, while published category/classification say common equity. Count is unscaled and agrees; no count fix implied."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ba98ca4ee38c",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Elysium BidCo Limited (4)(9) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 53,403 (GBP 40,236 ) 1.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-80f9a016c647aea7",
+          "assessment": "Confirmed taxonomy mismatch: convertible preference shares remain preferred, while published category/classification say common equity. Count is unscaled and agrees; no count fix implied."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_c5fb6c1487d6",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 13 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Raptor US Buyer II Corp. (3) First-lien loan ($ 86,364 par, due 3/2029 ) 3/24/2023 SOFR + 6.75 % 11.63 % 83,176 83,556 10.3 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Coupa Holdings, LLC (3) First-lien loan ($ 129,573 par, due 2/2030 ) 2/27/2023 SOFR + 7.50 % 12.29 % 126,014 126,948 15.6 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "BTRS Holdings, Inc. (3) First-lien loan ($ 136,895 par, due 12/2028 ) 12/16/2022 SOFR + 8.00 % 12.74 % 132,968 133,815 16.5 % First-lien revolving loan ($ 1,988 par, due 12/2028 ) 12/16/2022 SOFR + 7.25 % 12.06 % 1,575 1,663 0.2 % Ping Identity Holding Corp. (3) First-lien loan ($ 136,364 par, due 10/2029 ) 10/17/2022 SOFR + 7.00 % 11.76 % 132,861 133,364 16.4 % 267,404 268,842 33.1 % Healthcare Edge Bidco B.V (3)(4) First-lien loan (EUR 3,423 par, due 2/2029 ) 2/24/2023 E + 7.00 % 10.02 % (incl. 3.25 % PIK) 3,473 3,579 (EUR 3,294 ) 0.4 % Raptor US Buyer II Corp. (3) First-lien loan ($ 86,364 par, due 3/2029 ) 3/24/2023 SOFR + 6.75 % 11.63 % 83,176 83,556 10.3 % 86,649 87,135 10.7 % Human Resource Support Services bswift, LLC (3)(5) First-lien loan ($ 142,038 par, due 11/2028 ) 11/7/2022 SOFR + 6.63 % 11.33 % 137,811 139,551 17.2 % Insurance Disco Parent, Inc. (3) First-lien loan ($ 57,756 par, due 3/2029 ) 3/30/2023 SOFR + 7.50 % 12.39 % 56,169 56,326 6.9 % Internet Services Coupa Holdings, LLC (3) First-lien loan ($ 129,573 par, due 2/2030 ) 2/27/2023 SOFR + 7.50 % 12.29 % 126,014 126,948 15.6 % SMA Technologies Holdings, LLC (3)(5) First-lien loan ($ 5,667 par, due 10/2028 ) 10/31/2022 SOFR + 6.75 % 11.56 % 5,431 5,511 0.7 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 149,625 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.03 % 139,728 144,388 17.8 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "8,636 Class A 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Oil, Gas and Consumable Fuels Laramie Energy, LLC (3) First-lien loan ($ 97,561 par, due 2/2027 ) 2/21/2023 SOFR + 7.10 % 11.86 % 95,128 95,373 11.7 % Retail and Consumer Products Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 % Commercehub, Inc. (3) First-lien loan ($ 149,625 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.03 % 139,728 144,388 17.8 % 263,031 268,521 33.1 % Total Debt Investments 1,232,474 1,246,008 153.4 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 % 8,636 Class A 3/24/2023 864 864 0.1 % 8,636 Class B 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "8,636 Class B 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Laramie Energy, LLC (3) First-lien loan ($ 97,561 par, due 2/2027 ) 2/21/2023 SOFR + 7.10 % 11.86 % 95,128 95,373 11.7 % Retail and Consumer Products Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 % Commercehub, Inc. (3) First-lien loan ($ 149,625 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.03 % 139,728 144,388 17.8 % 263,031 268,521 33.1 % Total Debt Investments 1,232,474 1,246,008 153.4 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 % 8,636 Class A 3/24/2023 864 864 0.1 % 8,636 Class B 3/24/2023 864 864 0.1 % 8,636 Class C 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "8,636 Class C 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Retail and Consumer Products Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 % Commercehub, Inc. (3) First-lien loan ($ 149,625 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.03 % 139,728 144,388 17.8 % 263,031 268,521 33.1 % Total Debt Investments 1,232,474 1,246,008 153.4 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 % 8,636 Class A 3/24/2023 864 864 0.1 % 8,636 Class B 3/24/2023 864 864 0.1 % 8,636 Class C 3/24/2023 864 864 0.1 % 8,636 Class D 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "8,636 Class D 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Retail and Consumer Products Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 % Commercehub, Inc. (3) First-lien loan ($ 149,625 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.03 % 139,728 144,388 17.8 % 263,031 268,521 33.1 % Total Debt Investments 1,232,474 1,246,008 153.4 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 % 8,636 Class A 3/24/2023 864 864 0.1 % 8,636 Class B 3/24/2023 864 864 0.1 % 8,636 Class C 3/24/2023 864 864 0.1 % 8,636 Class D 3/24/2023 864 864 0.1 % 8,636 Class E 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "8,636 Class E 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 126,667 par, due 8/2027 ) 9/2/2022 SOFR + 7.90 % 12.75 % 123,303 124,133 15.3 % Commercehub, Inc. (3) First-lien loan ($ 149,625 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.03 % 139,728 144,388 17.8 % 263,031 268,521 33.1 % Total Debt Investments 1,232,474 1,246,008 153.4 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 % 8,636 Class A 3/24/2023 864 864 0.1 % 8,636 Class B 3/24/2023 864 864 0.1 % 8,636 Class C 3/24/2023 864 864 0.1 % 8,636 Class D 3/24/2023 864 864 0.1 % 8,636 Class E 3/24/2023 864 864 0.1 % 8,636 Class F 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "8,636 Class F 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 149,625 par, due 12/2027 ) 11/15/2022 SOFR + 6.50 % 11.03 % 139,728 144,388 17.8 % 263,031 268,521 33.1 % Total Debt Investments 1,232,474 1,246,008 153.4 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 % 8,636 Class A 3/24/2023 864 864 0.1 % 8,636 Class B 3/24/2023 864 864 0.1 % 8,636 Class C 3/24/2023 864 864 0.1 % 8,636 Class D 3/24/2023 864 864 0.1 % 8,636 Class E 3/24/2023 864 864 0.1 % 8,636 Class F 3/24/2023 864 864 0.1 % 8,636 Class G 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "8,636 Class G 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "263,031 268,521 33.1 % Total Debt Investments 1,232,474 1,246,008 153.4 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 % 8,636 Class A 3/24/2023 864 864 0.1 % 8,636 Class B 3/24/2023 864 864 0.1 % 8,636 Class C 3/24/2023 864 864 0.1 % 8,636 Class D 3/24/2023 864 864 0.1 % 8,636 Class E 3/24/2023 864 864 0.1 % 8,636 Class F 3/24/2023 864 864 0.1 % 8,636 Class G 3/24/2023 864 864 0.1 % 8,636 Class H 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "8,636 Class H 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Total Debt Investments 1,232,474 1,246,008 153.4 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 % 8,636 Class A 3/24/2023 864 864 0.1 % 8,636 Class B 3/24/2023 864 864 0.1 % 8,636 Class C 3/24/2023 864 864 0.1 % 8,636 Class D 3/24/2023 864 864 0.1 % 8,636 Class E 3/24/2023 864 864 0.1 % 8,636 Class F 3/24/2023 864 864 0.1 % 8,636 Class G 3/24/2023 864 864 0.1 % 8,636 Class H 3/24/2023 864 864 0.1 % 8,636 Class I 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "8,636 Class I 3/24/2023 864 864 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-021762",
+          "text": "Total Debt Investments 1,232,474 1,246,008 153.4 % Equity and Other Investments Healthcare Raptor US Buyer II Corp. (8)(10) 8,636 Ordinary Shares 3/24/2023 864 864 0.1 % 8,636 Class A 3/24/2023 864 864 0.1 % 8,636 Class B 3/24/2023 864 864 0.1 % 8,636 Class C 3/24/2023 864 864 0.1 % 8,636 Class D 3/24/2023 864 864 0.1 % 8,636 Class E 3/24/2023 864 864 0.1 % 8,636 Class F 3/24/2023 864 864 0.1 % 8,636 Class G 3/24/2023 864 864 0.1 % 8,636 Class H 3/24/2023 864 864 0.1 % 8,636 Class I 3/24/2023 864 864 0.1 % 8,640 8,640 1.0 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-d227ee7945e0528b",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-c8c3de567e8de76f",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-2a4d1cbb36bcb3c6",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-1ad17815acde49ed",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-36dcb7fe68f6cb0d",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-f3bd3e9220916ff6",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-3bd60fd99883d48b",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-5425db888b9cc51e",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-e34c591cf465c2c7",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-a4030f1afa7b38a7",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-1a88c2890653c478",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-cb1a594a1880fdce",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-3876068ea6b55b20",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_cc9ecf47923a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 10 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-101397",
+          "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 7.76 % 5,422 5,930 (EUR 5,052 ) 0.1 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Acosta (3)(12) First-lien loan ($ 195,300 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 9.92 % 191,433 194,324 4.6 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 10,951 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.23 % 10,816 9,747 0.2 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Belk, Inc. (3) First-lien loan ($ 187,688 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 11.33 % 185,032 187,218 4.4 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 146,250 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 10.51 % 140,501 146,250 3.5 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 9.00 % - ( 443 ) 225 0.0 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 165,178 par, due 2/2031 ) 2/1/2024 SOFR + 5.50 % 9.78 % 163,174 165,591 3.9 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,491 par, due 7/2029 ) 7/11/2023 E + 6.50 % 8.77 % (incl. 3.00 % PIK) 8,027 8,846 (EUR 7,535 ) 0.2 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Tango Management Consulting, LLC (3)(5) First-lien loan ($ 12,412 par, due 6/2031 ) 6/25/2025 SOFR + 5.50 % 9.82 % 12,123 12,123 0.3 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "First-lien loan ($ 29,710 par, due 10/2029 ) 5/6/2025 9.50 % 9.50 % 28,975 28,865 0.7 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "USA DeBusk, LLC (3) First-lien loan ($ 104,105 par, due 4/2031 ) 4/30/2024 SOFR + 5.25 % 9.53 % 102,547 104,105 2.5 % First-lien revolving loan ($ 5,954 par, due 4/2030 ) 4/30/2024 SOFR + 5.25 % 9.58 % 5,789 5,954 0.1 % Wrangler TopCo, LLC (3) First-lien loan ($ 135,629 par, due 9/2029 ) 7/7/2023 SOFR + 6.00 % 10.32 % 133,304 137,575 3.3 % 1,390,566 1,447,477 34.4 % Chemicals Erling Lux Bidco SARL (3)(4) First-lien loan (EUR 11,549 par, due 9/2028 ) 9/6/2022 E + 7.00 % 9.10 % 11,583 13,958 (EUR 11,891 ) 0.3 % First-lien loan (GBP 19,592 par, due 9/2028 ) 9/6/2022 S + 7.00 % 11.22 % 23,104 27,384 (GBP 19,983 ) 0.7 % First-lien loan (NOK 7,427 par, due 9/2028 ) 9/6/2022 N + 7.00 % 11.59 % 711 749 (NOK 7,575 ) 0.0 % First-lien revolving loan (GBP 281 par, due 9/2028 ) 9/6/2022 S + 7.00 % 11.22 % 367 392 (GBP 286 ) 0.0 % FGI Acquisition Corp. (3)(4) First-lien loan ($ 90,000 par, due 6/2032 ) 6/4/2025 SOFR + 5.50 % 9.82 % 88,214 88,650 2.1 % 123,979 131,133 3.1 % Communications Aurelia Netherlands MidCo 2 B.V. (3)(4) First-lien loan (EUR 326,566 par, due 5/2031 ) 5/22/2024 E + 4.75 % 6.83 % 354,463 384,297 (EUR 327,382 ) 9.1 % X Holdings. Inc. (3)(12) First-lien loan ($ 37,543 par, due 10/2029 ) 3/7/2025 SOFR + 6.60 % 10.93 % 36,478 36,634 0.9 % First-lien loan ($ 29,710 par, due 10/2029 ) 5/6/2025 9.50 % 9.50 % 28,975 28,865 0.7 % 419,916 449,796 10.7 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-c8004832ca06b7b3",
+          "assessment": "Supported row-level false alarm for issuer only: Green Shoot versus GreenShoot is whitespace variation, anchored by same currency/par/maturity/amounts. Does not certify concatenated descriptions or authorize merging positions."
+        },
+        {
+          "row_id": "ROW-5885a522afd1d21e",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-4bd42a0f43effec7",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-ac7daa028ad9620b",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-5ad1619ee998438a",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-f546cf18ff10fe3b",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-1d1e3f11313bbe18",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-d0f74e54925d40f3",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-3e4ad5da88f0d3f8",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-cada6c062fd923e8",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ccd9775f5118",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Elysium BidCo Limited (4)(8) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 58,651 (GBP 43,605 ) 1.4 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-bb113de91bae4aa5",
+          "assessment": "Confirmed taxonomy mismatch: convertible preference shares remain preferred, while published category/classification say common equity. Count is unscaled and agrees; no count fix implied."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d3bfc417bf31",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-062722",
+          "text": "Class B Units ( 173,048 units) 11/21/2022 10 19 0.0 %"
+        },
+        {
+          "accession": "0000950170-25-062722",
+          "text": "Warrior TopCo LP (8) Class A Units ( 9,576,271 units) 7/7/2023 9,576 14,293 0.3 % 47,732 52,289 1.3 % Financial Services AF Eagle Parent, L.P. (8) Partnership Units ( 337,024 units) 11/27/2023 11,364 12,784 0.3 % CLGF Holdings, L.P. (4)(8) Warrants ( 8,358,075 warrants) 11/7/2023 4,574 10,350 0.3 % 15,938 23,134 0.6 % Healthcare Raptor US Buyer II Corp. (8) Ordinary Shares ( 83,408 shares) 3/24/2023 12,876 12,876 0.3 % Human Resource Support Services bswift, LLC Class A-1 Units ( 7,606,491 units) 11/7/2022 7,606 15,764 0.4 % Internet Services SMA Technologies Holdings, LLC (8)(10) Class A Units ( 244 units) 11/21/2022 244 449 0.0 % Class B Units ( 173,048 units) 11/21/2022 10 19 0.0 % 254 468 0.0 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-bdbf1cbfe6d47a10",
+          "assessment": "Confirmed count mismatch: unscaled share tag and printed Class B count 173,048 versus published 244. Neighbor Class A has 244 units, supporting a cross-class carry-over hypothesis; exact implementation cause remains unproven."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d5738c94b590",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 7 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-062722",
+          "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 8.25 % 5,417 5,457 (EUR 5,052 ) 0.1 %"
+        },
+        {
+          "accession": "0000950170-25-062722",
+          "text": "Acosta (3)(12) First-lien loan ($ 139,650 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 9.93 % 137,074 136,857 3.3 %"
+        },
+        {
+          "accession": "0000950170-25-062722",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 15,90 0 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.22 % 15,681 14,310 0.3 %"
+        },
+        {
+          "accession": "0000950170-25-062722",
+          "text": "Belk, Inc. (3) First-lien loan ($ 190,125 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 11.33 % 187,357 188,699 4.6 %"
+        },
+        {
+          "accession": "0000950170-25-062722",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 146,625 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 10.56 % 140,366 145,525 3.5 %"
+        },
+        {
+          "accession": "0000950170-25-062722",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 159,247 par, due 2/2031 ) 2/1/2024 SOFR + 5.50 % 9.79 % 157,168 159,247 3.9 %"
+        },
+        {
+          "accession": "0000950170-25-062722",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,435 par, due 7/2029 ) 7/11/2023 E + 6.75 % 9.54 % (incl. 3.00 % PIK) 7,952 8,079 (EUR 7,479 ) 0.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-c03a21b830da25da",
+          "assessment": "Supported row-level false alarm for issuer only: Green Shoot versus GreenShoot is whitespace variation, anchored by same currency/par/maturity/amounts. Does not certify concatenated descriptions or authorize merging positions."
+        },
+        {
+          "row_id": "ROW-e51368b86868f840",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-105782acc18b6681",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-7b0229c42cae666d",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-e6978b9f6e64f148",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-53603f9ba8967f14",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-80957fbafcc9033b",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_da7c14089ed1",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 8 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-122238",
+          "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 9.27 % 5,409 5,623 (EUR 5,038 ) 0.2 %"
+        },
+        {
+          "accession": "0000950170-24-122238",
+          "text": "Scorpio Bidco (3)(4) First-lien loan (EUR 75,326 par, due 4/2031 ) 4/4/2024 E + 5.75 % 9.60 % 80,055 83,063 (EUR 74,426 ) 2.7 %"
+        },
+        {
+          "accession": "0000950170-24-122238",
+          "text": "Acosta (3)(12) First-lien loan ($ 182,000 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 10.73 % 178,376 178,360 5.8 %"
+        },
+        {
+          "accession": "0000950170-24-122238",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 17,805 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 14.75 % 17,510 16,380 0.5 %"
+        },
+        {
+          "accession": "0000950170-24-122238",
+          "text": "Belk, Inc. (3) First-lien loan ($ 195,000 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 12.28 % 192,010 192,563 6.2 %"
+        },
+        {
+          "accession": "0000950170-24-122238",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 147,375 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.35 % 140,132 141,112 4.6 %"
+        },
+        {
+          "accession": "0000950170-24-122238",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 129,858 par, due 2/2031 ) 2/1/2024 SOFR + 5.25 % 10.46 % 127,609 129,858 4.2 %"
+        },
+        {
+          "accession": "0000950170-24-122238",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.25 % 9.96 % 4,706 5,090 (EUR 4,561 ) 0.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-0be71f133280eedd",
+          "assessment": "Supported row-level false alarm for issuer only: Green Shoot versus GreenShoot is whitespace variation, anchored by same currency/par/maturity/amounts. Does not certify concatenated descriptions or authorize merging positions."
+        },
+        {
+          "row_id": "ROW-a7429f0c4147271e",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-77bf0f599542f282",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-b076097e063924f7",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-b5a362c47d8a2a5e",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-91b3d88598225b5e",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-b1d63b45774fbbd4",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-f89724445f60ad40",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_de50341a26ae",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 6 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-089930",
+          "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 9.56 % 5,405 5,356 (EUR 4,997 ) 0.2 %"
+        },
+        {
+          "accession": "0000950170-24-089930",
+          "text": "Scorpio Bidco (3)(4) First-lien loan (EUR 75,326 par, due 4/2031 ) 4/4/2024 E + 5.75 % 9.60 % 79,958 79,284 (EUR 73,976 ) 2.9 %"
+        },
+        {
+          "accession": "0000950170-24-089930",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 18,795 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.24 % 18,457 17,292 0.6 %"
+        },
+        {
+          "accession": "0000950170-24-089930",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 147,750 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.58 % 140,032 139,624 5.0 %"
+        },
+        {
+          "accession": "0000950170-24-089930",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 130,183 par, due 2/2031 ) 2/1/2024 SOFR + 5.25 % 10.58 % 127,840 129,749 4.7 %"
+        },
+        {
+          "accession": "0000950170-24-089930",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.42 % 4,696 4,818 (EUR 4,495 ) 0.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-dda932b81b842497",
+          "assessment": "Supported row-level false alarm for issuer only: Green Shoot versus GreenShoot is whitespace variation, anchored by same currency/par/maturity/amounts. Does not certify concatenated descriptions or authorize merging positions."
+        },
+        {
+          "row_id": "ROW-d790f077639db072",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-a1b35706693bca0e",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-bd00300ba2a68cce",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-7752c92f5cb62411",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-06363e0172a2ea6c",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e89d85f07ce7",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 4 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-052859",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 23,314 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.23 % 22,861 21,974 0.9 %"
+        },
+        {
+          "accession": "0000950170-24-052859",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 148,125 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.58 % 139,949 147,384 6.2 %"
+        },
+        {
+          "accession": "0000950170-24-052859",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 129,690 par, due 2/2031 ) 2/1/2024 SOFR + 5.50 % 10.83 % 127,081 127,755 5.4 %"
+        },
+        {
+          "accession": "0000950170-24-052859",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.43 % 4,686 4,827 (EUR 4,470 ) 0.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-969026ba2852b32b",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-c42752c0fd988dd9",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-c2fede73811904d9",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-e9a4bc9af02850e4",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e9b92b7f66b0",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Class B Units ( 173,048 units) 11/21/2022 10 18 0.0 %"
+        },
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Artisan Topco LP (8) Class A Preferred Units ( 7,882,736 units) 11/7/2023 7,883 6,700 0.2 % Insight Hideaway Aggregator, L.P. (8) Partnership Interest ( 2,170,139 units) 3/19/2024 21,701 25,228 0.5 % Newark FP Co-Invest, L.P. (8) Partnership ( 8,555,356 units) 11/8/2023 8,572 8,122 0.2 % Warrior TopCo LP (8) Class A Units ( 9,576,271 units) 7/7/2023 9,576 14,939 0.4 % 47,732 54,989 1.3 % Financial Services AF Eagle Parent, L.P. (8) Partnership Units ( 337,024 units) 11/27/2023 11,364 15,881 0.4 % Healthcare Raptor US Buyer II Corp. (8) Ordinary Shares ( 83,408 shares) 3/24/2023 12,876 14,904 0.4 % Human Resource Support Services bswift, LLC Class A-1 Units ( 7,606,491 units) 11/7/2022 7,606 15,023 0.4 % Internet Services Bigtincan Holdings L.P. (8)(10) Class A Units ( 1,597,110 units) 4/16/2025 1,630 1,630 0.0 % SMA Technologies Holdings, LLC (8) Class A Units ( 244 units) 11/21/2022 244 423 0.0 % Class B Units ( 173,048 units) 11/21/2022 10 18 0.0 % 1,884 2,071 0.0 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-f3e0e5f524fc78d7",
+          "assessment": "Confirmed count mismatch: unscaled share tag and printed Class B count 173,048 versus published 244. Neighbor Class A has 244 units, supporting a cross-class carry-over hypothesis; exact implementation cause remains unproven."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ea737619de4f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Elysium BidCo Limited (4)(8)(10) Convertible Preference Shares ( 38,503,125 units) 12/11/2024 49,063 52,763 (GBP 38,503 ) 1.3 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-97ac226012226f9e",
+          "assessment": "Confirmed taxonomy mismatch: convertible preference shares remain preferred, while published category/classification say common equity. Count is unscaled and agrees; no count fix implied."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_f69a3eccee19",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Class B Units ( 173,048 units) 11/21/2022 10 18 0.0 %"
+        },
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Artisan Topco LP (8) Class A Preferred Units ( 7,882,736 units) 11/7/2023 7,883 6,622 0.2 % Insight Hideaway Aggregator, L.P. (8) Partnership Interest ( 2,170,139 units) 3/19/2024 21,701 25,228 0.6 % Newark FP Co-Invest, L.P. (8) Partnership ( 8,555,356 units) 11/8/2023 8,572 7,886 0.2 % Warrior TopCo LP (8) Class A Units ( 9,576,271 units) 7/7/2023 9,576 14,939 0.3 % 47,732 54,675 1.3 % Financial Services AF Eagle Parent, L.P. (8) Partnership Units ( 337,024 units) 11/27/2023 11,364 13,068 0.3 % Healthcare Raptor US Buyer II Corp. (8) Ordinary Shares ( 83,408 shares) 3/24/2023 12,876 13,520 0.3 % Human Resource Support Services bswift, LLC (8) Class A-1 Units ( 7,606,491 units) 11/7/2022 7,606 16,164 0.4 % Internet Services Bigtincan Holdings L.P. (8) Class A Units ( 666,667 units) 4/16/2025 700 700 0.0 % SMA Technologies Holdings, LLC (8)(10) Class A Units ( 244 units) 11/21/2022 244 423 0.0 % Class B Units ( 173,048 units) 11/21/2022 10 18 0.0 % 954 1,141 0.0 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-f687c81d0ab79803",
+          "assessment": "Confirmed count mismatch: unscaled share tag and printed Class B count 173,048 versus published 244. Neighbor Class A has 244 units, supporting a cross-class carry-over hypothesis; exact implementation cause remains unproven."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_f8ecbf985e58",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 10 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Aurelia Netherlands B.V. (3)(4) First-lien loan (EUR 326,566 par, due 5/2031 ) 5/22/2024 E + 4.75 % 6.77 % 354,950 373,447 (EUR 324,116 ) 8.9 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Acosta (3)(12) First-lien loan ($ 193,970 par, due 8/2031 ) 8/20/2024 SOFR + 5.60 % 9.22 % 190,629 188,758 4.4 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Bed Bath and Beyond Inc. (3)(11)(13) ABL FILO term loan ($ 10,746 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 13.57 % 10,645 8,516 0.2 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Belk, Inc. (3) First-lien loan ($ 179,091 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 10.67 % 176,791 178,643 4.3 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Blazing Star Parent, LLC (3) First-lien loan ($ 197,500 par, due 8/2030 ) 8/28/2025 SOFR + 7.00 % 10.67 % 194,859 195,525 4.7 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Cordance Operations, LLC (3) First-lien loan ($ 27,946 par, due 7/2028 ) 6/12/2025 SOFR + 8.40 % 12.06 % 27,335 28,143 0.7 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "PDI TA Holdings, Inc. (3) First-lien loan ($ 163,269 par, due 2/2031 ) 2/1/2024 SOFR + 6.00 % 9.67 % (incl. 2.50 % PIK) 161,503 159,595 3.8 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 7,546 par, due 7/2029 ) 7/11/2023 E + 6.50 % 8.52 % 8,136 8,528 (EUR 7,401 ) 0.2 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Tango Management Consulting, LLC (3)(5) First-lien loan ($ 13,276 par, due 6/2031 ) 6/25/2025 SOFR + 6.50 % 10.16 % 13,011 12,854 0.3 %"
+        },
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Structured Credit Partners JV, LLC (4)(6)(10) Partnership Interest ( 25.00 % ownership) 12/23/2025 7,335 7,335 0.2 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-567e54e69da981d9",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-3369d2810bcb4b54",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-b641c889d50c15e7",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-948419de60f0e970",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-74fd7e8a92291237",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-8efe90773943e4a0",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-28504fedc444a456",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-f22f03136798c7f0",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-cb00706d3d56125b",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-98b669deb4d95862",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_f93914897f14",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Class B Units ( 173,048 units) 11/21/2022 10 17 0.0 %"
+        },
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Artisan Topco LP (8) Class A Preferred Units ( 7,882,736 units) 11/7/2023 7,883 6,621 0.2 % Insight Hideaway Aggregator, L.P. (8) Partnership Interest ( 2,170,139 units) 3/19/2024 21,701 23,220 0.5 % Newark FP Co-Invest, L.P. (8) Partnership ( 8,555,356 units) 11/8/2023 8,572 4,907 0.1 % Warrior TopCo LP (8) Class A Units ( 9,576,271 units) 7/7/2023 9,576 14,939 0.4 % 47,732 49,687 1.2 % Financial Services AF Eagle Parent, L.P. (8) Partnership Units ( 337,024 units) 11/27/2023 11,364 12,557 0.3 % Healthcare Raptor US Buyer II Corp. (8) Ordinary Shares ( 83,408 shares) 3/24/2023 12,876 13,262 0.3 % Human Resource Support Services bswift, LLC Class A-1 Units ( 7,606,491 units) 11/7/2022 7,606 15,365 0.4 % Internet Services Bigtincan Holdings L.P. (8) Class A Units ( 666,667 units) 4/16/2025 667 667 0.0 % SMA Technologies Holdings, LLC (8)(10) Class A Units ( 244 units) 11/21/2022 244 389 0.0 % Class B Units ( 173,048 units) 11/21/2022 10 17 0.0 % 921 1,073 0.0 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-041c48f226ce376b",
+          "assessment": "Confirmed count mismatch: unscaled share tag and printed Class B count 173,048 versus published 244. Neighbor Class A has 244 units, supporting a cross-class carry-over hypothesis; exact implementation cause remains unproven."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_f9781614ff73",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 12 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level confirmed_error correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Bed Bath and Beyond Inc. (3)(11) ABL FILO term loan ($ 27,954 par, due 8/2027 ) 9/2/2022 SOFR + 9.90 % 15.22 % 27,331 27,325 2.5 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 148,875 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.62 % 139,820 148,875 13.4 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.15 % 4,666 4,625 (EUR 4,368 ) 0.4 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "12,832 Class A 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Super-Priority DIP term loan ($ 47,116 par, due 9/2024 ) 4/24/2023 SOFR + 7.90 % 13.22 % (incl. 13.22 % PIK) 47,116 46,056 4.2 % Commercehub, Inc. (3) First-lien loan ($ 148,875 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.62 % 139,820 148,875 13.4 % Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.15 % 4,666 4,625 (EUR 4,368 ) 0.4 % 227,925 235,671 21.3 % Total Debt Investments 1,977,689 2,018,130 182.3 % Equity and Other Investments Business Services Warrior TopCo LP (8)(10) Class A Units ( 9,576,271 units) 7/7/2023 9,576 9,576 0.9 % Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.1 % 12,832 Class A 3/24/2023 1,288 1,288 0.1 % 12,832 Class B 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "12,832 Class B 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Commercehub, Inc. (3) First-lien loan ($ 148,875 par, due 12/2027 ) 11/15/2022 SOFR + 6.25 % 11.62 % 139,820 148,875 13.4 % Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.15 % 4,666 4,625 (EUR 4,368 ) 0.4 % 227,925 235,671 21.3 % Total Debt Investments 1,977,689 2,018,130 182.3 % Equity and Other Investments Business Services Warrior TopCo LP (8)(10) Class A Units ( 9,576,271 units) 7/7/2023 9,576 9,576 0.9 % Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.1 % 12,832 Class A 3/24/2023 1,288 1,288 0.1 % 12,832 Class B 3/24/2023 1,288 1,288 0.1 % 12,832 Class C 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "12,832 Class C 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.15 % 4,666 4,625 (EUR 4,368 ) 0.4 % 227,925 235,671 21.3 % Total Debt Investments 1,977,689 2,018,130 182.3 % Equity and Other Investments Business Services Warrior TopCo LP (8)(10) Class A Units ( 9,576,271 units) 7/7/2023 9,576 9,576 0.9 % Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.1 % 12,832 Class A 3/24/2023 1,288 1,288 0.1 % 12,832 Class B 3/24/2023 1,288 1,288 0.1 % 12,832 Class C 3/24/2023 1,288 1,288 0.1 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "12,832 Class D 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "227,925 235,671 21.3 % Total Debt Investments 1,977,689 2,018,130 182.3 % Equity and Other Investments Business Services Warrior TopCo LP (8)(10) Class A Units ( 9,576,271 units) 7/7/2023 9,576 9,576 0.9 % Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.1 % 12,832 Class A 3/24/2023 1,288 1,288 0.1 % 12,832 Class B 3/24/2023 1,288 1,288 0.1 % 12,832 Class C 3/24/2023 1,288 1,288 0.1 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "12,832 Class E 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Total Debt Investments 1,977,689 2,018,130 182.3 % Equity and Other Investments Business Services Warrior TopCo LP (8)(10) Class A Units ( 9,576,271 units) 7/7/2023 9,576 9,576 0.9 % Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.1 % 12,832 Class A 3/24/2023 1,288 1,288 0.1 % 12,832 Class B 3/24/2023 1,288 1,288 0.1 % 12,832 Class C 3/24/2023 1,288 1,288 0.1 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,288 1,288 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.2 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "12,832 Class F 3/24/2023 1,287 1,287 0.2 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Total Debt Investments 1,977,689 2,018,130 182.3 % Equity and Other Investments Business Services Warrior TopCo LP (8)(10) Class A Units ( 9,576,271 units) 7/7/2023 9,576 9,576 0.9 % Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.1 % 12,832 Class A 3/24/2023 1,288 1,288 0.1 % 12,832 Class B 3/24/2023 1,288 1,288 0.1 % 12,832 Class C 3/24/2023 1,288 1,288 0.1 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,288 1,288 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.2 % 12,832 Class G 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "12,832 Class G 3/24/2023 1,288 1,288 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Equity and Other Investments Business Services Warrior TopCo LP (8)(10) Class A Units ( 9,576,271 units) 7/7/2023 9,576 9,576 0.9 % Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.1 % 12,832 Class A 3/24/2023 1,288 1,288 0.1 % 12,832 Class B 3/24/2023 1,288 1,288 0.1 % 12,832 Class C 3/24/2023 1,288 1,288 0.1 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,288 1,288 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.2 % 12,832 Class G 3/24/2023 1,288 1,288 0.1 % 12,832 Class H 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "12,832 Class H 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Equity and Other Investments Business Services Warrior TopCo LP (8)(10) Class A Units ( 9,576,271 units) 7/7/2023 9,576 9,576 0.9 % Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.1 % 12,832 Class A 3/24/2023 1,288 1,288 0.1 % 12,832 Class B 3/24/2023 1,288 1,288 0.1 % 12,832 Class C 3/24/2023 1,288 1,288 0.1 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,288 1,288 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.2 % 12,832 Class G 3/24/2023 1,288 1,288 0.1 % 12,832 Class H 3/24/2023 1,287 1,287 0.1 % 12,832 Class I 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "12,832 Class I 3/24/2023 1,287 1,287 0.1 %"
+        },
+        {
+          "accession": "0000950170-23-058792",
+          "text": "Business Services Warrior TopCo LP (8)(10) Class A Units ( 9,576,271 units) 7/7/2023 9,576 9,576 0.9 % Healthcare Raptor US Buyer II Corp. (8)(10) 12,832 Ordinary Shares 3/24/2023 1,288 1,288 0.1 % 12,832 Class A 3/24/2023 1,288 1,288 0.1 % 12,832 Class B 3/24/2023 1,288 1,288 0.1 % 12,832 Class C 3/24/2023 1,288 1,288 0.1 % 12,832 Class D 3/24/2023 1,288 1,288 0.1 % 12,832 Class E 3/24/2023 1,288 1,288 0.1 % 12,832 Class F 3/24/2023 1,287 1,287 0.2 % 12,832 Class G 3/24/2023 1,288 1,288 0.1 % 12,832 Class H 3/24/2023 1,287 1,287 0.1 % 12,832 Class I 3/24/2023 1,287 1,287 0.1 % 12,877 12,877 1.1 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-0ea4e43625ae2b1d",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-d4bc57172a534605",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-dd605117803ea75e",
+          "assessment": "Confirmed issuer-field mismatch against attached original schedule row: printed issuer differs through industry/axis/instrument contamination, misspelling, wrong company, or Aurelia entity label. Preserve this context and distinct tranche; cleaning must be source-specific, not a borrower merge."
+        },
+        {
+          "row_id": "ROW-cdb043c72ee071c3",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-d0eade00ab86de1a",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-d49a1cb2ec9c1a9e",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-2526929c65c37aec",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-2403aad341276273",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-c519b133053bd390",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-d656059028e428ea",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-ecf34aabcbfc6c40",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        },
+        {
+          "row_id": "ROW-4aebd198b201ddce",
+          "assessment": "Supported row-level false alarm: immediately preceding ordinary-shares block supplies Raptor issuer; separate Class A-I count and amount rows are preserved. Blank continuation issuer is not evidence of a different issuer."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_61a9222bc84a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level false_alarm correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-038548",
+          "text": "SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Company (1)(9) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2) (7) Fair Value (6) Percentage of Net Assets Debt Investments Automotive Bestpass, Inc. (3)(5) First-lien loan ($ 10,000 par, due 5/2029 ) 5/26/2023 SOFR + 5.75 % 10.85 % $ 9,715 $ 9,750 1.1 % Business Services BCTO Ignition Purchaser, Inc. (3) First-lien holdco loan ($ 100,000 par, due 10/2030 ) 4/18/2023 SOFR + 9.00 % 13.98 % PIK 97,081 97,750 10.8 % Galileo Parent, Inc. (3) First-lien loan ($ 151,442 par, due 5/2030 ) 5/3/2023 SOFR + 7.25 % 12.34 % 147,004 148,792 16.4 % SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 % Hornetsecurity Holding GmbH (3)(4) First-lien loan (EUR 3,150 par, due 11/2029 ) 11/15/2022 E + 6.50 % 9.82 % 3,149 $ 3,409 (EUR 3,125 ) 0.4 %"
+        },
+        {
+          "accession": "0000950170-23-038548",
+          "text": "Company (1)(9) Investment Initial Acquisition Date Reference Rate and Spread Interest Rate Amortized Cost (2) (7) Fair Value (6) Percentage of Net Assets Debt Investments Automotive Bestpass, Inc. (3)(5) First-lien loan ($ 10,000 par, due 5/2029 ) 5/26/2023 SOFR + 5.75 % 10.85 % $ 9,715 $ 9,750 1.1 % Business Services BCTO Ignition Purchaser, Inc. (3) First-lien holdco loan ($ 100,000 par, due 10/2030 ) 4/18/2023 SOFR + 9.00 % 13.98 % PIK 97,081 97,750 10.8 % Galileo Parent, Inc. (3) First-lien loan ($ 151,442 par, due 5/2030 ) 5/3/2023 SOFR + 7.25 % 12.34 % 147,004 148,792 16.4 % SOFR + 7.25 % 12.34 % 9,745 10,020 1.1 % Hornetsecurity Holding GmbH (3)(4) First-lien loan (EUR 3,150 par, due 11/2029 ) 11/15/2022 E + 6.50 % 9.82 % 3,149 $ 3,409 (EUR 3,125 ) 0.4 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-7bae9be066147555",
+          "assessment": "Supported false alarm for missing principal: this exact source row has no face/par tag. Cordance explicitly prints dash par. Galileo neighboring main loan has 151,442 par but the flagged continuation separately has cost 9,745 and FV 10,020; do not borrow the parent loan principal. This does not certify instrument identification or other fields."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_78d2c979ac2a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level false_alarm correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-266848",
+          "text": "Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 8.65 % - ( 407 ) 225 0.0 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-90d6b9bd01cd4d94",
+          "assessment": "Supported false alarm for missing principal: this exact source row has no face/par tag. Cordance explicitly prints dash par. Galileo neighboring main loan has 151,442 par but the flagged continuation separately has cost 9,745 and FV 10,020; do not borrow the parent loan principal. This does not certify instrument identification or other fields."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_f114a3fee383",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Exact selected rule/date population independently re-queried from sandbox outputs: 1 occurrences. All published comparison fields and original context-row tags/text agree with report. Finding-level false_alarm correctly preserves mixed row conclusions. Specific repair/disposition proposals are supported as next steps; suspected code mechanisms remain hypotheses.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-101397",
+          "text": "Cordance Operations, LLC (3) First-lien loan ($- par, due 6/2027 ) 6/12/2025 SOFR + 9.00 % - ( 443 ) 225 0.0 %"
+        }
+      ],
+      "row_reviews": [
+        {
+          "row_id": "ROW-f546cf18ff10fe3b",
+          "assessment": "Supported false alarm for missing principal: this exact source row has no face/par tag. Cordance explicitly prints dash par. Galileo neighboring main loan has 151,442 par but the flagged continuation separately has cost 9,745 and FV 10,020; do not borrow the parent loan principal. This does not certify instrument identification or other fields."
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "cordance-maturity-label-disagrees-with-page",
+      "outcome": "supported",
+      "rationale": "Source prints 7/2028 while published description says 6/2027. Proposed context-anchored maturity comparison is feasible; normalize month/year versus full dates and distinguish acquisition dates. It is a detector proposal, not a validated implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-051289",
+          "text": "Cordance Operations, LLC (3) First-lien loan ($ 4,326 par, due 7/2028 ) 6/12/2025 SOFR + 8.65 % 12.53 % 3,955 4,755 0.1 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "aurelia-par-label-transposition",
+      "outcome": "supported",
+      "rationale": "Both anchored rows print EUR 326,566 versus description EUR 326,556. Proposed par comparison must compare same currency and scale, and inspect typed principal separately. No conclusion about numeric principal is justified by description alone.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Aurelia Netherlands B.V. (3)(4) First-lien loan (EUR 326,566 par, due 5/2031 ) 5/22/2024 E + 4.75 % 6.77 % 354,950 373,447 (EUR 324,116 ) 8.9 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Aurelia Netherlands B.V. (3)(4) First-lien loan (EUR 326,566 par, due 5/2031 ) 5/22/2024 E + 4.75 % 6.95 % 355,117 371,496 (EUR 324,933 ) 8.2 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "joint-venture-acquisition-date-label-disagrees-with-page",
+      "outcome": "supported",
+      "rationale": "Both source rows print acquisition 12/23/2025 versus published description 2/11/2026. Acquisition-role-aware comparison is concrete and feasible; JV stake must remain published and not be replaced with look-through holdings.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-208894",
+          "text": "Structured Credit Partners JV, LLC (4)(6)(10) Partnership Interest ( 25.00 % ownership) 12/23/2025 7,335 7,335 0.2 %"
+        },
+        {
+          "accession": "0001193125-26-335004",
+          "text": "Structured Credit Partners JV, LLC (4)(6)(10) Partnership Interest ( 25.00 % ownership) 12/23/2025 25,704 26,925 0.6 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "instrument-description-concatenates-sibling-position",
+      "outcome": "supported",
+      "rationale": "Published GreenShoot description contains repeated prior-rate text and Belk contains Bestpass text absent from their single anchored source rows. Multi-block detection is a reasonable triage proposal only: legitimate multiple rates need source comparison before any automatic cleaning.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-122238",
+          "text": "GreenShoot BidCo B.V. (3)(4) First-lien loan (EUR 5,107 par, due 5/2030 ) 5/28/2024 E + 5.75 % 9.27 % 5,409 5,623 (EUR 5,038 ) 0.2 %"
+        },
+        {
+          "accession": "0000950170-24-122238",
+          "text": "Belk, Inc. (3) First-lien loan ($ 195,000 par, due 7/2029 ) 7/22/2024 SOFR + 7.00 % 12.28 % 192,010 192,563 6.2 %"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "scope": "32 selected records only; no whole-fund acceptance or sample review",
+  "limitations": [
+    "Root-cause code tracing and correction effectiveness were not tested. Proposed detectors require implementation and false-positive tests before promotion. A clean selected review is not a statement of complete data correctness."
+  ]
+}
