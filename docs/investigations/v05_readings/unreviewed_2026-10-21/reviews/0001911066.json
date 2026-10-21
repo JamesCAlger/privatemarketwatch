@@ -1,0 +1,34 @@
+{
+  "reviewer_id": "/root/remaining_nuveen_check_sol",
+  "report_digest": "86ce0954612ca943a36b4ac269798a143373cbd23cfe99f4cac11c231b12d371",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_69fe30660d88",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent reconstruction of unchanged candidate_rules on rgA4 yields 341 tested rows at 2024-06-30 and exactly one flagged row ROW-4a736dabc3f7aae0, matching all saved issuer_name_printed findings for this CIK. Original XML c-427 is the sole exact Treasury-member context, instant 2024-06-30; original HTML binds f-2534 through f-2538 to c-427 within the printed T-Fund Institutional Class row. Thus the error is display-name fidelity to that disclosed position, with Treasury originating in the filer typed identifier. Read entire cash table, heading and First American continuation neighbor: rate 5.20%, cost/FV 16,382 thousand and net-asset share 2.25 match the selected sandbox; neighbor cost/FV 11 thousand gives cash total 16,393 thousand. This supports rejection of a wrong-row association or comparative substitution for this selected row. Inline shares scale=3 and XML 16,382,000 do not establish a scale error from printed digits; report appropriately makes no such finding. Source-backed override with raw identifier preservation and identity-impact assessment is a bounded proposal, not implemented repair. No conclusion about verified economic equivalence of the two fund labels or whole-fund accuracy.",
+      "evidence": [
+        {
+          "accession": "0001628280-24-036317",
+          "text": "BlackRock Liquidity Funds T-Fund - Institutional Class 5.20 % 16,382 $ 16,382 $ 16,382 2.25 %"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "typed-money-market-identifier-differs-from-printed-fund-name",
+      "outcome": "supported",
+      "rationale": "Original source shows conflicting typed and printed labels on the same source-bound cash position. Existing issuer_name_printed detector independently reproduces this exact mismatch, so existing_detector is justified for recurrence of this mechanism. Keeping source anchoring and raw identifier while reviewing any display override avoids a global Treasury-to-T-Fund alias; class-suffix omission in the neighboring First American issuer is not itself proof of a wrong issuer. No detector broadening or suppression proposed.",
+      "evidence": [
+        {
+          "accession": "0001628280-24-036317",
+          "text": "BlackRock Liquidity Funds T-Fund - Institutional Class 5.20 % 16,382 $ 16,382 $ 16,382 2.25 %"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "scope": "One selected finding, one affected/reviewed position, one observation, zero requests; no fund acceptance, repair, disposition or economic-identity/share-convention certification."
+}

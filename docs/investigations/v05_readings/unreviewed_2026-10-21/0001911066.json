@@ -1,0 +1,93 @@
+﻿{
+    "cik":  "0001911066",
+    "label":  "rgA4",
+    "investigator_id":  "/root/remaining_nuveen_review_sol",
+    "review_scope":  "selected_unreviewed_findings",
+    "target_finding_ids":  [
+                               "RVQ_BLK_69fe30660d88"
+                           ],
+    "investigations":  [
+                           {
+                               "finding_id":  "RVQ_BLK_69fe30660d88",
+                               "coverage":  {
+                                                "affected_rows":  [
+                                                                      "ROW-4a736dabc3f7aae0"
+                                                                  ],
+                                                "reviewed_rows":  [
+                                                                      "ROW-4a736dabc3f7aae0"
+                                                                  ]
+                                            },
+                               "evidence":  [
+                                                {
+                                                    "accession":  "0001628280-24-036317",
+                                                    "text":  "BlackRock Liquidity Funds T-Fund - Institutional Class 5.20 % 16,382 $ 16,382 $ 16,382 2.25 %"
+                                                },
+                                                {
+                                                    "accession":  "0001628280-24-036317",
+                                                    "text":  "First American Government Obligations Fund - Class Z 5.20 % 11 11 11 - % Total Cash Equivalents $ 16,393 $ 16,393 2.25 %"
+                                                },
+                                                {
+                                                    "accession":  "0001628280-24-036317",
+                                                    "text":  "June 30, 2024 (dollar amounts in thousands) Portfolio Company (1) (2) Interest Rate Share/Unit Cost Fair Value % of Net Assets (5) Cash Equivalents"
+                                                }
+                                            ],
+                               "conclusion":  "confirmed_error",
+                               "assessment":  "Confirmed display-name fidelity error in the selected sandbox: issuer_name and canonical_name are BlackRock Liquidity Funds Treasury, whereas the tagged printed investment row names BlackRock Liquidity Funds T-Fund - Institutional Class. This establishes a mismatch to the disclosed position label, not that the holding belongs to an economically unrelated manager or a different verified security. The filer itself supplied Treasury in the typed InvestmentIdentifierAxis domain; the pipeline retained that internal identifier as its displayed issuer. The actual HTML nonfraction facts f-2534 through f-2538 all bind to c-427 on the T-Fund row. No evidence of a wrong-row join, lost value, duplicate position, or comparative-period substitution was found in this selected population.",
+                               "population_reconstruction":  "Read every issuer_name_printed row in rgA4/output/shadow/page_rule_findings.csv for this CIK: exactly one. Independently reran the unchanged candidate_rules load_rows/ledger_rows in memory against rgA4 holdings and field-status parquet: 341 tested rows at 2024-06-30, one finding, exact same row_id and not_the_printed_name kind. Blind share is 3/341 (two missing printed rows and one without comparable name); page test is not suppressed. These are detector population counts, not 341 manual source reviews. Diagnostic is scratch/2026-10-21_review_queue/0001911066/source.txt.",
+                               "source_context":  "Accession 0001628280-24-036317, context c-427, instant 2024-06-30, InvestmentIdentifierAxis typed value BlackRock Liquidity Funds Treasury. Searched all original XML contexts for that typed value: only c-427, no duration or comparative sibling. Read original HTML cash-table heading, entire affected row, preceding Cash Equivalents heading, following First American row and Total Cash Equivalents. Cost and fair value are each $16,382 thousand, matching published $16,382,000; coupon is 5.20%, matching 5.2; disclosed net-asset share 2.25% matches 2.25. Neighbor First American has published cost/FV $11,000 and rate 5.2 matching its printed $11 thousand and 5.20%; class suffix omitted in issuer_name is consistent with issuer-prefix comparison and is not evidence of a different issuer. Total cash $16,393 thousand equals these two published values. No financial-metric finding is selected; no acceptance or denominator validation is claimed.",
+                               "hypotheses_tested":  [
+                                                         "Bad page association: rejected by direct original HTML facts f-2534 to f-2538, all referencing c-427 inside the T-Fund row, with matching rate, cost, fair value and net-assets percentage.",
+                                                         "Comparative-period duplication or sibling confusion: rejected for selected population; XML c-427 is June 30, 2024 and the only context carrying the exact Treasury identifier in this filing.",
+                                                         "Pipeline invented Treasury through normalization: rejected as the immediate mechanism; original typed member already says Treasury and published identifier, issuer_name and canonical_name retain it.",
+                                                         "Prior narrative already reviewed this exact issue: checked 0001911066.md, reports/0001911066.json and decision entries D-084, D-123, D-182. They discuss comma splitting, rotated names, Dragon and cash-unit/classification defects, but do not assess this 2024-06-30 Treasury versus T-Fund mismatch. No further exclusion requested.",
+                                                         "Share count is necessarily an extraction scale error: not established. Cash-schedule caption says dollar amounts in thousands; no exception explaining share scaling or printed per-unit price appears on this bounded cash table. Inline scale=3 and XML give 16,382,000, matching published shares. Printed 16,382 can represent thousands of units. No error or ambiguity finding is inferred from the raw-digit difference alone; source convention was not independently resolved."
+                                                     ],
+                               "next_action":  "Propose a source-row-backed display-name override for this accession/context to the printed T-Fund Institutional Class label, preserving the raw Treasury identifier and stable source anchor. Assess entity/position identity impact before implementation. Do not globally alias all BlackRock Treasury funds to T-Fund, and do not change value or shares to clear this name finding. Review-only: no repair or disposition performed."
+                           }
+                       ],
+    "observations":  [
+                         {
+                             "observation_key":  "typed-money-market-identifier-differs-from-printed-fund-name",
+                             "what":  "The selected name error originates in a filer typed identifier that differs from the printed fund label. In rgA4 the printed T-Fund Institutional Class row is displayed as BlackRock Liquidity Funds Treasury; no repair made.",
+                             "field":  "issuer_name",
+                             "quarters":  [
+                                              "2024-06-30"
+                                          ],
+                             "fair_value_m":  16.382,
+                             "cause":  "fund",
+                             "action":  "left",
+                             "quote":  {
+                                           "accession":  "0001628280-24-036317",
+                                           "text":  "BlackRock Liquidity Funds T-Fund - Institutional Class 5.20 % 16,382 $ 16,382 $ 16,382 2.25 %"
+                                       },
+                             "suggested_check":  "Retain the existing printed-name comparison on the source-bound row; assess name overrides without dropping the raw context identifier.",
+                             "detection_decision":  {
+                                                        "action":  "existing_detector",
+                                                        "rationale":  "issuer_name_printed actually fired on ROW-4a736dabc3f7aae0 in the untouched rgA4 output; the in-memory population reconstruction reproduced that exact finding.",
+                                                        "reference":  "issuer_name_printed / RVQ_BLK_69fe30660d88 / rgA4/output/shadow/page_rule_findings.csv"
+                                                    }
+                         }
+                     ],
+    "orchestrator_requests":  [
+
+                              ],
+    "not_done":  [
+                     "No independent review yet; report frozen for a separate reviewer.",
+                     "Only one selected finding and one affected source row investigated; 341 tested rows describe mechanical detector reach, not whole-quarter manual validation.",
+                     "No network, repairs, builds, tests, canonical/frontend writes, ledger/disposition changes or acceptance performed.",
+                     "Did not independently establish the economic equivalence of Treasury and T-Fund labels or resolve the share presentation convention. No current canonical gap or whole-fund correctness claim."
+                 ],
+    "counts":  {
+                   "selected_findings":  1,
+                   "affected_rows":  1,
+                   "reviewed_rows":  1,
+                   "confirmed_error":  1,
+                   "false_alarm":  0,
+                   "source_ambiguity":  0,
+                   "insufficient_evidence":  0,
+                   "observations":  1,
+                   "orchestrator_requests":  0,
+                   "detector_tested_rows_in_selected_quarter":  341,
+                   "detector_flagged_rows_in_selected_quarter":  1
+               }
+}
