@@ -1,0 +1,141 @@
+{
+  "reviewer_id": "/root/remaining_diameter_check_sol",
+  "report_digest": "09710bb543836961466f47333e7c6a150a959bc3a3b6f6d06336db2cd157ba59",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_019e3333fd8f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/quarter population from page_rule_findings.csv and queried sandbox parquet; independently parsed cached original inline-XBRL HTML contexts and table cells, including neighbors. ROW-275da8d1f59cb9ac (C_dc30570a-5f3f-40e1-b695-81cdf1b69219): Separate HTML issuer and Corporate Bond instrument cells establish instrument leakage; adjacent term loan is a distinct position. Wrapper strip regex contains bare Bond without Corporate Bond. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-107866",
+          "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 500"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_5737973b13a3",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/quarter population from page_rule_findings.csv and queried sandbox parquet; independently parsed cached original inline-XBRL HTML contexts and table cells, including neighbors. ROW-db134ce3215785ae (C_988be24d-7bad-484b-9ef3-09515adee7aa): Separate HTML issuer and Corporate Bond instrument cells establish instrument leakage; adjacent term loan is a distinct position. Wrapper strip regex contains bare Bond without Corporate Bond. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-067944",
+          "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 496"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7463e1fc0c6a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/quarter population from page_rule_findings.csv and queried sandbox parquet; independently parsed cached original inline-XBRL HTML contexts and table cells, including neighbors. ROW-e4729d34dd09570a (C_ee9fb0b0-3b94-4ab1-94ed-9ca9bc7729a7): Separate HTML issuer and Corporate Bond instrument cells establish instrument leakage; adjacent term loan is a distinct position. Wrapper strip regex contains bare Bond without Corporate Bond. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-123107",
+          "text": "R.R. Donnelley & Sons Company (9) Corporate Bond 10.42 % N/A 8/1/2029 500 500 504"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7d12ba225e1f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/quarter population from page_rule_findings.csv and queried sandbox parquet; independently parsed cached original inline-XBRL HTML contexts and table cells, including neighbors. ROW-7a090d92a7a1faaf (C_e0486b54-792b-4c99-8e76-1f6567d204de): Printed issuer includes ICAT while original member omits it. This is source-member omission propagated into display, not evidence of a different borrower. Adjacent ICAT DDTL and loan/revolver rows support a context-specific display mapping while preserving positions and negative fees. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed. ROW-56e0adca3d34aec7 (C_5b7301bf-0388-45fe-9db6-b990eea1b59c): Printed issuer includes ICAT while original member omits it. This is source-member omission propagated into display, not evidence of a different borrower. Adjacent ICAT DDTL and loan/revolver rows support a context-specific display mapping while preserving positions and negative fees. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed. ROW-6390c0f9876459db (C_c650f2d8-5a41-445d-9cdb-8ceba7574b72): Separate HTML issuer and Corporate Bond instrument cells establish instrument leakage; adjacent term loan is a distinct position. Wrapper strip regex contains bare Bond without Corporate Bond. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed. ROW-c44bc9181def0a21 (C_b70cdec0-e643-43a0-a167-7f8d573f599c): Separate HowardSimon LLC / Term Loan cells contradict published Term suffix; original member interrupts Term Loan with Interest Rate 8.91%, supporting the boundary mechanism. Adjacent revolver remains a separate position. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-279909",
+          "text": "ICAT Intermediate Holdings, LLC (4)(5)(6) Revolving Line of Credit SOFR 6.25 % 9/29/2025 3/1/2029 - ( 29 ) ( 29 )"
+        },
+        {
+          "accession": "0001193125-25-279909",
+          "text": "ICAT Intermediate Holdings, LLC (6) Term Loan 10.42 % SOFR 6.25 % 9/29/2025 3/1/2029 25,374 24,976 24,994"
+        },
+        {
+          "accession": "0001193125-25-279909",
+          "text": "R.R. Donnelley & Sons Company (4)(8) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 513"
+        },
+        {
+          "accession": "0001193125-25-279909",
+          "text": "HowardSimon LLC (6) Term Loan 8.91 % SOFR 4.75 % 12/13/2024 12/13/2030 22,519 22,270 22,654"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_9311bf261659",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/quarter population from page_rule_findings.csv and queried sandbox parquet; independently parsed cached original inline-XBRL HTML contexts and table cells, including neighbors. ROW-0691a87dc754406f (C_48282981-1a66-420b-b4b2-e2e979fd2b77): Original issuer cell has singular Holding; member and publication add s. This is a real printed-display mismatch beyond punctuation/accent normalization. Same economic row supports mapping but does not establish a different legal entity. Exact-member display correction is proportionate. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-216630",
+          "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.45 % EURIBOR 6.50 % 11/3/2025 11/4/2030 53,721 52,331 52,565"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d23212bcee58",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/quarter population from page_rule_findings.csv and queried sandbox parquet; independently parsed cached original inline-XBRL HTML contexts and table cells, including neighbors. ROW-917e251bc213b63e (C_e896bc9c-8aed-4701-8fd8-b7f695cf53be): Separate HTML issuer and Corporate Bond instrument cells establish instrument leakage; adjacent term loan is a distinct position. Wrapper strip regex contains bare Bond without Corporate Bond. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-038029",
+          "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 10.42 % N/A 07/30/2024 8/1/2029 500 500 508"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d3949d5e7467",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/quarter population from page_rule_findings.csv and queried sandbox parquet; independently parsed cached original inline-XBRL HTML contexts and table cells, including neighbors. ROW-ef34da1fed6e8d11 (C_9e530e5f-63d5-47a4-9c54-ddcb84076043): Original issuer cell has singular Holding; member and publication add s. This is a real printed-display mismatch beyond punctuation/accent normalization. Same economic row supports mapping but does not establish a different legal entity. Exact-member display correction is proportionate. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-342470",
+          "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.65 % EURIBOR 6.50 % 11/3/2025 11/4/2030 52,472 51,952 52,311"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e01be599095d",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/quarter population from page_rule_findings.csv and queried sandbox parquet; independently parsed cached original inline-XBRL HTML contexts and table cells, including neighbors. ROW-6f12ab31cb9d814f (C_edbd954f-9498-4106-b4cb-643417f81c40): Original issuer cell has singular Service; member and publication add s. This is a real printed-display mismatch beyond punctuation/accent normalization. Same economic row supports mapping but does not establish a different legal entity. Exact-member display correction is proportionate. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed. ROW-6b673454813d9e78 (C_3c6d6978-63ae-41bb-9754-3b81765fba99): Original issuer cell has singular Service; member and publication add s. This is a real printed-display mismatch beyond punctuation/accent normalization. Same economic row supports mapping but does not establish a different legal entity. Exact-member display correction is proportionate. Source context instant equals finding quarter; cost/FV, rate/spread when printed and maturity match the source row. Read preceding/following rows; no position aggregation proposed.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-104439",
+          "text": "Legacy Service Partners, LLC (4)(5)(6) Delayed Draw Term Loan N/A 11/10/2025 11/10/2032 $ - $ ( 171 ) $ ( 171 )"
+        },
+        {
+          "accession": "0001193125-26-104439",
+          "text": "Legacy Service Partners, LLC (6) Term Loan 13.25 % ( 13.25 % PIK) N/A 11/10/2025 11/10/2032 16,000 15,608 15,608"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [],
+  "request_reviews": [],
+  "limitations": [
+    "Selected 8 findings / 12 rows only; no whole-fund acceptance or random 20-row sample.",
+    "All selected source contexts match finding quarters; comparative contexts outside selected population not swept.",
+    "Display spelling/issuer-boundary errors established; no independent legal-borrower identity or current PIK payment/accrual determination.",
+    "Proposed mechanisms remain unimplemented and require focused false-positive validation before adoption."
+  ],
+  "counts": {
+    "supported_findings": 8,
+    "rejected_findings": 0,
+    "source_rows_reviewed": 12,
+    "observations": 0,
+    "requests": 0
+  }
+}

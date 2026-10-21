@@ -1,0 +1,521 @@
+{
+  "cik": "0001916099",
+  "label": "rgA3",
+  "investigator_id": "/root/remaining_diameter_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_019e3333fd8f",
+    "RVQ_BLK_5737973b13a3",
+    "RVQ_BLK_7463e1fc0c6a",
+    "RVQ_BLK_7d12ba225e1f",
+    "RVQ_BLK_9311bf261659",
+    "RVQ_BLK_d23212bcee58",
+    "RVQ_BLK_d3949d5e7467",
+    "RVQ_BLK_e01be599095d"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_019e3333fd8f",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-275da8d1f59cb9ac"
+        ],
+        "reviewed_rows": [
+          "ROW-275da8d1f59cb9ac"
+        ],
+        "population_source": "rgA3/output/shadow/page_rule_findings.csv filtered by exact CIK/rule/report_date; every matching row retained, no sampling",
+        "affected_count": 1,
+        "reviewed_count": 1
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-107866",
+          "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 500"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_analyses": [
+        {
+          "row_id": "ROW-275da8d1f59cb9ac",
+          "accession": "0000950170-25-107866",
+          "context_id": "C_dc30570a-5f3f-40e1-b695-81cdf1b69219",
+          "context_period": "2025-06-30",
+          "published_issuer": "R.R. Donnelley & Sons Company Corporate",
+          "printed_row": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 500",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Commercial Services & Supplies R.R. Donnelley & Sons Company Corporate Bond Acquisition Date 7/30/2024 Maturity Date 8/1/2029 2025-06-30",
+          "assessment": "Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix.",
+          "proposed_mechanism": "Extend the opt-in wrapper's instrument boundary to Corporate Bond before bare Bond; retain full instrument wording and test against company names containing Corporate.",
+          "neighbor_review": {
+            "index": 238,
+            "row": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 500",
+            "previous": "R.R. Donnelley & Sons Company (6) Term Loan 9.08 % SOFR 4.75 % 8/12/2024 8/8/2029 73,792 71,970 71,579",
+            "next": "164,944 161,362 161,929 18.27 %"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-275da8d1f59cb9ac: Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix."
+      ],
+      "next_action": "Review-only: propose the per-row mechanisms in row_analyses, then separately authorize fixes and focused false-positive checks; no disposition or correction made."
+    },
+    {
+      "finding_id": "RVQ_BLK_5737973b13a3",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-db134ce3215785ae"
+        ],
+        "reviewed_rows": [
+          "ROW-db134ce3215785ae"
+        ],
+        "population_source": "rgA3/output/shadow/page_rule_findings.csv filtered by exact CIK/rule/report_date; every matching row retained, no sampling",
+        "affected_count": 1,
+        "reviewed_count": 1
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-067944",
+          "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 496"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_analyses": [
+        {
+          "row_id": "ROW-db134ce3215785ae",
+          "accession": "0000950170-25-067944",
+          "context_id": "C_988be24d-7bad-484b-9ef3-09515adee7aa",
+          "context_period": "2025-03-31",
+          "published_issuer": "R.R. Donnelley & Sons Company Corporate",
+          "printed_row": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 496",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Commercial Services & Supplies R.R. Donnelley & Sons Company Corporate Bond Interest Rate 9.50% Acquisition Date 7/30/2024 Maturity Date 8/1/2029 2025-03-31",
+          "assessment": "Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix.",
+          "proposed_mechanism": "Extend the opt-in wrapper's instrument boundary to Corporate Bond before bare Bond; retain full instrument wording and test against company names containing Corporate.",
+          "neighbor_review": {
+            "index": 208,
+            "row": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 496",
+            "previous": "R.R. Donnelley & Sons Company (6) Term Loan 9.07 % SOFR 4.75 % 8/12/2024 8/8/2029 73,978 72,040 71,758",
+            "next": "159,910 156,157 156,799 22.69 %"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-db134ce3215785ae: Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix."
+      ],
+      "next_action": "Review-only: propose the per-row mechanisms in row_analyses, then separately authorize fixes and focused false-positive checks; no disposition or correction made."
+    },
+    {
+      "finding_id": "RVQ_BLK_7463e1fc0c6a",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-09-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-e4729d34dd09570a"
+        ],
+        "reviewed_rows": [
+          "ROW-e4729d34dd09570a"
+        ],
+        "population_source": "rgA3/output/shadow/page_rule_findings.csv filtered by exact CIK/rule/report_date; every matching row retained, no sampling",
+        "affected_count": 1,
+        "reviewed_count": 1
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-123107",
+          "text": "R.R. Donnelley & Sons Company (9) Corporate Bond 10.42 % N/A 8/1/2029 500 500 504"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_analyses": [
+        {
+          "row_id": "ROW-e4729d34dd09570a",
+          "accession": "0000950170-24-123107",
+          "context_id": "C_ee9fb0b0-3b94-4ab1-94ed-9ca9bc7729a7",
+          "context_period": "2024-09-30",
+          "published_issuer": "R.R. Donnelley & Sons Company Corporate",
+          "printed_row": "R.R. Donnelley & Sons Company (9) Corporate Bond 10.42 % N/A 8/1/2029 500 500 504",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Commercial Services & Supplies R.R. Donnelley & Sons Company Corporate Bond Interest Rate 10.42% Maturity Date 8/1/2029 2024-09-30",
+          "assessment": "Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix.",
+          "proposed_mechanism": "Extend the opt-in wrapper's instrument boundary to Corporate Bond before bare Bond; retain full instrument wording and test against company names containing Corporate.",
+          "neighbor_review": {
+            "index": 185,
+            "row": "R.R. Donnelley & Sons Company (9) Corporate Bond 10.42 % N/A 8/1/2029 500 500 504",
+            "previous": "R.R. Donnelley & Sons Company (6) Term Loan 9.91 % SOFR 4.75 % 8/8/2029 74,350 72,181 72,181",
+            "next": "111,987 109,193 110,037 25.91 %"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-e4729d34dd09570a: Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix."
+      ],
+      "next_action": "Review-only: propose the per-row mechanisms in row_analyses, then separately authorize fixes and focused false-positive checks; no disposition or correction made."
+    },
+    {
+      "finding_id": "RVQ_BLK_7d12ba225e1f",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-09-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-c44bc9181def0a21",
+          "ROW-6390c0f9876459db",
+          "ROW-7a090d92a7a1faaf",
+          "ROW-56e0adca3d34aec7"
+        ],
+        "reviewed_rows": [
+          "ROW-c44bc9181def0a21",
+          "ROW-6390c0f9876459db",
+          "ROW-7a090d92a7a1faaf",
+          "ROW-56e0adca3d34aec7"
+        ],
+        "population_source": "rgA3/output/shadow/page_rule_findings.csv filtered by exact CIK/rule/report_date; every matching row retained, no sampling",
+        "affected_count": 4,
+        "reviewed_count": 4
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-25-279909",
+          "text": "HowardSimon LLC (6) Term Loan 8.91 % SOFR 4.75 % 12/13/2024 12/13/2030 22,519 22,270 22,654"
+        },
+        {
+          "accession": "0001193125-25-279909",
+          "text": "R.R. Donnelley & Sons Company (4)(8) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 513"
+        },
+        {
+          "accession": "0001193125-25-279909",
+          "text": "ICAT Intermediate Holdings, LLC (4)(5)(6) Revolving Line of Credit SOFR 6.25 % 9/29/2025 3/1/2029 - ( 29 ) ( 29 )"
+        },
+        {
+          "accession": "0001193125-25-279909",
+          "text": "ICAT Intermediate Holdings, LLC (6) Term Loan 10.42 % SOFR 6.25 % 9/29/2025 3/1/2029 25,374 24,976 24,994"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_analyses": [
+        {
+          "row_id": "ROW-c44bc9181def0a21",
+          "accession": "0001193125-25-279909",
+          "context_id": "C_b70cdec0-e643-43a0-a167-7f8d573f599c",
+          "context_period": "2025-09-30",
+          "published_issuer": "HowardSimon LLC Term",
+          "printed_row": "HowardSimon LLC (6) Term Loan 8.91 % SOFR 4.75 % 12/13/2024 12/13/2030 22,519 22,270 22,654",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Professional Services HowardSimon LLC Term Interest Rate 8.91% Loan Reference Rate SOFR Spread 4.75% Acquisition Date 12/13/2024 Maturity Date 12/13/2030 2025-09-30",
+          "assessment": "Printed issuer is HowardSimon LLC and instrument is Term Loan. The context member inserts Interest Rate 8.91% between Term and Loan, preventing contiguous Term Loan splitting. Neighbor revolver retains the correct issuer.",
+          "proposed_mechanism": "Handle the filer-specific interrupted Term [Interest Rate] Loan marker using the printed row, without stripping genuine company-name Term tokens.",
+          "neighbor_review": {
+            "index": 393,
+            "row": "HowardSimon LLC (6) Term Loan 8.91 % SOFR 4.75 % 12/13/2024 12/13/2030 22,519 22,270 22,654",
+            "previous": "HowardSimon LLC (4)(5)(6) Revolving Line of Credit SOFR 4.75 % 12/13/2024 12/13/2030 - ( 44 ) -",
+            "next": "RPX Corporation (4)(5)(6) Revolving Line of Credit SOFR 5.25 % 8/02/2024 8/2/2030 - ( 56 ) -"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        },
+        {
+          "row_id": "ROW-6390c0f9876459db",
+          "accession": "0001193125-25-279909",
+          "context_id": "C_c650f2d8-5a41-445d-9cdb-8ceba7574b72",
+          "context_period": "2025-09-30",
+          "published_issuer": "R.R. Donnelley & Sons Company Corporate",
+          "printed_row": "R.R. Donnelley & Sons Company (4)(8) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 513",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Commercial Services & Supplies R.R. Donnelley & Sons Company Corporate Bond Acquisition Date 7/30/2024 Maturity Date 8/1/2029 2025-09-30",
+          "assessment": "Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix.",
+          "proposed_mechanism": "Extend the opt-in wrapper's instrument boundary to Corporate Bond before bare Bond; retain full instrument wording and test against company names containing Corporate.",
+          "neighbor_review": {
+            "index": 261,
+            "row": "R.R. Donnelley & Sons Company (4)(8) Corporate Bond 9.50 % N/A 7/30/2024 8/1/2029 500 500 513",
+            "previous": "R.R. Donnelley & Sons Company (6) Term Loan 8.91 % SOFR 4.75 % 8/12/2024 8/8/2029 63,116 61,653 61,790",
+            "next": "210,325 206,517 207,674 18.18 %"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        },
+        {
+          "row_id": "ROW-7a090d92a7a1faaf",
+          "accession": "0001193125-25-279909",
+          "context_id": "C_e0486b54-792b-4c99-8e76-1f6567d204de",
+          "context_period": "2025-09-30",
+          "published_issuer": "Intermediate Holdings, LLC",
+          "printed_row": "ICAT Intermediate Holdings, LLC (4)(5)(6) Revolving Line of Credit SOFR 6.25 % 9/29/2025 3/1/2029 - ( 29 ) ( 29 )",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Air Freight & Logistics Intermediate Holdings, LLC Revolving Line of Credit Reference Rate SOFR Spread 6.25% Acquisition Date 9/29/2025 Maturity Date 3/1/2029 2025-09-30",
+          "assessment": "Printed issuer includes ICAT, while the original member itself omits ICAT; publication faithfully propagates that source member omission. Adjacent ICAT delayed-draw row retains ICAT and matching dates; do not combine these three positions.",
+          "proposed_mechanism": "Declare the printed ICAT issuer for these exact accession/context rows through a source-backed per-filer mapping, preserving separate term loan/revolver identities.",
+          "neighbor_review": {
+            "index": 236,
+            "row": "ICAT Intermediate Holdings, LLC (4)(5)(6) Revolving Line of Credit SOFR 6.25 % 9/29/2025 3/1/2029 - ( 29 ) ( 29 )",
+            "previous": "ICAT Intermediate Holdings, LLC (4)(5)(6) Delayed Draw Term Loan SOFR 6.25 % 9/29/2025 3/1/2029 - ( 95 ) ( 95 )",
+            "next": "ICAT Intermediate Holdings, LLC (6) Term Loan 10.42 % SOFR 6.25 % 9/29/2025 3/1/2029 25,374 24,976 24,994"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        },
+        {
+          "row_id": "ROW-56e0adca3d34aec7",
+          "accession": "0001193125-25-279909",
+          "context_id": "C_5b7301bf-0388-45fe-9db6-b990eea1b59c",
+          "context_period": "2025-09-30",
+          "published_issuer": "Intermediate Holdings, LLC",
+          "printed_row": "ICAT Intermediate Holdings, LLC (6) Term Loan 10.42 % SOFR 6.25 % 9/29/2025 3/1/2029 25,374 24,976 24,994",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Air Freight & Logistics Intermediate Holdings, LLC Term Loan Reference Rate SOFR Spread 6.25% Acquisition Date 9/29/2025 Maturity Date 3/1/2029 2025-09-30",
+          "assessment": "Printed issuer includes ICAT, while the original member itself omits ICAT; publication faithfully propagates that source member omission. Adjacent ICAT delayed-draw row retains ICAT and matching dates; do not combine these three positions.",
+          "proposed_mechanism": "Declare the printed ICAT issuer for these exact accession/context rows through a source-backed per-filer mapping, preserving separate term loan/revolver identities.",
+          "neighbor_review": {
+            "index": 237,
+            "row": "ICAT Intermediate Holdings, LLC (6) Term Loan 10.42 % SOFR 6.25 % 9/29/2025 3/1/2029 25,374 24,976 24,994",
+            "previous": "ICAT Intermediate Holdings, LLC (4)(5)(6) Revolving Line of Credit SOFR 6.25 % 9/29/2025 3/1/2029 - ( 29 ) ( 29 )",
+            "next": "25,374 24,852 24,870 2.18 %"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-c44bc9181def0a21: Printed issuer is HowardSimon LLC and instrument is Term Loan. The context member inserts Interest Rate 8.91% between Term and Loan, preventing contiguous Term Loan splitting. Neighbor revolver retains the correct issuer.",
+        "ROW-6390c0f9876459db: Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix.",
+        "ROW-7a090d92a7a1faaf: Printed issuer includes ICAT, while the original member itself omits ICAT; publication faithfully propagates that source member omission. Adjacent ICAT delayed-draw row retains ICAT and matching dates; do not combine these three positions.",
+        "ROW-56e0adca3d34aec7: Printed issuer includes ICAT, while the original member itself omits ICAT; publication faithfully propagates that source member omission. Adjacent ICAT delayed-draw row retains ICAT and matching dates; do not combine these three positions."
+      ],
+      "next_action": "Review-only: propose the per-row mechanisms in row_analyses, then separately authorize fixes and focused false-positive checks; no disposition or correction made."
+    },
+    {
+      "finding_id": "RVQ_BLK_9311bf261659",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2026-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-0691a87dc754406f"
+        ],
+        "reviewed_rows": [
+          "ROW-0691a87dc754406f"
+        ],
+        "population_source": "rgA3/output/shadow/page_rule_findings.csv filtered by exact CIK/rule/report_date; every matching row retained, no sampling",
+        "affected_count": 1,
+        "reviewed_count": 1
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-216630",
+          "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.45 % EURIBOR 6.50 % 11/3/2025 11/4/2030 53,721 52,331 52,565"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_analyses": [
+        {
+          "row_id": "ROW-0691a87dc754406f",
+          "accession": "0001193125-26-216630",
+          "context_id": "C_48282981-1a66-420b-b4b2-e2e979fd2b77",
+          "context_period": "2026-03-31",
+          "published_issuer": "Purflux Holdings S.A.R.L.",
+          "printed_row": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.45 % EURIBOR 6.50 % 11/3/2025 11/4/2030 53,721 52,331 52,565",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Automobile Components Purflux Holdings S.A.R.L. Term Loan Interest Rate 8.45% Reference Rate EURIBOR Spread 6.50% Acquisition Date 11/03/2025 Maturity Date 11/4/2030 2026-03-31",
+          "assessment": "Printed issuer is Purflux Holding S.A R.L. (accent folded in normalized quote); original member and publication say Purflux Holdings S.A.R.L. The extra s in Holdings is a display spelling error; accent/spacing/punctuation alone are benign. Matching dates and amounts identify the row but do not prove a different borrower.",
+          "proposed_mechanism": "Map the exact member to the printed Purflux Holding S.A R.L. display name with original accented spelling retained where supported; do not infer a different legal entity.",
+          "neighbor_review": {
+            "index": 218,
+            "row": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.45 % EURIBOR 6.50 % 11/3/2025 11/4/2030 53,721 52,331 52,565",
+            "previous": "Automobile Components",
+            "next": "Ranger Intermediate II, LLC (6) Term Loan 9.17 % SOFR 5.50 % 10/28/2025 10/28/2031 74,900 73,856 73,068"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-0691a87dc754406f: Printed issuer is Purflux Holding S.A R.L. (accent folded in normalized quote); original member and publication say Purflux Holdings S.A.R.L. The extra s in Holdings is a display spelling error; accent/spacing/punctuation alone are benign. Matching dates and amounts identify the row but do not prove a different borrower."
+      ],
+      "next_action": "Review-only: propose the per-row mechanisms in row_analyses, then separately authorize fixes and focused false-positive checks; no disposition or correction made."
+    },
+    {
+      "finding_id": "RVQ_BLK_d23212bcee58",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-12-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-917e251bc213b63e"
+        ],
+        "reviewed_rows": [
+          "ROW-917e251bc213b63e"
+        ],
+        "population_source": "rgA3/output/shadow/page_rule_findings.csv filtered by exact CIK/rule/report_date; every matching row retained, no sampling",
+        "affected_count": 1,
+        "reviewed_count": 1
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-038029",
+          "text": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 10.42 % N/A 07/30/2024 8/1/2029 500 500 508"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_analyses": [
+        {
+          "row_id": "ROW-917e251bc213b63e",
+          "accession": "0000950170-25-038029",
+          "context_id": "C_e896bc9c-8aed-4701-8fd8-b7f695cf53be",
+          "context_period": "2024-12-31",
+          "published_issuer": "R.R. Donnelley & Sons Company Corporate",
+          "printed_row": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 10.42 % N/A 07/30/2024 8/1/2029 500 500 508",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Commercial Services & Supplies R.R. Donnelley & Sons Company Corporate Bond Interest Rate 10.42% Acquisition Date 07/30/2024 Maturity Date 8/1/2029 2024-12-31",
+          "assessment": "Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix.",
+          "proposed_mechanism": "Extend the opt-in wrapper's instrument boundary to Corporate Bond before bare Bond; retain full instrument wording and test against company names containing Corporate.",
+          "neighbor_review": {
+            "index": 366,
+            "row": "R.R. Donnelley & Sons Company (4)(9) Corporate Bond 10.42 % N/A 07/30/2024 8/1/2029 500 500 508",
+            "previous": "R.R. Donnelley & Sons Company (6) Term Loan 9.11 % SOFR 4.75 % 08/12/2024 8/8/2029 74,164 72,112 72,235",
+            "next": "149,758 145,848 146,363 24.08 %"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-917e251bc213b63e: Printed issuer is R.R. Donnelley & Sons Company; Corporate Bond is a separate instrument cell. The wrapper strips Bond but leaves Corporate in issuer_name. Neighboring term loan is a separate position, not an issuer suffix."
+      ],
+      "next_action": "Review-only: propose the per-row mechanisms in row_analyses, then separately authorize fixes and focused false-positive checks; no disposition or correction made."
+    },
+    {
+      "finding_id": "RVQ_BLK_d3949d5e7467",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2026-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-ef34da1fed6e8d11"
+        ],
+        "reviewed_rows": [
+          "ROW-ef34da1fed6e8d11"
+        ],
+        "population_source": "rgA3/output/shadow/page_rule_findings.csv filtered by exact CIK/rule/report_date; every matching row retained, no sampling",
+        "affected_count": 1,
+        "reviewed_count": 1
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-342470",
+          "text": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.65 % EURIBOR 6.50 % 11/3/2025 11/4/2030 52,472 51,952 52,311"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_analyses": [
+        {
+          "row_id": "ROW-ef34da1fed6e8d11",
+          "accession": "0001193125-26-342470",
+          "context_id": "C_9e530e5f-63d5-47a4-9c54-ddcb84076043",
+          "context_period": "2026-06-30",
+          "published_issuer": "Purflux Holdings S.A.R.L.",
+          "printed_row": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.65 % EURIBOR 6.50 % 11/3/2025 11/4/2030 52,472 51,952 52,311",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated First Lien Debt Automobile Components Purflux Holdings S.A.R.L. Term Loan Interest Rate 8.65% Reference Rate EURIBOR Spread 6.50% Acquisition Date 11/03/2025 Maturity Date 11/4/2030 2026-06-30",
+          "assessment": "Printed issuer is Purflux Holding S.A R.L. (accent folded in normalized quote); original member and publication say Purflux Holdings S.A.R.L. The extra s in Holdings is a display spelling error; accent/spacing/punctuation alone are benign. Matching dates and amounts identify the row but do not prove a different borrower.",
+          "proposed_mechanism": "Map the exact member to the printed Purflux Holding S.A R.L. display name with original accented spelling retained where supported; do not infer a different legal entity.",
+          "neighbor_review": {
+            "index": 245,
+            "row": "Purflux Holding S.A R.L. (6)(7)(13) Term Loan 8.65 % EURIBOR 6.50 % 11/3/2025 11/4/2030 52,472 51,952 52,311",
+            "previous": "Automobile Components",
+            "next": "Ranger Intermediate II, LLC (6) Term Loan 9.42 % SOFR 5.50 % 10/28/2025 10/28/2031 74,713 73,718 74,115"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-ef34da1fed6e8d11: Printed issuer is Purflux Holding S.A R.L. (accent folded in normalized quote); original member and publication say Purflux Holdings S.A.R.L. The extra s in Holdings is a display spelling error; accent/spacing/punctuation alone are benign. Matching dates and amounts identify the row but do not prove a different borrower."
+      ],
+      "next_action": "Review-only: propose the per-row mechanisms in row_analyses, then separately authorize fixes and focused false-positive checks; no disposition or correction made."
+    },
+    {
+      "finding_id": "RVQ_BLK_e01be599095d",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-12-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-6b673454813d9e78",
+          "ROW-6f12ab31cb9d814f"
+        ],
+        "reviewed_rows": [
+          "ROW-6b673454813d9e78",
+          "ROW-6f12ab31cb9d814f"
+        ],
+        "population_source": "rgA3/output/shadow/page_rule_findings.csv filtered by exact CIK/rule/report_date; every matching row retained, no sampling",
+        "affected_count": 2,
+        "reviewed_count": 2
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-104439",
+          "text": "Legacy Service Partners, LLC (6) Term Loan 13.25 % ( 13.25 % PIK) N/A 11/10/2025 11/10/2032 16,000 15,608 15,608"
+        },
+        {
+          "accession": "0001193125-26-104439",
+          "text": "Legacy Service Partners, LLC (4)(5)(6) Delayed Draw Term Loan N/A 11/10/2025 11/10/2032 $ - $ ( 171 ) $ ( 171 )"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_analyses": [
+        {
+          "row_id": "ROW-6b673454813d9e78",
+          "accession": "0001193125-26-104439",
+          "context_id": "C_3c6d6978-63ae-41bb-9754-3b81765fba99",
+          "context_period": "2025-12-31",
+          "published_issuer": "Legacy Services Partners LLC",
+          "printed_row": "Legacy Service Partners, LLC (6) Term Loan 13.25 % ( 13.25 % PIK) N/A 11/10/2025 11/10/2032 16,000 15,608 15,608",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated Second Lien Debt Diversified Consumer Services Legacy Services Partners LLC Term Loan Interest Rate 13.25% (13.25% PIK) Acquisition Date 11/10/2025 Maturity Date 11/10/2032 2025-12-31",
+          "assessment": "Printed issuer is Legacy Service Partners, LLC; the original member and published issuer instead say Legacy Services Partners LLC. The additional s in Services is a display spelling error beyond punctuation normalization. Matching date/amounts support row mapping, not legal-entity substitution. PIK text is schedule terms, not current accrual evidence.",
+          "proposed_mechanism": "Correct only the source-backed display spelling to Legacy Service Partners, LLC for these member contexts, retaining both distinct second-lien positions.",
+          "neighbor_review": {
+            "index": 672,
+            "row": "Legacy Service Partners, LLC (6) Term Loan 13.25 % ( 13.25 % PIK) N/A 11/10/2025 11/10/2032 16,000 15,608 15,608",
+            "previous": "Legacy Service Partners, LLC (4)(5)(6) Delayed Draw Term Loan N/A 11/10/2025 11/10/2032 $ - $ ( 171 ) $ ( 171 )",
+            "next": "16,000 15,437 15,437"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        },
+        {
+          "row_id": "ROW-6f12ab31cb9d814f",
+          "accession": "0001193125-26-104439",
+          "context_id": "C_edbd954f-9498-4106-b4cb-643417f81c40",
+          "context_period": "2025-12-31",
+          "published_issuer": "Legacy Services Partners LLC",
+          "printed_row": "Legacy Service Partners, LLC (4)(5)(6) Delayed Draw Term Loan N/A 11/10/2025 11/10/2032 $ - $ ( 171 ) $ ( 171 )",
+          "source_context": "0001916099 Investments Non-Controlled/Non-Affiliated Second Lien Debt Diversified Consumer Services Legacy Services Partners LLC Delayed Draw Term Loan Acquisition Date 11/10/2025 Maturity Date 11/10/2032 2025-12-31",
+          "assessment": "Printed issuer is Legacy Service Partners, LLC; the original member and published issuer instead say Legacy Services Partners LLC. The additional s in Services is a display spelling error beyond punctuation normalization. Matching date/amounts support row mapping, not legal-entity substitution. PIK text is schedule terms, not current accrual evidence.",
+          "proposed_mechanism": "Correct only the source-backed display spelling to Legacy Service Partners, LLC for these member contexts, retaining both distinct second-lien positions.",
+          "neighbor_review": {
+            "index": 671,
+            "row": "Legacy Service Partners, LLC (4)(5)(6) Delayed Draw Term Loan N/A 11/10/2025 11/10/2032 $ - $ ( 171 ) $ ( 171 )",
+            "previous": "Diversified Consumer Services",
+            "next": "Legacy Service Partners, LLC (6) Term Loan 13.25 % ( 13.25 % PIK) N/A 11/10/2025 11/10/2032 16,000 15,608 15,608"
+          },
+          "field_comparison": "Cost, fair value, displayed rate/spread/PIK terms where present and maturity agree numerically with this source row; no independent current-PIK-accrual inference. Source context date equals finding quarter."
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-6b673454813d9e78: Printed issuer is Legacy Service Partners, LLC; the original member and published issuer instead say Legacy Services Partners LLC. The additional s in Services is a display spelling error beyond punctuation normalization. Matching date/amounts support row mapping, not legal-entity substitution. PIK text is schedule terms, not current accrual evidence.",
+        "ROW-6f12ab31cb9d814f: Printed issuer is Legacy Service Partners, LLC; the original member and published issuer instead say Legacy Services Partners LLC. The additional s in Services is a display spelling error beyond punctuation normalization. Matching date/amounts support row mapping, not legal-entity substitution. PIK text is schedule terms, not current accrual evidence."
+      ],
+      "next_action": "Review-only: propose the per-row mechanisms in row_analyses, then separately authorize fixes and focused false-positive checks; no disposition or correction made."
+    }
+  ],
+  "observations": [],
+  "orchestrator_requests": [],
+  "prior_coverage_check": "Read 0001916099.md and D-118. Generic historical name issues and broad tranche split claims do not enumerate these current flagged row/context populations. No additional exact prior-covered findings excluded. Prior Legacy X02 discussion addressed absent rates, not this spelling finding.",
+  "neighbor_checks": "Read every selected original context/printed row and preceding/following table row. ICAT adjacent DDTL ROW-36bb9a2628250510 and HowardSimon revolver ROW-04eb172abb6d26de were compared with published rows: names, negative fees/zero FV, spread and maturity agree. Neighbor negative fees are not treated as errors. No additional independently established defect beyond selected names.",
+  "not_done": [
+    "No fixes, builds, tests, network, canonical data writes, dispositions, ledger edits or acceptance.",
+    "Selected 12-row population only, not whole fund correctness. No random 20-row full-fund sample commissioned in this selected review.",
+    "All selected context dates equal their finding quarters; comparative contexts outside the flagged population were not swept for new issues.",
+    "Economic row mapping does not independently establish legal borrower identity; member spelling errors are reported as display defects only.",
+    "No current PIK accrual/payment verification; schedule PIK terms only.",
+    "Independent review pending."
+  ],
+  "counts": {
+    "selected_findings": 8,
+    "affected_rows": 12,
+    "reviewed_rows": 12,
+    "confirmed_error_findings": 8,
+    "false_alarm_findings": 0,
+    "source_ambiguity_findings": 0,
+    "insufficient_evidence_findings": 0,
+    "observations": 0,
+    "orchestrator_requests": 0,
+    "corporate_suffix_rows": 5,
+    "interrupted_term_rows": 1,
+    "missing_ICAT_rows": 2,
+    "member_plural_spelling_rows": 4
+  }
+}

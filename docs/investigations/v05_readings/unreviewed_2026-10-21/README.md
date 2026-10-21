@@ -2,7 +2,7 @@
 
 User scope: review previously unreviewed findings, excluding recorded agent investigations, verdicts and disposition proposals. Initial selection: 447 findings across 40 retained funds. After excluding 44 additional findings already reviewed in substantive legacy narratives ([exclusion evidence](prior_review_exclusions.json)), current selection: 403 findings across 39 retained funds, ordered by 2026-03-31 published fair value.
 
-182 findings independently reviewed; 221 remain. 173 findings contain confirmed errors; 6 are false alarms; 3 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
+190 findings independently reviewed; 213 remain. 181 findings contain confirmed errors; 6 are false alarms; 3 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
 
 Reviews do not resolve ledger items, accept dispositions, repair data or approve funds. Canonical data, existing reports and previously reviewed findings remain unchanged. No builds or tests required for this evidence-only work. Mechanisms and proposed detectors need implementation and validation before repairs. Original-source quotes and exact selected coverage are mechanically checked; each completed report has a separate source reviewer.
 
@@ -23,3 +23,4 @@ Reviews do not resolve ledger items, accept dispositions, repair data or approve
 | Goldman Sachs BDC, Inc. | 12 | 12 | 0 | 0 | [Report](0001572694.json) / [independent review](reviews/0001572694.json) |
 | T. Rowe Price OHA Select Private Credit Fund | 8 | 7 | 0 | 1 | [Report](0001901164.json) / [independent review](reviews/0001901164.json) |
 | Stone Point Credit Corp | 20 | 18 | 2 | 0 | [Report](0001825384.json) / [independent review](reviews/0001825384.json) |
+| Diameter Credit Co | 8 | 8 | 0 | 0 | [Report](0001916099.json) / [independent review](reviews/0001916099.json) |
