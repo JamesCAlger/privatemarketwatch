@@ -1,0 +1,79 @@
+{
+  "reviewer_id": "/root/remaining_twinbrook_check_sol",
+  "report_digest": "e19193425a7bb47719419146d3140b4aad27dd5e2fd3cb70ba3cb4834902f2c4",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_25b2ed84879d",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed page_rule_findings.csv population independently: exactly ROW-ce9caff8b97e2bec and ROW-c7f65e84dcd65982 for this rule/period. Queried rgA2 parquet: FV120000 and28000, both pik_rate null. Original inline fact rows c-389/c-393 and XML instant2025-06-30 identify distinct CAD facilities with printed7.00% PIK. Read preceding/following non-PIK rows: same coupon does not imply same PIK. Independently read c-391: USD revolver2 FV16000 is a separate position, not prior coverage of selected CAD facilities. Existing D-162 documents margin-based fund convention; proposed7 is within that convention, not a cross-fund semantic endorsement. Evidence is terms only, not current payment or distress.",
+      "evidence": [
+        {
+          "accession": "0001913724-25-000072",
+          "text": "Canadian Orthodontic Partners Corp (7) First lien senior secured delayed draw term loan T + 7.00 % PIK 10.07 % 7/28/2023 3/19/2026 C$ 353 254 120 0.01 %"
+        },
+        {
+          "accession": "0001913724-25-000072",
+          "text": "Canadian Orthodontic Partners Corp (7) First lien senior secured revolving loan T + 7.00 % PIK 10.07 % 3/19/2021 12/31/2026 C$ 81 59 28 0.00 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_9f1f8621cb02",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed issuer_name_printed population: exactly ROW-2d6d7a293681f14b. Parquet publishes Engelman/term loan FV-49000. Original c-216 inline facts are physically in Ever Fresh delayed draw row; XML identifies Engelman but instant2024-06-30. Read adjacent Ever Fresh revolver and separately comparative c-840: instant2023-12-31 genuinely Engelman term loan706/704/702. Accession/context-specific correction is supported; issuer-wide replacement would be unsafe. Negative undrawn mark is explicitly printed and must remain.",
+      "evidence": [
+        {
+          "accession": "0001913724-24-000076",
+          "text": "Ever Fresh Fruit Company, LLC (6) First lien senior secured delayed draw term loan S + 6.25 % 11.69 % 11/17/2028 2,513 ( 49 ) ( 49 ) 0.00 %"
+        },
+        {
+          "accession": "0001913724-24-000076",
+          "text": "Engelman Baking Co, LLC First lien senior secured term loan S + 5.50 % 10.97 % 2/28/2025 706 704 702 0.09 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_aa939fdfbf34",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed selected F28 in validation_results_ledger.csv: one2026-06-30 metric, not position rows. Independently grouped rgA2 parquet:13 quarters2023-03-31 through2026-03-31, zero June holdings. Read cached June2026 statement and current schedule totals: assets5105014, investments4821347, cash equivalents7003 (thousands); queried matching fund_financials row. This supports historical rgA2 artifact coverage mismatch only. It does not establish missing current canonical holdings or authorize quarter expansion. Proposed cached ingestion with schedule validation is appropriate when authorized.",
+      "evidence": [
+        {
+          "accession": "0001913724-26-000024",
+          "text": "Consolidated Statements of Assets and Liabilities (Amounts in thousands, except share and per share amounts) June 30, 2026 December 31, 2025 (Unaudited)"
+        },
+        {
+          "accession": "0001913724-26-000024",
+          "text": "Total assets $ 5,105,014 $ 4,512,768"
+        },
+        {
+          "accession": "0001913724-26-000024",
+          "text": "Total investments $ 4,819,844 $ 4,821,347 179.40 %"
+        },
+        {
+          "accession": "0001913724-26-000024",
+          "text": "Total investments and cash equivalents $ 4,826,847 $ 4,828,350 179.66 %"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "filer-context-instrument-differs-from-printed-facility",
+      "outcome": "supported",
+      "rationale": "Independently read c-216 printed delayed draw facility against published term loan and c-840 comparative legitimate term loan. Accession/context anchored subtype contradiction check would detect this additional field error and avoid issuer-wide/comparative substitutions. Proposal needs exact inline row anchoring and subtype normalization; it is not an approved implementation or current canonical-data assertion. Existing selected issuer detector catches name, not independently instrument subtype.",
+      "evidence": [
+        {
+          "accession": "0001913724-24-000076",
+          "text": "Ever Fresh Fruit Company, LLC (6) First lien senior secured delayed draw term loan S + 6.25 % 11.69 % 11/17/2028 2,513 ( 49 ) ( 49 ) 0.00 %"
+        }
+      ]
+    }
+  ],
+  "request_reviews": []
+}

@@ -1,0 +1,144 @@
+{
+  "cik": "0001913724",
+  "label": "rgA2",
+  "investigator_id": "/root/remaining_twinbrook_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_25b2ed84879d",
+    "RVQ_BLK_9f1f8621cb02",
+    "RVQ_REV_aa939fdfbf34"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_25b2ed84879d",
+      "coverage": {
+        "affected_rows": [
+          "ROW-ce9caff8b97e2bec",
+          "ROW-c7f65e84dcd65982"
+        ],
+        "reviewed_rows": [
+          "ROW-ce9caff8b97e2bec",
+          "ROW-c7f65e84dcd65982"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001913724-25-000072",
+          "text": "Canadian Orthodontic Partners Corp (7) First lien senior secured delayed draw term loan T + 7.00 % PIK 10.07 % 7/28/2023 3/19/2026 C$ 353 254 120 0.01 %"
+        },
+        {
+          "accession": "0001913724-25-000072",
+          "text": "Canadian Orthodontic Partners Corp (7) First lien senior secured revolving loan T + 7.00 % PIK 10.07 % 3/19/2021 12/31/2026 C$ 81 59 28 0.00 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Reconstructed shadow/page_rule_findings.csv: exactly two flagged rows, CAD DDTL c-389 FV120000 and CAD revolver c-393 FV28000, total FV148000. Both untouched holdings have null pik_rate and cash rate; spread7, all-in10.07, CORRA. Original inline rows carry their own correct current-period contexts and print 7.00% PIK; XML facts carry only spread0.07 and coupon0.1007, no PIK concept. Neighboring CAD non-PIK loans print the same total coupon but no PIK, so copying by issuer or coupon would be unsafe.",
+        "Prior tbxd observation mentions Canadian Orthodontic 2025-06-30 but combine_spec.py lines46-47 and ids.sql identify USD revolver2 context c-391 FV16000, S+7 PIK11.56, not either selected CAD row. Root confirmed retain this finding. Three F16 legacy reviews stay excluded.",
+        "Read full Canadian Orthodontic block and immediate neighbors. The two flags concern PIK terms, not proof of current PIK income or distressed amendment. Existing fund convention stores the printed PIK margin7 separately; it does not justify treating all-in10.07 as the PIK amount."
+      ],
+      "next_action": "Propose source-backed corrections on these two exact accession/context rows: pik_rate=7 under existing fund margin convention; derive dependent cash field consistently. Prefer opt-in printed-cell extraction to prevent recurrence; retain separate positions and do not infer PIK for adjacent non-PIK loans. No correction made."
+    },
+    {
+      "finding_id": "RVQ_BLK_9f1f8621cb02",
+      "coverage": {
+        "affected_rows": [
+          "ROW-2d6d7a293681f14b"
+        ],
+        "reviewed_rows": [
+          "ROW-2d6d7a293681f14b"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001913724-24-000076",
+          "text": "Ever Fresh Fruit Company, LLC (6) First lien senior secured delayed draw term loan S + 6.25 % 11.69 % 11/17/2028 2,513 ( 49 ) ( 49 ) 0.00 %"
+        },
+        {
+          "accession": "0001913724-24-000076",
+          "text": "Engelman Baking Co, LLC First lien senior secured term loan S + 5.50 % 10.97 % 2/28/2025 706 704 702 0.09 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Exactly one flagged row ROW-2d6d7a293681f14b, accession0001913724-24-000076 c-216 instant2024-06-30. Published Engelman Baking Co, LLC / First lien senior secured term loan has par2513000, cost/FV-49000, spread6.25, coupon11.69, maturity2028-11-17. Original inline facts sit in the printed Ever Fresh Fruit delayed draw row, and XML c-216 incorrectly names Engelman term loan. Numeric values match the Ever Fresh row; this is erroneous filer member identity propagated into holdings, not a page-matcher coincidence.",
+        "Read current schedule block and comparative block separately. Comparative c-840 is legitimately Engelman term loan at2023-12-31 (par706000, cost704000,FV702000,coupon10.97,maturity2025-02-28); it must not be renamed. Current Ever Fresh revolving and term neighbors have distinct balances1380/658/663 and7326/7154/7182. Negative49 is a printed undrawn facility mark, not reason to delete the position."
+      ],
+      "next_action": "Propose accession+context-specific issuer and instrument correction to Ever Fresh Fruit Company, LLC / First lien senior secured delayed draw term loan, preserving all amounts and comparative c-840. Re-evaluate identity/industry and matching consequences after an authorized rebuild. No change made."
+    },
+    {
+      "finding_id": "RVQ_REV_aa939fdfbf34",
+      "coverage": {
+        "affected_rows": [
+          "0001913724|2026-06-30|F28:fund_financials_vs_holdings_coverage"
+        ],
+        "reviewed_rows": [
+          "0001913724|2026-06-30|F28:fund_financials_vs_holdings_coverage"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001913724-26-000024",
+          "text": "Consolidated Statements of Assets and Liabilities (Amounts in thousands, except share and per share amounts) June 30, 2026 December 31, 2025 (Unaudited)"
+        },
+        {
+          "accession": "0001913724-26-000024",
+          "text": "Total assets $ 5,105,014 $ 4,512,768"
+        },
+        {
+          "accession": "0001913724-26-000024",
+          "text": "Total investments $ 4,819,844 $ 4,821,347 179.40 %"
+        },
+        {
+          "accession": "0001913724-26-000024",
+          "text": "Total investments and cash equivalents $ 4,826,847 $ 4,828,350 179.66 %"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Reconstructed F28 current validation: fund=True;holdings=False. Fund_financials has exactly one2026-06-30 row with assets5105014000, investments4821347000, net assets2687535000; DuckDB grouped holdings has13 quarters ending2026-03-31 and zero2026-06-30 rows. This is fund-quarter coverage, not a position count.",
+        "Read original2026-06-30 statement header and assets/liabilities plus schedule current-quarter ending total. Investments components4685649+103083+32615=4821347 thousands agree with fund financials. Cash equivalents7003 are separately disclosed: schedule with-cash4828350 is not the investments-only4821347. Current schedule exists locally; a genuinely absent or pre-operational portfolio does not explain F28.",
+        "Sandbox holdings horizon differs from companyfacts financial horizon. This establishes an artifact coverage gap, not that the last published quarter is wrong or that all2026-06-30 source rows should be auto-admitted. No exhaustive reading of the unflagged2026-06-30 schedule positions was performed."
+      ],
+      "next_action": "When owner authorizes quarter expansion, ingest/rebuild this fund2026-06-30 from cached accession0001913724-26-000024 and validate published-basis schedule totals, distinguishing cash and JV underlying schedules. Until then report the explicit quarter coverage mismatch; do not suppress F28 or present missing holdings as zero."
+    }
+  ],
+  "observations": [
+    {
+      "observation_key": "filer-context-instrument-differs-from-printed-facility",
+      "what": "On the selected issuer-name flag, instrument_description also inherits the wrong filer member: term loan instead of printed delayed draw. No change made.",
+      "field": "instrument_description",
+      "quarters": [
+        "2024-06-30"
+      ],
+      "fair_value_m": -0.049,
+      "cause": "fund",
+      "action": "left",
+      "suggested_check": "Compare published instrument subtype with the exact original inline fact row facility label; flag term versus delayed-draw/revolver contradictions only when accession and context anchor the same row.",
+      "quote": {
+        "accession": "0001913724-24-000076",
+        "text": "Ever Fresh Fruit Company, LLC (6) First lien senior secured delayed draw term loan S + 6.25 % 11.69 % 11/17/2028 2,513 ( 49 ) ( 49 ) 0.00 %"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "issuer_name_printed fired for the name, but no evidence that an instrument mismatch detector fired on this row; an anchored subtype comparison would independently catch recurrence.",
+        "reference": "proposed accession/context anchored printed instrument comparison"
+      }
+    }
+  ],
+  "orchestrator_requests": [],
+  "not_done": [
+    "Review-only: no fixes, builds, tests, canonical data writes, ledger/disposition changes or acceptance.",
+    "No whole-fund or exhaustive unflagged2026-06-30 position review; independent review pending.",
+    "PIK evidence establishes disclosed terms only; current payment/accrual and distressed amendments not established."
+  ],
+  "counts": {
+    "selected_findings": 3,
+    "investigated_findings": 3,
+    "confirmed_error": 3,
+    "affected_position_rows": 3,
+    "reviewed_position_rows": 3,
+    "fund_quarter_metrics": 1,
+    "observations": 1
+  }
+}

@@ -2,7 +2,7 @@
 
 User scope: review previously unreviewed findings, excluding recorded agent investigations, verdicts and disposition proposals. Initial selection: 447 findings across 40 retained funds. After excluding 42 additional findings already reviewed in substantive legacy narratives ([exclusion evidence](prior_review_exclusions.json)), current selection: 405 findings across 39 retained funds, ordered by 2026-03-31 published fair value.
 
-106 findings independently reviewed; 299 remain. 101 findings contain confirmed errors; 3 are false alarms; 2 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
+109 findings independently reviewed; 296 remain. 104 findings contain confirmed errors; 3 are false alarms; 2 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
 
 Reviews do not resolve ledger items, accept dispositions, repair data or approve funds. Canonical data, existing reports and previously reviewed findings remain unchanged. No builds or tests required for this evidence-only work. Mechanisms and proposed detectors need implementation and validation before repairs. Original-source quotes and exact selected coverage are mechanically checked; each completed report has a separate source reviewer.
 
@@ -16,3 +16,4 @@ Reviews do not resolve ledger items, accept dispositions, repair data or approve
 | Monroe Capital Income Plus Corp | 13 | 13 | 0 | 0 | [Report](0001742313.json) / [independent review](reviews/0001742313.json) |
 | Blue Owl Technology Income Corp. | 5 | 3 | 0 | 2 | [Report](0001869453.json) / [independent review](reviews/0001869453.json) |
 | Barings Private Credit Corp | 17 | 17 | 0 | 0 | [Report](0001859919.json) / [independent review](reviews/0001859919.json) |
+| TPG Twin Brook Capital Income Fund | 3 | 3 | 0 | 0 | [Report](0001913724.json) / [independent review](reviews/0001913724.json) |
