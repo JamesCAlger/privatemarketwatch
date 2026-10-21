@@ -1,0 +1,834 @@
+{
+  "cik": "0001901164",
+  "label": "rgA3",
+  "investigator_id": "/root/remaining_trowe_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_1be54a445be7",
+    "RVQ_BLK_5c13dc434f62",
+    "RVQ_BLK_7733dc06dfac",
+    "RVQ_BLK_849ad834f993",
+    "RVQ_BLK_9377d454bc7c",
+    "RVQ_BLK_c5f01283fd04",
+    "RVQ_BLK_f055ffe85a0d",
+    "RVQ_BLK_f0a23ec9e4ad"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_1be54a445be7",
+      "coverage": {
+        "affected_rows": [
+          "ROW-33455c9a5cfccd36",
+          "ROW-0456b8c3033ec65f"
+        ],
+        "reviewed_rows": [
+          "ROW-33455c9a5cfccd36",
+          "ROW-0456b8c3033ec65f"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001901164-24-000011",
+          "text": "MRI Software LLC (4) (5) (6) S + 5.50 % 10.93 % 2/10/2027 1,864 ( 16 ) ( 16 ) -"
+        },
+        {
+          "accession": "0001901164-24-000011",
+          "text": "Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.94 % 11/24/2028 16,291 16,197 16,291 1.63"
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-33455c9a5cfccd36: Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+        "ROW-0456b8c3033ec65f: Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal."
+      ],
+      "row_assessments": [
+        {
+          "row_id": "ROW-33455c9a5cfccd36",
+          "accession": "0001901164-24-000011",
+          "context": "c-158",
+          "period": "2024-06-30",
+          "published_issuer": "MRI Software LLC4",
+          "published_pik_rate": "nan",
+          "source_row": "MRI Software LLC (4) (5) (6) S + 5.50 % 10.93 % 2/10/2027 1,864 ( 16 ) ( 16 ) -",
+          "assessment": "Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+          "neighbors": [
+            "MRI Software LLC (4) (5) (7) S + 5.50 % 10.93 % 2/10/2027 14,845 14,720 14,771 1.47",
+            "MRI Software LLC (4) (5) (6) S + 5.50 % 10.93 % 2/10/2027 1,864 ( 16 ) ( 16 ) -",
+            "PDI TA Holdings, Inc. (4) (5) (6) S + 5.25 % 10.59 % 2/3/2031 1,073 332 334 0.03"
+          ],
+          "xml_context": "<context id=\"c-158\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>MRI Software LLC4</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2024-06-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-158\"\n      decimals=\"4\"\n      id=\"f-1131\"\n      unitRef=\"number\">0.0550</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-158\"\n      decimals=\"4\"\n      id=\"f-1132\"\n      unitRef=\"number\">0.1093</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-158\" decimals=\"-3\" id=\"f-1133\" unitRef=\"usd\">1864000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-158\" decimals=\"-3\" id=\"f-1134\" unitRef=\"usd\">-16000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-158\" decimals=\"-3\" id=\"f-1135\" unitRef=\"usd\">-16000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-158\"\n      decimals=\"4\"\n      id=\"f-1136\"\n      unitRef=\"number\">0</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-0456b8c3033ec65f",
+          "accession": "0001901164-24-000011",
+          "context": "c-174",
+          "period": "2024-06-30",
+          "published_issuer": "Higginbotham Insurance Agency, Inc.2",
+          "published_pik_rate": "nan",
+          "source_row": "Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.94 % 11/24/2028 16,291 16,197 16,291 1.63",
+          "assessment": "Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+          "neighbors": [
+            "Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.94 % 11/24/2028 7,236 7,076 7,236 0.72",
+            "Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.94 % 11/24/2028 16,291 16,197 16,291 1.63",
+            "Integrity Marketing Acquisition, LLC (4) (5) (6) S + 6.00 % 11.35 % 8/27/2026 20 - - -"
+          ],
+          "xml_context": "<context id=\"c-174\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Higginbotham Insurance Agency, Inc.2</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2024-06-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-174\"\n      decimals=\"4\"\n      id=\"f-1224\"\n      unitRef=\"number\">0.0550</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-174\"\n      decimals=\"4\"\n      id=\"f-1225\"\n      unitRef=\"number\">0.1094</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-174\" decimals=\"-3\" id=\"f-1226\" unitRef=\"usd\">16291000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-174\" decimals=\"-3\" id=\"f-1227\" unitRef=\"usd\">16197000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-174\" decimals=\"-3\" id=\"f-1228\" unitRef=\"usd\">16291000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-174\"\n      decimals=\"4\"\n      id=\"f-1229\"\n      unitRef=\"number\">0.0163</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "next_action": "Propose bounded per-filer display-name correction backed by these rows; retain distinct position IDs/tranches and rerun exact-name comparisons with false-positive controls. No changes made."
+    },
+    {
+      "finding_id": "RVQ_BLK_5c13dc434f62",
+      "coverage": {
+        "affected_rows": [
+          "ROW-0e48fa9f0dbfb40e",
+          "ROW-5a57440a78ffd746",
+          "ROW-a9440d8443201aa7",
+          "ROW-7bcdc1413589bbbd",
+          "ROW-6e7c88f4655bb27e",
+          "ROW-44efb2b12e552888",
+          "ROW-a9e9eeeb548ffeaa"
+        ],
+        "reviewed_rows": [
+          "ROW-0e48fa9f0dbfb40e",
+          "ROW-5a57440a78ffd746",
+          "ROW-a9440d8443201aa7",
+          "ROW-7bcdc1413589bbbd",
+          "ROW-6e7c88f4655bb27e",
+          "ROW-44efb2b12e552888",
+          "ROW-a9e9eeeb548ffeaa"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001901164-25-000016",
+          "text": "Iconic Purchaser Corporation (4) (5) (6) S + 6.50 % ( 6.50 % PIK) 10.50 % 11/16/2028 292 ( 7 ) ( 11 ) -"
+        },
+        {
+          "accession": "0001901164-25-000016",
+          "text": "Granicus, Inc. (4) (5) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 12,439 12,439 12,439 0.83"
+        },
+        {
+          "accession": "0001901164-25-000016",
+          "text": "Deerfield Dakota Holding LLC (4) (5) S + 5.75 % ( 2.75 % PIK) 9.81 % 9/13/2032 39,314 39,119 39,118 2.61"
+        },
+        {
+          "accession": "0001901164-25-000016",
+          "text": "Pave America LLC (4) (5) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 21,617 21,510 21,509 1.43"
+        },
+        {
+          "accession": "0001901164-25-000016",
+          "text": "Pave America LLC (4) (5) (6) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 7,500 - ( 37 ) -"
+        },
+        {
+          "accession": "0001901164-25-000016",
+          "text": "Cheval Blanc Holdings Company (4) (5) (9) ( 14.50 % PIK) 14.50 % 10/30/2030 10,149 9,865 9,844 0.65"
+        },
+        {
+          "accession": "0001901164-25-000016",
+          "text": "Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 4,469 - - -"
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-0e48fa9f0dbfb40e: Original parenthetical PIK term is positive; XML PaidInKind fact is -0.065 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+        "ROW-5a57440a78ffd746: Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0225 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+        "ROW-a9440d8443201aa7: Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0275 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+        "ROW-7bcdc1413589bbbd: Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0288 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+        "ROW-6e7c88f4655bb27e: Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0288 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+        "ROW-44efb2b12e552888: Original parenthetical PIK term is positive; XML PaidInKind fact is -0.145 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+        "ROW-a9e9eeeb548ffeaa: Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0225 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms."
+      ],
+      "row_assessments": [
+        {
+          "row_id": "ROW-0e48fa9f0dbfb40e",
+          "accession": "0001901164-25-000016",
+          "context": "c-245",
+          "period": "2025-09-30",
+          "published_issuer": "Iconic Purchaser Corporation",
+          "published_pik_rate": "nan",
+          "source_row": "Iconic Purchaser Corporation (4) (5) (6) S + 6.50 % ( 6.50 % PIK) 10.50 % 11/16/2028 292 ( 7 ) ( 11 ) -",
+          "assessment": "Original parenthetical PIK term is positive; XML PaidInKind fact is -0.065 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+          "neighbors": [
+            "Iconic Purchaser Corporation (4) (5) (7) S + 6.50 % ( 6.50 % PIK) 10.50 % 11/16/2028 4,193 4,098 3,942 0.26",
+            "Iconic Purchaser Corporation (4) (5) (6) S + 6.50 % ( 6.50 % PIK) 10.50 % 11/16/2028 292 ( 7 ) ( 11 ) -",
+            "111,314 115,778 7.71"
+          ],
+          "xml_context": "<context id=\"c-245\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Investment, Unaffiliated Issuer, Iconic Purchaser Corporation 3</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2025-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-245\"\n      decimals=\"4\"\n      id=\"f-1674\"\n      unitRef=\"number\">0.0650</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRatePaidInKind\n      contextRef=\"c-245\"\n      decimals=\"4\"\n      id=\"f-1675\"\n      unitRef=\"number\">-0.065</us-gaap:InvestmentInterestRatePaidInKind>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-245\"\n      decimals=\"4\"\n      id=\"f-1676\"\n      unitRef=\"number\">0.1050</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-245\" decimals=\"-3\" id=\"f-1677\" unitRef=\"usd\">292000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-245\" decimals=\"-3\" id=\"f-1678\" unitRef=\"usd\">-7000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-245\" decimals=\"-3\" id=\"f-1679\" unitRef=\"usd\">-11000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-245\"\n      decimals=\"4\"\n      id=\"f-1680\"\n      unitRef=\"number\">0</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-5a57440a78ffd746",
+          "accession": "0001901164-25-000016",
+          "context": "c-213",
+          "period": "2025-09-30",
+          "published_issuer": "Granicus, Inc.",
+          "published_pik_rate": "nan",
+          "source_row": "Granicus, Inc. (4) (5) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 12,439 12,439 12,439 0.83",
+          "assessment": "Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0225 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+          "neighbors": [
+            "Granicus, Inc. (4) (5) S + 5.75 % ( 2.25 % PIK) 10.06 % 1/17/2031 5,067 5,048 5,067 0.34",
+            "Granicus, Inc. (4) (5) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 12,439 12,439 12,439 0.83",
+            "Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 4,469 - - -"
+          ],
+          "xml_context": "<context id=\"c-213\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Investment, Unaffiliated Issuer, Granicus, Inc. 3</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2025-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-213\"\n      decimals=\"4\"\n      id=\"f-1481\"\n      unitRef=\"number\">0.0525</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRatePaidInKind\n      contextRef=\"c-213\"\n      decimals=\"4\"\n      id=\"f-1482\"\n      unitRef=\"number\">-0.0225</us-gaap:InvestmentInterestRatePaidInKind>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-213\"\n      decimals=\"4\"\n      id=\"f-1483\"\n      unitRef=\"number\">0.0956</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-213\" decimals=\"-3\" id=\"f-1484\" unitRef=\"usd\">12439000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-213\" decimals=\"-3\" id=\"f-1485\" unitRef=\"usd\">12439000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-213\" decimals=\"-3\" id=\"f-1486\" unitRef=\"usd\">12439000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-213\"\n      decimals=\"4\"\n      id=\"f-1487\"\n      unitRef=\"number\">0.0083</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-a9440d8443201aa7",
+          "accession": "0001901164-25-000016",
+          "context": "c-277",
+          "period": "2025-09-30",
+          "published_issuer": "Deerfield Dakota Holding LLC",
+          "published_pik_rate": "nan",
+          "source_row": "Deerfield Dakota Holding LLC (4) (5) S + 5.75 % ( 2.75 % PIK) 9.81 % 9/13/2032 39,314 39,119 39,118 2.61",
+          "assessment": "Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0275 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+          "neighbors": [
+            "Cheval Blanc Holdings Company (4) (5) (9) ( 14.50 % PIK) 14.50 % 10/30/2030 10,149 9,865 9,844 0.65",
+            "Deerfield Dakota Holding LLC (4) (5) S + 5.75 % ( 2.75 % PIK) 9.81 % 9/13/2032 39,314 39,119 39,118 2.61",
+            "Deerfield Dakota Holding LLC (4) (5) (6) S + 5.75 % ( 2.75 % PIK) 9.81 % 9/13/2032 3,686 ( 18 ) ( 18 ) -"
+          ],
+          "xml_context": "<context id=\"c-277\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Investment, Unaffiliated Issuer, Deerfield Dakota Holding LLC 1</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2025-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-277\"\n      decimals=\"4\"\n      id=\"f-1858\"\n      unitRef=\"number\">0.0575</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRatePaidInKind\n      contextRef=\"c-277\"\n      decimals=\"4\"\n      id=\"f-1859\"\n      unitRef=\"number\">-0.0275</us-gaap:InvestmentInterestRatePaidInKind>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-277\"\n      decimals=\"4\"\n      id=\"f-1860\"\n      unitRef=\"number\">0.0981</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-277\" decimals=\"-3\" id=\"f-1861\" unitRef=\"usd\">39314000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-277\" decimals=\"-3\" id=\"f-1862\" unitRef=\"usd\">39119000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-277\" decimals=\"-3\" id=\"f-1863\" unitRef=\"usd\">39118000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-277\"\n      decimals=\"4\"\n      id=\"f-1864\"\n      unitRef=\"number\">0.0261</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-7bcdc1413589bbbd",
+          "accession": "0001901164-25-000016",
+          "context": "c-303",
+          "period": "2025-09-30",
+          "published_issuer": "Pave America LLC",
+          "published_pik_rate": "nan",
+          "source_row": "Pave America LLC (4) (5) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 21,617 21,510 21,509 1.43",
+          "assessment": "Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0288 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+          "neighbors": [
+            "Pave America LLC (4) (5) (6) S + 4.75 % 8.75 % 8/27/2032 5,625 2,672 2,672 0.18",
+            "Pave America LLC (4) (5) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 21,617 21,510 21,509 1.43",
+            "Pave America LLC (4) (5) (6) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 7,500 - ( 37 ) -"
+          ],
+          "xml_context": "<context id=\"c-303\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Investment, Unaffiliated Issuer, Pave America LLC 2</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2025-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-303\"\n      decimals=\"4\"\n      id=\"f-2016\"\n      unitRef=\"number\">0.0525</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRatePaidInKind\n      contextRef=\"c-303\"\n      decimals=\"4\"\n      id=\"f-2017\"\n      unitRef=\"number\">-0.0288</us-gaap:InvestmentInterestRatePaidInKind>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-303\"\n      decimals=\"4\"\n      id=\"f-2018\"\n      unitRef=\"number\">0.0925</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-303\" decimals=\"-3\" id=\"f-2019\" unitRef=\"usd\">21617000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-303\" decimals=\"-3\" id=\"f-2020\" unitRef=\"usd\">21510000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-303\" decimals=\"-3\" id=\"f-2021\" unitRef=\"usd\">21509000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-303\"\n      decimals=\"4\"\n      id=\"f-2022\"\n      unitRef=\"number\">0.0143</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-6e7c88f4655bb27e",
+          "accession": "0001901164-25-000016",
+          "context": "c-304",
+          "period": "2025-09-30",
+          "published_issuer": "Pave America LLC",
+          "published_pik_rate": "nan",
+          "source_row": "Pave America LLC (4) (5) (6) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 7,500 - ( 37 ) -",
+          "assessment": "Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0288 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+          "neighbors": [
+            "Pave America LLC (4) (5) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 21,617 21,510 21,509 1.43",
+            "Pave America LLC (4) (5) (6) S + 5.25 % ( 2.88 % PIK) 9.25 % 8/27/2032 7,500 - ( 37 ) -",
+            "PT Intermediate Holdings III, LLC (4) (5) (7) S + 5.00 % ( 1.75 % PIK) 9.00 % 4/9/2030 35,394 35,372 35,394 2.36"
+          ],
+          "xml_context": "<context id=\"c-304\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Investment, Unaffiliated Issuer, Pave America LLC 3</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2025-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-304\"\n      decimals=\"4\"\n      id=\"f-2023\"\n      unitRef=\"number\">0.0525</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRatePaidInKind\n      contextRef=\"c-304\"\n      decimals=\"4\"\n      id=\"f-2024\"\n      unitRef=\"number\">-0.0288</us-gaap:InvestmentInterestRatePaidInKind>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-304\"\n      decimals=\"4\"\n      id=\"f-2025\"\n      unitRef=\"number\">0.0925</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-304\" decimals=\"-3\" id=\"f-2026\" unitRef=\"usd\">7500000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-304\" decimals=\"-3\" id=\"f-2027\" unitRef=\"usd\">0</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-304\" decimals=\"-3\" id=\"f-2028\" unitRef=\"usd\">-37000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-304\"\n      decimals=\"4\"\n      id=\"f-2029\"\n      unitRef=\"number\">0</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-44efb2b12e552888",
+          "accession": "0001901164-25-000016",
+          "context": "c-276",
+          "period": "2025-09-30",
+          "published_issuer": "Cheval Blanc Holdings Company",
+          "published_pik_rate": "nan",
+          "source_row": "Cheval Blanc Holdings Company (4) (5) (9) ( 14.50 % PIK) 14.50 % 10/30/2030 10,149 9,865 9,844 0.65",
+          "assessment": "Original parenthetical PIK term is positive; XML PaidInKind fact is -0.145 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+          "neighbors": [
+            "Brand Industrial Services, Inc. 10.38 % 8/1/2030 14,002 13,211 13,957 0.93",
+            "Cheval Blanc Holdings Company (4) (5) (9) ( 14.50 % PIK) 14.50 % 10/30/2030 10,149 9,865 9,844 0.65",
+            "Deerfield Dakota Holding LLC (4) (5) S + 5.75 % ( 2.75 % PIK) 9.81 % 9/13/2032 39,314 39,119 39,118 2.61"
+          ],
+          "xml_context": "<context id=\"c-276\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Investment, Unaffiliated Issuer, Cheval Blanc Holdings Company, Debt Securities, First Lien</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2025-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentInterestRatePaidInKind\n      contextRef=\"c-276\"\n      decimals=\"4\"\n      id=\"f-1852\"\n      unitRef=\"number\">-0.145</us-gaap:InvestmentInterestRatePaidInKind>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-276\"\n      decimals=\"4\"\n      id=\"f-1853\"\n      unitRef=\"number\">0.1450</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-276\" decimals=\"-3\" id=\"f-1854\" unitRef=\"usd\">10149000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-276\" decimals=\"-3\" id=\"f-1855\" unitRef=\"usd\">9865000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-276\" decimals=\"-3\" id=\"f-1856\" unitRef=\"usd\">9844000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-276\"\n      decimals=\"4\"\n      id=\"f-1857\"\n      unitRef=\"number\">0.0065</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-a9e9eeeb548ffeaa",
+          "accession": "0001901164-25-000016",
+          "context": "c-214",
+          "period": "2025-09-30",
+          "published_issuer": "Granicus, Inc.",
+          "published_pik_rate": "nan",
+          "source_row": "Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 4,469 - - -",
+          "assessment": "Original parenthetical PIK term is positive; XML PaidInKind fact is -0.0225 and published pik_rate is blank. Parentheses were encoded as negative numeric sign in source tag, unlike visible positive PIK term. Proposed opt-in printed-row interpretation should preserve positive term without treating it as proof of accrual. Negative/zero FV and unfunded footnote do not erase contractual terms.",
+          "neighbors": [
+            "Granicus, Inc. (4) (5) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 12,439 12,439 12,439 0.83",
+            "Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.56 % 1/17/2031 4,469 - - -",
+            "Greenway Health, LLC (4) (5) (7) S + 6.75 % 10.75 % 4/1/2029 12,056 11,882 12,056 0.80"
+          ],
+          "xml_context": "<context id=\"c-214\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Investment, Unaffiliated Issuer, Granicus, Inc. 4</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2025-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-214\"\n      decimals=\"4\"\n      id=\"f-1488\"\n      unitRef=\"number\">0.0525</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRatePaidInKind\n      contextRef=\"c-214\"\n      decimals=\"4\"\n      id=\"f-1489\"\n      unitRef=\"number\">-0.0225</us-gaap:InvestmentInterestRatePaidInKind>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-214\"\n      decimals=\"4\"\n      id=\"f-1490\"\n      unitRef=\"number\">0.0956</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-214\" decimals=\"-3\" id=\"f-1491\" unitRef=\"usd\">4469000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-214\" decimals=\"-3\" id=\"f-1492\" unitRef=\"usd\">0</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-214\" decimals=\"-3\" id=\"f-1493\" unitRef=\"usd\">0</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-214\"\n      decimals=\"4\"\n      id=\"f-1494\"\n      unitRef=\"number\">0</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "next_action": "Propose per-filer positive PIK-term reading from printed cells, with explicit source-negative-sign handling and comparative context support; test funded, zero and negative FV rows and no-PIK controls before a future repair. No changes made."
+    },
+    {
+      "finding_id": "RVQ_BLK_7733dc06dfac",
+      "coverage": {
+        "affected_rows": [
+          "ROW-baa429cf0cd752a3",
+          "ROW-7423ad7ed3ad7cb1",
+          "ROW-a9ff586f1bcf4f6b"
+        ],
+        "reviewed_rows": [
+          "ROW-baa429cf0cd752a3",
+          "ROW-7423ad7ed3ad7cb1",
+          "ROW-a9ff586f1bcf4f6b"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001901164-24-000012",
+          "text": "Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 1,836 ( 13 ) ( 18 ) -"
+        },
+        {
+          "accession": "0001901164-24-000012",
+          "text": "Coding Solutions Acquisition Inc. (4) (5) S + 5.00 % 9.25 % 8/7/2031 10,172 10,080 10,070 0.93"
+        },
+        {
+          "accession": "0001901164-24-000012",
+          "text": "Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 992 238 238 0.02"
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-baa429cf0cd752a3: Display spelling differs: member and published issuer use singular Solution; original schedule uses Solutions. Same row verified by context, par/cost/FV/maturity; no evidence of a different borrower or lost position. This is a narrow display error, not evidence of exposure corruption.",
+        "ROW-7423ad7ed3ad7cb1: Display spelling differs: member and published issuer use singular Solution; original schedule uses Solutions. Same row verified by context, par/cost/FV/maturity; no evidence of a different borrower or lost position. This is a narrow display error, not evidence of exposure corruption.",
+        "ROW-a9ff586f1bcf4f6b: Display spelling differs: member and published issuer use singular Solution; original schedule uses Solutions. Same row verified by context, par/cost/FV/maturity; no evidence of a different borrower or lost position. This is a narrow display error, not evidence of exposure corruption."
+      ],
+      "row_assessments": [
+        {
+          "row_id": "ROW-baa429cf0cd752a3",
+          "accession": "0001901164-24-000012",
+          "context": "c-116",
+          "period": "2024-09-30",
+          "published_issuer": "Coding Solution Acquisition Inc.",
+          "published_pik_rate": "nan",
+          "source_row": "Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 1,836 ( 13 ) ( 18 ) -",
+          "assessment": "Display spelling differs: member and published issuer use singular Solution; original schedule uses Solutions. Same row verified by context, par/cost/FV/maturity; no evidence of a different borrower or lost position. This is a narrow display error, not evidence of exposure corruption.",
+          "neighbors": [
+            "Coding Solutions Acquisition Inc. (4) (5) S + 5.00 % 9.25 % 8/7/2031 10,172 10,080 10,070 0.93",
+            "Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 1,836 ( 13 ) ( 18 ) -"
+          ],
+          "xml_context": "<context id=\"c-116\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Coding Solution Acquisition Inc. 2</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2024-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate contextRef=\"c-116\" decimals=\"4\" id=\"f-888\" unitRef=\"number\">0.0500</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate contextRef=\"c-116\" decimals=\"4\" id=\"f-889\" unitRef=\"number\">0.1001</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-116\" decimals=\"-3\" id=\"f-890\" unitRef=\"usd\">1836000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-116\" decimals=\"-3\" id=\"f-891\" unitRef=\"usd\">-13000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-116\" decimals=\"-3\" id=\"f-892\" unitRef=\"usd\">-18000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef=\"c-116\" decimals=\"4\" id=\"f-893\" unitRef=\"number\">0</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-7423ad7ed3ad7cb1",
+          "accession": "0001901164-24-000012",
+          "context": "c-115",
+          "period": "2024-09-30",
+          "published_issuer": "Coding Solution Acquisition Inc.",
+          "published_pik_rate": "nan",
+          "source_row": "Coding Solutions Acquisition Inc. (4) (5) S + 5.00 % 9.25 % 8/7/2031 10,172 10,080 10,070 0.93",
+          "assessment": "Display spelling differs: member and published issuer use singular Solution; original schedule uses Solutions. Same row verified by context, par/cost/FV/maturity; no evidence of a different borrower or lost position. This is a narrow display error, not evidence of exposure corruption.",
+          "neighbors": [
+            "CNSI Holdings, LLC (4) (5) (6) S + 5.50 % 10.10 % 12/17/2029 26,444 - ( 66 ) ( 0.01 )",
+            "Coding Solutions Acquisition Inc. (4) (5) S + 5.00 % 9.25 % 8/7/2031 10,172 10,080 10,070 0.93",
+            "Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 1,836 ( 13 ) ( 18 ) -"
+          ],
+          "xml_context": "<context id=\"c-115\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Coding Solution Acquisition Inc. 1</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2024-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate contextRef=\"c-115\" decimals=\"4\" id=\"f-882\" unitRef=\"number\">0.0500</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate contextRef=\"c-115\" decimals=\"4\" id=\"f-883\" unitRef=\"number\">0.0925</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-115\" decimals=\"-3\" id=\"f-884\" unitRef=\"usd\">10172000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-115\" decimals=\"-3\" id=\"f-885\" unitRef=\"usd\">10080000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-115\" decimals=\"-3\" id=\"f-886\" unitRef=\"usd\">10070000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef=\"c-115\" decimals=\"4\" id=\"f-887\" unitRef=\"number\">0.0093</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-a9ff586f1bcf4f6b",
+          "accession": "0001901164-24-000012",
+          "context": "c-117",
+          "period": "2024-09-30",
+          "published_issuer": "Coding Solution Acquisition Inc.",
+          "published_pik_rate": "nan",
+          "source_row": "Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 992 238 238 0.02",
+          "assessment": "Display spelling differs: member and published issuer use singular Solution; original schedule uses Solutions. Same row verified by context, par/cost/FV/maturity; no evidence of a different borrower or lost position. This is a narrow display error, not evidence of exposure corruption.",
+          "neighbors": [
+            "Investments- non-controlled/ non-affiliated (1) Footnotes Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Units Cost (3) Fair Value % of Net Assets",
+            "Coding Solutions Acquisition Inc. (4) (5) (6) S + 5.00 % 10.01 % 8/7/2031 992 238 238 0.02",
+            "Color Intermediate, LLC (4) (5) (7) S + 4.75 % 9.45 % 10/4/2029 5,887 5,717 5,887 0.54"
+          ],
+          "xml_context": "<context id=\"c-117\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Coding Solution Acquisition Inc. 3</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2024-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate contextRef=\"c-117\" decimals=\"4\" id=\"f-894\" unitRef=\"number\">0.0500</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate contextRef=\"c-117\" decimals=\"4\" id=\"f-895\" unitRef=\"number\">0.1001</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-117\" decimals=\"-3\" id=\"f-896\" unitRef=\"usd\">992000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-117\" decimals=\"-3\" id=\"f-897\" unitRef=\"usd\">238000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-117\" decimals=\"-3\" id=\"f-898\" unitRef=\"usd\">238000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef=\"c-117\" decimals=\"4\" id=\"f-899\" unitRef=\"number\">0.0002</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "next_action": "Propose bounded per-filer display-name correction backed by these rows; retain distinct position IDs/tranches and rerun exact-name comparisons with false-positive controls. No changes made."
+    },
+    {
+      "finding_id": "RVQ_BLK_849ad834f993",
+      "coverage": {
+        "affected_rows": [
+          "ROW-cfe69d8a9159ea05",
+          "ROW-fb7882c9bf0fd4da"
+        ],
+        "reviewed_rows": [
+          "ROW-cfe69d8a9159ea05",
+          "ROW-fb7882c9bf0fd4da"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001901164-24-000009",
+          "text": "Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.93 % 11/24/2028 7,255 7,079 7,255 0.87"
+        },
+        {
+          "accession": "0001901164-24-000009",
+          "text": "Kaseya, Inc. (4) (5) (7) S + 6.00 % ( 2.50 % PIK) 11.31 % 6/25/2029 32,123 31,430 32,123 3.85"
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-cfe69d8a9159ea05: Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+        "ROW-fb7882c9bf0fd4da: Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal."
+      ],
+      "row_assessments": [
+        {
+          "row_id": "ROW-cfe69d8a9159ea05",
+          "accession": "0001901164-24-000009",
+          "context": "c-154",
+          "period": "2024-03-31",
+          "published_issuer": "Higginbotham Insurance Agency, Inc.2",
+          "published_pik_rate": "nan",
+          "source_row": "Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.93 % 11/24/2028 7,255 7,079 7,255 0.87",
+          "assessment": "Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+          "neighbors": [
+            "Higginbotham Insurance Agency, Inc. (4) (5) S + 5.50 % 10.93 % 11/24/2028 16,332 16,234 16,332 1.96",
+            "Higginbotham Insurance Agency, Inc. (4) (5) (7) S + 5.50 % 10.93 % 11/24/2028 7,255 7,079 7,255 0.87",
+            "Integrity Marketing Acquisition, LLC (4) (5) (6) S + 5.50 % 11.46 % 8/27/2026 20 - - -"
+          ],
+          "xml_context": "<context id=\"c-154\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Higginbotham Insurance Agency, Inc.2</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2024-03-31</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-154\"\n      decimals=\"4\"\n      id=\"f-1068\"\n      unitRef=\"number\">0.0550</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-154\"\n      decimals=\"4\"\n      id=\"f-1069\"\n      unitRef=\"number\">0.1093</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-154\" decimals=\"-3\" id=\"f-1070\" unitRef=\"usd\">7255000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-154\" decimals=\"-3\" id=\"f-1071\" unitRef=\"usd\">7079000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-154\" decimals=\"-3\" id=\"f-1072\" unitRef=\"usd\">7255000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-154\"\n      decimals=\"4\"\n      id=\"f-1073\"\n      unitRef=\"number\">0.0087</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-fb7882c9bf0fd4da",
+          "accession": "0001901164-24-000009",
+          "context": "c-131",
+          "period": "2024-03-31",
+          "published_issuer": "Kaseya, Inc.4",
+          "published_pik_rate": "2.5",
+          "source_row": "Kaseya, Inc. (4) (5) (7) S + 6.00 % ( 2.50 % PIK) 11.31 % 6/25/2029 32,123 31,430 32,123 3.85",
+          "assessment": "Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+          "neighbors": [
+            "Kaseya, Inc. (4) (5) (6) S + 6.00 % ( 2.50 % PIK) 10.31 % 6/25/2029 1,804 ( 39 ) - -",
+            "Kaseya, Inc. (4) (5) (7) S + 6.00 % ( 2.50 % PIK) 11.31 % 6/25/2029 32,123 31,430 32,123 3.85",
+            "Ministry Brands Purchaser, LLC (4) (5) S + 5.50 % 10.93 % 12/29/2028 93 90 90 0.01"
+          ],
+          "xml_context": "<context id=\"c-131\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Kaseya, Inc.4</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2024-03-31</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate contextRef=\"c-131\" decimals=\"4\" id=\"f-932\" unitRef=\"number\">0.0600</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRatePaidInKind contextRef=\"c-131\" decimals=\"4\" id=\"f-933\" unitRef=\"number\">0.0250</us-gaap:InvestmentInterestRatePaidInKind>",
+            "<us-gaap:InvestmentInterestRate contextRef=\"c-131\" decimals=\"4\" id=\"f-934\" unitRef=\"number\">0.1131</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-131\" decimals=\"-3\" id=\"f-935\" unitRef=\"usd\">32123000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-131\" decimals=\"-3\" id=\"f-936\" unitRef=\"usd\">31430000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-131\" decimals=\"-3\" id=\"f-937\" unitRef=\"usd\">32123000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef=\"c-131\" decimals=\"4\" id=\"f-938\" unitRef=\"number\">0.0385</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "next_action": "Propose bounded per-filer display-name correction backed by these rows; retain distinct position IDs/tranches and rerun exact-name comparisons with false-positive controls. No changes made."
+    },
+    {
+      "finding_id": "RVQ_BLK_9377d454bc7c",
+      "coverage": {
+        "affected_rows": [
+          "ROW-8d3934bd5d3bc366",
+          "ROW-64a45a3abbbeae96"
+        ],
+        "reviewed_rows": [
+          "ROW-8d3934bd5d3bc366",
+          "ROW-64a45a3abbbeae96"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001628280-23-028716",
+          "text": "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 71 69 0.02"
+        },
+        {
+          "accession": "0001628280-23-028716",
+          "text": "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 434 432 0.14"
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-8d3934bd5d3bc366: Original reference/spread cell says S + 6.25 % PIK, coupon 11.36%; XML tags 6.25% solely as spread and has no PaidInKind fact. PIK terms exist but whether 6.25 is the PIK margin, total margin or intended all-in PIK rate is not disambiguated. Do not mechanically put 6.25 into pik_rate. Footnote (6) says position or portion is unfunded and earns no interest on unfunded portion.",
+        "ROW-64a45a3abbbeae96: Original reference/spread cell says S + 6.25 % PIK, coupon 11.36%; XML tags 6.25% solely as spread and has no PaidInKind fact. PIK terms exist but whether 6.25 is the PIK margin, total margin or intended all-in PIK rate is not disambiguated. Do not mechanically put 6.25 into pik_rate. Footnote (6) says position or portion is unfunded and earns no interest on unfunded portion."
+      ],
+      "row_assessments": [
+        {
+          "row_id": "ROW-8d3934bd5d3bc366",
+          "accession": "0001628280-23-028716",
+          "context": "c-89",
+          "period": "2023-06-30",
+          "published_issuer": "Kaseya, Inc.",
+          "published_pik_rate": "nan",
+          "source_row": "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 71 69 0.02",
+          "assessment": "Original reference/spread cell says S + 6.25 % PIK, coupon 11.36%; XML tags 6.25% solely as spread and has no PaidInKind fact. PIK terms exist but whether 6.25 is the PIK margin, total margin or intended all-in PIK rate is not disambiguated. Do not mechanically put 6.25 into pik_rate. Footnote (6) says position or portion is unfunded and earns no interest on unfunded portion.",
+          "neighbors": [
+            "Kaseya, Inc. (4) (5) (9) S + 5.75 % 8.85 % 6/25/2029 31,649 30,879 30,858 10.24",
+            "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 71 69 0.02",
+            "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 434 432 0.14"
+          ],
+          "xml_context": "<context id=\"c-89\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Kaseya, Inc. 2</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2023-06-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate contextRef=\"c-89\" decimals=\"4\" id=\"f-627\" unitRef=\"number\">0.0625</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate contextRef=\"c-89\" decimals=\"4\" id=\"f-628\" unitRef=\"number\">0.1136</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-89\" decimals=\"-3\" id=\"f-629\" unitRef=\"usd\">1921000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-89\" decimals=\"-3\" id=\"f-630\" unitRef=\"usd\">71000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-89\" decimals=\"-3\" id=\"f-631\" unitRef=\"usd\">69000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef=\"c-89\" decimals=\"4\" id=\"f-632\" unitRef=\"number\">0.0002</us-gaap:InvestmentOwnedPercentOfNetAssets>",
+            "<us-gaap:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount contextRef=\"c-89\" decimals=\"-3\" id=\"f-1252\" unitRef=\"usd\">1441000</us-gaap:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount>",
+            "<us-gaap:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmount contextRef=\"c-89\" decimals=\"-3\" id=\"f-1253\" unitRef=\"usd\">-36000</us-gaap:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmount>"
+          ]
+        },
+        {
+          "row_id": "ROW-64a45a3abbbeae96",
+          "accession": "0001628280-23-028716",
+          "context": "c-90",
+          "period": "2023-06-30",
+          "published_issuer": "Kaseya, Inc.",
+          "published_pik_rate": "nan",
+          "source_row": "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 434 432 0.14",
+          "assessment": "Original reference/spread cell says S + 6.25 % PIK, coupon 11.36%; XML tags 6.25% solely as spread and has no PaidInKind fact. PIK terms exist but whether 6.25 is the PIK margin, total margin or intended all-in PIK rate is not disambiguated. Do not mechanically put 6.25 into pik_rate. Footnote (6) says position or portion is unfunded and earns no interest on unfunded portion.",
+          "neighbors": [
+            "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 71 69 0.02",
+            "Kaseya, Inc. (4) (5) (6) S + 6.25 % PIK 11.36 % 6/25/2029 1,921 434 432 0.14",
+            "Ministry Brands Purchaser, LLC (4) (5) (7) S + 5.50 % 10.70 % 12/29/2028 923 897 886 0.29"
+          ],
+          "xml_context": "<context id=\"c-90\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Kaseya, Inc. 3</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2023-06-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate contextRef=\"c-90\" decimals=\"4\" id=\"f-633\" unitRef=\"number\">0.0625</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate contextRef=\"c-90\" decimals=\"4\" id=\"f-634\" unitRef=\"number\">0.1136</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-90\" decimals=\"-3\" id=\"f-635\" unitRef=\"usd\">1921000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-90\" decimals=\"-3\" id=\"f-636\" unitRef=\"usd\">434000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-90\" decimals=\"-3\" id=\"f-637\" unitRef=\"usd\">432000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef=\"c-90\" decimals=\"4\" id=\"f-638\" unitRef=\"number\">0.0014</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        }
+      ],
+      "conclusion": "source_ambiguity",
+      "next_action": "Obtain Kaseya instrument terms or explicit position-level rate breakdown before assigning numeric PIK; retain disclosed PIK-terms evidence separately from accrual."
+    },
+    {
+      "finding_id": "RVQ_BLK_c5f01283fd04",
+      "coverage": {
+        "affected_rows": [
+          "ROW-865305e72366e556"
+        ],
+        "reviewed_rows": [
+          "ROW-865305e72366e556"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001901164-25-000002",
+          "text": "Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.84 % 1/17/2031 4,469 - ( 23 ) -"
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-865305e72366e556: Comparative 2024-12-31 context c-295 in the 2025-09-30 filing prints parenthetical 2.25% PIK; XML has no PaidInKind fact on this context. Published pik_rate blank is a schedule-term extraction gap. Negative FV is unamortized commitment fee, not negative PIK."
+      ],
+      "row_assessments": [
+        {
+          "row_id": "ROW-865305e72366e556",
+          "accession": "0001901164-25-000002",
+          "context": "c-295",
+          "period": "2024-12-31",
+          "published_issuer": "Granicus, Inc.",
+          "published_pik_rate": "nan",
+          "source_row": "Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.84 % 1/17/2031 4,469 - ( 23 ) -",
+          "assessment": "Comparative 2024-12-31 context c-295 in the 2025-09-30 filing prints parenthetical 2.25% PIK; XML has no PaidInKind fact on this context. Published pik_rate blank is a schedule-term extraction gap. Negative FV is unamortized commitment fee, not negative PIK.",
+          "neighbors": [
+            "Chase Intermediate, LLC (4) (5) (6) S + 4.75 % 9.11 % 10/30/2028 890 ( 7 ) ( 2 ) -",
+            "Granicus, Inc. (4) (5) (6) S + 5.25 % ( 2.25 % PIK) 9.84 % 1/17/2031 4,469 - ( 23 ) -",
+            "Granicus, Inc. (4) (5) (6) S + 5.25 % 10.34 % 1/17/2031 702 ( 3 ) - -"
+          ],
+          "xml_context": "<context id=\"c-295\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Granicus, Inc. 1</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2024-12-31</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-295\"\n      decimals=\"4\"\n      id=\"f-2009\"\n      unitRef=\"number\">0.0525</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-295\"\n      decimals=\"4\"\n      id=\"f-2011\"\n      unitRef=\"number\">0.0984</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-295\" decimals=\"-3\" id=\"f-2012\" unitRef=\"usd\">4469000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-295\" decimals=\"-3\" id=\"f-2013\" unitRef=\"usd\">0</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-295\" decimals=\"-3\" id=\"f-2014\" unitRef=\"usd\">-23000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-295\"\n      decimals=\"4\"\n      id=\"f-2015\"\n      unitRef=\"number\">0</us-gaap:InvestmentOwnedPercentOfNetAssets>",
+            "<us-gaap:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount contextRef=\"c-295\" decimals=\"-3\" id=\"f-2280\" unitRef=\"usd\">4469000</us-gaap:InvestmentCompanyFinancialCommitmentToInvesteeFutureAmount>",
+            "<oha:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmountNetOfUnamortizedCosts contextRef=\"c-295\" decimals=\"-3\" id=\"f-2281\" unitRef=\"usd\">-22000</oha:InvestmentCompanyFinancialSupportToInvesteeContractuallyRequiredAmountNetOfUnamortizedCosts>"
+          ]
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "next_action": "Propose per-filer positive PIK-term reading from printed cells, with explicit source-negative-sign handling and comparative context support; test funded, zero and negative FV rows and no-PIK controls before a future repair. No changes made."
+    },
+    {
+      "finding_id": "RVQ_BLK_f055ffe85a0d",
+      "coverage": {
+        "affected_rows": [
+          "ROW-8e127d6d01cb8c5c",
+          "ROW-424001c6008ad138",
+          "ROW-7e5f169a262d2f12"
+        ],
+        "reviewed_rows": [
+          "ROW-8e127d6d01cb8c5c",
+          "ROW-424001c6008ad138",
+          "ROW-7e5f169a262d2f12"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001628280-23-037892",
+          "text": "BCPE HIPH Parent, Inc. (4) (6) (8) S + 5.75 % 11.07 % 10/7/2030 6,287 6,193 6,193 1.25"
+        },
+        {
+          "accession": "0001628280-23-037892",
+          "text": "Higginbotham Insurance Agency, Inc. (4) (5) (6) S + 5.50 % 10.92 % 11/24/2028 16,400 ( 81 ) ( 164 ) ( 0.03 )"
+        },
+        {
+          "accession": "0001628280-23-037892",
+          "text": "Higginbotham Insurance Agency, Inc. (4) (6) (7) S + 5.50 % 10.92 % 11/24/2028 7,292 7,087 7,219 1.46"
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-8e127d6d01cb8c5c: Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+        "ROW-424001c6008ad138: Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+        "ROW-7e5f169a262d2f12: Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal."
+      ],
+      "row_assessments": [
+        {
+          "row_id": "ROW-8e127d6d01cb8c5c",
+          "accession": "0001628280-23-037892",
+          "context": "c-39",
+          "period": "2023-09-30",
+          "published_issuer": "BCPE HIPH Parent, Inc.2",
+          "published_pik_rate": "nan",
+          "source_row": "BCPE HIPH Parent, Inc. (4) (6) (8) S + 5.75 % 11.07 % 10/7/2030 6,287 6,193 6,193 1.25",
+          "assessment": "Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+          "neighbors": [
+            "Investments- non-controlled/ non-affiliated (1) Reference Rate and Spread Interest Rate (2) Maturity Date Par Amount/ Units Cost (3) Fair Value % of Net Assets",
+            "BCPE HIPH Parent, Inc. (4) (6) (8) S + 5.75 % 11.07 % 10/7/2030 6,287 6,193 6,193 1.25",
+            "Meridian Adhesives Group, Inc. (4) (6) (7) S + 7.00 % 12.32 % 9/3/2029 15,713 15,215 15,713 3.18"
+          ],
+          "xml_context": "<context id=\"c-39\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>BCPE HIPH Parent, Inc.2</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2023-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate contextRef=\"c-39\" decimals=\"4\" id=\"f-371\" unitRef=\"number\">0.0575</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate contextRef=\"c-39\" decimals=\"4\" id=\"f-372\" unitRef=\"number\">0.1107</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-39\" decimals=\"-3\" id=\"f-373\" unitRef=\"usd\">6287000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-39\" decimals=\"-3\" id=\"f-374\" unitRef=\"usd\">6193000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-39\" decimals=\"-3\" id=\"f-375\" unitRef=\"usd\">6193000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef=\"c-39\" decimals=\"4\" id=\"f-376\" unitRef=\"number\">0.0125</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-424001c6008ad138",
+          "accession": "0001628280-23-037892",
+          "context": "c-22",
+          "period": "2023-09-30",
+          "published_issuer": "Higginbotham Insurance Agency, Inc.1",
+          "published_pik_rate": "nan",
+          "source_row": "Higginbotham Insurance Agency, Inc. (4) (5) (6) S + 5.50 % 10.92 % 11/24/2028 16,400 ( 81 ) ( 164 ) ( 0.03 )",
+          "assessment": "Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+          "neighbors": [
+            "Banking",
+            "Higginbotham Insurance Agency, Inc. (4) (5) (6) S + 5.50 % 10.92 % 11/24/2028 16,400 ( 81 ) ( 164 ) ( 0.03 )",
+            "Higginbotham Insurance Agency, Inc. (4) (6) (7) S + 5.50 % 10.92 % 11/24/2028 7,292 7,087 7,219 1.46"
+          ],
+          "xml_context": "<context id=\"c-22\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Higginbotham Insurance Agency, Inc.1</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2023-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate contextRef=\"c-22\" decimals=\"4\" id=\"f-281\" unitRef=\"number\">0.0550</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate contextRef=\"c-22\" decimals=\"4\" id=\"f-282\" unitRef=\"number\">0.1092</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-22\" decimals=\"-3\" id=\"f-283\" unitRef=\"usd\">16400000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-22\" decimals=\"-3\" id=\"f-284\" unitRef=\"usd\">-81000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-22\" decimals=\"-3\" id=\"f-285\" unitRef=\"usd\">-164000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef=\"c-22\" decimals=\"4\" id=\"f-286\" unitRef=\"number\">-0.0003</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        },
+        {
+          "row_id": "ROW-7e5f169a262d2f12",
+          "accession": "0001628280-23-037892",
+          "context": "c-23",
+          "period": "2023-09-30",
+          "published_issuer": "Higginbotham Insurance Agency, Inc.2",
+          "published_pik_rate": "nan",
+          "source_row": "Higginbotham Insurance Agency, Inc. (4) (6) (7) S + 5.50 % 10.92 % 11/24/2028 7,292 7,087 7,219 1.46",
+          "assessment": "Glued ordinal survives issuer cleanup: member ends in a digit without preceding space; original company cell has no ordinal. Keep position identity separate while removing this display suffix only when verified as a typed-member ordinal.",
+          "neighbors": [
+            "Higginbotham Insurance Agency, Inc. (4) (5) (6) S + 5.50 % 10.92 % 11/24/2028 16,400 ( 81 ) ( 164 ) ( 0.03 )",
+            "Higginbotham Insurance Agency, Inc. (4) (6) (7) S + 5.50 % 10.92 % 11/24/2028 7,292 7,087 7,219 1.46",
+            "7,006 7,055 1.43"
+          ],
+          "xml_context": "<context id=\"c-23\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Higginbotham Insurance Agency, Inc.2</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2023-09-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate contextRef=\"c-23\" decimals=\"4\" id=\"f-287\" unitRef=\"number\">0.0550</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate contextRef=\"c-23\" decimals=\"4\" id=\"f-288\" unitRef=\"number\">0.1092</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-23\" decimals=\"-3\" id=\"f-289\" unitRef=\"usd\">7292000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-23\" decimals=\"-3\" id=\"f-290\" unitRef=\"usd\">7087000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-23\" decimals=\"-3\" id=\"f-291\" unitRef=\"usd\">7219000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets contextRef=\"c-23\" decimals=\"4\" id=\"f-292\" unitRef=\"number\">0.0146</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "next_action": "Propose bounded per-filer display-name correction backed by these rows; retain distinct position IDs/tranches and rerun exact-name comparisons with false-positive controls. No changes made."
+    },
+    {
+      "finding_id": "RVQ_BLK_f0a23ec9e4ad",
+      "coverage": {
+        "affected_rows": [
+          "ROW-41bd64998398ddfb"
+        ],
+        "reviewed_rows": [
+          "ROW-41bd64998398ddfb"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001901164-25-000008",
+          "text": "Allied Universal Holdco LLC (4) S + 3.75 % 8.18 % 5/12/2028 14,961 14,961 15,049 1.08"
+        }
+      ],
+      "hypotheses_tested": [
+        "ROW-41bd64998398ddfb: Filer member adds v to Allied; visible row has Allied. Prefix-strip repair leaves this stray letter. This residual is not the previously reviewed generic Investment, Unaffiliated Issuer prefix."
+      ],
+      "row_assessments": [
+        {
+          "row_id": "ROW-41bd64998398ddfb",
+          "accession": "0001901164-25-000008",
+          "context": "c-271",
+          "period": "2025-06-30",
+          "published_issuer": "vAllied Universal Holdco LLC",
+          "published_pik_rate": "nan",
+          "source_row": "Allied Universal Holdco LLC (4) S + 3.75 % 8.18 % 5/12/2028 14,961 14,961 15,049 1.08",
+          "assessment": "Filer member adds v to Allied; visible row has Allied. Prefix-strip repair leaves this stray letter. This residual is not the previously reviewed generic Investment, Unaffiliated Issuer prefix.",
+          "neighbors": [
+            "Services: Business",
+            "Allied Universal Holdco LLC (4) S + 3.75 % 8.18 % 5/12/2028 14,961 14,961 15,049 1.08",
+            "ARAMSCO, Inc. (4) (8) S + 4.75 % 9.05 % 10/10/2030 1,725 1,599 1,397 0.10"
+          ],
+          "xml_context": "<context id=\"c-271\">\n        <entity>\n            <identifier scheme=\"http://www.sec.gov/CIK\">0001901164</identifier>\n            <segment>\n                <xbrldi:typedMember dimension=\"us-gaap:InvestmentIdentifierAxis\">\n                    <us-gaap:InvestmentIdentifierAxis.domain>Investment, Unaffiliated Issuer, vAllied Universal Holdco LLC</us-gaap:InvestmentIdentifierAxis.domain>\n                </xbrldi:typedMember>\n            </segment>\n        </entity>\n        <period>\n            <instant>2025-06-30</instant>\n        </period>\n    </context>",
+          "xml_facts": [
+            "<us-gaap:InvestmentBasisSpreadVariableRate\n      contextRef=\"c-271\"\n      decimals=\"4\"\n      id=\"f-1817\"\n      unitRef=\"number\">0.0375</us-gaap:InvestmentBasisSpreadVariableRate>",
+            "<us-gaap:InvestmentInterestRate\n      contextRef=\"c-271\"\n      decimals=\"4\"\n      id=\"f-1818\"\n      unitRef=\"number\">0.0818</us-gaap:InvestmentInterestRate>",
+            "<us-gaap:InvestmentOwnedBalancePrincipalAmount contextRef=\"c-271\" decimals=\"-3\" id=\"f-1819\" unitRef=\"usd\">14961000</us-gaap:InvestmentOwnedBalancePrincipalAmount>",
+            "<us-gaap:InvestmentOwnedAtCost contextRef=\"c-271\" decimals=\"-3\" id=\"f-1820\" unitRef=\"usd\">14961000</us-gaap:InvestmentOwnedAtCost>",
+            "<us-gaap:InvestmentOwnedAtFairValue contextRef=\"c-271\" decimals=\"-3\" id=\"f-1821\" unitRef=\"usd\">15049000</us-gaap:InvestmentOwnedAtFairValue>",
+            "<us-gaap:InvestmentOwnedPercentOfNetAssets\n      contextRef=\"c-271\"\n      decimals=\"4\"\n      id=\"f-1822\"\n      unitRef=\"number\">0.0108</us-gaap:InvestmentOwnedPercentOfNetAssets>"
+          ]
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "next_action": "Propose bounded per-filer display-name correction backed by these rows; retain distinct position IDs/tranches and rerun exact-name comparisons with false-positive controls. No changes made."
+    }
+  ],
+  "observations": [],
+  "orchestrator_requests": [],
+  "not_done": [
+    "Review only: no repairs, builds, tests, ledger/disposition changes, export or acceptance.",
+    "Historical rgA3 selected populations only; no assertion about current canonical holdings or complete fund correctness.",
+    "No inference of current PIK accrual or distress from schedule terms; first-quarter Kaseya PIK amount remains ambiguous."
+  ],
+  "counts": {
+    "selected_findings": 8,
+    "affected_rows": 21,
+    "reviewed_rows": 21,
+    "confirmed_error_findings": 7,
+    "source_ambiguity_findings": 1,
+    "issuer_name_rows": 11,
+    "pik_rows": 10,
+    "observations": 0
+  },
+  "population_method": "All 21 rows for this CIK in untouched rgA3/output/shadow/page_rule_findings.csv, partitioned by selected rule/date; DuckDB joined exact row_id to holdings parquet. Each row independently read in original cached HTML using contextref and tr plus adjacent rows, and original XML context/facts. All context instants checked; 2024-12-31 PIK row is comparative in 2025-09-30 accession. No invented borrower rollups.",
+  "prior_coverage_check": "Read prior 0001901164.md, reports/0001901164.json and decision log D-115/D-173. Prior generic ordinals/prefix and rate convention reviews do not cover these exact residual forms. Root notified; no exclusions authorized or made."
+}
