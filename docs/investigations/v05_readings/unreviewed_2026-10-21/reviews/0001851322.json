@@ -1,0 +1,306 @@
+{
+  "reviewer_id": "/root/remaining_northhaven_check_sol",
+  "report_digest": "be7982eae80728164ce9666e0c0bf5d25c01e41487d08693e4dc929e1beb9c4a",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_01de8d22799b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-ad502402689f84a0. Original context-bearing numeric facts are attached to the cited printed row, so this is not evidence of a page-reader misjoin. The published name follows an inconsistent member instead of the printed issuer. A source-row-backed mechanism must retain distinct instruments and amounts; member-only renaming or borrower merging is unsafe.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-096532",
+          "text": "Madison Safety & Flow, LLC First Lien Debt S + 2.50 % 6.23 % 09/26/2031 4,144 4,153 4,169 0.12"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_0654897f82b2",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-731e84270c141569. Each selected schedule row explicitly prints Preferred Equity while published asset_category is EQUITY_COMMON. Acquisition dates, share counts, cost and FV distinguish neighboring common rows. Monetary facts use scale 3, shares scale 0, and PIK percentage facts scale -2; no rescaling explains the class discrepancy. The Vardiman comparative commitment-table fact sharing a context is not the schedule position.",
+      "evidence": [
+        {
+          "accession": "0001851322-24-000115",
+          "text": "Vardiman Black Holdings, LLC (6) (14) Preferred Equity 6.00 % PIK 3/29/2024 5,298,893 3,456 3,375 0.11"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_104d3d5dd19c",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-5ecdd8b548460c74, ROW-b5e3af39d42453fa, ROW-a39ad8d55a26714c. Each selected schedule row explicitly prints Preferred Equity while published asset_category is EQUITY_COMMON. Acquisition dates, share counts, cost and FV distinguish neighboring common rows. Monetary facts use scale 3, shares scale 0, and PIK percentage facts scale -2; no rescaling explains the class discrepancy. The Vardiman comparative commitment-table fact sharing a context is not the schedule position.",
+      "evidence": [
+        {
+          "accession": "0001851322-25-000044",
+          "text": "Eclipse Topco, Inc. (6) (18) Preferred Equity 12.50 % PIK 9/5/2024 310 3,048 3,083 0.09"
+        },
+        {
+          "accession": "0001851322-25-000044",
+          "text": "Vardiman Black Holdings, LLC (6) (18) Preferred Equity 6.00 % PIK 3/29/2024 7,065,190 4,798 1,572 0.05"
+        },
+        {
+          "accession": "0001851322-25-000044",
+          "text": "Cohesity Global, Inc. (17) (18) Preferred Equity 12/9/2024 18,617 382 382 0.01"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_13c049886802",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-c5be05f4b9b9fe01, ROW-e214dc87a14c7b24. Each selected schedule row explicitly prints Preferred Equity while published asset_category is EQUITY_COMMON. Acquisition dates, share counts, cost and FV distinguish neighboring common rows. Monetary facts use scale 3, shares scale 0, and PIK percentage facts scale -2; no rescaling explains the class discrepancy. The Vardiman comparative commitment-table fact sharing a context is not the schedule position.",
+      "evidence": [
+        {
+          "accession": "0001851322-24-000148",
+          "text": "Vardiman Black Holdings, LLC (6) (16) Preferred Equity 6.00 % PIK 3/29/2024 7,065,190 4,689 3,109 0.10"
+        },
+        {
+          "accession": "0001851322-24-000148",
+          "text": "Eclipse Topco, Inc. (6) (16) Preferred Equity 12.50 % PIK 9/5/2024 310 3,035 3,035 0.10"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6d64aa908228",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-55d0c48eea1f0af2, ROW-a099cc82b0ee3fe6, ROW-507d7ede6503a8b1, ROW-a554a8641a1efe05, ROW-b8870c28f550262c, ROW-e9fdee770573eeef, ROW-fba5e15b782cfaa9, ROW-42a2e8c2cb9523ef, ROW-2d37c918b6a69c15, ROW-f1abb99cb16348e4, ROW-4c8743b544548c9b, ROW-24f719073bf077d8, ROW-44474fd9535d7007, ROW-4013b1738b44425f, ROW-024f40840943a3bd, ROW-48c2ac873e86c14f, ROW-030d1c379d124480, ROW-5a1d95ba80ffc817, ROW-4fffa1e9b464d53f, ROW-1db09173cb38e045. Original context-bearing numeric facts are attached to the cited printed row, so this is not evidence of a page-reader misjoin. The published name follows an inconsistent member instead of the printed issuer. A source-row-backed mechanism must retain distinct instruments and amounts; member-only renaming or borrower merging is unsafe.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Fetch, Inc. (6) (11) (18) First Lien Debt S + 4.75 % 8.45 % 03/31/2033 - ( 26 ) ( 26 ) 0.00"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Appfire Technologies, LLC (6) (9) (10) First Lien Debt S + 4.75 % 8.45 % 03/09/2028 13,481 13,457 13,481 0.42"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Banyan Software Holdings, LLC (6) (9) (10) First Lien Debt S + 5.50 % 9.17 % 01/02/2031 30,130 29,879 29,904 0.93"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "LUV Car Wash (6) (16) (17) Common Equity 04/06/2022 1,383 1,331 936 0.03"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Fetch, Inc. (6) (9) (11) First Lien Debt S + 4.75 % 8.45 % 03/31/2033 17,680 17,503 17,503 0.54"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Banyan Software Holdings, LLC (6) (10) (18) First Lien Debt S + 5.50 % 9.17 % 01/02/2031 435 409 410 0.01"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "AuditBoard, Inc. (6) (9) (11) First Lien Debt S + 4.50 % 8.20 % 07/14/2031 16,286 16,146 16,059 0.50"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Artifact Bidco, Inc. (6) (12) (18) First Lien Debt S + 4.15 % 7.85 % 07/28/2031 - ( 20 ) - 0.00"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Pound Bidco, Inc. (6) (9) (10) (15) First Lien Debt S + 6.00 % 10.17 % 02/01/2027 3,743 3,742 3,717 0.12"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Pound Bidco, Inc. (6) (10) (15) (18) First Lien Debt S + 6.00 % 10.17 % 02/01/2027 263 262 260 0.01"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "AuditBoard, Inc. (6) (8) (11) First Lien Debt S + 4.50 % 8.20 % 07/14/2031 34,200 33,924 33,725 1.04"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Banyan Software Holdings, LLC (6) (10) (18) First Lien Debt S + 5.50 % 9.17 % 01/02/2031 23,229 22,996 22,999 0.71"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Pound Bidco, Inc. (6) (10) (15) (18) First Lien Debt S + 6.00 % 10.17 % 02/01/2027 262 262 260 0.01"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Madison Safety & Flow, LLC First Lien Debt S + 2.50 % 6.18 % 09/26/2031 3,846 3,854 3,843 0.12"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Artifact Bidco, Inc. (6) (12) (18) First Lien Debt S + 4.15 % 7.85 % 07/26/2030 - ( 27 ) - 0.00"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "AuditBoard, Inc. (6) (11) (18) First Lien Debt S + 4.50 % 8.20 % 07/14/2031 - ( 49 ) ( 91 ) 0.00"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Artifact Bidco, Inc. (6) (12) First Lien Debt S + 4.15 % 7.85 % 07/28/2031 21,837 21,661 21,837 0.68"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Archduke Buyer, Inc. (6) (12) First Lien Debt S + 5.50 % 9.17 % 12/03/2032 3,776 3,740 3,711 0.11"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Archduke Buyer, Inc. (6) (12) (18) First Lien Debt S + 5.50 % 9.17 % 12/03/2032 - ( 3 ) ( 5 ) 0.00"
+        },
+        {
+          "accession": "0001193125-26-221623",
+          "text": "Fetch, Inc. (6) (11) (18) First Lien Debt S + 4.75 % 8.45 % 03/31/2033 - ( 31 ) ( 31 ) 0.00"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7200236d6eac",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-6baa92dffd153137. Original context-bearing numeric facts are attached to the cited printed row, so this is not evidence of a page-reader misjoin. The published name follows an inconsistent member instead of the printed issuer. A source-row-backed mechanism must retain distinct instruments and amounts; member-only renaming or borrower merging is unsafe.",
+      "evidence": [
+        {
+          "accession": "0001851322-24-000048",
+          "text": "Kaseya, Inc. (5) (9) (14) S + 6.00 % (incl. 2.50 % PIK) 11.38 % 06/25/2029 774 738 760 0.03"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_772a91e8cc8e",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-e8669fd9fa9c0394. The original FMG preferred row prints 8.00% PIK and 500 shares with cost/FV 513 thousand; its adjacent common row has zero cost/FV. The published PIK rate is missing and member text carries 10.50%, so member-rate inference would also be wrong. The printed terms support 8%, without proving current PIK income.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-096532",
+          "text": "FMG Suite Holdings, LLC (6) (17) Preferred Equity 8.00 % PIK 09/09/2025 500 513 513 0.02"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a19c21b80a56",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-a554a8641a1efe05. The original context-bearing share fact is unscaled shares, not thousands of shares. LUV prints 1,383 versus 4,000,000 derived_proxy; KWOR common prints 2,785 versus 2,978,848 derived_proxy. Their separate preferred rows print those donor-sized values. This supports cross-position contamination, although the precise implementation path remains a proposed mechanism rather than a completed repair.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221623",
+          "text": "LUV Car Wash (6) (16) (17) Common Equity 04/06/2022 1,383 1,331 936 0.03"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a9ca89bdc185",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-56764c6fd7066445, ROW-1c2d14b7c65b4062, ROW-daab9728fcaa5915. Each selected schedule row explicitly prints Preferred Equity while published asset_category is EQUITY_COMMON. Acquisition dates, share counts, cost and FV distinguish neighboring common rows. Monetary facts use scale 3, shares scale 0, and PIK percentage facts scale -2; no rescaling explains the class discrepancy. The Vardiman comparative commitment-table fact sharing a context is not the schedule position.",
+      "evidence": [
+        {
+          "accession": "0001851322-25-000070",
+          "text": "Eclipse Topco, Inc. (6) (16) Preferred Equity 12.50 % PIK 09/05/2024 310 3,058 3,083 0.09"
+        },
+        {
+          "accession": "0001851322-25-000070",
+          "text": "Cohesity Global, Inc. (16) Preferred Equity 12/09/2024 18,617 382 382 0.01"
+        },
+        {
+          "accession": "0001851322-25-000070",
+          "text": "Vardiman Black Holdings, LLC (6) (16) Preferred Equity 6.00 % PIK 03/29/2024 7,065,190 4,798 124 -"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ba5042e1f4f8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-9d878c6a0737423c, ROW-cf61f2572dc57b3f, ROW-82b13d12ce642832. Each selected schedule row explicitly prints Preferred Equity while published asset_category is EQUITY_COMMON. Acquisition dates, share counts, cost and FV distinguish neighboring common rows. Monetary facts use scale 3, shares scale 0, and PIK percentage facts scale -2; no rescaling explains the class discrepancy. The Vardiman comparative commitment-table fact sharing a context is not the schedule position.",
+      "evidence": [
+        {
+          "accession": "0001851322-25-000023",
+          "text": "Eclipse Topco, Inc. (6) (16) Preferred Equity 12.50 % PIK 09/05/2024 310 3,048 3,036 0.09"
+        },
+        {
+          "accession": "0001851322-25-000023",
+          "text": "Cohesity Global, Inc. (16) Preferred Equity 12/09/2024 18,617 382 382 0.01"
+        },
+        {
+          "accession": "0001851322-25-000023",
+          "text": "Vardiman Black Holdings, LLC (6) (16) Preferred Equity 6.00 % PIK 03/29/2024 7,065,190 4,798 2,462 0.08"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ba6dbfdb13b6",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact rule/date population from shadow/page_rule_findings.csv and independently joined sandbox holdings by row_id. Read original HTML numeric-fact context, date/member, all attached rows, previous/next rows and table headers; the complete population equals affected_rows and reviewed_rows: ROW-667689d7080f2cea. The original context-bearing share fact is unscaled shares, not thousands of shares. LUV prints 1,383 versus 4,000,000 derived_proxy; KWOR common prints 2,785 versus 2,978,848 derived_proxy. Their separate preferred rows print those donor-sized values. This supports cross-position contamination, although the precise implementation path remains a proposed mechanism rather than a completed repair.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-274423",
+          "text": "KWOR Intermediate I, Inc. (6) (16) (17) (19) Common Equity 02/28/2025 2,785 1,069 107 0.00"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_05e8eb1bfca8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently read F28 output: fund=True;holdings=False at 2026-06-30. DuckDB grouping finds holdings only through 2026-03-31. June fund financials hold assets 6,330,562,000, liabilities 3,238,748,000, net assets 3,091,814,000 and investments FV 5,980,632,000. Original consolidated balance sheet current column and current schedule agree in thousands; 5,980,632 / 3,091,814 gives the printed 193.43%, while 6,113,030 is cost. December 2025 is comparative, and Keystone subsidiary totals are separate. F28 tests quarter presence, with no ratio denominator. The report correctly proposes including cached June holdings when a build is separately authorized, rather than alleging a proven parser failure or weakening the rule. Coverage key 0001851322/2026-06-30/F28:fund_financials_holdings_coverage.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-342549",
+          "text": "June 30, 2026 December 31, 2025"
+        },
+        {
+          "accession": "0001193125-26-342549",
+          "text": "Total assets $ 6,330,562 $ 6,973,120"
+        },
+        {
+          "accession": "0001193125-26-342549",
+          "text": "Total members' capital $ 3,091,814 $ 3,379,828"
+        },
+        {
+          "accession": "0001193125-26-342549",
+          "text": "Total Portfolio Investments $ 6,113,030 $ 5,980,632 193.43 %"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "stale-member-identity-causes-equity-class-and-proxy-contamination",
+      "outcome": "supported",
+      "rationale": "Original LUV context-bearing row prints Common Equity, 1,383 shares, cost 1,331 thousand and FV 936 thousand under Diversified Consumer Services. Its context member instead identifies FORTIS preferred under Commercial Services & Supplies, and publication follows the stale class/name plus 4,000,000 proxy shares. The separate FORTIS row really is preferred with 4,000,000 shares and different amounts. Reverse explicit common-versus-published-preferred checking is a justified proposed detector; current preferred_printed only tests published common rows. Context and amount alignment are necessary false-positive guards; a neighboring heading or borrower-name match is insufficient. This is a proposal, not a validated detector implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221623",
+          "text": "LUV Car Wash (6) (16) (17) Common Equity 04/06/2022 1,383 1,331 936 0.03"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "review_scope": "selected_unreviewed_findings",
+  "counts": {
+    "supported_findings": 12,
+    "rejected_findings": 0,
+    "position_rule_incidences": 37,
+    "unique_position_rows": 36,
+    "fund_metric_keys": 1,
+    "supported_observations": 1
+  },
+  "limitations": [
+    "The 23 previously reviewed findings remain excluded. No whole-fund acceptance, repair, rebuild, tests or disposition was performed.",
+    "Source comparison establishes printed versus published discrepancies; proposed repair mechanisms and detector are not implementation-validated.",
+    "Selected review completeness is not data correctness. No systematic audit of unselected positions or rate fields was performed."
+  ]
+}
