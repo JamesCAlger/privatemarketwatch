@@ -1,0 +1,136 @@
+{
+  "cik": "0002031750",
+  "label": "rgA6",
+  "investigator_id": "/root/remaining_arescore_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_c6fb09bb4ca1",
+    "RVQ_BLK_cda7dee751cc"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_c6fb09bb4ca1",
+      "coverage": {
+        "affected_rows": [
+          "ROW-053719e4b407d643"
+        ],
+        "reviewed_rows": [
+          "ROW-053719e4b407d643"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0002031750-26-000032",
+          "text": "AEJV SPV LP (1)(5) 03/2026 84,546,000 84,713 84,713 (2) 84,713 84,713 2.70 % Total common equity 321,412 338,429 10.81 % Total equity investments 321,412 338,429 10.81 % Total controlled/affiliated investments 321,412 338,429 10.81 % Total investment"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "published_vs_source": {
+        "issuer_name": "AEJV SPV LP Membership Interest",
+        "printed_company": "AEJV SPV LP",
+        "instrument_description": "Common equity",
+        "context_id": "c-107",
+        "context_instant": "2026-03-31",
+        "fair_value": 84713000.0,
+        "cost": 84713000.0,
+        "shares_held": 84546000.0
+      },
+      "population_reconstruction": "Filtered untouched rgA6/output/shadow/page_rule_findings.csv to this CIK, issuer_name_printed and report_date: exactly one row. Review queue denominator is 60; violation_pct 1.67. Denominator is tested rows, not affected rows. No comparative-period flagged context appears in this selected population.",
+      "hypotheses_tested": [
+        "Extra words might be the printed company name: rejected. Original cached schedule company cell, affiliate roll-forward and portfolio-summary row each print AEJV SPV LP without Membership Interest.",
+        "Extra words might describe a distinct position to retain: Membership Interest is instrument wording in the typed InvestmentIdentifierAxis member, followed by Common equity; stripping it from issuer_name must preserve position identity and the instrument information.",
+        "A comparative-period or roll-forward mismatch might have selected the wrong row: context c-107 is instant 2026-03-31; schedule cost and fair value match the published row. Roll-forward is corroboration, not an extra position.",
+        "Unit-scale error in this sandbox: rejected for these two rows. Raw XML shares are 1000 times the printed count; the sandbox publishes the printed 84,546,000 / 371,232,609, respectively. Cost and FV match the in-thousands schedule after monetary scaling."
+      ],
+      "next_action": "Propose a narrowly bounded filer name transformation for trailing Membership Interest after AEJV SPV LP, preserving the wording as instrument metadata and retaining the position. Verify all matching fund quarters and false positives before any implementation; no change is made by this review."
+    },
+    {
+      "finding_id": "RVQ_BLK_cda7dee751cc",
+      "coverage": {
+        "affected_rows": [
+          "ROW-6d2348f24b841d1a"
+        ],
+        "reviewed_rows": [
+          "ROW-6d2348f24b841d1a"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0002031750-26-000064",
+          "text": "AEJV SPV LP (1)(5) 03/2026 371,232,609 370,204 369,819 (2) 370,204 369,819 7.35 % Total common equity 618,020 631,392 12.55 % Total equity investments 618,020 631,392 12.55 % Total controlled/affiliated investments 618,020 631,392 12.55 % Total inves"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "published_vs_source": {
+        "issuer_name": "AEJV SPV LP Membership Interest",
+        "printed_company": "AEJV SPV LP",
+        "instrument_description": "Common equity",
+        "context_id": "c-129",
+        "context_instant": "2026-06-30",
+        "fair_value": 369819000.0,
+        "cost": 370204000.0,
+        "shares_held": 371232609.0
+      },
+      "population_reconstruction": "Filtered untouched rgA6/output/shadow/page_rule_findings.csv to this CIK, issuer_name_printed and report_date: exactly one row. Review queue denominator is 65; violation_pct 1.54. Denominator is tested rows, not affected rows. No comparative-period flagged context appears in this selected population.",
+      "hypotheses_tested": [
+        "Extra words might be the printed company name: rejected. Original cached schedule company cell, affiliate roll-forward and portfolio-summary row each print AEJV SPV LP without Membership Interest.",
+        "Extra words might describe a distinct position to retain: Membership Interest is instrument wording in the typed InvestmentIdentifierAxis member, followed by Common equity; stripping it from issuer_name must preserve position identity and the instrument information.",
+        "A comparative-period or roll-forward mismatch might have selected the wrong row: context c-129 is instant 2026-06-30; schedule cost and fair value match the published row. Roll-forward is corroboration, not an extra position.",
+        "Unit-scale error in this sandbox: rejected for these two rows. Raw XML shares are 1000 times the printed count; the sandbox publishes the printed 84,546,000 / 371,232,609, respectively. Cost and FV match the in-thousands schedule after monetary scaling."
+      ],
+      "next_action": "Propose a narrowly bounded filer name transformation for trailing Membership Interest after AEJV SPV LP, preserving the wording as instrument metadata and retaining the position. Verify all matching fund quarters and false positives before any implementation; no change is made by this review."
+    }
+  ],
+  "observations": [
+    {
+      "observation_key": "membership-interest-suffix-retained-in-issuer-name",
+      "what": "Both selected AEJV rows retain Membership Interest in issuer_name although the original schedule prints AEJV SPV LP. This is the same issue as the two selected findings, not an additional error count. The existing filer suffix expression handles comma-delimited Common equity but leaves preceding Membership Interest.",
+      "field": "issuer_name",
+      "quarters": [
+        "2026-03-31",
+        "2026-06-30"
+      ],
+      "cause": "fund",
+      "action": "left",
+      "affected_rows": [
+        "ROW-053719e4b407d643",
+        "ROW-6d2348f24b841d1a"
+      ],
+      "suggested_check": "Compare the published issuer with its located original schedule company cell, preserving instrument words separately.",
+      "quote": {
+        "accession": "0002031750-26-000032",
+        "text": "AEJV SPV LP (1)(5) 03/2026 84,546,000 84,713 84,713 (2) 84,713 84,713 2.70 % Total common equity 321,412 338,429 10.81 % Total equity investments 321,412 338,429 10.81 % Total controlled/affiliated investments 321,412 338,429 10.81 % Total investment"
+      },
+      "detection_decision": {
+        "action": "existing_detector",
+        "rationale": "issuer_name_printed actually fired on both exact row IDs in untouched rgA6 page_rule_findings.csv; no new detector is required for this observed shape.",
+        "reference": "identity/issuer_name_printed: RVQ_BLK_c6fb09bb4ca1 and RVQ_BLK_cda7dee751cc"
+      }
+    }
+  ],
+  "orchestrator_requests": [],
+  "prior_coverage_check": "Read existing 0002031750.md and decision entries D-107/D-168. They describe older general issuer splitting and share corrections, not evidence-backed adjudication of these exact current AEJV name findings. No further exclusion requested. Historical results refer only to their named sandboxes.",
+  "neighbor_review": "Read original AEJV schedule rows, Transportation infrastructure heading, following subtotal, preceding Meade and Redwood rows, affiliate roll-forward and portfolio-summary AEJV rows in both cached filings. Compared four neighboring published Meade/Redwood rows: company names, Common equity description, units 43/50, cost, FV and oil/gas industry agree with printed schedule. AEJV units, cost, FV and Transportation infrastructure also agree; this does not validate inferred GICS taxonomy.",
+  "diagnostics": [
+    "scratch/2026-10-21_review_queue/0002031750/population.json",
+    "scratch/2026-10-21_review_queue/0002031750/source_contexts.json"
+  ],
+  "not_done": [
+    "No repair, rebuild, tests, ledger/disposition changes, acceptance or publication.",
+    "No whole-fund or all-quarter correctness claim; only two selected findings reviewed.",
+    "No independent review yet.",
+    "No claim that instrument name cleanup may merge distinct positions; position-level identity must be retained."
+  ],
+  "counts": {
+    "selected_findings": 2,
+    "investigated_findings": 2,
+    "confirmed_error": 2,
+    "false_alarm": 0,
+    "source_ambiguity": 0,
+    "insufficient_evidence": 0,
+    "affected_rows": 2,
+    "reviewed_rows": 2,
+    "unique_observations": 1,
+    "neighbor_rows_compared": 4
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "reviewer_id": "/root/remaining_arescore_check_sol",
+  "report_digest": "5f512bc1642882c1488f1e22a2116f187637a479254db531a2afb1a207a53606",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_c6fb09bb4ca1",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently filtered rgA6 page_rule_findings.csv by CIK and rule: exactly ROW-053719e4b407d643 at 2026-03-31; the two dates exhaust the selected population. Validation ledger denominators 60 and 65 are tested rows, with one violation each. Original cached schedule company cell prints AEJV SPV LP, while this exact holdings row publishes AEJV SPV LP Membership Interest. Context c-107 is instant 2026-03-31, with the typed investment member retaining Membership Interest and Common equity (Q2 additionally Affiliated Investment). Source shares 84,546,000, cost 84,713 and FV 84,713 identify the same holding; monetary amounts scale by 1000, while published shares match the printed unit count despite raw XML being 1000 times larger. Read company/column headers, Common equity heading, Meade/Redwood neighbors, transportation heading, subtotal, affiliate roll-forward and portfolio-summary occurrences in both filings. No comparative-period row is flagged. This supports a name-field error; it does not justify dropping or merging the investment. The proposed narrowly bounded name cleanup preserves instrument metadata and position identity and requires cross-quarter/false-positive checks before implementation. Prior D-107/D-168 and the earlier reading do not adjudicate these exact current name findings.",
+      "evidence": [
+        {
+          "accession": "0002031750-26-000032",
+          "text": "AEJV SPV LP (1)(5) 03/2026 84,546,000 84,713 84,713 (2)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_cda7dee751cc",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently filtered rgA6 page_rule_findings.csv by CIK and rule: exactly ROW-6d2348f24b841d1a at 2026-06-30; the two dates exhaust the selected population. Validation ledger denominators 60 and 65 are tested rows, with one violation each. Original cached schedule company cell prints AEJV SPV LP, while this exact holdings row publishes AEJV SPV LP Membership Interest. Context c-129 is instant 2026-06-30, with the typed investment member retaining Membership Interest and Common equity (Q2 additionally Affiliated Investment). Source shares 371,232,609, cost 370,204 and FV 369,819 identify the same holding; monetary amounts scale by 1000, while published shares match the printed unit count despite raw XML being 1000 times larger. Read company/column headers, Common equity heading, Meade/Redwood neighbors, transportation heading, subtotal, affiliate roll-forward and portfolio-summary occurrences in both filings. No comparative-period row is flagged. This supports a name-field error; it does not justify dropping or merging the investment. The proposed narrowly bounded name cleanup preserves instrument metadata and position identity and requires cross-quarter/false-positive checks before implementation. Prior D-107/D-168 and the earlier reading do not adjudicate these exact current name findings.",
+      "evidence": [
+        {
+          "accession": "0002031750-26-000064",
+          "text": "AEJV SPV LP (1)(5) 03/2026 371,232,609 370,204 369,819 (2)"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "membership-interest-suffix-retained-in-issuer-name",
+      "outcome": "supported",
+      "rationale": "The two independently reconstructed flags demonstrate that existing identity/issuer_name_printed catches this observed suffix leakage. Original company cells omit Membership Interest while typed members contain it; wrapper issuer_name_strip_re removes comma-delimited Common equity but does not remove the preceding Membership Interest. Keeping the existing detector is supported for this observed shape; it is advisory and page-anchor dependent, not proof of universal name accuracy. Narrowly preserving the instrument and separate position avoids merging distinct interests. This observation repeats the two selected errors and adds no extra error count.",
+      "evidence": [
+        {
+          "accession": "0002031750-26-000032",
+          "text": "AEJV SPV LP (1)(5) 03/2026 84,546,000 84,713 84,713 (2)"
+        },
+        {
+          "accession": "0002031750-26-000064",
+          "text": "AEJV SPV LP (1)(5) 03/2026 371,232,609 370,204 369,819 (2)"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "scope": "Selected two findings only; no fund acceptance, repair or disposition. Four neighboring holdings compared; no new random whole-fund sample undertaken in this scoped review.",
+  "limitations": [
+    "No independent validation of all holdings, all quarters, inferred GICS taxonomy or unit economic convention.",
+    "Existing page detector coverage depends on page location and comparability; observed detection is not universal recall."
+  ]
+}
