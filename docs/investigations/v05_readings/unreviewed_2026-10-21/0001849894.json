@@ -1,0 +1,153 @@
+{
+  "cik": "0001849894",
+  "label": "rgA2",
+  "investigator_id": "/root/remaining_msd_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_0d8407c8b9ad",
+    "RVQ_BLK_3f48dc65ccd8",
+    "RVQ_BLK_d750eed63542",
+    "RVQ_REV_d90161eabe93"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_0d8407c8b9ad",
+      "coverage": {
+        "affected_rows": [
+          "ROW-cf9fdf0518f3844b"
+        ],
+        "reviewed_rows": [
+          "ROW-cf9fdf0518f3844b"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-035561",
+          "text": "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 31,597 31,469 27,600 2.94"
+        },
+        {
+          "accession": "0000950170-24-035561",
+          "text": "Equity investments are recorded as number of shares owned."
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Reconstructed the entire selected rule population from shadow/page_rule_findings.csv: exactly one row. Joined its row_id to the actual published Parquet; shares_held=31, shares_held_source=derived_proxy, src_transforms includes shares_held:pow10_shares.",
+        "Read the original HTML row and every fact using its exact instant context C_b5bae256-99b0-45c7-955a-ccc5f59c7fb8. InvestmentOwnedBalanceShares prints 31,597, unitRef U_shares, no scale. Costs and FV alone have USD scale=3. The schedule note says equity investments are recorded as number of shares owned. A dollars-versus-shares explanation does not justify 31.",
+        "Read the comparative Protective row (28,646, 28,519, 22,267, 4.62) in the same filing; it is a separate 2022-12-31 context and is not flagged by this selected 2023-12-31 finding. No comparative context occurs in this finding population. D-154/D-157 previously noted the normalizer risk; this specific new finding is independently confirmed against the current sandbox, without reopening their dispositions."
+      ],
+      "next_action": "Propose restoring the source-backed count 31,597 on this exact context through a per-CIK correction, or repair the shared pow10_shares normalizer only after measuring every affected source-backed shares fact. Do not use principal amounts as counts. No repair performed.",
+      "source_context_id": "C_b5bae256-99b0-45c7-955a-ccc5f59c7fb8",
+      "population_basis": "Full selected fund-quarter rule output, not a sample; see saved selected_evidence.json and inspect_selected.py."
+    },
+    {
+      "finding_id": "RVQ_BLK_3f48dc65ccd8",
+      "coverage": {
+        "affected_rows": [
+          "ROW-1c071f3c5f046a45"
+        ],
+        "reviewed_rows": [
+          "ROW-1c071f3c5f046a45"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-24-124249",
+          "text": "USA Debusk LLC (8) S + 5.25 % 0.75 % 9.85 % 4/30/2031 16,603 16,362 16,369 0.77"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Reconstructed the entire selected rule population: one row. Actual published issuer_name is USA Debunk LLC; original printed schedule says USA Debusk LLC. All linked facts are on instant context C_90f0e080-e6e4-41e2-83a5-f334b1b2382c, 2024-09-30.",
+        "The original typed dimension itself says USA Debunk LLC, so this is a filer member-label typo propagated into publication, not a row-matching failure. Printed principal 16,603, cost 16,362, FV 16,369, rate 9.85%, spread 5.25%, maturity 4/30/2031 match the linked context and identify the position.",
+        "Read adjacent USA Debusk delayed-draw and revolver lines; neither is the flagged term loan. They remain separate positions. No comparative context is in the one-row selected population."
+      ],
+      "next_action": "Propose a source-backed per-CIK issuer-name correction from USA Debunk LLC to USA Debusk LLC, retaining the exact position and instrument. Search the same member typo across quarters before applying; do not merge tranches or merely suppress the name detector.",
+      "source_context_id": "C_90f0e080-e6e4-41e2-83a5-f334b1b2382c",
+      "population_basis": "Full selected fund-quarter rule output, not a sample; see saved selected_evidence.json and inspect_selected.py."
+    },
+    {
+      "finding_id": "RVQ_BLK_d750eed63542",
+      "coverage": {
+        "affected_rows": [
+          "ROW-899f2d334c57f9f6"
+        ],
+        "reviewed_rows": [
+          "ROW-899f2d334c57f9f6"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0000950170-25-108316",
+          "text": "J LL Partners Fund VII Secondary (10) S + 6.75 % 1.00 % 11.05 % PIK 4/29/2032 51,180 50,440 50,430 2.05"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Reconstructed the entire selected rule population: one row. Actual published name LL Partners Fund VII Secondary drops the leading J visible on the page as J LL Partners Fund VII Secondary.",
+        "Read all original facts linked to C_0ceca229-4ba2-4c3c-86bb-c0b34147107d, instant 2025-06-30. Its typed dimension says LL Partners Fund VII Secondary, while the associated printed row says J LL. Thus the defect originates in the source member label, not only downstream cleaning.",
+        "Principal 51,180, cost 50,440, FV 50,430, maturity 4/29/2032 and 11.05% PIK independently identify the printed position. The cached rule flattened J LL to JLL, but the report uses the original HTML wording. No comparative context is in this selected one-row population."
+      ],
+      "next_action": "Propose a per-CIK source-backed issuer correction restoring the leading J (normalize the visible J LL typography to JLL only under the established name convention). Preserve the loan position and its terms. Check all occurrences before repair; do not treat the erroneous member label as as-filed justification.",
+      "source_context_id": "C_0ceca229-4ba2-4c3c-86bb-c0b34147107d",
+      "population_basis": "Full selected fund-quarter rule output, not a sample; see saved selected_evidence.json and inspect_selected.py."
+    },
+    {
+      "finding_id": "RVQ_REV_d90161eabe93",
+      "coverage": {
+        "affected_rows": [
+          "0001849894|2026-06-30|F28_fund_financials_holdings_coverage"
+        ],
+        "reviewed_rows": [
+          "0001849894|2026-06-30|F28_fund_financials_holdings_coverage"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001193125-26-352436",
+          "text": "Total Investments - non-controlled/non-affiliated $ 6,921,616 $ 6,857,807 195.98 %"
+        },
+        {
+          "accession": "0001193125-26-352436",
+          "text": "Total assets $ 7,152,634 $ 6,590,450"
+        },
+        {
+          "accession": "0001193125-26-352436",
+          "text": "Total net assets $ 3,498,843 $ 3,278,352 Net asset value per common share $ 23.48 $ 23.71"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Read the exact F28 validation row: fund=True;holdings=False. Counted every published holding by report_date with DuckDB: holdings end at 2026-03-31 (217 rows); zero rows at 2026-06-30. The aggregate coverage metric, not an invented position, is the complete flagged population.",
+        "The fund-financials row at 2026-06-30 exists: assets 7,152,634,000, liabilities 3,653,791,000, NAV 3,498,843,000, investments FV 6,857,807,000. Independently read cached June 2026 filing 0001193125-26-352436: corresponding printed financial statement and complete schedule total agree in thousands. It is an operating invested fund, not formation-stage or no-investment absence.",
+        "bdc_filings_index.csv contains no 2026-06-30 filing entry although its HTML is cached. This is consistent with a stale extraction/admission horizon relative to companyfacts; exact upstream cause not proven. The same filing includes December 2025 comparative total 6,391,054, which is distinct from June FV 6,857,807; no comparative position is fabricated to close F28."
+      ],
+      "next_action": "Propose admitting/extracting this already-cached 2026-06-30 filing through the existing per-fund workflow, then reconcile its published-basis positions to 6,857,807,000 and rerun coverage. Investigate why the local filings index stops early. Do not delete financials or relax F28; no build or extraction run performed.",
+      "population_basis": "One F28 fund-quarter coverage aggregate in fund_financials_validation_current.csv; complete output-side absence established by all-date count."
+    }
+  ],
+  "observations": [],
+  "orchestrator_requests": [],
+  "not_done": [
+    "Review only: no fixes, rebuilds, pytest, ledger/disposition writes, canonical/frontend writes, network, or commits.",
+    "The 36 excluded previously reviewed findings and prior reports/proposals were not reopened or changed.",
+    "No full-fund or quarter acceptance claimed. No independent approval authored; independent reviewer pending.",
+    "Did not enumerate every missing June 2026 schedule position: F28 flags aggregate presence, whose full population is one fund-quarter-metric key. Exact extraction/admission cause remains to be traced before repair.",
+    "No cross-quarter repair sweep or global normalizer impact measurement performed; proposed repair steps require those checks."
+  ],
+  "counts": {
+    "selected_findings": 4,
+    "investigations": 4,
+    "confirmed_error": 4,
+    "false_alarm": 0,
+    "source_ambiguity": 0,
+    "insufficient_evidence": 0,
+    "affected_position_rows": 3,
+    "reviewed_position_rows": 3,
+    "affected_aggregate_metrics": 1,
+    "reviewed_aggregate_metrics": 1,
+    "observations": 0,
+    "excluded_previously_reviewed_findings": 36
+  },
+  "evidence_artifact": "scratch/2026-10-21_review_queue/0001849894/selected_evidence.json"
+}

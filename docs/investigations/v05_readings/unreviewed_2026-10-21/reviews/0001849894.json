@@ -1,0 +1,76 @@
+{
+  "reviewer_id": "/root/remaining_msd_check_sol",
+  "report_digest": "c359eefbcfb98e90945282ffe412b7f0d7f58c0201bf54fc95a4d23250358bce",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_0d8407c8b9ad",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Full selected units_printed population is ROW-cf9fdf0518f3844b only. Original instant context is 2023-12-31; the linked printed preferred row has 31,597 shares, no share scale, U_shares, versus published 31 derived_proxy and pow10_shares. USD cost/FV carry scale=3 separately. Schedule note explicitly states equity investments are recorded as number of shares owned. Supported source-versus-publication error; earlier scale ambiguities do not authorize replacing this printed count.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-035561",
+          "text": "Protective Industrial Products Inc. - Series A Preferred (8)(9) 13.00 % PIK 31,597 31,469 27,600 2.94"
+        },
+        {
+          "accession": "0000950170-24-035561",
+          "text": "Equity investments are recorded as number of shares owned."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_3f48dc65ccd8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Full selected issuer_name_printed population at 2024-09-30 is ROW-1c071f3c5f046a45 only. Instant context, principal 16,603, cost 16,362, FV 16,369 and maturity identify the term loan independently of its name. Typed member and publication say Debunk; actual row says Debusk. Adjacent delayed-draw row is separate. Source-backed name correction proposal is appropriate; cross-quarter sweep remains future repair work.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-124249",
+          "text": "USA Debusk LLC (8) S + 5.25 % 0.75 % 9.85 % 4/30/2031 16,603 16,362 16,369 0.77"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d750eed63542",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Full selected issuer_name_printed population at 2025-06-30 is ROW-899f2d334c57f9f6 only. Original instant context is June 30; principal 51,180, cost 50,440, FV 50,430, 11.05% PIK and April 29 2032 maturity match the row. Visible J LL differs from member/publication LL. Restoring leading J preserves this loan and does not merge borrower tranches.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-108316",
+          "text": "J LL Partners Fund VII Secondary (10) S + 6.75 % 1.00 % 11.05 % PIK 4/29/2032 51,180 50,440 50,430 2.05"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_d90161eabe93",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "F28 at 2026-06-30 is one presence aggregate, not a position denominator. Validation says fund=True;holdings=False. Independent all-date holdings count ends 2026-03-31 with 217 rows; June has none. The cached June consolidated balance sheet has June/December columns: assets 7,152,634, liabilities 3,653,791 and NAV 3,498,843 in thousands. June investment schedule total cost 6,921,616 and FV 6,857,807 matches balance-sheet investments, separately from cash and December comparative FV 6,391,054. Thus source holdings exist but are absent from sandbox. Index stops March; exact upstream cause is unproven as report states. Admission/extraction and reconciliation is a proposal, not implemented or accepted.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-352436",
+          "text": "Total Investments - non-controlled/non-affiliated $ 6,921,616 $ 6,857,807 195.98 %"
+        },
+        {
+          "accession": "0001193125-26-352436",
+          "text": "Total assets $ 7,152,634 $ 6,590,450"
+        },
+        {
+          "accession": "0001193125-26-352436",
+          "text": "Total net assets $ 3,498,843 $ 3,278,352 Net asset value per common share $ 23.48 $ 23.71"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [],
+  "request_reviews": [],
+  "scope": "Four selected previously unreviewed findings only; 36 previously reviewed findings excluded. No whole-fund correctness, disposition or acceptance.",
+  "limitations": [
+    "No repair, build, network, tests or acceptance performed. June missing positions were not individually enumerated: F28 population is the aggregate presence key. Cross-quarter repair sweeps and global scale-normalizer impact are future work."
+  ]
+}
