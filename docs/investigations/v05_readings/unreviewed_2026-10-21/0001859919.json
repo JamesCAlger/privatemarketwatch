@@ -1,0 +1,3168 @@
+{
+  "cik": "0001859919",
+  "label": "rgA2",
+  "investigator_id": "/root/remaining_barings_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_057606c33e37",
+    "RVQ_BLK_1887292fcd4a",
+    "RVQ_BLK_1ef15d7b80eb",
+    "RVQ_BLK_275217b1d37a",
+    "RVQ_BLK_2a80efb06c5f",
+    "RVQ_BLK_2e81146d2ef8",
+    "RVQ_BLK_3a74ca5943f8",
+    "RVQ_BLK_4198afa7d600",
+    "RVQ_BLK_5eb7b9a53163",
+    "RVQ_BLK_6a3f83ea4e28",
+    "RVQ_BLK_6e1332b62e95",
+    "RVQ_BLK_746fcf5566c6",
+    "RVQ_BLK_757f60b2205c",
+    "RVQ_BLK_b96d4b690993",
+    "RVQ_BLK_cbb7be0a797a",
+    "RVQ_BLK_e065fe4462ac",
+    "RVQ_REV_774c581fceb2"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_057606c33e37",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-5fab3eab1099fb05",
+          "ROW-fb98218c97ee070d",
+          "ROW-63857fcd6747b5a1",
+          "ROW-5aea49f3e69568e9",
+          "ROW-2b23f1816a2778f8",
+          "ROW-19efc05563d05083",
+          "ROW-4bcc8655344c07e8",
+          "ROW-772972c644ccb855"
+        ],
+        "reviewed_rows": [
+          "ROW-5fab3eab1099fb05",
+          "ROW-fb98218c97ee070d",
+          "ROW-63857fcd6747b5a1",
+          "ROW-5aea49f3e69568e9",
+          "ROW-2b23f1816a2778f8",
+          "ROW-19efc05563d05083",
+          "ROW-4bcc8655344c07e8",
+          "ROW-772972c644ccb855"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 172 172 172 - % (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.9 % Cash 03/22 03/29 $ 7,343 $ 7,286 $ 7,141 0.4 % (3) (7) (8) (10) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.9 % Cash 03/22 03/29 2,430 2,419 2,363 0.1 % (3) (5) (7) (8) (10)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "n SOFR + 8.00 %, 13.4 % Cash 05/21 07/27 6,497 6,449 6,497 0.4 % (5) (7) (8) (15) 6,497 6,449 6,497 Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28) Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28) Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28) Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 174 - % (3) (7) (28) Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,273 9,273 8,893 0.5 % (3) (7) (28) 10,001 1"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,273 9,273 8,893 0.5 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 174 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.2 % Cash 05/21 12/26 4,205 4,165 4,146 0.3 % (6) (7) (8) (15) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.8 % Cash 06/22 06/29 465 446 220 - % (3) (5) (7) (8) (9) (27)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-5fab3eab1099fb05",
+          "context_id": "c-573",
+          "context": "0001859919 Ocelot Holdco LL, Construction Machinery, Super Senior Takeback Loan 2024-03-31",
+          "conclusion": "confirmed_error",
+          "reading": "Issuer cell prints Ocelot Holdco LLC; published name omits C. This is a truncation, not whitespace. Correct the source label from the matched row.",
+          "published": {
+            "issuer_name": "Ocelot Holdco LL",
+            "instrument_description": "Super Senior Takeback Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.0",
+            "interest_rate_reported": "10.0",
+            "basis_spread": "",
+            "fair_value": "172000.0",
+            "cost": "172000.0",
+            "principal_amount": "172000.0",
+            "maturity_date": "2027-10-31"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000034",
+            "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 172 172 172 - % (7) (28)"
+          },
+          "source_neighbors": [
+            "Revolver SOFR + 5.00 %, 10.4 % Cash 03/22 03/28 294 275 274 - % (7) (8) (16) (28) (29)",
+            "3,860 3,790 3,790",
+            "",
+            "Takeback Term Loan 10.0 % Cash 10/23 10/27 917 917 917 0.1 % (7) (28)",
+            "Preferred Stock ( 76.2 shares) 15.0 % PIK 10/23 N/A 488 641 - % (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-fb98218c97ee070d",
+          "context_id": "c-319",
+          "context": "0001859919 First Lien, Consumer Cyclical, First Lien Senior Secured Term Loan 2024-03-31",
+          "conclusion": "confirmed_error",
+          "reading": "The actual issuer cell is Finexvet; First Lien belongs to the investment-type cell. The valued context is misnamed; extract printed issuer on the matched row, retain tranche identity and verify its separate instrument description.",
+          "published": {
+            "issuer_name": "First Lien",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "9.9",
+            "interest_rate_reported": "9.9",
+            "basis_spread": "6.5",
+            "fair_value": "7141000.0",
+            "cost": "7286000.0",
+            "principal_amount": "7343000.0",
+            "maturity_date": "2029-03-31"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000034",
+            "text": "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.9 % Cash 03/22 03/29 $ 7,343 $ 7,286 $ 7,141 0.4 % (3) (7) (8) (10) (28)"
+          },
+          "source_neighbors": [
+            "",
+            "Portfolio Company Industry (30) Investment Type (1)(2)(31) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+            "First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.9 % Cash 03/22 03/29 2,430 2,419 2,363 0.1 % (3) (5) (7) (8) (10)",
+            "9,773 9,705 9,504"
+          ]
+        },
+        {
+          "row_id": "ROW-63857fcd6747b5a1",
+          "context_id": "c-619",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class B 2024-03-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class B",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.4",
+            "interest_rate_reported": "5.4",
+            "basis_spread": "",
+            "fair_value": "176000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000034",
+            "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "6,497 6,449 6,497",
+            "",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 174 - % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-5aea49f3e69568e9",
+          "context_id": "c-622",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class E 2024-03-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class E",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "11.4",
+            "interest_rate_reported": "11.4",
+            "basis_spread": "",
+            "fair_value": "8893000.0",
+            "cost": "9273000.0",
+            "principal_amount": "9273000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000034",
+            "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,273 9,273 8,893 0.5 % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 174 - % (3) (7) (28)",
+            "10,001 10,001 9,593",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-2b23f1816a2778f8",
+          "context_id": "c-620",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class C 2024-03-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class C",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.8999999999999995",
+            "interest_rate_reported": "5.8999999999999995",
+            "basis_spread": "",
+            "fair_value": "175000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000034",
+            "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 174 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,273 9,273 8,893 0.5 % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-19efc05563d05083",
+          "context_id": "c-621",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class D 2024-03-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class D",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "8.5",
+            "interest_rate_reported": "8.5",
+            "basis_spread": "",
+            "fair_value": "174000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000034",
+            "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 174 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,273 9,273 8,893 0.5 % (3) (7) (28)",
+            "10,001 10,001 9,593"
+          ]
+        },
+        {
+          "row_id": "ROW-4bcc8655344c07e8",
+          "context_id": "c-324",
+          "context": "0001859919 FitzMark Buyer, LLC, Cargo & Transportation, First Lien Senior Secured Term Loan 2024-03-31",
+          "conclusion": "source_ambiguity",
+          "reading": "Printed operating name is Fitzmark, Inc.; the context uses FitzMark Buyer, LLC. This proves a displayed-name divergence, not that the legal borrower is wrong. Preserve the printed label separately and establish the alias relationship before changing canonical entity identity.",
+          "published": {
+            "issuer_name": "FitzMark Buyer, LLC",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.2",
+            "interest_rate_reported": "10.2",
+            "basis_spread": "4.75",
+            "fair_value": "4146000.0",
+            "cost": "4165000.0",
+            "principal_amount": "4205000.0",
+            "maturity_date": "2026-12-31"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000034",
+            "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.2 % Cash 05/21 12/26 4,205 4,165 4,146 0.3 % (6) (7) (8) (15) (28)"
+          },
+          "source_neighbors": [
+            "FinThrive Software Intermediate Holdings Inc. Business Equipment & Services Preferred Stock ( 3,188.51 shares) 11.0 % PIK 03/22 N/A 4,267 2,740 0.2 % (5) (7)",
+            "4,267 2,740",
+            "",
+            "4,205 4,165 4,146",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-772972c644ccb855",
+          "context_id": "c-363",
+          "context": "0001859919 GPZN II GmbH, Healthcare, First Lien Senior Secured Term Loan 2024-03-31",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell reads GPNZ II GmbH, while published issuer transposes N/Z as GPZN. Correct source-label fidelity from the printed cell; do not infer a different legal entity solely from spelling.",
+          "published": {
+            "issuer_name": "GPZN II GmbH",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "9.8",
+            "interest_rate_reported": "9.8",
+            "basis_spread": "6.0",
+            "fair_value": "220000.0",
+            "cost": "446000.0",
+            "principal_amount": "465000.0",
+            "maturity_date": "2029-06-30"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000034",
+            "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.8 % Cash 06/22 06/29 465 446 220 - % (3) (5) (7) (8) (9) (27)"
+          },
+          "source_neighbors": [
+            "Gojo Industries, Inc. Industrial Other First Lien Senior Secured Term Loan SOFR + 5.00 %, 10.4 % Cash, 4.5 % PIK 10/23 10/28 25,154 24,457 24,465 1.5 % (7) (8) (16) (28)",
+            "25,154 24,457 24,465",
+            "",
+            "First Lien Senior Secured Term Loan 10.0 % PIK 06/22 06/29 158 159 158 - % (3) (7) (27) (28) (29)",
+            "Common Stock ( 5,785 shares) N/A 10/23 N/A - - - % (3) (5) (7) (26)"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_1887292fcd4a",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-b848fc0ce66bd1a6",
+          "ROW-212bbc81f9651d42",
+          "ROW-f5251f5a0c218532",
+          "ROW-b3d067d87b8b8891",
+          "ROW-2931488cb0f5c7bf",
+          "ROW-1988a50301d55305",
+          "ROW-3d6797aa93ae72b1",
+          "ROW-e4223990fb5d94e0",
+          "ROW-a26d1fd1154746e1"
+        ],
+        "reviewed_rows": [
+          "ROW-b848fc0ce66bd1a6",
+          "ROW-212bbc81f9651d42",
+          "ROW-f5251f5a0c218532",
+          "ROW-b3d067d87b8b8891",
+          "ROW-2931488cb0f5c7bf",
+          "ROW-1988a50301d55305",
+          "ROW-3d6797aa93ae72b1",
+          "ROW-e4223990fb5d94e0",
+          "ROW-a26d1fd1154746e1"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 172 172 172 - % (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,980 0.5 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": ") SOFR + 8.00 %, 13.4 % Cash 05/21 07/27 6,497 6,453 6,497 0.4 % (5) (7) (8) (15) 6,497 6,453 6,497 Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28) Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 178 - % (3) (7) (28) Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28) Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28) Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,980 0.5 % (3) (7) (28) 10,002 1"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Priority RCF SOFR + 8.00 %, 13.6 % Cash 06/24 12/26 - ( 9 ) ( 9 ) - % (7) (8) (16) (28) (29)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "REP SEKO MERGER SUB LLC Air Freight & Logistics First Lien Senior Secured Term Loan EURIBOR + 5.00 %, 8.7 % Cash 05/21 12/26 5,802 6,222 4,096 0.2 % (5) (7) (8) (10)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 178 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "First Lien Senior Secured Term Loan BBSY + 5.50 %, 10.0 % Cash 06/24 07/30 753 730 732 - % (3) (5) (7) (8) (14)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Technology Service Stream BidCo Pty Ltd Technology First Lien Senior Secured Term Loan BBSY + 5.50 %, 10.0 % Cash 06/24 01/30 - ( 7 ) ( 7 ) - % (3) (5) (7) (8) (14) (29)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Royalty Rights N/A 05/24 N/A 9,678 9,678 0.6 % (7)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Coherus Biosciences, Inc. Biotechnology First Lien Senior Secured Term Loan SOFR + 8.00 %, 13.3 % Cash 05/24 05/29 9,977 9,684 9,678 0.6 % (7) (8) (16) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.9 % Cash 06/22 06/29 461 447 132 - % (3) (5) (7) (8) (9) (27)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-b848fc0ce66bd1a6",
+          "context_id": "c-600",
+          "context": "0001859919 Ocelot Holdco LL, Construction Machinery, Super Senior Takeback Loan 2024-06-30",
+          "conclusion": "confirmed_error",
+          "reading": "Issuer cell prints Ocelot Holdco LLC; published name omits C. This is a truncation, not whitespace. Correct the source label from the matched row.",
+          "published": {
+            "issuer_name": "Ocelot Holdco LL",
+            "instrument_description": "Super Senior Takeback Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.0",
+            "interest_rate_reported": "10.0",
+            "basis_spread": "",
+            "fair_value": "172000.0",
+            "cost": "172000.0",
+            "principal_amount": "172000.0",
+            "maturity_date": "2027-10-31"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 172 172 172 - % (7) (28)"
+          },
+          "source_neighbors": [
+            "Revolver SOFR + 5.00 %, 10.5 % Cash 03/22 03/28 313 296 306 - % (7) (8) (16) (28) (29)",
+            "3,870 3,804 3,846",
+            "",
+            "Takeback Term Loan 10.0 % Cash 10/23 10/27 917 917 917 0.1 % (7) (28)",
+            "Preferred Stock ( 76.2 shares) 15.0 % PIK 10/23 N/A 488 681 - % (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-212bbc81f9651d42",
+          "context_id": "c-648",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class E 2024-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class E",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "11.4",
+            "interest_rate_reported": "11.4",
+            "basis_spread": "",
+            "fair_value": "8980000.0",
+            "cost": "9274000.0",
+            "principal_amount": "9274000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,980 0.5 % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 178 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)",
+            "10,002 10,002 9,688",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-f5251f5a0c218532",
+          "context_id": "c-713",
+          "context": "0001859919 REP SEKO MERGER SUB LLC, Air Freight & Logistics, Priority RCF 2024-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The immediately preceding named schedule row identifies this same issuer; the flagged royalty/RCF/second loan is its continuation. Neighboring instrument, amounts and period establish ownership independently of the member. Repair detector row-group inheritance, not the issuer.",
+          "published": {
+            "issuer_name": "REP SEKO MERGER SUB LLC",
+            "instrument_description": "Priority RCF",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "13.600000000000001",
+            "interest_rate_reported": "13.600000000000001",
+            "basis_spread": "8.0",
+            "fair_value": "-9000.0",
+            "cost": "-9000.0",
+            "principal_amount": "0.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "Priority RCF SOFR + 8.00 %, 13.6 % Cash 06/24 12/26 - ( 9 ) ( 9 ) - % (7) (8) (16) (28) (29)"
+          },
+          "source_neighbors": [
+            "REP SEKO MERGER SUB LLC Air Freight & Logistics First Lien Senior Secured Term Loan EURIBOR + 5.00 %, 8.7 % Cash 05/21 12/26 5,802 6,222 4,096 0.2 % (5) (7) (8) (10)",
+            "First Lien Senior Secured Term Loan EURIBOR + 5.00 %, 8.7 % Cash 06/22 12/26 13,664 13,250 9,646 0.5 % (5) (7) (8) (10)",
+            "First Lien Senior Secured Term Loan SOFR + 5.00 %, 10.5 % Cash 05/21 12/26 8,247 8,237 5,823 0.3 % (6) (7) (8) (16) (28)",
+            "27,713 27,700 19,556",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-b3d067d87b8b8891",
+          "context_id": "c-646",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class C 2024-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class C",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.8999999999999995",
+            "interest_rate_reported": "5.8999999999999995",
+            "basis_spread": "",
+            "fair_value": "177000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 178 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,980 0.5 % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-2931488cb0f5c7bf",
+          "context_id": "c-647",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class D 2024-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class D",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "8.5",
+            "interest_rate_reported": "8.5",
+            "basis_spread": "",
+            "fair_value": "176000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 178 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,980 0.5 % (3) (7) (28)",
+            "10,002 10,002 9,688"
+          ]
+        },
+        {
+          "row_id": "ROW-1988a50301d55305",
+          "context_id": "c-645",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class B 2024-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class B",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.4",
+            "interest_rate_reported": "5.4",
+            "basis_spread": "",
+            "fair_value": "178000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 178 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "6,497 6,453 6,497",
+            "",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-3d6797aa93ae72b1",
+          "context_id": "c-812",
+          "context": "0001859919 Technology Service Stream BidCo Pty Ltd, Technology, First Lien Senior Secured Term Loan 1 2024-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The immediately preceding named schedule row identifies this same issuer; the flagged royalty/RCF/second loan is its continuation. Neighboring instrument, amounts and period establish ownership independently of the member. Repair detector row-group inheritance, not the issuer.",
+          "published": {
+            "issuer_name": "Technology Service Stream BidCo Pty Ltd",
+            "instrument_description": "First Lien Senior Secured Term Loan 1",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.0",
+            "interest_rate_reported": "10.0",
+            "basis_spread": "5.5",
+            "fair_value": "732000.0",
+            "cost": "730000.0",
+            "principal_amount": "753000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "First Lien Senior Secured Term Loan BBSY + 5.50 %, 10.0 % Cash 06/24 07/30 753 730 732 - % (3) (5) (7) (8) (14)"
+          },
+          "source_neighbors": [
+            "600 989 1,009",
+            "",
+            "Technology Service Stream BidCo Pty Ltd Technology First Lien Senior Secured Term Loan BBSY + 5.50 %, 10.0 % Cash 06/24 01/30 - ( 7 ) ( 7 ) - % (3) (5) (7) (8) (14) (29)",
+            "753 723 725",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-e4223990fb5d94e0",
+          "context_id": "c-244",
+          "context": "0001859919 Coherus Biosciences, Inc., Biotechnology, Royalty Rights 2024-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The immediately preceding named schedule row identifies this same issuer; the flagged royalty/RCF/second loan is its continuation. Neighboring instrument, amounts and period establish ownership independently of the member. Repair detector row-group inheritance, not the issuer.",
+          "published": {
+            "issuer_name": "Coherus Biosciences, Inc.",
+            "instrument_description": "Royalty Rights",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "",
+            "interest_rate_reported": "",
+            "basis_spread": "",
+            "fair_value": "9678000.0",
+            "cost": "9678000.0",
+            "principal_amount": "",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "Royalty Rights N/A 05/24 N/A 9,678 9,678 0.6 % (7)"
+          },
+          "source_neighbors": [
+            "3,091 3,045 3,091",
+            "",
+            "Coherus Biosciences, Inc. Biotechnology First Lien Senior Secured Term Loan SOFR + 8.00 %, 13.3 % Cash 05/24 05/29 9,977 9,684 9,678 0.6 % (7) (8) (16) (28)",
+            "9,977 19,362 19,356",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-a26d1fd1154746e1",
+          "context_id": "c-383",
+          "context": "0001859919 GPZN II GmbH, Healthcare, First Lien Senior Secured Term Loan 2024-06-30",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell reads GPNZ II GmbH, while published issuer transposes N/Z as GPZN. Correct source-label fidelity from the printed cell; do not infer a different legal entity solely from spelling.",
+          "published": {
+            "issuer_name": "GPZN II GmbH",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "9.9",
+            "interest_rate_reported": "9.9",
+            "basis_spread": "6.0",
+            "fair_value": "132000.0",
+            "cost": "447000.0",
+            "principal_amount": "461000.0",
+            "maturity_date": "2029-06-30"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.9 % Cash 06/22 06/29 461 447 132 - % (3) (5) (7) (8) (9) (27)"
+          },
+          "source_neighbors": [
+            "Gojo Industries, Inc. Industrial Other First Lien Senior Secured Term Loan SOFR + 5.00 %, 10.4 % Cash, 4.5 % PIK 10/23 10/28 25,441 24,770 24,782 1.4 % (7) (8) (16) (28)",
+            "25,441 24,770 24,782",
+            "",
+            "First Lien Senior Secured Term Loan 10.0 % PIK 06/22 06/29 212 215 212 - % (3) (7) (8) (28) (29)",
+            "Common Stock ( 5,785 shares) N/A 10/23 N/A - - - % (3) (5) (7) (26)"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_1ef15d7b80eb",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-12-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-0e396aae6ffd810a",
+          "ROW-a4edf4739e2952d7",
+          "ROW-aa9e5a036ecb8ad2",
+          "ROW-5a24b259afd4e366",
+          "ROW-1c0dd447bc5d4fc4",
+          "ROW-58c4099314790cdd",
+          "ROW-1638a62dc8cff8bf",
+          "ROW-04c9667db7868c01",
+          "ROW-865ea2cfc6f9a66d"
+        ],
+        "reviewed_rows": [
+          "ROW-0e396aae6ffd810a",
+          "ROW-a4edf4739e2952d7",
+          "ROW-aa9e5a036ecb8ad2",
+          "ROW-5a24b259afd4e366",
+          "ROW-1c0dd447bc5d4fc4",
+          "ROW-58c4099314790cdd",
+          "ROW-1638a62dc8cff8bf",
+          "ROW-04c9667db7868c01",
+          "ROW-865ea2cfc6f9a66d"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 171 171 171 - % (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 182 182 172 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": ") SOFR + 8.00 %, 13.5 % Cash 05/21 07/27 6,497 6,446 6,497 0.5 % (5) (7) (8) (15) 6,497 6,446 6,497 Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 182 182 172 - % (3) (7) (28) Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 173 - % (3) (7) (28) Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28) Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 166 - % (3) (7) (28) Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,503 0.7 % (3) (7) (28) 10,002 1"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 166 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 173 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 02/28 3,409 3,370 3,406 0.3 % (6) (7) (8) (16)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,503 0.7 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 12/26 4,216 4,173 4,115 0.3 % (6) (7) (8) (16) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 10.00 %, 13.8 % Cash 06/22 06/29 475 446 265 - % (3) (5) (7) (8) (9)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 6.25 %, 9.9 % Cash 03/22 03/29 2,485 2,395 2,426 0.2 % (3) (5) (7) (8) (11)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "First Lien Senior Secured Term Loan EURIBOR + 6.25 %, 9.9 % Cash 05/23 03/29 5,567 5,317 5,390 0.4 % (3) (7) (8) (11) (28) (29)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-0e396aae6ffd810a",
+          "context_id": "c-563",
+          "context": "0001859919 Ocelot Holdco LL, Construction Machinery, First Lien Senior Secured Term Loan 2023-12-31",
+          "conclusion": "confirmed_error",
+          "reading": "Issuer cell prints Ocelot Holdco LLC; published name omits C. This is a truncation, not whitespace. Correct the source label from the matched row.",
+          "published": {
+            "issuer_name": "Ocelot Holdco LL",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.0",
+            "interest_rate_reported": "10.0",
+            "basis_spread": "",
+            "fair_value": "171000.0",
+            "cost": "171000.0",
+            "principal_amount": "171000.0",
+            "maturity_date": "2027-10-31"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 171 171 171 - % (7) (28)"
+          },
+          "source_neighbors": [
+            "Revolver SOFR + 5.00 %, 10.5 % Cash 03/22 03/28 - ( 20 ) ( 47 ) - % (7) (8) (16) (28) (29)",
+            "3,575 3,500 3,407",
+            "",
+            "Takeback Term Loan 10.0 % Cash 10/23 10/27 917 917 917 0.1 % (7) (28)",
+            "Preferred Stock ( 76.2 shares) 15.0 % PIK 10/23 N/A 488 652 - % (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-a4edf4739e2952d7",
+          "context_id": "c-610",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class C 2023-12-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class C",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.8999999999999995",
+            "interest_rate_reported": "5.8999999999999995",
+            "basis_spread": "",
+            "fair_value": "167000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 182 182 172 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 173 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 166 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,503 0.7 % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-aa9e5a036ecb8ad2",
+          "context_id": "c-611",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class D 2023-12-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class D",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "8.5",
+            "interest_rate_reported": "8.5",
+            "basis_spread": "",
+            "fair_value": "166000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 166 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 182 182 172 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 173 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,503 0.7 % (3) (7) (28)",
+            "10,002 10,002 9,181"
+          ]
+        },
+        {
+          "row_id": "ROW-5a24b259afd4e366",
+          "context_id": "c-609",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class B 2023-12-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class B",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.4",
+            "interest_rate_reported": "5.4",
+            "basis_spread": "",
+            "fair_value": "173000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 173 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "6,497 6,446 6,497",
+            "",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 182 182 172 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 166 - % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-1c0dd447bc5d4fc4",
+          "context_id": "c-331",
+          "context": "0001859919 Fineline Technologies, Inc., Consumer Services, First Lien Senior Secured Term Loan 2023-12-31",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell and member disagree: the displayed label is FineLine Systems. Published issuer follows the member rather than the matched printed label. Correct source-label fidelity; this does not prove the two labels denote different businesses.",
+          "published": {
+            "issuer_name": "Fineline Technologies, Inc.",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.100000000000001",
+            "interest_rate_reported": "10.100000000000001",
+            "basis_spread": "4.75",
+            "fair_value": "3406000.0",
+            "cost": "3370000.0",
+            "principal_amount": "3409000.0",
+            "maturity_date": "2028-02-29"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 02/28 3,409 3,370 3,406 0.3 % (6) (7) (8) (16)"
+          },
+          "source_neighbors": [
+            "Findex Group Ltd Finance Companies First Lien Senior Secured Term Loan BBSY + 5.50 %, 9.8 % Cash 03/23 12/26 2,463 2,313 2,371 0.2 % (3) (5) (7) (8) (13)",
+            "2,463 2,313 2,371",
+            "",
+            "3,409 3,370 3,406",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-58c4099314790cdd",
+          "context_id": "c-612",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class E 2023-12-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class E",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "11.4",
+            "interest_rate_reported": "11.4",
+            "basis_spread": "",
+            "fair_value": "8503000.0",
+            "cost": "9274000.0",
+            "principal_amount": "9274000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,503 0.7 % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 173 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 166 - % (3) (7) (28)",
+            "10,002 10,002 9,181",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-1638a62dc8cff8bf",
+          "context_id": "c-338",
+          "context": "0001859919 FitzMark Buyer, LLC, Cargo & Transportation, First Lien Senior Secured Term Loan 2023-12-31",
+          "conclusion": "source_ambiguity",
+          "reading": "Printed operating name is Fitzmark, Inc.; the context uses FitzMark Buyer, LLC. This proves a displayed-name divergence, not that the legal borrower is wrong. Preserve the printed label separately and establish the alias relationship before changing canonical entity identity.",
+          "published": {
+            "issuer_name": "FitzMark Buyer, LLC",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.100000000000001",
+            "interest_rate_reported": "10.100000000000001",
+            "basis_spread": "4.75",
+            "fair_value": "4115000.0",
+            "cost": "4173000.0",
+            "principal_amount": "4216000.0",
+            "maturity_date": "2026-12-31"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 12/26 4,216 4,173 4,115 0.3 % (6) (7) (8) (16) (28)"
+          },
+          "source_neighbors": [
+            "FinThrive Software Intermediate Holdings Inc. Business Equipment & Services Preferred Stock ( 3,188.51 shares) 11.0 % PIK 03/22 N/A 4,267 2,551 0.2 % (5) (7)",
+            "4,267 2,551",
+            "",
+            "4,216 4,173 4,115"
+          ]
+        },
+        {
+          "row_id": "ROW-04c9667db7868c01",
+          "context_id": "c-371",
+          "context": "0001859919 GPZN II GmbH, Healthcare, First Lien Senior Secured Term Loan 2023-12-31",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell reads GPNZ II GmbH, while published issuer transposes N/Z as GPZN. Correct source-label fidelity from the printed cell; do not infer a different legal entity solely from spelling.",
+          "published": {
+            "issuer_name": "GPZN II GmbH",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "13.8",
+            "interest_rate_reported": "13.8",
+            "basis_spread": "10.0",
+            "fair_value": "265000.0",
+            "cost": "446000.0",
+            "principal_amount": "475000.0",
+            "maturity_date": "2029-06-30"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 10.00 %, 13.8 % Cash 06/22 06/29 475 446 265 - % (3) (5) (7) (8) (9)"
+          },
+          "source_neighbors": [
+            "Gojo Industries, Inc. Industrial Other First Lien Senior Secured Term Loan SOFR + 5.00 %, 10.4 % Cash, 4.5 % PIK 10/23 10/28 24,869 24,145 24,122 1.8 % (7) (8) (16) (28)",
+            "24,869 24,145 24,122",
+            "",
+            "First Lien Senior Secured Term Loan 10.0 % PIK 06/22 06/29 124 122 124 - % (3) (7) (28) (29)",
+            "Common Stock ( 5,785 shares) N/A 10/23 N/A - - - % (3) (5) (7) (26)"
+          ]
+        },
+        {
+          "row_id": "ROW-865ea2cfc6f9a66d",
+          "context_id": "c-333",
+          "context": "0001859919 First Lien, Consumer Cyclical, Senior Secured Term Loan 2023-12-31",
+          "conclusion": "confirmed_error",
+          "reading": "The actual issuer cell is Finexvet; First Lien belongs to the investment-type cell. The valued context is misnamed; extract printed issuer on the matched row, retain tranche identity and verify its separate instrument description.",
+          "published": {
+            "issuer_name": "First Lien",
+            "instrument_description": "Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "9.9",
+            "interest_rate_reported": "9.9",
+            "basis_spread": "6.25",
+            "fair_value": "2426000.0",
+            "cost": "2395000.0",
+            "principal_amount": "2485000.0",
+            "maturity_date": "2029-03-31"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 6.25 %, 9.9 % Cash 03/22 03/29 2,485 2,395 2,426 0.2 % (3) (5) (7) (8) (11)"
+          },
+          "source_neighbors": [
+            "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 02/28 3,409 3,370 3,406 0.3 % (6) (7) (8) (16)",
+            "3,409 3,370 3,406",
+            "",
+            "First Lien Senior Secured Term Loan EURIBOR + 6.25 %, 9.9 % Cash 05/23 03/29 5,567 5,317 5,390 0.4 % (3) (7) (8) (11) (28) (29)",
+            "8,052 7,712 7,816"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_275217b1d37a",
+      "rule_name": "pik_printed",
+      "report_date": "2024-09-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-d670acf79f8014a2"
+        ],
+        "reviewed_rows": [
+          "ROW-d670acf79f8014a2"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Preferred Equity ( 264 shares) 20.0 % PIK 04/24 N/A 294 290 - % (7)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Woodland Foods, LLC Food & Beverage First Lien Senior Secured Term Loan SOFR + 5.50 %, 10.7 % Cash 12/21 12/27 8,860 8,753 8,771 0.5 % (5) (6) (7) (8) (13)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-d670acf79f8014a2",
+          "context_id": "c-939",
+          "context": "0001859919 Woodland Foods, LLC, Food & Beverage, Preferred Equity 2024-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "The matched current-period rate cell explicitly prints 20.0% PIK, while published pik_rate is blank and the coupon sits in interest_rate. Preserve the full PIK coupon from the printed cell, its spread where present, and avoid adding it twice under the cash-leg wrapper. This is disclosed PIK terms, not evidence of current payment/accrual.",
+          "published": {
+            "issuer_name": "Woodland Foods, LLC",
+            "instrument_description": "Preferred Equity",
+            "shares_held": "264.0",
+            "pik_rate": "",
+            "interest_rate": "20.0",
+            "interest_rate_reported": "20.0",
+            "basis_spread": "",
+            "fair_value": "290000.0",
+            "cost": "294000.0",
+            "principal_amount": "",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000075",
+            "text": "Preferred Equity ( 264 shares) 20.0 % PIK 04/24 N/A 294 290 - % (7)"
+          },
+          "source_neighbors": [
+            "",
+            "Woodland Foods, LLC Food & Beverage First Lien Senior Secured Term Loan SOFR + 5.50 %, 10.7 % Cash 12/21 12/27 8,860 8,753 8,771 0.5 % (5) (6) (7) (8) (13)",
+            "Revolver SOFR + 5.50 %, 10.7 % Cash 12/21 12/27 852 834 836 - % (7) (8) (13) (28) (29)",
+            "Common Stock ( 1,204.46 shares) N/A 12/21 N/A 1,204 750 - % (7) (32)",
+            "9,712 11,085 10,647"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_2a80efb06c5f",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-8d1011741b02b22e",
+          "ROW-1a5278dd9f1940d2",
+          "ROW-968ceb3742467358",
+          "ROW-5110be9ae63000eb",
+          "ROW-2457e936055c352f",
+          "ROW-dcdde73de2275fa8"
+        ],
+        "reviewed_rows": [
+          "ROW-8d1011741b02b22e",
+          "ROW-1a5278dd9f1940d2",
+          "ROW-968ceb3742467358",
+          "ROW-5110be9ae63000eb",
+          "ROW-2457e936055c352f",
+          "ROW-dcdde73de2275fa8"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 161 - % (3) (6) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 177 - % (3) (6) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "ype(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 177 - % (3) (6) (33) Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 172 - % (3) (6) (33) Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 166 - % (3) (6) (33) Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 161 - % (3) (6) (33) Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,185 0.7 % (3) (6) (33) 10"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 166 - % (3) (6) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 172 - % (3) (6) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,185 0.7 % (3) (6) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 7.9 % Cash, 1.0 % PIK 06/22 06/29 468 445 426 - % (3) (5) (6) (7) (11)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan LIBOR + 4.50 %, 9.5 % Cash 05/21 12/26 4,249 4,195 4,197 0.4 % (5) (6) (7) (9)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-8d1011741b02b22e",
+          "context_id": "i2b3ef65fe4c9480484839c6e9207533d_I20230331",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class D 2023-03-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class D",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "8.5",
+            "interest_rate_reported": "8.5",
+            "basis_spread": "",
+            "fair_value": "161000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000018",
+            "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 161 - % (3) (6) (33)"
+          },
+          "source_neighbors": [
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 177 - % (3) (6) (33)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 172 - % (3) (6) (33)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 166 - % (3) (6) (33)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,185 0.7 % (3) (6) (33)",
+            "10,002 10,002 8,861"
+          ]
+        },
+        {
+          "row_id": "ROW-1a5278dd9f1940d2",
+          "context_id": "icd45fd40f5544a608b63395ce60cc700_I20230331",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class C 2023-03-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class C",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.8999999999999995",
+            "interest_rate_reported": "5.8999999999999995",
+            "basis_spread": "",
+            "fair_value": "166000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000018",
+            "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 166 - % (3) (6) (33)"
+          },
+          "source_neighbors": [
+            "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 177 - % (3) (6) (33)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 172 - % (3) (6) (33)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 161 - % (3) (6) (33)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,185 0.7 % (3) (6) (33)"
+          ]
+        },
+        {
+          "row_id": "ROW-968ceb3742467358",
+          "context_id": "i687dca1c2208417995940880849d6b88_I20230331",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class B 2023-03-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class B",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.4",
+            "interest_rate_reported": "5.4",
+            "basis_spread": "",
+            "fair_value": "172000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000018",
+            "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 172 - % (3) (6) (33)"
+          },
+          "source_neighbors": [
+            "",
+            "Portfolio Company Industry Investment Type(1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 177 - % (3) (6) (33)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 166 - % (3) (6) (33)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 161 - % (3) (6) (33)"
+          ]
+        },
+        {
+          "row_id": "ROW-5110be9ae63000eb",
+          "context_id": "i976ab528e4d64166b2963d0e01e91176_I20230331",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class E 2023-03-31",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class E",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "11.4",
+            "interest_rate_reported": "11.4",
+            "basis_spread": "",
+            "fair_value": "8185000.0",
+            "cost": "9274000.0",
+            "principal_amount": "9274000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000018",
+            "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,185 0.7 % (3) (6) (33)"
+          },
+          "source_neighbors": [
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 172 - % (3) (6) (33)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 166 - % (3) (6) (33)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 161 - % (3) (6) (33)",
+            "10,002 10,002 8,861",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-2457e936055c352f",
+          "context_id": "ib25dcad2188a40ca8a4ea36c8a1ce720_I20230331",
+          "context": "0001859919 GPZN II GmbH, Healthcare, First Lien Senior Secured Term Loan 2023-03-31",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell reads GPNZ II GmbH, while published issuer transposes N/Z as GPZN. Correct source-label fidelity from the printed cell; do not infer a different legal entity solely from spelling.",
+          "published": {
+            "issuer_name": "GPZN II GmbH",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "1.0",
+            "interest_rate": "8.9",
+            "interest_rate_reported": "7.9",
+            "basis_spread": "6.0",
+            "fair_value": "426000.0",
+            "cost": "445000.0",
+            "principal_amount": "468000.0",
+            "maturity_date": "2029-06-30"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000018",
+            "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 7.9 % Cash, 1.0 % PIK 06/22 06/29 468 445 426 - % (3) (5) (6) (7) (11)"
+          },
+          "source_neighbors": [
+            "First Lien Senior Secured Term Loan BKBM + 6.00 %, 10.2 % Cash 07/22 07/27 4,318 4,209 4,208 0.4 % (3) (5) (6) (7) (27)",
+            "6,789 6,714 6,622",
+            "",
+            "468 445 426",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-dcdde73de2275fa8",
+          "context_id": "ib331d038a5dd4f989f3f77b5cc61db9a_I20230331",
+          "context": "0001859919 FitzMark Buyer, LLC, Cargo & Transportation, First Lien Senior Secured Term Loan 2023-03-31",
+          "conclusion": "source_ambiguity",
+          "reading": "Printed operating name is Fitzmark, Inc.; the context uses FitzMark Buyer, LLC. This proves a displayed-name divergence, not that the legal borrower is wrong. Preserve the printed label separately and establish the alias relationship before changing canonical entity identity.",
+          "published": {
+            "issuer_name": "FitzMark Buyer, LLC",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "9.5",
+            "interest_rate_reported": "9.5",
+            "basis_spread": "4.5",
+            "fair_value": "4197000.0",
+            "cost": "4195000.0",
+            "principal_amount": "4249000.0",
+            "maturity_date": "2026-12-31"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000018",
+            "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan LIBOR + 4.50 %, 9.5 % Cash 05/21 12/26 4,249 4,195 4,197 0.4 % (5) (6) (7) (9)"
+          },
+          "source_neighbors": [
+            "FinThrive Software Intermediate Holdings Inc. Business Equipment & Services Preferred Stock ( 3,188.51 shares) 11.0 % PIK 03/22 N/A 3,823 3,239 0.3 % (5) (6)",
+            "3,823 3,239",
+            "",
+            "4,249 4,195 4,197",
+            ""
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_2e81146d2ef8",
+      "rule_name": "units_printed",
+      "report_date": "2023-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-8095fd2d8b3a2e7e"
+        ],
+        "reviewed_rows": [
+          "ROW-8095fd2d8b3a2e7e"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Common Stock ( 36,533 shares) N/A 05/22 N/A 452 431 - % (3) (6) (30) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Xeinadin Bidco Limited Financial Other First Lien Senior Secured Term Loan SONIA + 5.25 %, 9.7 % Cash 05/22 05/29 11,340 10,704 11,041 0.9 % (3) (5) (6) (7) (21)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-8095fd2d8b3a2e7e",
+          "context_id": "c-829",
+          "context": "0001859919 Xeinadin Bidco Limited, Financial Other, Common Stock 2023-06-30",
+          "conclusion": "confirmed_error",
+          "reading": "Published shares_held=36,532,680 is a derived_proxy. The actual row explicitly prints 36,533 shares; its original ix fact uses shares at scale 0. Monetary thousands do not multiply an explicitly labelled share count. Retain the position-level source count and prevent issuer-level proxy overwrite.",
+          "published": {
+            "issuer_name": "Xeinadin Bidco Limited",
+            "instrument_description": "Common Stock",
+            "shares_held": "36532680.0",
+            "pik_rate": "",
+            "interest_rate": "",
+            "interest_rate_reported": "",
+            "basis_spread": "",
+            "fair_value": "431000.0",
+            "cost": "452000.0",
+            "principal_amount": "",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000040",
+            "text": "Common Stock ( 36,533 shares) N/A 05/22 N/A 452 431 - % (3) (6) (30) (32)"
+          },
+          "source_neighbors": [
+            "",
+            "Xeinadin Bidco Limited Financial Other First Lien Senior Secured Term Loan SONIA + 5.25 %, 9.7 % Cash 05/22 05/29 11,340 10,704 11,041 0.9 % (3) (5) (6) (7) (21)",
+            "Subordinated Term Loan 11.0 % PIK 05/22 05/29 4,280 4,046 4,187 0.3 % (3) (6) (7) (32)",
+            "15,620 15,202 15,659",
+            ""
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_3a74ca5943f8",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-09-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-1e71356a79af63fd",
+          "ROW-6d25434599795fd7",
+          "ROW-5b915241b36ec3c3",
+          "ROW-641c33e08b885fb8",
+          "ROW-57f8d6d8b6a36e96",
+          "ROW-620416b563e61c1f",
+          "ROW-be07d1ded647095e",
+          "ROW-ee479e6a9e5f131e"
+        ],
+        "reviewed_rows": [
+          "ROW-1e71356a79af63fd",
+          "ROW-6d25434599795fd7",
+          "ROW-5b915241b36ec3c3",
+          "ROW-641c33e08b885fb8",
+          "ROW-57f8d6d8b6a36e96",
+          "ROW-620416b563e61c1f",
+          "ROW-be07d1ded647095e",
+          "ROW-ee479e6a9e5f131e"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 163 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "pe (1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (7) (28) Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28) Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 163 - % (3) (7) (28) Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (7) (28) Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,288 0.7 % (3) (7) (28) 10"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 02/28 3,427 3,385 3,419 0.3 % (6) (7) (8) (16)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan SOFR + 4.50 %, 10.1 % Cash 05/21 12/26 4,227 4,180 4,190 0.3 % (6) (7) (8) (16) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.9 % Cash 06/22 06/29 456 445 325 - % (3) (5) (7) (8) (9)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,288 0.7 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 5.50 %, 9.6 % Cash 03/22 03/29 2,382 2,393 2,320 0.2 % (3) (5) (7) (8) (11)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "First Lien Senior Secured Term Loan EURIBOR + 5.50 %, 9.6 % Cash 05/23 03/29 5,336 5,309 5,148 0.4 % (3) (7) (8) (11) (28) (29)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-1e71356a79af63fd",
+          "context_id": "c-587",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class C 2023-09-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class C",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.8999999999999995",
+            "interest_rate_reported": "5.8999999999999995",
+            "basis_spread": "",
+            "fair_value": "163000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000073",
+            "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 163 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Portfolio Company Industry Investment Type (1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,288 0.7 % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-6d25434599795fd7",
+          "context_id": "c-588",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class D 2023-09-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class D",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "8.5",
+            "interest_rate_reported": "8.5",
+            "basis_spread": "",
+            "fair_value": "160000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000073",
+            "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 163 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,288 0.7 % (3) (7) (28)",
+            "10,002 10,002 8,944"
+          ]
+        },
+        {
+          "row_id": "ROW-5b915241b36ec3c3",
+          "context_id": "c-320",
+          "context": "0001859919 Fineline Technologies, Inc., Consumer Services, First Lien Senior Secured Term Loan 2023-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell and member disagree: the displayed label is FineLine Systems. Published issuer follows the member rather than the matched printed label. Correct source-label fidelity; this does not prove the two labels denote different businesses.",
+          "published": {
+            "issuer_name": "Fineline Technologies, Inc.",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.100000000000001",
+            "interest_rate_reported": "10.100000000000001",
+            "basis_spread": "4.75",
+            "fair_value": "3419000.0",
+            "cost": "3385000.0",
+            "principal_amount": "3427000.0",
+            "maturity_date": "2028-02-29"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000073",
+            "text": "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 02/28 3,427 3,385 3,419 0.3 % (6) (7) (8) (16)"
+          },
+          "source_neighbors": [
+            "Findex Group Ltd Finance Companies First Lien Senior Secured Term Loan BBSY + 5.50 %, 9.8 % Cash 03/23 12/26 2,330 2,307 2,233 0.2 % (3) (5) (7) (8) (13)",
+            "2,330 2,307 2,233",
+            "",
+            "3,427 3,385 3,419",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-641c33e08b885fb8",
+          "context_id": "c-327",
+          "context": "0001859919 FitzMark Buyer, LLC, Cargo & Transportation, First Lien Senior Secured Term Loan 2023-09-30",
+          "conclusion": "source_ambiguity",
+          "reading": "Printed operating name is Fitzmark, Inc.; the context uses FitzMark Buyer, LLC. This proves a displayed-name divergence, not that the legal borrower is wrong. Preserve the printed label separately and establish the alias relationship before changing canonical entity identity.",
+          "published": {
+            "issuer_name": "FitzMark Buyer, LLC",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.100000000000001",
+            "interest_rate_reported": "10.100000000000001",
+            "basis_spread": "4.5",
+            "fair_value": "4190000.0",
+            "cost": "4180000.0",
+            "principal_amount": "4227000.0",
+            "maturity_date": "2026-12-31"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000073",
+            "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan SOFR + 4.50 %, 10.1 % Cash 05/21 12/26 4,227 4,180 4,190 0.3 % (6) (7) (8) (16) (28)"
+          },
+          "source_neighbors": [
+            "FinThrive Software Intermediate Holdings Inc. Business Equipment & Services Preferred Stock ( 3,188.51 shares) 11.0 % PIK 03/22 N/A 4,039 3,191 0.3 % (5) (7)",
+            "4,039 3,191",
+            "",
+            "4,227 4,180 4,190"
+          ]
+        },
+        {
+          "row_id": "ROW-57f8d6d8b6a36e96",
+          "context_id": "c-362",
+          "context": "0001859919 GPZN II GmbH, Healthcare, First Lien Senior Secured Term Loan 2023-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell reads GPNZ II GmbH, while published issuer transposes N/Z as GPZN. Correct source-label fidelity from the printed cell; do not infer a different legal entity solely from spelling.",
+          "published": {
+            "issuer_name": "GPZN II GmbH",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "9.9",
+            "interest_rate_reported": "9.9",
+            "basis_spread": "6.0",
+            "fair_value": "325000.0",
+            "cost": "445000.0",
+            "principal_amount": "456000.0",
+            "maturity_date": "2029-06-30"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000073",
+            "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.9 % Cash 06/22 06/29 456 445 325 - % (3) (5) (7) (8) (9)"
+          },
+          "source_neighbors": [
+            "First Lien Senior Secured Term Loan BKBM + 6.00 %, 11.7 % Cash 07/22 07/27 4,147 4,222 4,065 0.3 % (3) (5) (7) (8) (23) (29)",
+            "6,563 6,769 6,437",
+            "",
+            "First Lien Senior Secured Term Loan 10.0 % PIK 06/22 06/29 34 35 34 - % (3) (7) (28) (29)",
+            "Common Stock ( 5,785 shares) N/A 09/23 N/A - - - % (3) (5) (7) (26)"
+          ]
+        },
+        {
+          "row_id": "ROW-620416b563e61c1f",
+          "context_id": "c-589",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class E 2023-09-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class E",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "11.4",
+            "interest_rate_reported": "11.4",
+            "basis_spread": "",
+            "fair_value": "8288000.0",
+            "cost": "9274000.0",
+            "principal_amount": "9274000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000073",
+            "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,288 0.7 % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 163 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (7) (28)",
+            "10,002 10,002 8,944",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-be07d1ded647095e",
+          "context_id": "c-586",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class B 2023-09-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class B",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.4",
+            "interest_rate_reported": "5.4",
+            "basis_spread": "",
+            "fair_value": "167000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000073",
+            "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "",
+            "Portfolio Company Industry Investment Type (1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 163 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-ee479e6a9e5f131e",
+          "context_id": "c-322",
+          "context": "0001859919 First Lien, Consumer Cyclical, Senior Secured Term Loan 2023-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "The actual issuer cell is Finexvet; First Lien belongs to the investment-type cell. The valued context is misnamed; extract printed issuer on the matched row, retain tranche identity and verify its separate instrument description.",
+          "published": {
+            "issuer_name": "First Lien",
+            "instrument_description": "Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "9.6",
+            "interest_rate_reported": "9.6",
+            "basis_spread": "5.5",
+            "fair_value": "2320000.0",
+            "cost": "2393000.0",
+            "principal_amount": "2382000.0",
+            "maturity_date": "2029-03-31"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000073",
+            "text": "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 5.50 %, 9.6 % Cash 03/22 03/29 2,382 2,393 2,320 0.2 % (3) (5) (7) (8) (11)"
+          },
+          "source_neighbors": [
+            "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 02/28 3,427 3,385 3,419 0.3 % (6) (7) (8) (16)",
+            "3,427 3,385 3,419",
+            "",
+            "First Lien Senior Secured Term Loan EURIBOR + 5.50 %, 9.6 % Cash 05/23 03/29 5,336 5,309 5,148 0.4 % (3) (7) (8) (11) (28) (29)",
+            "7,718 7,702 7,468"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_4198afa7d600",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2023-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-1fd973931a46e3af",
+          "ROW-ea5d31c231df560e",
+          "ROW-dbc9eb13290e5dcd",
+          "ROW-91d211a01f294a24",
+          "ROW-f234b5f752460e03",
+          "ROW-58b13f931a673937",
+          "ROW-8b4296f02a166cba"
+        ],
+        "reviewed_rows": [
+          "ROW-1fd973931a46e3af",
+          "ROW-ea5d31c231df560e",
+          "ROW-dbc9eb13290e5dcd",
+          "ROW-91d211a01f294a24",
+          "ROW-f234b5f752460e03",
+          "ROW-58b13f931a673937",
+          "ROW-8b4296f02a166cba"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-23-000040",
+          "text": "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.3 % Cash 05/21 02/28 3,427 3,383 3,382 0.3 % (5) (6) (7) (18)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 165 - % (3) (6) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (6) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "pe (1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (6) (32) Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 165 - % (3) (6) (32) Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 158 - % (3) (6) (32) Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (6) (32) Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 7,982 0.7 % (3) (6) (32) 10"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 7,982 0.7 % (3) (6) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 158 - % (3) (6) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (6) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan LIBOR + 4.50 %, 10.1 % Cash 05/21 12/26 4,238 4,187 4,194 0.3 % (5) (6) (7) (9)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.4 % Cash 06/22 06/29 469 445 334 - % (3) (5) (6) (7) (11)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-1fd973931a46e3af",
+          "context_id": "c-327",
+          "context": "0001859919 Fineline Technologies, Inc., Consumer Services, First Lien Senior Secured Term Loan 2023-06-30",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell and member disagree: the displayed label is FineLine Systems. Published issuer follows the member rather than the matched printed label. Correct source-label fidelity; this does not prove the two labels denote different businesses.",
+          "published": {
+            "issuer_name": "Fineline Technologies, Inc.",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.299999999999999",
+            "interest_rate_reported": "10.299999999999999",
+            "basis_spread": "4.75",
+            "fair_value": "3382000.0",
+            "cost": "3383000.0",
+            "principal_amount": "3427000.0",
+            "maturity_date": "2028-02-29"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000040",
+            "text": "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.3 % Cash 05/21 02/28 3,427 3,383 3,382 0.3 % (5) (6) (7) (18)"
+          },
+          "source_neighbors": [
+            "Findex Group Limited Finance Companies First Lien Senior Secured Term Loan BBSY + 5.50 %, 9.8 % Cash 03/23 12/26 2,403 2,300 2,283 0.2 % (3) (5) (6) (7) (15)",
+            "2,403 2,300 2,283",
+            "",
+            "3,427 3,383 3,382",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-ea5d31c231df560e",
+          "context_id": "c-585",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class B 2023-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class B",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.4",
+            "interest_rate_reported": "5.4",
+            "basis_spread": "",
+            "fair_value": "165000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000040",
+            "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 165 - % (3) (6) (32)"
+          },
+          "source_neighbors": [
+            "",
+            "Portfolio Company Industry Investment Type (1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (6) (32)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 158 - % (3) (6) (32)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (6) (32)"
+          ]
+        },
+        {
+          "row_id": "ROW-dbc9eb13290e5dcd",
+          "context_id": "c-588",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class E 2023-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class E",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "11.4",
+            "interest_rate_reported": "11.4",
+            "basis_spread": "",
+            "fair_value": "7982000.0",
+            "cost": "9274000.0",
+            "principal_amount": "9274000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000040",
+            "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 7,982 0.7 % (3) (6) (32)"
+          },
+          "source_neighbors": [
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 165 - % (3) (6) (32)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 158 - % (3) (6) (32)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (6) (32)",
+            "10,002 10,002 8,631",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-91d211a01f294a24",
+          "context_id": "c-586",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class C 2023-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class C",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.8999999999999995",
+            "interest_rate_reported": "5.8999999999999995",
+            "basis_spread": "",
+            "fair_value": "158000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000040",
+            "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 158 - % (3) (6) (32)"
+          },
+          "source_neighbors": [
+            "Portfolio Company Industry Investment Type (1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (6) (32)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 165 - % (3) (6) (32)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (6) (32)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 7,982 0.7 % (3) (6) (32)"
+          ]
+        },
+        {
+          "row_id": "ROW-f234b5f752460e03",
+          "context_id": "c-587",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class D 2023-06-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class D",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "8.5",
+            "interest_rate_reported": "8.5",
+            "basis_spread": "",
+            "fair_value": "160000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000040",
+            "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (6) (32)"
+          },
+          "source_neighbors": [
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 05/27 $ 182 $ 182 $ 166 - % (3) (6) (32)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 165 - % (3) (6) (32)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 158 - % (3) (6) (32)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 7,982 0.7 % (3) (6) (32)",
+            "10,002 10,002 8,631"
+          ]
+        },
+        {
+          "row_id": "ROW-58b13f931a673937",
+          "context_id": "c-335",
+          "context": "0001859919 FitzMark Buyer, LLC, Cargo & Transportation, First Lien Senior Secured Term Loan 2023-06-30",
+          "conclusion": "source_ambiguity",
+          "reading": "Printed operating name is Fitzmark, Inc.; the context uses FitzMark Buyer, LLC. This proves a displayed-name divergence, not that the legal borrower is wrong. Preserve the printed label separately and establish the alias relationship before changing canonical entity identity.",
+          "published": {
+            "issuer_name": "FitzMark Buyer, LLC",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.100000000000001",
+            "interest_rate_reported": "10.100000000000001",
+            "basis_spread": "4.5",
+            "fair_value": "4194000.0",
+            "cost": "4187000.0",
+            "principal_amount": "4238000.0",
+            "maturity_date": "2026-12-31"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000040",
+            "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan LIBOR + 4.50 %, 10.1 % Cash 05/21 12/26 4,238 4,187 4,194 0.3 % (5) (6) (7) (9)"
+          },
+          "source_neighbors": [
+            "FinThrive Software Intermediate Holdings Inc. Business Equipment & Services Preferred Stock ( 3,188.51 shares) 11.0 % PIK 03/22 N/A 4,039 3,146 0.3 % (5) (6)",
+            "4,039 3,146",
+            "",
+            "4,238 4,187 4,194"
+          ]
+        },
+        {
+          "row_id": "ROW-8b4296f02a166cba",
+          "context_id": "c-370",
+          "context": "0001859919 GPZN II GmbH, Healthcare, First Lien Senior Secured Term Loan 2023-06-30",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell reads GPNZ II GmbH, while published issuer transposes N/Z as GPZN. Correct source-label fidelity from the printed cell; do not infer a different legal entity solely from spelling.",
+          "published": {
+            "issuer_name": "GPZN II GmbH",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "9.4",
+            "interest_rate_reported": "9.4",
+            "basis_spread": "6.0",
+            "fair_value": "334000.0",
+            "cost": "445000.0",
+            "principal_amount": "469000.0",
+            "maturity_date": "2029-06-30"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000040",
+            "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.4 % Cash 06/22 06/29 469 445 334 - % (3) (5) (6) (7) (11)"
+          },
+          "source_neighbors": [
+            "First Lien Senior Secured Term Loan BKBM + 6.00 %, 11.6 % Cash 07/22 07/27 4,228 4,215 4,126 0.3 % (3) (5) (6) (7) (26)",
+            "6,684 6,724 6,528",
+            "",
+            "469 445 334",
+            ""
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_5eb7b9a53163",
+      "rule_name": "pik_printed",
+      "report_date": "2025-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-79652852d080a844",
+          "ROW-ca0f51dbfda3bfb7"
+        ],
+        "reviewed_rows": [
+          "ROW-79652852d080a844",
+          "ROW-ca0f51dbfda3bfb7"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-25-000033",
+          "text": "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,654 2,415 ( 24 ) - % (3)(7)(8)(11) (28)(30)(31)"
+        },
+        {
+          "accession": "0001859919-25-000033",
+          "text": "Marmoutier Holding B.V. Revolver EURIBOR + 5.75 %, 6.7 % PIK 12/21 06/27 116 104 ( 13 ) - % (3)(7)(8)(11) (28)(31)(32)"
+        },
+        {
+          "accession": "0001859919-25-000033",
+          "text": "Marmoutier Holding B.V. Super Senior Secured Term Loan 6.0 % PIK 03/24 04/25 194 195 194 - % (3)(7)(8)(28) (32)"
+        },
+        {
+          "accession": "0001859919-25-000033",
+          "text": "The Caprock Group, Inc. (aka TA/TCG Holdings, LLC) Subordinated Term Loan SOFR + 7.75 %, 12.2 % PIK 10/21 10/28 5,656 5,598 5,656 0.3 % (7)(8)(17)(32)"
+        },
+        {
+          "accession": "0001859919-25-000033",
+          "text": "The Caprock Group, Inc. (aka TA/TCG Holdings, LLC) First Lien Senior Secured Term Loan SOFR + 4.25 %, 8.6 % Cash 10/21 12/27 3,947 3,911 3,947 0.2 % (6)(7)(8)(15) (30)"
+        },
+        {
+          "accession": "0001859919-25-000033",
+          "text": "The Caprock Group, Inc. (aka TA/TCG Holdings, LLC) Revolver SOFR + 4.25 %, 8.6 % Cash 10/21 12/27 - ( 10 ) - - % (7)(8)(15)(31) (32)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-79652852d080a844",
+          "context_id": "c-500",
+          "context": "0001859919 Marmoutier Holding B.V., First Lien Senior Secured Term Loan 2025-03-31",
+          "conclusion": "confirmed_error",
+          "reading": "The matched current-period rate cell explicitly prints 10.4% PIK, while published pik_rate is blank and the coupon sits in interest_rate. Preserve the full PIK coupon from the printed cell, its spread where present, and avoid adding it twice under the cash-leg wrapper. This is disclosed PIK terms, not evidence of current payment/accrual.",
+          "published": {
+            "issuer_name": "Marmoutier Holding B.V.",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.4",
+            "interest_rate_reported": "10.4",
+            "basis_spread": "6.5",
+            "fair_value": "-24000.0",
+            "cost": "2415000.0",
+            "principal_amount": "2654000.0",
+            "maturity_date": "2028-12-31"
+          },
+          "source_row": {
+            "accession": "0001859919-25-000033",
+            "text": "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,654 2,415 ( 24 ) - % (3)(7)(8)(11) (28)(30)(31)"
+          },
+          "source_neighbors": [
+            "HomeX Services Group LLC Revolver SOFR + 4.50 %, 8.8 % Cash 11/23 11/29 - ( 53 ) - - % (7)(8)(16)(31) (32)",
+            "InvoCare Limited First Lien Senior Secured Term Loan BBSY + 6.25 %, 10.7 % Cash 11/23 11/29 4,036 4,129 3,960 0.2 % (3)(7)(8)(13) (30)(31)",
+            "Kid Distro Holdings, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.2 % Cash 10/21 10/29 29,931 29,829 29,931 1.4 % (6)(7)(8)(16) (30)",
+            "Marmoutier Holding B.V. Revolver EURIBOR + 5.75 %, 6.7 % PIK 12/21 06/27 116 104 ( 13 ) - % (3)(7)(8)(11) (28)(31)(32)",
+            "Marmoutier Holding B.V. Super Senior Secured Term Loan 6.0 % PIK 03/24 04/25 194 195 194 - % (3)(7)(8)(28) (32)"
+          ]
+        },
+        {
+          "row_id": "ROW-ca0f51dbfda3bfb7",
+          "context_id": "c-92",
+          "context": "0001859919 The Caprock Group, Inc. (aka TA/TCG Holdings, LLC), Subordinated Term Loan 2025-03-31",
+          "conclusion": "confirmed_error",
+          "reading": "The matched current-period rate cell explicitly prints 12.2% PIK, while published pik_rate is blank and the coupon sits in interest_rate. Preserve the full PIK coupon from the printed cell, its spread where present, and avoid adding it twice under the cash-leg wrapper. This is disclosed PIK terms, not evidence of current payment/accrual.",
+          "published": {
+            "issuer_name": "The Caprock Group, Inc. (aka TA/TCG Holdings, LLC)",
+            "instrument_description": "Subordinated Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "12.2",
+            "interest_rate_reported": "12.2",
+            "basis_spread": "7.75",
+            "fair_value": "5656000.0",
+            "cost": "5598000.0",
+            "principal_amount": "5656000.0",
+            "maturity_date": "2028-10-31"
+          },
+          "source_row": {
+            "accession": "0001859919-25-000033",
+            "text": "The Caprock Group, Inc. (aka TA/TCG Holdings, LLC) Subordinated Term Loan SOFR + 7.75 %, 12.2 % PIK 10/21 10/28 5,656 5,598 5,656 0.3 % (7)(8)(17)(32)"
+          },
+          "source_neighbors": [
+            "Shelf Bidco Ltd Second Out Term Loan SOFR + 5.00 %, 9.3 % Cash 10/24 10/31 44,428 44,216 44,219 2.0 % (3)(7)(8)(16) (32)",
+            "The Caprock Group, Inc. (aka TA/TCG Holdings, LLC) First Lien Senior Secured Term Loan SOFR + 4.25 %, 8.6 % Cash 10/21 12/27 3,947 3,911 3,947 0.2 % (6)(7)(8)(15) (30)",
+            "The Caprock Group, Inc. (aka TA/TCG Holdings, LLC) Revolver SOFR + 4.25 %, 8.6 % Cash 10/21 12/27 - ( 10 ) - - % (7)(8)(15)(31) (32)",
+            "THG Acquisition, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.0 % Cash 10/24 10/31 9,925 9,812 9,821 0.5 % (7)(8)(15)(30) (31)",
+            "THG Acquisition, LLC Revolver SOFR + 4.75 %, 9.0 % Cash 10/24 10/31 66 53 54 - % (7)(8)(15)(31) (32)"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_6a3f83ea4e28",
+      "rule_name": "pik_printed",
+      "report_date": "2023-09-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-fcd18073a022e671"
+        ],
+        "reviewed_rows": [
+          "ROW-fcd18073a022e671"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Rocade Holdings LLC Other Financial Preferred LP Units ( 75,000 units) SOFR + 6.0 % PIK, 11.4 % PIK 02/23 N/A 78,451 78,451 6.2 % (7) (28) (29)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-fcd18073a022e671",
+          "context_id": "c-864",
+          "context": "0001859919 Rocade Holdings LLC, Other Financial, Preferred LP Units 2023-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "The matched current-period rate cell explicitly prints 11.4% PIK, while published pik_rate is blank and the coupon sits in interest_rate. Preserve the full PIK coupon from the printed cell, its spread where present, and avoid adding it twice under the cash-leg wrapper. This is disclosed PIK terms, not evidence of current payment/accrual.",
+          "published": {
+            "issuer_name": "Rocade Holdings LLC",
+            "instrument_description": "Preferred LP Units",
+            "shares_held": "75000.0",
+            "pik_rate": "",
+            "interest_rate": "11.4",
+            "interest_rate_reported": "11.4",
+            "basis_spread": "6.0",
+            "fair_value": "78451000.0",
+            "cost": "78451000.0",
+            "principal_amount": "",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000073",
+            "text": "Rocade Holdings LLC Other Financial Preferred LP Units ( 75,000 units) SOFR + 6.0 % PIK, 11.4 % PIK 02/23 N/A 78,451 78,451 6.2 % (7) (28) (29)"
+          },
+          "source_neighbors": [
+            "LLC Units ( 63,139,338 units) N/A 08/21 N/A 66,059 103,803 8.2 % (7) (28)",
+            "6,546 72,515 110,349",
+            "",
+            "Common LP Units ( 30.8 units) N/A 02/23 N/A - 651 0.1 % (7) (26) (28)",
+            "78,451 79,102"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_6e1332b62e95",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2024-09-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-8b4671db35983686",
+          "ROW-085eb4bd0411d61c",
+          "ROW-8f4899ed363699b0",
+          "ROW-30dd8e4c207b8893",
+          "ROW-75476e816b39ee94",
+          "ROW-ce683b43bc928d8c",
+          "ROW-a461bb30b48fc4b2"
+        ],
+        "reviewed_rows": [
+          "ROW-8b4671db35983686",
+          "ROW-085eb4bd0411d61c",
+          "ROW-8f4899ed363699b0",
+          "ROW-30dd8e4c207b8893",
+          "ROW-75476e816b39ee94",
+          "ROW-ce683b43bc928d8c",
+          "ROW-a461bb30b48fc4b2"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-24-000075",
+          "text": "FineLine Technologies, Inc. Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.4 % Cash 05/21 02/28 3,374 3,342 3,374 0.2 % (6) (7) (8) (13)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 181 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 179 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "n SOFR + 8.00 %, 12.9 % Cash 05/21 07/27 6,497 6,456 6,497 0.3 % (5) (7) (8) (12) 6,497 6,456 6,497 Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 179 - % (3) (7) (28) Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 181 - % (3) (7) (28) Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28) Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28) Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,905 0.5 % (3) (7) (28) 10,002 1"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,905 0.5 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 172 172 172 - % (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Royalty Rights N/A 05/24 08/50 9,475 9,546 0.5 % (7)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Coherus Biosciences, Inc. Biotechnology First Lien Senior Secured Term Loan SOFR + 8.00 %, 12.6 % Cash 05/24 05/29 9,977 9,695 9,738 0.5 % (7) (8) (13) (28)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-8b4671db35983686",
+          "context_id": "c-362",
+          "context": "0001859919 FineLine Systems, Consumer Services, First Lien Senior Secured Term Loan 2024-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "The issuer cell and member disagree: the displayed label is FineLine Technologies, Inc.. Published issuer follows the member rather than the matched printed label. Correct source-label fidelity; this does not prove the two labels denote different businesses.",
+          "published": {
+            "issuer_name": "FineLine Systems",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "9.4",
+            "interest_rate_reported": "9.4",
+            "basis_spread": "4.75",
+            "fair_value": "3374000.0",
+            "cost": "3342000.0",
+            "principal_amount": "3374000.0",
+            "maturity_date": "2028-02-29"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000075",
+            "text": "FineLine Technologies, Inc. Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.4 % Cash 05/21 02/28 3,374 3,342 3,374 0.2 % (6) (7) (8) (13)"
+          },
+          "source_neighbors": [
+            "Findex Group Ltd Finance Companies First Lien Senior Secured Term Loan BBSY + 5.50 %, 9.8 % Cash 03/23 12/26 2,505 2,333 2,444 0.1 % (3) (5) (7) (19)",
+            "2,505 2,333 2,444",
+            "",
+            "3,374 3,342 3,374",
+            "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.2 % Cash 03/22 03/29 10,099 9,725 9,869 0.5 % (3) (5) (7) (8) (11) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-085eb4bd0411d61c",
+          "context_id": "c-678",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class B 2024-09-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class B",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.4",
+            "interest_rate_reported": "5.4",
+            "basis_spread": "",
+            "fair_value": "181000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000075",
+            "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 181 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "6,497 6,456 6,497",
+            "",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 179 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-8f4899ed363699b0",
+          "context_id": "c-679",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class C 2024-09-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class C",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "5.8999999999999995",
+            "interest_rate_reported": "5.8999999999999995",
+            "basis_spread": "",
+            "fair_value": "180000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000075",
+            "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "",
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 179 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 181 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,905 0.5 % (3) (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-30dd8e4c207b8893",
+          "context_id": "c-680",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class D 2024-09-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class D",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "8.5",
+            "interest_rate_reported": "8.5",
+            "basis_spread": "",
+            "fair_value": "180000.0",
+            "cost": "182000.0",
+            "principal_amount": "182000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000075",
+            "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Perimeter Master Note Business Trust Credit Card ABS Structured Secured Note - Class A 4.7 % Cash 05/22 11/28 182 182 179 - % (3) (7) (28)",
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 181 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)",
+            "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,905 0.5 % (3) (7) (28)",
+            "10,002 10,002 9,625"
+          ]
+        },
+        {
+          "row_id": "ROW-75476e816b39ee94",
+          "context_id": "c-681",
+          "context": "0001859919 Perimeter Master Note Business Trust, Credit Card ABS, Structured Secured Note - Class E 2024-09-30",
+          "conclusion": "false_alarm",
+          "reading": "The current-period Class B/C/D/E row continues Class A under the printed Perimeter Master Note Business Trust heading. Same tranche class, maturity, principal and FV locate it. A blank issuer cell does not change the issuer. Preserve separate tranches; repair detector continuation inheritance.",
+          "published": {
+            "issuer_name": "Perimeter Master Note Business Trust",
+            "instrument_description": "Structured Secured Note - Class E",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "11.4",
+            "interest_rate_reported": "11.4",
+            "basis_spread": "",
+            "fair_value": "8905000.0",
+            "cost": "9274000.0",
+            "principal_amount": "9274000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000075",
+            "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,905 0.5 % (3) (7) (28)"
+          },
+          "source_neighbors": [
+            "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 181 - % (3) (7) (28)",
+            "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)",
+            "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)",
+            "10,002 10,002 9,625",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-ce683b43bc928d8c",
+          "context_id": "c-628",
+          "context": "0001859919 Ocelot Holdco LL, Construction Machinery, Super Senior Takeback Loan 2024-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "Issuer cell prints Ocelot Holdco LLC; published name omits C. This is a truncation, not whitespace. Correct the source label from the matched row.",
+          "published": {
+            "issuer_name": "Ocelot Holdco LL",
+            "instrument_description": "Super Senior Takeback Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "10.0",
+            "interest_rate_reported": "10.0",
+            "basis_spread": "",
+            "fair_value": "172000.0",
+            "cost": "172000.0",
+            "principal_amount": "172000.0",
+            "maturity_date": "2027-10-31"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000075",
+            "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 172 172 172 - % (7) (28)"
+          },
+          "source_neighbors": [
+            "Revolver SOFR + 5.00 %, 9.9 % Cash 03/22 03/28 - ( 16 ) - - % (7) (8) (12) (28) (29)",
+            "3,548 3,485 3,548",
+            "",
+            "Takeback Term Loan 10.0 % Cash 10/23 10/27 917 917 917 - % (7) (28)",
+            "Preferred Stock ( 76.2 shares) 15.0 % PIK 10/23 N/A 488 854 - % (7) (28)"
+          ]
+        },
+        {
+          "row_id": "ROW-a461bb30b48fc4b2",
+          "context_id": "c-265",
+          "context": "0001859919 Coherus Biosciences, Inc., Biotechnology, Royalty Rights 2024-09-30",
+          "conclusion": "false_alarm",
+          "reading": "The immediately preceding named schedule row identifies this same issuer; the flagged royalty/RCF/second loan is its continuation. Neighboring instrument, amounts and period establish ownership independently of the member. Repair detector row-group inheritance, not the issuer.",
+          "published": {
+            "issuer_name": "Coherus Biosciences, Inc.",
+            "instrument_description": "Royalty Rights",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "",
+            "interest_rate_reported": "",
+            "basis_spread": "",
+            "fair_value": "9546000.0",
+            "cost": "9475000.0",
+            "principal_amount": "",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000075",
+            "text": "Royalty Rights N/A 05/24 08/50 9,475 9,546 0.5 % (7)"
+          },
+          "source_neighbors": [
+            "3,091 3,048 3,091",
+            "",
+            "Coherus Biosciences, Inc. Biotechnology First Lien Senior Secured Term Loan SOFR + 8.00 %, 12.6 % Cash 05/24 05/29 9,977 9,695 9,738 0.5 % (7) (8) (13) (28)",
+            "9,977 19,170 19,284"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_746fcf5566c6",
+      "rule_name": "pik_printed",
+      "report_date": "2024-12-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-e8aa2dbc831654a8"
+        ],
+        "reviewed_rows": [
+          "ROW-e8aa2dbc831654a8"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-25-000013",
+          "text": "Marmoutier Holding B.V. Revolver EURIBOR + 5.75 %, 6.7 % PIK 12/21 06/27 109 104 ( 53 ) - % (3)(7)(8)(11) (28)(31)(32)"
+        },
+        {
+          "accession": "0001859919-25-000013",
+          "text": "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,544 2,415 146 - % (3)(7)(8)(11) (28)(30)(31)"
+        },
+        {
+          "accession": "0001859919-25-000013",
+          "text": "Marmoutier Holding B.V. Super Senior Secured Term Loan 6.0 % PIK 03/24 03/25 186 195 186 - % (3)(7)(8)(28) (32)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-e8aa2dbc831654a8",
+          "context_id": "c-504",
+          "context": "0001859919 Marmoutier Holding B.V., Revolver 2024-12-31",
+          "conclusion": "confirmed_error",
+          "reading": "Printed EURIBOR + 5.75%, 6.7% PIK means margin 5.75 and full PIK coupon 6.7. The filer tags margin as PIK and full coupon as ordinary interest; published PIK=5.75 and interest=12.45 incorrectly add them. Read the printed rate cell and preserve margin separately; set disclosed PIK coupon 6.7 without double counting. This is PIK terms, not proof of current PIK accrual.",
+          "published": {
+            "issuer_name": "Marmoutier Holding B.V.",
+            "instrument_description": "Revolver",
+            "shares_held": "",
+            "pik_rate": "5.75",
+            "interest_rate": "12.45",
+            "interest_rate_reported": "6.7",
+            "basis_spread": "",
+            "fair_value": "-53000.0",
+            "cost": "104000.0",
+            "principal_amount": "109000.0",
+            "maturity_date": "2027-06-30"
+          },
+          "source_row": {
+            "accession": "0001859919-25-000013",
+            "text": "Marmoutier Holding B.V. Revolver EURIBOR + 5.75 %, 6.7 % PIK 12/21 06/27 109 104 ( 53 ) - % (3)(7)(8)(11) (28)(31)(32)"
+          },
+          "source_neighbors": [
+            "InvoCare Limited First Lien Senior Secured Term Loan BBSY + 6.25 %, 10.7 % Cash 11/23 11/29 4,010 4,124 3,925 0.2 % (3)(7)(8)(13) (30)(31)",
+            "Kid Distro Holdings, LLC First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.5 % Cash 10/21 10/27 30,009 29,898 30,009 1.5 % (6)(7)(8)(16) (30)",
+            "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,544 2,415 146 - % (3)(7)(8)(11) (28)(30)(31)",
+            "Marmoutier Holding B.V. Super Senior Secured Term Loan 6.0 % PIK 03/24 03/25 186 195 186 - % (3)(7)(8)(28) (32)",
+            "Premium Franchise Brands, LLC First Lien Senior Secured Term Loan SOFR + 6.25 %, 10.7 % Cash 05/21 12/26 24,158 23,967 23,819 1.2 % (6)(7)(8)(16) (30)"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_757f60b2205c",
+      "rule_name": "units_printed",
+      "report_date": "2023-03-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-160cb591b97af6b0"
+        ],
+        "reviewed_rows": [
+          "ROW-160cb591b97af6b0"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Common Stock ( 354,281 shares) N/A 05/22 N/A 452 452 - % (3) (6) (31) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Xeinadin Bidco Limited Financial Other First Lien Senior Secured Term Loan SONIA + 5.25 %, 9.2 % Cash 05/22 05/29 11,029 10,690 10,702 1.0 % (3) (5) (6) (7) (22)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-160cb591b97af6b0",
+          "context_id": "iffdbc77a291e4f378f903dde7c1c585a_I20230331",
+          "context": "0001859919 Xeinadin Bidco Limited, Financial Other, Common Stock 2023-03-31",
+          "conclusion": "confirmed_error",
+          "reading": "Published shares_held=36,532,680 is a derived_proxy. The actual row explicitly prints 354,281 shares; its original ix fact uses shares at scale 0. Monetary thousands do not multiply an explicitly labelled share count. Retain the position-level source count and prevent issuer-level proxy overwrite.",
+          "published": {
+            "issuer_name": "Xeinadin Bidco Limited",
+            "instrument_description": "Common Stock",
+            "shares_held": "36532680.0",
+            "pik_rate": "",
+            "interest_rate": "",
+            "interest_rate_reported": "",
+            "basis_spread": "",
+            "fair_value": "452000.0",
+            "cost": "452000.0",
+            "principal_amount": "",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-23-000018",
+            "text": "Common Stock ( 354,281 shares) N/A 05/22 N/A 452 452 - % (3) (6) (31) (33)"
+          },
+          "source_neighbors": [
+            "",
+            "Xeinadin Bidco Limited Financial Other First Lien Senior Secured Term Loan SONIA + 5.25 %, 9.2 % Cash 05/22 05/29 11,029 10,690 10,702 1.0 % (3) (5) (6) (7) (22)",
+            "Subordinated Term Loan 11.0 % PIK 05/22 05/29 4,162 4,043 4,061 0.4 % (3) (6) (7) (33)",
+            "15,191 15,185 15,215",
+            ""
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_b96d4b690993",
+      "rule_name": "issuer_name_printed",
+      "report_date": "2025-09-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-8b298162c891600f",
+          "ROW-9ad534421078e919",
+          "ROW-b3338bbdac41ed0b",
+          "ROW-14578e77ae8d66cc",
+          "ROW-60dc9cf2db4d436e"
+        ],
+        "reviewed_rows": [
+          "ROW-8b298162c891600f",
+          "ROW-9ad534421078e919",
+          "ROW-b3338bbdac41ed0b",
+          "ROW-14578e77ae8d66cc",
+          "ROW-60dc9cf2db4d436e"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-25-000087",
+          "text": "TA KHP Aggregator, L.P. Revolver SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 - ( 91 ) ( 87 ) - % (7)(16)(31)(32)"
+        },
+        {
+          "accession": "0001859919-25-000087",
+          "text": "TA KHP Aggregator, L.P. Subordinated Term Loan 12.5 % Cash 06/25 12/32 23,605 23,317 23,388 0.9 % (7)(32)"
+        },
+        {
+          "accession": "0001859919-25-000087",
+          "text": "TA KHP Aggregator, L.P. Common Stock 06/25 496,461 496 491 - % (7)(27)"
+        },
+        {
+          "accession": "0001859919-25-000087",
+          "text": "TA KHP Aggregator, L.P. First Lien Senior Secured Term Loan SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 21,717 21,278 21,300 0.8 % (7)(8)(16)(30) (31)"
+        },
+        {
+          "accession": "0001859919-25-000087",
+          "text": "Zelda Luxco S.A.S First Lien Senior Secured Term Loan EURIBOR + 5.25 %, 7.2 % Cash 07/25 07/32 1,663 1,605 1,619 0.1 % (3)(6)(7)(8)(11)(30)(31)"
+        },
+        {
+          "accession": "0001859919-25-000087",
+          "text": "White Bidco Limited First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.1 % Cash 07/25 06/32 $ 526 $ 519 $ 518 - % (3)(6)(7)(8)(16) (30)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-8b298162c891600f",
+          "context_id": "c-322",
+          "context": "0001859919 Kline Hill Partners LP, Revolver 2025-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "All four flagged rows print TA KHP Aggregator, L.P. (stock, first lien, revolver and subordinated loan), whereas the member/published label is Kline Hill Partners LP. Preserve each position and the printed borrower label; do not assume sponsor and borrower are interchangeable.",
+          "published": {
+            "issuer_name": "Kline Hill Partners LP",
+            "instrument_description": "Revolver",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "8.5",
+            "interest_rate_reported": "8.5",
+            "basis_spread": "4.5",
+            "fair_value": "-87000.0",
+            "cost": "-91000.0",
+            "principal_amount": "0.0",
+            "maturity_date": "2032-06-30"
+          },
+          "source_row": {
+            "accession": "0001859919-25-000087",
+            "text": "TA KHP Aggregator, L.P. Revolver SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 - ( 91 ) ( 87 ) - % (7)(16)(31)(32)"
+          },
+          "source_neighbors": [
+            "Swoop Intermediate III, Inc. First Lien Senior Secured Term Loan SOFR + 4.50 %, 8.8 % Cash 04/25 04/32 32,714 32,505 32,714 1.2 % (7)(8)(15)(30) (31)",
+            "Swoop Intermediate III, Inc. Revolver SOFR + 4.50 %, 8.8 % Cash 04/25 04/32 - ( 36 ) - - % (7)(8)(15)(31) (32)",
+            "TA KHP Aggregator, L.P. First Lien Senior Secured Term Loan SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 21,717 21,278 21,300 0.8 % (7)(8)(16)(30) (31)",
+            "TA KHP Aggregator, L.P. Subordinated Term Loan 12.5 % Cash 06/25 12/32 23,605 23,317 23,388 0.9 % (7)(32)",
+            "Team Health Holdings Inc. First Lien Senior Secured Term Loan SOFR + 4.50 %, 8.8 % Cash 08/25 06/28 7,204 7,204 7,185 0.3 % (8)(15)(33)"
+          ]
+        },
+        {
+          "row_id": "ROW-9ad534421078e919",
+          "context_id": "c-323",
+          "context": "0001859919 Kline Hill Partners LP, Subordinated Term Loan 2025-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "All four flagged rows print TA KHP Aggregator, L.P. (stock, first lien, revolver and subordinated loan), whereas the member/published label is Kline Hill Partners LP. Preserve each position and the printed borrower label; do not assume sponsor and borrower are interchangeable.",
+          "published": {
+            "issuer_name": "Kline Hill Partners LP",
+            "instrument_description": "Subordinated Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "12.5",
+            "interest_rate_reported": "12.5",
+            "basis_spread": "",
+            "fair_value": "23388000.0",
+            "cost": "23317000.0",
+            "principal_amount": "23605000.0",
+            "maturity_date": "2032-12-31"
+          },
+          "source_row": {
+            "accession": "0001859919-25-000087",
+            "text": "TA KHP Aggregator, L.P. Subordinated Term Loan 12.5 % Cash 06/25 12/32 23,605 23,317 23,388 0.9 % (7)(32)"
+          },
+          "source_neighbors": [
+            "Swoop Intermediate III, Inc. Revolver SOFR + 4.50 %, 8.8 % Cash 04/25 04/32 - ( 36 ) - - % (7)(8)(15)(31) (32)",
+            "TA KHP Aggregator, L.P. First Lien Senior Secured Term Loan SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 21,717 21,278 21,300 0.8 % (7)(8)(16)(30) (31)",
+            "TA KHP Aggregator, L.P. Revolver SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 - ( 91 ) ( 87 ) - % (7)(16)(31)(32)",
+            "Team Health Holdings Inc. First Lien Senior Secured Term Loan SOFR + 4.50 %, 8.8 % Cash 08/25 06/28 7,204 7,204 7,185 0.3 % (8)(15)(33)",
+            "Union Bidco Limited First Lien Senior Secured Term Loan SONIA + 4.30 %, 9.0 % Cash 06/22 06/29 2,860 2,562 2,808 0.1 % (3)(7)(8)(20) (30)(31)"
+          ]
+        },
+        {
+          "row_id": "ROW-b3338bbdac41ed0b",
+          "context_id": "c-738",
+          "context": "0001859919 Kline Hill Partners LP, Common Stock 2025-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "All four flagged rows print TA KHP Aggregator, L.P. (stock, first lien, revolver and subordinated loan), whereas the member/published label is Kline Hill Partners LP. Preserve each position and the printed borrower label; do not assume sponsor and borrower are interchangeable.",
+          "published": {
+            "issuer_name": "Kline Hill Partners LP",
+            "instrument_description": "Common Stock",
+            "shares_held": "496461.0",
+            "pik_rate": "",
+            "interest_rate": "",
+            "interest_rate_reported": "",
+            "basis_spread": "",
+            "fair_value": "491000.0",
+            "cost": "496000.0",
+            "principal_amount": "",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-25-000087",
+            "text": "TA KHP Aggregator, L.P. Common Stock 06/25 496,461 496 491 - % (7)(27)"
+          },
+          "source_neighbors": [
+            "Parkview Dental Holdings LLC LLC Units 10/23 29,762 298 350 - % (7)(27)",
+            "Parkview Dental Holdings LLC Preferred Stock 10.0 % PIK 01/25 1,229.1 12 38 - % (7)",
+            "SCP Medical Products, LLC. LLC Units 06/25 1,758.9 237 232 - % (7)(27)",
+            "Unosquare, LLC LLC Units 06/25 383,736.4 384 384 - % (7)(27)",
+            "VB Spine Intermediary II LLC LLC Units 04/25 1,151,506 - - - % (6)(7)(27)(32)"
+          ]
+        },
+        {
+          "row_id": "ROW-14578e77ae8d66cc",
+          "context_id": "c-321",
+          "context": "0001859919 Kline Hill Partners LP, First Lien Senior Secured Term Loan 2025-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "All four flagged rows print TA KHP Aggregator, L.P. (stock, first lien, revolver and subordinated loan), whereas the member/published label is Kline Hill Partners LP. Preserve each position and the printed borrower label; do not assume sponsor and borrower are interchangeable.",
+          "published": {
+            "issuer_name": "Kline Hill Partners LP",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "8.5",
+            "interest_rate_reported": "8.5",
+            "basis_spread": "4.5",
+            "fair_value": "21300000.0",
+            "cost": "21278000.0",
+            "principal_amount": "21717000.0",
+            "maturity_date": "2032-06-30"
+          },
+          "source_row": {
+            "accession": "0001859919-25-000087",
+            "text": "TA KHP Aggregator, L.P. First Lien Senior Secured Term Loan SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 21,717 21,278 21,300 0.8 % (7)(8)(16)(30) (31)"
+          },
+          "source_neighbors": [
+            "SSCP Spring Bidco 3 Limited First Lien Senior Secured Term Loan SONIA + 6.45 %, 10.6 % Cash 11/23 08/30 1,031 938 1,019 - % (3)(7)(8)(20) (30)",
+            "Swoop Intermediate III, Inc. First Lien Senior Secured Term Loan SOFR + 4.50 %, 8.8 % Cash 04/25 04/32 32,714 32,505 32,714 1.2 % (7)(8)(15)(30) (31)",
+            "Swoop Intermediate III, Inc. Revolver SOFR + 4.50 %, 8.8 % Cash 04/25 04/32 - ( 36 ) - - % (7)(8)(15)(31) (32)",
+            "TA KHP Aggregator, L.P. Revolver SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 - ( 91 ) ( 87 ) - % (7)(16)(31)(32)",
+            "TA KHP Aggregator, L.P. Subordinated Term Loan 12.5 % Cash 06/25 12/32 23,605 23,317 23,388 0.9 % (7)(32)"
+          ]
+        },
+        {
+          "row_id": "ROW-60dc9cf2db4d436e",
+          "context_id": "c-399",
+          "context": "0001859919 White Bidco Limited, First Lien Senior Secured Term Loan 2025-09-30",
+          "conclusion": "confirmed_error",
+          "reading": "The flagged 1,663 principal / 1,619 FV row prints Zelda Luxco S.A.S, with EURIBOR and 07/32 maturity. White Bidco is the preceding, distinct 526 principal / 518 FV SOFR row. The member is wrong; use the actual printed issuer on this matched row.",
+          "published": {
+            "issuer_name": "White Bidco Limited",
+            "instrument_description": "First Lien Senior Secured Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "7.199999999999999",
+            "interest_rate_reported": "7.199999999999999",
+            "basis_spread": "5.25",
+            "fair_value": "1619000.0",
+            "cost": "1605000.0",
+            "principal_amount": "1663000.0",
+            "maturity_date": "2032-07-31"
+          },
+          "source_row": {
+            "accession": "0001859919-25-000087",
+            "text": "Zelda Luxco S.A.S First Lien Senior Secured Term Loan EURIBOR + 5.25 %, 7.2 % Cash 07/25 07/32 1,663 1,605 1,619 0.1 % (3)(6)(7)(8)(11)(30)(31)"
+          },
+          "source_neighbors": [
+            "",
+            "Portfolio Company Investment Type (1)(2) Interest Acq. Date Maturity Date Principal Amount Cost Fair Value % of Net Assets * Notes",
+            "White Bidco Limited First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.1 % Cash 07/25 06/32 $ 526 $ 519 $ 518 - % (3)(6)(7)(8)(16) (30)",
+            "Subtotal High Tech Industries ( 18.2 %)* 494,380 479,694 480,982",
+            "Hotel, Gaming, & Leisure"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_cbb7be0a797a",
+      "rule_name": "pik_printed",
+      "report_date": "2023-12-31",
+      "coverage": {
+        "affected_rows": [
+          "ROW-3a475b318bc4e8dd"
+        ],
+        "reviewed_rows": [
+          "ROW-3a475b318bc4e8dd"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Rocade Holdings LLC Other Financial Preferred LP Units ( 108,000 units) SOFR + 6.0 % PIK, 11.3 % PIK 02/23 N/A 114,113 114,113 8.7 % (7) (16) (28) (29)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-3a475b318bc4e8dd",
+          "context_id": "c-890",
+          "context": "0001859919 Rocade Holdings LLC, Other Financial, Preferred LP Units 2023-12-31",
+          "conclusion": "confirmed_error",
+          "reading": "The matched current-period rate cell explicitly prints 11.3% PIK, while published pik_rate is blank and the coupon sits in interest_rate. Preserve the full PIK coupon from the printed cell, its spread where present, and avoid adding it twice under the cash-leg wrapper. This is disclosed PIK terms, not evidence of current payment/accrual.",
+          "published": {
+            "issuer_name": "Rocade Holdings LLC",
+            "instrument_description": "Preferred LP Units",
+            "shares_held": "108000.0",
+            "pik_rate": "",
+            "interest_rate": "11.3",
+            "interest_rate_reported": "11.3",
+            "basis_spread": "6.0",
+            "fair_value": "114113000.0",
+            "cost": "114113000.0",
+            "principal_amount": "",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000012",
+            "text": "Rocade Holdings LLC Other Financial Preferred LP Units ( 108,000 units) SOFR + 6.0 % PIK, 11.3 % PIK 02/23 N/A 114,113 114,113 8.7 % (7) (16) (28) (29)"
+          },
+          "source_neighbors": [
+            "LLC Units ( 63,139,338 units) N/A 08/21 N/A 65,621 102,917 7.9 % (7) (28)",
+            "7,123 72,659 110,041",
+            "",
+            "Common LP Units ( 30.8 units) N/A 02/23 N/A - 1,092 0.1 % (7) (26) (28)",
+            "114,113 115,205"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_BLK_e065fe4462ac",
+      "rule_name": "pik_printed",
+      "report_date": "2024-06-30",
+      "coverage": {
+        "affected_rows": [
+          "ROW-567b28a21d2746bc",
+          "ROW-31177479d53e656d"
+        ],
+        "reviewed_rows": [
+          "ROW-567b28a21d2746bc",
+          "ROW-31177479d53e656d"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Second Lien Third Out Term Loan SOFR + 7.00 %, 12.4 % PIK 06/24 09/29 9,788 6,493 6,460 0.4 % (5) (7) (8) (17)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Mold-Rite Plastics, LLC Containers, Packaging & Glass Second Lien Second Out Term Loan SOFR + 7.00 %, 12.4 % PIK 06/24 09/29 3,216 2,608 2,600 0.1 % (5) (7) (8) (17)"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "row_readings": [
+        {
+          "row_id": "ROW-567b28a21d2746bc",
+          "context_id": "c-551",
+          "context": "0001859919 Mold-Rite Plastics, LLC, Containers, Packaging & Glass, Second Lien Third Out Term Loan 2024-06-30",
+          "conclusion": "confirmed_error",
+          "reading": "The matched current-period rate cell explicitly prints 12.4% PIK, while published pik_rate is blank and the coupon sits in interest_rate. Preserve the full PIK coupon from the printed cell, its spread where present, and avoid adding it twice under the cash-leg wrapper. This is disclosed PIK terms, not evidence of current payment/accrual.",
+          "published": {
+            "issuer_name": "Mold-Rite Plastics, LLC",
+            "instrument_description": "Second Lien Third Out Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "12.4",
+            "interest_rate_reported": "12.4",
+            "basis_spread": "7.000000000000001",
+            "fair_value": "6460000.0",
+            "cost": "6493000.0",
+            "principal_amount": "9788000.0",
+            "maturity_date": "NaT"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "Second Lien Third Out Term Loan SOFR + 7.00 %, 12.4 % PIK 06/24 09/29 9,788 6,493 6,460 0.4 % (5) (7) (8) (17)"
+          },
+          "source_neighbors": [
+            "1,914 1,941 1,914",
+            "",
+            "Mold-Rite Plastics, LLC Containers, Packaging & Glass Second Lien Second Out Term Loan SOFR + 7.00 %, 12.4 % PIK 06/24 09/29 3,216 2,608 2,600 0.1 % (5) (7) (8) (17)",
+            "13,004 9,101 9,060",
+            ""
+          ]
+        },
+        {
+          "row_id": "ROW-31177479d53e656d",
+          "context_id": "c-550",
+          "context": "0001859919 Mold-Rite Plastics, LLC, Containers, Packaging & Glass, Second Lien Second Out Term Loan 2024-06-30",
+          "conclusion": "confirmed_error",
+          "reading": "The matched current-period rate cell explicitly prints 12.4% PIK, while published pik_rate is blank and the coupon sits in interest_rate. Preserve the full PIK coupon from the printed cell, its spread where present, and avoid adding it twice under the cash-leg wrapper. This is disclosed PIK terms, not evidence of current payment/accrual.",
+          "published": {
+            "issuer_name": "Mold-Rite Plastics, LLC",
+            "instrument_description": "Second Lien Second Out Term Loan",
+            "shares_held": "",
+            "pik_rate": "",
+            "interest_rate": "12.4",
+            "interest_rate_reported": "12.4",
+            "basis_spread": "7.000000000000001",
+            "fair_value": "2600000.0",
+            "cost": "2608000.0",
+            "principal_amount": "3216000.0",
+            "maturity_date": "2029-09-30"
+          },
+          "source_row": {
+            "accession": "0001859919-24-000053",
+            "text": "Mold-Rite Plastics, LLC Containers, Packaging & Glass Second Lien Second Out Term Loan SOFR + 7.00 %, 12.4 % PIK 06/24 09/29 3,216 2,608 2,600 0.1 % (5) (7) (8) (17)"
+          },
+          "source_neighbors": [
+            "Modern Star Holdings Bidco Pty Limited Non-durable Consumer Goods First Lien Senior Secured Term Loan BBSY + 5.75 %, 10.5 % Cash 05/21 12/26 1,914 1,941 1,914 0.1 % (3) (5) (7) (8) (14) (28) (29)",
+            "1,914 1,941 1,914",
+            "",
+            "Second Lien Third Out Term Loan SOFR + 7.00 %, 12.4 % PIK 06/24 09/29 9,788 6,493 6,460 0.4 % (5) (7) (8) (17)",
+            "13,004 9,101 9,060"
+          ]
+        }
+      ],
+      "hypotheses_tested": [
+        "Reconstructed complete rule/quarter population from untouched rgA2 shadow/page_rule_findings.csv; joined every row_id to sandbox holdings.",
+        "Read original cached HTML facts by src_context_id, explicit context period, full containing schedule row and continuation neighbors; compared published amounts/instrument to locate the actual position, not the candidate printed_row alone.",
+        "Tested missing-name continuation versus true printed-label divergence and, where applicable, explicit share units or full PIK coupon versus margin. See each row_readings conclusion; mixed populations are not all errors."
+      ],
+      "next_action": "Review only: proposed mechanisms are per row_readings. Do not clear this mixed finding wholesale. Stage source-backed corrections and detector continuation repairs only in a separately authorized task."
+    },
+    {
+      "finding_id": "RVQ_REV_774c581fceb2",
+      "rule_name": "F28",
+      "report_date": "2026-06-30",
+      "coverage": {
+        "affected_rows": [
+          "0001859919|2026-06-30|fund_financials_holdings_coverage"
+        ],
+        "reviewed_rows": [
+          "0001859919|2026-06-30|fund_financials_holdings_coverage"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001859919-26-000068",
+          "text": "l Money Market Fund ( 0.4 %)* 11,007 11,006 Subtotal Short-term Investments ( 0.4 %)* 11,007 11,006 Total Investments, June 30, 2026 ( 191.8 %)* $ 5,498,743 $ 5,412,114 Derivative Instruments Interest Rate Swaps: Description Company Receives Company Pays Maturity Date Notional Amount Value Hedged Instrument Unrealized Appreciation (Depreciation) Interest rate swap (See Note 5) 6.00 % SOFR + 3.245 % 5/10/2027 $ 100,000 $ ( 1,157 ) Series D Notes $ ( 1,157 ) Interest rate swap (See Note 5) 6.00 % SOFR + 3.382 % 5/10/2027 $ 55,000 $ ( 711 ) Series E Notes ( 711 ) Interest rate swap (See Note 5) 6.15 % SOFR + 2.506 % 6/11/2030 $ 400,000 $ ( 4,777"
+        },
+        {
+          "accession": "0001859919-26-000068",
+          "text": "831 2,658 Deferred financing fees 14,395 9,462 Receivable from unsettled transactions 46,967 53,161 Total assets $ 5,746,896 $ 5,133,708 Liabilities: Accounts payable and accrued liabilities $ 4,695 $ 6,178 Share repurchases payable 146,583 103,353 Interest payable 26,016 17,247 Administrative fees payable 487 458 Base management fees payable 9,550 7,761 Incentive management fees payable - 5,165 Derivative liabilities 12,179 4,915 Payable from unsettled transactions 60,105 93,022 Borrowings under credit facilities 861,309 950,655 Debt securitization (net of deferred financing fees) 774,365 406,357 Notes payable (net of deferred financing fees"
+        },
+        {
+          "accession": "0001859919-26-000068",
+          "text": " Additional paid-in capital 2,927,033 2,880,632 Total distributable earnings ( 105,694 ) ( 39,401 ) Total net assets 2,821,480 2,841,371 Total liabilities and net assets $ 5,746,896 $ 5,133,708 Net asset value per share $ 19.92 $ 20.37 See accompanying notes. 3 Barings Private Credit Corporation Unaudited Consolidated Statements of Operations (in thousands, except share and per share data) Three Months Ended Three Months Ended Six Months Ended Six Months Ended June 30, 2026 June 30, 2025 June 30, 2026 June 30, 2025 Investment income: Interest income: Non-Control / Non-Affiliate investments $ 101,746 $ 80,578 $ 199,606 $ 149,483 Affiliate inve"
+        },
+        {
+          "accession": "0001859919-26-000068",
+          "text": "ree Months Ended June 30, 2026 Common Stock Additional Paid-In Capital Total Distributable Earnings Total Net Assets Number of Shares Par Value Balance, March 31, 2026 146,404,445 $ 146 $ 3,022,072 $ ( 88,026 ) $ 2,934,192 Net investment income - - - 83,992 83,992 Net realized loss on investments / foreign currency transactions / forward currency contracts - - - ( 9,748 ) ( 9,748 ) Net unrealized depreciation on investments / foreign currency transactions / forward currency contracts - - - ( 14,180 ) ( 14,180 ) Purchases of shares in repurchase plan ( 7,320,222 ) ( 7 ) ( 145,670 ) - ( 145,677 ) Dividends / distributions 363,494 - 7,286 ( 77,7"
+        },
+        {
+          "accession": "0001859919-26-000068",
+          "text": "s at fair value: Non-Control / Non-Affiliate investments (cost of $ 4,991,437 and $ 4,575,588 as of June 30, 2026 and December 31, 2025, respectively) $ 4,888,437 $ 4,535,770 Affiliate investments (cost of $ 465,268 and $ 277,870 as of June 30, 2026 and December 31, 2025, respectively) 478,834 296,233 Control investments (cost of $ 31,031 and $ 34,191 as of June 30, 2026 and December 31, 2025, respectively) 33,837 34,177 Short-term investments (cost of $ 11,007 and $ 10,810 as of June 30, 2026 and December 31, 2025, respectively) 11,006 10,809 Total investments at fair value 5,412,114 4,876,989 Cash (restricted cash of $ 27,633 and $ 11,146 a"
+        },
+        {
+          "accession": "0001859919-26-000068",
+          "text": " respectively) $ 4,888,437 $ 4,535,770 Affiliate investments (cost of $ 465,268 and $ 277,870 as of June 30, 2026 and December 31, 2025, respectively) 478,834 296,233 Control investments (cost of $ 31,031 and $ 34,191 as of June 30, 2026 and December 31, 2025, respectively) 33,837 34,177 Short-term investments (cost of $ 11,007 and $ 10,810 as of June 30, 2026 and December 31, 2025, respectively) 11,006 10,809 Total investments at fair value 5,412,114 4,876,989 Cash (restricted cash of $ 27,633 and $ 11,146 as of June 30, 2026 and December 31, 2025, respectively) 173,245 99,041 Foreign currencies (cost of $ 23,938 and $ 23,717 as of June 30, "
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "metrics": {
+        "sandbox_financial_rows": 1,
+        "sandbox_holdings_rows": 0,
+        "sandbox_filing_index_rows": 0,
+        "cached_source_investments_fv": 5412114000,
+        "cached_source_investments_cost": 5498743000,
+        "cached_source_short_term_fv": 11006000,
+        "cached_source_total_assets": 5746896000,
+        "cached_source_net_assets": 2821480000
+      },
+      "hypotheses_tested": [
+        "Reconstructed F28: fund_financials.csv has one companyfacts 2026q2 row, while DuckDB published-basis holdings counts have no June 2026 group; rgA2 filing index ends 2026-03-31.",
+        "The original cached 0001859919-26-000068 HTML exists (cached October 14); its actual June 2026 schedule and balance sheet print a nonzero current-period portfolio, including short-term investments. Thus this is not a formation quarter or a fund with no holdings.",
+        "Read period-labelled balance sheet: first column June 30, 2026 versus December 31, 2025 comparative. Investments sum 4,888,437+478,834+33,837+11,006=5,412,114 thousand; total assets 5,746,896 and net assets 2,821,480 thousand match the financial row. The schedule total includes short-term assets; no invented position keys."
+      ],
+      "next_action": "In separately authorized cached-data work, admit and extract the June filing and independently reconcile its complete holdings. Do not invent holdings from the fund total or suppress F28. This is historical rgA2 coverage evidence; it is not fund acceptance or a current canonical NAV-gap claim."
+    }
+  ],
+  "observations": [
+    {
+      "observation_key": "ocelot-takeback-loan-published-as-first-lien",
+      "what": "On ROW-0e396aae6ffd810a (2023-12-31), published instrument_description is First Lien Senior Secured Term Loan, but the original current-period row prints Super Senior Takeback Loan (171 principal/cost/FV). The next row is a distinct Takeback Term Loan (917), and the next is preferred stock; do not collapse them. Left unchanged in review-only scope. This is an additional field error on the issuer-name population.",
+      "field": "instrument_description",
+      "quarters": [
+        "2023-12-31"
+      ],
+      "fair_value_m": 0.171,
+      "cause": "fund",
+      "action": "left",
+      "suggested_check": "For a source-anchored schedule row with an explicit investment-type cell, compare normalized published instrument type with that cell; inherit blank cells only within a verified issuer group, and retain distinct tranches.",
+      "quote": {
+        "accession": "0001859919-24-000012",
+        "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 171 171 171 - % (7) (28)"
+      },
+      "detection_decision": {
+        "action": "propose_detector",
+        "rationale": "issuer_name_printed fired on this row, but tests the name, not its investment-type mismatch. No demonstrated untouched detector identifies this instrument error.",
+        "reference": "Proposed source-anchored investment-type comparison; no rule change authorized."
+      }
+    }
+  ],
+  "orchestrator_requests": [],
+  "excluded_prior_narrative_review": {
+    "finding_ids": [
+      "RVQ_REV_007d30f651c1",
+      "RVQ_REV_1afed1cd5747",
+      "RVQ_REV_67a3a145f57b",
+      "RVQ_REV_6bc0b073d107",
+      "RVQ_REV_8a52979dc148",
+      "RVQ_REV_e6e2cf9f53c8",
+      "RVQ_REV_fad9ae0c267e",
+      "RVQ_REV_fbc19b10c5ca"
+    ],
+    "source": "docs/investigations/v05_readings/reports/0001859919.json parked entries (lines 77-81); root selection revision removed these eight. Legacy F26 source coverage was incomplete; excluded does not mean fixed, accepted or resolved."
+  },
+  "counts": {
+    "selected_findings": 17,
+    "selected_position_rows": 69,
+    "reviewed_position_rows": 69,
+    "fund_quarter_metrics": 1,
+    "row_conclusions": {
+      "confirmed_error": 32,
+      "false_alarm": 32,
+      "source_ambiguity": 5
+    },
+    "finding_conclusions": {
+      "confirmed_error": 17
+    },
+    "observations": 1
+  },
+  "source_method": "Original cached HTML parsed independently by src_context_id; source_rows.json preserves contexts, all facts, and schedule rows with neighbors. Candidate-rule printed_row text was not accepted as source proof. Selected context periods all equal the report quarter; no selected comparative-period contexts were found. All monetary schedule amounts are thousands; explicit share units are unscaled. supplement.json stores complete fund-quarter counts and Perimeter group headings.",
+  "not_done": [
+    "No repairs, builds, tests, SEC calls, dispositions, ledger edits, canonical writes or commits.",
+    "No independent review yet; report is not fund acceptance and does not resolve any finding.",
+    "No whole-fund random sample or review of previously reviewed findings; four X11 diagnostic rows were reconstructed before root excluded the exact legacy targets and are not part of report coverage.",
+    "No claim that alias-name differences prove wrong legal obligors. Five Fitzmark rows remain source ambiguity about legal versus operating label.",
+    "Current canonical financial/NAV correctness was not assessed. rgA2 is an October 18 historical sandbox; later global financial backfill must not be inferred from it.",
+    "No exhaustive review of neighboring positions outside selected populations; selected-source neighbor checks informed continuation and instrument readings."
+  ]
+}

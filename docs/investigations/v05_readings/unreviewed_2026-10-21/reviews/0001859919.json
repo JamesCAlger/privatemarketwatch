@@ -1,0 +1,464 @@
+{
+  "reviewer_id": "/root/remaining_barings_check_sol",
+  "report_digest": "29bc08a9eccd8e731017059a187c327b5ff6dccaa0aef4d8fa8593a6ad7eda2d",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_057606c33e37",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2024-03-31. ROW-5fab3eab1099fb05: Ocelot Holdco LLC is the explicit issuer cell; published LL drops the final letter. The adjacent 917 takeback loan and preferred stock are distinct positions. Correcting the label must preserve these instruments. ROW-fb98218c97ee070d: The containing row explicitly names Finexvet; First Lien is in the investment-type cell. Same context, amounts and period establish an issuer extraction error. Source-label repair must preserve the separate next loan. ROW-63857fcd6747b5a1: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-5aea49f3e69568e9: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-2b23f1816a2778f8: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-19efc05563d05083: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-4bcc8655344c07e8: The matched current-period printed label is Fitzmark, Inc. and published/member label is FitzMark Buyer, LLC. The filing row alone does not settle operating-name versus legal-obligor equivalence. Source ambiguity and an evidence-backed alias investigation are appropriate; legal identity must not be overwritten on this evidence. ROW-772972c644ccb855: The issuer cell spells GPNZ II GmbH; published GPZN transposes letters. This supports label fidelity repair, without asserting a different legal entity. Row outcomes independently supported: {'confirmed_error': 3, 'false_alarm': 4, 'source_ambiguity': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 172 172 172 - % (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 9.9 % Cash 03/22 03/29 $ 7,343 $ 7,286 $ 7,141 0.4 % (3) (7) (8) (10) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,273 9,273 8,893 0.5 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 175 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 174 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.2 % Cash 05/21 12/26 4,205 4,165 4,146 0.3 % (6) (7) (8) (15) (28)"
+        },
+        {
+          "accession": "0001859919-24-000034",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.8 % Cash 06/22 06/29 465 446 220 - % (3) (5) (7) (8) (9) (27)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_1887292fcd4a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2024-06-30. ROW-b848fc0ce66bd1a6: Ocelot Holdco LLC is the explicit issuer cell; published LL drops the final letter. The adjacent 917 takeback loan and preferred stock are distinct positions. Correcting the label must preserve these instruments. ROW-212bbc81f9651d42: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-f5251f5a0c218532: The original preceding named issuer row, intervening same-group instruments and following subtotal identify this continuation as the published issuer. The flagged blank issuer cell is a detector false positive, not grounds to rename or merge the position. ROW-b3d067d87b8b8891: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-2931488cb0f5c7bf: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-1988a50301d55305: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-3d6797aa93ae72b1: The original preceding named issuer row, intervening same-group instruments and following subtotal identify this continuation as the published issuer. The flagged blank issuer cell is a detector false positive, not grounds to rename or merge the position. ROW-e4223990fb5d94e0: The original preceding named issuer row, intervening same-group instruments and following subtotal identify this continuation as the published issuer. The flagged blank issuer cell is a detector false positive, not grounds to rename or merge the position. ROW-a26d1fd1154746e1: The issuer cell spells GPNZ II GmbH; published GPZN transposes letters. This supports label fidelity repair, without asserting a different legal entity. Row outcomes independently supported: {'confirmed_error': 2, 'false_alarm': 7}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 172 172 172 - % (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,980 0.5 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Priority RCF SOFR + 8.00 %, 13.6 % Cash 06/24 12/26 - ( 9 ) ( 9 ) - % (7) (8) (16) (28) (29)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 177 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 176 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 178 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "First Lien Senior Secured Term Loan BBSY + 5.50 %, 10.0 % Cash 06/24 07/30 753 730 732 - % (3) (5) (7) (8) (14)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Royalty Rights N/A 05/24 N/A 9,678 9,678 0.6 % (7)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.9 % Cash 06/22 06/29 461 447 132 - % (3) (5) (7) (8) (9) (27)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_1ef15d7b80eb",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2023-12-31. ROW-0e396aae6ffd810a: Ocelot Holdco LLC is the explicit issuer cell; published LL drops the final letter. The adjacent 917 takeback loan and preferred stock are distinct positions. Correcting the label must preserve these instruments. ROW-a4edf4739e2952d7: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-aa9e5a036ecb8ad2: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-5a24b259afd4e366: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-1c0dd447bc5d4fc4: The matched printed issuer label differs from published FineLine label in this quarter. The report correctly confines this to source-label fidelity rather than claiming different legal entities. Preserve the source label separately from canonical alias identity. ROW-58c4099314790cdd: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-1638a62dc8cff8bf: The matched current-period printed label is Fitzmark, Inc. and published/member label is FitzMark Buyer, LLC. The filing row alone does not settle operating-name versus legal-obligor equivalence. Source ambiguity and an evidence-backed alias investigation are appropriate; legal identity must not be overwritten on this evidence. ROW-04c9667db7868c01: The issuer cell spells GPNZ II GmbH; published GPZN transposes letters. This supports label fidelity repair, without asserting a different legal entity. ROW-865ea2cfc6f9a66d: The containing row explicitly names Finexvet; First Lien is in the investment-type cell. Same context, amounts and period establish an issuer extraction error. Source-label repair must preserve the separate next loan. Row outcomes independently supported: {'confirmed_error': 4, 'false_alarm': 4, 'source_ambiguity': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 171 171 171 - % (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 166 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 173 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 02/28 3,409 3,370 3,406 0.3 % (6) (7) (8) (16)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,503 0.7 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 12/26 4,216 4,173 4,115 0.3 % (6) (7) (8) (16) (28)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 10.00 %, 13.8 % Cash 06/22 06/29 475 446 265 - % (3) (5) (7) (8) (9)"
+        },
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 6.25 %, 9.9 % Cash 03/22 03/29 2,485 2,395 2,426 0.2 % (3) (5) (7) (8) (11)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_275217b1d37a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2024-09-30. ROW-d670acf79f8014a2: The matched investment rate cell explicitly designates its full coupon PIK, while the corresponding published PIK field is empty and coupon appears as ordinary interest. Spread text is a margin, not an additional full coupon. This supports missing/misassigned disclosed PIK terms; current accrual or borrower distress is not established. Row outcomes independently supported: {'confirmed_error': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Preferred Equity ( 264 shares) 20.0 % PIK 04/24 N/A 294 290 - % (7)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_2a80efb06c5f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2023-03-31. ROW-8d1011741b02b22e: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-1a5278dd9f1940d2: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-968ceb3742467358: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-5110be9ae63000eb: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-2457e936055c352f: The issuer cell spells GPNZ II GmbH; published GPZN transposes letters. This supports label fidelity repair, without asserting a different legal entity. ROW-dcdde73de2275fa8: The matched current-period printed label is Fitzmark, Inc. and published/member label is FitzMark Buyer, LLC. The filing row alone does not settle operating-name versus legal-obligor equivalence. Source ambiguity and an evidence-backed alias investigation are appropriate; legal identity must not be overwritten on this evidence. Row outcomes independently supported: {'false_alarm': 4, 'confirmed_error': 1, 'source_ambiguity': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 161 - % (3) (6) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 166 - % (3) (6) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 172 - % (3) (6) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,185 0.7 % (3) (6) (33)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 7.9 % Cash, 1.0 % PIK 06/22 06/29 468 445 426 - % (3) (5) (6) (7) (11)"
+        },
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan LIBOR + 4.50 %, 9.5 % Cash 05/21 12/26 4,249 4,195 4,197 0.4 % (5) (6) (7) (9)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_2e81146d2ef8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2023-06-30. ROW-8095fd2d8b3a2e7e: Explicit shares fact uses shares/scale 0, not monetary scale 3; 36,533 printed shares contradict 36,532,680 published. The issuer header and adjacent subordinated loan establish this equity row, without rolling positions together. Row outcomes independently supported: {'confirmed_error': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Common Stock ( 36,533 shares) N/A 05/22 N/A 452 431 - % (3) (6) (30) (32)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_3a74ca5943f8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2023-09-30. ROW-1e71356a79af63fd: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-6d25434599795fd7: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-5b915241b36ec3c3: The matched printed issuer label differs from published FineLine label in this quarter. The report correctly confines this to source-label fidelity rather than claiming different legal entities. Preserve the source label separately from canonical alias identity. ROW-641c33e08b885fb8: The matched current-period printed label is Fitzmark, Inc. and published/member label is FitzMark Buyer, LLC. The filing row alone does not settle operating-name versus legal-obligor equivalence. Source ambiguity and an evidence-backed alias investigation are appropriate; legal identity must not be overwritten on this evidence. ROW-57f8d6d8b6a36e96: The issuer cell spells GPNZ II GmbH; published GPZN transposes letters. This supports label fidelity repair, without asserting a different legal entity. ROW-620416b563e61c1f: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-be07d1ded647095e: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-ee479e6a9e5f131e: The containing row explicitly names Finexvet; First Lien is in the investment-type cell. Same context, amounts and period establish an issuer extraction error. Source-label repair must preserve the separate next loan. Row outcomes independently supported: {'false_alarm': 4, 'confirmed_error': 3, 'source_ambiguity': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 163 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.1 % Cash 05/21 02/28 3,427 3,385 3,419 0.3 % (6) (7) (8) (16)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan SOFR + 4.50 %, 10.1 % Cash 05/21 12/26 4,227 4,180 4,190 0.3 % (6) (7) (8) (16) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.9 % Cash 06/22 06/29 456 445 325 - % (3) (5) (7) (8) (9)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 8,288 0.7 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 167 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Finexvet Consumer Cyclical First Lien Senior Secured Term Loan EURIBOR + 5.50 %, 9.6 % Cash 03/22 03/29 2,382 2,393 2,320 0.2 % (3) (5) (7) (8) (11)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_4198afa7d600",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2023-06-30. ROW-1fd973931a46e3af: The matched printed issuer label differs from published FineLine label in this quarter. The report correctly confines this to source-label fidelity rather than claiming different legal entities. Preserve the source label separately from canonical alias identity. ROW-ea5d31c231df560e: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-dbc9eb13290e5dcd: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-91d211a01f294a24: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-f234b5f752460e03: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-58b13f931a673937: The matched current-period printed label is Fitzmark, Inc. and published/member label is FitzMark Buyer, LLC. The filing row alone does not settle operating-name versus legal-obligor equivalence. Source ambiguity and an evidence-backed alias investigation are appropriate; legal identity must not be overwritten on this evidence. ROW-8b4296f02a166cba: The issuer cell spells GPNZ II GmbH; published GPZN transposes letters. This supports label fidelity repair, without asserting a different legal entity. Row outcomes independently supported: {'confirmed_error': 2, 'false_alarm': 4, 'source_ambiguity': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-23-000040",
+          "text": "FineLine Systems Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 10.3 % Cash 05/21 02/28 3,427 3,383 3,382 0.3 % (5) (6) (7) (18)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 05/27 182 182 165 - % (3) (6) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 05/27 9,274 9,274 7,982 0.7 % (3) (6) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 05/27 182 182 158 - % (3) (6) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 05/27 182 182 160 - % (3) (6) (32)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "Fitzmark, Inc. Cargo & Transportation First Lien Senior Secured Term Loan LIBOR + 4.50 %, 10.1 % Cash 05/21 12/26 4,238 4,187 4,194 0.3 % (5) (6) (7) (9)"
+        },
+        {
+          "accession": "0001859919-23-000040",
+          "text": "GPNZ II GmbH Healthcare First Lien Senior Secured Term Loan EURIBOR + 6.00 %, 9.4 % Cash 06/22 06/29 469 445 334 - % (3) (5) (6) (7) (11)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_5eb7b9a53163",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2025-03-31. ROW-79652852d080a844: The matched investment rate cell explicitly designates its full coupon PIK, while the corresponding published PIK field is empty and coupon appears as ordinary interest. Spread text is a margin, not an additional full coupon. This supports missing/misassigned disclosed PIK terms; current accrual or borrower distress is not established. ROW-ca0f51dbfda3bfb7: The matched investment rate cell explicitly designates its full coupon PIK, while the corresponding published PIK field is empty and coupon appears as ordinary interest. Spread text is a margin, not an additional full coupon. This supports missing/misassigned disclosed PIK terms; current accrual or borrower distress is not established. Row outcomes independently supported: {'confirmed_error': 2}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-25-000033",
+          "text": "Marmoutier Holding B.V. First Lien Senior Secured Term Loan EURIBOR + 6.50 %, 10.4 % PIK 12/21 12/28 2,654 2,415 ( 24 ) - % (3)(7)(8)(11) (28)(30)(31)"
+        },
+        {
+          "accession": "0001859919-25-000033",
+          "text": "The Caprock Group, Inc. (aka TA/TCG Holdings, LLC) Subordinated Term Loan SOFR + 7.75 %, 12.2 % PIK 10/21 10/28 5,656 5,598 5,656 0.3 % (7)(8)(17)(32)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6a3f83ea4e28",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2023-09-30. ROW-fcd18073a022e671: The matched investment rate cell explicitly designates its full coupon PIK, while the corresponding published PIK field is empty and coupon appears as ordinary interest. Spread text is a margin, not an additional full coupon. This supports missing/misassigned disclosed PIK terms; current accrual or borrower distress is not established. Row outcomes independently supported: {'confirmed_error': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-23-000073",
+          "text": "Rocade Holdings LLC Other Financial Preferred LP Units ( 75,000 units) SOFR + 6.0 % PIK, 11.4 % PIK 02/23 N/A 78,451 78,451 6.2 % (7) (28) (29)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6e1332b62e95",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2024-09-30. ROW-8b4671db35983686: The matched printed issuer label differs from published FineLine label in this quarter. The report correctly confines this to source-label fidelity rather than claiming different legal entities. Preserve the source label separately from canonical alias identity. ROW-085eb4bd0411d61c: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-8f4899ed363699b0: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-30dd8e4c207b8893: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-75476e816b39ee94: Class A explicitly names Perimeter in this same current-period schedule group; the flagged class is a following separate tranche before the subtotal. Blank repeated issuer cells are continuation, not wrong published issuer. Detector repair must respect issuer-group boundaries and retain each class. ROW-ce683b43bc928d8c: Ocelot Holdco LLC is the explicit issuer cell; published LL drops the final letter. The adjacent 917 takeback loan and preferred stock are distinct positions. Correcting the label must preserve these instruments. ROW-a461bb30b48fc4b2: The original preceding named issuer row, intervening same-group instruments and following subtotal identify this continuation as the published issuer. The flagged blank issuer cell is a detector false positive, not grounds to rename or merge the position. Row outcomes independently supported: {'confirmed_error': 2, 'false_alarm': 5}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-24-000075",
+          "text": "FineLine Technologies, Inc. Consumer Services First Lien Senior Secured Term Loan SOFR + 4.75 %, 9.4 % Cash 05/21 02/28 3,374 3,342 3,374 0.2 % (6) (7) (8) (13)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Structured Secured Note - Class B 5.4 % Cash 05/22 11/28 182 182 181 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Structured Secured Note - Class C 5.9 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Structured Secured Note - Class D 8.5 % Cash 05/22 11/28 182 182 180 - % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Structured Secured Note - Class E 11.4 % Cash 05/22 11/28 9,274 9,274 8,905 0.5 % (3) (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 172 172 172 - % (7) (28)"
+        },
+        {
+          "accession": "0001859919-24-000075",
+          "text": "Royalty Rights N/A 05/24 08/50 9,475 9,546 0.5 % (7)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_746fcf5566c6",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2024-12-31. ROW-e8aa2dbc831654a8: Revolver schedule prints EURIBOR margin 5.75 and PIK coupon 6.7; published PIK 5.75 and interest 12.45 confuse margin with coupon. The separate commitments row sharing the context is not the rate source. Source-led rate repair needs to avoid counting the PIK coupon twice. Row outcomes independently supported: {'confirmed_error': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-25-000013",
+          "text": "Marmoutier Holding B.V. Revolver EURIBOR + 5.75 %, 6.7 % PIK 12/21 06/27 109 104 ( 53 ) - % (3)(7)(8)(11) (28)(31)(32)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_757f60b2205c",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2023-03-31. ROW-160cb591b97af6b0: Explicit shares fact uses shares/scale 0, not monetary scale 3; 354,281 printed shares contradict 36,532,680 published. The issuer header and adjacent subordinated loan establish this equity row, without rolling positions together. Row outcomes independently supported: {'confirmed_error': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-23-000018",
+          "text": "Common Stock ( 354,281 shares) N/A 05/22 N/A 452 452 - % (3) (6) (31) (33)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_b96d4b690993",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2025-09-30. ROW-8b298162c891600f: The selected position explicitly prints TA KHP Aggregator, L.P., including separate stock and three loan/facility rows. Published sponsor-like Kline Hill label is not the printed borrower label. Label repair is supported; sponsor/borrower identity equivalence remains unproven. ROW-9ad534421078e919: The selected position explicitly prints TA KHP Aggregator, L.P., including separate stock and three loan/facility rows. Published sponsor-like Kline Hill label is not the printed borrower label. Label repair is supported; sponsor/borrower identity equivalence remains unproven. ROW-b3338bbdac41ed0b: The selected position explicitly prints TA KHP Aggregator, L.P., including separate stock and three loan/facility rows. Published sponsor-like Kline Hill label is not the printed borrower label. Label repair is supported; sponsor/borrower identity equivalence remains unproven. ROW-14578e77ae8d66cc: The selected position explicitly prints TA KHP Aggregator, L.P., including separate stock and three loan/facility rows. Published sponsor-like Kline Hill label is not the printed borrower label. Label repair is supported; sponsor/borrower identity equivalence remains unproven. ROW-60dc9cf2db4d436e: The selected context belongs to the 1,663 principal/1,619 FV EURIBOR Zelda Luxco S.A.S row. The preceding White Bidco row has 526 principal/518 FV and SOFR. Source contradicts the selected published issuer; this is not a blank-name continuation. Row outcomes independently supported: {'confirmed_error': 5}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-25-000087",
+          "text": "TA KHP Aggregator, L.P. Revolver SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 - ( 91 ) ( 87 ) - % (7)(16)(31)(32)"
+        },
+        {
+          "accession": "0001859919-25-000087",
+          "text": "TA KHP Aggregator, L.P. Subordinated Term Loan 12.5 % Cash 06/25 12/32 23,605 23,317 23,388 0.9 % (7)(32)"
+        },
+        {
+          "accession": "0001859919-25-000087",
+          "text": "TA KHP Aggregator, L.P. Common Stock 06/25 496,461 496 491 - % (7)(27)"
+        },
+        {
+          "accession": "0001859919-25-000087",
+          "text": "TA KHP Aggregator, L.P. First Lien Senior Secured Term Loan SOFR + 4.50 %, 8.5 % Cash 06/25 06/32 21,717 21,278 21,300 0.8 % (7)(8)(16)(30) (31)"
+        },
+        {
+          "accession": "0001859919-25-000087",
+          "text": "Zelda Luxco S.A.S First Lien Senior Secured Term Loan EURIBOR + 5.25 %, 7.2 % Cash 07/25 07/32 1,663 1,605 1,619 0.1 % (3)(6)(7)(8)(11)(30)(31)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_cbb7be0a797a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2023-12-31. ROW-3a475b318bc4e8dd: The matched investment rate cell explicitly designates its full coupon PIK, while the corresponding published PIK field is empty and coupon appears as ordinary interest. Spread text is a margin, not an additional full coupon. This supports missing/misassigned disclosed PIK terms; current accrual or borrower distress is not established. Row outcomes independently supported: {'confirmed_error': 1}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Rocade Holdings LLC Other Financial Preferred LP Units ( 108,000 units) SOFR + 6.0 % PIK, 11.3 % PIK 02/23 N/A 114,113 114,113 8.7 % (7) (16) (28) (29)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e065fe4462ac",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently rebuilt rule/quarter population and joined original sandbox row IDs; exact affected/reviewed sets match. Original context dates match 2024-06-30. ROW-567b28a21d2746bc: The matched investment rate cell explicitly designates its full coupon PIK, while the corresponding published PIK field is empty and coupon appears as ordinary interest. Spread text is a margin, not an additional full coupon. This supports missing/misassigned disclosed PIK terms; current accrual or borrower distress is not established. ROW-31177479d53e656d: The matched investment rate cell explicitly designates its full coupon PIK, while the corresponding published PIK field is empty and coupon appears as ordinary interest. Spread text is a margin, not an additional full coupon. This supports missing/misassigned disclosed PIK terms; current accrual or borrower distress is not established. Row outcomes independently supported: {'confirmed_error': 2}. Aggregate confirmed_error means at least one error, not that every row is erroneous. Hypotheses and separately authorized next actions are proportionate; no findings are cleared by this review.",
+      "evidence": [
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Second Lien Third Out Term Loan SOFR + 7.00 %, 12.4 % PIK 06/24 09/29 9,788 6,493 6,460 0.4 % (5) (7) (8) (17)"
+        },
+        {
+          "accession": "0001859919-24-000053",
+          "text": "Mold-Rite Plastics, LLC Containers, Packaging & Glass Second Lien Second Out Term Loan SOFR + 7.00 %, 12.4 % PIK 06/24 09/29 3,216 2,608 2,600 0.1 % (5) (7) (8) (17)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_774c581fceb2",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently queried rgA2 financials, filing index, validation and holdings: June 2026 has one financial row, F28 fund=True/holdings=False, no holdings and no filing-index entry. Original June 30, 2026 versus December 31, 2025 balance sheet has current investments 4,888,437+478,834+33,837+11,006=5,412,114 thousand, assets 5,746,896 and net assets 2,821,480 thousand. The current schedule independently totals cost 5,498,743 and FV 5,412,114 thousand including money-market assets. This supports historical sandbox coverage error, not formation/no portfolio or present canonical metric failure. Admission/extraction and independent full reconciliation are the appropriate later task; totals cannot substitute for positions.",
+      "evidence": [
+        {
+          "accession": "0001859919-26-000068",
+          "text": "Total investments at fair value 5,412,114 4,876,989"
+        },
+        {
+          "accession": "0001859919-26-000068",
+          "text": "Total Investments, June 30, 2026 ( 191.8 %)* $ 5,498,743 $ 5,412,114"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "ocelot-takeback-loan-published-as-first-lien",
+      "outcome": "supported",
+      "rationale": "Original current-period 171/171/171 row explicitly says Super Senior Takeback Loan while sandbox description says First Lien Senior Secured Term Loan. The following 917 Takeback Term Loan and preferred stock establish separate tranches. The proposed explicit investment-type cell comparison addresses this extra field error; issuer_name_printed does not test it and preferred_printed concerns preferred/common equity. Verified group-bounded inheritance avoids turning blank continuation cells into false positives. This is a detector proposal requiring subsequent implementation validation, not an approved rule or repair.",
+      "evidence": [
+        {
+          "accession": "0001859919-24-000012",
+          "text": "Ocelot Holdco LLC Construction Machinery Super Senior Takeback Loan 10.0 % Cash 10/23 10/27 171 171 171 - % (7) (28)"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "scope": "17 selected findings only; 69 position rows plus one fund-quarter metric; 8 legacy findings excluded. No whole-fund random sample or fund acceptance.",
+  "limitations": [
+    "Five legal/operating alias relationships remain source ambiguity; printed labels do not prove different legal obligors.",
+    "Disclosed PIK terms do not establish current PIK accrual or distress.",
+    "Review concerns frozen rgA2 outputs, not later canonical correctness.",
+    "No repairs, builds, tests, network calls, dispositions, ledger edits or publication."
+  ]
+}

@@ -1,0 +1,1435 @@
+[
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001859919",
+        "reason":  "Owner excludes already-reviewed items; structured filter missed exact legacy narrative finding/quarter reviews. Review completeness is not resolution.",
+        "source":  "docs/investigations/v05_readings/reports/0001859919.json:77",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_REV_007d30f651c1",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001859919",
+                                     "rule_name":  "F26",
+                                     "report_date":  "2024-09-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2882.519000",
+                                     "finding_id":  "RVQ_REV_007d30f651c1",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_1afed1cd5747",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001859919",
+                                     "rule_name":  "F26",
+                                     "report_date":  "2024-03-31",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2568.911000",
+                                     "finding_id":  "RVQ_REV_1afed1cd5747",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_67a3a145f57b",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001859919",
+                                     "rule_name":  "F26",
+                                     "report_date":  "2025-06-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "4033.847000",
+                                     "finding_id":  "RVQ_REV_67a3a145f57b",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_6bc0b073d107",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001859919",
+                                     "rule_name":  "F26",
+                                     "report_date":  "2023-12-31",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2458.929000",
+                                     "finding_id":  "RVQ_REV_6bc0b073d107",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_8a52979dc148",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001859919",
+                                     "rule_name":  "X11",
+                                     "report_date":  "2023-06-30",
+                                     "lane":  "review",
+                                     "engine":  "row_validation",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2225.586000",
+                                     "finding_id":  "RVQ_REV_8a52979dc148",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_e6e2cf9f53c8",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001859919",
+                                     "rule_name":  "F26",
+                                     "report_date":  "2025-09-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "4479.835000",
+                                     "finding_id":  "RVQ_REV_e6e2cf9f53c8",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_fad9ae0c267e",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001859919",
+                                     "rule_name":  "F26",
+                                     "report_date":  "2023-09-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2305.959000",
+                                     "finding_id":  "RVQ_REV_fad9ae0c267e",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_fbc19b10c5ca",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001859919",
+                                     "rule_name":  "X11",
+                                     "report_date":  "2023-03-31",
+                                     "lane":  "review",
+                                     "engine":  "row_validation",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2271.398000",
+                                     "finding_id":  "RVQ_REV_fbc19b10c5ca",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "limitation":  "Legacy F26 source coverage is incomplete; excluded as previously agent-reviewed, not independently accepted."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001913724",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001913724.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_REV_02d27ad8c161",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001913724",
+                                     "rule_name":  "F16",
+                                     "report_date":  "2022-12-31",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "",
+                                     "finding_id":  "RVQ_REV_02d27ad8c161",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_24798f5b197b",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001913724",
+                                     "rule_name":  "F16",
+                                     "report_date":  "2023-09-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1212.376000",
+                                     "finding_id":  "RVQ_REV_24798f5b197b",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_4ecd75ff6f79",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001913724",
+                                     "rule_name":  "F16",
+                                     "report_date":  "2023-06-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "984.342000",
+                                     "finding_id":  "RVQ_REV_4ecd75ff6f79",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_REV_02d27ad8c161",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F16 2022-12-31, 2023-06-30, 2023-09-30",
+                                                        "hypotheses":  [
+                                                                           "The published income_yield_pct (2.4, 2.1, 2.8) is not any ratio the page prints: the 10-Q for 2023-09-30 prints \u0027Ratio of net investment income (loss) after taxes to average net assets (4)(5)(9) 6.8 % 2.2 %\u0027 (nine months, not annualised), the 10-Q for 2023-06-30 \u00274.0 % ( 0.5 )%\u0027 (six months). The 2023-09-30 instance has no InvestmentCompanyInvestmentIncomeLossRatio fact, so the published figure comes from companyfacts on a context I did not trace. distribution_rate is annualised from monthly 0.18 / 0.19 distributions (8.4, 8.8 pct), so F16 compares an annualised rate with what looks like a single-quarter ratio; annualised (x4) the ratio would pass the check in all three quarters.",
+                                                                           "2022-12-31: the only distribution of the year, 0.75 declared 12/19/2022, is annualised as a quarterly figure (11.9 pct); the fund operated only from mid-2022 (\u0027The Company did not commence operations as of December 31, 2022\u0027 refers to the Company before the merger with the Private BDC).",
+                                                                           "Fix would be highlights figure_corrections for income_yield_pct with the printed ratio (as Monroe), but the printed ratio is year-to-date and not annualised, so it is not comparable either; I did not choose a basis. Also: distribution_rate and income_yield_pct are empty from 2023-12-31 on (coverage gap, no finding)."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_24798f5b197b",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F16 2022-12-31, 2023-06-30, 2023-09-30",
+                                                        "hypotheses":  [
+                                                                           "The published income_yield_pct (2.4, 2.1, 2.8) is not any ratio the page prints: the 10-Q for 2023-09-30 prints \u0027Ratio of net investment income (loss) after taxes to average net assets (4)(5)(9) 6.8 % 2.2 %\u0027 (nine months, not annualised), the 10-Q for 2023-06-30 \u00274.0 % ( 0.5 )%\u0027 (six months). The 2023-09-30 instance has no InvestmentCompanyInvestmentIncomeLossRatio fact, so the published figure comes from companyfacts on a context I did not trace. distribution_rate is annualised from monthly 0.18 / 0.19 distributions (8.4, 8.8 pct), so F16 compares an annualised rate with what looks like a single-quarter ratio; annualised (x4) the ratio would pass the check in all three quarters.",
+                                                                           "2022-12-31: the only distribution of the year, 0.75 declared 12/19/2022, is annualised as a quarterly figure (11.9 pct); the fund operated only from mid-2022 (\u0027The Company did not commence operations as of December 31, 2022\u0027 refers to the Company before the merger with the Private BDC).",
+                                                                           "Fix would be highlights figure_corrections for income_yield_pct with the printed ratio (as Monroe), but the printed ratio is year-to-date and not annualised, so it is not comparable either; I did not choose a basis. Also: distribution_rate and income_yield_pct are empty from 2023-12-31 on (coverage gap, no finding)."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_4ecd75ff6f79",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F16 2022-12-31, 2023-06-30, 2023-09-30",
+                                                        "hypotheses":  [
+                                                                           "The published income_yield_pct (2.4, 2.1, 2.8) is not any ratio the page prints: the 10-Q for 2023-09-30 prints \u0027Ratio of net investment income (loss) after taxes to average net assets (4)(5)(9) 6.8 % 2.2 %\u0027 (nine months, not annualised), the 10-Q for 2023-06-30 \u00274.0 % ( 0.5 )%\u0027 (six months). The 2023-09-30 instance has no InvestmentCompanyInvestmentIncomeLossRatio fact, so the published figure comes from companyfacts on a context I did not trace. distribution_rate is annualised from monthly 0.18 / 0.19 distributions (8.4, 8.8 pct), so F16 compares an annualised rate with what looks like a single-quarter ratio; annualised (x4) the ratio would pass the check in all three quarters.",
+                                                                           "2022-12-31: the only distribution of the year, 0.75 declared 12/19/2022, is annualised as a quarterly figure (11.9 pct); the fund operated only from mid-2022 (\u0027The Company did not commence operations as of December 31, 2022\u0027 refers to the Company before the merger with the Private BDC).",
+                                                                           "Fix would be highlights figure_corrections for income_yield_pct with the printed ratio (as Monroe), but the printed ratio is year-to-date and not annualised, so it is not comparable either; I did not choose a basis. Also: distribution_rate and income_yield_pct are empty from 2023-12-31 on (coverage gap, no finding)."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001993402",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001993402.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_BLK_806d032e2f7c",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001993402",
+                                     "rule_name":  "A01",
+                                     "report_date":  "2024-03-31",
+                                     "lane":  "blocker",
+                                     "engine":  "oracle",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "479.854000",
+                                     "finding_id":  "RVQ_BLK_806d032e2f7c",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_1d2f90bc8ac2",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001993402",
+                                     "rule_name":  "C04",
+                                     "report_date":  "2024-06-30",
+                                     "lane":  "review",
+                                     "engine":  "oracle",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1031.913000",
+                                     "finding_id":  "RVQ_REV_1d2f90bc8ac2",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_54721d82e156",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001993402",
+                                     "rule_name":  "C04",
+                                     "report_date":  "2025-03-31",
+                                     "lane":  "review",
+                                     "engine":  "oracle",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2656.248000",
+                                     "finding_id":  "RVQ_REV_54721d82e156",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_650b38ae9298",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001993402",
+                                     "rule_name":  "C04",
+                                     "report_date":  "2024-12-31",
+                                     "lane":  "review",
+                                     "engine":  "oracle",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2131.829000",
+                                     "finding_id":  "RVQ_REV_650b38ae9298",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_7538e1af662f",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001993402",
+                                     "rule_name":  "C04",
+                                     "report_date":  "2024-03-31",
+                                     "lane":  "review",
+                                     "engine":  "oracle",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "479.854000",
+                                     "finding_id":  "RVQ_REV_7538e1af662f",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_8ccdd18a4c05",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001993402",
+                                     "rule_name":  "C04",
+                                     "report_date":  "2025-06-30",
+                                     "lane":  "review",
+                                     "engine":  "oracle",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "3160.570000",
+                                     "finding_id":  "RVQ_REV_8ccdd18a4c05",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_e6999aac20d7",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001993402",
+                                     "rule_name":  "C04",
+                                     "report_date":  "2024-09-30",
+                                     "lane":  "review",
+                                     "engine":  "oracle",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1565.598000",
+                                     "finding_id":  "RVQ_REV_e6999aac20d7",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_BLK_806d032e2f7c",
+                                          "prior":  {
+                                                        "finding":  "oracle A01 2024-03-31",
+                                                        "hypotheses":  [
+                                                                           "Rollup \u0027Investments - non-controlled/non-affiliated Secured Debt Diversified Consumer Services\u0027 carries 41,330,000 (page subtotal \u002741,332 41,330 13.69\u0027); its children sum 34,086,000; the 7,244,000 gap is not on a single member (fact_members.py finds no context with 7,244,000). Likely several rows on members spelled differently (e.g. \u0027Debt Diversified Consumer Services ...\u0027 without \u0027Secured\u0027), as in the other three quarters; not located row by row in time. Published equals filed at 2024-03-31, so no published value is shown wrong."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_1d2f90bc8ac2",
+                                          "prior":  {
+                                                        "finding":  "oracle C04 2024-03-31 2024-06-30 2024-09-30 2024-12-31 2025-03-31 2025-06-30",
+                                                        "hypotheses":  [
+                                                                           "Reading A (counts are in thousands): the schedule header prints \u0027(in thousands)\u0027 with no exception for shares, while the balance sheet header prints \u0027except share and per share amounts\u0027; the filer\u0027s own tags to 2025-06-30 put the printed count on the principal concept at decimals -3 (Holocene Topco preferred printed 136, tagged InvestmentOwnedBalancePrincipalAmount 136000). Under A, wrapper key units_tagged_as_par for the six accessions publishes 136,000, and the share tags from 2025-09-30 (unscaled) are 1,000 times too small.",
+                                                                           "Reading B (counts are as printed): from 2025-09-30 the filer tags the same counts with InvestmentOwnedBalanceShares unscaled (RxSense Holdings Group 14 at 2025-09-30, 2025-12-31 and 2026-03-31, printed 14). Under B, the early principal tags are the printed count x1000 by the schedule\u0027s scale and should be divided by 1,000; no wrapper key does that today.",
+                                                                           "Either reading applied alone breaks every equity chain by a factor of 1,000 at 2025-09-30. Needs the owner\u0027s ruling on the scale before anything is set; 36 to 65 equity rows a quarter."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_54721d82e156",
+                                          "prior":  {
+                                                        "finding":  "oracle C04 2024-03-31 2024-06-30 2024-09-30 2024-12-31 2025-03-31 2025-06-30",
+                                                        "hypotheses":  [
+                                                                           "Reading A (counts are in thousands): the schedule header prints \u0027(in thousands)\u0027 with no exception for shares, while the balance sheet header prints \u0027except share and per share amounts\u0027; the filer\u0027s own tags to 2025-06-30 put the printed count on the principal concept at decimals -3 (Holocene Topco preferred printed 136, tagged InvestmentOwnedBalancePrincipalAmount 136000). Under A, wrapper key units_tagged_as_par for the six accessions publishes 136,000, and the share tags from 2025-09-30 (unscaled) are 1,000 times too small.",
+                                                                           "Reading B (counts are as printed): from 2025-09-30 the filer tags the same counts with InvestmentOwnedBalanceShares unscaled (RxSense Holdings Group 14 at 2025-09-30, 2025-12-31 and 2026-03-31, printed 14). Under B, the early principal tags are the printed count x1000 by the schedule\u0027s scale and should be divided by 1,000; no wrapper key does that today.",
+                                                                           "Either reading applied alone breaks every equity chain by a factor of 1,000 at 2025-09-30. Needs the owner\u0027s ruling on the scale before anything is set; 36 to 65 equity rows a quarter."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_650b38ae9298",
+                                          "prior":  {
+                                                        "finding":  "oracle C04 2024-03-31 2024-06-30 2024-09-30 2024-12-31 2025-03-31 2025-06-30",
+                                                        "hypotheses":  [
+                                                                           "Reading A (counts are in thousands): the schedule header prints \u0027(in thousands)\u0027 with no exception for shares, while the balance sheet header prints \u0027except share and per share amounts\u0027; the filer\u0027s own tags to 2025-06-30 put the printed count on the principal concept at decimals -3 (Holocene Topco preferred printed 136, tagged InvestmentOwnedBalancePrincipalAmount 136000). Under A, wrapper key units_tagged_as_par for the six accessions publishes 136,000, and the share tags from 2025-09-30 (unscaled) are 1,000 times too small.",
+                                                                           "Reading B (counts are as printed): from 2025-09-30 the filer tags the same counts with InvestmentOwnedBalanceShares unscaled (RxSense Holdings Group 14 at 2025-09-30, 2025-12-31 and 2026-03-31, printed 14). Under B, the early principal tags are the printed count x1000 by the schedule\u0027s scale and should be divided by 1,000; no wrapper key does that today.",
+                                                                           "Either reading applied alone breaks every equity chain by a factor of 1,000 at 2025-09-30. Needs the owner\u0027s ruling on the scale before anything is set; 36 to 65 equity rows a quarter."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_7538e1af662f",
+                                          "prior":  {
+                                                        "finding":  "oracle C04 2024-03-31 2024-06-30 2024-09-30 2024-12-31 2025-03-31 2025-06-30",
+                                                        "hypotheses":  [
+                                                                           "Reading A (counts are in thousands): the schedule header prints \u0027(in thousands)\u0027 with no exception for shares, while the balance sheet header prints \u0027except share and per share amounts\u0027; the filer\u0027s own tags to 2025-06-30 put the printed count on the principal concept at decimals -3 (Holocene Topco preferred printed 136, tagged InvestmentOwnedBalancePrincipalAmount 136000). Under A, wrapper key units_tagged_as_par for the six accessions publishes 136,000, and the share tags from 2025-09-30 (unscaled) are 1,000 times too small.",
+                                                                           "Reading B (counts are as printed): from 2025-09-30 the filer tags the same counts with InvestmentOwnedBalanceShares unscaled (RxSense Holdings Group 14 at 2025-09-30, 2025-12-31 and 2026-03-31, printed 14). Under B, the early principal tags are the printed count x1000 by the schedule\u0027s scale and should be divided by 1,000; no wrapper key does that today.",
+                                                                           "Either reading applied alone breaks every equity chain by a factor of 1,000 at 2025-09-30. Needs the owner\u0027s ruling on the scale before anything is set; 36 to 65 equity rows a quarter."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_8ccdd18a4c05",
+                                          "prior":  {
+                                                        "finding":  "oracle C04 2024-03-31 2024-06-30 2024-09-30 2024-12-31 2025-03-31 2025-06-30",
+                                                        "hypotheses":  [
+                                                                           "Reading A (counts are in thousands): the schedule header prints \u0027(in thousands)\u0027 with no exception for shares, while the balance sheet header prints \u0027except share and per share amounts\u0027; the filer\u0027s own tags to 2025-06-30 put the printed count on the principal concept at decimals -3 (Holocene Topco preferred printed 136, tagged InvestmentOwnedBalancePrincipalAmount 136000). Under A, wrapper key units_tagged_as_par for the six accessions publishes 136,000, and the share tags from 2025-09-30 (unscaled) are 1,000 times too small.",
+                                                                           "Reading B (counts are as printed): from 2025-09-30 the filer tags the same counts with InvestmentOwnedBalanceShares unscaled (RxSense Holdings Group 14 at 2025-09-30, 2025-12-31 and 2026-03-31, printed 14). Under B, the early principal tags are the printed count x1000 by the schedule\u0027s scale and should be divided by 1,000; no wrapper key does that today.",
+                                                                           "Either reading applied alone breaks every equity chain by a factor of 1,000 at 2025-09-30. Needs the owner\u0027s ruling on the scale before anything is set; 36 to 65 equity rows a quarter."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_e6999aac20d7",
+                                          "prior":  {
+                                                        "finding":  "oracle C04 2024-03-31 2024-06-30 2024-09-30 2024-12-31 2025-03-31 2025-06-30",
+                                                        "hypotheses":  [
+                                                                           "Reading A (counts are in thousands): the schedule header prints \u0027(in thousands)\u0027 with no exception for shares, while the balance sheet header prints \u0027except share and per share amounts\u0027; the filer\u0027s own tags to 2025-06-30 put the printed count on the principal concept at decimals -3 (Holocene Topco preferred printed 136, tagged InvestmentOwnedBalancePrincipalAmount 136000). Under A, wrapper key units_tagged_as_par for the six accessions publishes 136,000, and the share tags from 2025-09-30 (unscaled) are 1,000 times too small.",
+                                                                           "Reading B (counts are as printed): from 2025-09-30 the filer tags the same counts with InvestmentOwnedBalanceShares unscaled (RxSense Holdings Group 14 at 2025-09-30, 2025-12-31 and 2026-03-31, printed 14). Under B, the early principal tags are the printed count x1000 by the schedule\u0027s scale and should be divided by 1,000; no wrapper key does that today.",
+                                                                           "Either reading applied alone breaks every equity chain by a factor of 1,000 at 2025-09-30. Needs the owner\u0027s ruling on the scale before anything is set; 36 to 65 equity rows a quarter."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0002031750",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0002031750.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_BLK_766d82fa062d",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0002031750",
+                                     "rule_name":  "income_identity",
+                                     "report_date":  "2024-12-31",
+                                     "lane":  "blocker",
+                                     "engine":  "identity",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "339.136000",
+                                     "finding_id":  "RVQ_BLK_766d82fa062d",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_BLK_766d82fa062d",
+                                          "prior":  {
+                                                        "finding":  "identity income_identity 2024-12-31",
+                                                        "hypotheses":  [
+                                                                           "The 10-K covers May 7 to Dec 31, 2024 (8 months). fund_financials prorates it by 3/8: total_investment_income 4,646,250 = 12,390k x 3/8, total_expenses 3,873,750 = 10,330k x 3/8, NII 2,714,625 = 7,239k x 3/8; net_expenses 4,393k and gross_investment_income 12,311k are the true fourth quarter (year less Q3). The check mixes the two bases. The published quarter income is an approximation, not the printed or derived Q4 figure (12,311k). A fix belongs in the shared quarterisation of an inception-period 10-K (fund_financials), not in this fund\u0027s settings; no wrapper key expresses it.",
+                                                                           "Not a recoupment or waiver mismatch: Q4 net expenses 5,151 - 758 = 4,393 matches.",
+                                                                           "Printed: \u0027Total income 12,390\u0027 and \u0027Net expenses 5,151 Net investment income before income taxes 7,239\u0027 (10-K 0001628280-25-012670)."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001508655",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001508655.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_REV_4723f5b210c4",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001508655",
+                                     "rule_name":  "html_carry",
+                                     "report_date":  "2022-06-30",
+                                     "lane":  "review",
+                                     "engine":  "html_extract",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "",
+                                     "finding_id":  "RVQ_REV_4723f5b210c4",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_REV_4723f5b210c4",
+                                          "prior":  {
+                                                        "finding":  "html_extract html_carry 2022-03-31, 2022-06-30",
+                                                        "hypotheses":  [
+                                                                           "The 2022 filings carry no position tags (InvestmentIdentifierAxis count 0), so no 2022 quarter is published; the HTML lane extracts 139 rows (3.43B) at 2022-03-31 and 76 rows (2.47B) at 2022-06-30 against a printed total of 2,536.4M at 2022-06-30, and its cross-quarter carry fails.",
+                                                                           "This is a gap (a printed schedule not published), not as-filed; fixing it needs per-CIK HTML template work for the 2017_8col_split_rate variant, outside this run."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001950803",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001950803.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_BLK_b4acc012ebd0",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001950803",
+                                     "rule_name":  "A01",
+                                     "report_date":  "2024-06-30",
+                                     "lane":  "blocker",
+                                     "engine":  "oracle",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "941.329435",
+                                     "finding_id":  "RVQ_BLK_b4acc012ebd0",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_BLK_b4acc012ebd0",
+                                          "prior":  {
+                                                        "finding":  "oracle A01 2024-06-30",
+                                                        "hypotheses":  [
+                                                                           "Research \u0026 Consulting subtotal printed 45,708,751; published rows whose member names that industry sum to 41,556,875 (15 rows). Tested: rows of the printed block tagged under another industry member (only Liberty Purchaser revolver, 0 value) - does not explain the 4,151,876. The quarter\u0027s total ties, so the difference sits in another industry\u0027s rows; not traced."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001920453",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001920453.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_BLK_abb1c157fe07",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001920453",
+                                     "rule_name":  "income_identity",
+                                     "report_date":  "2024-12-31",
+                                     "lane":  "blocker",
+                                     "engine":  "identity",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1369.240440",
+                                     "finding_id":  "RVQ_BLK_abb1c157fe07",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_BLK_abb1c157fe07",
+                                          "prior":  {
+                                                        "finding":  "identity income_identity 2024-12-31",
+                                                        "hypotheses":  [
+                                                                           "Published total_investment_income for the 10-K quarter is the annual figure divided by four (28,316,788.5 = 113,267,154 / 4); the quarter is 113,267,154 - 77,358,333 (nine months) = 35,908,821. Net expenses (16,843,175) and NII are the true quarter, so the identity fails. Real error, not as filed.",
+                                                                           "Fix route 1: highlights figure_corrections cannot set it: total_investment_income is pinned as not correctable (tests/test_fund_highlights_wrapper.py::test_an_income_statement_total_is_still_not_a_correctable_figure). Changing that pin is the owner\u0027s call.",
+                                                                           "Fix route 2: bdc_fund_income derives a 10-K quarter as annual minus three quarters only when all three quarters carry the figure; this fund\u0027s 2024-03-31 total_investment_income is empty (only interest income 19,809,098 tagged), so it falls back to annual / 4. Same fallback on 2023q4 and 2025q4 (cross_source xs_nii/xs_tii advisories). Shared code; not changed here."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001786108",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001786108.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_REV_05e3e3f69f41",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2023-03-31",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1091.531000",
+                                     "finding_id":  "RVQ_REV_05e3e3f69f41",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_12be05ff03f9",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2025-12-31",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2418.074000",
+                                     "finding_id":  "RVQ_REV_12be05ff03f9",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_1512c9277fba",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2023-06-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1148.018000",
+                                     "finding_id":  "RVQ_REV_1512c9277fba",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_3af9a6d15405",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2025-09-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2192.360000",
+                                     "finding_id":  "RVQ_REV_3af9a6d15405",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_43b43dd9bace",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2024-09-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1686.862000",
+                                     "finding_id":  "RVQ_REV_43b43dd9bace",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_61f4de29e41e",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2024-06-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1424.815000",
+                                     "finding_id":  "RVQ_REV_61f4de29e41e",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_671e6a5a8f22",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2023-12-31",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1272.652000",
+                                     "finding_id":  "RVQ_REV_671e6a5a8f22",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_6ef02ed7e60c",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2025-03-31",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1792.689000",
+                                     "finding_id":  "RVQ_REV_6ef02ed7e60c",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_98fa8fcdfaa7",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2023-09-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1116.552000",
+                                     "finding_id":  "RVQ_REV_98fa8fcdfaa7",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_a1eaa21648d8",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2024-12-31",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1725.570000",
+                                     "finding_id":  "RVQ_REV_a1eaa21648d8",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_b91131c864f2",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2024-03-31",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1363.862000",
+                                     "finding_id":  "RVQ_REV_b91131c864f2",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_c056cf7787aa",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2026-06-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "2732.301000",
+                                     "finding_id":  "RVQ_REV_c056cf7787aa",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_e788d906e4f6",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001786108",
+                                     "rule_name":  "F27",
+                                     "report_date":  "2025-06-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1978.330000",
+                                     "finding_id":  "RVQ_REV_e788d906e4f6",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_REV_05e3e3f69f41",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_12be05ff03f9",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_1512c9277fba",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_3af9a6d15405",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_43b43dd9bace",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_61f4de29e41e",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_671e6a5a8f22",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_6ef02ed7e60c",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_98fa8fcdfaa7",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_a1eaa21648d8",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_b91131c864f2",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_c056cf7787aa",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_e788d906e4f6",
+                                          "prior":  {
+                                                        "finding":  "fund_financials F27 x13 (2023-03-31 to 2026-06-30, not 2026-03-31)",
+                                                        "hypotheses":  [
+                                                                           "Real, not as filed: the income yield exceeds the published holdings rate by 3.8 to 7.0 points because on about 100 floating loans per quarter the published interest_rate is the FLOOR of the printed formula (\u0027Prime + 4.0 % or Floor rate 11.5 %\u0027 publishes 11.5). The shared identifier-text reader (pipeline/staging_bdc.py, _text_interest_rate) reads \u0027Floor rate\u0027 as the rate on purpose.",
+                                                                           "Fix options, each an owner decision with about 1,450 rows over 14 quarters: (a) withdraw the floor (rate null, spread and reference kept; the fund then joins f27-wac-from-fixed-rate-rows-only-floating-coupons-not-printed), by a wrapper-gated switch in the text reader (shared code) or by row corrections; (b) compute max(reference on the date + spread, floor) as a labelled derived rate, which the convention does not cover today.",
+                                                                           "Not done here: the change moves a published figure on half the loan book and the convention for a formula-only filer is not settled."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001901612",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001901612.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_BLK_e89e1b84614c",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001901612",
+                                     "rule_name":  "income_identity",
+                                     "report_date":  "2022-09-30",
+                                     "lane":  "blocker",
+                                     "engine":  "identity",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "",
+                                     "finding_id":  "RVQ_BLK_e89e1b84614c",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_BLK_e89e1b84614c",
+                                          "prior":  {
+                                                        "finding":  "identity income_identity 2022-09-30",
+                                                        "hypotheses":  [
+                                                                           "As filed: the check computes total investment income less total expenses, and the fund\u0027s expenses are printed gross before waivers (\u0027Total expenses 1,389,005 ... Net expenses 938,285 Net investment income 1,230,368\u0027 for April to September 2022); NII = income less net expenses holds on the page.",
+                                                                           "Not proposed because the published quarter is wrong as well: the first 10-K covers April to September 2022 and the shared quarterly-income step halves it (total investment income 1,084,326.5 published) instead of taking the six months less the 10-Q quarter to 2022-06-30 (2,168,653 - 193,832 = 1,974,821). Same shared fallback as D-168 (Ares Core) and D-179 (Fidelity). No setting or correctable field reaches fund-level income; the highlights wrapper corrects balance-sheet figures only."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001911066",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001911066.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_BLK_b14ee9d9deb1",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001911066",
+                                     "rule_name":  "fv_conservation",
+                                     "report_date":  "2024-03-31",
+                                     "lane":  "blocker",
+                                     "engine":  "conservation",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "633.650000",
+                                     "finding_id":  "RVQ_BLK_b14ee9d9deb1",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_BLK_b14ee9d9deb1",
+                                          "prior":  {
+                                                        "finding":  "conservation fv_conservation 2024-03-31",
+                                                        "hypotheses":  [
+                                                                           "Cause found: the money-market line \u0027Blackrock T-Fund Inst\u0027 (6,838) is published with asset_category FUND, asset_class OTHER, exposure FUND (index class CASH), so the like-for-like split (investments_total_excludes) does not take it out of the non-cash sum: residual 1.09 pct = 6,838 / 626,799. A real classification defect, not as filed.",
+                                                                           "Tried 1 (ncxc, ncxd): row corrections of asset_category, then also asset_class and exposure_type, to CASH. A later step of the unified build puts asset_class OTHER / exposure FUND back after the correction step, and the final schema check (cash_classification_consistency) stops the build. Withdrawn.",
+                                                                           "Tried 2 (diagnostic run of the unified stage only): adding \u0027blackrock\\s+t-fund\u0027 to the wrapper\u0027s cash family pattern drops the row altogether (6.8M lost). Withdrawn.",
+                                                                           "Not tried: finding which step after the row corrections rewrites asset_class / exposure_type for an index-class CASH row whose issuer_category is FUND; needs a code read beyond this run."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001989817",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001989817.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_REV_9385fe8e3aa6",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001989817",
+                                     "rule_name":  "X02",
+                                     "report_date":  "2025-09-30",
+                                     "lane":  "review",
+                                     "engine":  "row_validation",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "1998.196000",
+                                     "finding_id":  "RVQ_REV_9385fe8e3aa6",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_REV_9385fe8e3aa6",
+                                          "prior":  {
+                                                        "finding":  "row_validation X02 2025-09-30",
+                                                        "hypotheses":  [
+                                                                           "The flagged rows are undrawn lines with no printed rate and the Alp CFO 2025 subordinated note (no rate printed): as filed.",
+                                                                           "But IDF 9 Financeco Series B Units (966 cost, 1,041 value) is published as a loan with no rate; its identifier \u0027IDF 9 Financeco, LLC\u0027 is shared with the drawn IDF 9 loan in that quarter, so a row correction (keyed on accession + identifier) cannot reach it without also changing the loan. Needs a context-keyed correction or a class rule; not proposed as filed because one flagged row is a real class error."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001899017",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001899017.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_BLK_b1827cb59306",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001899017",
+                                     "rule_name":  "E04",
+                                     "report_date":  "2022-09-30",
+                                     "lane":  "blocker",
+                                     "engine":  "oracle",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "",
+                                     "finding_id":  "RVQ_BLK_b1827cb59306",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_BLK_b95edebefc40",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001899017",
+                                     "rule_name":  "nav_identity",
+                                     "report_date":  "2022-09-30",
+                                     "lane":  "blocker",
+                                     "engine":  "identity",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "",
+                                     "finding_id":  "RVQ_BLK_b95edebefc40",
+                                     "proposals":  [
+
+                                                   ]
+                                 },
+                                 {
+                                     "review_id":  "RVQ_REV_d4f85c3933bc",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001899017",
+                                     "rule_name":  "F30",
+                                     "report_date":  "2022-09-30",
+                                     "lane":  "review",
+                                     "engine":  "fund_financials",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "",
+                                     "finding_id":  "RVQ_REV_d4f85c3933bc",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_BLK_b1827cb59306",
+                                          "prior":  {
+                                                        "finding":  "oracle E04 2022-09-30; identity nav_identity 2022-09-30; fund_financials F30 2022-09-30",
+                                                        "hypotheses":  [
+                                                                           "Published NAV per share 1,787.2 against net assets -357,440 on 200 shares: the same sign loss as the corrected quarters (-357,440 / 200 = -1,787.2), so the printed figure is almost certainly (1,787.20).",
+                                                                           "No cached filing prints the 2022-09-30 balance sheet (the first cached filing is the 2022 10-K, which prints 2022-12-31 only); a figure correction needs the printed line, so it is not written.",
+                                                                           "Fix when the 2022-09-30 filing (10-Q or registration statement) is in the cache: figure_corrections nav_per_share -1787.20; F30 will then fire as before-operations."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_BLK_b95edebefc40",
+                                          "prior":  {
+                                                        "finding":  "oracle E04 2022-09-30; identity nav_identity 2022-09-30; fund_financials F30 2022-09-30",
+                                                        "hypotheses":  [
+                                                                           "Published NAV per share 1,787.2 against net assets -357,440 on 200 shares: the same sign loss as the corrected quarters (-357,440 / 200 = -1,787.2), so the printed figure is almost certainly (1,787.20).",
+                                                                           "No cached filing prints the 2022-09-30 balance sheet (the first cached filing is the 2022 10-K, which prints 2022-12-31 only); a figure correction needs the printed line, so it is not written.",
+                                                                           "Fix when the 2022-09-30 filing (10-Q or registration statement) is in the cache: figure_corrections nav_per_share -1787.20; F30 will then fire as before-operations."
+                                                                       ]
+                                                    }
+                                      },
+                                      {
+                                          "finding_id":  "RVQ_REV_d4f85c3933bc",
+                                          "prior":  {
+                                                        "finding":  "oracle E04 2022-09-30; identity nav_identity 2022-09-30; fund_financials F30 2022-09-30",
+                                                        "hypotheses":  [
+                                                                           "Published NAV per share 1,787.2 against net assets -357,440 on 200 shares: the same sign loss as the corrected quarters (-357,440 / 200 = -1,787.2), so the printed figure is almost certainly (1,787.20).",
+                                                                           "No cached filing prints the 2022-09-30 balance sheet (the first cached filing is the 2022 10-K, which prints 2022-12-31 only); a figure correction needs the printed line, so it is not written.",
+                                                                           "Fix when the 2022-09-30 filing (10-Q or registration statement) is in the cache: figure_corrections nav_per_share -1787.20; F30 will then fire as before-operations."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    },
+    {
+        "date":  "2026-10-21",
+        "cik":  "0001919369",
+        "reason":  "Exclude substantive prior narrative reviews under owner scope; no resolution or independent acceptance implied.",
+        "source":  "docs/investigations/v05_readings/reports/0001919369.json",
+        "removed_findings":  [
+                                 {
+                                     "review_id":  "RVQ_BLK_35a4a0fae073",
+                                     "state":  "open",
+                                     "in_queue":  "True",
+                                     "disposition_id":  "",
+                                     "disposition_basis":  "",
+                                     "population_origin":  "live",
+                                     "verdict_status":  "MISSING",
+                                     "verdict_detail":  "",
+                                     "has_fix_route":  "False",
+                                     "cik":  "0001919369",
+                                     "rule_name":  "income_identity",
+                                     "report_date":  "2023-12-31",
+                                     "lane":  "blocker",
+                                     "engine":  "identity",
+                                     "fv_at_risk_m":  "",
+                                     "fund_quarter_fv_m":  "104.869000",
+                                     "finding_id":  "RVQ_BLK_35a4a0fae073",
+                                     "proposals":  [
+
+                                                   ]
+                                 }
+                             ],
+        "prior_review_evidence":  [
+                                      {
+                                          "finding_id":  "RVQ_BLK_35a4a0fae073",
+                                          "prior":  {
+                                                        "finding":  "identity income_identity 2023-12-31",
+                                                        "hypotheses":  [
+                                                                           "Real error: published total_investment_income for 2023-12-31 is 195 thousand = the year\u0027s 780 / 4. The 10-K prints \u0027Total investment income $ 780\u0027 for 2023 and the 10-Q for 2023-09-30 prints no income line (the fund had not begun investing), so the fourth quarter is 780. With 780 the identity holds exactly (780 - 2,170 net expenses = -1,390 published NII).",
+                                                                           "Highlights wrapper first_income_year_ends [\u00272023-12-31\u0027] does not fix it: the shared quarter step (pipeline/fund_financials.py quarter_income_sql) also needs every filed quarter to carry the flow, and company facts hold no total investment income for 2023-09-30.",
+                                                                           "figure_corrections cannot set total_investment_income (not in FIGURE_FIELDS; corrections apply to the balance frame only). A fix is shared code: in a declared first income year, treat a filed quarter with no figure for a flow as nil. Not done here because it changes the three other funds that declare first_income_year_ends and only this fund can be built."
+                                                                       ]
+                                                    }
+                                      }
+                                  ],
+        "limitation":  "Prior reviews can be incomplete or ambiguous. Generic parked placeholders remain selected."
+    }
+]
