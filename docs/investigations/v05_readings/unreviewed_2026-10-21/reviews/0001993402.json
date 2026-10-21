@@ -1,0 +1,759 @@
+{
+  "reviewer_id": "/root/remaining_antares_check_sol",
+  "report_digest": "c80b55048485cfd182846dcbc4ef613a9f69e5d2fb372454623b3db1e45b475b",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_09a379572315",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 1 rows from rgA2 shadow/page_rule_findings.csv for pik_printed 2025-12-31, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 1}. Foreside preferred prints its own 11.00% PIK next to a distinct common row and GTCR 12.00% preferred; PhyNet prints total coupon 10.15% PIK with separate S+6.50% spread. Both sandbox PIK fields are absent. Terms capture is supported; current accrual, distressed amendment and isolated income-formula migration are not established or proposed. Reviewed keys: ROW-0ada4bb8faee6b75.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-115988",
+          "text": "PhyNet Dermatology LLC (8)(16) First Lien Term Loan S + 6.50 % 10.15 % PIK 10/20/2029 250 248 243 0.01"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_2ddf46934649",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 16 rows from rgA2 shadow/page_rule_findings.csv for issuer_name_printed 2024-09-30, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 16}. Printed name versus published name establishes heading leakage, duplicate strings, numeric suffixes, literal typographic differences and wrong-issuer assignments. Four apostrophe-only Q1-2024 rows preserve the same facilities and are false positives; eight related legal-name variants remain source ambiguity, with no asserted alias equivalence. Mixed finding conclusion reflects the confirmed-error component, not a claim that every row is erroneous. Proposed exact-context or parser changes preserve individual tranches and require matching checks; ambiguous names require further entity evidence. Reviewed keys: ROW-fd81b356d72c500c, ROW-8d52fca8897fa830, ROW-61ea817a5e54e240, ROW-c5cdf9bc8b8c7bad, ROW-b102a17499f196e7, ROW-64d36dd9543bd637, ROW-21318642ba7a753a, ROW-10ed738c8d79257d, ROW-4cb9e5b3c500f0ea, ROW-d531ac42f7def4a2, ROW-5b1eafa6fdf591c1, ROW-e984834fde3d0057, ROW-3d525f33dd8727e1, ROW-41d06df625c0b3b2, ROW-7df4dc6e246f3f0e, ROW-a7e0548d06af1a02.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-126519",
+          "text": "AVG Intermediate Holdings LLC Subordinated Unsecured Delayed Draw Term Loan 13.75 % PIK 0.00 % 13.75 % PIK 3/16/2028 278 278 260 0.03"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "OB Hospitalist Group, Inc. Subordinated Unsecured Term Loan 14.70 % PIK 1.00 % 14.70 % PIK 9/27/2028 21 20 20 -"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "Dave & Buster's, Inc. (5)(6) First Lien Term Loan S + 3.25 % 0.00 % 8.10 % 9/26/2031 1,087 1,076 1,079 0.10"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "AVE Holdings III, Corp. (8) First Lien Term Loan S + 5.25 % 0.75 % 9.99 % 2/25/2028 248 245 243 0.02"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "UBEO, LLC (8) First Lien Term Loan S + 5.25 % 1.00 % 9.99 % 4/3/2026 814 812 814 0.08"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "Varsity Brands, Inc. (5) First Lien Term Loan S + 3.75 % 0.00 % 8.34 % 8/26/2031 4,468 4,447 4,443 0.43"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "GC Mountaintop Holdings, LLC (11) Common 507 648 908 0.09"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "Movati Athletic (Group) Inc. (6)(7)(13) First Lien Revolver C + 5.25 % 0.00 % 9.82 % 5/29/2029 CAD 2,625 ( 29 ) ( 19 ) -"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "PPV Intermediate Holdings, LLC (3)(8) Subordinated Unsecured Delayed Draw Term Loan 13.75 % PIK 0.00 % 13.75 % PIK 8/31/2030 - - - -"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "LEP Pequod Holdings LP (3)(11) Common - 226 390 0.04"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "AVG Intermediate Holdings LLC Subordinated Unsecured Term Loan 13.75 % PIK 0.00 % 13.75 % PIK 3/16/2028 $ 728 $ 728 $ 680 0.07 %"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "VetCor Group Holdings LLC Subordinated Unsecured Term Loan 13.75 % PIK 0.00 % 13.75 % PIK 8/31/2030 5 5 5 -"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "Employee Health Co. Unsecured Term Loan 13.75 % PIK 0.00 % 13.75 % PIK 11/10/2031 266 261 261 0.03"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "VetCor Group Holdings LLC (3) Subordinated Unsecured Delayed Draw Term Loan 13.75 % PIK 0.00 % 13.75 % PIK 8/31/2030 - - - -"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "VetCor Group Holdings LLC Subordinated Unsecured Term Loan 14.75 % PIK 0.00 % 14.75 % PIK 8/31/2030 2 2 1 -"
+        },
+        {
+          "accession": "0000950170-24-126519",
+          "text": "Alpha Generation LLC (5) First Lien Term Loan S + 2.75 % 0.00 % 7.60 % 9/30/2031 1,985 1,980 1,988 0.19"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_42f64f0341d1",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 18 rows from rgA2 shadow/page_rule_findings.csv for issuer_name_printed 2024-12-31, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 18}. Printed name versus published name establishes heading leakage, duplicate strings, numeric suffixes, literal typographic differences and wrong-issuer assignments. Four apostrophe-only Q1-2024 rows preserve the same facilities and are false positives; eight related legal-name variants remain source ambiguity, with no asserted alias equivalence. Mixed finding conclusion reflects the confirmed-error component, not a claim that every row is erroneous. Proposed exact-context or parser changes preserve individual tranches and require matching checks; ambiguous names require further entity evidence. Reviewed keys: ROW-2d62703e88c7951f, ROW-65341eca37e57aaf, ROW-aaf26863a30fcd4b, ROW-c2f49ce577e5263e, ROW-5179b936108fbd96, ROW-fca3fa21a0c358e2, ROW-9ffa41d1215d9ff2, ROW-2c9f9a35139243f6, ROW-8840834b52a73603, ROW-ebd940d0e857d486, ROW-0b946f3abab66968, ROW-4421c221b8cfc483, ROW-b6e226c6e9316f4d, ROW-0ec9ccb506fd5a37, ROW-7dcb75c60573a8ce, ROW-711623d1d2bb08f3, ROW-add25e6712d697fb, ROW-68697644622f7e57.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-040578",
+          "text": "Bleriot US Bidco Inc. (5)(15) First Lien Term Loan S + 2.75 % 0.00 % 7.06 % 10/31/2030 $ 3,351 $ 3,351 $ 3,373 0.27 %"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "OB Hospitalist Group, Inc. (15) Subordinated Unsecured Term Loan S + 9.75 % 1.00 % 14.21 % 9/27/2028 21 21 21 -"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "DT1 Midco Corp (7)(13)(15) First Lien Delayed Draw Term Loan S + 5.00 % 0.00 % 9.31 % 12/30/2031 5,014 ( 13 ) ( 25 ) -"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "AVG Intermediate Holdings LLC (15) Subordinated Unsecured Delayed Draw Term Loan 13.75 % PIK 0.00 % 13.75 % PIK 3/16/2028 288 288 266 0.02"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "Employee Health Co. (15) Unsecured Term Loan 13.75 % 0.00 % 13.75 % 11/10/2031 275 270 270 0.02"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "BradyPlus Holdings, LLC (8)(13) First Lien Term Loan S + 5.00 % 1.00 % 9.31 % 10/31/2029 248 245 245 0.02"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "Kriv Acquisition Inc. (15) First Lien Delayed Draw Term Loan S + 5.75 % 1.00 % 10.06 % 7/6/2029 339 334 337 0.03"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "Pathstone Family Office LLC (8)(13) First Lien Term Loan S + 5.00 % 1.00 % 9.33 % 5/15/2029 23,545 23,427 23,427 1.88"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "AVG Intermediate Holdings LLC (15) Subordinated Unsecured Term Loan 13.75 % PIK 0.00 % 13.75 % PIK 3/16/2028 753 753 697 0.06"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "Dwyer Instruments, LLC (7)(13)(15) First Lien Delayed Draw Term Loan S + 4.75 % 0.75 % 9.06 % 7/23/2029 2,828 ( 14 ) ( 27 ) -"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "DT1 Midco Corp (8)(13) First Lien Term Loan S + 5.00 % 0.00 % 9.31 % 12/30/2031 14,372 14,301 14,300 1.15"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "VetCor Group Holdings LLC (15) Subordinated Unsecured Term Loan 13.75 % 0.00 % 13.75 % 8/31/2030 6 5 5 -"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "US Heart And Vascular Holdings LLC (11)(15) Common 100 106 63 0.01"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "DT1 Midco Corp (7)(13)(15) First Lien Revolver S + 5.00 % 0.00 % 9.31 % 12/30/2030 2,005 ( 10 ) ( 10 ) -"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "Dwyer Instruments, LLC (8)(13) First Lien Term Loan S + 4.75 % 0.75 % 9.06 % 7/23/2029 21,778 21,564 21,567 1.73"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "VetCor Group Holdings LLC (15) Subordinated Unsecured Term Loan 13.75 % 0.00 % 13.75 % 8/31/2030 2 2 2 -"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "e-Discovery AcquireCo, LLC (8)(13) First Lien Term Loan S + 5.50 % 1.00 % 9.83 % 8/29/2029 1,533 1,529 1,487 0.12"
+        },
+        {
+          "accession": "0000950170-25-040578",
+          "text": "Ruppert Landscape, LLC (7)(13)(15) First Lien Delayed Draw Term Loan S + 5.75 % 0.75 % 10.06 % 12/1/2028 11,899 1,902 1,804 0.14"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6fbcdd9a29c4",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 13 rows from rgA2 shadow/page_rule_findings.csv for issuer_name_printed 2025-06-30, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 13}. Printed name versus published name establishes heading leakage, duplicate strings, numeric suffixes, literal typographic differences and wrong-issuer assignments. Four apostrophe-only Q1-2024 rows preserve the same facilities and are false positives; eight related legal-name variants remain source ambiguity, with no asserted alias equivalence. Mixed finding conclusion reflects the confirmed-error component, not a claim that every row is erroneous. Proposed exact-context or parser changes preserve individual tranches and require matching checks; ambiguous names require further entity evidence. Reviewed keys: ROW-89511dfc4a269a8a, ROW-9d97aafa9d525adf, ROW-999148a477a2a437, ROW-a018851cdf7b1070, ROW-bf264b2cad268ad7, ROW-1a28dfe7a6005d0a, ROW-53275393ce601aaa, ROW-3f6832a6d46c3204, ROW-9e9fbd6c7cdb6887, ROW-81bc85c18a44ad06, ROW-3c488312e4622b4c, ROW-b5f473a743c0fa44, ROW-fca38ae5a155d579.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-108177",
+          "text": "Exactcare Parent Inc. (8)(16) First Lien Term Loan S + 5.50 % 9.79 % 11/5/2029 247 243 247 0.01"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "KWOR Acquisition, Inc. (13)(15)(19) Subordinated Unsecured HoldCo Debt S + 3.25 % 15.54 % (Incl. 8.00 % PIK) 2/28/2030 672 672 672 0.04"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "AVG Intermediate Holdings LLC (15)(19) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 3/16/2028 308 308 292 0.02"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "VetCor Group Holdings LLC (15)(19) Subordinated Unsecured Term Loan N/A 13.75 % PIK 8/31/2030 6 6 6 -"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "OB Hospitalist Group, Inc. (15)(19) Subordinated Unsecured Term Loan S + 9.75 % 14.18 % (Incl. 9.75 % PIK) 9/27/2028 23 23 23 -"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "Pareto Health Intermediate Holdings, Inc. (7)(15)(16) First Lien Revolver S + 4.00 % 8.15 % 6/1/2029 163 - ( 1 ) -"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "Employee Health Co. (15)(19) Unsecured Term Loan N/A 13.75 % PIK 11/10/2031 295 290 286 0.02"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "DT1 Midco Corp (7)(13)(15)(17) First Lien Delayed Draw Term Loan S + 5.00 % 9.32 % 12/30/2031 6,228 29 13 -"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "DT1 Midco Corp (13)(15)(17) First Lien Term Loan S + 5.00 % 9.32 % 12/30/2031 16,156 16,084 16,075 0.95"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "DT1 Midco Corp (13)(15)(17) First Lien Delayed Draw Term Loan S + 5.00 % 9.32 % 12/30/2031 5,014 4,977 4,988 0.30"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "AVG Intermediate Holdings LLC (15)(19) Subordinated Unsecured Term Loan N/A 13.75 % PIK 3/16/2028 805 805 763 0.05"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "DT1 Midco Corp (7)(13)(15)(17) First Lien Revolver S + 5.00 % 9.32 % 12/30/2030 2,940 ( 14 ) ( 15 ) -"
+        },
+        {
+          "accession": "0000950170-25-108177",
+          "text": "VetCor Group Holdings LLC (15)(19) Subordinated Unsecured Term Loan N/A 14.75 % PIK 8/31/2030 2 2 2 -"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7cfcbb9d259a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 8 rows from rgA2 shadow/page_rule_findings.csv for issuer_name_printed 2024-06-30, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 8}. Printed name versus published name establishes heading leakage, duplicate strings, numeric suffixes, literal typographic differences and wrong-issuer assignments. Four apostrophe-only Q1-2024 rows preserve the same facilities and are false positives; eight related legal-name variants remain source ambiguity, with no asserted alias equivalence. Mixed finding conclusion reflects the confirmed-error component, not a claim that every row is erroneous. Proposed exact-context or parser changes preserve individual tranches and require matching checks; ambiguous names require further entity evidence. Reviewed keys: ROW-2a4e1b8409226300, ROW-a8239ba39fa30769, ROW-b25e8d18d99b2089, ROW-7aa0050ea6310e1b, ROW-bae0d5092c46d12d, ROW-29d54e827ee67ad9, ROW-b54b11e94bdbc3d7, ROW-cd864a1996d7c618.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-095485",
+          "text": "Community Medical Acquisition Corp. (5)(8) First Lien Term Loan S + 4.75 % 1.00 % 10.25 % 12/15/2028 249 239 242 0.04"
+        },
+        {
+          "accession": "0000950170-24-095485",
+          "text": "OB Hospitalist Group, Inc. (5) Subordinated Unsecured Term Loan S + 9.75 % 1.00 % 15.09 % 9/27/2028 20 20 19 -"
+        },
+        {
+          "accession": "0000950170-24-095485",
+          "text": "AVG Intermediate Holdings LLC (5) Subordinated Unsecured Delayed Draw Term Loan S + N/A N/A 13.75 % PIK 3/16/2028 269 269 252 0.05"
+        },
+        {
+          "accession": "0000950170-24-095485",
+          "text": "AVG Intermediate Holdings LLC (5) Subordinated Unsecured Term Loan S + N/A N/A 13.75 % PIK 3/16/2028 $ 703 $ 703 $ 659 0.12 %"
+        },
+        {
+          "accession": "0000950170-24-095485",
+          "text": "VetCor Group Holdings LLC (5) Subordinated Unsecured Term Loan N/A N/A 13.75 % PIK 8/31/2030 5 5 5 -"
+        },
+        {
+          "accession": "0000950170-24-095485",
+          "text": "VetCor Group Holdings LLC (5) Subordinated Unsecured Term Loan N/A N/A 14.75 % PIK 8/31/2030 2 1 1 -"
+        },
+        {
+          "accession": "0000950170-24-095485",
+          "text": "Employee Health Co. (5) Unsecured Term Loan N/A N/A 13.75 % PIK 11/10/2031 257 252 252 0.05"
+        },
+        {
+          "accession": "0000950170-24-095485",
+          "text": "Ruppert Landscape, LLC (5)(7)(13) First Lien Revolver S + 5.75 % 0.75 % 11.25 % 12/1/2028 793 151 151 0.03"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7d15e160ed7a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 13 rows from rgA2 shadow/page_rule_findings.csv for issuer_name_printed 2024-03-31, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'false_alarm': 4, 'confirmed_error': 9}. Printed name versus published name establishes heading leakage, duplicate strings, numeric suffixes, literal typographic differences and wrong-issuer assignments. Four apostrophe-only Q1-2024 rows preserve the same facilities and are false positives; eight related legal-name variants remain source ambiguity, with no asserted alias equivalence. Mixed finding conclusion reflects the confirmed-error component, not a claim that every row is erroneous. Proposed exact-context or parser changes preserve individual tranches and require matching checks; ambiguous names require further entity evidence. Reviewed keys: ROW-bd457e02e4b69fa8, ROW-57b650c23889f8be, ROW-a396eb68b624062a, ROW-950375abb684c5a4, ROW-4e77542215d4a096, ROW-7ed397354595cea5, ROW-495e26e8d9c0a7d9, ROW-457ddd1d056281a2, ROW-99297946de937980, ROW-ff882ef97eb01eb7, ROW-5aa9d1c1228309ed, ROW-7b029fcc922062ba, ROW-246822cb2ba4d7cf.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-057976",
+          "text": "Nonni's Foods LLC (5)(8) First Lien Term Loan S + 5.00 % 1.00 % 10.43 % 3/1/2025 250 248 250 0.08"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "Banker's Toolbox, Inc. (5)(8) First Lien Delayed Draw Term Loan S + 5.25 % 0.75 % 10.57 % 7/27/2027 662 655 662 0.22"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "Monahan Products, LLC (5)(8) First Lien Term Loan S + 5.50 % 1.00 % 10.95 % 8/27/2027 250 246 250 0.08"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "RB Holdings Interco, LLC (5)(8) First Lien Term Loan S + 5.00 % 1.00 % 10.45 % 5/4/2028 250 247 248 0.08"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "Vector Group Holdings LLC (5) Subordinated Unsecured Term Loan N/A N/A 14.75 % PIK 8/31/2030 2 1 1 -"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "Vector Group Holdings LLC (5) Subordinated Unsecured Term Loan N/A N/A 13.75 % PIK 8/31/2030 5 5 5 -"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "Banker's Toolbox, Inc. (5)(7) First Lien Revolver S + 5.25 % 0.75 % 10.65 % 7/27/2027 637 239 245 0.08"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "AMS Parent, LLC (5)(8) First Lien Term Loan S + 4.75 % 0.75 % 10.31 % 10/25/2028 $ 249 $ 245 $ 240 0.08 %"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "AVG Intermediate Holdings LLC (5) Subordinated Unsecured Delayed Draw Term Loan N/A N/A 13.75 % PIK 3/16/2028 260 260 245 0.08"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "Banker's Toolbox, Inc. (5)(8) First Lien Term Loan S + 5.25 % 0.75 % 10.57 % 7/27/2027 3,668 3,634 3,668 1.22"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "Employee Health Co. (5) Unsecured Term Loan N/A N/A 13.75 % PIK 11/10/2031 250 245 246 0.08"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "AVG Intermediate Holdings LLC (5) Subordinated Unsecured Term Loan N/A N/A 13.75 % PIK 3/16/2028 $ 680 $ 680 $ 642 0.21 %"
+        },
+        {
+          "accession": "0000950170-24-057976",
+          "text": "OB Hospitalist Group, Inc. (5) Subordinated Unsecured Term Loan S + 9.50 % 1.00 % 14.83 % 9/27/2028 19 19 19 0.01"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_7d65bfb2a602",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 2 rows from rgA2 shadow/page_rule_findings.csv for units_printed 2025-09-30, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 2}. Own-row counts independently read: Arrow common 17 versus published 2; ACG common 17 versus 2 in each of two quarters; Goldeneye preferred 1 versus 54; Concord preferred 2670 versus 3; Eclipse preferred 6018 versus 1. Arrow/ACG preferred 2 and Goldeneye common 54 are distinct adjacent positions. Concord and Eclipse show changed own-row counts, not proof of a specific implementation path. Absolute unit scale remains unresolved; a global multiplier is unsupported. The proposed current-row extraction plus scale/chain validation is warranted. Prior narrative Concord evidence is distinguished from the previously uncovered companion Arrow row in this selected combined finding. Reviewed keys: ROW-0242510fa086280b, ROW-f2103b746e6f56fc.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Arrow Management Acquisition, LLC (12)(13)(15) Common - - - 17 17 17 -"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Concord Global Acquisition, LLC (12)(13)(15) Preferred N/A 8.00 % PIK - 2,670 2,930 2,930 0.15"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_83455eb8bee8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 2 rows from rgA2 shadow/page_rule_findings.csv for units_printed 2025-12-31, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 2}. Own-row counts independently read: Arrow common 17 versus published 2; ACG common 17 versus 2 in each of two quarters; Goldeneye preferred 1 versus 54; Concord preferred 2670 versus 3; Eclipse preferred 6018 versus 1. Arrow/ACG preferred 2 and Goldeneye common 54 are distinct adjacent positions. Concord and Eclipse show changed own-row counts, not proof of a specific implementation path. Absolute unit scale remains unresolved; a global multiplier is unsupported. The proposed current-row extraction plus scale/chain validation is warranted. Prior narrative Concord evidence is distinguished from the previously uncovered companion Arrow row in this selected combined finding. Reviewed keys: ROW-cf40a56e3a7e5bb8, ROW-52a173c5f1700011.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-115988",
+          "text": "ACG Parent Holdings, LP (12)(13)(15) Common - - - 17 17 217 0.01"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "Goldeneye Parent, LLC (12)(13)(15) Preferred - - - 1 1,111 1,111 0.06"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_cc729c6b97ce",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 16 rows from rgA2 shadow/page_rule_findings.csv for issuer_name_printed 2025-09-30, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 13, 'source_ambiguity': 3}. Printed name versus published name establishes heading leakage, duplicate strings, numeric suffixes, literal typographic differences and wrong-issuer assignments. Four apostrophe-only Q1-2024 rows preserve the same facilities and are false positives; eight related legal-name variants remain source ambiguity, with no asserted alias equivalence. Mixed finding conclusion reflects the confirmed-error component, not a claim that every row is erroneous. Proposed exact-context or parser changes preserve individual tranches and require matching checks; ambiguous names require further entity evidence. Reviewed keys: ROW-34ffc1b2e3f9cd35, ROW-822f1a5e1fca6c3d, ROW-c6d4241b72fe2c51, ROW-25c227cd7c977f46, ROW-8c25dfdad3c86494, ROW-5bbb7c4a0bcdb607, ROW-50f9eec87494ad49, ROW-68a08e4c38504397, ROW-729b2c8622b053bd, ROW-d7b3199c27d421fe, ROW-9d0135b449153479, ROW-4a33f542cf2dc898, ROW-bef73d5889d491c3, ROW-467cf001fbb8e4ba, ROW-5f6a0e36f378685c, ROW-5ed1eda363577f41.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-280638",
+          "text": "BlackRock Liquidity T-Fund - Institutional Shares (14) - - - 42,836 42,836 2.26"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Excelitas Technologies Corp. (8)(17) First Lien Term Loan S + 5.25 % 9.38 % 8/12/2029 193 191 193 0.01"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "PPV Intermediate Holdings, LLC (15)(19) Subordinated Unsecured Term Loan N/A 13.75 % PIK 8/31/2030 6 6 6 -"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Blackbird Purchaser, Inc. (7)(15)(17) First Lien Revolver S + 5.50 % 9.48 % 12/19/2029 619 429 433 0.02"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "North Star Acquisitionco, LLC (11)(15) Common - - - 336 362 462 0.02"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "OB Hospitalist Group, Inc. (15)(16) Subordinated Unsecured Term Loan S + 9.50 % 13.73 % (Incl. 9.50 % PIK) 9/27/2028 24 23 23 -"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "AVG Intermediate Holdings LLC (15)(19) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 3/16/2028 318 318 304 0.02"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "PPV Intermediate Holdings, LLC (15)(19) Subordinated Unsecured Term Loan N/A 14.75 % PIK 8/31/2030 2 2 2 -"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "PPV Intermediate Holdings, LLC (3)(8)(19) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 8/31/2030 - - - -"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Pregis TopCo LLC (5)(15)(19) First Lien Term Loan S + 4.00 % 8.13 % 2/1/2029 4,478 4,492 4,513 0.24"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "PPV Intermediate Holdings, LLC (3)(15)(19) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 8/31/2030 - - - -"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Kele Holdco, Inc. (3)(11)(15) Common - - - - 187 278 0.01"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Employee Health Co. (15)(19) Senior Unsecured Term Loan N/A 13.75 % PIK 11/10/2031 305 300 297 0.02"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "AVG Intermediate Holdings LLC (15)(19) Subordinated Unsecured Term Loan N/A 13.75 % PIK 3/16/2028 833 833 796 0.05"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "KWOR Acquisition, Inc. (13)(15)(16) Subordinated Unsecured Holdco Debt S + 3.25 % 15.23 % (Incl. 8.00 % PIK) 2/28/2030 693 693 693 0.04"
+        },
+        {
+          "accession": "0001193125-25-280638",
+          "text": "RxSense Holdings LLC (11)(15) Common - - - 14 284 725 0.04"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_da8f6c248cfa",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 8 rows from rgA2 shadow/page_rule_findings.csv for issuer_name_printed 2025-03-31, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 8}. Printed name versus published name establishes heading leakage, duplicate strings, numeric suffixes, literal typographic differences and wrong-issuer assignments. Four apostrophe-only Q1-2024 rows preserve the same facilities and are false positives; eight related legal-name variants remain source ambiguity, with no asserted alias equivalence. Mixed finding conclusion reflects the confirmed-error component, not a claim that every row is erroneous. Proposed exact-context or parser changes preserve individual tranches and require matching checks; ambiguous names require further entity evidence. Reviewed keys: ROW-292dc590d453be37, ROW-de6c8904cf29af3d, ROW-9e4097cedb047342, ROW-2f35a9b96bff85ce, ROW-065c6bd10ef85dca, ROW-4eff1c21b4015402, ROW-d379a67564c7aaa3, ROW-79aff342a40811e0.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-071531",
+          "text": "Employee Health Co. (15)(17) Unsecured Term Loan N/A 13.75 % PIK 11/10/2031 275 270 272 0.02"
+        },
+        {
+          "accession": "0000950170-25-071531",
+          "text": "OB Hospitalist Group, Inc. (15)(17) Subordinated Unsecured Term Loan S + 9.75 % 14.18 % (Incl. 9.75 % PIK) 9/27/2028 22 22 22 -"
+        },
+        {
+          "accession": "0000950170-25-071531",
+          "text": "BlackRock Liquidity T-Fund - Institutional Shares (14) 69,928 69,928 4.77"
+        },
+        {
+          "accession": "0000950170-25-071531",
+          "text": "e-Discovery AcquireCo, LLC (8)(13)(16) First Lien Term Loan S + 5.25 % 9.54 % 8/29/2029 1,533 1,529 1,494 0.10"
+        },
+        {
+          "accession": "0000950170-25-071531",
+          "text": "DT1 Midco Corp (7)(13)(15)(19) First Lien Revolver S + 5.00 % 9.32 % 12/30/2030 2,005 ( 10 ) ( 10 ) -"
+        },
+        {
+          "accession": "0000950170-25-071531",
+          "text": "Ruppert Landscape, LLC (7)(13)(15)(17) First Lien Delayed Draw Term Loan S + 5.00 % 9.29 % 12/1/2028 11,894 1,901 1,808 0.12"
+        },
+        {
+          "accession": "0000950170-25-071531",
+          "text": "DT1 Midco Corp (7)(13)(15)(16) First Lien Delayed Draw Term Loan S + 5.00 % 9.32 % 12/30/2031 5,014 ( 12 ) ( 25 ) -"
+        },
+        {
+          "accession": "0000950170-25-071531",
+          "text": "DT1 Midco Corp (13)(15)(19) First Lien Term Loan S + 5.00 % 9.32 % 12/30/2031 14,336 14,272 14,265 0.98"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_dc2ac1314570",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 20 rows from rgA2 shadow/page_rule_findings.csv for issuer_name_printed 2026-03-31, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 16, 'source_ambiguity': 4}. Printed name versus published name establishes heading leakage, duplicate strings, numeric suffixes, literal typographic differences and wrong-issuer assignments. Four apostrophe-only Q1-2024 rows preserve the same facilities and are false positives; eight related legal-name variants remain source ambiguity, with no asserted alias equivalence. Mixed finding conclusion reflects the confirmed-error component, not a claim that every row is erroneous. Proposed exact-context or parser changes preserve individual tranches and require matching checks; ambiguous names require further entity evidence. Reviewed keys: ROW-03c3ae3f01c001f2, ROW-56c2bf08055293dd, ROW-05a5ff5133fd1b7c, ROW-b2d5d67e62298ecc, ROW-cc8c49962d4d24de, ROW-737f440588b94d42, ROW-2b2b00bf38df278b, ROW-fffd7dc2a862d1cf, ROW-e3a2819404a893d3, ROW-288e3c0bb1b91762, ROW-f6e270a46d73f5a5, ROW-8b8ad02919cc6152, ROW-2575bad2003ba16a, ROW-23485b51c407c9e1, ROW-72e706e5edb4738f, ROW-7b2391f337538122, ROW-f490a0884bb6fa26, ROW-695e8bce71edd4ad, ROW-d9b1a590349c8858, ROW-5196fa6a82dadcdf.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221769",
+          "text": "BlackRock Liquidity T-Fund - Institutional Shares (14) - - - - $ 49,874 $ 49,874 2.31 %"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "KWOR Acquisition, Inc. (13)(15)(16) Subordinated Unsecured Term Loan S + 8.00 % 11.67 % (Incl. 8.00 % PIK) 2/28/2030 736 736 736 0.03"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "OEC Holdco, LLC (13)(15) Subordinated Unsecured Term Loan N/A 11.00 % PIK 12/30/2035 $ 10,000 $ 9,811 $ 9,675 0.45 %"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "GTCR BC Intermediate II, Inc. (13)(15) Subordinated Unsecured Term Loan N/A 12.75 % PIK 11/20/2034 7,303 7,136 7,047 0.33"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "AVG Intermediate Holdings LLC (15) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 11/16/2028 265 265 257 0.01"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "WRE Holding Corp. (13)(15)(17) First Lien Delayed Draw Term Loan S + 5.00 % 8.60 % 7/2/2031 567 567 563 0.03"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "ProAmpac PG Borrower LLC (5)(15)(19) First Lien Term Loan S + 4.00 % 7.77 % 3/7/2033 9,000 8,865 8,715 0.40"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "PPV Intermediate Holdings, LLC (15) Subordinated Unsecured Term Loan N/A 14.75 % PIK 8/31/2030 2 2 2 -"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "PPV Intermediate Holdings, LLC (3)(15) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 8/31/2030 - - - -"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "Saturn Borrower Inc (13)(15)(16) First Lien Term Loan S + 6.00 % 9.67 % 11/13/2028 7,742 7,704 7,607 0.35"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "PPV Intermediate Holdings, LLC (3)(8) Subordinated Unsecured Term Loan N/A 13.75 % PIK 8/31/2030 - - - -"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "DTI Holdco, Inc. (5)(15)(17) First Lien Term Loan S + 4.00 % 7.66 % 4/26/2029 1,045 902 905 0.04"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "Hercules Borrower LLC (9)(11)(15) Common - - - 140 252 225 0.01"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "ProAmpac PG Borrower LLC (5)(7)(15)(19) First Lien Revolver S + 3.75 % 7.41 % 3/6/2031 9,000 2,580 2,220 0.10"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "Red Ventures, LLC (5)(8)(19) First Lien Term Loan S + 2.75 % 6.41 % 3/4/2030 909 909 807 0.04"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "OB Hospitalist Group, Inc. (15)(16) Subordinated Unsecured Term Loan S + 9.50 % 13.26 % (Incl. 9.50 % PIK) 9/27/2028 25 25 25 -"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "AVG Intermediate Holdings LLC (15) Subordinated Unsecured Term Loan N/A 13.75 % PIK 11/16/2028 $ 692 $ 692 $ 671 0.03 %"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "Employee Health Co. (15) Senior Unsecured Term Loan N/A 13.75 % PIK 11/10/2031 338 334 319 0.01"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "PPV Intermediate Holdings, LLC (15) Subordinated Unsecured Term Loan N/A 13.75 % PIK 8/31/2030 7 6 6 -"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "GS Seer Group Borrower, LLC (3)(11)(15) Common - - - - 110 70 -"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e149526f48c8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 1 rows from rgA2 shadow/page_rule_findings.csv for pik_printed 2025-09-30, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 1}. Foreside preferred prints its own 11.00% PIK next to a distinct common row and GTCR 12.00% preferred; PhyNet prints total coupon 10.15% PIK with separate S+6.50% spread. Both sandbox PIK fields are absent. Terms capture is supported; current accrual, distressed amendment and isolated income-formula migration are not established or proposed. Reviewed keys: ROW-22286488aed4dc15.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Foreside Financial Group, LLC (12)(13)(15) Preferred N/A 11.00 % PIK - 659 913 792 0.04"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e61cf832f557",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 2 rows from rgA2 shadow/page_rule_findings.csv for units_printed 2026-03-31, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 2}. Own-row counts independently read: Arrow common 17 versus published 2; ACG common 17 versus 2 in each of two quarters; Goldeneye preferred 1 versus 54; Concord preferred 2670 versus 3; Eclipse preferred 6018 versus 1. Arrow/ACG preferred 2 and Goldeneye common 54 are distinct adjacent positions. Concord and Eclipse show changed own-row counts, not proof of a specific implementation path. Absolute unit scale remains unresolved; a global multiplier is unsupported. The proposed current-row extraction plus scale/chain validation is warranted. Prior narrative Concord evidence is distinguished from the previously uncovered companion Arrow row in this selected combined finding. Reviewed keys: ROW-18bcaa4fd685b348, ROW-3d705684de4c51ec.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-221769",
+          "text": "Eclipse Buyer, Inc. (12)(13)(15) Preferred N/A 12.50 % PIK - 6,018 6,018 5,880 0.27"
+        },
+        {
+          "accession": "0001193125-26-221769",
+          "text": "ACG Parent Holdings, LP (12)(13)(15) Common - - - 17 17 203 0.01"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_eee057bd4a57",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently selected 15 rows from rgA2 shadow/page_rule_findings.csv for issuer_name_printed 2025-12-31, joined their sandbox holdings row_id, and parsed original cached inline HTML and XBRL contexts. Every exact context instant is this quarter; each physical source row and both immediate siblings match the declared comparison. Population, contexts and neighbor text were reconstructed in reviewer_rows.json. Row assessments: {'confirmed_error': 14, 'source_ambiguity': 1}. Printed name versus published name establishes heading leakage, duplicate strings, numeric suffixes, literal typographic differences and wrong-issuer assignments. Four apostrophe-only Q1-2024 rows preserve the same facilities and are false positives; eight related legal-name variants remain source ambiguity, with no asserted alias equivalence. Mixed finding conclusion reflects the confirmed-error component, not a claim that every row is erroneous. Proposed exact-context or parser changes preserve individual tranches and require matching checks; ambiguous names require further entity evidence. Reviewed keys: ROW-b9b23e01536fa14b, ROW-cda3b96901aadf7b, ROW-510e9908b9de0922, ROW-7b11e1174c3b7725, ROW-ea9b9b8e6b7c670a, ROW-a8839d6bc114b50d, ROW-40a4225929d8f00e, ROW-c1b0518da252b89f, ROW-ac5d997c5f194634, ROW-cfb7a686db3eb00d, ROW-4c9c9a31c8cb4325, ROW-8b4dd58f0ed7f1e5, ROW-4dc7d64c2abc38a3, ROW-5cb608a2929ee9a7, ROW-797b003a4af55a93.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-115988",
+          "text": "BlackRock Liquidity T-Fund - Institutional Shares (14) - - - 71,644 71,644 3.55"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "Employee Health Co. (15) Senior Unsecured Term Loan N/A 13.00 % PIK 11/10/2031 316 311 306 0.01"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "PPV Intermediate Holdings, LLC (15) Subordinated Unsecured Term Loan N/A 13.75 % PIK 8/31/2030 8 8 8 -"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "GTCR BC Intermediate II, Inc. (6)(13)(15) Subordinated Unsecured Term Loan N/A 12.75 % PIK 11/20/2034 6,977 6,805 6,807 0.34"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "KWOR Acquisition, Inc. (13)(15)(16) Subordinated Unsecured Term Loan S + 8.00 % 11.65 % (Incl. 8.00 % PIK) 2/28/2030 714 714 714 0.04"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "Arrow Management Acquisition, LLC (7)(13)(15)(17) First Lien Delayed Draw Term Loan S + 5.00 % 8.65 % 7/26/2032 4,709 ( 11 ) ( 47 ) -"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "AVG Intermediate Holdings LLC (15) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 3/16/2028 330 330 318 0.02"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "GTCR Momentum Aggregator LP (12)(13)(15) Preferred N/A 12.00 % PIK - 865 961 913 0.04"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "PPV Intermediate Holdings, LLC (3)(8) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 8/31/2030 - - - -"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "Arrow Management Acquisition, LLC (13)(15)(17) First Lien Term Loan S + 5.00 % 8.65 % 7/26/2032 13,185 13,119 13,053 0.65"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "PPV Intermediate Holdings, LLC (3)(15) Subordinated Unsecured Delayed Draw Term Loan N/A 13.75 % PIK 8/31/2030 - - - -"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "AVG Intermediate Holdings LLC (15) Subordinated Unsecured Term Loan N/A 13.75 % PIK 3/16/2028 862 862 832 0.04"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "OB Hospitalist Group, Inc. (15)(16) Subordinated Unsecured Term Loan S + 9.50 % 13.27 % (Incl. 9.50 % PIK) 9/27/2028 24 24 24 -"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "CVET Midco 2, L.P. (5)(8)(18) First Lien Term Loan S + 5.00 % 8.65 % 10/13/2029 2,999 3,004 2,703 0.13"
+        },
+        {
+          "accession": "0001193125-26-115988",
+          "text": "Arrow Management Acquisition, LLC (7)(13)(15)(17) First Lien Revolver S + 5.00 % 8.65 % 7/23/2032 1,570 526 518 0.03"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_4274d0bc35e4",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently read the August13 cover share statement and XML dei shares context C_c7399712-52af-491b-a996-469e90cf0590, instant2026-08-13, 83198894 shares. rgA2 financial row has only shares and no portfolio balance sheet; source actual statements/schedule are June30. Thus an August13 holdings demand is a false alarm. Eligibility must distinguish metadata rows while still failing real quarter financial records missing holdings. Fund-level coverage key 0001993402|2026-08-13|F28:fund_financials_holdings_coverage.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-349216",
+          "text": "The Registrants common shares of beneficial interest (Common Shares), $0.001 par value per share, outstanding as of August 13, 2026 was 83,198,894 . Common Shares outstanding exclude August 1, 2026 subscriptions and share issuance pursuant to the dividend reinvestment plan, as the issuance price is not yet finalized at this time."
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_78bd0017b366",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently read original June30 statement header and balance sheet: assets4690400, noncontrolled FV4542789 plus short-term72811 gives investments4615600, all thousands. Schedule closing columns cost4653902/FV4615600 include BlackRock72811; no column reversal. rgA2 financial row agrees, while grouped holdings end2026-03-31 and have no June30 rows. F28 fund=True;holdings=False is a genuine historical sandbox coverage gap. This does not assert a current canonical deficit or establish any June30 position errors. Future quarter extraction and independent reconciliation are appropriate when authorized. Fund-level coverage key 0001993402|2026-06-30|F28:fund_financials_holdings_coverage.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-349216",
+          "text": "(in thousands, except share and per share amounts) June 30, 2026 December 31, 2025 (Unaudited)"
+        },
+        {
+          "accession": "0001193125-26-349216",
+          "text": "Total assets $ 4,690,400 $ 4,312,296"
+        },
+        {
+          "accession": "0001193125-26-349216",
+          "text": "Total Investments at fair value $ 4,653,902 $ 4,615,600 224.13 %"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "issuer-member-differs-from-own-printed-row",
+      "outcome": "supported",
+      "rationale": "Independent own-row comparisons establish recurring parser/path and name assignment discrepancies; issuer_name_printed already emitted the selected rows. Its four punctuation false positives and eight legal-name ambiguities constrain interpretation; existing detection is supported as a review flag, not automatic rename authority. Proposed comparison must preserve tranche identity and avoid treating punctuation as different borrowers.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-057976",
+          "text": "Monahan Products, LLC (5)(8) First Lien Term Loan S + 5.50 % 1.00 % 10.95 % 8/27/2027 250 246 250 0.08"
+        }
+      ]
+    },
+    {
+      "observation_key": "equity-count-proxy-borrowed-from-sibling-position",
+      "outcome": "supported",
+      "rationale": "Six independently checked exact-row counts differ from stored counts; same-issuer preferred/common rows have distinct numbers. units_printed already detects the selected discrepancies. Recurrence review must retain scale ambiguity, row/class identity and explicit count availability, avoiding automatic sibling donation or blanket thousand scaling.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Arrow Management Acquisition, LLC (12)(13)(15) Common - - - 17 17 17 -"
+        }
+      ]
+    },
+    {
+      "observation_key": "printed-pik-terms-omitted-from-position",
+      "outcome": "supported",
+      "rationale": "Both exact-row printed PIK terms are absent from sandbox PIK rate; pik_printed detects them. Own-cell full coupon versus component PIK requires distinct parsing, with rates handled under the current cash-leg storage contract. Detector is a terms discrepancy flag and cannot establish current accrual or stressed amendments.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-280638",
+          "text": "Foreside Financial Group, LLC (12)(13)(15) Preferred N/A 11.00 % PIK - 659 913 792 0.04"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "review_scope": "Selected current records only; no whole-fund acceptance or disposition.",
+  "counts": {
+    "finding_reviews": 16,
+    "observation_reviews": 3,
+    "requests": 0,
+    "position_flags": 135,
+    "confirmed_error_rows": 123,
+    "punctuation_false_alarm_rows": 4,
+    "source_ambiguity_rows": 8,
+    "fund_metric_keys": 2
+  },
+  "limitations": [
+    "Absolute equity count scale unresolved; exact extraction implementation path not traced.",
+    "Eight legal-name equivalences remain ambiguous. PIK terms are not current accrual evidence.",
+    "June30 finding is historical rgA2 coverage only; no exhaustive June30 portfolio review or canonical assertion.",
+    "Seven previously reviewed whole findings excluded; Concord prior row-level narrative distinguished. No random whole-fund sample or fund acceptance in this expressly selected scope."
+  ]
+}
