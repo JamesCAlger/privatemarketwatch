@@ -1,0 +1,367 @@
+{
+  "reviewer_id": "/root/remaining_carlyle_check_sol",
+  "report_digest": "85a1e72185faf0740cc7c99389892511e117bdba56f6dc602fd7c0e4e7f1be47",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_099eb992eb9b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent singleton census and exact current context verified. Original Shares/Units cell has inline scale=3, no sign reversal, unit shares; XML absolute count is 145631000, decimals=-3 (precision, not an extra scale). rgA3 derived_proxy 1018000.0 disagrees. Cost/FV facts and neighboring equity rows establish alignment. Talon is 145,631,000 shares in both selected 2023 quarters; Carbo is 4,387,000 at 2026-06-30, while comparative 2025-12-31 prints 1 thousand. No unit convention reconciles proxy with this current source. Preserving source-tagged counts and tracing override precedence is justified; no production repair is implied. Row keys: ROW-c6f681a21934c5a3",
+      "evidence": [
+        {
+          "accession": "0001702510-23-000068",
+          "text": "Talon MidCo 1 Limited ^ (7) Software 8/17/2022 145,631 1,456 1,717 0.16"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_0fafb7b1aa7c",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent singleton census and current-context inline facts match the printed Atlas US Finco, Inc. row, not the following separate Atlas US tranche. Exact XML dimension instead says Atlas AU Bidco Pty Ltd (Australia), which rgA3 reproduces. Matching principal/cost/FV and dates confirms filing display/XML disagreement rather than wrong row selection. A bounded context correction with retained tranche separation and documented source conflict is supported. Row keys: ROW-7ae36fda9fb36f82",
+      "evidence": [
+        {
+          "accession": "0001702510-24-000033",
+          "text": "Atlas US Finco, Inc. ^ (2)(3)(7)(11) High Tech Industries SOFR 7.25 % 12.55 % 12/15/2022 12/12/2029 1,445 1,404 1,457 0.13"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_2743c14885c2",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent rule-output census is exactly 58 rows; original HTML separate Industry cells, XML current instants, table headings and continuation neighbors checked for each. Missing raw labels are confirmed on 29 rows, including separate JV Class A/B Investment Funds rows (USD1,000/USD7,709,000); zero Class C is adjacent and outside this flagged set. The other 29 retain broad Structured Credit (27 literal, two with tranche ordinal) and null GICS; the report correctly leaves precise taxonomy unresolved. The aggregate confirmed_error is supported by the raw-capture omissions and does not mean all 58 rows have proven GICS errors. Restore source labels and separately decide taxonomy; no source evidence supports forcing a precise subtype. Row keys: ROW-2b3f1f48765a8c52, ROW-7108ca7ecc14d864, ROW-dcf4beb6a7e181a3, ROW-34d70b401dc4a16d, ROW-f669e54baf3c0f02, ROW-6dbcdf1361209740, ROW-d7db17b3e19d7a76, ROW-14b6568bbca08116, ROW-5f45a82ec628f91f, ROW-741982efc5cdfba1, ROW-82c5be8ac5f68047, ROW-73d4ae450506dc10, ROW-633e1a5a1e971b97, ROW-2335f0ff80154029, ROW-2998e4655756520d, ROW-8fcc7cc691fb95c0, ROW-29c4c6da631d31a5, ROW-4ae732848a72b20b, ROW-a6c8b1c19c80254c, ROW-19af725979e356cd, ROW-c3642701bd7ae082, ROW-94d6be3ffd0c1400, ROW-a5407e678b2f6f9a, ROW-316cdfac113da7df, ROW-324ac94ffa3308fb, ROW-ba3f224e866e2f59, ROW-2a92238acec478b4, ROW-8d33f5302ff1aa0c, ROW-51e72bb6f17b3ed8, ROW-22d80fdcd4e4c6cb, ROW-e12c1e2c6a86875f, ROW-a77adf48e6cec1d7, ROW-6e82ef676a389de9, ROW-d907869ac5ba3d29, ROW-f539e262f27837cf, ROW-36a976b74b750548, ROW-443cfaeee3abdea1, ROW-1c713b330c85580c, ROW-633f146f15360f28, ROW-531e8620a46b4308, ROW-bd37098e4fd3c49c, ROW-7bab890d835bba84, ROW-5ce34e64e1bb659a, ROW-f2d56ac78f6f9ab6, ROW-84ab8ce92f1943d7, ROW-4235710e8695f50b, ROW-fee510b8186afd6a, ROW-3aa1a78e8990f3f6, ROW-7ed8da04be8eb391, ROW-5dd37114affbe70a, ROW-2b91fe88ddc8844e, ROW-b5ccfa1fff86146e, ROW-6b45285f601a9af3, ROW-a4b12ba954cd7615, ROW-95b38b33998820ce, ROW-1a791db14171aa6d, ROW-b3248a4a4937bf96, ROW-df9215088d6f14a5",
+      "evidence": [
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Matterhorn Finco, Inc. (c) (2)(3)(15) Software SOFR 5.50 % 9.23 % 3/5/2026 3/5/2033 18,056 17,854 17,856 1.04"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "NFO Orange Buyer, LLC (c)(f) (2)(3)(15) Construction & Building SOFR 4.50 % 8.13 % 1/13/2026 1/13/2033 11,954 11,882 11,883 0.69"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "API Holdings III LLC (b)(c) (2)(3)(15) Aerospace & Defense SOFR 5.50 % 9.15 % 6/5/2026 6/5/2033 13,493 13,321 13,320 0.77"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "OHA Credit Funding 14-R Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.25 % 8.88 % 3/28/2025 4/20/2038 6,000 6,000 5,905 0.34"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Silver Point CLO 8 Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.15 % 8.78 % 2/28/2025 4/15/2038 1,500 1,500 1,402 0.08"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "BCTO Bobsled Purchaser, Inc. (b)(c) (2)(3)(15) Healthcare & Pharmaceuticals SOFR 4.75 % 8.48 % 1/16/2026 1/16/2033 23,162 22,926 22,934 1.33"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Apidos CLO XVIII-R Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.50 % 9.13 % 11/22/2024 1/22/2038 3,270 3,270 3,215 0.19"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Trintech, Inc. (b)(c) (2)(3)(15) Software SOFR 4.75 % 8.39 % 1/29/2026 1/29/2033 16,726 16,521 16,294 0.95"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "AGL CLO 40 Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.35 % 8.98 % 3/28/2025 7/22/2038 4,670 4,670 4,632 0.27"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Rad CLO 17 Ltd. (a) (2)(7)(13) Structured Credit SOFR 6.25 % 9.88 % 11/5/2024 1/20/2038 2,000 2,000 1,885 0.11"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Thor (BC) Bidco AB (Sweden) (e) (2)(7) Wholesale STIBOR 5.00 % 7.06 % 6/1/2026 6/1/2033 SEK 74,240 7,905 7,580 0.44"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Navacord Intermediate Holdings Inc. (Canada) (a) (6)(7)(15) Diversified Financial Services 11.00 % ( 100 % PIK) 2/2/2026 14 10,364 9,940 0.58"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Bitnova Midco S.p.A. (Italy) (d) (2)(7) High Tech Industries EURIBOR 5.50 % 7.72 % 2/19/2026 2/19/2033 EUR 6,521 7,527 7,321 0.43"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "DCA Buyer LLC (a) (2)(3) Healthcare & Pharmaceuticals SOFR 5.00 % 8.66 % 6/2/2026 6/2/2031 937 928 937 0.05"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Hermes BidCo Germany GmbH (Germany) (d) (2)(3)(7) Healthcare & Pharmaceuticals EURIBOR 5.25 % 7.54 % 4/29/2026 4/29/2033 EUR 8,446 9,668 9,457 0.55"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "TS Imagine Intermediate Inc. (b)(c) (2)(3)(15) Software SOFR 6.25 % 9.91 % 6/12/2026 6/12/2031 16,375 16,103 16,101 0.94"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "KKR CLO 54 Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.80 % 9.43 % 11/22/2024 1/15/2038 3,050 3,050 3,019 0.18"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Eltera Bidco AS (Norway) (e) (2)(7)(15) Business Services NIBOR 5.00 % 9.54 % 5/11/2026 5/12/2033 NOK 61,361 6,550 6,072 0.35"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Allegro CLO XV Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.50 % 9.13 % 2/14/2025 4/20/2038 2,500 2,500 2,390 0.14"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Advanced Infusion Solutions Acquisition, LLC (b)(c) (2)(3)(15) Healthcare & Pharmaceuticals SOFR 5.00 % 8.64 % 6/4/2026 6/4/2032 15,260 14,910 14,906 0.87"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Structured Credit Partners JV, LLC, Class A (a) (7)(12)(14) Investment Funds 2/11/2026 $ 1 $ 1 $ 1 0.00 %"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Bryant Park Funding Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.75 % 9.38 % 11/18/2024 1/18/2038 3,000 3,000 2,952 0.17"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Elmwood CLO 40 Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.25 % 8.88 % 3/21/2025 3/22/2038 2,500 2,500 2,511 0.15"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Generate CLO 18 Ltd. (a) (2)(7)(13) Structured Credit SOFR 6.00 % 9.63 % 10/18/2024 1/20/2038 2,190 2,190 2,154 0.13"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Silver Point CLO 7 Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.75 % 9.38 % 11/25/2024 1/15/2038 2,200 2,200 2,079 0.12"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Ethos Bidco, Ltd. (United Kingdom) (d) (2)(7) Healthcare & Pharmaceuticals SONIA 5.25 % 8.98 % 3/12/2026 3/12/2033 GBP 7,033 9,301 9,189 0.53"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Apollo Purchaser, Inc. (Canada) (c) (2)(3)(7)(15) Telecommunications CORRA 5.00 % 7.34 % 6/30/2026 6/30/2033 C$ 4,845 $ 3,356 $ 3,356 0.20 %"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Chartwell Cumming Holding Corporation (c) (2)(3)(15) Construction & Building SOFR 4.75 % 8.48 % 6/16/2026 6/16/2033 2,780 2,664 2,664 0.15"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "AB BSL CLO 5 Ltd. (a) (2)(7)(13) Structured Credit SOFR 6.10 % 9.73 % 11/18/2024 1/20/2038 1,250 1,250 1,232 0.07"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Birch Grove CLO 11 Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.80 % 9.43 % 11/15/2024 1/22/2038 3,000 3,000 3,004 0.17"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Reese Park CLO Ltd. (a) (2)(7)(13) Structured Credit SOFR 6.00 % 9.63 % 11/20/2024 1/15/2038 2,220 2,220 1,942 0.11"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Sound Point CLO 35 Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.80 % 9.43 % 2/13/2025 4/26/2038 1,670 1,670 1,617 0.09"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "GI DI Emerald Intermediate Limited (United Kingdom) (d) (2)(3)(7) Business Services EURIBOR 4.75 % 7.04 % 2/12/2026 2/12/2033 EUR 1,813 2,090 2,052 0.12"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "CIFC Funding 2014-III Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.25 % 8.88 % 3/11/2025 3/31/2038 4,000 4,000 3,936 0.23"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Golub Capital Partners CLO 43B Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.75 % 9.38 % 10/31/2024 10/20/2037 $ 3,375 $ 3,375 $ 3,169 0.18 %"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Regatta XXIV Funding Ltd (a) (2)(7)(13) Structured Credit SOFR 5.15 % 8.78 % 12/20/2024 1/20/2038 3,000 3,000 2,860 0.17"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Silver Point CLO 1 Ltd (a) (2)(7)(13) Structured Credit SOFR 5.25 % 8.88 % 12/23/2024 1/20/2038 2,250 2,250 2,020 0.12"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Onward Acquierco, Inc. (c) (2)(3)(15) Software SOFR 2.38 %, 2.68 % PIK 8.69 % 4/1/2026 4/1/2033 $ 11,685 $ 11,549 $ 11,550 0.67 %"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Orbcomm Inc. (b)(c)(f) (2)(15) Telecommunications SOFR 5.25 % 8.98 % 4/27/2026 4/27/2032 27,429 27,088 27,090 1.57"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Empower CLO 2025-1 Ltd (a) (2)(7)(13) Structured Credit SOFR 5.90 % 9.53 % 5/15/2025 7/20/2038 4,000 4,000 3,973 0.23"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "SIG Parent Holdings, LLC (a)(b) (2)(3)(15) Diversified Financial Services SOFR 4.75 % 8.39 % 2/25/2026 8/21/2031 3,921 3,760 3,841 0.22"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Bryant Park Funding Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.00 % 8.63 % 2/20/2025 4/15/2038 3,000 3,000 2,845 0.17"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "CVC Cordatus Loan Fund X DAC (a) (2)(7)(13) Structured Credit EURIBOR 5.35 % 7.67 % 1/24/2025 1/26/2038 EUR 1,100 1,155 1,257 0.07"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Elmwood CLO II Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.75 % 9.38 % 10/29/2024 10/20/2037 3,250 3,250 3,232 0.19"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Pikes Peak CLO 8 (a) (2)(7)(13) Structured Credit SOFR 5.75 % 9.38 % 12/19/2024 1/20/2038 3,000 3,000 2,912 0.17"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Regatta 30 Funding Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.40 % 9.03 % 11/25/2024 1/25/2038 1,970 1,970 1,942 0.11"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "DCA TopCo LP (a) (6)(12) Healthcare & Pharmaceuticals 6/2/2026 408 3,825 3,825 0.22"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "DCA Buyer LLC (a)(b) (2)(3) Healthcare & Pharmaceuticals SOFR 4.25 %, 2.25 % PIK 10.16 % 6/2/2026 6/2/2031 6,335 6,335 6,335 0.37"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Jawbreaker Parent, Inc. (b)(c) (2)(3)(15) Software SOFR 4.75 % 8.48 % 1/30/2026 1/30/2033 24,049 23,760 23,763 1.38"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "1988 CLO 2 Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.25 % 8.88 % 3/12/2025 4/15/2038 $ 3,500 $ 3,500 $ 3,366 0.20 %"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "AB BSL CLO 4 Ltd. (a) (2)(7)(13) Structured Credit SOFR 6.10 % 9.73 % 3/28/2025 4/20/2038 4,000 3,963 4,002 0.24"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Neuberger Berman Loan Advisers CLO 33 Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.50 % 9.13 % 3/14/2025 4/16/2039 6,000 6,000 5,930 0.34"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "GI DI Emerald Intermediate Limited (United Kingdom) (d)(e) (2)(3)(7)(15) Business Services SOFR 4.75 % 8.48 % 2/12/2026 2/12/2033 2,942 2,890 2,890 0.17"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Goose Borrower, L.P. (c) (2)(3)(15) Software SOFR 4.75 % 8.48 % 2/3/2026 3/2/2033 $ 15,737 $ 15,559 $ 15,560 0.90 %"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "RR Ltd. (a) (2)(7)(13) Structured Credit SOFR 5.50 % 9.13 % 11/26/2024 1/15/2037 2,860 2,860 2,807 0.16"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Structured Credit Partners JV, LLC, Class B (a) (7)(14) Investment Funds FIXED 18.70 % 18.70 % 2/11/2026 7,709 7,709 7,709 0.45"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Apollo Purchaser, Inc. (Canada) (c) (2)(3)(7) Telecommunications SOFR 5.00 % 8.73 % 6/30/2026 6/30/2033 3,411 3,377 3,377 0.20"
+        },
+        {
+          "accession": "0001702510-26-000084",
+          "text": "48Forty TopCo LLC (a) (6)(12) Transportation: Cargo 1/14/2026 1 $ 6,500 $ 5,627 0.33 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_3448be549782",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent singleton census and exact current context verified. Original Shares/Units cell has inline scale=3, no sign reversal, unit shares; XML absolute count is 4387000, decimals=-3 (precision, not an extra scale). rgA3 derived_proxy 1000.0 disagrees. Cost/FV facts and neighboring equity rows establish alignment. Talon is 145,631,000 shares in both selected 2023 quarters; Carbo is 4,387,000 at 2026-06-30, while comparative 2025-12-31 prints 1 thousand. No unit convention reconciles proxy with this current source. Preserving source-tagged counts and tracing override precedence is justified; no production repair is implied. Row keys: ROW-9c7983ebe6fc613e",
+      "evidence": [
+        {
+          "accession": "0001702510-26-000084",
+          "text": "Project Carbo S.a.r.l. (Luxembourg) (a) (6)(7) High Tech Industries 14.30 % ( 100 % PIK) 1/27/2025 4,387 4,709 5,082 0.30"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_50af55ce6992",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent singleton census: current c-49 row has EUR229,000 principal, USD265,000 cost/USD261,000 FV and 10.28% all-in rate; its separate spread cell prints 8.10 %, 0.25 % PIK. XML on the same current context omits PIK facts and sandbox pik_rate is null. Adjacent EUR3,346,000 and USD283,000 tranches differ, preventing issuer-level conflation. Source supports missing 0.25% PIK terms only, without proof of current accrual/payment or stress-induced amendment. Proposed column/context-specific capture and neighboring-tranche checks fit that evidence. Row keys: ROW-6e4ff9e5c17cab86",
+      "evidence": [
+        {
+          "accession": "0001702510-25-000139",
+          "text": "Big Bus Tours Group Limited (United Kingdom) (d) (2)(7) Leisure Products & Services EURIBOR 8.10 %, 0.25 % PIK 10.28 % 7/17/2025 6/4/2031 EUR 229 265 261 0.02"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_55e3cfc50479",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent singleton census and current-context inline facts match the printed Atlas US Finco, Inc. row, not the following separate Atlas US tranche. Exact XML dimension instead says Atlas AU Bidco Pty Ltd (Australia), which rgA3 reproduces. Matching principal/cost/FV and dates confirms filing display/XML disagreement rather than wrong row selection. A bounded context correction with retained tranche separation and documented source conflict is supported. Row keys: ROW-de2b8843247a45bf",
+      "evidence": [
+        {
+          "accession": "0001702510-24-000056",
+          "text": "Atlas US Finco, Inc. ^ (2)(3)(7)(13) High Tech Industries SOFR 5.75 % 11.08 % 12/15/2022 12/12/2029 1,445 1,406 1,458 0.14"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_5f3b4c4a2073",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent singleton census and current context verified. Original legal-name cell is Vensure Employer Services, Inc.; Business Services is a distinct Industry cell. XML typed identifier lacks a separator and rgA3 includes Business Services in issuer_name. Principal, cost/FV and dates match this row; it is not a comparative or neighboring row. A filer-specific verified industry-suffix parser correction is supported, with name false-positive checks required before implementation. Row keys: ROW-2bc6c015fc17959c",
+      "evidence": [
+        {
+          "accession": "0001702510-24-000084",
+          "text": "Vensure Employer Services, Inc. ^+ (2)(3)(13) Business Services SOFR 5.00 % 9.59 % 9/27/2024 9/27/2031 19,807 19,554 19,426 1.84"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ac1bc4cbd584",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent singleton census and current context verified. Original legal-name cell is Vensure Employer Services, Inc.; Business Services is a distinct Industry cell. XML typed identifier lacks a separator and rgA3 includes Business Services in issuer_name. Principal, cost/FV and dates match this row; it is not a comparative or neighboring row. A filer-specific verified industry-suffix parser correction is supported, with name false-positive checks required before implementation. Row keys: ROW-cbd1777a7fd9daee",
+      "evidence": [
+        {
+          "accession": "0001702510-25-000023",
+          "text": "Vensure Employer Services, Inc. (a)(b)(e) (2)(14) Business Services SOFR 5.00 % 9.34 % 9/27/2024 9/27/2031 21,058 20,816 21,029 1.41"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ff1997e2be0a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent singleton census and exact current context verified. Original Shares/Units cell has inline scale=3, no sign reversal, unit shares; XML absolute count is 145631000, decimals=-3 (precision, not an extra scale). rgA3 derived_proxy 1018000.0 disagrees. Cost/FV facts and neighboring equity rows establish alignment. Talon is 145,631,000 shares in both selected 2023 quarters; Carbo is 4,387,000 at 2026-06-30, while comparative 2025-12-31 prints 1 thousand. No unit convention reconciles proxy with this current source. Preserving source-tagged counts and tracing override precedence is justified; no production repair is implied. Row keys: ROW-348ac7a2a7332724",
+      "evidence": [
+        {
+          "accession": "0001702510-23-000039",
+          "text": "Talon MidCo 1 Limited ^ (7) Software 8/17/2022 145,631 1,456 1,725 0.15"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [],
+  "request_reviews": [],
+  "scope": "Nine exact selected findings only; not fund acceptance, resolution, current production validation, or a census outside the selected flags.",
+  "limitations": [
+    "Broad Structured Credit/Investment Funds labels do not establish precise GICS subtypes.",
+    "No repairs, builds, tests, ledger changes or dispositions; historical rgA3 evidence does not prove a current production defect."
+  ],
+  "counts": {
+    "selected_findings": 9,
+    "supported_findings": 9,
+    "rejected_findings": 0,
+    "affected_rows": 66,
+    "reviewed_rows": 66,
+    "observation_reviews": 0,
+    "request_reviews": 0
+  }
+}
