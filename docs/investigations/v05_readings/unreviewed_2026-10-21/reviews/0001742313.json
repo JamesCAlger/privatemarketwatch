@@ -1,0 +1,241 @@
+{
+  "reviewer_id": "/root/remaining_monroe_check_sol",
+  "report_digest": "8ea3b3044245fb84efebfdf6ddeaaef18a32d07228eeeec86a3969bf1a38dd8e",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_2d0aef4184fd",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 21 exact rule/date flags from sandbox canonical CSV and shadow output; checked original HTML context periods, every source row and adjacent continuation rows. Confirmed source-label errors and report's row-specific false positives. Spaced acronyms/legal suffixes and PrecisionX former-name spelling do not establish different economic issuers. STATS II is a printed/member discrepancy only; legal identity remains unproven. Proposed parser/continuation repairs preserve distinct positions. Exact keys and independent original source text are in reviewer/original_population.json. {'wrapped_source_name': 3, 'instrument_text_retained_in_issuer': 6, 'cosmetic_name_variation': 12}",
+      "evidence": [
+        {
+          "accession": "0001410578-23-001083",
+          "text": "American Broadband and Telecommunications 18.00 % Cash/"
+        },
+        {
+          "accession": "0001410578-23-001083",
+          "text": "Company LLC (Delayed Draw) (~) (*) (**) P 12.00 % 2.00 % PIK 6/10/2022 6/10/2025 3,065 2,768 2,849 0.3 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_2d62fdcc2eca",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 272 funded published missing-GICS rows and checked each original context and backward original DOM heading path, not reader output. Visible headings support raw-industry extraction loss; Class A shares is an instrument description, not Automotive. Q2 Nastel and SheerTrans rollforward contexts were crosswalked to distinct current-period schedule contexts using issuer, units and fair values, with correct Services: Business / Transportation: Cargo headings. This contradicts D-159's no-disclosure claim. Broad headings do not prove unique fine GICS; report explicitly retains that limitation and proposes separate mapping validation. Exact keys/source/heading paths in reviewer/original_population.json.",
+      "evidence": [
+        {
+          "accession": "0001410578-23-002414",
+          "text": "300 N. Michigan Mezz, LLC (Delayed Draw) (~) (<) (*) (**) SF 14.50 % 19.83 % PIK 7/15/2020 7/15/2024 1,000 997 997 0.1 %"
+        },
+        {
+          "accession": "0001410578-23-002414",
+          "text": "95 Percent Buyer, LLC ( 385,027 Class A units) (####) n/a n/a 8.00 % PIK 11/24/2021 - - 385 830 0.1 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_392dbe16ce0a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 257 funded published missing-GICS rows and checked each original context and backward original DOM heading path, not reader output. Visible headings support raw-industry extraction loss; Class A shares is an instrument description, not Automotive. Q2 Nastel and SheerTrans rollforward contexts were crosswalked to distinct current-period schedule contexts using issuer, units and fair values, with correct Services: Business / Transportation: Cargo headings. This contradicts D-159's no-disclosure claim. Broad headings do not prove unique fine GICS; report explicitly retains that limitation and proposes separate mapping validation. Exact keys/source/heading paths in reviewer/original_population.json.",
+      "evidence": [
+        {
+          "accession": "0001410578-23-001769",
+          "text": "300 N. Michigan Mezz, LLC (Delayed Draw) (~) (<) (*) (**) SF 14.57 % 19.63 % PIK 7/15/2020 7/15/2024 1,000 997 997 0.1 %"
+        },
+        {
+          "accession": "0001410578-23-001769",
+          "text": "95 Percent Buyer, LLC ( 385,027 Class A units) (####) n/a n/a 8.00 % PIK 11/24/2021 - - 385 469 0.1 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_4af2ed1f520a",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 2 exact rule/date flags from sandbox canonical CSV and shadow output; checked original HTML context periods, every source row and adjacent continuation rows. Confirmed source-label errors and report's row-specific false positives. Spaced acronyms/legal suffixes and PrecisionX former-name spelling do not establish different economic issuers. STATS II is a printed/member discrepancy only; legal identity remains unproven. Proposed parser/continuation repairs preserve distinct positions. Exact keys and independent original source text are in reviewer/original_population.json. {'instrument_text_retained_in_issuer': 2}",
+      "evidence": [
+        {
+          "accession": "0001742313-26-000013",
+          "text": "Evolve Biologics Inc. (warrant to purchase up to 1.2 % of the equity) (6)(12) - - - 1/18/2024 1/18/2034 - - - 0.0 %"
+        },
+        {
+          "accession": "0001742313-26-000013",
+          "text": "SFR Holdco, LLC ( 10.5 % of equity commitments) (12) - - - 3/1/2022 - - 2,925 3,715 0.1 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_4c24f8a23d07",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 2 exact rule/date flags from sandbox canonical CSV and shadow output; checked original HTML context periods, every source row and adjacent continuation rows. Confirmed source-label errors and report's row-specific false positives. Spaced acronyms/legal suffixes and PrecisionX former-name spelling do not establish different economic issuers. STATS II is a printed/member discrepancy only; legal identity remains unproven. Proposed parser/continuation repairs preserve distinct positions. Exact keys and independent original source text are in reviewer/original_population.json. {'instrument_text_retained_in_issuer': 2}",
+      "evidence": [
+        {
+          "accession": "0001742313-24-000006",
+          "text": "SFR Holdco, LLC ( 13.9 % of equity commitments) (<) - - - (###) 8/6/2021 - - 3,900 4,371 0.3 %"
+        },
+        {
+          "accession": "0001742313-24-000006",
+          "text": "SFR Holdco, LLC ( 10.5 % of equity commitments) (<) - - - (###) 3/1/2022 - - 2,925 3,278 0.3 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_704e7dcf2621",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 7 exact rule/date flags from sandbox canonical CSV and shadow output; checked original HTML context periods, every source row and adjacent continuation rows. Confirmed source-label errors and report's row-specific false positives. Spaced acronyms/legal suffixes and PrecisionX former-name spelling do not establish different economic issuers. STATS II is a printed/member discrepancy only; legal identity remains unproven. Proposed parser/continuation repairs preserve distinct positions. Exact keys and independent original source text are in reviewer/original_population.json. {'instrument_text_retained_in_issuer': 3, 'cosmetic_former_name_spelling': 3, 'source_issuer_suffix_discrepancy': 1}",
+      "evidence": [
+        {
+          "accession": "0001742313-24-000027",
+          "text": "KL Moon Acquisition, LLC ( 0.3 % of the equity) - - - (###) 1/31/2023 - - 981 657 0.1 %"
+        },
+        {
+          "accession": "0001742313-24-000027",
+          "text": "PrecisionX Group, LLC (fka Specialty Manufacturing Buyer, LLC) (Delayed Draw) (*) (**) SF 6.51 % 11.84 % 6/30/2023 6/30/2028 6,004 - - 0.0 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_9f2c6715c11f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 2 exact rule/date flags from sandbox canonical CSV and shadow output; checked original HTML context periods, every source row and adjacent continuation rows. Confirmed source-label errors and report's row-specific false positives. Spaced acronyms/legal suffixes and PrecisionX former-name spelling do not establish different economic issuers. STATS II is a printed/member discrepancy only; legal identity remains unproven. Proposed parser/continuation repairs preserve distinct positions. Exact keys and independent original source text are in reviewer/original_population.json. {'truncated_source_name': 2}",
+      "evidence": [
+        {
+          "accession": "0001742313-25-000012",
+          "text": "Bench Walk Lead, LLC (commitment to purchase up to 3.2 % of the equity) (12)(17) - - - 6/12/2023 - - 1,600 1,638 0.1 %"
+        },
+        {
+          "accession": "0001742313-25-000012",
+          "text": "Sparq Holdings, Inc. (Revolver) (19) SF 5.75 % 10.08 % 6/16/2023 6/15/2029 409 41 41 0.0 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a30f42a5365c",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 1 exact rule/date flags from sandbox canonical CSV and shadow output; checked original HTML context periods, every source row and adjacent continuation rows. Confirmed source-label errors and report's row-specific false positives. Spaced acronyms/legal suffixes and PrecisionX former-name spelling do not establish different economic issuers. STATS II is a printed/member discrepancy only; legal identity remains unproven. Proposed parser/continuation repairs preserve distinct positions. Exact keys and independent original source text are in reviewer/original_population.json. {'truncated_source_name': 1}",
+      "evidence": [
+        {
+          "accession": "0001742313-24-000084",
+          "text": "Sparq Holdings, Inc. (Revolver) (19) SF 5.75 % 10.35 % 6/16/2023 6/15/2029 409 - - 0.0 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_b82325228371",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 33 exact rule/date flags from sandbox canonical CSV and shadow output; checked original HTML context periods, every source row and adjacent continuation rows. Confirmed source-label errors and report's row-specific false positives. Spaced acronyms/legal suffixes and PrecisionX former-name spelling do not establish different economic issuers. STATS II is a printed/member discrepancy only; legal identity remains unproven. Proposed parser/continuation repairs preserve distinct positions. Exact keys and independent original source text are in reviewer/original_population.json. {'instrument_text_retained_in_issuer': 24, 'wrapped_source_name': 3, 'cosmetic_name_variation': 6}",
+      "evidence": [
+        {
+          "accession": "0001410578-23-002414",
+          "text": "Aduro Advisors, LLC (~) (~~~~) SF 6.25 % 11.57 % 5/26/2023 5/26/2028 8,479 8,275 8,542 0.7 %"
+        },
+        {
+          "accession": "0001410578-23-002414",
+          "text": "American Broadband and Telecommunications 18.50 % Cash/"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ca7fa93cef11",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 239 funded published missing-GICS rows and checked each original context and backward original DOM heading path, not reader output. Visible headings support raw-industry extraction loss; Class A shares is an instrument description, not Automotive. Q2 Nastel and SheerTrans rollforward contexts were crosswalked to distinct current-period schedule contexts using issuer, units and fair values, with correct Services: Business / Transportation: Cargo headings. This contradicts D-159's no-disclosure claim. Broad headings do not prove unique fine GICS; report explicitly retains that limitation and proposes separate mapping validation. Exact keys/source/heading paths in reviewer/original_population.json.",
+      "evidence": [
+        {
+          "accession": "0001410578-23-001083",
+          "text": "300 N. Michigan Mezz, LLC (Delayed Draw) (~) (<) (*) (**) SF 14.57 % 19.35 % PIK 7/15/2020 7/15/2024 1,000 979 979 0.1 %"
+        },
+        {
+          "accession": "0001410578-23-001083",
+          "text": "95 Percent Buyer, LLC ( 385,027 Class A units) (####) n/a n/a 8.00 % PIK 11/24/2021 - - 385 540 0.1 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_da08d2926d0d",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 7 exact rule/date flags from sandbox canonical CSV and shadow output; checked original HTML context periods, every source row and adjacent continuation rows. Confirmed source-label errors and report's row-specific false positives. Spaced acronyms/legal suffixes and PrecisionX former-name spelling do not establish different economic issuers. STATS II is a printed/member discrepancy only; legal identity remains unproven. Proposed parser/continuation repairs preserve distinct positions. Exact keys and independent original source text are in reviewer/original_population.json. {'instrument_text_retained_in_issuer': 5, 'source_issuer_suffix_discrepancy': 1, 'truncated_source_name': 1}",
+      "evidence": [
+        {
+          "accession": "0001742313-24-000046",
+          "text": "BTR Opco LLC (fka Born To Run, LLC) ( 659 Class A common units) (15) - - - 6/21/2024 - - 677 - 0.0 %"
+        },
+        {
+          "accession": "0001742313-24-000046",
+          "text": "SFR Holdco, LLC ( 13.9 % of equity commitments) (11)(15) - - - 8/6/2021 - - 3,900 4,460 0.3 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_f719c2bd8903",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed all 30 exact rule/date flags from sandbox canonical CSV and shadow output; checked original HTML context periods, every source row and adjacent continuation rows. Confirmed source-label errors and report's row-specific false positives. Spaced acronyms/legal suffixes and PrecisionX former-name spelling do not establish different economic issuers. STATS II is a printed/member discrepancy only; legal identity remains unproven. Proposed parser/continuation repairs preserve distinct positions. Exact keys and independent original source text are in reviewer/original_population.json. {'instrument_text_retained_in_issuer': 20, 'wrapped_source_name': 3, 'cosmetic_name_variation': 7}",
+      "evidence": [
+        {
+          "accession": "0001410578-23-001769",
+          "text": "Aduro Advisors, LLC (~) SF 6.35 % 11.45 % 5/26/2023 5/26/2028 8,500 8,290 8,288 0.9 %"
+        },
+        {
+          "accession": "0001410578-23-001769",
+          "text": "American Broadband and Telecommunications 18.25 % Cash/"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_REV_bba0cd9b8a2b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently queried canonical holdings (zero 2026-06-30 rows) and financials (current investments FV 5,956,417,000). Read original balance-sheet and schedule current/comparative columns: June FV 5,956,417 versus December 5,819,755, thousands; June net assets 2,709,662 explain 219.8% schedule NAV ratio. Read F28 code: presence mismatch, not valuation error. Cached June current schedule exists. Coverage-gap conclusion and proposed horizon/extraction investigation are supported; root cause and complete Q2 position extraction remain untested. Metric key 0001742313/2026-06-30/fund_financials_holdings_coverage.",
+      "evidence": [
+        {
+          "accession": "0001742313-26-000046",
+          "text": "Total investments, at fair value (amortized cost of: $ 6,047,458 and $ 5,913,363 , respectively) 5,956,417 5,819,755"
+        },
+        {
+          "accession": "0001742313-26-000046",
+          "text": "TOTAL INVESTMENTS $ 6,047,458 $ 5,956,417 219.8 %"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [],
+  "request_reviews": [],
+  "scope": "13 frozen selected findings only; excludes 32 previously reviewed findings; not fund acceptance or disposition",
+  "counts": {
+    "selected_findings_supported": 13,
+    "position_rule_memberships": 873,
+    "distinct_positions": 805,
+    "name_memberships": 105,
+    "industry_memberships": 768,
+    "fund_quarter_metric_keys": 1
+  },
+  "limitations": [
+    "No economic-identity conclusion from STATS suffix disagreement; no entity merge approved.",
+    "No unique GICS inference from broad filed industries.",
+    "Q2 coverage/source existence verified at metric level; complete Q2 position extraction and cause of omitted quarter not audited.",
+    "No builds, fixes, tests, network, ledger/disposition/acceptance changes or commits.",
+    "No observations or orchestrator requests in report to review."
+  ]
+}

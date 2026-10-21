@@ -2,7 +2,7 @@
 
 User scope: review previously unreviewed findings, excluding recorded agent investigations, verdicts and disposition proposals. Frozen selection: 447 findings across 40 retained funds, ordered by 2026-03-31 published fair value.
 
-71 findings independently reviewed; 376 remain. 68 findings contain confirmed errors; 3 are false alarms; 0 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
+84 findings independently reviewed; 363 remain. 81 findings contain confirmed errors; 3 are false alarms; 0 have source ambiguity. A finding may contain both error and false-positive rows; counts here classify the finding, not every row.
 
 Reviews do not resolve ledger items, accept dispositions, repair data or approve funds. Canonical data, existing reports and previously reviewed findings remain unchanged. No builds or tests required for this evidence-only work. Mechanisms and proposed detectors need implementation and validation before repairs. Original-source quotes and exact selected coverage are mechanically checked; each completed report has a separate source reviewer.
 
@@ -13,3 +13,4 @@ Reviews do not resolve ledger items, accept dispositions, repair data or approve
 | Oaktree Strategic Credit Fund | 8 | 8 | 0 | 0 | [Report](0001872371.json) / [independent review](reviews/0001872371.json) |
 | MSD Investment Corp. | 4 | 4 | 0 | 0 | [Report](0001849894.json) / [independent review](reviews/0001849894.json) |
 | North Haven Private Income Fund LLC | 12 | 12 | 0 | 0 | [Report](0001851322.json) / [independent review](reviews/0001851322.json) |
+| Monroe Capital Income Plus Corp | 13 | 13 | 0 | 0 | [Report](0001742313.json) / [independent review](reviews/0001742313.json) |
