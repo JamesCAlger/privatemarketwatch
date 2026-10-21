@@ -1,0 +1,451 @@
+{
+  "reviewer_id": "/root/remaining_oaktree_check_sol",
+  "report_digest": "532652e0fae2ca82f232e7002b05c22df862eaa10e62108e6d7f25da8f5b46f9",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_001ec129f2a8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact CIK/rule/quarter population independently from original rule CSV and holdings parquet: 1 rows, {'confirmed_error': 1}. Every original context has the finding's instant date; read attached physical row and previous two/next one rows, including continuation neighbors. Compared source cells, not mere quote existence or totals. ROW-e0c4402b5d5c672f: exact source shares 6338000 (unit shares, scale 0, decimals INF), derived proxy 6338.0; currency cost/FV facts scale 3 decimals -3.  Proposed context-keyed repair and targeted regressions are reasonable next actions, not verified fixes. Root-cause execution remains unverified. Currency source ambiguity requires audit, not automatic replacement.",
+      "evidence": [
+        {
+          "accession": "0001872371-24-000004",
+          "text": "PetVet Care Centers, LLC Health Care Services Preferred Equity 6,338,000 6,211 6,217 (8)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_07dd8d567170",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact CIK/rule/quarter population independently from original rule CSV and holdings parquet: 3 rows, {'confirmed_error': 3}. Every original context has the finding's instant date; read attached physical row and previous two/next one rows, including continuation neighbors. Compared source cells, not mere quote existence or totals. ROW-420b21f5ccd54353: issuer 'Asurion, LLC' disagrees with separate company cell 'athenahealth Group Inc.'; industry cell 'Health Care Technology', instrument cell 'Fixed Rate Bond'. ROW-0f5c42f9cc8aa6a1: issuer 'CLO Notes' disagrees with separate company cell 'Rockford Tower CLO 2024-1'; industry cell 'Multi-Sector Holdings', instrument cell 'CLO Notes'. ROW-9c6c03c2076c31fc: issuer 'CD&R Firefly Bidco Limited' disagrees with separate company cell 'Buttercup 2023-1 LLC'; industry cell 'Specialized Finance', instrument cell 'CLO Notes'.  Proposed context-keyed repair and targeted regressions are reasonable next actions, not verified fixes. Root-cause execution remains unverified. Currency source ambiguity requires audit, not automatic replacement.",
+      "evidence": [
+        {
+          "accession": "0001872371-26-000009",
+          "text": "athenahealth Group Inc. Health Care Technology Fixed Rate Bond 6.50 % 2/15/2030 10,357 10,030 9,732"
+        },
+        {
+          "accession": "0001872371-26-000009",
+          "text": "Rockford Tower CLO 2024-1 Multi-Sector Holdings CLO Notes SOFR+ 7.48 % 11.15 % 4/20/2037 2,500 2,479 2,432 (5)(10)"
+        },
+        {
+          "accession": "0001872371-26-000009",
+          "text": "Buttercup 2023-1 LLC Specialized Finance CLO Notes SOFR+ 6.50 % 10.13 % 9/30/2030 $ 30,824 30,901 30,855 (5)(8)(10)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_0cfa0e2fb93f",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact CIK/rule/quarter population independently from original rule CSV and holdings parquet: 3 rows, {'confirmed_error': 1, 'false_alarm': 2}. Every original context has the finding's instant date; read attached physical row and previous two/next one rows, including continuation neighbors. Compared source cells, not mere quote existence or totals. ROW-20f2c7b4851d31ab: issuer 'Microf Funding V LL' disagrees with separate company cell 'Microf Funding V LLC'; industry cell 'Consumer Finance', instrument cell 'First Lien Term Loan'. ROW-387beb802af7a166: internal whitespace only; exact CLO series preserved. ROW-211d08d6ec7b36f5: internal whitespace only; exact CLO series preserved.  Proposed context-keyed repair and targeted regressions are reasonable next actions, not verified fixes. Root-cause execution remains unverified. Currency source ambiguity requires audit, not automatic replacement.",
+      "evidence": [
+        {
+          "accession": "0001872371-25-000004",
+          "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 10.91 % 6/3/2027 14,239 13,986 14,319 (5)(8)(9)(10)"
+        },
+        {
+          "accession": "0001872371-25-000004",
+          "text": "AIMCO CLO 12 Multi-Sector Holdings CLO Notes SOFR+ 6.10 % 10.75 % 1/17/2032 1,400 1,392 1,406 (5)(10)"
+        },
+        {
+          "accession": "0001872371-25-000004",
+          "text": "AB BSL CLO 4 Multi-Sector Holdings CLO Notes SOFR+ 5.50 % 10.12 % 4/20/2036 3,800 3,800 3,864 (5)(10)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_4f1bbe0f4f94",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact CIK/rule/quarter population independently from original rule CSV and holdings parquet: 50 rows, {'confirmed_error': 50}. Every original context has the finding's instant date; read attached physical row and previous two/next one rows, including continuation neighbors. Compared source cells, not mere quote existence or totals. ROW-717a8d251b602b38: issuer 'MRI Software LLC, Application Software' disagrees with separate company cell 'MRI Software LLC'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-19be91931b2eaec7: issuer 'CVAUSA Management, LLC, Health Care Services' disagrees with separate company cell 'CVAUSA Management, LLC'; industry cell 'Health Care Services', instrument cell 'First Lien Term Loan'. ROW-fbb051b4b7e8f3ac: issuer 'Seres Therapeutics, Inc., Biotechnology' disagrees with separate company cell 'Seres Therapeutics, Inc.'; industry cell 'Biotechnology', instrument cell 'Warrants'. ROW-52c7a6f511fbf742: issuer 'IW Buyer LLC, Electrical Components & Equipment' disagrees with separate company cell 'IW Buyer LLC'; industry cell 'Electrical Components & Equipment', instrument cell 'First Lien Term Loan'. ROW-cc920a1cf1be2cae: issuer 'Supreme Fitness Group NY Holdings, LLC, Leisure Facilities' disagrees with separate company cell 'Supreme Fitness Group NY Holdings, LLC'; industry cell 'Leisure Facilities', instrument cell 'First Lien Term Loan'. ROW-5bc4ab777096bb6e: issuer 'Supreme Fitness Group NY Holdings, LLC, Leisure Facilities' disagrees with separate company cell 'Supreme Fitness Group NY Holdings, LLC'; industry cell 'Leisure Facilities', instrument cell 'First Lien Term Loan'. ROW-81b4278c4310ac95: issuer 'Ten-X LLC, Interactive Media & Services' disagrees with separate company cell 'Ten-X LLC'; industry cell 'Interactive Media & Services', instrument cell 'First Lien Term Loan'. ROW-cd1c457ddbe8809d: issuer 'THL Zinc Ventures Ltd, Diversified Metals & Mining' disagrees with separate company cell 'THL Zinc Ventures Ltd'; industry cell 'Diversified Metals & Mining', instrument cell 'First Lien Term Loan'. ROW-d6bb48a64449d0e5: issuer 'Galileo Parent, Inc., Aerospace & Defense' disagrees with separate company cell 'Galileo Parent, Inc.'; industry cell 'Aerospace & Defense', instrument cell 'First Lien Term Loan'. ROW-0bf458ede38e4350: issuer 'MRI Software LLC, Application Software' disagrees with separate company cell 'MRI Software LLC'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-39edb0e7300f9ede: issuer 'Supreme Fitness Group NY Holdings, LLC, Leisure Facilities' disagrees with separate company cell 'Supreme Fitness Group NY Holdings, LLC'; industry cell 'Leisure Facilities', instrument cell 'First Lien Term Loan'. ROW-84d83e8150778e20: issuer 'CVAUSA Management, LLC, Health Care Services' disagrees with separate company cell 'CVAUSA Management, LLC'; industry cell 'Health Care Services', instrument cell 'First Lien Revolver'. ROW-468bc4bc8482c62e: issuer 'HUB Pen Company, LLC, Other Specialty Retail' disagrees with separate company cell 'HUB Pen Company, LLC'; industry cell 'Other Specialty Retail', instrument cell 'First Lien Term Loan'. ROW-07ac990902228e3a: issuer 'IW Buyer LLC, Electrical Components & Equipment' disagrees with separate company cell 'IW Buyer LLC'; industry cell 'Electrical Components & Equipment', instrument cell 'First Lien Revolver'. ROW-c32992a18a552840: issuer 'North Star Acquisitionco, LLC, Education Services' disagrees with separate company cell 'North Star Acquisitionco, LLC'; industry cell 'Education Services', instrument cell 'First Lien Term Loan'. ROW-0cfb4e48d0c1aaa0: issuer 'Inventus Power, Inc., Electrical Components & Equipment' disagrees with separate company cell 'Inventus Power, Inc.'; industry cell 'Electrical Components & Equipment', instrument cell 'First Lien Revolver'. ROW-12cdbf5860d36cc3: issuer 'North Star Acquisitionco, LLC, Education Services' disagrees with separate company cell 'North Star Acquisitionco, LLC'; industry cell 'Education Services', instrument cell 'First Lien Revolver'. ROW-80d3effb1aa110a8: issuer 'CVAUSA Management, LLC, Health Care Services' disagrees with separate company cell 'CVAUSA Management, LLC'; industry cell 'Health Care Services', instrument cell 'First Lien Term Loan'. ROW-d23450cb03fcde06: issuer 'Pluralsight, LLC, Application Software' disagrees with separate company cell 'Pluralsight, LLC'; industry cell 'Application Software', instrument cell 'First Lien Revolver'. ROW-2b12a594d9c89a3b: issuer 'Seres Therapeutics, Inc., Biotechnology' disagrees with separate company cell 'Seres Therapeutics, Inc.'; industry cell 'Biotechnology', instrument cell 'First Lien Term Loan'. ROW-437ab40a31a6f3e4: issuer 'Seres Therapeutics, Inc., Biotechnology' disagrees with separate company cell 'Seres Therapeutics, Inc.'; industry cell 'Biotechnology', instrument cell 'First Lien Term Loan'. ROW-1a3f9f2f51b2e958: issuer 'Kindercare Learning Centers Kindercare Portfolio, Diversified Real Estate Activities' disagrees with separate company cell 'Kindercare Learning Centers Kindercare Portfolio'; industry cell 'Diversified Real Estate Activities', instrument cell 'CLO Notes'. ROW-f820cdb9313f2139: issuer 'Park Place Technologies, LLC, Internet Services & Infrastructure' disagrees with separate company cell 'Park Place Technologies, LLC'; industry cell 'Internet Services & Infrastructure', instrument cell 'First Lien Term Loan'. ROW-7b3bfd17e1cd90f2: issuer 'iCIMs, Inc., Application Software' disagrees with separate company cell 'iCIMs, Inc.'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-0615d38f5188894a: issuer 'Galileo Parent, Inc., Aerospace & Defense' disagrees with separate company cell 'Galileo Parent, Inc.'; industry cell 'Aerospace & Defense', instrument cell 'First Lien Revolver'. ROW-6e07ad1fe3e84c7a: issuer 'OneOncology, LLC, Health Care Services' disagrees with separate company cell 'OneOncology, LLC'; industry cell 'Health Care Services', instrument cell 'First Lien Term Loan'. ROW-8c3083fca9bba0b8: issuer 'Pluralsight, LLC, Application Software' disagrees with separate company cell 'Pluralsight, LLC'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-a4a42cc7ea6ed8d7: issuer 'North Star Acquisitionco, LLC, Education Services' disagrees with separate company cell 'North Star Acquisitionco, LLC'; industry cell 'Education Services', instrument cell 'First Lien Term Loan'. ROW-f052617d4d13c856: issuer 'IAMGOLD Corporation, Gold' disagrees with separate company cell 'IAMGOLD Corporation'; industry cell 'Gold', instrument cell 'Second Lien Term Loan'. ROW-e03c2cc1b1dc27b1: issuer 'iCIMs, Inc., Application Software' disagrees with separate company cell 'iCIMs, Inc.'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-143baccddf5a284f: issuer 'Inventus Power, Inc., Electrical Components & Equipment' disagrees with separate company cell 'Inventus Power, Inc.'; industry cell 'Electrical Components & Equipment', instrument cell 'First Lien Term Loan'. ROW-7d10b905eaf9b14f: issuer 'Seres Therapeutics, Inc., Biotechnology' disagrees with separate company cell 'Seres Therapeutics, Inc.'; industry cell 'Biotechnology', instrument cell 'First Lien Term Loan'. ROW-66f49fe315a32ad4: issuer 'New Enterprise Stone & Lime Co Inc, Construction Materials' disagrees with separate company cell 'New Enterprise Stone & Lime Co Inc'; industry cell 'Construction Materials', instrument cell 'Fixed Rate Bond'. ROW-f3751ad7c07ca5f8: issuer 'SCIH Salt Holdings Inc., Diversified Metals & Mining' disagrees with separate company cell 'SCIH Salt Holdings Inc.'; industry cell 'Diversified Metals & Mining', instrument cell 'First Lien Term Loan'. ROW-7ff91d8bbfbdeac9: issuer 'Ares LXVIII CLO, Multi-Sector Holdings' disagrees with separate company cell 'ARES LXVIII CLO'; industry cell 'Multi-Sector Holdings', instrument cell 'CLO Notes'. ROW-33ef1f5adaf052d4: issuer 'OneOncology, LLC, Health Care Services' disagrees with separate company cell 'OneOncology, LLC'; industry cell 'Health Care Services', instrument cell 'First Lien Term Loan'. ROW-3dfece8b62f5fe1e: issuer 'iCIMs, Inc., Application Software' disagrees with separate company cell 'iCIMs, Inc.'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-f8ec2853bbea2191: issuer 'PetSmart LLC, Other Specialty Retail' disagrees with separate company cell 'PetSmart LLC'; industry cell 'Other Specialty Retail', instrument cell 'First Lien Term Loan'. ROW-966849ef72af8382: issuer 'ARES LXIV CLO, Multi-Sector Holdings' disagrees with separate company cell 'ARES LXIV CLO'; industry cell 'Multi-Sector Holdings', instrument cell 'CLO Notes'. ROW-0e0859b7820975fc: issuer 'CVAUSA Management, LLC, Health Care Services' disagrees with separate company cell 'CVAUSA Management, LLC'; industry cell 'Health Care Services', instrument cell 'First Lien Term Loan'. ROW-f7d27628e08320fe: issuer 'SCIH Salt Holdings Inc., Diversified Metals & Mining' disagrees with separate company cell 'SCIH Salt Holdings Inc.'; industry cell 'Diversified Metals & Mining', instrument cell 'Fixed Rate Bond'. ROW-c5519a5b70c88453: issuer 'Seres Therapeutics, Inc., Biotechnology' disagrees with separate company cell 'Seres Therapeutics, Inc.'; industry cell 'Biotechnology', instrument cell 'First Lien Term Loan'. ROW-130745136a144c27: issuer 'iCIMs, Inc., Application Software' disagrees with separate company cell 'iCIMs, Inc.'; industry cell 'Application Software', instrument cell 'First Lien Revolver'. ROW-38f044ce94b87b2b: issuer 'MND Holdings III Corp, Other Specialty Retail' disagrees with separate company cell 'MND Holdings III Corp'; industry cell 'Other Specialty Retail', instrument cell 'First Lien Revolver'. ROW-bb36e5b820b309e8: issuer 'OneOncology, LLC, Health Care Services' disagrees with separate company cell 'OneOncology, LLC'; industry cell 'Health Care Services', instrument cell 'First Lien Revolver'. ROW-6ebe8b5eeb207255: issuer 'HUB Pen Company, LLC, Other Specialty Retail' disagrees with separate company cell 'HUB Pen Company, LLC'; industry cell 'Other Specialty Retail', instrument cell 'First Lien Revolver'. ROW-24ecc7aa0ba04d43: issuer 'MND Holdings III Corp, Other Specialty Retail' disagrees with separate company cell 'MND Holdings III Corp'; industry cell 'Other Specialty Retail', instrument cell 'First Lien Term Loan'. ROW-c6dfe4e0e185a825: issuer 'MRI Software LLC, Application Software' disagrees with separate company cell 'MRI Software LLC'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-2faf2e27fb84d873: issuer 'Global Aircraft Leasing Co Ltd, Trading Companies & Distributors' disagrees with separate company cell 'Global Aircraft Leasing Co Ltd'; industry cell 'Trading Companies & Distributors', instrument cell 'Fixed Rate Bond'. ROW-e7ef35cdc9585513: issuer 'Supreme Fitness Group NY Holdings, LLC, Leisure Facilities' disagrees with separate company cell 'Supreme Fitness Group NY Holdings, LLC'; industry cell 'Leisure Facilities', instrument cell 'First Lien Revolver'.  Proposed context-keyed repair and targeted regressions are reasonable next actions, not verified fixes. Root-cause execution remains unverified. Currency source ambiguity requires audit, not automatic replacement.",
+      "evidence": [
+        {
+          "accession": "0001872371-23-000012",
+          "text": "MRI Software LLC Application Software First Lien Term Loan SOFR+ 5.50 % 10.84 % 2/10/2026 4,966 4,958 4,830 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "CVAUSA Management, LLC Health Care Services First Lien Term Loan SOFR+ 6.50 % 11.59 % 5/22/2029 13,658 13,254 13,264 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Seres Therapeutics, Inc. Biotechnology Warrants 93,470 293 324 (8)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "IW Buyer LLC Electrical Components & Equipment First Lien Term Loan SOFR+ 6.75 % 11.80 % 6/28/2029 34,461 33,428 33,428 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Supreme Fitness Group NY Holdings, LLC Leisure Facilities First Lien Term Loan SOFR+ 7.00 % 12.18 % 12/31/2026 8,217 8,102 7,785 (5)(8)(13)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Supreme Fitness Group NY Holdings, LLC Leisure Facilities First Lien Term Loan SOFR+ 7.00 % 12.18 % 12/31/2026 281 270 236 (5)(8)(9)(13)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Ten-X LLC Interactive Media & Services First Lien Term Loan SOFR+ 6.00 % 11.09 % 5/26/2028 24,934 23,703 23,750 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "THL Zinc Ventures Ltd Diversified Metals & Mining First Lien Term Loan 13.00 % 5/23/2026 39,751 39,253 39,270 (8)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Galileo Parent, Inc. Aerospace & Defense First Lien Term Loan SOFR+ 7.25 % 12.34 % 5/3/2029 20,277 19,685 19,697 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "MRI Software LLC Application Software First Lien Term Loan SOFR+ 5.50 % 10.84 % 2/10/2026 4,609 4,460 4,482 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Supreme Fitness Group NY Holdings, LLC Leisure Facilities First Lien Term Loan SOFR+ 7.00 % 12.18 % 12/31/2026 704 693 662 (5)(8)(9)(13)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "CVAUSA Management, LLC Health Care Services First Lien Revolver SOFR+ 6.50 % 5/22/2029 - ( 75 ) ( 73 ) (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "HUB Pen Company, LLC Other Specialty Retail First Lien Term Loan SOFR+ 6.50 % 11.76 % 12/31/2027 27,404 26,680 26,708 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "IW Buyer LLC Electrical Components & Equipment First Lien Revolver SOFR+ 6.75 % 11.80 % 6/28/2029 459 267 267 (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "North Star Acquisitionco, LLC Education Services First Lien Term Loan SOFR+ 6.00 % 10.81 % 5/3/2029 36,717 36,002 36,023 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Inventus Power, Inc. Electrical Components & Equipment First Lien Revolver SOFR+ 7.50 % 6/30/2025 - ( 149 ) ( 149 ) (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "North Star Acquisitionco, LLC Education Services First Lien Revolver SOFR+ 6.00 % 5/3/2029 - ( 86 ) ( 83 ) (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "CVAUSA Management, LLC Health Care Services First Lien Term Loan SOFR+ 6.50 % 5/22/2029 - ( 202 ) ( 197 ) (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Pluralsight, LLC Application Software First Lien Revolver SOFR+ 8.00 % 13.04 % 4/6/2027 820 574 759 (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Seres Therapeutics, Inc. Biotechnology First Lien Term Loan SOFR+ 7.88 % 12.95 % 4/27/2029 11,547 11,116 11,129 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Seres Therapeutics, Inc. Biotechnology First Lien Term Loan SOFR+ 7.88 % 4/27/2029 - - - (5)(8)(9)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Kindercare Learning Centers Kindercare Portfolio Diversified Real Estate Activities CLO Notes SOFR+ 2.41 % 7.56 % 8/15/2038 4,964 4,617 4,633 (5)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Park Place Technologies, LLC Internet Services & Infrastructure First Lien Term Loan SOFR+ 5.00 % 10.20 % 11/10/2027 4,957 4,752 4,833 (5)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "iCIMs, Inc. Application Software First Lien Term Loan SOFR+ 7.25 % 8/18/2028 - - - (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Galileo Parent, Inc. Aerospace & Defense First Lien Revolver SOFR+ 7.25 % 12.34 % 5/3/2029 1,397 1,305 1,307 (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "OneOncology, LLC Health Care Services First Lien Term Loan SOFR+ 6.25 % 11.49 % 6/9/2030 22,885 22,318 22,322 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Pluralsight, LLC Application Software First Lien Term Loan SOFR+ 8.00 % 13.04 % 4/6/2027 26,144 22,222 25,177 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "North Star Acquisitionco, LLC Education Services First Lien Term Loan SOFR+ 6.00 % 5/3/2029 - ( 33 ) ( 32 ) (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "IAMGOLD Corporation Gold Second Lien Term Loan SOFR+ 8.25 % 13.30 % 5/16/2028 28,394 27,564 27,585 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "iCIMs, Inc. Application Software First Lien Term Loan SOFR+ 7.25 % 12.38 % 8/18/2028 2,325 2,289 2,279 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Inventus Power, Inc. Electrical Components & Equipment First Lien Term Loan SOFR+ 7.50 % 12.72 % 6/30/2025 43,875 42,560 42,558 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Seres Therapeutics, Inc. Biotechnology First Lien Term Loan SOFR+ 7.88 % 12.88 % 4/27/2029 4,330 4,169 4,173 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "New Enterprise Stone & Lime Co Inc Construction Materials Fixed Rate Bond 5.25 % 7/15/2028 500 453 456"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "SCIH Salt Holdings Inc. Diversified Metals & Mining First Lien Term Loan SOFR+ 4.00 % 9.19 % 3/16/2027 7,975 7,806 7,870 (5)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "ARES LXVIII CLO Multi-Sector Holdings CLO Notes SOFR+ 5.75 % 10.83 % 4/25/2035 5,000 5,000 5,087 (5)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "OneOncology, LLC Health Care Services First Lien Term Loan SOFR+ 6.25 % 6/9/2030 - ( 107 ) ( 106 ) (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "iCIMs, Inc. Application Software First Lien Term Loan SOFR+ 3.38 % 8.50 % 3.88 % 8/18/2028 15,468 15,243 14,858 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "PetSmart LLC Other Specialty Retail First Lien Term Loan SOFR+ 3.75 % 8.95 % 2/11/2028 10,929 10,706 10,927 (5)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "ARES LXIV CLO Multi-Sector Holdings CLO Notes SOFR+ 3.75 % 8.74 % 4/15/2035 2,200 2,050 2,043 (5)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "CVAUSA Management, LLC Health Care Services First Lien Term Loan SOFR+ 6.50 % 5/22/2029 - ( 86 ) ( 82 ) (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "SCIH Salt Holdings Inc. Diversified Metals & Mining Fixed Rate Bond 4.88 % 5/1/2028 2,000 1,804 1,789"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Seres Therapeutics, Inc. Biotechnology First Lien Term Loan SOFR+ 7.88 % 4/27/2029 - - - (5)(8)(9)(10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "iCIMs, Inc. Application Software First Lien Revolver SOFR+ 6.75 % 11.99 % 8/18/2028 241 220 184 (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "MND Holdings III Corp Other Specialty Retail First Lien Revolver SOFR+ 7.50 % 12.58 % 5/9/2028 2,166 1,895 1,895 (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "OneOncology, LLC Health Care Services First Lien Revolver SOFR+ 6.25 % 6/9/2030 - ( 113 ) ( 113 ) (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "HUB Pen Company, LLC Other Specialty Retail First Lien Revolver SOFR+ 6.50 % 11.76 % 12/31/2027 108 20 24 (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "MND Holdings III Corp Other Specialty Retail First Lien Term Loan SOFR+ 7.50 % 12.74 % 5/9/2028 41,587 40,867 40,867 (5)(8)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "MRI Software LLC Application Software First Lien Term Loan SOFR+ 5.50 % 10.83 % 2/10/2026 798 790 736 (5)(8)(9)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Global Aircraft Leasing Co Ltd Trading Companies & Distributors Fixed Rate Bond 6.50 % 9/15/2024 7,645 6,954 7,007 (10)"
+        },
+        {
+          "accession": "0001872371-23-000012",
+          "text": "Supreme Fitness Group NY Holdings, LLC Leisure Facilities First Lien Revolver SOFR+ 7.00 % 12.18 % 12/31/2026 396 391 375 (5)(8)(13)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a4329c91e620",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact CIK/rule/quarter population independently from original rule CSV and holdings parquet: 22 rows, {'confirmed_error': 22}. Every original context has the finding's instant date; read attached physical row and previous two/next one rows, including continuation neighbors. Compared source cells, not mere quote existence or totals. ROW-3f9af1e2fb12129b: issuer 'First Lien Term Loan 1' disagrees with separate company cell 'Kairos Intermediateco AB'; industry cell 'Health Care Supplies', instrument cell 'First Lien Term Loan'. ROW-d0593279a2ee7518: issuer 'CLO Notes 1' disagrees with separate company cell 'Fortress Credit BSL XV'; industry cell 'Multi-Sector Holdings', instrument cell 'CLO Notes'. ROW-a3472b535329817f: issuer 'First Lien Term Loan 1' disagrees with separate company cell 'ACESO Holding 4 S.A.R.L.'; industry cell 'Health Care Services', instrument cell 'First Lien Term Loan'. ROW-96690dcf62e710f7: issuer 'First Lien Term Loan 2' disagrees with separate company cell 'ACESO Holding 4 S.A.R.L.'; industry cell 'Health Care Services', instrument cell 'First Lien Term Loan'. ROW-f2910dc7c6043f36: issuer 'Subordinated Debt Revolver' disagrees with separate company cell 'Hertz Vehicle Financing III'; industry cell 'Specialized Finance', instrument cell 'Subordinated Debt Revolver'. ROW-b4cfb3ca8d41f4ec: issuer 'First Lien Term Loan 3' disagrees with separate company cell 'ACESO Holding 4 S.A.R.L.'; industry cell 'Health Care Services', instrument cell 'First Lien Term Loan'. ROW-cd2519c3bb1314fc: issuer 'First Lien Term Loan 4' disagrees with separate company cell 'Kairos Intermediateco AB'; industry cell 'Health Care Supplies', instrument cell 'First Lien Term Loan'. ROW-812f56daa85b379d: issuer 'First Lien Term Loan 1' disagrees with separate company cell 'Janus Bidco Limited'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-6d53e14781f10685: issuer 'CLO Notes' disagrees with separate company cell 'Woodmont 2022-9 Trust'; industry cell 'Multi-Sector Holdings', instrument cell 'CLO Notes'. ROW-dd651ec65fbf5c02: issuer 'Fixed Rate Bond' disagrees with separate company cell 'National Mentor Holdings'; industry cell 'Health Care Services', instrument cell 'Fixed Rate Bond'. ROW-f7720ac81440ef69: issuer 'First Lien Term Loan' disagrees with separate company cell 'Quantum Bidco Limited'; industry cell 'Food Distributors', instrument cell 'First Lien Term Loan'. ROW-280ed5c67dcc4dba: issuer 'CLO Notes 2' disagrees with separate company cell 'Prosper Credit Card 2024-1'; industry cell 'Specialized Finance', instrument cell 'CLO Notes'. ROW-0d1e79bc18323919: issuer 'First Lien Term Loan 1' disagrees with separate company cell 'Optimizely Sweden Holdings AB'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-47a7fa97dbe0184e: issuer 'CLO Notes 1' disagrees with separate company cell 'Prosper Credit Card 2024-1'; industry cell 'Specialized Finance', instrument cell 'CLO Notes'. ROW-776c383f66b203eb: issuer 'First Lien Term Loan 2' disagrees with separate company cell 'Optimizely Sweden Holdings AB'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-0993347f231805ca: issuer 'First Lien Term Loan 2' disagrees with separate company cell 'Kairos Intermediateco AB'; industry cell 'Health Care Supplies', instrument cell 'First Lien Term Loan'. ROW-caf627be87a30b93: issuer 'First Lien Term Loan' disagrees with separate company cell 'Intralot Capital Luxembourg S.A.'; industry cell 'Casinos & Gaming', instrument cell 'First Lien Term Loan'. ROW-3e2be25bcecc6eb3: issuer 'First Lien Term Loan 3' disagrees with separate company cell 'Kairos Intermediateco AB'; industry cell 'Health Care Supplies', instrument cell 'First Lien Term Loan'. ROW-468dd0d7aa32e8c0: issuer 'CLO Notes 2' disagrees with separate company cell 'Fortress Credit BSL XV'; industry cell 'Multi-Sector Holdings', instrument cell 'CLO Notes'. ROW-7f1ab7856a1e92c6: issuer 'First Lien Term Loan' disagrees with separate company cell 'Aurora Lux Finco S.A.R.L'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'. ROW-ec800e47c27f72d4: issuer 'CLO Notes 3' disagrees with separate company cell 'Prosper Credit Card 2024-1'; industry cell 'Specialized Finance', instrument cell 'CLO Notes'. ROW-faa3757a00d0794d: issuer 'First Lien Term Loan 2' disagrees with separate company cell 'Janus Bidco Limited'; industry cell 'Application Software', instrument cell 'First Lien Term Loan'.  Proposed context-keyed repair and targeted regressions are reasonable next actions, not verified fixes. Root-cause execution remains unverified. Currency source ambiguity requires audit, not automatic replacement.",
+      "evidence": [
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Kairos Intermediateco AB Health Care Supplies First Lien Term Loan E+ 4.75 % 4/22/2032 - ( 17 ) ( 17 ) (5)(8)(9)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Fortress Credit BSL XV Multi-Sector Holdings CLO Notes SOFR+ 4.75 % 8.43 % 10/18/2033 $ 5,000 5,000 4,979 (5)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "ACESO Holding 4 S.A.R.L. Health Care Services First Lien Term Loan E+ 5.75 % 8.25 % 9/27/2031 EUR 7,618 8,800 8,630 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "ACESO Holding 4 S.A.R.L. Health Care Services First Lien Term Loan E+ 5.75 % 8.25 % 9/30/2031 35,616 41,031 40,349 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Hertz Vehicle Financing III Specialized Finance Subordinated Debt Revolver 9.28 % 6/28/2028 85,710 85,710 85,273 (8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "ACESO Holding 4 S.A.R.L. Health Care Services First Lien Term Loan E+ 5.75 % 8.25 % 9/27/2031 30,473 33,504 34,523 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Kairos Intermediateco AB Health Care Supplies First Lien Term Loan NIBOR+ 4.75 % 9.31 % 4/22/2032 Nkr 163,432 16,078 16,392 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Janus Bidco Limited Application Software First Lien Term Loan SOFR+ 5.50 % 9.14 % 4/25/2031 38,626 37,956 38,626 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Woodmont 2022-9 Trust Multi-Sector Holdings CLO Notes SOFR+ 7.77 % 11.44 % 10/25/2036 9,385 9,302 9,387 (5)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "National Mentor Holdings Health Care Services Fixed Rate Bond 10.50 % 12/15/2030 18,855 18,530 19,886"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Quantum Bidco Limited Food Distributors First Lien Term Loan SONIA+ 5.50 % 9.35 % 1/31/2028 GBP 5,244 6,598 6,948 (5)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Prosper Credit Card 2024-1 Specialized Finance CLO Notes 10.05 % 10/15/2034 5,471 5,395 5,458 (8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Optimizely Sweden Holdings AB Application Software First Lien Term Loan E+ 5.75 % 5.46 % 2.50 % 10/30/2031 EUR 14,847 16,013 16,070 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Prosper Credit Card 2024-1 Specialized Finance CLO Notes 7.15 % 10/15/2034 5,240 5,228 5,243 (8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Optimizely Sweden Holdings AB Application Software First Lien Term Loan SONIA+ 6.00 % 7.23 % 2.50 % 10/30/2031 GBP 4,949 6,390 6,229 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Kairos Intermediateco AB Health Care Supplies First Lien Term Loan E+ 4.75 % 7.13 % 4/22/2032 EUR 31,021 36,044 35,201 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Intralot Capital Luxembourg S.A. Casinos & Gaming First Lien Term Loan SONIA+ 5.50 % 9.23 % 10/7/2031 GBP 41,506 54,772 54,103 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Kairos Intermediateco AB Health Care Supplies First Lien Term Loan SONIA+ 4.75 % 8.48 % 4/22/2032 GBP 11,627 15,608 15,316 (5)(8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Fortress Credit BSL XV Multi-Sector Holdings CLO Notes SOFR+ 8.45 % 12.13 % 10/18/2033 6,000 6,034 5,694 (5)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Aurora Lux Finco S.A.R.L Application Software First Lien Term Loan SOFR+ 5.25 % 8.98 % 10/1/2032 $ 20,375 20,009 18,236 (5)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Prosper Credit Card 2024-1 Specialized Finance CLO Notes 14.64 % 10/15/2034 7,289 7,289 7,289 (8)(10)"
+        },
+        {
+          "accession": "0001872371-26-000013",
+          "text": "Janus Bidco Limited Application Software First Lien Term Loan SONIA+ 5.50 % 4/25/2031 - ( 112 ) - (5)(8)(9)(10)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_caba0761928b",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact CIK/rule/quarter population independently from original rule CSV and holdings parquet: 3 rows, {'false_alarm': 2, 'confirmed_error': 1}. Every original context has the finding's instant date; read attached physical row and previous two/next one rows, including continuation neighbors. Compared source cells, not mere quote existence or totals. ROW-3ac80dac681ab202: internal whitespace only; exact CLO series preserved. ROW-7a3d2e968fc952ef: issuer 'Microf Funding V LL' disagrees with separate company cell 'Microf Funding V LLC'; industry cell 'Consumer Finance', instrument cell 'First Lien Term Loan'. ROW-81687a36d4cb4ef9: internal whitespace only; exact CLO series preserved.  Proposed context-keyed repair and targeted regressions are reasonable next actions, not verified fixes. Root-cause execution remains unverified. Currency source ambiguity requires audit, not automatic replacement.",
+      "evidence": [
+        {
+          "accession": "0001872371-24-000014",
+          "text": "AB BSL CLO 4 Multi-Sector Holdings CLO Notes SOFR+ 5.50 % 10.78 % 4/20/2036 3,800 3,800 3,882 (5)(10)"
+        },
+        {
+          "accession": "0001872371-24-000014",
+          "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 11.43 % 6/3/2027 14,239 14,086 13,952 (5)(8)(9)(10)"
+        },
+        {
+          "accession": "0001872371-24-000014",
+          "text": "AIMCO CLO 12 Multi-Sector Holdings CLO Notes SOFR+ 6.10 % 11.39 % 1/17/2032 1,400 1,392 1,405 (5)(10)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d1e86c986cfc",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact CIK/rule/quarter population independently from original rule CSV and holdings parquet: 3 rows, {'confirmed_error': 3}. Every original context has the finding's instant date; read attached physical row and previous two/next one rows, including continuation neighbors. Compared source cells, not mere quote existence or totals. ROW-7287584dc121614e: exact source shares 139794 (unit shares, scale 0, decimals INF), derived proxy 25.0; currency cost/FV facts scale 3 decimals -3. ROW-99b9606a70211ded: exact source shares 139677 (unit shares, scale 0, decimals INF), derived proxy 25.0; currency cost/FV facts scale 3 decimals -3. ROW-a66c38f990a225b8: exact source shares 138000 (unit shares, scale 0, decimals INF), derived proxy 149728.0; currency cost/FV facts scale 3 decimals -3.  Proposed context-keyed repair and targeted regressions are reasonable next actions, not verified fixes. Root-cause execution remains unverified. Currency source ambiguity requires audit, not automatic replacement.",
+      "evidence": [
+        {
+          "accession": "0001872371-25-000014",
+          "text": "Delta Leasing SPV II LLC Specialized Finance Common Stock 139,794 2 2 (8)(10)"
+        },
+        {
+          "accession": "0001872371-25-000014",
+          "text": "Delta Leasing SPV II LLC Specialized Finance Preferred Equity 139,677 330 455 (8)(10)"
+        },
+        {
+          "accession": "0001872371-25-000014",
+          "text": "BioXcel Therapeutics, Inc. Pharmaceuticals Warrants 138,000 74 1 (8)(10)"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ea42a99fa392",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Reconstructed exact CIK/rule/quarter population independently from original rule CSV and holdings parquet: 2 rows, {'false_alarm': 1, 'confirmed_error': 1}. Every original context has the finding's instant date; read attached physical row and previous two/next one rows, including continuation neighbors. Compared source cells, not mere quote existence or totals. ROW-1d359327f5f2fe99: internal whitespace only; exact CLO series preserved. ROW-29f892852fb3ee0e: issuer 'Microf Funding V LL' disagrees with separate company cell 'Microf Funding V LLC'; industry cell 'Consumer Finance', instrument cell 'First Lien Term Loan'.  Proposed context-keyed repair and targeted regressions are reasonable next actions, not verified fixes. Root-cause execution remains unverified. Currency source ambiguity requires audit, not automatic replacement.",
+      "evidence": [
+        {
+          "accession": "0001872371-25-000008",
+          "text": "AB BSL CLO 4 Multi-Sector Holdings CLO Notes SOFR+ 5.50 % 9.79 % 4/20/2036 3,800 3,800 3,805 (5)(10)"
+        },
+        {
+          "accession": "0001872371-25-000008",
+          "text": "Microf Funding V LLC Consumer Finance First Lien Term Loan SOFR+ 6.58 % 10.90 % 6/3/2027 15,825 15,586 16,056 (5)(8)(9)(10)"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "original-context-position-labels-disagree-with-published-instrument",
+      "outcome": "supported",
+      "rationale": "Original c-65 and c-104 physical company/instrument cells establish the athenahealth bond and Buttercup CLO instrument disagreements, independently of wrong-neighbor matching. The proposed independent context-cell instrument/currency comparison would catch recurrence when columns are explicit, while skipping ambiguity and retaining tranche distinctions limits false positives. Qualification: c-104 original principal inline fact itself has unitref gbp, scale 3, decimals -3, while its physical row prints $. Published GBP metadata follows that original tag; evidence establishes a printed-versus-tagged source conflict, not a demonstrated pipeline currency error or authorization to change it to USD. The report correctly requests an audit; any detector must flag such conflicts as source ambiguity. This proposal has not been implemented or tested.",
+      "evidence": [
+        {
+          "accession": "0001872371-26-000009",
+          "text": "athenahealth Group Inc. Health Care Technology Fixed Rate Bond 6.50 % 2/15/2030 10,357 10,030 9,732"
+        },
+        {
+          "accession": "0001872371-26-000009",
+          "text": "Buttercup 2023-1 LLC Specialized Finance CLO Notes SOFR+ 6.50 % 10.13 % 9/30/2030 $ 30,824 30,901 30,855 (5)(8)(10)"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "scope": "Only eight selected previously-unreviewed findings, 87 rows; no whole-fund acceptance, disposition, sampling or repair.",
+  "limitations": [
+    "Producing functions/root-cause execution not traced.",
+    "Review establishes errors in selected populations, not completeness or correctness of all fund data.",
+    "No builds, tests, network, ledger/correction edits or commits.",
+    "Buttercup printed USD versus inline GBP remains source ambiguity."
+  ]
+}
