@@ -1,0 +1,620 @@
+{
+  "reviewer_id": "/root/remaining_tslx_check_sol",
+  "report_digest": "49e8752114855a1babcc5ffe495b58fbe153105621ebcb6f9e7acf84fed83e51",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_00d199f008d8",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original instrument explicitly prints 423,728 Class A units with separate 424 cost/FV cells, yet published numeric shares are null. Monetary scaling does not explain omitted labelled units. Original instrument explicitly prints 315,005 common shares, separate from 2,716 cost/4,360 FV monetary cells, yet published numeric shares are null. This is distinct from historical replaced-count corrections. Checked row keys: ROW-1e26b1694c8fabeb, ROW-d83362f2fefa169e. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-058321",
+          "text": "Warrior TopCo LP (11)(12) Class A Units ( 423,728 units) 7/7/2023 424 424 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "Sprinklr, Inc. (10)(11) Common Shares ( 315,005 shares) 6/24/2021 2,716 4,360 0.3 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_171ad24849c0",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. The preceding row explicitly names Copper Bidco and 132,928 certificates; this continuation separately prints 996,958 certificates. No intervening heading/company exists. Published units, cost and fair value match this continuation; blank company cell is not contrary issuer evidence. Both Mach and Murchison printed rows carry the same context. The selected published row has Mach 5,000,000 principal and December 2026 maturity/member, but Murchison 27,453,000 cost, 28,267,000 fair value, 14 percent coupon and 8.65 spread. Original rows have distinct companies, acquisitions and maturities; context identity cannot resolve this mixed record. Checked row keys: ROW-518fb96ffb55a907, ROW-e9628f1c99b1925d. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-015845",
+          "text": "Trust Certificates ( 996,958 Certificates) (9) 1/30/2021 2,589 10,089 0.6 %"
+        },
+        {
+          "accession": "0000950170-24-015845",
+          "text": "Mach Natural Resources LP (3)(4) First-lien loan ($ 5,000 par, due 12/2026 ) 12/28/2023 SOFR + 6.65 % 12.00 % 4,900 4,900 0.3 %"
+        },
+        {
+          "accession": "0000950170-24-015845",
+          "text": "Murchison Oil and Gas, LLC (3) First-lien loan ($ 27,849 par, due 6/2026 ) 6/30/2022 SOFR + 8.65 % 14.00 % 27,453 28,267 1.9 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_38c088b09ff7",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. The printed company anchor is Raptor US Buyer II Corp.; the adjacent instrument column contains the share count and class. Ten distinct classes remain distinct in each quarter. March count is 1,364, June/September 2,027, while the published issuer erroneously retains 1,364 throughout. The preceding row explicitly names Copper Bidco and 132,928 certificates; this continuation separately prints 996,958 certificates. No intervening heading/company exists. Published units, cost and fair value match this continuation; blank company cell is not contrary issuer evidence. Checked row keys: ROW-b424125b95493952, ROW-d0170b4dba1459f2, ROW-64f3291f00e0ef7a, ROW-fcb8d8f925126d52, ROW-35864a6bd67a5a43, ROW-ed56e072f8adf714, ROW-61c35cfee16a9b6c, ROW-b9a4ba92f61385f8, ROW-a0edf89d10f44148, ROW-2b3a4e228f838763, ROW-f5a365a68c61073b. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class E 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class C 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,836 10,468 0.8 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class G 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class B 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "Raptor US Buyer II Corp. (11)(12) 1,364 Ordinary Shares 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class D 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class I 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class F 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class H 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class A 3/24/2023 136 136 0.0 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_461ecee1e562",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. The preceding row explicitly names Copper Bidco and 132,928 certificates; this continuation separately prints 996,958 certificates. No intervening heading/company exists. Published units, cost and fair value match this continuation; blank company cell is not contrary issuer evidence. The printed company anchor is Raptor US Buyer II Corp.; the adjacent instrument column contains the share count and class. Ten distinct classes remain distinct in each quarter. March count is 1,364, June/September 2,027, while the published issuer erroneously retains 1,364 throughout. Checked row keys: ROW-070deb39c82c0913, ROW-a6d7ce083e9a98ae, ROW-7765b65db71f76cc, ROW-ac842450fde9ba4e, ROW-485f4e5ee83ecfa6, ROW-0dd51cbc38d7b41b, ROW-03267bdc9b6bc9a1, ROW-42287834714f330d, ROW-7c377b7e8ff6faf6, ROW-3d992a1df210bdac, ROW-a71d321d9ba3ac1f. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-038066",
+          "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,735 10,468 0.7 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class A 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class I 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class D 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class F 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class H 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class E 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class C 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "Raptor US Buyer II Corp. (11)(12) 2,027 Ordinary Shares 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class B 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class G 3/24/2023 203 203 0.0 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_470e792fe3fe",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original current-period instrument and typed member both retain Convertible Preference Shares, 4,976,563 shares. COMMON_EQUITY loses the preference status; convertibility is not evidence that shares have converted. Count and monetary fields match the located row. Checked row keys: ROW-e9182a2089810056. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-019845",
+          "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,341 (GBP 5,063 ) 0.4 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6636990527b3",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original current-period instrument and typed member both retain Convertible Preference Shares, 4,976,563 shares. COMMON_EQUITY loses the preference status; convertibility is not evidence that shares have converted. Count and monetary fields match the located row. Checked row keys: ROW-400dee451bb86517. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-048664",
+          "text": "Elysium BidCo Limited (4)(11) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 7,581 (GBP 5,636 ) 0.5 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_6ec07e0beea5",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original current-period instrument and typed member both retain Convertible Preference Shares, 4,976,563 shares. COMMON_EQUITY loses the preference status; convertibility is not evidence that shares have converted. Count and monetary fields match the located row. Printed Series F Preferred Shares, 199,054 shares, acquired 8/2/2019, is between Bigtincan Class A Units and Piano preferred. Published numeric units/cost/FV match Lucidworks but instrument/acquisition copy Bigtincan and classification is COMMON_EQUITY. Both quarters support source row/member divergence. Checked row keys: ROW-fa1dfc077b7e12c4, ROW-57ee2dfe41aff00e. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-25-264618",
+          "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 7,403 (GBP 5,499 ) 0.5 %"
+        },
+        {
+          "accession": "0001193125-25-264618",
+          "text": "Lucidworks, Inc. (11) Series F Preferred Shares ( 199,054 shares) 8/2/2019 800 554 0.0 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_8c57971b3de3",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original current-period instrument and typed member both retain Convertible Preference Shares, 4,976,563 shares. COMMON_EQUITY loses the preference status; convertibility is not evidence that shares have converted. Count and monetary fields match the located row. Checked row keys: ROW-b33e249f8915f3fb. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-061008",
+          "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,424 (GBP 4,977 ) 0.4 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a62b5004c065",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original current-period instrument and typed member both retain Convertible Preference Shares, 4,976,563 shares. COMMON_EQUITY loses the preference status; convertibility is not evidence that shares have converted. Count and monetary fields match the located row. Checked row keys: ROW-4417d060805ed09b. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-206313",
+          "text": "Elysium BidCo Limited (4)(10) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,891 (GBP 5,225 ) 0.4 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_a77c8d68b4b5",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original company cell says Photo Holdings, LLC. The context embeds Retail and Consumer before that company; published issuer retains and Consumer. Loan terms and monetary cells identify the exact row. Checked row keys: ROW-de382b467de2726e. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-332725",
+          "text": "Photo Holdings, LLC (3) First-lien loan ($ 50,000 par, due 6/2031 ) 6/22/2026 SOFR + 7.00 % 10.68 % 47,585 48,625 3.1 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_c93615c9cd2d",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. The printed company anchor is Raptor US Buyer II Corp.; the adjacent instrument column contains the share count and class. Ten distinct classes remain distinct in each quarter. March count is 1,364, June/September 2,027, while the published issuer erroneously retains 1,364 throughout. The preceding row explicitly names Copper Bidco and 132,928 certificates; this continuation separately prints 996,958 certificates. No intervening heading/company exists. Published units, cost and fair value match this continuation; blank company cell is not contrary issuer evidence. Checked row keys: ROW-2423a3c9955fb236, ROW-06b482da57f3f623, ROW-154ec9a4d149303b, ROW-0a129077acf2e5dc, ROW-39c51dfc24353318, ROW-942bec5e665a5e9d, ROW-15aab1a8d2db018d, ROW-4ac9fcd2fe4cae37, ROW-e4f8d78e2afdb113, ROW-91d485945ba74799, ROW-49db78b035339915. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class H 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class G 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class B 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class C 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class E 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "Trust Certificates ( 996,958 Certificates) (9) 1/30/2021 2,589 10,727 0.7 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class A 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class F 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "Raptor US Buyer II Corp. (11)(12) 2,027 Ordinary Shares 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class D 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class I 3/24/2023 203 203 0.0 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_d343a4b9af35",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original company spelling ends Unternehmensberatung, while published name omits g. Par 4,495 thousand EUR, July 2029 maturity, coupon/cost/FV match each dated printed row; September spread is 6.25 despite stale 6.50 instrument text. Checked row keys: ROW-db565b3314545aae. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-088524",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.42 % 4,697 4,818 (EUR 4,495 ) 0.3 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_da3089afc0ab",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original company spelling ends Unternehmensberatung, while published name omits g. Par 4,495 thousand EUR, July 2029 maturity, coupon/cost/FV match each dated printed row; September spread is 6.25 despite stale 6.50 instrument text. Checked row keys: ROW-9e3248c2f02755bd. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-121434",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.25 % 9.96 % 4,707 5,090 (EUR 4,561 ) 0.3 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_eadb94242cd6",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Printed Series F Preferred Shares, 199,054 shares, acquired 8/2/2019, is between Bigtincan Class A Units and Piano preferred. Published numeric units/cost/FV match Lucidworks but instrument/acquisition copy Bigtincan and classification is COMMON_EQUITY. Both quarters support source row/member divergence. Original current-period instrument and typed member both retain Convertible Preference Shares, 4,976,563 shares. COMMON_EQUITY loses the preference status; convertibility is not evidence that shares have converted. Count and monetary fields match the located row. Checked row keys: ROW-4101c2d741341d5f, ROW-bfb359d798705b65. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-100204",
+          "text": "Lucidworks, Inc. (11) Series F Preferred Shares ( 199,054 shares) 8/2/2019 800 650 0.0 %"
+        },
+        {
+          "accession": "0000950170-25-100204",
+          "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,820 (GBP 4,977 ) 0.4 %"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_ef6b18d239ec",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independently reconstructed exact rule/date population from untouched rgA6 page_rule_findings.csv and joined each stable key to rgA6 holdings. Read original cached HTML cells, bounded neighbors, XML context/member and facts; context instants equal selected periods. Original current-period instrument and typed member both retain Convertible Preference Shares, 4,976,563 shares. COMMON_EQUITY loses the preference status; convertibility is not evidence that shares have converted. Count and monetary fields match the located row. Checked row keys: ROW-fddfb26508697e83. At least one actual error remains in this aggregate; Copper rows, where present, are separately false positives. Proposed source-row extraction/association repairs preserve positions and require validation before implementation.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-332725",
+          "text": "Elysium BidCo Limited (4)(10) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,902 (GBP 5,201 ) 0.4 %"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [
+    {
+      "observation_key": "unit-count-fused-into-issuer-name",
+      "outcome": "supported",
+      "rationale": "The printed company anchor is Raptor US Buyer II Corp.; the adjacent instrument column contains the share count and class. Ten distinct classes remain distinct in each quarter. March count is 1,364, June/September 2,027, while the published issuer erroneously retains 1,364 throughout. Existing detector reference is verified against actual flags for every listed row. This records detection coverage, not detector precision; Copper continuation handling needs a bounded section/company inheritance repair rather than suppressing real name errors.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class E 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class C 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class G 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class B 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "Raptor US Buyer II Corp. (11)(12) 1,364 Ordinary Shares 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class D 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class I 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class F 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class H 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-018777",
+          "text": "1,364 Class A 3/24/2023 136 136 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class A 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class I 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class D 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class F 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class H 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class E 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class C 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "Raptor US Buyer II Corp. (11)(12) 2,027 Ordinary Shares 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class B 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "2,027 Class G 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class H 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class G 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class B 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class C 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class E 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class A 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class F 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "Raptor US Buyer II Corp. (11)(12) 2,027 Ordinary Shares 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class D 3/24/2023 203 203 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "2,027 Class I 3/24/2023 203 203 0.0 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "continuation-company-cell-name-false-positive",
+      "outcome": "supported",
+      "rationale": "The preceding row explicitly names Copper Bidco and 132,928 certificates; this continuation separately prints 996,958 certificates. No intervening heading/company exists. Published units, cost and fair value match this continuation; blank company cell is not contrary issuer evidence. Existing detector reference is verified against actual flags for every listed row. This records detection coverage, not detector precision; Copper continuation handling needs a bounded section/company inheritance repair rather than suppressing real name errors.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-018777",
+          "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,836 10,468 0.8 %"
+        },
+        {
+          "accession": "0000950170-23-038066",
+          "text": "Trust Certificates ( 996,958 Certificates) 1/30/2021 2,735 10,468 0.7 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "Trust Certificates ( 996,958 Certificates) (9) 1/30/2021 2,589 10,727 0.7 %"
+        },
+        {
+          "accession": "0000950170-24-015845",
+          "text": "Trust Certificates ( 996,958 Certificates) (9) 1/30/2021 2,589 10,089 0.6 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "member-company-spelling-truncated",
+      "outcome": "supported",
+      "rationale": "Original company spelling ends Unternehmensberatung, while published name omits g. Par 4,495 thousand EUR, July 2029 maturity, coupon/cost/FV match each dated printed row; September spread is 6.25 despite stale 6.50 instrument text. Existing detector reference is verified against actual flags for every listed row. This records detection coverage, not detector precision; Copper continuation handling needs a bounded section/company inheritance repair rather than suppressing real name errors.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-088524",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.50 % 10.42 % 4,697 4,818 (EUR 4,495 ) 0.3 %"
+        },
+        {
+          "accession": "0000950170-24-121434",
+          "text": "Rapid Data GmbH Unternehmensberatung (3)(4) First-lien loan (EUR 4,495 par, due 7/2029 ) 7/11/2023 E + 6.25 % 9.96 % 4,707 5,090 (EUR 4,561 ) 0.3 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "industry-prefix-retained-in-issuer-name",
+      "outcome": "supported",
+      "rationale": "Original company cell says Photo Holdings, LLC. The context embeds Retail and Consumer before that company; published issuer retains and Consumer. Loan terms and monetary cells identify the exact row. Existing detector reference is verified against actual flags for every listed row. This records detection coverage, not detector precision; Copper continuation handling needs a bounded section/company inheritance repair rather than suppressing real name errors.",
+      "evidence": [
+        {
+          "accession": "0001193125-26-332725",
+          "text": "Photo Holdings, LLC (3) First-lien loan ($ 50,000 par, due 6/2031 ) 6/22/2026 SOFR + 7.00 % 10.68 % 47,585 48,625 3.1 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "explicit-equity-unit-count-not-published",
+      "outcome": "supported",
+      "rationale": "Original instrument explicitly prints 423,728 Class A units with separate 424 cost/FV cells, yet published numeric shares are null. Monetary scaling does not explain omitted labelled units. Original instrument explicitly prints 315,005 common shares, separate from 2,716 cost/4,360 FV monetary cells, yet published numeric shares are null. This is distinct from historical replaced-count corrections. Existing detector reference is verified against actual flags for every listed row. This records detection coverage, not detector precision; Copper continuation handling needs a bounded section/company inheritance repair rather than suppressing real name errors.",
+      "evidence": [
+        {
+          "accession": "0000950170-23-058321",
+          "text": "Warrior TopCo LP (11)(12) Class A Units ( 423,728 units) 7/7/2023 424 424 0.0 %"
+        },
+        {
+          "accession": "0000950170-23-058321",
+          "text": "Sprinklr, Inc. (10)(11) Common Shares ( 315,005 shares) 6/24/2021 2,716 4,360 0.3 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "preference-shares-classified-as-common",
+      "outcome": "supported",
+      "rationale": "Original current-period instrument and typed member both retain Convertible Preference Shares, 4,976,563 shares. COMMON_EQUITY loses the preference status; convertibility is not evidence that shares have converted. Count and monetary fields match the located row. Printed Series F Preferred Shares, 199,054 shares, acquired 8/2/2019, is between Bigtincan Class A Units and Piano preferred. Published numeric units/cost/FV match Lucidworks but instrument/acquisition copy Bigtincan and classification is COMMON_EQUITY. Both quarters support source row/member divergence. Existing detector reference is verified against actual flags for every listed row. This records detection coverage, not detector precision; Copper continuation handling needs a bounded section/company inheritance repair rather than suppressing real name errors.",
+      "evidence": [
+        {
+          "accession": "0000950170-25-019845",
+          "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,341 (GBP 5,063 ) 0.4 %"
+        },
+        {
+          "accession": "0000950170-25-061008",
+          "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,424 (GBP 4,977 ) 0.4 %"
+        },
+        {
+          "accession": "0000950170-25-100204",
+          "text": "Lucidworks, Inc. (11) Series F Preferred Shares ( 199,054 shares) 8/2/2019 800 650 0.0 %"
+        },
+        {
+          "accession": "0000950170-25-100204",
+          "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,820 (GBP 4,977 ) 0.4 %"
+        },
+        {
+          "accession": "0001193125-25-264618",
+          "text": "Elysium BidCo Limited (4)(11)(12) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 7,403 (GBP 5,499 ) 0.5 %"
+        },
+        {
+          "accession": "0001193125-25-264618",
+          "text": "Lucidworks, Inc. (11) Series F Preferred Shares ( 199,054 shares) 8/2/2019 800 554 0.0 %"
+        },
+        {
+          "accession": "0001193125-26-048664",
+          "text": "Elysium BidCo Limited (4)(11) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 7,581 (GBP 5,636 ) 0.5 %"
+        },
+        {
+          "accession": "0001193125-26-206313",
+          "text": "Elysium BidCo Limited (4)(10) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,891 (GBP 5,225 ) 0.4 %"
+        },
+        {
+          "accession": "0001193125-26-332725",
+          "text": "Elysium BidCo Limited (4)(10) Convertible Preference Shares ( 4,976,563 Shares) 12/11/2024 6,341 6,902 (GBP 5,201 ) 0.4 %"
+        }
+      ]
+    },
+    {
+      "observation_key": "adjacent-position-member-fields-misattributed",
+      "outcome": "supported",
+      "rationale": "Both Mach and Murchison printed rows carry the same context. The selected published row has Mach 5,000,000 principal and December 2026 maturity/member, but Murchison 27,453,000 cost, 28,267,000 fair value, 14 percent coupon and 8.65 spread. Original rows have distinct companies, acquisitions and maturities; context identity cannot resolve this mixed record. Printed Series F Preferred Shares, 199,054 shares, acquired 8/2/2019, is between Bigtincan Class A Units and Piano preferred. Published numeric units/cost/FV match Lucidworks but instrument/acquisition copy Bigtincan and classification is COMMON_EQUITY. Both quarters support source row/member divergence. Proposed independent source-cell comparison catches recurrence beyond name/preferred symptoms. Reused contexts and adjacent copied text are flags requiring row-level comparison; matching instrument text alone must not reject legitimate separate positions. No detector has been implemented or empirically validated.",
+      "evidence": [
+        {
+          "accession": "0000950170-24-015845",
+          "text": "Mach Natural Resources LP (3)(4) First-lien loan ($ 5,000 par, due 12/2026 ) 12/28/2023 SOFR + 6.65 % 12.00 % 4,900 4,900 0.3 %"
+        },
+        {
+          "accession": "0000950170-24-015845",
+          "text": "Murchison Oil and Gas, LLC (3) First-lien loan ($ 27,849 par, due 6/2026 ) 6/30/2022 SOFR + 8.65 % 14.00 % 27,453 28,267 1.9 %"
+        },
+        {
+          "accession": "0000950170-25-100204",
+          "text": "Lucidworks, Inc. (11) Series F Preferred Shares ( 199,054 shares) 8/2/2019 800 650 0.0 %"
+        },
+        {
+          "accession": "0001193125-25-264618",
+          "text": "Lucidworks, Inc. (11) Series F Preferred Shares ( 199,054 shares) 8/2/2019 800 554 0.0 %"
+        }
+      ]
+    }
+  ],
+  "request_reviews": [],
+  "counts": {
+    "selected_findings": 15,
+    "distinct_rows": 49,
+    "issuer_name_rows": 38,
+    "units_rows": 2,
+    "preferred_rows": 9,
+    "confirmed_error_rows": 45,
+    "false_positive_rows": 4,
+    "observations": 7
+  },
+  "limitations": [
+    "Selected review only; no fund acceptance, dispositions or repairs.",
+    "No exhaustive review of unflagged holdings or fresh random page sample.",
+    "Cached source context reuse prevents treating context IDs alone as unique source-row identifiers; both Mach/Murchison rows were compared.",
+    "Detector proposals have not been implemented or tested."
+  ],
+  "diagnostics": [
+    "scratch/2026-10-21_review_queue/0001508655/reviewer/reconstructed.json"
+  ]
+}
