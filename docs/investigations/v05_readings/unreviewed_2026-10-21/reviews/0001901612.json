@@ -1,0 +1,51 @@
+{
+  "reviewer_id": "/root/remaining_golub4_check_sol",
+  "report_digest": "40f889570fe43b26353db3e3357474511cb25f9cfa89deda189a1d146ae4f65e",
+  "finding_reviews": [
+    {
+      "finding_id": "RVQ_BLK_449966ec3faf",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent DuckDB reconstruction finds exactly ROW-a86c83b588dbf126 for 2023-12-31. Original HTML row physically contains c-71 facts; original XML context c-71 has instant 2023-12-31 and typed member Entomo Brands Acquisitions, Inc, Senior secured1. Company and instrument are separate printed cells. Sandbox retains the latter in issuer and leaves instrument empty. Neighbor Entomo commitment is distinct. Inline scale=3 establishes $873,000 principal/FV and $861,000 cost, with 11.00 percent coupon and 5.50 spread. Current fund wrapper requires whitespace before numeric suffix; proposed bounded split and false-positive checks address this mechanism while preserving position identity.",
+      "evidence": [
+        {
+          "accession": "0001901612-24-000027",
+          "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 11.00 % 07/2029 873 861 0.3 873"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_dc4f770c247e",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent reconstruction finds exactly ROW-273ee00d88c9c497 for 2024-03-31. Original HTML c-100 facts belong physically to the printed Entomo row, with separate Senior secured cell; XML c-100 instant is 2024-03-31 and typed member contains Senior secured1. Sandbox issuer retains instrument text and instrument_description is empty. Distinct neighboring Entomo commitment cannot substitute for this row. Inline scale=3 supports $871,000 principal/FV and $859,000 cost; coupon 10.95 percent and spread 5.50 agree. Wrapper whitespace requirement explains attached suffix failure. Proposed fund-scoped parsing and false-positive verification are supported, subject to implementation review.",
+      "evidence": [
+        {
+          "accession": "0001901612-24-000038",
+          "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 10.95 % 07/2029 871 859 0.2 871"
+        }
+      ]
+    },
+    {
+      "finding_id": "RVQ_BLK_e048da6f80fa",
+      "outcome": "supported",
+      "coverage_verified": true,
+      "source_comparison_verified": true,
+      "rationale": "Independent rule-output reconstruction yields exactly ROW-975300006f853b8b and ROW-f16cc63e4edb1024. Original HTML c-239 and c-240 facts physically occur in Integrity Marketing Acquisition, LLC rows, whereas original XML typed members say Integrated Specialty Coverages, LLC., One stop 4 and 5. Both instant periods are 2023-09-30, with no comparative row in this population. Preceding Integrated Specialty row has 07/2030 maturity and different amounts; following Paisley row differs too. Original negative sign and scale=0 confirm costs -110/-30979 and FV 0/-63769; spreads 6.50/6.00 and 08/2026 printed maturity agree. This supports confirmed published-versus-page identity mismatch and rejects wrong-neighbor matching. Exact-context page-evidenced corrections are a supported proposal with retained original identity evidence and separate positions; external legal issuer truth is explicitly unverified.",
+      "evidence": [
+        {
+          "accession": "0001901612-23-000079",
+          "text": "Integrity Marketing Acquisition, LLC(5) One stop SF + 6.50 % N/A(6) 08/2026 - ( 110 ) - -"
+        },
+        {
+          "accession": "0001901612-23-000079",
+          "text": "Integrity Marketing Acquisition, LLC(5) One stop SF + 6.00 % N/A(6) 08/2026 - ( 30,979 ) - ( 63,769 )"
+        }
+      ]
+    }
+  ],
+  "observation_reviews": [],
+  "request_reviews": []
+}

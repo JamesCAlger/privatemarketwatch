@@ -1,0 +1,102 @@
+{
+  "cik": "0001901612",
+  "label": "rgA3",
+  "investigator_id": "/root/remaining_golub4_review_sol",
+  "review_scope": "selected_unreviewed_findings",
+  "target_finding_ids": [
+    "RVQ_BLK_449966ec3faf",
+    "RVQ_BLK_dc4f770c247e",
+    "RVQ_BLK_e048da6f80fa"
+  ],
+  "investigations": [
+    {
+      "finding_id": "RVQ_BLK_449966ec3faf",
+      "coverage": {
+        "affected_rows": [
+          "ROW-a86c83b588dbf126"
+        ],
+        "reviewed_rows": [
+          "ROW-a86c83b588dbf126"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001901612-24-000027",
+          "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 11.00 % 07/2029 873 861 0.3 873"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Reconstructed the complete population from rgA3/output/shadow/page_rule_findings.csv, joined every flagged row_id to sandbox holdings. The selected quarter has 1 flagged rows; all read from original cached HTML tr elements and original XML contexts; saved in source_rows.json.",
+        "The source member contains Senior secured1 without whitespace before 1. Published issuer_name retains that instrument and instrument_description is empty. Printed company cell says Entomo Brands Acquisitions, Inc.; adjacent rows show separate senior-secured positions. Current issuer_name_strip_re requires whitespace before a numeric suffix, explaining the missed split. Fair value, cost, spread, coupon and month/year maturity agree with the printed row; schedule values are in thousands."
+      ],
+      "next_action": "Propose a fund-scoped issuer/instrument parsing change that permits an attached numeric suffix on a recognized instrument, preserving the tranche number in instrument_description and position identity; verify positive Senior secured1 and false-positive legal-name endings before any change. No repair performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_dc4f770c247e",
+      "coverage": {
+        "affected_rows": [
+          "ROW-273ee00d88c9c497"
+        ],
+        "reviewed_rows": [
+          "ROW-273ee00d88c9c497"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001901612-24-000038",
+          "text": "Entomo Brands Acquisitions, Inc.* Senior secured SF + 5.50 % (i) 10.95 % 07/2029 871 859 0.2 871"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Reconstructed the complete population from rgA3/output/shadow/page_rule_findings.csv, joined every flagged row_id to sandbox holdings. The selected quarter has 1 flagged rows; all read from original cached HTML tr elements and original XML contexts; saved in source_rows.json.",
+        "The source member contains Senior secured1 without whitespace before 1. Published issuer_name retains that instrument and instrument_description is empty. Printed company cell says Entomo Brands Acquisitions, Inc.; adjacent rows show separate senior-secured positions. Current issuer_name_strip_re requires whitespace before a numeric suffix, explaining the missed split. Fair value, cost, spread, coupon and month/year maturity agree with the printed row; schedule values are in thousands."
+      ],
+      "next_action": "Propose a fund-scoped issuer/instrument parsing change that permits an attached numeric suffix on a recognized instrument, preserving the tranche number in instrument_description and position identity; verify positive Senior secured1 and false-positive legal-name endings before any change. No repair performed."
+    },
+    {
+      "finding_id": "RVQ_BLK_e048da6f80fa",
+      "coverage": {
+        "affected_rows": [
+          "ROW-975300006f853b8b",
+          "ROW-f16cc63e4edb1024"
+        ],
+        "reviewed_rows": [
+          "ROW-975300006f853b8b",
+          "ROW-f16cc63e4edb1024"
+        ]
+      },
+      "evidence": [
+        {
+          "accession": "0001901612-23-000079",
+          "text": "Integrity Marketing Acquisition, LLC(5) One stop SF + 6.50 % N/A(6) 08/2026 - ( 110 ) - -"
+        },
+        {
+          "accession": "0001901612-23-000079",
+          "text": "Integrity Marketing Acquisition, LLC(5) One stop SF + 6.00 % N/A(6) 08/2026 - ( 30,979 ) - ( 63,769 )"
+        }
+      ],
+      "conclusion": "confirmed_error",
+      "hypotheses_tested": [
+        "Reconstructed the complete population from rgA3/output/shadow/page_rule_findings.csv, joined every flagged row_id to sandbox holdings. The selected quarter has 2 flagged rows; all read from original cached HTML tr elements and original XML contexts; saved in source_rows.json.",
+        "The two inline HTML rows physically reference c-239/c-240 and print Integrity Marketing Acquisition, LLC. XML typed members instead say Integrated Specialty Coverages, LLC., One stop 4/5. Both XML instant periods are 2023-09-30. This is a source tagging versus visible-page identity conflict, not an accidental match to neighboring rows. Adjacent preceding Integrated Specialty line matures 07/2030 and has different cost/value; following Paisley row is also distinct. Printed dash principal/N/A coupon, negative costs, fair values, spreads and 08/2026 maturity agree with the sandbox values. No comparative context is in this flagged population."
+      ],
+      "next_action": "Propose source-evidenced identity corrections for these exact two contexts to the visible Integrity Marketing issuer, retaining separate One stop 4 and 5 position identifiers. Preserve the original typed-member evidence and flag the filer conflict; do not globally replace Integrated Specialty. Legal issuer truth beyond the visible schedule remains unverified. No correction or disposition performed."
+    }
+  ],
+  "observations": [],
+  "orchestrator_requests": [],
+  "not_done": [
+    "Review only: no repairs, tests, builds, exports, ledger/disposition edits or acceptance. Independent review is pending.",
+    "No whole-fund validation. Prior reports were searched for exact selected-row coverage; general issuer-splitting observations do not evidence these four rows, so no further exclusion was proposed.",
+    "The September printed versus typed-member conflict establishes a published/page identity mismatch; external legal-issuer confirmation was not sought. Neighbor rows were read for identity and numerical context, not exhaustively audited across the fund."
+  ],
+  "counts": {
+    "selected_findings": 3,
+    "affected_rows": 4,
+    "reviewed_rows": 4,
+    "confirmed_error_findings": 3,
+    "observations": 0
+  }
+}
