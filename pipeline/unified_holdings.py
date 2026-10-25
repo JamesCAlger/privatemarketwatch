@@ -668,6 +668,99 @@ def _apply_printed_industry(combined: pd.DataFrame) -> pd.DataFrame:
     return combined
 
 
+def _gics_industry_key(text) -> str:
+    """A GICS industry name compared without case, commas or the 'and' / '&' spelling."""
+    return " ".join(str(text or "").lower().replace(" and ", " & ").replace(",", " ").split())
+
+
+def _company_key(name) -> str:
+    """A printed company name compared without case, punctuation or spacing (no legal-form or fuzzy matching).
+    Full stops and apostrophes are dropped ('L.L.C.' = 'LLC'); other punctuation separates words."""
+    import re
+    return " ".join(re.sub(r"[^a-z0-9]+", " ", re.sub("[.'’]", "", str(name or "").lower())).split())
+
+
+def _carry_back_gics_industry(combined: pd.DataFrame, encodings: dict | None = None,
+                              hierarchy: dict | None = None) -> pd.DataFrame:
+    """Carry a filer's later printed GICS industry heading back to its earlier non-GICS quarters.
+
+    Opt-in: ``source_encodings.gics_industry_carry_back: ["through YYYY-MM-DD"]`` (owner ruling D-232,
+    HPS Corporate Capital Solutions). Up to that date the filer prints a non-GICS (ICB-style) industry;
+    after it, GICS industry headings. For a BDC row of the fund dated on or before the date, the company is
+    the published issuer_name compared without case, punctuation or spacing; its later heading is the
+    filer's printed industry (extracted_industry) on the company's rows after the date, taken only where
+    every such row prints the same heading and that heading is a GICS industry
+    (data/reference/gics_hierarchy.json). Then:
+
+    - a published gics_sub_industry whose parent industry is that heading is kept (it is more specific);
+    - otherwise gics_sub_industry becomes the label the build publishes for that same printed heading on
+      the company's later rows (the heading's mapping through printed_industry_gics and the fund's own
+      label map), so the earlier and later quarters of one company carry one representation of the
+      heading. Where that mapping is not a sub-industry of the heading nothing is written.
+
+    extracted_industry (what the page prints for the row's own quarter) is never changed. A company with
+    no later heading, or with two different later headings, is left as it was. Off for every other fund.
+    """
+    needed = {"source", "cik", "report_date", "issuer_name", "extracted_industry", "gics_sub_industry"}
+    if not needed <= set(combined.columns):
+        return combined
+    if encodings is None:
+        from pipeline.source_encodings import load_encodings
+        encodings = load_encodings()
+    settings = {cik: enc["gics_industry_carry_back"][0].split()[-1]
+                for cik, enc in encodings.items() if enc.get("gics_industry_carry_back")}
+    if not settings:
+        return combined
+    if hierarchy is None:
+        from pipeline.gics_mapping import _load_gics_hierarchy
+        hierarchy = _load_gics_hierarchy()
+    parent = {sub: _gics_industry_key(v.get("industry")) for sub, v in hierarchy.items()}
+    industries = set(parent.values())
+    from pipeline.staging_bdc import industry_label_gics_maps
+    fund_maps = industry_label_gics_maps()
+    for cik, through in settings.items():
+        rows = (combined["source"] == "bdc") & (_normalize_cik_series(combined["cik"]) == cik)
+        if "index_classification" in combined.columns:
+            rows &= combined["index_classification"].astype("string").fillna("") != "CASH"
+        if not rows.any():
+            continue
+        quarter = combined.loc[rows, "report_date"].astype(str).str[:10]
+        company = combined.loc[rows, "issuer_name"].map(_company_key)
+        heading = combined.loc[rows, "extracted_industry"].astype("string").fillna("").str.strip()
+        heading_key = heading.map(_gics_industry_key)
+        later = (quarter > through) & heading_key.isin(industries)
+        found = pd.DataFrame({"company": company[later], "key": heading_key[later], "text": heading[later]})
+        per_company = found.groupby("company")["key"].nunique()
+        single = set(per_company[per_company == 1].index)
+        several = set(per_company[per_company > 1].index)
+        printed = found[found["company"].isin(single)].groupby("company").agg(key=("key", "first"), text=("text", "first"))
+        texts = printed["text"].unique().tolist()
+        mapping = {text: value[0] for text, value in printed_industry_gics(texts).items()}
+        own = fund_maps.get(cik, {})
+        for text in texts:
+            folded = " ".join(str(text).lower().split())
+            if folded in own:
+                mapping[text] = own[folded]
+        earlier = quarter <= through
+        idx = company.index[earlier & company.isin(printed.index)]
+        target_key = company[idx].map(printed["key"])
+        target_text = company[idx].map(printed["text"])
+        current = combined.loc[idx, "gics_sub_industry"].astype("string").fillna("")
+        inside = current.map(lambda sub: parent.get(sub)) == target_key
+        label = target_text.map(mapping)
+        usable = label.notna() & (label.map(lambda sub: parent.get(sub)) == target_key)
+        write = ~inside & usable
+        changed = write & (current != label.fillna(""))
+        combined.loc[write[write].index, "gics_sub_industry"] = label[write]
+        n_earlier = int(earlier.sum())
+        logger.info("  GICS industry carry-back %s (through %s): %d earlier rows; %d companies with one later "
+                    "heading, %d with several (left); %d rows kept (sub-industry inside the heading), %d set "
+                    "(%d changed), %d with no usable mapping, %d rows of companies with no later heading",
+                    cik, through, n_earlier, len(single), len(several), int(inside.sum()), int(write.sum()),
+                    int(changed.sum()), int((~inside & ~usable).sum()), n_earlier - len(idx))
+    return combined
+
+
 def _apply_lien_cache(combined: pd.DataFrame) -> pd.DataFrame:
     """Apply cached lien position classifications from lien_cache.csv.
 
@@ -1515,6 +1608,9 @@ def build_unified_holdings(
     # The filer's own industry for the row, where it maps to GICS, takes the place of the
     # name-keyed label above.
     combined = _apply_printed_industry(combined)
+    # A filer that moved from a non-GICS to a GICS industry taxonomy: its later printed GICS industry
+    # carried back per company (source_encodings.gics_industry_carry_back; off unless declared).
+    combined = _carry_back_gics_industry(combined)
 
     # Apply cached lien position classifications (if cache exists on disk)
     combined = _apply_lien_cache(combined)

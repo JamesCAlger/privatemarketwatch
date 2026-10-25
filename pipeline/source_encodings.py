@@ -33,7 +33,7 @@ def load_encodings(wrapper_directory=None):
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
                 'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
-                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','unfunded_note_aliases','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns','printed_industry_labels',
+                'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','unfunded_note_aliases','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns','printed_industry_labels','gics_industry_carry_back',
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
                 'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context',
                 'cash_rows_include_concepts','subtotal_members','cost_total_excludes','thousands_scale_filings','rate_verification_anchors'}:
@@ -78,6 +78,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('A filer has one detached-schedule label: '+str(path))
             if key=='legal_entity_members' and any(_member_mapping(v) is None for v in values):
                 raise ValueError('Legal entity member must read "axis=Member -> label": '+str(path))
+            if key=='gics_industry_carry_back' and (len(values)!=1 or not re.fullmatch(r'through \d{4}-\d{2}-\d{2}',values[0])):
+                raise ValueError('gics_industry_carry_back is one value "through YYYY-MM-DD": '+str(path))
             if key=='filed_rate_reading' and values not in (['all_in'],['cash_leg']):
                 raise ValueError('Filed rate reading must be all_in or cash_leg: '+str(path))
             if key=='units_tagged_as_par' and any(not _ACCESSION_RE.fullmatch(v) for v in values):

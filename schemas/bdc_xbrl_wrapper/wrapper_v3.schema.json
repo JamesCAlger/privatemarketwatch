@@ -685,6 +685,13 @@
           "items": {"type": "string", "minLength": 1},
           "description": "Exact source-reviewed industry headings to retain as extracted_industry even when most headings in a filing do not map to GICS. HPS prints broad FTSE-style headings such as Real Estate Investment and Services and Travel and Leisure. This list supplies no GICS subtype, does not bypass the industry coverage detector and does not admit section or issuer headings. Evidence required: each exact heading printed above portfolio rows. Default absent: existing unmapped-heading withdrawal remains."
         },
+        "gics_industry_carry_back": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"type": "string", "pattern": "^through \\d{4}-\\d{2}-\\d{2}$"},
+          "description": "For a filer that printed a non-GICS industry taxonomy up to and including the given date and GICS industry headings after it (owner ruling D-232, HPS Corporate Capital Solutions). On the fund's rows dated on or before the date, a company's later printed GICS industry heading (its extracted_industry after the date, one heading only, a GICS industry in data/reference/gics_hierarchy.json) is carried back: a published sub-industry inside that industry is kept; otherwise gics_sub_industry takes the label the build publishes for that heading on the company's later rows. Company identity is the published issuer name without case, punctuation or spacing. extracted_industry is not changed. Evidence required: printed headings of both taxonomies and the date of the change. Default absent: no carry-back."
+        },
         "industry_columns": {
           "type": "array",
           "minItems": 1,

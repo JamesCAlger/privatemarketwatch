@@ -160,9 +160,9 @@
   "basis": "D-183, gate PASS; page sample 0 published errors of 20"
  },
  "0001989817": {
-  "label": "rfhcf",
+  "label": "rfhcg",
   "accepted_on": "2026-10-25",
-  "basis": "D-230, gate INCOMPLETE with investigation COMPLETE (independent review r4, 15/15 findings, 17/17 observations): 43 findings, 15 outstanding, 9 proposed, 6 industry_coverage waiting on owner (REQ-rfhc-1 deferred); 9/9 quarters tie; page sample 0/20; six builds. Replaces hcxe (D-184)"
+  "basis": "D-236, gate PASS with investigation COMPLETE (independent review rfhcg, 9/9 findings, 19/19 observations): 37 findings, 9 outstanding, all proposed; owner ruling (b) implemented as opt-in gics_industry_carry_back (REQ-rfhc-1 implemented); 9/9 quarters tie; page sample 0/20 (rfhcd). Replaces rfhcf (D-230)"
  },
  "0001885968": {
   "label": "rftsc",
