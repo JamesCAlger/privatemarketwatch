@@ -289,6 +289,48 @@ def test_pik_guards():
     assert out.empty, out[["row_id", "kind", "printed"]]
 
 
+def test_pik_whole_coupon_after_benchmark_passes_d232():
+    # D-232 (owner 2026-10-25): '<benchmark> + m % PIK <coupon> %', whole coupon PIK, pik_rate = coupon
+    out = _run(cr.pik_printed_not_published, [
+        # T Series Applitools
+        {"row_id": "appl", "pik_rate": 11.35,
+         "printed_row": "Applitools, Inc. (4) (6) (10) (11) S + 6.25 % PIK 11.35 % 5/25/2029 7,229 7,134 7,015 0.87"},
+        # the same row as the page reader joins its cells (rftsc 2023-09-30)
+        {"row_id": "appl_cells", "pik_rate": 11.35,
+         "printed_row": "Applitools, Inc. | (4) (6) (10) (11) | S + | 6.25% PIK | 11.35% | 5/25/2029 | 7,229 | 7,134 | 7,015 | 0.87"},
+        # Commonwealth Kent
+        {"row_id": "kent", "pik_rate": 14.44,
+         "printed_row": "Kent Holdco, LLC | First Lien Term Loan | SOFR + 9.00 % PIK | 14.44 % | 02/25/2027 | 4,000"},
+        # tenor printed after the benchmark code
+        {"row_id": "tenor", "pik_rate": 11.6, "printed_row": "Acme | Term Loan | S (Q) + 6.25 % PIK | 11.60 % | 1,000"},
+        # the margin itself still passes, as before
+        {"row_id": "margin", "pik_rate": 6.25, "printed_row": "Acme | Term Loan | S + 6.25 % PIK | 11.35 % | 1,000"},
+    ])
+    assert out.empty, out[["row_id", "kind", "printed"]]
+
+
+def test_pik_whole_coupon_d232_false_positives():
+    out = _run(cr.pik_printed_not_published, [
+        # T Series Continental Battery 2025-09-30: no benchmark printed before the PIK figure; separate ruling
+        {"row_id": "cont", "pik_rate": 11.29,
+         "printed_row": "Continental Battery Merger Sub, Inc. (4) (6) (10) 7.00 % PIK 11.29 % 1/20/2027 5,000 4,950 4,800 0.60"},
+        {"row_id": "cont_cells", "pik_rate": 11.29,
+         "printed_row": "Continental Battery Merger Sub, Inc. | (4) (6) (10) | First Lien Debt | 7.00% PIK | 11.29% | 1/20/2027 | 5,000"},
+        # partial PIK: the PIK figure is inside '(incl. ...)', not after the benchmark
+        {"row_id": "partial", "pik_rate": 10.3,
+         "printed_row": "Acme | First Lien | S + 6.00 % (incl. 2.00 % PIK) 10.30 % | 1,000"},
+        # whole-coupon format, pik_rate equal to no printed figure
+        {"row_id": "other", "pik_rate": 9.75,
+         "printed_row": "Applitools, Inc. (4) (6) (10) (11) S + 6.25 % PIK 11.35 % 5/25/2029 7,229 7,134 7,015 0.87"},
+        # whole-coupon format, pik_rate equal to a printed percent below the margin (a floor)
+        {"row_id": "floor", "pik_rate": 1.0,
+         "printed_row": "Acme | Term Loan | S + 6.25 % PIK, 1.00 % Floor | 11.35 % | 1,000"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {
+        "cont": "pik_value_mismatch", "cont_cells": "pik_value_mismatch", "partial": "pik_value_mismatch", "other": "pik_value_mismatch",
+        "floor": "pik_value_mismatch"}
+
+
 def test_pik_figure_with_no_leading_zero_reads_as_a_fraction():
     # Varagon (CIK 1784700) prints a PIK figure as '( .50 % PIK)', which the rule read as 50.
     # '.50', '0.50' and '5.0' must each read as printed.

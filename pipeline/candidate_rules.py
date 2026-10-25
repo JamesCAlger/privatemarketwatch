@@ -38,6 +38,8 @@ from pathlib import Path
 import duckdb
 import pandas as pd
 
+from pipeline.bdc_xbrl_html_bridge import _BENCHMARK_CODE
+
 PUBLISHED_WHERE = ("source = 'bdc' AND coalesce(CAST(accounting_record_class AS VARCHAR), '') <> 'underlying_schedule'")
 
 OUTPUT_COLUMNS = ["rule", "kind", "basis", "cik", "report_date", "accession_number", "row_id", "issuer_name",
@@ -449,6 +451,13 @@ _PIK_PERCENT = r"(?i)" + _PIK_NUMBER + r"\s*%\s*\)?\s*PIK\b"
 # a figure without a percent sign: basis points from 25 up ('including 75 PIK', '1350 PIK', 'S+450 PIK')
 _PIK_BARE = r"(?i)(?:^|[^a-z0-9.%,])" + _PIK_NUMBER + r"\s*\)?\s*PIK\b"
 _PIK_NOT_A_FIGURE = r"(?i)\b(class|series|tranche|notes?)\s+[0-9]+"
+# D-232: whole-coupon PIK printed '<benchmark> [(tenor)] + m % PIK <coupon> %'. Benchmark codes are the
+# ones the HTML bridge reads from an Index column (pipeline/bdc_xbrl_html_bridge._BENCHMARK_CODE).
+_BENCH_CODES = "|".join(sorted(_BENCHMARK_CODE, key=lambda c: (-len(c), c)))
+# The page reader joins cells with ' | ' ('S + | 6.25% PIK | 11.35%').
+_PIK_AFTER_BENCHMARK = (r"(?i)(?:^|[^a-z0-9])(?:" + _BENCH_CODES + r")[\s|]*(?:\(\s*[a-z0-9]{1,3}\s*\)[\s|]*)?\+[\s|]*"
+                        + _PIK_NUMBER + r"\s*%\s*PIK\b")
+_PERCENT_FIGURE = _PIK_NUMBER + r"\s*%"
 
 
 def pik_printed_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand_rows") -> pd.DataFrame:
@@ -465,11 +474,16 @@ def pik_printed_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand
     goes to the weaker kind ``pik_member_text_only`` (basis ``member`` when no printed row is joined,
     ``member_page_silent`` when the printed row prints none): the page has been seen to disagree with
     the member (AB American Physician, Diameter BVI). A published tag that is the printed figure
-    rounded to fewer decimals (3.8 for 3.83) passes.
+    rounded to fewer decimals (3.8 for 3.83) passes. D-232 (owner 2026-10-25): a whole-coupon PIK row printed
+    '<benchmark> [(tenor)] + m % PIK <coupon> %' passes when pik_rate is a printed percent figure on that row,
+    not a PIK figure and above m (the coupon); without the benchmark code ('7.00 % PIK 11.29 %') it does not.
     """
+    def clean(expr: str) -> str:
+        return (f"regexp_replace(regexp_replace(coalesce({expr}, ''), '([0-9]) \\| %', '\\1 %', 'g'), "
+                f"'{_PIK_NOT_A_FIGURE}', '\\1 X', 'g')")
+
     def figures(expr: str) -> str:
-        txt = (f"regexp_replace(regexp_replace(coalesce({expr}, ''), '([0-9]) \\| %', '\\1 %', 'g'), "
-               f"'{_PIK_NOT_A_FIGURE}', '\\1 X', 'g')")
+        txt = clean(expr)
         return f"""list_sort(list_distinct(list_filter(list_concat(
                        list_transform(regexp_extract_all({txt}, '{_PIK_PERCENT}', 1), x -> TRY_CAST(x AS DOUBLE)),
                        list_transform(regexp_extract_all({txt}, '{_PIK_BARE}', 1),
@@ -487,11 +501,24 @@ def pik_printed_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand
             SELECT * FROM {table}
             WHERE regexp_matches(coalesce(printed_row, '') || ' || ' || coalesce(bdc_investment_identifier, ''),
                                  '(?i)[0-9]\\s*%?\\s*\\)?\\s*PIK\\b')),
-        g AS (SELECT *, {figures('printed_row')} AS page_figs, {figures('bdc_investment_identifier')} AS member_figs FROM b),
+        g0 AS (SELECT *, {figures('printed_row')} AS page_figs, {figures('bdc_investment_identifier')} AS member_figs,
+                      -- D-232: m in '<benchmark> + m % PIK', and every percent figure on the printed row
+                      list_max(list_transform(regexp_extract_all({clean('printed_row')}, '{_PIK_AFTER_BENCHMARK}', 1),
+                                              x -> TRY_CAST(x AS DOUBLE))) AS bench_pik,
+                      list_filter(list_transform(regexp_extract_all({clean('printed_row')}, '{_PERCENT_FIGURE}', 1),
+                                                 x -> TRY_CAST(x AS DOUBLE)), x -> x IS NOT NULL) AS page_pcts
+               FROM b),
+        g AS (SELECT *, bench_pik IS NOT NULL AND pik_rate > bench_pik
+                        AND coalesce(list_bool_or(list_transform(page_pcts,
+                                c -> c > bench_pik AND abs(pik_rate - c) <= 0.011
+                                     AND NOT coalesce(list_bool_or(list_transform(page_figs, p -> abs(c - p) <= 0.011)), false))), false)
+                        AS whole_coupon_pik
+              FROM g0),
         k AS (
             SELECT *, CASE
                 WHEN len(page_figs) > 0 AND coalesce(pik_rate, 0) = 0 THEN 'pik_printed_not_published'
                 WHEN len(page_figs) > 0 AND {agrees.format(f='page_figs')} THEN NULL
+                WHEN len(page_figs) > 0 AND whole_coupon_pik THEN NULL
                 WHEN len(page_figs) > 0 THEN 'pik_value_mismatch'
                 WHEN len(member_figs) > 0 AND coalesce(pik_rate, 0) = 0 THEN 'pik_member_text_only'
                 WHEN len(member_figs) > 0 AND NOT {agrees.format(f='member_figs')} THEN 'pik_member_text_only'
