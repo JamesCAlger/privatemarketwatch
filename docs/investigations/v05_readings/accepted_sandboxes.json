@@ -165,9 +165,9 @@
   "basis": "D-230, gate INCOMPLETE with investigation COMPLETE (independent review r4, 15/15 findings, 17/17 observations): 43 findings, 15 outstanding, 9 proposed, 6 industry_coverage waiting on owner (REQ-rfhc-1 deferred); 9/9 quarters tie; page sample 0/20; six builds. Replaces hcxe (D-184)"
  },
  "0001885968": {
-  "label": "tsxd",
-  "accepted_on": "2026-10-15",
-  "basis": "D-185, gate PASS in round 2; page sample 2 errors of 20 (rate tagged x0.01, stale issuer name), both fixed"
+  "label": "rftsc",
+  "accepted_on": "2026-10-25",
+  "basis": "D-231, gate PASS with investigation COMPLETE (independent review r3, 29/29 findings, 13/13 observations): 66 findings, 29 outstanding, all proposed (12 pik_printed from whole-coupon PIK corrections, RFTS-R1 deferred to owner); 14/14 quarters tie; page sample 0/20; three builds. Replaces tsxd (D-185)"
  },
  "0001925531": {
   "label": "ngxd",

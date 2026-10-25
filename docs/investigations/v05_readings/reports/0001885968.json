@@ -1,146 +1,164 @@
 {
  "cik": "0001885968",
- "label": "tsxd",
- "before": "spoff2",
- "shared_code": true,
+ "investigator_id": "fund-agent-rfts-0001885968 (claude-opus-5-5 general-purpose subagent, 2026-10-25)",
+ "label": "rftsc",
+ "before": "rgA4",
+ "shared_code": false,
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 15,
-   "why": "printed names set where the member glues the issuer to the next segment (KWOR Acquisition 2025-09-30, Vardiman preferred 2025-09-30; TS Imagine and Two Six Labs are new 2026-06-30 rows); 9 Mantech -> ManTech rows come from the shared name step since spoff2 (already in tsxa, before any change of this run); round 2: 4 rows 2026-03-31/2026-06-30 '48Forty Solutions, LLC' -> printed '48Forty TopCo, LLC' (page sample C015)"
-  },
-  {
-   "column": "instrument_description",
-   "rows": 2,
-   "why": "KWOR Acquisition Other Debt 2025-09-30 (was empty) and Vardiman preferred 2025-09-30 ('Equity ...' -> 'Preferred Equity ...'), from the wrapper's hierarchy regex fix"
-  },
-  {
-   "column": "shares_held",
-   "rows": 46,
-   "why": "2025-09-30 printed unit counts (the 10-Q tags every count as principal x 1,000; 30 rows); 2023-09-30 unit counts tagged as principal moved to units (13 rows); 3 loan pars tagged as share counts at 2024-12-31 moved out of units"
-  },
-  {
-   "column": "principal_amount",
-   "rows": 16,
-   "why": "2023-09-30 equity unit counts cleared from par (13 rows); 2024-12-31 Securonix x2 and Mobileum par from the share-count tag (3 rows)"
-  },
-  {
-   "column": "principal_amount_usd",
-   "rows": 16,
-   "why": "moves with principal_amount (same rows)"
-  },
-  {
-   "column": "asset_category",
-   "rows": 66,
-   "why": "old-format filings (to 2025-06-30): preferred rows published as loans, preferred published as common (Vardiman), and every 2023-09-30 equity row published as a loan; class from the printed section or instrument column"
-  },
-  {
-   "column": "index_classification",
-   "rows": 66,
-   "why": "moves with asset_category (same rows)"
-  },
-  {
-   "column": "asset_class",
-   "rows": 54,
-   "why": "loan rows reclassed to equity: PRIVATE_CREDIT -> PRIVATE_EQUITY (preferred-as-common rows keep PRIVATE_EQUITY)"
+   "rows": 9,
+   "why": "printed names for 9 rows whose member names another company or an old name (issuer_name_printed x4 quarters)"
   },
   {
    "column": "interest_rate",
-   "rows": 9,
-   "why": "fixed preferred dividends printed 'r %' and tagged only as a spread (Integrity, Knockout, Verdantas 2023-12-31, 2025-09-30, 2025-12-31; Knockout 2026-03-31); round 2: BCTO Bluebill revolver 2025-09-30 0.81 -> printed 8.81 (page sample C005)"
+   "rows": 4,
+   "why": "printed rates: Raptor 2024-09-30 x2 (no rate tag), Applitools 2023-03-31 x2 (coupon tagged only as PIK)"
   },
   {
    "column": "interest_rate_reported",
-   "rows": 9,
-   "why": "moves with interest_rate (same rows); round 2: BCTO Bluebill revolver 2025-09-30 0.81 -> printed 8.81 (page sample C005)"
+   "rows": 4,
+   "why": "moves with interest_rate (same rows)"
   },
   {
    "column": "interest_rate_kind",
-   "rows": 9,
-   "why": "rows that gained a rate"
+   "rows": 4,
+   "why": "rows that gained a rate: unresolved -> all_in"
   },
   {
    "column": "interest_rate_cash",
-   "rows": 2,
-   "why": "derived by the finalizer from the corrected spread/PIK: Continental Battery 2024-12-31 (11.48 less 4.08 PIK = 7.40) and Knockout 2026-03-31 (all PIK, 0.0)"
-  },
-  {
-   "column": "basis_spread",
-   "rows": 37,
-   "why": "printed margins: 'S + m % PIK' loans with the margin tagged only as PIK (Applitools, Sweep Purchaser, BP Purchaser, KWOR, Continental Battery); preferred 'S + 10.00 %' rows with the margin tagged as rate; fixed coupons tagged as spread withdrawn (Heartland 2026, preferred); Continental Battery 2024-12-31 7.00 not 4.08"
-  },
-  {
-   "column": "reference_rate_type",
-   "rows": 20,
-   "why": "codes C=CORRA, SA=SONIA added from the filer's legend (Surewerx, Victors, Hercules, Optimizely); benchmark withdrawn on fixed coupons tagged as spreads (Heartland 2026, Integrity/Knockout 2023-12-31, Knockout 2026-03-31)"
-  },
-  {
-   "column": "reference_rate_source",
-   "rows": 15,
-   "why": "moves with reference_rate_type (inferred_post_libor -> printed column)"
-  },
-  {
-   "column": "coupon_type",
-   "rows": 36,
-   "why": "Floating for printed 'CODE + m %' rows published Fixed; Fixed for printed fixed coupons published Floating"
+   "rows": 55,
+   "why": "derived by the finalizer from the corrected pik_rate: 54 whole-coupon PIK rows to 0.0, and Applitools 2023-03-31 term loan (None -> 0.0)"
   },
   {
    "column": "pik_rate",
+   "rows": 55,
+   "why": "54 whole-coupon PIK rows: the printed coupon instead of the margin; Applitools 2023-03-31 undrawn revolver: PIK tag on a line printed without PIK, withdrawn"
+  },
+  {
+   "column": "instrument_description",
    "rows": 1,
-   "why": "Continental Battery 2024-12-31: printed '(incl. 4.08 % PIK)', no PIK fact tagged"
+   "why": "Iris Buyer revolver 2025-12-31: HSI Halo's terms replaced by the printed terms"
   },
   {
    "column": "corrected_fields",
-   "rows": 139,
-   "why": "audit column listing the row corrections above"
+   "rows": 66,
+   "why": "audit column (holdings_field_diff rftsc rgA4: 66) = 13 round-1 rows + 54 PIK + 1 Iris instrument, less 2 rows in two groups (Iris, FPG 2026-06-30 06/29 line); reproduces from the diff"
   },
   {
    "column": "position_id",
-   "rows": 368,
-   "why": "position chains re-paired after the name, class and rate changes; 332 of these already differ in tsxa (shared steps since spoff2: issuer/instrument split D-166, ManTech casing), before any change of this run; round 2: 2 more (48Forty TopCo rows re-chained under the printed name)"
+   "rows": 7,
+   "why": "chains re-paired under printed names: Turbo Buyer / Portfolio Group (4), Iris Buyer revolver 2026-03-31 and 2026-06-30 (2), Bridgepointe undrawn 2026-06-30 (1)"
+  },
+  {
+   "column": "entity_id",
+   "rows": 1316,
+   "why": "19 rows follow the 9 renamed issuers (rftsb vs rftsa); the other 1,297 already differ in untouched rftsa vs rgA4 (build composition: rgA4 was a multi-fund build)"
   },
   {
    "column": "canonical_name",
-   "rows": 4,
-   "why": "follows the 48Forty TopCo issuer name"
+   "rows": 449,
+   "why": "9 rows follow the renamed issuers; the other 440 already differ in untouched rftsa vs rgA4 (build composition)"
   }
  ],
- "rows_added": 563,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
   {
-   "what": "Fetch Insurance 2024-12-31 (1.69M) dropped because its fair value is tagged at decimals -4: the wrapper's schedule-row test changed from cost_or_percent_unrounded to the new cost_or_percent (no rounding clause; note rows of this filer carry neither cost nor percent). 2024-12-31 now ties (was -1.7M).",
-   "kind": "shared_code",
+   "what": "Issuer names from the printed line where the member names another company, an old name or a typo (9 rows, 4 quarters); clears issuer_name_printed 2023-09-30, 2025-09-30, 2025-12-31, 2026-06-30",
+   "kind": "row_correction",
    "quarters": [
-    "2024-12-31"
+    "2023-09-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
    ],
    "quotes": [
     {
-     "accession": "0001885968-25-000005",
-     "text": "Fetch Insurance Services, LLC (5) Other Debt 12.75 % (incl. 3.75 % PIK) 12.75 % 10/31/2027 1,707 1,677 1,690 0.16"
+     "accession": "0001885968-23-000035",
+     "text": "Turbo Buyer, Inc. (4) (5) (14) S + 6.00 % 11.40 % 12/2/2025 989 931 959 0.12"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "FPG Intermediate Holdco, LLC (5) (15) (16) Common Equity 07/18/2025 8,121 - - -"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Iris Buyer, LLC (5) (6) (10) (14) (17) First Lien Debt S + 5.25 % 9.09 % 10/02/2029 - ( 7 ) ( 1 ) -"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) First Lien Debt S + 5.00 % PIK 8.67 % 06/29/2029 456 456 456 0.04"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Abracon Borrower, LLC (5) (18) First Lien Debt S + 5.50 % 9.38 % 06/10/2030 4,926 4,926 4,926 0.42"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Abracon Borrower, LLC (5) (17) (18) First Lien Debt S + 5.50 % 9.38 % 06/10/2030 21 - - -"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Bridgepointe Technologies, LLC (5) (6) (10) (11) First Lien Debt S + 4.75 % 8.48 % 04/18/2033 9,200 9,110 9,110 0.78"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Bridgepointe Technologies, LLC (5) (6) (17) First Lien Debt S + 4.75 % 8.48 % 04/18/2033 577 556 556 0.05"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Bridgepointe Technologies, LLC (5) (6) (17) First Lien Debt S + 4.75 % 8.48 % 04/18/2033 - ( 12 ) ( 12 ) -"
     }
    ]
   },
   {
-   "what": "fv_conservation x4: the filed investments total leaves the money-market row out (printed below 'Total Portfolio Investments'); wrapper investments_total_excludes cash_rows compares like with like.",
-   "kind": "wrapper",
+   "what": "Raptor Merger Sub 2024-09-30: rate printed, not tagged (2 rows)",
+   "kind": "row_correction",
    "quarters": [
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Raptor Merger Sub Debt, LLC (5) (7) (11) First Lien Debt S + 5.50 % 9.85 % 4/1/2029 31,988 31,253 31,988 3.30"
+    },
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Raptor Merger Sub Debt, LLC (5) (7) (17) First Lien Debt S + 5.50 % 8.60 % 4/1/2029 488 $ 432 $ 488 0.05"
+    }
+   ]
+  },
+  {
+   "what": "Applitools 2023-03-31: coupon tagged only as PIK; interest_rate 11.06 on both lines, PIK withdrawn on the revolver printed without PIK",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001885968-23-000017",
+     "text": "Applitools, Inc. (4) (6) (8) (12) S + 6.25 % PIK 11.06 % PIK 05/25/2029 6,827 6,726 6,493 1.09"
+    },
+    {
+     "accession": "0001885968-23-000017",
+     "text": "Applitools, Inc. (4) (6) (8) (10) S + 6.25 % 11.06 % 05/25/2028 - ( 16 ) ( 44 ) ( 0.01 )"
+    }
+   ]
+  },
+  {
+   "what": "Whole-coupon PIK: 54 loan rows printed 'S + m % PIK <coupon> %' (11 loans, 2023-06-30 to 2026-06-30) published pik_rate = margin with a cash leg; pik_rate set to the printed coupon, cash leg 0 (par grows by the coupon; pik_growth_sum.sql). Raises pik_printed x12 (rule problem, proposed, RFTS-R1)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
     "2024-06-30",
     "2024-09-30",
+    "2024-12-31",
     "2025-03-31",
-    "2025-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001885968-25-000018",
-     "text": "Government Money Market Fund - Institutional Shares 4.18 % $ 11,703 $ 11,703 1.08 % Cash 54,489 54,489 5.01 %"
-    }
-   ]
-  },
-  {
-   "what": "Money-market row missing from 2025-09-30 on (new filing agent tags it on CashAndCashEquivalentsAxis, cost and fair value on two contexts): cost context named (context_identifiers) and the printed fair value declared (untagged_values), four filings.",
-   "kind": "untagged_value",
-   "quarters": [
+    "2025-06-30",
     "2025-09-30",
     "2025-12-31",
     "2026-03-31",
@@ -148,338 +166,243 @@
    ],
    "quotes": [
     {
-     "accession": "0001193125-25-277734",
-     "text": "Money Market Fund - Institutional Shares 3.99 % $ 11,105 $ 11,105 1.00 % Cash 40,741 40,741 3.68 %"
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 11.19 % 6/30/2027 2,035 2,035 2,035 0.23"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "KWOR Acquisition, Inc. (5) (6) (19) Other Debt S + 8.00 % PIK 12.31 % 2/28/2030 2,881 2,881 2,881 0.27"
     },
     {
      "accession": "0001193125-26-085572",
-     "text": "Money Market Fund - Institutional Shares 3.62 % $ 23,676 $ 23,676 2.11 % Cash 47,217 47,217 4.20 %"
-    },
-    {
-     "accession": "0001193125-26-219405",
-     "text": "Money Market Fund - Institutional Shares 3.50 % $ 11,648 $ 11,648 1.01 % Cash and Cash Equivalents 64,929 64,929 5.61 %"
+     "text": "FPG Intermediate Holdco, LLC (5) (6) (17) First Lien Debt S + 5.00 % PIK 8.84 % 07/02/2029 646 646 646 0.06"
     },
     {
      "accession": "0001193125-26-344703",
-     "text": "J.P. Morgan US Government Money Market Fund - Institutional Shares 3.50 % $ 13,900 $ 13,900 1.18 % Cash and Cash Equivalents 33,012 33,012 2.81 %"
+     "text": "Vardiman Black Holdings, LLC (5) (12) (13) First Lien Debt S + 7.00 % PIK 10.75 % 03/18/2027 1,185 1,172 1,185 0.10"
     }
    ]
   },
   {
-   "what": "BP Purchaser common 2025-12-31: cost 1,379 filed on a context dated 2025-09-30 (misdated_contexts); cost now ties.",
-   "kind": "wrapper",
+   "what": "Iris Buyer revolver 2025-12-31: instrument text carried HSI Halo's terms; set to the printed terms",
+   "kind": "row_correction",
    "quarters": [
     "2025-12-31"
    ],
    "quotes": [
     {
      "accession": "0001193125-26-085572",
-     "text": "BP Purchaser, LLC (5) (15) (16) Common Equity 12/10/2021 1,383,156 1,379 - -"
-    }
-   ]
-  },
-  {
-   "what": "Equity rows of the old-format filings classed as loans (preferred every quarter to 2025-06-30, all equity at 2023-09-30 with unit counts tagged as par), Vardiman preferred published as common: 66 row corrections from the printed section or instrument column (X11 x9, X02 2023-09-30).",
-   "kind": "row_correction",
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001885968-23-000017",
-     "text": "Integrity Marketing Acquisition, LLC (4) (9) 10.50 % 12/21/2021 1,000,000 $ 1,123 $ 1,120 0.19 % Knockout Intermediate Holdings I, Inc. (4) (9) 11.75 % 06/25/2022 2,040 2,117 2,143 0.36"
-    },
-    {
-     "accession": "0001885968-23-000035",
-     "text": "Amerilife Holdings, LLC (4) (13) 9/1/2022 14,856 410 533 0.07 %"
-    },
-    {
-     "accession": "0001885968-25-000018",
-     "text": "Revalize, Inc. (5) (16) Preferred Equity S + 10.00 % 12/14/2021 2,154 3,376 3,183 0.29"
-    }
-   ]
-  },
-  {
-   "what": "2025-09-30 equity unit counts tagged as principal at the printed count x 1,000, none published (C04): 30 printed counts set by row correction.",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-09-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-25-277734",
-     "text": "Continental Battery Company (5) (15) (16) Common Equity 07/16/2025 7,758 $ - $ -"
-    },
-    {
-     "accession": "0001193125-25-277734",
-     "text": "FPG Intermediate Holdco, LLC (5) (15) (16) Common Equity 07/18/2025 8,121 - - -"
-    }
-   ]
-  },
-  {
-   "what": "Issuer names: member typos ('non-afiliated', 'Warrants', a missing space before the instrument or after the industry comma) gave empty or whole-member issuers (C201 x2, C206): wrapper hierarchy regex widened (dry run on all 2,653 identifiers: 7 change, all intended); printed names set by row correction where the member glues words (KWOR, Vardiman, TS Imagine) or omits the industry (Two Six Labs).",
-   "kind": "wrapper",
-   "quarters": [
-    "2025-09-30",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-25-277734",
-     "text": "KWOR Acquisition, Inc. (5) (6) (18) Other Debt S + 8.00 % PIK 12.17 % 02/28/2030 3,063 3,063 3,063 0.28"
-    },
-    {
-     "accession": "0001193125-26-344703",
-     "text": "TS Imagine, Inc. (5) (7) (9) First Lien Debt S + 6.25 % 9.91 % 06/12/2031 8,136 8,015 8,015 0.68"
-    },
-    {
-     "accession": "0001193125-26-344703",
-     "text": "Two Six Labs, LLC (5) (7) (9) (11) First Lien Debt S + 5.00 % 8.73 % 08/20/2030 16,662 16,560 16,560 1.41"
-    },
-    {
-     "accession": "0001193125-26-344703",
-     "text": "Leaf Home, LLC (5) (15) (16) Warrants 09/05/2025 1 - - -"
-    }
-   ]
-  },
-  {
-   "what": "Rates against the printed line (46 specs): 'S + m % PIK' margins tagged only as PIK published Fixed without spread; fixed coupons tagged as spreads published floating (Heartland 2026, fixed preferred dividends); Continental Battery 2024-12-31 spread fact held the PIK part (spread_printed); Knockout preferred 2026-03-31 printed fixed '10.75 % PIK' with no benchmark (reference_rate_printed).",
-   "kind": "row_correction",
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001885968-25-000005",
-     "text": "Applitools, Inc. (5) (7) (11) (13) First Lien Debt S + 6.25 % PIK 10.58 % 05/25/2029 8,356 8,277 8,284"
-    },
-    {
-     "accession": "0001885968-25-000005",
-     "text": "Continental Battery Company (5) (6) (11) (12) First Lien Debt S + 7.00 % (incl. 4.08 % PIK) 11.48 % 01/20/2027 6,473 6,415 4,571 0.44"
-    },
-    {
-     "accession": "0001193125-26-219405",
-     "text": "Knockout Intermediate Holdings I, Inc. (5) (7) (15) Preferred Equity 10.75 % PIK 06/25/2022 1,119 1,720 1,560 0.13"
-    }
-   ]
-  },
-  {
-   "what": "Reference-rate codes C=CORRA, SA=SONIA, F=FEDFUNDS added from the legend printed from the 10-K for 2024-12-31 on; 13 rows had an inferred SOFR.",
-   "kind": "wrapper",
-   "quarters": [
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001885968-25-000005",
-     "text": "Surewerx Purchaser III, Inc. (5) (7) (13) First Lien Debt C + 5.25 % 8.42 % 12/28/2029 C$ 319 230 222 0.02"
-    }
-   ]
-  },
-  {
-   "what": "2024-12-31 loan pars tagged with the share-count concept (Securonix x2, Mobileum; X11): par set, units cleared.",
-   "kind": "row_correction",
-   "quarters": [
-    "2024-12-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0001885968-25-000005",
-     "text": "Securonix, Inc. (5) (7) (11) First Lien Debt S + 7.00 % (incl. 3.75 % PIK) 12.34 % 04/05/2028 21,010 20,782 19,151 1.84"
-    }
-   ]
-  },
-  {
-   "what": "Page sample C015: from 2026-03-31 the page prints the restructured holding company '48Forty TopCo, LLC' for the common and preferred lines; the members still name the borrower '48Forty Solutions, LLC'. 4 row corrections (2026-03-31, 2026-06-30), the only quarters with these lines. GICS label unchanged (Distributors).",
-   "kind": "row_correction",
-   "quarters": [
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-26-219405",
-     "text": "48Forty TopCo, LLC (5) (15) (18) Preferred Equity 01/14/2026 1,554 6,300 6,300 0.54"
-    },
-    {
-     "accession": "0001193125-26-344703",
-     "text": "48Forty TopCo, LLC (5) (15) (18) Preferred Equity 01/14/2026 1,554 6,299 6,118 0.52"
-    }
-   ]
-  },
-  {
-   "what": "Page sample C005: BCTO Bluebill undrawn line 2025-09-30 tagged 0.0081 for the printed 8.81 % (printed '8 .81 %'), published 0.81. Set to 8.81. Whole fund checked: it is the only loan with a rate below 3 pct in any quarter.",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-09-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-25-277734",
-     "text": "BCTO Bluebill Midco, Inc. (5) (7) (17) First Lien Debt S + 4.50 % 8 .81 % 07/30/2032 - ( 9 ) ( 9 ) -"
+     "text": "Iris Buyer, LLC (5) (6) (10) (14) (17) First Lien Debt S + 5.25 % 9.09 % 10/02/2029 - ( 7 ) ( 1 ) -"
     }
    ]
   }
  ],
  "total_exceptions": [],
- "parked": [],
+ "parked": [
+  {
+   "finding": "observation unit-count-rescaled-by-issuer-normaliser (Leaf Home 2026-06-30, no ledger finding)",
+   "hypotheses": [
+    "page and tag both 250: the normaliser's 250,000 is not printed this quarter",
+    "earlier quarters print 250,000 at cost 253 to 271: a reprint in thousands is as likely as a unit change; units_scale_unclear awaits the owner's ruling, so no correction"
+   ]
+  }
+ ],
  "orchestrator_requests": [],
  "observations": [
   {
-   "observation_key": "schedule-row-dropped-by-rounding-clause",
-   "what": "The shared schedule-row test cost_or_percent_unrounded drops a context whose only fair-value fact has decimals below -3 even when it carries an exact cost and a percent: Fetch Insurance 1,690 (filed 1,690,000 at decimals -4) was lost at 2024-12-31. Fixed here by the new opt-in test cost_or_percent; other funds on cost_or_percent_unrounded (Barings, Carlyle, KKR FS) can lose a schedule row whose fair value happens to end in two zeros.",
-   "field": "fair_value",
+   "observation_key": "member-carries-another-rows-name",
+   "what": "Five rows whose context's facts sit on one printed line but whose member names another company of the schedule: three Bridgepointe Technologies lines 2026-06-30 tagged with Appfire's member (published Appfire), Iris Buyer's undrawn revolver 2025-12-31 tagged with HSI Halo's member, Turbo Buyer 2023-09-30 tagged 'Portfolio Group'. Fixed by row corrections (issuer_name); industry was already the printed one. Iris's revolver also carried HSI Halo's terms in its instrument text ('S + 5.00% Interest Rate 8.84%'; the published rate fields were the printed 5.25 / 9.09): instrument text set to the printed terms in rftsc. A strict scan of all 5,721 rows with a printed row (name_scan.py) finds no other case.",
+   "field": "issuer_name",
    "quarters": [
-    "2024-12-31"
+    "2023-09-30",
+    "2025-12-31",
+    "2026-06-30"
    ],
-   "fair_value_m": 1.7,
-   "cause": "shared",
+   "fair_value_m": 10.6,
+   "cause": "row",
    "action": "fixed",
-   "suggested_check": "a context dropped by the rounding clause that also carries an exact cost and a percent tag",
+   "suggested_check": "published issuer differs from the first cell of the row's own printed line",
    "quote": {
-    "accession": "0001885968-25-000005",
-    "text": "Fetch Insurance Services, LLC (5) Other Debt 12.75 % (incl. 3.75 % PIK) 12.75 % 10/31/2027 1,707 1,677 1,690 0.16"
+    "accession": "0001193125-26-344703",
+    "text": "Bridgepointe Technologies, LLC (5) (6) (10) (11) First Lien Debt S + 4.75 % 8.48 % 04/18/2033 9,200 9,110 9,110 0.78"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on all of these rows in the untouched build rftsa (shadow/page_rule_findings.csv, kind not_the_printed_name)",
+    "reference": "identity/issuer_name_printed"
    }
   },
   {
-   "observation_key": "money-market-fund-not-published",
-   "what": "From 2025-09-30 the new filing agent tags the J.P. Morgan money-market row on CashAndCashEquivalentsAxis with no identifier member, cost and fair value on two contexts; the row was not published (11.1M to 23.7M). Fixed by naming the cost context and declaring the printed fair value.",
-   "field": "fair_value",
+   "observation_key": "member-keeps-prior-company-name-after-rename",
+   "what": "After the June 2026 restructuring the page prints 'Abracon Borrower, LLC' (new 06/10/2030 term loan, new Abracon TopCo equity) while the members keep 'Abracon Group Holdings, LLC'; FPG's 06/29/2029 line prints 'FPG Intermediate Holdco, LLC' and its member says 'FPG Intermediate Holdings III, LLC'; the 2025-09-30 FPG equity member reads 'LFPG'. Fixed (4 rows).",
+   "field": "issuer_name",
    "quarters": [
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 5.4,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "published issuer differs from the first cell of the row's own printed line",
+   "quote": {
+    "accession": "0001193125-26-344703",
+    "text": "Abracon Borrower, LLC (5) (18) First Lien Debt S + 5.50 % 9.38 % 06/10/2030 4,926 4,926 4,926 0.42"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on all four rows in rftsa (Abracon x2, FPG Holdings III, LFPG)",
+    "reference": "identity/issuer_name_printed"
+   }
+  },
+  {
+   "observation_key": "rate-printed-on-the-row-and-not-tagged",
+   "what": "Raptor Merger Sub 2024-09-30: both lines print a rate (9.85 %, 8.60 %) and the filer tagged only the spread; published interest_rate blank. Fixed by row corrections. field_scan.py over every loan row: no other row with a printed rate and none published, apart from Applitools 2023-03-31 (next entry).",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": 32.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "a floating loan with a spread and no interest rate whose printed line holds a second percent figure",
+   "quote": {
+    "accession": "0001885968-24-000055",
+    "text": "Raptor Merger Sub Debt, LLC (5) (7) (11) First Lien Debt S + 5.50 % 9.85 % 4/1/2029 31,988 31,253 31,988 3.30"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "X02 does not fire when a spread is present; no rule compares the printed rate cell",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "what": "Loans printed 'S + m % PIK <coupon> %' published pik_rate = m (the margin, which is all the filer tags as PIK) and a positive cash leg, though the whole floating coupon is paid in kind. Population (pik_pop.sql on rftsb): 55 loan rows, 235.9M + 13.2M + Continental 2025-09-30 (printed '7.00 % PIK 11.29 %' without the benchmark); 11 loans: Applitools 2023-03-31 to 2026-06-30, Sweep Purchaser 2024-03-31 on, BP Purchaser 2025-03-31, KWOR other debt 2025-03-31 on, Continental Battery / Acquisition 2025-06-30 on, FPG Intermediate Holdco 2025-09-30 on, Vardiman Black 2025-12-31 on, BPG Holdings IV and Diligent 2026-06-30 (53.1M fair value at 2026-06-30, 12 rows). Evidence: 39 quarter steps of printed par, 28 grow by the coupon not the margin (Applitools 6,827 -> 7,023, +2.87 pct against 11.06/4 = 2.77 and 6.25/4 = 1.56), the rest are non-accrual (flat or below the margin) or delayed-draw moves (pik_growth_sum.sql); Applitools 2023-06-30 prints '11.35 % PIK' in the coupon column. Fixed in rftsc by 54 row corrections (pik_rate = printed coupon, cash leg 0; the 55th row, Applitools 2023-03-31 term loan, already published 11.06 / 0). Evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the corrections override the tag by inference; 15 of the 54 corrected rows have no par-growth evidence of their own and rest on the printed format alone (BP Purchaser 2025-03-31, Diligent x2 and BPG 2026-06-30, Continental x5, Vardiman x6; 10 of them on non-accrual; r21.sql), and Continental 2025-09-30 prints no benchmark, read from the same loan's 2025-06-30 and 2025-12-31 lines 'S + 7.00 % PIK 11.29 %'. Convention as Kent (D-218) and Wine.com (Silver Capital): the shared reading is still open on other funds (0001646614 left it as a cohort question). Same round: Applitools 2023-03-31 undrawn revolver, printed '6.25 % 11.06 %' with no PIK word but tagged PIK, PIK withdrawn and interest_rate 11.06 set; Long Term Care Group 2024-03-31 '(incl. 7.00 % PIK)' publishes pik = spread 7.00 with a cash leg 5.57, a different printed form, left.",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
     "2025-09-30",
     "2025-12-31",
     "2026-03-31",
     "2026-06-30"
    ],
-   "fair_value_m": 23.7,
+   "fair_value_m": 53.1,
    "cause": "fund",
    "action": "fixed",
-   "suggested_check": "a printed money-market line with no published cash row while earlier quarters have one",
+   "suggested_check": "on a loan printed 'CODE + m % PIK' (PIK after a benchmark, no cash part), pik_rate below the printed coupon while the printed par grows quarter on quarter by about coupon/4 rather than margin/4",
    "quote": {
-    "accession": "0001193125-26-085572",
-    "text": "Money Market Fund - Institutional Shares 3.62 % $ 23,676 $ 23,676 2.11 % Cash 47,217 47,217 4.20 %"
+    "accession": "0001885968-23-000025",
+    "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule fired on these rows in rftsb: pik_printed passes a pik_rate equal to the printed margin, and no rule compares pik_rate with par growth; after the fix pik_printed raises them (rule problem, RFTS-R1)",
+    "reference": "suggested_check; RFTS-R1"
+   }
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "what": "Leaf Home preferred 2026-06-30: the page prints 250 units and the filer tags 250; the shared normaliser publishes 250,000 (shares_held_source derived_proxy) because 2025-12-31 and 2026-03-31 print 250,000. Cost per unit would move from about $1 to about $1,084, so either the filer reprinted the count in thousands or the units changed; the page does not say. Parked as units_scale_unclear (owner ruling pending, as D-230). Only row of the fund the normaliser changed (r12.sql).",
+   "field": "shares_held",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.3,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "a published unit count that is exactly 1,000 times the printed and tagged count",
+   "quote": {
+    "accession": "0001193125-26-344703",
+    "text": "Leaf Home, LLC (5) (15) Preferred Equity 14.00 % PIK 09/05/2025 250 271 332 0.03"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "units_printed classifies this shape as units_scale_unclear and raises no finding until the owner rules (pipeline/candidate_rules.py unit_count_differs_from_row_text)",
+    "reference": "identity/units_printed kind units_scale_unclear"
+   }
+  },
+  {
+   "observation_key": "position-chain-breaks-at-issuer-rename",
+   "what": "Turbo Buyer's term loan (maturity 12/2/2025, par 997 -> 972) is printed 'Turbo Buyer, Inc.' to 2023-09-30 and from 2024-06-30, 'Portfolio Group' at 2023-12-31 and 2024-03-31. It is three chains in both builds (r19.sql): in rftsa 2023-03-31..06-30 | 2023-09-30..2024-03-31 | 2024-06-30 on; in rftsc 2023-03-31..09-30 | 2023-12-31..2024-03-31 | 2024-06-30 on. The break after 2024-03-31 is in both. 7 position_id changes in all (Turbo/Portfolio 4, Iris revolver 2026-03-31 and 2026-06-30 2 now continuous with 2025-12-31, one Bridgepointe undrawn 2026-06-30). Left: every row follows its printed name; joining across the filer's own rename is a matcher question.",
+   "field": "position_id",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "fair_value_m": 1.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "a chain ending and another starting in the next quarter with the same maturity, par within 5 pct and the same industry",
+   "quote": {
+    "accession": "0001885968-24-000009",
+    "text": "Portfolio Group (4) (5) (14) S + 6.00 % 11.59 % 12/2/2025 989 938 966 0.12"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule checks chain continuity across a printed rename; the matcher splits on the name key",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "principal-is-commitment-on-undrawn-lines",
+   "what": "Runway Bidco 2026-03-31 undrawn line prints par '-'; published principal null where other undrawn lines publish 0. Left: no value is wrong, the filer did not tag a par.",
+   "field": "principal_amount",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "",
+   "quote": {
+    "accession": "0001193125-26-219405",
+    "text": "Runway Bidco, LLC (5) (8) (17) First Lien Debt S + 5.00 % 8.70 % 12/17/2031 - ( 2 ) ( 5 ) - Saturn Borrower"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "a null against a printed dash on an undrawn line is not an error a check should raise",
+    "reference": ""
    }
   },
   {
    "observation_key": "money-market-yield-published-as-spread",
-   "what": "The money-market cash rows of 2024-06-30 to 2025-06-30 publish the fund's printed yield (for example 4.18) as basis_spread with coupon Floating; the filer tags the yield with the spread concept. Left: cash rows only (5 rows), no loan analytics affected; the four new cash rows carry no rate.",
+   "what": "Re-checked in rftsb: one cash row left with the yield as basis_spread (2025-06-30, 4.18, Floating); the 2024 rows no longer carry it. Left: cash row only.",
    "field": "basis_spread",
    "quarters": [
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
     "2025-06-30"
    ],
-   "fair_value_m": 23.8,
+   "fair_value_m": 11.7,
    "cause": "fund",
    "action": "left",
    "suggested_check": "a basis_spread on a CASH row",
    "quote": {
     "accession": "0001885968-25-000018",
     "text": "Government Money Market Fund - Institutional Shares 4.18 % $ 11,703 $ 11,703 1.08 % Cash 54,489 54,489 5.01 %"
-   }
-  },
-  {
-   "observation_key": "equity-section-rows-published-as-loans",
-   "what": "Old-format members name the issuer only, so preferred rows (rate, units, no maturity) were classed as loans in every quarter to 2025-06-30 and every equity row at 2023-09-30 (units tagged as par). Fixed by 66 row corrections; a wrapper-level reading of the printed section would carry forward, none exists for this member format.",
-   "field": "asset_category",
-   "quarters": [
-    "2023-03-31",
-    "2023-09-30",
-    "2025-06-30"
-   ],
-   "fair_value_m": 10.1,
-   "cause": "fund",
-   "action": "fixed",
-   "suggested_check": "printed 'Total Preferred Equity' against the published preferred class total per quarter",
-   "quote": {
-    "accession": "0001885968-23-000017",
-    "text": "Integrity Marketing Acquisition, LLC (4) (9) 10.50 % 12/21/2021 1,000,000 $ 1,123 $ 1,120 0.19 % Knockout Intermediate Holdings I, Inc. (4) (9) 11.75 % 06/25/2022 2,040 2,117 2,143 0.36"
-   }
-  },
-  {
-   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
-   "what": "The 10-Q for 2025-09-30 tags every equity unit count with the principal concept at the printed count x 1,000 (Amerilife 14,856,000 for 14,856); the filings before and after tag the count itself with the share concept. 30 rows had no count; set from the page.",
-   "field": "shares_held",
-   "quarters": [
-    "2025-09-30"
-   ],
-   "fair_value_m": 19.9,
-   "cause": "fund",
-   "action": "fixed",
-   "suggested_check": "equity unit coverage that drops to zero in one quarter",
-   "quote": {
-    "accession": "0001193125-25-277734",
-    "text": "Amerilife Holdings, LLC (5) (15) (16) Common Equity 09/01/2022 14,856 410 1,041"
-   }
-  },
-  {
-   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
-   "what": "'S + m % PIK' loans whose margin is tagged only as the PIK rate beside a plain rate were published Fixed with no spread (Applitools 2023-06-30 to 2025-06-30, Sweep Purchaser, BP Purchaser, KWOR, Continental Battery). Fixed by row corrections; pik_only_tag_reading does not apply because a plain rate is tagged.",
-   "field": "basis_spread",
-   "quarters": [
-    "2023-06-30",
-    "2025-06-30",
-    "2026-03-31"
-   ],
-   "fair_value_m": 8.7,
-   "cause": "fund",
-   "action": "fixed",
-   "suggested_check": "a loan with a SOFR reference rate, a PIK rate and no spread",
-   "quote": {
-    "accession": "0001885968-25-000018",
-    "text": "Applitools, Inc. (5) (7) (11) (14) First Lien Debt S + 6.25 % PIK 10.55 % 05/25/2029 8,805 $ 8,734 $ 8,717"
-   }
-  },
-  {
-   "observation_key": "fixed-coupon-tagged-as-spread-published-floating",
-   "what": "Heartland Veterinary second lien prints a fixed '14.50 % (incl. 7.00 % PIK)'; from 2026-03-31 it was published SOFR floating with spread 14.5 (the earlier quarters were Fixed). Fixed preferred dividends tagged as spreads likewise (Integrity, Knockout, Verdantas). Fixed by row corrections.",
-   "field": "coupon_type",
-   "quarters": [
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "fair_value_m": 4.1,
-   "cause": "fund",
-   "action": "fixed",
-   "suggested_check": "a floating row whose printed rate cell has no benchmark code",
-   "quote": {
-    "accession": "0001193125-26-344703",
-    "text": "Heartland Veterinary Partners, LLC (5) (6) (11) Second Lien Debt 14.50 % (incl. 7.00 % PIK) 14.50 % 09/11/2028 2,947"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule reads spread or coupon fields on CASH rows; a basis_spread on a cash row is never a loan margin",
+    "reference": "suggested_check"
    }
   },
   {
    "observation_key": "instrument-text-carries-member-maturity-and-ordinal",
-   "what": "From 2025-09-30 instrument_description is the member tail: 'First Lien Debt Reference Rate and Spread S + 5.50% Interest Rate 9.50% Maturity Date 03/28/2030 One' (rate text, maturity and the twin ordinal). Left: stripping it makes twin lines' instrument text identical and re-pairs position chains (the TriplePoint failure of D-166); a strip that keeps the ordinal needs a measured A/B.",
+   "what": "Re-checked in rftsb: 1,998 rows from 2025-09-30 keep the member tail ('... Reference Rate and Spread ... Maturity Date ... One') as instrument_description. Left for the reason in D-185 (cutting it re-pairs twin lines).",
    "field": "instrument_description",
    "quarters": [
     "2025-09-30",
@@ -494,11 +417,16 @@
    "quote": {
     "accession": "0001193125-25-277734",
     "text": "Formstack Acquisition, Co. (5) (6) (10) First Lien Debt S + 5.50 % 9.50 % 03/28/2030 9,287 9,176 9,264 0.84"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "the names gate checks issuer_name only, not instrument text",
+    "reference": "suggested_check"
    }
   },
   {
    "observation_key": "row-printed-not-tagged",
-   "what": "2026-03-31: the Surewerx CAD tranche (C$315, cost 228, fair value 226) is printed but has no context; the CORRA-labelled member carries the dollar tranche's values. 0.23M short, within the 0.5M tolerance. Left: no context to name and no value-declaration route that adds a row.",
+   "what": "Re-checked in rftsb: Surewerx 2026-03-31 still publishes 3 rows; the printed CAD tranche (C$315, fair value 226) has no context. 0.23M, inside tolerance. Left: no context to name.",
    "field": "fair_value",
    "quarters": [
     "2026-03-31"
@@ -510,15 +438,22 @@
    "quote": {
     "accession": "0001193125-26-219405",
     "text": "Surewerx Purchaser III, Inc. (5) (7) (14) First Lien Debt C + 5.25% 7.51% 12/28/2029 C$315 228 226 0.02"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "totals tie within 0.5M, so fv_conservation does not fire",
+    "reference": "suggested_check"
    }
   },
   {
    "observation_key": "issuer-name-casing-voted-across-quarters",
-   "what": "The page prints 'Mantech International CP' at 2025-09-30; the shared name step publishes 'ManTech International CP' (9 rows, 2025-09-30 to 2026-03-31; present in tsxa before any change of this run). Left: shared step, harmless casing.",
+   "what": "Re-checked in rftsb: 12 rows 2025-09-30 to 2026-06-30 published 'ManTech International CP'; the page prints 'Mantech'. Left: shared name step, casing only.",
    "field": "issuer_name",
    "quarters": [
     "2025-09-30",
-    "2025-12-31"
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
    ],
    "fair_value_m": 18.0,
    "cause": "shared",
@@ -527,60 +462,16 @@
    "quote": {
     "accession": "0001193125-25-277734",
     "text": "Mantech International CP (5) (7) (9) First Lien Debt S + 5.00 % 9.31 % 09/14/2029 18,012 17,795 18,012 1.62"
-   }
-  },
-  {
-   "observation_key": "instrument-in-member-differs-from-page",
-   "what": "Knockout preferred 2026-03-31: the member reads 'S+ 10.75% PIK', the page prints a fixed '10.75 % PIK' (and 'S + 10.75 % PIK' at 2026-06-30). The page was followed (benchmark withdrawn); the filer is inconsistent between quarters.",
-   "field": "reference_rate_type",
-   "quarters": [
-    "2026-03-31"
-   ],
-   "fair_value_m": 1.6,
-   "cause": "row",
-   "action": "fixed",
-   "suggested_check": "",
-   "quote": {
-    "accession": "0001193125-26-219405",
-    "text": "Knockout Intermediate Holdings I, Inc. (5) (7) (15) Preferred Equity 10.75 % PIK 06/25/2022 1,119 1,720 1,560 0.13"
-   }
-  },
-  {
-   "observation_key": "rate-tag-drops-digit-where-page-splits-the-number",
-   "what": "BCTO Bluebill undrawn line 2025-09-30: printed '8 .81 %', tagged 0.0081 (the tag lost the leading digit split by a stray space). Fixed by row correction; one row in the fund.",
-   "field": "interest_rate",
-   "quarters": [
-    "2025-09-30"
-   ],
-   "fair_value_m": 0.0,
-   "cause": "row",
-   "action": "fixed",
-   "suggested_check": "a loan whose rate is below its own spread",
-   "quote": {
-    "accession": "0001193125-25-277734",
-    "text": "BCTO Bluebill Midco, Inc. (5) (7) (17) First Lien Debt S + 4.50 % 8 .81 % 07/30/2032 - ( 9 ) ( 9 ) -"
-   }
-  },
-  {
-   "observation_key": "issuer-name-from-member-differs-from-page",
-   "what": "48Forty: after the January 2026 restructuring the page prints '48Forty TopCo, LLC' (acquired 01/14/2026) for the equity lines; the members keep '48Forty Solutions, LLC' and date 01/04/2026. Name fixed by row correction; the acquisition date is not published.",
-   "field": "issuer_name",
-   "quarters": [
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "fair_value_m": 6.3,
-   "cause": "fund",
-   "action": "fixed",
-   "suggested_check": "",
-   "quote": {
-    "accession": "0001193125-26-219405",
-    "text": "48Forty TopCo, LLC (5) (15) (18) Preferred Equity 01/14/2026 1,554 6,300 6,300 0.54"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "issuer_name_printed folds case by design; a casing-only check would mostly flag filer inconsistency",
+    "reference": ""
    }
   },
   {
    "observation_key": "rate-or-spread-read-from-stale-member-text",
-   "what": "Sweep Midco second lien 2026-03-31: the page prints no rate, the member reads 'Interest Rate 0.00%', and 0.0 Fixed is published from the member text. Left: the next 10-Q prints '0.00 %' on the same lines, so 0.0 is the filer's rate; withdrawing it would only raise X02.",
+   "what": "Re-checked in rftsb: Sweep Midco 2026-03-31 one line publishes 0.0 Fixed from member text (page blank; 2026-06-30 prints 0.00 % and tags it). Left.",
    "field": "interest_rate",
    "quarters": [
     "2026-03-31"
@@ -592,19 +483,1255 @@
    "quote": {
     "accession": "0001193125-26-219405",
     "text": "Sweep Midco, LLC (5) (11) (16) Second Lien Debt 03/12/2034 580 290 372 0.03"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "interest_rate_source identifier_text is recorded but no rule compares it with the page",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "cash-leg-float-residue-from-unrounded-subtraction",
+   "what": "Six whole-coupon PIK rows publish interest_rate_cash of about +/-1.8e-15 instead of 0.0 (r20.sql: Applitools 2025-03-31, 2025-06-30, 2026-06-30; BP Purchaser 2025-03-31; Continental Acquisition 2026-06-30; Sweep Purchaser 2026-06-30). The shared convention step derives the cash leg as reported rate less PIK without rounding (pipeline/financial_conventions.py, 'reported_rate-pik'), and the reported rate keeps the tag's float (10.549999999999999 for 0.1055) while the corrected pik_rate is the printed 10.55. A row correction cannot set interest_rate_cash (it is derived after corrections); setting pik_rate to the float would be a plug. Fair value 12.4M is the three 2026-06-30 rows. Left; the reviewer counted seven, r20.sql finds six with 0 < |cash| < 1e-6.",
+   "field": "interest_rate_cash",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 12.4,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "a published rate field with a non-zero value below 1e-9 in absolute size",
+   "quote": {
+    "accession": "0001885968-25-000009",
+    "text": "Applitools, Inc. (5) (7) (11) (14) First Lien Debt S + 6.25 % PIK 10.55 % 05/25/2029 8,577 8,501 8,523 0.80"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule checks float residue in derived rate fields; a value below 1e-9 is never a printed rate",
+    "reference": "suggested_check"
    }
   }
  ],
  "name_shape_exceptions": [],
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_39bd81ca961a",
+   "coverage": {
+    "affected_rows": [
+     "0001885968/2023-03-31/fund_financials/income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001885968/2023-03-31/fund_financials/income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-23-000017",
+     "text": "Ratio of net investment income to average Members Capital (4) 14.88 % 9.03 %"
+    },
+    {
+     "accession": "0001885968-23-000017",
+     "text": "Total Portfolio Investments $ 1,367,999 $ 1,335,567 223.75 %"
+    },
+    {
+     "accession": "0001885968-23-000017",
+     "text": "Asset coverage ratio 175.59 % 190.67 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published income_yield_pct differs from the printed ratio: rejected, published 14.88 equals the printed 14.88 (fund_financials.csv in rftsc)",
+    "the quarter's own leverage: the same filing prints 'Total Portfolio Investments $ 1,367,999 $ 1,335,567 223.75 %' and 'Asset coverage ratio 175.59 % 190.67 %'",
+    "ratio is year-to-date or unannualised: rejected, the filer prints it annualised (footnote 4) and the build publishes it unchanged",
+    "holdings WAC understated by missing rates: field_scan.py compared every loan row's rate with its printed cell in rftsc; 1 of 5,393 differs and it is a scan artefact (Continental Battery 2025-03-31, published 11.06 as printed)",
+    "check compares a levered return on members' capital with an unlevered coupon: confirmed, the quarter's printed investments are 1.9x to 2.2x members' capital and asset coverage 175.59 to 210.00 pct, so NII over capital sits above coupon + 200bp",
+    "WAC understated by the whole-coupon PIK correction: no, the correction changes pik_rate and the cash leg, not interest_rate"
+   ],
+   "next_action": "proposal PD-F27-1885968-1 (reason f27-income-over-net-assets-of-a-levered-fund) for a check or the owner; no data fix"
+  },
+  {
+   "finding_id": "RVQ_REV_224b976b1332",
+   "coverage": {
+    "affected_rows": [
+     "0001885968/2023-06-30/fund_financials/income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001885968/2023-06-30/fund_financials/income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.79 % 9.71 %"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Total Portfolio Investments $ 1,473,450 $ 1,444,805 200.33 %"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Asset coverage ratio 195.44 % 164.29 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published income_yield_pct differs from the printed ratio: rejected, published 13.79 equals the printed 13.79 (fund_financials.csv in rftsc)",
+    "the quarter's own leverage: the same filing prints 'Total Portfolio Investments $ 1,473,450 $ 1,444,805 200.33 %' and 'Asset coverage ratio 195.44 % 164.29 %'",
+    "ratio is year-to-date or unannualised: rejected, the filer prints it annualised (footnote 4) and the build publishes it unchanged",
+    "holdings WAC understated by missing rates: field_scan.py compared every loan row's rate with its printed cell in rftsc; 1 of 5,393 differs and it is a scan artefact (Continental Battery 2025-03-31, published 11.06 as printed)",
+    "check compares a levered return on members' capital with an unlevered coupon: confirmed, the quarter's printed investments are 1.9x to 2.2x members' capital and asset coverage 175.59 to 210.00 pct, so NII over capital sits above coupon + 200bp",
+    "WAC understated by the whole-coupon PIK correction: no, the correction changes pik_rate and the cash leg, not interest_rate"
+   ],
+   "next_action": "proposal PD-F27-1885968-1 (reason f27-income-over-net-assets-of-a-levered-fund) for a check or the owner; no data fix"
+  },
+  {
+   "finding_id": "RVQ_REV_27779925ad4e",
+   "coverage": {
+    "affected_rows": [
+     "0001885968/2023-09-30/fund_financials/income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001885968/2023-09-30/fund_financials/income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-23-000035",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.63 % 10.49 %"
+    },
+    {
+     "accession": "0001885968-23-000035",
+     "text": "Total Portfolio Investments $ 1,561,792 $ 1,544,375 191.73 %"
+    },
+    {
+     "accession": "0001885968-23-000035",
+     "text": "Asset coverage ratio 204.34 % 168.05 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published income_yield_pct differs from the printed ratio: rejected, published 13.63 equals the printed 13.63 (fund_financials.csv in rftsc)",
+    "the quarter's own leverage: the same filing prints 'Total Portfolio Investments $ 1,561,792 $ 1,544,375 191.73 %' and 'Asset coverage ratio 204.34 % 168.05 %'",
+    "ratio is year-to-date or unannualised: rejected, the filer prints it annualised (footnote 4) and the build publishes it unchanged",
+    "holdings WAC understated by missing rates: field_scan.py compared every loan row's rate with its printed cell in rftsc; 1 of 5,393 differs and it is a scan artefact (Continental Battery 2025-03-31, published 11.06 as printed)",
+    "check compares a levered return on members' capital with an unlevered coupon: confirmed, the quarter's printed investments are 1.9x to 2.2x members' capital and asset coverage 175.59 to 210.00 pct, so NII over capital sits above coupon + 200bp",
+    "WAC understated by the whole-coupon PIK correction: no, the correction changes pik_rate and the cash leg, not interest_rate"
+   ],
+   "next_action": "proposal PD-F27-1885968-1 (reason f27-income-over-net-assets-of-a-levered-fund) for a check or the owner; no data fix"
+  },
+  {
+   "finding_id": "RVQ_REV_3963ab10c11b",
+   "coverage": {
+    "affected_rows": [
+     "0001885968/2024-03-31/fund_financials/income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001885968/2024-03-31/fund_financials/income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.94 % 14.88 %"
+    },
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Total Portfolio Investments $ 1,748,996 $ 1,729,943 202.41 %"
+    },
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Asset coverage ratio (5) 195.59 % 175.59 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published income_yield_pct differs from the printed ratio: rejected, published 13.94 equals the printed 13.94 (fund_financials.csv in rftsc)",
+    "the quarter's own leverage: the same filing prints 'Total Portfolio Investments $ 1,748,996 $ 1,729,943 202.41 %' and 'Asset coverage ratio (5) 195.59 % 175.59 %'",
+    "ratio is year-to-date or unannualised: rejected, the filer prints it annualised (footnote 4) and the build publishes it unchanged",
+    "holdings WAC understated by missing rates: field_scan.py compared every loan row's rate with its printed cell in rftsc; 1 of 5,393 differs and it is a scan artefact (Continental Battery 2025-03-31, published 11.06 as printed)",
+    "check compares a levered return on members' capital with an unlevered coupon: confirmed, the quarter's printed investments are 1.9x to 2.2x members' capital and asset coverage 175.59 to 210.00 pct, so NII over capital sits above coupon + 200bp",
+    "WAC understated by the whole-coupon PIK correction: no, the correction changes pik_rate and the cash leg, not interest_rate"
+   ],
+   "next_action": "proposal PD-F27-1885968-1 (reason f27-income-over-net-assets-of-a-levered-fund) for a check or the owner; no data fix"
+  },
+  {
+   "finding_id": "RVQ_REV_e1832fe456ea",
+   "coverage": {
+    "affected_rows": [
+     "0001885968/2024-06-30/fund_financials/income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001885968/2024-06-30/fund_financials/income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.85 % 13.79 %"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Total Portfolio Investments $ 1,932,697 $ 1,915,753 216.34 %"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Asset coverage ratio (5) 183.20 % 195.44 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published income_yield_pct differs from the printed ratio: rejected, published 13.85 equals the printed 13.85 (fund_financials.csv in rftsc)",
+    "the quarter's own leverage: the same filing prints 'Total Portfolio Investments $ 1,932,697 $ 1,915,753 216.34 %' and 'Asset coverage ratio (5) 183.20 % 195.44 %'",
+    "ratio is year-to-date or unannualised: rejected, the filer prints it annualised (footnote 4) and the build publishes it unchanged",
+    "holdings WAC understated by missing rates: field_scan.py compared every loan row's rate with its printed cell in rftsc; 1 of 5,393 differs and it is a scan artefact (Continental Battery 2025-03-31, published 11.06 as printed)",
+    "check compares a levered return on members' capital with an unlevered coupon: confirmed, the quarter's printed investments are 1.9x to 2.2x members' capital and asset coverage 175.59 to 210.00 pct, so NII over capital sits above coupon + 200bp",
+    "WAC understated by the whole-coupon PIK correction: no, the correction changes pik_rate and the cash leg, not interest_rate"
+   ],
+   "next_action": "proposal PD-F27-1885968-1 (reason f27-income-over-net-assets-of-a-levered-fund) for a check or the owner; no data fix"
+  },
+  {
+   "finding_id": "RVQ_REV_5cc228d32ddd",
+   "coverage": {
+    "affected_rows": [
+     "0001885968/2024-09-30/fund_financials/income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001885968/2024-09-30/fund_financials/income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.52 % 13.63 %"
+    },
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Total Portfolio Investments $ 2,012,334 $ 1,999,992 206.07 %"
+    },
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Asset coverage ratio (5) 191.50 % 204.34 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published income_yield_pct differs from the printed ratio: rejected, published 13.52 equals the printed 13.52 (fund_financials.csv in rftsc)",
+    "the quarter's own leverage: the same filing prints 'Total Portfolio Investments $ 2,012,334 $ 1,999,992 206.07 %' and 'Asset coverage ratio (5) 191.50 % 204.34 %'",
+    "ratio is year-to-date or unannualised: rejected, the filer prints it annualised (footnote 4) and the build publishes it unchanged",
+    "holdings WAC understated by missing rates: field_scan.py compared every loan row's rate with its printed cell in rftsc; 1 of 5,393 differs and it is a scan artefact (Continental Battery 2025-03-31, published 11.06 as printed)",
+    "check compares a levered return on members' capital with an unlevered coupon: confirmed, the quarter's printed investments are 1.9x to 2.2x members' capital and asset coverage 175.59 to 210.00 pct, so NII over capital sits above coupon + 200bp",
+    "WAC understated by the whole-coupon PIK correction: no, the correction changes pik_rate and the cash leg, not interest_rate"
+   ],
+   "next_action": "proposal PD-F27-1885968-1 (reason f27-income-over-net-assets-of-a-levered-fund) for a check or the owner; no data fix"
+  },
+  {
+   "finding_id": "RVQ_REV_9b2b90cf3869",
+   "coverage": {
+    "affected_rows": [
+     "0001885968/2024-12-31/fund_financials/income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001885968/2024-12-31/fund_financials/income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Ratio of net investment income to average Members Capital (4) 12.83 % 13.33 % 11.19 % 0.71 %"
+    },
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Total Portfolio Investments $ 2,048,601 $ 2,029,756 194.80 %"
+    },
+    {
+     "accession": "0001885968-25-000005",
+     "text": "As of December 31, 2024 and December 31, 2023, our asset coverage ratio was 203.00 % and 194.00 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published income_yield_pct differs from the printed ratio: rejected, published 12.83 equals the printed 12.83 (fund_financials.csv in rftsc)",
+    "the quarter's own leverage: the same filing prints 'Total Portfolio Investments $ 2,048,601 $ 2,029,756 194.80 %' and 'As of December 31, 2024 and December 31, 2023, our asset coverage ratio was 203.00 % and 194.00 %'",
+    "ratio is year-to-date or unannualised: rejected, the filer prints it annualised (footnote 4) and the build publishes it unchanged",
+    "holdings WAC understated by missing rates: field_scan.py compared every loan row's rate with its printed cell in rftsc; 1 of 5,393 differs and it is a scan artefact (Continental Battery 2025-03-31, published 11.06 as printed)",
+    "check compares a levered return on members' capital with an unlevered coupon: confirmed, the quarter's printed investments are 1.9x to 2.2x members' capital and asset coverage 175.59 to 210.00 pct, so NII over capital sits above coupon + 200bp",
+    "WAC understated by the whole-coupon PIK correction: no, the correction changes pik_rate and the cash leg, not interest_rate"
+   ],
+   "next_action": "proposal PD-F27-1885968-1 (reason f27-income-over-net-assets-of-a-levered-fund) for a check or the owner; no data fix"
+  },
+  {
+   "finding_id": "RVQ_REV_ab80cef47b11",
+   "coverage": {
+    "affected_rows": [
+     "0001885968/2025-03-31/fund_financials/income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001885968/2025-03-31/fund_financials/income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Ratio of net investment income to average Members Capital (4) 12.02 % 13.94 %"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Total Portfolio Investments 2,059,145 2,034,736 191.12 %"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Asset coverage ratio (5) 206.00 % 196.00 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published income_yield_pct differs from the printed ratio: rejected, published 12.02 equals the printed 12.02 (fund_financials.csv in rftsc)",
+    "the quarter's own leverage: the same filing prints 'Total Portfolio Investments 2,059,145 2,034,736 191.12 %' and 'Asset coverage ratio (5) 206.00 % 196.00 %'",
+    "ratio is year-to-date or unannualised: rejected, the filer prints it annualised (footnote 4) and the build publishes it unchanged",
+    "holdings WAC understated by missing rates: field_scan.py compared every loan row's rate with its printed cell in rftsc; 1 of 5,393 differs and it is a scan artefact (Continental Battery 2025-03-31, published 11.06 as printed)",
+    "check compares a levered return on members' capital with an unlevered coupon: confirmed, the quarter's printed investments are 1.9x to 2.2x members' capital and asset coverage 175.59 to 210.00 pct, so NII over capital sits above coupon + 200bp",
+    "WAC understated by the whole-coupon PIK correction: no, the correction changes pik_rate and the cash leg, not interest_rate"
+   ],
+   "next_action": "proposal PD-F27-1885968-1 (reason f27-income-over-net-assets-of-a-levered-fund) for a check or the owner; no data fix"
+  },
+  {
+   "finding_id": "RVQ_REV_289db9a49bc1",
+   "coverage": {
+    "affected_rows": [
+     "0001885968/2026-06-30/fund_financials/income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001885968/2026-06-30/fund_financials/income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Ratio of net investment income to average Members Capital (4) 11.09 % 11.54 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Asset coverage ratio (5) 210.00 % 207.00 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published income_yield_pct differs from the printed ratio: rejected, published 11.09 equals the printed 11.09 (fund_financials.csv in rftsc)",
+    "the quarter's own leverage: the same filing prints 'Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %' and 'Asset coverage ratio (5) 210.00 % 207.00 %'",
+    "ratio is year-to-date or unannualised: rejected, the filer prints it annualised (footnote 4) and the build publishes it unchanged",
+    "holdings WAC understated by missing rates: field_scan.py compared every loan row's rate with its printed cell in rftsc; 1 of 5,393 differs and it is a scan artefact (Continental Battery 2025-03-31, published 11.06 as printed)",
+    "check compares a levered return on members' capital with an unlevered coupon: confirmed, the quarter's printed investments are 1.9x to 2.2x members' capital and asset coverage 175.59 to 210.00 pct, so NII over capital sits above coupon + 200bp",
+    "WAC understated by the whole-coupon PIK correction: no, the correction changes pik_rate and the cash leg, not interest_rate"
+   ],
+   "next_action": "proposal PD-F27-1885968-1 (reason f27-income-over-net-assets-of-a-levered-fund) for a check or the owner; no data fix"
+  },
+  {
+   "finding_id": "RVQ_REV_6eef182a98ec",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-24-000022/c-340",
+     "0001885968-24-000022/c-339"
+    ],
+    "reviewed_rows": [
+     "0001885968-24-000022/c-340",
+     "0001885968-24-000022/c-339"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Sweep Midco LLC (4) (5) (9) (15) 3/12/2034 580 290 290 0.03"
+    },
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Sweep Midco LLC (4) (5) (9) (15) 3/12/2036 1,686 $ - $ - - %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rate printed on the line but not tagged: rejected, both Sweep Midco second-lien lines print no benchmark, spread or rate between the instrument and the maturity (read on the page)",
+    "rate tagged on another context of the member (duration context): rejected, flagged.py shows only a percent-of-net-assets fact on each row; the page prints none either",
+    "flag population differs from the two rows: rejected, flagged.py rftsc X02 lists exactly these two rows in 2024-03-31"
+   ],
+   "next_action": "proposal PD-X02-1885968-2 (reason x02-no-rate-printed-on-the-row); nothing to publish"
+  },
+  {
+   "finding_id": "RVQ_REV_84dbd4c33342",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-24-000037/c-91",
+     "0001885968-24-000037/c-90"
+    ],
+    "reviewed_rows": [
+     "0001885968-24-000037/c-91",
+     "0001885968-24-000037/c-90"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 3/12/2034 580 290 290 0.03"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 3/12/2036 1,686 - - -"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "(14) Non-income producing security"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rate printed on the line but not tagged: rejected, both Sweep Midco second-lien lines print no benchmark, spread or rate between the instrument and the maturity (read on the page)",
+    "rate tagged on another context of the member (duration context): rejected, flagged.py shows only a percent-of-net-assets fact on each row; the page prints none either",
+    "flag population differs from the two rows: rejected, flagged.py rftsc X02 lists exactly these two rows in 2024-06-30"
+   ],
+   "next_action": "proposal PD-X02-1885968-2 (reason x02-no-rate-printed-on-the-row); nothing to publish"
+  },
+  {
+   "finding_id": "RVQ_REV_617c992cbb0c",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-24-000055/c-100",
+     "0001885968-24-000055/c-99"
+    ],
+    "reviewed_rows": [
+     "0001885968-24-000055/c-100",
+     "0001885968-24-000055/c-99"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Sweep Midco, LLC (5) (6) (10)(14) Second Lien Debt 3/12/2034 580 290 290 0.03"
+    },
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Sweep Midco, LLC (5) (6) (10)(14) Second Lien Debt 3/12/2036 1,686 - - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rate printed on the line but not tagged: rejected, both Sweep Midco second-lien lines print no benchmark, spread or rate between the instrument and the maturity (read on the page)",
+    "rate tagged on another context of the member (duration context): rejected, flagged.py shows only a percent-of-net-assets fact on each row; the page prints none either",
+    "flag population differs from the two rows: rejected, flagged.py rftsc X02 lists exactly these two rows in 2024-09-30"
+   ],
+   "next_action": "proposal PD-X02-1885968-2 (reason x02-no-rate-printed-on-the-row); nothing to publish"
+  },
+  {
+   "finding_id": "RVQ_REV_8d259e52fc79",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-25-000005/c-98",
+     "0001885968-25-000005/c-99"
+    ],
+    "reviewed_rows": [
+     "0001885968-25-000005/c-98",
+     "0001885968-25-000005/c-99"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 03/12/2034 580 290 376 0.04"
+    },
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 03/12/2036 1,686 - - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rate printed on the line but not tagged: rejected, both Sweep Midco second-lien lines print no benchmark, spread or rate between the instrument and the maturity (read on the page)",
+    "rate tagged on another context of the member (duration context): rejected, flagged.py shows only a percent-of-net-assets fact on each row; the page prints none either",
+    "flag population differs from the two rows: rejected, flagged.py rftsc X02 lists exactly these two rows in 2024-12-31"
+   ],
+   "next_action": "proposal PD-X02-1885968-2 (reason x02-no-rate-printed-on-the-row); nothing to publish"
+  },
+  {
+   "finding_id": "RVQ_REV_05953cc5a4a2",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-25-000009/c-108",
+     "0001885968-25-000009/c-109"
+    ],
+    "reviewed_rows": [
+     "0001885968-25-000009/c-108",
+     "0001885968-25-000009/c-109"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Sweep Midco, LLC (5) (6) (10) (11) (17) Second Lien Debt 03/12/2034 580 290 288 0.03"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Sweep Midco, LLC (5) (6) (10) (11) (17) Second Lien Debt 03/12/2036 1,686 - - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rate printed on the line but not tagged: rejected, both Sweep Midco second-lien lines print no benchmark, spread or rate between the instrument and the maturity (read on the page)",
+    "rate tagged on another context of the member (duration context): rejected, flagged.py shows only a percent-of-net-assets fact on each row; the page prints none either",
+    "flag population differs from the two rows: rejected, flagged.py rftsc X02 lists exactly these two rows in 2025-03-31"
+   ],
+   "next_action": "proposal PD-X02-1885968-2 (reason x02-no-rate-printed-on-the-row); nothing to publish"
+  },
+  {
+   "finding_id": "RVQ_REV_e31f087904ec",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-25-000018/c-120",
+     "0001885968-25-000018/c-121"
+    ],
+    "reviewed_rows": [
+     "0001885968-25-000018/c-120",
+     "0001885968-25-000018/c-121"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Sweep Midco, LLC (5) (10) (15) Second Lien Debt 03/12/2034 580 $ 290 $ 360 0.03"
+    },
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Sweep Midco, LLC (5) (10) (15) Second Lien Debt 03/12/2036 1,686 - - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rate printed on the line but not tagged: rejected, both Sweep Midco second-lien lines print no benchmark, spread or rate between the instrument and the maturity (read on the page)",
+    "rate tagged on another context of the member (duration context): rejected, flagged.py shows only a percent-of-net-assets fact on each row; the page prints none either",
+    "flag population differs from the two rows: rejected, flagged.py rftsc X02 lists exactly these two rows in 2025-06-30"
+   ],
+   "next_action": "proposal PD-X02-1885968-2 (reason x02-no-rate-printed-on-the-row); nothing to publish"
+  },
+  {
+   "finding_id": "RVQ_REV_681e9e90d296",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-277734/C_9748b345-5e56-4dfd-a565-6a3fee64cebb",
+     "0001193125-25-277734/C_84d1e43b-3522-4c62-a0d2-953eb19b5561"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-277734/C_9748b345-5e56-4dfd-a565-6a3fee64cebb",
+     "0001193125-25-277734/C_84d1e43b-3522-4c62-a0d2-953eb19b5561"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Sweep Midco, LLC (5) (10) Second Lien Debt 03/12/2034 580 290 363 0.03"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Sweep Midco, LLC (5) (10) Second Lien Debt 03/12/2036 1,686 - - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "rate printed on the line but not tagged: rejected, both Sweep Midco second-lien lines print no benchmark, spread or rate between the instrument and the maturity (read on the page)",
+    "rate tagged on another context of the member (duration context): rejected, flagged.py shows only a percent-of-net-assets fact on each row; the page prints none either",
+    "flag population differs from the two rows: rejected, flagged.py rftsc X02 lists exactly these two rows in 2025-09-30"
+   ],
+   "next_action": "proposal PD-X02-1885968-2 (reason x02-no-rate-printed-on-the-row); nothing to publish"
+  },
+  {
+   "finding_id": "RVQ_REV_9447d4353db5",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-085572/C_9efc79bf-b7b3-4191-9a68-a432656ed2c5"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-085572/C_9efc79bf-b7b3-4191-9a68-a432656ed2c5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-085572",
+     "text": "BP Purchaser, LLC (5) (15) (16) Common Equity 12/10/2021 1,383,156 1,379 - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "merged value differs from the page: rejected, row ROW-f1c0f1734ac03de6 publishes 1,383,156 units, cost 1,379,000 and fair value 0, the printed figures",
+    "the merge joins two different positions: rejected, the cost/value context is the same member re-dated by misdated_contexts and the unit count sits on the member's 2025-12-31 context; one printed line"
+   ],
+   "next_action": "proposal PD-merged_context_excluded-1885968-3 (reason merged-context-value-equals-printed-row)"
+  },
+  {
+   "finding_id": "RVQ_BLK_60d5a6636b44",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-23-000035/ROW-fb9ef199d3eca198"
+    ],
+    "reviewed_rows": [
+     "0001885968-23-000035/ROW-fb9ef199d3eca198"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-23-000035",
+     "text": "Applitools, Inc. (4) (6) (10) (11) S + 6.25 % PIK 11.35 % 5/25/2029 7,229 7,134 7,015 0.87"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 1 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_399ed4f0227e",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-24-000009/ROW-2d659c745ab63354"
+    ],
+    "reviewed_rows": [
+     "0001885968-24-000009/ROW-2d659c745ab63354"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000009",
+     "text": "Applitools, Inc. (4) (6) (10) (11) S + 6.25 % PIK 11.61 % 5/25/2029 7,443 7,350 7,265 0.88"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 1 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_a792031b5668",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-24-000022/ROW-d3fb3cbc3d2f82bb",
+     "0001885968-24-000022/ROW-a51e0b26ed810420"
+    ],
+    "reviewed_rows": [
+     "0001885968-24-000022/ROW-d3fb3cbc3d2f82bb",
+     "0001885968-24-000022/ROW-a51e0b26ed810420"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Applitools, Inc. (4) (6) (10) (11) S + 6.25 % PIK 11.58 % 5/25/2029 7,663 7,574 7,505 0.88"
+    },
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Sweep Purchaser, LLC (4) (9) S + 5.75 % PIK 11.07 % 6/30/2027 1,985 $ 1,985 $ 1,985 0.23 %"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 2 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_1017b85e118a",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-24-000037/ROW-e4d94c83b901b776",
+     "0001885968-24-000037/ROW-9c674992fb4ab061"
+    ],
+    "reviewed_rows": [
+     "0001885968-24-000037/ROW-e4d94c83b901b776",
+     "0001885968-24-000037/ROW-9c674992fb4ab061"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 11.19 % 6/30/2027 2,035 2,035 2,035 0.23"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Applitools, Inc. (5) (7) (11) (12) First Lien Debt S + 6.25 % PIK 11.59 % 5/25/2029 7,890 7,803 7,796 0.88"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 2 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_636d9c29dd5c",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-24-000055/ROW-489e52407ddd29b7",
+     "0001885968-24-000055/ROW-d461fe9832f38dfa"
+    ],
+    "reviewed_rows": [
+     "0001885968-24-000055/ROW-489e52407ddd29b7",
+     "0001885968-24-000055/ROW-d461fe9832f38dfa"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Applitools, Inc. (5) (7) (11) (13) First Lien Debt S + 6.25 % PIK 10.85 % 5/25/2029 8,130 8,048 8,048 0.83"
+    },
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 10.80 % 6/30/2027 2,088 2,088 2,088 0.22"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 2 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_36628bd42b48",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-25-000005/ROW-ee48b96535b774ee",
+     "0001885968-25-000005/ROW-d38d6d79af9f988d"
+    ],
+    "reviewed_rows": [
+     "0001885968-25-000005/ROW-ee48b96535b774ee",
+     "0001885968-25-000005/ROW-d38d6d79af9f988d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Applitools, Inc. (5) (7) (11) (13) First Lien Debt S + 6.25 % PIK 10.58 % 05/25/2029 8,356 8,277 8,284 0.80"
+    },
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Sweep Purchaser, LLC (5) (10) First Lien Debt S + 5.75 % PIK 10.24 % 06/30/2027 2,138 2,138 2,138 0.21"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 2 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_f9275bf2f4ba",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-25-000009/ROW-e63933fdf0fd2694",
+     "0001885968-25-000009/ROW-464b441bd8aa27f1",
+     "0001885968-25-000009/ROW-c73538c8bde6a7df",
+     "0001885968-25-000009/ROW-a45a4ed3f4cfc29c"
+    ],
+    "reviewed_rows": [
+     "0001885968-25-000009/ROW-e63933fdf0fd2694",
+     "0001885968-25-000009/ROW-464b441bd8aa27f1",
+     "0001885968-25-000009/ROW-c73538c8bde6a7df",
+     "0001885968-25-000009/ROW-a45a4ed3f4cfc29c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-25-000009",
+     "text": "KWOR Acquisition, Inc. (5) (6) (19) Other Debt S + 8.00 % PIK 12.31 % 2/28/2030 2,881 2,881 2,881 0.27"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "BP Purchaser, LLC (5) (7) (10) (11) First Lien Debt S + 5.50 % PIK 10.06 % 12/11/2028 28,330 28,004 24,948 2.34"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Sweep Purchaser, LLC (5) (6) (10) (11) First Lien Debt S + 5.75 % PIK 10.15 % 06/30/2027 2,186 2,186 2,186 0.21"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Applitools, Inc. (5) (7) (11) (14) First Lien Debt S + 6.25 % PIK 10.55 % 05/25/2029 8,577 8,501 8,523 0.80"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 4 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 1 of this quarter's rows have no par-growth evidence of their own (BP Purchaser 2025-03-31 (one quarter in this form)) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_6f0b9a938559",
+   "coverage": {
+    "affected_rows": [
+     "0001885968-25-000018/ROW-09025f41d90b6337",
+     "0001885968-25-000018/ROW-3efc4145cc5c9530",
+     "0001885968-25-000018/ROW-0e61a92c3ea79fb3",
+     "0001885968-25-000018/ROW-df96fc96f565ca2b"
+    ],
+    "reviewed_rows": [
+     "0001885968-25-000018/ROW-09025f41d90b6337",
+     "0001885968-25-000018/ROW-3efc4145cc5c9530",
+     "0001885968-25-000018/ROW-0e61a92c3ea79fb3",
+     "0001885968-25-000018/ROW-df96fc96f565ca2b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 10.17 % 06/30/2027 2,237 2,237 2,237 0.21"
+    },
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,124 0.20"
+    },
+    {
+     "accession": "0001885968-25-000018",
+     "text": "KWOR Acquisition, Inc. (5) (6) (18) Other Debt Investments S + 8.00 % PIK 12.30 % 02/28/2030 2,968 2,968 2,968 0.27"
+    },
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Applitools, Inc. (5) (7) (11) (14) First Lien Debt S + 6.25 % PIK 10.55 % 05/25/2029 8,805 $ 8,734 $ 8,717 0.80 %"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 4 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 1 of this quarter's rows have no par-growth evidence of their own (Continental Battery 2025-06-30 (non-accrual)) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_46156b064369",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-277734/ROW-e3e2335a04b0f455",
+     "0001193125-25-277734/ROW-96697b877998c807",
+     "0001193125-25-277734/ROW-7955a2058b121527",
+     "0001193125-25-277734/ROW-0490bfe41034ddb7",
+     "0001193125-25-277734/ROW-8cf75ede69fabd80",
+     "0001193125-25-277734/ROW-a8737e5dc31d30e9"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-277734/ROW-e3e2335a04b0f455",
+     "0001193125-25-277734/ROW-96697b877998c807",
+     "0001193125-25-277734/ROW-7955a2058b121527",
+     "0001193125-25-277734/ROW-0490bfe41034ddb7",
+     "0001193125-25-277734/ROW-8cf75ede69fabd80",
+     "0001193125-25-277734/ROW-a8737e5dc31d30e9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "KWOR Acquisition, Inc. (5) (6) (18) Other Debt S + 8.00 % PIK 12.17 % 02/28/2030 3,063 3,063 3,063 0.28"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) First Lien Debt S + 5.00 % PIK 9.32 % 07/02/2029 917 917 917 0.08"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 1,992 0.18"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 9.91 % 06/30/2027 2,288 2,288 2,288 0.21"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "FPG Intermediate Holdco, LLC (5) (12) First Lien Debt S + 5.00 % PIK 9.32 % 07/02/2029 3,094 3,036 3,036 0.27"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Applitools, Inc. (5) (7) (11) (14) First Lien Debt S + 6.25 % PIK 10.25 % 05/25/2029 7,763 7,706 7,685 0.69"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    },
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,124 0.20"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Continental Battery Company (5) (10) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,740 0.24"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "(13) Investment was on non-accrual status as of September 30, 2025"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 6 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 1 of this quarter's rows have no par-growth evidence of their own (Continental Battery 2025-09-30 (non-accrual)) and rest on the printed format alone",
+    "Continental Battery 2025-09-30 (ROW-7955a2058b121527) differs from the other rows: its line prints '7.00 % PIK 11.29 %' with no benchmark, so 'the PIK figure after the benchmark is the margin' does not apply on its own line; it is on non-accrual (footnote 13) with par flat at 6,473, so there is no par-growth evidence either. The reading rests on the same loan's lines either side: 2025-06-30 and 2025-12-31 print 'S + 7.00 % PIK 11.29 %' with the same coupon, par, cost and maturity; the 2025-09-30 line is that loan with the benchmark cell left blank. Its benchmark and spread are left unpublished as printed. RFTS-R1's wording would not clear this row: it is argued separately in the proposal"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_63b731e0c98d",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-085572/ROW-c5d6f2f152a710e4",
+     "0001193125-26-085572/ROW-d16f44459b84e031",
+     "0001193125-26-085572/ROW-29c741d526a14b9a",
+     "0001193125-26-085572/ROW-5b9aec47f88fa0f4",
+     "0001193125-26-085572/ROW-a666615c77ff36e4",
+     "0001193125-26-085572/ROW-5f3a876783c91bbf",
+     "0001193125-26-085572/ROW-63473d7187a200a2",
+     "0001193125-26-085572/ROW-52ffe4c0275ed89f",
+     "0001193125-26-085572/ROW-c7e61ecf1bc76a9c"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-085572/ROW-c5d6f2f152a710e4",
+     "0001193125-26-085572/ROW-d16f44459b84e031",
+     "0001193125-26-085572/ROW-29c741d526a14b9a",
+     "0001193125-26-085572/ROW-5b9aec47f88fa0f4",
+     "0001193125-26-085572/ROW-a666615c77ff36e4",
+     "0001193125-26-085572/ROW-5f3a876783c91bbf",
+     "0001193125-26-085572/ROW-63473d7187a200a2",
+     "0001193125-26-085572/ROW-52ffe4c0275ed89f",
+     "0001193125-26-085572/ROW-c7e61ecf1bc76a9c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-085572",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) (17) First Lien Debt S + 5.00 % PIK 8.84 % 07/02/2029 646 646 646 0.06"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "KWOR Acquisition, Inc. (5) (18) Other Debt S + 8.00 % PIK 12.20 % 02/28/2030 3,157 3,157 3,157 0.28"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Vardiman Black Holdings, LLC (5) (8) (12) (17) First Lien Debt S + 7.00 % PIK 10.77 % 03/18/2027 1,183 1,170 1,067 0.09"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Vardiman Black Holdings, LLC (5) (8) First Lien Debt S + 7.00 % PIK 10.77 % 03/18/2027 10,466 10,466 8,635 0.77"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) First Lien Debt S + 5.00 % PIK 8.84 % 06/29/2029 436 436 436 0.04"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Applitools, Inc. (5) (7) (10) (14) First Lien Debt S + 6.25 % PIK 9.92 % 05/25/2029 7,966 7,913 7,827 0.70"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) First Lien Debt S + 5.00 % PIK 8.84 % 07/02/2029 3,172 3,118 3,014 0.27"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Sweep Purchaser, LLC (5) (6) (11) First Lien Debt S + 5.75 % PIK 9.58 % 06/30/2027 2,339 2,339 2,339 0.21"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Continental Battery Company (5) (10) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,740 0.24"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 9 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 3 of this quarter's rows have no par-growth evidence of their own (Vardiman 2025-12-31, Vardiman 2025-12-31, Continental Battery 2025-12-31 (non-accrual)) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_289e7a9b7247",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-219405/ROW-5ebbf11bdf013ac2",
+     "0001193125-26-219405/ROW-866b8acbd01fe6e0",
+     "0001193125-26-219405/ROW-f97f0f402f5b8fb1",
+     "0001193125-26-219405/ROW-d8bd9bdf02f081b6",
+     "0001193125-26-219405/ROW-2f65464d812560f7",
+     "0001193125-26-219405/ROW-c75c0ae7a33e09ee",
+     "0001193125-26-219405/ROW-1b1b62c97c190825",
+     "0001193125-26-219405/ROW-7fbabc2dcbec7b88"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-219405/ROW-5ebbf11bdf013ac2",
+     "0001193125-26-219405/ROW-866b8acbd01fe6e0",
+     "0001193125-26-219405/ROW-f97f0f402f5b8fb1",
+     "0001193125-26-219405/ROW-d8bd9bdf02f081b6",
+     "0001193125-26-219405/ROW-2f65464d812560f7",
+     "0001193125-26-219405/ROW-c75c0ae7a33e09ee",
+     "0001193125-26-219405/ROW-1b1b62c97c190825",
+     "0001193125-26-219405/ROW-7fbabc2dcbec7b88"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-219405",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) First Lien Debt S + 5.00 % PIK 8.70 % 07/02/2029 1,106 1,106 1,106 0.10"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) First Lien Debt S + 5.00 % PIK 8.70 % 07/02/2029 3,242 3,191 2,684 0.23"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Applitools, Inc. (5) (7) (10) (14) First Lien Debt S + 6.25 % PIK 9.92 % 05/25/2029 8,164 8,114 7,102 0.61"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Sweep Purchaser, LLC (5) (6) (11) First Lien Debt S + 5.75 % PIK 9.53 % 06/30/2027 2,388 2,388 2,388 0.21"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Continental Acquisition Holdings, Inc. (5) (6) (10) (12) (13) First Lien Debt S + 7.00 % PIK 10.85 % 07/20/2028 6,473 6,415 2,806 0.24"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Vardiman Black Holdings, LLC (5) (8) (13) First Lien Debt S + 7.00 % PIK 10.77 % 03/18/2027 10,566 10,566 7,555 0.65"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Vardiman Black Holdings, LLC (5) (8) (12) (13) First Lien Debt S + 7.00 % PIK 10.77 % 03/18/2027 1,187 1,174 932 0.08"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "KWOR Acquisition, Inc. (5) (6) (18) Unsecured Debt S + 8.00 % PIK 11.67 % 02/28/2030 3,252 3,252 2,609 0.23"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 8 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 3 of this quarter's rows have no par-growth evidence of their own (Continental Acquisition 2026-03-31 (non-accrual), Vardiman 2026-03-31 (non-accrual), Vardiman 2026-03-31 (non-accrual)) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  },
+  {
+   "finding_id": "RVQ_BLK_dbf3ec9291c6",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-344703/ROW-2f1d86b86b06aa87",
+     "0001193125-26-344703/ROW-42b75ca58a62a685",
+     "0001193125-26-344703/ROW-aabae98acfcb5c1d",
+     "0001193125-26-344703/ROW-857de333dd72a6a6",
+     "0001193125-26-344703/ROW-068f6e8b10639def",
+     "0001193125-26-344703/ROW-bbf658a3e41ca930",
+     "0001193125-26-344703/ROW-5ab75318e8b78a9e",
+     "0001193125-26-344703/ROW-ba590253a3a52604",
+     "0001193125-26-344703/ROW-72f11ff8a57386fc",
+     "0001193125-26-344703/ROW-eb8a7053da6f6a78",
+     "0001193125-26-344703/ROW-9648881e0abfa14f",
+     "0001193125-26-344703/ROW-c2e8eba5f2996e14"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-344703/ROW-2f1d86b86b06aa87",
+     "0001193125-26-344703/ROW-42b75ca58a62a685",
+     "0001193125-26-344703/ROW-aabae98acfcb5c1d",
+     "0001193125-26-344703/ROW-857de333dd72a6a6",
+     "0001193125-26-344703/ROW-068f6e8b10639def",
+     "0001193125-26-344703/ROW-bbf658a3e41ca930",
+     "0001193125-26-344703/ROW-5ab75318e8b78a9e",
+     "0001193125-26-344703/ROW-ba590253a3a52604",
+     "0001193125-26-344703/ROW-72f11ff8a57386fc",
+     "0001193125-26-344703/ROW-eb8a7053da6f6a78",
+     "0001193125-26-344703/ROW-9648881e0abfa14f",
+     "0001193125-26-344703/ROW-c2e8eba5f2996e14"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Vardiman Black Holdings, LLC (5) (12) (13) First Lien Debt S + 7.00 % PIK 10.75 % 03/18/2027 1,185 1,172 1,185 0.10"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Applitools, Inc. (5) (7) (9) (14) First Lien Debt S + 6.25 % PIK 9.95 % 05/25/2029 8,369 8,322 6,905 0.59"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Diligent Corporation (5) (7) (17) First Lien Debt S + 8.42 % PIK 12.09 % 08/02/2030 929 918 886 0.08"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) First Lien Debt S + 5.00 % PIK 8.67 % 06/29/2029 456 456 456 0.04"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) (17) First Lien Debt S + 5.00 % PIK 8.67 % 07/02/2029 780 780 780 0.07"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Sweep Purchaser, LLC (5) (6) (11) First Lien Debt S + 5.75 % PIK 9.52 % 06/30/2027 2,440 2,440 2,440 0.21"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Continental Acquisition Holdings, Inc. (5) (9) (12) (13) First Lien Debt S + 7.00 % PIK 10.88 % 07/20/2028 6,473 6,415 3,035 0.26"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Vardiman Black Holdings, LLC (5) (13) First Lien Debt S + 7.00 % PIK 10.75 % 03/18/2027 10,566 10,566 6,129 0.52"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "BPG Holdings IV Corp. (5) (7) (9) (13) First Lien Debt S + 7.85 % PIK 11.58 % 07/30/2029 8,878 8,559 4,848 0.41"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) First Lien Debt S + 5.00 % PIK 8.67 % 07/02/2029 3,313 3,265 603 0.05"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Diligent Corporation (5) (7) First Lien Debt S + 8.42 % PIK 12.09 % 08/02/2030 24,117 23,989 23,672 2.02"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "KWOR Acquisition, Inc. (5) (6) (18) Unsecured Debt S + 8.00 % PIK 11.67 % 02/28/2030 3,348 3,348 2,192 0.19"
+    },
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 12 rows this quarter, all verified in the cached filing)",
+    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
+    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
+    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 6 of this quarter's rows have no par-growth evidence of their own (Vardiman 2026-06-30 (non-accrual), Diligent 2026-06-30 (new), Continental Acquisition 2026-06-30 (non-accrual), Vardiman 2026-06-30 (non-accrual), BPG Holdings IV 2026-06-30 (new, non-accrual), Diligent 2026-06-30 (new)) and rest on the printed format alone"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+  }
+ ],
  "tests_run": [
-  "tests/test_schedule_row_tags.py: 9 passed (2 new)",
-  "tests/test_source_encodings.py + tests/test_bdc_xbrl_wrapper.py + tests/test_schedule_row_tags.py: 663 passed"
+  "none: no code changed (row-correction specs and proposals only)"
  ],
  "not_done": [
-  "Full test suite not run.",
-  "Effect of the new cost_or_percent value on other funds not measured: it is opt-in and only this wrapper uses it.",
-  "Industry labels, maturities and non-accrual flags read on a sample of 6 rows only.",
-  "Interest rates of the 2023 preferred 'S + 10.00 %' rows: the filer tags 10.00 as the rate in some quarters; spread set, the tagged rate left.",
-  "Reader notes checked: Vardiman 2026-03-31 'S + 7.00 % PIK' publishes spread 7.0, SOFR, floating (already right in tsxc); Sonny's maturity published 08/05/2028 as printed."
+  "Full test suite and semantic diff not run (no code changed).",
+  "Long Term Care Group 2024-03-31 printed 'S + 7.00 % (incl. 7.00 % PIK)' publishes pik_rate 7.00 and a cash leg: whether the base rate is cash is not settled by the page; not changed, par growth not checked.",
+  "pik_rate meaning for 'S + m % PIK' rests on the whole-coupon convention (D-218 precedent), not an owner ruling: RFTS-R1.",
+  "Equity class check only for preferred vs common; warrants are published EQUITY_COMMON fund-wide and cohort-wide (r14.sql on rgA4), treated as the convention.",
+  "Industry/GICS not compared with the printed headings beyond the 9 renamed rows (extracted_industry already the printed heading there); non-accrual flags, percent of net assets and reference-rate codes not scanned.",
+  "Abracon Borrower 2026-06-30: the affiliate note lists Abracon Group Holding as non-controlled/affiliated; whether the schedule rows changed affiliation section was not checked.",
+  "field_scan.py/equity_scan.py cover rows with a unique printed row (5,721 of 5,726); the 5 others are 4 money-market rows and BP Purchaser 2025-12-31 (read by hand).",
+  "Process slips: one `python -c \"\"` (during the rftsa build) and one bare `python -c` (failed at once); no process left."
+ ],
+ "request_resolution_history": [
+  {
+   "request_id": "RFTS-R1",
+   "classification": "acceptance_change",
+   "resolution": "deferred",
+   "response": "deferred to the owner: an acceptance change (whether pik_printed should accept a pik_rate equal to the printed coupon on loans printed \"S + m % PIK\" whose whole coupon is paid in kind) is the owner's decision. Nothing implemented in the rule; the 54 printed-coupon pik_rate corrections stay (precedent D-218 Commonwealth, Silver Capital) and the 12 pik_printed findings stay outstanding with proposal PD-pik_printed-1885968-4 under the existing reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan. Orchestrator recommendation (a): accept a pik_rate equal to the printed coupon where the PIK figure follows a benchmark code and par growth matches the coupon. If the owner rules (b) instead, the 54 corrections are withdrawn.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-231; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "RFTS-R1",
+    "file": "pipeline/candidate_rules.py",
+    "classification": "acceptance_change",
+    "what": "pik_printed_not_published (identity/pik_printed): where the printed PIK figure follows a benchmark code ('S + 6.25 % PIK') and the row prints a coupon with no cash part, accept a published pik_rate equal to the printed coupon (whole coupon in kind), as the rule already accepts '100 % PIK'. The rule's own docstring notes this shape as a likely false alarm.",
+    "why": "54 rows here (53 flagged in 12 quarters) and the same shape at Silver Capital (Wine.com) and Commonwealth (Kent, D-218) are proposed as rule problems; the data follow the whole-coupon convention. Alternatively the owner rules on the convention for 'S + m % PIK' cohort-wide (0001646614 left it open).",
+    "quotes": [
+     {
+      "accession": "0001885968-23-000025",
+      "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+     }
+    ],
+    "next_action": "owner decision: (a) accept the convention and change the rule as above, which clears the 12 findings; or (b) rule that pik_rate holds only the printed margin, and the 54 corrections are withdrawn"
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 11.19 % 6/30/2027 2,035 2,035 2,035 0.23"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "KWOR Acquisition, Inc. (5) (6) (19) Other Debt S + 8.00 % PIK 12.31 % 2/28/2030 2,881 2,881 2,881 0.27"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) (17) First Lien Debt S + 5.00 % PIK 8.84 % 07/02/2029 646 646 646 0.06"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Vardiman Black Holdings, LLC (5) (12) (13) First Lien Debt S + 7.00 % PIK 10.75 % 03/18/2027 1,185 1,172 1,185 0.10"
+    }
+   ]
+  }
  ]
 }
