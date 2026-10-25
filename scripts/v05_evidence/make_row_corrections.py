@@ -1313,6 +1313,20 @@ if ASIF in held and ASIF_LOOP_FILE.exists():
         EXACT.add(spec["identifier"])
         context_by_spec[(ASIF, spec["quarter"], spec["identifier"], tuple(sorted(spec["fields"])))] = spec_context(spec)
 
+# AB Private Credit Investors (fund-clearing 2026-10-25): a spec that supersedes an earlier spec of the same row
+# names the row's context (correction_context). Its CSV line is keyed by that context, so it is appended after the
+# earlier plain line and the build applies it last. Its field set must differ from every plain spec of the same row.
+if ABPCI_LOOP in held and ABPCI_LOOP_FILE.exists():
+    import json
+    _abpci = json.loads(ABPCI_LOOP_FILE.read_text(encoding="utf-8"))
+    _plain = {(s["quarter"], s["identifier"], tuple(sorted(s["fields"]))) for s in _abpci if not s.get("correction_context")}
+    for spec in _abpci:
+        if spec.get("correction_context"):
+            key = (spec["quarter"], spec["identifier"], tuple(sorted(spec["fields"])))
+            if key in _plain:
+                raise SystemExit("context spec has the field set of a plain spec of the same row: %r" % (key,))
+            context_by_spec[(ABPCI_LOOP,) + key] = spec_context(spec)
+
 for cik, quarter, phrase, fields, reason, *decision in SPECS:
     if cik not in held:
         continue

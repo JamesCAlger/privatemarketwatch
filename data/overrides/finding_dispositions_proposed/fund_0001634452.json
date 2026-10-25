@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "abxf",
+ "sandbox": "rfabf",
  "dispositions": [
   {
    "disposition_id": "PD-F21-1634452-1",
@@ -154,20 +154,32 @@
     "2025-12-31",
     "2026-03-31"
    ],
-   "statement": "The rows with a zero spread are loans the page prints with 'S + 0.00 %': whole-margin PIK loans (Mavenlink 2023-12-31 and 2024-03-31, Bonterra, CHV Holdings' PIK bridge, Magaya 2025-12-31) and Delaware Valley's non-accrual lines (2025-09-30 onward), plus FirstDigital's third term loan printed '( S + .%' . The published zero spread is the printed one. No fix applies.",
+   "statement": "In this build X05 flags only rows whose page prints a zero cash margin and no PIK margin: Mavenlink's revolver at 2023-12-31 ('S + 0.00 %; 0.75 % Floor'), CHV Holdings' PIK bridge at 2024-03-31 ('S + 0.00 %; 16.50 % PIK' with a printed coupon 14.18 % below the PIK, so the 16.50 is not read as a margin), Delaware Valley's non-accrual lines (2025-09-30 to 2026-03-31, 'S + 0.00 %') and FirstDigital's third term loan ('S + 0.00 %', 'S + .%'). The published zero spread is the printed cash margin on every flagged row; CHV's bridge is a source ambiguity kept as printed. Every loan printed 'S + x %; y % PIK', including Bonterra 2023-12-31 / 2024-03-31 and Magaya's term loans and revolvers, publishes x + y as the spread (D-031, orchestrator D-237) and is not flagged. No fix applies.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
      "accession": "0001193125-24-081951",
-     "verbatim": "Mavenlink, Inc. (1) (3) (4) Software & Tech Services Term Loan 11.77 % (S + 0.00 %; 6.25 % PIK; 0.75 % Floor) 06/03/2027 15,264,979 15,074,764 14,959,680",
-     "quote": "'Mavenlink, Inc. (1) (3) (4) Software & Tech Services Term Loan 11.77 % (S + 0.00 %; 6.25 % PIK; 0.75 % Floor) 06/03/2027 15,264,979 15,074,764 14,959,680': 2023-12-31, whole margin paid in kind, cash spread printed 0.00."
+     "verbatim": "Bonterra, LLC Software & Tech Services Term Loan 12.35 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 09/08/2027 2,713,108 2,675,770 2,713,108",
+     "quote": "'Bonterra, LLC Software & Tech Services Term Loan 12.35 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 09/08/2027 2,713,108 2,675,770 2,713,108': 2023-12-31, D-031 form: published spread 8.0 in rfabf, not flagged (the earlier verdict's row list is answered by this)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-124450",
+     "verbatim": "Magaya Corporation Software & Tech Services Revolver 11.5 % ( S + 0.00 %; 0.75 % Floor; 4.75 % PIK) 7/26/2030 682,497 674,985 663,933",
+     "quote": "'Magaya Corporation Software & Tech Services Revolver 11.5 % ( S + 0.00 %; 0.75 % Floor; 4.75 % PIK) 7/26/2030 682,497 674,985 663,933': 2025-12-31, D-031 form: published spread 4.75 in rfabf, not flagged."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-081951",
+     "verbatim": "Mavenlink, Inc. (2) Software & Tech Services Revolver 11.76 % (S + 0.00 %; 0.75 % Floor) 06/03/2027 1,446,026 1,423,378 1,409,946",
+     "quote": "'Mavenlink, Inc. (2) Software & Tech Services Revolver 11.76 % (S + 0.00 %; 0.75 % Floor) 06/03/2027 1,446,026 1,423,378 1,409,946': 2023-12-31, the flagged revolver prints a zero margin and no PIK; published spread 0."
     },
     {
      "source": "filing",
      "accession": "0001193125-24-138418",
-     "verbatim": "Bonterra, LLC (1) (4) (5) Software & Tech Services Term Loan 13.30 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 9/8/2027 2,804,652 2,769,309 2,804,652",
-     "quote": "'Bonterra, LLC (1) (4) (5) Software & Tech Services Term Loan 13.30 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 9/8/2027 2,804,652 2,769,309 2,804,652': 2024-03-31, spread printed 0.00 with 8.00 PIK."
+     "verbatim": "CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840",
+     "quote": "'CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840': 2024-03-31, margin printed 0.00; the 16.50 PIK exceeds the printed coupon, so it is left as pik_rate and the spread stays 0."
     },
     {
      "source": "filing",
@@ -178,8 +190,8 @@
     {
      "source": "filing",
      "accession": "0001193125-26-124450",
-     "verbatim": "Magaya Corporation Software & Tech Services Term Loan 9.42 % ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 3,739,718 3,709,431 3,664,924",
-     "quote": "'Magaya Corporation Software & Tech Services Term Loan 9.42 % ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 3,739,718 3,709,431 3,664,924': 2025-12-31, spread printed 0.00 with 5.75 PIK."
+     "verbatim": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - % ( S + 0.00 %; 1.00 % Floor) 3/31/2026 413,145 233,153 83,827",
+     "quote": "'Delaware Valley Management Holdings, Inc. Healthcare Revolver - % ( S + 0.00 %; 1.00 % Floor) 3/31/2026 413,145 233,153 83,827': 2025-12-31, non-accrual revolver printed S + 0.00."
     },
     {
      "source": "filing",
@@ -191,21 +203,21 @@
      "source": "filing",
      "accession": "0001193125-26-124450",
      "verbatim": "RevauAdvanced Underwriting Inc. Financials Term Loan 8.46 % ( S + 4.75 %; 0.75 % Floor) 5/10/2032 9,635,703 9,546,142 9,539,346",
-     "quote": "'RevauAdvanced Underwriting Inc. Financials Term Loan 8.46 % ( S + 4.75 %; 0.75 % Floor) 5/10/2032 9,635,703 9,546,142 9,539,346': 2025-12-31, the row of the earlier verdict; published spread 4.75 in this build."
+     "quote": "'RevauAdvanced Underwriting Inc. Financials Term Loan 8.46 % ( S + 4.75 %; 0.75 % Floor) 5/10/2032 9,635,703 9,546,142 9,539,346': 2025-12-31, the row of the earlier verdict; published spread 4.75 in this build, not flagged."
     },
     {
      "source": "filing",
      "accession": "0001193125-26-224298",
      "verbatim": "RevauAdvanced Underwriting Inc. Financials Term Loan 8.66 % ( S + 5.00 %; 0.75 % Floor) 5/10/2032 9,611,493 9,524,787 9,371,206",
-     "quote": "'RevauAdvanced Underwriting Inc. Financials Term Loan 8.66 % ( S + 5.00 %; 0.75 % Floor) 5/10/2032 9,611,493 9,524,787 9,371,206': 2026-03-31, the row of the earlier verdict; published spread 5.00 in this build."
+     "quote": "'RevauAdvanced Underwriting Inc. Financials Term Loan 8.66 % ( S + 5.00 %; 0.75 % Floor) 5/10/2032 9,611,493 9,524,787 9,371,206': 2026-03-31, the row of the earlier verdict; published spread 5.00 in this build, not flagged."
     }
    ],
-   "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
-   "decided_on": "2026-10-16",
+   "rerun": "see scratch/fund_runs/0001634452/notes.md (run 2026-10-25) and coverage_rfabc.json",
+   "decided_by": "PROPOSED by agent fund-agent-rfab-0001634452 2026-10-25 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-25",
    "addresses_verdict": {
-    "2025-12-31": "The earlier reviewer found RevauAdvanced Underwriting (two loans, S + 4.75 %) and Syntax Systems published with spread 0. In this build both publish 4.75 and 5.00 as printed (RevauAdvanced 8.46 / 4.75, Syntax 8.81 / 5.00); the rows X05 still flags are Magaya (printed S + 0.00 %, PIK 5.75 / 4.75) and Delaware Valley (printed S + 0.00 %, non-accrual).",
-    "2026-03-31": "The earlier reviewer found RevauAdvanced (S + 5.00 %) and Syntax Systems (S + 5.00 %) published with spread 0. In this build they publish 5.00 as printed (RevauAdvanced 8.66 / 5.00, Syntax 8.76 and 8.77 / 5.00); the rows X05 still flags are Delaware Valley's three lines printed 'S + 0.00 %' and FirstDigital's line printed 'S + .%'."
+    "2025-12-31": "The earlier reviewer found RevauAdvanced Underwriting (two loans, S + 4.75 %) and Syntax Systems published with spread 0. Fixed before this run: both publish 4.75 / 5.00 as printed and are not flagged. The four rows X05 flags now are Delaware Valley's three non-accrual lines and FirstDigital's term loan, all printed 'S + 0.00 %'.",
+    "2026-03-31": "The earlier reviewer found RevauAdvanced (S + 5.00 %) and Syntax Systems (S + 5.00 %) published with spread 0. Fixed before this run: they publish 5.00 as printed and are not flagged. The four rows X05 flags now are Delaware Valley's three lines printed 'S + 0.00 %' or 'S + .%' and FirstDigital's line printed 'S + .%'."
    }
   },
   {
@@ -414,6 +426,38 @@
    "rerun": "see scratch/fund_runs/0001634452/notes.md and docs/investigations/v05_readings/0001634452.md",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
    "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-issuer_name_printed-1634452-11",
+   "class": "false_alarm",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "reason_key": "issuer-name-printed-row-joins-words-the-page-separates",
+   "ciks": [
+    "0001634452"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "statement": "The two flagged rows (Mykaarma revolver and term loan, 2023-12-31) publish 'Mykaarma Acquisition LLC'. The page reader's printed row reads 'Mykaarma AcquisitionLLC(2) (6)', but the filing's own text prints the name with the space ('Mykaarma Acquisition LLC (2) (6)'): the two words sit in separate spans and the reader joined them. The published name is the printed name. The other six rows the rule flagged in this quarter in the build before this run (four preferred rows named after their series, two names that had lost their apostrophes) were corrected. No fix applies to these two rows: the name is right.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-24-081951",
+     "verbatim": "Mykaarma Acquisition LLC (2) (6) Software & Tech Services Revolver 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 - ( 8,417 ) ( 4,449 )",
+     "quote": "'Mykaarma Acquisition LLC (2) (6) Software & Tech Services Revolver 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 - ( 8,417 ) ( 4,449 )': 2023-12-31, revolver; the page prints 'Mykaarma Acquisition LLC' with the space."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-081951",
+     "verbatim": "Mykaarma Acquisition LLC (3) (5) Software & Tech Services Term Loan 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 6,339,104 6,250,126 6,291,561",
+     "quote": "'Mykaarma Acquisition LLC (3) (5) Software & Tech Services Term Loan 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 6,339,104 6,250,126 6,291,561': 2023-12-31, term loan; same."
+    }
+   ],
+   "rerun": "see scratch/fund_runs/0001634452/notes.md (run 2026-10-25) and coverage_rfabc.json",
+   "decided_by": "PROPOSED by agent fund-agent-rfab-0001634452 2026-10-25 (fund-clearing loop); not accepted by the owner",
+   "decided_on": "2026-10-25"
   }
  ]
 }

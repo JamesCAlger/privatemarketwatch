@@ -1,0 +1,973 @@
+{
+ "reviewer_id": "claude-independent-reviewer-ab-rfabe",
+ "report_digest": "c6c179232cc31dd03de88bf7b1b0b9da05e965f8c2fada5eb03d39f4230a59f3",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_16ba237d54bf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the one rfabe oracle/check_failures A01 row (parent 'community based care ... delayed draw term loan 09 16 27', rollup 1,948,384, child sum -87,363) is the declared key. Checked on the 10-K for 2023: 1,948,384 and (87,363) are both lines of the comparative December 2022 schedule (Healthcare & HCIT label, 9.93 pct rates); the current lines print 2,095,814 and 942,256 and are published as such (ROW-2e3e26568600747c, ROW-d9e94ed1c73b1fba). False alarm supported. The second hypothesis and two evidence quotes (Canadian subtotal, 10-K for 2024) were copied from the 2024-12-31 finding and are irrelevant to this quarter; they do not change the conclusion.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Community Based Care Acquisition, Inc. (2) (3) Healthcare & HCIT Delayed Draw Term Loan 9.93 % (S + 5.25 %; 1.00 % Floor) 09/16/2027 2,034,120 2,003,449 1,948,384"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Community Based Care Acquisition, Inc. (3) (4) Healthcare & HCIT Delayed Draw Term Loan 9.93 % (S + 5.75 %; 1.00 % Floor) 09/16/2027 - ( 55,320 ) ( 87,363 )"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Community Based Care Acquisition, Inc. (5) Healthcare Delayed Draw Term Loan 10.70 % (S + 5.25 %; 1.00 % Floor) 09/16/2027 2,122,343 2,097,467 2,095,814"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_063ec30577cf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the two rfabe A01 rows (rollups 23,923,702 and 8,619,561 against child sum 39,227,843) are the two declared keys. Both rollups are printed in the 10-K for 2024's comparative December 2023 schedule (Canadian 1st lien total and the Syntax line under the 4.74 pct heading). The current Canadian lines (Syntax x2, Versaterm x3) sum to the printed current total 24,184,759 (8,588,145 + 1,194,390 + 13,258,433 + 1,024,233 + 119,558). False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Total Canadian 1st Lien/Senior Secured Debt 24,027,560 23,923,702"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Canadian Corporate Debt - 4.74 % 1st Lien/Senior Secured Debt - 4.74 % 8,684,697 8,622,463 8,619,561"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Versaterm Public Safety Inc. Software & Tech Services Revolver 12.75 % (S + 6.25 %; 1.00 % Floor) 12/4/2025 119,558 112,997 119,558 (6)(8) Total Canadian 1st Lien/Senior Secured Debt 24,028,199 24,184,759"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9098e9e8ef78",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe row_validation_issues / shadow ledger for C117 2024-12-31 match the declared keys; the only pik_rate above 20 in the quarter is ROW-70b7785b67d6d52f (Colo Holdings, pik 20.5 = published interest_rate). The page prints the whole coupon in kind ('Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % '). Published value equals the printed figure; false alarm supported. fmt_pik_rate metric = 1 unit of n/a.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 673,703 643,498 673,703"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d08d89c1b346",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe row_validation_issues / shadow ledger for C117 2025-03-31 match the declared keys; the only pik_rate above 20 in the quarter is ROW-b3a21d52d8261e4d (Colo Holdings, pik 20.5 = published interest_rate). The page prints the whole coupon in kind ('Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % '). Published value equals the printed figure; false alarm supported. fmt_pik_rate metric = 1 unit of n/a.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 284,880 261,736 284,880"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_af1070092697",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe row_validation_issues / shadow ledger for C117 2025-06-30 match the declared keys; the only pik_rate above 20 in the quarter is ROW-2a3cb5ad0b978427 (Colo Holdings, pik 21.5 = published interest_rate). The page prints the whole coupon in kind ('Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PI'). Published value equals the printed figure; false alarm supported. fmt_pik_rate metric = 1 unit of n/a.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PIK) 3/27/2026 177,369 147,559 177,369"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a9fa210ec859",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe oracle/check_results D06 2023-12-31 fail, 20.4 pct (39/191 issuers); fund-quarter key declared. Independent check: with punctuation and case removed from issuer names, 174 of 189 2023-12-31 issuers persist from 2023-09-30 (92 pct), e.g. 'Galway Borrower LLC' (2023-09-30, published from the member) vs 'Galway Borrower, LLC' (2023-12-31); the page prints the comma in both filings. False alarm supported. Residual not recorded as the proposal claims: the 2023-09-30 published names drop a printed comma, and no observation in the report records it.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "Galway Borrower, LLC Financials Delayed Draw Term Loan 10.74 % (S + 5.25 %; 0.75 % Floor) 09/29/2028 39,209 38,926 38,621"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Galway Borrower, LLC (2) (6) Financials Revolver 10.70 % (S + 5.25 %; 0.75 % Floor) 09/30/2027 - ( 3,432 ) ( 3,380 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fe286321b40a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2023-03-31|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.5408, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 254.06 pct of net assets, i.e. 2.5406, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-145163",
+     "text": "TOTAL INVESTMENTS - 254.06% (14) $ 1,198,535,419 $ 1,179,343,662"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_87856c8646e0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2023-06-30|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.5376, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 253.75 pct of net assets, i.e. 2.5375, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-212335",
+     "text": "TOTAL INVESTMENTS - 253.7 5 % (15) $ 1,253,961,805 $ 1,227,572,852"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e1a25b5e54a0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2023-12-31|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.6007, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 260.04 pct of net assets, i.e. 2.6004, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "TOTAL INVESTMENTS- 260.04 % (15) $ 1,329,540,850 $ 1,311,120,584"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_671829fa9afc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2024-03-31|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.6056, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 260.53 pct of net assets, i.e. 2.6053, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-138418",
+     "text": "TOTAL INVESTMENTS - 260.53 % $ 1,398,952,125 $ 1,387,137,974"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_39fd14c2b867",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2024-06-30|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.657, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 265.70 pct of net assets, i.e. 2.6570, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-200574",
+     "text": "TOTAL INVESTMENTS - 265.70 % 1,490,018,182 1,480,958,078"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8e882a6992a0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2024-09-30|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.5931, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 259.31 pct of net assets, i.e. 2.5931, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126944",
+     "text": "TOTAL INVESTMENTS - 259.31 % 1,540,127,100 1,530,430,854"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_97191bb35b97",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2024-12-31|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.686, band 0.5 to 2.5). Source: printed total investments 1,630,349,305 over printed total net assets 607,051,545 = 2.6857, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Total Investments 1,636,597,753 1,630,349,305"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Total net assets $ 607,051,545 $ 504,197,245"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_35f23e75a28d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2025-03-31|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.5154, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 251.51 pct of net assets, i.e. 2.5151, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Total Investments - 251.51 % 1,653,045,866 1,644,014,546"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_325bd9ec5a22",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2025-06-30|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.672, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 267.17 pct of net assets, i.e. 2.6717, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Total Investments - ( 267.17 %) $ 1,748,732,749 $ 1,735,894,006"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_653315f02098",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2025-09-30|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.5744, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 257.41 pct of net assets, i.e. 2.5741, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277881",
+     "text": "Total Investments - ( 257.41 %) $ 1,808,750,592 $ 1,796,706,145"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_64f5de4a4fe7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: key 0001634452|2026-06-30|F21|investments_over_net_assets is the single F21 FAIL row in rfabe fund_financials_validation_current (value 2.6211, band 0.5 to 2.5). Source: printed TOTAL INVESTMENTS line gives 262.09 pct of net assets, i.e. 2.6209, equal to the published ratio, so neither holdings FV nor net assets is mis-read; the ratio is a levered BDC's (about 1.6x debt to equity). Compared with the filer's own printed figure, not with the build. As filed; F21's 2.5 ceiling is a generic band.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Total Investments - ( 262.09 %) 1,984,633,170 1,943,637,816"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b75534e34b7e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe X02 rows for 2024-09-30 (3) equal the declared keys exactly. Every flagged line (Delaware Valley non-accrual lines, FirstDigital at 2026-06-30) prints a dash rate and no margin ('(S; 1.00 % Floor)' or '( 1.00 % Floor)'); published interest_rate and basis_spread are both blank. Checked against the page reader's printed_row for every row and the quoted lines. False alarm (no rate printed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S; 1.00 % Floor) 12/31/2024 505,093 168,457 152,336"
+    },
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - (S; 1.00 % Floor) 12/31/2024 398,650 265,722 120,300"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5e7965b097aa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe X02 rows for 2024-12-31 (3) equal the declared keys exactly. Every flagged line (Delaware Valley non-accrual lines, FirstDigital at 2026-06-30) prints a dash rate and no margin ('(S; 1.00 % Floor)' or '( 1.00 % Floor)'); published interest_rate and basis_spread are both blank. Checked against the page reader's printed_row for every row and the quoted lines. False alarm (no rate printed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S; 1.00 % Floor) 1/30/2026 470,345 120,253 112,977"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S; 1.00 % Floor) 1/30/2026 251,307 165,594 60,364"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_684a2f0cb730",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe X02 rows for 2025-03-31 (3) equal the declared keys exactly. Every flagged line (Delaware Valley non-accrual lines, FirstDigital at 2026-06-30) prints a dash rate and no margin ('(S; 1.00 % Floor)' or '( 1.00 % Floor)'); published interest_rate and basis_spread are both blank. Checked against the page reader's printed_row for every row and the quoted lines. False alarm (no rate printed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - ( S ; 1.00 % Floor) 1/30/2026 483,017 120,253 112,978"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - ( S ; 1.00 % Floor) 1/30/2026 258,077 165,594 60,364"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f8d11d317229",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe X02 rows for 2025-06-30 (3) equal the declared keys exactly. Every flagged line (Delaware Valley non-accrual lines, FirstDigital at 2026-06-30) prints a dash rate and no margin ('(S; 1.00 % Floor)' or '( 1.00 % Floor)'); published interest_rate and basis_spread are both blank. Checked against the page reader's printed_row for every row and the quoted lines. False alarm (no rate printed) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - ( S ; 1.00 % Floor) 1/30/2026 496,168 124,773 112,184"
+    },
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - ( S ; 1.00 % Floor) 1/30/2026 265,104 168,009 59,940"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3702160648c2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe X02 rows for 2026-06-30 (4) equal the declared keys exactly. Every flagged line (Delaware Valley non-accrual lines, FirstDigital at 2026-06-30) prints a dash rate and no margin ('(S; 1.00 % Floor)' or '( 1.00 % Floor)'); published interest_rate and basis_spread are both blank. Checked against the page reader's printed_row for every row and the quoted lines. False alarm (no rate printed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Delaware Valley Management Holdings, Inc. Health Care Providers & Services Revolver - % ( 1.00 % Floor) 12/31/2026 434,393 233,153 83,534"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Delaware Valley Management Holdings, Inc. Health Care Providers & Services Delayed Draw Term Loan - % ( 1.00 % Floor) 12/31/2026 294,070 165,594 56,550"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f3de4501bd7f",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches (Bonterra PIK term loan, Mavenlink revolver). Mavenlink revolver: printed 'S + 0.00 %' with no PIK, as filed. Bonterra not supported: the page prints '(S + 0.00 %; 8.00 % PIK)' at 12.35 %; the same loan with the same printed terms publishes spread 8.0 at 2024-03-31 (13.30 %) and 0.0 here. A zero cash margin cannot be a total margin that includes an 8.00 PIK, so under D-031 the zero is not the margin. The D-031 all-in test that set these spreads is unsound as a test of the spread: its CONTRADICTED class ('cash-only fits') shows only that the printed rate is the cash coupon, which is this repo's interest_rate storage convention, not that the PIK lies outside the margin. Where the printed PIK exceeds the printed cash margin the cash margin cannot be a total that includes the PIK, so the withdrawn D-031 spread was right. Same-filing pairs with identical printed terms show the filer prints all-in on one line and cash on the next (GHA Buyer 2023-03-31: term loan 13.30 %, delayed draw 9.55 %, both 'S + 4.50 %; 3.75 % PIK'; the build now publishes 8.25 and 4.50 for the same terms). The report's own observation pik-rate-holds-margin-when-whole-coupon-is-pik says spread 8 was left for this quarter; rfabe publishes 0.0. At best source_ambiguity (the parked D-232 whole-coupon reading), not false_alarm.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Bonterra, LLC Software & Tech Services Term Loan 12.35 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 09/08/2027 2,713,108 2,675,770 2,713,108"
+    },
+    {
+     "accession": "0001193125-24-138418",
+     "text": "Bonterra, LLC (1) (4) (5) Software & Tech Services Term Loan 13.30 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 9/8/2027 2,804,652 2,769,309 2,804,652"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Mavenlink, Inc. (2) Software & Tech Services Revolver 11.76 % (S + 0.00 %; 0.75 % Floor) 06/03/2027 1,446,026 1,423,378 1,409,946"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_16918d32797e",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches (CHV PIK bridge 2024-03-31). The report concludes false_alarm here and source_ambiguity for the same row and the same printed line in RVQ_REV_083c1c5e934d. The line prints a 14.18 % coupon below a 16.50 % PIK with 'S + 0.00 %'; the build publishes coupon_type Floating, SOFR, spread 0, interest_rate blank. Nothing shows a floating spread of 0 is the right reading (a fixed 16.5 % PIK coupon is as plausible). The evidence supports source_ambiguity, not a false alarm.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-138418",
+     "text": "CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b85ff2d6feea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: three rfabe X05 rows (Delaware Valley x2, FirstDigital) = declared keys. Each prints 'S + 0.00 %' with no PIK and a dash rate (non-accrual / unfunded lines). Published spread 0 equals the printed margin. False alarm (as filed) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277881",
+     "text": "FirstDigital Communications, LLC Digital Infrastructure & Services Term Loan - ( S + 0.00 %; 0.75 % Floor) 12/17/2026 34,453 - 33,850"
+    },
+    {
+     "accession": "0001193125-25-277881",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S + 0.00 %; 1.00 % Floor) 1/30/2026 509,836 120,253 106,148"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1d8ad04b9928",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches (5 rows). Delaware Valley x3 and FirstDigital are as filed. Magaya revolver (ROW-d4b9b1195a08f748) is not: printed '( S + 0.00 %; 0.75 % Floor; 4.75 % PIK)' publishes spread 0.0 while the Magaya term loan and delayed draw in the same filing ('S + 0.00 %; 5.75 % PIK') publish 5.75 under D-031. A zero cash margin cannot be a total that includes a 4.75 PIK. The test withdrew it only because 11.5 is not SOFR + 4.75; 11.5 equals Prime 6.75 + 4.75, a hypothesis not tested. Ledger state remediation_pulled (an earlier verdict confirmed an error). The D-031 all-in test that set these spreads is unsound as a test of the spread: its CONTRADICTED class ('cash-only fits') shows only that the printed rate is the cash coupon, which is this repo's interest_rate storage convention, not that the PIK lies outside the margin. Where the printed PIK exceeds the printed cash margin the cash margin cannot be a total that includes the PIK, so the withdrawn D-031 spread was right. Same-filing pairs with identical printed terms show the filer prints all-in on one line and cash on the next (GHA Buyer 2023-03-31: term loan 13.30 %, delayed draw 9.55 %, both 'S + 4.50 %; 3.75 % PIK'; the build now publishes 8.25 and 4.50 for the same terms).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Magaya Corporation Software & Tech Services Revolver 11.5 % ( S + 0.00 %; 0.75 % Floor; 4.75 % PIK) 7/26/2030 682,497 674,985 663,933"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Magaya Corporation Software & Tech Services Term Loan 9.42 % ( S + 0.00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 3,739,718 3,709,431 3,664,924"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - % ( S + 0.00 %; 1.00 % Floor) 3/31/2026 413,145 233,153 83,827"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_54a76e4cc044",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage matches (5 rows). Delaware Valley x3 and FirstDigital are as filed. Magaya revolver (ROW-b59f5d0f3079ed38) is not quoted in the investigation's evidence; the page prints '1.5 % ( S + .00 %; 0.75 % Floor; 4.75 % PIK)'. The fund's own fix (observation pik-margin-loan-read-as-fixed) set spread = PIK margin on this row; the D-031 test withdrew it because 1.5 fits no reading. A misprinted coupon is no evidence about the margin, and the Magaya term loan on the same page ('S + .00 %; 5.75 % PIK') publishes 5.75. Ledger state real_error_unremediated. Published spread 0 not shown correct.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Magaya Corporation Software & Tech Services Revolver 1.5 % ( S + .00 %; 0.75 % Floor; 4.75 % PIK) 7/26/2030 690,490 683,307 662,405"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Magaya Corporation Software & Tech Services Term Loan 9.44 % ( S + .00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 3,793,477 3,764,542 3,679,672"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - .% ( S + .%; 1.00 % Floor) 6/30/2026 286,763 165,594 56,550"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_272ce33db0a6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: one rfabe X07 row (ROW-5afa6f752ec9baee, cost 39, FV 5,961) = declared key. The page prints par 5,961, cost 39, value 5,961 on Sandstone's own revolver line. As filed; false alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Sandstone Care Holdings, LLC Health Care Providers & Services Revolver - % (S + 5.50 %; 1.00 % Floor) 6/28/2028 5,961 39 5,961"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c419d582f199",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2023-09-30 (7) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/29/2023 1,171,910 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-23-277031",
+     "text": "American Physician Partners, LLC (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/29/2023 882,467 817,051 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_362f5288917b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2023-12-31 (7) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.00 % PIK; 1.00 % Floor) 03/29/2024 1,218,972 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "American Physician Partners, LLC (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.00 % PIK; 1.00 % Floor) 03/29/2024 917,905 817,051 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_083c1c5e934d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2024-03-31 (8) equal the declared keys. Dash rows (American Physician Partners and others): printed rate cell is a dash on every line (page reader printed_row and page text), published interest_rate blank, re-verifier compares the tagged 0. Non-dash rows (CHV PIK bridge) print a coupon below their PIK or implausibly low (14.18 under a 16.50 PIK; 1.44, 1.5, 3.78, 5.76 under 5 to 6 pct PIK); those cannot be read as all-in or cash coupons. source_ambiguity supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-138418",
+     "text": "American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 6/28/2024 1,267,955 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-24-138418",
+     "text": "CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6e96e6f89c96",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2024-06-30 (7) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-200574",
+     "text": "American Physician Partners, LLC (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/31/2024 949,042 817,051 -"
+    },
+    {
+     "accession": "0001193125-24-200574",
+     "text": "American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/31/2024 1,260,322 1,082,011 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8f58b2ec6566",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2024-09-30 (14) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Saviynt, Inc. Software & Tech Services Revolver - (S + 4.00 %; 1.00 % Floor; 3.50 % PIK) 12/22/2027 - ( 9,943 ) ( 7,622 )"
+    },
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Single Digits, Inc. Digital Infrastructure & Services Term Loan - (S + 4.25 %; 1.00 % Floor; 3.00 % PIK) 6/22/2026 2,932,730 2,822,024 1,979,592"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b1469937587a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2024-12-31 (12) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Single Digits, Inc. Digital Infrastructure & Services Term Loan - (S + 4.25 %; 1.00 % Floor; 3.00 % PIK) 6/22/2026 2,932,730 2,709,917 1,686,320"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - (S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 1/31/2025 1,260,322 1,082,011 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5154fd9701eb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2025-03-31 (13) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 6/30/2025 1,260,322 1,082,011 -"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 6/30/2025 949,042 817,051 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3c2d4c0b6a55",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2025-06-30 (11) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "CHV Holdings LLC Digital Infrastructure & Services Revolver - ( S + 4.00 %; 1.00 % Floor; 4.75 % PIK) 3/27/2029 - ( 23,280 ) -"
+    },
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Penn TRGRP Holdings LLC Software & Tech Services Revolver - ( S + 1.5 %; 0.75 % Floor; 6.00 % PIK) 9/27/2030 - ( 15,862 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f339bfdfcb77",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2025-09-30 (11) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277881",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.5 % PIK) 12/31/2025 1,260,321 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-25-277881",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.5 % PIK) 12/31/2025 949,042 817,051 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9d5de2bd18b9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2025-12-31 (10) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-124450",
+     "text": "CHV Holdings LLC Digital Infrastructure & Services Revolver - ( S + 4.00 %; 1.00 % Floor; 4.75 % PIK) 3/27/2029 - ( 20,136 ) -"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "American Physician Partners, LLC Healthcare Revolver - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 3/31/2026 346,322 345,024 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_455197802b18",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2026-03-31 (13) equal the declared keys. Dash rows (American Physician Partners and others): printed rate cell is a dash on every line (page reader printed_row and page text), published interest_rate blank, re-verifier compares the tagged 0. Non-dash rows (Penn TRGRP x2, Gryphon x2, Magaya revolver, Smile Brands) print a coupon below their PIK or implausibly low (14.18 under a 16.50 PIK; 1.44, 1.5, 3.78, 5.76 under 5 to 6 pct PIK); those cannot be read as all-in or cash coupons. source_ambiguity supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224298",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 6/30/2026 1,260,321 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Penn TRGRP Holdings LLC Software & Tech Services Term Loan 1.44 % ( S + 1.75 %; 0.75 % Floor; 6.00 % PIK) 9/27/2030 7,281,745 7,165,664 6,717,410"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Magaya Corporation Software & Tech Services Revolver 1.5 % ( S + .00 %; 0.75 % Floor; 4.75 % PIK) 7/26/2030 690,490 683,307 662,405"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0e4d3dcc914f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe provenance_ledger reason financial_convention_unresolved rows for 2026-06-30 (7) equal the declared keys. Every row is a published-blank interest_rate against a tagged 0 (cheap_status unresolved_coupon), and every printed rate cell is a dash (checked on the page reader's printed_row for all rows with one, and on the page text for the 2025-12-31 American Physician Partners rows that have none). pik_rate equals the printed PIK on the rows read. False alarm (dash printed, published blank) supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-352137",
+     "text": "American Physician Partners, LLC Health Care Providers & Services Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 12/31/2026 1,260,321 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "American Physician Partners, LLC Health Care Providers & Services Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 12/31/2026 949,042 817,051 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e5fae5b38ffa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe row_validation_issues / shadow ledger for fmt_pik_rate 2024-12-31 match the declared keys; the only pik_rate above 20 in the quarter is ROW-70b7785b67d6d52f (Colo Holdings, pik 20.5 = published interest_rate). The page prints the whole coupon in kind ('Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % '). Published value equals the printed figure; false alarm supported. fmt_pik_rate metric = 1 unit of 41.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 673,703 643,498 673,703"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f34e33805724",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe row_validation_issues / shadow ledger for fmt_pik_rate 2025-03-31 match the declared keys; the only pik_rate above 20 in the quarter is ROW-b3a21d52d8261e4d (Colo Holdings, pik 20.5 = published interest_rate). The page prints the whole coupon in kind ('Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % '). Published value equals the printed figure; false alarm supported. fmt_pik_rate metric = 1 unit of 43.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 284,880 261,736 284,880"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_da6e6e245429",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe row_validation_issues / shadow ledger for fmt_pik_rate 2025-06-30 match the declared keys; the only pik_rate above 20 in the quarter is ROW-2a3cb5ad0b978427 (Colo Holdings, pik 21.5 = published interest_rate). The page prints the whole coupon in kind ('Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PI'). Published value equals the printed figure; false alarm supported. fmt_pik_rate metric = 1 unit of 43.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PIK) 3/27/2026 177,369 147,559 177,369"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b700098b6e07",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: rfabe shadow/page_rule_findings has exactly the two declared Mykaarma rows (kind spacing_only). Raw HTML of 0001193125-24-081951 holds '>Mykaarma Acquisition<br/>LLC' for both lines: a line break the page reader dropped without a space ('Mykaarma AcquisitionLLC'). The printed company is 'Mykaarma Acquisition LLC', as published. False alarm supported; the rule's input is wrong (REQ-rfab-2).",
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Mykaarma Acquisition LLC (2) (6) Software & Tech Services Revolver 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 - ( 8,417 ) ( 4,449 )"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Mykaarma Acquisition LLC (3) (5) Software & Tech Services Term Loan 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 6,339,104 6,250,126 6,291,561"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Verified in rgA4 shadow/page_rule_findings: issuer_name_printed fired 6 rows at 2023-09-30 (incl. the 4 AmerCareRoyal rows), 7 at 2024-03-31, 18 at 2024-06-30; rfabe has only the Mykaarma pair left. The existing detector caught these on first build; the name_scan suggestion (no identifier-once limit) is a reasonable widening.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "AmerCareRoyal, LLC (1) (5) Services Term Loan 11.98 % (S + 6.50 %; 0.50 % PIK; 1.00 % Floor) 11/25/2025 4,100,950 4,002,424 4,100,950"
+    }
+   ]
+  },
+  {
+   "observation_key": "entity-resolver-overrides-corrected-issuer",
+   "outcome": "supported",
+   "rationale": "Verified in rfabe: the 4 2023-09-30 AmerCareRoyal rows (issuer 'AmerCareRoyal LLC') keep canonical_name and entity 'West Dermatology' and GICS Health Care Services, while the same position_ids publish Amercare Royal LLC / Diversified Support Services in 2023-06-30 and 2023-12-31; all other AmerCareRoyal rows 2023-03-31 to 2024-06-30 are back on the Amercare entity. The residual also includes the GICS label, which the observation does not state. The respelling drops the printed comma. Proposed detector (canonical name vs row-corrected issuer) is scoped to corrected rows, so false positives are bounded.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "AmerCareRoyal, LLC (1) (5) Services Term Loan 11.98 % (S + 6.50 %; 0.50 % PIK; 1.00 % Floor) 11/25/2025 4,100,950 4,002,424 4,100,950"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-plus-pik-spread-is-cash-leg-only",
+   "outcome": "rejected",
+   "rationale": "Action 'fixed' is not supported. In rfabe 363 D-031-form rows publish the printed cash margin only; 77 of them (233.2M FV) print a PIK margin above the cash margin, where the cash margin cannot be the total. Same terms publish different spreads: GHA Buyer 2023-03-31 term loans 8.25 vs delayed draw 4.50; Saviynt 2023-06-30 delayed draw 7.5 vs term loan 4.0; Penn TRGRP term loan 7.75 in every quarter but 2024-03-31 and 2026-03-31 (1.75); Mykaarma term loan 3.00 to 2024-06-30 then 6.75 at 2024-09-30. The suggested detector is sound and would flag exactly these rows, which shows the defect is open, not fixed.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-145163",
+     "text": "GHA Buyer, Inc. (1) Healthcare & HCIT Term Loan 13.30% (S + 4.50%; 3.75% PIK; 1.00% Floor) 06/24/2026 562,705 556,769 538,790"
+    },
+    {
+     "accession": "0001193125-23-145163",
+     "text": "GHA Buyer, Inc. (3) Healthcare & HCIT Delayed Draw Term Loan 9.55% (S + 4.50%; 3.75% PIK; 1.00% Floor) 06/24/2026 815,950 808,160 781,272"
+    },
+    {
+     "accession": "0001193125-24-138418",
+     "text": "Penn TRGRP Holdings, LLC (1) (3) (5) Software & Tech Services Term Loan 12.07 % (S + 1.75 %; 6.00 % PIK; 0.75 % Floor) 9/27/2030 7,061,153 6,933,606 7,061,153"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "rfabe funded-row GICS coverage 0.903 (2023-03-31) and 0.895 (2023-06-30), as stated; industry_coverage fired on both quarters in rgA4 (278 rows). Existing detector is adequate.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-145163",
+     "text": "Coupa Holdings,LLC (3) Software & Tech Services Term Loan 12.29% (S + 7.50%; 0.75% Floor) 02/27/2030 10,617,824 10,352,378 10,352,378"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-margin-loan-read-as-fixed",
+   "outcome": "supported",
+   "rationale": "rfabe: Mavenlink 2024-03-31 to 2024-09-30 and Magaya 2026-03-31 rows publish Floating / SOFR. The coupon_type fix holds on all 7 rows; note the Magaya revolver 2026-03-31 spread was later withdrawn by the D-031 test and publishes 0 (see RVQ_REV_54a76e4cc044). Proposed detector (Fixed with a benchmark letter printed) is specific and low in false positives.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Magaya Corporation Software & Tech Services Term Loan 9.44 % ( S + .00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 3,793,477 3,764,542 3,679,672"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Magaya Corporation Software & Tech Services Revolver 1.5 % ( S + .00 %; 0.75 % Floor; 4.75 % PIK) 7/26/2030 690,490 683,307 662,405"
+    }
+   ]
+  },
+  {
+   "observation_key": "subtotal-tagged-on-another-holdings-context",
+   "outcome": "supported",
+   "rationale": "Raw HTML: both facts of C_caf7702b-8f3d-4dc1-a2ff-155b44e5762f (8,561 and '-') sit after the 'Total French Warrants' label. The rule predicate pins report_date 2024-12-31 and row_id ROW-f38d5914f9ef522d, which occurs once in rgA4. rgA4 vs rfabe: the only row removed for this fund is ROW-f38d5914f9ef522d (7371 -> 7370); Content Square warrants ROW-601fb258753d9e9a and real CN Co-Invest ROW-630cdf690cc1ee6a remain; 2024-12-31 cost 1,636,606,314 -> 1,636,597,753 = printed total, FV unchanged. The rule removes only the subtotal row. Proposed detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Content Square SAS Indemnity Series F Shares Warrants Software & Tech Services 11/30/2023 2,027 8,561 - (8) Total French Warrants 8,561 -"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Total Investments 1,636,597,753 1,630,349,305"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "units_printed fired 13 rows in 10 quarters in rgA4 and none in rfabe. Existing detector adequate.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Degreed, Inc. Series D Warrants Software & Tech Services 4/11/2021 7,624 - 330"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-label-is-a-facility-word",
+   "outcome": "supported",
+   "rationale": "rfabe has no row with extracted_industry Revolver / Term Loan / Delayed Draw Term Loan; Foundation Risk 2023-12-31 now Financials. The proposed check (industry equal to a facility word) is exact-match and has a negligible false-positive surface.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Foundation Risk Partners, Corp. (2) (6) Financials Revolver 11.45 % (S + 6.00 %; 0.75 % Floor) 10/29/2027 - ( 8,273 ) ( 5,190 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-label-keyed-on-built-issuer-name",
+   "outcome": "supported",
+   "rationale": "Plausible and small (1 row); proposed check (rows losing GICS after a name correction) is a direct before/after comparison.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "Freddys Frozen Custard, LLC) (11) LP Interests Consumer Non-Cyclical 03/03/2021 72,483 72,483 139,477"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-label-depends-on-build-composition",
+   "outcome": "supported",
+   "rationale": "rfabe 2024-09-30 Amercare Royal rows carry no GICS (verified). Single- vs multi-fund comparison is a feasible determinism check.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Amercare Royal LLC Services Term Loan 9.84 % (S + 5.00 %; 1.00 % Floor) 9/10/2030 8,384,591 8,300,745 8,300,745"
+    }
+   ]
+  },
+  {
+   "observation_key": "cost-printed-dash-published-null",
+   "outcome": "supported",
+   "rationale": "Parked; dash-as-null vs dash-as-0 is a convention question; the proposed comparison against other quarters of the same position is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Amercare Royal LLC Services Delayed Draw Term Loan - % ( S + 5.00 %; 1.00 % Floor) 9/10/2030 - - ( 19,254 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "outcome": "rejected",
+   "rationale": "The stated state is wrong. rfabe publishes the Bonterra PIK term loan as: 2023-09-30 Fixed, spread blank, pik 8.0; 2023-12-31 Floating, spread 0.0, pik 8.0; 2024-03-31 Floating, spread 8.0; 2024-06-30 Fixed, spread blank - not 'pik_rate 8 and spread 8'. Par growth verified (2,623,369 / 2,713,108 / 2,804,652 / 2,898,956, about 3.4 pct a quarter, near coupon/4), so the whole-coupon question is real and the par-growth detector is a good idea, but the observation misreports what is published and hides an inconsistent spread across four quarters of one loan.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Bonterra, LLC Software & Tech Services Term Loan 12.35 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 09/08/2027 2,713,108 2,675,770 2,713,108"
+    },
+    {
+     "accession": "0001193125-24-138418",
+     "text": "Bonterra, LLC (1) (4) (5) Software & Tech Services Term Loan 13.30 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 9/8/2027 2,804,652 2,769,309 2,804,652"
+    }
+   ]
+  },
+  {
+   "observation_key": "page-reader-printed-row-joins-words",
+   "outcome": "supported",
+   "rationale": "Raw HTML holds 'Mykaarma Acquisition<br/>LLC'; the page reader drops the line break without a space. Detection: the defect surfaces as issuer_name_printed spacing_only flags, so recurrence is visible (as false positives) until the reader is fixed.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Mykaarma Acquisition LLC (2) (6) Software & Tech Services Revolver 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 - ( 8,417 ) ( 4,449 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "d031-pik-margin-not-confirmed-by-printed-all-in-rate",
+   "outcome": "rejected",
+   "rationale": "Band: sound as a proxy and not circular (built from no-PIK floating loans of the same quarter and benchmark, so D-031 rows are excluded); windows track SOFR ([4.50, 5.22] at 2023-03-31, [3.54, 3.98] at 2026-06-30). Spot checks on the page match the CSV: confirmed Blink 2023-03-31, GHA term loan 2023-03-31, Saviynt delayed draw 2023-06-30, Duetto 2025-03-31, CHV 2025-12-31, Tau 2026-06-30; contradicted GHA delayed draw 2023-03-31, Blink 2023-09-30, Veracross 2023-12-31, Securonix 2025-03-31, Smile Brands 2025-12-31, Penn TRGRP 2026-03-31 (1.44 pct misprint). The inference is the defect: 'cash-only fits' shows the printed rate is the cash coupon (the repo's interest_rate storage convention) and says nothing against PIK being part of the margin; where PIK > cash margin (77 withdrawn rows, 233.2M FV, e.g. Veracross 'S + 2.00 %; 4.50 % PIK', Mykaarma 'S + 3.00 %; 3.75 % PIK') the withdrawal is wrong under D-031. Same-filing pairs with identical terms (GHA 13.30 vs 9.55; Veracross 12.38 vs 7.46) show the filer's rate-printing convention varies line by line while the margin form does not, so the 0.58 form-level share measures the rate convention, not the margin. 'No reading fits' rows (misprints such as Penn 1.44, Magaya 1.5) carry no margin information. Withdrawing 362 rows is unsupported; the action 'fixed' should be an owner question on D-031 for this layout.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-145163",
+     "text": "GHA Buyer, Inc. (1) Healthcare & HCIT Term Loan 13.30% (S + 4.50%; 3.75% PIK; 1.00% Floor) 06/24/2026 562,705 556,769 538,790"
+    },
+    {
+     "accession": "0001193125-23-145163",
+     "text": "GHA Buyer, Inc. (3) Healthcare & HCIT Delayed Draw Term Loan 9.55% (S + 4.50%; 3.75% PIK; 1.00% Floor) 06/24/2026 815,950 808,160 781,272"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Veracross LLC (1) (5) Software & Tech Services Delayed Draw Term Loan 12.38 % (S + 2.00 %; 4.50 % PIK; 1.00 % Floor) 12/28/2027 1,727,307 1,675,853 1,697,079"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Veracross LLC (3) Software & Tech Services Term Loan 7.46 % (S + 2.00 %; 4.50 % PIK; 1.00 % Floor) 12/28/2027 13,537,910 13,372,753 13,300,997"
+    },
+    {
+     "accession": "0001193125-23-145163",
+     "text": "Mykaarma Acquisition LLC (2) (3) Software & Tech Services Term Loan 8.00% (S + 3.00%; 3.75% PIK; 1.00% Floor) 03/21/2028 6,160,929 6,058,994 6,053,113"
+    },
+    {
+     "accession": "0001193125-23-145163",
+     "text": "Blink Holdings, Inc. (1) Consumer Non-Cyclical Delayed Draw Term Loan 13.66% (L + 5.50%; 3.00% PIK; 1.00% Floor) 11/08/2024 1,123,558 1,119,643 957,833"
+    },
+    {
+     "accession": "0001193125-23-277031",
+     "text": "Blink Holdings, Inc. (1) Consumer Non-Cyclical Term Loan 11.04 % (S + 5.50 %; 3.00 % PIK; 1.00 % Floor) 11/08/2024 1,562,805 1,558,966 1,386,990"
+    },
+    {
+     "accession": "0001193125-23-212335",
+     "text": "Saviynt, Inc. (5) Software & Tech Services Delayed Draw Term Loan 12.70% (S + 4.00%; 3.50% PIK; 1.00% Floor) 12/22/2027 $ 1,836,331 $ 1,699,341 $ 1,698,970"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Duetto Research, Inc Software & Tech Services Term Loan 10.83 % ( S + 1.00 %; 0.75 % Floor; 5.50 % PIK) 6/26/2030 14,755,233 14,447,460 14,681,457"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Securonix, Inc Software & Tech Services Term Loan 12.04 % ( S + 7.00 %; 0.75 % Floor; 3.75 % PIK) 4/5/2028 8,628,217 8,551,685 5,996,610"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "CHV Holdings LLC Digital Infrastructure & Services Term Loan 12.56 % ( S + 4.00 %; 1.00 % Floor; 4.75 % PIK) 3/27/2029 5,416,969 5,322,217 5,416,969"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Smile Brands, Inc. Healthcare Term Loan 9.94 % ( S + 6.00 %; 0.75 % Floor; 1.50 % PIK) 10/12/2027 1,647,334 1,606,175 1,478,482"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Tau Buyer, LLC Technology Hardware, Storage & Peripherals Delayed Draw Term Loan 8.73 % (S + 2.50 %; 0.75 % Floor; 2.50 % PIK) 2/2/2032 3,612,458 3,589,474 3,287,337"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Penn TRGRP Holdings LLC Software & Tech Services Term Loan 1.44 % ( S + 1.75 %; 0.75 % Floor; 6.00 % PIK) 9/27/2030 7,281,745 7,165,664 6,717,410"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-rfab-1",
+   "outcome": "rejected",
+   "rationale": "Facts verified (rfabe: the respelling stops the 14-row contamination; the 4 rows keep West Dermatology entity, canonical name and GICS Health Care Services). Classification is wrong: no check is defective; entity resolution (pipeline data path) publishes a wrong value, so a verification-bug test (source-backed passes, wrong fails) does not apply. Deferring leaves known-wrong published canonical, entity and GICS on 4 rows (7.1M) with no ledger finding tracking them; that residual is an acceptance matter for the owner and should be recorded as such, not as a deferred verification bug.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "AmerCareRoyal, LLC (1) (5) Services Term Loan 11.98 % (S + 6.50 %; 0.50 % PIK; 1.00 % Floor) 11/25/2025 4,100,950 4,002,424 4,100,950"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-rfab-2",
+   "outcome": "supported",
+   "rationale": "Correct classification: the page reader's printed_row (the rule's input) drops '<br/>' between 'Acquisition' and 'LLC' in raw HTML, so issuer_name_printed flags a correct name. Deferral is justified: changing span joining alters printed_row for every fund and needs a cohort measurement; the one affected finding stays outstanding with its proposal.",
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Mykaarma Acquisition LLC (3) (5) Software & Tech Services Term Loan 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 6,339,104 6,250,126 6,291,561"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-rfab-3",
+   "outcome": "rejected",
+   "rationale": "Implementation verified: none of the 71 lines remains in data/overrides/row_corrections.csv (exact-line match after CR strip) and 71/71 rows publish value_back in rfabe. But it is not a verification bug (it withdraws data corrections; no check is changed), and its basis is the D-031 all-in test, which cannot show a PIK margin is outside the spread: 11 of the 57 'contradicted' rows print PIK above the cash margin (e.g. Mykaarma 2023-03-31 'S + 3.00%; 3.75% PIK' now 3.00, while the same loan publishes 6.75 at 2024-09-30). The response is mechanically supported; the decision it implements is not.",
+   "evidence": [
+    {
+     "accession": "0001193125-23-145163",
+     "text": "Mykaarma Acquisition LLC (2) (3) Software & Tech Services Term Loan 8.00% (S + 3.00%; 3.75% PIK; 1.00% Floor) 03/21/2028 6,160,929 6,058,994 6,053,113"
+    },
+    {
+     "accession": "0001193125-23-145163",
+     "text": "AmerCareRoyal, LLC (3) Business Services Term Loan 11.41% (S + 6.50%; 0.75% PIK; 1.00% Floor) 11/25/2025 510,571 498,708 505,465"
+    }
+   ]
+  }
+ ]
+}

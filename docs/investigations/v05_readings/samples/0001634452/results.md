@@ -15,25 +15,22 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 | principal_amount | 18 | 0.0% (0.0-17.6) | 0 | 0 | 5.6% (1.0-25.8) | 0 | 0 | 0 | 1 |
 | shares_held | 2 | 0.0% (0.0-65.8) | 0 | 0 | 0.0% (0.0-65.8) | 0 | 0 | 0 | 0 |
 | pct_of_net_assets | 0 | - | 0 | 0 | - | 0 | 0 | 0 | 0 |
-| interest_rate | 18 | 11.1% (3.1-32.8) | 0 | 2 | 5.6% (1.0-25.8) | 0 | 0 | 1 | 0 |
+| interest_rate | 18 | 0.0% (0.0-17.6) | 0 | 0 | 5.6% (1.0-25.8) | 0 | 0 | 1 | 0 |
 | basis_spread | 18 | 0.0% (0.0-17.6) | 0 | 0 | 5.6% (1.0-25.8) | 0 | 0 | 1 | 0 |
 | reference_rate_type | 18 | 0.0% (0.0-17.6) | 0 | 0 | 55.6% (33.7-75.4) | 0 | 0 | 1 | 9 |
-| pik_rate | 4 | 25.0% (4.6-69.9) | 1 | 0 | 25.0% (4.6-69.9) | 1 | 0 | 0 | 0 |
+| pik_rate | 4 | 0.0% (0.0-49.0) | 0 | 0 | 25.0% (4.6-69.9) | 1 | 0 | 0 | 0 |
 | maturity_date | 18 | 0.0% (0.0-17.6) | 0 | 0 | 11.1% (3.1-32.8) | 1 | 0 | 1 | 0 |
 
 | Fund | cards | cards with any published error | with any tag error |
 |---|---|---|---|
-| 0001634452 | 20 | 15.0% (5.2-36.0) | 55.0% (34.2-74.2) |
+| 0001634452 | 20 | 0.0% (0.0-16.1) | 55.0% (34.2-74.2) |
 
 | Era | cards | with any published error | with any tag error |
 |---|---|---|---|
 | to 2023-12-31 | 4 | 0.0% (0.0-49.0) | 100.0% (51.0-100.0) |
-| 2024 on | 16 | 18.8% (6.6-43.0) | 43.8% (23.1-66.8) |
+| 2024 on | 16 | 0.0% (0.0-19.4) | 43.8% (23.1-66.8) |
 
-Published errors: 3
+Published errors: 0
 
 | Card | Quarter | Field | Published | Cause | Note |
 |---|---|---|---|---|---|
-| C012 | 2024-09-30 | pik_rate | extra | tag | prints 13.5% (S + 6.50%; 1.00% Floor), no PIK; the 1.00% floor is tagged InvestmentInterestRatePaidInKind and we publish pik_rate 1.0 |
-| C013 | 2024-12-31 | interest_rate | extra | pipeline | prints '—' (no coupon, undrawn revolver), dash tagged 0.0; we publish interest_rate 0.0 where C008 same shape publishes blank |
-| C019 | 2026-03-31 | interest_rate | extra | pipeline | prints '— %' (no coupon, undrawn revolver), dash tagged 0.0; we publish interest_rate 0.0 instead of blank |

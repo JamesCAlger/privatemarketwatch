@@ -1,0 +1,37 @@
+{
+  "cik": "1634452",
+  "rule_id": "exclude_2024q4_french_warrants_subtotal",
+  "rule_type": "row_exclusion",
+  "action": "exclude",
+  "scope": {
+    "quarters": [
+      "2024-12-31"
+    ]
+  },
+  "predicate_sql": "report_date = '2024-12-31' AND row_id = 'ROW-f38d5914f9ef522d'",
+  "evidence": [
+    {
+      "source": "filing",
+      "accession": "0000950170-25-047686",
+      "quote": "French Warrants 0.00 % Content Square SAS Indemnity Series F Shares Warrants Software & Tech Services 11/30/2023 2,027 8,561 - (8) Total French Warrants 8,561 -"
+    },
+    {
+      "source": "filing",
+      "accession": "0000950170-25-047686",
+      "quote": "CN Co-Invest, LP Units Digital Infrastructure & Services 10/31/2023 776,334 776,334 719,786"
+    },
+    {
+      "source": "query",
+      "quote": "Context C_caf7702b-8f3d-4dc1-a2ff-155b44e5762f carries only InvestmentOwnedAtCost 8,561 and InvestmentOwnedAtFairValue '-'; in the HTML both facts follow the 'Total French Warrants' label (byte 12,087,205 against the label at 12,082,873), i.e. the subtotal line. Its typed member reads 'U.S. Investment Companies | CN CO-INVEST, LP. | Units | Digital Infrastructure & Services' with explicit members MedsuitePurchaserLLCMember and SeniorSecuredDebtFirstLienMember. The build publishes it as a second CN Co-Invest row (cost 8,561, fair value 0) beside the real CN Co-Invest row (776,334 / 719,786) and the Content Square warrant row (ROW-601fb258753d9e9a, 2,027 / 8,561 / 0) that the subtotal sums."
+    }
+  ],
+  "rationale": "The row is the French Warrants subtotal, tagged on a context whose member names another holding. The position it totals (Content Square SAS warrants, cost 8,561, value 0) is already published from its own context, so the subtotal row double counts that cost (+8,561 against the printed total cost at 2024-12-31). It is not a position; excluding it removes the double count and changes no real holding.",
+  "confidence": 0.97,
+  "measured_impact": {
+    "2024-12-31": {
+      "rows": 1,
+      "fv": 0.0,
+      "cost": -8561.0
+    }
+  }
+}

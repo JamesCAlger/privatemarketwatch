@@ -1,198 +1,151 @@
 {
  "cik": "0001634452",
- "label": "abxf",
- "before": "spoff2",
+ "label": "rfabf",
+ "before": "rgA4",
  "shared_code": false,
+ "investigator_id": "fund-agent-rfab-0001634452 (claude-opus-5-5 general-purpose subagent, 2026-10-25)",
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 672,
-   "why": "trailing row-number words cut from the 2023-03-31 / 2023-06-30 names (wrapper issuer_name_strip_re, 621 rows) plus 7 names corrected from the page (NI Topco, Honor HN Buyer, Saviynt, Activ Software, BSI2 Hold Nettle, CHV Holdings, Admiral Buyer); the rest is the shared name step on a single-fund build (39 rows changed in abxa with no edit); round 2: Saviynt and Zendesk revolvers tagged on Datacor / Kaseya members renamed"
+   "rows": 138,
+   "why": "138 rows renamed from the printed company (47 hand-read rows incl. AmerCare respelling, 91 from the 2023 Q1/Q2 printed lines)"
   },
   {
    "column": "instrument_description",
-   "rows": 6700,
-   "why": "wrapper instrument_description_strip_re keeps the facility ('Term Loan', 'Class A Units') and drops the industry, rate text, maturity and section labels the member carried; 7 rows set by row correction"
+   "rows": 5,
+   "why": "4 preferred series rows (2023-12-31) and Zendesk's delayed draw (2024-03-31)"
   },
   {
-   "column": "cost",
-   "rows": 3,
-   "why": "8x8, Inc. 2023-09-30 cost 170,890 from the page (its cost fact has no identifier member); round 2: two undrawn revolvers tagged on another issuer's member with the cost unsigned (Saviynt, Zendesk 2024-03-31)"
+   "column": "shares_held",
+   "rows": 13,
+   "why": "13 printed unit counts (SCP-Resonetics, Degreed Series D warrants)"
   },
   {
-   "column": "cost_reported",
-   "rows": 3,
-   "why": "same 8x8 row; round 2: same two rows"
+   "column": "asset_category",
+   "rows": 1,
+   "why": "Concerto Series B-1 Preferred 2025-03-31"
   },
   {
-   "column": "interest_rate",
-   "rows": 1700,
-   "why": "2023-03-31 / 2023-06-30 loans: rate read from each row's printed line (the two 10-Qs tag no rate); round 2: 1,078 rows whose rate cell is printed as a dash and tagged 0 no longer publish 0.0 (blank)"
-  },
-  {
-   "column": "interest_rate_reported",
-   "rows": 1700,
-   "why": "same rows; round 2: same dash rows"
-  },
-  {
-   "column": "interest_rate_kind",
-   "rows": 1700,
-   "why": "same rows: all_in (the fund's filed_rate_reading); round 2: same dash rows (unresolved: no rate)"
-  },
-  {
-   "column": "interest_rate_cash",
-   "rows": 110,
-   "why": "same rows with a printed PIK part: cash leg derived; round 2: cash leg withdrawn with the rate or the floor-as-PIK"
+   "column": "index_classification",
+   "rows": 1,
+   "why": "Concerto Series B-1 Preferred 2025-03-31"
   },
   {
    "column": "basis_spread",
-   "rows": 780,
-   "why": "same 2023 loans, spread from the printed line"
+   "rows": 690,
+   "why": "D-031 total printed margin: 683 gen_spread rows + Mavenlink x4 / Magaya x3; CHV bridge kept at 0 (round-2 withdrawals all restored)"
   },
   {
    "column": "reference_rate_type",
-   "rows": 790,
-   "why": "same 2023 loans (SOFR / LIBOR / PRIME as printed) plus 13 Prime loans of 2023-09-30 published as a date-guessed SOFR"
+   "rows": 7,
+   "why": "Mavenlink x4, Magaya x3 SOFR"
   },
   {
    "column": "reference_rate_source",
-   "rows": 790,
-   "why": "printed_schedule on the same rows"
+   "rows": 7,
+   "why": "Mavenlink x4, Magaya x3 printed_schedule"
   },
   {
    "column": "coupon_type",
-   "rows": 780,
-   "why": "Floating on the 2023 loans read from the page"
+   "rows": 7,
+   "why": "Mavenlink x4, Magaya x3 Fixed -> Floating"
   },
   {
    "column": "pik_rate",
-   "rows": 130,
-   "why": "printed PIK part on 2023 loans (incl. Delaware Valley non-accrual lines 11.10 / 11.50); round 2: 13 rows where the filer tagged the floor as PIK and the page prints no PIK part, withdrawn"
-  },
-  {
-   "column": "maturity_date",
-   "rows": 785,
-   "why": "2023 loans: maturity from the printed line"
-  },
-  {
-   "column": "maturity_status",
-   "rows": 785,
-   "why": "the shared step marks these rows 'unresolved' (it runs before row corrections; see observations)"
+   "rows": 3,
+   "why": "Single Digits 2023-12-31 x3 1.00 -> 3.00"
   },
   {
    "column": "corrected_fields",
-   "rows": 1760,
-   "why": "rows carrying a row correction"
+   "rows": 1530,
+   "why": "lists the corrected fields of every corrected row"
   },
   {
-   "column": "position_id",
-   "rows": 700,
-   "why": "instrument texts and names changed; positions 1,923 -> 1,916 (abxa -> abxb), 16 rows added"
+   "column": "entity_id",
+   "rows": 792,
+   "why": "follows the renamed issuers and the single-fund build's resolver (rgA4 is a 10-fund build)"
   },
   {
-   "column": "gics_sector",
-   "rows": 45,
-   "why": "33 rows lost a label with no edit (abxa vs spoff2: GICS depends on build composition); 15 gained from cleaned names; NI Topco no longer labelled from 'U.S. Corporate Debt'"
+   "column": "canonical_name",
+   "rows": 399,
+   "why": "follows the renamed issuers; most rows are the single-fund build's choice of spelling (Fullsteam, Galway, PDI, Nasuni, Netwrix, Amercare) as in abxf"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 922,
+   "why": "892 printed industries for 2023 Q1/Q2 + 30 hand rows (2024-06-30 renamed rows, glued-industry rows, Freddy's/RCFN equity, Foundation Risk)"
   },
   {
    "column": "gics_sub_industry",
-   "rows": 45,
-   "why": "same rows"
+   "rows": 455,
+   "why": "follows the printed industry (2023 Q1/Q2 +268 gained, label mapping as in later quarters) and the renames; 30 lost vs rgA4 (28 Amercare rows lose a canonical-name label the 10-fund build gave them, same as single-fund abxf; Freddy's 2023-09-30 apostrophe rename)"
   },
   {
-   "column": "src_transforms",
-   "rows": 8,
-   "why": "present in abxa with no edit (single-fund build); round 2: two rows renamed (Saviynt, Zendesk)"
+   "column": "position_id",
+   "rows": 137,
+   "why": "follows the renamed issuers (chains of renamed rows)"
   },
   {
-   "column": "shares_held_source",
-   "rows": 6,
-   "why": "present in abxa with no edit (single-fund build)"
+   "column": "interest_rate_cash",
+   "rows": 3,
+   "why": "Single Digits 2023-12-31 x3: cash leg follows the corrected PIK (9.61/9.85 - 3.00)"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 406,
+   "why": "follows gics_sub_industry"
+  },
+  {
+   "column": "row_removed",
+   "rows": 1,
+   "why": "2024-12-31 French Warrants subtotal (exclusion rule)"
   }
  ],
- "rows_added": 609,
- "rows_removed": 0,
+ "rows_added": 0,
+ "rows_removed": 1,
  "fixes": [
   {
-   "what": "Issuer names of 2023-03-31 and 2023-06-30 carried the filer's row-number word ('Galway Borrower Llc One', 'Saviynt Inc.One'): cut by dispatch.issuer_name_strip_re (trailing One..Twenty after a space or a full stop). Dry run on all 986 names: 325 changed, no false positive. Gate names check: 286 rows (3.9 pct) -> ok.",
-   "kind": "wrapper",
+   "what": "Issuer names from the page where the filer's member names another company or a broken string: AmerCareRoyal x4 on West Dermatology members (2023-09-30), 16 rows carrying 'Visionary Buyer LLC' before the printed company (2024-06-30), Zendesk's undrawn delayed draw on an Iodine member (2024-03-31, with instrument and maturity), four preferred rows named 'SeriesB-1/C-1/E/F' (2023-12-31, with instrument), Activ, Ungerboeck '..., LL', Alphasense 'LLC9', Salisbury 'LLC 1', industry glued to the name (Amercare, BHG, Cerifi, Wolverine), apostrophes (Freddy's, People's Care)",
+   "kind": "row_correction",
    "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-12-31",
-    "2024-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-23-145163",
-     "text": "Galway Borrower, LLC (1) (3) Financials Term Loan 10.41% (L + 5.25%; 0.75% Floor) 09/29/2028 4,240,250 4,186,071 4,102,442"
-    }
-   ]
-  },
-  {
-   "what": "instrument_description held the member tail ('Software & Tech Services | Term Loan | 12.39% (S + 7.00%; 1.00% Floor) | 09-01-2028 One') on about 97 pct of rows from 2023-09-30, and section labels in 2023 Q1/Q2 ('First Lien Senior Secured Debt At 241.34 - Term Loan - Us Corporate Debt'): dispatch.instrument_description_strip_re keeps the facility or share class.",
-   "kind": "wrapper",
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
     "2023-09-30",
     "2023-12-31",
     "2024-03-31",
     "2024-06-30",
     "2024-09-30",
     "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-26-124450",
-     "text": "RevauAdvanced Underwriting Inc. Financials Term Loan 8.46 % ( S + 4.75 %; 0.75 % Floor) 5/10/2032 9,635,703 9,546,142 9,539,346"
-    }
-   ]
-  },
-  {
-   "what": "Medical Management Resource Group revolver (223,073) tagged on a context dated 2025-03-31 in the 10-Q for 2025-06-30: source_encodings.misdated_contexts. Published cost and value at 2025-06-30 now equal the printed totals.",
-   "kind": "wrapper",
-   "quarters": [
     "2025-06-30"
    ],
    "quotes": [
     {
-     "accession": "0000950170-25-108839",
-     "text": "Medical Management Resource Group, L.L.C. Healthcare Revolver 10.14 % (S + 5.75 %; 0.75 % Floor) 9/30/2026 227,819 226,193 223,073"
+     "accession": "0001193125-23-277031",
+     "text": "AmerCareRoyal, LLC (1) (5) Services Term Loan 11.98 % (S + 6.50 %; 0.50 % PIK; 1.00 % Floor) 11/25/2025 4,100,950 4,002,424 4,100,950"
+    },
+    {
+     "accession": "0001193125-24-138418",
+     "text": "Zendesk, Inc. (2) (6) Software & Tech Services Delayed Draw Term Loan 6.25 % (S + 6.25 %; 0.75 % Floor) 11/22/2028 - ( 26,012 ) -"
+    },
+    {
+     "accession": "0001193125-24-200574",
+     "text": "Zendesk, Inc. (1) (3) (5) Software & Tech Services Term Loan 11.60 % (S + 6.25 %; 0.75 % Floor) 11/22/2028 13,681,445 13,475,674 13,681,424"
     }
    ]
   },
   {
-   "what": "Rows printed with a dash for fair value and a cost (American Physician Partners x6 and four undrawn lines at 2025-12-31, GHP-EIP at 2025-06-30, four undrawn lines at 2023-09-30) were dropped: fair value 0 declared per context (source_encodings.untagged_values, 15 rows). Published cost now equals the printed total cost in 2023-09-30 (1,269,400,998), 2025-06-30 (1,748,732,749) and 2025-12-31 (1,876,212,627).",
-   "kind": "untagged_value",
+   "what": "AmerCareRoyal 2023-09-30 x4 respelt 'AmerCareRoyal LLC' (context-keyed superseding lines) so the entity resolver, which reads the company from the West Dermatology member, no longer pulls the fund's other 'AmerCareRoyal, LLC' rows (14) into West Dermatology",
+   "kind": "row_correction",
    "quarters": [
-    "2023-09-30",
-    "2025-06-30",
-    "2025-12-31"
+    "2023-09-30"
    ],
    "quotes": [
     {
-     "accession": "0001193125-26-124450",
-     "text": "American Physician Partners, LLC Healthcare Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 3/31/2026 6,791,604 5,733,816 -"
-    },
-    {
-     "accession": "0000950170-25-108839",
-     "text": "GHP-EIP Aggregator, LLC Common Units Digital Infrastructure & Services 50,957 174,608 -"
-    },
-    {
      "accession": "0001193125-23-277031",
-     "text": "Avalara, Inc. (2) (6) Software & Tech Services Revolver 12.64 % (S + 7.25 %; 0.75 % Floor) 10/19/2028 - ( 22,576 ) -"
+     "text": "AmerCareRoyal, LLC (1) (5) Services Term Loan 11.98 % (S + 6.50 %; 0.50 % PIK; 1.00 % Floor) 11/25/2025 4,100,950 4,002,424 4,100,950"
     }
    ]
   },
   {
-   "what": "2023-03-31 and 2023-06-30: the 10-Qs tag no rate, spread, PIK or maturity; 781 loans had none (X02, C01, dl_rate_fill). Each loan's printed line located by its printed par, cost and fair value and read for rate, reference, spread, PIK and maturity (766 by generator scratch/fund_runs/0001634452/gen_2023_rates.py, 15 by hand); 4,742 field corrections, each with its printed line.",
+   "what": "Printed industry (extracted_industry) for every located row of the 2023-03-31 and 2023-06-30 10-Qs (892 rows; explicit members carry none) and 91 squashed or title-cased company names from the same printed lines (Coupaholdingsllctwo, Navigate Three Hundred And Sixty, GSV Medsuite / Vehlo swapped at 2023-03-31, ...); gen_2023_ind.py. GICS coverage of funded rows 0.611 / 0.612 -> 0.903 / 0.895",
    "kind": "row_correction",
    "quarters": [
     "2023-03-31",
@@ -201,77 +154,18 @@
    "quotes": [
     {
      "accession": "0001193125-23-145163",
-     "text": "Coretelligent Intermediate LLC (4) Digital Infrastructure & Services Revolver 12.00% (P + 4.00%; 1.00% Floor) 10/21/2027 94,982 80,431 69,653"
+     "text": "AMI US Holdings, Inc. (4) (5) Software & Tech Services Revolver 10.16% (L + 5.25%) 04/01/2024 - ( 4,741 ) -"
     },
     {
-     "accession": "0001193125-23-212335",
-     "text": "Delaware Valley Management Holdings, Inc. (8) Healthcare & HCIT Term Loan - (11.50% PIK; 1.00% Floor) 03/21/2024 3,726,832 3,446,462 2,351,631"
+     "accession": "0001193125-23-145163",
+     "text": "AAH Topco, LLC (1) (2) (3) (4) (6) Healthcare & HCIT Delayed Draw Term Loan 10.21% (L + 5.50%; 0.75% Floor) 12/22/2027 4,831,387 4,686,763 4,616,098"
     }
    ]
   },
   {
-   "what": "13 Prime loans at 2023-09-30 published SOFR (guessed from the date); set to PRIME from the printed line. Rep Tec's term loan left SOFR: its member says P + 6.50 % but the page prints S + 6.50 %.",
+   "what": "D-031 by row correction (not by the wrapper's printed_margin_reading, as at Commonwealth, D-218): basis_spread = printed cash margin + printed PIK margin on every loan printed '(S + x %; [floor;] y % PIK)', pik_rate = y unchanged: 683 rows from gen_spread.py plus Mavenlink x4 and Magaya x3 'S; y % PIK' rows (690 rows differ from rgA4). Round 2 withdrew 362 of them on an all-in rate test; under the orchestrator's corrected rule (D-237: a printed rate equal to base + cash margin does not contradict PIK-as-margin; the only exception is a whole-coupon line) all 362 are restored in rfabf (582 own superseding lines removed, 71 own context lines re-written through the helper). None of the 362 is a whole-coupon line. One row of the form keeps its cash margin: CHV's PIK bridge 2024-03-31 (source ambiguity, see RVQ_REV_16918d32797e).",
    "kind": "row_correction",
    "quarters": [
-    "2023-09-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-23-277031",
-     "text": "OMH-HealthEdge Holdings, LLC (1) Healthcare Term Loan 12.75 % (P + 4.25 %) 10/24/2025 3,633,067 3,600,700 3,633,067"
-    },
-    {
-     "accession": "0001193125-23-277031",
-     "text": "Rep Tec Intermediate Holdings, Inc. (1) (3) (5) Services Term Loan 12.04 % (S + 6.50 %; 1.00 % Floor) 12/01/2027 14,458,172 14,331,624 14,241,299"
-    }
-   ]
-  },
-  {
-   "what": "8x8, Inc. 2023-09-30 published no cost; the cost fact has no identifier member and was read as the fund's total cost (cost_conservation). Row cost 170,890 from the page; fund-level investments_at_cost 1,269,400,998 from the balance sheet (highlights wrapper figure_corrections).",
-   "kind": "row_correction",
-   "quarters": [
-    "2023-09-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-23-277031",
-     "text": "8x8, Inc. (11) (13) Common Units Digital Infrastructure & Services 7,886 170,890 19,873"
-    },
-    {
-     "accession": "0001193125-23-277031",
-     "text": "Total investments, at fair value (amortized cost of $ 1,269,400,998 and $ 1,146,231,264 ) 1,249,718,283 1,122,517,095"
-    }
-   ]
-  },
-  {
-   "what": "Issuer names wrong or missing on 7 rows (C201 x2): members that repeat section heads, misspell 'Debts', put a rate fragment first, misspell the issuer or run issuer, industry and facility together. Set from the page.",
-   "kind": "row_correction",
-   "quarters": [
-    "2023-12-31",
-    "2024-03-31",
-    "2025-06-30",
-    "2026-03-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-24-138418",
-     "text": "Honor HN Buyer, Inc (4) (5) Healthcare Delayed Draw Term Loan 11.21 % (S + 5.75 %; 1.00 % Floor) 10/15/2027 $ 1,633,891 $ 1,614,236 $ 1,633,891"
-    },
-    {
-     "accession": "0001193125-26-224298",
-     "text": "Saviynt, Inc. Software & Tech Services Revolver - % (S + 3.00 %; 1.00 % Floor) 2/18/2030 - ( 4,653 ) ( 4,573 )"
-    },
-    {
-     "accession": "0001193125-24-081951",
-     "text": "Activ Software Holdings, LLC (2) (6) Software & Tech Services Revolver 11.94 % (S + 6.25 %; 1.00 % Floor) 05/04/2027 - ( 7,370 ) ( 3,244 )"
-    }
-   ]
-  },
-  {
-   "what": "Fund-level borrowings were the credit facility alone; the fund also has about 535 to 545M of unsecured notes (F26 x11). borrowings = notes payable + credit facility (+ secured borrowings where printed) for 15 quarters, and shares outstanding for 2025-12-31, 2026-03-31, 2026-06-30 (untagged), in a new highlights wrapper.",
-   "kind": "wrapper",
-   "quarters": [
-    "2022-12-31",
     "2023-03-31",
     "2023-06-30",
     "2023-09-30",
@@ -289,20 +183,38 @@
    ],
    "quotes": [
     {
-     "accession": "0001193125-26-224298",
-     "text": "Liabilities Notes payable (net of unamortized discount of $ 0 and $ 0 , respectively, and debt issuance costs of $ 2,189,305 and $ 2,359,715 , respectively) $ 535,810,695 $ 535,640,285 Credit facility payable 696,000,000 680,000,000"
+     "accession": "0001193125-23-145163",
+     "text": "GHA Buyer, Inc. (1) Healthcare & HCIT Term Loan 13.30% (S + 4.50%; 3.75% PIK; 1.00% Floor) 06/24/2026 562,705 556,769 538,790"
     },
     {
-     "accession": "0001193125-26-352137",
-     "text": "200,000,000 shares authorized, 81,022,158 and 77,076,615 shares issued and outstanding as of June 30, 2026"
+     "accession": "0001193125-24-138418",
+     "text": "Penn TRGRP Holdings, LLC (1) (3) (5) Software & Tech Services Term Loan 12.07 % (S + 1.75 %; 6.00 % PIK; 0.75 % Floor) 9/27/2030 7,061,153 6,933,606 7,061,153"
     }
    ]
   },
   {
-   "what": "Page sample round 2 (C013 PDI TA 2024-12-31, C019 MyKaarma 2026-03-31): rows whose rate cell is printed as a dash and tagged 0 published a 0.0 coupon. Every loan of every quarter publishing 0.0 was located on its printed line (par, cost, value; scratch/fund_runs/0001634452/gen_dash.py) and, where the cell is a dash, the rate blanked: 1,078 rows (1,074 by generator, Mastery x2 by hand, Dorado and Einstein whose rate was held back by the floor-as-PIK). Left at 0.0: five 2024-03-31 rows printed '0.00 %' (Delaware Valley x4, RCP Encore).",
+   "what": "Mavenlink (2024-06-30, 2024-09-30) and Magaya (2026-03-31) loans printed 'S; m % PIK' / 'S + .00 %; m % PIK' published Fixed with no spread: Floating, SOFR, spread = PIK margin (par grows by about the margin, not the coupon)",
    "kind": "row_correction",
    "quarters": [
-    "2023-09-30",
+    "2024-06-30",
+    "2024-09-30",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-24-200574",
+     "text": "Mavenlink, Inc. (1) (3) (4) Software & Tech Services Term Loan 11.73 % (S; 6.25 % PIK; 0.75 % Floor) 6/3/2027 15,750,151 15,516,491 15,435,148"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Magaya Corporation Software & Tech Services Term Loan 9.44 % ( S + .00 %; 0.75 % Floor; 5.75 % PIK) 7/26/2030 3,793,477 3,764,542 3,679,672"
+    }
+   ]
+  },
+  {
+   "what": "Unit counts: SCP-Resonetics Class A / Class B (11 rows) and Degreed Series D warrants (2 rows) published another class's derived count; printed counts set",
+   "kind": "row_correction",
+   "quarters": [
     "2023-12-31",
     "2024-06-30",
     "2024-09-30",
@@ -316,32 +228,35 @@
    ],
    "quotes": [
     {
-     "accession": "0000950170-25-047686",
-     "text": "PDI TA Holdings, Inc Software & Tech Services Revolver - (S + 5.25 %; 0.75 % Floor) 2/3/2031 - ( 8,224 ) ( 4,718 )"
+     "accession": "0001193125-24-081951",
+     "text": "SCP Resonatics Aggregator I, LLC (11) Class A Healthcare 541 368,990 368,990"
     },
     {
      "accession": "0001193125-26-224298",
-     "text": "MyKaarma Acquisition LLC Software & Tech Services Revolver - % ( S + 4.50 %; 0.75 % Floor) 12/24/2030 - ( 7,890 ) ( 8,912 )"
+     "text": "Degreed, Inc. Series D Warrants Software & Tech Services 4/11/2021 7,624 - 330"
     }
    ]
   },
   {
-   "what": "Page sample round 2 (C012 Versaterm revolver 2024-09-30): the 1.00 % floor is tagged as PIK. Every loan publishing a PIK rate was checked against its printed line; 13 rows print no PIK part (Versaterm x3, Syntax x2, SumUp, Dorado, Evolveip, Firebird x2, Center for Orthopedic 2024-09-30; Einstein 2025-03-31; Zendesk 2024-03-31): PIK withdrawn.",
+   "what": "Single Digits 2023-12-31 x3 PIK published 1.00 (the floor) -> printed 3.00; Concerto 'Series B-1 Preferred' 2025-03-31 published as common -> preferred; 'Revolver' read as the industry (Foundation Risk 2023-12-31) -> Financials",
    "kind": "row_correction",
    "quarters": [
-    "2024-03-31",
-    "2024-09-30",
+    "2023-12-31",
     "2025-03-31"
    ],
    "quotes": [
     {
-     "accession": "0000950170-24-126944",
-     "text": "Versaterm Public Safety Inc. Software & Tech Services Revolver 13.5 % (S + 6.50 %; 1.00 % Floor) 12/4/2025 119,558 111,280 108,349"
+     "accession": "0001193125-24-081951",
+     "text": "Single Digits, Inc. (1) Digital Infrastructure & Services Term Loan 9.85 % (S + 4.25 %; 3.00 % PIK; 1.00 % Floor) 06/19/2026 2,884,904 2,871,166 2,509,867"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Concerto HealthAI Solutions LLC Series B-1 Preferred Software & Tech Services 12/23/2019 65,614 349,977 277,078"
     }
    ]
   },
   {
-   "what": "Two undrawn revolvers at 2024-03-31 tagged on another issuer's member with the cost unsigned: Saviynt's revolver on a Datacor member, Zendesk's on a Kaseya member (carrying Kaseya's PIK). Renamed, cost signed as printed, PIK withdrawn.",
+   "what": "CHV Holdings PIK bridge 2024-03-31: the D-031 total 16.50 set earlier in this run withdrawn (printed coupon 14.18 below the 16.50 PIK; C115 and fmt_basis_spread fired on 16.5). The line does not settle a floating 0 + 16.50 PIK margin against a fixed 16.50 PIK coupon; spread stays the printed cash margin 0 and the finding is a source ambiguity",
    "kind": "row_correction",
    "quarters": [
     "2024-03-31"
@@ -349,226 +264,2037 @@
    "quotes": [
     {
      "accession": "0001193125-24-138418",
-     "text": "Saviynt, Inc. (2) (6) Software & Tech Services Revolver 9.46 % (S + 4.00 %; 3.50 % PIK; 1.00 % Floor) 12/22/2027 - ( 11,479 ) ( 10,671 )"
-    },
+     "text": "CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840"
+    }
+   ]
+  },
+  {
+   "what": "Exclusion: the 2024-12-31 'Total French Warrants 8,561 -' subtotal, tagged on a context whose member names CN Co-Invest, was published as a second CN Co-Invest row (cost 8,561, value 0) beside Content Square's own warrant row; the +8,561 cost gap of D-189 is this double count",
+   "kind": "exclusion",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
     {
-     "accession": "0001193125-24-138418",
-     "text": "Zendesk, Inc. (2) (6) Software & Tech Services Revolver 6.25 % (S + 6.25 %; 0.75 % Floor) 11/22/2028 - ( 21,392 ) -"
+     "accession": "0000950170-25-047686",
+     "text": "Content Square SAS Indemnity Series F Shares Warrants Software & Tech Services 11/30/2023 2,027 8,561 - (8) Total French Warrants 8,561 -"
     }
    ]
   }
  ],
  "total_exceptions": [],
- "parked": [],
+ "parked": [
+  {
+   "finding": "observation dash par / dash cost published blank (15 undrawn rows par, 2 Amercare delayed draw rows cost)",
+   "hypotheses": [
+    "printed '-' could be declared 0 through source_encodings.untagged_values: not done, blank and 0 are both readings of a dash and no rule flags them"
+   ]
+  },
+  {
+   "finding": "observation pik-rate-holds-margin-when-whole-coupon-is-pik: Bonterra PIK term loan 2023-09-30 to 2024-06-30 (D-232 whole-coupon question)",
+   "hypotheses": [
+    "D-031 partial PIK of the margin: applied where the page prints 'S + 0.00 %; 8.00 % PIK' (2023-12-31, 2024-03-31: spread 8)",
+    "whole coupon PIK under D-232 (par grows about coupon/4): would set pik_rate = coupon and cash leg 0 in all four quarters; not converted, owner reading needed",
+    "2023-09-30 and 2024-06-30 print no benchmark: left Fixed with no spread"
+   ]
+  },
+  {
+   "finding": "observation printed-rate-is-cash-coupon-on-some-pik-lines (interest_rate_cash understated on 177 rows)",
+   "hypotheses": [
+    "filed rate is all-in on every line (wrapper filed_rate_reading all_in): contradicted on 177 lines whose printed rate fits benchmark + cash margin",
+    "per-row interest_rate_kind = cash would fix the cash leg; not done, no build left"
+   ]
+  }
+ ],
  "orchestrator_requests": [],
  "observations": [
   {
-   "observation_key": "issuer-name-differs-from-page",
-   "what": "2023-09-30 issuer names are built from members that drop the comma before the legal form ('Galway Borrower LLC'); 2023-03-31 / 2023-06-30 names are title-cased from members ('Businessolver.com Inc.' for 'BusinesSolver.com, Inc.', 'Amer Care Royal Llc'). The page prints the proper names. Causes D06 2023-12-31 (19.5 pct issuer continuity by exact name). Left: about 650 rows of name spelling, canonical_name groups most of them.",
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Members naming another company or carrying a stale prefix: AmerCareRoyal's four 2023-09-30 lines on West Dermatology members; 16 rows of 2024-06-30 whose member starts 'Visionary Buyer LLC |' before the printed company (Wealth Enhancement, West Dermatology, Zendesk, Wolverine, Your Part-Time Controller, Webster); Zendesk's undrawn delayed draw on an Iodine member (2024-03-31). Searched every published row of every quarter against all its printed rows (name_scan.py, no identifier-once limit): 42 rows in rgA4, 1 left in rfabc (Bridgepointe, a one-row page typo 'Bridgepoint').",
    "field": "issuer_name",
    "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-09-30"
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30"
    ],
-   "fair_value_m": 3656.0,
-   "cause": "fund",
-   "action": "left",
-   "suggested_check": "issuer continuity computed on a punctuation- and case-folded name",
+   "fair_value_m": 59.32,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed without the identifier-printed-once limit (name_scan.py logic)",
    "quote": {
     "accession": "0001193125-23-277031",
-    "text": "Galway Borrower, LLC Financials Delayed Draw Term Loan 10.74 % (S + 5.25 %; 0.75 % Floor) 09/29/2028 39,209 38,926 38,621"
+    "text": "AmerCareRoyal, LLC (1) (5) Services Term Loan 11.98 % (S + 6.50 %; 0.50 % PIK; 1.00 % Floor) 11/25/2025 4,100,950 4,002,424 4,100,950"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed (not_the_printed_name) fired on these rows in the untouched build rgA4 (page_rule_findings.csv, 2023-09-30 x4, 2024-03-31, 2024-06-30 x16)",
+    "reference": "scratch/fund_sandbox/rgA4/output/shadow/page_rule_findings.csv"
    }
   },
   {
-   "observation_key": "zero-rate-tag-on-dash-printed-row-published-as-coupon",
-   "what": "Undrawn and non-accrual lines printed with '-' or '- %' in the rate cell, tagged 0, published a 0.0 coupon (1,078 rows, every quarter from 2023-09-30; page sample C013, C019). Where a PIK part is printed the build already withheld the 0. Fixed for this fund by row corrections; any filer that tags a dash as 0 has the same problem.",
-   "field": "interest_rate",
+   "observation_key": "entity-resolver-overrides-corrected-issuer",
+   "what": "A row correction of issuer_name on a row tagged with another company's member does not reach the entity: the resolver reads the company from the identifier (LLM extraction cache) and maps entities by issuer string, so the corrected string 'AmerCareRoyal, LLC' pulled 14 other rows of that company (2023-03-31 to 2024-06-30) into West Dermatology in rfaba. Worked around (distinct spelling); the 4 corrected rows keep canonical 'West Dermatology'. The residual includes the GICS label: the 4 rows publish Health Care Services (West Dermatology's) while the same positions publish Diversified Support Services in 2023-06-30 and 2023-12-31.",
+   "field": "canonical_name",
    "quarters": [
-    "2024-12-31",
-    "2025-03-31",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-06-30"
+    "2023-09-30"
    ],
-   "fair_value_m": 12.0,
+   "fair_value_m": 7.1,
    "cause": "shared",
-   "action": "fixed",
-   "suggested_check": "a published rate of exactly 0 on a loan whose printed rate cell is a dash",
+   "action": "parked",
+   "suggested_check": "canonical_name first word differs from a row-corrected issuer_name (q_contam2.sql)",
    "quote": {
-    "accession": "0000950170-25-047686",
-    "text": "Race Finco, LLC Digital Infrastructure & Services Revolver - (S + 5.75 %; 1.00 % Floor) 8/16/2029 - ( 11,235 ) ( 13,720 )"
+    "accession": "0001193125-23-277031",
+    "text": "AmerCareRoyal, LLC (1) Services Delayed Draw Term Loan 11.98 % (S + 6.50 %; 0.50 % PIK; 1.00 % Floor) 11/25/2025 494,975 488,118 494,975"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule compares canonical_name with a corrected issuer; found by q_contam2.sql",
+    "reference": "scratch/fund_runs/0001634452/q_contam2.sql; REQ-rfab-1"
    }
   },
   {
-   "observation_key": "net-investment-income-holds-total-investment-income",
-   "what": "fund_financials.net_investment_income 2023-03-31 to 2024-03-31 (32.8M to 41.3M) is total investment income; printed NII after tax is 11.0M at 2023-03-31. At 2026-03-31 it holds 1,271,321, the cash-flow line 'Amortization of premium and accretion of discount, net' (printed NII 15,676,027); total_investment_income is null from 2025-06-30. Not a correctable figure field in the highlights wrapper.",
-   "field": "net_investment_income",
+   "observation_key": "cash-plus-pik-spread-is-cash-leg-only",
+   "what": "Loans printed '(S + x %; [floor;] y % PIK)' published basis_spread = x (cash margin only): 690 rows set to x + y (D-031). Residual in rfabf (gen_spread.py run on rfabf: 683 already total, 1 to change): CHV's PIK bridge 2024-03-31, kept at the printed cash margin 0 as a source ambiguity. 28 PIK rows of other printed forms (no benchmark or no cash margin printed) are outside the rule.",
+   "field": "basis_spread",
    "quarters": [
     "2023-03-31",
-    "2023-06-30",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-03-31",
-    "2025-12-31",
-    "2026-03-31"
+    "2026-06-30"
    ],
-   "fair_value_m": 0.0,
-   "cause": "shared",
-   "action": "left",
-   "suggested_check": "net investment income above total investment income less total expenses",
+   "fair_value_m": 2290.9,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "spread equals the printed cash margin while a PIK margin is printed on the same line",
    "quote": {
     "accession": "0001193125-23-145163",
-    "text": "Net investment income after tax 11,021,846 8,245,373"
+    "text": "GHA Buyer, Inc. (3) Healthcare & HCIT Delayed Draw Term Loan 9.55% (S + 4.50%; 3.75% PIK; 1.00% Floor) 06/24/2026 815,950 808,160 781,272"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed checks pik_rate, not the spread; no rule fired on these rows in rgA4",
+    "reference": "scratch/fund_runs/0001634452/gen_spread.py"
    }
   },
   {
-   "observation_key": "maturity-status-not-recomputed-after-row-correction",
-   "what": "maturity_status reads 'unresolved' on the 781 2023 loans whose maturity_date is now set by row correction (it was 'not_disclosed'): the status is computed before row corrections are applied.",
-   "field": "maturity_status",
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "what": "2023-03-31 and 2023-06-30: explicit members carry no industry, so no row had extracted_industry and GICS came only from name lookups (coverage 0.61). 892 rows set from the printed industry; funded-row GICS coverage 0.903 and 0.895 after.",
+   "field": "extracted_industry",
    "quarters": [
     "2023-03-31",
     "2023-06-30"
    ],
-   "fair_value_m": 2340.0,
-   "cause": "shared",
-   "action": "left",
-   "suggested_check": "maturity_status recomputed after row corrections, or 'corrected' where maturity_date is a corrected field",
+   "fair_value_m": 2394.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "industry_coverage",
    "quote": {
     "accession": "0001193125-23-145163",
-    "text": "Zendesk, Inc. (2) (3) Software & Tech Services Term Loan 11.88% (S + 3.50%; 3.50% PIK; 0.75% Floor) 11/22/2028 13,334,101 13,082,937 13,200,760"
+    "text": "Coupa Holdings,LLC (3) Software & Tech Services Term Loan 12.29% (S + 7.50%; 0.75% Floor) 02/27/2030 10,617,824 10,352,378 10,352,378"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "industry_coverage fired at 2023-03-31 and 2023-06-30 in rgA4",
+    "reference": "rgA4 findings_ledger RVQ_BLK_82d7c2fe723f, RVQ_BLK_8ff7970a8a0a"
    }
   },
   {
-   "observation_key": "cost-printed-dash-published-null",
-   "what": "Degreed Series D warrants and ORCP III Triton units (2025-06-30) print a dash for cost and publish cost null. Cost totals still tie because the dash is zero.",
+   "observation_key": "pik-margin-loan-read-as-fixed",
+   "what": "Mavenlink (2024-06-30, 2024-09-30) and Magaya (2026-03-31) printed 'S; m % PIK' / 'S + .00 %; m % PIK' were published Fixed, no reference rate, spread blank or 0. Fixed for 7 rows; Magaya 2026-06-30 prints no benchmark ('( 0.75 % Floor; 5.75 % PIK)') and was left.",
+   "field": "coupon_type",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 38.44,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "coupon_type Fixed on a row whose printed rate parentheses start with a benchmark letter",
+   "quote": {
+    "accession": "0001193125-24-200574",
+    "text": "Mavenlink, Inc. (1) (3) (4) Software & Tech Services Term Loan 11.73 % (S; 6.25 % PIK; 0.75 % Floor) 6/3/2027 15,750,151 15,516,491 15,435,148"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "X05 fired only where a 0 spread was tagged (Magaya 2025-12-31); the blank-spread Fixed rows were not flagged",
+    "reference": "scratch/fund_runs/0001634452/hand_rows2.json"
+   }
+  },
+  {
+   "observation_key": "subtotal-tagged-on-another-holdings-context",
+   "what": "2024-12-31: the 'Total French Warrants 8,561 -' subtotal is tagged on a context whose member names CN Co-Invest and was published as a second CN Co-Invest row, double counting Content Square's warrant cost (+8,561 against the printed cost total; fair value 0 so the FV tie never showed it). Excluded.",
    "field": "cost",
    "quarters": [
-    "2025-06-30"
+    "2024-12-31"
    ],
-   "fair_value_m": 0.2,
+   "fair_value_m": 0,
    "cause": "row",
-   "action": "left",
-   "suggested_check": "null cost on a row whose printed cost cell is a dash",
+   "action": "fixed",
+   "suggested_check": "a published row whose cost and value equal a printed 'Total ...' line and repeat another row's figures",
    "quote": {
-    "accession": "0000950170-25-108839",
-    "text": "Degreed, Inc. Series D Warrants Software & Tech Services 4/11/2021 7,624 - 3,086"
+    "accession": "0000950170-25-047686",
+    "text": "Content Square SAS Indemnity Series F Shares Warrants Software & Tech Services 11/30/2023 2,027 8,561 - (8) Total French Warrants 8,561 -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule fired; cost conservation is not a gate and FV conservation is blind to a zero-value subtotal",
+    "reference": "data/overrides/agent_investigate_rules/1634452/exclude_2024q4_french_warrants_subtotal.json"
    }
   },
   {
-   "observation_key": "reference-rate-code-in-member-not-read-guessed-from-date",
-   "what": "2023-09-30 members print 'P + 6.00%' in their own pipe segment, but the identifier-text reader did not take it and 14 loans got a SOFR guessed from the date (13 Prime by the page; Rep Tec's term loan member says P where the page prints S). Fixed by row correction for this fund.",
-   "field": "reference_rate_type",
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "what": "SCP-Resonetics Class A / Class B and Degreed Series D warrants published another class's unit count (derived_proxy) in 13 rows; printed counts set. derived_proxy rows: 16 before, 16 after (the 13 now carry the printed count but keep the source label).",
+   "field": "shares_held",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.08,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "units_printed",
+   "quote": {
+    "accession": "0001193125-26-224298",
+    "text": "Degreed, Inc. Series D Warrants Software & Tech Services 4/11/2021 7,624 - 330"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "units_printed fired in 10 quarters in rgA4",
+    "reference": "rgA4 page_rule_findings.csv units_printed"
+   }
+  },
+  {
+   "observation_key": "industry-label-is-a-facility-word",
+   "what": "Members without an industry cell put the facility word in the industry slot: 'Revolver' published as extracted_industry and mapped to Consumer Finance (3 rows: Foundation Risk 2023-12-31, Wolverine 2024-09-30, Cerifi 2025-06-30). Fixed to the printed industry.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2023-12-31",
+    "2024-09-30",
+    "2025-06-30"
+   ],
+   "fair_value_m": 1.08,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "extracted_industry equal to a facility word (Revolver, Term Loan, Delayed Draw)",
+   "quote": {
+    "accession": "0001193125-24-081951",
+    "text": "Foundation Risk Partners, Corp. (2) (6) Financials Revolver 11.45 % (S + 6.00 %; 0.75 % Floor) 10/29/2027 - ( 8,273 ) ( 5,190 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule fired on these rows in rgA4; a check that an industry label is not a facility word would have caught all three",
+    "reference": "q_labels.sql"
+   }
+  },
+  {
+   "observation_key": "gics-label-keyed-on-built-issuer-name",
+   "what": "Restoring the printed apostrophe (Freddy's Acquisition, 2023-09-30) dropped its name-keyed GICS label 'Restaurants' (1 row, 0.14M); the printed industry 'Consumer Non-Cyclical' has no GICS mapping.",
+   "field": "gics_sub_industry",
    "quarters": [
     "2023-09-30"
    ],
-   "fair_value_m": 22.6,
+   "fair_value_m": 0.14,
    "cause": "shared",
-   "action": "fixed",
-   "suggested_check": "a guessed reference rate on a row whose member text names another code",
+   "action": "left",
+   "suggested_check": "rows that lose GICS after a name correction",
    "quote": {
     "accession": "0001193125-23-277031",
-    "text": "Thrive Buyer, Inc. (2) Digital Infrastructure & Services Revolver 13.50 % (P + 5.00 %; 1.00 % Floor) 01/22/2027 369,907 356,788 369,907"
-   }
-  },
-  {
-   "observation_key": "borrowings-exclude-securitization-and-notes",
-   "what": "fund_financials.borrowings held only the credit facility (e.g. 716.25M at 2026-06-30) and left out the unsecured notes (536M); F26 flagged the gap 11 times. Fixed for this fund by highlights-wrapper figure corrections.",
-   "field": "borrowings",
-   "quarters": [
-    "2023-06-30",
-    "2026-06-30"
-   ],
-   "fair_value_m": 0.0,
-   "cause": "shared",
-   "action": "fixed",
-   "suggested_check": "borrowings below total liabilities less accrued items by more than 20 pct",
-   "quote": {
-    "accession": "0001193125-26-352137",
-    "text": "Liabilities Notes payable (net of unamortized discount of $ 0 and $ 0 , respectively, and debt issuance costs of $ 2,017,002 and $ 2,359,715 , respectively) $ 535,982,998 $ 535,640,285 Credit facility payable 716,250,000 680,000,000"
-   }
-  },
-  {
-   "observation_key": "dash-valued-row-not-published",
-   "what": "Schedule rows printed with a dash for fair value but tagged with a cost were dropped (excluded_no_fair_value): 10 rows / 11.48M cost at 2025-12-31, GHP-EIP at 2025-06-30, 4 undrawn lines at 2023-09-30. Fixed for this fund with untagged_values.",
-   "field": "fair_value",
-   "quarters": [
-    "2023-09-30",
-    "2025-06-30",
-    "2025-12-31"
-   ],
-   "fair_value_m": 0.0,
-   "cause": "shared",
-   "action": "fixed",
-   "suggested_check": "published cost against the printed total cost every quarter",
-   "quote": {
-    "accession": "0001193125-26-124450",
-    "text": "American Physician Partners, LLC Healthcare Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 3/31/2026 6,791,604 5,733,816 -"
+    "text": "Freddys Frozen Custard, LLC) (11) LP Interests Consumer Non-Cyclical 03/03/2021 72,483 72,483 139,477"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "found by comparing GICS before and after (q_final_counts.sql); no rule",
+    "reference": "scratch/fund_runs/0001634452/q_final_counts.sql"
    }
   },
   {
    "observation_key": "gics-label-depends-on-build-composition",
-   "what": "With no edit, the single-fund build abxa gives 39 rows a different GICS label than the multi-fund spoff2 (33 lose one). None of the losses is caused by this run's edits (checked row by row against abxa).",
+   "what": "28 Amercare Royal rows (2024-09-30 to 2026-03-31) carry Health Care Services in the 10-fund build rgA4 and none in the single-fund builds (abxf before this run, rfabc after): the canonical-name fallback differs with the build's composition.",
    "field": "gics_sub_industry",
    "quarters": [
-    "2023-03-31",
-    "2023-06-30"
+    "2024-09-30",
+    "2026-03-31"
    ],
-   "fair_value_m": 0.0,
+   "fair_value_m": 70.66,
    "cause": "shared",
    "action": "left",
-   "suggested_check": "GICS label stable across sandboxes for an unchanged row",
-   "quote": {
-    "accession": "0001193125-23-145163",
-    "text": "Coretelligent Intermediate LLC (4) Digital Infrastructure & Services Revolver 12.00% (P + 4.00%; 1.00% Floor) 10/21/2027 94,982 80,431 69,653"
-   }
-  },
-  {
-   "observation_key": "floor-tagged-as-pik",
-   "what": "The filer tags the floor figure with InvestmentInterestRatePaidInKind on loans that print no PIK part (13 rows, mostly 2024-09-30; page sample C012), so a PIK rate of 1.00 or 0.75 was published. Fixed by row correction.",
-   "field": "pik_rate",
-   "quarters": [
-    "2024-09-30",
-    "2025-03-31"
-   ],
-   "fair_value_m": 77.0,
-   "cause": "fund",
-   "action": "fixed",
-   "suggested_check": "a published PIK rate equal to the row's floor where the printed line has no 'PIK'",
+   "suggested_check": "same fund, same inputs, single vs multi-fund build",
    "quote": {
     "accession": "0000950170-24-126944",
-    "text": "Versaterm Public Safety Inc. Software & Tech Services Revolver 13.5 % (S + 6.50 %; 1.00 % Floor) 12/4/2025 119,558 111,280 108,349"
+    "text": "Amercare Royal LLC Services Term Loan 9.84 % (S + 5.00 %; 1.00 % Floor) 9/10/2030 8,384,591 8,300,745 8,300,745"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "known shared behaviour (D-189): no rule compares a single-fund build with a multi-fund build of the same inputs",
+    "reference": "q_amer2.sql (abxf vs rfabc)"
    }
   },
   {
-   "observation_key": "row-tagged-on-another-issuers-member",
-   "what": "2024-03-31: Saviynt's and Zendesk's undrawn revolvers are tagged on Datacor and Kaseya members, with the cost unsigned; published under the wrong issuer. Fixed by row correction.",
+   "observation_key": "cost-printed-dash-published-null",
+   "what": "Amercare Royal's undrawn delayed draw prints cost '-' and publishes cost null (2025-12-31, 2026-03-31); 15 undrawn lines print par '-' and publish par null (2023-09-30 x12, 2025-12-31 x3). Other quarters publish 0.",
+   "field": "cost",
+   "quarters": [
+    "2023-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "dash-printed par or cost published null where the same position publishes 0 in other quarters",
+   "quote": {
+    "accession": "0001193125-26-124450",
+    "text": "Amercare Royal LLC Services Delayed Draw Term Loan - % ( S + 5.00 %; 1.00 % Floor) 9/10/2030 - - ( 19,254 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "found by neighbours.py (published par and cost against the printed row); no rule compares them",
+    "reference": "scratch/fund_runs/0001634452/neighbours_rfabc.txt"
+   }
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "what": "Bonterra's PIK term loan, as published in rfabf: 2023-09-30 Fixed, spread blank, pik 8.0 (printed '13.40 % (8.00 % PIK; 0.75 % Floor)', no benchmark); 2023-12-31 Floating, spread 8.0, pik 8.0 ('12.35 % (S + 0.00 %; 8.00 % PIK)'); 2024-03-31 Floating, spread 8.0, pik 8.0 ('13.30 % (S + 0.00 %; 8.00 % PIK)'); 2024-06-30 Fixed, spread blank, pik 8.0 ('12.59 % (8.00 % PIK; 0.75 % Floor)', no benchmark); 2024-12-31 prints the whole coupon in kind ('12.07 % (S; 0.75 % Floor; 12.07 % PIK)', pik 12.07). Par grows 2,623,369 / 2,713,108 / 2,804,652 / 2,898,956 (about 3.4 pct a quarter, near coupon/4), so the four quarters to 2024-06-30 may be whole-coupon PIK under D-232 (parked, not converted). The two quarters without a printed benchmark keep Fixed / no spread: the page gives no 'S +' to read.",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30"
+   ],
+   "fair_value_m": 11.04,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "par growth against pik_rate/4 on PIK loans",
+   "quote": {
+    "accession": "0001193125-24-081951",
+    "text": "Bonterra, LLC Software & Tech Services Term Loan 12.35 % (S + 0.00 %; 8.00 % PIK; 0.75 % Floor) 09/08/2027 2,713,108 2,675,770 2,713,108"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed compares the printed PIK figure only; no rule reads par growth",
+    "reference": "q_bon.sql"
+   }
+  },
+  {
+   "observation_key": "page-reader-printed-row-joins-words",
+   "what": "The page reader's printed_row for Mykaarma 2023-12-31 reads 'Mykaarma AcquisitionLLC'; the filing text prints the space. issuer_name_printed flags the correct name.",
    "field": "issuer_name",
    "quarters": [
-    "2024-03-31"
+    "2023-12-31"
    ],
-   "fair_value_m": 0.01,
-   "cause": "row",
-   "action": "fixed",
-   "suggested_check": "a row whose rate and spread differ from every printed line of its member's issuer",
+   "fair_value_m": 6.29,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "compare printed_row tokens with the gate's normalised page text",
    "quote": {
-    "accession": "0001193125-24-138418",
-    "text": "Saviynt, Inc. (2) (6) Software & Tech Services Revolver 9.46 % (S + 4.00 %; 3.50 % PIK; 1.00 % Floor) 12/22/2027 - ( 11,479 ) ( 10,671 )"
+    "accession": "0001193125-24-081951",
+    "text": "Mykaarma Acquisition LLC (2) (6) Software & Tech Services Revolver 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 - ( 8,417 ) ( 4,449 )"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed (spacing_only) fired on both rows in rgA4 and rfabc; the defect is in its input",
+    "reference": "REQ-rfab-2"
    }
+  },
+  {
+   "observation_key": "printed-rate-is-cash-coupon-on-some-pik-lines",
+   "what": "Replaces the round-2 observation d031-pik-margin-not-confirmed-by-printed-all-in-rate (retired: its inference about the spread was wrong, D-237). What the all-in test does show is about the rate, not the margin: on 177 PIK lines (522.6M) the printed rate equals benchmark + cash margin, i.e. it is the cash coupon, while the wrapper reads every filed rate as all-in (filed_rate_reading all_in) and publishes interest_rate_cash = printed rate - PIK. On those rows the published cash leg is understated by the PIK (GHA Buyer 2023-03-31 delayed draw printed 9.55 % publishes cash 5.80; Veracross 2023-12-31 term loan printed 7.46 % publishes cash 2.96). The same filing prints the all-in coupon on the twin line (GHA term loan 13.30 %, cash 9.55). Not fixed: no build left; the mechanism is a per-row correction interest_rate_kind = cash on the lines whose printed rate fits benchmark + cash (test_d031_rfabc.csv, class CONTRADICTED / cash-only fits), then a rebuild and a sample.",
+   "field": "interest_rate_cash",
+   "quarters": [
+    "2023-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 522.6,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "for a loan printing a PIK part, printed rate minus cash margin inside the quarter's benchmark band of plain loans means the printed rate is the cash coupon: interest_rate_kind must be cash",
+   "quote": {
+    "accession": "0001193125-23-145163",
+    "text": "GHA Buyer, Inc. (3) Healthcare & HCIT Delayed Draw Term Loan 9.55% (S + 4.50%; 3.75% PIK; 1.00% Floor) 06/24/2026 815,950 808,160 781,272"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule compares the published cash leg with the printed coupon; test_d031.py measures it on every PIK line (177 rows fit cash-only)",
+    "reference": "scratch/fund_runs/0001634452/test_d031.py, q_resid.sql, q_ir.sql"
+   }
+  },
+  {
+   "observation_key": "issuer-name-drops-printed-comma",
+   "what": "2023-09-30: 130 of 191 published issuer names drop the comma the page prints before the legal form (members read 'Galway Borrower LLC'; the page prints 'Galway Borrower, LLC'); 142 names differ from 2023-12-31 only in punctuation (q_comma.sql). This is why D06 reports low issuer continuity at 2023-12-31 (false alarm, PD-D06-1634452-10). Left: cosmetic, positions chain.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "fair_value_m": 0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "issuer name equal to the printed name only after removing punctuation",
+   "quote": {
+    "accession": "0001193125-23-277031",
+    "text": "Galway Borrower, LLC Financials Delayed Draw Term Loan 10.74 % (S + 5.25 %; 0.75 % Floor) 09/29/2028 39,209 38,926 38,621"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "D06 (issuer continuity) fired at 2023-12-31 on exactly this cause in rgA4 and rfabf",
+    "reference": "RVQ_REV_a9fa210ec859"
+   }
+  },
+  {
+   "observation_key": "amercareroyal-2023-09-30-wrong-entity-canonical-gics",
+   "what": "REQ-rfab-1 residual, tracked here: 4 AmerCareRoyal rows of 2023-09-30 (7.1M; ROW-cf5c385cd25d6002, ROW-b5065abd466d5064, ROW-3e33efc99925cfd5, ROW-5e6c8204b61d76f5) publish the issuer from the page ('AmerCareRoyal LLC') but entity, canonical_name 'West Dermatology' and GICS Health Care Services from the West Dermatology member they are tagged on.",
+   "field": "canonical_name",
+   "quarters": [
+    "2023-09-30"
+   ],
+   "fair_value_m": 7.1,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "canonical_name first word differs from a row-corrected issuer_name",
+   "quote": {
+    "accession": "0001193125-23-277031",
+    "text": "AmerCareRoyal, LLC (1) (5) Services Term Loan 11.98 % (S + 6.50 %; 0.50 % PIK; 1.00 % Floor) 11/25/2025 4,100,950 4,002,424 4,100,950"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "no rule compares canonical_name and GICS with a corrected issuer; found by q_contam2.sql and confirmed by the reviewer",
+    "reference": "scratch/fund_runs/0001634452/q_contam2.sql"
+   },
+   "rows": [
+    "ROW-cf5c385cd25d6002",
+    "ROW-b5065abd466d5064",
+    "ROW-3e33efc99925cfd5",
+    "ROW-5e6c8204b61d76f5"
+   ]
   }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
-  "tests/test_source_encodings.py tests/test_fund_highlights_wrapper.py tests/test_bdc_xbrl_wrapper_oracle.py tests/test_audit_wrapper_cohort.py tests/test_v05_fund_gate.py: 267 passed",
-  "fund_gate.py check on abxf (no snapshot): all ok except files (expected)"
+  "none: no shared code changed (pipeline/, tests/, schemas/ untouched); fund_gate.py check run on rfabb and the final sandbox without --snapshot"
  ],
  "not_done": [
-  "Cost residuals not traced: 2024-03-31 published 1,399,017,867 vs printed 1,398,952,125 (+65,742); 2024-12-31 1,636,606,314 vs 1,636,597,753 (+8,561). Fair value ties in all 14 quarters.",
-  "Fund-level income lines (NII / TII) not corrected: no correctable figure field; recorded as an observation.",
-  "Non-accrual flags, floors, acquisition dates, share counts and industries not read row by row beyond the sample.",
-  "Full pytest suite and cohort semantic diff not run (no shared code changed).",
-  "'All findings proposed' is not 'data correct': the 2023 Q1/Q2 rates come from a page reading matched by printed figures; a row whose figures appear twice with different text was skipped and done by hand.",
-  "pct_of_net_assets is null on every row: the schedule prints no percent column (section headings only); not changed.",
-  "Round 2 located rows by printed par, cost and value; 7 rows printed with a PIK part (West Dermatology, Visionary) were not located and needed no change."
+  "No page sample of 20 cards drawn for this run; neighbour check (neighbours.py) compared maturity, par, cost, value and filed rate of 5,627 loan rows with a single printed row: only 15 dash-par and 2 dash-cost rows differ",
+  "Equity rows: unit counts compared only where a page rule tested them; extracted_industry is blank on most equity rows from 2023-09-30 on (members carry it); not filled",
+  "2023-03-31 / 2023-06-30 names compared only where the printed line was located by figures (892 of 909 rows); title-case-only differences left as published",
+  "Bonterra whole-coupon question and dash par/cost left (parked)",
+  "Independent review: not done by me (orchestrator commissions it)",
+  "interest_rate_cash understated on 177 PIK lines whose printed rate is the cash coupon (parked, observation printed-rate-is-cash-coupon-on-some-pik-lines)",
+  "Bonterra whole-coupon question (D-232) left for the owner"
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_16ba237d54bf",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2023-12-31|A01|corporate debt 1st lien senior secured debt community based care acquisition inc healthcare hcit delayed draw term loan 09 16 27|rollup 1948384.0"
+    ],
+    "reviewed_rows": [
+     "0001634452|2023-12-31|A01|corporate debt 1st lien senior secured debt community based care acquisition inc healthcare hcit delayed draw term loan 09 16 27|rollup 1948384.0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Community Based Care Acquisition, Inc. (2) (3) Healthcare & HCIT Delayed Draw Term Loan 9.93 % (S + 5.25 %; 1.00 % Floor) 09/16/2027 2,034,120 2,003,449 1,948,384"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Community Based Care Acquisition, Inc. (3) (4) Healthcare & HCIT Delayed Draw Term Loan 9.93 % (S + 5.75 %; 1.00 % Floor) 09/16/2027 - ( 55,320 ) ( 87,363 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a published current row is wrong: rejected, the rollup 1,948,384 and the child (87,363) are lines of the 10-K's comparative December 2022 schedule; the current lines print 2,095,814 and 942,256 and are published as such"
+   ],
+   "next_action": "proposal PD-A01-1634452-8"
+  },
+  {
+   "finding_id": "RVQ_BLK_063ec30577cf",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2024-12-31|A01|canadian corporate debt 1st lien senior secured debt|rollup 23923702.0",
+     "0001634452|2024-12-31|A01|canadian corporate debt 1st lien senior secured debt|rollup 8619561.0"
+    ],
+    "reviewed_rows": [
+     "0001634452|2024-12-31|A01|canadian corporate debt 1st lien senior secured debt|rollup 23923702.0",
+     "0001634452|2024-12-31|A01|canadian corporate debt 1st lien senior secured debt|rollup 8619561.0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Community Based Care Acquisition, Inc. (2) (3) Healthcare & HCIT Delayed Draw Term Loan 9.93 % (S + 5.25 %; 1.00 % Floor) 09/16/2027 2,034,120 2,003,449 1,948,384"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Total Canadian 1st Lien/Senior Secured Debt 24,027,560 23,923,702"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Total Canadian 1st Lien/Senior Secured Debt 24,028,199 24,184,759"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "a published current row is wrong: rejected, the rollups compared are figures of the comparative (prior year-end) schedule",
+    "the Canadian subtotal does not tie: rejected for the current schedule, the current Canadian rows sum to the printed current total"
+   ],
+   "next_action": "proposal PD-A01-1634452-8"
+  },
+  {
+   "finding_id": "RVQ_REV_9098e9e8ef78",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-047686/C_6dfe8a47-e104-4cbc-bfc8-3da3f5a54f80/ROW-70b7785b67d6d52f"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-047686/C_6dfe8a47-e104-4cbc-bfc8-3da3f5a54f80/ROW-70b7785b67d6d52f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 673,703 643,498 673,703"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "PIK rate mis-scaled: rejected, the page prints the whole coupon in kind at 20.50 / 21.5 %",
+    "D-232 whole-coupon PIK reading changes the published PIK: no, pik_rate already equals the printed coupon, cash leg 0"
+   ],
+   "next_action": "proposal PD-C117-1634452-6 (pik-rate-above-20-as-printed)"
+  },
+  {
+   "finding_id": "RVQ_REV_d08d89c1b346",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-072549/C_6f5de2d2-2f6d-4038-8dfd-dc124e953ae4/ROW-b3a21d52d8261e4d"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-072549/C_6f5de2d2-2f6d-4038-8dfd-dc124e953ae4/ROW-b3a21d52d8261e4d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 284,880 261,736 284,880"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "PIK rate mis-scaled: rejected, the page prints the whole coupon in kind at 20.50 / 21.5 %",
+    "D-232 whole-coupon PIK reading changes the published PIK: no, pik_rate already equals the printed coupon, cash leg 0"
+   ],
+   "next_action": "proposal PD-C117-1634452-6 (pik-rate-above-20-as-printed)"
+  },
+  {
+   "finding_id": "RVQ_REV_af1070092697",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-108839/C_e2257002-0c1e-4f8c-bc10-d6d903f590de/ROW-2a3cb5ad0b978427"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-108839/C_e2257002-0c1e-4f8c-bc10-d6d903f590de/ROW-2a3cb5ad0b978427"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PIK) 3/27/2026 177,369 147,559 177,369"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "PIK rate mis-scaled: rejected, the page prints the whole coupon in kind at 20.50 / 21.5 %",
+    "D-232 whole-coupon PIK reading changes the published PIK: no, pik_rate already equals the printed coupon, cash leg 0"
+   ],
+   "next_action": "proposal PD-C117-1634452-6 (pik-rate-above-20-as-printed)"
+  },
+  {
+   "finding_id": "RVQ_REV_a9fa210ec859",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2023-12-31|D06|issuer_continuity"
+    ],
+    "reviewed_rows": [
+     "0001634452|2023-12-31|D06|issuer_continuity"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "Galway Borrower, LLC Financials Delayed Draw Term Loan 10.74 % (S + 5.25 %; 0.75 % Floor) 09/29/2028 39,209 38,926 38,621"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Galway Borrower, LLC (2) (6) Financials Revolver 10.70 % (S + 5.25 %; 0.75 % Floor) 09/30/2027 - ( 3,432 ) ( 3,380 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "positions dropped between the quarters: rejected, fair value ties in both quarters",
+    "the 2023-09-30 names drop the printed comma (130 of 191 names, observation issuer-name-drops-printed-comma); with punctuation folded, continuity is 92 pct"
+   ],
+   "next_action": "proposal PD-D06-1634452-10"
+  },
+  {
+   "finding_id": "RVQ_REV_fe286321b40a",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2023-03-31|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2023-03-31|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-23-145163",
+     "text": "TOTAL INVESTMENTS - 254.06% (14) $ 1,198,535,419 $ 1,179,343,662"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_87856c8646e0",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2023-06-30|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2023-06-30|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-23-212335",
+     "text": "TOTAL INVESTMENTS - 253.7 5 % (15) $ 1,253,961,805 $ 1,227,572,852"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_e1a25b5e54a0",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2023-12-31|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2023-12-31|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "TOTAL INVESTMENTS- 260.04 % (15) $ 1,329,540,850 $ 1,311,120,584"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_671829fa9afc",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2024-03-31|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2024-03-31|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-138418",
+     "text": "TOTAL INVESTMENTS - 260.53 % $ 1,398,952,125 $ 1,387,137,974"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_39fd14c2b867",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2024-06-30|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2024-06-30|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-200574",
+     "text": "TOTAL INVESTMENTS - 265.70 % 1,490,018,182 1,480,958,078"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_8e882a6992a0",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2024-09-30|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2024-09-30|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126944",
+     "text": "TOTAL INVESTMENTS - 259.31 % 1,540,127,100 1,530,430,854"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_97191bb35b97",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2024-12-31|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2024-12-31|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Total Investments 1,636,597,753 1,630,349,305"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_35f23e75a28d",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2025-03-31|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2025-03-31|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Total Investments - 251.51 % 1,653,045,866 1,644,014,546"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_325bd9ec5a22",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2025-06-30|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2025-06-30|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Total Investments - ( 267.17 %) $ 1,748,732,749 $ 1,735,894,006"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_653315f02098",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2025-09-30|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2025-09-30|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277881",
+     "text": "Total Investments - ( 257.41 %) $ 1,808,750,592 $ 1,796,706,145"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_64f5de4a4fe7",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2026-06-30|F21|investments_over_net_assets"
+    ],
+    "reviewed_rows": [
+     "0001634452|2026-06-30|F21|investments_over_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Total Investments - ( 262.09 %) 1,984,633,170 1,943,637,816"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "holdings over net assets inflated by duplicated rows: rejected, published fair value ties to the printed total in this quarter (gate totals 14 of 14)",
+    "net assets mis-read: rejected, the printed total line gives the same ratio (about 2.5 to 2.7 times) as published"
+   ],
+   "next_action": "proposal PD-F21-1634452-1 (f21-holdings-over-net-assets-of-a-levered-fund)"
+  },
+  {
+   "finding_id": "RVQ_REV_b75534e34b7e",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-126944/C_52f8e30d-c8f7-4ddb-99f0-93585d6d2a8a/ROW-b9f74b125a7ecbb2",
+     "0000950170-24-126944/C_e49e83d6-b395-42f1-a9e4-961140a7fba8/ROW-7cada4ffd9f2fa36",
+     "0000950170-24-126944/C_c04d8727-75ba-42e1-bd6d-c146b21ffd20/ROW-3e2dc67e1bef7231"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-126944/C_52f8e30d-c8f7-4ddb-99f0-93585d6d2a8a/ROW-b9f74b125a7ecbb2",
+     "0000950170-24-126944/C_e49e83d6-b395-42f1-a9e4-961140a7fba8/ROW-7cada4ffd9f2fa36",
+     "0000950170-24-126944/C_c04d8727-75ba-42e1-bd6d-c146b21ffd20/ROW-3e2dc67e1bef7231"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S; 1.00 % Floor) 12/31/2024 269,873 186,699 81,394"
+    },
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S; 1.00 % Floor) 12/31/2024 505,093 168,457 152,336"
+    },
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - (S; 1.00 % Floor) 12/31/2024 398,650 265,722 120,300"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "page prints a rate for these rows: rejected, the rate cell is a dash on every printed line read",
+    "a spread is printed and dropped: rejected, the margin parentheses hold only the benchmark letter or nothing and the floor",
+    "rate tag 0 should be published as 0.0: rejected, the convention of this run and D-189 publishes a dash as blank"
+   ],
+   "next_action": "proposal PD-X02-1634452-5 (x02-no-rate-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_5e7965b097aa",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-047686/C_abb33b9c-1458-4021-a15c-45228beebbbc/ROW-d5f577f8433df323",
+     "0000950170-25-047686/C_75eaab59-a77e-4c55-9bfe-2e7a6b958683/ROW-40a047aa91fca71f",
+     "0000950170-25-047686/C_f856451e-9c5b-4404-8e6b-e5e18296b844/ROW-0c7d778c34590ff5"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-047686/C_abb33b9c-1458-4021-a15c-45228beebbbc/ROW-d5f577f8433df323",
+     "0000950170-25-047686/C_75eaab59-a77e-4c55-9bfe-2e7a6b958683/ROW-40a047aa91fca71f",
+     "0000950170-25-047686/C_f856451e-9c5b-4404-8e6b-e5e18296b844/ROW-0c7d778c34590ff5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - (S; 1.00 % Floor) 1/30/2026 371,224 227,042 89,190"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S; 1.00 % Floor) 1/30/2026 470,345 120,253 112,977"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S; 1.00 % Floor) 1/30/2026 251,307 165,594 60,364"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "page prints a rate for these rows: rejected, the rate cell is a dash on every printed line read",
+    "a spread is printed and dropped: rejected, the margin parentheses hold only the benchmark letter or nothing and the floor",
+    "rate tag 0 should be published as 0.0: rejected, the convention of this run and D-189 publishes a dash as blank"
+   ],
+   "next_action": "proposal PD-X02-1634452-5 (x02-no-rate-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_684a2f0cb730",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-072549/C_3f4b7c4d-04df-46b0-a01b-747784fc7170/ROW-2d197683d8dfeb6f",
+     "0000950170-25-072549/C_c1869839-1a3f-4c1e-a2af-181a38d4cfd7/ROW-df5d83c7c4bf0c70",
+     "0000950170-25-072549/C_a4a41397-768c-4864-af8d-25c2e2d3ad5c/ROW-f9f85de8e3a2e615"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-072549/C_3f4b7c4d-04df-46b0-a01b-747784fc7170/ROW-2d197683d8dfeb6f",
+     "0000950170-25-072549/C_c1869839-1a3f-4c1e-a2af-181a38d4cfd7/ROW-df5d83c7c4bf0c70",
+     "0000950170-25-072549/C_a4a41397-768c-4864-af8d-25c2e2d3ad5c/ROW-f9f85de8e3a2e615"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - ( S ; 1.00 % Floor) 1/30/2026 483,017 120,253 112,978"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - ( S ; 1.00 % Floor) 1/30/2026 258,077 165,594 60,364"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - ( S ; 1.00 % Floor) 1/30/2026 381,226 227,042 89,144"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "page prints a rate for these rows: rejected, the rate cell is a dash on every printed line read",
+    "a spread is printed and dropped: rejected, the margin parentheses hold only the benchmark letter or nothing and the floor",
+    "rate tag 0 should be published as 0.0: rejected, the convention of this run and D-189 publishes a dash as blank"
+   ],
+   "next_action": "proposal PD-X02-1634452-5 (x02-no-rate-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_f8d11d317229",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-108839/C_680f6945-044f-421f-836d-8f2503897cdf/ROW-5d43176232c6ee63",
+     "0000950170-25-108839/C_12f85ffa-0ce8-46a4-8077-e17d1bb29567/ROW-f4a1f3b8fa960ce5",
+     "0000950170-25-108839/C_b30630d8-574c-45a2-b1bc-42a56d7aad25/ROW-e94618f8df387114"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-108839/C_680f6945-044f-421f-836d-8f2503897cdf/ROW-5d43176232c6ee63",
+     "0000950170-25-108839/C_12f85ffa-0ce8-46a4-8077-e17d1bb29567/ROW-f4a1f3b8fa960ce5",
+     "0000950170-25-108839/C_b30630d8-574c-45a2-b1bc-42a56d7aad25/ROW-e94618f8df387114"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - ( S ; 1.00 % Floor) 1/30/2026 391,605 230,609 88,520"
+    },
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - ( S ; 1.00 % Floor) 1/30/2026 496,168 124,773 112,184"
+    },
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - ( S ; 1.00 % Floor) 1/30/2026 265,104 168,009 59,940"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "page prints a rate for these rows: rejected, the rate cell is a dash on every printed line read",
+    "a spread is printed and dropped: rejected, the margin parentheses hold only the benchmark letter or nothing and the floor",
+    "rate tag 0 should be published as 0.0: rejected, the convention of this run and D-189 publishes a dash as blank"
+   ],
+   "next_action": "proposal PD-X02-1634452-5 (x02-no-rate-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_3702160648c2",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-352137/C_6287fc0a-5b31-4818-9a24-e226f4099a4b/ROW-66108c681cefed87",
+     "0001193125-26-352137/C_78a627ba-012e-4d91-904a-39c618d647a7/ROW-abcc853f8986f5ff",
+     "0001193125-26-352137/C_d3d3c5b6-5414-42d4-bbe3-0706ddcddda0/ROW-ff05de0da8757587",
+     "0001193125-26-352137/C_dc6bc335-53d5-46dd-acc0-c2ca897e2a3b/ROW-84dee5c1867ba394"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-352137/C_6287fc0a-5b31-4818-9a24-e226f4099a4b/ROW-66108c681cefed87",
+     "0001193125-26-352137/C_78a627ba-012e-4d91-904a-39c618d647a7/ROW-abcc853f8986f5ff",
+     "0001193125-26-352137/C_d3d3c5b6-5414-42d4-bbe3-0706ddcddda0/ROW-ff05de0da8757587",
+     "0001193125-26-352137/C_dc6bc335-53d5-46dd-acc0-c2ca897e2a3b/ROW-84dee5c1867ba394"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Delaware Valley Management Holdings, Inc. Health Care Providers & Services Revolver - % ( 1.00 % Floor) 12/31/2026 434,393 233,153 83,534"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Delaware Valley Management Holdings, Inc. Health Care Providers & Services Delayed Draw Term Loan - % ( 1.00 % Floor) 12/31/2026 294,070 165,594 56,550"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Delaware Valley Management Holdings, Inc. Health Care Providers & Services Delayed Draw Term Loan - % ( 1.00 % Floor) 12/31/2026 550,380 120,253 105,838"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "FirstDigital Communications, LLC Diversified Telecommunication Services Term Loan - % ( 0.75 % Floor) 12/17/2026 34,453 - 34,195"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "page prints a rate for these rows: rejected, the rate cell is a dash on every printed line read",
+    "a spread is printed and dropped: rejected, the margin parentheses hold only the benchmark letter or nothing and the floor",
+    "rate tag 0 should be published as 0.0: rejected, the convention of this run and D-189 publishes a dash as blank"
+   ],
+   "next_action": "proposal PD-X02-1634452-5 (x02-no-rate-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_f3de4501bd7f",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtMavenlinkIncSoftwareTechServicesRevolver1176S000075Floor06032027TypedMemberusgaapInvestmentIdentifierAxis/ROW-1e269d7b53223526"
+    ],
+    "reviewed_rows": [
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtMavenlinkIncSoftwareTechServicesRevolver1176S000075Floor06032027TypedMemberusgaapInvestmentIdentifierAxis/ROW-1e269d7b53223526"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Mavenlink, Inc. (2) Software & Tech Services Revolver 11.76 % (S + 0.00 %; 0.75 % Floor) 06/03/2027 1,446,026 1,423,378 1,409,946"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread printed and not published: rejected, the flagged Mavenlink revolver prints 'S + 0.00 %; 0.75 % Floor' with no PIK",
+    "Bonterra's term loan ('S + 0.00 %; 8.00 % PIK') belongs to the D-031 form: it publishes spread 8.0 in rfabf and is no longer flagged (the round-2 withdrawal is undone)"
+   ],
+   "next_action": "proposal PD-X05-1634452-4 (x05-zero-spread-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_16918d32797e",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtCHVHoldingsLLCDigitalInfrastructureServicesPIKBridgeTermLoan1418S0001650PIK000Floor3272026TypedMemberusgaapInvestmentIdentifierAxis/ROW-e8f10b5c0bbcada7"
+    ],
+    "reviewed_rows": [
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtCHVHoldingsLLCDigitalInfrastructureServicesPIKBridgeTermLoan1418S0001650PIK000Floor3272026TypedMemberusgaapInvestmentIdentifierAxis/ROW-e8f10b5c0bbcada7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-138418",
+     "text": "CHV Holdings LLC (4) Digital Infrastructure & Services PIK Bridge Term Loan 14.18 % (S + 0.00 %; 16.50 % PIK; 0.00 % Floor) 3/27/2026 647,016 630,950 630,840"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "D-031 (spread 0 + 16.50): would publish 16.5, which C115 and fmt_basis_spread flagged; the printed coupon 14.18 is below the PIK, so the line does not show 16.50 is a margin over SOFR",
+    "fixed whole PIK coupon of 16.50 (D-232 shape): the printed coupon is 14.18, not 16.50, so it is not the whole-coupon exception either",
+    "spread 0 as printed and tagged: kept; the finding is a source ambiguity (same conclusion as RVQ_REV_083c1c5e934d)"
+   ],
+   "next_action": "proposal PD-X05-1634452-4 (x05-zero-spread-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_b85ff2d6feea",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-277881/C_a3dc2b91-0927-4cb4-a47d-f1a76c77bc99/ROW-9618deaed6046a4e",
+     "0001193125-25-277881/C_d9952a9f-91b4-424d-a51b-e7398495c8d4/ROW-739d252526f161de",
+     "0001193125-25-277881/C_bfeef6c1-18d1-4f3f-a6a8-b5c69a88af34/ROW-f125112f3600c3ef"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-277881/C_a3dc2b91-0927-4cb4-a47d-f1a76c77bc99/ROW-9618deaed6046a4e",
+     "0001193125-25-277881/C_d9952a9f-91b4-424d-a51b-e7398495c8d4/ROW-739d252526f161de",
+     "0001193125-25-277881/C_bfeef6c1-18d1-4f3f-a6a8-b5c69a88af34/ROW-f125112f3600c3ef"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277881",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S + 0.00 %; 1.00 % Floor) 1/30/2026 272,407 165,594 56,715"
+    },
+    {
+     "accession": "0001193125-25-277881",
+     "text": "FirstDigital Communications, LLC Digital Infrastructure & Services Term Loan - ( S + 0.00 %; 0.75 % Floor) 12/17/2026 34,453 - 33,850"
+    },
+    {
+     "accession": "0001193125-25-277881",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - (S + 0.00 %; 1.00 % Floor) 1/30/2026 509,836 120,253 106,148"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread printed and not published: rejected, each flagged line prints 'S + 0.00 %' or 'S + .%' (or, for CHV's bridge, 0.00 with a PIK above the coupon)",
+    "whole-margin PIK loan whose PIK margin should be the spread (D-031): applied to Mavenlink TL, Bonterra, Magaya in this run; the remaining flagged rows print no PIK, except CHV's bridge where the printed coupon 14.18 is below the 16.50 PIK so the PIK is not read as a margin",
+    "earlier verdict rows (RevauAdvanced, Syntax) still published 0: rejected, they publish 4.75 / 5.00 as printed"
+   ],
+   "next_action": "proposal PD-X05-1634452-4 (x05-zero-spread-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_1d8ad04b9928",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-124450/C_4431b40d-42f8-4c21-a1a6-76ea38ab8576/ROW-49810cd6ff0f2ff6",
+     "0001193125-26-124450/C_63c7ff47-4bdc-4127-bb60-e3c381a03265/ROW-4c09a400f6e3058a",
+     "0001193125-26-124450/C_b903efc2-a7e8-47ff-ae22-786277bfb2f2/ROW-4f2b05932bc34a39",
+     "0001193125-26-124450/C_36333094-7dbc-47f4-a497-80bfdae38388/ROW-527b881f0968e2a7"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-124450/C_4431b40d-42f8-4c21-a1a6-76ea38ab8576/ROW-49810cd6ff0f2ff6",
+     "0001193125-26-124450/C_63c7ff47-4bdc-4127-bb60-e3c381a03265/ROW-4c09a400f6e3058a",
+     "0001193125-26-124450/C_b903efc2-a7e8-47ff-ae22-786277bfb2f2/ROW-4f2b05932bc34a39",
+     "0001193125-26-124450/C_36333094-7dbc-47f4-a497-80bfdae38388/ROW-527b881f0968e2a7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - % ( S + 0.00 %; 1.00 % Floor) 3/31/2026 413,145 233,153 83,827"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - % ( S + 0.00 %; 1.00 % Floor) 3/31/2026 523,459 120,253 106,210"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "FirstDigital Communications, LLC Digital Infrastructure & Services Term Loan - % ( S + 0.00 %; 0.75 % Floor) 12/17/2026 34,453 - 33,937"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - % ( S + 0.00 %; 1.00 % Floor) 3/31/2026 279,686 165,594 56,748"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Magaya Corporation Software & Tech Services Revolver 11.5 % ( S + 0.00 %; 0.75 % Floor; 4.75 % PIK) 7/26/2030 682,497 674,985 663,933"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread printed and not published: rejected, each flagged line prints 'S + 0.00 %' or 'S + .%' (or, for CHV's bridge, 0.00 with a PIK above the coupon)",
+    "earlier verdict rows (RevauAdvanced, Syntax) still published 0: rejected, they publish 4.75 / 5.00 as printed",
+    "Magaya's revolver ('S + 0.00 %; 4.75 % PIK') belongs to the D-031 form: it publishes 4.75 in rfabf and is no longer flagged; the reviewer's Prime + 4.75 = 11.5 reading of 2025-12-31 is not testable here (no Prime loan printed in the filing; the line prints 'S') and does not change the margin; the 2026-03-31 line prints a 1.5 % coupon, a misprint that carries no margin information"
+   ],
+   "next_action": "proposal PD-X05-1634452-4 (x05-zero-spread-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_54a76e4cc044",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-224298/C_acc8f34c-0d45-4165-a083-61da942c3dea/ROW-b56640207ffd6786",
+     "0001193125-26-224298/C_226f2794-2c91-41b6-bdde-ab6e4a817930/ROW-dd0b2d909d9278ee",
+     "0001193125-26-224298/C_e2120ba1-fb24-4221-b0c4-e5a71fb0ace3/ROW-cfb27a8c33d5e88f",
+     "0001193125-26-224298/C_33c83c1d-38fa-4b23-b93d-f0734a66e319/ROW-ecc8a405c0478b54"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-224298/C_acc8f34c-0d45-4165-a083-61da942c3dea/ROW-b56640207ffd6786",
+     "0001193125-26-224298/C_226f2794-2c91-41b6-bdde-ab6e4a817930/ROW-dd0b2d909d9278ee",
+     "0001193125-26-224298/C_e2120ba1-fb24-4221-b0c4-e5a71fb0ace3/ROW-cfb27a8c33d5e88f",
+     "0001193125-26-224298/C_33c83c1d-38fa-4b23-b93d-f0734a66e319/ROW-ecc8a405c0478b54"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Revolver - % ( S + 0.00 %; 1.00 % Floor) 6/30/2026 423,599 233,153 83,534"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - .% ( S + .%; 1.00 % Floor) 6/30/2026 286,763 165,594 56,550"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Delaware Valley Management Holdings, Inc. Healthcare Delayed Draw Term Loan - % ( S + 0.00 %; 1.00 % Floor) 6/30/2026 536,704 120,253 105,838"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "FirstDigital Communications, LLC Digital Infrastructure & Services Term Loan - .% ( S + .%; 0.75 % Floor) 12/17/2026 34,453 - 34,023"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "Magaya Corporation Software & Tech Services Revolver 1.5 % ( S + .00 %; 0.75 % Floor; 4.75 % PIK) 7/26/2030 690,490 683,307 662,405"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "spread printed and not published: rejected, each flagged line prints 'S + 0.00 %' or 'S + .%' (or, for CHV's bridge, 0.00 with a PIK above the coupon)",
+    "earlier verdict rows (RevauAdvanced, Syntax) still published 0: rejected, they publish 4.75 / 5.00 as printed",
+    "Magaya's revolver ('S + 0.00 %; 4.75 % PIK') belongs to the D-031 form: it publishes 4.75 in rfabf and is no longer flagged; the reviewer's Prime + 4.75 = 11.5 reading of 2025-12-31 is not testable here (no Prime loan printed in the filing; the line prints 'S') and does not change the margin; the 2026-03-31 line prints a 1.5 % coupon, a misprint that carries no margin information"
+   ],
+   "next_action": "proposal PD-X05-1634452-4 (x05-zero-spread-printed-on-the-row) for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_272ce33db0a6",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-352137/C_fe72f13b-fa9f-4701-adb1-8bcd6de50ba8/ROW-5afa6f752ec9baee"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-352137/C_fe72f13b-fa9f-4701-adb1-8bcd6de50ba8/ROW-5afa6f752ec9baee"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352137",
+     "text": "Sandstone Care Holdings, LLC Health Care Providers & Services Revolver - % (S + 5.50 %; 1.00 % Floor) 6/28/2028 5,961 39 5,961"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "value above cost is a mis-scaled cost: rejected, the page prints cost 39 on par 5,961 and value 5,961",
+    "cost belongs to another row: rejected, the figures sit on Sandstone's own revolver line"
+   ],
+   "next_action": "proposal PD-X07-1634452-9 (x07-value-above-cost-as-printed)"
+  },
+  {
+   "finding_id": "RVQ_REV_c419d582f199",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675350PIK100Floor12292023TypedMemberusgaapInvestmentIdentifierAxis/ROW-84407bb7eedafe1d",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675350PIK100Floor122920231TypedMemberusgaapInvestmentIdentifierAxis/ROW-dfc41d0262677abc",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareRevolverS675350PIK100Floor12292023TypedMemberusgaapInvestmentIdentifierAxis/ROW-f56d2229d6f2f812",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor12292023TypedMemberusgaapInvestmentIdentifierAxis/ROW-090577a4341652cd",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor122920231TypedMemberusgaapInvestmentIdentifierAxis/ROW-f56b9d2c2fdaf368",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor122920232TypedMemberusgaapInvestmentIdentifierAxis/ROW-54a53be8d38c2037",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor122920233TypedMemberusgaapInvestmentIdentifierAxis/ROW-28cc16732dcd134c"
+    ],
+    "reviewed_rows": [
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675350PIK100Floor12292023TypedMemberusgaapInvestmentIdentifierAxis/ROW-84407bb7eedafe1d",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675350PIK100Floor122920231TypedMemberusgaapInvestmentIdentifierAxis/ROW-dfc41d0262677abc",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareRevolverS675350PIK100Floor12292023TypedMemberusgaapInvestmentIdentifierAxis/ROW-f56d2229d6f2f812",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor12292023TypedMemberusgaapInvestmentIdentifierAxis/ROW-090577a4341652cd",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor122920231TypedMemberusgaapInvestmentIdentifierAxis/ROW-f56b9d2c2fdaf368",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor122920232TypedMemberusgaapInvestmentIdentifierAxis/ROW-54a53be8d38c2037",
+     "0001193125-23-277031/PAsOn09_30_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor122920233TypedMemberusgaapInvestmentIdentifierAxis/ROW-28cc16732dcd134c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/29/2023 1,171,910 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-23-277031",
+     "text": "American Physician Partners, LLC (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/29/2023 882,467 817,051 -"
+    },
+    {
+     "accession": "0001193125-23-277031",
+     "text": "American Physician Partners, LLC (7) Healthcare Revolver - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/29/2023 346,322 345,024 -"
+    },
+    {
+     "accession": "0001193125-23-277031",
+     "text": "American Physician Partners, LLC (7) Healthcare Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/29/2023 6,290,877 5,733,816 -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_362f5288917b",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675300PIK100Floor03292024TypedMemberusgaapInvestmentIdentifierAxis/ROW-b7708fb921f5bf07",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675300PIK100Floor032920241TypedMemberusgaapInvestmentIdentifierAxis/ROW-253d0486ad3b8d6b",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareRevolverS675300PIK100Floor03292024TypedMemberusgaapInvestmentIdentifierAxis/ROW-86d3da4ef4972e2b",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675300PIK100Floor03292024TypedMemberusgaapInvestmentIdentifierAxis/ROW-2c028a024716b206",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675300PIK100Floor032920241TypedMemberusgaapInvestmentIdentifierAxis/ROW-b5bca39e702f4d18",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675300PIK100Floor032920242TypedMemberusgaapInvestmentIdentifierAxis/ROW-68a63fd8f7c29f36",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675300PIK100Floor032920243TypedMemberusgaapInvestmentIdentifierAxis/ROW-d986299dc0545fb9"
+    ],
+    "reviewed_rows": [
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675300PIK100Floor03292024TypedMemberusgaapInvestmentIdentifierAxis/ROW-b7708fb921f5bf07",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675300PIK100Floor032920241TypedMemberusgaapInvestmentIdentifierAxis/ROW-253d0486ad3b8d6b",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareRevolverS675300PIK100Floor03292024TypedMemberusgaapInvestmentIdentifierAxis/ROW-86d3da4ef4972e2b",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675300PIK100Floor03292024TypedMemberusgaapInvestmentIdentifierAxis/ROW-2c028a024716b206",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675300PIK100Floor032920241TypedMemberusgaapInvestmentIdentifierAxis/ROW-b5bca39e702f4d18",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675300PIK100Floor032920242TypedMemberusgaapInvestmentIdentifierAxis/ROW-68a63fd8f7c29f36",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675300PIK100Floor032920243TypedMemberusgaapInvestmentIdentifierAxis/ROW-d986299dc0545fb9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.00 % PIK; 1.00 % Floor) 03/29/2024 1,218,972 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "American Physician Partners, LLC (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.00 % PIK; 1.00 % Floor) 03/29/2024 917,905 817,051 -"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "American Physician Partners, LLC (7) Healthcare Revolver - (S + 6.75 %; 3.00 % PIK; 1.00 % Floor) 03/29/2024 346,322 345,024 -"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "American Physician Partners, LLC (7) Healthcare Term Loan - (S + 6.75 %; 3.00 % PIK; 1.00 % Floor) 03/29/2024 6,557,417 5,733,816 -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_083c1c5e934d",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoan-S675350PIK100Floor6282024TypedMemberusgaapInvestmentIdentifierAxis/ROW-34c35ecb815662ef",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoan-S675350PIK100Floor62820241TypedMemberusgaapInvestmentIdentifierAxis/ROW-d4339b5e808545bc",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareRevolver-S675350PIK100Floor6282024TypedMemberusgaapInvestmentIdentifierAxis/ROW-1fbcd189630ebeaa",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoan-S675350PIK100Floor6282024TypedMemberusgaapInvestmentIdentifierAxis/ROW-ac9da165daa5dcd4",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoan-S675350PIK100Floor62820242TypedMemberusgaapInvestmentIdentifierAxis/ROW-9d4f4295045601d9",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoan-S675350PIK100Floor62820243TypedMemberusgaapInvestmentIdentifierAxis/ROW-fb8e219e63f0d535",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoan-S675350PIK100Floor62820241TypedMemberusgaapInvestmentIdentifierAxis/ROW-e672a6f061bd32af",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtCHVHoldingsLLCDigitalInfrastructureServicesPIKBridgeTermLoan1418S0001650PIK000Floor3272026TypedMemberusgaapInvestmentIdentifierAxis/ROW-e8f10b5c0bbcada7"
+    ],
+    "reviewed_rows": [
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoan-S675350PIK100Floor6282024TypedMemberusgaapInvestmentIdentifierAxis/ROW-34c35ecb815662ef",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoan-S675350PIK100Floor62820241TypedMemberusgaapInvestmentIdentifierAxis/ROW-d4339b5e808545bc",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareRevolver-S675350PIK100Floor6282024TypedMemberusgaapInvestmentIdentifierAxis/ROW-1fbcd189630ebeaa",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoan-S675350PIK100Floor6282024TypedMemberusgaapInvestmentIdentifierAxis/ROW-ac9da165daa5dcd4",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoan-S675350PIK100Floor62820242TypedMemberusgaapInvestmentIdentifierAxis/ROW-9d4f4295045601d9",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoan-S675350PIK100Floor62820243TypedMemberusgaapInvestmentIdentifierAxis/ROW-fb8e219e63f0d535",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoan-S675350PIK100Floor62820241TypedMemberusgaapInvestmentIdentifierAxis/ROW-e672a6f061bd32af",
+     "0001193125-24-138418/PAsOn03_31_2024_USCorporateDebt1stLienSeniorSecuredDebtCHVHoldingsLLCDigitalInfrastructureServicesPIKBridgeTermLoan1418S0001650PIK000Floor3272026TypedMemberusgaapInvestmentIdentifierAxis/ROW-e8f10b5c0bbcada7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-138418",
+     "text": "American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 6/28/2024 1,267,955 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-24-138418",
+     "text": "American Physician Partners, LLC (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 6/28/2024 954,790 817,051 -"
+    },
+    {
+     "accession": "0001193125-24-138418",
+     "text": "American Physician Partners, LLC (7) Healthcare Revolver - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 6/28/2024 346,322 345,024 -"
+    },
+    {
+     "accession": "0001193125-24-138418",
+     "text": "American Physician Partners, LLC (7) Healthcare Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 6/28/2024 6,834,836 5,733,816 -"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters",
+    "rows printing a coupon below their PIK (CHV bridge 2024-03-31; Penn TRGRP, Gryphon, Smile Brands, Magaya 2026-03-31): the printed figures cannot be read as all-in, left as tagged"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank, convention-printed-pik-above-printed-rate for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_6e96e6f89c96",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675350PIK100Floor12312024TypedMemberusgaapInvestmentIdentifierAxis/ROW-9fb4670bbf82257b",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675350PIK100Floor123120241TypedMemberusgaapInvestmentIdentifierAxis/ROW-39c73beffbcd3fdc",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareRevolverS675350PIK100Floor12312024TypedMemberusgaapInvestmentIdentifierAxis/ROW-cf1a4aab0b3cd845",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor12312024TypedMemberusgaapInvestmentIdentifierAxis/ROW-1019a6d7c08e5123",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor123120241TypedMemberusgaapInvestmentIdentifierAxis/ROW-9faec188c504de96",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor123120242TypedMemberusgaapInvestmentIdentifierAxis/ROW-e3bd319b935312ea",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor123120243TypedMemberusgaapInvestmentIdentifierAxis/ROW-2b07c234fbaa6304"
+    ],
+    "reviewed_rows": [
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675350PIK100Floor12312024TypedMemberusgaapInvestmentIdentifierAxis/ROW-9fb4670bbf82257b",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareDelayedDrawTermLoanS675350PIK100Floor123120241TypedMemberusgaapInvestmentIdentifierAxis/ROW-39c73beffbcd3fdc",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareRevolverS675350PIK100Floor12312024TypedMemberusgaapInvestmentIdentifierAxis/ROW-cf1a4aab0b3cd845",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor12312024TypedMemberusgaapInvestmentIdentifierAxis/ROW-1019a6d7c08e5123",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor123120241TypedMemberusgaapInvestmentIdentifierAxis/ROW-9faec188c504de96",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor123120242TypedMemberusgaapInvestmentIdentifierAxis/ROW-e3bd319b935312ea",
+     "0001193125-24-200574/PAsOn06_30_2024_USCorporateDebt1stLienSeniorSecuredDebtAmericanPhysicianPartnersLLCHealthcareTermLoanS675350PIK100Floor123120243TypedMemberusgaapInvestmentIdentifierAxis/ROW-2b07c234fbaa6304"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-200574",
+     "text": "American Physician Partners, LLC (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/31/2024 949,042 817,051 -"
+    },
+    {
+     "accession": "0001193125-24-200574",
+     "text": "American Physician Partners, LLC (1) (7) Healthcare Delayed Draw Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/31/2024 1,260,322 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-24-200574",
+     "text": "American Physician Partners, LLC (7) Healthcare Revolver - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/31/2024 346,322 345,024 -"
+    },
+    {
+     "accession": "0001193125-24-200574",
+     "text": "American Physician Partners, LLC (7) Healthcare Term Loan - (S + 6.75 %; 3.50 % PIK; 1.00 % Floor) 12/31/2024 2,682,124 2,278,901 -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_8f58b2ec6566",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-126944/C_9c4be542-7ab8-4dc8-b7a2-dcf2ccb431f5/ROW-8c3e274a4911d532",
+     "0000950170-24-126944/C_6da99d03-0d51-4843-bcf2-786ab75970d8/ROW-db9155b9c820d97b",
+     "0000950170-24-126944/C_4de36a8e-f7a5-4e0c-8a86-07d7ccd9d85e/ROW-8a611c9557c1a6b8",
+     "0000950170-24-126944/C_5d07a2d9-8b65-44f7-bf02-1d4ab933df79/ROW-386d1c7a14591069",
+     "0000950170-24-126944/C_3d30dae2-b2fd-4d0b-aa76-da1ff6be4076/ROW-2b8475eab2d6ad53",
+     "0000950170-24-126944/C_1c2d42de-25c0-4c11-8a8c-df69d53d31b2/ROW-1076941d864bfd5f",
+     "0000950170-24-126944/C_2ed2c53b-2af7-4e4c-aace-990163dd4306/ROW-f43c81b15ac4c72e",
+     "0000950170-24-126944/C_b358c378-2af2-438a-a02c-f37f45b58d89/ROW-f614a1647ad427c2",
+     "0000950170-24-126944/C_f04252e4-0de0-493c-8747-225136fc8e25/ROW-e990fe66832defc0",
+     "0000950170-24-126944/C_2c7d2940-0861-4442-8dbe-dd06abc766ae/ROW-88756f191b9ba0a1",
+     "0000950170-24-126944/C_ee08d5bb-7cae-494d-911b-844d2fd0c178/ROW-07d1675da9db279c",
+     "0000950170-24-126944/C_eccb7b1e-12d8-44d3-9b6e-38de1e9111e2/ROW-1977f64adbd4cf84",
+     "0000950170-24-126944/C_7d713f54-aedc-4167-bf45-8b524073c3fa/ROW-8df36d1b1e397001",
+     "0000950170-24-126944/C_3686e9cb-3e35-4d2b-bf50-f9f97e413985/ROW-1c252ade73894766"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-126944/C_9c4be542-7ab8-4dc8-b7a2-dcf2ccb431f5/ROW-8c3e274a4911d532",
+     "0000950170-24-126944/C_6da99d03-0d51-4843-bcf2-786ab75970d8/ROW-db9155b9c820d97b",
+     "0000950170-24-126944/C_4de36a8e-f7a5-4e0c-8a86-07d7ccd9d85e/ROW-8a611c9557c1a6b8",
+     "0000950170-24-126944/C_5d07a2d9-8b65-44f7-bf02-1d4ab933df79/ROW-386d1c7a14591069",
+     "0000950170-24-126944/C_3d30dae2-b2fd-4d0b-aa76-da1ff6be4076/ROW-2b8475eab2d6ad53",
+     "0000950170-24-126944/C_1c2d42de-25c0-4c11-8a8c-df69d53d31b2/ROW-1076941d864bfd5f",
+     "0000950170-24-126944/C_2ed2c53b-2af7-4e4c-aace-990163dd4306/ROW-f43c81b15ac4c72e",
+     "0000950170-24-126944/C_b358c378-2af2-438a-a02c-f37f45b58d89/ROW-f614a1647ad427c2",
+     "0000950170-24-126944/C_f04252e4-0de0-493c-8747-225136fc8e25/ROW-e990fe66832defc0",
+     "0000950170-24-126944/C_2c7d2940-0861-4442-8dbe-dd06abc766ae/ROW-88756f191b9ba0a1",
+     "0000950170-24-126944/C_ee08d5bb-7cae-494d-911b-844d2fd0c178/ROW-07d1675da9db279c",
+     "0000950170-24-126944/C_eccb7b1e-12d8-44d3-9b6e-38de1e9111e2/ROW-1977f64adbd4cf84",
+     "0000950170-24-126944/C_7d713f54-aedc-4167-bf45-8b524073c3fa/ROW-8df36d1b1e397001",
+     "0000950170-24-126944/C_3686e9cb-3e35-4d2b-bf50-f9f97e413985/ROW-1c252ade73894766"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Saviynt, Inc. Software & Tech Services Revolver - (S + 4.00 %; 1.00 % Floor; 3.50 % PIK) 12/22/2027 - ( 9,943 ) ( 7,622 )"
+    },
+    {
+     "accession": "0000950170-24-126944",
+     "text": "Single Digits, Inc. Digital Infrastructure & Services Term Loan - (S + 4.25 %; 1.00 % Floor; 3.00 % PIK) 6/22/2026 2,932,730 2,822,024 1,979,592"
+    },
+    {
+     "accession": "0000950170-24-126944",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - (S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 12/31/2024 1,260,322 1,082,011 -"
+    },
+    {
+     "accession": "0000950170-24-126944",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - (S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 12/31/2024 949,042 817,051 -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_b1469937587a",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-047686/C_e7868716-a4bf-4bfb-a04f-f18b73ebe6f8/ROW-e85f27f7bc0d98b6",
+     "0000950170-25-047686/C_5b3c2736-897b-4e68-afe4-831c338ff67b/ROW-fb948293bb58b4c7",
+     "0000950170-25-047686/C_bed56789-3c5d-4eb1-8148-0ba7660460a4/ROW-7a27676416f3fbf1",
+     "0000950170-25-047686/C_73be4044-05cc-46e3-a791-05a01611ddff/ROW-f43896650c9f05ac",
+     "0000950170-25-047686/C_a4180348-9122-497d-8eaf-4f138eb0675c/ROW-4290259366cef6f0",
+     "0000950170-25-047686/C_5b972ccb-a9a3-4ede-b397-6e8eed21b890/ROW-c669ff2c4eb11a75",
+     "0000950170-25-047686/C_6a711e15-aef2-47d2-920e-b07cba3af2d4/ROW-41e6e1e3182f945e",
+     "0000950170-25-047686/C_78a91786-5e4d-4895-87f8-27a2bed9afb4/ROW-847b3d3db7472057",
+     "0000950170-25-047686/C_6246d4e9-9f1f-42c0-81a2-442ec217d40e/ROW-d7e42845c5094393",
+     "0000950170-25-047686/C_7a6f725f-9da5-4f2a-a97b-40edfffa5d53/ROW-4b80ad646e52e5e6",
+     "0000950170-25-047686/C_3e55587d-565b-4e15-8e59-a15c17d72c2d/ROW-682f3fc119cd872d",
+     "0000950170-25-047686/C_abd4cf51-d176-4c6a-8710-64504203dce2/ROW-e1a6c606f36f0d2b"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-047686/C_e7868716-a4bf-4bfb-a04f-f18b73ebe6f8/ROW-e85f27f7bc0d98b6",
+     "0000950170-25-047686/C_5b3c2736-897b-4e68-afe4-831c338ff67b/ROW-fb948293bb58b4c7",
+     "0000950170-25-047686/C_bed56789-3c5d-4eb1-8148-0ba7660460a4/ROW-7a27676416f3fbf1",
+     "0000950170-25-047686/C_73be4044-05cc-46e3-a791-05a01611ddff/ROW-f43896650c9f05ac",
+     "0000950170-25-047686/C_a4180348-9122-497d-8eaf-4f138eb0675c/ROW-4290259366cef6f0",
+     "0000950170-25-047686/C_5b972ccb-a9a3-4ede-b397-6e8eed21b890/ROW-c669ff2c4eb11a75",
+     "0000950170-25-047686/C_6a711e15-aef2-47d2-920e-b07cba3af2d4/ROW-41e6e1e3182f945e",
+     "0000950170-25-047686/C_78a91786-5e4d-4895-87f8-27a2bed9afb4/ROW-847b3d3db7472057",
+     "0000950170-25-047686/C_6246d4e9-9f1f-42c0-81a2-442ec217d40e/ROW-d7e42845c5094393",
+     "0000950170-25-047686/C_7a6f725f-9da5-4f2a-a97b-40edfffa5d53/ROW-4b80ad646e52e5e6",
+     "0000950170-25-047686/C_3e55587d-565b-4e15-8e59-a15c17d72c2d/ROW-682f3fc119cd872d",
+     "0000950170-25-047686/C_abd4cf51-d176-4c6a-8710-64504203dce2/ROW-e1a6c606f36f0d2b"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Single Digits, Inc. Digital Infrastructure & Services Term Loan - (S + 4.25 %; 1.00 % Floor; 3.00 % PIK) 6/22/2026 2,932,730 2,709,917 1,686,320"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - (S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 1/31/2025 1,260,322 1,082,011 -"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - (S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 1/31/2025 949,042 817,051 -"
+    },
+    {
+     "accession": "0000950170-25-047686",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - (S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 1/31/2025 31,879 20,395 10,403"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_5154fd9701eb",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-072549/C_fdc8ac0b-a45e-4dca-a83b-5851000fbca2/ROW-d527378e9b8f690c",
+     "0000950170-25-072549/C_49e93d52-67cd-4ad4-abd0-92258fc216ff/ROW-54e362872927967b",
+     "0000950170-25-072549/C_d90edf04-9b79-48f0-83c6-5d15d9f3c1c7/ROW-b6b3e9cdcdb732bf",
+     "0000950170-25-072549/C_e09ce1dd-ec3b-413a-8557-f8b7f74e8e61/ROW-b6959e88885f0766",
+     "0000950170-25-072549/C_8fb369bd-b62c-4ff4-bf1d-070bd5c320b5/ROW-1ebb5f447f876c6e",
+     "0000950170-25-072549/C_64528e41-0f8b-4e4b-b1f2-a8339525977b/ROW-4d157529dd3118a5",
+     "0000950170-25-072549/C_c3cd161e-ed22-4c4d-8780-faa9989b8b8b/ROW-69682eaaa6a560c5",
+     "0000950170-25-072549/C_5cd975f7-79e1-4e37-8b15-d740de32dada/ROW-47ce2f4fd5f79139",
+     "0000950170-25-072549/C_977d33a8-22df-4835-955e-062b2f722c7e/ROW-411a9d7ca911d6bc",
+     "0000950170-25-072549/C_018ca54c-f94d-4d57-896f-9faddc9d10d0/ROW-a0793a9fe5f3f7e6",
+     "0000950170-25-072549/C_a98256d9-7aef-460c-b1c6-164480c3c334/ROW-1cb30521fd8ba185",
+     "0000950170-25-072549/C_f1e53912-b645-4a46-b80b-9201f01e9380/ROW-d4152200a6e43af5",
+     "0000950170-25-072549/C_0b02f0b8-8095-4791-bb20-07b653d6609a/ROW-8d1fd987013325b6"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-072549/C_fdc8ac0b-a45e-4dca-a83b-5851000fbca2/ROW-d527378e9b8f690c",
+     "0000950170-25-072549/C_49e93d52-67cd-4ad4-abd0-92258fc216ff/ROW-54e362872927967b",
+     "0000950170-25-072549/C_d90edf04-9b79-48f0-83c6-5d15d9f3c1c7/ROW-b6b3e9cdcdb732bf",
+     "0000950170-25-072549/C_e09ce1dd-ec3b-413a-8557-f8b7f74e8e61/ROW-b6959e88885f0766",
+     "0000950170-25-072549/C_8fb369bd-b62c-4ff4-bf1d-070bd5c320b5/ROW-1ebb5f447f876c6e",
+     "0000950170-25-072549/C_64528e41-0f8b-4e4b-b1f2-a8339525977b/ROW-4d157529dd3118a5",
+     "0000950170-25-072549/C_c3cd161e-ed22-4c4d-8780-faa9989b8b8b/ROW-69682eaaa6a560c5",
+     "0000950170-25-072549/C_5cd975f7-79e1-4e37-8b15-d740de32dada/ROW-47ce2f4fd5f79139",
+     "0000950170-25-072549/C_977d33a8-22df-4835-955e-062b2f722c7e/ROW-411a9d7ca911d6bc",
+     "0000950170-25-072549/C_018ca54c-f94d-4d57-896f-9faddc9d10d0/ROW-a0793a9fe5f3f7e6",
+     "0000950170-25-072549/C_a98256d9-7aef-460c-b1c6-164480c3c334/ROW-1cb30521fd8ba185",
+     "0000950170-25-072549/C_f1e53912-b645-4a46-b80b-9201f01e9380/ROW-d4152200a6e43af5",
+     "0000950170-25-072549/C_0b02f0b8-8095-4791-bb20-07b653d6609a/ROW-8d1fd987013325b6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 6/30/2025 1,260,322 1,082,011 -"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 6/30/2025 949,042 817,051 -"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "American Physician Partners, LLC Healthcare Revolver - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 6/30/2025 346,322 345,024 -"
+    },
+    {
+     "accession": "0000950170-25-072549",
+     "text": "American Physician Partners, LLC Healthcare Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 6/30/2025 6,791,604 5,733,816 -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_3c2d4c0b6a55",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-108839/C_6cbb8e06-d3a3-4fcc-bc6a-c98fd14d3d15/ROW-da633310a870c4ad",
+     "0000950170-25-108839/C_a6b90b1d-3e61-403b-aac7-2d0c04cbb6d6/ROW-b0b98e224ac74c5a",
+     "0000950170-25-108839/C_0f4cd88e-dd3b-48f3-a71f-24151788f676/ROW-c2b64f55bc39dbd2",
+     "0000950170-25-108839/C_189ceca7-e4bd-466a-92bf-7eb5d7efda54/ROW-7d74ae300c2d68df",
+     "0000950170-25-108839/C_593b855e-03bc-4370-84ca-cbbda155382c/ROW-5eda0b93eee44ea2",
+     "0000950170-25-108839/C_56983efe-69eb-443c-970f-7bd34f061971/ROW-8bb564e44baf3229",
+     "0000950170-25-108839/C_30ec70fc-125a-4703-99ce-352c6f493e79/ROW-d4110bb7fc0bbf57",
+     "0000950170-25-108839/C_1b57569a-faac-4221-af2b-562d0f630a68/ROW-c5b55437df4b9e05",
+     "0000950170-25-108839/C_6bdf7537-d030-421a-817e-142f8c70193b/ROW-661f95b454f40701",
+     "0000950170-25-108839/C_ce9c8d3c-6745-4afd-a9a2-0919eb5afa89/ROW-4edcf3ee0acce3c6",
+     "0000950170-25-108839/C_71414631-3e9c-4ccf-870d-4158e974195c/ROW-5e426759966301b6"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-108839/C_6cbb8e06-d3a3-4fcc-bc6a-c98fd14d3d15/ROW-da633310a870c4ad",
+     "0000950170-25-108839/C_a6b90b1d-3e61-403b-aac7-2d0c04cbb6d6/ROW-b0b98e224ac74c5a",
+     "0000950170-25-108839/C_0f4cd88e-dd3b-48f3-a71f-24151788f676/ROW-c2b64f55bc39dbd2",
+     "0000950170-25-108839/C_189ceca7-e4bd-466a-92bf-7eb5d7efda54/ROW-7d74ae300c2d68df",
+     "0000950170-25-108839/C_593b855e-03bc-4370-84ca-cbbda155382c/ROW-5eda0b93eee44ea2",
+     "0000950170-25-108839/C_56983efe-69eb-443c-970f-7bd34f061971/ROW-8bb564e44baf3229",
+     "0000950170-25-108839/C_30ec70fc-125a-4703-99ce-352c6f493e79/ROW-d4110bb7fc0bbf57",
+     "0000950170-25-108839/C_1b57569a-faac-4221-af2b-562d0f630a68/ROW-c5b55437df4b9e05",
+     "0000950170-25-108839/C_6bdf7537-d030-421a-817e-142f8c70193b/ROW-661f95b454f40701",
+     "0000950170-25-108839/C_ce9c8d3c-6745-4afd-a9a2-0919eb5afa89/ROW-4edcf3ee0acce3c6",
+     "0000950170-25-108839/C_71414631-3e9c-4ccf-870d-4158e974195c/ROW-5e426759966301b6"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "CHV Holdings LLC Digital Infrastructure & Services Revolver - ( S + 4.00 %; 1.00 % Floor; 4.75 % PIK) 3/27/2029 - ( 23,280 ) -"
+    },
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Penn TRGRP Holdings LLC Software & Tech Services Revolver - ( S + 1.5 %; 0.75 % Floor; 6.00 % PIK) 9/27/2030 - ( 15,862 ) -"
+    },
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Sauce Labs Inc Software & Tech Services Revolver - ( S + 5.5 %; 1.00 % Floor; 0.5 % PIK) 8/16/2027 - ( 9,292 ) ( 22,432 )"
+    },
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Saviynt, Inc. Software & Tech Services Revolver - ( S + 3.00 %; 1.00 % Floor; 2.75 % PIK) 2/18/2030 - ( 6,653 ) -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_f339bfdfcb77",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-277881/C_4563d23b-2351-4c1a-bf23-d49e0384346f/ROW-94cbb21b9d02e7ac",
+     "0001193125-25-277881/C_733b9fbc-c27a-4479-b229-e272eb294849/ROW-c9294c798bf6ccfa",
+     "0001193125-25-277881/C_b9817f42-59be-4e9c-8983-e8bb53c1a5c6/ROW-36da9a953c91b413",
+     "0001193125-25-277881/C_0dc2d846-e11d-46b7-b84b-f2d9cfa10b88/ROW-4d4962adc847e2d1",
+     "0001193125-25-277881/C_301b4667-da6e-45bf-aa4d-f94fba971099/ROW-3f0a4d72158eace2",
+     "0001193125-25-277881/C_814bd097-bdb5-44b6-968f-140e20b95671/ROW-bb05fbf0842a16ff",
+     "0001193125-25-277881/C_fd8efddf-3e2f-4575-8546-6395fa2ff3de/ROW-8d26c612a88e44db",
+     "0001193125-25-277881/C_ab4d3724-056b-4f20-9ced-6d2ea94be9d6/ROW-feeef4f8649fa56b",
+     "0001193125-25-277881/C_519aaf6e-6141-44aa-9c48-a0fa6eab57c4/ROW-899d4f7c83db807d",
+     "0001193125-25-277881/C_b0a0ebf0-1cdd-427b-bd07-292dfc30a458/ROW-556f6418bab54600",
+     "0001193125-25-277881/C_371c8d65-dbbd-47cb-8247-074e16535e60/ROW-76d8977cd7f1f21d"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-277881/C_4563d23b-2351-4c1a-bf23-d49e0384346f/ROW-94cbb21b9d02e7ac",
+     "0001193125-25-277881/C_733b9fbc-c27a-4479-b229-e272eb294849/ROW-c9294c798bf6ccfa",
+     "0001193125-25-277881/C_b9817f42-59be-4e9c-8983-e8bb53c1a5c6/ROW-36da9a953c91b413",
+     "0001193125-25-277881/C_0dc2d846-e11d-46b7-b84b-f2d9cfa10b88/ROW-4d4962adc847e2d1",
+     "0001193125-25-277881/C_301b4667-da6e-45bf-aa4d-f94fba971099/ROW-3f0a4d72158eace2",
+     "0001193125-25-277881/C_814bd097-bdb5-44b6-968f-140e20b95671/ROW-bb05fbf0842a16ff",
+     "0001193125-25-277881/C_fd8efddf-3e2f-4575-8546-6395fa2ff3de/ROW-8d26c612a88e44db",
+     "0001193125-25-277881/C_ab4d3724-056b-4f20-9ced-6d2ea94be9d6/ROW-feeef4f8649fa56b",
+     "0001193125-25-277881/C_519aaf6e-6141-44aa-9c48-a0fa6eab57c4/ROW-899d4f7c83db807d",
+     "0001193125-25-277881/C_b0a0ebf0-1cdd-427b-bd07-292dfc30a458/ROW-556f6418bab54600",
+     "0001193125-25-277881/C_371c8d65-dbbd-47cb-8247-074e16535e60/ROW-76d8977cd7f1f21d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277881",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.5 % PIK) 12/31/2025 1,260,321 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-25-277881",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.5 % PIK) 12/31/2025 949,042 817,051 -"
+    },
+    {
+     "accession": "0001193125-25-277881",
+     "text": "American Physician Partners, LLC Healthcare Revolver - ( S + 6.75 %; 1.00 % Floor; 3.5 % PIK) 12/31/2025 346,322 345,024 -"
+    },
+    {
+     "accession": "0001193125-25-277881",
+     "text": "American Physician Partners, LLC Healthcare Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 12/31/2025 6,791,604 5,733,816 -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_9d5de2bd18b9",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-124450/C_05d87e6c-5962-407f-bea0-b72c23e0a3d7/ROW-2cedbfed86e5c098",
+     "0001193125-26-124450/C_9f1ab104-74f1-4ef1-b4aa-0ff022978198/ROW-229b7d64cfd0c999",
+     "0001193125-26-124450/C_aecfe749-16eb-4165-9d05-4e3d5cf392ca/ROW-02dab38ef7806ef9",
+     "0001193125-26-124450/C_42b2c3df-d470-44b6-8581-e821a54c09c5/ROW-8c8df0fd50d9fe2e",
+     "0001193125-26-124450/C_1e8b571b-6243-4f49-90bd-92bddb403897/ROW-4b4ec0f73542a0b9",
+     "0001193125-26-124450/C_28cc7a58-05ed-4eda-95c5-3f2c6a1cafe2/ROW-fd3dd57e742e99f2",
+     "0001193125-26-124450/C_eb59ce18-7035-4d17-ad62-2c64c8c8d608/ROW-1f388664863767c7",
+     "0001193125-26-124450/C_4f58a687-f7e4-472e-86a0-5e55aad7e45c/ROW-898158b1cc48f8ec",
+     "0001193125-26-124450/C_832450bc-7c40-42d8-8696-d497d0c6495c/ROW-e3cef4b637ba70ea",
+     "0001193125-26-124450/C_77f4be3d-ac69-4df8-b53e-de1752d47574/ROW-5307f0a1a044bc37"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-124450/C_05d87e6c-5962-407f-bea0-b72c23e0a3d7/ROW-2cedbfed86e5c098",
+     "0001193125-26-124450/C_9f1ab104-74f1-4ef1-b4aa-0ff022978198/ROW-229b7d64cfd0c999",
+     "0001193125-26-124450/C_aecfe749-16eb-4165-9d05-4e3d5cf392ca/ROW-02dab38ef7806ef9",
+     "0001193125-26-124450/C_42b2c3df-d470-44b6-8581-e821a54c09c5/ROW-8c8df0fd50d9fe2e",
+     "0001193125-26-124450/C_1e8b571b-6243-4f49-90bd-92bddb403897/ROW-4b4ec0f73542a0b9",
+     "0001193125-26-124450/C_28cc7a58-05ed-4eda-95c5-3f2c6a1cafe2/ROW-fd3dd57e742e99f2",
+     "0001193125-26-124450/C_eb59ce18-7035-4d17-ad62-2c64c8c8d608/ROW-1f388664863767c7",
+     "0001193125-26-124450/C_4f58a687-f7e4-472e-86a0-5e55aad7e45c/ROW-898158b1cc48f8ec",
+     "0001193125-26-124450/C_832450bc-7c40-42d8-8696-d497d0c6495c/ROW-e3cef4b637ba70ea",
+     "0001193125-26-124450/C_77f4be3d-ac69-4df8-b53e-de1752d47574/ROW-5307f0a1a044bc37"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-124450",
+     "text": "CHV Holdings LLC Digital Infrastructure & Services Revolver - ( S + 4.00 %; 1.00 % Floor; 4.75 % PIK) 3/27/2029 - ( 20,136 ) -"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Sauce Labs Inc Software & Tech Services Revolver - ( S + 5.50 %; 1.00 % Floor; 0.5 % PIK) 8/16/2027 - ( 7,113 ) ( 35,250 )"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Saviynt, Inc. Software & Tech Services Revolver - ( S + 3.00 %; 1.00 % Floor; 2.75 % PIK) 2/18/2030 - ( 5,314 ) -"
+    },
+    {
+     "accession": "0001193125-26-124450",
+     "text": "Single Digits, Inc. Digital Infrastructure & Services Term Loan - ( S + 4.25 %; 1.00 % Floor; 3.00 % PIK) 6/22/2026 3,162,179 2,580,446 1,017,526"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_455197802b18",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-224298/C_0c751328-996e-4025-bb85-05e0f2702c83/ROW-571f0baba5751a96",
+     "0001193125-26-224298/C_e2bc9d00-7dce-4e61-987e-bcc29d2ba738/ROW-219427f30132ec6d",
+     "0001193125-26-224298/C_2dc26c96-864c-4a5b-a51f-3a9d1abb8223/ROW-b235fd2b7a4130ec",
+     "0001193125-26-224298/C_f81686d0-7097-4107-8357-b524cb10095e/ROW-a82d00d0e299f3cd",
+     "0001193125-26-224298/C_4b1f660d-2913-4311-b661-91122c378fd4/ROW-3e58a7dc614567ec",
+     "0001193125-26-224298/C_487b3203-3b6f-4435-b231-eca472f8bf50/ROW-f3559b2601799fa3",
+     "0001193125-26-224298/C_ac83bdc1-472b-4d2d-94db-638c01759137/ROW-9c2a98a2ad66cbf1",
+     "0001193125-26-224298/C_f2ba7ac1-37a3-42ce-9f66-165964718f42/ROW-1ece1c656c8352f0",
+     "0001193125-26-224298/C_4e54b607-4f6a-4adc-839c-e40425f4f3fb/ROW-b59f5d0f3079ed38",
+     "0001193125-26-224298/C_e15f9cce-71d6-49f7-8619-f305bab2826a/ROW-195cc23a66fd454b",
+     "0001193125-26-224298/C_0410d64e-7ca1-49e8-9139-845ef0ca9a6d/ROW-95c34464743d694e",
+     "0001193125-26-224298/C_59342a71-811a-446e-8312-5f4937201632/ROW-27bfe85e11250f5a",
+     "0001193125-26-224298/C_a57cfff3-8ee0-4186-8d14-714f588ef7ef/ROW-27edd2f871bec8dd"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-224298/C_0c751328-996e-4025-bb85-05e0f2702c83/ROW-571f0baba5751a96",
+     "0001193125-26-224298/C_e2bc9d00-7dce-4e61-987e-bcc29d2ba738/ROW-219427f30132ec6d",
+     "0001193125-26-224298/C_2dc26c96-864c-4a5b-a51f-3a9d1abb8223/ROW-b235fd2b7a4130ec",
+     "0001193125-26-224298/C_f81686d0-7097-4107-8357-b524cb10095e/ROW-a82d00d0e299f3cd",
+     "0001193125-26-224298/C_4b1f660d-2913-4311-b661-91122c378fd4/ROW-3e58a7dc614567ec",
+     "0001193125-26-224298/C_487b3203-3b6f-4435-b231-eca472f8bf50/ROW-f3559b2601799fa3",
+     "0001193125-26-224298/C_ac83bdc1-472b-4d2d-94db-638c01759137/ROW-9c2a98a2ad66cbf1",
+     "0001193125-26-224298/C_f2ba7ac1-37a3-42ce-9f66-165964718f42/ROW-1ece1c656c8352f0",
+     "0001193125-26-224298/C_4e54b607-4f6a-4adc-839c-e40425f4f3fb/ROW-b59f5d0f3079ed38",
+     "0001193125-26-224298/C_e15f9cce-71d6-49f7-8619-f305bab2826a/ROW-195cc23a66fd454b",
+     "0001193125-26-224298/C_0410d64e-7ca1-49e8-9139-845ef0ca9a6d/ROW-95c34464743d694e",
+     "0001193125-26-224298/C_59342a71-811a-446e-8312-5f4937201632/ROW-27bfe85e11250f5a",
+     "0001193125-26-224298/C_a57cfff3-8ee0-4186-8d14-714f588ef7ef/ROW-27edd2f871bec8dd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-224298",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 6/30/2026 1,260,321 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "American Physician Partners, LLC Healthcare Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 6/30/2026 949,042 817,051 -"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "American Physician Partners, LLC Healthcare Revolver - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 6/30/2026 346,322 345,024 -"
+    },
+    {
+     "accession": "0001193125-26-224298",
+     "text": "American Physician Partners, LLC Healthcare Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 6/30/2026 6,791,604 5,733,816 -"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters",
+    "rows printing a coupon below their PIK (CHV bridge 2024-03-31; Penn TRGRP, Gryphon, Smile Brands, Magaya 2026-03-31): the printed figures cannot be read as all-in, left as tagged"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank, convention-printed-pik-above-printed-rate for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_0e4d3dcc914f",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-352137/C_5dc668f6-4eab-4d6c-afaf-0f049153f347/ROW-8751b22ad384557f",
+     "0001193125-26-352137/C_93852251-59ae-4be0-a93d-1d632021de9d/ROW-dce796ef0f09cd35",
+     "0001193125-26-352137/C_bc2cfd7f-0941-4e46-8a26-fdec9f325c14/ROW-5a8602695b70ca64",
+     "0001193125-26-352137/C_49f898c0-1a7e-4590-a899-5ea225736e2b/ROW-38c09f7148adf98a",
+     "0001193125-26-352137/C_437f7b37-9f61-4559-a5f8-e1a398b5b7fa/ROW-069cb8bcc8cadb41",
+     "0001193125-26-352137/C_c0d42b35-4b79-432e-9ed2-109815831109/ROW-a54b7b5b4bec4f1c",
+     "0001193125-26-352137/C_804351c7-757f-473f-b07c-a070c29743b9/ROW-ab54117d30b8b9b7"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-352137/C_5dc668f6-4eab-4d6c-afaf-0f049153f347/ROW-8751b22ad384557f",
+     "0001193125-26-352137/C_93852251-59ae-4be0-a93d-1d632021de9d/ROW-dce796ef0f09cd35",
+     "0001193125-26-352137/C_bc2cfd7f-0941-4e46-8a26-fdec9f325c14/ROW-5a8602695b70ca64",
+     "0001193125-26-352137/C_49f898c0-1a7e-4590-a899-5ea225736e2b/ROW-38c09f7148adf98a",
+     "0001193125-26-352137/C_437f7b37-9f61-4559-a5f8-e1a398b5b7fa/ROW-069cb8bcc8cadb41",
+     "0001193125-26-352137/C_c0d42b35-4b79-432e-9ed2-109815831109/ROW-a54b7b5b4bec4f1c",
+     "0001193125-26-352137/C_804351c7-757f-473f-b07c-a070c29743b9/ROW-ab54117d30b8b9b7"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-352137",
+     "text": "American Physician Partners, LLC Health Care Providers & Services Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 12/31/2026 1,260,321 1,082,011 -"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "American Physician Partners, LLC Health Care Providers & Services Delayed Draw Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 12/31/2026 949,042 817,051 -"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "American Physician Partners, LLC Health Care Providers & Services Revolver - ( S + 6.75 %; 1.00 % Floor; 3.50 % PIK) 12/31/2026 346,322 345,024 -"
+    },
+    {
+     "accession": "0001193125-26-352137",
+     "text": "American Physician Partners, LLC Health Care Providers & Services Term Loan - ( S + 6.75 %; 1.00 % Floor; 3.00 % PIK) 12/31/2026 6,791,604 5,733,816 -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published rate on these rows is a tagged 0: rejected, the published interest_rate is blank (the page prints a dash) on every dash row; the re-verifier compares the tagged 0",
+    "the PIK part is mis-assigned: rejected, the printed PIK equals pik_rate on every row read",
+    "D-031 spread change in this run moved these rows: the flag is on interest_rate, not the spread; the population is the same rows as in rgA4 for these quarters"
+   ],
+   "next_action": "proposals convention-dash-printed-rate-published-blank for the owner or a check"
+  },
+  {
+   "finding_id": "RVQ_REV_e5fae5b38ffa",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2024-12-31|fmt_pik_rate|weak_metric",
+     "0000950170-25-047686/C_6dfe8a47-e104-4cbc-bfc8-3da3f5a54f80/ROW-70b7785b67d6d52f"
+    ],
+    "reviewed_rows": [
+     "0001634452|2024-12-31|fmt_pik_rate|weak_metric",
+     "0000950170-25-047686/C_6dfe8a47-e104-4cbc-bfc8-3da3f5a54f80/ROW-70b7785b67d6d52f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-047686",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 673,703 643,498 673,703"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "the weak format metric reflects a scale error: rejected, the only PIK above 20 % is Colo's printed whole-coupon PIK (see C117)"
+   ],
+   "next_action": "proposal PD-fmt_pik_rate-1634452-7 (pik-rate-above-20-as-printed)"
+  },
+  {
+   "finding_id": "RVQ_REV_f34e33805724",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2025-03-31|fmt_pik_rate|weak_metric",
+     "0000950170-25-072549/C_6f5de2d2-2f6d-4038-8dfd-dc124e953ae4/ROW-b3a21d52d8261e4d"
+    ],
+    "reviewed_rows": [
+     "0001634452|2025-03-31|fmt_pik_rate|weak_metric",
+     "0000950170-25-072549/C_6f5de2d2-2f6d-4038-8dfd-dc124e953ae4/ROW-b3a21d52d8261e4d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-072549",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 20.50 % ( 20.50 % PIK) 3/27/2026 284,880 261,736 284,880"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "the weak format metric reflects a scale error: rejected, the only PIK above 20 % is Colo's printed whole-coupon PIK (see C117)"
+   ],
+   "next_action": "proposal PD-fmt_pik_rate-1634452-7 (pik-rate-above-20-as-printed)"
+  },
+  {
+   "finding_id": "RVQ_REV_da6e6e245429",
+   "coverage": {
+    "affected_rows": [
+     "0001634452|2025-06-30|fmt_pik_rate|weak_metric",
+     "0000950170-25-108839/C_e2257002-0c1e-4f8c-bc10-d6d903f590de/ROW-2a3cb5ad0b978427"
+    ],
+    "reviewed_rows": [
+     "0001634452|2025-06-30|fmt_pik_rate|weak_metric",
+     "0000950170-25-108839/C_e2257002-0c1e-4f8c-bc10-d6d903f590de/ROW-2a3cb5ad0b978427"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-108839",
+     "text": "Colo Holdings LLC Digital Infrastructure & Services Term Loan 21.5 % ( 21.5 % PIK) 3/27/2026 177,369 147,559 177,369"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "the weak format metric reflects a scale error: rejected, the only PIK above 20 % is Colo's printed whole-coupon PIK (see C117)"
+   ],
+   "next_action": "proposal PD-fmt_pik_rate-1634452-7 (pik-rate-above-20-as-printed)"
+  },
+  {
+   "finding_id": "RVQ_BLK_b700098b6e07",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtMykaarmaAcquisitionLLCSoftwareTechServicesRevolver838S300375PIK100Floor03212028TypedMemberusgaapInvestmentIdentifierAxis/ROW-489771c2c25b1d59",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtMykaarmaAcquisitionLLCSoftwareTechServicesTermLoan838S300375PIK100Floor03212028TypedMemberusgaapInvestmentIdentifierAxis/ROW-3d0465457cb53e35"
+    ],
+    "reviewed_rows": [
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtMykaarmaAcquisitionLLCSoftwareTechServicesRevolver838S300375PIK100Floor03212028TypedMemberusgaapInvestmentIdentifierAxis/ROW-489771c2c25b1d59",
+     "0001193125-24-081951/PAsOn12_31_2023_USCorporateDebt1stLienSeniorSecuredDebtMykaarmaAcquisitionLLCSoftwareTechServicesTermLoan838S300375PIK100Floor03212028TypedMemberusgaapInvestmentIdentifierAxis/ROW-3d0465457cb53e35"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Mykaarma Acquisition LLC (2) (6) Software & Tech Services Revolver 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 - ( 8,417 ) ( 4,449 )"
+    },
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Mykaarma Acquisition LLC (3) (5) Software & Tech Services Term Loan 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 6,339,104 6,250,126 6,291,561"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published name differs from the page: rejected, the filing text prints 'Mykaarma Acquisition LLC' with the space; the page reader's printed row joined the words",
+    "other rows of the quarter flagged in rgA4 (four preferred rows named after their series, Freddy's / People's Care without apostrophes): fixed by row corrections in this run"
+   ],
+   "next_action": "proposal PD-issuer_name_printed-1634452-11 (issuer-name-printed-row-joins-words-the-page-separates); page-reader spacing to the orchestrator as an observation"
+  }
+ ],
+ "request_resolution_history": [
+  {
+   "request_id": "REQ-rfab-1",
+   "classification": "verification_bug",
+   "resolution": "deferred",
+   "response": "Deferred, not rejected. Letting a corrected issuer_name override the identifier-keyed entity extraction changes entity assignment for every fund that has issuer-name corrections, so it is a shared change that must be measured on the whole cohort (semantic diff plus regression of accepted funds) before it ships; that does not fit inside one fund's gate. Workaround in place and accepted for now: the four AmerCareRoyal rows are respelt so they no longer pull 14 other rows into West Dermatology; residual: those four rows keep canonical \"West Dermatology\" until the resolver is changed. Listed for the owner in the end-of-run report as a shared-code candidate. The finding effects stay as reported; nothing is accepted by this deferral. AMENDED: Classification corrected by the orchestrator after independent review rfabe: this is not a verification bug (no check is wrong) but a published-value defect in shared pipeline code. The four AmerCareRoyal rows at 2023-09-30 ($7.1M) publish the West Dermatology entity, canonical name and GICS (Health Care Services); they are now tracked by observation amercareroyal-2023-09-30-wrong-entity-canonical-gics. Remains deferred as a shared-code candidate for the owner (resolver precedence for corrected issuer names); the residual is the owner's to accept or not.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-237; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rfab-1",
+    "classification": "verification_bug",
+    "file": "pipeline/entity_resolution.py (build_entity_lookup / identifier LLM cache) via pipeline/unified_holdings.py _resolve_entities_in_build",
+    "what": "Let a row-corrected issuer_name win over the identifier-keyed LLM extraction when resolving the entity, or key the lookup by (issuer_name, identifier) rather than issuer_name alone.",
+    "why": "Correcting the issuer of 4 rows tagged on another company's member (AmerCareRoyal on West Dermatology members, 2023-09-30) moved every row of the fund with the same issuer string (14 rows, 2023-03-31 to 2024-06-30) into the West Dermatology entity; worked around by a distinct spelling, but those 4 rows keep canonical 'West Dermatology'.",
+    "next_action": "orchestrator: shared change in a worktree with a focused test (corrected name on a foreign member) and a cohort measurement; then drop the respelling"
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-23-277031",
+     "text": "AmerCareRoyal, LLC (1) (5) Services Term Loan 11.98 % (S + 6.50 %; 0.50 % PIK; 1.00 % Floor) 11/25/2025 4,100,950 4,002,424 4,100,950"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-rfab-2",
+   "classification": "verification_bug",
+   "resolution": "deferred",
+   "response": "Deferred, not rejected. Changing how the page reader joins adjacent spans alters printed_row text and therefore issuer_name_printed for every fund; it needs a cohort-wide measurement of findings cleared and created before it ships. Here it affects one finding (Mykaarma 2023-12-31), which stays outstanding with the fund agent's false-alarm proposal for the owner. Listed in the end-of-run report as a shared-code candidate (verification bug in the page reader).",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-237; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rfab-2",
+    "classification": "verification_bug",
+    "file": "pipeline/candidate_rules.py (issuer_name_printed) / page reader printed_row",
+    "what": "The page reader's printed_row joins words the filing prints in separate spans ('Mykaarma AcquisitionLLC'); issuer_name_printed then flags a correct name as spacing_only.",
+    "why": "One finding (2023-12-31) is outstanding only because of this; proposed as a false alarm.",
+    "next_action": "orchestrator: second rule batch (page-reader spacing) or accept the proposal"
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-081951",
+     "text": "Mykaarma Acquisition LLC (3) (5) Software & Tech Services Term Loan 8.38 % (S + 3.00 %; 3.75 % PIK; 1.00 % Floor) 03/21/2028 6,339,104 6,250,126 6,291,561"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-rfab-3",
+   "classification": "verification_bug",
+   "resolution": "implemented",
+   "response": "71 uncommitted context-keyed lines withdrawn by the fund agent under orchestrator authorisation (D-237); none in HEAD AMENDED: Classification corrected by the orchestrator after independent review rfabe: this was an edit to the fund's own uncommitted correction lines, not a verification bug. Its basis, the orchestrator's round-2 all-in test, was wrong (printed rate = base + cash margin is the D-031 shape, not evidence against it) and was withdrawn in round 3 (D-237). The same 71 lines were regenerated byte-identical in rfabf; net effect of this request on the published data: none.",
+   "authority": "orchestrator, D-237",
+   "original_request": {
+    "request_id": "REQ-rfab-3",
+    "classification": "verification_bug",
+    "file": "data/overrides/row_corrections.csv (lines written by this run)",
+    "what": "Withdraw the 71 context-keyed basis_spread lines this run wrote for 2023-03-31 / 2023-06-30 rows that the all-in test did not confirm (listed with line numbers and the value to go back to in scratch/fund_runs/0001634452/revert_held_lines_rfabc.csv), or allow me to remove them. The append-only rule and the helper's key (one line per row, field and context) leave no way to supersede them by appending.",
+    "why": "Without it these rows keep a D-031 spread the printed all-in rate does not support (CONTRADICTED 57, UNTESTABLE 14).",
+    "evidence": [
+     {
+      "accession": "0001193125-23-145163",
+      "text": "AmerCareRoyal, LLC (3) Business Services Term Loan 11.41% (S + 6.50%; 0.75% PIK; 1.00% Floor) 11/25/2025 510,571 498,708 505,465"
+     }
+    ],
+    "next_action": "orchestrator: delete the listed lines (or authorise me to), rebuild this fund, re-run the gate; the earlier gen_2023_rates spread (the cash margin) then applies"
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-23-145163",
+     "text": "AmerCareRoyal, LLC (3) Business Services Term Loan 11.41% (S + 6.50%; 0.75% PIK; 1.00% Floor) 11/25/2025 510,571 498,708 505,465"
+    }
+   ]
+  }
  ]
 }
