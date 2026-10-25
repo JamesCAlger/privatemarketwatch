@@ -305,60 +305,7 @@
 - shares_held_source = 
 - src_transforms = 
 
-### C007 | 0001899017 | 2026-06-30 | 0001193125-26-349812
-
-**Table header rows:** Interest | Maturity | Market | % of Members' // Portfolio Company | Investment Type | Index (1) | Floor (1) | Spread (1) | Rate | Date | Principal (2) | Cost | Value | Equity // U.S. Dollars // Healthcare & Pharmaceuticals
-
-**Lines printed before it:**
-- Pharmacy Partners(4) | First Lien Senior Secured Loan | SOFR | 1.50 | % | 6.50 % | 10.17 | % | 2/28/2029 | $ | 6,964 | 6,964 | 6,930
-- Psychiatric Medical Care LLC(4) | First Lien Senior Secured Loan | SOFR | 0.75 | % | 4.75 % | 8.43 | % | 7/1/2032 | $ | 4,975 | 4,915 | 4,913
-- Red Nucleus(4) | First Lien Senior Secured Loan | SOFR | 0.75 | % | 5.25 % | 9.08 | % | 10/17/2031 | $ | 6,927 | 6,875 | 6,893
-
-**The printed line** (cell text, then the facts tagged in that cell):
-1. `RedMed Operations (Collage Rehabilitation)(4)`
-2. `First Lien Senior Secured Loan`
-3. `SOFR`
-4. `1.00`  <- InvestmentInterestRateFloor = 0.01
-5. `%`
-6. `5.00 %`  <- InvestmentBasisSpreadVariableRate = 0.05
-7. `8.64`  <- InvestmentInterestRate = 0.0864
-8. `%`
-9. `2/28/2031`  <- InvestmentMaturityDate = 2/28/2031
-10. `13,628`  <- InvestmentOwnedBalancePrincipalAmount = 13628000.0
-11. `13,567`  <- InvestmentOwnedAtCost = 13567000.0
-12. `13,627`  <- InvestmentOwnedAtFairValue = 13627000.0
-
-**Lines printed after it:**
-- Vatica Health, Inc.(4) | First Lien Senior Secured Loan | SOFR | 0.75 | % | 4.25 % | 7.98 | % | 10/29/2032 | $ | 9,866 | 9,769 | 9,866
-
-**Facts on this context not on the printed line:** InvestmentVariableInterestRateTypeExtensibleEnumeration = http://fasb.org/us-gaap/2025#SecuredOvernightFinancingRateSo (hidden)
-
-**Member (identifier text):** `Healthcare & Pharmaceuticals RedMed Operations (Collage Rehabilitation) First Lien Senior Secured Loan SOFR Floor 1.00% Spread 5.00% Interest Rate 8.64% Maturity Date 2/28/2031`
-
-**Published:**
-- issuer_name = RedMed Operations (Collage Rehabilitation)
-- instrument_description = First Lien Senior Secured Loan SOFR Floor 1.00% Spread 5.00% Interest Rate 8.64% Maturity Date 2/28/2031
-- asset_category = LOAN
-- fair_value = 13627000.0  (tag: equal)
-- cost = 13567000.0  (tag: equal)
-- principal_amount = 13628000.0  (tag: equal)
-- principal_amount_currency = USD
-- shares_held = 
-- pct_of_net_assets = 
-- interest_rate = 8.64  (tag: equal)
-- basis_spread = 5.0  (tag: equal)
-- reference_rate_type = SOFR
-- coupon_type = Floating
-- pik_rate = 
-- maturity_date = 2031-02-28  (tag: equal)
-- corrected_fields = 
-- interest_rate_source = xbrl_field
-- basis_spread_source = xbrl_field
-- pik_rate_source = 
-- shares_held_source = 
-- src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
-
-### C008 | 0001899017 | 2025-09-30 | 0001193125-25-283129
+### C007 | 0001899017 | 2025-09-30 | 0001193125-25-283129
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3) // Non-Controlled/Non-Affiliate Investments
 
@@ -409,7 +356,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
 
-### C009 | 0001899017 | 2025-12-31 | 0001193125-26-104390
+### C008 | 0001899017 | 2025-12-31 | 0001193125-26-104390
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3) // Non-Controlled/Non-Affiliate Investments
 
@@ -460,7 +407,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
 
-### C010 | 0001899017 | 2024-06-30 | 0000950170-24-097161
+### C009 | 0001899017 | 2024-06-30 | 0000950170-24-097161
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/ Share (2) | Cost | Market Value | % of NAV (3) // Consumer goods: Durable
 
@@ -512,7 +459,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
 
-### C011 | 0001899017 | 2024-09-30 | 0000950170-24-127117
+### C010 | 0001899017 | 2024-09-30 | 0000950170-24-127117
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/ Share (2) | Cost | Market Value | % of NAV (3) // Media: Advertising, Printing & Publishing
 
@@ -563,7 +510,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
 
-### C012 | 0001899017 | 2025-12-31 | 0001193125-26-104390
+### C011 | 0001899017 | 2025-12-31 | 0001193125-26-104390
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3) // Non-Controlled/Non-Affiliate Investments
 
@@ -613,7 +560,7 @@
 - shares_held_source = 
 - src_transforms = shares_held:from_principal_tag
 
-### C013 | 0001899017 | 2024-12-31 | 0000950170-25-039445
+### C012 | 0001899017 | 2024-12-31 | 0000950170-25-039445
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/ Share (2) | Cost | Market Value | % of NAV (3) // Consumer goods: Non-durable
 
@@ -664,7 +611,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
 
-### C014 | 0001899017 | 2024-12-31 | 0000950170-25-039445
+### C013 | 0001899017 | 2024-12-31 | 0000950170-25-039445
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/ Share (2) | Cost | Market Value | % of NAV (3) // Healthcare & Pharmaceuticals
 
@@ -714,7 +661,7 @@
 - shares_held_source = 
 - src_transforms = shares_held:from_principal_tag
 
-### C015 | 0001899017 | 2025-09-30 | 0001193125-25-283129
+### C014 | 0001899017 | 2025-09-30 | 0001193125-25-283129
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3) // Non-Controlled/Non-Affiliate Investments // Capital Equipment
 
@@ -765,7 +712,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
 
-### C016 | 0001899017 | 2026-06-30 | 0001193125-26-349812
+### C015 | 0001899017 | 2026-06-30 | 0001193125-26-349812
 
 **Table header rows:** Portfolio Company (1) | Investment Type | Index (2) | Floor (2) | Spread (2) | Interest Rate | Maturity Date | Principal/Shares (3) | Cost | Market Value | % of Net Assets // Non-Controlled/Non-Affiliate Investments // FIRE: Insurance
 
@@ -817,7 +764,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
 
-### C017 | 0001899017 | 2025-12-31 | 0001193125-26-104390
+### C016 | 0001899017 | 2025-12-31 | 0001193125-26-104390
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3) // Non-Controlled/Non-Affiliate Investments
 
@@ -868,7 +815,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
 
-### C018 | 0001899017 | 2025-03-31 | 0000950170-25-072747
+### C017 | 0001899017 | 2025-03-31 | 0000950170-25-072747
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3) // Non-Controlled/Non-Affiliate Investments // Beverage, Food & Tobacco
 
@@ -919,7 +866,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
 
-### C019 | 0001899017 | 2024-12-31 | 0000950170-25-039445
+### C018 | 0001899017 | 2024-12-31 | 0000950170-25-039445
 
 **Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/ Share (2) | Cost | Market Value | % of NAV (3) // Hotel, Gaming & Leisure
 
@@ -971,7 +918,7 @@
 - shares_held_source = 
 - src_transforms = 
 
-### C020 | 0001899017 | 2026-06-30 | 0001193125-26-349812
+### C019 | 0001899017 | 2026-06-30 | 0001193125-26-349812
 
 **Table header rows:** Portfolio Company (1) | Investment Type | Index (2) | Floor (2) | Spread (2) | Interest Rate | Maturity Date | Principal/Shares (3) | Cost | Market Value | % of Net Assets // Non-Controlled/Non-Affiliate Investments // FIRE: Insurance
 
@@ -1016,6 +963,58 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2027-03-27  (tag: equal)
+- corrected_fields = 
+- interest_rate_source = xbrl_field
+- basis_spread_source = xbrl_field
+- pik_rate_source = 
+- shares_held_source = 
+- src_transforms = interest_rate:rate_x100;basis_spread:rate_x100
+
+### C020 | 0001899017 | 2025-06-30 | 0000950170-25-109036
+
+**Table header rows:** Portfolio Company | Investment Type | Index (1) | Spread (1) | Interest Rate | Maturity Date | Principal/Shares (2) | Cost | Market Value | % of NAV (3) // Non-Controlled/Non-Affiliate Investments // Consumer Goods: Durable
+
+**Lines printed before it:**
+- Avalon Bidco Limited (4)(5)(6)(9)(17)(21) | First Lien Senior Secured Loan - Delayed Draw | — | — | — | 4/16/2032 | £ | — | ( 4 | ) | ( 4 | )
+- Avalon Bidco Limited (6)(13)(17)(21) | First Lien Senior Secured Loan | SONIA | 6.25 % | 10.57 | % | 4/16/2032 | £ | 1,376 | 1,799 | 1,863
+- Cetera (21) | First Lien Senior Secured Loan | SOFR | 3.50 % | 7.83 | % | 8/9/2030 | $ | 3,980 | 3,970 | 3,992
+
+**The printed line** (cell text, then the facts tagged in that cell):
+1. `Choreo (13)(17)(18)`
+2. `First Lien Senior Secured Loan`
+3. `SOFR`
+4. `5.00 %`  <- InvestmentBasisSpreadVariableRate = 0.05
+5. `9.33`  <- InvestmentInterestRate = 0.0933
+6. `%`
+7. `2/18/2028`  <- InvestmentMaturityDate = 2/18/2028
+8. `1,234`  <- InvestmentOwnedBalancePrincipalAmount = 1234000.0
+9. `1,234`  <- InvestmentOwnedAtCost = 1234000.0
+10. `1,234`  <- InvestmentOwnedAtFairValue = 1234000.0
+
+**Lines printed after it:**
+- Choreo (5)(17)(21) | First Lien Senior Secured Loan - Delayed Draw | — | — | — | 2/18/2028 | $ | — | — | —
+- (blank)
+
+**Facts on this context not on the printed line:** InvestmentVariableInterestRateTypeExtensibleEnumeration = http://fasb.org/us-gaap/2025#SecuredOvernightFinancingRateSo (hidden)
+
+**Member (identifier text):** `Non Controlled/Non Affiliate Investments FIRE: Finance Choreo First Lien Senior Secured Loan SOFR Spread 5.00% Interest Rate 9.33% Maturity Date 2/18/2028`
+
+**Published:**
+- issuer_name = Choreo
+- instrument_description = First Lien Senior Secured Loan SOFR Spread 5.00% Interest Rate 9.33% Maturity Date 2/18/2028
+- asset_category = LOAN
+- fair_value = 1234000.0  (tag: equal)
+- cost = 1234000.0  (tag: equal)
+- principal_amount = 1234000.0  (tag: equal)
+- principal_amount_currency = USD
+- shares_held = 
+- pct_of_net_assets = 
+- interest_rate = 9.33  (tag: equal)
+- basis_spread = 5.0  (tag: equal)
+- reference_rate_type = SOFR
+- coupon_type = Floating
+- pik_rate = 
+- maturity_date = 2028-02-18  (tag: equal)
 - corrected_fields = 
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field

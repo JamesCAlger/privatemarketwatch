@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "bnxd",
+ "sandbox": "rfbne",
  "dispositions": [
   {
    "disposition_id": "PD-B01-1899017-1",
@@ -8,23 +8,48 @@
    "engine": "oracle",
    "rule_name": "B01",
    "reason_key": "b01-contexts-without-value-carry-no-position-value",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-06-30"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
    "statement": "The contexts without a fair value are lines the schedule prints with a dash in the Market Value column: undrawn revolvers and delayed draws with a negative cost from unamortised fees and no value (2 to 46 a quarter, 36 to 44 of them named revolver or delayed draw), and equity lines printed with dashes (Legacy Corporate Lending Class B at 2023-12-31, DTIQ's second equity line printing units 3,351 and dashes for cost and value). The build leaves them out (excluded_no_fair_value). Every printed position with a value is published and published fair value equals the filed total in all 13 quarters. No fix applies: there is no value to publish.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-26-104390",
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104390",
      "verbatim": "CorePower Yoga, LLC (5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 4/30/2031 $ - ( 3 ) -",
-     "quote": "'CorePower Yoga, LLC (5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 4/30/2031 $ - ( 3 ) -': 2025-12-31, undrawn line, cost (3) thousand, value printed as a dash."},
-    {"source": "filing", "accession": "0001193125-26-349812",
+     "quote": "'CorePower Yoga, LLC (5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 4/30/2031 $ - ( 3 ) -': 2025-12-31, undrawn line, cost (3) thousand, value printed as a dash."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349812",
      "verbatim": "AMI (4)(5) First Lien Senior Secured Loan - Revolver - - - - 10/17/2031 $ - ( 13 ) -",
-     "quote": "'AMI (4)(5) First Lien Senior Secured Loan - Revolver - - - - 10/17/2031 $ - ( 13 ) -': 2026-06-30, the same shape."},
-    {"source": "filing", "accession": "0001193125-26-349812",
+     "quote": "'AMI (4)(5) First Lien Senior Secured Loan - Revolver - - - - 10/17/2031 $ - ( 13 ) -': 2026-06-30, the same shape."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349812",
      "verbatim": "DTIQ (4)(6)(11) Equity Interest - - - - - 3,351 - -",
-     "quote": "'DTIQ (4)(6)(11) Equity Interest - - - - - 3,351 - -': 2026-06-30, an equity line with units and no cost or value."},
-    {"source": "filing", "accession": "0000950170-24-037134",
+     "quote": "'DTIQ (4)(6)(11) Equity Interest - - - - - 3,351 - -': 2026-06-30, an equity line with units and no cost or value."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Legacy Corporate Lending HoldCo, LLC, Class B (7)(10)(11)(12)(17 ) Equity Interest - - - - - - -",
-     "quote": "'Legacy Corporate Lending HoldCo, LLC, Class B (7)(10)(11)(12)(17 ) Equity Interest - - - - - - -': 2023-12-31, every cell a dash."}
+     "quote": "'Legacy Corporate Lending HoldCo, LLC, Class B (7)(10)(11)(12)(17 ) Equity Interest - - - - - - -': 2023-12-31, every cell a dash."
+    }
    ],
    "addresses_verdict": {
     "2024-09-30": "The reviewer read the 27 leaves without value as section headings (subtotal_leak). They are not headings: they are position contexts the page prints with a dash for value (undrawn revolvers and delayed draws), and no heading is published; published 512,500 thousand ex cash equals the printed Investments Total 512,500.",
@@ -40,17 +65,28 @@
    "engine": "oracle",
    "rule_name": "B02",
    "reason_key": "b02-twin-undrawn-lines-printed-separately",
-   "ciks": ["0001899017"],
-   "quarters": ["2025-12-31", "2026-06-30"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2025-12-31",
+    "2026-06-30"
+   ],
    "statement": "The two repeated position keys are Galanthus Group Holdings' two undrawn delayed-draw lines, one in dollars and one in sterling, with the same maturity and no rate; the page prints them as two lines with their own cost and value, and the filer gives them two members ('... Maturity Date 12/24/2031' and '... One'). They are two commitments, not a repeated fact. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-26-104390",
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104390",
      "verbatim": "Galanthus Group Holdings, Limited (4)(5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 12/24/2031 GBP - ( 28 ) ( 28 )",
-     "quote": "'Galanthus Group Holdings, Limited (4)(5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 12/24/2031 GBP - ( 28 ) ( 28 )': 2025-12-31, the sterling line; the dollar line follows with '$ - ( 28 ) ( 28 )'."},
-    {"source": "filing", "accession": "0001193125-26-349812",
+     "quote": "'Galanthus Group Holdings, Limited (4)(5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 12/24/2031 GBP - ( 28 ) ( 28 )': 2025-12-31, the sterling line; the dollar line follows with '$ - ( 28 ) ( 28 )'."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349812",
      "verbatim": "Galanthus Group Holdings, Limited (4)(5)(7) First Lien Senior Secured Loan - Delayed Draw - - - - 12/24/2031 GBP - ( 26 ) ( 56 )",
-     "quote": "'Galanthus Group Holdings, Limited (4)(5)(7) First Lien Senior Secured Loan - Delayed Draw - - - - 12/24/2031 GBP - ( 26 ) ( 56 )': 2026-06-30, the sterling line beside the dollar line '$ - ( 25 ) ( 56 )'."}
+     "quote": "'Galanthus Group Holdings, Limited (4)(5)(7) First Lien Senior Secured Loan - Delayed Draw - - - - 12/24/2031 GBP - ( 26 ) ( 56 )': 2026-06-30, the sterling line beside the dollar line '$ - ( 25 ) ( 56 )'."
+    }
    ],
    "addresses_verdict": {
     "2025-12-31": "The reviewer found the ATS loan in the main schedule (11,875) and again in the SLP II schedule (4,949) and called it a look-through duplicate. Those SLP II rows are now all marked underlying_schedule (the pinned exclusion rule that removed 18 of them is pulled) and are outside the published basis; the two keys the check still counts at 2025-12-31 are the Galanthus twin undrawn lines, printed separately."
@@ -65,17 +101,21 @@
    "engine": "row_validation",
    "rule_name": "X11",
    "reason_key": "x11-undrawn-line-par-printed-as-dash",
-   "ciks": ["0001899017"],
-   "quarters": ["2025-12-31", "2026-06-30"],
-   "statement": "The flagged rows are undrawn lines that print a dash for par: R1 RCM's delayed draw (2025-12-31) and Atlas Bidco's Australian-dollar revolver (2026-06-30), with a small negative cost and value from fees. The published par is blank because the page prints none. No fix applies.",
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
+   "statement": "The flagged row is R1 RCM's undrawn delayed draw at 2025-12-31: the page prints a dash for par, cost ( 1 ) and value 1 thousand; the published par is blank because the page prints none and the published value +1,000 is the printed figure. No fix applies. (Round 2, D-238: the 2026-06-30 Atlas Bidco revolver was not this shape. The page prints value ( 3 ) but the tag has no sign, so +3,000 was published and X11 fired on it; the value is now corrected to -3,000 from the page and that finding is gone.)",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-26-104390",
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104390",
      "verbatim": "R1 RCM Inc. (5)(9)(21) First Lien Senior Secured Loan - Delayed Draw - - - 11/19/2031 $ - ( 1 ) 1",
-     "quote": "'R1 RCM Inc. (5)(9)(21) First Lien Senior Secured Loan - Delayed Draw - - - 11/19/2031 $ - ( 1 ) 1': 2025-12-31, par printed as a dash."},
-    {"source": "filing", "accession": "0001193125-26-349812",
-     "verbatim": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )",
-     "quote": "'Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )': 2026-06-30, par printed as a dash."}
+     "quote": "'R1 RCM Inc. (5)(9)(21) First Lien Senior Secured Loan - Delayed Draw - - - 11/19/2031 $ - ( 1 ) 1': 2025-12-31, par printed as a dash."
+    }
    ],
    "rerun": "python scripts/v05_evidence/flagged.py bnxd X11 0001899017 2026-06-30",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -87,14 +127,21 @@
    "engine": "row_validation",
    "rule_name": "X07",
    "reason_key": "x07-value-above-cost-as-printed",
-   "ciks": ["0001899017"],
-   "quarters": ["2025-09-30"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
    "statement": "The flagged row is the fund's preferred equity interest in its joint venture Bain Capital Senior Loan Program II, cost 10 thousand and value 105 thousand as printed; the published cost 10,000 and value 105,000 are the printed figures. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-25-283129",
+    {
+     "source": "filing",
+     "accession": "0001193125-25-283129",
      "verbatim": "Bain Capital Senior Loan Program II, LLC (6)(7)(10)(28) Preferred Equity Interest Investment Vehicles - - - - 10 10 105",
-     "quote": "'Bain Capital Senior Loan Program II, LLC (6)(7)(10)(28) Preferred Equity Interest Investment Vehicles - - - - 10 10 105': 2025-09-30, cost 10, value 105 (thousands)."}
+     "quote": "'Bain Capital Senior Loan Program II, LLC (6)(7)(10)(28) Preferred Equity Interest Investment Vehicles - - - - 10 10 105': 2025-09-30, cost 10, value 105 (thousands)."
+    }
    ],
    "addresses_verdict": {
     "2025-09-30": "The reviewer cited a Chex Finer Foods line '10,000 9,939 10,000' and said cost was taken from the principal cell. That line is in the SLP II schedule of the notes (after the SLP II heading), not the fund's schedule, and it is not the flagged row: the flagged context is the SLP II preferred equity interest, whose printed cost 10 and value 105 are what is published."
@@ -109,17 +156,28 @@
    "engine": "source_recon",
    "rule_name": "blocking_fair_value_scale_or_unit_candidate",
    "reason_key": "src-value-tagged-in-thousands-corrected-from-the-page",
-   "ciks": ["0001899017"],
-   "quarters": ["2025-09-30", "2025-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
    "statement": "Four rows are tagged decimals 0 with the thousands figure as the value (KAMC Holdings term loan and revolver at 2025-09-30, fair value only; Spotless Brands delayed draw and Spindrift subordinated debt at 2025-12-31, all three money facts). The published rows carry the printed figures through row corrections (D-127) and published fair value equals the filed total in both quarters; the source check compares with the raw tag and keeps firing. No fix applies to the filing.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-25-283129",
+    {
+     "source": "filing",
+     "accession": "0001193125-25-283129",
      "verbatim": "KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556",
-     "quote": "'KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556': value 32,556 thousand, tagged 32,556 at decimals 0."},
-    {"source": "filing", "accession": "0001193125-26-104390",
+     "quote": "'KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556': value 32,556 thousand, tagged 32,556 at decimals 0."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104390",
      "verbatim": "Spotless Brands (17)(18) First Lien Senior Secured Loan - Delayed Draw SOFR 5.50 % 9.37 % 7/25/2028 $ 9,618 9,586 9,618",
-     "quote": "'Spotless Brands (17)(18) First Lien Senior Secured Loan - Delayed Draw SOFR 5.50 % 9.37 % 7/25/2028 $ 9,618 9,586 9,618': tagged 9,618 / 9,586 / 9,618 dollars."}
+     "quote": "'Spotless Brands (17)(18) First Lien Senior Secured Loan - Delayed Draw SOFR 5.50 % 9.37 % 7/25/2028 $ 9,618 9,586 9,618': tagged 9,618 / 9,586 / 9,618 dollars."
+    }
    ],
    "rerun": "grep 1899017 data/overrides/row_corrections.csv",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -131,17 +189,28 @@
    "engine": "row_validation",
    "rule_name": "SRC_BDC03",
    "reason_key": "src-value-tagged-in-thousands-corrected-from-the-page",
-   "ciks": ["0001899017"],
-   "quarters": ["2025-09-30", "2025-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
    "statement": "The two rows a quarter flagged as differing from their source fact are the same four unscaled rows (KAMC Holdings x2 at 2025-09-30; Spotless Brands and Spindrift at 2025-12-31): published at the printed value by row correction, tagged a thousand times smaller. No fix applies to the filing.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-26-104390",
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104390",
      "verbatim": "Spindrift (15)(17) Subordinated Debt - 13.75 % PIK 13.75 % 2/19/2033 $ 1,574 1,536 1,574",
-     "quote": "'Spindrift (15)(17) Subordinated Debt - 13.75 % PIK 13.75 % 2/19/2033 $ 1,574 1,536 1,574': tagged 1,574 / 1,536 / 1,574 dollars."},
-    {"source": "filing", "accession": "0001193125-25-283129",
+     "quote": "'Spindrift (15)(17) Subordinated Debt - 13.75 % PIK 13.75 % 2/19/2033 $ 1,574 1,536 1,574': tagged 1,574 / 1,536 / 1,574 dollars."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-283129",
      "verbatim": "KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556",
-     "quote": "'KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556': fair value tagged 32,556 dollars."}
+     "quote": "'KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556': fair value tagged 32,556 dollars."
+    }
    ],
    "rerun": "grep SRC_BDC03 scratch/fund_sandbox/bnxd/output/row_validation_issues.csv",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -153,20 +222,43 @@
    "engine": "fund_financials",
    "rule_name": "F30",
    "reason_key": "fund-row-before-operations-began",
-   "ciks": ["0001899017"],
-   "quarters": ["2022-12-31", "2023-03-31", "2023-06-30", "2023-09-30"],
-   "statement": "Before operations began (first investments in the 2023 fourth quarter) net assets were negative and the balance sheet prints net asset value per share in brackets: (5,444.70) on 200 seed shares, then (20.16), (29.53), (19.75). Those printed negative figures are now published (highlights wrapper, D-1899017 loop); the check's range 0.01 to 1000 rejects any negative value. Not a data defect.",
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2022-09-30",
+    "2022-12-31",
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30"
+   ],
+   "statement": "Before operations began (first investments in the 2023 fourth quarter) net assets were negative and the filings print net asset value per share in brackets: (1,787.20) at 2022-09-30 on 200 seed shares (printed as the prior-year column of the 2023-09-30 10-Q), (5,444.70) at 2022-12-31, then (20.16), (29.53), (19.75). Those printed negative figures are now published (highlights wrapper figure_corrections; 2022-09-30 added in the rfbn loop, which also cleared E04 and nav_identity for that quarter); the check's range 0.01 to 1000 rejects any negative value. Not a data defect.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001104659-23-040212",
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062818",
+     "verbatim": "Net asset value per Common Share ( 19.75 ) ( 1,787.20 ) ( 19.75 ) ( 1,787.20 )",
+     "quote": "'Net asset value per Common Share ( 19.75 ) ( 1,787.20 ) ( 19.75 ) ( 1,787.20 )': 10-Q 2023-09-30, statement of changes in net assets; the second and fourth columns are the prior-year periods ending 2022-09-30: (1,787.20), now published as -1787.2."
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-23-040212",
      "verbatim": "As of December 31, 2022, the Company had not commenced operations.",
-     "quote": "'As of December 31, 2022, the Company had not commenced operations.'"},
-    {"source": "filing", "accession": "0001104659-23-060706",
+     "quote": "'As of December 31, 2022, the Company had not commenced operations.'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-23-060706",
      "verbatim": "Total liabilities and total net assets $ 2,336,085 $ 1,282,157 Net asset value per share ( 20.16 ) ( 5,",
-     "quote": "'Total liabilities and total net assets $ 2,336,085 $ 1,282,157 Net asset value per share ( 20.16 ) ( 5,': 2023-03-31 and 2022-12-31, negative as printed."},
-    {"source": "filing", "accession": "0000950170-23-062818",
+     "quote": "'Total liabilities and total net assets $ 2,336,085 $ 1,282,157 Net asset value per share ( 20.16 ) ( 5,': 2023-03-31 and 2022-12-31, negative as printed."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062818",
      "verbatim": "Total Liabilities and Total Net Assets $ 31,021,803 $ 1,282,157 Net asset value per share ( 19.75 )",
-     "quote": "'Total Liabilities and Total Net Assets $ 31,021,803 $ 1,282,157 Net asset value per share ( 19.75 )': 2023-09-30."}
+     "quote": "'Total Liabilities and Total Net Assets $ 31,021,803 $ 1,282,157 Net asset value per share ( 19.75 )': 2023-09-30."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/fund_financials_validation_current.csv | grep F30",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -178,17 +270,27 @@
    "engine": "fund_financials",
    "rule_name": "F22",
    "reason_key": "fund-row-before-operations-began",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-09-30"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
    "statement": "Before operations began: the one holding (the controlled affiliate Legacy Corporate Lending, 1,215,000 dollars) over negative net assets of (1,188,729) gives a percent of net assets of -102 pct. Both figures are the printed ones. Not a data defect.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-23-062818",
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062818",
      "verbatim": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ -",
-     "quote": "'Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ -': the quarter's only investment."},
-    {"source": "filing", "accession": "0000950170-23-062818",
+     "quote": "'Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ -': the quarter's only investment."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062818",
      "verbatim": "Total Net Assets $ ( 1,188,729 ) $ ( 1,088,939 )",
-     "quote": "'Total Net Assets $ ( 1,188,729 ) $ ( 1,088,939 )': negative net assets."}
+     "quote": "'Total Net Assets $ ( 1,188,729 ) $ ( 1,088,939 )': negative net assets."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/fund_financials_validation_current.csv | grep F22",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -200,14 +302,21 @@
    "engine": "fund_financials",
    "rule_name": "F20",
    "reason_key": "f20-canonical-gav-reads-total-assets-where-investments-line-printed",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-09-30"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
    "statement": "F20 reports the canonical GAV status as FAIL against total assets (1,215,000 over 31,021,803 = 0.039). The quarter's investments line is printed (1,215,000) and is now the fund figure (highlights wrapper); the GAV reconciliation row of this build compares with it and passes (ratio 1.0), and the same correction cleared F20 at 2023-06-30. Total assets are 96 pct cash in escrow and subscriptions receivable before operations began. Published equals the printed investments line.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-23-062818",
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062818",
      "verbatim": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000",
-     "quote": "'Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000': investments 1,215,000; the rest of total assets is cash and receivables."}
+     "quote": "'Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000': investments 1,215,000; the rest of total assets is cash and receivables."
+    }
    ],
    "rerun": "python scripts/v05_evidence/gav.py bnxd 0001899017",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -219,20 +328,35 @@
    "engine": "fund_strategy",
    "rule_name": "fund_strategy_validation",
    "reason_key": "fund-strategy-seed-equity-holding-before-operations",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-06-30", "2023-09-30", "2023-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
    "statement": "Before operations began the fund's only holding was its equity in the controlled affiliate Legacy Corporate Lending HoldCo (646,250 and 1,215,000 dollars), so the observed mix is private equity and the private-credit share is 0 (FS02 at 2023-06-30 and 2023-09-30); at 2023-12-31 the fund started lending and the observed strategy changed to private credit (FS04, share 0.89). Both readings follow the printed holdings. Not a data defect.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-23-041723",
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041723",
      "verbatim": "The Company had not commenced operations as of June 30, 2023 .",
-     "quote": "'The Company had not commenced operations as of June 30, 2023 .'"},
-    {"source": "filing", "accession": "0000950170-23-041723",
+     "quote": "'The Company had not commenced operations as of June 30, 2023 .'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-041723",
      "verbatim": "Controlled affiliate investment (amortized cost of $ 646,250 and $ 0 , respectively) $ 646,250 $ -",
-     "quote": "'Controlled affiliate investment (amortized cost of $ 646,250 and $ 0 , respectively) $ 646,250 $ -': the one holding."},
-    {"source": "filing", "accession": "0000950170-24-037134",
+     "quote": "'Controlled affiliate investment (amortized cost of $ 646,250 and $ 0 , respectively) $ 646,250 $ -': the one holding."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Investments Total $ 192,731 $ 192,754 174.8 %",
-     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31, first quarter of lending."}
+     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31, first quarter of lending."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/fund_strategy_validation.csv",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -244,17 +368,27 @@
    "engine": "oracle",
    "rule_name": "D01",
    "reason_key": "growth-heuristics-while-fund-ramps",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
    "statement": "First quarter of operations: positions went from 3 to 32 and investments from 1,215,000 dollars to 192,754 thousand. Published investments equal the printed totals in both quarters.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-037134",
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Investments Total $ 192,731 $ 192,754 174.8 %",
-     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31 (thousands)."},
-    {"source": "filing", "accession": "0000950170-23-062818",
+     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31 (thousands)."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062818",
      "verbatim": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ -",
-     "quote": "'Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ -': 2023-09-30 (dollars)."}
+     "quote": "'Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ -': 2023-09-30 (dollars)."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/oracle/check_results.csv",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -266,14 +400,21 @@
    "engine": "oracle",
    "rule_name": "D02",
    "reason_key": "growth-heuristics-while-fund-ramps",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
    "statement": "First quarter of operations: fair value grew 174 times (1,215,000 dollars of seed equity to 211,749 thousand including the money-market row) as the fund began lending. Published investments equal the printed totals in both quarters.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-037134",
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Investments Total $ 192,731 $ 192,754 174.8 %",
-     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31."}
+     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/oracle/check_results.csv",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -285,14 +426,21 @@
    "engine": "row_validation",
    "rule_name": "CNT01",
    "reason_key": "growth-heuristics-while-fund-ramps",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
    "statement": "Position count 3 to 32 (ratio 10.7) in the first quarter of operations. Published investments equal the printed totals in both quarters.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-037134",
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Investments Total $ 192,731 $ 192,754 174.8 %",
-     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31."}
+     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31."
+    }
    ],
    "rerun": "grep CNT01 scratch/fund_sandbox/bnxd/output/row_validation_issues.csv",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -304,17 +452,28 @@
    "engine": "fund_financials",
    "rule_name": "F24",
    "reason_key": "growth-heuristics-while-fund-ramps",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-12-31", "2024-03-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
    "statement": "First and second quarters of operations: positions 3 to 32 (10.7x) and 32 to 74 (2.3x) as the fund invested the capital raised. Published investments equal the printed totals (192,754 and 309,947 thousand).",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-060419",
+    {
+     "source": "filing",
+     "accession": "0000950170-24-060419",
      "verbatim": "Investments Total $ 310,771 $ 309,947 225.1 %",
-     "quote": "'Investments Total $ 310,771 $ 309,947 225.1 %': 2024-03-31."},
-    {"source": "filing", "accession": "0000950170-24-037134",
+     "quote": "'Investments Total $ 310,771 $ 309,947 225.1 %': 2024-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Investments Total $ 192,731 $ 192,754 174.8 %",
-     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31."}
+     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/fund_financials_validation_current.csv | grep F24",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -326,17 +485,28 @@
    "engine": "fund_financials",
    "rule_name": "F25",
    "reason_key": "growth-heuristics-while-fund-ramps",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-09-30", "2023-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31"
+   ],
    "statement": "Before and at the start of operations holdings and total assets move apart: at 2023-09-30 total assets rose to 31,021,803 dollars, mostly cash in escrow and subscriptions receivable, while the one holding rose to 1,215,000; at 2023-12-31 holdings jumped to 192,754 thousand as the cash was invested. All figures are the printed ones.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-23-062818",
+    {
+     "source": "filing",
+     "accession": "0000950170-23-062818",
      "verbatim": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000",
-     "quote": "'Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000': 2023-09-30 balance sheet."},
-    {"source": "filing", "accession": "0000950170-24-037134",
+     "quote": "'Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000': 2023-09-30 balance sheet."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Investments Total $ 192,731 $ 192,754 174.8 %",
-     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31."}
+     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 %': 2023-12-31."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/fund_financials_validation_current.csv | grep F25",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -348,14 +518,21 @@
    "engine": "oracle",
    "rule_name": "A04",
    "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
    "statement": "A04 compares all published rows, including the Goldman Sachs money-market row (18,995 thousand) the schedule prints after the investments, with the filed investments figure 192,754, which leaves cash equivalents out (the balance sheet carries them under cash; wrapper investments_total_excludes = cash_rows). Published non-cash rows equal 192,754 exactly; the 9.9 pct gap is the money-market row. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-037134",
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995",
-     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995': the investments total and the money-market row after it."}
+     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995': the investments total and the money-market row after it."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/oracle/check_results.csv | grep A04",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -367,14 +544,21 @@
    "engine": "oracle",
    "rule_name": "E01",
    "reason_key": "oracle-holdings-with-cash-rows-against-ex-cash-investments-total",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
    "statement": "E01 makes the same comparison as A04 (holdings 211,749 thousand against 192,754): the published sum includes the 18,995 money-market row, the filed figure is the investments line without cash equivalents. Published non-cash rows equal the filed figure exactly. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-037134",
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Cash Equivalents Total $ 18,995 $ 18,995 17.2 % Investments and Cash Equivalents Total $ 211,726 $ 211,749",
-     "quote": "'Cash Equivalents Total $ 18,995 $ 18,995 17.2 % Investments and Cash Equivalents Total $ 211,726 $ 211,749': published 211,749 is the total with cash equivalents."}
+     "quote": "'Cash Equivalents Total $ 18,995 $ 18,995 17.2 % Investments and Cash Equivalents Total $ 211,726 $ 211,749': published 211,749 is the total with cash equivalents."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/oracle/check_results.csv | grep E01",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -386,14 +570,21 @@
    "engine": "conservation",
    "rule_name": "cost_conservation",
    "reason_key": "cost-conservation-cash-rows-against-ex-cash-cost-total",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
    "statement": "Published cost (all rows) is 211,726 thousand against the filed investments cost 192,731 (9.86 pct over). The difference is exactly the cost of the money-market row, 18,995, which the page prints after the investments total. The fair-value rule splits cash rows out for this filer (investments_total_excludes = cash_rows), the cost rule does not. Published non-cash cost equals the filed 192,731. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-037134",
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995",
-     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995': cost 192,731 ex cash; the money-market row cost 18,995."}
+     "quote": "'Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995': cost 192,731 ex cash; the money-market row cost 18,995."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/shadow/validation_results_ledger.csv | grep cost_conservation",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
@@ -405,18 +596,124 @@
    "engine": "oracle",
    "rule_name": "C04",
    "reason_key": "c04-share-cell-printed-as-dash",
-   "ciks": ["0001899017"],
-   "quarters": ["2023-12-31"],
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
    "statement": "Of the two published equity rows of 2023-12-31, Legacy Corporate Lending's preferred carries its printed count (4 thousand, now published 4,000) and the Class A equity interest prints a dash in the Principal/Shares column and has no count tag. 1 of 2 is below the check's 70 pct. Nothing to publish for the second row.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-24-037134",
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037134",
      "verbatim": "Legacy Corporate Lending HoldCo, LLC, Class A (7)(10)(11)(12)(17 ) Equity Interest - - - - - 90 90",
-     "quote": "'Legacy Corporate Lending HoldCo, LLC, Class A (7)(10)(11)(12)(17 ) Equity Interest - - - - - 90 90': units printed as a dash."}
+     "quote": "'Legacy Corporate Lending HoldCo, LLC, Class A (7)(10)(11)(12)(17 ) Equity Interest - - - - - 90 90': units printed as a dash."
+    }
    ],
    "rerun": "grep 1899017 scratch/fund_sandbox/bnxd/output/oracle/check_results.csv | grep C04",
    "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop); not accepted by the owner",
    "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-pik_printed-1899017-20",
+   "class": "rule_problem",
+   "engine": "identity",
+   "rule_name": "pik_printed",
+   "reason_key": "pik-printed-rule-reads-margin-of-whole-coupon-pik-loan",
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "The 9 flagged rows in these 7 quarters are floating loans whose whole margin is printed as PIK, with the benchmark in the Index column and the coupon in the rate column: Masco subordinated debt 'EURIBOR 10.00 % PIK 13.25 %' (2024-12-31 to 2025-09-30) and Cube's sterling delayed draw 'SONIA 10.00 % PIK' 14.22 / 14.10 / 13.73 (2025-06-30 to 2026-06-30). Par grows by about half the coupon each half-year, not by the margin: Masco EUR 5,000 to 5,331 (5,000 x (1 + 13.25 pct / 2) = 5,331.25) and 5,666 at 2025-12-31; Cube GBP 2,040 to 2,185 (+7.1 pct, 14.10 / 2 = 7.05) and 2,185 to 2,334 (+6.8 pct, 13.73 / 2 = 6.87). So the whole coupon is paid in kind and, under the owner's D-232 reading, the build publishes pik_rate = the printed coupon, basis_spread = the margin, coupon type floating and interest_rate_cash 0 (row corrections, rfbn loop). The rule reads the margin printed before 'PIK' as the PIK rate and flags the difference. Its D-232 repair accepts the coupon only when the margin follows '<benchmark> +', and this filer prints the benchmark in its own cell with no '+' (REQ-rfbn-1). A rule problem, not a data error. CAVEAT for REQ-rfbn-1: the printed format alone is not enough. Cube's dollar delayed draw at 2025-09-30 prints the same form ('SOFR 7.44 % PIK 11.44 %'), but its PIK tag is 7.44 and the same filing's other Cube dollar line prints 3.00 cash + 4.44 PIK. The whole-coupon reading was withdrawn there in round 2 (D-238), and that row now publishes pik 7.44 as printed. A format-only repair of the rule would have accepted the contradicted pik 11.44 without a word. The repair should also require par growth of about the coupon over a period (or another check independent of the format), and this proposal covers only the 9 rows that have it.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-072747",
+     "verbatim": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,000 5,348 5,271",
+     "quote": "'Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,000 5,348 5,271': 2025-03-31, par EUR 5,000."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-109036",
+     "verbatim": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,331 5,724 6,146",
+     "quote": "'Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,331 5,724 6,146': 2025-06-30, par EUR 5,331 = 5,000 grown by half the 13.25 coupon; published pik_rate 13.25, spread 10."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104390",
+     "verbatim": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 13.73 % 5/22/2032 GBP 2,185 2,992",
+     "quote": "'Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 13.73 % 5/22/2032 GBP 2,185 2,992': 2025-12-31, par GBP 2,185 after 2,040 at 2025-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349812",
+     "verbatim": "Cube (4)(7) First Lien Senior Secured Loan - Delayed Draw SONIA - 10.00 % PIK 13.73 % 5/22/2032 GBP 2,334 3,190 3,098",
+     "quote": "'Cube (4)(7) First Lien Senior Secured Loan - Delayed Draw SONIA - 10.00 % PIK 13.73 % 5/22/2032 GBP 2,334 3,190 3,098': 2026-06-30, par GBP 2,334 = 2,185 grown by about half the coupon."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-104390",
+     "verbatim": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 9.25 % ( 0.75 % PIK) 12.23 % 10/4/2032 EUR 5,666 6,111 6,716",
+     "quote": "'Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 9.25 % ( 0.75 % PIK) 12.23 % 10/4/2032 EUR 5,666 6,111 6,716': 2025-12-31, par EUR 5,666 = 5,331 grown by about half the 13.25 coupon over the half-year (terms then changed)."
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-SRC_BDC03-1899017-21",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "SRC_BDC03",
+   "reason_key": "src-fv-sign-corrected-from-page",
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Atlas Bidco's undrawn AUD revolver at 2026-06-30: the page prints cost ( 3 ) and value ( 3 ) thousand; the fair value fact (context C_d1954ba6) is 3000 with no sign while the cost fact on the same context carries it. The published value is the printed -3,000 (row correction of round 2, D-238). The source check compares with the raw tag (3,000) and fires on the sign. The finding exists only because of the correction. No fix applies to the filing. Before the correction X11 fired on the same row because +3,000 made it look like a drawn loan.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349812",
+     "verbatim": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )",
+     "quote": "'Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )': 2026-06-30, value printed in brackets (negative), published -3,000."
+    }
+   ]
+  },
+  {
+   "disposition_id": "PD-SRCFV-1899017-22",
+   "class": "as_filed",
+   "engine": "source_recon",
+   "rule_name": "blocking_fair_value_disagreement",
+   "reason_key": "src-fv-sign-corrected-from-page",
+   "ciks": [
+    "0001899017"
+   ],
+   "quarters": [
+    "2026-06-30"
+   ],
+   "statement": "Atlas Bidco's undrawn AUD revolver at 2026-06-30: the page prints cost ( 3 ) and value ( 3 ) thousand; the fair value fact (context C_d1954ba6) is 3000 with no sign while the cost fact on the same context carries it. The published value is the printed -3,000 (row correction of round 2, D-238). The source check compares with the raw tag (3,000) and fires on the sign. The finding exists only because of the correction. No fix applies to the filing. Before the correction X11 fired on the same row because +3,000 made it look like a drawn loan.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-26-349812",
+     "verbatim": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )",
+     "quote": "'Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )': 2026-06-30, value printed in brackets (negative), published -3,000."
+    }
+   ]
   }
  ]
 }

@@ -3,8 +3,10 @@
  "cik": "0001899017",
  "entity_name": "Bain Capital Private Credit",
  "version": 1,
- "notes": "Fund-clearing loop 2026-10-16 (bnx sandboxes). Before operations began (net assets negative until 2023-12-31) the balance sheet prints net asset value per share in brackets, negative; the build published it positive (5,444.70, 20.16, 29.53, 19.75), against negative net assets. Each figure below is the printed one with its sign. 2022-09-30 (published 1,787.2) has no cached filing that prints it and is left.",
+ "notes": "Fund-clearing loop 2026-10-16 (bnx sandboxes). Before operations began (net assets negative until 2023-12-31) the balance sheet prints net asset value per share in brackets, negative; the build published it positive (5,444.70, 20.16, 29.53, 19.75), against negative net assets. Each figure below is the printed one with its sign. 2022-09-30 (published 1,787.2) is printed as a prior-year comparative in the 2023-09-30 10-Q and was added on 2026-10-25.",
  "figure_corrections": [
+  {"report_date": "2022-09-30", "field": "nav_per_share", "value": -1787.20,
+   "evidence": "0000950170-23-062818 (10-Q 2023-09-30), statement of changes in net assets, prior-year column (three and nine months to 2022-09-30): 'Net assets, end of period $ ( 1,188,729 ) $ ( 357,440 ) $ ( 1,188,729 ) $ ( 357,440 ) Net asset value per Common Share ( 19.75 ) ( 1,787.20 ) ( 19.75 ) ( 1,787.20 )'. Added in the rfbn loop (2026-10-25); the earlier note that no cached filing prints the quarter was wrong."},
   {"report_date": "2022-12-31", "field": "nav_per_share", "value": -5444.70,
    "evidence": "0001104659-23-040212 (10-K 2022): 'Total liabilities and total net assets $ 1,282,157 $ - Net asset value per share $ (5,444.70 ) $ -'."},
   {"report_date": "2023-03-31", "field": "nav_per_share", "value": -20.16,

@@ -1,0 +1,1067 @@
+{
+ "reviewer_id": "claude-independent-reviewer-bain-rfbne",
+ "report_digest": "9fd3477009585d0beddce4c193039bac6b881566461a3089bcc9c1510100e9e5",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001899017_2025-09-30_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_db733d9262",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: rfbne source_reconciliation_residual_classification SRCRES-000001 (2025-09-30, 2 issues, source 33,499 vs output 33,499,000; identifiers KAMC term loan and revolver) = affected rows ROW-5347b4c2fbf8c330 (C_22bde640) and ROW-9e4961c64b0a6e7f (C_36e891cf). Raw iXBRL: these two InvestmentOwnedAtFairValue facts are tagged decimals=0 with no scale (32,556 and 943); the third decimals=0 FV fact (33,499, C_d67808e9) is the KAMC issuer subtotal; 707 other FV facts are decimals=-3. Published 32,556,000 and 943,000 equal the printed lines; both D-127 corrections show 'Row correction applied' in rebuild.log. Totals tie ex cash 13/13 (gate).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-283129",
+     "text": "KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001899017_2025-12-31_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_c6a4f06fb8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: SRCRES-000002 (2025-12-31, 2 issues, 11,192 vs 11,192,000; Spindrift and Spotless) = ROW-d76dac801d193f69 (C_4f113ac1) and ROW-c5e88b7cee9a7f51 (C_942fddf9). Raw iXBRL: all three money facts on both contexts are decimals=0 with no scale (1,574/1,536/1,574 and 9,618/9,586/9,618); 742 other FV facts are decimals=-3. Published values equal the printed lines; 6 D-127 corrections applied in rebuild.log.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Spotless Brands (17)(18) First Lien Senior Secured Loan - Delayed Draw SOFR 5.50 % 9.37 % 7/25/2028 $ 9,618 9,586 9,618"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Spindrift (15)(17) Subordinated Debt - 13.75 % PIK 13.75 % 2/19/2033 $ 1,574 1,536 1,574"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001899017_2026-06-30_BLOCKING_FAIR_VALUE_DISAGREEMENT_ada4c2377b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: rfbne source_reconciliation_residual_classification SRCRES-000003 (2026-06-30, 1 issue, blocking_fair_value_disagreement, source 3,000 vs output -3,000, Atlas Bidco revolver identifier) = ROW-70310825f3c2ec86 = affected rows. Same mechanism as RVQ_BLK_c68a03a85d54: published equals the page, the tag lacks the sign. PD-SRCFV-1899017-22 is sound; it should stay pinned to this one row and quarter, since a carried-forward sign reason must not excuse a future tag/page sign disagreement without reading the page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3cabf1a5c0dc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results A04 2023-12-31 FAIL: holdings 211,749,000 vs 192,754,000 (9.9 pct). rfbne published rows sum 211,749,000 including one money-market row of 18,995,000; ex cash 192,754,000 equals the printed Investments Total. Gate totals use the ex-cash basis and tie in all 13 quarters. Rule-basis mismatch, not a data defect.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995"
+    },
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Cash Equivalents Total $ 18,995 $ 18,995 17.2 % Investments and Cash Equivalents Total $ 211,726 $ 211,749"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3da62c487701",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results E01 2023-12-31 FAIL with the same 211,749,000 vs 192,754,000; the printed 'Investments and Cash Equivalents Total' is 211,749 and the difference is exactly the 18,995 money-market row (reconstructed from rfbne holdings).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Cash Equivalents Total $ 18,995 $ 18,995 17.2 % Investments and Cash Equivalents Total $ 211,726 $ 211,749"
+    },
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_57cd4d2fea9c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: page_rule_findings pik_printed 2025-12-31 = one row ROW-6a23bc9f1604a7eb (Cube GBP, kind pik_value_mismatch) = affected rows. Par evidence read on the pages: Masco EUR 5,000 (2024-12-31, 2025-03-31) -> 5,331 (2025-06-30, 2025-09-30) -> 5,666 (2025-12-31), +6.62 and +6.28 pct per half-year against 13.25 / 2 = 6.63 pct (a 10.00 margin-only PIK gives 5 pct; cost follows 5,348 -> 5,724 -> 6,111); Cube GBP 2,000 -> 2,040 (stub from the May 2025 draw) -> 2,185 -> 2,185 -> 2,334, +7.1 and +6.8 pct per half-year against 7.05 and 6.87. The filer's own PIK tag is the margin (10.00 on Masco C_d739c307), so the whole-coupon reading rests on par growth, which is strong for these rows. Published (rfbne): pik_rate = printed coupon, basis_spread 10.00, Floating, interest_rate_cash 0. The rule fires because the benchmark sits in its own cell (REQ-rfbn-1).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 13.73 % 5/22/2032 GBP 2,185 2,992 2,939"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 13.73 % 5/22/2032 GBP 2,185 2,992 2,882"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_776a59811f9b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Re-reviewed after the label edit (report diff against my dumps of the cf0118 version: only this investigation changed). Coverage verified: rfbne page_rule_findings pik_printed 2025-09-30 = ROW-5d597a55636ef766 (Masco) and ROW-80fada22f8d58391 (Cube GBP), kind pik_value_mismatch = affected and reviewed rows. Both publish pik = printed coupon (13.25, 14.10), spread 10.00, Floating, cash 0. Par growth read on the pages supports the whole-coupon reading: Masco EUR 5,000 -> 5,331 -> 5,666 (13.25/2 per half-year), Cube GBP 2,040 -> 2,185 -> 2,334 (about 7 pct per half-year); the rule fires because the benchmark sits in its own cell (REQ-rfbn-1, deferred). false_alarm under PD-pik_printed-1899017-20 is right. The Cube dollar row ROW-337dc1a8c820a500 is correctly left out (not flagged; pik 7.44 as printed, split recorded in the observation).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-283129",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,331 5,724 6,205"
+    },
+    {
+     "accession": "0001193125-25-283129",
+     "text": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 14.10 % 5/22/2032 GBP 2,040 2,798 2,746"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 9.25 % ( 0.75 % PIK) 12.23 % 10/4/2032 EUR 5,666 6,111 6,716"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 13.73 % 5/22/2032 GBP 2,185 2,992 2,939"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_790e92237ee7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: pik_printed 2026-03-31 = ROW-3edcaadecdbbd9a0 (Cube GBP) = affected rows. Par unchanged 2,185 over the quarter, consistent with half-yearly capitalisation. Par evidence read on the pages: Masco EUR 5,000 (2024-12-31, 2025-03-31) -> 5,331 (2025-06-30, 2025-09-30) -> 5,666 (2025-12-31), +6.62 and +6.28 pct per half-year against 13.25 / 2 = 6.63 pct (a 10.00 margin-only PIK gives 5 pct; cost follows 5,348 -> 5,724 -> 6,111); Cube GBP 2,000 -> 2,040 (stub from the May 2025 draw) -> 2,185 -> 2,185 -> 2,334, +7.1 and +6.8 pct per half-year against 7.05 and 6.87. The filer's own PIK tag is the margin (10.00 on Masco C_d739c307), so the whole-coupon reading rests on par growth, which is strong for these rows. Published (rfbne): pik_rate = printed coupon, basis_spread 10.00, Floating, interest_rate_cash 0. The rule fires because the benchmark sits in its own cell (REQ-rfbn-1).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 13.73 % 5/22/2032 GBP 2,185 2,992 2,882"
+    },
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Cube (4)(7) First Lien Senior Secured Loan - Delayed Draw SONIA - 10.00 % PIK 13.73 % 5/22/2032 GBP 2,334 3,190 3,098"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_9414fb156ea6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: pik_printed 2025-06-30 = ROW-1b66d6e88b4cc827 (Cube GBP) and ROW-7bbb69f9df6f424a (Masco) = affected rows. Par evidence read on the pages: Masco EUR 5,000 (2024-12-31, 2025-03-31) -> 5,331 (2025-06-30, 2025-09-30) -> 5,666 (2025-12-31), +6.62 and +6.28 pct per half-year against 13.25 / 2 = 6.63 pct (a 10.00 margin-only PIK gives 5 pct; cost follows 5,348 -> 5,724 -> 6,111); Cube GBP 2,000 -> 2,040 (stub from the May 2025 draw) -> 2,185 -> 2,185 -> 2,334, +7.1 and +6.8 pct per half-year against 7.05 and 6.87. The filer's own PIK tag is the margin (10.00 on Masco C_d739c307), so the whole-coupon reading rests on par growth, which is strong for these rows. Published (rfbne): pik_rate = printed coupon, basis_spread 10.00, Floating, interest_rate_cash 0. The rule fires because the benchmark sits in its own cell (REQ-rfbn-1).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-109036",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,331 5,724 6,146"
+    },
+    {
+     "accession": "0000950170-25-109036",
+     "text": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 14.22 % 5/22/2032 GBP 2,000 2,743 2,743"
+    },
+    {
+     "accession": "0000950170-25-072747",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,000 5,348 5,271"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_98fd23ee7fbd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "validation_results_ledger cost_conservation 2023-12-31 fail, residual 9.856 pct, mechanism ff_investments_at_cost:investments_ex_cash. rfbne cost: all rows 211,726,000, money-market row 18,995,000, ex cash 192,731,000 = printed cost total. The FV rule honours investments_total_excludes (wrapper line 230), the cost rule does not.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995"
+    },
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Cash Equivalents Total $ 18,995 $ 18,995 17.2 % Investments and Cash Equivalents Total $ 211,726 $ 211,749"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_98fed1c4432f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: pik_printed 2024-12-31 = ROW-5bb8ca6861e6aa06 (Masco) = affected rows. Par 5,000 here and at 2025-03-31, then 5,331: loan dated about 10/2024 capitalises half-yearly. Par evidence read on the pages: Masco EUR 5,000 (2024-12-31, 2025-03-31) -> 5,331 (2025-06-30, 2025-09-30) -> 5,666 (2025-12-31), +6.62 and +6.28 pct per half-year against 13.25 / 2 = 6.63 pct (a 10.00 margin-only PIK gives 5 pct; cost follows 5,348 -> 5,724 -> 6,111); Cube GBP 2,000 -> 2,040 (stub from the May 2025 draw) -> 2,185 -> 2,185 -> 2,334, +7.1 and +6.8 pct per half-year against 7.05 and 6.87. The filer's own PIK tag is the margin (10.00 on Masco C_d739c307), so the whole-coupon reading rests on par growth, which is strong for these rows. Published (rfbne): pik_rate = printed coupon, basis_spread 10.00, Floating, interest_rate_cash 0. The rule fires because the benchmark sits in its own cell (REQ-rfbn-1).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-039445",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,000 5,348 5,102"
+    },
+    {
+     "accession": "0000950170-25-109036",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,331 5,724 6,146"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_aabf3cee955c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "row_validation_issues SRC_BDC03 2025-09-30: two issues whose value is the KAMC term-loan and revolver identifiers (no row_id in the file); they map to ROW-5347b4c2fbf8c330 and ROW-9e4961c64b0a6e7f = affected rows. Same unscaled decimals=0 tags as the BDCSRC finding; published equals the page.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-283129",
+     "text": "KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_be1360373c1b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "row_validation_issues SRC_BDC03 2025-12-31: two issues with the Spindrift and Spotless identifiers, mapping to ROW-d76dac801d193f69 and ROW-c5e88b7cee9a7f51 = affected rows. Tags decimals=0 unscaled; published equals the page.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Spindrift (15)(17) Subordinated Debt - 13.75 % PIK 13.75 % 2/19/2033 $ 1,574 1,536 1,574"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Spotless Brands (17)(18) First Lien Senior Secured Loan - Delayed Draw SOFR 5.50 % 9.37 % 7/25/2028 $ 9,618 9,586 9,618"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c68a03a85d54",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: rfbne row_validation_issues SRC_BDC03 2026-06-30 has one issue whose value is the Atlas Bidco revolver identifier (no row_id in the file) = ROW-70310825f3c2ec86 = affected rows. Point (b): rfbne publishes cost -3,000 and fair value -3,000 as printed '( 3 ) ( 3 )'; the raw iXBRL FV fact on C_d1954ba6 (F_a1fa5635) has no sign='-' while the cost fact has one, so the source check now sees tag +3,000 against output -3,000. Gate totals still tie 13/13 ex cash. Proposal PD-SRC_BDC03-1899017-21 (src-fv-sign-corrected-from-page) is sound and narrow: one quarter, one row, cites the page and the unsigned tag, same pattern as the accepted D-127 scale corrections.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ea7900abd338",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: pik_printed 2026-06-30 = ROW-017a018cc9b12927 (Cube GBP) = affected rows. Par 2,185 -> 2,334 (+6.8 pct, 13.73 / 2 = 6.87). Par evidence read on the pages: Masco EUR 5,000 (2024-12-31, 2025-03-31) -> 5,331 (2025-06-30, 2025-09-30) -> 5,666 (2025-12-31), +6.62 and +6.28 pct per half-year against 13.25 / 2 = 6.63 pct (a 10.00 margin-only PIK gives 5 pct; cost follows 5,348 -> 5,724 -> 6,111); Cube GBP 2,000 -> 2,040 (stub from the May 2025 draw) -> 2,185 -> 2,185 -> 2,334, +7.1 and +6.8 pct per half-year against 7.05 and 6.87. The filer's own PIK tag is the margin (10.00 on Masco C_d739c307), so the whole-coupon reading rests on par growth, which is strong for these rows. Published (rfbne): pik_rate = printed coupon, basis_spread 10.00, Floating, interest_rate_cash 0. The rule fires because the benchmark sits in its own cell (REQ-rfbn-1).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Cube (4)(7) First Lien Senior Secured Loan - Delayed Draw SONIA - 10.00 % PIK 13.73 % 5/22/2032 GBP 2,334 3,190 3,098"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 13.73 % 5/22/2032 GBP 2,185 2,992 2,882"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_efb02243c718",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fund_financials_validation F20 2023-09-30 FAIL value 0.0392 = 1,215,000 / 31,021,803 (total assets from companyfacts). The balance sheet prints investments 1,215,000 against assets that are mostly escrow cash and subscriptions receivable. Published holdings (3 Legacy rows) sum 1,215,000. Rule-basis problem, as proposed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f5ad50a0aa2a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: pik_printed 2025-03-31 = ROW-cf74f035f6ceab73 (Masco) = affected rows. Par evidence read on the pages: Masco EUR 5,000 (2024-12-31, 2025-03-31) -> 5,331 (2025-06-30, 2025-09-30) -> 5,666 (2025-12-31), +6.62 and +6.28 pct per half-year against 13.25 / 2 = 6.63 pct (a 10.00 margin-only PIK gives 5 pct; cost follows 5,348 -> 5,724 -> 6,111); Cube GBP 2,000 -> 2,040 (stub from the May 2025 draw) -> 2,185 -> 2,185 -> 2,334, +7.1 and +6.8 pct per half-year against 7.05 and 6.87. The filer's own PIK tag is the margin (10.00 on Masco C_d739c307), so the whole-coupon reading rests on par growth, which is strong for these rows. Published (rfbne): pik_rate = printed coupon, basis_spread 10.00, Floating, interest_rate_cash 0. The rule fires because the benchmark sits in its own cell (REQ-rfbn-1).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072747",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,000 5,348 5,271"
+    },
+    {
+     "accession": "0000950170-25-109036",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,331 5,724 6,146"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_034f4c142291",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2023-09-30 FAIL value -102.2. Published pct_of_net_assets (xbrl_field) -94.6, -7.6 and 0.0 on the three Legacy rows; the page prints the same with a minus ('- 94.6 %', '- 7.6 %', total '- 102.2 %'): the Class B line '75 - - 0.0 %' shows there is no extra column, so the dash is a sign. Holdings over negative net assets of (1,188,729).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Legacy Corporate Lending HoldCo, LLC (1 )(2)(3)(4)(5 ) Preferred Equity - - - - 1,125 1,125,000 1,125,000 - 94.6 % Legacy Corporate Lending HoldCo, LLC , Class A (1)(2)(3)(4)(5) Equity Interest - - - - 90 90,000 90,000 - 7.6 %"
+    },
+    {
+     "accession": "0000950170-23-062818",
+     "text": "FIRE: Finance Total $ 1,215,000 $ 1,215,000 - 102.2 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_041361c99e27",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results D01 2023-12-31 FAIL count ratio 10.67 (3 -> 32). rfbne counts 3 and 32 (32 includes the money-market row); FV 1,215,000 and 192,754,000 ex cash, both equal to the printed totals. First quarter of lending.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995"
+    },
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_077fa22465ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "row_validation_issues X07 2025-09-30 = ROW-0257bd85604f8e50 = affected rows. Published units 10,000, cost 10,000, value 105,000 equal the printed '10 10 105' (thousands) for the fund's preferred interest in its SLP II joint venture; value above cost on a JV equity interest is a valuation.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-283129",
+     "text": "Bain Capital Senior Loan Program II, LLC (6)(7)(10)(28) Preferred Equity Interest Investment Vehicles - - - - 10 10 105"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_09c58a6ef34a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F30 2023-06-30 FAIL value -29.53; the 10-Q prints NAV per share ( 29.53 ) with net assets (1,187,213) on 40,200 shares. Published equals the page; the range check cannot pass a negative NAV before operations.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041723",
+     "text": "Total Net Assets $ ( 1,187,213 ) $ ( 1,088,939 ) Total Liabilities and Total Net Assets $ 5,600,339 $ 1,282,157 Net asset value per share ( 29.53 ) ( 5,444.70 )"
+    },
+    {
+     "accession": "0000950170-23-041723",
+     "text": "The Company had not commenced operations as of June 30, 2023 ."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0d951e4434d2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fund_strategy_validation 2023-09-30 warn (affected 50 pct, vehicle_type_bdc). The only holdings are three Legacy Corporate Lending equity lines (1,215,000 printed); the private-credit mix is zero before lending began. Holdings match the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Legacy Corporate Lending HoldCo, LLC (1 )(2)(3)(4)(5 ) Preferred Equity - - - - 1,125 1,125,000 1,125,000 - 94.6 % Legacy Corporate Lending HoldCo, LLC , Class A (1)(2)(3)(4)(5) Equity Interest - - - - 90 90,000 90,000 - 7.6 %"
+    },
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_13fe20561d38",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fund_strategy_validation 2023-12-31 warn (affected 100 pct). First lending quarter: 32 rows, 192,754 ex cash, mix changes from seed equity to private credit; published totals equal the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2755462bd83b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: oracle check_failures B01 2025-12-31 = 69 source contexts, set-equal to affected_rows (0 missing, 0 extra). Independent sample (seeded, 2 per quarter, 22 contexts over all B01 quarters): none carries an InvestmentOwnedAtFairValue fact in the raw iXBRL (cost or principal only), and each printed line ends in a dash in the value column, e.g. Awayday 2025-12-31. Ex-cash totals tie in all 13 quarters, so no dropped value is hiding here.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Awayday (5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 5/6/2032 $ - ( 5 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_29dfa8b15e97",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results B02 2026-06-30: 2 duplicate keys, Galanthus. Affected ROW-712da571b0de5f32 (cost -25,000, value -56,000) and ROW-d0071b0f76850e0a (-26,000, -56,000) match the two printed delayed-draw lines, one in dollars and one in sterling. Two commitments, not one fact twice.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Galanthus Group Holdings, Limited (4)(5)(7) First Lien Senior Secured Loan - Delayed Draw - - - - 12/24/2031 $ - ( 25 ) ( 56 )"
+    },
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Galanthus Group Holdings, Limited (4)(5)(7) First Lien Senior Secured Loan - Delayed Draw - - - - 12/24/2031 GBP - ( 26 ) ( 56 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3b1f3524ce41",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2024-09-30 = 27 contexts, set-equal to affected_rows. Sampled contexts have no FV fact and print dashes (New Milani revolver, Electronic Merchant Systems revolver). Totals tie.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-127117",
+     "text": "New Milani Group LLC (5)(17)(21) First Lien Senior Secured Loan - Revolver - - - 6/6/2026 $ - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4310a0256a5f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2025-03-31 = 46 contexts, set-equal to affected_rows. Sampled City BBQ revolver: cost fact only, printed '$ - ( 20 ) -'.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072747",
+     "text": "City BBQ (5)(9)(17)(21) First Lien Senior Secured Loan - Revolver - - - 9/4/2030 $ - ( 20 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_50eadf521c4f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2024-12-31 = 26 contexts, set-equal to affected_rows. Sampled Beacon Specialized Living revolver and Apollo Intelligence delayed draw: no facts with value, printed dashes. Blackbird spread-only context checked by the agent; the Blackbird delayed draw is published at 730,000 from its own context (rfbne ROW-19fa2a3d1444e8a1).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-039445",
+     "text": "Beacon Specialized Living (5)(17)(21) First Lien Senior Secured Loan - Revolver - - - 3/25/2028 $ - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5223e3100af6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F24 2023-12-31 value 10.6667 = 32 / 3 (rfbne counts); FV totals equal the page. Ramp-up, as proposed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5b0d507a993f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results D02 2023-12-31 FV ratio 174.28 (1,215,000 -> 211,749,000); both totals reconstructed from rfbne and equal to the printed totals (incl. cash 211,749).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Cash Equivalents Total $ 18,995 $ 18,995 17.2 % Investments and Cash Equivalents Total $ 211,726 $ 211,749"
+    },
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_601a05358fa7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F25 2023-12-31 value 167.07: holdings jump from 1,215,000 to 211,749,000 while total assets were already 31.0M at 2023-09-30 (escrow and receivables). Both holdings totals equal the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000"
+    },
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_620ccf4f563f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F25 2023-09-30 value 3.66: holdings 646,250 -> 1,215,000 while total assets moved to 31.0M of escrow cash and subscriptions receivable. Printed figures; published holdings 1,215,000.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Controlled affiliate investment (amortized cost of $ 1,215,000 and $ 0 , respectively) $ 1,215,000 $ - Cash 295,000 5,000 Cash held in escrow 8,015,000 - Subscriptions receivable 20,000,000"
+    },
+    {
+     "accession": "0000950170-23-041723",
+     "text": "Controlled affiliate investment (amortized cost of $ 646,250 and $ 0 , respectively) $ 646,250 $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6363da22952d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2026-06-30 = 85 contexts, set-equal to affected_rows. Sampled Appriss delayed draw (cost fact only, printed '$ - ( 19 ) -') and DTIQ's second equity line (units fact only, printed dashes for cost and value).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Appriss (4)(5) First Lien Senior Secured Loan - Delayed Draw - - - - 3/10/2031 $ - ( 19 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_645192897cf2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2024-03-31 = 7 contexts, set-equal to affected_rows. Sampled Pharmacy Partners revolver: cost fact only, printed '$ - ( 27 ) -'; Blackbird comparative context has no facts with value.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-060419",
+     "text": "Pharmacy Partners (5)(9)(17)(21) First Lien Senior Secured Loan - Revolver - - - 2/28/2029 $ - ( 27 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_678081ddb3b7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2023-12-31 = 2 Blackbird contexts, set-equal to affected_rows; neither carries any money fact in the raw iXBRL and the page prints dashes in every money column.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Blackbird Purchaser, Inc. (5)(17)(21) First Lien Senior Secured Loan - - - 12/19/2030 - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_728b3e69f76b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2025-09-30 = 64 contexts, set-equal to affected_rows. Sampled Solairus delayed draw (cost only, '$ - ( 9 ) -') and Allbridge revolver (no facts with value).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-283129",
+     "text": "Solairus (5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 7/22/2030 $ - ( 9 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_79a9db68dc6b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2024-06-30 = 19 contexts, set-equal to affected_rows. Sampled Simplicity revolver (cost only, '$ - ( 3 ) -') and a Cube delayed draw (no facts with value).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-097161",
+     "text": "Simplicity (5)(9)(17)(21) First Lien Senior Secured Loan - Revolver - - - 12/2/2026 $ - ( 3 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_82105cc08ed6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results C04 2023-12-31: 50 pct of 2 equity rows have shares. The two published equity rows are ROW-72a85a47aaf513fa (preferred, shares 4,000 from the printed and tagged 4 thousand) and ROW-f845d258330d3749 (Class A, no units: the page prints a dash in the units column) = affected rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Legacy Corporate Lending HoldCo, LLC (7)(10)(11)(12)(17 ) Preferred Equity - - - - 4 3,875 3,875 Legacy Corporate Lending HoldCo, LLC, Class A (7)(10)(11)(12)(17 ) Equity Interest - - - - - 90 90"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_82a2722dd1d8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F30 2023-03-31 FAIL -20.16 = printed ( 20.16 ) on net assets (810,452) and 40,200 shares. Published equals the page.",
+   "evidence": [
+    {
+     "accession": "0001104659-23-060706",
+     "text": "Total Net Assets $ ( 810,452 ) $ ( 1,088,939 ) Total liabilities and total net assets $ 2,336,085 $ 1,282,157 Net asset value per share ( 20.16 ) ( 5,444.70 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9fc39e346acc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F30 2023-09-30 FAIL -19.75 = printed ( 19.75 ) on net assets (1,188,729) and 60,200 shares.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Total Net Assets $ ( 1,188,729 ) $ ( 1,088,939 ) Total Liabilities and Total Net Assets $ 31,021,803 $ 1,282,157 Net asset value per share ( 19.75 ) ( 5,444.70 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b7ad2fce2c51",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2025-06-30 = 53 contexts, set-equal to affected_rows. Sampled Apollo Intelligence delayed draw (no facts with value) and RoC Skincare revolver comparative (cost only, '$ - ( 49 ) -').",
+   "evidence": [
+    {
+     "accession": "0000950170-25-109036",
+     "text": "Apollo Intelligence (5)(13)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 5/31/2028 $ - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bb534114d834",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2025-12-31 = ROW-36db4dfc4bcbe8bf (R1 RCM delayed draw) = affected rows. Page prints par '-', cost ( 1 ), value 1; published principal blank, cost -1,000, value +1,000: equal to the page. Undrawn line, no par to publish.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104390",
+     "text": "R1 RCM Inc. (5)(9)(21) First Lien Senior Secured Loan - Delayed Draw - - - 11/19/2031 $ - ( 1 ) 1"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bdd4ed8551a3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F30 2022-12-31 FAIL -5,444.7 = printed (5,444.70) on net assets (1,088,939) and 200 shares.",
+   "evidence": [
+    {
+     "accession": "0001104659-23-040212",
+     "text": "Total liabilities and total net assets $ 1,282,157 $ - Net asset value per share $ (5,444.70 ) $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d3d8679b8f94",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fund_strategy_validation 2023-06-30 warn: the two holdings are Legacy equity (646,250 printed); not commenced operations.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041723",
+     "text": "The Company had not commenced operations as of June 30, 2023 ."
+    },
+    {
+     "accession": "0000950170-23-041723",
+     "text": "Controlled affiliate investment (amortized cost of $ 646,250 and $ 0 , respectively) $ 646,250 $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d43a1de77cfb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results B02 2025-12-31: 2 duplicate keys, Galanthus. ROW-0a246d3a9c54114d and ROW-4af848625eb0dd22 (-28,000 / -28,000 each) match the two printed lines, GBP and dollar, same maturity.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Galanthus Group Holdings, Limited (4)(5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 12/24/2031 GBP - ( 28 ) ( 28 )"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Galanthus Group Holdings, Limited (4)(5)(9)(17)(21) First Lien Senior Secured Loan - Delayed Draw - - - 12/24/2031 $ - ( 28 ) ( 28 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d4f85c3933bc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (d) checked. The figure is end-of-period NAV per share, not a change or a loss: it sits in the Statement of Changes in Net Assets of the 2023-09-30 10-Q, prior-year columns (three and nine months to 2022-09-30), directly under 'Net assets, end of period ( 357,440 )' with 200 shares outstanding; -357,440 / 200 = -1,787.20. The loss per share line is separate ((491.49) and (1,812.20)). A negative NAV per share is right for a seed vehicle with a deficit. Published -1,787.2 equals the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Net assets, end of period $ ( 1,188,729 ) $ ( 357,440 ) $ ( 1,188,729 ) $ ( 357,440 ) Net asset value per Common Share ( 19.75 ) ( 1,787.20 ) ( 19.75 ) ( 1,787.20 ) Common Shares outstanding at the end of period 60,200 200 60,200 200"
+    },
+    {
+     "accession": "0000950170-23-062818",
+     "text": "Loss per share (basic and diluted) ( 8.91 ) ( 491.49 ) ( 48.66 ) ( 1,812.20 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ef977e18198e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "validation ledger CNT01 2023-12-31 warn, 1 issue row; counts 3 -> 32 from rfbne. Totals tie.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f1606482c764",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F24 2024-03-31 value 2.3125 = 74 / 32 (rfbne counts, each including one money-market row); ex-cash FV 309,947,000 equals the page.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-060419",
+     "text": "Investments Total $ 310,771 $ 309,947 225.1 %"
+    },
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Investments Total $ 192,731 $ 192,754 174.8 % Cash Equivalents Goldman Sachs Financial Square Government Fund Institutional Share Class (20) Cash Equivalents - - 5.25 % - $ 18,995 $ 18,995 $ 18,995"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "cash-plus-pik-spread-is-cash-leg-only",
+   "outcome": "supported",
+   "rationale": "Fix re-checked in rfbne (unchanged from rfbnc): 10 rows read on the pages over 8 quarters publish spread = cash + PIK and interest_rate = printed all-in coupon; coupon less spread is 1.94 to 5.35 on all 74 rows with a spread, i.e. the benchmark, so the cash leg is not understated. The amended suggested_check (interest_rate - basis_spread vs benchmark; residual of about +pik_rate means a cash-only spread) is now correct and fires on the defect, not on the fixed rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Chase Industries, Inc. (15)(17)(18) First Lien Senior Secured Loan SOFR 5.65 % ( 1.50 % PIK) 12.50 % 5/12/2025 $ 4,654 4,037 4,328"
+    },
+    {
+     "accession": "0000950170-24-097161",
+     "text": "Chase Industries, Inc. (15)(17)(18) First Lien Senior Secured Loan SOFR 4.40 % ( 1.25 % PIK) 10.98 % 5/12/2025 $ 4,663 4,267 4,406"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "New Gen Holding (6)(8)(15)(17)(21) First Lien Senior Secured Loan EURIBOR 3.00 % ( 4.25 % PIK) 9.75 % 5/28/2031 EUR 5,716 6,414 6,537"
+    }
+   ]
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
+   "outcome": "supported",
+   "rationale": "Now 9 whole-coupon rows, each backed by par growth read on the pages (Masco 5,000 -> 5,331 -> 5,666; Cube GBP 2,040 -> 2,185 -> 2,334). Point (c): Cube's dollar delayed draw ROW-337dc1a8c820a500 publishes pik 7.44, spread 7.44, Floating, interest 11.44, cash 4.00 (float residue 3.999...), which follows its own printed 'SOFR 7.44 % PIK 11.44 %' and its PIK tag 7.44; the observation states the split is unresolved by the page (siblings print 3.00 + 4.44 PIK). That is an honest source_ambiguity recorded at the row; acceptable.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-283129",
+     "text": "Cube (5)(6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SOFR 7.44 % PIK 11.44 % 5/20/2031 $ 114 111 112"
+    },
+    {
+     "accession": "0001193125-25-283129",
+     "text": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SOFR 3.00 % ( 4.44 % PIK) 11.45 % 5/20/2031 $ 9,226 9,226 9,226"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 9.25 % ( 0.75 % PIK) 12.23 % 10/4/2032 EUR 5,666 6,111 6,716"
+    },
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Cube (4)(7) First Lien Senior Secured Loan - Delayed Draw SONIA - 10.00 % PIK 13.73 % 5/22/2032 GBP 2,334 3,190 3,098"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed-from-date",
+   "outcome": "supported",
+   "rationale": "Point (c). rfbnc corrected reference_rate_type on 38 rows: BBSY 17, BKBM 7 (6 plus Hellers 2026-03-31), PRIME 9, EURIBOR 1, and 4 withdrawn. Read on the page: Tartan 2025-06-30 BBSY, HLRS delayed draw 2024-09-30 BBSY (NZ$), E-Tech and Advanced Aircrew 2024-09-30 'P' (8.00 + 4.50 = 12.50, 8.00 + 5.50 = 13.50), Vessco 2026-06-30 'P', PlentyMarkets 2025-06-30 EURIBOR, Hellers BKBM. All publish the printed code, with reference_rate_source blank. The detector (compare against the page reader's code wherever the source is inferred_*) is concrete and does not depend on the reference_rate_columns switch.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-109036",
+     "text": "Tartan Bidco Pty. Ltd. (6)(17)(21) First Lien Senior Secured Loan BBSY 5.25 % 8.85 % 12/31/2027 AUD 3,173 2,033 2,039"
+    },
+    {
+     "accession": "0000950170-24-127117",
+     "text": "E-Tech Group (5)(17)(18) First Lien Senior Secured Loan - Revolver P 4.50 % 12.50 % 4/9/2030 $ 73 66 66"
+    },
+    {
+     "accession": "0000950170-24-127117",
+     "text": "Advanced Aircrew Academy, LLC (5)(17)(18) First Lien Senior Secured Loan - Revolver P 5.50 % 13.50 % 7/26/2030 $ 43 43 43"
+    },
+    {
+     "accession": "0000950170-24-127117",
+     "text": "HLRS Holdco Limited (5)(6)(17)(18) First Lien Senior Secured Loan - Delayed Draw BBSY 5.75 % 10.23 % 9/27/2030 NZ$ 1,000 657 657"
+    },
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Vessco Water (4)(5) First Lien Senior Secured Loan - Revolver P 1.75 % 3.50 % 10.25 % 7/24/2031 $ 79 61 79"
+    }
+   ]
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-with-guessed-benchmark",
+   "outcome": "supported",
+   "rationale": "Point (c), SOFR withdrawn: HLRS subordinated 2024-09-30 ('- 15.00 % 15.00 %'), Substantial 2025-12-31 ('- 8.00 % ( 4.00 % PIK) 12.00 %') and Chartbeat x2 2026-03-31 ('- 16.00 % PIK 16.00 %') print no index. rfbne publishes (unchanged from rfbnc) Fixed with no reference rate. HLRS has interest 15.0 and no spread; Substantial has 12.0, pik 4.0 and no spread; Chartbeat has 16.0 and pik 16.0. The dash-in-Index check is direct.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-127117",
+     "text": "HLRS Holdco Limited (6)(17) Subordinated Debt - 15.00 % 15.00 % 3/27/2031 NZ$ 80 49 49"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Substantial Holdco Limited (5)(6)(15)(17) First Lien Senior Secured Loan - Delayed Draw - 8.00 % ( 4.00 % PIK) 12.00 % 4/20/2030 GBP 5,058 6,768 6,803"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Chartbeat (15)(17) Subordinated Debt - 16.00 % PIK 16.00 % 10/4/2030 $ 14,168 14,022 13,743"
+    }
+   ]
+  },
+  {
+   "observation_key": "spread-tag-published-as-pik-rate",
+   "outcome": "supported",
+   "rationale": "SauceCo 2025-12-31: the page prints 'SOFR 5.75 % 9.42 %' (term) and 'SOFR 5.75 % 9.44 %' (revolver) with no PIK. rfbne publishes (unchanged from rfbnc) spread 5.75, no pik, Floating on both (ROW-7ef2dc71ae8d1c10, ROW-8dd4dd5884c61156). The proposed check (pik > 0 where neither the line nor the member prints a PIK figure) is concrete. It does not touch D-232 rows, which print PIK.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104390",
+     "text": "SauceCo HoldCo, LLC (8)(17)(18) First Lien Senior Secured Loan SOFR 5.75 % 9.42 % 5/13/2030 $ 48,841 47,403 48,841"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "SauceCo HoldCo, LLC (5)(17)(18) First Lien Senior Secured Loan - Revolver SOFR 5.75 % 9.44 % 5/13/2030 $ 2,598 2,572 2,598"
+    }
+   ]
+  },
+  {
+   "observation_key": "coupon-published-as-sum-of-margins",
+   "outcome": "supported",
+   "rationale": "Hellers 2026-03-31 ROW-36474402a6693c1f publishes interest_rate 8.09 all_in, BKBM, spread 5.50, pik 1.50, cash 6.59, as printed. The proposed check (rate equal to spread or spread + pik on a benchmark row) is cheap. At this fund it raises no false positive on the 74 D-031 rows with a spread: coupon less spread is 1.94 to 5.35 (the base), never 0 or the PIK.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Hellers (6)(15)(17)(18) First Lien Senior Secured Loan - Delayed Draw BKBM 4.00 % ( 1.50 % PIK) 8.09 % 9/27/2030 NZ$ 1,097 663 623"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Point (d): the 7 Legacy Class A rows (2023-09-30 to 2025-03-31) now publish issuer 'Legacy Corporate Lending HoldCo, LLC' and instrument 'Class A Equity Interest', as the 2023-09-30 Class B row ('Class B Equity Interest'); the Chase term loans 2026-03-31 (ROW-79ea05af79d96160) and 2026-06-30 (ROW-5940db058dc76b90) publish 'Chase Industries, Inc.' as printed. Entity, canonical name and GICS of the other renamed rows unchanged from my rfbnc check (each in its peers' entity, GICS diff vs rgA4 0). The detection decision now states the gap honestly: issuer_name_printed fired on 19 rows and not on 5 Class A rows or the Chase punctuation; the existing detector covers the main shape and the gap is disclosed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037134",
+     "text": "Legacy Corporate Lending HoldCo, LLC (7)(10)(11)(12)(17 ) Preferred Equity - - - - 4 3,875 3,875 Legacy Corporate Lending HoldCo, LLC, Class A (7)(10)(11)(12)(17 ) Equity Interest - - - - - 90 90"
+    },
+    {
+     "accession": "0000950170-24-097161",
+     "text": "Legacy Corporate Lending HoldCo, LLC, Class A (7)(10)(11)(12)(17) Equity Interest - - - - - 100 100"
+    },
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Chase Industries, Inc. (4)(12) First Lien Senior Secured Loan SOFR 1.00 % 5.00 % 8.67 % 11/12/2029 $ 38,608 38,366 38,221"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Chase Industries, Inc. (15)(17)(18) First Lien Senior Secured Loan SOFR 5.65 % ( 1.50 % PIK) 10.82 % 11/11/2027 $ 8,495 8,321 8,410"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-correction-blanks-instrument-description",
+   "outcome": "supported",
+   "rationale": "The ordering problem (correction applied before the strip) is real and handled: rfbne renamed rows keep their instruments (Utimaco 'First Lien Senior Secured Loan EURIBOR ...', Abracon TopCo 'Equity Interest'), and the 7 Legacy Class A rows now carry 'Class A Equity Interest' through context-keyed superseding lines that win over the earlier plain 'Equity Interest' lines (verified in the published rows). The field-diff check proposed is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Abracon TopCo, LLC (4)(6)(11) Equity Interest - - - - - 3 1,726 2,367"
+    },
+    {
+     "accession": "0000950170-24-097161",
+     "text": "Legacy Corporate Lending HoldCo, LLC, Class A (7)(10)(11)(12)(17) Equity Interest - - - - - 100 100"
+    }
+   ]
+  },
+  {
+   "observation_key": "page-reader-printed-row-is-jv-schedule-line",
+   "outcome": "supported",
+   "rationale": "Measured independently: I joined rfbnc published (non-underlying) rows to bdc_ixbrl_field_status printed_row by accession and member and compared the last printed figure with fair value. Mismatches over 1 thousand from 2025-03-31: 11, 9, 8, 19, 30, 57 (= 134, exactly as reported; the only other two are the 2023-06-30 dollar-presentation rows). Example: ATS 2025-03-31 publishes 11,964,000, joined to the SLP II line '... $ 4,987 4,925 4,987'. The proposed check is a one-line comparison.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072747",
+     "text": "ATS (8)(17)(18) First Lien Senior Secured Loan SOFR 5.75 % 10.05 % 7/12/2029 $ 11,964 11,835 11,964"
+    },
+    {
+     "accession": "0000950170-25-072747",
+     "text": "ATS (8)(17)(18) First Lien Senior Secured Loan SOFR 5.75 % 10.05 % 7/12/2029 $ 4,987 4,925 4,987"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "AGS 2026-03-31 revolver ROW-67f78b80376d11b0 and delayed draw ROW-b3f266a782f973c7 publish interest_rate 9.17 and SOFR (identifier_text). The page prints dashes in the index, spread and rate cells. The proposed check is concrete; undrawn and negative-value lines, so impact is small.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224183",
+     "text": "AGS American Glass Services Acquisition, LLC (4)(5)(9)(17) First Lien Senior Secured Loan - Revolver - - - 7/24/2031 $ - ( 10 ) ( 11 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-crosses-printed-tranche-and-maturity",
+   "outcome": "supported",
+   "rationale": "rfbnc: chain 3ba7313d holds EUR 7,627 at 2025-06-30 and USD 3,934 from 2025-09-30. Chain 7835f0fb holds USD 5,373 at 2025-06-30 and EUR 5,551 after. So the chains swap currency at 2025-09-30, as described, and the 2026 renamed rows continue them. A currency-change-within-chain check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Utimaco (6)(17)(19) First Lien Senior Secured Loan SOFR 5.93 % 9.65 % 5/14/2029 $ 3,934 3,911 3,934"
+    }
+   ]
+  },
+  {
+   "observation_key": "canonical-name-from-stale-name-form",
+   "outcome": "supported",
+   "rationale": "Re-measured on rfbne: canonical_name begins with a printed industry heading on 127 published rows of 10 entities, 781.0M (BTX Precision 30, City BBQ 22, Awayday 20, SureWerx 11, Ergotron 11, ATS 10, Abracon Group Holding 10, DiversiTech 6, Allworth 5, Engineered Products 2), exactly as stated. Informational column; the proposed check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Abracon TopCo, LLC (4)(6)(11) Equity Interest - - - - - 3 1,726 2,367"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-correction-helper-fails-for-bain",
+   "outcome": "supported",
+   "rationale": "Point (f) re-checked on rfbne. The helper defect (loop variable 'columns' rebound in the D-127 block) is confirmed by reading the code. data/overrides/row_corrections.csv now holds 402 Bain lines: 8 D-127, 394 fund-loop lines equal field for field to the 183 specs, 9 of them context-keyed superseding lines (Cube dollar pik 7.44, Legacy Class A instruments, Govineer twin), ASCII only, no duplicate keys; the only value conflicts are those superseded pairs, and the published rows show the later value. rebuild.log: 402 'Row correction applied' for 0001899017, 0 unmatched, one 'matches 2 rows' warning (Govineer, see identifier-keyed-correction-hits-jv-twin-row). Shape difference remains date_added 2026-10-25 against the helper's 2026-10-13.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-283129",
+     "text": "KAMC Holdings, Inc. (8)(13)(17)(19) First Lien Senior Secured Loan SOFR 5.25 % 9.55 % 8/1/2031 $ 32,926 32,566 32,556"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Point (a), both directions read on the pages: foreign par that was tagged USD - Alldent EUR 4,177 (-> 4,902,127), Avalon GBP 1,376, Lagerbox EUR 750, Nafinco EUR 1,464, Tartan AUD 3,173 (-> 2,116,074), Masco EUR 5,666 (2025-12-31), Access GBP 6,481, Reconomy EUR 937 and GBP 2,499 (2026-03-31), Polar GBP 155, SoftCo EUR 3,600, Rydoo EUR 2,802 (2026-06-30); Le Berger EUR 500 (was GBP); dollar par that was tagged GBP/EUR - Govineer $13,698 and $600, Minus Forty $4,988 and $4,202, Facts Global $145, all now USD at 1.0 source_usd. rfbne publishes the printed currency on all 16 FX-corrected rows I read on the pages, and USD par = par x the build's single rate for that quarter and currency (EUR 1.1736 / 1.1518 / 1.1417, GBP 1.3447 / 1.3184 / 1.3259, AUD 0.6669; one rate per currency-quarter across all 56-59 foreign rows). USD par sits beside fair value on every row (e.g. Le Berger 586,800 vs 587,000). Reconomy 2026-03-31 prints 'EURIBOR ... GBP 2,499' and a SOFR revolver in GBP; the build follows the printed currency, and value fits GBP (3.29M par vs 3.28M value), so I accept it. Independent scan: on the 995 rows whose joined printed line is the row's own, printed currency equals published currency in every quarter (3 apparent hits in 2024 were my parser reading the '$' before cost). Rows joined to JV lines or not joined are not covered by that scan.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Alldent Holding GmbH (17)(21) First Lien Senior Secured Loan EURIBOR 5.50 % 7.62 % 11/15/2032 EUR 4,177 4,795 4,853"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Tartan Bidco Pty. Ltd. (6)(17)(21) First Lien Senior Secured Loan BBSY 5.25 % 8.96 % 12/31/2027 AUD 3,173 2,043 2,106"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Le Berger SA (6)(17)(18) First Lien Senior Secured Loan - Delayed Draw EURIBOR 3.75 % 5.77 % 2/21/2028 EUR 500 522 587"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Access (6)(13)(17)(21) First Lien Senior Secured Loan SONIA 5.25 % 8.98 % 6/28/2029 GBP 6,481 8,114 8,549"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Minus Forty QBD Corp. (6)(17)(18) First Lien Senior Secured Loan SOFR 6.50 % 10.17 % 8/27/2030 $ 4,988 4,932 4,913"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Facts Global Energy (5)(6)(17)(18) First Lien Senior Secured Loan - Delayed Draw SOFR 5.50 % 9.18 % 12/20/2031 $ 145 142 127"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Reconomy (6)(13)(17)(21)(30) First Lien Senior Secured Loan EURIBOR 6.25 % 8.38 % 7/12/2029 GBP 2,499 3,114 3,277"
+    },
+    {
+     "accession": "0001193125-26-349812",
+     "text": "SoftCo (4)(7) First Lien Senior Secured Loan EURIBOR 1.00 % 6.50 % 8.73 % 2/22/2031 EUR 3,600 3,872 4,096"
+    }
+   ]
+  },
+  {
+   "observation_key": "value-tagged-with-wrong-sign",
+   "outcome": "supported",
+   "rationale": "Atlas Bidco 2026-06-30 now -3,000 / -3,000 as printed; the unsigned FV tag is confirmed in the raw iXBRL. Detector judgement: X11 catches this shape (undrawn, no par, value made positive by a missing sign) and nothing else; source checks cannot, since they agree with the wrong tag. The observation's suggested_check (negative cost, positive value, compare with printed sign) is the broader test; existing_detector is acceptable because the rfbne scan found no other such row (AMI and R1 RCM print positive values).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349812",
+     "text": "Atlas Bidco Pty Ltd (4)(5)(7) First Lien Senior Secured Loan - Revolver - - - - 6/20/2033 AUD - ( 3 ) ( 3 )"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "R1 RCM Inc. (5)(9)(21) First Lien Senior Secured Loan - Delayed Draw - - - 11/19/2031 $ - ( 1 ) 1"
+    }
+   ]
+  },
+  {
+   "observation_key": "identifier-keyed-correction-hits-jv-twin-row",
+   "outcome": "supported",
+   "rationale": "Point (e): rfbne Govineer 2026-03-31 fund row ROW-39793261a8f3e989 (C_6438e56d) publishes par 13,698,000 USD, rate 1.0, source_usd, matching the printed '$ 13,698'; its par fact is tagged U_GBP, so the correction is right. The SLP II twin ROW-6ec3519b6b701bb5 (C_cb3b3990, underlying_schedule) carries 6,970,000 USD, matching its own U_USD tag and the printed SLP II line '$ 6,970'. rebuild.log still warns 'Row correction matches 2 rows (expected 1)' for the Govineer member: the identifier-keyed lines still reach the twin and the context-keyed line restores its own par. That is the only multi-match warning for this fund, consistent with the dup_ident scan. 402 Bain lines, 402 applied, 0 unmatched. The proposed refusal-unless-context check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Govineer Solutions (fka Black Mountain) (8)(13)(17)(18) First Lien Senior Secured Loan SOFR 5.00 % 8.70 % 10/7/2030 $ 13,698 13,621 13,698"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Govineer Solutions (fka Black Mountain) (8)(17)(18) First Lien Senior Secured Loan SOFR 5.00 % 8.70 % 10/7/2030 $ 6,970 6,939 6,970"
+    },
+    {
+     "accession": "0001193125-26-224183",
+     "text": "Govineer Solutions (fka Black Mountain) (5)(17)(18) First Lien Senior Secured Loan - Revolver SOFR 5.00 % 8.67 % 10/7/2030 $ 600 590 600"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rfbn-1",
+   "outcome": "supported",
+   "rationale": "The amendment answers the rfbnc objection: it records that the request overclaimed (the Cube dollar row had no par evidence and its conversion was undone in rfbne) and makes any repair require independent whole-coupon evidence and refuse rows whose own line or tag contradicts whole-coupon PIK. The 7 findings it covers are exactly the 7 pik_printed findings outstanding on rfbne, all Masco or Cube sterling rows with par growth. Deferral to the end-of-run shared-code batch with a cohort ledger re-run is the right handling; nothing is accepted by it.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-109036",
+     "text": "Masco (6)(15)(17)(21) Subordinated Debt EURIBOR 10.00 % PIK 13.25 % 10/4/2032 EUR 5,331 5,724 6,146"
+    },
+    {
+     "accession": "0001193125-26-104390",
+     "text": "Cube (6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SONIA 10.00 % PIK 13.73 % 5/22/2032 GBP 2,185 2,992 2,939"
+    },
+    {
+     "accession": "0001193125-25-283129",
+     "text": "Cube (5)(6)(15)(17)(21) First Lien Senior Secured Loan - Delayed Draw SOFR 7.44 % PIK 11.44 % 5/20/2031 $ 114 111 112"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-rfbn-2",
+   "outcome": "supported",
+   "rationale": "Verification bug, correctly classified and safely deferred: it changes printed_row for every fund with a JV schedule. I measured the population independently at 134 rows (11, 9, 8, 19, 30, 57 from 2025-03-31), as stated. Example: ATS 2025-03-31, fund line 11,964 against SLP II line 4,987. The proposed join rule (value-matching line, else empty) with a twin-line false-positive test is sound. 'No finding hidden' is not proved by this review: names and terms of the 134 JV lines happen to match. Unchanged on rfbne; the new principal-currency detector depends on this repair.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-072747",
+     "text": "ATS (8)(17)(18) First Lien Senior Secured Loan SOFR 5.75 % 10.05 % 7/12/2029 $ 11,964 11,835 11,964"
+    },
+    {
+     "accession": "0000950170-25-072747",
+     "text": "ATS (8)(17)(18) First Lien Senior Secured Loan SOFR 5.75 % 10.05 % 7/12/2029 $ 4,987 4,925 4,987"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "Published diff rfbnc -> rfbne (2,534 rows joined by row_id): rates/spread/pik on 1 row (Cube dollar), issuer on 2 (Chase), instrument on 7 (Legacy Class A), fair value/cost/par on 1 (Atlas), entity and GICS on 0, plus the 33 FX rows. Entries reused from the rfbnc review concern rows outside that diff.",
+  "Clean findings are not proof the data is correct: these checks cannot detect a wrong rate on a row the page prints the same way, or offsetting errors in totals.",
+  "Reconomy prints GBP par on a EURIBOR delayed draw and on a SOFR revolver (2025-12-31 and 2026-03-31); published GBP follows the page and fits the values, but the index/currency pairing on the page is itself odd.",
+  "The Govineer identifier-keyed correction lines still match the SLP II twin (rebuild.log warning); the twin's own par is restored by a later context-keyed line. Correct now, but fragile until the helper refuses multi-row keys."
+ ]
+}
