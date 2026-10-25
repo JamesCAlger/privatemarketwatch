@@ -1,0 +1,759 @@
+{
+ "reviewer_id": "independent-reviewer-rfnge-0001925531 (claude-opus-5-5 general-purpose subagent, 2026-10-25)",
+ "report_digest": "f9b451f1424d7b0fbb72b834c093f327265dd60e47c75da3ac5acb40f4a5b8dd",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_0b2f57a4b472",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from rfnge row_validation_issues (rule X02, 2024-09-30): 120 rows, identical to affected_rows and reviewed_rows (0 missing, 0 extra, accession/context prefixes agree with holdings). Independently joined each to its printed row in bdc_ixbrl_field_status (accession + member): every flagged identifier is an undrawn commitment line, no printed row carries any percent figure (regex N.NN%, which does match funded rows such as '7.50%'), and no row publishes a rate or spread; 1 carry a small positive fair value as printed, which is why the accepted no-rate check does not clear the quarter. Conclusion false_alarm and proposal reason x02-no-rate-printed-on-the-row hold. Note: the hypotheses text is copied verbatim across the five quarters (it cites 2025-03-31 examples in every quarter); the per-quarter facts nonetheless check out.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000020",
+     "text": "PetVet Care Centers, LLC Consumer Services First Lien(8)(9) - Undrawn - - - 10/2023 11/2025 2,442 - - First Lien(8)(9) - Undrawn - - - 10/2023 11/2029 2,442 ( 21 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_41576c172052",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from rfnge row_validation_issues (rule X02, 2025-09-30): 140 rows, identical to affected_rows and reviewed_rows (0 missing, 0 extra, accession/context prefixes agree with holdings). Independently joined each to its printed row in bdc_ixbrl_field_status (accession + member): every flagged identifier is an undrawn commitment line, no printed row carries any percent figure (regex N.NN%, which does match funded rows such as '7.50%'), and no row publishes a rate or spread; 1 carry a small positive fair value as printed, which is why the accepted no-rate check does not clear the quarter. Conclusion false_alarm and proposal reason x02-no-rate-printed-on-the-row hold. Note: the hypotheses text is copied verbatim across the five quarters (it cites 2025-03-31 examples in every quarter); the per-quarter facts nonetheless check out.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000018",
+     "text": "Eclipse Topco, Inc. (12) Eclipse Buyer, Inc. Software First Lien(8)(9) - Undrawn - - - 09/2024 09/2026 2,929 - - - %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5cbb447ed6d7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from rfnge row_validation_issues (rule X02, 2023-12-31): 66 rows, identical to affected_rows and reviewed_rows (0 missing, 0 extra, accession/context prefixes agree with holdings). Independently joined each to its printed row in bdc_ixbrl_field_status (accession + member): every flagged identifier is an undrawn commitment line, no printed row carries any percent figure (regex N.NN%, which does match funded rows such as '7.50%'), and no row publishes a rate or spread; 2 carry a small positive fair value as printed, which is why the accepted no-rate check does not clear the quarter. Conclusion false_alarm and proposal reason x02-no-rate-printed-on-the-row hold. Note: the hypotheses text is copied verbatim across the five quarters (it cites 2025-03-31 examples in every quarter); the per-quarter facts nonetheless check out.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000004",
+     "text": "PetVet Care Centers, LLC Consumer Services First Lien(5) - Undrawn - - - 10/2023 11/2025 2,442 - 1 First Lien(5) - Undrawn - - - 10/2023 11/2029 2,442 ( 24 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_980b4485dc24",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from rfnge row_validation_issues (rule X02, 2024-03-31): 79 rows, identical to affected_rows and reviewed_rows (0 missing, 0 extra, accession/context prefixes agree with holdings). Independently joined each to its printed row in bdc_ixbrl_field_status (accession + member): every flagged identifier is an undrawn commitment line, no printed row carries any percent figure (regex N.NN%, which does match funded rows such as '7.50%'), and no row publishes a rate or spread; 2 carry a small positive fair value as printed, which is why the accepted no-rate check does not clear the quarter. Conclusion false_alarm and proposal reason x02-no-rate-printed-on-the-row hold. Note: the hypotheses text is copied verbatim across the five quarters (it cites 2025-03-31 examples in every quarter); the per-quarter facts nonetheless check out.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000008",
+     "text": "PetVet Care Centers, LLC Consumer Services First Lien(4)(5) - Undrawn - - - 10/2023 11/2025 2,442 - - First Lien(4)(5) - Undrawn - - - 10/2023 11/2029 2,442 ( 23 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c584b28b4fc8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from rfnge row_validation_issues (rule X02, 2025-03-31): 133 rows, identical to affected_rows and reviewed_rows (0 missing, 0 extra, accession/context prefixes agree with holdings). Independently joined each to its printed row in bdc_ixbrl_field_status (accession + member): every flagged identifier is an undrawn commitment line, no printed row carries any percent figure (regex N.NN%, which does match funded rows such as '7.50%'), and no row publishes a rate or spread; 1 carry a small positive fair value as printed, which is why the accepted no-rate check does not clear the quarter. Two rows (Accession Risk second undrawn line, Baker Tilly second undrawn line) have no joined printed row because the member carries a double space; I read both on the page with page_line.py: '469 ( 1 ) -' and '1,603 ( 10 ) ( 12 )', no rate, and the published cost -1,000 / -10,000 and fair value 0 / -12,000 match. Conclusion false_alarm and proposal reason x02-no-rate-printed-on-the-row hold. Note: the hypotheses text is copied verbatim across the five quarters (it cites 2025-03-31 examples in every quarter); the per-quarter facts nonetheless check out.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000008",
+     "text": "Accession Risk Management Group, Inc. Business Services First Lien(8)(9) - Undrawn - - - 08/2024 08/2026 2,571 - - First Lien(8)(9) - Undrawn - - - 08/2024 11/2029 469 ( 1 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c9bc02bc56a0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed 83 rows (rule C107, 2025-12-31) equal to affected_rows and reviewed_rows. All 83 are undrawn lines with negative published cost, all 83 printed rows carry a bracketed cost cell, none prints a rate; spot-checked PetVet (cost -22,000, printed '( 22 )'). Acumatica and Anaplan, the subject of the earlier real-error verdict, publish 0 / 0 as printed ('3,148 - - -', '2,460 -') and are not in the flagged set in this build, so the proposal's addresses_verdict answer is consistent with the data.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000003",
+     "text": "PetVet Care Centers, LLC Consumer Services First Lien(8)(9) - Undrawn - - - 10/2023 11/2029 $ 2,198 $ ( 22 )"
+    },
+    {
+     "accession": "0001925531-26-000003",
+     "text": "Acumatica Holdings, Inc. Software First Lien(8)(9) - Undrawn - - - 07/2025 07/2032 3,148 - - -"
+    },
+    {
+     "accession": "0001925531-26-000003",
+     "text": "Anaplan, Inc. Software First Lien(8)(9) - Undrawn - - - 07/2025 06/2028 2,460 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1eeb28b9a060",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from rfnge provenance_ledger (reason_code merged_context_excluded): the ledger rows for this quarter are exactly the affected_rows. Eclipse Topco preferred: the excluded field is principal_amount (left blank); the filer's second context holds the footnote's stated value plus unpaid compounded dividends. Published units 461, cost 5,040,000, fair value 5,086,000 equal the printed line read on the page. Blank principal on a preferred row is correct.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000018",
+     "text": "Eclipse Topco, Inc. (12) Software Preferred shares (8) Fixed(S)* 12.50 %/PIK 12.50 % 09/2024 - 461 5,040 5,086"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_73e93a460358",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from rfnge provenance_ledger (reason_code merged_context_excluded): the ledger rows for this quarter are exactly the affected_rows. Eclipse Topco preferred: 461 / 5,361 / 5,413 printed and published. Packaging Coordinators SONIA loan: published par 646,000 GBP equals the printed 'GBP 646', cost 866 and fair value 866 match; the excluded context (c-865 pair) is the filer's USD fact 871,000. Correction to the investigation: that dollar figure is not 'unprinted', footnote 17 prints 'the par value U.S. dollar equivalent of the Packaging Coordinators Midco, Inc. first lien delayed draw is $ 871'. The published USD (868,676 at the build's FX) differs from the filer's 871,000 by 0.3 pct; not material to the conclusion.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000003",
+     "text": "First Lien (4)(7)(8)(17) SONIA(D) + 4.50 % 8.22 % 10/2025 10/2032 GBP 646 866 866"
+    },
+    {
+     "accession": "0001925531-26-000003",
+     "text": "Financial Services & Technology Preferred shares (8) Fixed(S)* 12.50 %/PIK 12.50 % 09/2024 - 461 5,361 5,413"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b4e2aed94449",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from rfnge provenance_ledger (reason_code merged_context_excluded): the ledger rows for this quarter are exactly the affected_rows. Eclipse Topco preferred: the excluded field is principal_amount (left blank); the filer's second context holds the footnote's stated value plus unpaid compounded dividends. Published units 461, cost 5,040,000, fair value 5,036,000 equal the printed line read on the page. Blank principal on a preferred row is correct.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000014",
+     "text": "Eclipse Topco, Inc. (12) Software Preferred shares (8) Fixed(S)* 12.50 %/PIK 12.50 % 09/2024 - 461 5,040 5,036"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f5bd5a87d4a6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed from rfnge provenance_ledger (reason_code merged_context_excluded): the ledger rows for this quarter are exactly the affected_rows. Higginbotham undrawn line: the excluded field is pct_of_net_assets (published 0.0); page prints par 20,500, cost and fair value '-' and percent '- %'; published par 20,500,000, cost 0, fair value 0 match.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000014",
+     "text": "Higginbotham Insurance Agency, Inc. Business Services First lien (4)(5) - Undrawn - - - 08/2023 08/2025 20,500 - - - %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fb23079702b2",
+   "outcome": "rejected",
+   "coverage_verified": true,
+   "source_comparison_verified": false,
+   "rationale": "Row set matches the provenance ledger (2 rows) and Eclipse Topco (461 / 5,361 / 5,407) is correct. Rejected for the Packaging Coordinators SONIA row: the investigation states 'published par equals the printed GBP 646 / 643' and 'every published field read against the printed line', but the cited page prints and the filer tags EUR 643 (XBRL c-276: InvestmentOwnedBalancePrincipalAmount 643000 unit eur), while rfnge publishes GBP. GBP is defensible (SONIA benchmark; the filer's own USD fact 850,000 / 643 = 1.32, a sterling rate; printed GBP 646 at 2025-12-31), but it comes from an earlier fund-loop row correction (row_corrections.csv, principal_amount_currency GBP, 2026-10-13) that the investigation neither cites nor noticed. It also calls the excluded dollar fact 'unprinted' although footnote 18 prints '$ 850'. The source comparison as written is wrong for this row, so the reason 'merged-context-value-equals-printed-row' is not literally true here. Next action: restate the investigation for this row (printed EUR, published GBP by correction, with that correction's evidence) before the disposition is accepted.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000010",
+     "text": "First Lien(4)(7)(8)(18) SONIA(D) + 5.00 % 8.73 % 10/2025 10/2032 EUR 643 842 846"
+    },
+    {
+     "accession": "0001925531-26-000010",
+     "text": "the par value U.S. dollar equivalent of the Packaging Coordinators Midco, Inc. first lien delayed draw is $ 850"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_07c115a44d78",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2024-06-30; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000016",
+     "text": "Total members' capital $ 457,815 $ 276,573 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_13070c450671",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2023-03-31; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000007",
+     "text": "Total members' capital $ 84,131 $ 73,517 Total liabilities"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_176ef32f7df8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2025-12-31; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000003",
+     "text": "Total members' capital $ 1,206,808 $ 820,098 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_31c46ef0df77",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2024-09-30; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000020",
+     "text": "Total members' capital $ 673,397 $ 276,573 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_39689bc23a12",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2023-09-30; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000014",
+     "text": "Total members' capital $ 240,613 $ 73,517 Total liabilities"
+    },
+    {
+     "accession": "0001925531-23-000014",
+     "text": "Radwell Parent, LLC Distribution & Logistics First lien (2)(4) SOFR(Q) + 6.75 % 12.14 % 11/2022 04/2029 5,506 5,432 5,506 First lien (4)(5) - Drawn SOFR(Q) + 6.75 % 12.14 % 11/2022 04/2028 83 83 83"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4f497c421b8c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2024-12-31; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000004",
+     "text": "Total members' capital $ 820,098 $ 276,573 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_60e62e6235e8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2025-03-31; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000008",
+     "text": "Total members' capital $ 817,932 $ 820,098 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_79ef7feab48f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2026-06-30; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000014",
+     "text": "Total members' capital $ 1,181,973 $ 1,206,808 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7c2aaa80bf03",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2024-03-31; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000008",
+     "text": "Total members' capital $ 377,512 $ 276,573 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9bf74c043837",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2023-12-31; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000004",
+     "text": "Total members' capital $ 276,573 $ 73,517 Total liabilities"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a5753e167cf2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2025-06-30; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000014",
+     "text": "Total members' capital $ 812,742 $ 820,098 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_afde07cfb9f0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2025-09-30; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000018",
+     "text": "Total members' capital $ 871,023 $ 820,098 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f9c58e95b0eb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2023-06-30; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000011",
+     "text": "Total members' capital $ 86,315 $ 73,517 Total liabilities"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fed94b2d284e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2026-03-31; aggregate id as listed. Independently: fund_financials net_assets on rfnge equals the printed 'Total members' capital' quoted; on the published basis no row's pct_of_net_assets differs from 100 x fair value / net assets by more than 0.02 (0 rows), and the sum of published percents sits below 100 x sum(FV) / net assets because the filer prints one percent per issuer group, so most tranches of multi-line issuers carry none. Mechanism verified; false alarm. Caveat (AGENTS.md): F23 is now a false alarm in all 14 quarters for this fund, so the rule should be repaired or retired for this filer rather than dispositioned each quarter.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000010",
+     "text": "Total members' capital $ 1,180,992 $ 1,206,808 Total"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0917bc2c3144",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2024-06-30. Verified on the page that the published income_yield_pct equals the printed NII ratio to average members' capital (13.99 pct); the investigation's quote stops before the figure, so I quote the full line. Investments over members' capital 1.84 to 2.13 in these quarters (fund_financials investments_at_fair_value / net_assets), so a capital-based ratio exceeding the asset WAC + 200bp is expected for a levered fund. False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000016",
+     "text": "Ratio to average members' capital: Net investment income(4) 13.99 % 11.66 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0a6911968909",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2024-09-30. Verified on the page that the published income_yield_pct equals the printed NII ratio to average members' capital (13.20 pct); the investigation's quote stops before the figure, so I quote the full line. Investments over members' capital 1.84 to 2.13 in these quarters (fund_financials investments_at_fair_value / net_assets), so a capital-based ratio exceeding the asset WAC + 200bp is expected for a levered fund. False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000020",
+     "text": "Ratio to average members' capital: Net investment income(4) 13.20 % 11.48 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_398949143637",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2024-03-31. Verified on the page that the published income_yield_pct equals the printed NII ratio to average members' capital (13.72 pct); the investigation's quote stops before the figure, so I quote the full line. Investments over members' capital 1.84 to 2.13 in these quarters (fund_financials investments_at_fair_value / net_assets), so a capital-based ratio exceeding the asset WAC + 200bp is expected for a levered fund. False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000008",
+     "text": "Ratio to average members' capital: Net investment income(4) 13.72 % 11.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_47c64c9c80ed",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level finding 2024-12-31. Verified on the page that the published income_yield_pct equals the printed NII ratio to average members' capital (12.29 pct); the investigation's quote stops before the figure, so I quote the full line. Investments over members' capital 1.84 to 2.13 in these quarters (fund_financials investments_at_fair_value / net_assets), so a capital-based ratio exceeding the asset WAC + 200bp is expected for a levered fund. False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000004",
+     "text": "Ratio to average members' capital: Net investment income (4) 12.29 % 11.37 % 9.88 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_62a4a9cf71a8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Printed Total Investments 240,737 over printed members' capital 86,315 = 2.789; rfnge fund_financials investments_at_fair_value 240,737,000 and net_assets 86,315,000. The ratio is as filed. Supported.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000011",
+     "text": "Total Investments $ 237,519 $ 240,737 278.91 %"
+    },
+    {
+     "accession": "0001925531-23-000011",
+     "text": "Total members' capital $ 86,315 $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b59b0ff3b67d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Checked the oracle input: the highlights row for 2022q4 is the eight-month FY2022 column scaled by 3/8 (TII 2,203,875 = 5,877 x 3/8, total expenses 1,781,625 = 4,751 x 3/8, NII 612,750 = 1,634 x 3/8), so the scale is uniform and the gap 190,500 = 508 x 3/8 is the printed fee waiver; 0.3109 = 508 / 1,634. Printed: Total expenses 4,751, waiver (508), net expenses 4,243, NII 1,634. Supported.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000003",
+     "text": "Total expenses 4,751 Less: management fees waived (See Note 5) (508) Net expenses 4,243 Net investment income 1,634"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_685ef0362d04",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "rfnge fund_financials has a 2026-08-11 row with every field blank except shares_outstanding 120,834,931, the cover-page unit count of the 2026-06-30 10-Q; not a reporting period, no schedule expected. Supported.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000014",
+     "text": "The number of the registrant's limited liability company units outstanding as of August 11, 2026 was 120,834,931 . As of June 30,"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0d6651fb52d2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with candidate_rules on rfnge (funded published rows without gics_sub_industry, 2024-03-31): 27 rows, identical to affected_rows and reviewed_rows; none has extracted_industry. The page prints the filer's own broad label in the first cell of each company's first line (field-status printed_row starts e.g. 'Software | First lien ...'), so the industry is on the page and not published: confirmed_error is the right conclusion. Rejecting the alias mapping is sound (it maps 'Distribution & Logistics' to Air Freight & Logistics, a guess). Parking with an acceptance question to the owner (REQ-rfng-1, now in history) is correct; no proposal written, nothing cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000008",
+     "text": "Geo Parent Corporation Business Services First Lien(2)(4) SOFR(S) + 5.25 % 10.50 % 04/2023 12/2028 17,761 17,512 17,761 4.70 % Enverus Holdings, Inc."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1b2e9d4e3994",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with candidate_rules on rfnge (funded published rows without gics_sub_industry, 2023-09-30): 22 rows, identical to affected_rows and reviewed_rows; none has extracted_industry. The page prints the filer's own broad label in the first cell of each company's first line (field-status printed_row starts e.g. 'Software | First lien ...'), so the industry is on the page and not published: confirmed_error is the right conclusion. Rejecting the alias mapping is sound (it maps 'Distribution & Logistics' to Air Freight & Logistics, a guess). Parking with an acceptance question to the owner (REQ-rfng-1, now in history) is correct; no proposal written, nothing cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000014",
+     "text": "Pye-Barker Fire & Safety, LLC Business Services First lien (2) SOFR(Q) + 5.50 % 11.04 % 09/2023 11/2027 17,455 17,368 17,367 7.22 % Virtusa"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1b3f9b68498d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with candidate_rules on rfnge (funded published rows without gics_sub_industry, 2023-12-31): 26 rows, identical to affected_rows and reviewed_rows; none has extracted_industry. The page prints the filer's own broad label in the first cell of each company's first line (field-status printed_row starts e.g. 'Software | First lien ...'), so the industry is on the page and not published: confirmed_error is the right conclusion. Rejecting the alias mapping is sound (it maps 'Distribution & Logistics' to Air Freight & Logistics, a guess). Parking with an acceptance question to the owner (REQ-rfng-1, now in history) is correct; no proposal written, nothing cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000004",
+     "text": "Geo Parent Corporation 3.1 % 35.7 % Industry Type Percent of Total Investments at Fair Value Business Services 36.5 % Software 34.7 % Healthcare 8.4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_636aa0f53f21",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with candidate_rules on rfnge (funded published rows without gics_sub_industry, 2025-09-30): 63 rows, identical to affected_rows and reviewed_rows; none has extracted_industry. The page prints the filer's own broad label in the first cell of each company's first line (field-status printed_row starts e.g. 'Software | First lien ...'), so the industry is on the page and not published: confirmed_error is the right conclusion. Rejecting the alias mapping is sound (it maps 'Distribution & Logistics' to Air Freight & Logistics, a guess). Parking with an acceptance question to the owner (REQ-rfng-1, now in history) is correct; no proposal written, nothing cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000018",
+     "text": "NC Topco, LLC Software First Lien(4)(7)(8) SOFR(M) + 4.50 % 8.66 % 08/2024 09/2031 30,702 30,571 30,702 3.52 % Diamondback Acquisition, Inc. Software"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_719eab88b04b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with candidate_rules on rfnge (funded published rows without gics_sub_industry, 2023-06-30): 12 rows, identical to affected_rows and reviewed_rows; none has extracted_industry. The page prints the filer's own broad label in the first cell of each company's first line (field-status printed_row starts e.g. 'Software | First lien ...'), so the industry is on the page and not published: confirmed_error is the right conclusion. Rejecting the alias mapping is sound (it maps 'Distribution & Logistics' to Air Freight & Logistics, a guess). Parking with an acceptance question to the owner (REQ-rfng-1, now in history) is correct; no proposal written, nothing cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000011",
+     "text": "Optiv Parent Inc. Software First lien (2) SOFR(S) + 5.25 % 10.34 % 04/2023 7/1/2026 9,852 9,522 9,413 10.91 % Disco Parent, Inc. Software First lien"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_9a5a94f7ecf1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with candidate_rules on rfnge (funded published rows without gics_sub_industry, 2025-12-31): 93 rows, identical to affected_rows and reviewed_rows; none has extracted_industry. The page prints the filer's own broad label in the first cell of each company's first line (field-status printed_row starts e.g. 'Software | First lien ...'), so the industry is on the page and not published: confirmed_error is the right conclusion. Rejecting the alias mapping is sound (it maps 'Distribution & Logistics' to Air Freight & Logistics, a guess). Parking with an acceptance question to the owner (REQ-rfng-1, now in history) is correct; no proposal written, nothing cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000003",
+     "text": "Safety Borrower Holdings LLC Business Services First Lien(4)(7)(8) SOFR(M) + 4.75 % 8.47 % 03/2024 12/2032 32,920 32,885 32,920 First Lien(8)(9) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a0d6442434fb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with candidate_rules on rfnge (funded published rows without gics_sub_industry, 2025-06-30): 50 rows, identical to affected_rows and reviewed_rows; none has extracted_industry. The page prints the filer's own broad label in the first cell of each company's first line (field-status printed_row starts e.g. 'Software | First lien ...'), so the industry is on the page and not published: confirmed_error is the right conclusion. Rejecting the alias mapping is sound (it maps 'Distribution & Logistics' to Air Freight & Logistics, a guess). Parking with an acceptance question to the owner (REQ-rfng-1, now in history) is correct; no proposal written, nothing cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000014",
+     "text": "NC Topco, LLC Software First Lien(4)(7)(8) SOFR(M) + 4.50 % 8.83 % 08/2024 09/2031 30,778 30,642 30,624 3.77 % OEConnection LLC Software First"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_af78babd7d5a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with candidate_rules on rfnge (funded published rows without gics_sub_industry, 2026-06-30): 108 rows, identical to affected_rows and reviewed_rows; none has extracted_industry. The page prints the filer's own broad label in the first cell of each company's first line (field-status printed_row starts e.g. 'Software | First lien ...'), so the industry is on the page and not published: confirmed_error is the right conclusion. Rejecting the alias mapping is sound (it maps 'Distribution & Logistics' to Air Freight & Logistics, a guess). Parking with an acceptance question to the owner (REQ-rfng-1, now in history) is correct; no proposal written, nothing cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000014",
+     "text": "Safety Borrower Holdings LLC Business Services First Lien(4)(7)(8) SOFR(M) + 4.75 % 8.39 % 03/2024 12/2032 32,755 32,722 32,549 First Lien(8)(9) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c24ed8aafc70",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed with candidate_rules on rfnge (funded published rows without gics_sub_industry, 2026-03-31): 99 rows, identical to affected_rows and reviewed_rows; none has extracted_industry. The page prints the filer's own broad label in the first cell of each company's first line (field-status printed_row starts e.g. 'Software | First lien ...'), so the industry is on the page and not published: confirmed_error is the right conclusion. Rejecting the alias mapping is sound (it maps 'Distribution & Logistics' to Air Freight & Logistics, a guess). Parking with an acceptance question to the owner (REQ-rfng-1, now in history) is correct; no proposal written, nothing cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000010",
+     "text": "Safety Borrower Holdings LLC Business Services First Lien(4)(7)(8) SOFR(M) + 4.75 % 8.42 % 03/2024 12/2032 32,837 32,804 32,309 First Lien(8)(9) -"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "printed-debt-classified-as-equity-or-fund",
+   "outcome": "supported",
+   "rationale": "Verified in all 7 quarters: printed 'Structured Finance Obligations ... SOFR + 7.00% ... 01/2037 $ 1,996' and rgA4 published FUND / PRIVATE_CREDIT_FUND with par blank; rfnge LOAN / CORPORATE / DIRECT / STRUCTURED_CREDIT par 1,996,000, matching the cohort's only coding of STRUCTURED_CREDIT in rgA4 (9 rows, all LOAN/CORPORATE/DIRECT). The proposed check (fund-class row with tagged principal, maturity and floating spread) is specific; real fund interests rarely carry all three, so false positives should be few.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000014",
+     "text": "Ivy Hill Middle Market Credit Fund, Ltd** Investment Fund Structured Finance Obligations(8) SOFR(Q) + 7.00 % 10.66 % 11/2024 01/2037 $ 1,996 $ 1,996"
+    }
+   ]
+  },
+  {
+   "observation_key": "par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "rgA4 2024-12-31 shares_held 1,996,000 on the Ivy Hill row, page prints a dollar par; rfnge units blank, par set. Check (units equal to dollar cost or FV on a debt-like row) would catch recurrence; restricting to debt-like rows keeps $1-par equity out.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000004",
+     "text": "Ivy Hill Middle Market Credit Fund, Ltd** Investment Fund Structured Finance Obligations SOFR(S) + 7.00 % 11.46 % 11/2024 01/2037 $ 1,996 $ 1,996 $"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Suppression verified: shadow/page_rules_name_blind_spots.csv on rfnge has page_test_suppressed True in all 14 quarters with 93 to 98 pct of rows lacking a name cell; field-status printed rows start at the industry cell, consistent with the company sitting on a heading row. All 27 renames match the printed company line. The agent's scan covers every (filing, issuer_name) pair, but it uses substring matching, so a published name that is a prefix of the printed one passes: 11 names missing a trailing dot (e.g. 'Allworth Financial Group, L.P' vs printed 'L.P.') remain published and are disclosed only in not_done; 'fixed' is therefore partial. Count slips: the punctuation fixes are 9 names / 14 rows, not 10 or 12 names. The proposed check needs whole-token matching to catch those.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000003",
+     "text": "Allworth Financial Group, L.P. Financial Services & Technology First Lien(8) SOFR(M) + 4.75 % 8.47 % 10/2023 12/2027 12,523 12,446 12,523"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-cell-leaks-into-issuer-name",
+   "outcome": "supported",
+   "rationale": "rgA4 issuer 'Business Services' on the Atlas undrawn line 2024-12-31 with GICS Diversified Support Services; rfnge Atlas AU Bidco Pty Ltd, GICS blank like Atlas's other rows. Check (issuer name equal to a printed industry label) is precise for this filer's label set.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000004",
+     "text": "Atlas AU Bidco Pty Ltd** Business Services First Lien(8)(9) - Undrawn - - - 12/2022 12/2028 $ 320 $ ( 3 ) $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-plus-pik-spread-is-cash-leg-only",
+   "outcome": "supported",
+   "rationale": "All 125 basis_spread changes rfnge vs rgA4 equal the sum of the printed margin figures in the row's printed margin cell (scripted check over the field-status printed rows, 125 of 125). Check (two figures in the margin cell, published spread equals the first) is narrow and testable.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000004",
+     "text": "CentralSquare Technologies, LLC Software First Lien(4)(7)(8) SOFR(M)* + 2.88 % + 3.38 %/PIK 10.63 % 04/2024 04/2030 19,829 19,611 19,829"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-margin-loan-read-as-fixed",
+   "outcome": "supported",
+   "rationale": "25 coupon_type changes Fixed -> Floating, all on reference_rate_type SOFR rows (Knockout 10, KWOR 12, Sierra 2, Diligent 1). Check (Fixed on a floating benchmark) is cheap and low in false positives.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000014",
+     "text": "First Lien(8) SOFR(Q)* + 8.42 %/PIK 12.09 % 04/2024 08/2030 1,882 1,877 1,834"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "outcome": "rejected",
+   "rationale": "Population incomplete. My scan of every rfnge row whose printed row carries a PIK figure (185 rows) finds one row still wrong: Associations Subordinated 2 at 2025-12-31 prints 'Fixed(Q)* 14.25 %/PIK 14.25 %' and publishes no pik_rate. The observation lists two rows (2023-12-31, 2024-12-31) and REQ-rfng-2 states every '%/PIK' row now publishes a printed figure; both are untrue for this row. Next action: fix the row by correction (pik_rate 14.25, cash 0) and re-run the agent's pikform scan over the identifier format used from 2025-12-31 ('Issuer | Instrument').",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000003",
+     "text": "Subordinated(8) Fixed(Q)* 14.25 %/PIK 14.25 % 05/2024 05/2030 5,081 5,073 5,183 Subordinated(8) Fixed(Q)* 14.25 %/PIK 14.25 % 05/2024 05/2030 1,940 1,937 1,990"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-instrument-differs-from-printed-row",
+   "outcome": "supported",
+   "rationale": "WEG Sub 2023-12-31 published 'First Lien' (member) on a printed Subordinated line, now Subordinated; Ivy Hill 2024-12-31 member 'Preferred shares' on a printed Structured Finance Obligations line, now as printed. Check is reasonable; abbreviations in members may need a token map to avoid false positives.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000004",
+     "text": "WEG Sub Intermediate Holdings, LLC Financial Services Subordinated(4) Fixed(Q)* + 15.00 %/PIK 15.00 % 05/2023 05/2033 3,513 3,465"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "outcome": "supported",
+   "rationale": "holdings_field_diff rfnge vs rgA4 shows instrument_description changed on exactly the 4 declared rows, so the workaround held. not_feasible as a ledger rule is fair: it is a build-order interaction visible only in a before/after diff, which the fund loop already requires.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000014",
+     "text": "Coupa Holdings, LLC Software First lien (2)(4) SOFR(M) + 7.50 % 12.82 % 02/2023 02/2030 19,683 19,453 19,683"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "outcome": "supported",
+   "rationale": "All 23 rows now publish pik_rate = printed all-in rate and spread = printed margin (scripted, 23 of 23). Growth evidence re-derived from rfnge: KWOR subordinated par 375, 386, 398, 411, 423, 435 (2.8 to 3.3 pct a quarter vs coupon/4 2.9 to 3.1, margin/4 2.0): strong. KWOR preferred cost 250, 260, 268, 276, 284, 293 on 250 units: strong. Knockout preferred cost per unit 1.177, 1.271, 1.374, 1.376, 1.481, 1.483, 1.594, 1.594, 1.709 (semiannual steps 7.2 to 8.1 pct vs coupon/2) with flat cost per unit across the two partial redemptions: consistent, moderate as stated. Diligent: 2026-03-31 prints 'SOFR(Q) + 5.00 % 8.67 %' and 2026-06-30 'SOFR(Q)* + 8.42 %/PIK 12.09 %' on the same par 1,882, a repricing with no growth evidence yet, so whole-coupon is inferred from this filer's format only (weak, as disclosed; re-check par at 2026-09-30). Scope note for the owner: D-232 as recorded accepts the whole-coupon reason for three named funds' loans; applying it to this fund and to 16 preferred rows is the agent's extension and is not yet recorded in the decision log. The detector (par or cost-per-unit growth vs pik_rate) needs a redemption/draw guard to avoid false positives.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000014",
+     "text": "Subordinated(8) SOFR(Q)* + 8.00 %/PIK 11.67 % 02/2025 02/2030 435 435 435"
+    },
+    {
+     "accession": "0001925531-26-000010",
+     "text": "Diligent Corporation Software First Lien(4)(7)(8) SOFR(Q) + 5.00 % 8.67 % 04/2024 08/2030 10,980 10,949 10,861 First Lien(8) SOFR(Q) + 5.00 % 8.67 % 04/2024 08/2030 1,882 1,877 1,862"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "industry_coverage fires on the nine quarters with 500 rows in rfnge (reconstructed: 12, 22, 26, 27, 50, 63, 93, 99, 108), none with extracted_industry. existing_detector is correct.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000014",
+     "text": "Coupa Holdings, LLC Software First Lien(2)(6)(8) SOFR(Q) + 5.25 % 8.91 % 02/2023 02/2030 $ 38,674 $ 38,532 $ 38,156"
+    }
+   ]
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "outcome": "supported",
+   "rationale": "Latent risk, correctly left. The filer's industry summary prints only ten broad labels (Business Services 36.3 pct, Software 28.9 pct, ...), which cannot name a GICS sub-industry; the proposed alias-breadth audit is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000003",
+     "text": "Industry Type Percent of Total Investments at Fair Value Business Services 36.3 % Software 28.9 % Financial Services & Technology 14.3 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "pct-printed-once-per-issuer-group",
+   "outcome": "supported",
+   "rationale": "Verified: 0 published percents differ from FV / net assets in any of 14 quarters; the shortfall is the per-issuer-group print. existing_detector is accurate in that F23 fires, but F23 detects the layout, not a recurrence of a real error; after 14 quarters of false alarms AGENTS.md calls for repairing or retiring F23 for this filer.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000014",
+     "text": "Radwell Parent, LLC Distribution & Logistics First lien (2)(4) SOFR(Q) + 6.75 % 12.14 % 11/2022 04/2029 5,506 5,432 5,506"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-basis-changes-between-filings",
+   "outcome": "supported",
+   "rationale": "Eclipse Topco preferred printed 4,607 units at 2024-09-30 and 461 from 2025-06-30 on unchanged cost 5,040; published equals printed. Detector (units change by about 10x while cost moves under 5 pct) is targeted.",
+   "evidence": [
+    {
+     "accession": "0001925531-25-000014",
+     "text": "Eclipse Topco, Inc. (12) Software Preferred shares (8) Fixed(S)* 12.50 %/PIK 12.50 % 09/2024 - 461 5,040 5,036 0.62 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-leg-float-residue-from-unrounded-subtract",
+   "outcome": "rejected",
+   "rationale": "Population incomplete. rfnge has three rows with a non-zero sub-1e-9 cash rate, not one: Associations Subordinated 2 2024-12-31 (-1.78e-15), and Knockout preferred 2024-06-30 (-1.78e-15) and 2024-09-30 (-3.55e-15). The two Knockout values were created by this run's whole-coupon corrections (rgA4 5.16 and 5.26), while declared_changes says the 23 whole-coupon rows 'now have cash leg 0.0'. The column was declared, so no undeclared column changed, but the declared value is wrong for two rows. The proposed check would catch all three. Next action: correct the count and the declared_changes text, and either round in the shared step or declare all three.",
+   "evidence": [
+    {
+     "accession": "0001925531-24-000020",
+     "text": "Preferred shares (8) SOFR(S)* + 10.75 %/PIK 16.01 % 06/2022 - 789 1,003 1,013"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rfng-1",
+   "outcome": "supported",
+   "rationale": "Classification acceptance_change is correct: whether a filer's own non-GICS industry counts as industry coverage changes what the gate accepts, which only the owner can decide. The deferral hides nothing: the nine industry_coverage findings stay outstanding with conclusion confirmed_error and no proposal, and I reconstructed all nine populations (500 rows). The distinction from the HPS ruling (D-232 option b carries the filer's later GICS headings back; this filer never prints GICS) holds. Gap: the cited authority record D-233 is not in docs/investigations/v05_decision_log.md at review time (last entry D-232); the deferral must be recorded there before the fund is cleared.",
+   "evidence": [
+    {
+     "accession": "0001925531-23-000014",
+     "text": "Radwell Parent, LLC Distribution & Logistics First lien (2)(4) SOFR(Q) + 6.75 % 12.14 % 11/2022 04/2029 5,506 5,432"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-rfng-2",
+   "outcome": "rejected",
+   "rationale": "Classification verification_bug is right (pik_printed cannot read 'N %/PIK'), and deferring a rule change that alters findings cohort-wide to the measured second rule batch follows the owner's 2026-10-18 direction. Rejected because the deferral rests on a false statement: the request says every '%/PIK' row of this fund now publishes a printed figure, so the extended rule 'should raise no finding here', and the history says the agent checked these lines by its own scan. My scan of all 185 printed-PIK rows finds Associations Subordinated 2 at 2025-12-31 ('Fixed(Q)* 14.25 %/PIK 14.25 %') with no pik_rate published. With the rule deferred, nothing in the ledger sees this live defect. Next action: correct the row in this fund now and amend the request's evidence before it goes to the rule batch.",
+   "evidence": [
+    {
+     "accession": "0001925531-26-000003",
+     "text": "Subordinated(8) Fixed(Q)* 14.25 %/PIK 14.25 % 05/2024 05/2030 5,081 5,073 5,183 Subordinated(8) Fixed(Q)* 14.25 %/PIK 14.25 % 05/2024 05/2030 1,940 1,937 1,990"
+    }
+   ]
+  }
+ ]
+}
