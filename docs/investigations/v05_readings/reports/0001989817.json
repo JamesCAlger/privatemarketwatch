@@ -1,112 +1,2093 @@
 {
  "cik": "0001989817",
- "label": "hcxe",
- "before": "spoff3",
+ "label": "rfhcf",
+ "before": "rgA4",
  "shared_code": false,
+ "investigator_id": "fund-agent-rfhc-0001989817 (claude-opus-5-5 general-purpose subagent, 2026-10-25)",
  "declared_changes": [
-  {"column": "asset_category", "rows": 70, "why": "rows printed under 'Preferred Equity' / 'Other Equity Investments' published as loans, or preferred published as common; row corrections from the printed line"},
-  {"column": "index_classification", "rows": 70, "why": "moves with asset_category (same rows)"},
-  {"column": "asset_class", "rows": 43, "why": "loan rows reclassed to equity: PRIVATE_CREDIT -> PRIVATE_EQUITY"},
-  {"column": "instrument_description", "rows": 93, "why": "printed instrument text ('Preferred Stock', 'Class A Units', 'B-2 Warrants', ...) set on equity lines; the member names none"},
-  {"column": "shares_held", "rows": 55, "why": "printed unit count on reclassed rows (the filer tagged it as principal), and printed counts where the published count differed (ONE Group preferred 1,000 not 11,911,000; A-2 warrants 11,911); New Era par moved out of shares_held"},
-  {"column": "principal_amount", "rows": 44, "why": "cleared on rows reclassed to equity (the tag held the unit count); New Era 2025-12-31 / 2026-03-31 par from the share-count tag (par_tagged_as_units rated_rows_near_cost)"},
-  {"column": "principal_amount_usd", "rows": 44, "why": "cleared with principal_amount on reclassed rows; New Era par"},
-  {"column": "principal_fx_status", "rows": 44, "why": "cleared with principal_amount on reclassed rows; New Era par"},
-  {"column": "principal_fx_rate_to_usd", "rows": 3, "why": "New Era par now published (rate 1.0)"},
-  {"column": "principal_amount_source", "rows": 3, "why": "New Era par from the share-count tag"},
-  {"column": "issuer_name", "rows": 3, "why": "PBN II-A issuer name held the instrument ('... Limited Partnership Interest'); NE SPV common units tagged on a New Era member (2025-12-31)"},
-  {"column": "basis_spread", "rows": 48, "why": "'SF + m % PIK' margins tagged as PIK only (spread from the printed margin, row corrections; MBS rows without a rate by the wrapper pik_only_tag_reading margin); AVSC, LC8 printed margins"},
-  {"column": "coupon_type", "rows": 40, "why": "those PIK-margin loans were published Fixed; printed floating ('SF + 6.75 % PIK')"},
-  {"column": "interest_rate", "rows": 7, "why": "printed and untagged rates (AVSC 2026-03-31, Knitwell 2024-06-30, LC8 2025-03-31); fixed PIK coupons printed '14.00 % PIK' with no plain rate tag (wrapper pik_only_tag_reading coupon: Kowalski, Corza x2, ICP)"},
-  {"column": "interest_rate_reported", "rows": 3, "why": "row-corrected rates (AVSC, Knitwell, LC8)"},
-  {"column": "interest_rate_kind", "rows": 7, "why": "rows that gained a rate"},
-  {"column": "reference_rate_source", "rows": 2, "why": "reference rate read from the printed line (AVSC, LC8)"},
-  {"column": "src_transforms", "rows": 16, "why": "interest_rate:pik_only, basis_spread:pik_margin and principal_amount:from_shares_tag events from the two wrapper settings; Navacord shares_held:pow10_shares (build composition, present in the unedited hcxa)"},
-  {"column": "shares_held_source", "rows": 1, "why": "Navacord 2026-03-31 derived_proxy; appears in the unedited build hcxa (new 2026-06-30 row of the issuer), not from an edit"},
-  {"column": "corrected_fields", "rows": 139, "why": "row corrections applied"},
-  {"column": "gics_sub_industry", "rows": 30, "why": "not an edit: the same 30 rows differ in the unedited build hcxa (single-fund build plus the 2026-06-30 quarter against the 47-fund spoff3); e.g. CCI Buyer Diversified Financial Services -> Wireless Telecommunication Services"},
-  {"column": "gics_sector", "rows": 21, "why": "as gics_sub_industry (unedited hcxa shows the same 21)"},
-  {"column": "position_id", "rows": 242, "why": "237 rows differ in the unedited hcxa (new quarter re-links chains); 5 more from issuer/class changes of corrected rows"}
+  {
+   "column": "issuer_name",
+   "rows": 34,
+   "why": "printed names (8 rows, plus Constellation c-389 named Corza) and tranche text cut from 25 structured-finance names (wrapper)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 30,
+   "why": "tranche text moved from the name (25), warrant classes (4), IDF 9 Series B Units (1)"
+  },
+  {
+   "column": "shares_held",
+   "rows": 13,
+   "why": "unit counts from the page: ONE Group preferred/warrants, NE SPV, LC8, IDF 9; New Era withdrawn (a loan)"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 3,
+   "why": "New Era par 4,314; LC8 and IDF 9 par withdrawn (equity)"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 10,
+   "why": "printed currency (7 loans) and equity/loan class changes (3)"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 10,
+   "why": "same rows, USD at the build's FRED rate"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 10,
+   "why": "same rows"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 10,
+   "why": "same rows"
+  },
+  {
+   "column": "asset_category",
+   "rows": 4,
+   "why": "New Era loan; LC8 and IDF 9 preferred; Constellation note 2025-09-30 fund interest to loan"
+  },
+  {
+   "column": "index_classification",
+   "rows": 4,
+   "why": "same rows"
+  },
+  {
+   "column": "asset_class",
+   "rows": 4,
+   "why": "same rows"
+  },
+  {
+   "column": "issuer_category",
+   "rows": 1,
+   "why": "Constellation note 2025-09-30: FUND to CORPORATE"
+  },
+  {
+   "column": "exposure_type",
+   "rows": 1,
+   "why": "Constellation note 2025-09-30: FUND to DIRECT"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 1,
+   "why": "New Era printed margin 6.25"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 1,
+   "why": "New Era printed SOFR"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "New Era floating"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 8,
+   "why": "printed PIK figures not tagged"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 8,
+   "why": "derived from interest_rate less pik_rate on the 8 PIK rows"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 5,
+   "why": "printed maturities restored (Constellation c-389, Equinox c-181, IDF 9 c-359, Corza c-393, Distributed Solar c-252)"
+  },
+  {
+   "column": "maturity_status",
+   "rows": 5,
+   "why": "follows the restored maturities"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 816,
+   "why": "printed ICB headings kept (printed_industry_labels) and 41 rows corrected to the printed heading"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 31,
+   "why": "follows the corrected headings (Structured Finance rows, Corza)"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 31,
+   "why": "same rows"
+  },
+  {
+   "column": "position_id",
+   "rows": 10,
+   "why": "chains rejoined after the name and class fixes (TTF/Soliant, Team, IDF 9 Series B)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 83,
+   "why": "rows touched by this run's row corrections"
+  }
  ],
- "rows_added": 320,
+ "rows_added": 2,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Equity lines published as loans (member names no class, unit count tagged as principal): CC Investor Aggregator (41-45M, 2025-06-30 to 2026-03-31), CCI Topco 2025-06-30 (49.8M), Kendra Scott, Racing Point, Creek Feeder, IDF 8 Topco, IDF 9 Financeco, ONE Group preferred, Lasko and NE SPV units, LC8 Class A Units, Holdings 2 L.P. Interest, PBN II-A; and preferred published as common (CCI Topco, Kendra Scott, Lava Topco, LAL Group, CB Lido, Navacord, Sparkle, Femur, Herb, Behavox Series C, NE SPV preferred units). Class from the printed section, instrument and unit count from the printed line. 185 specs in scripts/v05_evidence/row_correction_specs/0001989817.json, generated by scratch/fund_runs/0001989817/gen_specs.py.",
+  {
+   "what": "printed issuer names on 8 rows (member kept an old or another company's name; 'Kendra Scott Design In.' misspelling)",
    "kind": "row_correction",
-   "quarters": ["2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001989817-25-000065", "text": "CC Investor Aggregator, L.P. (4)(20) - Class A Units 40,582 $ 40,582 $ 41,197"},
-    {"accession": "0001989817-25-000065", "text": "CCI Topco, Inc. (4)(20) - Preferred Stock 500 49,005 49,791"},
-    {"accession": "0001989817-25-000023", "text": "Kendra Scott Design, Inc.(4)(19) 23,997 24,270 26,110"}
-   ]},
-  {"what": "'SF + m % PIK r %' loans: the margin tagged only as the PIK rate beside a plain rate, published with no spread and as Fixed; spread set from the printed margin, coupon Floating (Chord, Distributed Solar, Femur, Flatiron, GAPCO, Lakeland, Link, MBS 2025-09-30, Matrix, NRD, New Era, RGP, Stanford, Sunraycer, TecoStar, BW NHHC, LC8).",
-   "kind": "row_correction",
-   "quarters": ["2024-12-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [
-    {"accession": "0001989817-25-000023", "text": "Sunraycer HPS Borrower LLC (4)(14) SF + 8.50 % PIK 12.83 % 10/28/2029 10,709 10,508 10,503"}
-   ]},
-  {"what": "Rates printed and not tagged on the row's context: AVSC Holding Corp. revolver 2026-03-31 (8.67 / SF + 5.00), Knitwell 2024-06-30 (13.48), LC8 Cirrostratus 2025-03-31 (11.30 / SF + 7.00; tags sit on another context).",
-   "kind": "row_correction",
-   "quarters": ["2024-06-30", "2025-03-31", "2026-03-31"],
-   "quotes": [
-    {"accession": "0001628280-26-035294", "text": "AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173"},
-    {"accession": "0001989817-24-000032", "text": "Knitwell Borrower LLC (4)(10) SF+ 8.00 % 13.48 % 7/28/2027 16,981 16,410 16,419"}
-   ]},
-  {"what": "NE SPV Holdco common units (4,139 units, no cost, no value) tagged on a New Era Technology member at 2025-12-31: issuer, instrument, class and unit count set from the NE SPV line.",
-   "kind": "row_correction",
-   "quarters": ["2025-12-31"],
-   "quotes": [
-    {"accession": "0001628280-26-020820", "text": "NE SPV Holdco, LLC (4)(19)(21) - Common Units 4,139 - - - - - %"}
-   ]},
-  {"what": "Wrapper source_encodings.pik_only_tag_reading [coupon, margin]: fixed PIK coupons printed '14.00 % PIK' with no plain rate tag publish the coupon as the rate (Kowalski, Corza, ICP at 2024-12-31 / 2025-03-31); 'SF + 9.50 % PIK' rows with no printed rate publish the margin as the spread (MBS Services 2025-12-31 to 2026-06-30).",
+    {
+     "accession": "0001989817-25-000023",
+     "text": "TTF Lower Intermediate LLC (7) SF + 3.75 % 8.11 % 7/18/2031 2,750 2,724 2,736"
+    },
+    {
+     "accession": "0001989817-25-000043",
+     "text": "Team, Inc. (4)(10) SF + 6.50 % 10.83 % 3/12/2030 13,090 12,799 12,799"
+    },
+    {
+     "accession": "0001628280-26-035294",
+     "text": "Global Service GmbH (4)(5)(7)(27) E + 6.75 % 8.85 % 2/1/2030 EUR 7,753 8,842 9,051"
+    },
+    {
+     "accession": "0001628280-26-035294",
+     "text": "White Cap Supply Holdings LLC (7)(22) SF + 3.25 % 6.92 % 10/19/2029 1,809 1,803 1,745"
+    },
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Westlands Electric Power Company Investor, LLC (4)(6)(13)(24) SF + 6.00 % 9.73 % 12/6/2030 50,000 40,988 40,778"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Kendra Scott Design Inc (4)(21) - Preferred Stock 2,316,836 24,270 33,117"
+    }
+   ]
+  },
+  {
+   "what": "tranche text cut from 9 structured-finance issuer names into the instrument (issuer_name_strip_re alternative plus issuer_name_strip_to_instrument)",
    "kind": "wrapper",
-   "quarters": ["2024-12-31", "2025-03-31", "2025-12-31", "2026-03-31", "2026-06-30"],
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001989817-25-000023", "text": "Kowalski Trust (4)(5)(7) 14.00 % PIK 5/31/2034 18,030 17,714 18,030"},
-    {"accession": "0001628280-26-035294", "text": "MBS Services Holdings, LLC (4)(10)(17)(23) SF + 9.50 % PIK 4/15/2026 4,232 3,950 3,088"}
-   ]},
-  {"what": "Wrapper source_encodings.par_tagged_as_units [rated_rows_near_cost]: New Era Technology par tagged with the share-count concept (4,481,000 / 4,594,000) published as principal (clears X11 at 2025-12-31 and 2026-03-31). Reaches only rows with a rate and a count within 0.8 to 1.25 times cost: New Era x2 and Holdings 2 (whose principal the row correction then clears, it is preferred equity).",
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999"
+    }
+   ]
+  },
+  {
+   "what": "printed ICB industry headings kept in extracted_industry (printed_industry_labels, 36 labels); no GICS supplied",
    "kind": "wrapper",
-   "quarters": ["2025-12-31", "2026-03-31"],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
    "quotes": [
-    {"accession": "0001628280-26-035294", "text": "New Era Technology Inc (4)(10)(18)(23) SF + 6.25 % PIK 10.10 % 6/30/2030 4,594 4,546 4,593"}
-   ]}
+    {
+     "accession": "0001989817-25-000043",
+     "text": "11.58 % Industrial Transportation Stonepeak Nile Parent LLC (5)(7)(18) SF + 2.75 % 7.07 % 2/4/2032 1,765 1,760 1,760"
+    }
+   ]
+  },
+  {
+   "what": "'Structured Finance' heading on 39 rows and Corza 2025-12-31 heading (extracted_industry)",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001989817-25-000065",
+     "text": "Structured Finance Structured Finance Investments Ares Secondaries PBN Finance Co IV LLC (4)(5)(6)(7) SF + 2.90 % 7.23 % 4/14/2039 $ 1,000 $ 10 $ 10"
+    }
+   ]
+  },
+  {
+   "what": "PIK figures printed and not tagged (8 rows)",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "Kowalski Trust (4)(5)(7) 16.00 % PIK 16.00 % 5/31/2034 18,030 17,722 18,030"
+    },
+    {
+     "accession": "0001989817-25-000043",
+     "text": "Sunraycer HPS Borrower LLC (4)(13) SF + 8.50 % PIK 12.80 % 10/28/2029 11,052 10,861 10,871"
+    },
+    {
+     "accession": "0001989817-25-000043",
+     "text": "Flatiron Energy Holdco LLC (4)(13) SF + 7.50 % PIK 11.80 % 10/1/2029 5,094 4,986 4,991"
+    },
+    {
+     "accession": "0001989817-25-000043",
+     "text": "LC8 Cirrostratus L.P. (4)(5)(10)(19) SF + 7.00 % PIK 11.30 % 2/8/2029 1,575 $ 1,548 $ 1,556"
+    },
+    {
+     "accession": "0001989817-25-000043",
+     "text": "International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075"
+    }
+   ]
+  },
+  {
+   "what": "unit counts from the page (13 rows: proxy overwrites, x1000 tags, class changes)",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "The ONE Group Hospitality, Inc. - Preferred Shares (4) 8/2/2029 $ 1,000 $ 950 $ 972"
+    },
+    {
+     "accession": "0001628280-26-035294",
+     "text": "The ONE Group Hospitality, Inc. (20) - A-2 Warrants 11,911 61 21"
+    },
+    {
+     "accession": "0001989817-25-000085",
+     "text": "NE SPV Holdco, LLC (4)(18)(20) - Preferred Units 4,139 $ 3,018 $ 3,018"
+    }
+   ]
+  },
+  {
+   "what": "Constellation Wealth Capital Fund-A-Blocker (LIDO) unsecured note: 2025-12-31 c-389 tagged with Corza's member (name and maturity, context-keyed); 2025-09-30 published as a fund interest (loan); 2026-03-31 and 2026-06-30 dropped as aggregates, now published (wrapper debt leaf marker 'blocker', 1 identifier of 989 changes) with the printed name and loan class. 2 rows added, all values nil",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ -"
+    },
+    {
+     "accession": "0001628280-26-035294",
+     "text": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 48 $ - $ -"
+    },
+    {
+     "accession": "0001989817-25-000085",
+     "text": "Constellation Wealth Capital Fund-A-Blocker (Lido), LLC (4) 2/1/2038 46 46 46"
+    }
+   ]
+  },
+  {
+   "what": "class: New Era 2025-09-30 to a loan (par tagged as units); LC8 2024-09-30 and IDF 9 Series B 2025-09-30 to preferred equity (IDF 9 context-keyed)",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001989817-25-000085",
+     "text": "New Era Technology Inc (4)(10)(17)(18) SF + 6.25 % PIK 6/30/2030 4,314 4,314 4,314"
+    },
+    {
+     "accession": "0001989817-24-000055",
+     "text": "Preferred Equity Consumer Services LC8 Cirrostratus L.P. (4)(5)(10) 2/8/2029 $ 3,800 3,725 3,726"
+    },
+    {
+     "accession": "0001989817-25-000085",
+     "text": "IDF 9 Financeco, LLC (4)(6)(19)(20) - Series B Units 1,055,303 966 1,041"
+    }
+   ]
+  },
+  {
+   "what": "par currency from the printed line (7 loans), USD at the build's FRED H.10 rate",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "Travelex Issuerco 2 PLC (4)(5)(12) SN+ 8.00 % 13.21 % 9/22/2028 GBP 1,770 2,093 2,241"
+    },
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Fertitta Entertainment LLC/NV (8) SF + 3.50 % 7.86 % 1/27/2029 4,974 4,998 4,999"
+    },
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Tango Bidco SAS (4)(5)(7) E + 5.00 % 8.18 % 10/17/2031 EUR 4,646 4,960 4,744"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Neon Maple US Debt Mergersub Inc (5)(7)(23) SF + 2.50 % 6.22 % 11/17/2031 3,970 3,962 3,980"
+    }
+   ]
+  },
+  {
+   "what": "printed maturities restored (4 rows)",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Equinox Holdings, Inc. (4)(10) SF + 8.25 % (incl. 4.13 % PIK) 12.58 % 3/8/2029 10,046 9,843 9,879"
+    },
+    {
+     "accession": "0001989817-25-000085",
+     "text": "IDF 9 Financeco, LLC (4)(6)(15) SF + 8.50 % 12.50 % 3/28/2031 2,518 2,299 2,306"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950"
+    },
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Distributed Solar Development LLC (4)(13)(24) SF + 12.50 % PIK 16.17 % 5/30/2026 2,384 2,384 2,366"
+    }
+   ]
+  },
+  {
+   "what": "2024-03-31 declared a nil income quarter (new highlights wrapper): 2024-Q4 income is the year less three quarters (22,872 / NII 18,523), clears income_identity",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001989817-24-000007",
+     "text": "Total expenses $ 391,674 Reimbursable expenses (Note 3) ( 391,674 ) Net expenses $ - Net increase (decrease) in net assets resulting from operations $ -"
+    },
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Year Ended December 31, 2024 Total investment income $ 61,475 Net expenses 13,370 Net investment income before excise tax 48,105"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [
-  {"finding": "row_validation X02 2025-09-30",
+  {
+   "finding": "identity industry_coverage 2024-06-30 to 2025-09-30 (6)",
    "hypotheses": [
-    "The flagged rows are undrawn lines with no printed rate and the Alp CFO 2025 subordinated note (no rate printed): as filed.",
-    "But IDF 9 Financeco Series B Units (966 cost, 1,041 value) is published as a loan with no rate; its identifier 'IDF 9 Financeco, LLC' is shared with the drawn IDF 9 loan in that quarter, so a row correction (keyed on accession + identifier) cannot reach it without also changing the loan. Needs a context-keyed correction or a class rule; not proposed as filed because one flagged row is a real class error."
-   ]}
+    "ICB headings are now published in extracted_industry and match the page on every located row; no exact GICS sub-industry follows from a broad ICB heading.",
+    "The filer's own later GICS heading per entity would cover most rows but needs shared code and an owner decision (REQ-rfhc-1)."
+   ]
+  },
+  {
+   "finding": "Equinox Holdings 2024-12-31 c-195 maturity (not a ledger finding)",
+   "hypotheses": [
+    "Row correction logged as applied (context c-195) but the published row has no maturity and empty corrected_fields: a later step replaces the row (likely a duplicate-identifier collapse); not traced within the build budget."
+   ]
+  },
+  {
+   "finding": "AP Himalaya and Creek Feeder LP-interest unit scale (not a ledger finding)",
+   "hypotheses": [
+    "Printed figure equals cost in thousands: may be a dollar commitment, not units; the tag scale changes at 2025-12-31. Owner ruling on the 'Par Amount/Units' column for LP interests needed."
+   ]
+  }
  ],
  "orchestrator_requests": [],
  "observations": [
-  {"observation_key": "equity-section-rows-published-as-loans", "what": "Rows printed under 'Preferred Equity' / 'Other Equity Investments' (member names no class, unit count tagged as principal) were published as loans, up to 144.7M at 2025-06-30.", "field": "asset_category", "quarters": ["2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 144.7, "cause": "fund", "action": "fixed", "suggested_check": "A loan row with no maturity, no rate and no spread whose printed line sits under an equity section heading is an equity row.", "quote": {"accession": "0001989817-25-000065", "text": "CC Investor Aggregator, L.P. (4)(20) - Class A Units 40,582 $ 40,582 $ 41,197"}},
-  {"observation_key": "preferred-equity-published-as-common", "what": "Preferred stock and preferred units printed under 'Preferred Equity' published as common equity (member names no class).", "field": "asset_category", "quarters": ["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 160.0, "cause": "fund", "action": "fixed", "suggested_check": "An equity row printed under a 'Preferred Equity' heading published as COMMON_EQUITY.", "quote": {"accession": "0001989817-25-000065", "text": "CCI Topco, Inc. (4)(20) - Preferred Stock 500 49,005 49,791"}},
-  {"observation_key": "pik-margin-loan-read-as-fixed", "what": "'SF + m % PIK r %' loans published Fixed with no spread; the PIK tag holds the margin. pik_rate still publishes the margin (e.g. 6.75) while the whole printed coupon (10.39) is paid in kind: left, a convention question for pik_rate.", "field": "basis_spread", "quarters": ["2024-12-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 80.4, "cause": "fund", "action": "fixed", "suggested_check": "A loan with a reference rate, a PIK rate and no spread whose PIK rate is below its interest rate.", "quote": {"accession": "0001989817-25-000023", "text": "Sunraycer HPS Borrower LLC (4)(14) SF + 8.50 % PIK 12.83 % 10/28/2029 10,709 10,508 10,503"}},
-  {"observation_key": "rate-printed-on-the-row-and-not-tagged", "what": "AVSC revolver 2026-03-31, Knitwell 2024-06-30 and LC8 2025-03-31 print a rate the row's context does not carry.", "field": "interest_rate", "quarters": ["2024-06-30", "2025-03-31", "2026-03-31"], "fair_value_m": 18.1, "cause": "row", "action": "fixed", "suggested_check": "", "quote": {"accession": "0001628280-26-035294", "text": "AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173"}},
-  {"observation_key": "par-tagged-as-share-count", "what": "New Era Technology par tagged as InvestmentOwnedBalanceShares at 2025-12-31 and 2026-03-31; published with no principal.", "field": "principal_amount", "quarters": ["2025-12-31", "2026-03-31"], "fair_value_m": 4.6, "cause": "row", "action": "fixed", "suggested_check": "X11 caught it.", "quote": {"accession": "0001628280-26-035294", "text": "New Era Technology Inc (4)(10)(18)(23) SF + 6.25 % PIK 10.10 % 6/30/2030 4,594 4,546 4,593"}},
-  {"observation_key": "member-holds-another-rows-values", "what": "A New Era Technology member at 2025-12-31 (c-454) carries the NE SPV common units (4,139, no cost, no value).", "field": "issuer_name", "quarters": ["2025-12-31"], "fair_value_m": 0.0, "cause": "row", "action": "fixed", "suggested_check": "", "quote": {"accession": "0001628280-26-020820", "text": "NE SPV Holdco, LLC (4)(19)(21) - Common Units 4,139 - - - - - %"}},
-  {"observation_key": "one-context-for-two-printed-lines", "what": "IDF 8 Topco Series B-1 and B-2 Units print as two lines (230,248 units, cost 230, value 0 each) but sit on one context at 2025-12-31 and 2026-03-31: one row and 230 of cost missing each quarter; value unaffected.", "field": "cost", "quarters": ["2025-12-31", "2026-03-31"], "fair_value_m": 0.0, "cause": "row", "action": "left", "suggested_check": "Published cost sum against the printed total cost per quarter (230 short in these two quarters).", "quote": {"accession": "0001628280-26-035294", "text": "IDF 8 Topco, LLC (4)(19)(20) - Series B-1 Units 230,248 230 - IDF 8 Topco, LLC (4)(19)(20) - Series B-2 Units 230,248"}},
-  {"observation_key": "duplicate-identifier-blocks-row-correction", "what": "Two published rows share one bdc_investment_identifier in a quarter, so a row correction cannot reach one: IDF 9 Financeco 2025-09-30 (Series B Units published as a loan, 1.0M), ONE Group A-2/B-2 warrants 2025-12-31 and 2026-03-31 (both published with 6,667 units; A-2 prints 11,911), Equinox 2024-12-31 (16.00 % PIK fixed note, no rate published).", "field": "asset_category", "quarters": ["2024-12-31", "2025-09-30", "2025-12-31", "2026-03-31"], "fair_value_m": 2.5, "cause": "shared", "action": "parked", "suggested_check": "make_row_corrections.py: key a correction on the context id when the identifier is not unique in the quarter.", "quote": {"accession": "0001628280-26-035294", "text": "The ONE Group Hospitality, Inc. (20) - A-2 Warrants 11,911 61 21"}},
-  {"observation_key": "unprinted-zero-row-published", "what": "Corza Medical 2025-12-31: a second context (c-389) with principal 47,000, cost 0 and value 0 is published as a loan; the page prints only one Corza line.", "field": "principal_amount", "quarters": ["2025-12-31"], "fair_value_m": 0.0, "cause": "row", "action": "left", "suggested_check": "A published row with zero cost and value whose par matches no printed line.", "quote": {"accession": "0001628280-26-020820", "text": "Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950"}},
-  {"observation_key": "operating-company-lp-interest-classed-as-fund", "what": "AP Himalaya Co-Invest, L.P. (LP Interest, printed under Other Equity Investments) is classed FUND / PRIVATE_EQUITY_FUND to 2025-06-30 and COMMON_EQUITY from 2025-09-30: class changes between quarters with no change on the page. Left: a co-invest vehicle can be read either way.", "field": "index_classification", "quarters": ["2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30"], "fair_value_m": 25.0, "cause": "fund", "action": "left", "suggested_check": "One position whose class changes between quarters while its printed instrument does not.", "quote": {"accession": "0001989817-25-000023", "text": "AP Himalaya Co-Invest, L.P.(4)(19) 25,000 25,082 25,000"}},
-  {"observation_key": "fund-interest-classed-private-equity-under-preferred-section", "what": "Constellation Wealth Capital Fund-A-Blocker (LIDO) Class Z Units, printed under Preferred Equity, published FUND / UNCLASSIFIED (0.13M); the generator skipped it (parentheses in the name).", "field": "index_classification", "quarters": ["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 0.13, "cause": "row", "action": "left", "suggested_check": "", "quote": {"accession": "0001628280-26-035294", "text": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4)(20)(34) - Class Z Units 21,755 121 126"}},
-  {"observation_key": "gics-label-depends-on-build-composition", "what": "With no edit, a single-fund build with the 2026-06-30 quarter (hcxa) publishes a different GICS label on 30 rows than the 47-fund sandbox spoff3 (CCI Buyer Diversified Financial Services -> Wireless Telecommunication Services, DigiCert and Indigo Purchaser lose their label, Stack Sports loses 'Other Specialized REITs'). Some moves are better, some are losses.", "field": "gics_sub_industry", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30"], "fair_value_m": 60.0, "cause": "shared", "action": "left", "suggested_check": "Regression: the same fund built alone and in a cohort sandbox publishes the same GICS labels.", "quote": {"accession": "0001989817-25-000085", "text": "Telecommunications Service Providers CCI Buyer, Inc. (4)(6)(9) 5/13/2032 144 ( 1 ) ( 1 )"}}
+  {
+   "observation_key": "member-keeps-prior-company-name-after-rename",
+   "what": "Five rows published the member's old or another company's name where the page prints the current one: Soliant -> TTF Lower Intermediate (2024-12-31), Global Gruppe -> Global Service (2026-03-31), White Cap Buyer -> White Cap Supply Holdings (2026-03-31), Westlands Power -> Westlands Electric Power (2026-03-31, 2026-06-30). Fixed by row corrections; position_id chains kept (one pid per position across the rename).",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 86.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (existing) fired on these rows.",
+   "quote": {
+    "accession": "0001628280-26-056793",
+    "text": "Westlands Electric Power Company Investor, LLC (4)(6)(13)(24) SF + 6.00 % 9.73 % 12/6/2030 50,000 40,988 40,778"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "The candidate identity rule issuer_name_printed raised RVQ_BLK_19d449ced2b1, RVQ_BLK_75bd43e6f97e and RVQ_BLK_1085b84eee9f on exactly these rows in the untouched build rfhca.",
+    "reference": "identity issuer_name_printed (pipeline/candidate_rules.py issuer_name_differs_from_page), rfhca"
+   }
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "what": "The drawn Team, Inc. term loan at 2025-03-31 (c-125, 12.8M) was tagged with the member 'NTH Degree Purchaser, INC 5' and published under that name; fixed by a row correction; the Team chain is now continuous from 2025-03-31.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 12.8,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (existing) fired.",
+   "quote": {
+    "accession": "0001989817-25-000043",
+    "text": "Team, Inc. (4)(10) SF + 6.50 % 10.83 % 3/12/2030 13,090 12,799 12,799"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed raised RVQ_BLK_160cd8671ea7 on this row in rfhca; the fix removed it.",
+    "reference": "identity issuer_name_printed, rfhca RVQ_BLK_160cd8671ea7"
+   }
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "what": "Structured-finance tranches from 2025-12-31 published the tranche in the issuer name ('Alp CFO 2025, L.P. Class A', '... Subordinated Note'; 9 names, 25 rows) with a blank instrument. Fixed with the wrapper's issuer_name_strip_re plus issuer_name_strip_to_instrument (dry run on all 717 distinct names: only these 9 changed).",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 34.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A published issuer name ending in 'Class <letter>' or 'Subordinated Note' whose instrument_description is blank.",
+   "quote": {
+    "accession": "0001628280-26-056793",
+    "text": "Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The name-shape gate counts instrument words but these rows were under its 1 pct threshold and issuer_name_printed compares after cutting class text, so no rule raised them; found by the agent's name sweep.",
+    "reference": "scratch/fund_runs/0001989817/r2/names.py"
+   }
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "what": "Eight loans print a PIK figure that no fact on the row's context carries; pik_rate was empty: Kowalski 16 pct (2025-03-31, 2025-06-30), Flatiron, Sunraycer x2, LC8 margins (2025-03-31), International Construction Products 15.25 pct 1,075 tranche (2025-03-31, 2025-06-30; identifier repeats, so pik_printed could not test them). Fixed by row corrections (pik_rate = printed PIK figure; margin for 'SF + m % PIK' rows as in the fund's other quarters).",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 61.7,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "pik_printed (existing) for rows with a unique identifier; extend it to rows whose identifier repeats by joining the printed row on the context.",
+   "quote": {
+    "accession": "0001989817-25-000043",
+    "text": "International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "pik_printed raised RVQ_BLK_af4cf0200e8d and RVQ_BLK_ccdefa15631b on six of the eight rows in rfhca; the two ICP rows were not tested because the printed-row join needs a unique identifier (a coverage gap of that detector).",
+    "reference": "identity pik_printed, rfhca"
+   }
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "what": "Unit counts overwritten by the shared normaliser (shares_held_source derived_proxy): ONE Group preferred 2024-06-30 7,000 (printed 1,000); A-2 warrants 2025-12-31 11,911,000 and 2026-03-31 6,667 although tagged 11911 with decimals 0. Fixed by row corrections (context-keyed where the identifier repeats).",
+   "field": "shares_held",
+   "quarters": [
+    "2024-06-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 1.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A derived_proxy unit count that differs from a unit-count fact tagged on the row's own context.",
+   "quote": {
+    "accession": "0001628280-26-020820",
+    "text": "The ONE Group Hospitality, Inc. (21) - A-2 Warrants 11,911 61 21"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "units_printed raised only the 2024-06-30 preferred (RVQ_BLK_502b4dd30a07); the 2025-12-31 and 2026-03-31 warrant rows share one identifier, so no printed row was joined and the rule could not test them.",
+    "reference": "identity units_printed rfhca RVQ_BLK_502b4dd30a07"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "ONE Group warrants tagged 6,667,000 and 11,911,000 (decimals -3) in 2024-09-30 to 2025-03-31 and 6,667 / 11,911 (decimals 0) from 2025-06-30; the 10-Q for 2024-06-30 prints them as 7 and 12 in the thousands column, so the count is units. Fixed for the six x1000 rows; NE SPV preferred units 2025-09-30 (tagged 4,139,000, printed 4,139, later tagged 4,139) fixed likewise. The 2024-06-30 warrant counts (7,000 and 12,000, the printed rounded thousands) left as printed.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-09-30"
+   ],
+   "fair_value_m": 3.1,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "The same position's unit count changes by exactly 1,000x between consecutive quarters while its cost is unchanged.",
+   "quote": {
+    "accession": "0001989817-24-000032",
+    "text": "The ONE Group Hospitality, Inc. - Warrants (4) 7 - - The ONE Group Hospitality, Inc. - Warrants (4) 12 - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired: units_printed treats a count equal to 1,000 times the printed figure as unclear only when the count is derived, and these were tagged; the cross-quarter jump is not checked anywhere.",
+    "reference": "scratch/fund_runs/0001989817/r2/sweep.py"
+   }
+  },
+  {
+   "observation_key": "combined-par-units-column-semantic-ambiguity",
+   "what": "LP interests AP Himalaya Co-Invest (20,006) and Creek Feeder (10,000) publish units 20,006 / 10,000 to 2025-09-30 and 20,006,000 / 10,000,000 from 2025-12-31 (tags change scale); the printed figure equals the cost in thousands, so it may be a dollar commitment. Left: the page does not say which; owner ruling on 'Par Amount/Units' for LP interests needed.",
+   "field": "shares_held",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 34.1,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "The same position's unit count changes by exactly 1,000x between consecutive quarters while its cost is unchanged.",
+   "quote": {
+    "accession": "0001628280-26-020820",
+    "text": "AP Himalaya Co-Invest, L.P. (4)(21) - LP Interest 20,006 20,087 21,745"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The units_printed rule labels a x1000 count units_scale_unclear only for derived counts; a tagged count that jumps 1,000x between quarters is not checked.",
+    "reference": "proposal in unit-count-tag-concept-and-scale-change-between-filings"
+   }
+  },
+  {
+   "observation_key": "loan-par-tagged-as-share-count",
+   "what": "New Era Technology first lien loan 2025-09-30 (4.3M): par tagged as a share count, published as common equity with 4,314,000 units; par_tagged_as_units did not reach it (no rate tag on the row). Fixed by row correction to a loan with par 4,314 and spread 6.25.",
+   "field": "asset_category",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 4.3,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "An equity row whose printed line carries a reference rate and spread.",
+   "quote": {
+    "accession": "0001989817-25-000085",
+    "text": "New Era Technology Inc (4)(10)(17)(18) SF + 6.25 % PIK 6/30/2030 4,314 4,314 4,314"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on this row in rfhca (X11 checks loans, not equity rows with a printed rate); found by the agent's unit sweep.",
+    "reference": "scratch/fund_runs/0001989817/r2/sweep.py"
+   }
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "what": "Two rows printed under Preferred Equity were published as loans: LC8 Cirrostratus 2024-09-30 (3.7M) and IDF 9 Financeco Series B Units 2025-09-30 (1.0M, identifier shared with the IDF 9 loan). Fixed by row corrections (IDF 9 context-keyed).",
+   "field": "asset_category",
+   "quarters": [
+    "2024-09-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 4.8,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A loan row with no rate and no spread whose printed line sits under an equity section heading.",
+   "quote": {
+    "accession": "0001989817-24-000055",
+    "text": "Preferred Equity Consumer Services LC8 Cirrostratus L.P. (4)(5)(10) 2/8/2029 $ 3,800 3,725 3,726"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule caught these as class errors: X02 counts loans with no rate, but its 2024-09-30 finding (RVQ_REV_3cb132fea40e) was recorded a false alarm with LC8 in it, and the pending reason x02-no-rate-printed-on-the-row would clear such a row by check. A class check tied to the printed section heading is needed.",
+    "reference": "scratch/fund_runs/0001989817/r2/sweep.py; reviewer note on RVQ_REV_3cb132fea40e"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "Seven loans' par currency followed a wrong unit tag: Travelex 2024-06-30 EUR (printed GBP), Fertitta 2024-12-31 AUD (printed none, USD), Tango Bidco x3 2024-12-31 USD (printed EUR), Neon Maple 2025-12-31 and 2026-03-31 GBP (printed USD). Fixed by row corrections with USD par at the build's FRED H.10 rate (GBP 1.2640 at 2024-06-28, EUR 1.0351 at 2024-12-31).",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2024-06-30",
+    "2024-12-31",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 25.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "A loan whose par currency differs from the currency code printed on its row (no code printed = USD).",
+   "quote": {
+    "accession": "0001989817-25-000023",
+    "text": "Tango Bidco SAS (4)(5)(7) E + 5.00 % 8.18 % 10/17/2031 EUR 4,646 4,960 4,744"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule fired on these rows in rfhca (FX01 checks par against cost scale, and these pars are close to cost in either reading); found by the agent's currency sweep sweep2.py.",
+    "reference": "scratch/fund_runs/0001989817/r2/sweep2.py"
+   }
+  },
+  {
+   "observation_key": "printed-maturity-missing-from-published-row",
+   "what": "Maturity was blank on loans whose identifier repeats in the quarter (Equinox x2 2024-12-31, IDF 9 2025-09-30, Corza 2025-12-31) and on Distributed Solar 2026-06-30 (printed 5/30/2026, before the report date). Fixed by row corrections on four; Equinox c-195 (2024-12-31) is logged 'Row correction applied' but the published row still has no maturity: parked.",
+   "field": "maturity_date",
+   "quarters": [
+    "2024-12-31",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 35.5,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "A loan with a printed maturity on its row and no published maturity.",
+   "quote": {
+    "accession": "0001989817-25-000023",
+    "text": "Equinox Holdings, Inc. (4)(7) 16.00 % PIK 6/30/2027 1,421 1,393 1,393"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares a printed maturity with a blank published one; the rows sit where the page reader cannot join a printed row (repeated identifier), so even a page rule would need a context join.",
+    "reference": "scratch/fund_runs/0001989817/r2/nomat.sql"
+   }
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "what": "Rows under the printed heading 'Structured Finance' (39 rows, 2025-06-30 to 2026-06-30) carried the heading of the block above (Health Care Equipment & Supplies, Hotels, Restaurants & Leisure), so GICS labels were wrong; Corza 2025-12-31 carried 'Capital Markets'. Fixed by row corrections to extracted_industry; GICS is now empty or Specialized Finance on these rows.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 68.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "The published industry differs from the nearest printed heading above the row (headings.py does this per row).",
+   "quote": {
+    "accession": "0001628280-26-056793",
+    "text": "Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "industry_coverage only counts missing labels; a wrong label taken from the previous block passes it. The page reader keeps the last heading it recognised when a heading is not in its list.",
+    "reference": "scratch/fund_runs/0001989817/r2/headings.py"
+   }
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "what": "To 2025-09-30 the filer prints ICB-style industries; they are now published in extracted_industry (printed_industry_labels, 816 rows changed) but have no exact GICS sub-industry, so industry_coverage stays at 71 to 76 pct in six quarters.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 1823.2,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "industry_coverage (existing).",
+   "quote": {
+    "accession": "0001989817-25-000043",
+    "text": "11.58 % Industrial Transportation Stonepeak Nile Parent LLC (5)(7)(18) SF + 2.75 % 7.07 % 2/4/2032 1,765 1,760 1,760"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "industry_coverage raised the six findings on these quarters in the untouched build rfhca.",
+    "reference": "identity industry_coverage rfhca RVQ_BLK_087a12721007 etc."
+   }
+  },
+  {
+   "observation_key": "gics-differs-from-filers-own-later-heading",
+   "what": "Restated at GICS industry level after the round-3 review (the round-2 text compared sub-industries and overstated the count). The filer prints a GICS industry heading from 2025-12-31. In the ICB-era quarters, of 661 funded rows that carry a GICS sub-industry and belong to an entity the filer later classifies, 387 sit inside the filer's printed industry (e.g. a 'Restaurants' label within 'Hotels, Restaurants & Leisure'), 253 (1,655.4M of row-quarter value) sit in another industry, and 21 cannot be compared (spelling not in data/reference/gics_hierarchy.json), so at most 274 disagree (reviewer's count 258, 1,665.4M). Real contradictions: AthenaHealth 'Pharmaceuticals' vs printed 'Health Care Technology'; Alchemy 'Diversified Support Services' vs 'Metals & Mining'; Kowalski Trust 'Diversified Support Services' vs 'Insurance'. The label comes from a shared enrichment, not from these filings. Left: gics_sub_industry is not correctable and a change would be shared code.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 1655.4,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Per entity, the parent GICS industry of the published sub-industry (data/reference/gics_hierarchy.json) differs from the GICS industry heading the filer prints for that entity in another quarter; a sub-industry inside the printed industry passes.",
+   "quote": {
+    "accession": "0001628280-26-020820",
+    "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares published GICS with the filer's printed GICS industry across quarters; industry_coverage counts only missing labels, so a wrong label passes. Comparing at industry level avoids the false alarms a sub-industry comparison raises on labels that are more specific than the heading.",
+    "reference": "scratch/fund_runs/0001989817/r2/gics_industry_level.py"
+   }
+  },
+  {
+   "observation_key": "quarterly-income-from-first-annual-period-divided-evenly",
+   "what": "2024-Q4 income was published as one quarter of the year (investment income 15,369, NII 12,026) because the nil first quarter (no investments, 10-Q 2024-03-31) was not counted; net expenses were the true quarter, so income_identity failed. Fixed with a new highlights wrapper (nil_income_quarters 2024-03-31): now 22,872 / 18,523.",
+   "field": "total_investment_income",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "income_identity (existing) fired.",
+   "quote": {
+    "accession": "0001989817-24-000007",
+    "text": "Total expenses $ 391,674 Reimbursable expenses (Note 3) ( 391,674 ) Net expenses $ - Net increase (decrease) in net assets resulting from operations $ -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "income_identity raised RVQ_BLK_219c7fe80675 at 2024-12-31 in rfhca; it is gone in rfhcc and rfhcd.",
+    "reference": "identity income_identity rfhca RVQ_BLK_219c7fe80675"
+   }
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "what": "Corrected from the round-1 report (which called it an unprinted zero row; the reviewer was right). 2025-12-31 context c-389 (par 47, cost 0, value 0) carries Corza Medical's member but its figures are those of the printed line 'Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ -' (Unsecured Debt). Fixed: issuer name and maturity 2038-02-01 by a context-keyed row correction. The same note is printed every quarter from 2025-09-30: 2025-09-30 c-377 was published as a fund interest (now a loan); 2026-03-31 c-371 and 2026-06-30 c-382 sit on the member 'Constellation Wealth Capital Fund-A-Blocker | Non-Affiliated Issuer', which the wrapper dropped as an aggregate (no legal-form marker, so the 'non-affiliated issuer' aggregate marker won). Fixed: 'blocker' added to the wrapper's debt leaf markers (dry run leaf_dry.py: 989 identifiers, 1 changed) and the two new rows given the printed name and loan class. All values nil; totals unchanged.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "For a row whose identifier repeats in the quarter, find the printed line whose par, cost and value match its context and compare the printed name (noprint_match.py does this); and list source rows the wrapper excludes as aggregates whose context has par, cost and value facts.",
+   "quote": {
+    "accession": "0001628280-26-020820",
+    "text": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed did not fire because the identifier 'Corza Medical Srl' repeats in the quarter, so the page reader joins no printed row; the dropped 2026 rows show only as documented aggregate exclusions in source reconciliation (excluded_aggregate_candidate, non-blocking).",
+    "reference": "scratch/fund_runs/0001989817/r2/noprint_match.py; source_reconciliation_detail.csv c-371, c-382"
+   }
+  },
+  {
+   "observation_key": "page-rules-skip-rows-with-repeated-identifier",
+   "what": "issuer_name_printed, pik_printed and units_printed join the printed row by accession and member text and skip any member that appears more than once in the quarter, so they test none of this fund's 14 such rows (Equinox x2 2024-12-31, ICP x4 2025-03-31/06-30, IDF 9 x2 2025-09-30, Corza/Constellation x2 2025-12-31, ONE Group warrants x4 2025-12-31/2026-03-31). Here that hid the ICP PIK figure (2 rows), the Corza/Constellation name (1 row) and the A-2 warrant unit counts (2 rows), all fixed by hand. Every one of the 14 rows was matched to its printed line by figures (noprint_match_rfhcf.txt: 14 of 14 found).",
+   "field": "printed_row",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 46.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Join the printed row on the context (the reader's own context id) rather than on member text, so a repeated identifier is still tested; report the untested rows per fund-quarter as blind spots.",
+   "quote": {
+    "accession": "0001989817-25-000043",
+    "text": "International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The blind-spot file page_rules_name_blind_spots.csv counts these rows (n_no_printed_row) but no rule raises them; a context-keyed join would let the three page rules test them.",
+    "reference": "pipeline/candidate_rules.py _load (join on raw_id_lower with n = 1)"
+   }
+  },
+  {
+   "observation_key": "name-only-match-crosses-tranches-of-one-issuer",
+   "what": "Equinox Holdings' two loans swap position_id between 2024-06-30 and 2024-09-30 (pid 6ef6b308 holds the 6/30/2027 note at 2024-06-30 and the 3/8/2029 loan from 2024-09-30), and the 2027 note's chain splits again at 2025-09-30. The ONE Group A-2 and B-2 warrants (no maturity) swap position_id at 2025-09-30 (pid 9be3bef6 holds B-2 6,667 units to 2025-06-30 and A-2 11,911 units from 2025-09-30) and the B-2 chain gets a new pid every quarter from 2025-12-31 (wpid.sql). Left: matcher behaviour, not changed here.",
+   "field": "position_id",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 11.1,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A position_id whose instrument_description, maturity or unit count changes between consecutive quarters while another position of the same issuer carries the earlier value (covers warrants, which have no maturity).",
+   "quote": {
+    "accession": "0001989817-24-000032",
+    "text": "Equinox Holdings, Inc. (4) 16.00 % 6/30/2027 $ 1,313 $ 1,279 $ 1,286"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The maturity veto in matching should have prevented this; no ledger rule checks chain maturity consistency.",
+    "reference": "scratch/fund_runs/0001989817/r2/pid.sql"
+   }
+  }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
-  "tests/test_source_encodings.py: 97 passed",
-  "tests/test_bdc_xbrl_wrapper.py: 557 passed",
-  "fund_gate.py check (no snapshot) run on hcxc during the loop; final run on hcxe below"
+  "tests/test_bdc_xbrl_wrapper.py tests/test_source_encodings.py tests/test_fund_highlights_wrapper.py tests/test_wrapper_content_signatures.py: 726 passed"
  ],
  "not_done": [
-  "pct_of_net_assets is null on every row; whether the filings tag a per-row percent was not checked.",
-  "Cash-equivalent rows are not published (below 'Total Investment Portfolio'); not changed.",
-  "pik_rate on 'SF + m % PIK r %' rows publishes the margin, not the whole PIK coupon; left as filed (convention question).",
-  "Unit counts on equity rows that equal 1,000 times the printed figure (AP Himalaya 25,000,000 vs 20,006 etc.) were left as tagged; on reclassed rows the printed figure was used. The page column is 'Par Amount/Units' and mixes a face amount in thousands with unit counts.",
-  "No full read of every row; spot checks of 13 sampled rows (rate, spread, maturity, par, values) matched the page.",
-  "All findings cleared or proposed is not data correct."
+  "No independent page sample drawn by me (the orchestrator's sample on rfhcd: 0 published errors of 20).",
+  "Rows with no name cell on the printed page cannot be checked by the page rules: up to 31 rows at 2026-06-30 (13 pct of that quarter's FV), 2 to 25 rows in other quarters (page_rules_name_blind_spots.csv in rfhcf, n_no_name_cell); those names were not checked against the page.",
+  "Rows whose identifier repeats in a quarter (14 rows) are not reached by the page-reader printed-row join; each was read by hand (Equinox, ICP, IDF 9, Corza, ONE Group warrants).",
+  "Equinox c-195 maturity cause not traced (parked).",
+  "LP-interest unit scale (AP Himalaya, Creek Feeder) and the 2024-06-30 warrant counts printed in thousands left as published.",
+  "ICP 2025-09-30 c-352 heading 'Non-Life Insurance' (capital L) not published: the encoding check refuses both casings in one list.",
+  "No other fund rebuilt: the wrapper changes are this fund's own keys; make_row_corrections.py change only reads correction_context from this fund's spec file.",
+  "'All findings cleared' would not be 'data correct': no rule tests GICS correctness, cross-quarter unit consistency, or maturity against the page."
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_087a12721007",
+   "rule_name": "industry_coverage",
+   "report_date": "2024-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-04f79d7eebf07e8f",
+     "ROW-0efcfd1d380e3356",
+     "ROW-1bcb6abeefda1ce5",
+     "ROW-1f521ea6a72e0b6d",
+     "ROW-22ad8537725033bc",
+     "ROW-2e55e062c485cbae",
+     "ROW-48b5ef84b5660799",
+     "ROW-535f9a1f15c2c1b3",
+     "ROW-541faf6073bf3df8",
+     "ROW-5e310d93b4ba82a6",
+     "ROW-6099d442fd469ef0",
+     "ROW-6229cbf5408e126d",
+     "ROW-671c49ff64f7cb5c",
+     "ROW-785beabda7b58bd0",
+     "ROW-78953a27119040d9",
+     "ROW-7c4aab878055acab",
+     "ROW-909b3d5e23dfb9b7",
+     "ROW-9af6f72e721eb557",
+     "ROW-a9668caedef0ce31",
+     "ROW-bcccc9458ba43c59",
+     "ROW-eb9278a494c48609",
+     "ROW-fe51800e83b71dc4"
+    ],
+    "reviewed_rows": [
+     "ROW-04f79d7eebf07e8f",
+     "ROW-0efcfd1d380e3356",
+     "ROW-1bcb6abeefda1ce5",
+     "ROW-1f521ea6a72e0b6d",
+     "ROW-22ad8537725033bc",
+     "ROW-2e55e062c485cbae",
+     "ROW-48b5ef84b5660799",
+     "ROW-535f9a1f15c2c1b3",
+     "ROW-541faf6073bf3df8",
+     "ROW-5e310d93b4ba82a6",
+     "ROW-6099d442fd469ef0",
+     "ROW-6229cbf5408e126d",
+     "ROW-671c49ff64f7cb5c",
+     "ROW-785beabda7b58bd0",
+     "ROW-78953a27119040d9",
+     "ROW-7c4aab878055acab",
+     "ROW-909b3d5e23dfb9b7",
+     "ROW-9af6f72e721eb557",
+     "ROW-a9668caedef0ce31",
+     "ROW-bcccc9458ba43c59",
+     "ROW-eb9278a494c48609",
+     "ROW-fe51800e83b71dc4"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "Fair Value Percentage of Net Assets Health Care Providers AthenaHealth Group Inc. (8)(14) SF+ 3.25 % 8.59 % 2/15/2029 9,975 10,003 9,954"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Heading missing from the build: tested. Before this run extracted_industry was empty on most rows of the quarter (the shared step withdraws unmapped headings in a filing where under half map). With printed_industry_labels (36 headings read from the six filings) every flagged row now carries its printed heading; scratch/fund_runs/0001989817/r2/headings.py located every published row with a printed row (2145 of 2159 fund rows in rfhcf, all quarters; output headings_rfhcf.txt) and found the published heading equal to the nearest printed heading on all but one row (ICP 2025-09-30, 'Non-Life Insurance' printed with a capital L; the encoding check refuses two casings of one label).",
+    "Filer prints GICS: rejected for this quarter. To 2025-09-30 the filer prints FTSE/ICB-style industries ('Industrial Transportation', 'Health Care Providers', 'Software and Computer Services'); from 2025-12-31 it prints GICS industries ('Health Care Technology'), which is why later quarters pass.",
+    "A one-to-one ICB-to-GICS sub-industry map: rejected; a broad ICB heading does not name one GICS sub-industry (same ruling as HPS Corporate Lending, 0001838126).",
+    "The filer's own later GICS heading for the same entity: tested as a measure, not applied. On one basis (funded rows: fair value > 0, not cash, published basis; quarters to 2025-09-30; query scratch/fund_runs/0001989817/r2/gicsdis2.sql on rfhcf): 1,023 funded rows, 272 with no GICS label (the rows industry_coverage counts), of which 225 belong to an entity the filer later prints under a GICS heading; 661 rows carry a GICS label and belong to an entity the filer later classifies. Compared at the level the filer prints (GICS industry; the published sub-industry's parent industry from data/reference/gics_hierarchy.json; query scratch/fund_runs/0001989817/r2/gics_industry_level.py on rfhcf): 387 sit inside the filer's printed industry, 253 (1,655.4M) sit in another industry, 21 cannot be compared (label spelling not in the hierarchy), so at most 274 disagree; the independent reviewer's count on the same question was 258 (1,665.4M). Real contradictions remain (AthenaHealth published 'Pharmaceuticals' where the filer later prints 'Health Care Technology'; Alchemy 'Diversified Support Services' vs 'Metals & Mining'). Carrying the filer's label back would need shared code and assumes the classification did not change; gics_sub_industry is not a correctable field."
+   ],
+   "next_action": "Parked. Owner decision requested (orchestrator request REQ-rfhc-1): either measure ICB-era quarters on the printed filer industry now published in extracted_industry, or approve an opt-in step that carries the filer's own printed GICS industry heading per entity to its earlier quarters and keeps a published sub-industry only where it lies inside that industry (on the funded-row basis of gicsdis2.sql it would give an industry to 225 of the 272 uncovered rows; at industry level at most 274 labels, 253 certain, contradict the filer per gics_industry_level.py; carrying the sub-industry instead would overwrite correct, more specific labels). Until then the finding stays open; no disposition proposed."
+  },
+  {
+   "finding_id": "RVQ_BLK_5d1a85d25169",
+   "rule_name": "industry_coverage",
+   "report_date": "2024-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-0006182bb915a007",
+     "ROW-11d4a28ab9a622f8",
+     "ROW-1bb0a7859c12cbfc",
+     "ROW-2ac427ae51cb36c9",
+     "ROW-3a1f11621e3e2b95",
+     "ROW-3bedd38b59ce199a",
+     "ROW-5077c71d4a6b1863",
+     "ROW-521d56ef02eaec8a",
+     "ROW-613f19ff86d9a2fe",
+     "ROW-6371fd55da3ab3fb",
+     "ROW-67297f8e83ee92cc",
+     "ROW-74b179228329458d",
+     "ROW-7b59ee4d043c1c49",
+     "ROW-8270607ac7248190",
+     "ROW-a160c457a46d96b2",
+     "ROW-a1dd533313288fc4",
+     "ROW-a41e1b8f8b8eab7a",
+     "ROW-aacb147a93c7e2bf",
+     "ROW-b297d0f86af20b81",
+     "ROW-b8e74b3673a8abb6",
+     "ROW-bfbc125b2095e540",
+     "ROW-c27bf6425ba85ae7",
+     "ROW-ee474bef61d132bc",
+     "ROW-f5d0215f820e925d",
+     "ROW-fe627e0287537893",
+     "ROW-ff86ff96b797ef88"
+    ],
+    "reviewed_rows": [
+     "ROW-0006182bb915a007",
+     "ROW-11d4a28ab9a622f8",
+     "ROW-1bb0a7859c12cbfc",
+     "ROW-2ac427ae51cb36c9",
+     "ROW-3a1f11621e3e2b95",
+     "ROW-3bedd38b59ce199a",
+     "ROW-5077c71d4a6b1863",
+     "ROW-521d56ef02eaec8a",
+     "ROW-613f19ff86d9a2fe",
+     "ROW-6371fd55da3ab3fb",
+     "ROW-67297f8e83ee92cc",
+     "ROW-74b179228329458d",
+     "ROW-7b59ee4d043c1c49",
+     "ROW-8270607ac7248190",
+     "ROW-a160c457a46d96b2",
+     "ROW-a1dd533313288fc4",
+     "ROW-a41e1b8f8b8eab7a",
+     "ROW-aacb147a93c7e2bf",
+     "ROW-b297d0f86af20b81",
+     "ROW-b8e74b3673a8abb6",
+     "ROW-bfbc125b2095e540",
+     "ROW-c27bf6425ba85ae7",
+     "ROW-ee474bef61d132bc",
+     "ROW-f5d0215f820e925d",
+     "ROW-fe627e0287537893",
+     "ROW-ff86ff96b797ef88"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-24-000055",
+     "text": "Preferred Equity Consumer Services LC8 Cirrostratus L.P. (4)(5)(10) 2/8/2029 $ 3,800 3,725 3,726"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Heading missing from the build: tested. Before this run extracted_industry was empty on most rows of the quarter (the shared step withdraws unmapped headings in a filing where under half map). With printed_industry_labels (36 headings read from the six filings) every flagged row now carries its printed heading; scratch/fund_runs/0001989817/r2/headings.py located every published row with a printed row (2145 of 2159 fund rows in rfhcf, all quarters; output headings_rfhcf.txt) and found the published heading equal to the nearest printed heading on all but one row (ICP 2025-09-30, 'Non-Life Insurance' printed with a capital L; the encoding check refuses two casings of one label).",
+    "Filer prints GICS: rejected for this quarter. To 2025-09-30 the filer prints FTSE/ICB-style industries ('Industrial Transportation', 'Health Care Providers', 'Software and Computer Services'); from 2025-12-31 it prints GICS industries ('Health Care Technology'), which is why later quarters pass.",
+    "A one-to-one ICB-to-GICS sub-industry map: rejected; a broad ICB heading does not name one GICS sub-industry (same ruling as HPS Corporate Lending, 0001838126).",
+    "The filer's own later GICS heading for the same entity: tested as a measure, not applied. On one basis (funded rows: fair value > 0, not cash, published basis; quarters to 2025-09-30; query scratch/fund_runs/0001989817/r2/gicsdis2.sql on rfhcf): 1,023 funded rows, 272 with no GICS label (the rows industry_coverage counts), of which 225 belong to an entity the filer later prints under a GICS heading; 661 rows carry a GICS label and belong to an entity the filer later classifies. Compared at the level the filer prints (GICS industry; the published sub-industry's parent industry from data/reference/gics_hierarchy.json; query scratch/fund_runs/0001989817/r2/gics_industry_level.py on rfhcf): 387 sit inside the filer's printed industry, 253 (1,655.4M) sit in another industry, 21 cannot be compared (label spelling not in the hierarchy), so at most 274 disagree; the independent reviewer's count on the same question was 258 (1,665.4M). Real contradictions remain (AthenaHealth published 'Pharmaceuticals' where the filer later prints 'Health Care Technology'; Alchemy 'Diversified Support Services' vs 'Metals & Mining'). Carrying the filer's label back would need shared code and assumes the classification did not change; gics_sub_industry is not a correctable field."
+   ],
+   "next_action": "Parked. Owner decision requested (orchestrator request REQ-rfhc-1): either measure ICB-era quarters on the printed filer industry now published in extracted_industry, or approve an opt-in step that carries the filer's own printed GICS industry heading per entity to its earlier quarters and keeps a published sub-industry only where it lies inside that industry (on the funded-row basis of gicsdis2.sql it would give an industry to 225 of the 272 uncovered rows; at industry level at most 274 labels, 253 certain, contradict the filer per gics_industry_level.py; carrying the sub-industry instead would overwrite correct, more specific labels). Until then the finding stays open; no disposition proposed."
+  },
+  {
+   "finding_id": "RVQ_BLK_96576ec2ae19",
+   "rule_name": "industry_coverage",
+   "report_date": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-15291fcf66e4d5c0",
+     "ROW-1654f7f156094081",
+     "ROW-1a00aafa0a9d28ec",
+     "ROW-34e044223d28d2c0",
+     "ROW-368d0827ce6d563d",
+     "ROW-39af06693a272be6",
+     "ROW-40a20a926125c583",
+     "ROW-41c375cb91dc616a",
+     "ROW-50cce49adce6db79",
+     "ROW-50ed45f3a51cb63e",
+     "ROW-6a0c1b3c674d8412",
+     "ROW-6dc9e935452acca2",
+     "ROW-6f5ee1c76e532567",
+     "ROW-7b58a71edd4148ad",
+     "ROW-7b622271482638bf",
+     "ROW-7f7745e7ca330d69",
+     "ROW-81b9cd5c05e33ea1",
+     "ROW-8b89a543b2734749",
+     "ROW-8e35c25e00786cdf",
+     "ROW-9ae9fd435adc40be",
+     "ROW-9ee2372dc56d9349",
+     "ROW-a042e35d689ee61e",
+     "ROW-a7ce9326f6f7f207",
+     "ROW-b6f09a796df1cee5",
+     "ROW-c19253a107cca5af",
+     "ROW-c2c295b5184e6278",
+     "ROW-ca001e50f7b35922",
+     "ROW-d3340d27b8285eca",
+     "ROW-d85a35d26d9a93f3",
+     "ROW-da8566f05b4dff35",
+     "ROW-daeb37a305ed2b99",
+     "ROW-dd342f65746af3a4",
+     "ROW-dda892140c2282f4",
+     "ROW-df8aa96719b3ee1f",
+     "ROW-f2048c97e73f7a21",
+     "ROW-f6b8d3661c2e3637",
+     "ROW-fa9a18c7c38ed4d4",
+     "ROW-fd4554e99b061d2f"
+    ],
+    "reviewed_rows": [
+     "ROW-15291fcf66e4d5c0",
+     "ROW-1654f7f156094081",
+     "ROW-1a00aafa0a9d28ec",
+     "ROW-34e044223d28d2c0",
+     "ROW-368d0827ce6d563d",
+     "ROW-39af06693a272be6",
+     "ROW-40a20a926125c583",
+     "ROW-41c375cb91dc616a",
+     "ROW-50cce49adce6db79",
+     "ROW-50ed45f3a51cb63e",
+     "ROW-6a0c1b3c674d8412",
+     "ROW-6dc9e935452acca2",
+     "ROW-6f5ee1c76e532567",
+     "ROW-7b58a71edd4148ad",
+     "ROW-7b622271482638bf",
+     "ROW-7f7745e7ca330d69",
+     "ROW-81b9cd5c05e33ea1",
+     "ROW-8b89a543b2734749",
+     "ROW-8e35c25e00786cdf",
+     "ROW-9ae9fd435adc40be",
+     "ROW-9ee2372dc56d9349",
+     "ROW-a042e35d689ee61e",
+     "ROW-a7ce9326f6f7f207",
+     "ROW-b6f09a796df1cee5",
+     "ROW-c19253a107cca5af",
+     "ROW-c2c295b5184e6278",
+     "ROW-ca001e50f7b35922",
+     "ROW-d3340d27b8285eca",
+     "ROW-d85a35d26d9a93f3",
+     "ROW-da8566f05b4dff35",
+     "ROW-daeb37a305ed2b99",
+     "ROW-dd342f65746af3a4",
+     "ROW-dda892140c2282f4",
+     "ROW-df8aa96719b3ee1f",
+     "ROW-f2048c97e73f7a21",
+     "ROW-f6b8d3661c2e3637",
+     "ROW-fa9a18c7c38ed4d4",
+     "ROW-fd4554e99b061d2f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-25-000023",
+     "text": "TTF Lower Intermediate LLC (7) SF + 3.75 % 8.11 % 7/18/2031 2,750 2,724 2,736"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Heading missing from the build: tested. Before this run extracted_industry was empty on most rows of the quarter (the shared step withdraws unmapped headings in a filing where under half map). With printed_industry_labels (36 headings read from the six filings) every flagged row now carries its printed heading; scratch/fund_runs/0001989817/r2/headings.py located every published row with a printed row (2145 of 2159 fund rows in rfhcf, all quarters; output headings_rfhcf.txt) and found the published heading equal to the nearest printed heading on all but one row (ICP 2025-09-30, 'Non-Life Insurance' printed with a capital L; the encoding check refuses two casings of one label).",
+    "Filer prints GICS: rejected for this quarter. To 2025-09-30 the filer prints FTSE/ICB-style industries ('Industrial Transportation', 'Health Care Providers', 'Software and Computer Services'); from 2025-12-31 it prints GICS industries ('Health Care Technology'), which is why later quarters pass.",
+    "A one-to-one ICB-to-GICS sub-industry map: rejected; a broad ICB heading does not name one GICS sub-industry (same ruling as HPS Corporate Lending, 0001838126).",
+    "The filer's own later GICS heading for the same entity: tested as a measure, not applied. On one basis (funded rows: fair value > 0, not cash, published basis; quarters to 2025-09-30; query scratch/fund_runs/0001989817/r2/gicsdis2.sql on rfhcf): 1,023 funded rows, 272 with no GICS label (the rows industry_coverage counts), of which 225 belong to an entity the filer later prints under a GICS heading; 661 rows carry a GICS label and belong to an entity the filer later classifies. Compared at the level the filer prints (GICS industry; the published sub-industry's parent industry from data/reference/gics_hierarchy.json; query scratch/fund_runs/0001989817/r2/gics_industry_level.py on rfhcf): 387 sit inside the filer's printed industry, 253 (1,655.4M) sit in another industry, 21 cannot be compared (label spelling not in the hierarchy), so at most 274 disagree; the independent reviewer's count on the same question was 258 (1,665.4M). Real contradictions remain (AthenaHealth published 'Pharmaceuticals' where the filer later prints 'Health Care Technology'; Alchemy 'Diversified Support Services' vs 'Metals & Mining'). Carrying the filer's label back would need shared code and assumes the classification did not change; gics_sub_industry is not a correctable field."
+   ],
+   "next_action": "Parked. Owner decision requested (orchestrator request REQ-rfhc-1): either measure ICB-era quarters on the printed filer industry now published in extracted_industry, or approve an opt-in step that carries the filer's own printed GICS industry heading per entity to its earlier quarters and keeps a published sub-industry only where it lies inside that industry (on the funded-row basis of gicsdis2.sql it would give an industry to 225 of the 272 uncovered rows; at industry level at most 274 labels, 253 certain, contradict the filer per gics_industry_level.py; carrying the sub-industry instead would overwrite correct, more specific labels). Until then the finding stays open; no disposition proposed."
+  },
+  {
+   "finding_id": "RVQ_BLK_a212140ee5fb",
+   "rule_name": "industry_coverage",
+   "report_date": "2025-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-05efccac7fb6fed1",
+     "ROW-17d5312af82b9490",
+     "ROW-26c40412ce8e1d1f",
+     "ROW-2c63cf046d4ba295",
+     "ROW-30989e1e95fd915a",
+     "ROW-3e7c231a47552f48",
+     "ROW-4834cd0292c331bc",
+     "ROW-4b207d40753eef57",
+     "ROW-4e32a3e264eae8cc",
+     "ROW-565db844e9c820c8",
+     "ROW-5d56758a5d9aae58",
+     "ROW-5d80bad28f6dbad2",
+     "ROW-5ef828f3ef739072",
+     "ROW-65078d5dbc074e05",
+     "ROW-6e26eef16f97a15d",
+     "ROW-708eef93ed95fab2",
+     "ROW-75f77e234d38b330",
+     "ROW-7b63a142cb9d6009",
+     "ROW-7c5080509ed1c098",
+     "ROW-7cbfa718b14ab27c",
+     "ROW-7f6be6371a5b90e7",
+     "ROW-7fbf7086e81073e4",
+     "ROW-81130bca0a2e53ac",
+     "ROW-824221e082f6def9",
+     "ROW-88052c8c81da4d84",
+     "ROW-8f08e772280564a3",
+     "ROW-92aab433636e33ba",
+     "ROW-9397097bcccff048",
+     "ROW-98c3ef2f4079bb7c",
+     "ROW-9a2a9f0476be3f63",
+     "ROW-9de2786af2963552",
+     "ROW-ad891cbc9f7fab9f",
+     "ROW-adb033a24c6d68ba",
+     "ROW-adc212de67f44740",
+     "ROW-b186492348ccf086",
+     "ROW-bba30990cd7d9d6e",
+     "ROW-bc38e0695e2cb22d",
+     "ROW-c1fbf5b6f8a1245d",
+     "ROW-c330a900eff6f199",
+     "ROW-c5b35d6e6c06e2e4",
+     "ROW-c5d82de8fa2718ab",
+     "ROW-c6e94001eaef39a5",
+     "ROW-d0ca85d25b05080f",
+     "ROW-d43522be79577d19",
+     "ROW-d6d1da2dea77623d",
+     "ROW-dd8b3b08abe3ff9e",
+     "ROW-df7732f84369e99a",
+     "ROW-e499f87ced76f466",
+     "ROW-ef62fb23d84632e4",
+     "ROW-efadef75d966ea2f",
+     "ROW-f174a57c4908e198",
+     "ROW-f67b194943d7ef9b",
+     "ROW-f9f7828dc9f7aaf5",
+     "ROW-fa60370cf2b7c942",
+     "ROW-ff3955db0b9a4493"
+    ],
+    "reviewed_rows": [
+     "ROW-05efccac7fb6fed1",
+     "ROW-17d5312af82b9490",
+     "ROW-26c40412ce8e1d1f",
+     "ROW-2c63cf046d4ba295",
+     "ROW-30989e1e95fd915a",
+     "ROW-3e7c231a47552f48",
+     "ROW-4834cd0292c331bc",
+     "ROW-4b207d40753eef57",
+     "ROW-4e32a3e264eae8cc",
+     "ROW-565db844e9c820c8",
+     "ROW-5d56758a5d9aae58",
+     "ROW-5d80bad28f6dbad2",
+     "ROW-5ef828f3ef739072",
+     "ROW-65078d5dbc074e05",
+     "ROW-6e26eef16f97a15d",
+     "ROW-708eef93ed95fab2",
+     "ROW-75f77e234d38b330",
+     "ROW-7b63a142cb9d6009",
+     "ROW-7c5080509ed1c098",
+     "ROW-7cbfa718b14ab27c",
+     "ROW-7f6be6371a5b90e7",
+     "ROW-7fbf7086e81073e4",
+     "ROW-81130bca0a2e53ac",
+     "ROW-824221e082f6def9",
+     "ROW-88052c8c81da4d84",
+     "ROW-8f08e772280564a3",
+     "ROW-92aab433636e33ba",
+     "ROW-9397097bcccff048",
+     "ROW-98c3ef2f4079bb7c",
+     "ROW-9a2a9f0476be3f63",
+     "ROW-9de2786af2963552",
+     "ROW-ad891cbc9f7fab9f",
+     "ROW-adb033a24c6d68ba",
+     "ROW-adc212de67f44740",
+     "ROW-b186492348ccf086",
+     "ROW-bba30990cd7d9d6e",
+     "ROW-bc38e0695e2cb22d",
+     "ROW-c1fbf5b6f8a1245d",
+     "ROW-c330a900eff6f199",
+     "ROW-c5b35d6e6c06e2e4",
+     "ROW-c5d82de8fa2718ab",
+     "ROW-c6e94001eaef39a5",
+     "ROW-d0ca85d25b05080f",
+     "ROW-d43522be79577d19",
+     "ROW-d6d1da2dea77623d",
+     "ROW-dd8b3b08abe3ff9e",
+     "ROW-df7732f84369e99a",
+     "ROW-e499f87ced76f466",
+     "ROW-ef62fb23d84632e4",
+     "ROW-efadef75d966ea2f",
+     "ROW-f174a57c4908e198",
+     "ROW-f67b194943d7ef9b",
+     "ROW-f9f7828dc9f7aaf5",
+     "ROW-fa60370cf2b7c942",
+     "ROW-ff3955db0b9a4493"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "11.58 % Industrial Transportation Stonepeak Nile Parent LLC (5)(7)(18) SF + 2.75 % 7.07 % 2/4/2032 1,765 1,760 1,760"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Heading missing from the build: tested. Before this run extracted_industry was empty on most rows of the quarter (the shared step withdraws unmapped headings in a filing where under half map). With printed_industry_labels (36 headings read from the six filings) every flagged row now carries its printed heading; scratch/fund_runs/0001989817/r2/headings.py located every published row with a printed row (2145 of 2159 fund rows in rfhcf, all quarters; output headings_rfhcf.txt) and found the published heading equal to the nearest printed heading on all but one row (ICP 2025-09-30, 'Non-Life Insurance' printed with a capital L; the encoding check refuses two casings of one label).",
+    "Filer prints GICS: rejected for this quarter. To 2025-09-30 the filer prints FTSE/ICB-style industries ('Industrial Transportation', 'Health Care Providers', 'Software and Computer Services'); from 2025-12-31 it prints GICS industries ('Health Care Technology'), which is why later quarters pass.",
+    "A one-to-one ICB-to-GICS sub-industry map: rejected; a broad ICB heading does not name one GICS sub-industry (same ruling as HPS Corporate Lending, 0001838126).",
+    "The filer's own later GICS heading for the same entity: tested as a measure, not applied. On one basis (funded rows: fair value > 0, not cash, published basis; quarters to 2025-09-30; query scratch/fund_runs/0001989817/r2/gicsdis2.sql on rfhcf): 1,023 funded rows, 272 with no GICS label (the rows industry_coverage counts), of which 225 belong to an entity the filer later prints under a GICS heading; 661 rows carry a GICS label and belong to an entity the filer later classifies. Compared at the level the filer prints (GICS industry; the published sub-industry's parent industry from data/reference/gics_hierarchy.json; query scratch/fund_runs/0001989817/r2/gics_industry_level.py on rfhcf): 387 sit inside the filer's printed industry, 253 (1,655.4M) sit in another industry, 21 cannot be compared (label spelling not in the hierarchy), so at most 274 disagree; the independent reviewer's count on the same question was 258 (1,665.4M). Real contradictions remain (AthenaHealth published 'Pharmaceuticals' where the filer later prints 'Health Care Technology'; Alchemy 'Diversified Support Services' vs 'Metals & Mining'). Carrying the filer's label back would need shared code and assumes the classification did not change; gics_sub_industry is not a correctable field."
+   ],
+   "next_action": "Parked. Owner decision requested (orchestrator request REQ-rfhc-1): either measure ICB-era quarters on the printed filer industry now published in extracted_industry, or approve an opt-in step that carries the filer's own printed GICS industry heading per entity to its earlier quarters and keeps a published sub-industry only where it lies inside that industry (on the funded-row basis of gicsdis2.sql it would give an industry to 225 of the 272 uncovered rows; at industry level at most 274 labels, 253 certain, contradict the filer per gics_industry_level.py; carrying the sub-industry instead would overwrite correct, more specific labels). Until then the finding stays open; no disposition proposed."
+  },
+  {
+   "finding_id": "RVQ_BLK_f213307b781b",
+   "rule_name": "industry_coverage",
+   "report_date": "2025-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-018e7018467c2190",
+     "ROW-0414e1530b0cd5c7",
+     "ROW-07e2dffaeb1f69bb",
+     "ROW-0b0fa9052c1b1380",
+     "ROW-0fc0b5b080f59453",
+     "ROW-130fe7a26365872b",
+     "ROW-16526a9a21068c92",
+     "ROW-166fa5c3a0c5955f",
+     "ROW-1b6ff62bef3e0ee4",
+     "ROW-2308a29c34db2caa",
+     "ROW-2701706e58278a84",
+     "ROW-2a719a082fc75a3c",
+     "ROW-2ed860047f6694d4",
+     "ROW-2fd06b64c3ecc7c3",
+     "ROW-3957e53f6afe543a",
+     "ROW-3a23fbee637422fa",
+     "ROW-3bf2775a31c80c8c",
+     "ROW-3c84ea1d6ea04427",
+     "ROW-42b938e8ed71cf11",
+     "ROW-42fc19418d3f5140",
+     "ROW-48166efae18affa4",
+     "ROW-4914d37de71f6f70",
+     "ROW-502dc7b52fa4ac0e",
+     "ROW-558e7147aa2ab84c",
+     "ROW-571d7556fda195a8",
+     "ROW-57d7e879c53119e2",
+     "ROW-5bbdc6d7ee3977d3",
+     "ROW-5bfd5edfff0f5b62",
+     "ROW-67ade6eb477b9292",
+     "ROW-691bdcc0c5c5f47a",
+     "ROW-7c2b58e121c21d50",
+     "ROW-8809ad0116427e6e",
+     "ROW-9141c4caeacf0368",
+     "ROW-950660c8d05e6e82",
+     "ROW-95751426f975b471",
+     "ROW-9d91a5ae48eabb38",
+     "ROW-9f4515b0d3eddf11",
+     "ROW-b469b21d10685dc0",
+     "ROW-b8ce446718afd8f9",
+     "ROW-bd2f14057e3b0940",
+     "ROW-bfbeae935900d24e",
+     "ROW-c2afca723c287ff0",
+     "ROW-c33bddbbea98a47e",
+     "ROW-ce8b26b848819c51",
+     "ROW-d70e23e6864702dc",
+     "ROW-d98987a64dd43947",
+     "ROW-da9214577d6b0598",
+     "ROW-e6534bbe928f3d1b",
+     "ROW-e65cf8a30563eb87",
+     "ROW-e9a7196e20c10c2c",
+     "ROW-e9b357f60a94dbf0",
+     "ROW-e9d0fc89b6ac8084",
+     "ROW-ef470571d54bc979",
+     "ROW-f0f4920bf28e95d3",
+     "ROW-f199f18b0fc37dc5",
+     "ROW-f25d38bcd183ee63",
+     "ROW-f416e7d6fbe81014",
+     "ROW-f513ac722fd107a3"
+    ],
+    "reviewed_rows": [
+     "ROW-018e7018467c2190",
+     "ROW-0414e1530b0cd5c7",
+     "ROW-07e2dffaeb1f69bb",
+     "ROW-0b0fa9052c1b1380",
+     "ROW-0fc0b5b080f59453",
+     "ROW-130fe7a26365872b",
+     "ROW-16526a9a21068c92",
+     "ROW-166fa5c3a0c5955f",
+     "ROW-1b6ff62bef3e0ee4",
+     "ROW-2308a29c34db2caa",
+     "ROW-2701706e58278a84",
+     "ROW-2a719a082fc75a3c",
+     "ROW-2ed860047f6694d4",
+     "ROW-2fd06b64c3ecc7c3",
+     "ROW-3957e53f6afe543a",
+     "ROW-3a23fbee637422fa",
+     "ROW-3bf2775a31c80c8c",
+     "ROW-3c84ea1d6ea04427",
+     "ROW-42b938e8ed71cf11",
+     "ROW-42fc19418d3f5140",
+     "ROW-48166efae18affa4",
+     "ROW-4914d37de71f6f70",
+     "ROW-502dc7b52fa4ac0e",
+     "ROW-558e7147aa2ab84c",
+     "ROW-571d7556fda195a8",
+     "ROW-57d7e879c53119e2",
+     "ROW-5bbdc6d7ee3977d3",
+     "ROW-5bfd5edfff0f5b62",
+     "ROW-67ade6eb477b9292",
+     "ROW-691bdcc0c5c5f47a",
+     "ROW-7c2b58e121c21d50",
+     "ROW-8809ad0116427e6e",
+     "ROW-9141c4caeacf0368",
+     "ROW-950660c8d05e6e82",
+     "ROW-95751426f975b471",
+     "ROW-9d91a5ae48eabb38",
+     "ROW-9f4515b0d3eddf11",
+     "ROW-b469b21d10685dc0",
+     "ROW-b8ce446718afd8f9",
+     "ROW-bd2f14057e3b0940",
+     "ROW-bfbeae935900d24e",
+     "ROW-c2afca723c287ff0",
+     "ROW-c33bddbbea98a47e",
+     "ROW-ce8b26b848819c51",
+     "ROW-d70e23e6864702dc",
+     "ROW-d98987a64dd43947",
+     "ROW-da9214577d6b0598",
+     "ROW-e6534bbe928f3d1b",
+     "ROW-e65cf8a30563eb87",
+     "ROW-e9a7196e20c10c2c",
+     "ROW-e9b357f60a94dbf0",
+     "ROW-e9d0fc89b6ac8084",
+     "ROW-ef470571d54bc979",
+     "ROW-f0f4920bf28e95d3",
+     "ROW-f199f18b0fc37dc5",
+     "ROW-f25d38bcd183ee63",
+     "ROW-f416e7d6fbe81014",
+     "ROW-f513ac722fd107a3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-25-000065",
+     "text": "Structured Finance Structured Finance Investments Ares Secondaries PBN Finance Co IV LLC (4)(5)(6)(7) SF + 2.90 % 7.23 % 4/14/2039 $ 1,000 $ 10 $ 10"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Heading missing from the build: tested. Before this run extracted_industry was empty on most rows of the quarter (the shared step withdraws unmapped headings in a filing where under half map). With printed_industry_labels (36 headings read from the six filings) every flagged row now carries its printed heading; scratch/fund_runs/0001989817/r2/headings.py located every published row with a printed row (2145 of 2159 fund rows in rfhcf, all quarters; output headings_rfhcf.txt) and found the published heading equal to the nearest printed heading on all but one row (ICP 2025-09-30, 'Non-Life Insurance' printed with a capital L; the encoding check refuses two casings of one label).",
+    "Filer prints GICS: rejected for this quarter. To 2025-09-30 the filer prints FTSE/ICB-style industries ('Industrial Transportation', 'Health Care Providers', 'Software and Computer Services'); from 2025-12-31 it prints GICS industries ('Health Care Technology'), which is why later quarters pass.",
+    "A one-to-one ICB-to-GICS sub-industry map: rejected; a broad ICB heading does not name one GICS sub-industry (same ruling as HPS Corporate Lending, 0001838126).",
+    "The filer's own later GICS heading for the same entity: tested as a measure, not applied. On one basis (funded rows: fair value > 0, not cash, published basis; quarters to 2025-09-30; query scratch/fund_runs/0001989817/r2/gicsdis2.sql on rfhcf): 1,023 funded rows, 272 with no GICS label (the rows industry_coverage counts), of which 225 belong to an entity the filer later prints under a GICS heading; 661 rows carry a GICS label and belong to an entity the filer later classifies. Compared at the level the filer prints (GICS industry; the published sub-industry's parent industry from data/reference/gics_hierarchy.json; query scratch/fund_runs/0001989817/r2/gics_industry_level.py on rfhcf): 387 sit inside the filer's printed industry, 253 (1,655.4M) sit in another industry, 21 cannot be compared (label spelling not in the hierarchy), so at most 274 disagree; the independent reviewer's count on the same question was 258 (1,665.4M). Real contradictions remain (AthenaHealth published 'Pharmaceuticals' where the filer later prints 'Health Care Technology'; Alchemy 'Diversified Support Services' vs 'Metals & Mining'). Carrying the filer's label back would need shared code and assumes the classification did not change; gics_sub_industry is not a correctable field."
+   ],
+   "next_action": "Parked. Owner decision requested (orchestrator request REQ-rfhc-1): either measure ICB-era quarters on the printed filer industry now published in extracted_industry, or approve an opt-in step that carries the filer's own printed GICS industry heading per entity to its earlier quarters and keeps a published sub-industry only where it lies inside that industry (on the funded-row basis of gicsdis2.sql it would give an industry to 225 of the 272 uncovered rows; at industry level at most 274 labels, 253 certain, contradict the filer per gics_industry_level.py; carrying the sub-industry instead would overwrite correct, more specific labels). Until then the finding stays open; no disposition proposed."
+  },
+  {
+   "finding_id": "RVQ_BLK_483ff47958fe",
+   "rule_name": "industry_coverage",
+   "report_date": "2025-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-034e8a51a5880b0c",
+     "ROW-03533fd4df10354d",
+     "ROW-05d4f88ece55de88",
+     "ROW-08b45251b56c23d9",
+     "ROW-19f118e61d1b0842",
+     "ROW-1a32f8c8667144db",
+     "ROW-1fa6aee5b1f5e65c",
+     "ROW-2026641d9ae6064a",
+     "ROW-21f8027edd89b2aa",
+     "ROW-231701d8d812fa6a",
+     "ROW-2aad48788ca35481",
+     "ROW-2b775140ae3f3198",
+     "ROW-307cc48b7b592884",
+     "ROW-316bf11d66ec9ff2",
+     "ROW-31fe50a581af7beb",
+     "ROW-36ce3b1625618a0c",
+     "ROW-3be60ae32f37ed20",
+     "ROW-3e0f1d2aeae0eea7",
+     "ROW-42cda1fe925b3f28",
+     "ROW-469b01ee64f054df",
+     "ROW-493c505a9826f4d9",
+     "ROW-4ac2aadec0269d55",
+     "ROW-4cdc9eb298154c34",
+     "ROW-4de3fe1a50eecf2b",
+     "ROW-54a7253d636bf5bf",
+     "ROW-5546b921ef103b8c",
+     "ROW-595de5960409e120",
+     "ROW-5e5d5a403e9c26dd",
+     "ROW-62f45905f1e06fcc",
+     "ROW-65cd31cf2112a05f",
+     "ROW-67e163e67032e2a8",
+     "ROW-6b3b1f4284b23143",
+     "ROW-6dc3a6d76a903a08",
+     "ROW-739995760900b981",
+     "ROW-747e2c7b828d8b59",
+     "ROW-7e8c7f58103943dd",
+     "ROW-7f232baa371a8d10",
+     "ROW-8201be084036ab51",
+     "ROW-822a44fc645e04ac",
+     "ROW-85151d5cd35f0f9b",
+     "ROW-8a36d671aa50ef76",
+     "ROW-8b45e09f10a53549",
+     "ROW-8faf6a3750635ab8",
+     "ROW-933f7830317d31da",
+     "ROW-95f10421b32b030e",
+     "ROW-9fa250e324399cea",
+     "ROW-a0dfd3bc57546115",
+     "ROW-a1851c01c17d481f",
+     "ROW-a8c320016dbf8f49",
+     "ROW-ab85ee55bd03112c",
+     "ROW-ab9242736ed291df",
+     "ROW-ac4625e30c630777",
+     "ROW-b122c7283f1c2d53",
+     "ROW-b60878ba3a292b18",
+     "ROW-b75131e395bf774b",
+     "ROW-b92a20f1bc2576cf",
+     "ROW-bbf1fe189af4320f",
+     "ROW-c2e91ff9dc258b83",
+     "ROW-ce38da181bcee0a7",
+     "ROW-cfea397d74f49d32",
+     "ROW-d2fdca8d676c9bc2",
+     "ROW-d75e01b57d4467d2",
+     "ROW-d7b8c6369a2037c8",
+     "ROW-d9a133f0e87a831f",
+     "ROW-e38d37bc8bd12f60",
+     "ROW-e7d975305c7b618b",
+     "ROW-eb1c08a40e8a8aca",
+     "ROW-eb7df49f943cc923",
+     "ROW-ec3ec65b9de7fbca",
+     "ROW-ef08cd0e39fdd902",
+     "ROW-f2323ef1ceb825f7",
+     "ROW-f3cb9df590a84e12",
+     "ROW-f7ad885f7a730505"
+    ],
+    "reviewed_rows": [
+     "ROW-034e8a51a5880b0c",
+     "ROW-03533fd4df10354d",
+     "ROW-05d4f88ece55de88",
+     "ROW-08b45251b56c23d9",
+     "ROW-19f118e61d1b0842",
+     "ROW-1a32f8c8667144db",
+     "ROW-1fa6aee5b1f5e65c",
+     "ROW-2026641d9ae6064a",
+     "ROW-21f8027edd89b2aa",
+     "ROW-231701d8d812fa6a",
+     "ROW-2aad48788ca35481",
+     "ROW-2b775140ae3f3198",
+     "ROW-307cc48b7b592884",
+     "ROW-316bf11d66ec9ff2",
+     "ROW-31fe50a581af7beb",
+     "ROW-36ce3b1625618a0c",
+     "ROW-3be60ae32f37ed20",
+     "ROW-3e0f1d2aeae0eea7",
+     "ROW-42cda1fe925b3f28",
+     "ROW-469b01ee64f054df",
+     "ROW-493c505a9826f4d9",
+     "ROW-4ac2aadec0269d55",
+     "ROW-4cdc9eb298154c34",
+     "ROW-4de3fe1a50eecf2b",
+     "ROW-54a7253d636bf5bf",
+     "ROW-5546b921ef103b8c",
+     "ROW-595de5960409e120",
+     "ROW-5e5d5a403e9c26dd",
+     "ROW-62f45905f1e06fcc",
+     "ROW-65cd31cf2112a05f",
+     "ROW-67e163e67032e2a8",
+     "ROW-6b3b1f4284b23143",
+     "ROW-6dc3a6d76a903a08",
+     "ROW-739995760900b981",
+     "ROW-747e2c7b828d8b59",
+     "ROW-7e8c7f58103943dd",
+     "ROW-7f232baa371a8d10",
+     "ROW-8201be084036ab51",
+     "ROW-822a44fc645e04ac",
+     "ROW-85151d5cd35f0f9b",
+     "ROW-8a36d671aa50ef76",
+     "ROW-8b45e09f10a53549",
+     "ROW-8faf6a3750635ab8",
+     "ROW-933f7830317d31da",
+     "ROW-95f10421b32b030e",
+     "ROW-9fa250e324399cea",
+     "ROW-a0dfd3bc57546115",
+     "ROW-a1851c01c17d481f",
+     "ROW-a8c320016dbf8f49",
+     "ROW-ab85ee55bd03112c",
+     "ROW-ab9242736ed291df",
+     "ROW-ac4625e30c630777",
+     "ROW-b122c7283f1c2d53",
+     "ROW-b60878ba3a292b18",
+     "ROW-b75131e395bf774b",
+     "ROW-b92a20f1bc2576cf",
+     "ROW-bbf1fe189af4320f",
+     "ROW-c2e91ff9dc258b83",
+     "ROW-ce38da181bcee0a7",
+     "ROW-cfea397d74f49d32",
+     "ROW-d2fdca8d676c9bc2",
+     "ROW-d75e01b57d4467d2",
+     "ROW-d7b8c6369a2037c8",
+     "ROW-d9a133f0e87a831f",
+     "ROW-e38d37bc8bd12f60",
+     "ROW-e7d975305c7b618b",
+     "ROW-eb1c08a40e8a8aca",
+     "ROW-eb7df49f943cc923",
+     "ROW-ec3ec65b9de7fbca",
+     "ROW-ef08cd0e39fdd902",
+     "ROW-f2323ef1ceb825f7",
+     "ROW-f3cb9df590a84e12",
+     "ROW-f7ad885f7a730505"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-25-000085",
+     "text": "NE SPV Holdco, LLC (4)(18)(20) - Preferred Units 4,139 $ 3,018 $ 3,018"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+    }
+   ],
+   "conclusion": "confirmed_error",
+   "hypotheses_tested": [
+    "Heading missing from the build: tested. Before this run extracted_industry was empty on most rows of the quarter (the shared step withdraws unmapped headings in a filing where under half map). With printed_industry_labels (36 headings read from the six filings) every flagged row now carries its printed heading; scratch/fund_runs/0001989817/r2/headings.py located every published row with a printed row (2145 of 2159 fund rows in rfhcf, all quarters; output headings_rfhcf.txt) and found the published heading equal to the nearest printed heading on all but one row (ICP 2025-09-30, 'Non-Life Insurance' printed with a capital L; the encoding check refuses two casings of one label).",
+    "Filer prints GICS: rejected for this quarter. To 2025-09-30 the filer prints FTSE/ICB-style industries ('Industrial Transportation', 'Health Care Providers', 'Software and Computer Services'); from 2025-12-31 it prints GICS industries ('Health Care Technology'), which is why later quarters pass.",
+    "A one-to-one ICB-to-GICS sub-industry map: rejected; a broad ICB heading does not name one GICS sub-industry (same ruling as HPS Corporate Lending, 0001838126).",
+    "The filer's own later GICS heading for the same entity: tested as a measure, not applied. On one basis (funded rows: fair value > 0, not cash, published basis; quarters to 2025-09-30; query scratch/fund_runs/0001989817/r2/gicsdis2.sql on rfhcf): 1,023 funded rows, 272 with no GICS label (the rows industry_coverage counts), of which 225 belong to an entity the filer later prints under a GICS heading; 661 rows carry a GICS label and belong to an entity the filer later classifies. Compared at the level the filer prints (GICS industry; the published sub-industry's parent industry from data/reference/gics_hierarchy.json; query scratch/fund_runs/0001989817/r2/gics_industry_level.py on rfhcf): 387 sit inside the filer's printed industry, 253 (1,655.4M) sit in another industry, 21 cannot be compared (label spelling not in the hierarchy), so at most 274 disagree; the independent reviewer's count on the same question was 258 (1,665.4M). Real contradictions remain (AthenaHealth published 'Pharmaceuticals' where the filer later prints 'Health Care Technology'; Alchemy 'Diversified Support Services' vs 'Metals & Mining'). Carrying the filer's label back would need shared code and assumes the classification did not change; gics_sub_industry is not a correctable field."
+   ],
+   "next_action": "Parked. Owner decision requested (orchestrator request REQ-rfhc-1): either measure ICB-era quarters on the printed filer industry now published in extracted_industry, or approve an opt-in step that carries the filer's own printed GICS industry heading per entity to its earlier quarters and keeps a published sub-industry only where it lies inside that industry (on the funded-row basis of gicsdis2.sql it would give an industry to 225 of the 272 uncovered rows; at industry level at most 274 labels, 253 certain, contradict the filer per gics_industry_level.py; carrying the sub-industry instead would overwrite correct, more specific labels). Until then the finding stays open; no disposition proposed."
+  },
+  {
+   "finding_id": "RVQ_REV_e372b59541c5",
+   "rule_name": "F27",
+   "report_date": "2024-09-30",
+   "coverage": {
+    "affected_rows": [
+     "0001989817|2024-09-30|income_yield_pct",
+     "0001989817|2024-09-30|weighted_average_coupon"
+    ],
+    "reviewed_rows": [
+     "0001989817|2024-09-30|income_yield_pct",
+     "0001989817|2024-09-30|weighted_average_coupon"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-24-000055",
+     "text": "Ratio of net investment income to average net assets (5) 13.77 %"
+    },
+    {
+     "accession": "0001989817-24-000055",
+     "text": "Total Investments - Non-Controlled/Non-Affiliated $ 703,871 $ 707,902 126.15 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published income yield differs from the page: rejected; income_yield_pct equals the printed ratio of net investment income to average net assets (13.77, 12.83, 12.57).",
+    "Holdings coupon understated: not supported; the fund holds 126 to 169 pct of net assets in investments (printed totals), so income over net assets exceeds the asset coupon plus 200bp by leverage alone.",
+    "Annualisation or period mismatch: the printed ratio is the filer's annualised ratio; no published value differs from it."
+   ],
+   "next_action": "Proposal PD-F27-1989817-1 (reason f27-income-over-net-assets-of-a-levered-fund, same reason already proposed for other funds) awaits the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_ce0a1c1d85bc",
+   "rule_name": "F27",
+   "report_date": "2024-12-31",
+   "coverage": {
+    "affected_rows": [
+     "0001989817|2024-12-31|income_yield_pct",
+     "0001989817|2024-12-31|weighted_average_coupon"
+    ],
+    "reviewed_rows": [
+     "0001989817|2024-12-31|income_yield_pct",
+     "0001989817|2024-12-31|weighted_average_coupon"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Ratio of net investment income to average net assets (5) 12.83 %"
+    },
+    {
+     "accession": "0001989817-25-000023",
+     "text": "Total Investments - Non-Controlled/Non-Affiliated $ 982,565 $ 984,954 151.10 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published income yield differs from the page: rejected; income_yield_pct equals the printed ratio of net investment income to average net assets (13.77, 12.83, 12.57).",
+    "Holdings coupon understated: not supported; the fund holds 126 to 169 pct of net assets in investments (printed totals), so income over net assets exceeds the asset coupon plus 200bp by leverage alone.",
+    "Annualisation or period mismatch: the printed ratio is the filer's annualised ratio; no published value differs from it."
+   ],
+   "next_action": "Proposal PD-F27-1989817-1 (reason f27-income-over-net-assets-of-a-levered-fund, same reason already proposed for other funds) awaits the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_c472f5c765f6",
+   "rule_name": "F27",
+   "report_date": "2025-06-30",
+   "coverage": {
+    "affected_rows": [
+     "0001989817|2025-06-30|income_yield_pct",
+     "0001989817|2025-06-30|weighted_average_coupon"
+    ],
+    "reviewed_rows": [
+     "0001989817|2025-06-30|income_yield_pct",
+     "0001989817|2025-06-30|weighted_average_coupon"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-25-000065",
+     "text": "Ratio of net investment income to average net assets (5) 12.57 %"
+    },
+    {
+     "accession": "0001989817-25-000065",
+     "text": "Total Investment Portfolio $ 1,632,151 $ 1,646,959 169.34 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published income yield differs from the page: rejected; income_yield_pct equals the printed ratio of net investment income to average net assets (13.77, 12.83, 12.57).",
+    "Holdings coupon understated: not supported; the fund holds 126 to 169 pct of net assets in investments (printed totals), so income over net assets exceeds the asset coupon plus 200bp by leverage alone.",
+    "Annualisation or period mismatch: the printed ratio is the filer's annualised ratio; no published value differs from it."
+   ],
+   "next_action": "Proposal PD-F27-1989817-1 (reason f27-income-over-net-assets-of-a-levered-fund, same reason already proposed for other funds) awaits the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_76f22d14da84",
+   "rule_name": "C107",
+   "report_date": "2024-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-1d359150d51eba41",
+     "ROW-2c0b44ef87bf831f",
+     "ROW-3f922b2fdde6eaff",
+     "ROW-6381f29ddb1a5f75",
+     "ROW-7bfba7c31c3d17e4",
+     "ROW-7c72590c0f7b7bee",
+     "ROW-88c5d12286bf986e",
+     "ROW-b3ad341c4412c2b1",
+     "ROW-ffc3489b35cc5781"
+    ],
+    "reviewed_rows": [
+     "ROW-1d359150d51eba41",
+     "ROW-2c0b44ef87bf831f",
+     "ROW-3f922b2fdde6eaff",
+     "ROW-6381f29ddb1a5f75",
+     "ROW-7bfba7c31c3d17e4",
+     "ROW-7c72590c0f7b7bee",
+     "ROW-88c5d12286bf986e",
+     "ROW-b3ad341c4412c2b1",
+     "ROW-ffc3489b35cc5781"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-24-000032",
+     "text": "WorkWave Intermediate II, LLC (4)(6)(9) 6/29/2027 10,847 ( 156 ) ( 62 )"
+    },
+    {
+     "accession": "0001989817-24-000032",
+     "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Earlier verdict (American Academy revolver cost -3,000 against a printed dash): rechecked; the row now publishes cost 0 (printed '-'), and is no longer flagged.",
+    "Each of the 9 flagged rows read against its printed line (scratch/fund_runs/0001989817/r2/flag_C107_2024-06-30.txt): all are undrawn delayed-draw or revolving lines whose printed amortized cost is a bracketed negative figure, published equal to the page.",
+    "Sign lost or cost taken from fair value: rejected on every row (cost and value printed separately and published separately)."
+   ],
+   "next_action": "Proposal PD-C107-1989817-1 (reason undrawn-line-negative-cost-from-unamortized-fees, addresses the verdict) awaits the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_c72b2b8f1437",
+   "rule_name": "C107",
+   "report_date": "2024-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-2fed13d18e8d6d91",
+     "ROW-3139ec2b901e8711",
+     "ROW-6bc1feb3040f9ffe",
+     "ROW-87dcb069fcc9eb36",
+     "ROW-93cde8ed2febe7ec",
+     "ROW-998d92f535e3c41d",
+     "ROW-d878798b5635f624",
+     "ROW-e96f7ae172239cdb",
+     "ROW-f28f05ff2dc5b33f"
+    ],
+    "reviewed_rows": [
+     "ROW-2fed13d18e8d6d91",
+     "ROW-3139ec2b901e8711",
+     "ROW-6bc1feb3040f9ffe",
+     "ROW-87dcb069fcc9eb36",
+     "ROW-93cde8ed2febe7ec",
+     "ROW-998d92f535e3c41d",
+     "ROW-d878798b5635f624",
+     "ROW-e96f7ae172239cdb",
+     "ROW-f28f05ff2dc5b33f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-24-000055",
+     "text": "NTH Degree Purchaser, Inc (4)(6)(10) 9/10/2030 3,422 ( 68 ) ( 68 )"
+    },
+    {
+     "accession": "0001989817-24-000055",
+     "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - ( 3 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Earlier verdict (American Academy revolver cost -3,000 against a printed dash): rechecked; the row now publishes cost 0 (printed '-'), and is no longer flagged.",
+    "Each of the 9 flagged rows read against its printed line (scratch/fund_runs/0001989817/r2/flag_C107_2024-09-30.txt): all are undrawn delayed-draw or revolving lines whose printed amortized cost is a bracketed negative figure, published equal to the page.",
+    "Sign lost or cost taken from fair value: rejected on every row (cost and value printed separately and published separately)."
+   ],
+   "next_action": "Proposal PD-C107-1989817-1 (reason undrawn-line-negative-cost-from-unamortized-fees, addresses the verdict) awaits the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_9385fe8e3aa6",
+   "rule_name": "X02",
+   "report_date": "2025-09-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-19f118e61d1b0842",
+     "ROW-1eec05853ade9ad0",
+     "ROW-2435ee879b12f94f",
+     "ROW-292e8ced6acd6dbd",
+     "ROW-2d973d96e53ec416",
+     "ROW-31eb89cdc4a05227",
+     "ROW-32a196ec09d11bfe",
+     "ROW-3601dc5fa7ceae47",
+     "ROW-37153233eb75311b",
+     "ROW-38842855bcf79dff",
+     "ROW-3aebd6e0f37b096b",
+     "ROW-54a7253d636bf5bf",
+     "ROW-5877a0a19411509b",
+     "ROW-59b5edada79fb5d2",
+     "ROW-5c52254809983c33",
+     "ROW-5c8a2c93560ad5f1",
+     "ROW-61d4a76b93b9ba73",
+     "ROW-67d2cad33d5f31fb",
+     "ROW-6df141472127f6db",
+     "ROW-7073eaafd1f2b823",
+     "ROW-731da23fef0c743a",
+     "ROW-78d3a72bb9be90ee",
+     "ROW-79688c55123e8a40",
+     "ROW-7c6405935b168d15",
+     "ROW-7f900fd4c000a7d3",
+     "ROW-91a2fc5016aace9d",
+     "ROW-a658a583b979e0af",
+     "ROW-a8ef4a1de38bd5e9",
+     "ROW-ab8f5acd8ba593c8",
+     "ROW-abd6d8f5f64f3c69",
+     "ROW-ac0eff0c979038a5",
+     "ROW-ad87e8895cd9ba64",
+     "ROW-b02c547d390b03af",
+     "ROW-b2debad4b70dabbe",
+     "ROW-b52fd0990efb8ee5",
+     "ROW-bbf1fe189af4320f",
+     "ROW-c907b3ac6ef42c58",
+     "ROW-d4384f17002b1976",
+     "ROW-d74a40d3124c9927",
+     "ROW-ddc88e1b554876cf",
+     "ROW-e16bf81c5c18fa87",
+     "ROW-eb364dfa9f69cf8b",
+     "ROW-ef959650b980cdd1",
+     "ROW-f2e90750e88da035"
+    ],
+    "reviewed_rows": [
+     "ROW-19f118e61d1b0842",
+     "ROW-1eec05853ade9ad0",
+     "ROW-2435ee879b12f94f",
+     "ROW-292e8ced6acd6dbd",
+     "ROW-2d973d96e53ec416",
+     "ROW-31eb89cdc4a05227",
+     "ROW-32a196ec09d11bfe",
+     "ROW-3601dc5fa7ceae47",
+     "ROW-37153233eb75311b",
+     "ROW-38842855bcf79dff",
+     "ROW-3aebd6e0f37b096b",
+     "ROW-54a7253d636bf5bf",
+     "ROW-5877a0a19411509b",
+     "ROW-59b5edada79fb5d2",
+     "ROW-5c52254809983c33",
+     "ROW-5c8a2c93560ad5f1",
+     "ROW-61d4a76b93b9ba73",
+     "ROW-67d2cad33d5f31fb",
+     "ROW-6df141472127f6db",
+     "ROW-7073eaafd1f2b823",
+     "ROW-731da23fef0c743a",
+     "ROW-78d3a72bb9be90ee",
+     "ROW-79688c55123e8a40",
+     "ROW-7c6405935b168d15",
+     "ROW-7f900fd4c000a7d3",
+     "ROW-91a2fc5016aace9d",
+     "ROW-a658a583b979e0af",
+     "ROW-a8ef4a1de38bd5e9",
+     "ROW-ab8f5acd8ba593c8",
+     "ROW-abd6d8f5f64f3c69",
+     "ROW-ac0eff0c979038a5",
+     "ROW-ad87e8895cd9ba64",
+     "ROW-b02c547d390b03af",
+     "ROW-b2debad4b70dabbe",
+     "ROW-b52fd0990efb8ee5",
+     "ROW-bbf1fe189af4320f",
+     "ROW-c907b3ac6ef42c58",
+     "ROW-d4384f17002b1976",
+     "ROW-d74a40d3124c9927",
+     "ROW-ddc88e1b554876cf",
+     "ROW-e16bf81c5c18fa87",
+     "ROW-eb364dfa9f69cf8b",
+     "ROW-ef959650b980cdd1",
+     "ROW-f2e90750e88da035"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-25-000085",
+     "text": "Alp CFO 2025, L.P. (4)(5)(19) - Subordinated Note 7/15/2037 4,000 4,000 4,000"
+    },
+    {
+     "accession": "0001989817-25-000085",
+     "text": "Saga Mid Co Limited (4)(5)(6)(10) 2/27/2031 GBP 8,364 ( 250 ) 22"
+    },
+    {
+     "accession": "0001989817-25-000085",
+     "text": "IDF 9 Financeco, LLC (4)(6)(19)(20) - Series B Units 1,055,303 966 1,041"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row read against its printed row (scratch/fund_runs/0001989817/r2/flag_X02_2025-09-30.txt, 44 rows): undrawn lines printing maturity, par, cost and value only, plus the Alp CFO 2025 subordinated note, printed with no coupon.",
+    "Equity row published as a loan: found and fixed; IDF 9 Financeco Series B Units (context c-395) shared its identifier with the IDF 9 loan, now corrected by a context-keyed row correction to preferred equity and no longer flagged.",
+    "New Era Technology 2025-09-30 (published as common equity before this run, printed 'SF + 6.25 % PIK' with no all-in rate) is now a loan with spread 6.25 and is not flagged.",
+    "Gate round 2: the Constellation Wealth Capital Fund-A-Blocker (LIDO) unsecured note is now published as a loan in this quarter (c-377, printed '... (4) 2/1/2038 46 46 46') and joins the flagged rows; its printed line has maturity, par, cost and value and no coupon, so it is the same no-rate-printed case."
+   ],
+   "next_action": "Proposal PD-X02-1989817-1 (reason x02-no-rate-printed-on-the-row) awaits the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_5ff52445ac17",
+   "rule_name": "X02",
+   "report_date": "2026-03-31",
+   "coverage": {
+    "affected_rows": [
+     "ROW-017c1135bdfffa76",
+     "ROW-0963bd571555000a",
+     "ROW-0ce11658e2be66a5",
+     "ROW-128165083790f0ef",
+     "ROW-1fa0cd1928c530e5",
+     "ROW-3270006edcb2fe4f",
+     "ROW-387e6f9fc7a22c56",
+     "ROW-3caf468861f89d98",
+     "ROW-4ac2b8eefb260f1f",
+     "ROW-5596457908c3181a",
+     "ROW-5ed296a675e41979",
+     "ROW-60b77e73cae92511",
+     "ROW-63622d39c8613582",
+     "ROW-6bf10d2d2971074f",
+     "ROW-6c743a2273d2d43a",
+     "ROW-72dff1b46f6d8e5a",
+     "ROW-7998cc4391c3b615",
+     "ROW-79f868eb71b9e82e",
+     "ROW-80bbdca5972dd7bf",
+     "ROW-8a8117b5b20f704a",
+     "ROW-9e01cacf53cadf7b",
+     "ROW-a106fc307368853b",
+     "ROW-a2225ff99a788d57",
+     "ROW-a823c96b00dc86ae",
+     "ROW-bee15f6719a64843",
+     "ROW-c29b5ca475c1cf68",
+     "ROW-c39eaa47a4c189ef",
+     "ROW-c5c8021e2fe19220",
+     "ROW-cf72a7c88894b3de",
+     "ROW-d2ffd622f9ed4be7",
+     "ROW-d752d64113995396",
+     "ROW-df50858059853a34",
+     "ROW-e01691b077025065",
+     "ROW-e03f132dd9fa5ed5",
+     "ROW-e2f1cda59b310844",
+     "ROW-ed945baab9ed72ff",
+     "ROW-eef291c20bd19098",
+     "ROW-ef273910290537f9",
+     "ROW-f28184865acc17c9",
+     "ROW-f9315850cc1a0b4e",
+     "ROW-fd1b2636b8c4b7ab"
+    ],
+    "reviewed_rows": [
+     "ROW-017c1135bdfffa76",
+     "ROW-0963bd571555000a",
+     "ROW-0ce11658e2be66a5",
+     "ROW-128165083790f0ef",
+     "ROW-1fa0cd1928c530e5",
+     "ROW-3270006edcb2fe4f",
+     "ROW-387e6f9fc7a22c56",
+     "ROW-3caf468861f89d98",
+     "ROW-4ac2b8eefb260f1f",
+     "ROW-5596457908c3181a",
+     "ROW-5ed296a675e41979",
+     "ROW-60b77e73cae92511",
+     "ROW-63622d39c8613582",
+     "ROW-6bf10d2d2971074f",
+     "ROW-6c743a2273d2d43a",
+     "ROW-72dff1b46f6d8e5a",
+     "ROW-7998cc4391c3b615",
+     "ROW-79f868eb71b9e82e",
+     "ROW-80bbdca5972dd7bf",
+     "ROW-8a8117b5b20f704a",
+     "ROW-9e01cacf53cadf7b",
+     "ROW-a106fc307368853b",
+     "ROW-a2225ff99a788d57",
+     "ROW-a823c96b00dc86ae",
+     "ROW-bee15f6719a64843",
+     "ROW-c29b5ca475c1cf68",
+     "ROW-c39eaa47a4c189ef",
+     "ROW-c5c8021e2fe19220",
+     "ROW-cf72a7c88894b3de",
+     "ROW-d2ffd622f9ed4be7",
+     "ROW-d752d64113995396",
+     "ROW-df50858059853a34",
+     "ROW-e01691b077025065",
+     "ROW-e03f132dd9fa5ed5",
+     "ROW-e2f1cda59b310844",
+     "ROW-ed945baab9ed72ff",
+     "ROW-eef291c20bd19098",
+     "ROW-ef273910290537f9",
+     "ROW-f28184865acc17c9",
+     "ROW-f9315850cc1a0b4e",
+     "ROW-fd1b2636b8c4b7ab"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001628280-26-035294",
+     "text": "AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173"
+    },
+    {
+     "accession": "0001628280-26-035294",
+     "text": "Axiom Buyer, LLC (4)(6)(10) 1/14/2030 1,905 ( 40 ) ( 27 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Every flagged row read against its printed row (scratch/fund_runs/0001989817/r2/flag_X02_2026-03-31.txt, 41 rows): undrawn lines printing maturity, par, cost and value only.",
+    "Earlier verdict (AVSC Holding Corp. revolver c-75 with no rate, printed 8.67 pct): fixed in the 2026-10-15 run by a row correction; published 8.67 / 5.00 / SOFR, no longer flagged.",
+    "New Era Technology 2025-09-30 (published as common equity before this run, printed 'SF + 6.25 % PIK' with no all-in rate) is now a loan with spread 6.25 and is not flagged.",
+    "Gate round 2: the Constellation Wealth Capital Fund-A-Blocker (LIDO) unsecured note is now published as a loan in this quarter (c-371, printed '... (4) 2/1/2038 $ 48 $ - $ -') and joins the flagged rows; its printed line has maturity, par, cost and value and no coupon, so it is the same no-rate-printed case."
+   ],
+   "next_action": "Proposal PD-X02-1989817-1 (reason x02-no-rate-printed-on-the-row) awaits the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_e38e8b45dbbb",
+   "rule_name": "PP02",
+   "report_date": "2026-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-153222d046a2e288",
+     "ROW-f253313ba3cfb1b8"
+    ],
+    "reviewed_rows": [
+     "ROW-153222d046a2e288",
+     "ROW-f253313ba3cfb1b8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206 Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206 Total Software 412 412 0.03 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Duplicate dimension path: rejected; the page prints two identical Class V lines and the subtotal 412 counts both.",
+    "One line is the comparative or a note figure: rejected; both sit in the current schedule above 'Total Software'."
+   ],
+   "next_action": "Proposal PD-PP02-1989817-1 (reason pp02-twin-lines-printed-separately) awaits the owner; no data change."
+  },
+  {
+   "finding_id": "RVQ_REV_94b972980829",
+   "rule_name": "maturity_not_past",
+   "report_date": "2026-06-30",
+   "coverage": {
+    "affected_rows": [
+     "ROW-ae8aa544c1712b5f"
+    ],
+    "reviewed_rows": [
+     "ROW-ae8aa544c1712b5f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001628280-26-056793",
+     "text": "Distributed Solar Development LLC (4)(13)(24) SF + 12.50 % PIK 16.17 % 5/30/2026 2,384 2,384 2,366"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "New in this run: the build had dropped the printed maturity on this row; a row correction restores 2026-05-30 from the printed line, which raised the check (1 of 287 rows; query scratch/fund_runs/0001989817/r2/past.sql lists every published row with a maturity before its report date: only this one).",
+    "Maturity misread (another tranche's date): rejected; the other Distributed Solar line prints 9/19/2027 and is published so."
+   ],
+   "next_action": "Proposal PD-maturity_not_past-1989817-1 (reason maturity-not-past-loan-held-past-printed-maturity) awaits the owner."
+  }
+ ],
+ "request_resolution_history": [
+  {
+   "request_id": "REQ-rfhc-1",
+   "classification": "acceptance_change",
+   "resolution": "deferred",
+   "response": "deferred to the owner: an acceptance change (what counts as industry coverage for quarters where the filer prints a non-GICS taxonomy) is the owner's decision. Nothing implemented; the six industry_coverage findings stay outstanding without a proposal and are listed for the owner with options (a) and (b) and the orchestrator's recommendation (b, at industry level).",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-230; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rfhc-1",
+    "classification": "acceptance_change",
+    "file": "pipeline/candidate_rules.py (industry_coverage) or pipeline/unified_holdings.py (_apply_printed_industry)",
+    "what": "Owner decision for funds that print a non-GICS (ICB) taxonomy in some quarters: either (a) industry_coverage counts a printed filer industry (extracted_industry from printed_industry_labels) as covered for those quarters, or (b) an opt-in wrapper setting carries the filer's own printed GICS heading for the same entity to its other quarters.",
+    "why": "Six industry_coverage findings (272 rows) are a real gap that no source-backed fund-level fix closes: the page prints ICB industries, not GICS. At GICS industry level, at most 274 published labels (253 certain, 1,655.4M; reviewer's count 258, 1,665.4M) sit outside the industry the filer itself prints later for the same company (gics_industry_level.py). Option (b) should carry the filer's industry heading and keep a published sub-industry only where it lies inside that industry: carried at sub-industry level it would overwrite correct, more specific labels (387 published sub-industries already sit inside the printed industry; the reviewer counted at least 76 among the earlier sub-industry mismatches).",
+    "quotes": [
+     {
+      "accession": "0001989817-25-000043",
+      "text": "11.58 % Industrial Transportation Stonepeak Nile Parent LLC (5)(7)(18) SF + 2.75 % 7.07 % 2/4/2032 1,765 1,760 1,760"
+     },
+     {
+      "accession": "0001628280-26-020820",
+      "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+     }
+    ],
+    "next_action": "Orchestrator records the request and puts it to the owner with the sibling case (HPS Corporate Lending 0001838126, same parked reason); the six findings stay open until the owner rules; no check is changed meanwhile."
+   },
+   "evidence": [
+    {
+     "accession": "0001989817-25-000043",
+     "text": "11.58 % Industrial Transportation Stonepeak Nile Parent LLC (5)(7)(18) SF + 2.75 % 7.07 % 2/4/2032 1,765 1,760 1,760"
+    },
+    {
+     "accession": "0001628280-26-020820",
+     "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"
+    }
+   ]
+  }
  ]
 }

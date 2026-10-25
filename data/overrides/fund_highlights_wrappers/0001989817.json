@@ -1,0 +1,10 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001989817",
+ "entity_name": "HPS Corporate Capital Solutions Fund",
+ "version": 1,
+ "nil_income_quarters": [
+  {"report_date": "2024-03-31", "evidence": "0001989817-24-000007 (10-Q, 2024-03-31) Statement of Operations: 'Three Months Ended March 31, 2024 Expenses: Organization expenses (See Note 2) $ 49,959 ... Total expenses $ 391,674 Reimbursable expenses (Note 3) ( 391,674 ) Net expenses $ - Net increase (decrease) in net assets resulting from operations $ -' and MD&A 'As of March 31, 2024, we had not commenced operations and have not made any investments.' No income lines are printed or tagged."}
+ ],
+ "notes": "Fund-clearing loop 2026-10-25 (rfhc). The fund began investing in April 2024 (10-K 2024, 0001989817-25-000023: 'our monthly NAV per share since our commencement of operations ... April 30, 2024 $ 25.63'). The 10-Q for 2024-06-30 prints the same figures for three and six months ('Total investment income 19,712 19,712'). With the first quarter not counted, the fourth quarter of 2024 was published as one quarter of the year (61,475 / 4 = 15,369 investment income; 48,105 / 4 = 12,026 net investment income) while net expenses were the true fourth quarter (13,370 - 9,021 = 4,349), so income_identity failed. With 2024-03-31 a nil quarter, the fourth quarter is the year less the three filed quarters (61,475 - 0 - 19,712 - 18,891 = 22,872; the build's gross_investment_income for the quarter was already 22,870,000)."
+}

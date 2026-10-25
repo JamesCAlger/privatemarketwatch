@@ -1973,5 +1973,773 @@
    "reference_rate_source": "printed_schedule"
   },
   "reason": "The filer tagged the rate and PIK facts on a separate context (c-269) with no value; the row's own context carries none. Printed (0001989817-25-000043): 'LC8 Cirrostratus L.P. (4)(5)(10)(19) SF + 7.00 % PIK 11.30 % 2/8/2029 1,575 $ 1,548 $ 1,556'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Soliant Lower Intermediate LLC",
+  "fields": {
+   "issuer_name": "TTF Lower Intermediate LLC"
+  },
+  "reason": "The context carries the member 'Soliant Lower Intermediate LLC' and the values of the line printed. Printed (0001989817-25-000023, context c-100): 'TTF Lower Intermediate LLC (7) SF + 3.75 % 8.11 % 7/18/2031 2,750 2,724 2,736 TruckPro, LLC (4)(11) SF + 7.75 % 12.49 % 8/16/2028 3,482 3,435 3,374 W3 TopCo LLC (4)(10) S'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "NTH Degree Purchaser, INC 5",
+  "fields": {
+   "issuer_name": "Team, Inc."
+  },
+  "reason": "The filer tagged this line with the member 'NTH Degree Purchaser, INC 5'; its par, cost and value are those of the line printed. Printed (0001989817-25-000043, context c-125): 'Team, Inc. (4)(10) SF + 6.50 % 10.83 % 3/12/2030 13,090 12,799 12,799 TruckPro, LLC (4)(11) SF + 7.75 % 12.19 % 8/16/2028 3,465 3,420 3,329 W3 TopCo LLC (4)(10) SF + 6.50'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Global Gruppe GmbH",
+  "fields": {
+   "issuer_name": "Global Service GmbH"
+  },
+  "reason": "The member keeps the old name 'Global Gruppe GmbH'; the page prints the current name. Printed (0001628280-26-035294, context c-252): 'Global Service GmbH (4)(5)(7)(27) E + 6.75 % 8.85 % 2/1/2030 EUR 7,753 8,842 9,051 HUB International Ltd (7)(23) SF + 2.25 % 5.92 % 6/20/2030 7,998 7,998 7,990 Internatio'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "White Cap Buyer, LLC",
+  "fields": {
+   "issuer_name": "White Cap Supply Holdings LLC"
+  },
+  "reason": "The member keeps the old name 'White Cap Buyer, LLC'; the page prints the current name. Printed (0001628280-26-035294, context c-331): 'White Cap Supply Holdings LLC (7)(22) SF + 3.25 % 6.92 % 10/19/2029 1,809 1,803 1,745 Total Specialty Retail 59,714 59,683 4.54 % Trading Companies & Distributors Atlas I'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Westlands Power Company Investor, LLC",
+  "fields": {
+   "issuer_name": "Westlands Electric Power Company Investor, LLC"
+  },
+  "reason": "The member keeps the old name 'Westlands Power Company Investor, LLC'; the page prints the current name. Printed (0001628280-26-035294, context c-245): 'Westlands Electric Power Company Investor, LLC (4)(6)(12)(23) SF + 6.00 % 9.70 % 12/6/2030 50,000 32,188 32,278 Total Independent Power and Renewable Electricity Producer'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Westlands Power Company Investor, LLC",
+  "fields": {
+   "issuer_name": "Westlands Electric Power Company Investor, LLC"
+  },
+  "reason": "The member keeps the old name 'Westlands Power Company Investor, LLC'; the page prints the current name. Printed (0001628280-26-056793, context c-263): 'Westlands Electric Power Company Investor, LLC (4)(6)(13)(24) SF + 6.00 % 9.73 % 12/6/2030 50,000 40,988 40,778 Total Independent Power and Renewable Electricity Producer'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Kendra Scott Design In.",
+  "fields": {
+   "issuer_name": "Kendra Scott Design Inc"
+  },
+  "reason": "The member is misspelled 'Kendra Scott Design In.'; the page prints. Printed (0001628280-26-020820, context c-425): 'Kendra Scott Design Inc (4)(21) - Preferred Stock 2,316,836 24,270 33,117 24,270 33,117 2.65 % Wireless Telecommunication Services CCI Topco, Inc. (4)(21) - Preferred Sto'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Kendra Scott Design In.",
+  "fields": {
+   "issuer_name": "Kendra Scott Design Inc"
+  },
+  "reason": "The member is misspelled 'Kendra Scott Design In.'; the page prints. Printed (0001628280-26-035294, context c-411): 'Kendra Scott Design Inc (4)(20)(34) - Preferred Stock 2,316,836 24,270 34,836 Total Textiles, Apparel & Luxury Goods 24,270 34,836 2.65 % Wireless Telecommunication Servi'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Kowalski Trust",
+  "fields": {
+   "pik_rate": "16"
+  },
+  "reason": "The page prints the fixed coupon as paid in kind; no PIK fact on the context. Printed (0001989817-25-000043, context c-172): 'Kowalski Trust (4)(5)(7) 16.00 % PIK 16.00 % 5/31/2034 18,030 17,722 18,030 28,251 28,530 3.52 % Pharmaceuticals and Biotechnology Azurity Pharmaceuticals Inc (4)(10) SF'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Kowalski Trust",
+  "fields": {
+   "pik_rate": "16"
+  },
+  "reason": "The page prints the fixed coupon as paid in kind; no PIK fact on the context. Printed (0001989817-25-000065, context c-218): 'Kowalski Trust (4)(5)(7) 16.00 % PIK 16.00 % 5/31/2034 19,427 19,128 19,427 PCF Insurance Services of the West LLC (7) SF + 3.25 % 7.56 % 6/17/2032 3,457 3,449 3,468 44,8'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Flatiron Energy Holdco LLC 2",
+  "fields": {
+   "pik_rate": "7.5"
+  },
+  "reason": "The page prints the margin as paid in kind (pik_rate = margin, as in the fund's other quarters); no PIK fact on the context. Printed (0001989817-25-000043, context c-76): 'Flatiron Energy Holdco LLC (4)(13) SF + 7.50 % PIK 11.80 % 10/1/2029 5,094 4,986 4,991 6,445 6,459 0.80 % General Industrials Capripack Debtco PLC (4)(5)(10) E + 5.75 % ('"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Sunraycer HPS Borrower LLC 1",
+  "fields": {
+   "pik_rate": "8.5"
+  },
+  "reason": "The page prints the margin as paid in kind; no PIK fact on the context. Printed (0001989817-25-000043, context c-69): 'Sunraycer HPS Borrower LLC (4)(6)(13) SF + 8.50 % PIK 12.80 % 10/28/2029 6,328 3,283 3,294 Sunraycer HPS Borrower LLC (4)(13) SF + 8.50 % PIK 12.80 % 10/28/2029 11,052 10'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Sunraycer HPS Borrower LLC 2",
+  "fields": {
+   "pik_rate": "8.5"
+  },
+  "reason": "The page prints the margin as paid in kind; no PIK fact on the context. Printed (0001989817-25-000043, context c-70): 'Sunraycer HPS Borrower LLC (4)(13) SF + 8.50 % PIK 12.80 % 10/28/2029 11,052 10,861 10,871 81,621 81,797 10.09 % Finance and Credit Services Consolidated Information Serv'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "LC8 Cirrostratus L.P",
+  "fields": {
+   "pik_rate": "7"
+  },
+  "reason": "The page prints the margin as paid in kind; no PIK fact on the context. Printed (0001989817-25-000043, context c-270): 'LC8 Cirrostratus L.P. (4)(5)(10)(19) SF + 7.00 % PIK 11.30 % 2/8/2029 1,575 $ 1,548 $ 1,556 1,548 1,556 0.19 % Electricity IDF 9 Financeco, LLC (4)(6)(18)(19) 1,055,302 7'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "The ONE Group Hospitality, Inc. - Preferred Shares",
+  "fields": {
+   "shares_held": "1000"
+  },
+  "reason": "Published 7,000 (a count borrowed by the shared normaliser from the warrant line); the page prints 1,000, as in every later quarter. Printed (0001989817-24-000032, context c-140): 'The ONE Group Hospitality, Inc. - Preferred Shares (4) 8/2/2029 $ 1,000 $ 950 $ 972 The ONE Group Hospitality, Inc. - Warrants (4) 7 - - The ONE Group Hospitality, Inc. -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "The ONE Group Hospitality, Inc.",
+  "fields": {
+   "shares_held": "11911",
+   "instrument_description": "A-2 Warrants"
+  },
+  "reason": "Tagged 11911 (decimals 0); published 11,911,000 by the shared normaliser; instrument printed. Printed (0001628280-26-020820, context c-438): 'The ONE Group Hospitality, Inc. (21) - A-2 Warrants 11,911 61 21 The ONE Group Hospitality, Inc. (4)(21) - B-2 Warrants 6,667 12 - 73 21 - % Pharmaceuticals Creek Feeder,'",
+  "correction_context": "c-438"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "The ONE Group Hospitality, Inc.",
+  "fields": {
+   "instrument_description": "B-2 Warrants"
+  },
+  "reason": "Instrument printed, published blank. Printed (0001628280-26-020820, context c-439): 'The ONE Group Hospitality, Inc. (4)(21) - B-2 Warrants 6,667 12 - 73 21 - % Pharmaceuticals Creek Feeder, L.P. (4)(21) - LP Interest 10,000 10,000 10,835 10,000 10,835 0.'",
+  "correction_context": "c-439"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "The ONE Group Hospitality, Inc.",
+  "fields": {
+   "shares_held": "11911",
+   "instrument_description": "A-2 Warrants"
+  },
+  "reason": "Tagged 11911 (decimals 0); published 6,667 (the B-2 count) by the shared normaliser; instrument printed. Printed (0001628280-26-035294, context c-424): 'The ONE Group Hospitality, Inc. (20) - A-2 Warrants 11,911 61 21 The ONE Group Hospitality, Inc. (4)(20) - B-2 Warrants 6,667 12 - Total Hotels, Restaurants & Leisure 73'",
+  "correction_context": "c-424"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "The ONE Group Hospitality, Inc.",
+  "fields": {
+   "instrument_description": "B-2 Warrants"
+  },
+  "reason": "Instrument printed, published blank. Printed (0001628280-26-035294, context c-425): 'The ONE Group Hospitality, Inc. (4)(20) - B-2 Warrants 6,667 12 - Total Hotels, Restaurants & Leisure 73 21 - % Mortgage Real Estate Investment Trusts (REITs) Claros Mort'",
+  "correction_context": "c-425"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "New Era Technology Inc",
+  "fields": {
+   "asset_category": "LOAN",
+   "index_classification": "DIRECT_LENDING",
+   "asset_class": "PRIVATE_CREDIT",
+   "principal_amount": "4314000",
+   "principal_amount_currency": "USD",
+   "principal_amount_usd": "4314000",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd",
+   "shares_held": "",
+   "basis_spread": "6.25",
+   "coupon_type": "Floating",
+   "reference_rate_type": "SOFR",
+   "reference_rate_source": "printed_schedule"
+  },
+  "reason": "A first lien loan printed under First Lien Debt with par 4,314; the filer tagged the par as a share count, so the row was published as common equity. Printed (0001989817-25-000085, context c-423): 'New Era Technology Inc (4)(10)(17)(18) SF + 6.25 % PIK 6/30/2030 4,314 4,314 4,314 4,314 4,314 0.39 % Total First Lien Debt $ 6,064 $ 6,082 0.55 % 16 HPS Corporate Capita'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "LC8 Cirrostratus L.P",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "principal_fx_rate_to_usd": "",
+   "principal_amount_currency": "",
+   "shares_held": "3800"
+  },
+  "reason": "Printed under 'Preferred Equity'; the count is tagged as a principal, so the row was published as a loan. Printed (0001989817-24-000055, context c-165): 'LC8 Cirrostratus L.P. (4)(5)(10) 2/8/2029 $ 3,800 3,725 3,726 3,725 3,726 0.66 % Personal Goods Kendra Scott Design, Inc.(4) 23,997 24,270 24,342 24,270 24,342 4.34 % Tra'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "IDF 9 Financeco, LLC",
+  "fields": {
+   "asset_category": "EQUITY_PREFERRED",
+   "index_classification": "PREFERRED_EQUITY",
+   "asset_class": "PRIVATE_EQUITY",
+   "principal_amount": "",
+   "principal_amount_usd": "",
+   "principal_fx_status": "",
+   "principal_fx_rate_to_usd": "",
+   "principal_amount_currency": "",
+   "shares_held": "1055303",
+   "instrument_description": "Series B Units"
+  },
+  "reason": "Printed under Preferred Equity as Series B Units; the unit count is tagged as a principal, so the row was published as a loan. Printed (0001989817-25-000085, context c-395): 'IDF 9 Financeco, LLC (4)(6)(19)(20) - Series B Units 1,055,303 966 1,041 966 1,041 0.09 % Investment Banking and Brokerage Services CB Lido Offshore Blocker X, LLC (4)(20'",
+  "correction_context": "c-395"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Travelex Issuerco 2 PLC,",
+  "fields": {
+   "principal_amount_currency": "GBP",
+   "principal_amount_usd": "2237280",
+   "principal_fx_rate_to_usd": "1.264",
+   "principal_fx_status": "reference_fx"
+  },
+  "reason": "Par tagged in EUR; the page prints GBP (SONIA). USD at the build's FRED H.10 GBP rate for 2024-06-28, 1.2640. Printed (0001989817-24-000032, context c-77): 'Travelex Issuerco 2 PLC (4)(5)(12) SN+ 8.00 % 13.21 % 9/22/2028 GBP 1,770 2,093 2,241 3,825 4,017 0.99 % Media MBS Services Holdings, LLC (4)(10) SF+ 6.75 % (incl 0.75 %'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Fertitta Entertainment LLC/NV",
+  "fields": {
+   "principal_amount_currency": "USD",
+   "principal_amount_usd": "4974000",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Par tagged in AUD; the page prints no currency (US dollars, SOFR). Printed (0001989817-25-000023, context c-182): 'Fertitta Entertainment LLC/NV (8) SF + 3.50 % 7.86 % 1/27/2029 4,974 4,998 4,999 HB ACQUISITIONCO PTY LTD (4)(5)(8) B + 6.50 % 10.97 % 8/7/2029 A$ 3,789 2,494 2,249 HB AC'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Neon Maple US Debt Mergersub Inc",
+  "fields": {
+   "principal_amount_currency": "USD",
+   "principal_amount_usd": "3970000",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Par tagged in GBP; the page prints no currency (US dollars, SOFR). Printed (0001628280-26-020820, context c-151): 'Neon Maple US Debt Mergersub Inc (5)(7)(23) SF + 2.50 % 6.22 % 11/17/2031 3,970 3,962 3,980 Orthrus Ltd (4)(5)(7)(29) SN + 6.25 % (incl 2.75 % PIK) 9.99 % 12/5/2031 GBP 3'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Neon Maple US Debt Mergersub Inc",
+  "fields": {
+   "principal_amount_currency": "USD",
+   "principal_amount_usd": "3960000",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
+  "reason": "Par tagged in GBP; the page prints no currency (US dollars, SOFR). Printed (0001628280-26-035294, context c-142): 'Neon Maple US Debt Mergersub Inc (5)(7)(22) SF + 2.50 % 6.17 % 11/17/2031 3,960 3,952 3,886 Orthrus Ltd (4)(5)(7)(28) SN + 6.25 % (incl 2.75 % PIK) 9.99 % 12/5/2031 GBP 3'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Tango Bidco SAS 1",
+  "fields": {
+   "principal_amount_currency": "EUR",
+   "principal_amount_usd": "1908724.4",
+   "principal_fx_rate_to_usd": "1.0351",
+   "principal_fx_status": "reference_fx"
+  },
+  "reason": "Par tagged in USD; the page prints EUR (EURIBOR). USD at the build's FRED H.10 EUR rate for 2024-12-31, 1.0351. Printed (0001989817-25-000023, context c-166): 'Tango Bidco SAS (4)(5)(6)(7) E + 5.00 % 7.85 % 10/17/2031 EUR 1,844 1,025 1,020 Tango Bidco SAS (4)(5)(6)(7) 10/17/2031 EUR 348 ( 6 ) ( 5 ) Tango Bidco SAS (4)(5)(7) E +'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Tango Bidco SAS 2",
+  "fields": {
+   "principal_amount_currency": "EUR",
+   "principal_amount_usd": "360214.8",
+   "principal_fx_rate_to_usd": "1.0351",
+   "principal_fx_status": "reference_fx"
+  },
+  "reason": "Par tagged in USD; the page prints EUR (EURIBOR). USD at the build's FRED H.10 EUR rate for 2024-12-31, 1.0351. Printed (0001989817-25-000023, context c-167): 'Tango Bidco SAS (4)(5)(6)(7) 10/17/2031 EUR 348 ( 6 ) ( 5 ) Tango Bidco SAS (4)(5)(7) E + 5.00 % 8.18 % 10/17/2031 EUR 4,646 4,960 4,744 Technology Growth Capital Pty Ltd'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Tango Bidco SAS 3",
+  "fields": {
+   "principal_amount_currency": "EUR",
+   "principal_amount_usd": "4809074.6",
+   "principal_fx_rate_to_usd": "1.0351",
+   "principal_fx_status": "reference_fx"
+  },
+  "reason": "Par tagged in USD; the page prints EUR (EURIBOR). USD at the build's FRED H.10 EUR rate for 2024-12-31, 1.0351. Printed (0001989817-25-000023, context c-168): 'Tango Bidco SAS (4)(5)(7) E + 5.00 % 8.18 % 10/17/2031 EUR 4,646 4,960 4,744 Technology Growth Capital Pty Ltd (4)(5)(10) SF + 6.50 % 11.09 % 7/2/2030 3,544 3,455 3,510 U'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Equinox Holdings, Inc.",
+  "fields": {
+   "maturity_date": "2027-06-30"
+  },
+  "reason": "Maturity printed, published blank. Printed (0001989817-25-000023, context c-195): 'Equinox Holdings, Inc. (4)(7) 16.00 % PIK 6/30/2027 1,421 1,393 1,393 1,393 1,393 0.21 % Total Second Lien Debt $ 5,329 $ 5,329 0.82 % Other Secured Debt Asset Based Lend'",
+  "correction_context": "c-195"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Equinox Holdings, Inc.",
+  "fields": {
+   "maturity_date": "2029-03-08"
+  },
+  "reason": "Maturity printed, published blank. Printed (0001989817-25-000023, context c-181): 'Equinox Holdings, Inc. (4)(10) SF + 8.25 % (incl. 4.13 % PIK) 12.58 % 3/8/2029 10,046 9,843 9,879 Fertitta Entertainment LLC/NV (8) SF + 3.50 % 7.86 % 1/27/2029 4,974 4,9'",
+  "correction_context": "c-181"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "IDF 9 Financeco, LLC",
+  "fields": {
+   "maturity_date": "2031-03-28"
+  },
+  "reason": "Maturity printed, published blank. Printed (0001989817-25-000085, context c-359): 'IDF 9 Financeco, LLC (4)(6)(15) SF + 8.50 % 12.50 % 3/28/2031 2,518 2,299 2,306 2,299 2,306 0.21 % Finance and Credit Services Freedom Funding Center LLC (4)(7) 12.00 % 1'",
+  "correction_context": "c-359"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Corza Medical Srl",
+  "fields": {
+   "maturity_date": "2030-02-13",
+   "extracted_industry": "Health Care Equipment & Supplies"
+  },
+  "reason": "Maturity printed, published blank; printed under 'Health Care Equipment & Supplies', published 'Capital Markets'. Printed (0001628280-26-020820, context c-393): 'Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950 19,164 19,950 1.60 % Total Unsecured Debt $ 47,040 $ 48,111 3.86 % Structured Finance Inves'",
+  "correction_context": "c-393"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Distributed Solar Development LLC 2",
+  "fields": {
+   "maturity_date": "2026-05-30"
+  },
+  "reason": "Maturity printed, published blank. Printed (0001628280-26-056793, context c-252): 'Distributed Solar Development LLC (4)(13)(24) SF + 12.50 % PIK 16.17 % 5/30/2026 2,384 2,384 2,366 Hamilton Projects Acquiror LLC (7)(23) SF + 2.50 % 6.14 % 5/30/2031 8,9'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Ares Secondaries PBN Finance Co IV LLC 1",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000065, context c-330): 'Structured Finance Structured Finance Investments Ares Secondaries PBN Finance Co IV LLC (4)(5)(6)(7) SF + 2.90 % 7.23 % 4/14/2039 $ 1,000 $ 10 $ 10 Ares Secondaries PBN'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Ares Secondaries PBN Finance Co IV LLC 2",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000065, context c-331): 'Structured Finance Structured Finance Investments Ares Secondaries PBN Finance Co IV LLC (4)(5)(6)(7) SF + 2.90 % 7.23 % 4/14/2039 $ 1,000 $ 10 $ 10 Ares Secondaries PBN'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Alp CFO 2025, L.P. 1",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000085, context c-380): 'Structured Finance Structured Finance Investments Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Alp CFO 2025, L.P.  2",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000085, context c-381): 'Structured Finance Structured Finance Investments Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Alp CFO 2025, L.P.  3",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000085, context c-382): 'Structured Finance Structured Finance Investments Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Alp CFO 2025, L.P.  4",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000085, context c-383): 'Structured Finance Structured Finance Investments Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Ares Secondaries Pbn Finance Co IV LLC 1",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000085, context c-384): 'Structured Finance Structured Finance Investments Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Ares Secondaries Pbn Finance Co IV LLC 2",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000085, context c-385): 'Structured Finance Structured Finance Investments Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Coller Private Equity Backed Notes & Loans II-A LP 1",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000085, context c-386): 'Structured Finance Structured Finance Investments Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Coller Private Equity Backed Notes & Loans II-A LP 2",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000085, context c-387): 'Structured Finance Structured Finance Investments Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "PBN II-A Equity Holdings L.P.",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001989817-25-000085, context c-388): 'Structured Finance Structured Finance Investments Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Alp CFO 2025, L.P. Class A",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-020820, context c-396): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Alp CFO 2025, L.P. Class B",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-020820, context c-397): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Alp CFO 2025, L.P. Class C",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-020820, context c-398): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Alp CFO 2025, L.P. Subordinated Note",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-020820, context c-399): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Ares Secondaries Pbn Finance Co IV LLC Class A",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-020820, context c-400): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Ares Secondaries Pbn Finance Co IV LLC Class C",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-020820, context c-401): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Coller Private Equity Backed Notes & Loans II-A LP Class A",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-020820, context c-402): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Coller Private Equity Backed Notes & Loans II-A LP Class B",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-020820, context c-403): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "PBN II-A Equity Holdings L.P. Limited Partnership Interest",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-020820, context c-404): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 1,000 Alp CFO 2025, L.P. (4)(5)(7) - Cl'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Alp CFO 2025, L.P. Class A",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-035294, context c-378): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 997 17 Table of Contents HPS Corporate'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Alp CFO 2025, L.P. Class B",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-035294, context c-379): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 997 17 Table of Contents HPS Corporate'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Alp CFO 2025, L.P. Class C",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-035294, context c-380): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 997 17 Table of Contents HPS Corporate'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Alp CFO 2025, L.P. Subordinated Note",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-035294, context c-381): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 997 17 Table of Contents HPS Corporate'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Ares Secondaries Pbn Finance Co IV LLC Class A",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-035294, context c-382): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 997 17 Table of Contents HPS Corporate'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Ares Secondaries Pbn Finance Co IV LLC Class C",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-035294, context c-383): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 997 17 Table of Contents HPS Corporate'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Coller Private Equity Backed Notes & Loans II-A LP Class A",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-035294, context c-384): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 997 17 Table of Contents HPS Corporate'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Coller Private Equity Backed Notes & Loans II-A LP Class B",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-035294, context c-385): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 997 17 Table of Contents HPS Corporate'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "PBN II-A Equity Holdings L.P. Limited Partnership Interest",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-035294, context c-386): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 997 17 Table of Contents HPS Corporate'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Alp CFO 2025, L.P. Class A",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-391): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Alp CFO 2025, L.P. Class B",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-392): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Alp CFO 2025, L.P. Class C",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-393): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Alp CFO 2025, L.P. Subordinated Note",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-394): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Ares Secondaries Pbn Finance Co IV LLC Class A",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-395): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Ares Secondaries Pbn Finance Co IV LLC Class C",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-396): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Coller Private Equity Backed Notes & Loans II-A LP Class A",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-397): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Coller Private Equity Backed Notes & Loans II-A LP Class B",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-398): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "CRA Issuer, LLC Class M",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-399): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "PBN II-A Equity Holdings L.P. Limited Partnership Interest",
+  "fields": {
+   "extracted_industry": "Structured Finance"
+  },
+  "reason": "Printed under the heading 'Structured Finance'; the published industry is the heading of the block above. Printed (0001628280-26-056793, context c-400): 'Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999 Alp CFO 2025, L.P. (4)(5)(7) - Clas'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 1",
+  "fields": {
+   "shares_held": "6667"
+  },
+  "reason": "Tagged 6,667,000 with decimals -3; the page prints 6,667 and the same warrants are printed and tagged 6,667 (decimals 0) from 2025-06-30 on; the 10-Q for 2024-06-30 prints them as 7 and 12 in the thousands column, so the count is units, not thousands. Printed (0001989817-24-000055, context c-176): 'The ONE Group Hospitality, Inc. - Warrants (4) 6,667 - - The ONE Group Hospitality, Inc. - Warrants (4) 11,911 - - - - - % Total Other Equity Investments $ 35,129 $ 35,39'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 2",
+  "fields": {
+   "shares_held": "11911"
+  },
+  "reason": "Tagged 11,911,000 with decimals -3; the page prints 11,911 and the same warrants are printed and tagged 11,911 (decimals 0) from 2025-06-30 on; the 10-Q for 2024-06-30 prints them as 7 and 12 in the thousands column, so the count is units, not thousands. Printed (0001989817-24-000055, context c-177): 'The ONE Group Hospitality, Inc. - Warrants (4) 11,911 - - - - - % Total Other Equity Investments $ 35,129 $ 35,390 6.31 % Total Investments - Non-Controlled/Non-Affiliate'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 1",
+  "fields": {
+   "shares_held": "6667"
+  },
+  "reason": "Tagged 6,667,000 with decimals -3; the page prints 6,667 and the same warrants are printed and tagged 6,667 (decimals 0) from 2025-06-30 on; the 10-Q for 2024-06-30 prints them as 7 and 12 in the thousands column, so the count is units, not thousands. Printed (0001989817-25-000023, context c-223): 'The ONE Group Hospitality, Inc. - Warrants (4)(19) 6,667 12 3 The ONE Group Hospitality, Inc. - Warrants (4)(19) 11,911 61 35 73 38 0.01 % Total Other Equity Investments'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 2",
+  "fields": {
+   "shares_held": "11911"
+  },
+  "reason": "Tagged 11,911,000 with decimals -3; the page prints 11,911 and the same warrants are printed and tagged 11,911 (decimals 0) from 2025-06-30 on; the 10-Q for 2024-06-30 prints them as 7 and 12 in the thousands column, so the count is units, not thousands. Printed (0001989817-25-000023, context c-224): 'The ONE Group Hospitality, Inc. - Warrants (4)(19) 11,911 61 35 73 38 0.01 % Total Other Equity Investments $ 45,662 $ 45,225 6.94 % Total Investments - Non-Controlled/No'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 1",
+  "fields": {
+   "shares_held": "6667"
+  },
+  "reason": "Tagged 6,667,000 with decimals -3; the page prints 6,667 and the same warrants are printed and tagged 6,667 (decimals 0) from 2025-06-30 on; the 10-Q for 2024-06-30 prints them as 7 and 12 in the thousands column, so the count is units, not thousands. Printed (0001989817-25-000043, context c-288): 'The ONE Group Hospitality, Inc. - B-2 Warrants (4)(19) 6,667 12 3 The ONE Group Hospitality, Inc. - A-2 Warrants (4)(19) 11,911 61 36 73 39 - % Total Other Equity Investm'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "The ONE Group Hospitality, Inc. - Warrants 2",
+  "fields": {
+   "shares_held": "11911"
+  },
+  "reason": "Tagged 11,911,000 with decimals -3; the page prints 11,911 and the same warrants are printed and tagged 11,911 (decimals 0) from 2025-06-30 on; the 10-Q for 2024-06-30 prints them as 7 and 12 in the thousands column, so the count is units, not thousands. Printed (0001989817-25-000043, context c-289): 'The ONE Group Hospitality, Inc. - A-2 Warrants (4)(19) 11,911 61 36 73 39 - % Total Other Equity Investments $ 45,662 $ 47,153 5.81 % Total Investments - Non-Controlled/N'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "NE SPV Holdco, LLC 1",
+  "fields": {
+   "shares_held": "4139"
+  },
+  "reason": "Tagged 4,139,000; the page prints 4,139, the common units of the same holder in this filing are printed and tagged 4,139, and the same preferred units are tagged 4,139 in every later quarter. Printed (0001989817-25-000085, context c-426): 'NE SPV Holdco, LLC (4)(18)(20) - Preferred Units 4,139 $ 3,018 $ 3,018 3,018 3,018 0.27 % Total Preferred Equity $ 3,018 $ 3,018 0.27 % Other Equity Investments Household'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "International Construction Products, LLC",
+  "fields": {
+   "pik_rate": "15.25"
+  },
+  "reason": "The page prints the fixed coupon as paid in kind; the context carries a rate fact and no PIK fact. Printed (0001989817-25-000043, context c-171): 'International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075 Kowalski Trust (4)(5)('",
+  "correction_context": "c-171"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "International Construction Products, LLC",
+  "fields": {
+   "pik_rate": "15.25"
+  },
+  "reason": "The page prints the fixed coupon as paid in kind; the context carries a rate fact and no PIK fact. Printed (0001989817-25-000065, context c-217): 'International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075 Kowalski Trust (4)(5)('",
+  "correction_context": "c-217"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Corza Medical Srl",
+  "fields": {
+   "issuer_name": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC",
+   "maturity_date": "2038-02-01"
+  },
+  "reason": "The filer tagged this line with Corza Medical's member; its par 47, cost 0 and value 0 are those of the unsecured note printed. Printed (0001628280-26-020820, context c-389): 'Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ - - - - % Financial Services F'",
+  "correction_context": "c-389"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Constellation Wealth Capital Fund-A-Blocker (Lido), LLC",
+  "fields": {
+   "asset_category": "LOAN",
+   "index_classification": "DIRECT_LENDING",
+   "asset_class": "PRIVATE_CREDIT",
+   "exposure_type": "DIRECT",
+   "issuer_category": "CORPORATE"
+  },
+  "reason": "An unsecured note printed under Unsecured Debt with par, maturity, cost and value; published as a fund interest from the word 'Fund' in the name. Printed (0001989817-25-000085, context c-377): 'Constellation Wealth Capital Fund-A-Blocker (Lido), LLC (4) 2/1/2038 46 46 46 46 46 - % Total Unsecured Debt $'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Constellation Wealth Capital Fund-A-Blocker",
+  "fields": {
+   "asset_category": "LOAN",
+   "index_classification": "DIRECT_LENDING",
+   "asset_class": "PRIVATE_CREDIT",
+   "exposure_type": "DIRECT",
+   "issuer_category": "CORPORATE",
+   "issuer_name": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC"
+  },
+  "reason": "The member is 'Constellation Wealth Capital Fund-A-Blocker | Non-Affiliated Issuer' (no legal form, so the row was dropped as an aggregate until this run, then published as a fund interest from the word Fund); the unsecured note printed under Unsecured Debt. Printed (0001628280-26-035294, context c-371): 'Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 48 $ - $ - Total Capital Markets - - -'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Constellation Wealth Capital Fund-A-Blocker",
+  "fields": {
+   "asset_category": "LOAN",
+   "index_classification": "DIRECT_LENDING",
+   "asset_class": "PRIVATE_CREDIT",
+   "exposure_type": "DIRECT",
+   "issuer_category": "CORPORATE",
+   "issuer_name": "Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC"
+  },
+  "reason": "The member is 'Constellation Wealth Capital Fund-A-Blocker | Non-Affiliated Issuer' (no legal form, so the row was dropped as an aggregate until this run, then published as a fund interest from the word Fund); the unsecured note printed under Unsecured Debt. Printed (0001628280-26-056793, context c-382): 'Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4)(7) 2/1/2038 $ 50 $ - $ - Total Capital Markets - -'"
  }
 ]

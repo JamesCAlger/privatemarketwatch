@@ -1,0 +1,318 @@
+{
+ "reviewer_id": "independent-reviewer-rfhcd-0001989817 (claude-opus-5-5 general-purpose subagent, 2026-10-25)",
+ "report_digest": "a68b102c8a94da4fbfa0e45542cfe97ca98474d6a059049e9452cd1943bef52b",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_087a12721007",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: reviewer rebuilt the population from rfhcd (candidate_rules.load_fund_rows + _FUNDED, gics_sub_industry empty, 2024-06-30): 22 rows, identical to affected_rows (scratch/2026-10-25_fix_run/review_hps/reconstruct.py). All 84 funded rows now carry extracted_industry. Source: re-ran the heading sweep on rfhcd (2143 located rows, 1 differs, ICP 2025-09-30 c-352 only); AthenaHealth ROW-c3fe8161d56c48eb publishes the printed ICB heading 'Health Care Providers'. The page prints ICB headings, not GICS, so the GICS gap is real and not closable by a source-backed fund fix. Parking with REQ-rfhc-1 and no disposition is the right next action. Caveat: the 'about 284 of the 272+' figure in next_action mixes counts; gicsdis.sql counts all published rows including unfunded ones, the rule counts funded rows only.",
+   "evidence": [
+    {"accession": "0001989817-24-000032", "text": "Fair Value Percentage of Net Assets Health Care Providers AthenaHealth Group Inc. (8)(14) SF+ 3.25 % 8.59 % 2/15/2029 9,975 10,003 9,954"},
+    {"accession": "0001989817-24-000032", "text": "Industrial Support Services Allied Universal Holdco LLC (8) SF+ 3.75 % 9.19 % 5/12/2028 7,481 7,499 7,460"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_5d1a85d25169",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: reconstructed 26 funded no-GICS rows at 2024-09-30 in rfhcd; set equals affected_rows. extracted_industry is filled on all 108 funded rows. Source: the 10-Q prints ICB headings, e.g. 'Non-life Insurance' over HUB and Kowalski Trust; Kowalski ROW-c27bf6425ba85ae7 (in affected_rows) publishes 'Non-life Insurance' with no GICS. The heading sweep on rfhcd shows no heading mismatch in this quarter. Same reasoning and owner route as the other five industry_coverage findings.",
+   "evidence": [
+    {"accession": "0001989817-24-000055", "text": "Non-life Insurance HUB International Ltd (7) SF + 3.00 % 8.26 % 6/20/2030 9,501 9,501 9,498"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_96576ec2ae19",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: reconstructed 38 funded no-GICS rows at 2024-12-31; set equals affected_rows. extracted_industry is filled on all 139 funded rows. Source: the 10-K prints ICB headings ('Non-life Insurance'); Kowalski ROW-c2c295b5184e6278 and Tango Bidco ROW-15291fcf66e4d5c0 (both in affected_rows) carry the printed headings and no GICS. The heading sweep shows no mismatch. A one-to-one ICB-to-GICS map is correctly rejected.",
+   "evidence": [
+    {"accession": "0001989817-25-000023", "text": "Non-life Insurance HUB International Ltd (7) SF + 2.75 % 7.37 % 6/20/2030 9,478 9,478 9,547"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a212140ee5fb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: reconstructed 55 funded no-GICS rows at 2025-03-31; set equals affected_rows (e.g. Kowalski ROW-824221e082f6def9, Sunraycer ROW-88052c8c81da4d84). extracted_industry is filled on all 190 funded rows. Source: the 10-Q still prints ICB headings ('Health Care Providers' over AthenaHealth). Heading sweep shows no mismatch in the quarter.",
+   "evidence": [
+    {"accession": "0001989817-25-000043", "text": "Health Care Providers AthenaHealth Group Inc. (8) SF + 3.00 % 7.32 % 2/15/2029 9,924 9,947 9,824"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f213307b781b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: reconstructed 58 funded no-GICS rows at 2025-06-30; set equals affected_rows. extracted_industry is filled on all 235 funded rows. Source: ICB headings printed ('Health Care Providers'); the 'Structured Finance' rows corrected this run (Ares Secondaries c-330/c-331) now carry the printed heading. Heading sweep shows no mismatch.",
+   "evidence": [
+    {"accession": "0001989817-25-000065", "text": "Health Care Providers AthenaHealth Group Inc. (8) SF + 2.75 % 7.08 % 2/15/2029 9,899 9,921 9,900"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_483ff47958fe",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: reconstructed 73 funded no-GICS rows at 2025-09-30; set equals affected_rows. 1 of 267 funded rows lacks extracted_industry (ICP c-352, 'Non-Life Insurance' with a capital L), disclosed in not_done; that row has a GICS label so it is outside the finding population. Source: ICB headings printed; heading sweep on rfhcd reports exactly that one difference.",
+   "evidence": [
+    {"accession": "0001989817-25-000085", "text": "Health Care Providers AthenaHealth Group Inc. (8) SF + 2.75 % 6.91 % 2/15/2029 9,874 9,895 9,867"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e372b59541c5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Fund-level keys (income_yield_pct, weighted_average_coupon at 2024-09-30) are the F27 inputs. rfhcd fund_financials income_yield_pct = 13.77, equal to the printed ratio; F27 value 2.49 means holdings WAC about 11.28. Investments are 126 pct of net assets (561,141), so NII over average net assets can exceed the asset coupon plus 200bp through leverage. The check compares an equity-based ratio with an asset-based coupon; no published value differs from the page. False alarm is supported. The F27 metric remains a weak proxy.",
+   "evidence": [
+    {"accession": "0001989817-24-000055", "text": "Ratio of net investment income to average net assets (5) 13.77 %"},
+    {"accession": "0001989817-24-000055", "text": "Total Investments - Non-Controlled/Non-Affiliated $ 703,871 $ 707,902 126.15 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ce0a1c1d85bc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "income_yield_pct 12.83 at 2024-12-31 equals the printed ratio; F27 value 2.17 against investments at 151 pct of net assets (651,874). Same mechanism as the 2024-09-30 finding; no data disagreement.",
+   "evidence": [
+    {"accession": "0001989817-25-000023", "text": "Ratio of net investment income to average net assets (5) 12.83 %"},
+    {"accession": "0001989817-25-000023", "text": "Total Investments - Non-Controlled/Non-Affiliated $ 982,565 $ 984,954 151.10 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c472f5c765f6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "income_yield_pct 12.57 at 2025-06-30 equals the printed ratio; F27 value 2.32 with investments at 169 pct of net assets (972,569). Leverage explains the gap; false alarm supported.",
+   "evidence": [
+    {"accession": "0001989817-25-000065", "text": "Ratio of net investment income to average net assets (5) 12.57 %"},
+    {"accession": "0001989817-25-000065", "text": "Total Investment Portfolio $ 1,632,151 $ 1,646,959 169.34 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_76f22d14da84",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: row_validation_issues in rfhcd has 9 C107 rows at 2024-06-30, set equal to affected_rows. Reviewer read CC WDW c-113 (cost -58, printed (58)), WorkWave c-111 (-156), Mood Media c-85 (-4), MBS c-82 (-1), Showtime c-89 (-4): all undrawn lines with bracketed printed cost, published equal. Prior real-error verdict (American Academy revolver cost -3,000): ROW-621b4b569894e6e0 (c-39) now publishes cost 0 / value 0 as printed and is not flagged. As-filed is supported.",
+   "evidence": [
+    {"accession": "0001989817-24-000032", "text": "WorkWave Intermediate II, LLC (4)(6)(9) 6/29/2027 10,847 ( 156 ) ( 62 )"},
+    {"accession": "0001989817-24-000032", "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - -"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c72b2b8f1437",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: 9 C107 rows at 2024-09-30 in rfhcd, set equal to affected_rows. Reviewer read NTH Degree c-76 (-68), Palmetto Solar c-47 (-65), Alchemy c-66 (-52): undrawn lines, cost printed in brackets and published equal. Prior verdict row American Academy ROW-3163d70ceee0a90c (c-40) now cost 0, value -3,000, matching the printed '- ( 3 )'; not flagged.",
+   "evidence": [
+    {"accession": "0001989817-24-000055", "text": "NTH Degree Purchaser, Inc (4)(6)(10) 9/10/2030 3,422 ( 68 ) ( 68 )"},
+    {"accession": "0001989817-24-000055", "text": "American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - ( 3 )"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9385fe8e3aa6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: 43 X02 rows at 2025-09-30 in rfhcd, set equal to affected_rows. Only 3 rows have non-negative cost: Alp CFO 2025 Subordinated Note ROW-bbf1fe189af4320f (c-383; printed with maturity, par, cost, value and no coupon, distinct from Class C c-382 at 12.24 pct), Grain Connect c-330 (printed 'GBP 1,074 - ( 49 )') and American Academy c-94; the rest are undrawn lines with bracketed cost. The real error inside this population (IDF 9 Series B Units c-395 as a loan) is fixed and no longer flagged. False alarm on the remaining population is supported.",
+   "evidence": [
+    {"accession": "0001989817-25-000085", "text": "Alp CFO 2025, L.P. (4)(5)(19) - Subordinated Note 7/15/2037 4,000 4,000 4,000"},
+    {"accession": "0001989817-25-000085", "text": "Grain Connect Limited (4)(5)(6)(7)(19) 8/3/2030 GBP 1,074 - ( 49 )"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5ff52445ac17",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: 40 X02 rows at 2026-03-31 in rfhcd, set equal to affected_rows. Reviewer read Saga c-225 (printed '( 239 ) 332', published cost -239, value 0.33M), Tikehau c-338 ('( 170 ) ( 137 )'), Femur c-160 ('340 - ( 7 )'), CohnReznick c-290 ('19 - ( 1 )'): undrawn lines with no rate. The prior real-error verdict row (AVSC c-75, printed 8.67 pct) is not in the flagged population.",
+   "evidence": [
+    {"accession": "0001628280-26-035294", "text": "Femur Buyer Inc (4)(6)(10) 10/23/2030 340 - ( 7 )"},
+    {"accession": "0001628280-26-035294", "text": "AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e38e8b45dbbb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PP02 flags identifiers 'Behavox Ltd 1' and 'Behavox Ltd 2' at 2026-06-30, which map to ROW-f253313ba3cfb1b8 (c-447) and ROW-153222d046a2e288 (c-448), equal to affected_rows. The page prints two identical Class V lines (3,120 / 206 / 206) and the subtotal 412 counts both, so dropping one would break the printed subtotal. The separate Series C row (c-423) is not part of the flag. As-filed is supported.",
+   "evidence": [
+    {"accession": "0001628280-26-056793", "text": "Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206 Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206 Total Software 412 412 0.03 %"}
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_94b972980829",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: exactly one published 2026-06-30 row has maturity before the report date, ROW-ae8aa544c1712b5f (Distributed Solar c-252, 2026-05-30), equal to affected_rows; shadow metric 0.35 pct of 287 matches one row. The page prints 5/30/2026 and the loan is still held at 2,366; the sibling loan prints 9/19/2027 and publishes so (ROW-261154a416eda3d5). As-filed is supported.",
+   "evidence": [
+    {"accession": "0001628280-26-056793", "text": "Distributed Solar Development LLC (4)(13)(24) SF + 12.50 % PIK 16.17 % 5/30/2026 2,384 2,384 2,366"}
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "member-keeps-prior-company-name-after-rename",
+   "outcome": "supported",
+   "rationale": "holdings_field_diff rfhcd vs rgA4 shows the renames on TTF c-100 (2024-12-31), Global Service c-252, White Cap c-331, Westlands c-245 (2026-03-31) and Westlands c-263 (2026-06-30), matching the printed names. issuer_name_printed findings RVQ_BLK_19d449ced2b1, RVQ_BLK_75bd43e6f97e and RVQ_BLK_1085b84eee9f exist in the rfhca ledger and are gone in rfhcd. The existing detector caught them.",
+   "evidence": [
+    {"accession": "0001628280-26-056793", "text": "Westlands Electric Power Company Investor, LLC (4)(6)(13)(24) SF + 6.00 % 9.73 % 12/6/2030 50,000 40,988 40,778"}
+   ]
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "outcome": "supported",
+   "rationale": "Diff shows c-125 at 2025-03-31 'NTH Degree Purchaser, INC' -> 'Team, Inc.' (par 13,090, value 12,799), matching the printed line. RVQ_BLK_160cd8671ea7 (issuer_name_printed) is in rfhca and gone in rfhcd. Existing detector is adequate for rows with a unique identifier.",
+   "evidence": [
+    {"accession": "0001989817-25-000043", "text": "Team, Inc. (4)(10) SF + 6.50 % 10.83 % 3/12/2030 13,090 12,799 12,799"}
+   ]
+  },
+  {
+   "observation_key": "class-text-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Diff shows exactly 25 rows over 9 names (Alp CFO Class A/B/C/Subordinated Note, Ares Secondaries Class A/C, Coller Class A/B, CRA Issuer Class M) across 2025-12-31 to 2026-06-30, with the class moved to the instrument. The proposed check (name ending in 'Class <letter>' or 'Subordinated Note' with a blank instrument) is concrete and should have few false positives.",
+   "evidence": [
+    {"accession": "0001628280-26-056793", "text": "Structured Finance Investments Structured Finance Alp CFO 2025, L.P. (4)(5)(7) - Class A 7.09 % 7.09 % 7/15/2037 $ 1,000 $ 1,000 $ 999"}
+   ]
+  },
+  {
+   "observation_key": "pik-printed-on-the-row-and-not-tagged",
+   "outcome": "supported",
+   "rationale": "Diff shows pik_rate set on 8 rows (Flatiron c-76 7.5, ICP c-171/c-217 15.25, Kowalski c-172/c-218 16, LC8 c-270 7, Sunraycer c-69/c-70 8.5), matching the printed lines. Using the margin for 'SF + m % PIK' rows follows the filer's own tagging: the 2024-12-31 10-K tags Sunraycer c-53 with InvestmentInterestRatePaidInKind 0.0850 and interest rate 0.1283. pik_printed findings RVQ_BLK_af4cf0200e8d / RVQ_BLK_ccdefa15631b exist in rfhca. The existing detector misses rows whose identifier repeats (ICP); the suggested_check extends it with a context join. That is acceptable as long as the extension is tracked.",
+   "evidence": [
+    {"accession": "0001989817-25-000043", "text": "International Construction Products, LLC (4)(5)(7) 15.25 % PIK 15.25 % 9/5/2034 1,075 1,075 1,075"},
+    {"accession": "0001989817-25-000043", "text": "Sunraycer HPS Borrower LLC (4)(13) SF + 8.50 % PIK 12.80 % 10/28/2029 11,052 10,861 10,871"}
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "Diff: ONE Group preferred c-140 2024-06-30 7,000 -> 1,000 (1,000 matches every later quarter's printed preferred count), A-2 warrants c-438 2025-12-31 11,911,000 -> 11,911 and c-424 2026-03-31 6,667 -> 11,911, matching the printed A-2 line. units_printed RVQ_BLK_502b4dd30a07 exists in rfhca. The proposed check (derived_proxy count differing from a count tagged on the row's own context) targets the mechanism directly.",
+   "evidence": [
+    {"accession": "0001628280-26-020820", "text": "The ONE Group Hospitality, Inc. (21) - A-2 Warrants 11,911 61 21"}
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Diff: six ONE Group warrant rows (2024-09-30 to 2025-03-31) 6,667,000/11,911,000 -> 6,667/11,911 and NE SPV c-426 4,139,000 -> 4,139, consistent with the printed counts and with later filings tagged at decimals 0. The 1,000x cross-quarter jump with unchanged cost is a concrete, low-noise check.",
+   "evidence": [
+    {"accession": "0001989817-24-000032", "text": "The ONE Group Hospitality, Inc. - Warrants (4) 7 - - The ONE Group Hospitality, Inc. - Warrants (4) 12 - -"},
+    {"accession": "0001989817-25-000085", "text": "NE SPV Holdco, LLC (4)(18)(20) - Preferred Units 4,139 $ 3,018 $ 3,018"}
+   ]
+  },
+  {
+   "observation_key": "combined-par-units-column-semantic-ambiguity",
+   "outcome": "supported",
+   "rationale": "The page prints a single 'Par Amount/Units' figure equal to cost in thousands for the LP interests, so units versus dollar commitment cannot be decided from the page. Leaving it for an owner ruling is correct. Reusing the 1,000x-jump check is a reasonable detector.",
+   "evidence": [
+    {"accession": "0001628280-26-020820", "text": "AP Himalaya Co-Invest, L.P. (4)(21) - LP Interest 20,006 20,087 21,745"}
+   ]
+  },
+  {
+   "observation_key": "loan-par-tagged-as-share-count",
+   "outcome": "supported",
+   "rationale": "Diff: New Era c-423 2025-09-30 EQUITY_COMMON -> LOAN, shares 4,314,000 -> null, par 4,314, USD, spread 6.25, matching the printed 'SF + 6.25 % PIK' line. No ledger rule fired on this row. The proposed check (equity row whose printed line carries a reference rate and spread) is concrete; the false-alarm risk from floating-rate preferred is small and reviewable.",
+   "evidence": [
+    {"accession": "0001989817-25-000085", "text": "New Era Technology Inc (4)(10)(17)(18) SF + 6.25 % PIK 6/30/2030 4,314 4,314 4,314"}
+   ]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "outcome": "rejected",
+   "rationale": "The fixes are correct (LC8 c-165 2024-09-30 and IDF 9 c-395 2025-09-30 are now EQUITY_PREFERRED, matching the printed lines). The detection decision 'existing_detector X02' is not supported. X02 did flag LC8 ROW-e8f139cbaebd4d8e in 2024-09-30 (present in rgA4 and rfhca row_validation_issues), but that X02 finding (RVQ_REV_3cb132fea40e) is adjudicated_false_alarm, so the error passed through the existing detector. The pending reason x02-no-rate-printed-on-the-row would also clear such a row by its check, because the printed LC8 line carries no rate. X02 fires on 40+ undrawn lines a quarter and does not separate this case. The decision should be propose_detector, using the observation's own suggested_check (a loan with no rate or spread whose printed line sits under an equity section heading).",
+   "evidence": [
+    {"accession": "0001989817-24-000055", "text": "Preferred Equity Consumer Services LC8 Cirrostratus L.P. (4)(5)(10) 2/8/2029 $ 3,800 3,725 3,726"},
+    {"accession": "0001989817-25-000085", "text": "IDF 9 Financeco, LLC (4)(6)(19)(20) - Series B Units 1,055,303 966 1,041"}
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Diff: Travelex c-77 EUR -> GBP (USD 2,237,280 at 1.264), Fertitta c-182 AUD -> USD, Tango c-166/167/168 USD -> EUR, Neon Maple c-151/c-142 GBP -> USD, each matching the printed currency code (none printed = USD). FX01 cannot see these because par is near cost either way. The proposed printed-code comparison is concrete.",
+   "evidence": [
+    {"accession": "0001989817-24-000032", "text": "Travelex Issuerco 2 PLC (4)(5)(12) SN+ 8.00 % 13.21 % 9/22/2028 GBP 1,770 2,093 2,241"},
+    {"accession": "0001989817-25-000023", "text": "Tango Bidco SAS (4)(5)(7) E + 5.00 % 8.18 % 10/17/2031 EUR 4,646 4,960 4,744"}
+   ]
+  },
+  {
+   "observation_key": "printed-maturity-missing-from-published-row",
+   "outcome": "supported",
+   "rationale": "Diff: maturity restored on Equinox c-181, IDF 9 c-359, Corza c-393, Distributed Solar c-252. Equinox c-195 (2024-12-31) still publishes no maturity and also no interest_rate (pik_rate 16 only), which fits the parked hypothesis that a later step replaces the row. Parking is honest. The proposed check needs the context join the report names.",
+   "evidence": [
+    {"accession": "0001989817-25-000023", "text": "Equinox Holdings, Inc. (4)(7) 16.00 % PIK 6/30/2027 1,421 1,393 1,393"}
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "Diff: 31 gics changes on the Structured Finance rows (Health Care Equipment / Hotels -> Specialized Finance or empty) and Corza c-393 (Diversified Capital Markets -> Health Care Equipment). The 2025-12-31 page prints 'Health Care Equipment & Supplies' above Corza. Reviewer re-ran headings.py on rfhcd: 2143 rows located, 1 difference (ICP c-352). Detector proposal is concrete.",
+   "evidence": [
+    {"accession": "0001989817-25-000065", "text": "Structured Finance Structured Finance Investments Ares Secondaries PBN Finance Co IV LLC (4)(5)(6)(7) SF + 2.90 % 7.23 % 4/14/2039 $ 1,000 $ 10 $ 10"}
+   ]
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "outcome": "supported",
+   "rationale": "industry_coverage in rfhcd still reads 71 to 76 pct GICS coverage for 2024-06-30 to 2025-09-30, with extracted_industry at 99.6 to 100 pct. The existing detector raised the six open findings. Parking for the owner is correct.",
+   "evidence": [
+    {"accession": "0001989817-25-000043", "text": "Health Care Providers AthenaHealth Group Inc. (8) SF + 3.00 % 7.32 % 2/15/2029 9,924 9,947 9,824"}
+   ]
+  },
+  {
+   "observation_key": "gics-differs-from-filers-own-later-heading",
+   "outcome": "supported",
+   "rationale": "Confirmed on AthenaHealth (entity pid 8c725f26): 'Pharmaceuticals' published 2024-06-30 to 2025-09-30, 'Health Care Technology' from 2025-12-31 where the filer prints that GICS industry. One qualification: gicsdis.sql takes the mode of the published later gics_sub_industry, which is derived from the filer's GICS industry heading rather than printed as a sub-industry, and it joins on entity_id, which changed on 286 rows this run. It is a measure, not proof. The proposed cross-quarter check is concrete. It matters for REQ-rfhc-1 option (a), which would leave these labels in place.",
+   "evidence": [
+    {"accession": "0001628280-26-020820", "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"}
+   ]
+  },
+  {
+   "observation_key": "quarterly-income-from-first-annual-period-divided-evenly",
+   "outcome": "supported",
+   "rationale": "rfhcd fund_financials 2024: TII 19,712 + 18,891 + 22,872 = 61,475 and NII 12,146 + 17,436 + 18,523 = 48,105, equal to the printed full year, with the 2024-03-31 10-Q showing net expenses nil. income_identity RVQ_BLK_219c7fe80675 exists in rfhca and is gone in rfhcd.",
+   "evidence": [
+    {"accession": "0001989817-25-000023", "text": "Year Ended December 31, 2024 Total investment income $ 61,475 Net expenses 13,370 Net investment income before excise tax 48,105"}
+   ]
+  },
+  {
+   "observation_key": "unprinted-zero-row-published",
+   "outcome": "rejected",
+   "rationale": "The factual premise is wrong. ROW-855383a497c28763 (2025-12-31, c-389, published as 'Corza Medical Srl', par 47, cost 0, value 0, 'Capital Markets', no maturity) is printed. In the cached 10-K HTML, the c-389 facts (InvestmentOwnedBalancePrincipalAmount 47, cost and value dashes) sit on the line 'Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ -' under Unsecured Debt / Capital Markets. The filer tagged that line with Corza's investment member, which shares c-393's dimensions. The same position publishes correctly at 2025-09-30 as ROW-54a7253d636bf5bf (Constellation Wealth, par 46, maturity 2038-02-01). So this is a wrong issuer name (and missing maturity) on a printed row, not an unprinted row. 'Left, no exclusion rule applies' and the proposed 'zero row with no printed line' check do not fit the mechanism. issuer_name_printed missed it because the identifier repeats in the quarter: the same printed-row-join gap as ICP and IDF 9. Next action: name and maturity row correction keyed on c-389, or a recorded as-filed reason, plus the context-join extension of issuer_name_printed. FV effect is nil.",
+   "evidence": [
+    {"accession": "0001628280-26-020820", "text": "Capital Markets Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 $ 47 $ - $ -"},
+    {"accession": "0001628280-26-020820", "text": "Corza Medical Srl (4)(5)(7) 14.00 % PIK 14.00 % 2/13/2030 19,369 19,164 19,950"}
+   ]
+  },
+  {
+   "observation_key": "name-only-match-crosses-tranches-of-one-issuer",
+   "outcome": "supported",
+   "rationale": "Confirmed: pid 6ef6b308 holds the 6/30/2027 note (c-131) at 2024-06-30 and the 3/8/2029 loan (c-142) at 2024-09-30. The 2027 note moves to 8ee86e56 and then to 96071d9d at 2025-09-30. Reviewer found a second instance the report does not list: ONE Group A-2 and B-2 warrants swap position_id at 2025-09-30 (A-2 11,911 moves from 608159c8 to 9be3bef6, B-2 6,667 the reverse). The proposed maturity-based check would not catch that swap because warrants carry no maturity. The check should also compare unit count and instrument class.",
+   "evidence": [
+    {"accession": "0001989817-24-000032", "text": "Equinox Holdings, Inc. (4) 16.00 % 6/30/2027 $ 1,313 $ 1,279 $ 1,286"}
+   ]
+  }
+ ],
+ "request_reviews": [
+  {
+   "request_id": "REQ-rfhc-1",
+   "outcome": "supported",
+   "rationale": "Correctly classified as acceptance_change, not verification_bug. industry_coverage reads gics_sub_industry correctly, and the gap is real because the filer prints ICB headings to 2025-09-30. Option (a) changes what the check accepts. Option (b) adds a cross-quarter carry-back step that assumes the classification is stable. Both need the owner, and the report changes no check meanwhile. The owner brief should say three things: option (a) would pass the six quarters while about 374 GICS labels that contradict the filer's later heading stay published (gics-differs observation); option (b) depends on entity_id stability; and the 284 versus 272 row figures use different row bases (all rows versus funded rows).",
+   "evidence": [
+    {"accession": "0001989817-25-000043", "text": "11.58 % Industrial Transportation Stonepeak Nile Parent LLC (5)(7)(18) SF + 2.75 % 7.07 % 2/4/2032 1,765 1,760 1,760"},
+    {"accession": "0001628280-26-020820", "text": "17.72 % Health Care Technology AthenaHealth Group Inc. (8)(23) SF + 2.75 % 6.47 % 2/15/2029 9,849 9,868 9,881"}
+   ]
+  }
+ ]
+}

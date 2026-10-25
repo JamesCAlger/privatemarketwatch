@@ -48,7 +48,8 @@
         "services",
         "solutions",
         "trust",
-        "llp"
+        "llp",
+        "blocker"
       ],
       "equity": [
         "preferred stock",
@@ -114,7 +115,8 @@
     ],
     "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|\\|\\s*Non-Affiliated\\s+Issuer|\\|\\s*Affiliated\\s+Issuer)\\s*$",
     "category_marker_re": "(?i)^\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|Non-Controlled/Affiliated\\s+Investments|Total\\s+Investments|Subtotal|Sub-Total)\\s*$",
-    "issuer_name_strip_re": "(?:(?:\\s*\\(\\d{1,2}\\))+|[,\\s]*\\d{1,2}|,)\\s*$"
+    "issuer_name_strip_re": "(?:(?:\\s*\\(\\d{1,2}\\))+|[,\\s]*\\d{1,2}|,)\\s*$|\\s+(?:Class [A-Z]|Subordinated Note)\\s*$",
+    "issuer_name_strip_to_instrument": true
   },
   "identifier_format": {
     "delimiter": " ",
@@ -243,6 +245,44 @@
     ],
     "reference_rate_columns": [
       "Reference Rate and Spread"
+    ],
+    "printed_industry_labels": [
+      "Aerospace and Defense",
+      "Asset Based Lending and Fund Finance",
+      "Automobiles and Parts",
+      "Beverages",
+      "Chemicals",
+      "Construction and Materials",
+      "Consumer Services",
+      "Electricity",
+      "Finance and Credit Services",
+      "Food Producers",
+      "Gas, Water and Multi-utilities",
+      "Gas, Water, and Multi-utilities",
+      "General Industrials",
+      "Health Care Providers",
+      "Household Goods and Home Construction",
+      "Industrial Engineering",
+      "Industrial Metals and Mining",
+      "Industrial Support Services",
+      "Industrial Transportation",
+      "Investment Banking and Brokerage Services",
+      "Leisure Goods",
+      "Life Insurance",
+      "Media",
+      "Medical Equipment and Services",
+      "Non-life Insurance",
+      "Personal Care, Drug and Grocery Stores",
+      "Personal Goods",
+      "Pharmaceuticals and Biotechnology",
+      "Real Estate Investment and Services",
+      "Retailers",
+      "Software and Computer Services",
+      "Structured Finance",
+      "Technology Hardware and Equipment",
+      "Telecommunications Equipment",
+      "Telecommunications Service Providers",
+      "Travel and Leisure"
     ],
     "reference_rate_codes": [
       "SN=SONIA",
