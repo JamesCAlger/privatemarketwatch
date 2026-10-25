@@ -5469,3 +5469,14 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Page sample (same 20 rows on rfbnc and rfbne, seeded): 0 published errors; it did not exercise the round-2 fixes, which the reviewer checked on the pages (21 of 33 FX rows, Atlas, Cube, Legacy, Chase, Govineer). Twenty cards can miss a problem on under about 15 pct of rows.
 - Independent reviews reviews/0001899017_rfbnc.json (7 rejections, fixed) and _rfbne.json: 48/48 findings, 16/16 observations, 2/2 history; investigation COMPLETE; digest 9fd34770...
 - Gate rfbne (snapshot at eee7b6d): PASS. A zero is not "data correct".
+
+### D-239 Jefferies Credit Partners BDC: cleared with fixes (sandbox `rfjcd`), gate PASS (2026-10-25)
+
+- Before rgA5 (2026-06-30 added). Four builds (rfjca to rfjcd), two rounds. Untouched rfjca 13 outstanding; final 20 findings, 7 outstanding (C04 x4 Firebird dash units, B01 x2 comparative leaves, F16 2024-12-31), all proposed; 11/11 quarters tie (ex_cash).
+- Fixed: wrapper issuer_name_strip_re (18 rows, 65.3M: row words "Two"/"1", "Business, " heading residue, doubled IRI prefix; all 6 issuer_name_printed findings cleared; GICS unchanged) and new instrument_description_strip_re (51 rows, 148.1M; Firebird "L.P. Interest One" kept as the distinguishing word). KL Stockton 13.00 % PIK (9 quarters, 2024-06-30 to 2026-06-30): D-232 applied by 27 row-correction lines (pik 13.0, all-in 13.0, cash leg 0.0, Fixed), par 714 -> 926 thousand at 3.23-3.36 pct a quarter vs 13/4.
+- Orchestrator decision (D-207): D-232 overrides the published result of the existing pik_only_tag_reading wrapper setting for this fund; the setting itself is unchanged (other funds may use it).
+- Request REQ-rfjc-1 (helper's Jefferies block drops the spec context field): deferred; not needed here (59 lines, 0 unmatched, 0 multi-row; no JV schedule). Shared-tooling batch with the Bain crash (D-238).
+- Owner items (observations, values left as published): SEKO last-out 2025-09-30 to 2026-03-31 par growth ~(SOFR + 7)/4 suggests whole-coupon PIK while pik_rate publishes the printed 5.00 (4.1M); Seko 2025-03-31 and IRI 2024-09-30 publish PIK read from member text where the page prints none. Firebird rows publish 0.0 shares rather than blank from 2025-09-30.
+- Page sample rfjcd: 0/20 published errors; no PIK, rate or non-USD line in the sample (the reviewer checked KL Stockton and the strips directly). Twenty cards can miss a problem on under about 15 pct of rows.
+- Independent review reviews/0001959604_rfjcd.json: 7/7 findings, 17/17 observations, 1/1 history; read all 36 B01 comparative contexts on the pages; investigation COMPLETE; digest 39e826a8...
+- Gate rfjcd (snapshot at 0d80265): PASS. A zero is not "data correct".

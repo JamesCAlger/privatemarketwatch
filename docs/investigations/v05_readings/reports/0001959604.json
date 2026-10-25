@@ -1,157 +1,858 @@
 {
  "cik": "0001959604",
- "label": "jcxd",
- "before": "spoff3",
+ "investigator_id": "claude-fund-agent-jefferies-rfjc",
+ "label": "rfjcd",
+ "before": "rgA5",
  "shared_code": false,
  "declared_changes": [
-  {"column": "issuer_name", "rows": 11, "why": "9 equity rows (2024-09-30 Eclipse; 2025-03-31 Red Griffin, Firebird, Eclipse; 2025-06-30 Red Griffin, Firebird x2, Eclipse; 2025-12-31 Eclipse) lose the 'Non-controlled-non-affiliated Portfolio company ... Equity Investments <class> <industry>' prefix (wrapper issuer_name_strip_re); 2 Hiller Companies rows at 2024-06-30 set from the page (row correction, member typo 'Investment' for 'Investment Type')"},
-  {"column": "instrument_description", "rows": 5, "why": "row corrections: Hiller DDTL and revolver 2024-06-30, Firebird 'L.P. Interest One' 2025-06-30, Eclipse 'Preferred Stock' 2025-12-31, Foreside second DDTL 2024-09-30 (member said Term Loan)"},
-  {"column": "shares_held", "rows": 5, "why": "printed share counts (C04): Eclipse 72 at 2024-09-30, 2024-12-31, 2025-03-31; Red Griffin 1,746 at 2024-12-31, 2025-03-31 (row corrections)"},
-  {"column": "principal_amount_currency", "rows": 2, "why": "Spruce Bidco CAD and JPY pars tagged USD at 2025-09-30 set to CAD / JPY (row corrections)"},
-  {"column": "principal_amount_usd", "rows": 2, "why": "the same two rows at the build's H.10 rates for 2025-09-30: 379,119.7 and 381,455.7 (was 528,000 and 56,444,000)"},
-  {"column": "principal_fx_rate_to_usd", "rows": 2, "why": "the same two rows: 0.7180297 and 0.0067581"},
-  {"column": "principal_fx_status", "rows": 2, "why": "the same two rows: source_usd -> reference_fx"},
-  {"column": "asset_category", "rows": 1, "why": "Firebird Co-Invest L.P. interest 2026-03-31 FUND -> EQUITY_COMMON, as in 2025-03-31 to 2025-12-31 (row correction; also on the new 2026-06-30 row)"},
-  {"column": "issuer_category", "rows": 1, "why": "same row FUND -> CORPORATE"},
-  {"column": "index_classification", "rows": 1, "why": "same row PRIVATE_EQUITY_FUND -> COMMON_EQUITY"},
-  {"column": "exposure_type", "rows": 1, "why": "same row FUND -> DIRECT"},
-  {"column": "reference_rate_type", "rows": 22, "why": "reference_rate_columns / reference_rate_codes: printed codes C, T, SN, P read as CORRA, TONA, SONIA, PRIME (were guessed SOFR) on 20 rows 2024-12-31 to 2026-03-31; plus 2 rows where the page code differs from the member (Victors Purchaser revolver 2024-12-31 printed 'C + 4.75 %', Titan Luxco term loan One 2025-06-30 printed 'E + 5.00 %')"},
-  {"column": "reference_rate_source", "rows": 28, "why": "the 22 rows above plus 6 SOFR rows whose member has no code segment (Wildcat Topco 'SpreadS +', Any Hour): source now the printed column (ixbrl_field_status), value unchanged"},
-  {"column": "corrected_fields", "rows": 13, "why": "trail of the row corrections on rows present in spoff3"},
-  {"column": "position_id", "rows": 222, "why": "not edited: chains re-formed because the 2026-06-30 rows now carry clean issuer names and keys (they did not chain in jcxa), 77 dash rows are now published and 2 subtotals removed. jcxa (no edit, with 2026-06-30) had no position_id change against spoff3. Not traced row by row."}
+  {
+   "column": "issuer_name",
+   "rows": 18,
+   "why": "wrapper issuer_name_strip_re extended (rfjcb): 15 rows lose the filer's trailing row word ('Dwyer Instruments, LLC One/Two/Three', 'The GI Alliance Management, LLC One', 'IG Investments Holdings, LLC 1', 'Foreside Financial Group, LLC 1', AB Centers, GS AcquisitionCo, National Express Wash x2, Nellson x2); 2 Chartwell Cumming rows at 2023-12-31 lose 'Business, ' (member 'Services: Business, Chartwell ...', the industry heading split at the comma); 1 IRI Group row at 2024-09-30 loses the doubled member prefix 'Non-Controlled/NoNon-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Professional Services'. Each new name equals the printed company cell."
+  },
+  {
+   "column": "instrument_description",
+   "rows": 51,
+   "why": "new wrapper instrument_description_strip_re (rfjcc): 47 loan rows lose a trailing row word ('First Lien Term Loan One', '... Delayed Draw Term Loan 1/Two/Three/Four', 'First Lien Revolver One'); 2 National Express Wash rows at 2026-06-30 lose the abbreviated member tail 'RR&S S + 6.00% (includes 2.75% PIK) MD 7/16/2029 [One]'; 1 West Star revolver 2025-06-30 loses a trailing comma; plus 1 counted in the 47 at 2026-06-30. L.P. interest rows are not cut (the row word separates Firebird's two L.P. interests). Count: holdings_field_diff rfjcc rfjcb = 51."
+  },
+  {
+   "column": "position_id",
+   "rows": 18,
+   "why": "not edited. Chains re-formed after the name fix (pid.py rfjcb rfjca, saved in the notes folder): Dwyer's two term loans and delayed-draw line now chain through all quarters (were split at 2025-06-30 by the row word), IRI Group's term loan chains 2024-03-31 to 2026-06-30 (was 3 pieces), GS AcquisitionCo DDTL moves to the chain of its 2025-06-30 row. No position_id holds two rows in one quarter (piddup.sql, 0 rows). Distinct positions 698 -> 692, singletons 334 -> 332. The instrument strip moved no position_id (pid.py rfjcc rfjcb: 0)."
+  },
+  {
+   "column": "coupon_type",
+   "rows": 9,
+   "why": "KL Stockton Intermediate II '13.00 % PIK' fixed term loan, 9 rows 2024-06-30 to 2026-06-30: D-232 applied (D-239) by row corrections interest_rate 13.0, interest_rate_kind all_in, coupon_type Fixed (27 lines, all applied). coupon_type None -> Fixed."
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 9,
+   "why": "KL Stockton Intermediate II '13.00 % PIK' fixed term loan, 9 rows 2024-06-30 to 2026-06-30: D-232 applied (D-239) by row corrections interest_rate 13.0, interest_rate_kind all_in, coupon_type Fixed (27 lines, all applied). Cash leg None -> 0.0 (all-in 13.0 less PIK 13.0)."
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 9,
+   "why": "KL Stockton Intermediate II '13.00 % PIK' fixed term loan, 9 rows 2024-06-30 to 2026-06-30: D-232 applied (D-239) by row corrections interest_rate 13.0, interest_rate_kind all_in, coupon_type Fixed (27 lines, all applied). None -> 13.0 (the printed coupon)."
+  },
+  {
+   "column": "src_transforms",
+   "rows": 9,
+   "why": "KL Stockton Intermediate II '13.00 % PIK' fixed term loan, 9 rows 2024-06-30 to 2026-06-30: D-232 applied (D-239) by row corrections interest_rate 13.0, interest_rate_kind all_in, coupon_type Fixed (27 lines, all applied). 'interest_rate:pik_only' no longer written: the rate comes from the correction, not the pik_only transform."
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 9,
+   "why": "KL Stockton Intermediate II '13.00 % PIK' fixed term loan, 9 rows 2024-06-30 to 2026-06-30: D-232 applied (D-239) by row corrections interest_rate 13.0, interest_rate_kind all_in, coupon_type Fixed (27 lines, all applied). Trail 'interest_rate;interest_rate_kind;coupon_type'."
+  }
  ],
- "rows_added": 396,
- "rows_removed": 2,
+ "rows_added": 0,
+ "rows_removed": 0,
  "fixes": [
-  {"what": "Net assets were blank in all 11 quarters (the filer tags us-gaap:AssetsNet, not in the company-facts net_assets map). New highlights wrapper declares them from the printed balance sheets (172,108 to 843,166 thousand).",
-   "kind": "wrapper", "quarters": ["2023-12-31", "2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-221855", "text": "Commitments and contingencies (Note 9) Total net assets $ 815,679 $ 677,000"},
-              {"accession": "0000950170-24-038501", "text": "Commitments and contingencies (Note 9) Total net assets $ 172,108"},
-              {"accession": "0001193125-26-345216", "text": "Commitments and contingencies (Note 9) Total net assets $ 843,166 $ 677,000"}]},
-  {"what": "NAV per share 3.87 at 2025-12-31 and 1.34 at 2026-03-31 were the next 10-Q's tender-offer percent of NAV tagged as NetAssetValuePerShare. Set to the printed Class I NAV 14.43 and 14.38; 2026-06-30 NAV 14.30 and shares outstanding for 2026-03-31 and 2026-06-30 (blank) declared from the page. Clears F33 and F16 at 2025-12-31 (earlier reviewers' real-error verdicts, remediation_pulled): distribution rate 37.6 -> 10.08 pct.",
-   "kind": "wrapper", "quarters": ["2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-116342", "text": "Net asset value per share $ 14.43 $ 14.60"},
-              {"accession": "0001193125-26-221855", "text": "which represents 3.87 % of the net asset value as of December 31, 2025"},
-              {"accession": "0001193125-26-345216", "text": "which represents 1.34 % of the net asset value as of March 31, 2026"},
-              {"accession": "0001193125-26-221855", "text": "Net asset value per share $ 14.38 $ 14.43"},
-              {"accession": "0001193125-26-345216", "text": "Net asset value per share $ 14.30 $ 14.43"},
-              {"accession": "0001193125-26-345216", "text": "Common shares, par value $ 0.001 ( 58,948,314 and 46,924,095 , shares issued and outstanding"}]},
-  {"what": "The 10-Q for 2026-06-30 abbreviates the member prefix to 'NCNA Ptfl Cmp Invs First Lien Debt Investments <industry> <issuer> Investment Type ...': 314 of 319 rows published the whole prefix and industry as the issuer, 5 Titan Luxco rows the whole label (C206), and none chained to 2026-03-31 (D06 issuer continuity). The wrapper's hierarchy issuer / instrument patterns, condition and canonical strip now accept the abbreviation; issuer_name_strip_re carries the same prefix as a backstop. Clears C206 and D06 at 2026-06-30.",
-   "kind": "wrapper", "quarters": ["2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-345216", "text": "Titan Luxco I SARL First Lien Revolver S + 5.00 % 6/12/2031 235 233 235"},
-              {"accession": "0001193125-26-345216", "text": "World Insurance Associates, LLC First Lien Delayed Draw Term Loan S + 5.00 % 4/3/2030 3,553 3,535 3,553"}]},
-  {"what": "Two single-row industry subtotals of the equity section at 2025-03-31 (749 and 412 thousand, tagged on members named by section, class and industry only) were published as positions beside the rows they repeat: published was 1.2M over filed. Exclusion rule 1959604_exclude_single_row_equity_industry_subtotals_2025q1 (exact identifiers, one quarter). Now equal in 11 of 11 quarters. Also added the label shape to the wrapper's category_marker_re (wrapper oracle only; production does not drop rows by it).",
-   "kind": "exclusion", "quarters": ["2025-03-31"],
-   "quotes": [{"accession": "0000950170-25-071600", "text": "Equity Investments Preferred Stock Professional Services Eclipse Topco, Inc. Preferred Stock 72 $ 735 $ 749 735 749"},
-              {"accession": "0000950170-25-071600", "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 412 434 412 Total non-controlled-non-affiliated Portfolio Company equity investments 9,604 8,590 2.2 %"}]},
-  {"what": "77 schedule rows printed with a dash for fair value (undrawn revolvers and delayed-draw lines, cost tagged, no fair-value tag) were dropped, so published cost was under filed cost by 9 to 219 thousand a quarter. Each context declared at fair value 0 in source_encodings.untagged_values (every printed line read: '- ( n ) -'; list and lines in scratch/fund_runs/0001959604/dash_lines.json). Clears B01 at 2024-12-31 and the current-period part of 2025-03-31 / 2025-06-30.",
-   "kind": "untagged_value", "quarters": ["2023-12-31", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-12-31"],
-   "quotes": [{"accession": "0000950170-25-044452", "text": "Brave Parent Holdings, Inc. First Lien Revolver S + 5.00 % 11/29/2030 - ( 3 ) - 9 CB Buyer, Inc."},
-              {"accession": "0001959604-25-000006", "text": "Trystar, LLC First Lien Delayed Draw Term Loan S + 4.50 % 8/6/2031 - ( 29 ) - 17"},
-              {"accession": "0000950170-24-038501", "text": "Foreside Financial Group, LLC First Lien Delayed Draw Term Loan S + 5.50 % 9/30/2027 - ( 43 ) -"}]},
-  {"what": "Printed reference-rate codes C, T, SN and P were published as SOFR (inferred_post_libor) on 1 to 6 rows a quarter from 2024-12-31. Wrapper reference_rate_columns ['Reference Rate and Spread'] with codes S, E, C, SN, T, P from the schedule legend.",
-   "kind": "wrapper", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-221855", "text": "Canadian Overnight Repo Rate Average (CORRA or C), Euro Interbank Offered Rate (EURIBOR or E), Sterling Overnight Index Average (SONIA or SN), Tokyo Overnight Average Rate (TONAR or T)"},
-              {"accession": "0001193125-26-221855", "text": "Spruce Bidco II Inc. First Lien Term Loan C + 4.75 % 1/30/2032 CAD 525 358 378"},
-              {"accession": "0001193125-26-221855", "text": "PPW Aero Buyer, Inc. First Lien Revolver P + 4.00 % 9/30/2031 74 70 73"}]},
-  {"what": "C04: printed share counts not published for Eclipse Topco (72) and Red Griffin TopCo (1,746) in 2024-09-30 to 2025-03-31 (the earlier reviewer's real-error verdict at 2024-12-31 stands and is fixed). Row corrections. C04 2024-09-30 and 2024-12-31 now pass.",
-   "kind": "row_correction", "quarters": ["2024-09-30", "2024-12-31", "2025-03-31"],
-   "quotes": [{"accession": "0000950170-24-126450", "text": "Eclipse Topco, Inc. Preferred Stock 72 706 706"},
-              {"accession": "0000950170-25-044452", "text": "Eclipse Topco, Inc. Preferred Stock 72 $ 735 $ 706 Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Common Stock 1,746 8,435 8,000"}]},
-  {"what": "C206 at 2024-06-30: the filer wrote 'Investment' for 'Investment Type' in two Hiller Companies members, so the whole label was the issuer. Issuer and instrument set from the page (row corrections).",
-   "kind": "row_correction", "quarters": ["2024-06-30"],
-   "quotes": [{"accession": "0000950170-24-096306", "text": "The Hiller Companies, LLC First Lien Delayed Draw Term Loan S + 5.00 % 6/20/2030 - ( 7 ) ( 15 )"},
-              {"accession": "0000950170-24-096306", "text": "The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 12 8 8"}]},
-  {"what": "Par currency: Spruce Bidco's CAD 528,000 and JPY 56,444,000 pars tagged unit USD at 2025-09-30 only (X06: 56.4M dollar par on a 382 thousand loan); Titan Luxco's dollar revolver par 235,000 tagged EUR at 2026-06-30. Row corrections at the build's own H.10 rates for the date.",
-   "kind": "row_correction", "quarters": ["2025-09-30", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-25-280633", "text": "Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 56,444 360 382"},
-              {"accession": "0001193125-25-280633", "text": "Spruce Bidco II Inc. First Lien Term Loan C + 5.00 % 2/2/2032 CAD 528 $ 359 $ 379"},
-              {"accession": "0001193125-26-345216", "text": "Titan Luxco I SARL First Lien Revolver E + 5.00 % 6/12/2031 EUR 99 114 1"}]},
-  {"what": "Classes and instruments: Firebird Co-Invest L.P. interest classed FUND from 2026-03-31 (member 'L.P Interest' without a full stop) set back to EQUITY_COMMON as in earlier quarters; Foreside's second undrawn delayed-draw line at 2024-09-30 published as a term loan (member text); two instruments not separated by the member (Firebird 2025-06-30, Eclipse 2025-12-31). Row corrections.",
-   "kind": "row_correction", "quarters": ["2024-09-30", "2025-06-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-221855", "text": "Firebird Co-Invest L.P. L.P. Interest - 434 537 Firebird Co-Invest L.P. L.P. Interest - - 5 434 542"},
-              {"accession": "0000950170-24-126450", "text": "Foreside Financial Group, LLC First Lien Delayed Draw Term Loan S + 5.25 % 9/30/2027 - ( 21 ) ( 25 )"},
-              {"accession": "0001193125-26-116342", "text": "Eclipse Topco, Inc. Preferred Stock 72 831 846 831 846"}]}
+  {
+   "what": "issuer_name_printed (6 quarters, 17 flagged rows plus 1 unflagged dash row of the same shape): issuer names kept the filer's row word, an industry fragment or a doubled member prefix. Wrapper issuer_name_strip_re extended with three alternatives: trailing row word (One..Nine, 1..9), a leading 'Business, ' or 'Consumer, ' left by the 'Services: Business,' heading, and the doubled 'Non-Controlled/NoNon-Controlled/...' prefix. Dry-run on all 162 distinct names of the fund (dry_extra.py): 18 rows change, none empties, only two names end in a digit and both are row numbers. Entity resolution runs after the strip: Chartwell 2023-12-31 joins the company's entity and canonical name (was 'Business, Chartwell Cumming Holding Corp'); GICS unchanged on all 18 rows. Ledger: issuer_name_printed 6 -> 0.",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-038501",
+     "text": "Services: Business Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 15,464 14,855 15,232 7"
+    },
+    {
+     "accession": "0001959604-25-000006",
+     "text": "Dwyer Instruments, LLC First Lien Term Loan S + 4.75 % 7/20/2029 6,350 6,261 6,350 8"
+    },
+    {
+     "accession": "0000950170-24-126450",
+     "text": "IRI Group Holdings, Inc (f/k/a The NPD Group L.P.) First Lien Term Loan S + 5.00 % 12/1/2028 15,942 15,563 15,942 6"
+    },
+    {
+     "accession": "0000950170-24-058817",
+     "text": "The GI Alliance Management, LLC First Lien Term Loan S + 5.50 % 9/15/2028 2,142 2,122 2,099 8"
+    }
+   ]
+  },
+  {
+   "what": "instrument_description kept the member's row word on 47 loan rows, the abbreviated rate and maturity tail ('RR&S ... MD 7/16/2029') on 2 rows at 2026-06-30 and a trailing comma on 1 row. New wrapper instrument_description_strip_re, loan and revolver rows only. Dry-run on all 22 distinct instruments (dry_instr.py): 51 rows, none empties. Spread, PIK and maturity on the two National Express rows were already read correctly (6.00, 2.75, 2029-07-16).",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "National Express Wash Parent Intermediate Holdco, LLC First Lien Delayed Draw Term Loan S + 6.00 % (includes 2.75 % PIK) 7/16/2029 2,707 2,638 2,564 9,25"
+    },
+    {
+     "accession": "0001959604-25-000006",
+     "text": "West Star Aviation Acquisition, LLC First Lien Revolver S + 4.50 % 5/20/2032 76 73 73 8,17"
+    }
+   ]
+  },
+  {
+   "what": "D-232 (owner ruling, applied to this fund by the orchestrator in D-239): KL Stockton Intermediate II's term loan prints '13.00 % PIK' and no cash part, no reference rate, in all 9 quarters (whole_pik_scan.py over all 11 schedules). Par accretes 714 to 926 thousand, 3.23 to 3.36 pct a quarter against 13/4 = 3.25 pct (kl_specs.py): the whole coupon is paid in kind. Row corrections per quarter: interest_rate 13.0, interest_rate_kind all_in, coupon_type Fixed. Published now: pik_rate 13.0, interest_rate (all-in) 13.0, interest_rate_cash 0.0, Fixed, the same shape as T Series' D-232 rows. The wrapper's pik_only_tag_reading setting is unchanged. 27 lines appended through make_row_corrections.py (specs in row_correction_specs/0001959604.json); keyed by accession and exact identifier, not by context, because the helper's Jefferies block does not pass correction_context (see request REQ-rfjc-1); each key matches one row (build log: 59 of 59 lines for this fund applied, 0 unmatched, no 'matches 2 rows').",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-096306",
+     "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 714 699 699"
+    },
+    {
+     "accession": "0001193125-26-345216",
+     "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 926 914 791"
+    }
+   ]
+  },
+  {
+   "what": "In force from the earlier run (jcxd, D-193), already in rgA5 and unchanged here: highlights wrapper (net assets all quarters; NAV per share 14.43 / 14.38 / 14.30 replacing the tender-offer percentages 3.87 and 1.34; shares 2026-03-31 and 2026-06-30); NCNA prefix handling for 2026-06-30; exclusion of two 2025-03-31 equity industry subtotals; 77 dash rows at fair value 0; printed reference-rate codes; 32 row corrections (C04 units, Hiller names, Spruce Bidco and Titan Luxco par currency, Firebird class, Foreside and two other instruments). All 32 row-correction lines applied in rfjcc (rebuild.log 'Row correction applied' = 32; no 'matches 2 rows').",
+   "kind": "wrapper",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221855",
+     "text": "Net asset value per share $ 14.38 $ 14.43"
+    },
+    {
+     "accession": "0001193125-26-221855",
+     "text": "which represents 3.87 % of the net asset value as of December 31, 2025"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [],
  "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "REQ-rfjc-1",
+   "classification": "verification_bug",
+   "resolution": "deferred",
+   "response": "Deferred; no change needed for this fund. All 59 Jefferies correction lines match exactly one row each (0 \"matches 2 rows\" in rfjcd) and the fund files no joint-venture or subsidiary schedule, so identifier-keyed lines cannot hit a twin; the 27 KL Stockton lines stand and are not superseded. The helper's per-fund Jefferies block ignoring the spec context field is a shared-tooling defect, batched for the end of the run with the Bain make_row_corrections.py crash.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-239; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rfjc-1",
+    "classification": "verification_bug",
+    "file": "scripts/v05_evidence/make_row_corrections.py",
+    "what": "The Jefferies block (JEFFERIES_LOOP) reads specs but ignores correction_context, so its lines are written without src_context_id. To key the 27 KL Stockton lines (and future ones) by context, register spec_context(spec) in context_by_spec for JEFFERIES_LOOP after it is defined (as for ASIF and ABPCI). Not edited: shared tooling.",
+    "why": "The orchestrator asked for context-keyed corrections. The lines as written each match exactly one row (no JV or subsidiary schedule in this fund; 59 of 59 applied, no 'matches 2 rows'), so the published values are right; the request is about key robustness. The specs already carry correction_context.",
+    "quotes": [
+     {
+      "accession": "0001193125-26-345216",
+      "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 926 914 791"
+     }
+    ],
+    "next_action": "Orchestrator: approve or make the 3-line hook; then the 27 lines can be superseded by context-keyed lines (would need your approval, they are my own lines) or left as they are."
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 926 914 791"
+    }
+   ]
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_6f4a287e0bbb",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-071600/C_33540db5-d0bf-4959-9f32-adc8eb5e230b/ROW-7fce66f7b4aee9e6",
+     "0000950170-25-071600/C_6f9179c6-f0b5-4e91-8016-1d92597b50bc/ROW-d710c656f4a256ef",
+     "0000950170-25-071600/C_5df45773-3a96-4030-89e7-d43631f61b05/ROW-23fd67e02223c047"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-071600/C_33540db5-d0bf-4959-9f32-adc8eb5e230b/ROW-7fce66f7b4aee9e6",
+     "0000950170-25-071600/C_6f9179c6-f0b5-4e91-8016-1d92597b50bc/ROW-d710c656f4a256ef",
+     "0000950170-25-071600/C_5df45773-3a96-4030-89e7-d43631f61b05/ROW-23fd67e02223c047"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429 8,435 7,429 L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 412 434 412"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Count printed but not published: Eclipse Topco 72 and Red Griffin 1,746 are printed and published (row corrections from the earlier run, applied in rfjcc). Rejected for these two.",
+    "Firebird L.P. interest has a unit count somewhere: the 'Principal / Shares' cell prints '-' and no unit fact is tagged on its context. Rejected.",
+    "Equity population is wrong (subtotal or commitment row counted): the three published equity rows are the three printed equity lines (aff_keys.sql). Rejected."
+   ],
+   "next_action": "Proposal PD-C04-1959604-1 (c04-share-cell-printed-as-dash): 2 of 3 equity rows carry the printed count; the third prints a dash. Owner or check to accept."
+  },
+  {
+   "finding_id": "RVQ_REV_99a61c606b52",
+   "coverage": {
+    "affected_rows": [
+     "0001959604-25-000006/C_75367d3b-3f18-4d24-97ae-a3c46062dc19/ROW-2bae87eedd18f703",
+     "0001959604-25-000006/C_4583effc-b2fe-40ec-a6e9-90731bb9c477/ROW-fc26f15d8a43f782",
+     "0001959604-25-000006/C_d7e860f5-3d91-4609-ad9c-baa06929f6ab/ROW-3f4baff427901c74",
+     "0001959604-25-000006/C_b438a5de-b4d8-4ec7-a548-319ab9c3ce81/ROW-48f69f8dfd20206f"
+    ],
+    "reviewed_rows": [
+     "0001959604-25-000006/C_75367d3b-3f18-4d24-97ae-a3c46062dc19/ROW-2bae87eedd18f703",
+     "0001959604-25-000006/C_4583effc-b2fe-40ec-a6e9-90731bb9c477/ROW-fc26f15d8a43f782",
+     "0001959604-25-000006/C_d7e860f5-3d91-4609-ad9c-baa06929f6ab/ROW-3f4baff427901c74",
+     "0001959604-25-000006/C_b438a5de-b4d8-4ec7-a548-319ab9c3ce81/ROW-48f69f8dfd20206f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001959604-25-000006",
+     "text": "Red Griffin TopCo, LLC Common Stock 1,746 8,435 4,848 8,435 4,848 L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 468 Firebird Co-Invest L.P. L.P. Interest - - 2 434 470"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Eclipse 72 and Red Griffin 1,746 printed and published: yes in rfjcc.",
+    "The two Firebird L.P. interests print a unit: both share cells print '-'. Rejected.",
+    "The second Firebird line is a duplicate of the first: different cost and value ('- - 2' against '- 434 468'), separate contexts. Rejected."
+   ],
+   "next_action": "Proposal PD-C04-1959604-1: 2 of 4 equity rows can carry a count; the two L.P. interests print none."
+  },
+  {
+   "finding_id": "RVQ_REV_795ce4879026",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-280633/C_bd5ad095-5d0f-4e35-ad0c-67eae61d25e0/ROW-05f4d001f02ca01a",
+     "0001193125-25-280633/C_a74df374-ee41-4f47-b881-685672472a1c/ROW-635213c2964b28f0",
+     "0001193125-25-280633/C_68510611-2b81-48e6-95f2-c1976d1dc97d/ROW-d92bad4aee06da26",
+     "0001193125-25-280633/C_c13e3de7-9456-409c-98b2-f33547858d05/ROW-778c19d534b27fdd"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-280633/C_bd5ad095-5d0f-4e35-ad0c-67eae61d25e0/ROW-05f4d001f02ca01a",
+     "0001193125-25-280633/C_a74df374-ee41-4f47-b881-685672472a1c/ROW-635213c2964b28f0",
+     "0001193125-25-280633/C_68510611-2b81-48e6-95f2-c1976d1dc97d/ROW-d92bad4aee06da26",
+     "0001193125-25-280633/C_c13e3de7-9456-409c-98b2-f33547858d05/ROW-778c19d534b27fdd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-280633",
+     "text": "Eclipse Topco, Inc. Preferred Stock 72 $ 781 $ 812 781 812 Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Common Stock 1,746 8,435 2,228 8,435 2,228"
+    },
+    {
+     "accession": "0001193125-25-280633",
+     "text": "Firebird Co-Invest L.P. L.P. Interest - 434 468 Firebird Co-Invest L.P. L.P. Interest - - 2 434 470"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Eclipse and Red Griffin counts published: 72 and 1,746, yes.",
+    "Firebird interests carry a printed unit: '-' on both lines; published shares_held 0.0 (tag absent). Rejected."
+   ],
+   "next_action": "Proposal PD-C04-1959604-1."
+  },
+  {
+   "finding_id": "RVQ_REV_6aa972ee7da1",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-345216/C_7ec47dec-2cd8-4e84-ba28-3e8e99c5cc4c/ROW-8ec4e2bd0f24bb7e",
+     "0001193125-26-345216/C_25655c70-8c9b-41bd-b178-09a4958db39c/ROW-b5756570a56e40e3",
+     "0001193125-26-345216/C_57922e8f-5505-4080-9942-b5c24eacbfe5/ROW-ab51b5e4811f6ae3",
+     "0001193125-26-345216/C_53456237-7421-4576-bdc9-da9960088352/ROW-7c4f834cebd2c67a"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-345216/C_7ec47dec-2cd8-4e84-ba28-3e8e99c5cc4c/ROW-8ec4e2bd0f24bb7e",
+     "0001193125-26-345216/C_25655c70-8c9b-41bd-b178-09a4958db39c/ROW-b5756570a56e40e3",
+     "0001193125-26-345216/C_57922e8f-5505-4080-9942-b5c24eacbfe5/ROW-ab51b5e4811f6ae3",
+     "0001193125-26-345216/C_53456237-7421-4576-bdc9-da9960088352/ROW-7c4f834cebd2c67a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Eclipse Topco, Inc. Preferred Stock 50 $ 601 $ 596 601 596 Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Common Stock 1,746 8,435 1,125 8,435 1,125"
+    },
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Firebird Co-Invest L.P. L.P. Interest - 434 582 Firebird Co-Invest L.P. L.P. Interest - - 8 434 590"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Eclipse count 50 (fell from 72) published as 50: yes, as printed.",
+    "Red Griffin 1,746 published: yes.",
+    "Firebird interests print a unit: both '-'. Rejected."
+   ],
+   "next_action": "Proposal PD-C04-1959604-1."
+  },
+  {
+   "finding_id": "RVQ_REV_3f088aaea30a",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-071600/C_1f79834c-e338-46c1-be64-cb09bb1ae1b0",
+     "0000950170-25-071600/C_20b934d2-b74e-4b5e-bfff-94f7863ea362",
+     "0000950170-25-071600/C_2adb5652-9403-4275-9b8d-d84f49a57e35",
+     "0000950170-25-071600/C_3657c26e-9830-404e-a99e-c7abec419ed5",
+     "0000950170-25-071600/C_41216dd3-2abe-40db-96ae-7a1485ab8143",
+     "0000950170-25-071600/C_4e41dce4-fb1b-46cd-8ec5-0d5fc0f672a9",
+     "0000950170-25-071600/C_5830b4da-4690-4ddc-b440-80a6713400ee",
+     "0000950170-25-071600/C_6f79cb26-739e-4e1a-8d2a-bf2d88ba7c49",
+     "0000950170-25-071600/C_767a1f96-95b5-433c-a4ca-43c49b33deda",
+     "0000950170-25-071600/C_81b7e128-4eff-4640-b78d-7c0e6ba04367",
+     "0000950170-25-071600/C_8dd452d4-fca6-484b-a100-8fe9b5f6ba07",
+     "0000950170-25-071600/C_90dc41f1-2339-485f-adbf-c433f56e6c57",
+     "0000950170-25-071600/C_91496687-b114-4f1c-bbcf-45be8bb356bc",
+     "0000950170-25-071600/C_a2fe2b27-648e-427c-b945-9bd41dd9be41",
+     "0000950170-25-071600/C_a6562999-ec00-425d-8b41-f5732db7e9ef",
+     "0000950170-25-071600/C_a8e7dc45-20e7-4c79-bcbb-228327d7a7ff",
+     "0000950170-25-071600/C_e37dc634-a01d-4343-b7d9-b267e08c276c",
+     "0000950170-25-071600/C_f28e4d5c-e69f-4e2f-b998-b9509d754adc",
+     "0000950170-25-071600/C_d0080acf-f0d2-4609-b9b6-6806f4cca743"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-071600/C_f28e4d5c-e69f-4e2f-b998-b9509d754adc",
+     "0000950170-25-071600/C_d0080acf-f0d2-4609-b9b6-6806f4cca743",
+     "0000950170-25-071600/C_1f79834c-e338-46c1-be64-cb09bb1ae1b0",
+     "0000950170-25-071600/C_20b934d2-b74e-4b5e-bfff-94f7863ea362",
+     "0000950170-25-071600/C_2adb5652-9403-4275-9b8d-d84f49a57e35",
+     "0000950170-25-071600/C_3657c26e-9830-404e-a99e-c7abec419ed5",
+     "0000950170-25-071600/C_41216dd3-2abe-40db-96ae-7a1485ab8143",
+     "0000950170-25-071600/C_4e41dce4-fb1b-46cd-8ec5-0d5fc0f672a9",
+     "0000950170-25-071600/C_5830b4da-4690-4ddc-b440-80a6713400ee",
+     "0000950170-25-071600/C_6f79cb26-739e-4e1a-8d2a-bf2d88ba7c49",
+     "0000950170-25-071600/C_767a1f96-95b5-433c-a4ca-43c49b33deda",
+     "0000950170-25-071600/C_81b7e128-4eff-4640-b78d-7c0e6ba04367",
+     "0000950170-25-071600/C_8dd452d4-fca6-484b-a100-8fe9b5f6ba07",
+     "0000950170-25-071600/C_90dc41f1-2339-485f-adbf-c433f56e6c57",
+     "0000950170-25-071600/C_91496687-b114-4f1c-bbcf-45be8bb356bc",
+     "0000950170-25-071600/C_a2fe2b27-648e-427c-b945-9bd41dd9be41",
+     "0000950170-25-071600/C_a6562999-ec00-425d-8b41-f5732db7e9ef",
+     "0000950170-25-071600/C_a8e7dc45-20e7-4c79-bcbb-228327d7a7ff",
+     "0000950170-25-071600/C_e37dc634-a01d-4343-b7d9-b267e08c276c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Consolidated Schedule of Investments (Unaudited) December 31, 2024 (In thousands, except for share and per share data)"
+    },
+    {
+     "accession": "0000950170-25-071600",
+     "text": "The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 - ( 3 ) - 9 NRO Holdings III Corp."
+    },
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429 8,435 7,429"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The 18 leaves are current-period positions dropped by the build: all 18 have period 2024-12-31 (oracle check_failures, status excluded_comparative_period) and are the comparative schedule printed after the current one. Rejected.",
+    "Their positions are missing from the platform: each of the 18 identifiers has a published 2024-12-31 row from the 10-K at fair value 0 (b01_twin.sql: 18 of 18, cost -219 thousand, equal to the printed dash rows). Rejected.",
+    "The one current leaf (C_d0080acf, Red Griffin) is an unpublished position: it carries only InvestmentOwnedBalancePrincipalAmount 1,746,000 for the same member; the position is published on C_5df45773 with fair value 7,429 thousand and the count 1,746. Rejected."
+   ],
+   "next_action": "Proposal PD-B01-1959604-2 (b01-leaves-without-value-are-the-comparative-schedule). Reviewed rows: Hiller and Red Griffin read on the page; the other 17 comparative contexts checked by identifier against published 2024-12-31 fair-value-0 rows whose 10-K lines were read in the earlier run (dash_lines.json), not re-read on the 10-Q page one by one."
+  },
+  {
+   "finding_id": "RVQ_REV_aeabb581750e",
+   "coverage": {
+    "affected_rows": [
+     "0001959604-25-000006/C_293f536f-fd25-4297-9461-df2a6f086a95",
+     "0001959604-25-000006/C_2bc67de6-e293-4505-8f87-12e7a1503f19",
+     "0001959604-25-000006/C_315c38d9-7e2c-4d8c-b9b7-aeb5c4bcc437",
+     "0001959604-25-000006/C_31cfa009-ec57-4b7c-90f6-40bd1ea266c2",
+     "0001959604-25-000006/C_4c4fba0d-c0d1-4994-a6d8-6d9ae9eb4229",
+     "0001959604-25-000006/C_57fe2231-4ea9-4c09-8a2d-37433b2c027e",
+     "0001959604-25-000006/C_64e1ddde-890d-47dc-80d8-0f310fb2fa08",
+     "0001959604-25-000006/C_756422b5-9a33-45ff-a6b9-5f9adbe97b37",
+     "0001959604-25-000006/C_76758810-1115-4d77-88c6-05f5c7dfbabe",
+     "0001959604-25-000006/C_95b36788-652c-4a06-bcb8-dd0eb4ad005d",
+     "0001959604-25-000006/C_99555ab9-9301-401b-adfd-a7ea520fd2f5",
+     "0001959604-25-000006/C_9c346e31-0ef6-4733-ae00-6a65a3bcdaf9",
+     "0001959604-25-000006/C_9edef285-8c5e-45ce-bbc6-9257b9f235f2",
+     "0001959604-25-000006/C_a050f594-2c6d-45c5-96a0-d0620b999906",
+     "0001959604-25-000006/C_d2f3e7a7-24bf-4f6c-adbf-05463223bb1c",
+     "0001959604-25-000006/C_d8fe250b-ce7e-47ac-942c-5a307ab10955",
+     "0001959604-25-000006/C_e105b2b4-4b9d-4873-a6d2-794e554dd377",
+     "0001959604-25-000006/C_e2ef1db4-1f61-407f-98ac-ae7d5fdd66dd"
+    ],
+    "reviewed_rows": [
+     "0001959604-25-000006/C_293f536f-fd25-4297-9461-df2a6f086a95",
+     "0001959604-25-000006/C_2bc67de6-e293-4505-8f87-12e7a1503f19",
+     "0001959604-25-000006/C_315c38d9-7e2c-4d8c-b9b7-aeb5c4bcc437",
+     "0001959604-25-000006/C_31cfa009-ec57-4b7c-90f6-40bd1ea266c2",
+     "0001959604-25-000006/C_4c4fba0d-c0d1-4994-a6d8-6d9ae9eb4229",
+     "0001959604-25-000006/C_57fe2231-4ea9-4c09-8a2d-37433b2c027e",
+     "0001959604-25-000006/C_64e1ddde-890d-47dc-80d8-0f310fb2fa08",
+     "0001959604-25-000006/C_756422b5-9a33-45ff-a6b9-5f9adbe97b37",
+     "0001959604-25-000006/C_76758810-1115-4d77-88c6-05f5c7dfbabe",
+     "0001959604-25-000006/C_95b36788-652c-4a06-bcb8-dd0eb4ad005d",
+     "0001959604-25-000006/C_99555ab9-9301-401b-adfd-a7ea520fd2f5",
+     "0001959604-25-000006/C_9c346e31-0ef6-4733-ae00-6a65a3bcdaf9",
+     "0001959604-25-000006/C_9edef285-8c5e-45ce-bbc6-9257b9f235f2",
+     "0001959604-25-000006/C_a050f594-2c6d-45c5-96a0-d0620b999906",
+     "0001959604-25-000006/C_d2f3e7a7-24bf-4f6c-adbf-05463223bb1c",
+     "0001959604-25-000006/C_d8fe250b-ce7e-47ac-942c-5a307ab10955",
+     "0001959604-25-000006/C_e105b2b4-4b9d-4873-a6d2-794e554dd377",
+     "0001959604-25-000006/C_e2ef1db4-1f61-407f-98ac-ae7d5fdd66dd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001959604-25-000006",
+     "text": "Consolidated Schedule of Investments (Unaudited) December 31, 2024 (In thousands, except for share and per share data)"
+    },
+    {
+     "accession": "0001959604-25-000006",
+     "text": "The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 - ( 3 ) - 9 NRO Holdings III Corp."
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "The 18 leaves are 2025-06-30 positions: all have period 2024-12-31 (comparative schedule of the 10-Q). Rejected.",
+    "Their positions are unpublished: 18 of 18 identifiers have a published 2024-12-31 row at fair value 0 (b01_twin.sql). Rejected.",
+    "A current-period leaf without value remains: none at 2025-06-30 (aff_keys.sql lists only period-2024-12-31 leaves). Rejected."
+   ],
+   "next_action": "Proposal PD-B01-1959604-2. Hiller read on the page; the other 17 checked by identifier against published 2024-12-31 rows (lines read in the earlier run), not re-read one by one."
+  },
+  {
+   "finding_id": "RVQ_REV_a9d7759bb028",
+   "coverage": {
+    "affected_rows": [
+     "0001959604/2024-12-31/F16/distribution_rate"
+    ],
+    "reviewed_rows": [
+     "0001959604/2024-12-31/F16/distribution_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-044452",
+     "text": "October 31, 2024 October 31, 2024 November 13, 2024 0.5786 10,932 November 27, 2024 November 29, 2024 December 12, 2024 0.1693 3,262 December 27, 2024 December 27, 2024 January 30, 2025 0.2141 4,860 $ 1.8125 $ 30,787"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published quarter distribution 0.962 is wrong: it equals the printed year 1.8125 less the three earlier quarters (0.1295 + 0.3566 + 0.3644), and the three Q4 declarations 0.5786 + 0.1693 + 0.2141 = 0.962. Rejected.",
+    "NAV per share denominator wrong: 14.60 published, printed in the 10-K. Rejected. distribution_rate 26.36 pct in rfjcc = 0.962 x 4 / 14.60.",
+    "Year-to-date figure mistaken for the quarter: no, the quarter carries a catch-up declaration (31 October) after the move to monthly distributions."
+   ],
+   "next_action": "Proposal PD-F16-1959604-3 (f16-quarter-distribution-includes-catch-up-declaration)."
+  }
+ ],
  "observations": [
-  {"observation_key": "net-assets-concept-not-mapped",
-   "what": "net_assets blank in every quarter: the filer tags us-gaap:AssetsNet, which the company-facts net_assets map (pipeline/extract_companyfacts.py: StockholdersEquity, NetAssetsOrNetAssets, MembersCapital, PartnersCapital) does not list. Declared per quarter in the highlights wrapper; a new quarter will be blank again until the shared map takes AssetsNet.",
-   "field": "net_assets", "quarters": ["2023-12-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed",
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "18 issuer names held the member's row word ('Dwyer Instruments, LLC Two'), a heading fragment ('Business, Chartwell Cumming Holding Corporation', heading 'Services: Business,' split at its comma) or a doubled affiliation prefix (IRI Group 2024-09-30, member 'Non-Controlled/NoNon-Controlled/...'). The Chartwell rows also carried their own entity and canonical name. Fixed in the wrapper; recurs on any new member written the same way.",
+   "field": "issuer_name",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 65.3,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (fired on 17 of the 18 rows in rfjca).",
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed raised 6 findings (17 rows, kind not_the_printed_name) in the untouched build rfjca; the 18th row (Dwyer DDTL Two 2025-06-30, fair value 0) was not flagged.",
+    "reference": "issuer_name_printed (pipeline/candidate_rules.py issuer_name_differs_from_page); rfjca shadow/page_rule_findings.csv"
+   },
+   "quote": {
+    "accession": "0000950170-24-038501",
+    "text": "Services: Business Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 15,464 14,855 15,232 7"
+   }
+  },
+  {
+   "observation_key": "instrument-text-holds-row-word-or-rate-tail",
+   "what": "instrument_description kept the member's row word on 47 loan rows ('First Lien Term Loan One', '... Term Loan 1'), the abbreviated 'RR&S S + 6.00% (includes 2.75% PIK) MD 7/16/2029' tail on 2 rows at 2026-06-30 and a trailing comma on 1. No rule flagged them. Fixed in the wrapper. Left on purpose: 'L.P. Interest One' / 'L.P Interest One' (6 rows, Firebird's second L.P. interest), where the row word separates two printed lines of one issuer and instrument.",
+   "field": "instrument_description",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 148.1,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "An instrument_description that ends in a row word (One to Nine or a single digit) or contains 'Reference Rate', 'RR&S', 'Maturity' or 'MD <date>' is a finding.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No existing rule tests instrument text against the page; the pattern is cheap and specific. False positives: tranche numbers that are part of the printed instrument ('Term Loan B-1') should be excluded by requiring a space before a bare digit at the end.",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0001193125-26-345216",
+    "text": "National Express Wash Parent Intermediate Holdco, LLC First Lien Delayed Draw Term Loan S + 6.00 % (includes 2.75 % PIK) 7/16/2029 2,707 2,638 2,564 9,25"
+   }
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "what": "Seko Global Logistics last-out term loan 2025-03-31: the page prints 'S + 5.00 %' with no PIK and the spread tag is 0.05, but the member reads 'S + 7.00% (includes 5.00% PIK)' (as in every other quarter). Published spread 5.0 (tag, = page) and pik_rate 5.0 (identifier_text, not on the page), i.e. a loan whose whole margin is PIK, which no quarter prints. Either the 2025-03-31 line is a filer misprint of 7.00 incl 5.00 PIK, or the margin was 5.00 cash that quarter; the page cannot tell. Left: source ambiguity, 3.7M.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 3.7,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "A pik_rate read from member text (pik_rate_source identifier_text) on a row whose printed line carries no 'PIK' is a finding.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed tests printed-not-published only; the reverse (published, not printed, from member text) is unchecked. In this fund it would flag this row and IRI 2024-09-30 (printed 'S + 5.00 %', member '(including 2.00% PIK)').",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0000950170-25-071600",
+    "text": "Seko Global Logistics Network, LLC First Lien Term Loan, Last-out S + 5.00 % 5/27/2030 3,691 3,484 3,691 8"
+   }
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "what": "KL Stockton Intermediate II '13.00 % PIK' fixed loan, 9 rows 2024-06-30 to 2026-06-30 (0.8M at 2026-06-30): published interest_rate 13.0 and pik_rate 13.0 through the wrapper's pik_only_tag_reading, with no cash leg (interest_rate_cash null) and no coupon type. Fixed under D-232 / D-239 by row corrections: pik_rate 13.0, all-in 13.0, interest_rate_cash 0.0, Fixed, on all 9 rows. The wrapper setting itself is unchanged; a new quarter of this loan will publish the old shape until corrected.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-06-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.8,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "A loan row with pik_rate equal to interest_rate, no reference rate and interest_rate_cash null is a finding (whole-coupon PIK not in the D-232 shape).",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in rfjca. A row with pik_rate equal to the published all-in rate, no reference rate and a null cash leg is a whole-coupon PIK not yet in the D-232 shape; in this fund it lists exactly the 9 KL Stockton rows and nothing else.",
+    "reference": "suggested_check of this observation; D-232, D-239"
+   },
+   "quote": {
+    "accession": "0001193125-26-345216",
+    "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 926 914 791"
+   }
+  },
+  {
+   "observation_key": "issuer-name-punctuation-differs-from-page",
+   "what": "Firebird Co-Invest's first L.P. interest is published 'Firebird Co-Invest L.P' (no final stop) at 2026-03-31 and 2026-06-30 (member text); the page prints 'Firebird Co-Invest L.P.'. Entity, canonical name, GICS and chain are the same as the other quarters. Left: punctuation only, 1.1M.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.1,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "",
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "issuer_name_printed tolerates punctuation on purpose; a stricter test would flag many correct legal-form variants. No published figure differs.",
+    "reference": "issuer_name_printed tolerance"
+   },
+   "quote": {
+    "accession": "0001193125-26-345216",
+    "text": "Firebird Co-Invest L.P. L.P. Interest - 434 582 Firebird Co-Invest L.P. L.P. Interest - - 8 434 590"
+   }
+  },
+  {
+   "observation_key": "net-assets-concept-not-mapped",
+   "what": "From the earlier run, still true: the filer tags us-gaap:AssetsNet, which the company-facts net_assets map does not list; net assets come from the fund's highlights wrapper. A new quarter will be blank until the shared map takes AssetsNet.",
+   "field": "net_assets",
+   "quarters": [
+    "2023-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
    "suggested_check": "A fund with investments and no net assets in a quarter is a finding.",
-   "quote": {"accession": "0001193125-26-345216", "text": "Commitments and contingencies (Note 9) Total net assets $ 843,166 $ 677,000"}},
-  {"observation_key": "nav-per-share-tagged-on-tender-offer-percent",
-   "what": "The filer tags the tender offer's share of NAV ('3.87 % of the net asset value as of December 31, 2025') as us-gaap:NetAssetValuePerShare on the prior quarter-end context of the next 10-Q; company facts keep the last value filed, so NAV per share became 3.87 and 1.34. Fixed by declaring the printed NAV; the next 10-Q will repeat it for 2026-06-30.",
-   "field": "nav_per_share", "quarters": ["2025-12-31", "2026-03-31"], "fair_value_m": 0.0, "cause": "fund", "action": "fixed",
-   "suggested_check": "NAV per share that moves more than 50 pct from the prior quarter while net assets per share outstanding does not is a finding.",
-   "quote": {"accession": "0001193125-26-221855", "text": "which represents 3.87 % of the net asset value as of December 31, 2025"}},
-  {"observation_key": "issuer-name-differs-from-page",
-   "what": "New quarter, new member dialect: the 10-Q for 2026-06-30 abbreviates the affiliation prefix ('NCNA Ptfl Cmp Invs'), so 314 of 319 issuer names held the prefix and the industry. The gate's names check passed it (the shapes it counts are instrument, row number, holder label and leading industry; a leading affiliation abbreviation is none of them). Fixed in the wrapper.",
-   "field": "issuer_name", "quarters": ["2026-06-30"], "fair_value_m": 1906.4, "cause": "fund", "action": "fixed",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the blank net assets in the untouched builds of the earlier run; the check is simple and has no obvious false positive for a fund with holdings.",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0001193125-26-345216",
+    "text": "Commitments and contingencies (Note 9) Total net assets $ 843,166 $ 677,000"
+   }
+  },
+  {
+   "observation_key": "nav-per-share-tagged-on-tender-offer-percent",
+   "what": "From the earlier run: the next 10-Q tags the tender offer's percent of NAV ('3.87 %', '1.34 %') as NetAssetValuePerShare on the prior quarter-end context; declared from the page in the highlights wrapper. The 10-Q for 2026-09-30 is expected to repeat it for 2026-06-30.",
+   "field": "nav_per_share",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "NAV per share that moves more than 50 pct from the prior quarter while net assets over shares outstanding does not is a finding.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "F33/F16 caught the effect (distribution rate 37.6 pct) only indirectly; a direct NAV-per-share consistency check against net assets / shares would catch it at source.",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0001193125-26-221855",
+    "text": "which represents 3.87 % of the net asset value as of December 31, 2025"
+   }
+  },
+  {
+   "observation_key": "issuer-name-holds-affiliation-abbreviation",
+   "what": "From the earlier run: the 10-Q for 2026-06-30 abbreviates the member prefix to 'NCNA Ptfl Cmp Invs'; 314 of 319 names held it until the wrapper took the short form. The names check did not count a leading affiliation abbreviation.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 1906.4,
+   "cause": "fund",
+   "action": "fixed",
    "suggested_check": "An issuer name that begins with the same three or more words on more than 20 pct of a fund-quarter's rows is a finding.",
-   "quote": {"accession": "0001193125-26-345216", "text": "World Insurance Associates, LLC First Lien Delayed Draw Term Loan S + 5.00 % 4/3/2030 3,553 3,535 3,553"}},
-  {"observation_key": "dash-valued-row-not-published",
-   "what": "77 rows printed '- ( cost ) -' with a cost tag and no fair-value tag were dropped (excluded_no_fair_value), so published cost was below the printed total cost. Declared at 0 for this fund.",
-   "field": "cost", "quarters": ["2023-12-31", "2024-12-31", "2025-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The gate's names check and issuer_name_printed did not flag the prefix in the earlier run's untouched build (jcxa); a shared-leading-words test is specific to this failure.",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0001193125-26-345216",
+    "text": "World Insurance Associates, LLC First Lien Delayed Draw Term Loan S + 5.00 % 4/3/2030 3,553 3,535 3,553"
+   }
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "what": "From the earlier run: 77 rows printed '- ( cost ) -' (cost tagged, no fair value tag) were dropped as excluded_no_fair_value; declared at fair value 0 for this fund.",
+   "field": "cost",
+   "quarters": [
+    "2023-12-31",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
    "suggested_check": "Published cost against the printed total cost, per quarter, within 0.5M.",
-   "quote": {"accession": "0001959604-25-000006", "text": "Trystar, LLC First Lien Delayed Draw Term Loan S + 4.50 % 8/6/2031 - ( 29 ) - 17"}},
-  {"observation_key": "reference-rate-code-in-member-not-read-guessed",
-   "what": "Members print 'C + 4.75%', 'T + 5.25%', 'SN + 4.50%', 'P + 4.00%'; the identifier-text reader took only S and E and guessed SOFR for the rest. Fixed with the fund's printed codes. The filer also tags InvestmentVariableInterestRateTypeExtensibleEnumeration from 2025-03-31, which nothing reads.",
-   "field": "reference_rate_type", "quarters": ["2025-03-31", "2026-06-30"], "fair_value_m": 1.3, "cause": "shared", "action": "fixed",
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 flagged these leaves without a value in the earlier run's untouched build (jcxa: B01 at 2024-12-31, 2025-03-31, 2025-06-30).",
+    "reference": "oracle B01"
+   },
+   "quote": {
+    "accession": "0001959604-25-000006",
+    "text": "Trystar, LLC First Lien Delayed Draw Term Loan S + 4.50 % 8/6/2031 - ( 29 ) - 17"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed",
+   "what": "From the earlier run: printed codes C, T, SN, P were published as guessed SOFR; fixed with the fund's printed codes. The filer's InvestmentVariableInterestRateTypeExtensibleEnumeration (from 2025-03-31) is read by nothing.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.3,
+   "cause": "shared",
+   "action": "fixed",
    "suggested_check": "A published reference rate that differs from the filer's InvestmentVariableInterestRateTypeExtensibleEnumeration on the same context is a finding.",
-   "quote": {"accession": "0001193125-26-221855", "text": "Spruce Bidco II Inc. First Lien Term Loan C + 4.75 % 1/30/2032 CAD 525 358 378"}},
-  {"observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
-   "what": "Par currency comes from the unit tag with no check against the printed currency code: Spruce Bidco CAD and JPY pars tagged USD at 2025-09-30 (56.4M dollar par published for a 382 thousand loan), and a dollar revolver tagged EUR at 2026-06-30. Fixed by row correction.",
-   "field": "principal_amount_usd", "quarters": ["2025-09-30", "2026-06-30"], "fair_value_m": 1.0, "cause": "shared", "action": "fixed",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the published benchmark with the filer's enumeration tag; the tag is exact where filed.",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0001193125-26-221855",
+    "text": "Spruce Bidco II Inc. First Lien Term Loan C + 4.75 % 1/30/2032 CAD 525 358 378"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "From the earlier run: Spruce Bidco CAD and JPY pars tagged USD at 2025-09-30, Titan Luxco dollar revolver tagged EUR at 2026-06-30; fixed by row correction at the build's rates. All other non-USD rows (Spruce Bidco, Titan Luxco, Flexera, Packaging Coordinators, 2025-03-31 on) carry the printed currency and reference_fx in rfjcc.",
+   "field": "principal_amount_usd",
+   "quarters": [
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1.0,
+   "cause": "shared",
+   "action": "fixed",
    "suggested_check": "A par whose unit differs from the currency code printed on its line is a finding; so is a dollar par above 20 times fair value on a performing loan.",
-   "quote": {"accession": "0001193125-25-280633", "text": "Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 56,444 360 382"}},
-  {"observation_key": "operating-company-lp-interest-classed-as-fund",
-   "what": "Firebird Co-Invest L.P. interest (co-investment beside the fund's Firebird Acquisition loans) flips to FUND / PRIVATE_EQUITY_FUND when the member reads 'L.P Interest' without a full stop (2026-03-31 on). Fixed by row correction for the two quarters; a later quarter with the same spelling will flip again.",
-   "field": "asset_category", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 0.6, "cause": "shared", "action": "fixed",
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "X06 fired on the Spruce Bidco yen row (56.4M dollar par on a 0.4M loan) in the earlier untouched build; the reverse case (dollar par tagged EUR) has no detector, covered by the suggested check.",
+    "reference": "oracle X06"
+   },
+   "quote": {
+    "accession": "0001193125-25-280633",
+    "text": "Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 56,444 360 382"
+   }
+  },
+  {
+   "observation_key": "operating-company-lp-interest-classed-as-fund",
+   "what": "From the earlier run: Firebird Co-Invest's L.P. interest flips to FUND when the member reads 'L.P Interest' without a stop (2026-03-31 on); row corrections keep it EQUITY_COMMON. A later quarter with the same spelling will flip again.",
+   "field": "asset_category",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.6,
+   "cause": "shared",
+   "action": "fixed",
    "suggested_check": "A position whose asset class changes between quarters while issuer, instrument and cost do not is a finding.",
-   "quote": {"accession": "0001193125-26-345216", "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 582"}},
-  {"observation_key": "industry-word-drives-asset-class",
-   "what": "Before the Q2 2026 name fix, Atlas US Finco's two rows at 2026-06-30 were asset_class REAL_ESTATE (the issuer name began with 'Real Estate Management & Development'); PRIVATE_CREDIT as in earlier quarters once the name is clean. Not a separate fix.",
-   "field": "asset_class", "quarters": ["2026-06-30"], "fair_value_m": 15.5, "cause": "shared", "action": "fixed",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule tests class stability along a position chain; the chain exists (position_id), so the check is direct.",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0001193125-26-345216",
+    "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 582"
+   }
+  },
+  {
+   "observation_key": "asset-class-from-industry-text-in-issuer-name",
+   "what": "From the earlier run: before the 2026-06-30 name fix, Atlas US Finco was classed REAL_ESTATE because its issuer name began with 'Real Estate Management & Development'; PRIVATE_CREDIT once the name was clean.",
+   "field": "asset_class",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 15.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "An asset_class that differs from the class of the same position_id in the prior quarter is a finding.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Same chain-stability test as above, on asset_class; no rule fired in the earlier untouched build.",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0001193125-26-345216",
+    "text": "Titan Luxco I SARL First Lien Revolver S + 5.00 % 6/12/2031 235 233 235"
+   }
+  },
+  {
+   "observation_key": "unit-count-on-a-second-context-of-the-member",
+   "what": "At 2025-03-31 Red Griffin TopCo's share count is tagged as InvestmentOwnedBalancePrincipalAmount 1,746,000 on a second context with no values (C_d0080acf); B01 counts it as a leaf without value. The count 1,746 is published on the position row by row correction. Whether the unit is 1,746 or 1,746 thousand shares is not stated on the page.",
+   "field": "shares_held",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 7.4,
+   "cause": "row",
+   "action": "fixed",
    "suggested_check": "",
-   "quote": {"accession": "0001193125-26-345216", "text": "Titan Luxco I SARL First Lien Revolver S + 5.00 % 6/12/2031 235 233 235"}},
-  {"observation_key": "unit-count-on-a-second-context-of-the-member",
-   "what": "At 2025-03-31 Red Griffin TopCo's share count is tagged as InvestmentOwnedBalancePrincipalAmount 1,746,000 on a second context with no values (B01 counts it as a leaf without a value); 2025-06-30 on it is tagged 1,746. Published 1,746 by row correction, consistent with the later quarters. Whether the count is 1,746 or 1,746 thousand shares is not stated on the page (the column header reads 'Principal / Shares' in a schedule 'In thousands, except for share and per share data').",
-   "field": "shares_held", "quarters": ["2025-03-31"], "fair_value_m": 7.4, "cause": "row", "action": "fixed",
-   "suggested_check": "",
-   "quote": {"accession": "0000950170-25-071600", "text": "Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429 8,435 7,429"}},
-  {"observation_key": "distribution-per-share-period-to-date-in-quarter",
-   "what": "distribution_per_share is null at 2024-03-31 and 0.24305 at 2024-06-30, which is (0.1295 + 0.3566) / 2, the half-year split evenly, not the quarter's 0.3566; 2024-12-31 is the year less the three printed quarters (0.962). distribution_rate and income_yield_pct are blank at 2026-03-31 and 2026-06-30. Left: shared quarterly split in the fund-financials step; not traced.",
-   "field": "distribution_per_share", "quarters": ["2024-06-30", "2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "left",
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "B01 flags the second context in rfjcc and rfjca (status excluded_no_fair_value, period 2025-03-31).",
+    "reference": "oracle B01, RVQ_REV_3f088aaea30a"
+   },
+   "quote": {
+    "accession": "0000950170-25-071600",
+    "text": "Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429 8,435 7,429"
+   }
+  },
+  {
+   "observation_key": "distribution-per-share-period-to-date-in-quarter",
+   "what": "From the earlier run, not re-traced: distribution_per_share 0.24305 at 2024-06-30 equals the half-year split evenly, not the quarter's 0.3566; null at 2024-03-31. Shared quarterly split in the fund-financials step.",
+   "field": "distribution_per_share",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
    "suggested_check": "A quarter's distribution per share that equals the average of the year-to-date declarations is a finding.",
-   "quote": {"accession": "0000950170-25-044452", "text": "May 13, 2024 May 28, 2024 June 6, 2024 0.3566 4,376"}},
-  {"observation_key": "issuer-name-row-number-left",
-   "what": "16 rows keep the filer's row word in the issuer name ('Dwyer Instruments, LLC One / Two / Three', 'IG Investments Holdings, LLC 1', 'The GI Alliance Management, LLC One'): the number is what separates two lines of one issuer and instrument (IG's two term loans 4,600 and 169), and cutting it re-pairs chains (D-166). Left; under 1 pct of rows.",
-   "field": "issuer_name", "quarters": ["2024-03-31", "2024-09-30", "2025-06-30"], "fair_value_m": 25.6, "cause": "fund", "action": "left",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "F16 only tests the rate band; an equality test against the YTD average is specific to the split error.",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0000950170-25-044452",
+    "text": "May 13, 2024 May 28, 2024 June 6, 2024 0.3566 4,376"
+   }
+  },
+  {
+   "observation_key": "spread-includes-pik-no-all-in-rate",
+   "what": "The schedule prints only reference rate and spread ('S + 5.00 % (includes 2.75 % PIK)'); no rate column and no rate tag, so interest_rate is null on about 99 pct of loans. Spread is published as the printed total (D-031 shape), pik_rate separate. As filed.",
+   "field": "interest_rate",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 1900.0,
+   "cause": "fund",
+   "action": "left",
    "suggested_check": "",
-   "quote": {"accession": "0000950170-24-126450", "text": "IG Investments Holdings, LLC First Lien Term Loan S + 6.00 % 9/22/2028 169 165 168"}},
-  {"observation_key": "spread-includes-pik-no-all-in-rate",
-   "what": "The schedule prints only reference rate and spread ('S + 5.00 % (includes 2.75 % PIK)'); no all-in rate column and no rate tag, so interest_rate is null on about 99 pct of loans. As filed (reading notes l9b, D-128).",
-   "field": "interest_rate", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 1900.0, "cause": "fund", "action": "left",
-   "suggested_check": "",
-   "quote": {"accession": "0001193125-26-345216", "text": "Firebird Acquisition Corp, Inc First Lien Term Loan S + 5.00 % (includes 2.75 % PIK) 2/2/2032 11,791 11,743 11,791"}}
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "The page prints no rate; nothing to compare. Deriving a rate from a benchmark curve is a product decision, not a detector.",
+    "reference": "D-128"
+   },
+   "quote": {
+    "accession": "0001193125-26-345216",
+    "text": "Firebird Acquisition Corp, Inc First Lien Term Loan S + 5.00 % (includes 2.75 % PIK) 2/2/2032 11,791 11,743 11,791"
+   }
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-f",
+   "what": "SEKO Global Logistics last-out term loan 2026-06-30 prints 'S + 7.00 % PIK' (whole margin, and so the whole coupon, paid in kind; earlier quarters print 'S + 7.00 % (includes 5.00 % PIK)'). Published spread 7.0, pik_rate 7.0 (identifier_text), no rate. D-232 would set pik_rate to the coupon, but the page prints no coupon (no rate column) and no tag carries one, so there is no printed figure to set; left as published. Par growth supports a whole-coupon PIK from 2025-09-30 (3,701 -> 3,807 -> 3,913 -> 4,020 -> 4,129 thousand, 2.7 to 2.9 pct a quarter, against about (SOFR + 7)/4 = 2.7 to 2.8 pct; 5.00 pct PIK would give 1.25 pct), so the 2025-09-30 to 2026-03-31 lines' 'includes 5.00 % PIK' may understate the PIK part. Source ambiguity, 4.1M.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "fair_value_m": 4.1,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "A floating loan printed 'benchmark + m % PIK' with no 'includes' is listed for D-232 review with its par growth.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed compares the printed PIK figure with pik_rate and passes this row (7 = 7); nothing tests whether the whole coupon is PIK. A listing check with par growth is cheap; it cannot set the coupon where none is printed.",
+    "reference": "suggested_check of this observation"
+   },
+   "quote": {
+    "accession": "0001193125-26-345216",
+    "text": "SEKO Global Logistics Network, LLC First Lien Term Loan, Last-out S + 7.00 % PIK 5/27/2030 4,129 3,960 4,129 9"
+   }
+  }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
-  "tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper.py tests/test_fund_highlights_wrapper.py tests/test_wrapper_content_signatures.py tests/test_wrapper_v1_quality_gate.py: 725 passed (run before jcxd; the jcxd edit was one row correction)",
-  "fund_gate.py check --label jcxd --cik 0001959604 --before spoff3 (no snapshot), with this report: see the final reply",
-  "dry runs: category marker on 21 distinct equity identifiers (3 subtotals matched, Eclipse 2025-12-31 not); issuer_name_strip_re on all 285 distinct issuer names (323 rows changed, none emptied); hierarchy patterns on 4 sample labels; 16 sampled jcxc rows read against their printed lines (par, cost, value, spread, maturity, lien, industry equal; Foreside instrument wrong, fixed)"
+  "tests/test_bdc_xbrl_wrapper.py tests/test_source_encodings.py tests/test_wrapper_content_signatures.py tests/test_wrapper_v1_quality_gate.py tests/test_fund_highlights_wrapper.py: 729 passed (after both wrapper edits, before rfjcc)",
+  "dry runs: issuer strip on all 162 distinct issuer names (18 rows, none emptied); instrument strip on all 22 distinct instruments (51 rows, none emptied)",
+  "holdings_field_diff rfjca rgA5 (entity_id/canonical_name only), rfjcb rfjca, rfjcc rfjcb, rfjcc rgA5",
+  "pid.py and piddup.sql on rfjca, rfjcb, rfjcc: no position_id with two rows in one quarter",
+  "16-row page sample of rfjcb (sample_rfjc.py): issuer, instrument, spread, PIK, maturity, par, cost, value and industry equal to the printed line on 15; the 16th (Dwyer DDTL One 2024-06-30) had no page match only because of the row word, fixed in rfjcc",
+  "whole_pik_scan.py: every printed 'x % PIK' not written '(includes x % PIK)' in all 11 schedules: KL Stockton (9 quarters) and SEKO 2026-06-30 only",
+  "holdings_field_diff rfjcd rfjcc: 5 columns, 9 rows each, all KL Stockton",
+  "fund_gate.py check --label rfjcd --cik 0001959604 --before rgA5 (no snapshot): see final reply"
  ],
  "not_done": [
-  "rows_added 396 = 319 rows of 2026-06-30 (not in spoff3) + 77 dash-valued rows published at fair value 0; rows_removed 2 = the 2025-03-31 subtotals",
-  "builds: jcxa (base), jcxb, jcxc, jcxd (final); four of six",
-  "position_id changes (222 common rows) not traced row by row",
-  "Firebird 'L.P. Interest' unit cells and the 2025-03-31 Red Griffin unit scale (1,746 vs 1,746 thousand) not settled from the notes",
-  "income figures, expense ratios, leverage and the quarterly distribution split not read against the page beyond the lines quoted",
-  "non-accrual footnotes, acquisition dates and GICS labels not checked row by row; the 2023-09-30 F28 row (all figures null) left as dispositioned",
-  "full pytest suite not run; test_unified_holdings.py not run",
-  "a bare 'python -' command was started once by mistake (stopped through the task tool; no python process left); see the final reply"
+  "B01: 17 of 18 comparative contexts per quarter checked by identifier against published 2024-12-31 rows, not re-read on each 10-Q page.",
+  "Seko 2025-03-31 spread/PIK and IRI 2024-09-30 PIK (printed 'S + 5.00 %' without PIK, member says 2.00 PIK): not changed; source ambiguity.",
+  "Earlier-run observations restated from jcxd without re-running every query; their fixes are unchanged in rfjcc (row corrections 32 of 32 applied).",
+  "Full pytest suite and tests/test_unified_holdings.py not run (no shared code changed).",
+  "Builds: rfjca (untouched, = rgA5 on all value columns), rfjcb, rfjcc, rfjcd (final); four of six.",
+  "KL Stockton correction lines are keyed by exact identifier, not context (REQ-rfjc-1).",
+  "SEKO 2026-06-30 whole-margin PIK: no printed coupon, left (observation)."
  ]
 }

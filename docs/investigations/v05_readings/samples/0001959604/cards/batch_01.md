@@ -77,7 +77,7 @@
 
 **Published:**
 - issuer_name = Dwyer Instruments, LLC
-- instrument_description = First Lien Term Loan One
+- instrument_description = First Lien Term Loan
 - asset_category = LOAN
 - fair_value = 6318000.0  (tag: equal)
 - cost = 6311000.0  (tag: equal)

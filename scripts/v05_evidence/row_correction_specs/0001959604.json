@@ -3,105 +3,260 @@
   "quarter": "2024-09-30",
   "identifier": "Non-controlled-non-affiliated Portfolio company debt investments Equity Investments Preferred Stock Professional Services Eclipse Topco,Inc. Investment Type Preferred Stock",
   "exact": true,
-  "fields": {"shares_held": "72"},
+  "fields": {
+   "shares_held": "72"
+  },
   "reason": "C04: the share count is printed and not published (no share fact on the context). Printed: 'Eclipse Topco, Inc. Preferred Stock 72 706 706'; published as 72 from 2025-06-30, where the filer tags it."
  },
  {
   "quarter": "2024-12-31",
   "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments Preferred Stock Professional Services Eclipse Topco,Inc. Investment Type Preferred Stock",
   "exact": true,
-  "fields": {"shares_held": "72"},
+  "fields": {
+   "shares_held": "72"
+  },
   "reason": "C04 (earlier reviewer's real-error verdict): the share count is printed and not published. Printed: 'Eclipse Topco, Inc. Preferred Stock 72 $ 735 $ 706'."
  },
  {
   "quarter": "2024-12-31",
   "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Investment Type Common Stock",
   "exact": true,
-  "fields": {"shares_held": "1746"},
+  "fields": {
+   "shares_held": "1746"
+  },
   "reason": "C04 (earlier reviewer's real-error verdict): the share count is printed and not published. Printed: 'Red Griffin TopCo, LLC Common Stock 1,746 8,435 8,000'; published as 1,746 from 2025-06-30."
  },
  {
   "quarter": "2025-03-31",
   "identifier": "Non-controlled-non-affiliated Portfolio company debt investments Equity Investments Preferred Stock Professional Services Eclipse Topco,Inc. Investment Type Preferred Stock",
   "exact": true,
-  "fields": {"shares_held": "72"},
+  "fields": {
+   "shares_held": "72"
+  },
   "reason": "C04: the share count is printed and not published. Printed: 'Eclipse Topco, Inc. Preferred Stock 72 $ 735 $ 749'."
  },
  {
   "quarter": "2025-03-31",
   "identifier": "\"Non-controlled-non-affiliated Portfolio company debt investments Equity Investments Common Stock Air Freight & Logistics Red Griffin TopCo, LLC Investment Type Common Stock",
   "exact": true,
-  "fields": {"shares_held": "1746"},
+  "fields": {
+   "shares_held": "1746"
+  },
   "reason": "C04: the share count is printed and not published (the filer tags it as InvestmentOwnedBalancePrincipalAmount 1,746,000 on a separate context with no values). Printed: 'Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429'."
  },
  {
   "quarter": "2025-06-30",
   "identifier": "Non-controlled-non-affiliated Portfolio Company Equity Investments L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. One Investment Type L.P. Interest",
   "exact": true,
-  "fields": {"instrument_description": "L.P. Interest One"},
+  "fields": {
+   "instrument_description": "L.P. Interest One"
+  },
   "reason": "The member puts the row word 'One' before 'Investment Type', so no instrument was read; the printed line is 'Firebird Co-Invest L.P. L.P. Interest - - 2' and the filer's member from 2025-09-30 reads '... Investment Type L.P. Interest One' (published 'L.P. Interest One')."
  },
  {
   "quarter": "2025-12-31",
   "identifier": "Non-controlled-non-affiliated Portfolio company debt investments Equity Investments Preferred Stock Professional Services Eclipse Topco,Inc. Preferred Stock",
   "exact": true,
-  "fields": {"instrument_description": "Preferred Stock"},
+  "fields": {
+   "instrument_description": "Preferred Stock"
+  },
   "reason": "The member has no 'Investment Type' word, so no instrument was read and 'Preferred Stock' stayed in the name (cut by the wrapper's issuer strip). Printed: 'Eclipse Topco, Inc. Preferred Stock 72 831 846'."
  },
  {
   "quarter": "2026-03-31",
   "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments L.P Interests Commercial Services & Supplies Firebird Co-Invest L.P Investment Type L.P Interest",
   "exact": true,
-  "fields": {"asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY", "exposure_type": "DIRECT", "issuer_category": "CORPORATE"},
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "exposure_type": "DIRECT",
+   "issuer_category": "CORPORATE"
+  },
   "reason": "The same co-investment L.P. interest is classed EQUITY_COMMON in 2025-03-31 to 2025-12-31; from 2026-03-31 the member reads 'L.P Interest' (no full stop) and the row was classed as a fund. Printed under Equity Investments: 'Firebird Co-Invest L.P. L.P. Interest - 434 537'."
  },
  {
   "quarter": "2026-06-30",
   "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments Equity Investments L.P Interests Commercial Services & Supplies Firebird Co-Invest L.P Investment Type L.P Interest",
   "exact": true,
-  "fields": {"asset_category": "EQUITY_COMMON", "index_classification": "COMMON_EQUITY", "exposure_type": "DIRECT", "issuer_category": "CORPORATE"},
+  "fields": {
+   "asset_category": "EQUITY_COMMON",
+   "index_classification": "COMMON_EQUITY",
+   "exposure_type": "DIRECT",
+   "issuer_category": "CORPORATE"
+  },
   "reason": "As at 2026-03-31: member 'L.P Interest' classed as a fund; the earlier quarters class the same interest EQUITY_COMMON. Printed under Equity Investments: 'Firebird Co-Invest L.P. L.P. Interest - 434 582'."
  },
  {
   "quarter": "2024-06-30",
   "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Wholesale The Hiller Companies, LLC Investment First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.00% Maturity Date 6/20/2030",
   "exact": true,
-  "fields": {"issuer_name": "The Hiller Companies, LLC", "instrument_description": "First Lien Delayed Draw Term Loan"},
+  "fields": {
+   "issuer_name": "The Hiller Companies, LLC",
+   "instrument_description": "First Lien Delayed Draw Term Loan"
+  },
   "reason": "C206: the filer wrote 'Investment' for 'Investment Type' in this member, so the whole label became the issuer. Printed: 'The Hiller Companies, LLC First Lien Delayed Draw Term Loan S + 5.00 % 6/20/2030 - ( 7 ) ( 15 )'."
  },
  {
   "quarter": "2024-06-30",
   "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Wholesale The Hiller Companies, LLC Investment First Lien Revolver Reference Rate and Spread S + 5.00% Maturity Date 6/20/2030",
   "exact": true,
-  "fields": {"issuer_name": "The Hiller Companies, LLC", "instrument_description": "First Lien Revolver"},
+  "fields": {
+   "issuer_name": "The Hiller Companies, LLC",
+   "instrument_description": "First Lien Revolver"
+  },
   "reason": "C206: the filer wrote 'Investment' for 'Investment Type' in this member, so the whole label became the issuer. Printed: 'The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 12 8 8'."
  },
  {
   "quarter": "2025-09-30",
   "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Health Care Equipment & Supplies Spruce Bidco II Inc. Investment Type First Lien Term Loan Reference Rate and Spread T + 5.25% Maturity Date 2/02/2032",
   "exact": true,
-  "fields": {"principal_amount_currency": "JPY", "principal_amount_usd": "381455.7", "principal_fx_rate_to_usd": "0.006758126647293370", "principal_fx_status": "reference_fx"},
+  "fields": {
+   "principal_amount_currency": "JPY",
+   "principal_amount_usd": "381455.7",
+   "principal_fx_rate_to_usd": "0.006758126647293370",
+   "principal_fx_status": "reference_fx"
+  },
   "reason": "X06: the yen par 56,444,000 is tagged with unit USD in this 10-Q only (JPY in every other filing), so 56.4M was published as the dollar par of a 382 thousand loan. Printed: 'Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 56,444 360 382'. Dollar amount at the build's own FRED H.10 rate for 2025-09-30 (DEXJPUS 0.0067581266)."
  },
  {
   "quarter": "2025-09-30",
   "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Health Care Equipment & Supplies Spruce Bidco II Inc. Investment Type First Lien Term Loan Reference Rate and Spread C + 5.00% Maturity Date 2/02/2032",
   "exact": true,
-  "fields": {"principal_amount_currency": "CAD", "principal_amount_usd": "379119.7", "principal_fx_rate_to_usd": "0.718029726430674", "principal_fx_status": "reference_fx"},
+  "fields": {
+   "principal_amount_currency": "CAD",
+   "principal_amount_usd": "379119.7",
+   "principal_fx_rate_to_usd": "0.718029726430674",
+   "principal_fx_status": "reference_fx"
+  },
   "reason": "The Canadian-dollar par 528,000 is tagged with unit USD in this 10-Q only (CAD in every other filing). Printed: 'Spruce Bidco II Inc. First Lien Term Loan C + 5.00 % 2/2/2032 CAD 528 $ 359 $ 379'. Dollar amount at the build's own FRED H.10 rate for 2025-09-30 (DEXCAUS 0.7180297)."
  },
  {
   "quarter": "2024-09-30",
   "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Professional Services Foreside Financial Group, LLC 1 Investment Type First Lien Term Loan Reference Rate and Spread S + 5.25% Maturity Date 9/30/2027",
   "exact": true,
-  "fields": {"instrument_description": "First Lien Delayed Draw Term Loan"},
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan"
+  },
   "reason": "The member names this line a term loan; the page prints it as Foreside's second undrawn delayed-draw line (no par, cost (21), value (25)), and the only term loan carries par 1,051. Printed: 'Foreside Financial Group, LLC First Lien Delayed Draw Term Loan S + 5.25 % 9/30/2027 - ( 21 ) ( 25 )'."
  },
  {
   "quarter": "2026-06-30",
   "identifier": "NCNA Ptfl Cmp Invs First Lien Debt Investments Life Sciences Tools & Services Titan Luxco I SARL Investment Type First Lien Revolver Reference Rate and Spread S + 5.00% Maturity Date 6/12/2031",
   "exact": true,
-  "fields": {"principal_amount_currency": "USD", "principal_amount_usd": "235000", "principal_fx_rate_to_usd": "1.0", "principal_fx_status": "source_usd"},
+  "fields": {
+   "principal_amount_currency": "USD",
+   "principal_amount_usd": "235000",
+   "principal_fx_rate_to_usd": "1.0",
+   "principal_fx_status": "source_usd"
+  },
   "reason": "The dollar (SOFR) revolver's par 235,000 is tagged with unit EUR (cost and fair value in USD); the page prints it without a currency code, unlike the euro lines beside it. Printed: 'Titan Luxco I SARL First Lien Revolver S + 5.00 % 6/12/2031 235 233 235' and 'Titan Luxco I SARL First Lien Revolver E + 5.00 % 6/12/2031 EUR 99 114 114'."
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Services: Consumer KL Stockton Intermediate II, LLC Investment Type First Lien Term Loan Reference Rate and Spread 13.00% PIK% Maturity Date 5/23/2031",
+  "exact": true,
+  "correction_context": "C_d6e4f434-3a5f-41e7-857c-dc13b6593280",
+  "fields": {
+   "interest_rate": "13.0",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Whole coupon paid in kind (owner ruling D-232, applied by the orchestrator in D-239): pik_rate is the printed fixed coupon 13.00, cash leg 0 (interest_rate all-in 13.00, interest_rate_kind all_in, coupon_type Fixed). No cash part and no reference rate printed; par accretes about 13/4 = 3.25 pct a quarter (714 to 926 thousand from 2024-06-30 to 2026-06-30, 3.23 to 3.36 pct each quarter): strong. Printed (0000950170-24-096306, context C_d6e4f434-3a5f-41e7-857c-dc13b6593280): 'KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 714 699 699'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Diversified Consumer Services KL Stockton Intermediate II, LLC Investment Type First Lien Term Loan Reference Rate and Spread 13.00% PIK Maturity Date 5/23/2030",
+  "exact": true,
+  "correction_context": "C_2ba429a6-45d7-4971-87ca-565ff8f7956a",
+  "fields": {
+   "interest_rate": "13.0",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Whole coupon paid in kind (owner ruling D-232, applied by the orchestrator in D-239): pik_rate is the printed fixed coupon 13.00, cash leg 0 (interest_rate all-in 13.00, interest_rate_kind all_in, coupon_type Fixed). No cash part and no reference rate printed; par accretes about 13/4 = 3.25 pct a quarter (714 to 926 thousand from 2024-06-30 to 2026-06-30, 3.23 to 3.36 pct each quarter): strong. par 714 -> 738 thousand (+3.36 pct) Printed (0000950170-24-126450, context C_2ba429a6-45d7-4971-87ca-565ff8f7956a): 'KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 738 724 738'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Diversified Consumer Services KL Stockton Intermediate II, LLC Investment Type First Lien Term Loan Reference Rate and Spread 13.00% PIK Maturity Date 5/23/2030",
+  "exact": true,
+  "correction_context": "C_da768011-e358-4363-8198-4786bb217198",
+  "fields": {
+   "interest_rate": "13.0",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Whole coupon paid in kind (owner ruling D-232, applied by the orchestrator in D-239): pik_rate is the printed fixed coupon 13.00, cash leg 0 (interest_rate all-in 13.00, interest_rate_kind all_in, coupon_type Fixed). No cash part and no reference rate printed; par accretes about 13/4 = 3.25 pct a quarter (714 to 926 thousand from 2024-06-30 to 2026-06-30, 3.23 to 3.36 pct each quarter): strong. par 738 -> 762 thousand (+3.25 pct) Printed (0000950170-25-044452, context C_da768011-e358-4363-8198-4786bb217198): 'KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 762 749 762'"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Diversified Consumer Services KL Stockton Intermediate II, LLC Investment Type First Lien Term Loan Reference Rate and Spread 13.00% PIK Maturity Date 5/23/2031",
+  "exact": true,
+  "correction_context": "C_767f7278-9671-4cf3-95c1-c90ca1a11c8e",
+  "fields": {
+   "interest_rate": "13.0",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Whole coupon paid in kind (owner ruling D-232, applied by the orchestrator in D-239): pik_rate is the printed fixed coupon 13.00, cash leg 0 (interest_rate all-in 13.00, interest_rate_kind all_in, coupon_type Fixed). No cash part and no reference rate printed; par accretes about 13/4 = 3.25 pct a quarter (714 to 926 thousand from 2024-06-30 to 2026-06-30, 3.23 to 3.36 pct each quarter): strong. par 762 -> 787 thousand (+3.28 pct) Printed (0000950170-25-071600, context C_767f7278-9671-4cf3-95c1-c90ca1a11c8e): 'KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 787 774 787'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Diversified Consumer Services KL Stockton Intermediate II, LLC Investment Type First Lien Term Loan Reference Rate and Spread 13.00% PIK Maturity Date 5/23/2031",
+  "exact": true,
+  "correction_context": "C_2b27ba89-757e-49de-b944-8cbe3af5b376",
+  "fields": {
+   "interest_rate": "13.0",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Whole coupon paid in kind (owner ruling D-232, applied by the orchestrator in D-239): pik_rate is the printed fixed coupon 13.00, cash leg 0 (interest_rate all-in 13.00, interest_rate_kind all_in, coupon_type Fixed). No cash part and no reference rate printed; par accretes about 13/4 = 3.25 pct a quarter (714 to 926 thousand from 2024-06-30 to 2026-06-30, 3.23 to 3.36 pct each quarter): strong. par 787 -> 813 thousand (+3.30 pct) Printed (0001959604-25-000006, context C_2b27ba89-757e-49de-b944-8cbe3af5b376): 'KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 813 800 797'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Diversified Consumer Services KL Stockton Intermediate II, LLC Investment Type First Lien Term Loan Reference Rate and Spread 13.00% PIK Maturity Date 5/23/2031",
+  "exact": true,
+  "correction_context": "C_194267cf-2303-48c5-b0a7-76feea323e6c",
+  "fields": {
+   "interest_rate": "13.0",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Whole coupon paid in kind (owner ruling D-232, applied by the orchestrator in D-239): pik_rate is the printed fixed coupon 13.00, cash leg 0 (interest_rate all-in 13.00, interest_rate_kind all_in, coupon_type Fixed). No cash part and no reference rate printed; par accretes about 13/4 = 3.25 pct a quarter (714 to 926 thousand from 2024-06-30 to 2026-06-30, 3.23 to 3.36 pct each quarter): strong. par 813 -> 840 thousand (+3.32 pct) Printed (0001193125-25-280633, context C_194267cf-2303-48c5-b0a7-76feea323e6c): 'KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 840 828 834'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Diversified Consumer Services KL Stockton Intermediate II, LLC Investment Type First Lien Term Loan Reference Rate and Spread 13.00% PIK Maturity Date 5/23/2031",
+  "exact": true,
+  "correction_context": "C_2293da99-f7c5-42b9-9795-2f7ce147c2ac",
+  "fields": {
+   "interest_rate": "13.0",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Whole coupon paid in kind (owner ruling D-232, applied by the orchestrator in D-239): pik_rate is the printed fixed coupon 13.00, cash leg 0 (interest_rate all-in 13.00, interest_rate_kind all_in, coupon_type Fixed). No cash part and no reference rate printed; par accretes about 13/4 = 3.25 pct a quarter (714 to 926 thousand from 2024-06-30 to 2026-06-30, 3.23 to 3.36 pct each quarter): strong. par 840 -> 868 thousand (+3.33 pct) Printed (0001193125-26-116342, context C_2293da99-f7c5-42b9-9795-2f7ce147c2ac): 'KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 868 856 863'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Non-Controlled/Non-Affiliated Portfolio Company Investments First Lien Debt Investments Diversified Consumer Services KL Stockton Intermediate II, LLC Investment Type First Lien Term Loan Reference Rate and Spread 13.00% PIK Maturity Date 23/5/2031",
+  "exact": true,
+  "correction_context": "C_ba378551-5bad-4cdb-bc0d-d915fb54b4b3",
+  "fields": {
+   "interest_rate": "13.0",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Whole coupon paid in kind (owner ruling D-232, applied by the orchestrator in D-239): pik_rate is the printed fixed coupon 13.00, cash leg 0 (interest_rate all-in 13.00, interest_rate_kind all_in, coupon_type Fixed). No cash part and no reference rate printed; par accretes about 13/4 = 3.25 pct a quarter (714 to 926 thousand from 2024-06-30 to 2026-06-30, 3.23 to 3.36 pct each quarter): strong. par 868 -> 896 thousand (+3.23 pct) Printed (0001193125-26-221855, context C_ba378551-5bad-4cdb-bc0d-d915fb54b4b3): 'KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 896 885 874'"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "NCNA Ptfl Cmp Invs First Lien Debt Investments Diversified Consumer Services KL Stockton Intermediate II, LLC Investment Type First Lien Term Loan Reference Rate and Spread 13.00% PIK Maturity Date 5/23/2031",
+  "exact": true,
+  "correction_context": "C_cddf9101-986d-406f-8b31-e7cf17b72882",
+  "fields": {
+   "interest_rate": "13.0",
+   "interest_rate_kind": "all_in",
+   "coupon_type": "Fixed"
+  },
+  "reason": "Whole coupon paid in kind (owner ruling D-232, applied by the orchestrator in D-239): pik_rate is the printed fixed coupon 13.00, cash leg 0 (interest_rate all-in 13.00, interest_rate_kind all_in, coupon_type Fixed). No cash part and no reference rate printed; par accretes about 13/4 = 3.25 pct a quarter (714 to 926 thousand from 2024-06-30 to 2026-06-30, 3.23 to 3.36 pct each quarter): strong. par 896 -> 926 thousand (+3.35 pct) Printed (0001193125-26-345216, context C_cddf9101-986d-406f-8b31-e7cf17b72882): 'KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 926 914 791'"
  }
 ]

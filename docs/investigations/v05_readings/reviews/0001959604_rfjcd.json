@@ -1,0 +1,417 @@
+{
+ "reviewer_id": "claude-independent-reviewer-jefferies-rfjcd",
+ "report_digest": "39e826a826e4091616a87f8f1c22e860299e08c0ea0062c39ff36a886a66a00c",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_3f088aaea30a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: rfjcd oracle check_failures B01 2025-03-31 = 19 contexts (18 excluded_comparative_period with period 2024-12-31, 1 excluded_no_fair_value C_d0080acf), set-equal to affected_rows. Point (a): the agent read only the Hiller line on the page and matched the rest by identifier; I read all of them. My locator (b01_page.py) found every comparative context's line in the 10-Q's own 'December 31, 2024' comparative schedule, each printing '- ( cost ) -' with the bracketed cost equal to the source cost (Hiller 3, PPV 83, Vital Care 3, Healthedge 3, Victors 23, Integrity 36 and 3, SG 3, Advarra 3, Foreside 18, Aptean 3, Brave 3, CB Buyer 22 and 3, Enverus 5, GS AcquisitionCo 1, PT Intermediate 1, Vessco 3). The raw iXBRL contexts carry only InvestmentBasisSpreadVariableRate and InvestmentOwnedAtCost, no fair value fact. Each identifier has a published 2024-12-31 row with the same cost and fair value 0 (q_b01.sql). So the coverage claim now rests on a full page read, not on matching alone. C_d0080acf carries only InvestmentOwnedBalancePrincipalAmount (1,746,000) for the Red Griffin member; the position is published on C_5df45773 (ROW-23fd67e02223c047, cost 8,435,000, value 7,429,000, shares 1,746), as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071600",
+     "text": "The Hiller Companies, LLC First Lien Revolver S + 5.00 % 6/20/2030 - ( 3 ) - 9"
+    },
+    {
+     "accession": "0000950170-25-071600",
+     "text": "PPV Intermediate Holdings, LLC First Lien Delayed Draw Term Loan S + 5.25 % 8/31/2029 - ( 83 ) - 9"
+    },
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Victors Purchaser, LLC First Lien Delayed Draw Term Loan S + 4.75 % 8/15/2031 - ( 23 ) - 9"
+    },
+    {
+     "accession": "0000950170-25-071600",
+     "text": "CB Buyer, Inc. First Lien Delayed Draw Term Loan S + 5.25 % 7/1/2031 - ( 22 ) - 9"
+    },
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429 8,435 7,429"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6aa972ee7da1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results C04 2026-06-30: 50 pct of 4; Eclipse count 50 published as printed. Point (e). Equity rows reconstructed from rfjcd: Eclipse Topco preferred (72, later 50 shares), Red Griffin common (1,746) and one or two Firebird Co-Invest L.P. interests; equal to affected_rows. The page prints a dash in the Principal/Shares cell for both Firebird lines and no unit fact is tagged, so 2 of 3 (2025-03-31) or 2 of 4 rows can carry a count; C04 fails on the 70 pct threshold, not on a missing figure. Note: from 2025-09-30 the Firebird rows publish shares_held 0.0 rather than blank, which states zero units where the page prints none; harmless to totals, but blank would be the faithful value.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Eclipse Topco, Inc. Preferred Stock 50 $ 601 $ 596 601 596"
+    },
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Red Griffin TopCo, LLC Common Stock 1,746 8,435 1,125 8,435 1,125"
+    },
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Firebird Co-Invest L.P. L.P. Interest - 434 582 Firebird Co-Invest L.P. L.P. Interest - - 8 434 590"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6f4a287e0bbb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results C04 2025-03-31: 66.7 pct of 3 equity rows. Point (e). Equity rows reconstructed from rfjcd: Eclipse Topco preferred (72, later 50 shares), Red Griffin common (1,746) and one or two Firebird Co-Invest L.P. interests; equal to affected_rows. The page prints a dash in the Principal/Shares cell for both Firebird lines and no unit fact is tagged, so 2 of 3 (2025-03-31) or 2 of 4 rows can carry a count; C04 fails on the 70 pct threshold, not on a missing figure. Note: from 2025-09-30 the Firebird rows publish shares_held 0.0 rather than blank, which states zero units where the page prints none; harmless to totals, but blank would be the faithful value.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Firebird Co-Invest L.P. L.P. Interest - 434 412 434 412"
+    },
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429 8,435 7,429"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_795ce4879026",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results C04 2025-09-30: 50 pct of 4. Point (e). Equity rows reconstructed from rfjcd: Eclipse Topco preferred (72, later 50 shares), Red Griffin common (1,746) and one or two Firebird Co-Invest L.P. interests; equal to affected_rows. The page prints a dash in the Principal/Shares cell for both Firebird lines and no unit fact is tagged, so 2 of 3 (2025-03-31) or 2 of 4 rows can carry a count; C04 fails on the 70 pct threshold, not on a missing figure. Note: from 2025-09-30 the Firebird rows publish shares_held 0.0 rather than blank, which states zero units where the page prints none; harmless to totals, but blank would be the faithful value.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280633",
+     "text": "Eclipse Topco, Inc. Preferred Stock 72 $ 781 $ 812 781 812"
+    },
+    {
+     "accession": "0001193125-25-280633",
+     "text": "Firebird Co-Invest L.P. L.P. Interest - 434 468 Firebird Co-Invest L.P. L.P. Interest - - 2 434 470"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_99a61c606b52",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "check_results C04 2025-06-30: 50 pct of 4. The two Firebird lines are separate ('- 434 468' and '- - 2'), separate contexts. Point (e). Equity rows reconstructed from rfjcd: Eclipse Topco preferred (72, later 50 shares), Red Griffin common (1,746) and one or two Firebird Co-Invest L.P. interests; equal to affected_rows. The page prints a dash in the Principal/Shares cell for both Firebird lines and no unit fact is tagged, so 2 of 3 (2025-03-31) or 2 of 4 rows can carry a count; C04 fails on the 70 pct threshold, not on a missing figure. Note: from 2025-09-30 the Firebird rows publish shares_held 0.0 rather than blank, which states zero units where the page prints none; harmless to totals, but blank would be the faithful value.",
+   "evidence": [
+    {
+     "accession": "0001959604-25-000006",
+     "text": "Firebird Co-Invest L.P. L.P. Interest - 434 468 Firebird Co-Invest L.P. L.P. Interest - - 2 434 470"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a9d7759bb028",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (e). F16 2024-12-31 FAIL value 7.006 = distribution_rate 26.356 - 1.5 x income_yield 12.9. Published distribution_per_share 0.962 = the three Q4 declarations on the page (0.5786 + 0.1693 + 0.2141) = 1.8125 - (0.1295 + 0.3566 + 0.3644); NAV 14.60 as printed; 0.962 x 4 / 14.60 = 26.36 pct. The 'catch-up' reading is an inference from the schedule (quarterly declarations in arrears through August, then 0.5786 on 31 October about the size of one quarter plus one month, then monthly), not stated in the filing; the proposal's substance (the check annualises one irregular quarter of as-declared figures) does not depend on it.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-044452",
+     "text": "October 31, 2024 October 31, 2024 November 13, 2024 0.5786 10,932 November 27, 2024 November 29, 2024 December 12, 2024 0.1693 3,262 December 27, 2024 December 27, 2024 January 30, 2025 0.2141 4,860 $ 1.8125 $ 30,787"
+    },
+    {
+     "accession": "0000950170-25-044452",
+     "text": "March 28, 2024 March 28, 2024 April 5, 2024 $ 0.1295 $ 1,537 May 13, 2024 May 28, 2024 June 6, 2024 0.3566 4,376 August 13, 2024 August 28, 2024 September 6, 2024 0.3644 5,820"
+    },
+    {
+     "accession": "0000950170-25-044452",
+     "text": "November 30, 2024 $ 14.63 December 31, 2024 $ 14.60"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_aeabb581750e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: B01 2025-06-30 = 18 contexts, all period 2024-12-31 excluded_comparative_period, set-equal to affected_rows. Point (a): the agent read only the Hiller line on the page and matched the rest by identifier; I read all of them. My locator (b01_page.py) found every comparative context's line in the 10-Q's own 'December 31, 2024' comparative schedule, each printing '- ( cost ) -' with the bracketed cost equal to the source cost (Hiller 3, PPV 83, Vital Care 3, Healthedge 3, Victors 23, Integrity 36 and 3, SG 3, Advarra 3, Foreside 18, Aptean 3, Brave 3, CB Buyer 22 and 3, Enverus 5, GS AcquisitionCo 1, PT Intermediate 1, Vessco 3). The raw iXBRL contexts carry only InvestmentBasisSpreadVariableRate and InvestmentOwnedAtCost, no fair value fact. Each identifier has a published 2024-12-31 row with the same cost and fair value 0 (q_b01.sql). So the coverage claim now rests on a full page read, not on matching alone.",
+   "evidence": [
+    {
+     "accession": "0001959604-25-000006",
+     "text": "Consolidated Schedule of Investments (Unaudited) December 31, 2024 (In thousands, except for share and per share data)"
+    },
+    {
+     "accession": "0001959604-25-000006",
+     "text": "PPV Intermediate Holdings, LLC First Lien Delayed Draw Term Loan S + 5.25 % 8/31/2029 - ( 83 ) - 9"
+    },
+    {
+     "accession": "0001959604-25-000006",
+     "text": "Integrity Marketing Acquisition, LLC First Lien Delayed Draw Term Loan S + 5.00 % 8/25/2028 - ( 36 ) - 9"
+    },
+    {
+     "accession": "0001959604-25-000006",
+     "text": "Foreside Financial Group, LLC First Lien Delayed Draw Term Loan S + 5.25 % 9/30/2027 - ( 18 ) - 9"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Point (c). rfjca -> rfjcd changes issuer_name on exactly 18 rows; every new name is the printed company cell (Chartwell, Dwyer, IRI and GI Alliance read on the pages), no name empties, and no published name still ends in a row word or starts with 'Business, ', 'Consumer, ' or 'Non-Controlled'. Value columns unchanged (0 rows). Entity and canonical name change on 3 rows only, the intended joins (Chartwell x2 to the company entity, IRI 2024-09-30 to 'IRI Group Holdings, Inc.'); GICS unchanged on all rows. Note, not caused by the strip: Dwyer's 2025-06-30 'Two' row carries GICS 'Diversified Support Services' while its other rows carry 'Electronic Equipment & Instruments' (same in rfjca). The existing detector fired on 17 of 18 rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-038501",
+     "text": "Services: Business Chartwell Cumming Holding Corporation First Lien Term Loan S + 5.75 % 11/16/2027 15,464 14,855 15,232 7"
+    },
+    {
+     "accession": "0001959604-25-000006",
+     "text": "Dwyer Instruments, LLC First Lien Term Loan S + 4.75 % 7/20/2029 6,350 6,261 6,350 8"
+    },
+    {
+     "accession": "0000950170-24-126450",
+     "text": "IRI Group Holdings, Inc (f/k/a The NPD Group L.P.) First Lien Term Loan S + 5.00 % 12/1/2028 15,942 15,563 15,942 6"
+    },
+    {
+     "accession": "0000950170-24-058817",
+     "text": "The GI Alliance Management, LLC First Lien Term Loan S + 5.50 % 9/15/2028 2,142 2,122 2,099 8"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-holds-row-word-or-rate-tail",
+   "outcome": "supported",
+   "rationale": "Point (c). rfjca -> rfjcd changes instrument_description on exactly 51 rows: row words ('One', 'Two', 'Three', 'Four', '1') on term loans, delayed draws and revolvers, the two National Express 'RR&S ... MD 7/16/2029' tails and one trailing comma; every result is one of 'First Lien Term Loan', 'First Lien Delayed Draw Term Loan', 'First Lien Revolver'. Firebird keeps 'L.P. Interest One' / 'L.P Interest One' on its second interest (5 rows in rfjcd), which separates the two printed lines. Spread, PIK and maturity unchanged on all rows. The proposed pattern check is concrete; its false-positive guard for printed tranche numbers is sensible.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "National Express Wash Parent Intermediate Holdco, LLC First Lien Delayed Draw Term Loan S + 6.00 % (includes 2.75 % PIK) 7/16/2029 2,707 2,638 2,564"
+    },
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Firebird Co-Invest L.P. L.P. Interest - 434 582 Firebird Co-Invest L.P. L.P. Interest - - 8 434 590"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Point (d). Seko 2025-03-31: the page prints 'S + 5.00 %' with no PIK; rfjcd publishes spread 5.0 (xbrl_field) and pik 5.0 (identifier_text, from the member's 'S + 7.00% (includes 5.00% PIK)'). The neighbouring quarters print 'S + 7.00 % (includes 5.00 % PIK)'. The published pair matches neither reading (7.00 incl 5.00 PIK -> spread 7, pik 5; 5.00 cash -> spread 5, no PIK); par 3,654 -> 3,691 (+1.0 pct) leans to the PIK reading. The observation states this honestly as source ambiguity. IRI 2024-09-30 is the same shape (page 'S + 5.00 %', published pik 2.0 from member text; the quarter before prints 'includes 2.00 % PIK'). The proposed detector (pik_rate from identifier_text with no 'PIK' on the printed line) is concrete and would list both rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Seko Global Logistics Network, LLC First Lien Term Loan, Last-out S + 5.00 % 5/27/2030 3,691 3,484 3,691"
+    },
+    {
+     "accession": "0000950170-25-044452",
+     "text": "Seko Global Logistics Network, LLC First Lien Term Loan, Last-out S + 7.00 % (includes 5.00 % PIK) 5/27/2030 3,654 3,438"
+    },
+    {
+     "accession": "0000950170-24-126450",
+     "text": "IRI Group Holdings, Inc (f/k/a The NPD Group L.P.) First Lien Term Loan S + 5.00 % 12/1/2028 15,942 15,563 15,942 6"
+    },
+    {
+     "accession": "0000950170-24-096306",
+     "text": "IRI Group Holdings, Inc (f/k/a The NPD Group L.P.) First Lien Term Loan S + 5.50 % (includes 2.00 % PIK) 12/1/2028 15,926 15,528 15,926 7"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "outcome": "supported",
+   "rationale": "Point (b). All 9 KL Stockton lines read on the pages print '13.00 % PIK' with no benchmark (e.g. 2024-06-30 714, 2024-09-30 738, 2025-12-31 868, 2026-06-30 926). Par 714, 738, 762, 787, 813, 840, 868, 896, 926 grows 3.23 to 3.36 pct a quarter against 13/4 = 3.25 pct: the whole coupon is paid in kind. rfjcd publishes on all 9 rows pik_rate 13.0, interest_rate 13.0 all_in, interest_rate_reported 13.0, interest_rate_cash 0.0, Fixed, no spread or reference rate; par, cost and value equal the page. Before (rfjca) the same rows had cash leg null and no coupon type. The detector (pik = rate, no benchmark, null cash leg) is concrete; the observation correctly says a new quarter will need the correction again.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096306",
+     "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 714 699 699"
+    },
+    {
+     "accession": "0000950170-24-126450",
+     "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 738 724 738"
+    },
+    {
+     "accession": "0001193125-26-116342",
+     "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 868 856 863"
+    },
+    {
+     "accession": "0001193125-26-345216",
+     "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 926 914 791"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-punctuation-differs-from-page",
+   "outcome": "supported",
+   "rationale": "rfjcd publishes 'Firebird Co-Invest L.P' on the first L.P. interest at 2026-03-31 and 2026-06-30 and 'Firebird Co-Invest L.P.' on the second; the page prints 'L.P.'. Entity unchanged; punctuation only; not_feasible is a fair call given the rule's deliberate tolerance.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Firebird Co-Invest L.P. L.P. Interest - 434 582 Firebird Co-Invest L.P. L.P. Interest - - 8 434 590"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-assets-concept-not-mapped",
+   "outcome": "supported",
+   "rationale": "Net assets on the page ($843,166 thousand at 2026-06-30) come from the highlights wrapper; the shared map gap is real per the report and the proposed 'investments but no net assets' check has no obvious false positive.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Commitments and contingencies (Note 9) Total net assets $ 843,166 $ 677,000"
+    }
+   ]
+  },
+  {
+   "observation_key": "nav-per-share-tagged-on-tender-offer-percent",
+   "outcome": "supported",
+   "rationale": "rfjcd fund_financials publishes NAV per share 14.43 (2025-12-31), 14.38 (2026-03-31), 14.30 (2026-06-30), the printed figures, not the tender-offer percentages. The proposed NAV-vs-net-assets/shares consistency check is direct.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221855",
+     "text": "Net asset value per share $ 14.38 $ 14.43"
+    },
+    {
+     "accession": "0001193125-26-221855",
+     "text": "which represents 3.87 % of the net asset value as of December 31, 2025"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-holds-affiliation-abbreviation",
+   "outcome": "supported",
+   "rationale": "No rfjcd issuer name begins with 'NCNA' or an affiliation prefix (0 rows). The shared-leading-words check is specific to the failure.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "World Insurance Associates, LLC First Lien Delayed Draw Term Loan S + 5.00 % 4/3/2030 3,553 3,535 3,553"
+    }
+   ]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "Dash rows are published at fair value 0 with the printed negative cost (e.g. the B01 twins at 2024-12-31); B01 is the existing detector and caught them in the earlier untouched build.",
+   "evidence": [
+    {
+     "accession": "0001959604-25-000006",
+     "text": "Trystar, LLC First Lien Delayed Draw Term Loan S + 4.50 % 8/6/2031 - ( 29 ) - 17"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed",
+   "outcome": "supported",
+   "rationale": "rfjcd publishes CORRA for Spruce's 'C +' CAD loan and TONA for its 'T +' JPY loan in every quarter, EURIBOR for Titan's euro lines; the enumeration-tag comparison proposed is exact where filed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221855",
+     "text": "Spruce Bidco II Inc. First Lien Term Loan C + 4.75 % 1/30/2032 CAD 525 358 378"
+    },
+    {
+     "accession": "0001193125-25-280633",
+     "text": "Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 56,444 360 382"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "rfjcd: Spruce CAD 524-529 thousand and JPY 56,020-56,586 thousand carry CAD/JPY with USD par near fair value in every quarter; Titan 2026-06-30 dollar revolver USD 235,000, euro lines EUR. X06 is a fair existing detector for the yen case; the reverse case is covered by the suggested check.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280633",
+     "text": "Spruce Bidco II Inc. First Lien Term Loan T + 5.25 % 2/2/2032 JPY 56,444 360 382"
+    },
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Titan Luxco I SARL First Lien Revolver S + 5.00 % 6/12/2031 235 233 235"
+    }
+   ]
+  },
+  {
+   "observation_key": "operating-company-lp-interest-classed-as-fund",
+   "outcome": "supported",
+   "rationale": "Firebird interests are EQUITY_COMMON in every quarter of rfjcd including 2026-03-31 and 2026-06-30 ('L.P Interest'). The chain-stability check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "L.P. Interests Commercial Services & Supplies Firebird Co-Invest L.P. L.P. Interest - 434 582"
+    }
+   ]
+  },
+  {
+   "observation_key": "asset-class-from-industry-text-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Atlas US Finco is PRIVATE_CREDIT in all 10 rfjcd rows (2025-06-30 to 2026-06-30). The position-chain class check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Titan Luxco I SARL First Lien Revolver S + 5.00 % 6/12/2031 235 233 235"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-on-a-second-context-of-the-member",
+   "outcome": "supported",
+   "rationale": "Confirmed: C_d0080acf carries only InvestmentOwnedBalancePrincipalAmount 1,746,000; the position row publishes 1,746 shares. One correction to the observation's reasoning: the unit is stated on the page, whose header reads 'In thousands, except for share and per share data', so 1,746 shares is the printed count and the tag's 1,746,000 is the wrongly scaled one.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Red Griffin TopCo, LLC Common Stock 1,746 8,435 7,429 8,435 7,429"
+    },
+    {
+     "accession": "0000950170-25-071600",
+     "text": "Consolidated Schedule of Investments (Unaudited) December 31, 2024 (In thousands, except for share and per share data)"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-per-share-period-to-date-in-quarter",
+   "outcome": "supported",
+   "rationale": "Confirmed in rfjcd fund_financials: 0.24305 at 2024-06-30 = (0.1295 + 0.3566) / 2, not the quarter's 0.3566; 2024-03-31 null. The equality test against the YTD average is specific.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-044452",
+     "text": "May 13, 2024 May 28, 2024 June 6, 2024 0.3566 4,376"
+    }
+   ]
+  },
+  {
+   "observation_key": "spread-includes-pik-no-all-in-rate",
+   "outcome": "supported",
+   "rationale": "rfjcd: 1,946 of 1,955 loan rows have no interest_rate; the schedule prints only benchmark and spread (e.g. Firebird Acquisition 'S + 5.00 % (includes 2.75 % PIK)'). not_feasible is right; deriving a coupon would be a product decision.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "Firebird Acquisition Corp, Inc First Lien Term Loan S + 5.00 % (includes 2.75 % PIK) 2/2/2032 11,791 11,743 11,791"
+    }
+   ]
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-f",
+   "outcome": "supported",
+   "rationale": "Point (d). SEKO 2026-06-30 prints 'S + 7.00 % PIK' with no rate column; rfjcd publishes spread 7.0, pik 7.0 (identifier_text). Par 3,701 (2025-06-30) -> 3,807 -> 3,913 -> 4,020 -> 4,129 grows 2.7 to 2.9 pct a quarter, about (SOFR + 7)/4; 5.00 pct PIK would give 1.25 pct. So from 2025-09-30 the whole coupon looks paid in kind while the lines print 'includes 5.00 % PIK' and publish pik 5.0: published pik likely understates on 4 rows, and no printed coupon exists to publish under D-232. Recorded as source ambiguity, which is the honest call. The listing detector is concrete; it should also list rows whose par growth exceeds the printed PIK (the 2025-09-30 to 2026-03-31 rows), not only lines without 'includes'.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "SEKO Global Logistics Network, LLC First Lien Term Loan, Last-out S + 7.00 % PIK 5/27/2030 4,129 3,960 4,129"
+    },
+    {
+     "accession": "0001193125-25-280633",
+     "text": "Global Logistics Network, LLC First Lien Term Loan, Last-out S + 7.00 % (includes 5.00 % PIK) 5/27/2030 3,807 3,615"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rfjc-1",
+   "outcome": "supported",
+   "rationale": "Verification-tooling defect, correctly classified and safely deferred. Read make_row_corrections.py: the JEFFERIES_LOOP block appends specs without registering spec_context, so the 9 specs that carry correction_context are written without src_context_id. Impact today is nil: rfjcd has 59 Jefferies lines, 59 applied, 0 unmatched, 0 'matches 2 rows', and all 1,981 rows are parent_schedule (no JV or subsidiary schedule that could hold a twin). Batching with the Bain helper crash is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-345216",
+     "text": "KL Stockton Intermediate II, LLC First Lien Term Loan 13.00 % PIK 5/23/2031 926 914 791"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "Clean findings are not proof the data is correct: none of these checks would see a wrong rate on a row the page prints the same way, or offsetting errors in totals.",
+  "SEKO last-out 2025-09-30 to 2026-03-31: par growth implies whole-coupon PIK while pik_rate publishes the printed 5.00; and Seko 2025-03-31 publishes a spread/PIK pair that matches neither reading. Both left as source ambiguity by the agent.",
+  "entity_id differs from rgA5 on 518 rows and canonical_name on 81; 515 and 78 of those already differ in the untouched rfjca (build drift). declared_changes does not list either column."
+ ]
+}

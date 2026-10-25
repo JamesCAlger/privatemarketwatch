@@ -7,7 +7,7 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 
 | Field | n | Published wrong | of which tag | of which pipeline | Tag wrong (any) | wrong label | wrong value | wrong row | untagged |
 |---|---|---|---|---|---|---|---|---|---|
-| row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 1 | 0 | 0 | 0 |
+| row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | issuer_name | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | instrument_and_class | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | fair_value | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
@@ -23,12 +23,12 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 
 | Fund | cards | cards with any published error | with any tag error |
 |---|---|---|---|
-| 0001959604 | 20 | 0.0% (0.0-16.1) | 35.0% (18.1-56.7) |
+| 0001959604 | 20 | 0.0% (0.0-16.1) | 30.0% (14.5-51.9) |
 
 | Era | cards | with any published error | with any tag error |
 |---|---|---|---|
 | to 2023-12-31 | 0 | - | - |
-| 2024 on | 20 | 0.0% (0.0-16.1) | 35.0% (18.1-56.7) |
+| 2024 on | 20 | 0.0% (0.0-16.1) | 30.0% (14.5-51.9) |
 
 Published errors: 0
 
