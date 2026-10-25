@@ -1069,6 +1069,102 @@
    "next_action": "proposal PD-merged_context_excluded-1885968-3 (reason merged-context-value-equals-printed-row)"
   },
   {
+   "finding_id": "RVQ_BLK_46156b064369",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-277734/ROW-7955a2058b121527"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-277734/ROW-7955a2058b121527"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 1,992 0.18"
+    },
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,124 0.20"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Continental Battery Company (5) (10) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,740 0.24"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "(13) Investment was on non-accrual status as of September 30, 2025"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "published pik_rate is not the printed PIK figure: true by design; after the pik_printed repair (d7df345, D-235) only this row is flagged in 2025-09-30 (shadow/page_rule_findings.csv of rftsc), the five benchmark-form rows of the quarter now pass the rule; the row matches its printed line in the cached filing (pik_lines.py)",
+    "Continental Battery 2025-09-30 (ROW-7955a2058b121527) prints '7.00 % PIK 11.29 %' with no benchmark, so the benchmark form does not apply on its own line; it is on non-accrual (footnote 13) with par flat at 6,473, so there is no par-growth evidence. The reading rests on the same loan's lines either side: 2025-06-30 and 2025-12-31 print 'S + 7.00 % PIK 11.29 %' with the same coupon, par, cost and maturity; the 2025-09-30 line is that loan with the benchmark cell left blank",
+    "pik_rate published wrong by the correction: rejected, 11.29 equals the printed coupon (gen_pik_rf.py asserts it); the filer's XBRL tags 0.07 (the margin) as the PIK rate, so the correction overrides the tag by inference"
+   ],
+   "next_action": "proposal PD-pik_printed-1885968-5 (reason pik-printed-whole-coupon-pik-no-benchmark-on-row): the 2025-09-30 finding left PD-pik_printed-1885968-4 under D-232 because Continental Battery prints no benchmark on its own line; it waits for the owner's separate ruling on that row"
+  }
+ ],
+ "tests_run": [
+  "none: no code changed (row-correction specs and proposals only)"
+ ],
+ "not_done": [
+  "Full test suite and semantic diff not run (no code changed).",
+  "Long Term Care Group 2024-03-31 printed 'S + 7.00 % (incl. 7.00 % PIK)' publishes pik_rate 7.00 and a cash leg: whether the base rate is cash is not settled by the page; not changed, par growth not checked.",
+  "pik_rate meaning for 'S + m % PIK' rests on the whole-coupon convention (D-218 precedent), not an owner ruling: RFTS-R1.",
+  "Equity class check only for preferred vs common; warrants are published EQUITY_COMMON fund-wide and cohort-wide (r14.sql on rgA4), treated as the convention.",
+  "Industry/GICS not compared with the printed headings beyond the 9 renamed rows (extracted_industry already the printed heading there); non-accrual flags, percent of net assets and reference-rate codes not scanned.",
+  "Abracon Borrower 2026-06-30: the affiliate note lists Abracon Group Holding as non-controlled/affiliated; whether the schedule rows changed affiliation section was not checked.",
+  "field_scan.py/equity_scan.py cover rows with a unique printed row (5,721 of 5,726); the 5 others are 4 money-market rows and BP Purchaser 2025-12-31 (read by hand).",
+  "Process slips: one `python -c \"\"` (during the rftsa build) and one bare `python -c` (failed at once); no process left."
+ ],
+ "request_resolution_history": [
+  {
+   "request_id": "RFTS-R1",
+   "classification": "acceptance_change",
+   "resolution": "implemented",
+   "response": "deferred to the owner: an acceptance change (whether pik_printed should accept a pik_rate equal to the printed coupon on loans printed \"S + m % PIK\" whose whole coupon is paid in kind) is the owner's decision. Nothing implemented in the rule; the 54 printed-coupon pik_rate corrections stay (precedent D-218 Commonwealth, Silver Capital) and the 12 pik_printed findings stay outstanding with proposal PD-pik_printed-1885968-4 under the existing reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan. Orchestrator recommendation (a): accept a pik_rate equal to the printed coupon where the PIK figure follows a benchmark code and par growth matches the coupon. If the owner rules (b) instead, the 54 corrections are withdrawn. AMENDED: owner ruled 2026-10-25 (D-232): \"accept both recommendations, (b) for HPS and (a) for T Series\", scope all three funds proposing the reason. Implemented as a repair of pik_printed (commit d7df345, D-235) because a rule_problem cannot be an accepted disposition; ledger re-run on rftsc clears the 11 whole-coupon quarters. Continental Battery 2025-09-30 (no benchmark printed) stays outstanding under PD-pik_printed-1885968-5 for a separate ruling.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-231; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "RFTS-R1",
+    "file": "pipeline/candidate_rules.py",
+    "classification": "acceptance_change",
+    "what": "pik_printed_not_published (identity/pik_printed): where the printed PIK figure follows a benchmark code ('S + 6.25 % PIK') and the row prints a coupon with no cash part, accept a published pik_rate equal to the printed coupon (whole coupon in kind), as the rule already accepts '100 % PIK'. The rule's own docstring notes this shape as a likely false alarm.",
+    "why": "54 rows here (53 flagged in 12 quarters) and the same shape at Silver Capital (Wine.com) and Commonwealth (Kent, D-218) are proposed as rule problems; the data follow the whole-coupon convention. Alternatively the owner rules on the convention for 'S + m % PIK' cohort-wide (0001646614 left it open).",
+    "quotes": [
+     {
+      "accession": "0001885968-23-000025",
+      "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+     }
+    ],
+    "next_action": "owner decision: (a) accept the convention and change the rule as above, which clears the 12 findings; or (b) rule that pik_rate holds only the printed margin, and the 54 corrections are withdrawn"
+   },
+   "evidence": [
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 11.19 % 6/30/2027 2,035 2,035 2,035 0.23"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "KWOR Acquisition, Inc. (5) (6) (19) Other Debt S + 8.00 % PIK 12.31 % 2/28/2030 2,881 2,881 2,881 0.27"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "FPG Intermediate Holdco, LLC (5) (6) (17) First Lien Debt S + 5.00 % PIK 8.84 % 07/02/2029 646 646 646 0.06"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Vardiman Black Holdings, LLC (5) (12) (13) First Lien Debt S + 7.00 % PIK 10.75 % 03/18/2027 1,185 1,172 1,185 0.10"
+    }
+   ]
+  }
+ ],
+ "cleared_by_rule_repair": [
+  {
    "finding_id": "RVQ_BLK_60d5a6636b44",
    "coverage": {
     "affected_rows": [
@@ -1095,7 +1191,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_399ed4f0227e",
@@ -1124,7 +1221,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_a792031b5668",
@@ -1159,7 +1257,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_1017b85e118a",
@@ -1194,7 +1293,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_636d9c29dd5c",
@@ -1229,7 +1329,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_36628bd42b48",
@@ -1264,7 +1365,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 0 of this quarter's rows have no par-growth evidence of their own (none) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_f9275bf2f4ba",
@@ -1311,7 +1413,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 1 of this quarter's rows have no par-growth evidence of their own (BP Purchaser 2025-03-31 (one quarter in this form)) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_6f0b9a938559",
@@ -1358,79 +1461,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 1 of this quarter's rows have no par-growth evidence of their own (Continental Battery 2025-06-30 (non-accrual)) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
-  },
-  {
-   "finding_id": "RVQ_BLK_46156b064369",
-   "coverage": {
-    "affected_rows": [
-     "0001193125-25-277734/ROW-e3e2335a04b0f455",
-     "0001193125-25-277734/ROW-96697b877998c807",
-     "0001193125-25-277734/ROW-7955a2058b121527",
-     "0001193125-25-277734/ROW-0490bfe41034ddb7",
-     "0001193125-25-277734/ROW-8cf75ede69fabd80",
-     "0001193125-25-277734/ROW-a8737e5dc31d30e9"
-    ],
-    "reviewed_rows": [
-     "0001193125-25-277734/ROW-e3e2335a04b0f455",
-     "0001193125-25-277734/ROW-96697b877998c807",
-     "0001193125-25-277734/ROW-7955a2058b121527",
-     "0001193125-25-277734/ROW-0490bfe41034ddb7",
-     "0001193125-25-277734/ROW-8cf75ede69fabd80",
-     "0001193125-25-277734/ROW-a8737e5dc31d30e9"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0001193125-25-277734",
-     "text": "KWOR Acquisition, Inc. (5) (6) (18) Other Debt S + 8.00 % PIK 12.17 % 02/28/2030 3,063 3,063 3,063 0.28"
-    },
-    {
-     "accession": "0001193125-25-277734",
-     "text": "FPG Intermediate Holdco, LLC (5) (6) First Lien Debt S + 5.00 % PIK 9.32 % 07/02/2029 917 917 917 0.08"
-    },
-    {
-     "accession": "0001193125-25-277734",
-     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 1,992 0.18"
-    },
-    {
-     "accession": "0001193125-25-277734",
-     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 9.91 % 06/30/2027 2,288 2,288 2,288 0.21"
-    },
-    {
-     "accession": "0001193125-25-277734",
-     "text": "FPG Intermediate Holdco, LLC (5) (12) First Lien Debt S + 5.00 % PIK 9.32 % 07/02/2029 3,094 3,036 3,036 0.27"
-    },
-    {
-     "accession": "0001193125-25-277734",
-     "text": "Applitools, Inc. (5) (7) (11) (14) First Lien Debt S + 6.25 % PIK 10.25 % 05/25/2029 7,763 7,706 7,685 0.69"
-    },
-    {
-     "accession": "0001885968-23-000025",
-     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
-    },
-    {
-     "accession": "0001885968-25-000018",
-     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,124 0.20"
-    },
-    {
-     "accession": "0001193125-26-085572",
-     "text": "Continental Battery Company (5) (10) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,740 0.24"
-    },
-    {
-     "accession": "0001193125-25-277734",
-     "text": "(13) Investment was on non-accrual status as of September 30, 2025"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "published pik_rate is not the printed PIK figure: true by design, the printed '% PIK' figure after the benchmark is the margin and the published pik_rate is the printed coupon; every flagged row matched to its printed line (pik_lines.py, 6 rows this quarter, all verified in the cached filing)",
-    "the PIK covers only the margin (base rate paid in cash): rejected on par growth: 39 quarter steps on these loans, 28 grow by the quarter's coupon rather than the margin, 2 (Vardiman 2026-03-31) sit below even the margin as the loan went on non-accrual, 4 are flat on non-accrual loans, 5 are delayed-draw draws or repayments (pik_growth_sum.sql); Applitools 2023-06-30 prints the coupon itself as '11.35 % PIK'",
-    "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
-    "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 1 of this quarter's rows have no par-growth evidence of their own (Continental Battery 2025-09-30 (non-accrual)) and rest on the printed format alone",
-    "Continental Battery 2025-09-30 (ROW-7955a2058b121527) differs from the other rows: its line prints '7.00 % PIK 11.29 %' with no benchmark, so 'the PIK figure after the benchmark is the margin' does not apply on its own line; it is on non-accrual (footnote 13) with par flat at 6,473, so there is no par-growth evidence either. The reading rests on the same loan's lines either side: 2025-06-30 and 2025-12-31 print 'S + 7.00 % PIK 11.29 %' with the same coupon, par, cost and maturity; the 2025-09-30 line is that loan with the benchmark cell left blank. Its benchmark and spread are left unpublished as printed. RFTS-R1's wording would not clear this row: it is argued separately in the proposal"
-   ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_63b731e0c98d",
@@ -1507,7 +1539,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 3 of this quarter's rows have no par-growth evidence of their own (Vardiman 2025-12-31, Vardiman 2025-12-31, Continental Battery 2025-12-31 (non-accrual)) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_289e7a9b7247",
@@ -1578,7 +1611,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 3 of this quarter's rows have no par-growth evidence of their own (Continental Acquisition 2026-03-31 (non-accrual), Vardiman 2026-03-31 (non-accrual), Vardiman 2026-03-31 (non-accrual)) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   },
   {
    "finding_id": "RVQ_BLK_dbf3ec9291c6",
@@ -1673,65 +1707,8 @@
     "pik_rate published wrong by the correction: rejected, each value equals the row's printed coupon (gen_pik_rf.py asserts it)",
     "evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (e.g. Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the correction overrides the tag by inference from the printed form and par growth; 6 of this quarter's rows have no par-growth evidence of their own (Vardiman 2026-06-30 (non-accrual), Diligent 2026-06-30 (new), Continental Acquisition 2026-06-30 (non-accrual), Vardiman 2026-06-30 (non-accrual), BPG Holdings IV 2026-06-30 (new, non-accrual), Diligent 2026-06-30 (new)) and rest on the printed format alone"
    ],
-   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well"
-  }
- ],
- "tests_run": [
-  "none: no code changed (row-correction specs and proposals only)"
- ],
- "not_done": [
-  "Full test suite and semantic diff not run (no code changed).",
-  "Long Term Care Group 2024-03-31 printed 'S + 7.00 % (incl. 7.00 % PIK)' publishes pik_rate 7.00 and a cash leg: whether the base rate is cash is not settled by the page; not changed, par growth not checked.",
-  "pik_rate meaning for 'S + m % PIK' rests on the whole-coupon convention (D-218 precedent), not an owner ruling: RFTS-R1.",
-  "Equity class check only for preferred vs common; warrants are published EQUITY_COMMON fund-wide and cohort-wide (r14.sql on rgA4), treated as the convention.",
-  "Industry/GICS not compared with the printed headings beyond the 9 renamed rows (extracted_industry already the printed heading there); non-accrual flags, percent of net assets and reference-rate codes not scanned.",
-  "Abracon Borrower 2026-06-30: the affiliate note lists Abracon Group Holding as non-controlled/affiliated; whether the schedule rows changed affiliation section was not checked.",
-  "field_scan.py/equity_scan.py cover rows with a unique printed row (5,721 of 5,726); the 5 others are 4 money-market rows and BP Purchaser 2025-12-31 (read by hand).",
-  "Process slips: one `python -c \"\"` (during the rftsa build) and one bare `python -c` (failed at once); no process left."
- ],
- "request_resolution_history": [
-  {
-   "request_id": "RFTS-R1",
-   "classification": "acceptance_change",
-   "resolution": "deferred",
-   "response": "deferred to the owner: an acceptance change (whether pik_printed should accept a pik_rate equal to the printed coupon on loans printed \"S + m % PIK\" whose whole coupon is paid in kind) is the owner's decision. Nothing implemented in the rule; the 54 printed-coupon pik_rate corrections stay (precedent D-218 Commonwealth, Silver Capital) and the 12 pik_printed findings stay outstanding with proposal PD-pik_printed-1885968-4 under the existing reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan. Orchestrator recommendation (a): accept a pik_rate equal to the printed coupon where the PIK figure follows a benchmark code and par growth matches the coupon. If the owner rules (b) instead, the 54 corrections are withdrawn.",
-   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-231; precedent SCI-R1 / TDL-R1",
-   "original_request": {
-    "request_id": "RFTS-R1",
-    "file": "pipeline/candidate_rules.py",
-    "classification": "acceptance_change",
-    "what": "pik_printed_not_published (identity/pik_printed): where the printed PIK figure follows a benchmark code ('S + 6.25 % PIK') and the row prints a coupon with no cash part, accept a published pik_rate equal to the printed coupon (whole coupon in kind), as the rule already accepts '100 % PIK'. The rule's own docstring notes this shape as a likely false alarm.",
-    "why": "54 rows here (53 flagged in 12 quarters) and the same shape at Silver Capital (Wine.com) and Commonwealth (Kent, D-218) are proposed as rule problems; the data follow the whole-coupon convention. Alternatively the owner rules on the convention for 'S + m % PIK' cohort-wide (0001646614 left it open).",
-    "quotes": [
-     {
-      "accession": "0001885968-23-000025",
-      "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
-     }
-    ],
-    "next_action": "owner decision: (a) accept the convention and change the rule as above, which clears the 12 findings; or (b) rule that pik_rate holds only the printed margin, and the 54 corrections are withdrawn"
-   },
-   "evidence": [
-    {
-     "accession": "0001885968-23-000025",
-     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
-    },
-    {
-     "accession": "0001885968-24-000037",
-     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 11.19 % 6/30/2027 2,035 2,035 2,035 0.23"
-    },
-    {
-     "accession": "0001885968-25-000009",
-     "text": "KWOR Acquisition, Inc. (5) (6) (19) Other Debt S + 8.00 % PIK 12.31 % 2/28/2030 2,881 2,881 2,881 0.27"
-    },
-    {
-     "accession": "0001193125-26-085572",
-     "text": "FPG Intermediate Holdco, LLC (5) (6) (17) First Lien Debt S + 5.00 % PIK 8.84 % 07/02/2029 646 646 646 0.06"
-    },
-    {
-     "accession": "0001193125-26-344703",
-     "text": "Vardiman Black Holdings, LLC (5) (12) (13) First Lien Debt S + 7.00 % PIK 10.75 % 03/18/2027 1,185 1,172 1,185 0.10"
-    }
-   ]
+   "next_action": "proposal PD-pik_printed-1885968-4 (reason pik-printed-rule-reads-margin-of-whole-coupon-pik-loan, as Silver Capital); RFTS-R1 (deferred to the owner, see request_resolution_history) covers the benchmark form; the Continental 2025-09-30 row printed without a benchmark is argued separately in the proposal and would need the owner's ruling as well",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235"
   }
  ]
 }

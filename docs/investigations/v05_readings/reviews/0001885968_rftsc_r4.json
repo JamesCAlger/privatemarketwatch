@@ -1,0 +1,512 @@
+{
+ "reviewer_id": "independent-reviewer-rftsc-r4-0001885968 (claude-opus-5-5 general-purpose subagent, 2026-10-25)",
+ "report_digest": "4ca1d1c71eb082fb0f0aba449cf5a27c1e7d605af1178b8dfd0b4282487b071e",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_46156b064369",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": false,
+   "rationale": "Coverage no longer matches the rule. After the D-232 repair (d7df345) and the ledger re-run, shadow/page_rule_findings.csv in rftsc flags exactly one row for 2025-09-30, Continental Battery ROW-7955a2058b121527 (kind pik_value_mismatch). The investigation still declares six affected and reviewed rows; the other five (Applitools ROW-a8737e5dc31d30e9, FPG ROW-0490bfe41034ddb7 / ROW-8cf75ede69fabd80, KWOR ROW-e3e2335a04b0f455, Sweep Purchaser ROW-96697b877998c807) now pass the repaired rule and are not in the flagged population (reconstruct_c.py: claimed 6, actual 1). Its first hypothesis still says 'every flagged row matched ... 6 rows this quarter', and PD-pik_printed-1885968-5 still says 'The finding covers six rows at 2025-09-30' and argues the five benchmark rows. The substance on the remaining row is supported and unchanged from my r3 review: the line prints '7.00 % PIK 11.29 %' with no benchmark, footnote (13) puts it on non-accrual as of September 30, 2025, par is flat at 6,473, and the reading rests on the same loan's 2025-06-30 and 2025-12-31 lines ('S + 7.00 % PIK 11.29 %', same coupon, par, cost and maturity); the tag is 0.07. The next_action (split to PD-5, separate owner ruling) is right. Fix: set affected_rows and reviewed_rows to the one Continental row, update the first hypothesis, and restate PD-pik_printed-1885968-5 as covering one flagged row (the five benchmark rows passed the repaired rule).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 1,992 0.18"
+    },
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,124 0.20"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Continental Battery Company (5) (10) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,740 0.24"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_05953cc5a4a2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: X02 in rftsc flags exactly the two Sweep Midco, LLC second-lien lines for 2025-03-31 (par 580 cost 290; undrawn 1,686), identical to affected_rows. Source: neither printed line carries a benchmark, spread or rate, and the XBRL contexts hold no rate or spread fact on the context or its siblings (filing_grep.py xml, 2024-03-31 c-340 and 2025-09-30 C_9748b345). The row is published as printed. PD-X02-1885968-2 supported as a reason.",
+   "evidence": [
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Sweep Midco, LLC (5) (6) (10) (11) (17) Second Lien Debt 03/12/2034 580 290 288 0.03"
+    },
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Sweep Midco, LLC (5) (6) (10) (11) (17) Second Lien Debt 03/12/2036 1,686 - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_224b976b1332",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter check; the one affected row is fund_financials income_yield_pct 2023-06-30, as declared (reconstruct_c.py on rftsc: 29 of 29 populations equal). Source: the filer prints 'Ratio of net investment income to average Members Capital (4) 13.79 % 9.71 %' and fund_financials.csv publishes the first figure; footnote (4) says amounts are annualized. F27 compares that return on members' capital with the holdings' coupon (gap 2.61 pp against 2.0). The same table prints total expenses at 7 to 11 pct of members' capital, so gross income is about 20 to 25 pct of capital, which at 1.8 to 1.9x capital invested is an 11 to 13 pct asset yield, in line with the coupons: the excess is leverage arithmetic. interest_rate is unchanged in rftsc (the PIK round moved pik_rate and the cash leg only), so the check's WAC input is the same as in rftsb. PD-F27-1885968-1 supported as a reason; acceptance stays with a check or the owner.",
+   "evidence": [
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.79 % 9.71 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_27779925ad4e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter check; the one affected row is fund_financials income_yield_pct 2023-09-30, as declared (reconstruct_c.py on rftsc: 29 of 29 populations equal). Source: the filer prints 'Ratio of net investment income to average Members Capital (4) 13.63 % 10.49 %' and fund_financials.csv publishes the first figure; footnote (4) says amounts are annualized. F27 compares that return on members' capital with the holdings' coupon (gap 2.22 pp against 2.0). The same table prints total expenses at 7 to 11 pct of members' capital, so gross income is about 20 to 25 pct of capital, which at 1.8 to 1.9x capital invested is an 11 to 13 pct asset yield, in line with the coupons: the excess is leverage arithmetic. interest_rate is unchanged in rftsc (the PIK round moved pik_rate and the cash leg only), so the check's WAC input is the same as in rftsb. PD-F27-1885968-1 supported as a reason; acceptance stays with a check or the owner.",
+   "evidence": [
+    {
+     "accession": "0001885968-23-000035",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.63 % 10.49 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_289db9a49bc1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter check; the one affected row is fund_financials income_yield_pct 2026-06-30, as declared (reconstruct_c.py on rftsc: 29 of 29 populations equal). Source: the filer prints 'Ratio of net investment income to average Members Capital (4) 11.09 % 11.54 %' and fund_financials.csv publishes the first figure; footnote (4) says amounts are annualized. F27 compares that return on members' capital with the holdings' coupon (gap 2.16 pp against 2.0). The same table prints total expenses at 7 to 11 pct of members' capital, so gross income is about 20 to 25 pct of capital, which at 1.8 to 1.9x capital invested is an 11 to 13 pct asset yield, in line with the coupons: the excess is leverage arithmetic. interest_rate is unchanged in rftsc (the PIK round moved pik_rate and the cash leg only), so the check's WAC input is the same as in rftsb. PD-F27-1885968-1 supported as a reason; acceptance stays with a check or the owner.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Ratio of net investment income to average Members Capital (4) 11.09 % 11.54 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3963ab10c11b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter check; the one affected row is fund_financials income_yield_pct 2024-03-31, as declared (reconstruct_c.py on rftsc: 29 of 29 populations equal). Source: the filer prints 'Ratio of net investment income to average Members Capital (4) 13.94 % 14.88 %' and fund_financials.csv publishes the first figure; footnote (4) says amounts are annualized. F27 compares that return on members' capital with the holdings' coupon (gap 2.59 pp against 2.0). The same table prints total expenses at 7 to 11 pct of members' capital, so gross income is about 20 to 25 pct of capital, which at 1.8 to 1.9x capital invested is an 11 to 13 pct asset yield, in line with the coupons: the excess is leverage arithmetic. interest_rate is unchanged in rftsc (the PIK round moved pik_rate and the cash leg only), so the check's WAC input is the same as in rftsb. PD-F27-1885968-1 supported as a reason; acceptance stays with a check or the owner.",
+   "evidence": [
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.94 % 14.88 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_39bd81ca961a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter check; the one affected row is fund_financials income_yield_pct 2023-03-31, as declared (reconstruct_c.py on rftsc: 29 of 29 populations equal). Source: the filer prints 'Ratio of net investment income to average Members Capital (4) 14.88 % 9.03 %' and fund_financials.csv publishes the first figure; footnote (4) says amounts are annualized. F27 compares that return on members' capital with the holdings' coupon (gap 4.02 pp against 2.0). The same table prints total expenses at 7 to 11 pct of members' capital, so gross income is about 20 to 25 pct of capital, which at 1.8 to 1.9x capital invested is an 11 to 13 pct asset yield, in line with the coupons: the excess is leverage arithmetic. interest_rate is unchanged in rftsc (the PIK round moved pik_rate and the cash leg only), so the check's WAC input is the same as in rftsb. PD-F27-1885968-1 supported as a reason; acceptance stays with a check or the owner.",
+   "evidence": [
+    {
+     "accession": "0001885968-23-000017",
+     "text": "Ratio of net investment income to average Members Capital (4) 14.88 % 9.03 %"
+    },
+    {
+     "accession": "0001885968-23-000017",
+     "text": "Asset coverage ratio 175.59 % 190.67 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5cc228d32ddd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter check; the one affected row is fund_financials income_yield_pct 2024-09-30, as declared (reconstruct_c.py on rftsc: 29 of 29 populations equal). Source: the filer prints 'Ratio of net investment income to average Members Capital (4) 13.52 % 13.63 %' and fund_financials.csv publishes the first figure; footnote (4) says amounts are annualized. F27 compares that return on members' capital with the holdings' coupon (gap 3.08 pp against 2.0). The same table prints total expenses at 7 to 11 pct of members' capital, so gross income is about 20 to 25 pct of capital, which at 1.8 to 1.9x capital invested is an 11 to 13 pct asset yield, in line with the coupons: the excess is leverage arithmetic. interest_rate is unchanged in rftsc (the PIK round moved pik_rate and the cash leg only), so the check's WAC input is the same as in rftsb. PD-F27-1885968-1 supported as a reason; acceptance stays with a check or the owner.",
+   "evidence": [
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.52 % 13.63 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_617c992cbb0c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: X02 in rftsc flags exactly the two Sweep Midco, LLC second-lien lines for 2024-09-30 (par 580 cost 290; undrawn 1,686), identical to affected_rows. Source: neither printed line carries a benchmark, spread or rate, and the XBRL contexts hold no rate or spread fact on the context or its siblings (filing_grep.py xml, 2024-03-31 c-340 and 2025-09-30 C_9748b345). The row is published as printed. PD-X02-1885968-2 supported as a reason.",
+   "evidence": [
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Sweep Midco, LLC (5) (6) (10)(14) Second Lien Debt 3/12/2034 580 290 290 0.03"
+    },
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Sweep Midco, LLC (5) (6) (10)(14) Second Lien Debt 3/12/2036 1,686 - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_681e9e90d296",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: X02 in rftsc flags exactly the two Sweep Midco, LLC second-lien lines for 2025-09-30 (par 580 cost 290; undrawn 1,686), identical to affected_rows. Source: neither printed line carries a benchmark, spread or rate, and the XBRL contexts hold no rate or spread fact on the context or its siblings (filing_grep.py xml, 2024-03-31 c-340 and 2025-09-30 C_9748b345). The row is published as printed. PD-X02-1885968-2 supported as a reason.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Sweep Midco, LLC (5) (10) Second Lien Debt 03/12/2034 580 290 363 0.03"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Sweep Midco, LLC (5) (10) Second Lien Debt 03/12/2036 1,686 - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6eef182a98ec",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: X02 in rftsc flags exactly the two Sweep Midco, LLC second-lien lines for 2024-03-31 (par 580 cost 290; undrawn 1,686), identical to affected_rows. Source: neither printed line carries a benchmark, spread or rate, and the XBRL contexts hold no rate or spread fact on the context or its siblings (filing_grep.py xml, 2024-03-31 c-340 and 2025-09-30 C_9748b345). The row is published as printed. PD-X02-1885968-2 supported as a reason.",
+   "evidence": [
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Sweep Midco LLC (4) (5) (9) (15) 3/12/2034 580 290 290 0.03"
+    },
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Sweep Midco LLC (4) (5) (9) (15) 3/12/2036 1,686 $ - $ - - %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_84dbd4c33342",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: X02 in rftsc flags exactly the two Sweep Midco, LLC second-lien lines for 2024-06-30 (par 580 cost 290; undrawn 1,686), identical to affected_rows. Source: neither printed line carries a benchmark, spread or rate, and the XBRL contexts hold no rate or spread fact on the context or its siblings (filing_grep.py xml, 2024-03-31 c-340 and 2025-09-30 C_9748b345). The row is published as printed. PD-X02-1885968-2 supported as a reason.",
+   "evidence": [
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 3/12/2034 580 290 290 0.03"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 3/12/2036 1,686 - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8d259e52fc79",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: X02 in rftsc flags exactly the two Sweep Midco, LLC second-lien lines for 2024-12-31 (par 580 cost 290; undrawn 1,686), identical to affected_rows. Source: neither printed line carries a benchmark, spread or rate, and the XBRL contexts hold no rate or spread fact on the context or its siblings (filing_grep.py xml, 2024-03-31 c-340 and 2025-09-30 C_9748b345). The row is published as printed. PD-X02-1885968-2 supported as a reason.",
+   "evidence": [
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 03/12/2034 580 290 376 0.04"
+    },
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Sweep Midco, LLC (5) (10) (14) Second Lien Debt 03/12/2036 1,686 - - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9447d4353db5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: the one BP Purchaser, LLC common-equity row of 2025-12-31 (context C_9efc79bf), as declared. Source: the cached XML dates C_9efc79bf <instant>2025-09-30</instant> but it holds cost 1,379,000, fair value 0 and percent 0, the year-end figures (the 2025-09-30 10-Q printed fair value 659 for this line), so it is misdated; units 1,383,156 sit on the member's 2025-12-31 context. The published row equals the printed line; the re-verifier cannot replay a merge of two contexts. PD-merged_context_excluded-1885968-3 supported as a reason.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-085572",
+     "text": "BP Purchaser, LLC (5) (15) (16) Common Equity 12/10/2021 1,383,156 1,379 - -"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "BP Purchaser, LLC (5) (14) (15) Common Equity 12/10/2021 1,383,156 1,379 659 0.06"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9b2b90cf3869",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter check; the one affected row is fund_financials income_yield_pct 2024-12-31, as declared (reconstruct_c.py on rftsc: 29 of 29 populations equal). Source: the filer prints 'Ratio of net investment income to average Members Capital (4) 12.83 % 13.33 % 11.19 % 0.71 %' and fund_financials.csv publishes the first figure; footnote (4) says amounts are annualized. F27 compares that return on members' capital with the holdings' coupon (gap 2.89 pp against 2.0). The same table prints total expenses at 7 to 11 pct of members' capital, so gross income is about 20 to 25 pct of capital, which at 1.8 to 1.9x capital invested is an 11 to 13 pct asset yield, in line with the coupons: the excess is leverage arithmetic. interest_rate is unchanged in rftsc (the PIK round moved pik_rate and the cash leg only), so the check's WAC input is the same as in rftsb. PD-F27-1885968-1 supported as a reason; acceptance stays with a check or the owner.",
+   "evidence": [
+    {
+     "accession": "0001885968-25-000005",
+     "text": "Ratio of net investment income to average Members Capital (4) 12.83 % 13.33 % 11.19 % 0.71 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ab80cef47b11",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter check; the one affected row is fund_financials income_yield_pct 2025-03-31, as declared (reconstruct_c.py on rftsc: 29 of 29 populations equal). Source: the filer prints 'Ratio of net investment income to average Members Capital (4) 12.02 % 13.94 %' and fund_financials.csv publishes the first figure; footnote (4) says amounts are annualized. F27 compares that return on members' capital with the holdings' coupon (gap 2.29 pp against 2.0). The same table prints total expenses at 7 to 11 pct of members' capital, so gross income is about 20 to 25 pct of capital, which at 1.8 to 1.9x capital invested is an 11 to 13 pct asset yield, in line with the coupons: the excess is leverage arithmetic. interest_rate is unchanged in rftsc (the PIK round moved pik_rate and the cash leg only), so the check's WAC input is the same as in rftsb. PD-F27-1885968-1 supported as a reason; acceptance stays with a check or the owner.",
+   "evidence": [
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Ratio of net investment income to average Members Capital (4) 12.02 % 13.94 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e1832fe456ea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: fund-quarter check; the one affected row is fund_financials income_yield_pct 2024-06-30, as declared (reconstruct_c.py on rftsc: 29 of 29 populations equal). Source: the filer prints 'Ratio of net investment income to average Members Capital (4) 13.85 % 13.79 %' and fund_financials.csv publishes the first figure; footnote (4) says amounts are annualized. F27 compares that return on members' capital with the holdings' coupon (gap 2.73 pp against 2.0). The same table prints total expenses at 7 to 11 pct of members' capital, so gross income is about 20 to 25 pct of capital, which at 1.8 to 1.9x capital invested is an 11 to 13 pct asset yield, in line with the coupons: the excess is leverage arithmetic. interest_rate is unchanged in rftsc (the PIK round moved pik_rate and the cash leg only), so the check's WAC input is the same as in rftsb. PD-F27-1885968-1 supported as a reason; acceptance stays with a check or the owner.",
+   "evidence": [
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Ratio of net investment income to average Members Capital (4) 13.85 % 13.79 %"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Total Portfolio Investments $ 2,276,904 $ 2,216,776 188.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e31f087904ec",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Coverage: X02 in rftsc flags exactly the two Sweep Midco, LLC second-lien lines for 2025-06-30 (par 580 cost 290; undrawn 1,686), identical to affected_rows. Source: neither printed line carries a benchmark, spread or rate, and the XBRL contexts hold no rate or spread fact on the context or its siblings (filing_grep.py xml, 2024-03-31 c-340 and 2025-09-30 C_9748b345). The row is published as printed. PD-X02-1885968-2 supported as a reason.",
+   "evidence": [
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Sweep Midco, LLC (5) (10) (15) Second Lien Debt 03/12/2034 580 $ 290 $ 360 0.03"
+    },
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Sweep Midco, LLC (5) (10) (15) Second Lien Debt 03/12/2036 1,686 - - -"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Verified on the page (Bridgepointe x3 2026-06-30 under IT Services with Appfire members; Iris revolver 2025-12-31 with an HSI Halo member; Turbo Buyer 2023-09-30 with a 'Portfolio Group' member); count now five, correct. The Iris instrument text now carries its printed terms (holdings_field_diff rftsc rftsb: instrument_description 1 row). issuer_name_printed fired on all rows in rftsa. My scan of all 5,726 rows, including repeated identifiers (none in this fund), finds 9 mismatches in rftsa and 0 after the fix: the strict-scan claim holds.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Bridgepointe Technologies, LLC (5) (6) (10) (11) First Lien Debt S + 4.75 % 8.48 % 04/18/2033 9,200 9,110 9,110 0.78"
+    },
+    {
+     "accession": "0001193125-26-085572",
+     "text": "Iris Buyer, LLC (5) (6) (10) (14) (17) First Lien Debt S + 5.25 % 9.09 % 10/02/2029 - ( 7 ) ( 1 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-keeps-prior-company-name-after-rename",
+   "outcome": "supported",
+   "rationale": "Verified: 2026-06-30 prints 'Abracon Borrower, LLC' (two lines) and 'FPG Intermediate Holdco, LLC' on the 06/29/2029 line; 2025-09-30 prints 'FPG Intermediate Holdco, LLC' on the equity with an 'LFPG' member. Four rows, as 'what' now says, and the detection rationale now says 'all four rows' (Abracon x2, FPG Holdings III, LFPG), matching shadow/page_rule_findings.csv in rftsa. The existing detector covers recurrence.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Abracon Borrower, LLC (5) (17) (18) First Lien Debt S + 5.50 % 9.38 % 06/10/2030 21 - - -"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "FPG Intermediate Holdco, LLC (5) (15) (16) Common Equity 07/18/2025 8,121 - - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-printed-on-the-row-and-not-tagged",
+   "outcome": "supported",
+   "rationale": "Verified: Raptor 2024-09-30 prints 9.85 % / 8.60 %; context c-261 holds only the spread; rftsc publishes the printed rates. rftsc has no loan with a spread and no interest_rate. The proposed check is specific and should have few false alarms.",
+   "evidence": [
+    {
+     "accession": "0001885968-24-000055",
+     "text": "Raptor Merger Sub Debt, LLC (5) (7) (11) First Lien Debt S + 5.50 % 9.85 % 4/1/2029 31,988 31,253 31,988 3.30"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "outcome": "supported",
+   "rationale": "Population verified: pik_pop.sql re-run on rftsb gives 52 'margin_pik_rate_plain' rows (all pik = spread) + 2 'margin_pik_rate_pik' (Applitools 2023-03-31 / 06-30) + Continental 2025-09-30 (fixed_pik shape) = 55; on rftsc all 54 corrected rows publish pik_rate = interest_rate = the printed coupon, cash 0 (pik_rows.py: every row's printed coupon equals the published value; holdings_field_diff rftsc rftsb: pik_rate 54, interest_rate_cash 54, corrected_fields 55, instrument_description 1, nothing else). Par-growth evidence verified: of the 54 rows, 39 sit on four accruing loans whose par grows by about coupon/4 (Applitools, Sweep Purchaser, KWOR, FPG); no step used as evidence carries the current non-accrual footnote (my footnote check reads each filing's '(n) Investment was on non-accrual status as of <quarter end>' legend), and delayed-draw / paydown moves are excluded. The other 15 rows (BP Purchaser 2025-03-31, Diligent x2 and BPG 2026-06-30, Continental x5, Vardiman x6, of which 10 are on non-accrual) have no growth evidence and follow the printed form. Long Term Care Group's '(incl. 7.00 % PIK)' is correctly left: its par grows 1.3 to 1.5 pct a quarter, margin/4, and the filer's 'incl.' wording is its partial-PIK form. Caveats the owner should weigh with RFTS-R1: the filer's XBRL tags the margin as InvestmentInterestRatePaidInKind on these rows (r21.sql on rftsc: 0.055 / 0.0842 / 0.07 where a tag exists; BPG and Vardiman 2025-12-31 carry none), so the corrections override the tag by inference; the owner has since accepted the reading for this fund, Silver Capital and Commonwealth (D-232, implemented as the pik_printed repair d7df345, D-235). r3 adds this evidence-strength statement to the observation, the proposal and each pik_printed investigation, with the 15 rows named (r21.sql lists 16 rows for those issuers; the 16th, Continental 2024-12-31 pik 4.08, is an earlier '(incl. 4.08 % PIK)' correction, not one of the 54). The proposed detector (pik_rate below the printed coupon while par grows by about coupon/4) is concrete and measurable.",
+   "evidence": [
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    },
+    {
+     "accession": "0001885968-24-000037",
+     "text": "Sweep Purchaser, LLC (5) (6) (10) First Lien Debt S + 5.75 % PIK 11.19 % 6/30/2027 2,035 2,035 2,035 0.23"
+    },
+    {
+     "accession": "0001885968-24-000022",
+     "text": "Long Term Care Group, Inc. (4) (6) (9) (16) S + 7.00 % (incl. 7.00 % PIK) 12.57 % 9/8/2027 11,945 11,789 9,867 1.15"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "Verified: 2026-06-30 prints and tags 250 units; earlier quarters 250,000; rftsc publishes 250,000 (derived_proxy). Cost 253 -> 271 is PIK accretion and fits either a reprint in thousands or a consolidation, so parking under units_scale_unclear (classified by pipeline/candidate_rules.py) is right.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Leaf Home, LLC (5) (15) Preferred Equity 14.00 % PIK 09/05/2025 250 271 332 0.03"
+    },
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Leaf Home, LLC (5) (15) Preferred Equity 14.00 % PIK 09/05/2025 250,000 253 323 0.03"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-at-issuer-rename",
+   "outcome": "supported",
+   "rationale": "Verified with chain.py: three Turbo chains in both builds, as the corrected text now says, with the break after 2024-03-31 in both; Iris revolver continuous from 2025-12-31; Bridgepointe undrawn line left Appfire's chain. The proposed check is concrete; refinancings are the likely false alarms.",
+   "evidence": [
+    {
+     "accession": "0001885968-24-000009",
+     "text": "Portfolio Group (4) (5) (14) S + 6.00 % 11.59 % 12/2/2025 989 938 966 0.12"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-is-commitment-on-undrawn-lines",
+   "outcome": "supported",
+   "rationale": "Verified: two Runway undrawn lines 2026-03-31 print par '-'; one publishes 0, one null; it is the only null-par undrawn loan of 1,500. No value is wrong; not_feasible is fair.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Runway Bidco, LLC (5) (8) (17) First Lien Debt S + 5.00 % 8.70 % 12/17/2031 - ( 2 ) ( 5 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "money-market-yield-published-as-spread",
+   "outcome": "supported",
+   "rationale": "Verified: one CASH row (2025-06-30, 4.18) carries a basis_spread; the page prints the 4.18 % yield. A basis_spread on a CASH row has no legitimate positive, so the proposed check is exact.",
+   "evidence": [
+    {
+     "accession": "0001885968-25-000018",
+     "text": "Government Money Market Fund - Institutional Shares 4.18 % $ 11,703 $ 11,703 1.08 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-carries-member-maturity-and-ordinal",
+   "outcome": "supported",
+   "rationale": "Verified: 1,998 rows 2025-09-30 to 2026-06-30 keep the member tail; left under D-185. The one case carrying another company's terms (Iris 2025-12-31) is now fixed. The proposed text check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Formstack Acquisition, Co. (5) (6) (10) First Lien Debt S + 5.50 % 9.50 % 03/28/2030 9,287 9,176 9,264 0.84"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-printed-not-tagged",
+   "outcome": "supported",
+   "rationale": "Verified: four Surewerx Purchaser III loan lines printed 2026-03-31 including the CAD tranche (fair value 226); three loan rows published. Below conservation tolerance, so only a per-issuer printed-row count would catch it.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Surewerx Purchaser III, Inc. (5) (7) (14) First Lien Debt C + 5.25% 7.51% 12/28/2029 C$315 228 226 0.02"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-casing-voted-across-quarters",
+   "outcome": "supported",
+   "rationale": "Verified: 'Mantech' printed, 'ManTech' published 2025-09-30 on (12 rows). Casing only; not raising it is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Mantech International CP (5) (7) (9) First Lien Debt S + 5.00 % 9.31 % 09/14/2029 18,012 17,795 18,012 1.62"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Verified: 2026-03-31 prints no rate on Sweep Midco; 0.0 is published from identifier_text; 2026-06-30 prints 0.00 % and tags it. The proposed check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219405",
+     "text": "Sweep Midco, LLC (5) (11) (16) Second Lien Debt 03/12/2034 580 290 372 0.03"
+    },
+    {
+     "accession": "0001193125-26-344703",
+     "text": "Sweep Midco, LLC (5) (11) Second Lien Debt 0.00 % 03/12/2034 580 290 204 0.02"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-leg-float-residue-from-unrounded-subtraction",
+   "outcome": "supported",
+   "rationale": "Reconciled: six rows, not seven. r20.sql on rftsc and my own pik_rows.py listing both give exactly six rows with 0 < |interest_rate_cash| < 1e-6: Applitools 2025-03-31, 2025-06-30, 2026-06-30, BP Purchaser 2025-03-31, Continental Acquisition 2026-06-30, Sweep Purchaser 2026-06-30 (each +/-1.78e-15). My rftsc review miscounted. Mechanism checked: on each row interest_rate keeps the tag's float (10.549999999999999, 9.950000000000001, ...) while the corrected pik_rate is the printed two-decimal value, so the unrounded subtraction leaves the residue; the other 48 corrected rows subtract to exactly 0.0. Leaving it is acceptable (well below any displayed precision); a row correction on the derived field is not available and plugging pik_rate to the float would hide the mechanism. The proposed check (a non-zero rate field below 1e-9 in absolute size) is exact and has no legitimate positives; rounding in the shared subtraction is the real fix.",
+   "evidence": [
+    {
+     "accession": "0001885968-25-000009",
+     "text": "Applitools, Inc. (5) (7) (11) (14) First Lien Debt S + 6.25 % PIK 10.55 % 05/25/2029 8,577 8,501 8,523 0.80"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "RFTS-R1",
+   "outcome": "supported",
+   "rationale": "The amended entry is accurate against the record: the appended text quotes the owner verbatim as in D-232 ('accept both recommendations, (b) for HPS and (a) for T Series', scope all three funds), states the implementation route that D-233/D-235 record (repair of pik_printed in commit d7df345 because a rule_problem cannot be an accepted disposition, rather than the owner_queue accept D-232 first names), and states the result I measured on rftsc (the 11 whole-coupon quarters cleared; Continental Battery 2025-09-30 still flagged under PD-pik_printed-1885968-5 for a separate ruling). The original request, quotes and evidence are unchanged from r3. One cosmetic point: the 'resolution' field still reads 'deferred' although the amendment records the owner's ruling; a reader of the field alone would miss it. The 54 corrections now rest on the owner's ruling, not only on the orchestrator's recommendation.",
+   "evidence": [
+    {
+     "accession": "0001885968-23-000025",
+     "text": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93"
+    },
+    {
+     "accession": "0001193125-25-277734",
+     "text": "Continental Battery Company (5) (11) (12) (13) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 1,992 0.18"
+    }
+   ]
+  }
+ ],
+ "notes": [
+  "Ledger rftsc (13:48, after the D-232 repair d7df345 and the shadow -> ledger re-run): 55 findings, 18 outstanding (F27 x9, X02 x7, merged_context_excluded 1, pik_printed 2025-09-30 1). The 11 cleared pik_printed findings are absent from the ledger (the rule no longer emits them), not dispositioned. shadow/page_rule_findings.csv holds one row: Continental Battery 2025-09-30.",
+  "Cleared for the right reason: the repaired rule passes a row whose printed line has '<benchmark> + m % PIK' and whose pik_rate equals a printed non-PIK percent above m. pik_rows.py on rftsc vs rftsb: 53 of the 54 corrected rows print 'S + | m% PIK | c%' with pik_rate = interest_rate = c > m (the 52 previously flagged rows plus Applitools 2023-06-30, which was never flagged); the 54th, Continental 2025-09-30, has no benchmark and is the one row still flagged. The holdings did not change (parquet 11:41; holdings_field_diff rftsc rftsb still pik_rate 54, interest_rate_cash 54, corrected_fields 55, instrument_description 1), so nothing else could have cleared them.",
+  "BLOCKER outside this file: the report still carries investigations for the 11 cleared findings, so the gate reports 11 orphan investigations whatever this review says. The fund agent must drop them (or the orchestrator must, per the contract) before the investigation check can pass.",
+  "PD-pik_printed-1885968-4 (11 quarters, 47 rows, 14 without growth evidence, 9 on non-accrual): counts correct (53 - 6 = 47; 15 - 1 = 14; 10 - 1 = 9), every row prints the benchmark on its own line. It no longer has an outstanding finding to dispose of (the repair cleared them); it now stands as the record of the reason only.",
+  "PD-pik_printed-1885968-5 (2025-09-30): the Continental argument is accurate, but the statement still describes six rows; the flagged finding is now one row. See the rejection of RVQ_BLK_46156b064369.",
+  "Unchanged since r3 (json_diff of the current report against the pre-defer copy shows the r3 edit set plus the PD-5 next_action and the history amendment only); F27 x9, X02 x7 and merged_context populations equal on rftsc. A copy of the report reviewed here is kept at scratch/2026-10-25_fix_run/review_ts/report_reviewed_r4.json.",
+  "All-clear caveat: these checks do not detect a change in a field's meaning, a wrong rate on the right row, or offsetting errors."
+ ]
+}

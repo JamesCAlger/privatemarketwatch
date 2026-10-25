@@ -310,12 +310,11 @@
     "2024-12-31",
     "2025-03-31",
     "2025-06-30",
-    "2025-09-30",
     "2025-12-31",
     "2026-03-31",
     "2026-06-30"
    ],
-   "statement": "The 53 flagged rows are loans printed 'S + m % PIK <coupon> %' (Applitools, Sweep Purchaser, BP Purchaser, KWOR, Continental Battery / Acquisition, FPG Intermediate Holdco, Vardiman Black, BPG Holdings IV, Diligent): the whole floating coupon is paid in kind. On accruing loans the printed par grows each quarter by the coupon, not the margin (39 quarter steps: 28 nearer the coupon; 2 nearer the margin, both Vardiman 2026-03-31 at +0.96 and +0.34 pct, below even the margin, the quarter it went on non-accrual; 4 flat on non-accrual loans; 5 delayed-draw draws or repayments; pik_growth_sum.sql). Under the convention used for Kent (D-218) and Wine.com (Silver Capital), the build publishes pik_rate = the printed coupon, basis_spread = the margin and interest_rate_cash 0. The rule reads the margin printed before 'PIK' as the PIK rate and flags the difference: a rule problem, not a data error. Fixed rows: 54 row corrections from the printed lines. Evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the corrections override the tag by inference from the printed form and par growth; 15 of the 54 corrected rows have no par-growth evidence of their own and rest on the printed format alone (BP Purchaser 2025-03-31, Diligent x2 and BPG 2026-06-30, Continental x5, Vardiman x6; 10 on non-accrual). One row differs in kind: Continental Battery 2025-09-30 prints '7.00 % PIK 11.29 %' with no benchmark and is on non-accrual (footnote 13, par flat at 6,473), so neither the benchmark form nor par growth applies on its own line; it is read from the same loan's 2025-06-30 and 2025-12-31 lines, which print 'S + 7.00 % PIK 11.29 %' with the same coupon, par, cost and maturity. RFTS-R1's wording would not clear this row; it needs the owner's ruling on its own.",
+   "statement": "The 47 flagged rows in these 11 quarters are loans printed 'S + m % PIK <coupon> %' (Applitools, Sweep Purchaser, BP Purchaser, KWOR, Continental Battery / Acquisition, FPG Intermediate Holdco, Vardiman Black, BPG Holdings IV, Diligent): the whole floating coupon is paid in kind. On accruing loans the printed par grows each quarter by the coupon, not the margin (39 quarter steps on these loans: 28 nearer the coupon; 2 nearer the margin, both Vardiman 2026-03-31 at +0.96 and +0.34 pct, below even the margin, the quarter it went on non-accrual; 4 flat on non-accrual loans; 5 delayed-draw draws or repayments; pik_growth_sum.sql). Under the convention used for Kent (D-218) and Wine.com (Silver Capital), the build publishes pik_rate = the printed coupon, basis_spread = the margin and interest_rate_cash 0. The rule reads the margin printed before 'PIK' as the PIK rate and flags the difference: a rule problem, not a data error. Evidence strength: the filer's XBRL tags the margin as the PIK rate on these rows (Applitools 0.0625, Diligent 0.0842, BP Purchaser 0.055), so the corrections override the tag by inference from the printed form and par growth; 14 of these rows have no par-growth evidence of their own and rest on the printed format alone (BP Purchaser 2025-03-31, Diligent x2 and BPG 2026-06-30, Continental x4, Vardiman x6; 9 on non-accrual). Every row here prints the benchmark on its own line. 2025-09-30 is proposed separately (PD-pik_printed-1885968-5): its Continental Battery line prints no benchmark.",
    "basis": "read",
    "evidence": [
     {
@@ -368,12 +367,6 @@
     },
     {
      "source": "filing",
-     "accession": "0001193125-25-277734",
-     "verbatim": "KWOR Acquisition, Inc. (5) (6) (18) Other Debt S + 8.00 % PIK 12.17 % 02/28/2030 3,063 3,063 3,063 0.28",
-     "quote": "'KWOR Acquisition, Inc. (5) (6) (18) Other Debt S + 8.00 % PIK 12.17 % 02/28/2030 3,063 3,063 3,063 0.28': 2025-09-30: printed margin '% PIK' after the benchmark, coupon in the rate column; published pik_rate 12.17 (the coupon), spread 8.0, interest_rate_cash 0.0."
-    },
-    {
-     "source": "filing",
      "accession": "0001193125-26-085572",
      "verbatim": "FPG Intermediate Holdco, LLC (5) (6) (17) First Lien Debt S + 5.00 % PIK 8.84 % 07/02/2029 646 646 646 0.06",
      "quote": "'FPG Intermediate Holdco, LLC (5) (6) (17) First Lien Debt S + 5.00 % PIK 8.84 % 07/02/2029 646 646 646 0.06': 2025-12-31: printed margin '% PIK' after the benchmark, coupon in the rate column; published pik_rate 8.84 (the coupon), spread 5.0, interest_rate_cash 0.0."
@@ -395,6 +388,38 @@
      "accession": "0001885968-23-000025",
      "verbatim": "Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93",
      "quote": "'Applitools, Inc. (4) (6) (8) S + 6.25 % PIK 11.35 % PIK 05/25/2029 7,023 6,924 6,722 0.93': the filer's own explicit form in 2023: the coupon column itself says PIK; par 6,827 at 2023-03-31 -> 7,023 (+2.87 pct, the quarter's coupon 11.06/4 = 2.77, the margin 6.25/4 = 1.56)."
+    }
+   ],
+   "rerun": "re-read 2026-10-25 against sandbox rftsc; all 47 flagged rows of these quarters matched to their printed line (pik_lines.py); 2025-09-30 split out under D-232",
+   "decided_by": "PROPOSED by agent fund-agent-rfts-0001885968 (2026-10-25); not accepted by the owner",
+   "decided_on": "2026-10-25"
+  },
+  {
+   "disposition_id": "PD-pik_printed-1885968-5",
+   "class": "rule_problem",
+   "engine": "identity",
+   "rule_name": "pik_printed",
+   "reason_key": "pik-printed-whole-coupon-pik-no-benchmark-on-row",
+   "ciks": [
+    "0001885968"
+   ],
+   "quarters": [
+    "2025-09-30"
+   ],
+   "statement": "The finding covers one flagged row at 2025-09-30, Continental Battery (ROW-7955a2058b121527). Its line prints '7.00 % PIK 11.29 %' with no benchmark and it is on non-accrual (footnote 13, par flat at 6,473), so neither the benchmark form nor par growth shows the whole-coupon reading on that line. It is read from the same loan's 2025-06-30 and 2025-12-31 lines, which print 'S + 7.00 % PIK 11.29 %' with the same coupon, par, cost and maturity: the 2025-09-30 line is that loan with the benchmark cell left blank. Published pik_rate 11.29 (the coupon), cash leg 0, no benchmark or spread (as printed). The filer's XBRL tags 0.07 as the PIK rate. Context: the quarter's five whole-coupon loans printed with the benchmark now pass the repaired rule (d7df345, D-235). A separate owner ruling is needed for this row (D-232).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277734",
+     "verbatim": "Continental Battery Company (5) (11) (12) (13) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 1,992 0.18",
+     "quote": "'Continental Battery Company (5) (11) (12) (13) First Lien Debt 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 1,992 0.18': 2025-09-30: Continental Battery printed with no benchmark; published pik_rate 11.29, spread None, cash 0.0."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-277734",
+     "verbatim": "(13) Investment was on non-accrual status as of September 30, 2025",
+     "quote": "'(13) Investment was on non-accrual status as of September 30, 2025': footnote 13 on the Continental line: non-accrual, par flat at 6,473, so no par-growth evidence."
     },
     {
      "source": "filing",
@@ -406,16 +431,10 @@
      "source": "filing",
      "accession": "0001193125-26-085572",
      "verbatim": "Continental Battery Company (5) (10) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,740 0.24",
-     "quote": "'Continental Battery Company (5) (10) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,740 0.24': 2025-12-31: again with the benchmark, same coupon, par and maturity."
-    },
-    {
-     "source": "filing",
-     "accession": "0001193125-25-277734",
-     "verbatim": "(13) Investment was on non-accrual status as of September 30, 2025",
-     "quote": "'(13) Investment was on non-accrual status as of September 30, 2025': 2025-09-30: footnote 13 on the Continental line: non-accrual, so par does not grow."
+     "quote": "'Continental Battery Company (5) (10) (12) (13) First Lien Debt S + 7.00 % PIK 11.29 % 07/20/2028 6,473 6,415 2,740 0.24': 2025-12-31: again with the benchmark, same coupon, par, cost and maturity."
     }
    ],
-   "rerun": "re-read 2026-10-25 against sandbox rftsc (round 3); all 53 flagged rows matched to their printed line (pik_lines.py)",
+   "rerun": "re-read 2026-10-25 against sandbox rftsc after the pik_printed repair (D-235): the one flagged row matched to its printed line",
    "decided_by": "PROPOSED by agent fund-agent-rfts-0001885968 (2026-10-25); not accepted by the owner",
    "decided_on": "2026-10-25"
   }
