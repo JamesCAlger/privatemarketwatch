@@ -334,7 +334,7 @@
     "2026-06-30"
    ],
    "fair_value_m": 283.1,
-   "what": "Members written with an en dash ('Narcote, LLC \u2013 Term Loan A') failed the filer's hierarchy regex (hyphen only): instrument blank and the heading kept in the issuer on 38 rows (283.1M summed over the quarters, obs_fv.sql). Fixed with the en dash in the wrapper regexes.",
+   "what": "Members written with an en dash ('Narcote, LLC – Term Loan A') failed the filer's hierarchy regex (hyphen only): instrument blank and the heading kept in the issuer on 38 rows (283.1M summed over the quarters, obs_fv.sql). Fixed with the en dash in the wrapper regexes.",
    "cause": "fund",
    "action": "fixed",
    "suggested_check": "Flag a loan row with a blank instrument_description whose identifier contains an en dash.",
@@ -872,90 +872,6 @@
     "These findings are new in cwaf: they appear because pik_rate now holds the whole PIK coupon rather than the 2.00 margin. The 2025-03-31 to 2025-09-30 rows (printed with '( 0.50 % floor)') are published the same way and are not flagged."
    ],
    "next_action": "Proposal PD-CWA-PIK-D218 (pik-printed-rule-reads-margin-of-floating-pik-leg); suggested rule repair: on a line printing 'reference + X % PIK + Y % R %', compare pik_rate with R - Y."
-  },
-  {
-   "finding_id": "RVQ_BLK_a0117ac1f4f1",
-   "coverage": {
-    "affected_rows": [
-     "0000950170-24-029358/C_877bda4e-e571-47cd-874a-d1ff223a9c55/ROW-3836c0cd455403c1",
-     "0000950170-24-029358/C_287d1960-2a7c-4646-a7b9-98bb32e705ec/ROW-f959ed8acbfa4ea3"
-    ],
-    "reviewed_rows": [
-     "0000950170-24-029358/C_877bda4e-e571-47cd-874a-d1ff223a9c55/ROW-3836c0cd455403c1",
-     "0000950170-24-029358/C_287d1960-2a7c-4646-a7b9-98bb32e705ec/ROW-f959ed8acbfa4ea3"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-24-029358",
-     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11)(12) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.44 % 12/31/2025 13,186 12,748 8,176 1.6 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2023-12-31, kind pik_value_mismatch: 2 rows, the Kent Water Sports first-out and last-out delayed draw loans (populations_cwaf.json); both read on the page.",
-    "Printed form: 'SOFR + 9.00 % PIK 14.44 %' (last-out) / 'SOFR + 10.00 % PIK 15.44 %' (first-out): the margin over SOFR is the 9.00 / 10.00 and the whole coupon, printed in the interest-rate column, is paid in kind. The rule takes the figure before the word PIK (the margin) as the PIK rate.",
-    "Published (cwaf): pik_rate = the printed coupon (Delayed Draw Loan First-Out 15.44, Delayed Draw Loan Last-Out 14.44), interest_rate = the same printed all-in rate, basis_spread = the margin. This is the convention used for whole-coupon PIK loans (D-092: 'PIK 11.55, spread 7.50'; BCRED Digital Media Solutions row correction pik_rate 16.57 for 'SOFR + 11.00 % 16.57 % PIK'), and the same loans from 2024-09-30 print 'SOFR + 10.00 % ( 1.00 % floor) PIK 13.78 %', published the same way, where the rule does not fire.",
-    "Swapped terms (found by the independent review of cwae, then by swap_audit.py): at 2023-12-31 the filer's members swap the two loans' terms (member of the last-out context reads 'SOFR + 10.00% PIK Interest rate 15.44%'), so cwae published basis_spread 9.0 on the first-out and 10.0 on the last-out. Corrected in cwaf by context-keyed basis_spread corrections (first-out C_877bda4e -> 10.00, last-out C_287d1960 -> 9.00, each with its printed line); cwaf publishes margin 10.00 / 9.00 and pik_rate 15.44 / 14.44 as printed.",
-    "Alternative tested: publish the margin (9.00 / 10.00) as pik_rate. Rejected: the cash leg (interest_rate minus pik_rate) would then be 5.44 on a loan that pays no cash, and it would differ from the later quarters of the same loans."
-   ],
-   "next_action": "Proposal PD-CWA-PIK-WHOLE-COUPON (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan); suggested rule repair: where the printed rate column is followed by PIK on a row whose margin is followed by PIK with no '+', compare pik_rate with the printed rate, not with the margin."
-  },
-  {
-   "finding_id": "RVQ_BLK_bb6c3d945574",
-   "coverage": {
-    "affected_rows": [
-     "0000950170-24-057722/C_de5418b1-836c-40e8-9713-0c780ea242b4/ROW-24da7e37a6806618",
-     "0000950170-24-057722/C_96d81413-45f3-47fd-9f15-0ffc069feb0a/ROW-4be5128752c738fc"
-    ],
-    "reviewed_rows": [
-     "0000950170-24-057722/C_de5418b1-836c-40e8-9713-0c780ea242b4/ROW-24da7e37a6806618",
-     "0000950170-24-057722/C_96d81413-45f3-47fd-9f15-0ffc069feb0a/ROW-4be5128752c738fc"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-24-057722",
-     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out (4)(8)(10)(11) Consumer Durables & Apparel SOFR + 10.00 % PIK 15.41 % 12/31/2025 5,217 4,658 5,217 1.0 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2024-03-31, kind pik_value_mismatch: 2 rows, the Kent Water Sports first-out and last-out delayed draw loans (populations_cwaf.json); both read on the page.",
-    "Printed form: 'SOFR + 9.00 % PIK 14.44 %' (last-out) / 'SOFR + 10.00 % PIK 15.44 %' (first-out): the margin over SOFR is the 9.00 / 10.00 and the whole coupon, printed in the interest-rate column, is paid in kind. The rule takes the figure before the word PIK (the margin) as the PIK rate.",
-    "Published (cwaf): pik_rate = the printed coupon (Delayed Draw Loan First-Out 15.41, Delayed Draw Loan Last-Out 14.41), interest_rate = the same printed all-in rate, basis_spread = the margin. This is the convention used for whole-coupon PIK loans (D-092: 'PIK 11.55, spread 7.50'; BCRED Digital Media Solutions row correction pik_rate 16.57 for 'SOFR + 11.00 % 16.57 % PIK'), and the same loans from 2024-09-30 print 'SOFR + 10.00 % ( 1.00 % floor) PIK 13.78 %', published the same way, where the rule does not fire.",
-    "Spreads checked: cwaf publishes basis_spread 10.00 on the first-out and 9.00 on the last-out, equal to the printed margins (swap_audit.py reports no spread difference).",
-    "Alternative tested: publish the margin (9.00 / 10.00) as pik_rate. Rejected: the cash leg (interest_rate minus pik_rate) would then be 5.44 on a loan that pays no cash, and it would differ from the later quarters of the same loans."
-   ],
-   "next_action": "Proposal PD-CWA-PIK-WHOLE-COUPON (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan); suggested rule repair: where the printed rate column is followed by PIK on a row whose margin is followed by PIK with no '+', compare pik_rate with the printed rate, not with the margin."
-  },
-  {
-   "finding_id": "RVQ_BLK_cf06a429a431",
-   "coverage": {
-    "affected_rows": [
-     "0000950170-24-096491/C_35a391ad-9767-4ebd-bc40-33e8088c0695/ROW-c9c8930369aa84a7",
-     "0000950170-24-096491/C_c56596d2-9c48-4999-8b63-de58f3a02a22/ROW-0dd1d6728abfbcb9"
-    ],
-    "reviewed_rows": [
-     "0000950170-24-096491/C_35a391ad-9767-4ebd-bc40-33e8088c0695/ROW-c9c8930369aa84a7",
-     "0000950170-24-096491/C_c56596d2-9c48-4999-8b63-de58f3a02a22/ROW-0dd1d6728abfbcb9"
-    ]
-   },
-   "evidence": [
-    {
-     "accession": "0000950170-24-096491",
-     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.59 % 10/18/2027 14,006 12,840 5,224 0.9 %"
-    }
-   ],
-   "conclusion": "false_alarm",
-   "hypotheses_tested": [
-    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2024-06-30, kind pik_value_mismatch: 2 rows, the Kent Water Sports first-out and last-out delayed draw loans (populations_cwaf.json); both read on the page.",
-    "Printed form: 'SOFR + 9.00 % PIK 14.44 %' (last-out) / 'SOFR + 10.00 % PIK 15.44 %' (first-out): the margin over SOFR is the 9.00 / 10.00 and the whole coupon, printed in the interest-rate column, is paid in kind. The rule takes the figure before the word PIK (the margin) as the PIK rate.",
-    "Published (cwaf): pik_rate = the printed coupon (Delayed Draw Loan First-Out 15.59, Delayed Draw Loan Last-Out 14.59), interest_rate = the same printed all-in rate, basis_spread = the margin. This is the convention used for whole-coupon PIK loans (D-092: 'PIK 11.55, spread 7.50'; BCRED Digital Media Solutions row correction pik_rate 16.57 for 'SOFR + 11.00 % 16.57 % PIK'), and the same loans from 2024-09-30 print 'SOFR + 10.00 % ( 1.00 % floor) PIK 13.78 %', published the same way, where the rule does not fire.",
-    "Spreads checked: cwaf publishes basis_spread 10.00 on the first-out and 9.00 on the last-out, equal to the printed margins (swap_audit.py reports no spread difference).",
-    "Alternative tested: publish the margin (9.00 / 10.00) as pik_rate. Rejected: the cash leg (interest_rate minus pik_rate) would then be 5.44 on a loan that pays no cash, and it would differ from the later quarters of the same loans."
-   ],
-   "next_action": "Proposal PD-CWA-PIK-WHOLE-COUPON (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan); suggested rule repair: where the printed rate column is followed by PIK on a row whose margin is followed by PIK with no '+', compare pik_rate with the printed rate, not with the margin."
   },
   {
    "finding_id": "RVQ_REV_c0f8e1a23340",
@@ -1552,6 +1468,95 @@
     "The fund issues shares at about 1,000 (2021-12-31 996.26, 2022-06-30 997.52); the value is as printed and above the check's upper bound by 1.80. Before the holdings period (holdings start 2023-03-31)."
    ],
    "next_action": "Proposal PD-CWA-F30 (f30-nav-per-share-printed-just-above-1000-issue-price)."
+  }
+ ],
+ "cleared_by_rule_repair": [
+  {
+   "finding_id": "RVQ_BLK_a0117ac1f4f1",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-029358/C_877bda4e-e571-47cd-874a-d1ff223a9c55/ROW-3836c0cd455403c1",
+     "0000950170-24-029358/C_287d1960-2a7c-4646-a7b9-98bb32e705ec/ROW-f959ed8acbfa4ea3"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-029358/C_877bda4e-e571-47cd-874a-d1ff223a9c55/ROW-3836c0cd455403c1",
+     "0000950170-24-029358/C_287d1960-2a7c-4646-a7b9-98bb32e705ec/ROW-f959ed8acbfa4ea3"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-029358",
+     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11)(12) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.44 % 12/31/2025 13,186 12,748 8,176 1.6 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2023-12-31, kind pik_value_mismatch: 2 rows, the Kent Water Sports first-out and last-out delayed draw loans (populations_cwaf.json); both read on the page.",
+    "Printed form: 'SOFR + 9.00 % PIK 14.44 %' (last-out) / 'SOFR + 10.00 % PIK 15.44 %' (first-out): the margin over SOFR is the 9.00 / 10.00 and the whole coupon, printed in the interest-rate column, is paid in kind. The rule takes the figure before the word PIK (the margin) as the PIK rate.",
+    "Published (cwaf): pik_rate = the printed coupon (Delayed Draw Loan First-Out 15.44, Delayed Draw Loan Last-Out 14.44), interest_rate = the same printed all-in rate, basis_spread = the margin. This is the convention used for whole-coupon PIK loans (D-092: 'PIK 11.55, spread 7.50'; BCRED Digital Media Solutions row correction pik_rate 16.57 for 'SOFR + 11.00 % 16.57 % PIK'), and the same loans from 2024-09-30 print 'SOFR + 10.00 % ( 1.00 % floor) PIK 13.78 %', published the same way, where the rule does not fire.",
+    "Swapped terms (found by the independent review of cwae, then by swap_audit.py): at 2023-12-31 the filer's members swap the two loans' terms (member of the last-out context reads 'SOFR + 10.00% PIK Interest rate 15.44%'), so cwae published basis_spread 9.0 on the first-out and 10.0 on the last-out. Corrected in cwaf by context-keyed basis_spread corrections (first-out C_877bda4e -> 10.00, last-out C_287d1960 -> 9.00, each with its printed line); cwaf publishes margin 10.00 / 9.00 and pik_rate 15.44 / 14.44 as printed.",
+    "Alternative tested: publish the margin (9.00 / 10.00) as pik_rate. Rejected: the cash leg (interest_rate minus pik_rate) would then be 5.44 on a loan that pays no cash, and it would differ from the later quarters of the same loans."
+   ],
+   "next_action": "Proposal PD-CWA-PIK-WHOLE-COUPON (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan); suggested rule repair: where the printed rate column is followed by PIK on a row whose margin is followed by PIK with no '+', compare pik_rate with the printed rate, not with the margin.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
+  },
+  {
+   "finding_id": "RVQ_BLK_bb6c3d945574",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-057722/C_de5418b1-836c-40e8-9713-0c780ea242b4/ROW-24da7e37a6806618",
+     "0000950170-24-057722/C_96d81413-45f3-47fd-9f15-0ffc069feb0a/ROW-4be5128752c738fc"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-057722/C_de5418b1-836c-40e8-9713-0c780ea242b4/ROW-24da7e37a6806618",
+     "0000950170-24-057722/C_96d81413-45f3-47fd-9f15-0ffc069feb0a/ROW-4be5128752c738fc"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-057722",
+     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan First-Out (4)(8)(10)(11) Consumer Durables & Apparel SOFR + 10.00 % PIK 15.41 % 12/31/2025 5,217 4,658 5,217 1.0 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2024-03-31, kind pik_value_mismatch: 2 rows, the Kent Water Sports first-out and last-out delayed draw loans (populations_cwaf.json); both read on the page.",
+    "Printed form: 'SOFR + 9.00 % PIK 14.44 %' (last-out) / 'SOFR + 10.00 % PIK 15.44 %' (first-out): the margin over SOFR is the 9.00 / 10.00 and the whole coupon, printed in the interest-rate column, is paid in kind. The rule takes the figure before the word PIK (the margin) as the PIK rate.",
+    "Published (cwaf): pik_rate = the printed coupon (Delayed Draw Loan First-Out 15.41, Delayed Draw Loan Last-Out 14.41), interest_rate = the same printed all-in rate, basis_spread = the margin. This is the convention used for whole-coupon PIK loans (D-092: 'PIK 11.55, spread 7.50'; BCRED Digital Media Solutions row correction pik_rate 16.57 for 'SOFR + 11.00 % 16.57 % PIK'), and the same loans from 2024-09-30 print 'SOFR + 10.00 % ( 1.00 % floor) PIK 13.78 %', published the same way, where the rule does not fire.",
+    "Spreads checked: cwaf publishes basis_spread 10.00 on the first-out and 9.00 on the last-out, equal to the printed margins (swap_audit.py reports no spread difference).",
+    "Alternative tested: publish the margin (9.00 / 10.00) as pik_rate. Rejected: the cash leg (interest_rate minus pik_rate) would then be 5.44 on a loan that pays no cash, and it would differ from the later quarters of the same loans."
+   ],
+   "next_action": "Proposal PD-CWA-PIK-WHOLE-COUPON (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan); suggested rule repair: where the printed rate column is followed by PIK on a row whose margin is followed by PIK with no '+', compare pik_rate with the printed rate, not with the margin.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
+  },
+  {
+   "finding_id": "RVQ_BLK_cf06a429a431",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-096491/C_35a391ad-9767-4ebd-bc40-33e8088c0695/ROW-c9c8930369aa84a7",
+     "0000950170-24-096491/C_c56596d2-9c48-4999-8b63-de58f3a02a22/ROW-0dd1d6728abfbcb9"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-096491/C_35a391ad-9767-4ebd-bc40-33e8088c0695/ROW-c9c8930369aa84a7",
+     "0000950170-24-096491/C_c56596d2-9c48-4999-8b63-de58f3a02a22/ROW-0dd1d6728abfbcb9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-096491",
+     "text": "Kent Water Sports Holdings, LLC - Delayed Draw Loan Last-Out (10)(11) Consumer Durables & Apparel SOFR + 9.00 % PIK 14.59 % 10/18/2027 14,006 12,840 5,224 0.9 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Population: shadow/page_rule_findings.csv rule pik_printed, quarter 2024-06-30, kind pik_value_mismatch: 2 rows, the Kent Water Sports first-out and last-out delayed draw loans (populations_cwaf.json); both read on the page.",
+    "Printed form: 'SOFR + 9.00 % PIK 14.44 %' (last-out) / 'SOFR + 10.00 % PIK 15.44 %' (first-out): the margin over SOFR is the 9.00 / 10.00 and the whole coupon, printed in the interest-rate column, is paid in kind. The rule takes the figure before the word PIK (the margin) as the PIK rate.",
+    "Published (cwaf): pik_rate = the printed coupon (Delayed Draw Loan First-Out 15.59, Delayed Draw Loan Last-Out 14.59), interest_rate = the same printed all-in rate, basis_spread = the margin. This is the convention used for whole-coupon PIK loans (D-092: 'PIK 11.55, spread 7.50'; BCRED Digital Media Solutions row correction pik_rate 16.57 for 'SOFR + 11.00 % 16.57 % PIK'), and the same loans from 2024-09-30 print 'SOFR + 10.00 % ( 1.00 % floor) PIK 13.78 %', published the same way, where the rule does not fire.",
+    "Spreads checked: cwaf publishes basis_spread 10.00 on the first-out and 9.00 on the last-out, equal to the printed margins (swap_audit.py reports no spread difference).",
+    "Alternative tested: publish the margin (9.00 / 10.00) as pik_rate. Rejected: the cash leg (interest_rate minus pik_rate) would then be 5.44 on a loan that pays no cash, and it would differ from the later quarters of the same loans."
+   ],
+   "next_action": "Proposal PD-CWA-PIK-WHOLE-COUPON (pik-printed-rule-reads-margin-of-whole-coupon-pik-loan); suggested rule repair: where the printed rate column is followed by PIK on a row whose margin is followed by PIK with no '+', compare pik_rate with the printed rate, not with the margin.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   }
  ]
 }

@@ -2987,7 +2987,22 @@
     "merged rate differs from the page: rejected, 12.67 printed on the line"
    ],
    "next_action": "Proposed as merged-context-value-equals-printed-row (PD-merged_context_excluded-1674760-10); the owner decides the reason."
-  },
+  }
+ ],
+ "tests_run": [
+  "tests/test_bdc_xbrl_wrapper.py + tests/test_fund_highlights_wrapper.py: 588 passed (before svcb, svcc)"
+ ],
+ "not_done": [
+  "No full pytest suite and no cohort semantic diff: only this fund's wrapper, highlights wrapper, its row corrections and two pulled promoted overrides changed (no shared code or shared table).",
+  "Interest expense in 2022-12-31, 2023-03-31, 2023-06-30, 2024-12-31 left (request SVC-R1, deferred, D-221); total_expenses blank.",
+  "Recipe 2023-03-31 lien_position stays 'Second Lien' for a line printed under Unsecured Debt (request SVC-R2, deferred, D-221).",
+  "2022 quarters have no published holdings; F16 / F33 there were read from the 2022 10-Q statements only.",
+  "row_audit.py residue (29 rows) read by hand only where the pattern missed: EUR prefix, SugarCRM drawn/undrawn pairing, Peppertree 'Towers, LLC' comma in 2026, equity lines with no date; no value difference found among them.",
+  "Position chains after the issuer renames (position_id changed on rows) not checked.",
+  "The 20-row random page sample is the orchestrator's.",
+  "A cleared ledger would not establish data correctness."
+ ],
+ "cleared_by_rule_repair": [
   {
    "finding_id": "RVQ_BLK_b86bf3e69175",
    "coverage": {
@@ -3015,7 +3030,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   },
   {
    "finding_id": "RVQ_BLK_c7f5c4751955",
@@ -3044,7 +3060,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   },
   {
    "finding_id": "RVQ_BLK_6e782396cc17",
@@ -3073,7 +3090,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   },
   {
    "finding_id": "RVQ_BLK_f2a6c49e1d32",
@@ -3102,7 +3120,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   },
   {
    "finding_id": "RVQ_BLK_40f1615f49e7",
@@ -3131,7 +3150,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   },
   {
    "finding_id": "RVQ_BLK_4a6fd20d1210",
@@ -3160,7 +3180,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   },
   {
    "finding_id": "RVQ_BLK_44fcd0ffddfe",
@@ -3189,7 +3210,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   },
   {
    "finding_id": "RVQ_BLK_2fff3ab431b4",
@@ -3218,7 +3240,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   },
   {
    "finding_id": "RVQ_BLK_1979462235cf",
@@ -3247,7 +3270,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   },
   {
    "finding_id": "RVQ_BLK_35618ef28a16",
@@ -3276,20 +3300,8 @@
     "published PIK wrong: rejected, the published pik_rate is the printed coupon of an all-PIK loan (D-092)",
     "printed PIK figure a different PIK part: rejected, the line prints no cash part ('S + m % PIK')"
    ],
-   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason."
+   "next_action": "Proposed as pik-printed-rule-reads-margin-of-whole-coupon-pik-loan (PD-pik_printed-1674760-6); the owner decides the reason.",
+   "cleared_by": "pik_printed repair d7df345, D-232/D-235 (ledger re-run); the finding was a pik_printed false alarm the repaired rule no longer emits"
   }
- ],
- "tests_run": [
-  "tests/test_bdc_xbrl_wrapper.py + tests/test_fund_highlights_wrapper.py: 588 passed (before svcb, svcc)"
- ],
- "not_done": [
-  "No full pytest suite and no cohort semantic diff: only this fund's wrapper, highlights wrapper, its row corrections and two pulled promoted overrides changed (no shared code or shared table).",
-  "Interest expense in 2022-12-31, 2023-03-31, 2023-06-30, 2024-12-31 left (request SVC-R1, deferred, D-221); total_expenses blank.",
-  "Recipe 2023-03-31 lien_position stays 'Second Lien' for a line printed under Unsecured Debt (request SVC-R2, deferred, D-221).",
-  "2022 quarters have no published holdings; F16 / F33 there were read from the 2022 10-Q statements only.",
-  "row_audit.py residue (29 rows) read by hand only where the pattern missed: EUR prefix, SugarCRM drawn/undrawn pairing, Peppertree 'Towers, LLC' comma in 2026, equity lines with no date; no value difference found among them.",
-  "Position chains after the issuer renames (position_id changed on rows) not checked.",
-  "The 20-row random page sample is the orchestrator's.",
-  "A cleared ledger would not establish data correctness."
  ]
 }
