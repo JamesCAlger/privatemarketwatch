@@ -1,119 +1,1708 @@
 {
  "cik": "0001976336",
- "label": "atxc",
- "before": "spoff2",
+ "label": "rfape",
+ "before": "rgA5",
  "shared_code": false,
+ "investigator_id": "claude-fund-agent-antares-rfap",
  "declared_changes": [
-  {"column": "instrument_description", "rows": 5580, "why": "wrapper instrument_description_strip_re: the member's header words and terms ('Asset Type ... Reference Rate and Spread ... Interest Rate ... Maturity Date', trailing 'One'/'Two') removed, leaving 'First Lien Term Loan', 'Common' and so on (5,575 rows); Americhem 2025-12-31 set to 'Common' by row correction"},
-  {"column": "issuer_name", "rows": 11, "why": "Valicor PPC Intermediate II LLC 2025-03-31 (was NULL; wrapper '\\s*' before 'Asset Type'), Cyan Investors LP 2025-12-31 (row correction); 9 rows PLZ Corp. -> PLZ CORP. and COP Hometown -> Cop Hometown: casing taken from the new 2026-06-30 member, a change since spoff2, not mine"},
-  {"column": "canonical_name", "rows": 900, "why": "follows issuer names and the 2026-06-30 quarter (casing harmonised across chains); no entry needed"},
-  {"column": "shares_held", "rows": 39, "why": "C04: 38 equity unit counts tagged with the principal concept at the printed figure x 1,000, published as printed (row corrections), plus Americhem 2025-12-31 (2)"},
-  {"column": "principal_amount_currency", "rows": 6, "why": "FX01: pars tagged with unit EGP; 4 dollar pars to USD, Riser Interco 2026-03-31 and 2026-06-30 to GBP (row corrections)"},
-  {"column": "principal_amount_usd", "rows": 6, "why": "same 6 rows; dollar pars equal par, sterling at the build's own H.10 rate (1.3184, 1.3259)"},
-  {"column": "principal_fx_rate_to_usd", "rows": 6, "why": "same 6 rows"},
-  {"column": "principal_fx_status", "rows": 6, "why": "same 6 rows (missing_reference_fx -> source_usd or reference_fx)"},
-  {"column": "asset_category", "rows": 1, "why": "Americhem 2025-12-31 EQUITY_PREFERRED -> EQUITY_COMMON (printed Common)"},
-  {"column": "index_classification", "rows": 1, "why": "same row PREFERRED_EQUITY -> COMMON_EQUITY"},
-  {"column": "corrected_fields", "rows": 46, "why": "the 46 rows with new row corrections"},
-  {"column": "position_id", "rows": 680, "why": "640 change between spoff2 and atxa with no edit of mine (the 2026-06-30 quarter added and issuer casing), 31 more follow the renamed and reclassed rows and their chains"},
-  {"column": "fair_value", "rows": 23, "why": "0.0 vs -0.0 (sign of zero only) on 23 rows; change since spoff2, not mine"},
-  {"column": "cost", "rows": 8, "why": "0.0 vs -0.0 on 8 rows; change since spoff2, not mine"},
-  {"column": "cost_reported", "rows": 8, "why": "as cost"},
-  {"column": "pct_of_net_assets_calculated", "rows": 23, "why": "follows the -0.0 fair values; not mine"},
-  {"column": "src_facts", "rows": 30, "why": "30 rows differ between spoff2 and atxa (source-unit bookkeeping); change since spoff2, not mine"}
+  {
+   "column": "issuer_name",
+   "rows": 55,
+   "why": "wrapper: 33 'T Services' rows 2025-03-31, Apex 2025-06-30, 4 BlackRock, Edgeco, WRE (40); row corrections: 15 rows (r_counts.sql)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 34,
+   "why": "31 rows set to the printed instrument by row correction plus Kipu, Onit, Tersera (34 rows, r_counts.sql)"
+  },
+  {
+   "column": "fair_value",
+   "rows": 46,
+   "why": "44 rows -0.0 -> 0.0 (sign of zero, already in the untouched rfapa, not mine); Oeconnection 2025-12-31 -3,000 -> 3,000, Movati 2026-03-31 -7,000 -> 7,000"
+  },
+  {
+   "column": "pct_of_net_assets_calculated",
+   "rows": 46,
+   "why": "follows fair_value"
+  },
+  {
+   "column": "cost",
+   "rows": 12,
+   "why": "-0.0 -> 0.0 only, already in rfapa, not mine"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 12,
+   "why": "as cost"
+  },
+  {
+   "column": "src_facts",
+   "rows": 55,
+   "why": "53 rows -0.0 -> 0.0 bookkeeping (rfapa, not mine) and the two sign corrections"
+  },
+  {
+   "column": "shares_held",
+   "rows": 1,
+   "why": "TCB Holdings 2026-06-30 5 -> 5,000 (printed and tagged)"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 2,
+   "why": "Bamboo EUR 2024-12-31 7.96 -> 12.93; 123Dentist 2024-12-31 0.08 -> 10.08"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 2,
+   "why": "as interest_rate"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 1,
+   "why": "Bamboo EUR 2024-12-31 None -> 9.55 (12.93 less 3.38 PIK)"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 1,
+   "why": "Bamboo EUR 2024-12-31 None -> 3.38"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 84,
+   "why": "the 84 rows with new row corrections (51 round 1, 33 more in round 2; Bamboo EUR gained basis_spread)"
+  },
+  {
+   "column": "basis_spread",
+   "rows": 34,
+   "why": "round 2: 31 PIK loans 2024-12-31 to 2025-09-30 to cash + PIK (D-031); DT Intermediate 2024-12-31 10.59 -> 6 and 2025-03-31 None -> 6; Apex 2024-12-31 11.59 -> none (D-240)"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 22,
+   "why": "21 CAD rows 2025-06-30 / 2025-09-30 CDOR -> CORRA (wrapper legend dates); DT Intermediate 2025-03-31 None -> SOFR"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 2,
+   "why": "DT Intermediate 2024-12-31 and 2025-03-31 -> printed_schedule (row correction)"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 1,
+   "why": "DT Intermediate 2025-03-31 Fixed -> Floating"
+  },
+  {
+   "column": "position_key",
+   "rows": 1,
+   "why": "Apex 2025-06-30 follows its issuer (wrapper)"
+  },
+  {
+   "column": "position_id",
+   "rows": 163,
+   "why": "renamed rows join their own chains (r_chain.sql); AMP 2026-06-30 keeps Wildcat's chain (observation)"
+  }
  ],
- "rows_added": 948,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Equity unit counts tagged with InvestmentOwnedBalancePrincipalAmount at the printed figure x 1,000 (no share fact) published as printed: 5 rows 2024-12-31, 10 at 2025-03-31, 15 at 2025-06-30, 8 at 2025-12-31 (the 10-K mixes concepts: 27 equity rows tag share counts equal to the printed figure, these 9 tag a principal). From 2025-09-30 the filer tags the printed count as shares. Spec generated from the page by scratch/fund_runs/0001976336/c04_specs.py (every row matched on its printed line with par, cost and fair value). Clears C04 x4 (2025-12-31 had a real-error verdict: right, now fixed) and field_coverage_drop 2025-12-31.",
-   "kind": "row_correction", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-12-31"],
-   "quotes": [{"accession": "0000950170-25-041127", "text": "DT1 Midco Corp (9) Common 1,159 1,159 1,159"},
-              {"accession": "0001193125-26-115260", "text": "TCB Holdings I LLC (9)(12) Preferred - 14.00 % PIK - 5 5,200 5,136 0.70"},
-              {"accession": "0001193125-26-115260", "text": "Lal Group Holdings, LLC (9) Common - - - 146 151 151 0.02"}]},
-  {"what": "Pars tagged with unit EGP: BigTime Software 2025-09-30 and Beyond Risk, Broadstreet, Foundation Risk 2025-12-31 are dollar loans (USD); Riser Interco's SONIA loan at 2026-03-31 and 2026-06-30 is sterling (GBP, at the build's own rate for the date). Clears FX01 x4, including the earlier real-error verdicts at 2025-12-31 and 2026-03-31 (right on missing dollar principal; the Bulab euro par they cite was already converted).",
-   "kind": "row_correction", "quarters": ["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-25-280627", "text": "BigTime Software, Inc. (13) First Lien Term Loan S + 6.25 % 10.23 % 6/30/2028 $ 200 $ 200 $ 198 0.03 %"},
-              {"accession": "0001193125-26-115260", "text": "Broadstreet Partners, Inc. (5)(6)(8)(16) First Lien Term Loan S + 2.75 % 6.42 % 6/13/2031 2,489 2,493 2,500 0.34"},
-              {"accession": "0001193125-26-221684", "text": "Riser Interco, LLC (8)(14) First Lien Term Loan SON + 4.75 % 8.49 % 10/31/2029 GBP 981 1,298 1,278 0.16"},
-              {"accession": "0001193125-26-349158", "text": "Riser Interco, LLC (8)(14) First Lien Term Loan SON + 4.75 % 8.50 % 10/31/2029 GBP 977 1,293 1,289 0.16"}]},
-  {"what": "Americhem 2025-12-31 equity line: member says 'Asset Type Preferred', the 10-K prints Common (2026 filings print and tag Common); class, instrument and unit count set from the page. Cyan Investors LP 2025-12-31: the member drops the 'H' of the heading, which stayed in the issuer name.",
-   "kind": "row_correction", "quarters": ["2025-12-31"],
-   "quotes": [{"accession": "0001193125-26-115260", "text": "Americhem, Inc. (9) Common - - - 2 245 307 0.04"},
-              {"accession": "0001193125-26-115260", "text": "Healthcare Equipment and Supplies Cyan Investors LP (6)(9) LP Units - - - 610 535 535 0.07"}]},
-  {"what": "Wrapper hierarchy_issuer_re / hierarchy_instrument_re accept no space before 'Asset Type' (Valicor 'LLCAsset Type'); issuer published, clears C201 2025-03-31.",
-   "kind": "wrapper", "quarters": ["2025-03-31"],
-   "quotes": [{"accession": "0000950170-25-071352", "text": "Valicor PPC Intermediate II LLC (8)(12) First Lien Term Loan S + 5.00 % 9.32 % 7/24/2028 2,649 2,644 2,643 0.41"}]},
-  {"what": "Wrapper instrument_description_strip_re: the instrument text was the member's tail ('Asset Type First Lien Term Loan Reference Rate and Spread S + 4.50% Interest Rate 8.17% Maturity Date 5/3/2032') on 99 pct of rows; now the instrument as printed in the 'Asset Type' column. Dry run on every distinct value (scratch/fund_runs/0001976336/strip_dry.py): one value would empty and is kept as filed.",
-   "kind": "wrapper", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-221684", "text": "Riser Interco, LLC (8)(14) First Lien Term Loan SON + 4.75 % 8.49 % 10/31/2029 GBP 981 1,298 1,278 0.16"}]},
-  {"what": "43 schedule lines of the 10-K for 2024-12-31 printed with a dash for fair value (36 undrawn lines with par only, 7 with a negative cost) and tagged without a fair value fact, declared at fair value 0 (source_encodings.untagged_values; generated by scratch/fund_runs/0001976336/b01_dash.py, each matched on its printed '<par> - - -' or '<par> ( cost ) - -' line). Published cost at 2024-12-31 now equals the printed 849,742 exactly. The remaining four B01 contexts are rate-only or percent-only twins of published rows. Clears B01 2024-12-31.",
-   "kind": "untagged_value", "quarters": ["2024-12-31"],
-   "quotes": [{"accession": "0000950170-25-041127", "text": "Lightbeam Bidco Inc (7) First Lien Revolver S + 5.25 % 0.00 % 9.56 % 5/4/2029 491 - - -"},
-              {"accession": "0000950170-25-041127", "text": "Hercules Borrower LLC (7) First Lien Revolver S + 6.25 % 1.00 % 10.66 % 12/14/2026 459 ( 4 ) - -"}]},
-  {"what": "Highlights wrapper figure_corrections: net_expenses for 2024-12-31 to 2026-06-30 from the printed 'Net expenses, net of fee waivers' (the filer tags the net-expense concept only on a note figure, 0 to 477 thousand, so income_identity used it); clears income_identity x6. income_yield_pct 2024-12-31 = 10.05 (the annualised stub-period ratio had been divided by four), clears F16 2024-12-31. investments_at_cost 2025-06-30 = 1,282,904,000 (was blank).",
-   "kind": "wrapper", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0001193125-26-221684", "text": "Net expenses, net of fee waivers 20,691 5,136 Excise tax expense 55 - Net investment income (loss) 17,417 18,239"},
-              {"accession": "0000950170-25-041127", "text": "Net expenses to average net assets net of fee waivers 1.23 % Net investment income to average net assets 10.05 %"},
-              {"accession": "0000950170-25-107525", "text": "Total Investments at fair value $ 1,282,904 $ 1,281,081 190.97 %"}]},
-  {"what": "Highlights wrapper income concepts (atxc): income_concept_suppress 'investmentincomeinvestmentexpense' with income_concept_fallback total_expenses <- OperatingExpenses, so total_expenses is the printed gross 'Total expenses' (D-025) instead of the net figure the filer tags with InvestmentIncomeInvestmentExpense (2024-12-31 to 2025-09-30 had published the net 1,005 / 5,136 / 10,266 / 14,632; now 3,983 / 9,870 / 14,852 / 16,815; 2024 Q1-Q3 now carry the 11 / 37 / 113 of pre-operation costs); 'noninterestexpense' so NoninterestExpenseOfferingCost (offering costs, 505 at 2026-03-31) is no longer published as interest expense. Fund-level only; holdings unchanged against atxb.",
-   "kind": "wrapper", "quarters": ["2024-03-31", "2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
-   "quotes": [{"accession": "0000950170-25-071352", "text": "Total expenses 9,870 11 Management fees waiver (Note 3) ( 1,965 ) - Incentive fees waiver (Note 3) ( 2,269 )"},
-              {"accession": "0000950170-25-071352", "text": "Net expenses, net of fee waivers 5,136 - Net investment income (loss) 18,239"}]}
+  {
+   "what": "Wrapper hierarchy_issuer_re: the 10-Q for 2025-03-31 writes the 'IT Services' heading as 'T Services' in 33 members ('Secured Debt T Services BigTime Software, Inc. Asset Type ...'), and the 10-Q for 2025-06-30 one member under 'Unsecured Debt Investment' (singular); both prefixes stayed in the issuer name and the canonical name (one entity merge: Safety Borrower under Saturn Borrower). Added 'T\\s+Services\\s+' and 'Debt\\s+Investments?'. Dry run on every distinct identifier (issuer_re_dry.py): 34 issuer changes, all intended. Clears issuer_name_printed 2025-03-31 and 2025-06-30 (Apex).",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "IT Services BigTime Software, Inc. (15) First Lien Term Loan S + 6.50 % 10.79 % 6/30/2028 200 200 200 0.03"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Apex Service Partners Intermediate 2, LLC (15) Subordinated Unsecured Delayed Draw Term Loan N/A 14.25 % PIK 4/23/2031 773 765 755 0.11"
+    }
+   ]
+  },
+  {
+   "what": "Wrapper issuer_name_strip_re: ordinals 'Five' to 'Ten' and an ordinal glued to a full stop ('WRE Holding Corp.One', 'Edgeco Buyer, Inc. Five'), and the money-market member's 'Short-term Investments ' heading (BlackRock, 4 quarters). Dry run on every distinct published name (name_strip_dry.py): 3 names, 6 rows. Clears issuer_name_printed 2025-09-30 to 2026-06-30 for the BlackRock rows.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares (11) 29,010 29,010 4.12"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Edgeco Buyer, Inc. (12) First Lien Delayed Draw Term Loan S + 4.50 % 8.79 % 6/1/2028 483 483 481 0.07"
+    }
+   ]
+  },
+  {
+   "what": "15 issuer names by row correction where the member names another printed line (Integrated Power Services on Phillips & Temro's loan, Cold Chain on Nelipak's, Continental Buyer on Cotiviti's, Kaseya on Kipu's, North Star on Onit's, Heights Buyer on GTCR Everest's, Wildcat Topco on AMP Purchaser's revolver), carries a fragment of the heading or of an earlier name (Packaging Coordinators PG Buyer, Virgin Infinite Bidco, Proampac Rohrer x2, 'Diversified' COP Hometown x2), names no issuer (Tersera revolver 2025-12-31, member 'Secured Debt Pharmaceuticals Asset Type Reference Rate ...'), or keeps the earlier borrower name (CD&R Hydra Buyer for the loan the 10-Q for 2026-06-30 prints as SunSource Borrower). Kipu, Onit and Tersera also get the printed instrument. Canonical names follow; GICS labels unchanged. Clears issuer_name_printed 2024-12-31, 2025-03-31, 2025-06-30, 2025-12-31, 2026-03-31, 2026-06-30.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Phillips & Temro Industries Inc. (8) First Lien Term Loan S + 5.00 % 1.00 % 9.46 % 9/8/2025 200 200 200 0.03"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Kipu Buyer, LLC (8)(12) First Lien Term Loan S + 4.25 % 8.54 % 1/27/2027 199 199 199 0.03"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "GTCR Everest Borrower, LLC (5)(6)(8)(16) First Lien Term Loan S + 2.75 % 6.40 % 9/5/2031 383 382 385 0.05"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "SunSource Borrower, LLC (5)(8)(16) First Lien Term Loan S + 4.00 % 7.76 % 3/25/2031 1,965 1,974 1,969 0.24"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Tersera Therapeutics, LLC (7)(12)(13) First Lien Revolver S + 5.75 % 9.42 % 4/4/2029 116 - - -"
+    }
+   ]
+  },
+  {
+   "what": "31 instrument descriptions by row correction where the member's instrument words differ from the printed line of the context's own facts (field status printed_row; r_instr.sql): revolvers published as term loans and back (TPC, Kaseya 2025-06-30, WPP Bullet, Wisdom, AMP term loan, TransDigm x3, Gloves), delayed draws printed as term loans (Kenco x2, Heights, BC Group, GTCR BC x2 and OEC x2 'Subordinated Unsecured Term Loan'), joined words ('First Lien Revolver Term Loan', 'First Lien Delayed Draw Term Loan Revolver', 'First Lien First Lien Delayed Draw Term Loan'), 'Revolver Loan', 'Common' for printed 'LP Units' (Cyan, SCHP). No finding named these rows.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-349158",
+     "text": "AMP Purchaser, LLC (12)(15) First Lien Term Loan S + 4.50 % 8.16 % 4/1/2033 2,214 2,209 2,209 0.28"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "TPC Engineering Holdings, Inc. (7) First Lien Revolver S + 5.25 % 0.00 % 9.58 % 2/16/2027 441 289 288 0.05"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "OEC Holdco, LLC (12)(16) Subordinated Unsecured Term Loan N/A 11.00 % PIK 12/30/2035 5,000 4,900 4,900 0.67"
+    }
+   ]
+  },
+  {
+   "what": "TCB Holdings I LLC preferred at 2026-06-30: the share fact and the page give 5,000 units; the shared unit step published 5 (derived_proxy, from the earlier quarters that print 5). Row correction shares_held 5000. Clears units_printed 2026-06-30.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-349158",
+     "text": "TCB Holdings I LLC (9)(12) Preferred N/A 14.00 % PIK - 5,000 5,574 5,424 0.67"
+    }
+   ]
+  },
+  {
+   "what": "Bamboo US BidCo euro term loan at 2024-12-31: no rate or PIK fact on the context; the 10-K prints '12.93 % (Incl. 3.38 % PIK)'. The build had published 7.96 from the member text. Row correction interest_rate 12.93, pik_rate 3.38 (interest_rate_cash then derives 9.55, as on the dollar tranche). Clears pik_printed 2024-12-31.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Bamboo US BidCo LLC (8) First Lien Term Loan E + 5.25 % 1.00 % 12.93 % (Incl. 3.38 % PIK) 9/30/2030 EUR 2,697 2,948 2,779 0.44"
+    }
+   ]
+  },
+  {
+   "what": "123Dentist delayed draw at 2024-12-31: rate fact 0.0008 on a SOFR + 5.75 % loan; the page prints 10.08 % (split '1 0.08 %'). Row correction interest_rate 10.08. No finding named it (printed_vs_published.py).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "123Dentist Inc. (7) First Lien Delayed Draw Term Loan S + 5.75 % 0.75 % 1 0.08 % 8/10/2029 $ 10,132 $ 1,789 $ 1,750 0.27 %"
+    }
+   ]
+  },
+  {
+   "what": "Two fair values tagged negative where the page prints them without brackets: Oeconnection revolver 2025-12-31 (+3) and Movati delayed draw 2026-03-31 (+7). Row corrections. Published fair value now equals the printed total exactly at 2025-12-31 (1,665,503; was 6 short) and 2026-03-31 (1,730,366; was 14 short), the two gaps the 2026-10-10 reading could not place. Creates SRC_BDC03 and blocking_fair_value_disagreement at both dates (the checks compare with the instance fact), proposed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Total Secured Debt Investments 1,674,082 1,654,411 207.92"
+    }
+   ]
+  },
+  {
+   "what": "D-031 / D-240 on floating PIK loans: until the 10-Q for 2025-09-30 this filer printed the CASH margin ('S + 2.75 % 10.42 % (Incl. 3.25 % PIK)', rate - margin - PIK = benchmark), from the 10-K for 2025-12-31 the total ('S + 6.00 % 9.75 % (Incl. 3.25 % PIK)'). 31 rows of 2024-12-31 to 2025-09-30 (ACI, GSV, Govdelivery, Bamboo x2, Spartan, MTI, Medallia, Bluecat, GSP x3, Plaskolite, Pavion, DT Intermediate, Adelaide; list from pik_margin_scan.py) now publish spread = printed cash margin + printed PIK by row correction; pik_rate, the all-in rate and the cash leg unchanged. Each row's printed form checked: 24 by residual (cash residual 0.00 to 0.25 against total residual 1.0 to 6.1), Bluecat x2 and Govdelivery 2024-12-31 by residual (0.00 / 0.01 / 0.78 against 1.0 / 1.0 / 3.0), GSP x3 by its 2025-12-31 line 'S + 6.50 %' with the same 0.75 % PIK, Bamboo's euro tranche by its dollar twin's identical printed form. Not changed (printed form is the total or unclear): Alert Media 2025-03-31 to 2025-09-30, GSV 2025-06-30 ('S + 5.25 %'). From 2025-12-31 no row changed (printed margin already total). No whole-coupon PIK row changed (Onsite, Apex Intermediate 2, GTCR BC, OEC, New ACI keep pik_rate = coupon).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "ACI Group Holdings, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.42 % (Incl. 3.25 % PIK) 8/2/2028 202 201 196 0.03"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "ACI Group Holdings, Inc. (8)(14) First Lien Term Loan S + 6.00 % 9.75 % (Incl. 3.25 % PIK) 8/2/2028 207 206 198 0.03"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Bamboo US BidCo LLC (8) First Lien Term Loan S + 5.25 % 1.00 % 12.93 % (Incl. 3.38 % PIK) 9/30/2030 $ 3,023 $ 3,023 $ 3,008 0.47 %"
+    }
+   ]
+  },
+  {
+   "what": "Margin cell printing the all-in rate (D-240): DT Intermediate 2024-12-31 and 2025-03-31 print '10.59 % (Incl. 3.25 % PIK)' / '10.28 % (Incl. 3.25 % PIK)' where the margin goes; the same loan (maturity 2/24/2028, PIK 3.25 %) prints 'S + 2.75 %' in the 10-Q for 2025-06-30, so spread 6.00 (2.75 + 3.25), SOFR, Floating (2025-03-31 had been published Fixed with no spread). Apex Service Partners 2024-12-31 prints '11.59 % (Incl. 2.00 % PIK)' and no margin for that term anywhere: spread withdrawn (was 11.59), rate and PIK as printed; X05 now fires and is proposed. No other row of this shape (r_bigspread.sql: spread within 0.05 of the rate).",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "DT Intermediate Holdco, Inc. (8) First Lien Term Loan 10.59 % (Incl. 3.25 % PIK) 0.75 % 10.59 % (Incl. 3.25 % PIK) 2/24/2028 3,299 3,283 3,274 0.51"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.29 % (Incl. 3.25 % PIK) 2/24/2028 3,326 3,313 3,317 0.49"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Apex Service Partners, LLC First Lien Term Loan 11.59 % (Incl. 2.00 % PIK) 1.00 % 11.59 % (Incl. 2.00 % PIK) 10/24/2030 $ 4,850 $ 4,826 $ 4,827 0.76 %"
+    }
+   ]
+  },
+  {
+   "what": "Wrapper reference_rate_codes: 'C=CDOR to 2025-03-31' and 'C=CORRA from 2025-06-30' (were to 2025-09-30 / from 2025-12-31). The 10-Qs for 2025-06-30 and 2025-09-30 define C as CORRA in their own legend (CDOR only in the comparative schedule's legend); the 10-K for 2024-12-31 and the 10-Q for 2025-03-31 say CDOR. 21 CAD rows (11 at 2025-06-30, 10 at 2025-09-30) now CORRA; 2024-12-31 and 2025-03-31 stay CDOR as printed; 2025-12-31 on already CORRA (legend checked in the 10-K for 2025-12-31).",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Prime Rate (Prime or P), Canadian Overnight Repo Rate Average (\"CORRA\" or \"C\"), Sterling Overnight Index Average (\"SONIA\" or \"SON\")"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Prime Rate (Prime or P), Canadian Dollar Offered Rate (\"CDOR\" or \"C\"), Sterling Overnight Index Average (\"SONIA\" or \"SON\")"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
- "parked": [],
+ "parked": [
+  {
+   "finding": "observation position-chain-follows-shifted-member (AMP Purchaser revolver 2026-06-30)",
+   "hypotheses": [
+    "Row correction of issuer_name: renames the row, canonical follows, position_id does not (r_chain.sql).",
+    "Row correction of position_key: not a correctable field (_CORRECTABLE_FIELDS in pipeline/unified_holdings.py)."
+   ]
+  },
+  {
+   "finding": "observation common-equity-published-as-preferred (OMERS Apollo 2025-12-31)",
+   "hypotheses": [
+    "10-K prints Common; the 2026 10-Qs print Preferred for the same date: source ambiguity, left as tagged."
+   ]
+  },
+  {
+   "finding": "owner question: equity unit scale ('(in thousands)' header), TCB 5 vs 5,000",
+   "hypotheses": [
+    "Published as printed per quarter; a uniform x1,000 needs the owner's ruling (as for 0001993402)."
+   ]
+  }
+ ],
  "orchestrator_requests": [],
  "observations": [
-  {"observation_key": "unit-count-tag-concept-and-scale-change-between-filings", "what": "Equity unit counts: to 2025-06-30 (and 9 of 36 rows in the 10-K for 2025-12-31) tagged with InvestmentOwnedBalancePrincipalAmount at the printed figure x 1,000 and no share fact, so no count was published (0 of 5, 11, 16 equity rows); from 2025-09-30 tagged as shares equal to the printed figure. Published as printed by row correction (38 rows). The schedule header says '(in thousands)' with no exception for shares, so the scale question the owner holds for the sister fund (D-163) applies here too: if counts are in thousands, every published count of this fund is 1,000 times too small, uniformly across quarters.", "field": "shares_held",
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-12-31"], "fair_value_m": 38.8, "cause": "fund", "action": "fixed",
-   "suggested_check": "Flag an equity row with a principal tag that is an exact multiple of 1,000 of the printed unit count and no share fact.",
-   "quote": {"accession": "0000950170-25-041127", "text": "DT1 Midco Corp (9) Common 1,159 1,159 1,159"}},
-  {"observation_key": "principal-currency-from-unit-tag-not-checked-against-page", "what": "Six pars tagged with unit EGP (Egyptian pound): four dollar SOFR loans (BigTime 2025-09-30; Beyond Risk, Broadstreet, Foundation Risk 2025-12-31) and Riser Interco's sterling loan at 2026-03-31 and 2026-06-30. The shared step takes the par currency from the unit tag, so no dollar principal was published. Fixed by row correction.", "field": "principal_amount_currency",
-   "quarters": ["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 8.3, "cause": "shared", "action": "fixed",
-   "suggested_check": "Flag a par unit that differs from the printed currency code (or its absence) on the row and from the reference rate's currency.",
-   "quote": {"accession": "0001193125-26-221684", "text": "Riser Interco, LLC (8)(14) First Lien Term Loan SON + 4.75 % 8.49 % 10/31/2029 GBP 981 1,298 1,278 0.16"}},
-  {"observation_key": "inception-period-annual-figures-prorated-into-a-quarter", "what": "income_yield_pct 2024-12-31 was 2.5125: the 10-K's ratio for the stub period from November 5, 2024, already annualised (footnote 5), divided by four as if it were a year (fixed by figure correction to 10.05). Same family, left: total_expenses 2023-12-31 is 42,250, the May 1 to December 31, 2023 figure (169,000) divided by four; interest_expense 2024-12-31 is 43,500, a year figure divided by four because the three earlier quarters carry no interest fact (nil, not zero).", "field": "income_yield_pct",
-   "quarters": ["2023-12-31", "2024-12-31"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed",
-   "suggested_check": "Flag a year-end quarter whose ratio or flow is exactly a quarter of the annual figure when the fund's first statement covers less than a year.",
-   "quote": {"accession": "0000950170-25-041127", "text": "Net expenses to average net assets net of fee waivers 1.23 % Net investment income to average net assets 10.05 %"}},
-  {"observation_key": "net-expense-concept-tagged-on-a-note-figure", "what": "The filer tags InvestmentCompanyExpenseAfterReductionOfFeeWaiverAndReimbursement only on a note figure (organisation and offering costs after the adviser's reimbursement: 0 to 477 thousand), so net_expenses was that figure and income_identity failed in every quarter. Declared per quarter from the printed 'Net expenses, net of fee waivers'.", "field": "net_expenses",
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31"], "fair_value_m": 0.0, "cause": "fund", "action": "fixed",
-   "suggested_check": "Flag net_expenses below 20 pct of total expenses where no waiver line is printed.",
-   "quote": {"accession": "0001193125-26-221684", "text": "Net expenses, net of fee waivers 20,691 5,136 Excise tax expense 55 - Net investment income (loss) 17,417 18,239"}},
-  {"observation_key": "total-expenses-reads-net-expense-concept", "what": "The shared fund-income map reads us-gaap:InvestmentIncomeInvestmentExpense as total_expenses; this filer tags its net-of-waiver figure with it and the gross 'Total expenses' with OperatingExpenses, so total_expenses was the net figure in the four quarters with waivers. Fixed for this fund by income_concept_suppress plus fallback; other funds not measured.", "field": "total_expenses",
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed",
-   "suggested_check": "Compare total_expenses with OperatingExpenses where both are filed for the same period.",
-   "quote": {"accession": "0000950170-25-071352", "text": "Total expenses 9,870 11 Management fees waiver (Note 3) ( 1,965 ) - Incentive fees waiver (Note 3) ( 2,269 )"}},
-  {"observation_key": "interest-expense-reads-noninterest-expense", "what": "interest_expense was NoninterestExpenseOfferingCost (505 thousand at 2026-03-31 against printed interest and debt expenses of 14,197) through the 'interestexpense' substring. Suppressed for this fund; interest_expense is now InterestExpenseDebt, the 'Stated interest expense' component of the note (13,179), not the income-statement line 14,197 (InterestAndDebtExpense and InterestExpense, not preferred by the shared map). Left at the component.", "field": "interest_expense",
-   "quarters": ["2025-03-31", "2026-03-31"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed",
-   "suggested_check": "Flag interest_expense below 10 pct of the period's InterestAndDebtExpense when both are filed.",
-   "quote": {"accession": "0001193125-26-221684", "text": "Interest and debt expenses 14,197 4,258 Management fees"}},
-  {"observation_key": "row-printed-with-par-only-not-published", "what": "In the 10-K for 2024-12-31 the filer tags no fair value on 43 undrawn or unfunded lines printed with dashes; they were not published. Declared at fair value 0 (untagged_values). Later filings tag the zero.", "field": "fair_value",
-   "quarters": ["2024-12-31"], "fair_value_m": 0.0, "cause": "fund", "action": "fixed",
-   "suggested_check": "Flag schedule contexts with a principal tag and no fair-value tag.",
-   "quote": {"accession": "0000950170-25-041127", "text": "Lightbeam Bidco Inc (7) First Lien Revolver S + 5.25 % 0.00 % 9.56 % 5/4/2029 491 - - -"}},
-  {"observation_key": "common-equity-published-as-preferred", "what": "Americhem at 2025-12-31: member 'Asset Type Preferred', page prints Common (the filer printed Preferred at 2025-09-30 and Common from 2025-12-31; not traced which is the instrument's real class). Published as printed for 2025-12-31; 2025-09-30 left as printed there.", "field": "asset_category",
-   "quarters": ["2025-12-31"], "fair_value_m": 0.31, "cause": "row", "action": "fixed",
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Members that name another printed line or keep a fragment of an earlier name: 15 rows over 6 quarters (fixed by row correction, list in fixes). Two members join two schedule lines in one typed member ('Kaseya Inc. ... Investments - non-controlled/non-affiliated ... Kipu Buyer, LLC ...', and North Star / Onit, 2025-03-31): the facts are the second line's. Searched every quarter: issuer_name_printed covers all but the 43 dash rows of 2024-12-31 (page_rules_name_blind_spots.csv), and r_joined.sql finds only these two joined members plus MHE 2025-06-30, whose two halves name the same line (left).",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 22.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (printed row of the context's own facts) already does this.",
+   "quote": {
+    "accession": "0000950170-25-071352",
+    "text": "Cotiviti, Inc. (5)(8)(15) First Lien Term Loan S + 2.75 % 7.07 % 3/28/2032 4,936 4,887 4,831 0.76"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on every one of these rows in the untouched build rfapa (shadow/page_rule_findings.csv, 57 rows); after the fixes it fires on none.",
+    "reference": "identity/issuer_name_printed (rfapa)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "what": "Heading words left in the issuer name: 'T Services ' (the 'IT Services' heading with its first letter lost) on 33 rows of 2025-03-31, 'Debt Investment Diversified Consumer Services ' on Apex 2025-06-30, 'Short-term Investments ' on the money-market row in 4 quarters, ordinals 'Five' and '.One'. Fixed in the wrapper. Earlier run (atxc): Cyan Investors 2025-12-31 ('ealthcare Equipment and Supplies'), fixed by row correction.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 192.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed begins_with_industry_label / not_the_printed_name already does this.",
+   "quote": {
+    "accession": "0000950170-25-071352",
+    "text": "IT Services BigTime Software, Inc. (15) First Lien Term Loan S + 6.50 % 10.79 % 6/30/2028 200 200 200 0.03"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on these rows in rfapa (kinds not_the_printed_name and begins_with_industry_label).",
+    "reference": "identity/issuer_name_printed (rfapa)"
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "what": "instrument_description comes from the member text; on 34 rows (all quarters) it differs from the printed line that holds the context's facts: revolver vs term loan, delayed draw vs term loan, joined words. Fixed by row correction. No rule reported any of them.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 63.9,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose instrument_description is not contained in the instrument cell of the printed row of its own facts (bdc_ixbrl_field_status printed_row, current period); scratch/fund_runs/0001976336/r_instr.sql is the query.",
+   "quote": {
+    "accession": "0001193125-26-349158",
+    "text": "AMP Purchaser, LLC (12)(15) First Lien Term Loan S + 4.50 % 8.16 % 4/1/2033 2,214 2,209 2,209 0.28"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No existing rule compares the instrument with the printed row; the query found 35 rows here (rows with a printed row; 34 fixed, OMERS Apollo left as ambiguous), all read on the page against the printed row. False positives expected only where a filer abbreviates the instrument on the page."
+   }
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "what": "TCB Holdings I preferred 2026-06-30: tag and page 5,000 units, published 5 (derived_proxy carried from the quarters that print 5). Fixed by row correction. The filer printed 5 for this line through 2026-03-31 and 5,000 from 2026-06-30 (its own comparative column still prints 5 for 2025-12-31): the same unit-scale question the owner holds for the sister fund (schedule header '(in thousands)').",
+   "field": "shares_held",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 5.4,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "units_printed already compares the published count with the printed one.",
+   "quote": {
+    "accession": "0001193125-26-349158",
+    "text": "TCB Holdings I LLC (9)(12) Preferred N/A 14.00 % PIK - 5,000 5,574 5,424 0.67"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "units_printed fired on this row in rfapa (kind proxy_count_not_on_row).",
+    "reference": "identity/units_printed (rfapa)"
+   }
+  },
+  {
+   "observation_key": "printed-margin-convention-changes-between-filings",
+   "what": "On floating PIK loans this filer printed the cash margin until the 10-Q for 2025-09-30 and the total margin (cash + PIK) from the 10-K for 2025-12-31, so basis_spread changed meaning at 2025-12-31 (ACI 2.75 -> 6.00, Medallia 2.50 -> 6.50 with the same PIK). 31 rows of 2024-12-31 to 2025-09-30 (about 41M) published the cash margin; fixed by row correction to cash + PIK (D-031). Bamboo is one of them: the euro tranche also had no rate fact and published 7.96 from the member text (fixed to the printed 12.93, Incl. 3.38 PIK, identical to the dollar line; EURIBOR + 8.63 would be about 11.3, so the printed euro figure may be copied from the dollar line, left as printed). Not changed: Alert Media (printed total throughout), GSV 2025-06-30 ('S + 5.25 %' fits neither form), Vertex 2025-12-31 (printed margin above the printed rate, see below). The next filing will need the same reading if the filer switches back.",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 41.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "On each floating PIK loan compute rate - margin - benchmark; flag a fund-quarter where it equals the PIK on most rows (cash margin printed) when D-031 publishes total margins, or a loan whose margin jumps by exactly its PIK between quarters with the rate unchanged (scratch/fund_runs/0001976336/pik_margin_scan.py is the query).",
+   "quote": {
+    "accession": "0000950170-25-071352",
+    "text": "Medallia, Inc. (8)(13) First Lien Term Loan S + 2.50 % 10.78 % (Incl. 4.00 % PIK) 10/29/2028 $ 102 $ 99 $ 100 0.02 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the published spread with rate minus benchmark; pik_printed checks only that a PIK is published. The residual separates the forms where PIK is 1 pct or more; below that it needs the loan's own later line."
+   }
+  },
+  {
+   "observation_key": "all-in-rate-printed-in-margin-cell",
+   "what": "DT Intermediate 2024-12-31 and 2025-03-31 and Apex Service Partners 2024-12-31 print the all-in rate where the margin goes; the build published SOFR + 10.59 / 11.59 (spread equal to the rate) on 2024-12-31 and Fixed with no spread on DT 2025-03-31. Fixed: DT spread 6.00 from its own 2025-06-30 line; Apex spread withdrawn (no printed margin).",
+   "field": "basis_spread",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 11.4,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a floating loan whose basis_spread is within 0.05 of its interest_rate (r_bigspread.sql).",
+   "quote": {
+    "accession": "0000950170-25-041127",
+    "text": "DT Intermediate Holdco, Inc. (8) First Lien Term Loan 10.59 % (Incl. 3.25 % PIK) 0.75 % 10.59 % (Incl. 3.25 % PIK) 2/24/2028 3,299 3,283 3,274 0.51"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule tests spread against rate; X05 only fires once the spread is withdrawn."
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-legend-dated-wrong",
+   "what": "The wrapper dated the change of 'C' from CDOR to CORRA at 2025-12-31; the 10-Qs for 2025-06-30 and 2025-09-30 already define C as CORRA in their current legend (their comparative legend says CDOR). 21 CAD rows published CDOR, a benchmark that ceased in June 2024. Fixed in the wrapper (dates moved to 2025-03-31 / 2025-06-30). The tag on these rows still names CDOR (CanadianDollarOfferedRateMember); the page legend is followed.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 54.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag CDOR published on a report date after 2024-06-30, and check each dated reference_rate_codes entry against the legend of the first filing on either side of the date.",
+   "quote": {
+    "accession": "0000950170-25-107525",
+    "text": "Prime Rate (Prime or P), Canadian Overnight Repo Rate Average (\"CORRA\" or \"C\"), Sterling Overnight Index Average (\"SONIA\" or \"SON\")"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule checks a benchmark against its cessation date or the filing's legend."
+   }
+  },
+  {
+   "observation_key": "printed-margin-above-printed-rate",
+   "what": "Vertex Service Partners at 2025-12-31 prints 'S + 10.14 % 9.65 % (Incl. 4.14 % PIK)' and 'S + 9.08 % 8.90 % (Incl. 3.83 % PIK)': the margin exceeds the all-in rate, impossible for a SOFR loan. Published as printed (spread 10.14 / 9.08); the 10-Q for 2026-03-31 prints 'S + 6.00 %'. No margin inferred. Left.",
+   "field": "basis_spread",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.2,
+   "cause": "row",
+   "action": "left",
+   "suggested_check": "Flag a floating loan whose published basis_spread exceeds its interest_rate.",
+   "quote": {
+    "accession": "0001193125-26-115260",
+    "text": "Vertex Service Partners, LLC (8)(14) First Lien Term Loan S + 10.14 % 9.65 % (Incl. 4.14 % PIK) 11/8/2030 $ 200 $ 200 $ 194 0.03 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No current rule compares a published spread with the published all-in rate, so an impossible margin passes every check."
+   }
+  },
+  {
+   "observation_key": "interest-rate-tag-below-its-own-spread",
+   "what": "123Dentist 2024-12-31: InvestmentInterestRate tagged 0.0008 (0.08 pct) on a SOFR + 5.75 loan; the page prints 10.08 % split as '1 0.08 %'. Published 0.08 until fixed by row correction. No rule fired.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 1.8,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a floating loan whose interest_rate is below its basis_spread.",
+   "quote": {
+    "accession": "0000950170-25-041127",
+    "text": "123Dentist Inc. (7) First Lien Delayed Draw Term Loan S + 5.75 % 0.75 % 1 0.08 % 8/10/2029 $ 10,132 $ 1,789 $ 1,750 0.27 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A rate below its own margin is impossible for a floating loan with a non-negative base; no current rule tests it."
+   }
+  },
+  {
+   "observation_key": "fair-value-sign-differs-from-page",
+   "what": "Oeconnection revolver 2025-12-31 and Movati delayed draw 2026-03-31: fair value tagged negative, printed positive; the printed values are the ones that make the printed totals tie. The totals check passed before the fix because 6 and 14 thousand are inside its tolerance. Fixed by row correction.",
+   "field": "fair_value",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.01,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose fair-value sign differs from the printed row of its own facts (brackets), or a quarter whose rows miss the printed total by a small exact amount equal to twice a row's value.",
+   "quote": {
+    "accession": "0001193125-26-221684",
+    "text": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the sign with the page; bracketed_unsigned_values cannot be used for this filer (brackets in separate cells; sign_dry.py)."
+   }
+  },
+  {
+   "observation_key": "position-chain-follows-shifted-member",
+   "what": "AMP Purchaser's revolver at 2026-06-30 is tagged on a member naming Wildcat Topco's revolver (Wildcat has left the schedule). After the issuer correction the row is named AMP Purchaser but keeps Wildcat Topco's position_id (6 earlier quarters named Wildcat, r_chain.sql), so the chain reads as Wildcat continuing. No correctable field reaches position identity. Likewise SunSource 2026-06-30 keeps CD&R Hydra's chain, which is right (same loan, same terms).",
+   "field": "position_id",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "parked",
+   "suggested_check": "Flag a position chain whose published issuer_name changes between consecutive quarters when the later row's printed name matches no earlier printed name of the chain.",
+   "quote": {
+    "accession": "0001193125-26-349158",
+    "text": "AMP Purchaser, LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.16 % 4/1/2033 286 ( 1 ) ( 1 ) -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule tests chain identity against the printed name; the matcher reads the member (position_key)."
+   }
+  },
+  {
+   "observation_key": "common-equity-published-as-preferred",
+   "what": "Equity class printed differently for one line across filings: OMERS Apollo Investment Holdings prints Preferred at 2025-09-30, Common in the 10-K for 2025-12-31 (member: Preferred; published Preferred), and the 2026 10-Qs print Preferred for the same 2025-12-31 comparative and LP Units for the current date. Left (source ambiguity). Earlier run: Americhem 2025-12-31 set to the 10-K's Common by row correction.",
+   "field": "asset_category",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 1.4,
+   "cause": "row",
+   "action": "left",
    "suggested_check": "Flag an equity position whose class changes between quarters while units and cost are unchanged.",
-   "quote": {"accession": "0001193125-26-115260", "text": "Americhem, Inc. (9) Common - - - 2 245 307 0.04"}},
-  {"observation_key": "issuer-name-differs-from-page", "what": "Cyan Investors LP at 2025-12-31: the member starts 'ealthcare Equipment and Supplies' (heading with its first letter lost and no category prefix), so the heading stayed in the issuer name. Fixed by row correction.", "field": "issuer_name",
-   "quarters": ["2025-12-31"], "fair_value_m": 0.54, "cause": "row", "action": "fixed",
-   "suggested_check": "Flag an issuer name that contains one of the fund's own industry labels after its first character.",
-   "quote": {"accession": "0001193125-26-115260", "text": "Healthcare Equipment and Supplies Cyan Investors LP (6)(9) LP Units - - - 610 535 535 0.07"}},
-  {"observation_key": "issuer-name-casing-voted-across-quarters", "what": "With no edit of mine, PLZ Corp. and COP Hometown Acquisitions are published 'PLZ CORP.' and 'Cop Hometown Acquisitions, Inc.' in every quarter once 2026-06-30 is added; the 10-K for 2024-12-31 prints 'PLZ Corp.'. Shared name step; left.", "field": "issuer_name",
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"], "fair_value_m": 0.2, "cause": "shared", "action": "left",
+   "quote": {
+    "accession": "0001193125-26-115260",
+    "text": "OMERS Apollo Investment Holdings, LLC (9) Common - - - 1,369 1,369 1,390 0.19"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares class across quarters or with the comparative column."
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "what": "Earlier run (atxc): 38 equity counts tagged as principal x1,000 (to 2025-06-30 and 9 rows of the 10-K for 2025-12-31) published as printed by row correction. Owner question still open: the schedule header says '(in thousands)'; if counts are in thousands, every count is 1,000 times too small. TCB (above) now prints 5,000 where it printed 5.",
+   "field": "shares_held",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 38.8,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag an equity row with a principal tag that is an exact multiple of 1,000 of the printed unit count and no share fact.",
+   "quote": {
+    "accession": "0000950170-25-041127",
+    "text": "DT1 Midco Corp (9) Common 1,159 1,159 1,159"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C04 caught the coverage drop in atxa, not the concept; in rfapa the rows are already corrected, so no rule fired there."
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "Earlier run (atxc): six pars tagged with unit EGP (four dollar loans, Riser Interco sterling) fixed by row correction. Re-checked this run (r_fx.sql): every non-dollar par carries the printed currency and a dollar par at the build's rate; Low Voltage's CAD revolver prints 'S +' (as printed).",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 8.3,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a par unit that differs from the printed currency code on the row and from the reference rate's currency.",
+   "quote": {
+    "accession": "0001193125-26-221684",
+    "text": "Riser Interco, LLC (8)(14) First Lien Term Loan SON + 4.75 % 8.49 % 10/31/2029 GBP 981 1,298 1,278 0.16"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "FX01 fired in atxa (2026-10-16); in rfapa the rows were already corrected, so cite as proposal."
+   }
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "what": "Left from atxc: total_expenses 2023-12-31 is 42,250 (the May to December 2023 figure divided by four); interest_expense 2024-12-31 is 43,500 (a year figure divided by four). income_yield_pct 2024-12-31 fixed in atxc.",
+   "field": "total_expenses",
+   "quarters": [
+    "2023-12-31",
+    "2024-12-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a year-end quarter whose flow is exactly a quarter of the annual figure when the fund's first statement covers less than a year.",
+   "quote": {
+    "accession": "0000950170-25-041127",
+    "text": "Net expenses to average net assets net of fee waivers 1.23 % Net investment income to average net assets 10.05 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No current rule compares a start-up quarter's flows with the annual figure, so these prorations pass every check."
+   }
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "what": "atxc: offering cost no longer published as interest expense; interest_expense is the 'Stated interest expense' component (13,179 at 2026-03-31), not the income-statement 'Interest and debt expenses' 14,197. Left.",
+   "field": "interest_expense",
+   "quarters": [
+    "2025-03-31",
+    "2026-03-31"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag interest_expense below 90 pct of the period's InterestAndDebtExpense when both are filed.",
+   "quote": {
+    "accession": "0001193125-26-221684",
+    "text": "Interest and debt expenses 14,197 4,258 Management fees"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the published interest expense with the printed line."
+   }
+  },
+  {
+   "observation_key": "issuer-name-casing-voted-across-quarters",
+   "what": "PLZ Corp. and COP Hometown casing is voted across quarters ('PLZ CORP.', 'Cop Hometown'); the 10-K for 2024-12-31 prints 'PLZ Corp.'. Left (shared name step).",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 0.2,
+   "cause": "shared",
+   "action": "left",
    "suggested_check": "Flag a published issuer name whose casing differs from the quarter's own printed name.",
-   "quote": {"accession": "0000950170-25-041127", "text": "PLZ Corp. (8) First Lien Term Loan S + 3.75 % 0.75 % 8.20 % 8/3/2026 100 94 91 0.01"}}
+   "quote": {
+    "accession": "0000950170-25-041127",
+    "text": "PLZ Corp. (8) First Lien Term Loan S + 3.75 % 0.75 % 8.20 % 8/3/2026 100 94 91 0.01"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed compares case-insensitively, so it does not fire on casing."
+   }
+  },
+  {
+   "observation_key": "printed-rows-do-not-sum-to-printed-cost-total",
+   "what": "Published cost equals the sum of the printed row costs in every quarter (printed_vs_published.py), but the printed rows exceed the printed cost total by 92 thousand at 2025-03-31 (1,107,311 vs 1,095,604 + 739 + 10,876 = 1,107,219), 32 at 2025-06-30 and 1 at 2025-09-30. The filer's arithmetic; no published value differs from its printed line. Left.",
+   "field": "cost",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Report a quarter whose printed row costs do not sum to the printed cost total.",
+   "quote": {
+    "accession": "0000950170-25-071352",
+    "text": "Total Secured Debt Investments 1,095,604"
+   },
+   "detection_decision": {
+    "action": "not_feasible",
+    "rationale": "Nothing to correct: the published rows equal the page; a detector would only restate the filer's own total difference, which the totals check (fair value) does not cover."
+   }
+  }
  ],
  "name_shape_exceptions": [],
- "tests_run": ["tests/test_bdc_xbrl_wrapper.py tests/test_wrapper_content_signatures.py: 598 passed", "tests/test_fund_highlights_wrapper.py: 27 passed (run twice, after each highlights edit)"],
+ "investigations": [
+  {
+   "finding_id": "BDCSRC_0001976336_2024-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_2eb6c8ade2",
+   "coverage": {
+    "affected_rows": [
+     "src:0000950170-25-041127:C_1ab92454-3ded-4b06-93b7-d39f99305a33",
+     "src:0000950170-25-041127:C_20cdfb2f-d907-4354-8d08-a9d1dd319be0",
+     "src:0000950170-25-041127:C_2356af11-7080-46c3-9038-543fce693ff5",
+     "src:0000950170-25-041127:C_300dc90e-5ed3-45d1-9abc-926c9be81e05",
+     "src:0000950170-25-041127:C_3204ef7b-e40f-497a-b13a-b9bd9ddda626",
+     "src:0000950170-25-041127:C_4075c637-d977-4731-be25-5d37ef162d07",
+     "src:0000950170-25-041127:C_464ef6a5-cf06-4579-b3c9-d35f55c38482",
+     "src:0000950170-25-041127:C_5390e5e0-b19f-43a6-9504-d55d5a7e979c",
+     "src:0000950170-25-041127:C_839e9701-45d7-4fd2-91da-e4e766240004",
+     "src:0000950170-25-041127:C_a895af42-fb85-4f17-a099-bbbba9281e28",
+     "src:0000950170-25-041127:C_cb359cdf-eaef-4b70-8b7b-9febf8a92664",
+     "src:0000950170-25-041127:C_d7a604b5-4ce7-4e12-a2f9-83baeba29bd9",
+     "src:0000950170-25-041127:C_f2d50301-7be8-4fc8-ad36-ab6571bd0d24"
+    ],
+    "reviewed_rows": [
+     "src:0000950170-25-041127:C_1ab92454-3ded-4b06-93b7-d39f99305a33",
+     "src:0000950170-25-041127:C_20cdfb2f-d907-4354-8d08-a9d1dd319be0",
+     "src:0000950170-25-041127:C_2356af11-7080-46c3-9038-543fce693ff5",
+     "src:0000950170-25-041127:C_300dc90e-5ed3-45d1-9abc-926c9be81e05",
+     "src:0000950170-25-041127:C_3204ef7b-e40f-497a-b13a-b9bd9ddda626",
+     "src:0000950170-25-041127:C_4075c637-d977-4731-be25-5d37ef162d07",
+     "src:0000950170-25-041127:C_464ef6a5-cf06-4579-b3c9-d35f55c38482",
+     "src:0000950170-25-041127:C_5390e5e0-b19f-43a6-9504-d55d5a7e979c",
+     "src:0000950170-25-041127:C_839e9701-45d7-4fd2-91da-e4e766240004",
+     "src:0000950170-25-041127:C_a895af42-fb85-4f17-a099-bbbba9281e28",
+     "src:0000950170-25-041127:C_cb359cdf-eaef-4b70-8b7b-9febf8a92664",
+     "src:0000950170-25-041127:C_d7a604b5-4ce7-4e12-a2f9-83baeba29bd9",
+     "src:0000950170-25-041127:C_f2d50301-7be8-4fc8-ad36-ab6571bd0d24"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Trimech Acquisition Corp. Revolver 3/10/2028 1,457 ( 15 )"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Trimech Acquisition Corp. (7) First Lien Revolver S + 4.75 % 0.00 % 9.06 % 3/10/2028 1,550 78"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "BC Group Holdings, Inc. Delayed Draw Term Loan 12/21/2026 5,893 ( 44 )"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "BC Group Holdings, Inc. (7) First Lien Delayed Draw Term Loan S + 5.25 % 0.75 % 9.56 % 12/21/2026 6,746 790"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-blocking_source_position_like_parser_mismatch-1976336-1 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 13 rows, fair value -370 thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_2c2d2571a1",
+   "coverage": {
+    "affected_rows": [
+     "src:0000950170-25-071352:C_08d2e0b3-093d-4cde-b415-7de537e3a875",
+     "src:0000950170-25-071352:C_1b079e74-cbfd-45ee-9b46-cda3088dde04",
+     "src:0000950170-25-071352:C_2018b36d-ba4a-45c6-8c09-c3983141eeff",
+     "src:0000950170-25-071352:C_54c487e1-a37a-474f-b059-b990bfa3f12c",
+     "src:0000950170-25-071352:C_62ca4721-d758-426f-9faa-3f4b249ab503",
+     "src:0000950170-25-071352:C_65175837-0eed-49f7-b9b5-481914afa447",
+     "src:0000950170-25-071352:C_81b1681e-f026-4f8f-ba49-fdf01f38ad0c",
+     "src:0000950170-25-071352:C_cc7be140-2b2d-47c6-af01-ed835fc62689"
+    ],
+    "reviewed_rows": [
+     "src:0000950170-25-071352:C_08d2e0b3-093d-4cde-b415-7de537e3a875",
+     "src:0000950170-25-071352:C_1b079e74-cbfd-45ee-9b46-cda3088dde04",
+     "src:0000950170-25-071352:C_2018b36d-ba4a-45c6-8c09-c3983141eeff",
+     "src:0000950170-25-071352:C_54c487e1-a37a-474f-b059-b990bfa3f12c",
+     "src:0000950170-25-071352:C_62ca4721-d758-426f-9faa-3f4b249ab503",
+     "src:0000950170-25-071352:C_65175837-0eed-49f7-b9b5-481914afa447",
+     "src:0000950170-25-071352:C_81b1681e-f026-4f8f-ba49-fdf01f38ad0c",
+     "src:0000950170-25-071352:C_cc7be140-2b2d-47c6-af01-ed835fc62689"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Ruppert Landscape, LLC Delayed Draw Term Loan 4/30/2026 4,009 ( 52 )"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Ruppert Landscape, LLC (7)(13) First Lien Delayed Draw Term Loan S + 5.00 % 9.29 % 12/1/2028 4,802 749"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Collision Sp Subco, LLC Delayed Draw Term Loan 1/30/2026 254 3"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Collision Sp Subco, LLC (7)(12) First Lien Delayed Draw Term Loan S + 5.50 % 9.79 % 1/29/2030 1,133 878"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-blocking_source_position_like_parser_mismatch-1976336-1 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 8 rows, fair value -197 thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_7253b1d22b",
+   "coverage": {
+    "affected_rows": [
+     "src:0000950170-25-107525:C_47904474-cb46-4472-8f95-7fb627ed7dab",
+     "src:0000950170-25-107525:C_61ae658b-7d58-4e8c-8c60-8ba4e10d4e69",
+     "src:0000950170-25-107525:C_8f9ea041-45b2-40af-937e-d0591e2c506f",
+     "src:0000950170-25-107525:C_9a96235c-fed2-4ef6-8ab9-e55639c41766",
+     "src:0000950170-25-107525:C_c67d3100-99c3-43fc-b33b-b2142780fc89",
+     "src:0000950170-25-107525:C_d824231e-d133-452c-a98e-76fd8b5551ce",
+     "src:0000950170-25-107525:C_df4c03c2-bfcf-4193-9ace-0e974406a3df"
+    ],
+    "reviewed_rows": [
+     "src:0000950170-25-107525:C_47904474-cb46-4472-8f95-7fb627ed7dab",
+     "src:0000950170-25-107525:C_61ae658b-7d58-4e8c-8c60-8ba4e10d4e69",
+     "src:0000950170-25-107525:C_8f9ea041-45b2-40af-937e-d0591e2c506f",
+     "src:0000950170-25-107525:C_9a96235c-fed2-4ef6-8ab9-e55639c41766",
+     "src:0000950170-25-107525:C_c67d3100-99c3-43fc-b33b-b2142780fc89",
+     "src:0000950170-25-107525:C_d824231e-d133-452c-a98e-76fd8b5551ce",
+     "src:0000950170-25-107525:C_df4c03c2-bfcf-4193-9ace-0e974406a3df"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Innovetive Petcare, Inc. Delayed Draw Term Loan 11/19/2026 1,811 ( 18 )"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Innovetive Petcare, Inc. (7)(12) First Lien Delayed Draw Term Loan S + 5.00 % 9.47 % 6/30/2028 7,770 5,947"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Eyesouth Eye Care Holdco, LLC Delayed Draw Term Loan 4/1/2026 3,972 ( 40 )"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Eyesouth Eye Care Holdco, LLC (7)(12) First Lien Delayed Draw Term Loan S + 5.50 % 9.92 % 10/5/2029 4,299 324"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-blocking_source_position_like_parser_mismatch-1976336-1 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 7 rows, fair value -193 thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-09-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_928e7081da",
+   "coverage": {
+    "affected_rows": [
+     "src:0001193125-25-280627:C_021aa1f2-bbff-4940-8ab7-bf0046880522",
+     "src:0001193125-25-280627:C_40b888e5-a5e0-4cfc-853e-158f6d37a7dd",
+     "src:0001193125-25-280627:C_40cd022b-868d-4414-abce-734aaa247052",
+     "src:0001193125-25-280627:C_43e1e6cf-0bd1-4db0-b33e-1450b778693c",
+     "src:0001193125-25-280627:C_526ac991-db19-417e-91f2-5877c659ec00",
+     "src:0001193125-25-280627:C_962c8ac1-35b2-435f-91c6-5e3bca782275",
+     "src:0001193125-25-280627:C_9dcef4ae-95f6-42f7-b9b2-796517bd2286",
+     "src:0001193125-25-280627:C_b14d6a9d-a3e4-48bb-bbd2-1d142eb4b508",
+     "src:0001193125-25-280627:C_f4ab105d-11d8-485c-8402-f9bda09654f5"
+    ],
+    "reviewed_rows": [
+     "src:0001193125-25-280627:C_021aa1f2-bbff-4940-8ab7-bf0046880522",
+     "src:0001193125-25-280627:C_40b888e5-a5e0-4cfc-853e-158f6d37a7dd",
+     "src:0001193125-25-280627:C_40cd022b-868d-4414-abce-734aaa247052",
+     "src:0001193125-25-280627:C_43e1e6cf-0bd1-4db0-b33e-1450b778693c",
+     "src:0001193125-25-280627:C_526ac991-db19-417e-91f2-5877c659ec00",
+     "src:0001193125-25-280627:C_962c8ac1-35b2-435f-91c6-5e3bca782275",
+     "src:0001193125-25-280627:C_9dcef4ae-95f6-42f7-b9b2-796517bd2286",
+     "src:0001193125-25-280627:C_b14d6a9d-a3e4-48bb-bbd2-1d142eb4b508",
+     "src:0001193125-25-280627:C_f4ab105d-11d8-485c-8402-f9bda09654f5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Rimkus Consulting Group, Inc. Revolver 4/1/2030 901 ( 27 )"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Rimkus Consulting Group, Inc. (7)(13) First Lien Revolver S + 5.25 % 9.23 % 4/1/2030 1,201 300"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Trilon Group, LLC Delayed Draw Term Loan 3/13/2027 1,436 ( 11 )"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Trilon Group, LLC (8)(12) First Lien Delayed Draw Term Loan S + 4.75 % 8.73 % 5/29/2029 4,177 4,125"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-blocking_source_position_like_parser_mismatch-1976336-1 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 9 rows, fair value -195 thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-12-31_BLOCKING_FAIR_VALUE_DISAGREEMENT_d74dcd6dd2",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-115260|C_db5c99e4-9787-41be-b282-fa0a9b8713c7|Oeconnection revolver"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-115260|C_db5c99e4-9787-41be-b282-fa0a9b8713c7|Oeconnection revolver"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published value wrong: the published +3 thousand is the printed value (no brackets); the instance fact is the negative. Rejected.",
+    "Tag right and page wrong: with the tagged sign the rows were 6 thousand short of the printed total 1,665,503; with the printed sign they equal it exactly. Rejected.",
+    "Wrapper setting bracketed_unsigned_values instead of a row correction: dry run (sign_dry.py) flags about 400 correctly signed facts in one filing because this filer prints brackets in separate cells. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-blocking_fair_value_disagreement-1976336-8 (reason_key src-fv-sign-corrected-from-page, already used by 0001899017); keep the row correction."
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_9fc0856cb5",
+   "coverage": {
+    "affected_rows": [
+     "src:0001193125-26-115260:C_14e68e66-0193-49be-966b-66818da88379",
+     "src:0001193125-26-115260:C_15905407-edb3-41b9-9297-ea68e9738d56",
+     "src:0001193125-26-115260:C_20900ae1-eba2-4699-be8f-39004f7e82cf",
+     "src:0001193125-26-115260:C_5c1d4319-de07-4977-9467-3f22fdbba629",
+     "src:0001193125-26-115260:C_e61e15f2-d182-47ac-9c7f-81b3d1ac589c"
+    ],
+    "reviewed_rows": [
+     "src:0001193125-26-115260:C_14e68e66-0193-49be-966b-66818da88379",
+     "src:0001193125-26-115260:C_15905407-edb3-41b9-9297-ea68e9738d56",
+     "src:0001193125-26-115260:C_20900ae1-eba2-4699-be8f-39004f7e82cf",
+     "src:0001193125-26-115260:C_5c1d4319-de07-4977-9467-3f22fdbba629",
+     "src:0001193125-26-115260:C_e61e15f2-d182-47ac-9c7f-81b3d1ac589c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Sugar Ppc Buyer LLC Delayed Draw Term Loan 7/10/2026 4,760 ( 24 )"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Sugar Ppc Buyer LLC (7)(12)(13) First Lien Delayed Draw Term Loan S + 4.75 % 8.33 % 10/2/2031 6,789 2,002"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Rimkus Consulting Group, Inc. Delayed Draw Term Loan 4/1/2026 1,711 ( 51 )"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Rimkus Consulting Group, Inc. (7)(12)(14) First Lien Delayed Draw Term Loan S + 5.25 % 8.90 % 4/1/2031 2,246 534"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected.",
+    "Earlier verdict (ESCALATE, no HTML coordinates) read the five delayed-draw commitment facts of 2025-12-31 (Foreside, Kwol, Rimkus, Ruppert, Sugar PPC, -165,000) as missing positions; all five are in this list, each with a commitment-table line and a published schedule line, so the verdict does not stand."
+   ],
+   "next_action": "Owner or check to accept proposal PD-blocking_source_position_like_parser_mismatch-1976336-1 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 5 rows, fair value -165 thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2026-03-31_BLOCKING_FAIR_VALUE_DISAGREEMENT_d15fc7e892",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-221684|C_42332ffe-6a53-4637-9883-ae6a30a03420|Movati delayed draw"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-221684|C_42332ffe-6a53-4637-9883-ae6a30a03420|Movati delayed draw"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Total Secured Debt Investments 1,674,082 1,654,411 207.92"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published value wrong: the published +7 thousand is the printed value (no brackets); the instance fact is the negative. Rejected.",
+    "Tag right and page wrong: with the tagged sign the rows were 14 thousand short of the printed Total Secured Debt Investments 1,654,411; with the printed sign they equal it exactly. Rejected.",
+    "Wrapper setting bracketed_unsigned_values instead of a row correction: dry run (sign_dry.py) flags about 400 correctly signed facts in one filing because this filer prints brackets in separate cells. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-blocking_fair_value_disagreement-1976336-8 (reason_key src-fv-sign-corrected-from-page, already used by 0001899017); keep the row correction."
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2026-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_a31e5fada6",
+   "coverage": {
+    "affected_rows": [
+     "src:0001193125-26-221684:C_0ccde890-2fc3-4768-9e28-abfe0b76df11",
+     "src:0001193125-26-221684:C_3f138e3c-4042-4735-a549-711ece5cfab6",
+     "src:0001193125-26-221684:C_4d116d63-7f4f-4e25-b66b-d50f847ab1dc",
+     "src:0001193125-26-221684:C_bf24f8f5-a55d-4a81-9ecd-cc23d9eff3b0",
+     "src:0001193125-26-221684:C_c8b3d438-7833-4593-82c9-3c3fc8a0810a",
+     "src:0001193125-26-221684:C_d74f1b22-5081-4b35-9524-706bff09e10f",
+     "src:0001193125-26-221684:C_dd1759ed-4e4d-4556-a9a9-f256442b2219"
+    ],
+    "reviewed_rows": [
+     "src:0001193125-26-221684:C_0ccde890-2fc3-4768-9e28-abfe0b76df11",
+     "src:0001193125-26-221684:C_3f138e3c-4042-4735-a549-711ece5cfab6",
+     "src:0001193125-26-221684:C_4d116d63-7f4f-4e25-b66b-d50f847ab1dc",
+     "src:0001193125-26-221684:C_bf24f8f5-a55d-4a81-9ecd-cc23d9eff3b0",
+     "src:0001193125-26-221684:C_c8b3d438-7833-4593-82c9-3c3fc8a0810a",
+     "src:0001193125-26-221684:C_d74f1b22-5081-4b35-9524-706bff09e10f",
+     "src:0001193125-26-221684:C_dd1759ed-4e4d-4556-a9a9-f256442b2219"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Seahawk Bidco, LLC Delayed Draw Term Loan 12/25/2027 6,669 ( 50 )"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Seahawk Bidco, LLC (7)(12)(13) First Lien Delayed Draw Term Loan S + 4.75 % 8.42 % 12/19/2031 8,305 1,621"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Sugar Ppc Buyer LLC Delayed Draw Term Loan 7/10/2026 4,760 ( 48 )"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Sugar Ppc Buyer LLC (7)(12)(13) First Lien Delayed Draw Term Loan S + 4.75 % 8.44 % 10/2/2031 6,784 1,998"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-blocking_source_position_like_parser_mismatch-1976336-1 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 7 rows, fair value -276 thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2026-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_9684c412aa",
+   "coverage": {
+    "affected_rows": [
+     "src:0001193125-26-349158:C_11f3f05e-de25-4957-975e-7b29dd6907c0",
+     "src:0001193125-26-349158:C_274fb398-cb8d-4031-b026-c4aaf426da89",
+     "src:0001193125-26-349158:C_3a51fe36-1752-4405-8d8a-b7dca147559c",
+     "src:0001193125-26-349158:C_5f9ed7a6-a4b8-480a-a1c4-f946c706b378",
+     "src:0001193125-26-349158:C_70ee34fd-3cda-4ced-98a8-84fc8443edc3",
+     "src:0001193125-26-349158:C_8c953496-bc71-4e86-ba45-abc165bb3b18",
+     "src:0001193125-26-349158:C_91c2e47e-4340-4666-a191-a14a93dd324b",
+     "src:0001193125-26-349158:C_9c78afec-bc90-4f3c-b72e-7da7cab9aad3",
+     "src:0001193125-26-349158:C_bb148f66-447d-4a7b-bac9-d420d11b6bf0",
+     "src:0001193125-26-349158:C_bdd58346-4fee-406a-8ca5-f9c18009ad02"
+    ],
+    "reviewed_rows": [
+     "src:0001193125-26-349158:C_11f3f05e-de25-4957-975e-7b29dd6907c0",
+     "src:0001193125-26-349158:C_274fb398-cb8d-4031-b026-c4aaf426da89",
+     "src:0001193125-26-349158:C_3a51fe36-1752-4405-8d8a-b7dca147559c",
+     "src:0001193125-26-349158:C_5f9ed7a6-a4b8-480a-a1c4-f946c706b378",
+     "src:0001193125-26-349158:C_70ee34fd-3cda-4ced-98a8-84fc8443edc3",
+     "src:0001193125-26-349158:C_8c953496-bc71-4e86-ba45-abc165bb3b18",
+     "src:0001193125-26-349158:C_91c2e47e-4340-4666-a191-a14a93dd324b",
+     "src:0001193125-26-349158:C_9c78afec-bc90-4f3c-b72e-7da7cab9aad3",
+     "src:0001193125-26-349158:C_bb148f66-447d-4a7b-bac9-d420d11b6bf0",
+     "src:0001193125-26-349158:C_bdd58346-4fee-406a-8ca5-f9c18009ad02"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-349158",
+     "text": "RxSense Holdings LLC Revolver 3/12/2027 619 ( 3 )"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "RxSense Holdings LLC (7)(12)(13) First Lien Revolver S + 5.00 % 8.75 % 3/12/2027 619 -"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "HeartLand PPC Buyer, LLC Delayed Draw Term Loan 11/12/2027 3,014 ( 45 )"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "HeartLand PPC Buyer, LLC (12)(14) First Lien Delayed Draw Term Loan S + 4.75 % 8.50 % 12/12/2029 854 847"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-blocking_source_position_like_parser_mismatch-1976336-1 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 10 rows, fair value -322 thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "RVQ_BLK_43beaa51b725",
+   "coverage": {
+    "affected_rows": [
+     "2024-12-31|Investments-non-controlled/non-affiliated BC Group Holdings, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 12/21/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Beyond Risk Parent Holdings, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/9/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Eyesouth Eye Care Holdco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/1/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Flow Control Solutions, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 6/28/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated HP RSS Buyer, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 3/12/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Innovetive Petcare, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/19/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated MRI Software LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 8/27/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Merlin Buyer, Inc. Commitment Type Revolver Commitment Expiration Date 12/14/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Prism Parent Co. Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 9/19/2025",
+     "2024-12-31|Investments-non-controlled/non-affiliated Riser Interco LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 6/5/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Ruppert Landscape, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/30/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Trilon Group, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 10/16/2025",
+     "2024-12-31|Investments-non-controlled/non-affiliated Trimech Acquisition Corp. Commitment Type Revolver Commitment Expiration Date 03/10/2028"
+    ],
+    "reviewed_rows": [
+     "2024-12-31|Investments-non-controlled/non-affiliated BC Group Holdings, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 12/21/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Beyond Risk Parent Holdings, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/9/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Eyesouth Eye Care Holdco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/1/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Flow Control Solutions, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 6/28/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated HP RSS Buyer, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 3/12/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Innovetive Petcare, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/19/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated MRI Software LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 8/27/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Merlin Buyer, Inc. Commitment Type Revolver Commitment Expiration Date 12/14/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Prism Parent Co. Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 9/19/2025",
+     "2024-12-31|Investments-non-controlled/non-affiliated Riser Interco LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 6/5/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Ruppert Landscape, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/30/2026",
+     "2024-12-31|Investments-non-controlled/non-affiliated Trilon Group, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 10/16/2025",
+     "2024-12-31|Investments-non-controlled/non-affiliated Trimech Acquisition Corp. Commitment Type Revolver Commitment Expiration Date 03/10/2028"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "BC Group Holdings, Inc. Delayed Draw Term Loan 12/21/2026 5,893 ( 44 )"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "BC Group Holdings, Inc. (7) First Lien Delayed Draw Term Loan S + 5.25 % 0.75 % 9.56 % 12/21/2026 6,746 790"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Beyond Risk Parent Holdings, Inc. Delayed Draw Term Loan 4/9/2026 5,843 ( 44 )"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Beyond Risk Parent Holdings, Inc. (7) First Lien Delayed Draw Term Loan S + 4.50 % 0.00 % 8.93 % 10/8/2027 6,373 514"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-SRC_BDC01-1976336-2 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 13 rows, fair value see the source-only list thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "RVQ_BLK_45ae93474dc3",
+   "coverage": {
+    "affected_rows": [
+     "2026-06-30|Investments - non-controlled/non-affiliated Kriv Acquisition Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 2/25/2028",
+     "2026-06-30|Investments - non-controlled/non-affiliated Merlin Buyer, Inc. Commitment Type Revolver Commitment Expiration Date 4/16/2031",
+     "2026-06-30|Investments - non-controlled/non-affiliated Packaging Coordinators Midco, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 10/16/2027",
+     "2026-06-30|Investments - non-controlled/non-affiliated ProAmpac PG Borrower LLC Commitment Type Revolver Commitment Expiration Date 3/6/2031",
+     "2026-06-30|Investments - non-controlled/non-affiliated RxSense Holdings LLC Commitment Type Revolver Commitment Expiration Date 3/12/2027",
+     "2026-06-30|Investments - non-controlled/non-affiliated Seahawk Bidco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 12/25/2027",
+     "2026-06-30|Investments - non-controlled/non-affiliated YA Intermediate Holdings II, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 10/2/2026",
+     "2026-06-30|Investments-non-controlled/non-affiliated DT Intermediate Holdco, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 9/14/2026",
+     "2026-06-30|Investments-non-controlled/non-affiliated Edition Holdings, Inc. Commitment Type Revolver Commitment Expiration Date 12/20/2032",
+     "2026-06-30|Investments-non-controlled/non-affiliated HeartLand PPC Buyer, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/12/2027"
+    ],
+    "reviewed_rows": [
+     "2026-06-30|Investments - non-controlled/non-affiliated Kriv Acquisition Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 2/25/2028",
+     "2026-06-30|Investments - non-controlled/non-affiliated Merlin Buyer, Inc. Commitment Type Revolver Commitment Expiration Date 4/16/2031",
+     "2026-06-30|Investments - non-controlled/non-affiliated Packaging Coordinators Midco, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 10/16/2027",
+     "2026-06-30|Investments - non-controlled/non-affiliated ProAmpac PG Borrower LLC Commitment Type Revolver Commitment Expiration Date 3/6/2031",
+     "2026-06-30|Investments - non-controlled/non-affiliated RxSense Holdings LLC Commitment Type Revolver Commitment Expiration Date 3/12/2027",
+     "2026-06-30|Investments - non-controlled/non-affiliated Seahawk Bidco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 12/25/2027",
+     "2026-06-30|Investments - non-controlled/non-affiliated YA Intermediate Holdings II, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 10/2/2026",
+     "2026-06-30|Investments-non-controlled/non-affiliated DT Intermediate Holdco, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 9/14/2026",
+     "2026-06-30|Investments-non-controlled/non-affiliated Edition Holdings, Inc. Commitment Type Revolver Commitment Expiration Date 12/20/2032",
+     "2026-06-30|Investments-non-controlled/non-affiliated HeartLand PPC Buyer, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/12/2027"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-349158",
+     "text": "Kriv Acquisition Inc. Delayed Draw Term Loan 2/25/2028 3,043 ( 23 )"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "Kriv Acquisition Inc. (7)(12)(13) First Lien Delayed Draw Term Loan S + 4.75 % 8.50 % 7/31/2031 3,044 ( 8 )"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "Merlin Buyer, Inc. Revolver 4/16/2031 1,450 ( 14 )"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "Merlin Buyer, Inc. (5)(7)(12)(16) First Lien Revolver S + 3.75 % 7.50 % 4/16/2031 1,450 ( 5 )"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-SRC_BDC01-1976336-2 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 10 rows, fair value see the source-only list thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "RVQ_BLK_4f5e901279d0",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-221684|C_42332ffe-6a53-4637-9883-ae6a30a03420|Movati delayed draw"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-221684|C_42332ffe-6a53-4637-9883-ae6a30a03420|Movati delayed draw"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Total Secured Debt Investments 1,674,082 1,654,411 207.92"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published value wrong: the published +7 thousand is the printed value (no brackets); the instance fact is the negative. Rejected.",
+    "Tag right and page wrong: with the tagged sign the rows were 14 thousand short of the printed Total Secured Debt Investments 1,654,411; with the printed sign they equal it exactly. Rejected.",
+    "Wrapper setting bracketed_unsigned_values instead of a row correction: dry run (sign_dry.py) flags about 400 correctly signed facts in one filing because this filer prints brackets in separate cells. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-SRC_BDC03-1976336-7 (reason_key src-fv-sign-corrected-from-page, already used by 0001899017); keep the row correction."
+  },
+  {
+   "finding_id": "RVQ_BLK_69c20c0dacc5",
+   "coverage": {
+    "affected_rows": [
+     "2025-03-31|Investments-non-controlled/non-affiliated BC Group Holdings, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 12/21/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated Collision Sp Subco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 1/30/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated Collision Sp Subco, LLC Commitment Type Revolver Commitment Expiration Date 1/29/2030",
+     "2025-03-31|Investments-non-controlled/non-affiliated Eyesouth Eye Care Holdco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/1/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated HP RSS Buyer, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 03/12/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated Innovetive Petcare, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/19/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated Ruppert Landscape, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/30/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated VPP Intermediate Holdings, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 1/19/2027"
+    ],
+    "reviewed_rows": [
+     "2025-03-31|Investments-non-controlled/non-affiliated BC Group Holdings, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 12/21/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated Collision Sp Subco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 1/30/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated Collision Sp Subco, LLC Commitment Type Revolver Commitment Expiration Date 1/29/2030",
+     "2025-03-31|Investments-non-controlled/non-affiliated Eyesouth Eye Care Holdco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/1/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated HP RSS Buyer, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 03/12/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated Innovetive Petcare, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/19/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated Ruppert Landscape, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/30/2026",
+     "2025-03-31|Investments-non-controlled/non-affiliated VPP Intermediate Holdings, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 1/19/2027"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "BC Group Holdings, Inc. Delayed Draw Term Loan 12/21/2026 5,420 ( 41 )"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "BC Group Holdings, Inc. (7)(13) First Lien Delayed Draw Term Loan S + 5.00 % 9.29 % 12/21/2026 6,743 1,268"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Collision Sp Subco, LLC Delayed Draw Term Loan 1/30/2026 254 3"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Collision Sp Subco, LLC (7)(12) First Lien Delayed Draw Term Loan S + 5.50 % 9.79 % 1/29/2030 1,133 878"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-SRC_BDC01-1976336-2 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 8 rows, fair value see the source-only list thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "RVQ_BLK_8bb33afe9206",
+   "coverage": {
+    "affected_rows": [
+     "2025-06-30|Investments-non-controlled/non-affiliated Eyesouth Eye Care Holdco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/1/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated Flow Control Solutions, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 6/28/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated HP RSS Buyer, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 3/12/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated Innovetive Petcare, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/19/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated Oeconnection LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/22/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated VPP Intermediate Holdings, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 1/19/2027",
+     "2025-06-30|Investments-non-controlled/non-affiliated Zone Climate Services, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/22/2025"
+    ],
+    "reviewed_rows": [
+     "2025-06-30|Investments-non-controlled/non-affiliated Eyesouth Eye Care Holdco, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/1/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated Flow Control Solutions, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 6/28/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated HP RSS Buyer, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 3/12/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated Innovetive Petcare, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/19/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated Oeconnection LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/22/2026",
+     "2025-06-30|Investments-non-controlled/non-affiliated VPP Intermediate Holdings, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 1/19/2027",
+     "2025-06-30|Investments-non-controlled/non-affiliated Zone Climate Services, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 11/22/2025"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Eyesouth Eye Care Holdco, LLC Delayed Draw Term Loan 4/1/2026 3,972 ( 40 )"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Eyesouth Eye Care Holdco, LLC (7)(12) First Lien Delayed Draw Term Loan S + 5.50 % 9.92 % 10/5/2029 4,299 324"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Flow Control Solutions, Inc. Delayed Draw Term Loan 6/28/2026 4,246 ( 60 )"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Flow Control Solutions, Inc. (7)(13) First Lien Delayed Draw Term Loan S + 5.00 % 9.29 % 3/30/2029 5,241 962"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-SRC_BDC01-1976336-2 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 7 rows, fair value see the source-only list thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "RVQ_BLK_cdf64a11b421",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-115260|C_db5c99e4-9787-41be-b282-fa0a9b8713c7|Oeconnection revolver"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-115260|C_db5c99e4-9787-41be-b282-fa0a9b8713c7|Oeconnection revolver"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published value wrong: the published +3 thousand is the printed value (no brackets); the instance fact is the negative. Rejected.",
+    "Tag right and page wrong: with the tagged sign the rows were 6 thousand short of the printed total 1,665,503; with the printed sign they equal it exactly. Rejected.",
+    "Wrapper setting bracketed_unsigned_values instead of a row correction: dry run (sign_dry.py) flags about 400 correctly signed facts in one filing because this filer prints brackets in separate cells. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-SRC_BDC03-1976336-7 (reason_key src-fv-sign-corrected-from-page, already used by 0001899017); keep the row correction."
+  },
+  {
+   "finding_id": "RVQ_BLK_d2627d362579",
+   "coverage": {
+    "affected_rows": [
+     "2025-09-30|Investments - Non-controlled/non-affiliated Gloves Buyer, Inc. Commitment Type Revolver Commitment Expiration Date 5/22/2030",
+     "2025-09-30|Investments - Non-controlled/non-affiliated HP RSS Buyer, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 7/2/2027",
+     "2025-09-30|Investments - Non-controlled/non-affiliated Lido Advisors, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 5/10/2027",
+     "2025-09-30|Investments-non-controlled/non-affiliated Rimkus Consulting Group, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 04/01/2026",
+     "2025-09-30|Investments-non-controlled/non-affiliated Rimkus Consulting Group, Inc. Commitment Type Revolver Commitment Expiration Date 04/01/2030",
+     "2025-09-30|Investments-non-controlled/non-affiliated Ruppert Landscape, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 04/30/2026",
+     "2025-09-30|Investments-non-controlled/non-affiliated Sugar Ppc Buyer LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 07/10/2026",
+     "2025-09-30|Investments-non-controlled/non-affiliated Trilon Group, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 03/13/2027",
+     "2025-09-30|Investments-non-controlled/non-affiliated VPP Intermediate Holdings, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 01/19/2027"
+    ],
+    "reviewed_rows": [
+     "2025-09-30|Investments - Non-controlled/non-affiliated Gloves Buyer, Inc. Commitment Type Revolver Commitment Expiration Date 5/22/2030",
+     "2025-09-30|Investments - Non-controlled/non-affiliated HP RSS Buyer, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 7/2/2027",
+     "2025-09-30|Investments - Non-controlled/non-affiliated Lido Advisors, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 5/10/2027",
+     "2025-09-30|Investments-non-controlled/non-affiliated Rimkus Consulting Group, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 04/01/2026",
+     "2025-09-30|Investments-non-controlled/non-affiliated Rimkus Consulting Group, Inc. Commitment Type Revolver Commitment Expiration Date 04/01/2030",
+     "2025-09-30|Investments-non-controlled/non-affiliated Ruppert Landscape, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 04/30/2026",
+     "2025-09-30|Investments-non-controlled/non-affiliated Sugar Ppc Buyer LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 07/10/2026",
+     "2025-09-30|Investments-non-controlled/non-affiliated Trilon Group, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 03/13/2027",
+     "2025-09-30|Investments-non-controlled/non-affiliated VPP Intermediate Holdings, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 01/19/2027"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Gloves Buyer, Inc. Revolver 5/22/2030 420 ( 11 )"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Gloves Buyer, Inc. (7)(14) First Lien Revolver S + 4.00 % 8.13 % 5/22/2030 420 -"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "HP RSS Buyer, Inc. Delayed Draw Term Loan 7/2/2027 4,391 ( 21 )"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "HP RSS Buyer, Inc. (13) First Lien Delayed Draw Term Loan S + 5.00 % 8.98 % 12/11/2029 844 837"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected."
+   ],
+   "next_action": "Owner or check to accept proposal PD-SRC_BDC01-1976336-2 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 9 rows, fair value see the source-only list thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "RVQ_BLK_fd07ae89d93f",
+   "coverage": {
+    "affected_rows": [
+     "2025-12-31|Investments-non-controlled/non-affiliated Foreside Financial Group, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 3/13/2026",
+     "2025-12-31|Investments-non-controlled/non-affiliated Kwol Acquisition, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 8/25/2027",
+     "2025-12-31|Investments-non-controlled/non-affiliated Rimkus Consulting Group, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/1/2026",
+     "2025-12-31|Investments-non-controlled/non-affiliated Ruppert Landscape, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/30/2026",
+     "2025-12-31|Investments-non-controlled/non-affiliated Sugar Ppc Buyer LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 7/10/2026"
+    ],
+    "reviewed_rows": [
+     "2025-12-31|Investments-non-controlled/non-affiliated Foreside Financial Group, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 3/13/2026",
+     "2025-12-31|Investments-non-controlled/non-affiliated Kwol Acquisition, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 8/25/2027",
+     "2025-12-31|Investments-non-controlled/non-affiliated Rimkus Consulting Group, Inc. Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/1/2026",
+     "2025-12-31|Investments-non-controlled/non-affiliated Ruppert Landscape, LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 4/30/2026",
+     "2025-12-31|Investments-non-controlled/non-affiliated Sugar Ppc Buyer LLC Commitment Type Delayed Draw Term Loan Commitment Expiration Date 7/10/2026"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Foreside Financial Group, LLC Delayed Draw Term Loan 3/13/2026 10,020 ( 25 )"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Foreside Financial Group, LLC (7)(12)(13) First Lien Delayed Draw Term Loan S + 5.25 % 9.05 % 9/30/2027 11,639 1,616"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Kwol Acquisition, Inc. Delayed Draw Term Loan 8/25/2027 $ 9,237 $ ( 46 )"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Kwol Acquisition, Inc. (7)(12)(14) First Lien Delayed Draw Term Loan S + 5.00 % 8.67 % 12/12/2029 11,113 1,839"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Missing position: tested by finding, for every flagged row, a schedule line of the same issuer and facility type (commit_rows_check.py). Found for every row, and that schedule row is published with the facility's whole par and fair value; adding the commitment row would count the undrawn mark twice. Rejected.",
+    "Commitment row is not on the page: tested by finding the unfunded-commitments table line '<issuer> <type> <date> <amount> ( <fv> )'. Found for every row. Rejected.",
+    "Published total short because of these rows: published fair value equals the printed 'Total Investments at fair value' in this quarter without them. Rejected.",
+    "Earlier verdict (real_error, missing_position_add) read the five delayed-draw commitment facts of 2025-12-31 (Foreside, Kwol, Rimkus, Ruppert, Sugar PPC, -165,000) as missing positions; all five are in this list, each with a commitment-table line and a published schedule line, so the verdict does not stand."
+   ],
+   "next_action": "Owner or check to accept proposal PD-SRC_BDC01-1976336-2 (reason_key commitment-memo-table-rows-excluded-not-positions); no data change. 5 rows, fair value see the source-only list thousand, all read on the page by scratch/fund_runs/0001976336/commit_rows_check.py <label>."
+  },
+  {
+   "finding_id": "RVQ_REV_0b13558bc642",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-041127|C_4aa7b52b-eddd-4fe1-8c7d-50c7c391d88c|Eos Fitness delayed draw"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-041127|C_4aa7b52b-eddd-4fe1-8c7d-50c7c391d88c|Eos Fitness delayed draw"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Eos Fitness Opco Holdings, LLC (7) First Lien Delayed Draw Term Loan S + 5.25 % 0.00 % 9.56 % 1/5/2028 929 281 286 0.04"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Merged row carries a wrong value: published par 929, cost 281, fair value 286 thousand, rate 9.56, spread 5.25 equal the printed line (r_eos.sql). Rejected.",
+    "Twin context double counted: one published row for the printed line (r_dup_printed.sql). Rejected."
+   ],
+   "next_action": "Owner or check to accept PD-merged_context_excluded-1976336-4 (reason_key merged-context-row-published-equals-the-printed-line)."
+  },
+  {
+   "finding_id": "RVQ_REV_633d39e4b89f",
+   "coverage": {
+    "affected_rows": [
+     "0001976336|2025-06-30|income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001976336|2025-06-30|income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Expenses to average net assets gross of fee waivers 7.41 % Net expenses to average net assets net of fee waivers 4.66 % Net investment income to average net assets 11.14 %"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Total Investments at fair value $ 1,282,904 $ 1,281,081 190.97 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield mis-scaled or prorated: published 11.14 equals the printed ratio of net investment income to average net assets. Rejected.",
+    "Holdings coupon understated (rates missing): printed_vs_published.py finds every loan rate equal to the page except 123Dentist 2024-12-31 (fixed). Rejected.",
+    "Leverage: investments are 1.91 times net assets (190.97 pct printed at 2025-06-30), so income over net assets exceeds the asset coupon plus 200bp without error. Accepted as the cause.",
+    "Holdings coupon now higher after the D-031 spread corrections: those change basis_spread only; interest_rate (the WAC input) is unchanged on every corrected row (holdings_field_diff rfape vs rfapd). Finding unaffected."
+   ],
+   "next_action": "Owner or check to accept PD-F27-1976336-3 (reason_key f27-income-over-net-assets-of-a-levered-fund)."
+  },
+  {
+   "finding_id": "RVQ_REV_769d59d96cbd",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-041127|C_939d5c3a-89a4-45c0-be13-2093b41a0716|Apex Service Partners term loan"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-041127|C_939d5c3a-89a4-45c0-be13-2093b41a0716|Apex Service Partners term loan"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Apex Service Partners, LLC First Lien Term Loan 11.59 % (Incl. 2.00 % PIK) 1.00 % 11.59 % (Incl. 2.00 % PIK) 10/24/2030 $ 4,850 $ 4,826 $ 4,827 0.76 %"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Apex Service Partners, LLC (12) First Lien Term Loan S + 5.00 % 9.29 % 10/24/2030 4,838 4,816 4,815 0.75"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Margin printed elsewhere for this term: searched the 10-K for 2024-12-31 and the 10-Qs for 2025-03-31 and 2025-06-30 for every Apex Service Partners, LLC line; the term loan prints a margin only from 2025-03-31 ('S + 5.00 %', no PIK), a different term. Not found.",
+    "Margin by residual (11.59 - SOFR - 2.00): not used; D-240 forbids inferring a margin the page does not print.",
+    "Fixed coupon: the member says 'S +' and the later quarters float on SOFR; the loan stays Floating."
+   ],
+   "next_action": "Owner or check to accept PD-X05-1976336-9 (new reason_key x05-floating-loan-margin-not-printed)."
+  },
+  {
+   "finding_id": "RVQ_REV_b5eaa899e0d8",
+   "coverage": {
+    "affected_rows": [
+     "0001976336|2025-12-31|pct_of_net_assets_sum"
+    ],
+    "reviewed_rows": [
+     "0001976336|2025-12-31|pct_of_net_assets_sum"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Duplicate rows inflating the sum: r_dup_printed.sql finds no printed line matched by two published rows. Rejected.",
+    "Wrong denominator: the published sum 227.20 equals the printed percent total. Rejected."
+   ],
+   "next_action": "Owner or check to accept PD-PCT01-1976336-5 (reason_key pct01-percent-sum-is-the-printed-total-of-a-levered-fund)."
+  },
+  {
+   "finding_id": "RVQ_REV_e2f0915d6962",
+   "coverage": {
+    "affected_rows": [
+     "0001976336|2025-12-31|income_yield_pct"
+    ],
+    "reviewed_rows": [
+     "0001976336|2025-12-31|income_yield_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Total expenses to average net assets gross of fee waivers 8.91 % 3.77 % Net expenses to average net assets net of fee waivers 7.21 % 1.23 Net investment income to average net assets 10.68 % 10.05 %"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Total Short-term Investments 56,001 56,001 7.64 Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Income yield mis-scaled or prorated: published 10.68 equals the printed ratio of net investment income to average net assets. Rejected.",
+    "Holdings coupon understated (rates missing): printed_vs_published.py finds every loan rate equal to the page except 123Dentist 2024-12-31 (fixed). Rejected.",
+    "Leverage: investments are 2.27 times net assets (227.20 pct printed at 2025-12-31), so income over net assets exceeds the asset coupon plus 200bp without error. Accepted as the cause.",
+    "Holdings coupon now higher after the D-031 spread corrections: those change basis_spread only; interest_rate (the WAC input) is unchanged on every corrected row (holdings_field_diff rfape vs rfapd). Finding unaffected."
+   ],
+   "next_action": "Owner or check to accept PD-F27-1976336-3 (reason_key f27-income-over-net-assets-of-a-levered-fund)."
+  },
+  {
+   "finding_id": "RVQ_REV_ea2f1bdd579f",
+   "coverage": {
+    "affected_rows": [
+     "0001976336|2023-12-31|distribution_rate"
+    ],
+    "reviewed_rows": [
+     "0001976336|2023-12-31|distribution_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Accumulated net distributable earnings (losses) 1,710 - Total net assets $ 637,459 $ 25 Total liabilities and net assets $ 918,834 $ 194"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "The Company commenced operations on November 5, 2024."
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "A distribution omitted: the fund commenced operations on 2024-11-05 and held 25 thousand of seed capital at 2023-12-31; there was nothing to distribute. Rejected."
+   ],
+   "next_action": "Owner or check to accept PD-F33-1976336-6 (reason_key fund-row-before-operations-began)."
+  }
+ ],
+ "tests_run": [
+  "tests/test_bdc_xbrl_wrapper.py tests/test_wrapper_content_signatures.py tests/test_issuer_name_strip.py: 610 passed (run after each wrapper edit, last after the reference_rate_codes change of round 2)"
+ ],
  "not_done": [
-  "No new shared code; no full-suite pytest; no cohort semantic diff (fund-only settings).",
-  "Published cost differs from filed cost by +92K (2025-03-31), +32K (2025-06-30), +1K (2025-09-30); not traced.",
-  "The 6K and 14K of secured-debt fair value missing at 2025-12-31 and 2026-03-31 (reading report) not located; totals still tie within 0.5M.",
-  "interest_expense left at the 'Stated interest expense' component; 2023-12-31 total_expenses and 2024-12-31 interest_expense prorations left (observation).",
-  "Unit scale of equity counts ('(in thousands)' header) not ruled: counts published as printed; owner question as for 0001993402.",
-  "Non-accrual footnote, PIK tags without PIK in the label (Vertex, Unlimited Technology), J01 issuer matching across quarters: not read.",
-  "Neighbouring-row spot check: 3 sampled rows (Kwol, Invictus 2026-06-30; Concord 2025-09-30) plus the rows read for findings; all matched the page on par, cost, value, rate, spread, maturity and industry."
+  "No new shared code; no full-suite pytest; no cohort semantic diff (fund-only wrapper settings and row corrections).",
+  "Rates compared with the page only where the printed rate cell parses (printed_vs_published.py); spreads, PIK, reference rates and industries were not compared row by row this run beyond the page-rule checks.",
+  "interest_expense left at the 'Stated interest expense' component; 2023-12-31 and 2024-12-31 prorations left.",
+  "Equity unit scale not ruled (owner question).",
+  "Non-accrual footnotes not read this run (nonaccrual_flag findings are dispositioned informational).",
+  "Twenty-row random page sample is the orchestrator's; not run here."
  ]
 }

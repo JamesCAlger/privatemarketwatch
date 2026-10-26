@@ -1,0 +1,676 @@
+{
+ "reviewer_id": "claude-independent-reviewer-antares-rfape",
+ "report_digest": "1c68801af442580a5a792e26226bb7a814eff7ba791c4945e23498cd65696007",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001976336_2024-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_2eb6c8ade2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape source_reconciliation_source_only_detail, mechanism blocking_source_position_like_parser_mismatch, 2024-12-31 = 13 source rows, fair value -370 thousand, source_row_ids set-equal to affected_rows. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Trimech Acquisition Corp. Revolver 3/10/2028 1,457 ( 15 )"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Trimech Acquisition Corp. (7) First Lien Revolver S + 4.75 % 0.00 % 9.06 % 3/10/2028 1,550 78"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_2c2d2571a1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape source_reconciliation_source_only_detail, mechanism blocking_source_position_like_parser_mismatch, 2025-03-31 = 8 source rows, fair value -197 thousand, source_row_ids set-equal to affected_rows. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Ruppert Landscape, LLC Delayed Draw Term Loan 4/30/2026 4,009 ( 52 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_7253b1d22b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape source_reconciliation_source_only_detail, mechanism blocking_source_position_like_parser_mismatch, 2025-06-30 = 7 source rows, fair value -193 thousand, source_row_ids set-equal to affected_rows. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Innovetive Petcare, Inc. Delayed Draw Term Loan 11/19/2026 1,811 ( 18 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-09-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_928e7081da",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape source_reconciliation_source_only_detail, mechanism blocking_source_position_like_parser_mismatch, 2025-09-30 = 9 source rows, fair value -195 thousand, source_row_ids set-equal to affected_rows. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Rimkus Consulting Group, Inc. Revolver 4/1/2030 901 ( 27 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-12-31_BLOCKING_FAIR_VALUE_DISAGREEMENT_d74dcd6dd2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: source_reconciliation_detail 2025-12-31 calibrated_status blocking_fair_value_mismatch, one row, src C_db5c99e4 (Oeconnection revolver), source -3,000, output +3,000 = affected key. Point (a). The raw iXBRL tags the fair value with sign='-' (as it tags the cost), while the page prints the value unbracketed. rfape publishes the printed figure; the published totals equal the printed totals exactly (the tagged signs left 6 and 14 thousand gaps, i.e. twice the value). The finding exists only because the source check compares with the tag; proposal src-fv-sign-corrected-from-page is narrow (one row, one quarter) and the same reason as the accepted Bain row.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_9fc0856cb5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape source_reconciliation_source_only_detail, mechanism blocking_source_position_like_parser_mismatch, 2025-12-31 = 5 source rows, fair value -165 thousand, source_row_ids set-equal to affected_rows. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Sugar Ppc Buyer LLC Delayed Draw Term Loan 7/10/2026 4,760 ( 24 )"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Foreside Financial Group, LLC Delayed Draw Term Loan 3/13/2026 10,020 ( 25 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2026-03-31_BLOCKING_FAIR_VALUE_DISAGREEMENT_d15fc7e892",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: one blocking_fair_value_mismatch row, C_42332ffe (Movati CAD delayed draw), source -7,000, output +7,000 = affected key. Point (a). The raw iXBRL tags the fair value with sign='-' (as it tags the cost), while the page prints the value unbracketed. rfape publishes the printed figure; the published totals equal the printed totals exactly (the tagged signs left 6 and 14 thousand gaps, i.e. twice the value). The finding exists only because the source check compares with the tag; proposal src-fv-sign-corrected-from-page is narrow (one row, one quarter) and the same reason as the accepted Bain row.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Total Investments at fair value $ 1,750,309 $ 1,730,366 217.49"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2026-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_a31e5fada6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape source_reconciliation_source_only_detail, mechanism blocking_source_position_like_parser_mismatch, 2026-03-31 = 7 source rows, fair value -276 thousand, source_row_ids set-equal to affected_rows. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Seahawk Bidco, LLC Delayed Draw Term Loan 12/25/2027 6,669 ( 50 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001976336_2026-06-30_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_9684c412aa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape source_reconciliation_source_only_detail, mechanism blocking_source_position_like_parser_mismatch, 2026-06-30 = 10 source rows, fair value -322 thousand, source_row_ids set-equal to affected_rows. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349158",
+     "text": "RxSense Holdings LLC Revolver 3/12/2027 619 ( 3 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_43beaa51b725",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape row_validation_issues SRC_BDC01 2024-12-31 = 13 issues whose identifiers equal affected_rows (the only difference is the em dash in 'Investments-non-controlled', an encoding artefact). Same commitment-memo rows as the source-recon finding of the quarter. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "BC Group Holdings, Inc. Delayed Draw Term Loan 12/21/2026 5,420 ( 41 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_45ae93474dc3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape row_validation_issues SRC_BDC01 2026-06-30 = 10 issues whose identifiers equal affected_rows (the only difference is the em dash in 'Investments-non-controlled', an encoding artefact). Same commitment-memo rows as the source-recon finding of the quarter. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349158",
+     "text": "Kriv Acquisition Inc. Delayed Draw Term Loan 2/25/2028 3,043 ( 23 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_4f5e901279d0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). SRC_BDC03 2026-03-31, one issue on the Movati delayed draw identifier (C_42332ffe) = affected key. Point (a). The raw iXBRL tags the fair value with sign='-' (as it tags the cost), while the page prints the value unbracketed. rfape publishes the printed figure; the published totals equal the printed totals exactly (the tagged signs left 6 and 14 thousand gaps, i.e. twice the value). The finding exists only because the source check compares with the tag; proposal src-fv-sign-corrected-from-page is narrow (one row, one quarter) and the same reason as the accepted Bain row.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Total Investments at fair value $ 1,750,309 $ 1,730,366 217.49"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_69c20c0dacc5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape row_validation_issues SRC_BDC01 2025-03-31 = 8 issues whose identifiers equal affected_rows (the only difference is the em dash in 'Investments-non-controlled', an encoding artefact). Same commitment-memo rows as the source-recon finding of the quarter. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "BC Group Holdings, Inc. Delayed Draw Term Loan 12/21/2026 5,420 ( 41 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8bb33afe9206",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape row_validation_issues SRC_BDC01 2025-06-30 = 7 issues whose identifiers equal affected_rows (the only difference is the em dash in 'Investments-non-controlled', an encoding artefact). Same commitment-memo rows as the source-recon finding of the quarter. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Eyesouth Eye Care Holdco, LLC Delayed Draw Term Loan 4/1/2026 3,972 ( 40 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_cdf64a11b421",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). row_validation_issues SRC_BDC03 2025-12-31, one issue on the Oeconnection revolver identifier (C_db5c99e4) = affected key. Point (a). The raw iXBRL tags the fair value with sign='-' (as it tags the cost), while the page prints the value unbracketed. rfape publishes the printed figure; the published totals equal the printed totals exactly (the tagged signs left 6 and 14 thousand gaps, i.e. twice the value). The finding exists only because the source check compares with the tag; proposal src-fv-sign-corrected-from-page is narrow (one row, one quarter) and the same reason as the accepted Bain row.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d2627d362579",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape row_validation_issues SRC_BDC01 2025-09-30 = 9 issues whose identifiers equal affected_rows (the only difference is the em dash in 'Investments-non-controlled', an encoding artefact). Same commitment-memo rows as the source-recon finding of the quarter. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages).",
+   "evidence": [
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Gloves Buyer, Inc. Revolver 5/22/2030 420 ( 11 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_fd07ae89d93f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). Reconstructed: rfape row_validation_issues SRC_BDC01 2025-12-31 = 5 issues whose identifiers equal affected_rows (the only difference is the em dash in 'Investments-non-controlled', an encoding artefact). Same commitment-memo rows as the source-recon finding of the quarter. Every row's member reads '<issuer> Commitment Type <Revolver|Delayed Draw Term Loan> Commitment Expiration Date', i.e. the unfunded-commitments memo table after the schedule; the same facility is a published schedule row. Published fair value equals the printed 'Total Investments' exactly in all 7 quarters (848,360; 1,103,954; 1,281,081; 1,422,768; 1,665,503; 1,730,366; 1,733,471 thousand, read on the pages). The earlier real-error verdict (five delayed draws to add, -165 thousand) does not stand: each has a schedule line.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Foreside Financial Group, LLC Delayed Draw Term Loan 3/13/2026 10,020 ( 25 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0b13558bc642",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). provenance ledger merged_context_excluded 2024-12-31 is ROW-759cc160fa7f9db2 (C_4aa7b52b, Eos Fitness delayed draw) = affected key. Published par 929,000, cost 281,000, value 286,000, rate 9.56, spread 5.25 equal the printed line.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Eos Fitness Opco Holdings, LLC (7) First Lien Delayed Draw Term Loan S + 5.25 % 0.00 % 9.56 % 1/5/2028 929 281 286 0.04"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_633d39e4b89f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2025-06-30 FAIL 2.1055 in rfape, same as rfapd: the D-031 corrections change basis_spread only; interest_rate (the WAC input) is unchanged on all 34 rows (rfapd -> rfape diff: 0 rows in rate, PIK or cash leg). Published income_yield_pct 11.14 = the printed ratio; investments 190.97 pct of net assets, now cited correctly (1.91x).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Expenses to average net assets gross of fee waivers 7.41 % Net expenses to average net assets net of fee waivers 4.66 % Net investment income to average net assets 11.14 %"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Total Investments at fair value $ 1,282,904 $ 1,281,081 190."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_769d59d96cbd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (c). Reconstructed: rfape row_validation_issues X05 2024-12-31 = one row, ROW-26cffc6f58e8cfe9 (Apex Service Partners term loan, C_939d5c3a) = affected key. The 10-K prints '11.59 % (Incl. 2.00 % PIK)' in the margin cell and the raw iXBRL tags InvestmentBasisSpreadVariableRate 11.59 = InvestmentInterestRate 11.59, so the old SOFR + 11.59 was wrong; withdrawing the spread without inferring one (D-240) is the sound choice, and X05 then fires correctly. The later quarters print 'S + 5.00 %' with no PIK, a different term, so they cannot supply it. Caveat the investigation omits: the member text of the same context reads 'Interest Rate 9.81 (Include 2.00% PIK)', so even the published all-in 11.59 rests on a page and tag the filer contradicts in its own member; source_ambiguity is the right label. The new reason key x05-floating-loan-margin-not-printed is sound if it stays pinned to this row and quarter; as a carry-forward key it must not excuse an X05 on a line whose page does print a margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Apex Service Partners, LLC First Lien Term Loan 11.59 % (Incl. 2.00 % PIK) 1.00 % 11.59 % (Incl. 2.00 % PIK) 10/24/2030 $ 4,850 $ 4,826 $ 4,827 0.76 %"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Apex Service Partners, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 11.59% Interest Rate Floor 1.00% Interest Rate 9.81 (Include 2.00% PIK)% Maturity Date 10/24/2030"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Apex Service Partners, LLC (12) First Lien Term Loan S + 5.00 % 9.29 % 10/24/2030 4,838 4,816 4,815 0.75"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b5eaa899e0d8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). PCT01 2025-12-31 value 227.2 = the published pct sum and the printed total percent; no duplicate rows.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e2f0915d6962",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2025-12-31 FAIL 2.4066 in rfape, unchanged. Published 10.68 = the 10-K's printed ratio; investments 227.20 pct (2.27x).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Net investment income to average net assets 10.68 % 10.05 %"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Total Investments at fair value $ 1,666,882 $ 1,665,503 227.20"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ea2f1bdd579f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfape (population and values re-derived on rfape). F33 2023-12-31 value 0.0: net assets 25 thousand of seed capital, operations began 2024-11-05.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Total net assets $ 637,459 $ 25"
+    },
+    {
+     "accession": "0000950170-25-041127",
+     "text": "The Company commenced operations on November 5, 2024."
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfape (issuer and instrument columns identical to rfapd). Points (c) and (e). rfapa -> rfapd: 15 row-correction renames (AMP, COP Hometown x2, Cotiviti, GTCR Everest, Infinite, Kipu, Nelipak, Onit, PG Buyer, Phillips & Temro, Rohrer x2, SunSource, Tersera), each to the printed name. Each renamed row sits in one entity with its unrenamed peers and keeps the same GICS sub-industry (GICS diff vs rfapa: 0 rows). Canonical names follow, except 'Cop Hometown' casing (separate observation). The existing detector fired on these rows in rfapa.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Phillips & Temro Industries Inc. (8) First Lien Term Loan S + 5.00 % 1.00 % 9.46 % 9/8/2025 200 200 200 0.03"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Kipu Buyer, LLC (8)(12) First Lien Term Loan S + 4.25 % 8.54 % 1/27/2027 199 199 199 0.03"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Cotiviti, Inc. (5)(8)(15) First Lien Term Loan S + 2.75 % 7.07 % 3/28/2032 4,936 4,887 4,831 0.76"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "SunSource Borrower, LLC (5)(8)(16) First Lien Term Loan S + 4.00 % 7.76 % 3/25/2031 1,965 1,974 1,969 0.24"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfape (issuer and instrument columns identical to rfapd). Point (b). The 'T Services ' cut applies to exactly 33 rows of 2025-03-31 (exact prefix removal on all 33, 18 names); with it Safety Borrower Holdings (entity 003388fb) and Saturn Borrower (ef71adb7) are separate entities in every quarter, as they already were outside 2025-03-31 (rfapa had both in e8087c7e at 2025-03-31, canonical 'T Services Saturn Borrower Inc'). Apex 'Debt Investment' prefix, BlackRock 'Short-term Investments ' (4 quarters), 'Five' and '.One' ordinals cut; 55 issuer changes in total = 33 + 7 + 15, nothing else touched; GICS unchanged.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "IT Services BigTime Software, Inc. (15) First Lien Term Loan S + 6.50 % 10.79 % 6/30/2028 200 200 200 0.03"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Apex Service Partners Intermediate 2, LLC (15) Subordinated Unsecured Delayed Draw Term Loan N/A 14.25 % PIK 4/23/2031 773 765 755 0.11"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Short-term Investments BlackRock Liquidity T-Fund - Institutional Shares (11) 29,010 29,010 4.12"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-printed-row",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfape (issuer and instrument columns identical to rfapd). Point (c). 34 instrument changes, all to the instrument printed on the line holding the row's par, cost and value; read on the pages for AMP 2026-06-30, TransDigm 2026-03-31, Gloves and Onit 2025-03-31, BC Group 2026-03-31, GTCR BC 2025-12-31, Wisdom 2026-06-30, and Kenco 2025-09-30. The proposed printed-row check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349158",
+     "text": "AMP Purchaser, LLC (12)(15) First Lien Term Loan S + 4.50 % 8.16 % 4/1/2033 2,214 2,209 2,209 0.28"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "TransDigm Inc. (5)(6)(8)(16) First Lien Term Loan S + 2.25 % 5.91 % 3/22/2030 686 688 686 0.09"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Onit, Inc. (8)(13) First Lien Term Loan S + 4.75 % 9.07 % 1/27/2032 6,316 6,287 6,285 0.98"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "Wisdom Purchaser, LLC (7)(12)(15) First Lien Revolver S + 4.25 % 8.00 % 7/24/2032 636 ( 2 ) ( 16 ) -"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "GTCR BC Intermediate II, Inc. (6)(12)(16) Subordinated Unsecured Term Loan N/A 12.75 % PIK 11/20/2034 2,965 2,892 2,893 0.39"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "Point (d). TCB 2026-06-30 publishes 5,000 units, printed and tagged; earlier quarters publish 5 as printed. The 5 vs 5,000 break inside one chain is the open owner question on unit scale, correctly parked.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349158",
+     "text": "TCB Holdings I LLC (9)(12) Preferred N/A 14.00 % PIK - 5,000 5,574 5,424 0.67"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-margin-convention-changes-between-filings",
+   "outcome": "supported",
+   "rationale": "Point (a). rfapd -> rfape: basis_spread changes on 34 rows and nothing else in rate, PIK or cash leg (0 rows), so the cash leg is intact. I read 13 of the 31 D-031 rows on the pages: ACI 2025-03-31 (2.75 + 3.25 = 6.00), Medallia 2025-09-30 (2.50 + 4.00 = 6.50), GSV 2024-12-31 (2.63 + 3.13 = 5.76), Bluecat 2025-03-31 (5.00 + 1.00), MTI 2024-12-31 (6.00 + 4.50), Spartan 2024-12-31 (0.75 + 6.00), Govdelivery 2025-09-30 (3.50 + 2.25), Bamboo x2 2024-12-31 (5.25 + 3.38), Pavion 2025-06-30 (3.75 + 2.25), Plaskolite 2025-09-30 (4.00 + 4.00), Adelaide 2025-09-30 (3.38 + 3.38) and GSP 2025-09-30 (5.75 + 0.75). Each prints 'S + cash % rate % (Incl. PIK % PIK)', and rate less the new spread is the benchmark (3.95 to 4.59; Govdelivery 2024-12-31 5.11 is the weakest fit), so the PIK is counted once. GSP's low-PIK reading is confirmed by its 2025-12-31 line 'S + 6.50 % ... (Incl. 0.75 % PIK)'. No whole-coupon row changed (Onsite, Apex Intermediate 2, GTCR BC, OEC, New ACI keep pik = rate). From 2025-12-31 no row changed. Point (e): Alert Media 2025-03-31 ('S + 5.75 % 11.04 % (Incl. 6.75 % PIK)') fits neither form (cash residual -1.46, total 5.29), and its other quarters print the total, so leaving it is right, though 'printed total throughout' overstates that quarter. GSV 2025-06-30 ('S + 5.25 % 10.05 %') fits neither (total residual 4.80 against about 4.3); 5.76 would fit, so the printed 5.25 is likely a filer slip, left as printed. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "ACI Group Holdings, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.42 % (Incl. 3.25 % PIK) 8/2/2028 202 201 196 0.03"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "ACI Group Holdings, Inc. (8)(14) First Lien Term Loan S + 6.00 % 9.75 % (Incl. 3.25 % PIK) 8/2/2028 207 206 198 0.03"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Medallia, Inc. (8)(13) First Lien Term Loan S + 2.50 % 10.45 % (Incl. 4.00 % PIK) 10/29/2028 104 102 92 0.01"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Pavion Corp. (8)(13) First Lien Term Loan S + 3.75 % 10.30 % (Incl. 2.25 % PIK) 10/30/2030 193 193 191 0.03"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Plaskolite PPC Intermediate II LLC (8)(12) First Lien Term Loan S + 4.00 % 12.13 % (Incl. 4.00 % PIK) 5/9/2030 1,400 1,387 1,346 0.19"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "GSP Holdings, LLC (6)(8)(12) First Lien Term Loan S + 5.75 % 10.63 % (Incl. 0.75 % PIK) 11/6/2026 102 102 95 0.01"
+    },
+    {
+     "accession": "0001193125-26-115260",
+     "text": "GSP Holdings, LLC (6)(8)(13) First Lien Term Loan S + 6.50 % 10.30 % (Incl. 0.75 % PIK) 11/6/2026 104 104 97 0.01"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "GSV Holding, LLC (8)(12) First Lien Term Loan S + 5.25 % 10.05 % (Incl. 3.13 % PIK) 10/18/2030 4,940 4,919 4,903 0.73"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Alert Media, Inc. (12) First Lien Term Loan S + 5.75 % 11.04 % (Incl. 6.75 % PIK) 4/12/2027 431 431 429 0.07"
+    }
+   ]
+  },
+  {
+   "observation_key": "all-in-rate-printed-in-margin-cell",
+   "outcome": "supported",
+   "rationale": "Point (b). DT Intermediate's term loan prints the all-in rate in the margin cell at 2024-12-31 and 2025-03-31 and 'S + 2.75 % 10.29 % (Incl. 3.25 % PIK)' at 2025-06-30. It is the same loan: maturity 2/24/2028, PIK 3.25 % and par 3,299 at both early dates, 3,326 at 2025-06-30 (+0.82 pct, about one quarter of 3.25 % PIK). rfape spread 6.00 (2.75 + 3.25), SOFR, Floating on both; rate less spread is 4.59 and 4.28, the benchmark. Taking the margin from the loan's own later line is sound evidence, not inference. Apex: see RVQ_REV_769d59d96cbd. The 'spread within 0.05 of rate' detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "DT Intermediate Holdco, Inc. (8) First Lien Term Loan 10.59 % (Incl. 3.25 % PIK) 0.75 % 10.59 % (Incl. 3.25 % PIK) 2/24/2028 3,299 3,283 3,274 0.51"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan 10.28 % (Incl. 3.25 % PIK) 10.28 % (Incl. 3.25 % PIK) 2/24/2028 3,299 3,285 3,282 0.51"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.29 % (Incl. 3.25 % PIK) 2/24/2028 3,326 3,313 3,317 0.49"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-code-legend-dated-wrong",
+   "outcome": "supported",
+   "rationale": "Point (d). Wrapper now 'C=CDOR to 2025-03-31', 'C=CORRA from 2025-06-30'. Legends read: 10-K 2024-12-31 and 10-Q 2025-03-31 define C as CDOR (both schedules); 10-Qs 2025-06-30 and 2025-09-30 define C as CORRA in the current legend; 2026 filings CORRA. rfape CAD rows: CDOR 6 (2024-12-31) and 5 (2025-03-31), CORRA 11 and 10 at 2025-06-30 and 2025-09-30, CORRA after; Low Voltage's 'S +' revolver stays SOFR as printed. The cessation-date detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Prime Rate (Prime or P), Canadian Dollar Offered Rate (\"CDOR\" or \"C\"), Sterling Overnight Index Average"
+    },
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Prime Rate (Prime or P), Canadian Dollar Offered Rate (\"CDOR\" or \"C\"), Sterling Overnight Index Average"
+    },
+    {
+     "accession": "0000950170-25-107525",
+     "text": "Prime Rate (Prime or P), Canadian Overnight Repo Rate Average (\"CORRA\" or \"C\"), Sterling Overnight Index Average"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Prime Rate (Prime or P), Canadian Overnight Repo Rate Average (\"CORRA\" or \"C\"), Sterling Overnight Index Average"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Onyx-Fire Protection Services Inc. (6)(8)(13) First Lien Term Loan C + 4.50 % 7.06 % 7/31/2031 CAD 9,080 6,532 6,523 0.93"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-margin-above-printed-rate",
+   "outcome": "supported",
+   "rationale": "Point (e). Vertex 2025-12-31 prints 'S + 10.14 % 9.65 % (Incl. 4.14 % PIK)'; published as printed. Rate less benchmark is about 6.00, and the next 10-Q prints 'S + 6.00 % 9.67 % (Incl. 6.00 % PIK)', so 10.14 looks like 6.00 + 4.14 counted twice; leaving it with no inference is consistent with D-240, and the spread-above-rate detector would list it.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Vertex Service Partners, LLC (8)(14) First Lien Term Loan S + 10.14 % 9.65 % (Incl. 4.14 % PIK) 11/8/2030 $ 200 $ 200 $ 194 0.03 %"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Vertex Service Partners, LLC (8)(14) First Lien Term Loan S + 6.00 % 9.67 % (Incl. 6.00 % PIK) 11/8/2030 $ 201 $ 201 $ 195 0.03 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "interest-rate-tag-below-its-own-spread",
+   "outcome": "supported",
+   "rationale": "Point (d). 123Dentist 2024-12-31 publishes 10.08 (SOFR 4.33 + 5.75), the printed '1 0.08 %'; the 0.0008 tag was the defect. Rate-below-spread detector is concrete; it would also list Vertex 2025-12-31, which the page itself prints 'S + 10.14 % 9.65 %'.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "123Dentist Inc. (7) First Lien Delayed Draw Term Loan S + 5.75 % 0.75 % 1 0.08 % 8/10/2029 $ 10,132 $ 1,789 $ 1,750 0.27 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "fair-value-sign-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Point (a): confirmed on the raw tags (sign='-' on both FV facts) and the printed lines; both corrections close the 6 and 14 thousand gaps to the exact printed totals. The twice-a-value residual check is a good detector.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Total Investments at fair value $ 1,750,309 $ 1,730,366 217.49"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-follows-shifted-member",
+   "outcome": "supported",
+   "rationale": "Point (e). rfapd: AMP Purchaser's 2026-06-30 revolver carries position 3b60f8f2, the chain of Wildcat Topco's revolver (2024-12-31 to 2025-12-31); AMP's term loan starts its own chain. Parked correctly: position_key is not correctable.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-349158",
+     "text": "AMP Purchaser, LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.16 % 4/1/2033 286 ( 1 ) ( 1 ) -"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "AMP Purchaser, LLC (12)(15) First Lien Term Loan S + 4.50 % 8.16 % 4/1/2033 2,214 2,209 2,209 0.28"
+    }
+   ]
+  },
+  {
+   "observation_key": "common-equity-published-as-preferred",
+   "outcome": "supported",
+   "rationale": "Point (e). OMERS Apollo publishes Preferred at 2025-09-30 and 2025-12-31 and LP Units from 2026-03-31; the 10-K prints Common for 2025-12-31. Source ambiguity, left; the class-stability detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-115260",
+     "text": "OMERS Apollo Investment Holdings, LLC (9) Common - - - 1,369 1,369 1,390 0.19"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Counts published as printed; the scale question is the parked owner item.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "DT1 Midco Corp (9) Common 1,159 1,159 1,159"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Currencies checked (point f): CAD, EUR and GBP pars carry the printed currency with a USD par at the build's rate in every quarter I looked at (Onyx, Movati, North Star, 1364720 B.C., Riser, St Athena, Bamboo). The reference-rate defect on the same CAD rows is separate (see reviewer notes).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Riser Interco, LLC (8)(14) First Lien Term Loan SON + 4.75 % 8.49 % 10/31/2029 GBP 981 1,298 1,278 0.16"
+    },
+    {
+     "accession": "0001193125-26-349158",
+     "text": "St Athena Global LLC (6)(8)(14) First Lien Term Loan SON + 5.25 % 9.00 % 6/26/2030 GBP 2,257 2,921 2,956"
+    },
+    {
+     "accession": "0001193125-25-280627",
+     "text": "Onyx-Fire Protection Services Inc. (6)(8)(13) First Lien Term Loan C + 4.50 % 7.06 % 7/31/2031 CAD 9,080 6,532 6,523 0.93"
+    }
+   ]
+  },
+  {
+   "observation_key": "inception-period-annual-figures-prorated-into-a-quarter",
+   "outcome": "supported",
+   "rationale": "rfapd fund_financials: total_expenses 2023-12-31 = 42,250 and interest_expense 2024-12-31 = 43,500, as described.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "Net expenses to average net assets net of fee waivers 1.23 % Net investment income to average net assets 10.05 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "outcome": "supported",
+   "rationale": "rfapd interest_expense 2026-03-31 = 13,179,000, the printed 'Stated interest expense', against 'Interest and debt expenses' 14,197.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Stated interest expense $ 13,179 $ 3,878"
+    },
+    {
+     "accession": "0001193125-26-221684",
+     "text": "Interest and debt expenses 14,197 4,258"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-casing-voted-across-quarters",
+   "outcome": "supported",
+   "rationale": "Casing only ('PLZ CORP.', 'Cop Hometown'); detector concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041127",
+     "text": "PLZ Corp. (8) First Lien Term Loan S + 3.75 % 0.75 % 8.20 % 8/3/2026 100 94 91 0.01"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-rows-do-not-sum-to-printed-cost-total",
+   "outcome": "supported",
+   "rationale": "rfapd cost sums 1,107,311 / 1,282,936 / 1,424,841 thousand against printed totals 1,107,219 / 1,282,904 / 1,424,840: the filer's arithmetic, as stated.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071352",
+     "text": "Total Secured Debt Investments 1,095,604"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [],
+ "reviewer_notes": [
+  "rfapd -> rfape published diff (5,624 rows by row_id): basis_spread 34, reference_rate_type 22, coupon_type 1; rate, PIK, cash leg, par, cost, value, names, instruments, entity and GICS 0. Totals still tie exactly (7 of 7); 162 Antares correction lines, 162 applied, 0 unmatched, no multi-row matches.",
+  "Apex 2024-12-31: the member text says 'Interest Rate 9.81 (Include 2.00% PIK)' against the printed and tagged 11.59; the published all-in rate is itself uncertain.",
+  "Clean findings are not proof the data is correct: none of these checks would see a wrong rate on a row the page prints the same way, or offsetting errors in totals."
+ ]
+}

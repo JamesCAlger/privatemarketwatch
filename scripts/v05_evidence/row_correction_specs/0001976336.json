@@ -525,5 +525,950 @@
   "reason": "C04 and class: the member says 'Asset Type Preferred' but this 10-K prints the line as Common (the 10-Q for 2025-09-30 printed Preferred; 2026-03-31 and 2026-06-30 print and tag Common); unit count tagged with the principal concept (2,000). Printed: 'Americhem, Inc. (9) Common - - - 2 245 307 0.04'.",
   "accession": "0001193125-26-115260",
   "verbatim": "Americhem, Inc. (9) Common - - - 2 245 307 0.04"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Energy Equipment and Services Integrated Power Services Holdings, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 5.00% Interest Rate Floor 1.00% Interest Rate 9.46% Maturity Date 9/8/2025",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Phillips & Temro Industries Inc."
+  },
+  "reason": "issuer_name_printed: The filer's member names another schedule line ('Integrated Power Services Holdings, Inc.'); the context's facts (par, cost, fair value, rate, maturity) are those of the printed line 'Phillips & Temro Industries Inc. (8) First Lien Term Loan S + 5.00 % 1.00 % 9.46 % 9/8/2025 200 200 200 0.03' (context C_9bbd616f-1074-4b91-9a9b-ed5f49e282ae)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Phillips & Temro Industries Inc. (8) First Lien Term Loan S + 5.00 % 1.00 % 9.46 % 9/8/2025 200 200 200 0.03"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Containers and Packaging Cold Chain Technologies, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 5.50% Interest Rate Floor 1.00% Interest Rate 9.83% Maturity Date 3/26/2031",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Nelipak Holding Company"
+  },
+  "reason": "issuer_name_printed: The filer's member names another schedule line ('Cold Chain Technologies, LLC'); the context's facts (par, cost, fair value, rate, maturity) are those of the printed line 'Nelipak Holding Company (8) First Lien Term Loan S + 5.50 % 1.00 % 9.83 % 3/26/2031 6,408 6,408 6,312 0.99' (context C_64273d3d-12ab-490e-b9cb-846877f4eb15)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Nelipak Holding Company (8) First Lien Term Loan S + 5.50 % 1.00 % 9.83 % 3/26/2031 6,408 6,408 6,312 0.99"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Containers and Packaging Packaging Coordinators PG Buyer, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 4.25% Interest Rate Floor 1.00% Interest Rate 8.50% Maturity Date 3/2/2026",
+  "exact": true,
+  "fields": {
+   "issuer_name": "PG Buyer, LLC"
+  },
+  "reason": "issuer_name_printed: The member's issuer text carries a fragment of the heading or of the previous name ('Packaging Coordinators PG Buyer, LLC'); the printed line reads 'PG Buyer, LLC (8) First Lien Term Loan S + 4.25 % 1.00 % 8.50 % 3/2/2026 199 199 199 0.03' (context C_3f3e3832-dc33-469a-979e-9ae7b555fb79)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "PG Buyer, LLC (8) First Lien Term Loan S + 4.25 % 1.00 % 8.50 % 3/2/2026 199 199 199 0.03"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Electrical Equipment Virgin Infinite Bidco LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 6.25% Interest Rate Floor 1.00% Interest Rate 10.56% Maturity Date 3/2/2028",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Infinite Bidco LLC"
+  },
+  "reason": "issuer_name_printed: The member's issuer text carries a fragment of the heading or of the previous name ('Virgin Infinite Bidco LLC'); the printed line reads 'Infinite Bidco LLC (8) First Lien Term Loan S + 6.25 % 1.00 % 10.56 % 3/2/2028 100 100 100 0.02' (context C_d0dcf069-bf6b-4f1b-9755-8fb84cf053ca)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Infinite Bidco LLC (8) First Lien Term Loan S + 6.25 % 1.00 % 10.56 % 3/2/2028 100 100 100 0.02"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Health Care Technology Continental Buyer, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 7.07% Maturity Date 3/28/2032",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Cotiviti, Inc."
+  },
+  "reason": "issuer_name_printed: The filer's member names another schedule line ('Continental Buyer, Inc.'); the context's facts (par, cost, fair value, rate, maturity) are those of the printed line 'Cotiviti, Inc. (5)(8)(15) First Lien Term Loan S + 2.75 % 7.07 % 3/28/2032 4,936 4,887 4,831 0.76' (context C_fff8c569-ecc5-4af8-86f7-dc0d555a33cc)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Cotiviti, Inc. (5)(8)(15) First Lien Term Loan S + 2.75 % 7.07 % 3/28/2032 4,936 4,887 4,831 0.76"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Software Kaseya Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 3.25% Interest Rate 7.57% Maturity Date 3/20/2030 Investments - non-controlled/non-affiliated Secured Debt Software Kipu Buyer, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 4.25% Interest Rate 8.54% Maturity Date 1/27/2027",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Kipu Buyer, LLC",
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "issuer_name_printed: The filer's member names another schedule line ('Kaseya Inc.'); the context's facts (par, cost, fair value, rate, maturity) are those of the printed line 'Kipu Buyer, LLC (8)(12) First Lien Term Loan S + 4.25 % 8.54 % 1/27/2027 199 199 199 0.03' (context C_17372b6a-c869-4f43-a54b-c0fd702be812)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Kipu Buyer, LLC (8)(12) First Lien Term Loan S + 4.25 % 8.54 % 1/27/2027 199 199 199 0.03"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Software North Star Acquisitionco, LLC Asset Type First Lien Revolver Reference Rate and Spread S + 6.00% Interest Rate 10.29% Maturity Date 03/05/2029 Investments - non-controlled/non-affiliated Secured Debt Software Onit, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 4.75% Interest Rate 9.07% Maturity Date 1/27/2032",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Onit, Inc.",
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "issuer_name_printed: The filer's member names another schedule line ('North Star Acquisitionco, LLC'); the context's facts (par, cost, fair value, rate, maturity) are those of the printed line 'Onit, Inc. (8)(13) First Lien Term Loan S + 4.75 % 9.07 % 1/27/2032 6,316 6,287 6,285 0.98' (context C_617aadc0-5875-42b7-8595-dc631c8a4c44)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Onit, Inc. (8)(13) First Lien Term Loan S + 4.75 % 9.07 % 1/27/2032 6,316 6,287 6,285 0.98"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Containers and Packaging Proampac Rohrer Corporation Asset Type First Lien Term Loan Reference Rate and Spread S + 5.00% Interest Rate 9.44% Maturity Date 3/15/2027",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Rohrer Corporation"
+  },
+  "reason": "issuer_name_printed: The member's issuer text carries a fragment of the heading or of the previous name ('Proampac Rohrer Corporation'); the printed line reads 'Rohrer Corporation (8)(12) First Lien Term Loan S + 5.00 % 9.44 % 3/15/2027 199 199 199 0.03' (context C_ea031b2b-53fb-41d6-83c1-6f4cff080041)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Rohrer Corporation (8)(12) First Lien Term Loan S + 5.00 % 9.44 % 3/15/2027 199 199 199 0.03"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt Containers and Packaging Proampac Rohrer Corporation Asset Type First Lien Term Loan Reference Rate and Spread S + 5.00% Interest Rate 9.40% Maturity Date 3/15/2027",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Rohrer Corporation"
+  },
+  "reason": "issuer_name_printed: The member's issuer text carries a fragment of the heading or of the previous name ('Proampac Rohrer Corporation'); the printed line reads 'Rohrer Corporation (8)(12) First Lien Term Loan S + 5.00 % 9.40 % 3/15/2027 199 199 199 0.03' (context C_8eb09aab-663f-4c5e-9f03-06e70667314e)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "Rohrer Corporation (8)(12) First Lien Term Loan S + 5.00 % 9.40 % 3/15/2027 199 199 199 0.03"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Secured Debt Financial Services Heights Buyer, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 5.75% Interest Rate 9.50% Maturity Date 8/25/2028",
+  "exact": true,
+  "fields": {
+   "issuer_name": "GTCR Everest Borrower, LLC"
+  },
+  "reason": "issuer_name_printed: The filer's member names another schedule line ('Heights Buyer, LLC'); the context's facts (par, cost, fair value, rate, maturity) are those of the printed line 'GTCR Everest Borrower, LLC (5)(6)(8)(16) First Lien Term Loan S + 2.75 % 6.40 % 9/5/2031 383 382 385 0.05' (context C_44987431-1e32-400f-b352-c49d3c2745b9)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "GTCR Everest Borrower, LLC (5)(6)(8)(16) First Lien Term Loan S + 2.75 % 6.40 % 9/5/2031 383 382 385 0.05"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Secured Debt Pharmaceuticals Asset Type Reference Rate and Spread 5.75% Interest Rate 9.42% Maturity Date 4/4/2029",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Tersera Therapeutics, LLC",
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "issuer_name_printed: The member names no issuer and no instrument ('Pharmaceuticals'); the printed line of the context's facts reads 'Tersera Therapeutics, LLC (7)(12)(13) First Lien Revolver S + 5.75 % 9.42 % 4/4/2029 116 - - -' (context C_2a4a1dbe-0a4a-4e6a-8fc7-0350e1b02c4f)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "Tersera Therapeutics, LLC (7)(12)(13) First Lien Revolver S + 5.75 % 9.42 % 4/4/2029 116 - - -"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Secured Debt Diversified Cop Hometown Acquisitions, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate 8.92% Maturity Date 7/16/2027",
+  "exact": true,
+  "fields": {
+   "issuer_name": "COP Hometown Acquisitions, Inc."
+  },
+  "reason": "issuer_name_printed: The member's issuer text carries a fragment of the heading or of the previous name ('Diversified Cop Hometown Acquisitions, Inc.'); the printed line reads 'COP Hometown Acquisitions, Inc. (8)(13) First Lien Term Loan S + 5.25 % 8.92 % 7/16/2027 908 905 904 0.12' (context C_4484e66a-c30a-492f-ab83-0ede07e389fa)",
+  "accession": "0001193125-26-221684",
+  "verbatim": "COP Hometown Acquisitions, Inc. (8)(13) First Lien Term Loan S + 5.25 % 8.92 % 7/16/2027 908 905 904 0.12"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Secured Debt Diversified Cop Hometown Acquisitions, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate 9.00% Maturity Date 7/16/2027",
+  "exact": true,
+  "fields": {
+   "issuer_name": "COP Hometown Acquisitions, Inc."
+  },
+  "reason": "issuer_name_printed: The member's issuer text carries a fragment of the heading or of the previous name ('Diversified Cop Hometown Acquisitions, Inc.'); the printed line reads 'COP Hometown Acquisitions, Inc. (8)(13) First Lien Term Loan S + 5.25 % 9.00 % 7/16/2027 906 904 899 0.11' (context C_b3eb94ad-dc8f-4123-91ce-6d4a059720b7)",
+  "accession": "0001193125-26-349158",
+  "verbatim": "COP Hometown Acquisitions, Inc. (8)(13) First Lien Term Loan S + 5.25 % 9.00 % 7/16/2027 906 904 899 0.11"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Secured Debt Machinery CD&R Hydra Buyer, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 4.00% Interest Rate 7.76% Maturity Date 3/25/2031",
+  "exact": true,
+  "fields": {
+   "issuer_name": "SunSource Borrower, LLC"
+  },
+  "reason": "issuer_name_printed: The member keeps the loan's earlier borrower name ('CD&R Hydra Buyer, Inc.', printed until 2026-03-31 with the same terms); the 10-Q prints 'SunSource Borrower, LLC (5)(8)(16) First Lien Term Loan S + 4.00 % 7.76 % 3/25/2031 1,965 1,974 1,969 0.24' (context C_5cf39e21-5265-4919-a245-2e0655d513f3)",
+  "accession": "0001193125-26-349158",
+  "verbatim": "SunSource Borrower, LLC (5)(8)(16) First Lien Term Loan S + 4.00 % 7.76 % 3/25/2031 1,965 1,974 1,969 0.24"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Secured Debt Electronic Equipment, Instruments and Components Wildcat Topco, Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 4.50% Interest Rate 8.17% Maturity Date 11/17/2031",
+  "exact": true,
+  "fields": {
+   "issuer_name": "AMP Purchaser, LLC"
+  },
+  "reason": "issuer_name_printed: The filer's member names another schedule line ('Wildcat Topco, Inc.'); the context's facts (par, cost, fair value, rate, maturity) are those of the printed line 'AMP Purchaser, LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.16 % 4/1/2033 286 ( 1 ) ( 1 ) -' (context C_ee88d9e1-f584-426e-8ce4-dc53c02378b3)",
+  "accession": "0001193125-26-349158",
+  "verbatim": "AMP Purchaser, LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.16 % 4/1/2033 286 ( 1 ) ( 1 ) -"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Diversified Consumer Services AVG Intermediate Holdings LLC Asset Type First Lien Revolver Reference Rate and Spread S + 6.00% Interest Rate Floor 1.00% Interest Rate 10.41% Maturity Date 3/16/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver') differ from the printed line of the context's own facts, which reads 'AVG Intermediate Holdings LLC (8) First Lien Delayed Draw Term Loan S + 6.00 % 1.00 % 10.41 % 3/16/2027 199 195 194 0.03' (context C_0529d788-2635-4d41-9857-46c75b9ec7b9)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "AVG Intermediate Holdings LLC (8) First Lien Delayed Draw Term Loan S + 6.00 % 1.00 % 10.41 % 3/16/2027 199 195 194 0.03"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Healthcare Providers and Services Crown Laundry, LLC One Asset Type First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate Floor 1.00% Interest Rate 9.58% Maturity Date 3/8/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Term Loan') differ from the printed line of the context's own facts, which reads 'Crown Laundry, LLC (8) First Lien Delayed Draw Term Loan S + 5.25 % 1.00 % 9.58 % 3/8/2027 602 602 596 0.09' (context C_cec1eb9f-6462-4ef8-9202-bbf6b553b5bb)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Crown Laundry, LLC (8) First Lien Delayed Draw Term Loan S + 5.25 % 1.00 % 9.58 % 3/8/2027 602 602 596 0.09"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Electrical Equipment TPC Engineering Holdings, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate Floor 0.00% Interest Rate 9.58% Maturity Date 2/16/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Term Loan') differ from the printed line of the context's own facts, which reads 'TPC Engineering Holdings, Inc. (7) First Lien Revolver S + 5.25 % 0.00 % 9.58 % 2/16/2027 441 289 288 0.05' (context C_afff182c-1db3-41fb-a461-bb66f88d1564)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "TPC Engineering Holdings, Inc. (7) First Lien Revolver S + 5.25 % 0.00 % 9.58 % 2/16/2027 441 289 288 0.05"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Distributors Vessco Midco Holdings, LLC Asset Type First Lien Delayed Draw Term Loan Revolver Reference Rate and Spread S + 4.25% Interest Rate Floor 0.75% Interest Rate 8.58% Maturity Date 7/24/2031",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Delayed Draw Term Loan Revolver') differ from the printed line of the context's own facts, which reads 'Vessco Midco Holdings, LLC (7) First Lien Revolver S + 4.25 % 0.75 % 8.58 % 7/24/2031 552 ( 3 ) ( 3 ) -' (context C_c21fac98-5f3c-47f0-affe-f8faaca6ac6e)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Vessco Midco Holdings, LLC (7) First Lien Revolver S + 4.25 % 0.75 % 8.58 % 7/24/2031 552 ( 3 ) ( 3 ) -"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Financial Services Wealth Enhancement Group, LLC Asset Type First Lien Revolver Loan Reference Rate and Spread S + 5.25% Interest Rate Floor 0.00% Interest Rate 9.58% Maturity Date 10/2/2028",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver Loan') differ from the printed line of the context's own facts, which reads 'Wealth Enhancement Group, LLC (7) First Lien Revolver S + 5.25 % 0.00 % 9.58 % 10/2/2028 323 - ( 2 ) -' (context C_d6f10666-4408-46ee-80b4-e2105f069696)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Wealth Enhancement Group, LLC (7) First Lien Revolver S + 5.25 % 0.00 % 9.58 % 10/2/2028 323 - ( 2 ) -"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Health Care Technology Continental Buyer, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.25% Interest Rate 9.57% Maturity Date 4/2/2031",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'Continental Buyer, Inc. (7)(13) First Lien Revolver S + 5.25 % 9.57 % 4/2/2031 1,398 ( 2 ) ( 3 ) -' (context C_44427fce-505c-4f7a-bba2-ee8630c3dbcc)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Continental Buyer, Inc. (7)(13) First Lien Revolver S + 5.25 % 9.57 % 4/2/2031 1,398 ( 2 ) ( 3 ) -"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Textiles, Apparel and Luxury Goods Gloves Buyer, Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 4.00% Interest Rate 8.29% Maturity Date 1/17/2032",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver') differ from the printed line of the context's own facts, which reads 'Gloves Buyer, Inc. (5)(8)(14) First Lien Term Loan S + 4.00 % 8.29 % 1/17/2032 4,000 3,980 3,857 0.60' (context C_ac689921-002b-44db-a6b1-4814642280b4)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Gloves Buyer, Inc. (5)(8)(14) First Lien Term Loan S + 4.00 % 8.29 % 1/17/2032 4,000 3,980 3,857 0.60"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Construction Materials Red Fox CD Acquisition Corporation Asset Type First Lien First Lien Delayed Draw Term Loan Reference Rate and Spread S + 6.00% Interest Rate 10.29% Maturity Date 3/4/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Delayed Draw Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien First Lien Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'Red Fox CD Acquisition Corporation (7)(15) First Lien Delayed Draw Term Loan S + 6.00 % 10.29 % 3/4/2030 10,718 9,808 9,828 1.54' (context C_f7699d56-3aa9-465f-8f3d-314e100beb0e)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Red Fox CD Acquisition Corporation (7)(15) First Lien Delayed Draw Term Loan S + 6.00 % 10.29 % 3/4/2030 10,718 9,808 9,828 1.54"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt Software Kaseya Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 3.25% Interest Rate 7.57% Maturity Date 3/20/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Term Loan') differ from the printed line of the context's own facts, which reads 'Kaseya Inc. (5)(7)(15) First Lien Revolver S + 3.25 % 7.57 % 3/20/2030 761 ( 4 ) 4 -' (context C_ad87455a-e6ea-4455-97c1-c71c4b37177f)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "Kaseya Inc. (5)(7)(15) First Lien Revolver S + 3.25 % 7.57 % 3/20/2030 761 ( 4 ) 4 -"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt Commercial Services and Supplies The Hiller Companies, LLC Asset Type First Lien Revolver Term Loan Reference Rate and Spread S + 5.00% Interest Rate 9.29% Maturity Date 6/20/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver Term Loan') differ from the printed line of the context's own facts, which reads 'The Hiller Companies, LLC (7)(13) First Lien Revolver S + 5.00 % 9.29 % 6/20/2030 1,299 ( 6 ) ( 10 ) -' (context C_ce5cd48a-26c7-4a5c-b812-098e0c3838a7)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "The Hiller Companies, LLC (7)(13) First Lien Revolver S + 5.00 % 9.29 % 6/20/2030 1,299 ( 6 ) ( 10 ) -"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Air Freight and Logistics Kenco PPC Buyer LLC Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.75% Interest Rate 8.60% Maturity Date 11/15/2029",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'Kenco PPC Buyer LLC (8)(12) First Lien Term Loan S + 4.75 % 8.60 % 11/15/2029 5,356 5,330 5,356 0.76' (context C_9b5b433d-492b-4a36-a004-0bf3caf9ac7f)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "Kenco PPC Buyer LLC (8)(12) First Lien Term Loan S + 4.75 % 8.60 % 11/15/2029 5,356 5,330 5,356 0.76"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Commercial Services and Supplies The Hiller Companies, LLC Asset Type First Lien Revolver Term Loan Reference Rate and Spread S + 5.00% Interest Rate 8.98% Maturity Date 6/20/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver Term Loan') differ from the printed line of the context's own facts, which reads 'The Hiller Companies, LLC (7)(13) First Lien Revolver S + 5.00 % 8.98 % 6/20/2030 1,299 ( 6 ) - -' (context C_0c8d8b2b-9ea4-4d5c-abac-9da18fb24d6a)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "The Hiller Companies, LLC (7)(13) First Lien Revolver S + 5.00 % 8.98 % 6/20/2030 1,299 ( 6 ) - -"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Aerospace and Defense TransDigm Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 2.25% Interest Rate 6.23% Maturity Date 3/22/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver') differ from the printed line of the context's own facts, which reads 'TransDigm Inc. (5)(6)(8)(15) First Lien Term Loan S + 2.25 % 6.23 % 3/22/2030 3,687 3,703 3,688 0.52' (context C_b618b9e0-47dd-467a-b335-cb79279a5b90)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "TransDigm Inc. (5)(6)(8)(15) First Lien Term Loan S + 2.25 % 6.23 % 3/22/2030 3,687 3,703 3,688 0.52"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Secured Debt Construction & Engineering Ampirical Solutions, LLC Asset Type First Lien Revolver Loan Reference Rate and Spread S + 4.25% Interest Rate 7.90% Maturity Date 9/30/2032",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver Loan') differ from the printed line of the context's own facts, which reads 'Ampirical Solutions, LLC (7)(12)(14) First Lien Revolver S + 4.25 % 7.90 % 9/30/2032 708 ( 3 ) ( 7 ) -' (context C_36a3fb0e-e225-4a1f-b9a2-1cd06d6b3df2)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "Ampirical Solutions, LLC (7)(12)(14) First Lien Revolver S + 4.25 % 7.90 % 9/30/2032 708 ( 3 ) ( 7 ) -"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Investments Healthcare Equipment and Supplies GTCR BC Intermediate II, Inc. Asset Type Subordinated Unsecured Delayed Draw Term Loan Interest Rate 12.75% PIK Maturity Date 11/20/2034",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Subordinated Unsecured Term Loan"
+  },
+  "reason": "The member's instrument words ('Subordinated Unsecured Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'GTCR BC Intermediate II, Inc. (6)(12)(16) Subordinated Unsecured Term Loan N/A 12.75 % PIK 11/20/2034 2,965 2,892 2,893 0.39' (context C_74e99398-5671-457c-9b5b-3d6219379394)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "GTCR BC Intermediate II, Inc. (6)(12)(16) Subordinated Unsecured Term Loan N/A 12.75 % PIK 11/20/2034 2,965 2,892 2,893 0.39"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Secured Debt Financial Services Heights Buyer, LLC Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.75% Interest Rate 9.50% Maturity Date 8/25/2028",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'Heights Buyer, LLC (8)(13) First Lien Term Loan S + 5.00 % 8.75 % 8/25/2028 921 917 916 0.12' (context C_e1298813-0515-4cef-929a-eb261c7da1b9)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "Heights Buyer, LLC (8)(13) First Lien Term Loan S + 5.00 % 8.75 % 8/25/2028 921 917 916 0.12"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Secured Debt Air Freight and Logistics Kenco PPC Buyer LLC Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 4.50% Interest Rate 8.08% Maturity Date 11/15/2029",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'Kenco PPC Buyer LLC (8)(13) First Lien Term Loan S + 4.50 % 8.08 % 11/15/2029 5,342 5,318 5,342 0.73' (context C_d757dd49-11b3-4ad5-ab92-9a018b7986c3)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "Kenco PPC Buyer LLC (8)(13) First Lien Term Loan S + 4.50 % 8.08 % 11/15/2029 5,342 5,318 5,342 0.73"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Secured Debt Containers and Packaging Nelipak Holding Company Asset Type First Lien Revolver Loan Reference Rate and Spread S + 5.50% Interest Rate 9.17% Maturity Date 3/26/2031",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver Loan') differ from the printed line of the context's own facts, which reads 'Nelipak Holding Company (7)(12)(13) First Lien Revolver S + 5.50 % 9.17 % 3/26/2031 1,855 278 264 0.03' (context C_7aef239b-62cc-443c-b961-3d6303f00f5c)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "Nelipak Holding Company (7)(12)(13) First Lien Revolver S + 5.50 % 9.17 % 3/26/2031 1,855 278 264 0.03"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Investments IT Services OEC Holdco, LLC Asset Type Subordinated Unsecured Delayed Draw Term Loan Interest Rate 11.00% PIK Maturity Date 12/30/2035",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Subordinated Unsecured Term Loan"
+  },
+  "reason": "The member's instrument words ('Subordinated Unsecured Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'OEC Holdco, LLC (12)(16) Subordinated Unsecured Term Loan N/A 11.00 % PIK 12/30/2035 5,000 4,900 4,900 0.67' (context C_c5513a89-eb85-437b-926a-551edfba973b)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "OEC Holdco, LLC (12)(16) Subordinated Unsecured Term Loan N/A 11.00 % PIK 12/30/2035 5,000 4,900 4,900 0.67"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Secured Debt Aerospace and Defense TransDigm Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 2.25% Interest Rate 5.92% Maturity Date 3/22/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver') differ from the printed line of the context's own facts, which reads 'TransDigm Inc. (5)(6)(8)(16) First Lien Term Loan S + 2.25 % 5.92 % 3/22/2030 3,678 3,693 3,693 0.50' (context C_1da9aa93-a94b-48ea-838d-6ddcfc308d8d)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "TransDigm Inc. (5)(6)(8)(16) First Lien Term Loan S + 2.25 % 5.92 % 3/22/2030 3,678 3,693 3,693 0.50"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Secured Debt Commercial Services and Supplies Zinc Buyer Corporation Asset Type First Lien Revolver Loan Reference Rate and Spread S + 4.75% Interest Rate 8.40% Maturity Date 7/24/2031",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver Loan') differ from the printed line of the context's own facts, which reads 'Zinc Buyer Corporation (7)(12)(14) First Lien Revolver S + 4.75 % 8.40 % 7/24/2031 790 ( 5 ) - -' (context C_72fe2885-ce08-4ed1-a38d-1b3e13b1961b)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "Zinc Buyer Corporation (7)(12)(14) First Lien Revolver S + 4.75 % 8.40 % 7/24/2031 790 ( 5 ) - -"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Secured Debt Distributors BC Group Holdings, Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.00% Interest Rate 8.67% Maturity Date 12/21/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'BC Group Holdings, Inc. (8)(14) First Lien Term Loan S + 5.00 % 8.67 % 12/21/2027 4,086 4,067 4,066 0.51' (context C_94296b63-55f3-4b6c-9419-a868a848e3e5)",
+  "accession": "0001193125-26-221684",
+  "verbatim": "BC Group Holdings, Inc. (8)(14) First Lien Term Loan S + 5.00 % 8.67 % 12/21/2027 4,086 4,067 4,066 0.51"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Healthcare Providers and Services Cyan Investors LP Asset Type Common",
+  "exact": true,
+  "fields": {
+   "instrument_description": "LP Units"
+  },
+  "reason": "The member's instrument words ('Common') differ from the printed line of the context's own facts, which reads 'Cyan Investors LP (7)(9) LP Units - - - 610 535 487 0.06' (context C_d2461ef1-d563-4720-b446-84f6ee24a0d2)",
+  "accession": "0001193125-26-221684",
+  "verbatim": "Cyan Investors LP (7)(9) LP Units - - - 610 535 487 0.06"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Investments Healthcare Equipment and Supplies GTCR BC Intermediate II, Inc. Asset Type Subordinated Unsecured Delayed Draw Term Loan Interest Rate 12.75% PIK Maturity Date 11/20/2034",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Subordinated Unsecured Term Loan"
+  },
+  "reason": "The member's instrument words ('Subordinated Unsecured Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'GTCR BC Intermediate II, Inc. (12) Subordinated Unsecured Term Loan N/A 12.75 % PIK 11/20/2034 3,104 3,033 2,995 0.38' (context C_9bc90512-9daf-4283-a109-22cf262d6c6f)",
+  "accession": "0001193125-26-221684",
+  "verbatim": "GTCR BC Intermediate II, Inc. (12) Subordinated Unsecured Term Loan N/A 12.75 % PIK 11/20/2034 3,104 3,033 2,995 0.38"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Investments IT Services OEC Holdco, LLC Asset Type Subordinated Unsecured Delayed Draw Term Loan Interest Rate 11.00% PIK Maturity Date 12/30/2035",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Subordinated Unsecured Term Loan"
+  },
+  "reason": "The member's instrument words ('Subordinated Unsecured Delayed Draw Term Loan') differ from the printed line of the context's own facts, which reads 'OEC Holdco, LLC (12) Subordinated Unsecured Term Loan N/A 11.00 % PIK 12/30/2035 5,000 4,906 4,838 0.61' (context C_b82af950-ea9f-4e38-a50b-e1c3064783d8)",
+  "accession": "0001193125-26-221684",
+  "verbatim": "OEC Holdco, LLC (12) Subordinated Unsecured Term Loan N/A 11.00 % PIK 12/30/2035 5,000 4,906 4,838 0.61"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Healthcare Providers and Services SCHP Holdings, L.P Asset Type Common",
+  "exact": true,
+  "fields": {
+   "instrument_description": "LP Units"
+  },
+  "reason": "The member's instrument words ('Common') differ from the printed line of the context's own facts, which reads 'SCHP Holdings, L.P. (9) LP Units - - - 3 331 320 0.04' (context C_a1aa952a-f44f-4309-bfb3-cde31a83d1bc)",
+  "accession": "0001193125-26-221684",
+  "verbatim": "SCHP Holdings, L.P. (9) LP Units - - - 3 331 320 0.04"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Secured Debt Aerospace and Defense TransDigm Inc. Asset Type First Lien Revolver Reference Rate and Spread S + 2.25% Interest Rate 5.91% Maturity Date 3/22/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver') differ from the printed line of the context's own facts, which reads 'TransDigm Inc. (5)(6)(8)(16) First Lien Term Loan S + 2.25 % 5.91 % 3/22/2030 686 688 686 0.09' (context C_ba352b7e-8c44-4c94-bc7b-c039a28858f1)",
+  "accession": "0001193125-26-221684",
+  "verbatim": "TransDigm Inc. (5)(6)(8)(16) First Lien Term Loan S + 2.25 % 5.91 % 3/22/2030 686 688 686 0.09"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Secured Debt Electrical Equipment AMP Purchaser, LLC Asset Type First Lien Revolver Reference Rate and Spread S + 4.50% Interest Rate 8.16% Maturity Date 4/1/2033",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Term Loan"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver') differ from the printed line of the context's own facts, which reads 'AMP Purchaser, LLC (12)(15) First Lien Term Loan S + 4.50 % 8.16 % 4/1/2033 2,214 2,209 2,209 0.28' (context C_c0dc542e-afb2-4599-afcd-11a2fcdd46cb)",
+  "accession": "0001193125-26-349158",
+  "verbatim": "AMP Purchaser, LLC (12)(15) First Lien Term Loan S + 4.50 % 8.16 % 4/1/2033 2,214 2,209 2,209 0.28"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Secured Debt Healthcare Equipment and Supplies Sentry Acquisition, LLC Asset Type First Lien Revolver Term Loan Reference Rate and Spread S + 4.50% Interest Rate 8.25% Maturity Date 2/2/2033",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Revolver Term Loan') differ from the printed line of the context's own facts, which reads 'Sentry Acquisition, LLC (7)(12)(14) First Lien Revolver S + 4.50 % 8.25 % 2/2/2033 633 ( 3 ) - -' (context C_7ca79210-c9c9-4c42-9713-5cefd9f9c65f)",
+  "accession": "0001193125-26-349158",
+  "verbatim": "Sentry Acquisition, LLC (7)(12)(14) First Lien Revolver S + 4.50 % 8.25 % 2/2/2033 633 ( 3 ) - -"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Secured Debt Food Products WPP Bullet Buyer, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate 9.00% Maturity Date 12/7/2029",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Term Loan') differ from the printed line of the context's own facts, which reads 'WPP Bullet Buyer, LLC (7)(12)(13) First Lien Revolver S + 5.25 % 9.00 % 12/7/2029 83 ( 1 ) ( 1 ) -' (context C_73737502-8198-45c4-87f3-1ac42ee8e972)",
+  "accession": "0001193125-26-349158",
+  "verbatim": "WPP Bullet Buyer, LLC (7)(12)(13) First Lien Revolver S + 5.25 % 9.00 % 12/7/2029 83 ( 1 ) ( 1 ) -"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Secured Debt Health Care Technology Wisdom Purchaser, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 4.25% Interest Rate 8.00% Maturity Date 7/24/2032 One",
+  "exact": true,
+  "fields": {
+   "instrument_description": "First Lien Revolver"
+  },
+  "reason": "The member's instrument words ('First Lien Term Loan') differ from the printed line of the context's own facts, which reads 'Wisdom Purchaser, LLC (7)(12)(15) First Lien Revolver S + 4.25 % 8.00 % 7/24/2032 636 ( 2 ) ( 16 ) -' (context C_eb0d1a57-eaf5-4dab-99cd-32d73d49f6ac)",
+  "accession": "0001193125-26-349158",
+  "verbatim": "Wisdom Purchaser, LLC (7)(12)(15) First Lien Revolver S + 4.25 % 8.00 % 7/24/2032 636 ( 2 ) ( 16 ) -"
+ },
+ {
+  "quarter": "2026-06-30",
+  "identifier": "Containers and Packaging TCB Holdings I LLC Asset Type Preferred Interest Rate 14.00% PIK",
+  "exact": true,
+  "fields": {
+   "shares_held": "5000"
+  },
+  "reason": "units_printed: the context's share fact is 5,000 (InvestmentOwnedBalanceShares 5000, decimals -3) and the 10-Q prints 5,000; the shared unit step published 5 (derived_proxy, carried from the earlier quarters that print 5). Published as printed and tagged; the cross-quarter scale question (5 vs 5,000) is an observation. Printed: 'TCB Holdings I LLC (9)(12) Preferred N/A 14.00 % PIK - 5,000 5,574 5,424 0.67' (context C_882ea784-f6dc-409d-994f-1472400ca6c5)",
+  "accession": "0001193125-26-349158",
+  "verbatim": "TCB Holdings I LLC (9)(12) Preferred N/A 14.00 % PIK - 5,000 5,574 5,424 0.67"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Pharmaceuticals Bamboo US BidCo LLC Asset Type First Lien Term Loan Reference Rate and Spread E + 5.25% Interest Rate Floor 1.00% Interest Rate 7.96% Maturity Date 9/30/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": "12.93",
+   "pik_rate": "3.38"
+  },
+  "reason": "pik_printed: no rate or PIK fact on the context; the 10-K prints the euro tranche as '12.93 % (Incl. 3.38 % PIK)', the same as the dollar tranche whose context tags 0.1293 and PIK 0.0338. The build had published 7.96 from the member text, a figure the page does not print. Published as printed: 'Bamboo US BidCo LLC (8) First Lien Term Loan E + 5.25 % 1.00 % 12.93 % (Incl. 3.38 % PIK) 9/30/2030 EUR 2,697 2,948 2,779 0.44' (context C_0c12b04e-a3f9-466a-bfe2-204c354c8e72)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Bamboo US BidCo LLC (8) First Lien Term Loan E + 5.25 % 1.00 % 12.93 % (Incl. 3.38 % PIK) 9/30/2030 EUR 2,697 2,948 2,779 0.44"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Healthcare Providers and Services 123Dentist Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread S + 5.75% Interest Rate Floor 0.75% Interest Rate 10.08% Maturity Date 8/10/2029",
+  "exact": true,
+  "fields": {
+   "interest_rate": "10.08"
+  },
+  "reason": "Rate fact tagged 0.0008 (InvestmentInterestRate, decimals 4) on a SOFR + 5.75 % loan; the 10-K prints 10.08 % (the page splits the figure as '1 0.08 %'; the page reader's printed row reads '10.08%'). Printed: '123Dentist Inc. (7) First Lien Delayed Draw Term Loan S + 5.75 % 0.75 % 1 0.08 % 8/10/2029 $ 10,132 $ 1,789 $ 1,750 0.27 %' (context C_ee81a269-9001-459e-84e3-381ece4ade1b)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "123Dentist Inc. (7) First Lien Delayed Draw Term Loan S + 5.75 % 0.75 % 1 0.08 % 8/10/2029 $ 10,132 $ 1,789 $ 1,750 0.27 %"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Secured Debt IT Services Oeconnection LLC Asset Type First Lien Revolver Reference Rate and Spread S + 4.50% Interest Rate 8.17% Maturity Date 12/23/2032",
+  "exact": true,
+  "fields": {
+   "fair_value": "3000"
+  },
+  "reason": "Fair value fact tagged -3000; the 10-K prints the revolver's fair value without brackets (cost ( 3 ), fair value 3). With the printed 3 the published total equals the printed 'Total Investments at fair value' 1,665,503 (it was 6 short). Printed: 'Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -' (context C_db5c99e4-9787-41be-b282-fa0a9b8713c7)",
+  "accession": "0001193125-26-115260",
+  "verbatim": "Oeconnection LLC (7)(12)(15) First Lien Revolver S + 4.50 % 8.17 % 12/23/2032 1,628 ( 3 ) 3 -"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Secured Debt Hotels, Restaurants and Leisure Movati Athletic (Group) Inc. Asset Type First Lien Delayed Draw Term Loan Reference Rate and Spread C + 4.50% Interest Rate 7.10% Maturity Date 5/29/2030",
+  "exact": true,
+  "fields": {
+   "fair_value": "7000"
+  },
+  "reason": "Fair value fact tagged -7000; the 10-Q prints the delayed draw's fair value without brackets (cost ( 6 ), fair value 7). With the printed 7 the secured-debt rows sum to the printed 'Total Secured Debt Investments 1,674,082 1,654,411' and the total to 1,730,366 (they were 14 short). Printed: 'Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -' (context C_42332ffe-6a53-4637-9883-ae6a30a03420)",
+  "accession": "0001193125-26-221684",
+  "verbatim": "Movati Athletic (Group) Inc. (6)(7)(12)(13) First Lien Delayed Draw Term Loan C + 4.50 % 7.10 % 5/29/2030 CAD 918 ( 6 ) 7 -"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Diversified Consumer Services GSV Holding, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 2.63% Interest Rate Floor 1.00% Interest Rate 6.93% (Incl. 3.13% PIK) Maturity Date 10/18/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.76"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.63 + PIK 3.13 = 5.76; pik_rate and the all-in rate unchanged. Printed: 'GSV Holding, LLC (8) First Lien Term Loan S + 2.63 % 1.00 % 10.06 % (Incl. 3.13 % PIK) 10/18/2030 4,856 4,832 4,833 0.76' (context C_fab72b16-3850-4d19-91aa-ca26b70daa19)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "GSV Holding, LLC (8) First Lien Term Loan S + 2.63 % 1.00 % 10.06 % (Incl. 3.13 % PIK) 10/18/2030 4,856 4,832 4,833 0.76"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Healthcare Providers and Services ACI Group Holdings, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate Floor 0.75% Interest Rate 10.43% (Incl. 3.25% PIK) Maturity Date 8/2/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.75 + PIK 3.25 = 6; pik_rate and the all-in rate unchanged. Printed: 'ACI Group Holdings, Inc. (8) First Lien Term Loan S + 2.75 % 0.75 % 10.43 % (Incl. 3.25 % PIK) 8/2/2028 200 199 195 0.03' (context C_3c08e1dc-1028-4bee-aef4-e306571f5b55)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "ACI Group Holdings, Inc. (8) First Lien Term Loan S + 2.75 % 0.75 % 10.43 % (Incl. 3.25 % PIK) 8/2/2028 200 199 195 0.03"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt IT Services Govdelivery Holdings, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 3.50% Interest Rate Floor 0.75% Interest Rate 7.81% (Incl. 2.25% PIK) Maturity Date 1/17/2031",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.75"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 3.5 + PIK 2.25 = 5.75; pik_rate and the all-in rate unchanged. Printed: 'Govdelivery Holdings, LLC (8) First Lien Term Loan S + 3.50 % 0.75 % 10.86 % (Incl. 2.25 % PIK) 1/17/2031 200 199 200 0.03' (context C_cff9c384-e89d-48bb-950f-6491a8accb97)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Govdelivery Holdings, LLC (8) First Lien Term Loan S + 3.50 % 0.75 % 10.86 % (Incl. 2.25 % PIK) 1/17/2031 200 199 200 0.03"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Pharmaceuticals Bamboo US BidCo LLC Asset Type First Lien Term Loan Reference Rate and Spread E + 5.25% Interest Rate Floor 1.00% Interest Rate 7.96% Maturity Date 9/30/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8.63"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 5.25 + PIK 3.38 = 8.63; pik_rate and the all-in rate unchanged. Printed: 'Bamboo US BidCo LLC (8) First Lien Term Loan E + 5.25 % 1.00 % 12.93 % (Incl. 3.38 % PIK) 9/30/2030 EUR 2,697 2,948 2,779 0.44' (context C_0c12b04e-a3f9-466a-bfe2-204c354c8e72)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Bamboo US BidCo LLC (8) First Lien Term Loan E + 5.25 % 1.00 % 12.93 % (Incl. 3.38 % PIK) 9/30/2030 EUR 2,697 2,948 2,779 0.44"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Pharmaceuticals Bamboo US BidCo LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 5.25% Interest Rate Floor 1.00% Interest Rate 9.56% Maturity Date 9/30/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8.63"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 5.25 + PIK 3.38 = 8.63; pik_rate and the all-in rate unchanged. Printed: 'Bamboo US BidCo LLC (8) First Lien Term Loan S + 5.25 % 1.00 % 12.93 % (Incl. 3.38 % PIK) 9/30/2030 $ 3,023 $ 3,023 $ 3,008 0.47 %' (context C_9504e9c4-24b7-4ecb-a94a-df55a25b1ef5)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Bamboo US BidCo LLC (8) First Lien Term Loan S + 5.25 % 1.00 % 12.93 % (Incl. 3.38 % PIK) 9/30/2030 $ 3,023 $ 3,023 $ 3,008 0.47 %"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Software Spartan Bidco PTY LTD Asset Type First Lien Term Loan Reference Rate and Spread S + 0.75% Interest Rate Floor 0.00% Interest Rate 5.21% PIK Maturity Date 1/24/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.75"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 0.75 + PIK 6 = 6.75; pik_rate and the all-in rate unchanged. Printed: 'Spartan Bidco PTY LTD (6)(8) First Lien Term Loan S + 0.75 % 0.00 % 11.21 % (Incl. 6.00 % PIK) 1/24/2028 4,815 4,778 4,771 0.75' (context C_32703a08-461d-4937-b872-4ee2a8869a95)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Spartan Bidco PTY LTD (6)(8) First Lien Term Loan S + 0.75 % 0.00 % 11.21 % (Incl. 6.00 % PIK) 1/24/2028 4,815 4,778 4,771 0.75"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Textiles, Apparel and Luxury Goods MTI Group Acquisition Company Asset Type First Lien Term Loan Reference Rate and Spread S + 6.00% Interest Rate Floor 1.00% Interest Rate 10.43% (Incl. 4.50% PIK) Maturity Date 3/31/2025",
+  "exact": true,
+  "fields": {
+   "basis_spread": "10.5"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 6 + PIK 4.5 = 10.5; pik_rate and the all-in rate unchanged. Printed: 'MTI Group Acquisition Company (6)(8) First Lien Term Loan S + 6.00 % 1.00 % 14.93 % (Incl. 4.50 % PIK) 3/31/2025 100 100 100 0.02' (context C_c95d74bc-f794-471c-a3c3-f130b9c8fb06)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "MTI Group Acquisition Company (6)(8) First Lien Term Loan S + 6.00 % 1.00 % 14.93 % (Incl. 4.50 % PIK) 3/31/2025 100 100 100 0.02"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Diversified Consumer Services GSV Holding, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 2.63% Interest Rate 10.03% (Incl. 3.13% PIK) Maturity Date 10/18/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.76"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.63 + PIK 3.13 = 5.76; pik_rate and the all-in rate unchanged. Printed: 'GSV Holding, LLC (8)(12) First Lien Term Loan S + 2.63 % 10.03 % (Incl. 3.13 % PIK) 10/18/2030 4,884 4,862 4,859 0.76' (context C_e4d4db61-1aa3-4dff-ae17-5a9da293b2c5)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "GSV Holding, LLC (8)(12) First Lien Term Loan S + 2.63 % 10.03 % (Incl. 3.13 % PIK) 10/18/2030 4,884 4,862 4,859 0.76"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Healthcare Providers and Services ACI Group Holdings, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 10.42% (Incl. 3.25% PIK) Maturity Date 8/2/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.75 + PIK 3.25 = 6; pik_rate and the all-in rate unchanged. Printed: 'ACI Group Holdings, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.42 % (Incl. 3.25 % PIK) 8/2/2028 202 201 196 0.03' (context C_8133c614-e5db-4829-99c8-e10e30ec39c5)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "ACI Group Holdings, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.42 % (Incl. 3.25 % PIK) 8/2/2028 202 201 196 0.03"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Software Bluecat Networks (USA) Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 5.00% Interest Rate 10.28% (Incl. 1.00% PIK) Maturity Date 8/08/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 5 + PIK 1 = 6; pik_rate and the all-in rate unchanged. Printed: 'Bluecat Networks (USA) Inc. (6)(8)(13) First Lien Term Loan S + 5.00 % 10.28 % (Incl. 1.00 % PIK) 8/8/2028 1,473 1,463 1,466 0.23' (context C_6344c1c1-26da-45da-a51f-f345f87aade6)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Bluecat Networks (USA) Inc. (6)(8)(13) First Lien Term Loan S + 5.00 % 10.28 % (Incl. 1.00 % PIK) 8/8/2028 1,473 1,463 1,466 0.23"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt T Services Govdelivery Holdings, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 3.50% Interest Rate 10.03% (Incl. 2.25% PIK) Maturity Date 1/17/2031",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.75"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 3.5 + PIK 2.25 = 5.75; pik_rate and the all-in rate unchanged. Printed: 'Govdelivery Holdings, LLC (8)(13) First Lien Term Loan S + 3.50 % 10.03 % (Incl. 2.25 % PIK) 1/17/2031 200 199 200 0.03' (context C_781063b2-feeb-4e63-800e-12e3403a0361)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Govdelivery Holdings, LLC (8)(13) First Lien Term Loan S + 3.50 % 10.03 % (Incl. 2.25 % PIK) 1/17/2031 200 199 200 0.03"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt T Services Medallia, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.50% Interest Rate 10.78% (Incl. 4.00% PIK) Maturity Date 10/29/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.5"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.5 + PIK 4 = 6.5; pik_rate and the all-in rate unchanged. Printed: 'Medallia, Inc. (8)(13) First Lien Term Loan S + 2.50 % 10.78 % (Incl. 4.00 % PIK) 10/29/2028 $ 102 $ 99 $ 100 0.02 %' (context C_98122be9-d9a5-46b1-af0a-1cab13933aa5)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "Medallia, Inc. (8)(13) First Lien Term Loan S + 2.50 % 10.78 % (Incl. 4.00 % PIK) 10/29/2028 $ 102 $ 99 $ 100 0.02 %"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt Aerospace and Defense GSP Holdings, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 5.75% Interest Rate 10.45% (Incl. 0.25% PIK) Maturity Date 11/6/2026",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 5.75 + PIK 0.25 = 6; pik_rate and the all-in rate unchanged. Printed: 'GSP Holdings, LLC (6)(8)(12) First Lien Term Loan S + 5.75 % 10.45 % (Incl. 0.25 % PIK) 11/6/2026 99 99 92 0.01' (context C_4d22f89d-a3fa-4a8d-a313-5fc7d5fbbb34)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "GSP Holdings, LLC (6)(8)(12) First Lien Term Loan S + 5.75 % 10.45 % (Incl. 0.25 % PIK) 11/6/2026 99 99 92 0.01"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt Chemicals Plaskolite PPC Intermediate II LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 4.00% Interest Rate 11.33% (Incl. 3.00% PIK) Maturity Date 5/9/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "7"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 4 + PIK 3 = 7; pik_rate and the all-in rate unchanged. Printed: 'Plaskolite PPC Intermediate II LLC (5)(8)(12) First Lien Term Loan S + 4.00 % 11.33 % (Incl. 3.00 % PIK) 5/9/2030 1,388 1,374 1,342 0.20' (context C_e96e91d3-cb13-495c-a40a-93a4299d6fbe)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "Plaskolite PPC Intermediate II LLC (5)(8)(12) First Lien Term Loan S + 4.00 % 11.33 % (Incl. 3.00 % PIK) 5/9/2030 1,388 1,374 1,342 0.20"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt Commercial Services and Supplies Pavion Corp. Asset Type First Lien Term Loan Reference Rate and Spread S + 3.75% Interest Rate 10.30% (Incl. 2.25% PIK) Maturity Date 10/30/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 3.75 + PIK 2.25 = 6; pik_rate and the all-in rate unchanged. Printed: 'Pavion Corp. (8)(13) First Lien Term Loan S + 3.75 % 10.30 % (Incl. 2.25 % PIK) 10/30/2030 193 193 191 0.03' (context C_172a031f-2f6a-4339-9e20-42c153e82064)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "Pavion Corp. (8)(13) First Lien Term Loan S + 3.75 % 10.30 % (Incl. 2.25 % PIK) 10/30/2030 193 193 191 0.03"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt Healthcare Providers and Services ACI Group Holdings, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 10.42% (Incl. 3.25% PIK) Maturity Date 8/2/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.75 + PIK 3.25 = 6; pik_rate and the all-in rate unchanged. Printed: 'ACI Group Holdings, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.42 % (Incl. 3.25 % PIK) 8/2/2028 204 203 197 0.03' (context C_8bb752b2-140f-4247-97cc-53ad468bd247)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "ACI Group Holdings, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.42 % (Incl. 3.25 % PIK) 8/2/2028 204 203 197 0.03"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt IT Services Govdelivery Holdings, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 3.50% Interest Rate 10.05% (Incl. 2.25% PIK) Maturity Date 1/17/2031",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.75"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 3.5 + PIK 2.25 = 5.75; pik_rate and the all-in rate unchanged. Printed: 'Govdelivery Holdings, LLC (8)(13) First Lien Term Loan S + 3.50 % 10.05 % (Incl. 2.25 % PIK) 1/17/2031 201 200 201 0.03' (context C_a832996a-6c79-4f6e-ba93-1034347688fa)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "Govdelivery Holdings, LLC (8)(13) First Lien Term Loan S + 3.50 % 10.05 % (Incl. 2.25 % PIK) 1/17/2031 201 200 201 0.03"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt IT Services Medallia, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.50% Interest Rate 10.74% (Incl. 4.00% PIK) Maturity Date 10/29/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.5"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.5 + PIK 4 = 6.5; pik_rate and the all-in rate unchanged. Printed: 'Medallia, Inc. (8)(13) First Lien Term Loan S + 2.50 % 10.74 % (Incl. 4.00 % PIK) 10/29/2028 103 100 100 0.01' (context C_8763a566-32d6-4adc-ab5e-2728eb61e71b)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "Medallia, Inc. (8)(13) First Lien Term Loan S + 2.50 % 10.74 % (Incl. 4.00 % PIK) 10/29/2028 103 100 100 0.01"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt Software Bluecat Networks (USA) Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 5.00% Interest Rate 10.30% (Incl. 1.00% PIK) Maturity Date 8/08/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 5 + PIK 1 = 6; pik_rate and the all-in rate unchanged. Printed: 'Bluecat Networks (USA) Inc. (6)(8)(13) First Lien Term Loan S + 5.00 % 10.30 % (Incl. 1.00 % PIK) 8/8/2028 1,473 1,464 1,455 0.22' (context C_e33184fc-258f-4ef7-845e-682d3251fd14)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "Bluecat Networks (USA) Inc. (6)(8)(13) First Lien Term Loan S + 5.00 % 10.30 % (Incl. 1.00 % PIK) 8/8/2028 1,473 1,464 1,455 0.22"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Secured Debt Software DT Intermediate Holdco, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 10.29% (Incl. 3.25% PIK) Maturity Date 2/24/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.75 + PIK 3.25 = 6; pik_rate and the all-in rate unchanged. Printed: 'DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.29 % (Incl. 3.25 % PIK) 2/24/2028 3,326 3,313 3,317 0.49' (context C_90d4e48a-ca1a-466f-9556-d54679894b55)",
+  "accession": "0000950170-25-107525",
+  "verbatim": "DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.29 % (Incl. 3.25 % PIK) 2/24/2028 3,326 3,313 3,317 0.49"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Aerospace and Defense GSP Holdings, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 5.75% Interest Rate 10.63% (Incl. 0.75% PIK) Maturity Date 11/6/2026",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.5"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 5.75 + PIK 0.75 = 6.5; pik_rate and the all-in rate unchanged. Printed: 'GSP Holdings, LLC (6)(8)(12) First Lien Term Loan S + 5.75 % 10.63 % (Incl. 0.75 % PIK) 11/6/2026 102 102 95 0.01' (context C_005550c0-54fa-4b8d-8914-95b458a7fb7b)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "GSP Holdings, LLC (6)(8)(12) First Lien Term Loan S + 5.75 % 10.63 % (Incl. 0.75 % PIK) 11/6/2026 102 102 95 0.01"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Aerospace and Defense GSP Holdings, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 5.75% Interest Rate 10.63% (Incl. 0.75% PIK) Maturity Date 11/6/2026 One",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.5"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 5.75 + PIK 0.75 = 6.5; pik_rate and the all-in rate unchanged. Printed: 'GSP Holdings, LLC (3)(6)(8)(12) First Lien Term Loan S + 5.75 % 10.63 % (Incl. 0.75 % PIK) 11/6/2026 - 1 - -' (context C_c4f17ebd-aa50-4d06-af8c-f288aa264647)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "GSP Holdings, LLC (3)(6)(8)(12) First Lien Term Loan S + 5.75 % 10.63 % (Incl. 0.75 % PIK) 11/6/2026 - 1 - -"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Chemicals Plaskolite PPC Intermediate II LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 4.00% Interest Rate 12.13% (Incl. 4.00% PIK) Maturity Date 5/9/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "8"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 4 + PIK 4 = 8; pik_rate and the all-in rate unchanged. Printed: 'Plaskolite PPC Intermediate II LLC (8)(12) First Lien Term Loan S + 4.00 % 12.13 % (Incl. 4.00 % PIK) 5/9/2030 1,400 1,387 1,346 0.19' (context C_9bbd8d73-217e-450a-9e95-a00e6500715b)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "Plaskolite PPC Intermediate II LLC (8)(12) First Lien Term Loan S + 4.00 % 12.13 % (Incl. 4.00 % PIK) 5/9/2030 1,400 1,387 1,346 0.19"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Commercial Services and Supplies Pavion Corp. Asset Type First Lien Term Loan Reference Rate and Spread S + 3.75% Interest Rate 10.13% (Incl. 2.25% PIK) Maturity Date 10/30/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 3.75 + PIK 2.25 = 6; pik_rate and the all-in rate unchanged. Printed: 'Pavion Corp. (8)(13) First Lien Term Loan S + 3.75 % 10.13 % (Incl. 2.25 % PIK) 10/30/2030 195 195 193 0.03' (context C_94aa957c-2759-47f0-8759-76b6fe9bff4c)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "Pavion Corp. (8)(13) First Lien Term Loan S + 3.75 % 10.13 % (Incl. 2.25 % PIK) 10/30/2030 195 195 193 0.03"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Diversified Consumer Services GSV Holding, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 2.63% Interest Rate 9.73% (Incl. 3.13% PIK) Maturity Date 10/18/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.76"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.63 + PIK 3.13 = 5.76; pik_rate and the all-in rate unchanged. Printed: 'GSV Holding, LLC (8)(12) First Lien Term Loan S + 2.63 % 9.73 % (Incl. 3.13 % PIK) 10/18/2030 4,967 4,946 4,942 0.70' (context C_1940188d-4a6c-4291-9369-8d957adbb045)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "GSV Holding, LLC (8)(12) First Lien Term Loan S + 2.63 % 9.73 % (Incl. 3.13 % PIK) 10/18/2030 4,967 4,946 4,942 0.70"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Healthcare Providers and Services ACI Group Holdings, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 10.23% (Incl. 3.25% PIK) Maturity Date 8/2/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.75 + PIK 3.25 = 6; pik_rate and the all-in rate unchanged. Printed: 'ACI Group Holdings, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.23 % (Incl. 3.25 % PIK) 8/2/2028 205 205 198 0.03' (context C_9b0f7a06-7c53-4cb2-8999-07a9fef30c18)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "ACI Group Holdings, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.23 % (Incl. 3.25 % PIK) 8/2/2028 205 205 198 0.03"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt IT Services Govdelivery Holdings, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 3.50% Interest Rate 9.73% (Incl. 2.25% PIK) Maturity Date 1/17/2031",
+  "exact": true,
+  "fields": {
+   "basis_spread": "5.75"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 3.5 + PIK 2.25 = 5.75; pik_rate and the all-in rate unchanged. Printed: 'Govdelivery Holdings, LLC (8)(13) First Lien Term Loan S + 3.50 % 9.73 % (Incl. 2.25 % PIK) 1/17/2031 201 201 201 0.03' (context C_f60c768c-6abf-4561-a3dd-93dc936f17bb)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "Govdelivery Holdings, LLC (8)(13) First Lien Term Loan S + 3.50 % 9.73 % (Incl. 2.25 % PIK) 1/17/2031 201 201 201 0.03"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt IT Services Medallia, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.50% Interest Rate 10.45% (Incl. 4.00% PIK) Maturity Date 10/29/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.5"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.5 + PIK 4 = 6.5; pik_rate and the all-in rate unchanged. Printed: 'Medallia, Inc. (8)(13) First Lien Term Loan S + 2.50 % 10.45 % (Incl. 4.00 % PIK) 10/29/2028 104 102 92 0.01' (context C_402e6cf2-0fa8-4740-af72-06fbeb609462)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "Medallia, Inc. (8)(13) First Lien Term Loan S + 2.50 % 10.45 % (Incl. 4.00 % PIK) 10/29/2028 104 102 92 0.01"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Software Adelaide Borrower, LLC Assets Type First Lien Term Loan Reference Rate and Spread S + 3.38% Interest Rate 10.73% (Incl. 3.38% PIK) Maturity Date 5/8/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6.76"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 3.38 + PIK 3.38 = 6.76; pik_rate and the all-in rate unchanged. Printed: 'Adelaide Borrower, LLC (13) First Lien Term Loan S + 3.38 % 10.73 % (Incl. 3.38 % PIK) 5/8/2030 202 200 200 0.03' (context C_e1c5f6a2-6c98-4dde-af58-a5c6733008dc)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "Adelaide Borrower, LLC (13) First Lien Term Loan S + 3.38 % 10.73 % (Incl. 3.38 % PIK) 5/8/2030 202 200 200 0.03"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Software Bluecat Networks (USA) Inc. Assets Type First Lien Term Loan Reference Rate and Spread S + 5.00% Interest Rate 9.98% (Incl. 1.00% PIK) Maturity Date 8/8/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 5 + PIK 1 = 6; pik_rate and the all-in rate unchanged. Printed: 'Bluecat Networks (USA) Inc. (6)(8)(13) First Lien Term Loan S + 5.00 % 9.98 % (Incl. 1.00 % PIK) 8/8/2028 1,477 1,468 1,477 0.21' (context C_c17a1584-2a11-4308-973d-e30eb6ec184e)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "Bluecat Networks (USA) Inc. (6)(8)(13) First Lien Term Loan S + 5.00 % 9.98 % (Incl. 1.00 % PIK) 8/8/2028 1,477 1,468 1,477 0.21"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Secured Debt Software DT Intermediate Holdco, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate 9.98% (Incl. 3.25% PIK) Maturity Date 2/24/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6"
+  },
+  "reason": "D-031 / D-240: the filer printed the CASH margin on floating PIK loans until 2025-09-30 (residual: rate - margin - PIK = benchmark) and the total from 2025-12-31 (ACI 'S + 2.75 %' then 'S + 6.00 %' with the same 3.25 % PIK). Spread = printed cash margin 2.75 + PIK 3.25 = 6; pik_rate and the all-in rate unchanged. Printed: 'DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan S + 2.75 % 9.98 % (Incl. 3.25 % PIK) 2/24/2028 3,381 3,369 3,381 0.48' (context C_0da8201d-d6a9-4c26-8109-8dc05da760bc)",
+  "accession": "0001193125-25-280627",
+  "verbatim": "DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan S + 2.75 % 9.98 % (Incl. 3.25 % PIK) 2/24/2028 3,381 3,369 3,381 0.48"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Diversified Consumer Services Apex Service Partners, LLC Asset Type First Lien Term Loan Reference Rate and Spread S + 11.59% Interest Rate Floor 1.00% Interest Rate 9.81 (Include 2.00% PIK)% Maturity Date 10/24/2030",
+  "exact": true,
+  "fields": {
+   "basis_spread": ""
+  },
+  "reason": "D-240: the margin cell prints the all-in rate '11.59 % (Incl. 2.00 % PIK)'; no line of this or a later filing prints this loan's margin with the PIK (from 2025-03-31 it prints 'S + 5.00 %' with no PIK). No margin is inferred: spread withdrawn, all-in rate 11.59 and PIK 2.00 as printed. Printed: 'Apex Service Partners, LLC First Lien Term Loan 11.59 % (Incl. 2.00 % PIK) 1.00 % 11.59 % (Incl. 2.00 % PIK) 10/24/2030 $ 4,850 $ 4,826 $ 4,827 0.76 %' (context C_939d5c3a-89a4-45c0-be13-2093b41a0716)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "Apex Service Partners, LLC First Lien Term Loan 11.59 % (Incl. 2.00 % PIK) 1.00 % 11.59 % (Incl. 2.00 % PIK) 10/24/2030 $ 4,850 $ 4,826 $ 4,827 0.76 %"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Secured Debt Software DT Intermediate Holdco, Inc. Asset Type First Lien Term Loan Reference Rate and Spread S + 2.75% Interest Rate Floor 0.75% Interest Rate 7.06% (Incl. 3.25% PIK) Maturity Date 2/24/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6",
+   "reference_rate_type": "SOFR",
+   "reference_rate_source": "printed_schedule",
+   "coupon_type": "Floating"
+  },
+  "reason": "D-240: the margin cell prints the all-in rate ('10.59 % (Incl. 3.25 % PIK)'); the same loan (maturity 2/24/2028, PIK 3.25 %) is printed in the 10-Q for 2025-06-30 as 'DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.29 % (Incl. 3.25 % PIK) 2/24/2028 3,326 3,313 3,317 0.49', so the margin is SOFR + 2.75 % cash + 3.25 % PIK = 6.00 (D-031). Rate and PIK as printed. Printed: 'DT Intermediate Holdco, Inc. (8) First Lien Term Loan 10.59 % (Incl. 3.25 % PIK) 0.75 % 10.59 % (Incl. 3.25 % PIK) 2/24/2028 3,299 3,283 3,274 0.51' (context C_dbe8813a-d92f-40cf-8baf-665684f6711b)",
+  "accession": "0000950170-25-041127",
+  "verbatim": "DT Intermediate Holdco, Inc. (8) First Lien Term Loan 10.59 % (Incl. 3.25 % PIK) 0.75 % 10.59 % (Incl. 3.25 % PIK) 2/24/2028 3,299 3,283 3,274 0.51"
+ },
+ {
+  "quarter": "2025-03-31",
+  "identifier": "Secured Debt Software DT Intermediate Holdco, Inc. Asset Type First Lien Term Loan Reference Rate and Spread 10.28% (Incl. 3.25% PIK) Interest Rate 10.28% (Incl. 3.25% PIK) Maturity Date 2/24/2028",
+  "exact": true,
+  "fields": {
+   "basis_spread": "6",
+   "reference_rate_type": "SOFR",
+   "reference_rate_source": "printed_schedule",
+   "coupon_type": "Floating"
+  },
+  "reason": "D-240: the margin cell prints the all-in rate ('10.28 % (Incl. 3.25 % PIK)'); the same loan (maturity 2/24/2028, PIK 3.25 %) is printed in the 10-Q for 2025-06-30 as 'DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan S + 2.75 % 10.29 % (Incl. 3.25 % PIK) 2/24/2028 3,326 3,313 3,317 0.49', so the margin is SOFR + 2.75 % cash + 3.25 % PIK = 6.00 (D-031). Rate and PIK as printed. Printed: 'DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan 10.28 % (Incl. 3.25 % PIK) 10.28 % (Incl. 3.25 % PIK) 2/24/2028 3,299 3,285 3,282 0.51' (context C_73e60fb4-786a-4bfb-9f11-98c8e94a7561)",
+  "accession": "0000950170-25-071352",
+  "verbatim": "DT Intermediate Holdco, Inc. (8)(13) First Lien Term Loan 10.28 % (Incl. 3.25 % PIK) 10.28 % (Incl. 3.25 % PIK) 2/24/2028 3,299 3,285 3,282 0.51"
  }
 ]
