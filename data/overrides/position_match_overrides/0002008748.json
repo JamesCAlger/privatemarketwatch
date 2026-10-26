@@ -1,0 +1,22 @@
+{
+  "schema_version": "position-match-override.v1",
+  "cik": "0002008748",
+  "overrides": [
+    {
+      "begin_report_date": "2026-03-31",
+      "end_report_date": "2026-06-30",
+      "begin_issuer_name": "Ambient Enterprises Holdco LLC",
+      "end_issuer_name": "Ambient Enterprises Holdco LLC",
+      "begin_fair_value": -3000.0,
+      "end_fair_value": -5000.0,
+      "match_method": "C_normalized_name",
+      "action": "reject",
+      "mechanism": "Name-only match (C_normalized_name) linked two different undrawn tranches of one borrower: Delayed Draw 2025 Term Loan C at 2026-03-31 (fair value -3 thousand) to Delayed Draw 2026 Term Loan D at 2026-06-30 (-5 thousand), a tranche first printed at 2026-06-30. Term Loan C is printed again at 2026-06-30, now drawn (249 par). Rejecting the pair starts Term Loan D as a new position.",
+      "evidence": "0000930413-26-001612: 'Delayed Draw 2025 Term Loan C) (7) 3M S + 5.25 % N/A 6/28/2030 - ( 4 ) ( 3 )'. 0000930413-26-002499: 'Ambient Enterprises Holdco LLC, (Delayed Draw 2025 Term Loan C) (7) 3M S + 5.50 % 9.23 % 6/28/2030 249 245 240 0.03 Ambient Enterprises Holdco LLC, (Delayed Draw 2026 Term Loan D) (7) 3M S + 5.50 % N/A 6/28/2030 - ( 4 ) ( 5 )'. Sandbox rflab position_matches: -3000 -> -5000 by C_normalized_name.",
+      "confidence": 1.0,
+      "residual_risk": "Keyed by name and fair values within the loader's tolerance (1 pct or 1,000 dollars); the two values differ by 2,000, so one pair matches. Term Loan C 2026-06-30 and Term Loan B 2026-06-30 still start new position ids unless the matcher re-pairs them; recorded in the fund report.",
+      "created_by": "claude-fund-agent-lordabbett-rfla",
+      "review_id": "OBS-2008748-ambient-tranche-c-to-d"
+    }
+  ]
+}

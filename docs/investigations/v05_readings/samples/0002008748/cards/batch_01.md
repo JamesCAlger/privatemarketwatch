@@ -43,7 +43,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2031-09-29  (tag: equal, equal)
-- corrected_fields = 
+- corrected_fields = extracted_industry
 - interest_rate_source = 
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -93,7 +93,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2032-04-26  (tag: equal)
-- corrected_fields = 
+- corrected_fields = extracted_industry
 - interest_rate_source = 
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -128,7 +128,7 @@
 **Member (identifier text):** `United Flow Technologies Intermediate Holdco IILLC Revolver`
 
 **Published:**
-- issuer_name = United Flow Technologies Intermediate Holdco IILLC
+- issuer_name = United Flow Technologies Intermediate Holdco II, LLC
 - instrument_description = Revolver
 - asset_category = LOAN
 - fair_value = -17000.0  (tag: equal)
@@ -143,7 +143,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2030-06-21  (tag: equal)
-- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type
+- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type;extracted_industry;issuer_name;instrument_description
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 
@@ -178,7 +178,7 @@
 **Member (identifier text):** `BCM One Inc Term Loan`
 
 **Published:**
-- issuer_name = BCM One Inc
+- issuer_name = BCM One, Inc.
 - instrument_description = Term Loan
 - asset_category = LOAN
 - fair_value = 9575000.0  (tag: equal, differs)
@@ -193,7 +193,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2027-11-17  (tag: equal, equal)
-- corrected_fields = 
+- corrected_fields = extracted_industry;issuer_name;instrument_description
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -228,7 +228,7 @@
 **Member (identifier text):** `Transnet YX Inc Revolver`
 
 **Published:**
-- issuer_name = Transnet YX Inc
+- issuer_name = TransnetYX, Inc
 - instrument_description = Revolver
 - asset_category = LOAN
 - fair_value = 0.0  (tag: equal)
@@ -243,7 +243,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2027-04-13  (tag: equal)
-- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type
+- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type;extracted_industry;issuer_name;instrument_description
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 
@@ -291,7 +291,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2028-08-21  (tag: equal, differs)
-- corrected_fields = 
+- corrected_fields = extracted_industry
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -341,7 +341,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2031-01-03  (tag: equal)
-- corrected_fields = 
+- corrected_fields = extracted_industry
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -391,7 +391,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2031-04-02  (tag: equal)
-- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type
+- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type;extracted_industry
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 
@@ -426,7 +426,7 @@
 **Member (identifier text):** `RJW Logistics Group Inc Revolver`
 
 **Published:**
-- issuer_name = RJW Logistics Group Inc
+- issuer_name = RJW Logistics Group, Inc
 - instrument_description = Revolver
 - asset_category = LOAN
 - fair_value = 0.0
@@ -441,7 +441,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2027-03-05  (tag: equal)
-- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type
+- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type;extracted_industry;issuer_name;instrument_description
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 
@@ -476,7 +476,7 @@
 **Member (identifier text):** `Lead Venture Inc Term Loan`
 
 **Published:**
-- issuer_name = Lead Venture Inc
+- issuer_name = LeadVenture, Inc
 - instrument_description = Term Loan
 - asset_category = LOAN
 - fair_value = 49293000.0  (tag: equal)
@@ -491,7 +491,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2032-06-23  (tag: equal)
-- corrected_fields = 
+- corrected_fields = extracted_industry;issuer_name;instrument_description
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -544,7 +544,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2031-11-06  (tag: equal)
-- corrected_fields = 
+- corrected_fields = extracted_industry
 - interest_rate_source = 
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -629,7 +629,7 @@
 **Member (identifier text):** `MGSMFG Group Inc Revolver`
 
 **Published:**
-- issuer_name = MGSMFG Group Inc
+- issuer_name = MGS MFG. Group, Inc.
 - instrument_description = Revolver
 - asset_category = LOAN
 - fair_value = 0.0  (tag: equal, equal)
@@ -644,7 +644,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2027-05-31  (tag: equal, equal)
-- corrected_fields = 
+- corrected_fields = extracted_industry;issuer_name;instrument_description
 - interest_rate_source = 
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -695,7 +695,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2031-04-02  (tag: equal)
-- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type
+- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type;extracted_industry
 - interest_rate_source = xbrl_field
 - basis_spread_source = 
 - pik_rate_source = 
@@ -746,7 +746,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2031-09-29  (tag: equal)
-- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type
+- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type;extracted_industry
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 
@@ -796,7 +796,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2031-10-15  (tag: equal)
-- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type
+- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type;extracted_industry
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 
@@ -881,7 +881,7 @@
 **Member (identifier text):** `Vacation Rental Brands LLC Incremental Term Loan`
 
 **Published:**
-- issuer_name = Vacation Rental Brands LLC
+- issuer_name = Vacation Rental Brands, LLC
 - instrument_description = Incremental Term Loan
 - asset_category = LOAN
 - fair_value = 4214000.0  (tag: equal)
@@ -896,7 +896,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2032-05-06  (tag: equal)
-- corrected_fields = 
+- corrected_fields = extracted_industry;issuer_name;instrument_description
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -932,7 +932,7 @@
 **Member (identifier text):** `Playpower Inc Revolver`
 
 **Published:**
-- issuer_name = Playpower Inc
+- issuer_name = Playpower, Inc.
 - instrument_description = Revolver
 - asset_category = LOAN
 - fair_value = -66000.0  (tag: equal)
@@ -947,7 +947,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2030-08-28  (tag: equal)
-- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type
+- corrected_fields = basis_spread;reference_rate_type;reference_rate_source;coupon_type;extracted_industry;issuer_name;instrument_description
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 

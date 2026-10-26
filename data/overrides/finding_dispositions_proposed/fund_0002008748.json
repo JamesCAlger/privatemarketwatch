@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "layf",
+ "sandbox": "rflad",
  "dispositions": [
   {
    "disposition_id": "PD-pct_position_concentration-2008748-1",
@@ -302,6 +302,44 @@
    "rerun": "see docs/investigations/v05_readings/reports/0002008748.json and scratch/fund_runs/0002008748/",
    "decided_by": "PROPOSED by agent lordabbett_fund_agent_2026-10-17 (fund-clearing loop, sandbox laye); not accepted by the owner",
    "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-F21-2008748-9",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F21",
+   "reason_key": "f21-holdings-over-net-assets-of-a-levered-fund",
+   "ciks": [
+    "0002008748"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "statement": "Holdings over net assets 2.5746 at 2025-06-30 (published-basis holdings 856,850 thousand over net assets 332,815 thousand): both figures are the filer's printed balance-sheet figures, and the fund borrows (debt 527,945 thousand, total liabilities 538,411 thousand). Published fair value and cost equal the printed investments totals in this and every other quarter. No fix applies: neither figure is mis-read.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "Total investments at fair value (cost of $ 856,319 , $ 471,418 , respectively) $ 856,850 $ 472,588",
+     "quote": "'Total investments at fair value (cost of $ 856,319 , $ 471,418 , respectively) $ 856,850 $ 472,588': fair value 856,850 at 2025-06-30, equal to the published-basis sum."
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "Total liabilities $ 538,411 $ 388,433 Total net assets $ 332,815 $ 203,539",
+     "quote": "'Total liabilities $ 538,411 $ 388,433 Total net assets $ 332,815 $ 203,539': net assets 332,815; 856,850 / 332,815 = 2.5746."
+    },
+    {
+     "source": "filing",
+     "accession": "0000930413-25-002470",
+     "verbatim": "Debt (net of deferred financing costs $ 4,855 and $ 3,652 respectively) (Note 5) $ 527,945 $ 382,230",
+     "quote": "'Debt (net of deferred financing costs $ 4,855 and $ 3,652 respectively) (Note 5) $ 527,945 $ 382,230': the fund is levered."
+    }
+   ],
+   "rerun": "scratch/fund_runs/0002008748/r2_q17_totals.sql (sandbox rflac) and scratch/fund_runs/0002008748/notes.md",
+   "decided_by": "PROPOSED by agent claude-fund-agent-lordabbett-rfla (fund-clearing loop, sandbox rflac); not accepted by the owner",
+   "decided_on": "2026-10-26"
   }
  ]
 }

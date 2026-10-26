@@ -255,9 +255,9 @@
   "basis": "D-248, gate INCOMPLETE with investigation COMPLETE (independent review rfnsf_r2, 70/70 findings, 25/25 observations, 2/2 history): 97 findings, 70 outstanding, 61 proposed, 9 industry_coverage waiting on owner (REQ-rfns-1); 14/14 quarters tie on FV and cost; page sample 0/20; six builds. Known parked published errors with staged fixes (D-248). Replaces nmyd (D-204)"
  },
  "0002008748": {
-  "label": "layf",
-  "accepted_on": "2026-10-17",
-  "basis": "D-205, gate INCOMPLETE with investigation COMPLETE (five review rounds): 19 outstanding, 18 proposed, D06 2026-06-30 a confirmed error (humanised issuer names to 2026-03-31); 8/8 quarters tie (2026-06-30 was 1,437.6M under); sample 0/20 errors on laye; Ambient two rows and C/D chain mislink left; six builds"
+  "label": "rflad",
+  "accepted_on": "2026-10-26",
+  "basis": "D-249, gate PASS with investigation COMPLETE (independent review rflad, 19/19 findings, 19/19 observations): 29 findings, 19 outstanding, all proposed; 8/8 quarters tie on FV and cost; page sample 0/20; four builds. Replaces layf (D-205)"
  },
  "0001825265": {
   "label": "t8zd",

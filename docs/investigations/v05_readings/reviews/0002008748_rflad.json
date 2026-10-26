@@ -1,0 +1,549 @@
+{
+ "reviewer_id": "claude-independent-reviewer-lordabbett-rflad",
+ "report_digest": "34ffa2090f81973bef0350fa4ccffe13008680056c7d9617f1d41959c7dfa95f",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_018ad0f71c92",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2025-06-30: the ledger fails at 257.44. That equals my published-basis sum and the printed 'Total Investments (8) $ 856,319 $ 856,850 257.44 %'. Before the pct_tagged_as_ratio fix the sum was 2.57. A levered fund over the 250 bar; fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Total Investments (8) $ 856,319 $ 856,850 257.44 %"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Total net assets $ 332,815 $ 203,539"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Security 101 (Term Loan) 3M S + 5.00 % 9.30 % 4/11/2028 73,885 73,200 73,423 22.06"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Total Investments (8) $ 856,319 $ 856,850 257.44 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0add5f585242",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pct_position_concentration 2025-09-30: the ledger shows 5.0 pct of 80 rows, i.e. 4, equal to affected_rows. My population (q_pct.sql) is the rows over 25 pct: Alliance Mobile, Discovery Marketing, Seakeeper, Trimont. All are underlying_schedule rows of the SBLA JV schedule, whose percent is of the JV's net assets, as printed there. No own-book row exceeds 25 pct. The reason concentration-jv-lookthrough-row-percent-of-jv-net-assets fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-003431",
+     "text": "Trimont Holdings LLC (Term Loan) 1M S + 3.00 % 7.16 % 5/31/2027 $ 26,600 $ 26,364 $ 26,334 39.50 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1819f88eea38",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pct_position_concentration 2025-06-30: the ledger shows 5.26 pct of 76 rows, i.e. 4, equal to affected_rows. My population (q_pct.sql) is the rows over 25 pct: Alliance Mobile, Discovery Marketing, Royal Property, Seakeeper. All are underlying_schedule rows of the SBLA JV schedule, whose percent is of the JV's net assets, as printed there. No own-book row exceeds 25 pct. The reason concentration-jv-lookthrough-row-percent-of-jv-net-assets fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Seakeeper Technologies LLC (Term Loan) 3M S + 2.75 % 7.51 7/19/2027 18,500 18,321 18,321 33.14"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2dacd0ab6a8a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F21 2025-06-30 (point f): 856,850 / 332,815 = 2.5746, from the printed balance sheet (quoted). The published-basis holdings equal the printed total (costtie.py). Printed debt is 527,945 and total liabilities 538,411, so leverage explains the ratio. This is the only quarter over 2.5. The existing reason f21-holdings-over-net-assets-of-a-levered-fund fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Total investments at fair value (cost of $ 856,319 , $ 471,418 , respectively) $ 856,850 $ 472,588"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Total liabilities $ 538,411 $ 388,433 Total net assets $ 332,815 $ 203,539"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Debt (net of deferred financing costs $ 4,855 and $ 3,652 respectively) (Note 5) $ 527,945 $ 382,230"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3a0a7439986a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2026-06-30: affected_rows 1, equal to the Arkas Bidco equity rows (COMMON_EQUITY) published that quarter (q_cls.sql). The context tags a dollar principal equal to the printed cost cell, and the filing does not say whether the cell is a count. source_ambiguity, with the owner to decide, is the honest state.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 929 0.13"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3a80619b0397",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT01 2025-06-30: one CIK-quarter row, as affected_rows. My published-basis sum of pct_of_net_assets (review_la/q_pct.sql, JV look-through rows excluded) is 257.44, which equals the printed Total Investments percent. Published cost and FV tie the printed totals in all 8 quarters (review_la/costtie.py). The fund is levered (2025-06-30 printed debt 527,945 against net assets 332,815). The reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Total Investments (8) $ 856,319 $ 856,850 257.44 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3dcb414a66e8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT01 2024-12-31: one CIK-quarter row, as affected_rows. My published-basis sum of pct_of_net_assets (review_la/q_pct.sql, JV look-through rows excluded) is 232.18, which equals the printed Total Investments percent. Published cost and FV tie the printed totals in all 8 quarters (review_la/costtie.py). The fund is levered (2025-06-30 printed debt 527,945 against net assets 332,815). The reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-000900",
+     "text": "Total Investments at Fair Value (9) $ 471,418 $ 472,588 232."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_489c4f7e9ed6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT01 2025-12-31: one CIK-quarter row, as affected_rows. My published-basis sum of pct_of_net_assets (review_la/q_pct.sql, JV look-through rows excluded) is 248.07, which equals the printed Total Investments percent. Published cost and FV tie the printed totals in all 8 quarters (review_la/costtie.py). The fund is levered (2025-06-30 printed debt 527,945 against net assets 332,815). The reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Total Investments (8) $ 1,312,388 $ 1,309,928 248.07 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7e42a3400714",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2026-03-31: affected_rows 1, equal to the Arkas Bidco equity rows (COMMON_EQUITY) published that quarter (q_cls.sql). The context tags a dollar principal equal to the printed cost cell, and the filing does not say whether the cell is a count. source_ambiguity, with the owner to decide, is the honest state.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 890 0.13"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7e5cb94e189b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2025-06-30: the ledger shows n_units 70, equal to affected_rows. I read c346 in the raw filing: it carries only InvestmentMaturityDate and lordabbett:UnfundedLoanCommitment, the unfunded-commitment table row (the Accel revolver line is quoted next to its schedule row). My reverse check (review_la/reverse_ov.py) finds no unpublished own-book position context in any quarter. Cost and FV tie the printed totals. The reason b01-unfunded-commitment-table-rows-not-positions fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Accel International Holdings Inc (Revolver) 4/26/2032 $ 2,162"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Accel International Holdings Inc (Revolver) (7) 3M S + 4.50 % N/A 4/26/2032 - ("
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_805434c4321d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2025-09-30: the ledger shows n_units 72, equal to affected_rows. I read c346 in the raw filing: it carries only InvestmentMaturityDate and lordabbett:UnfundedLoanCommitment, the unfunded-commitment table row (the Accel revolver line is quoted next to its schedule row). My reverse check (review_la/reverse_ov.py) finds no unpublished own-book position context in any quarter. Cost and FV tie the printed totals. The reason b01-unfunded-commitment-table-rows-not-positions fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-003431",
+     "text": "Accel International Holdings Inc (Revolver) 4/26/2032 $ 2,162"
+    },
+    {
+     "accession": "0000930413-25-003431",
+     "text": "Accel International Holdings Inc (Revolver) (7) 3M S + 4.50 % N/A 4/26/2032 - ("
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8c48e3d5316b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT01 2024-09-30: one CIK-quarter row, as affected_rows. My published-basis sum of pct_of_net_assets (review_la/q_pct.sql, JV look-through rows excluded) is 244.41, which equals the printed Total Investments percent. Published cost and FV tie the printed totals in all 8 quarters (review_la/costtie.py). The fund is levered (2025-06-30 printed debt 527,945 against net assets 332,815). The reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8e3fe5d1aa5d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT01 2025-09-30: one CIK-quarter row, as affected_rows. My published-basis sum of pct_of_net_assets (review_la/q_pct.sql, JV look-through rows excluded) is 226.60, which equals the printed Total Investments percent. Published cost and FV tie the printed totals in all 8 quarters (review_la/costtie.py). The fund is levered (2025-06-30 printed debt 527,945 against net assets 332,815). The reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-003431",
+     "text": "Total Investments (8) $ 949,025 $ 950,464 226.60 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9d540e9d7443",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C04 2025-12-31: affected_rows 2, equal to the Arkas Bidco equity rows (COMMON_EQUITY) published that quarter (q_cls.sql). The context tags a dollar principal equal to the printed cost cell, and the filing does not say whether the cell is a count. source_ambiguity, with the owner to decide, is the honest state.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Equity (6) Personal Care Products Arkas Bidco Limited (5)(11)(12) N/A N/A N/A 888 888 888 0.17"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a08692fd6233",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pct_position_concentration 2024-09-30: the ledger shows 15.0 pct of 20 rows, i.e. 3, equal to affected_rows (c64, c61, c39). My population is the rows over 25 pct: Playpower 33.36, GCOM 30.79 and Continental Buyer 25.32, all own-book. Each percent equals its printed line on a 128M-net-asset fund in its first published quarter. Fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b5ccef3284b7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pct_position_concentration 2025-12-31: the ledger shows 2.65 pct of 113 rows, i.e. 3, equal to affected_rows. My population (q_pct.sql) is the rows over 25 pct: Rental Equipment, Seakeeper, Trimont. All are underlying_schedule rows of the SBLA JV schedule, whose percent is of the JV's net assets, as printed there. No own-book row exceeds 25 pct. The reason concentration-jv-lookthrough-row-percent-of-jv-net-assets fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Trimont Holdings LLC (Term Loan) 1M S + 2.75 % 6.47 % 3/1/2030 $ 25,900 $ 25,704 $ 25,641 36.42 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c2917ec0d28c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pct_position_concentration 2026-06-30: the ledger shows 2.33 pct of 172 rows, i.e. 4, equal to affected_rows. My population (q_pct.sql) is the rows over 25 pct: ComPsych, Iris Acquisition, Rental Equipment, Trimont. All are underlying_schedule rows of the SBLA JV schedule, whose percent is of the JV's net assets, as printed there. No own-book row exceeds 25 pct. The reason concentration-jv-lookthrough-row-percent-of-jv-net-assets fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Iris Acquisition, LLC (Term Loan) 1M S + 5.00 % 8.61 % 6/9/2033 28,000 27,720 27,720 31.59"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e6e88f92b6a0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2024-09-30: the ledger warns at 244.41. That equals my published sum and the printed 'Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %'. The outlier rows c64, c61 and c39 are the three over 25 pct (Playpower, GCOM, Continental), each as printed. a07-outlier-percent-is-the-printed-row fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %"
+    },
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Playpower, Inc. 3M S + 5.25% 9.85 % 8/28/2030 $ 43,434 $ 42,790 $ 42,790 33.36 %"
+    },
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Total Investments at Fair Value $ 312,639 $ 313,562 244.41 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f2337f8c0db5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "pct_position_concentration 2026-03-31: the ledger shows 1.27 pct of 157 rows, i.e. 2, equal to affected_rows. My population (q_pct.sql) is the rows over 25 pct: Rental Equipment, Trimont. All are underlying_schedule rows of the SBLA JV schedule, whose percent is of the JV's net assets, as printed there. No own-book row exceeds 25 pct. The reason concentration-jv-lookthrough-row-percent-of-jv-net-assets fits.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Trimont Holdings LLC (Term Loan) 3M S + 2.75 % 6.45 % 5/31/2027 25,200 25,042 24,948 34.00"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "typed-member-label-ending-member-read-as-aggregate",
+   "outcome": "supported",
+   "rationale": "Supported. Published 2026-06-30 equals the printed 'Total Investments (8) $ 1,572,733 $ 1,563,657' on cost and FV (costtie.py). The reverse check finds only '[Member]' aggregates (industry and lien totals, JV subtotals) unpublished that quarter.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Real Estate Management & Development Vacation Rental Brands, LLC (Term Loan 2025) 3M S + 5.25 % 8.98 % 5/6/2032 64,677 64,124 64,192 8.77"
+    },
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Total Investments (8) $ 1,572,733 $ 1,563,657 213.58 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "pct-scale-test-counts-totals-and-lookthrough-rows",
+   "outcome": "supported",
+   "rationale": "Supported. 2025-06-30 published percents sum to 257.44, equal to the printed total, with Security 101 at 22.06. The shared heuristic is unchanged; the detector proposal is reasoned.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Security 101 (Term Loan) 3M S + 5.00 % 9.30 % 4/11/2028 73,885 73,200 73,423 22.06"
+    }
+   ]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "Supported. The undrawn dash lines appear in rflad at FV 0 with null cost (e.g. BCM One, MGS, TransnetYX revolvers), as printed '- - - -'. Cost and FV tie in every quarter.",
+   "evidence": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "BCM One, Inc. (Revolver) (8) 3M S + 4.50% N/A 11/17/2027 - - - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-interest-classed-as-loan-without-instrument-word",
+   "outcome": "supported",
+   "rationale": "Supported. SBLA Private Credit LLC is classed PRIVATE_CREDIT_FUND on one parent-schedule row in each of the 7 quarters from 2024-12-31 (q_cls.sql).",
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Investments in Joint Venture (4)(6)(9) SBLA Private Credit LLC (5) N/A N/A N/A 77,101 77,101 76,767 10.49"
+    }
+   ]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "outcome": "supported",
+   "rationale": "Supported. The Arkas Bidco equity rows are COMMON_EQUITY: 2 at 2025-12-31, 1 at 2026-03-31, 1 at 2026-06-30.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 890 0.13"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-names-another-tranche",
+   "outcome": "supported",
+   "rationale": "Supported (point b). RJW c16 2024-12-31 is 'Delayed Draw' (-17 / -17), as printed. RSC c77 2024-12-31 is 'Delayed Draw' (7,135 / 7,104 / 7,117), as printed. TransnetYX c232 2026-03-31 is 'Term Loan' (11,495), as printed, and continues TransnetYX's term-loan chain d4c86f8d from 2024-12-31.\nMinor: RSC 2024-12-31 now publishes two rows both named 'Delayed Draw' (c77 drawn, c79 undrawn), since the page prints '(Delayed Draw)' twice. That departs from the report's own rule of keeping the member's distinguishing text in that case; the chains stay distinct.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-003431",
+     "text": "Flourish Research Acquistion, LLC (Revolver) (7) 3M S + 5.00 % 9.22 % 11/6/2031 523 468 492 0.12"
+    },
+    {
+     "accession": "0000930413-25-000900",
+     "text": "RSC Acquisition, Inc. (Delayed Draw) (8) 3M S + 4.75% N/A 11/1/2029 - ( 186 ) ( 100 ) ( 0.05 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "outcome": "supported",
+   "rationale": "Supported. The Flourish revolver publishes instrument 'Revolver' at 2025-06-30 and 2025-09-30, with no stray prefix.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Flourish Research Acquistion, LLC (Revolver) (7) 3M S + 5.00 % N/A 11/6/2031 - ( 57 ) ( 31 ) ( 0.01 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Supported (point d). Meta Buyer EUR c222 2025-12-31: 16,804 x 1.1736 = 19,721.2k. AUD c226: 19,782 x 0.6669 = 13,192.6k. Both rates equal data/reference/fx_fred DEXUSEU and DEXUSAL for 2025-12-31. 2026-03-31 (1.1518 / 0.6855) and 2026-06-30 (1.1417 / 0.6915) also match FRED. The EUR, AUD and USD chains pair like with like across 2025-12-31 -> 2026-06-30 (aa2c106c, 67f20d90, 51784554).",
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Meta Buyer LLC (Term Loan 2025 AUD) 3M B + 5.25 % 9.62 % 12/22/2031 19,733 12,921 13,542 1.85"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "outcome": "supported",
+   "rationale": "Supported (point d). My scan of every printed 'P +', 'E +' and 'B +' code in the five filings 2025-06-30 to 2026-06-30 (review_la/refscan.py), current-period lines only, finds exactly the rows published non-SOFR:\n- Meta Buyer EUR/AUD and the BBSY delayed draw and revolver at 2025-12-31.\n- PRIME on Cards-Live Oak, MGS MFG and Meridian JV 2025-12-31; eShipping and MGS 2026-03-31; MGS and Leg Purchaser 2026-06-30.\n- Earlier PRIME rows (Schoeneck, RSC 2024-12-31; MGS 2025-03-31).\nCaveat: MGS 2025-12-31 prints '1M P + 3.50 % 8.32 %', the same 8.32 as its SOFR term loan, so the filer's code and rate disagree. Published as printed.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Leg Purchaser Inc (Revolver) (7)(5) 3M P + 4.25 % 11.00 % 1/12/2032 1,924 1,878 1,924 0.26"
+    },
+    {
+     "accession": "0000930413-26-000841",
+     "text": "MGS MFG. Group, Inc. (Revolver) (7) 1M P + 3.50 % 8.32 % 5/31/2027 547 547 547 0.10"
+    }
+   ]
+  },
+  {
+   "observation_key": "spread-printed-not-tagged-published-fixed",
+   "outcome": "supported",
+   "rationale": "Supported. 2024-09-30 rows publish the printed margin and Floating coupon (BCM One 4.50, quoted). 156 rows carry reference_rate_source row_correction.",
+   "evidence": [
+    {
+     "accession": "0000930413-24-003190",
+     "text": "IT Services BCM One, Inc. 6M S + 4.50% 8.85 % 11/17/2027 15,089 15,089 15,089"
+    },
+    {
+     "accession": "0000930413-24-003190",
+     "text": "IT Services BCM One, Inc. 6M S + 4.50"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "Supported (point a). I sampled 15 of the 718 rows with a changed extracted_industry (review_la/indsample.py, heading.py) and found the nearest printed heading above each row on its page. All 15 match: BCM One x2 'IT Services', TransnetYX 'Life Sciences Tools & Services', Arkas 'Personal Care Products', ATCDT (JV) 'Automobile Components', Keystone 'Insurance', Playpower and Buffalo Games 'Leisure Products', SolarWinds 'Software', Vensure (JV) 'Professional Services', KDV and Meridian 'Commercial Services & Supplies', Applied Aerospace 'Aerospace & Defense', Qualus 'Construction & Engineering', Security 101 'IT Services'. The GICS diff shows 526 labels gained and 0 lost.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Keystone Agency Investors (Term Loan) 3M S + 4.75 % 9.05 %"
+    },
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Construction & Engineering Qualus Power Services Cor"
+    },
+    {
+     "accession": "0000930413-24-003190",
+     "text": "IT Services BCM One, Inc. 6M S + 4.50"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Supported (point b). In rflad, 100 entity_ids equal 100 normalised printed names, and each entity has one canonical_name (review_la/q_ent.sql). No entity spans two normalised names, and no name spans two entities. The 104 spellings fold into 100 keys only through punctuation (Databricks Inc / Databricks, Inc.; AMP Purchaser; MGS MFG./Mfg.; Ambient Holdco LLC / , LLC).",
+   "evidence": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-label-depends-on-build-composition",
+   "outcome": "supported",
+   "rationale": "Supported as left. SolarWinds now takes 'Application Software' from the 'Software' heading (sample row 2025-12-31).",
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Software SolarWinds Holdings, Inc. (Term Loan) 3M S + 6.00 % 9.67 % 4/18/2033 31,000 30,001 25,575 3.49"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Supported. No published issuer_name in rflad keeps a tranche word: the 100 normalised keys are company names only (q_ent.sql listing).",
+   "evidence": [
+    {
+     "accession": "0000930413-25-001811",
+     "text": "Accession Risk Management Group, Inc (Delayed Draw Term) (8) 3M S + 4.75% 9.05 % 11/1/2029 1,313 1,180 1,237 0.46"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Supported. Ambient c70 / c72 2025-12-31 publish issuer 'Ambient Enterprises Holdco LLC' with 'Term Loan 2025 2nd / 3rd Amendment' (379 / 308), on their own position_ids (1bce673d, ef5ddb6e) through 2026-06-30.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Ambient Enterprises Holdco LLC, (Term Loan 2025 2nd Amendment) 3M S + 5.25 % 8.92 % 6/28/2030 383 377 379 0.07"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-links-rows-of-different-size",
+   "outcome": "supported",
+   "rationale": "Supported as left (point e).\n- Ambient: the reject override is the only entry in position_match_overrides/0002008748.json (untracked, new). Term Loan D 2026-06-30 still carries 7179acdf (Term Loan C's id), and Term Loan C 2026-06-30 (240) and Term Loan B (640) start new ids, as stated.\n- United Flow 2025-03-31: c44 / c46 / c48 publish 'Intermediate Holdco II, LLC' on chains 61db88c7, 8b13fa91 and 28bae73a, continuous 2024-09-30 to 2025-09-30.\n- Meta Buyer: re-paired like with like.\n- Meridian JV: Delayed Draw 2026-03-31 (3,815) -> 'Delayed Draw 2026 Term Loan' 2026-06-30 (107) shares 168ba38b, while a new 'Delayed Draw' (0) takes 88587d13. The doubt is warranted, and it is look-through only.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Ambient Enterprises Holdco LLC, (Delayed Draw 2026 Term Loan D) (7) 3M S + 5.50 % N/A 6/28/2030 - ( 4 ) ( 5 )"
+    },
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Ambient Enterprises Holdco LLC, (Delayed Draw 2025 Term Loan C) (7) 3M S + 5.50 % 9.23 % 6/28/2030 249 245 240 0.03"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) (7) 3M S + 5.25 % 9.57 % 6/23/2031 9,926 9,799 9,889"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-plus-pik-spread-is-cash-leg-only",
+   "outcome": "supported",
+   "rationale": "Supported (point c). The printed lines read '3M S + 5.50% (Incl. 2.75% PIK) 9.15 %' at 2026-06-30 and 9.17 at 2026-03-31. The same filing's Falcon revolver prints '3M S + 5.00 % 8.66 %', so 3M SOFR was about 3.65 to 3.66. 3.65 + 5.50 = 9.15, so 5.50 is the total margin including PIK: D-031 spread 5.50 and pik 2.75.\nThe published cash leg 6.40 (6.42) = 9.15 - 2.75 (9.17 - 2.75) is SOFR + 2.75 cash margin, so it is not understated. All 6 rows (own term loan and delayed draw and JV term loan, two quarters) carry spread 5.50 and pik 2.75.\nPar growth: 36,031 x 2.75 / 4 pct = 248, less 0.25 pct amortisation (90) = 158, against +154 printed.",
+   "evidence": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Falcon Parent Holdings Inc (Term Loan) 3M S + 5.50% (Incl. 2.75% PIK) 9.15 % 11/6/2031 36,185 35,850 35,551 4.86"
+    },
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Falcon Parent Holdings Inc (Revolver) (7) 3M S + 5.00 % 8.66 % 11/6/2031 1,151 1,102 1,078 0.15"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-published-as-representative-sub-industry",
+   "outcome": "supported",
+   "rationale": "Supported as an owner item (point a). My GICS diff (q_gics.sql) confirms 18 Vensure rows moved 'Human Resource & Employment Services' -> 'Research & Consulting Services' and 8 Accession / Ardonagh rows 'Insurance Brokers' -> 'Property & Casualty Insurance'. These are less accurate labels, produced by the owner's heading-wins ruling.\nNot counted in the 26: RSC Acquisition (5 rows, an insurance broker) moved 'Diversified Financial Services' -> 'Property & Casualty Insurance' under the 'Insurance' heading, and Keystone Agency Investors gained 'Property & Casualty Insurance'. Both are brokers or agencies that the same map mislabels. The owner should see them with the 26.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-001811",
+     "text": "Insurance Accession Risk Management Group, Inc 3M S + 4.75% 9.05 % 11/1/2029 17,064 17,003 17,021 6.30"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Supported. The tranche words match the page on my 15-row spot check. 2024-09-30 and 2025-03-31 term loans print no tranche word on the page, and several publish no instrument there (e.g. Meridian c12, United Flow c44), as printed.",
+   "evidence": [
+    {
+     "accession": "0000930413-25-000900",
+     "text": "RJW Logistics Group, Inc (Delayed Draw) (8) 3M S + 5.25% N/A 11/26/2031 - ( 17 ) ( 17 ) ( 0.01 )"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [],
+ "reviewer_notes": [
+  "Point (g):\n- Cost tie (review_la/costtie.py, published basis): printed Total Investments cost and FV equal published in all 8 quarters.\n- Spot check of 15 random rows (seed rev-la-2; spot2.py, findnum.py): 15 of 15 match the printed line on par, cost, FV, spread, rate and maturity, including 3 undrawn lines (CCI Buyer, Flourish, KDV, Meridian JV, Schoeneck, LeadVenture x2, Meta Buyer AUD, AA&D, Vacation Rental, MGS, JFL-Atomic, United Flow, Electro Methods, Centaur).\n- Reverse check (reverse_ov.py): no unpublished own-book position in any quarter. What remains unpublished are industry, lien and total aggregates, the fund's credit facilities, and the SBLA JV schedule's rows at 2024-12-31 and 2025-03-31.",
+  "Gap not in the report: the JV look-through layer has no rows at 2024-12-31 and 2025-03-31 (rflaa and rflad alike), although those filings tag the JV schedule (about 15 rows each, totals 95,411k and 93,939k). Published basis is unaffected (underlying_schedule is excluded), but the look-through starts only at 2025-06-30.",
+  "rflaa vs rflad (fdiff.py): 874 = 874 rows. The column diff counts equal the declared ones; entity_id (23) and canonical_name (489) follow the names.",
+  "Point (f), F28: DS-FUNDLOOP-F28-2008748 covers 2024-03-31 only, where companyfacts has net assets 25.6M and no investments figure, so 'not_applicable' is plausible. The 2024-06-30 quarter (investments 228M per companyfacts) is cleared by DS-LARGE11; its holdings are missing because that 10-Q is not cached, a download gap rather than not-applicable.",
+  "All 86 quotes in the report are on their pages (allquotes.py). All findings proposed does not mean the data are correct."
+ ]
+}

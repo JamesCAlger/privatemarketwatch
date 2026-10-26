@@ -1,117 +1,92 @@
 {
  "cik": "0002008748",
- "label": "layf",
- "before": "sponfb",
- "investigator_id": "lordabbett_fund_agent_2026-10-17",
+ "label": "rflad",
+ "before": "rgA6",
+ "investigator_id": "claude-fund-agent-lordabbett-rfla",
  "shared_code": false,
  "declared_changes": [
   {
-   "column": "instrument_description",
-   "rows": 22,
-   "why": "Flourish revolver (2), Continental Buyer 2026-03-31 (1), Databricks 2025-06-30 and 2025-09-30 'Term Loan' (2, swapped axes), and the 17 rows above whose cut tranche words now lead the instrument ('Delayed Draw 2025 Term Loan B')"
-  },
-  {
-   "column": "issuer_name",
-   "rows": 19,
-   "why": "17 rows whose name kept tranche words ('Accession Risk Management Group Inc Delayed Draw Term', 'Lighthouse Technologies Holding Corp 4 th Amendment', 'Radwell Parent LLC Delayed Draw 20264 th Amendment'), cut by the extended issuer_name_strip_re; plus the 2 Flourish revolver rows (unchanged against sponfb)"
-  },
-  {
-   "column": "pct_of_net_assets",
-   "rows": 90,
-   "why": "2025-06-30 percents x100 (pct_tagged_as_ratio), 60 own-book + 30 JV rows"
-  },
-  {
-   "column": "principal_amount_currency",
-   "rows": 4,
-   "why": "Meta Buyer EUR/AUD par, 2026-03-31 and 2026-06-30"
-  },
-  {
-   "column": "principal_amount_usd",
-   "rows": 4,
-   "why": "same, H.10 reference conversion"
-  },
-  {
-   "column": "principal_fx_rate_to_usd",
-   "rows": 4,
-   "why": "same"
-  },
-  {
-   "column": "principal_fx_status",
-   "rows": 4,
-   "why": "same, reference_fx"
-  },
-  {
-   "column": "asset_category",
-   "rows": 11,
-   "why": "SBLA JV interest to FUND (7 quarters), Arkas equity to EQUITY_COMMON (4 rows)"
-  },
-  {
-   "column": "issuer_category",
-   "rows": 7,
-   "why": "SBLA JV interest to FUND"
-  },
-  {
-   "column": "index_classification",
-   "rows": 11,
-   "why": "SBLA to PRIVATE_CREDIT_FUND, Arkas to COMMON_EQUITY"
-  },
-  {
-   "column": "exposure_type",
-   "rows": 7,
-   "why": "SBLA to FUND"
-  },
-  {
-   "column": "asset_class",
-   "rows": 11,
-   "why": "SBLA 2025-06-30 OTHER to PRIVATE_CREDIT; Arkas to PRIVATE_EQUITY"
-  },
-  {
    "column": "basis_spread",
-   "rows": 142,
-   "why": "printed margin on the 142 loans of 2024-09-30 to 2025-03-31 (no spread tagged)"
-  },
-  {
-   "column": "reference_rate_type",
-   "rows": 150,
-   "why": "printed code on those 142 loans; BBSY on the AUD loan, EURIBOR on the 2026-03-31 EUR loan, PRIME on 4 revolvers"
-  },
-  {
-   "column": "reference_rate_source",
-   "rows": 150,
-   "why": "row_correction on the same rows"
-  },
-  {
-   "column": "coupon_type",
-   "rows": 142,
-   "why": "Fixed to Floating on the 142 loans"
-  },
-  {
-   "column": "src_transforms",
-   "rows": 90,
-   "why": "pct_of_net_assets:rate_x100 on the 2025-06-30 rows"
+   "rows": 2,
+   "why": "Falcon Parent 2026-06-30 c186/c188: total printed margin 5.50 (D-031), filer tags the 2.75 cash part"
   },
   {
    "column": "corrected_fields",
-   "rows": 162,
-   "why": "every row with a row correction"
+   "rows": 724,
+   "why": "every row with a round-2 row correction"
   },
   {
-   "column": "position_id",
-   "rows": 100,
-   "why": "chains re-paired by the added 2026-06-30 quarter, the 37 zero-value rows and the 17 corrected names"
+   "column": "extracted_industry",
+   "rows": 718,
+   "why": "printed industry heading above each row, 2024-09-30 to 2026-03-31 own and JV rows and 2026-06-30 JV rows (718)"
   },
   {
    "column": "gics_sector",
-   "rows": 3,
-   "why": "SolarWinds rows: canonical-name GICS depends on the funds in the sandbox (sponfb had 32); no change aimed at"
+   "rows": 595,
+   "why": "follows gics_sub_industry"
   },
   {
    "column": "gics_sub_industry",
-   "rows": 3,
-   "why": "same"
+   "rows": 674,
+   "why": "follows extracted_industry through the shared printed-industry map (526 rows gained a label, 122 moved to the filer's heading's industry, 26 specific labels inside the heading replaced by the map's representative sub-industry; 0 lost)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 38,
+   "why": "printed tranche of the row ('(Term Loan)' on 2024-12-31 term loans published with none; member suffixes 'Delayed Draw 1', 'Term Loan 2', '20252 nd Amendment'); member names another tranche on RJW c16 2024-12-31, RSC c77 2024-12-31, TransnetYX c232 2026-03-31; Arkas equity 'Equity'"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 4,
+   "why": "Falcon 4 rows: all-in 9.17/9.15 less PIK 2.75 under filed_rate_reading all_in"
+  },
+  {
+   "column": "issuer_name",
+   "rows": 438,
+   "why": "printed company name on each row's own schedule line (row corrections, context-keyed), 2024-09-30 to 2026-06-30: humanised member names ('JFL Atomic Acquisition Co Inc' -> 'JFL-Atomic AcquisitionCo, Inc.'), Ambient c70/c72 2025-12-31 ('Commercial Services Supplies'), Arkas equity, residue ('Accord Buyer LLC One'); two filer typos spelled as in the filer's other quarters (Endol, Acquistion)"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 6,
+   "why": "Falcon Parent 2.75 PIK on 6 rows (own term loan and delayed draw, JV term loan; 2026-03-31 and 2026-06-30)"
+  },
+  {
+   "column": "position_id",
+   "rows": 73,
+   "why": "chains re-paired by the printed names and instruments (rflad against rflaa: 48 consecutive-quarter links gained, 2 lost, both the Meta Buyer 2025-12-31 -> 2026-03-31 EUR/AUD crossing that rflaa had (the gained links pair EUR with EUR and AUD with AUD); r2_q26_links_vs_rflaa.sql)"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 2,
+   "why": "Meta Buyer 2025-12-31 EUR (c222) and AUD (c226) par, tagged usd"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 2,
+   "why": "same two rows at the build's FRED H.10 rate for 2025-12-31"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 2,
+   "why": "same two rows (DEXUSEU 1.1736, DEXUSAL 0.6669)"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 2,
+   "why": "same two rows, reference_fx"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 7,
+   "why": "row_correction on the same 7 rows"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 7,
+   "why": "Meta Buyer 2025-12-31 EURIBOR (c222) and BBSY (c226, c228, c230); PRIME on Cards-Live Oak c84 and Meridian JV c769 2025-12-31, eShipping c42 2026-03-31"
   }
  ],
- "rows_added": 224,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
   {
@@ -129,7 +104,8 @@
      "accession": "0000930413-26-002499",
      "text": "Vacation Rental Brands, LLC (Term Loan 2025) 3M S + 5.25 % 8.98 % 5/6/2032 64,677 64,124 64,192 8.77"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "Issuer strip takes a leading lot number before 'Incremental' ('Continental Buyer Inc 2 Incremental Term Loan 2025' to issuer 'Continental Buyer Inc', instrument '2 Incremental Term Loan 2025', as the 2026-06-30 label).",
@@ -142,7 +118,8 @@
      "accession": "0000930413-26-002499",
      "text": "Continental Buyer Inc (2 Incremental Term Loan 2025)"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "pct_tagged_as_ratio for 0000930413-25-002470: percents x100 (were 100 times too small).",
@@ -155,7 +132,8 @@
      "accession": "0000930413-25-002470",
      "text": "Security 101 (Term Loan) 3M S + 5.00 % 9.30 % 4/11/2028 73,885 73,200 73,423 22.06"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "37 undrawn lines printed with a dash declared at fair value 0 (untagged_values).",
@@ -177,7 +155,8 @@
      "accession": "0000930413-26-000841",
      "text": "Security 101 (Revolver) (7) 3M S + 5.00 % N/A 4/11/2028 - ( 45 ) - -"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "SBLA Private Credit LLC JV interest reclassed PRIVATE_CREDIT_FUND / FUND (7 rows); Arkas equity reclassed COMMON_EQUITY (4 rows).",
@@ -200,7 +179,8 @@
      "accession": "0000930413-26-000841",
      "text": "Equity (6) Personal Care Products Arkas Bidco Limited (5)(11)(12) N/A N/A N/A 888 888 888 0.17"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "Flourish Research Acquisition revolver published as 'Delayed Draw 1' (member name) corrected to Revolver.",
@@ -214,7 +194,8 @@
      "accession": "0000930413-25-002470",
      "text": "Flourish Research Acquistion, LLC (Revolver) (7) 3M S + 5.00 % N/A 11/6/2031 - ( 57 ) ( 31 ) ( 0.01 )"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "Meta Buyer EUR and AUD par currency and H.10 dollar amount; BBSY on the AUD loan, EURIBOR on the 2026-03-31 EUR loan.",
@@ -232,7 +213,8 @@
      "accession": "0000930413-26-002499",
      "text": "Meta Buyer LLC (Term Loan 2025 AUD) 3M B + 5.25 % 9.62 % 12/22/2031 19,733 12,921 13,542 1.85"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "PRIME on the MGS MFG revolver (2025-12-31 to 2026-06-30) and the Leg Purchaser revolver (2026-06-30), published SOFR by date guess.",
@@ -247,7 +229,8 @@
      "accession": "0000930413-26-002499",
      "text": "MGS MFG. Group, Inc. (Revolver) (7) 1M P + 3.50 % 10.25 % 12/31/2028 1,682 1,677 1,656 0.23"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "Printed margin, reference rate and Floating coupon on the 142 loans of the three filings that tag no spread.",
@@ -266,7 +249,8 @@
      "accession": "0000930413-25-001811",
      "text": "World Insurance Associates, LLC (Revolver) 8) 3 M S + 1.00% N/A 4/3/2030 - ( 1 ) ( 1 ) -"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "issuer_name_strip_re extended: tranche words left in 17 names (lot years, 'Term Loan' after a delayed draw, 'Nth Amendment' before or after the tranche, 'Delayed Draw Term') are cut into the instrument.",
@@ -281,7 +265,8 @@
      "accession": "0000930413-25-001811",
      "text": "Accession Risk Management Group, Inc (Delayed Draw Term) (8) 3M S + 4.75% 9.05 % 11/1/2029 1,313 1,180 1,237 0.46"
     }
-   ]
+   ],
+   "round": 1
   },
   {
    "what": "Databricks term loan published with no instrument at 2025-06-30 and 2025-09-30 (filer put the tranche on the industry axis): instrument 'Term Loan' by row correction.",
@@ -295,32 +280,236 @@
      "accession": "0000930413-25-002470",
      "text": "Databricks Inc (Term Loan) 1M S + 4.50 % 8.82 % 1/3/2031 20,313 20,219 20,211 6.07"
     }
+   ],
+   "round": 1
+  },
+  {
+   "what": "Filer industry heading published on 718 rows before 2026-06-30 (and on the JV schedule's 2026-06-30 rows): extracted_industry set from the heading printed above each row, read by context (r2_page_rows.py); the heading equals the filer's EquitySecuritiesByIndustryAxis member on every own row except four filer axis swaps, and equals the page reader's own 2026-06-30 reading on all 149 rows. Cleared industry_coverage x7.",
+   "kind": "row_correction",
+   "round": 2,
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "First Lien Secured Debt (4)(6) Aerospace & Defense AA&D Midco Inc (Term Loan) 3M S + 4.75 % 8.45 % 11/29/2030"
+    },
+    {
+     "accession": "0000930413-24-003190",
+     "text": "Air Freight & Logistics RJW Logistics Group, Inc 3M S + 3.75% 9.10 % 3/5/2027"
+    }
+   ]
+  },
+  {
+   "what": "Printed company names on 453 rows (humanised member names to 2026-03-31, Ambient c70/c72 2025-12-31 published as 'Commercial Services Supplies', residue 'One'/'Two'/'Specified'); Endol and Acquistion spelled as in the filer's other quarters. Cleared D06 2026-06-30; one entity per printed company (100 = 100).",
+   "kind": "row_correction",
+   "round": 2,
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"
+    },
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Ambient Enterprises Holdco LLC, (Term Loan 2025 3rd Amendment)"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Flourish Research Acquistion, LLC (Term Loan)"
+    },
+    {
+     "accession": "0000930413-25-000900",
+     "text": "Endol Partners - California, LLC"
+    }
+   ]
+  },
+  {
+   "what": "Printed tranche as instrument_description (424 lines, 38 rows changed): 2024-12-31 term loans published with no instrument; member names another tranche on RJW (Revolver, printed Delayed Draw), RSC (Term Loan, printed Delayed Draw), TransnetYX 2026-03-31 (Revolver, printed Term Loan); member suffixes removed. Where the page prints the same label twice in a quarter for one company (10 rows) the member's distinguishing text is kept.",
+   "kind": "row_correction",
+   "round": 2,
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-25-000900",
+     "text": "RJW Logistics Group, Inc (Delayed Draw) (8) 3M S + 5.25% N/A 11/26/2031 - ( 17 ) ( 17 ) ( 0.01 )"
+    },
+    {
+     "accession": "0000930413-25-000900",
+     "text": "RSC Acquisition, Inc. (Delayed Draw) 3M S + 4.75% 9.34 % 11/1/2029 7,135 7,104 7,117 3.50"
+    },
+    {
+     "accession": "0000930413-26-001612",
+     "text": "TransnetYX, Inc (Term Loan) 3M S + 4.75 % 8.45 % 4/13/2027 $ 11,495 $ 11,495 $ 11,495 1.71 %"
+    }
+   ]
+  },
+  {
+   "what": "Falcon Parent: printed '3M S + 5.50% (Incl. 2.75% PIK)': spread 5.50 and pik_rate 2.75 on 6 rows (D-031); the filer tags 2.75 as the spread at 2026-06-30 and the PIK part only on hidden custom tags. Wrapper source_encodings.filed_rate_reading ['all_in'] (9.15 = 3M SOFR + 5.50) keeps interest_rate 9.17/9.15 and gives the cash leg 6.42/6.40. Cleared pik_printed 2026-06-30.",
+   "kind": "wrapper",
+   "round": 2,
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Falcon Parent Holdings Inc (Term Loan) 3M S + 5.50% (Incl. 2.75% PIK) 9.15 % 11/6/2031 36,185 35,850 35,551 4.86"
+    },
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Falcon Parent Holdings Inc (Term Loan) 3M S + 5.50 % (Incl. 2.75% PIK) 9.17 % 11/6/2031 36,031 35,681 35,355"
+    },
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Falcon Parent Holdings Inc (Delayed Draw) (7) 3M S + 5.50% (Incl. 2.75% PIK) N/A 11/6/2031 - ( 65 ) ( 49 ) ( 0.01 )"
+    },
+    {
+     "accession": "0000930413-26-002499",
+     "text": "provided the spread and interest rate in effect as of June 30, 2026"
+    }
+   ]
+  },
+  {
+   "what": "Meta Buyer 2025-12-31 (missed in round 1): EUR and AUD par tagged usd set to EUR/AUD with dollars at DEXUSEU 1.1736 / DEXUSAL 0.6669; EURIBOR and BBSY reference rates (also on the undrawn delayed draw and revolver printed '3M B').",
+   "kind": "row_correction",
+   "round": 2,
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Meta Buyer LLC (Term Loan) 3M E + 5.25 % 7.29 % 12/22/2031 16,804 19,480 19,551 3.70"
+    },
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Meta Buyer LLC (Term Loan) 3M B + 5.25 % 9.02 % 12/22/2031 19,782 12,947 13,070 2.48"
+    },
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Meta Buyer LLC (Delayed Draw) (7) 3M B + 5.25 % N/A 12/22/2031 - ( 65 ) ( 65 ) ( 0.01 )"
+    }
+   ]
+  },
+  {
+   "what": "PRIME reference rate on three revolvers published SOFR by date guess (Cards-Live Oak and Meridian JV 2025-12-31, eShipping 2026-03-31).",
+   "kind": "row_correction",
+   "round": 2,
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Cards-Live Oak Holdings, Inc. (Revolver) (7) 3M P + 3.75 % 8.42 % 10/21/2032 1,144 1,128 1,128 0.21"
+    },
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Meridian Waste Acquisitions, LLC (Revolver) (6) 3M P + 2.25 % 9.00 % 8/30/2029 977 977 977 1.39"
+    },
+    {
+     "accession": "0000930413-26-001612",
+     "text": "eShipping LLC (Revolver) (7) 3M P + 3.50 % 10.25 % 12/23/2032 390 360 358 0.05"
+    }
+   ]
+  },
+  {
+   "what": "Arkas Bidco equity rows: issuer 'Arkas Bidco Limited' with instrument 'Equity' (published 'Arkas Bidco Limited Two' / 'Arkas Bidco Limited Equity' with no instrument); one entity with the Arkas term loan.",
+   "kind": "row_correction",
+   "round": 2,
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Equity (6) Personal Care Products Arkas Bidco Limited Equity (5)(11)(12) N/A N/A N/A 890 890 890 0.13"
+    },
+    {
+     "accession": "0000930413-26-000841",
+     "text": "Arkas Bidco Limited (5)(11)(12) N/A N/A N/A 888 888 888 0.17"
+    }
+   ]
+  },
+  {
+   "what": "Position-match reject (data/overrides/position_match_overrides/0002008748.json): Ambient Delayed Draw 2025 Term Loan C 2026-03-31 (-3k) was paired with the new Delayed Draw 2026 Term Loan D 2026-06-30 (-5k). The pair is removed from position_matches; the published position_id of Term Loan D is unchanged (see observation position-chain-links-rows-of-different-size).",
+   "kind": "row_correction",
+   "round": 2,
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-26-002499",
+     "text": "Ambient Enterprises Holdco LLC, (Delayed Draw 2026 Term Loan D) (7) 3M S + 5.50 % N/A 6/28/2030 - ( 4 ) ( 5 )"
+    },
+    {
+     "accession": "0000930413-26-001612",
+     "text": "Delayed Draw 2025 Term Loan C) (7) 3M S + 5.25 % N/A 6/28/2030 - ( 4 ) ( 3 )"
+    }
+   ]
+  },
+  {
+   "what": "United Flow Technologies 2025-03-31 (c44, c46, c48): issuer spelled 'United Flow Technologies Intermediate Holdco II, LLC' as in every other quarter and in the same filing's unfunded-commitment table; the schedule line prints 'II,LLC'. Three appended lines supersede this run's earlier lines for the same keys (orchestrator approval D-249); restores the term loan's chain 2025-03-31 -> 2025-06-30.",
+   "kind": "row_correction",
+   "round": 2,
+   "quarters": [
+    "2025-03-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000930413-25-001811",
+     "text": "United Flow Technologies Intermediate Holdco II,LLC"
+    },
+    {
+     "accession": "0000930413-25-001811",
+     "text": "United Flow Technologies Intermediate Holdco II, LLC (Delayed Draw) 6/23/2031 2,460"
+    }
    ]
   }
  ],
  "total_exceptions": [],
  "parked": [
   {
-   "finding": "observation industry-heading-not-read-from-the-page (no filer industry on any row before 2026-06-30)",
+   "finding": "observation position-chain-links-rows-of-different-size (Ambient Term Loan D keeps Term Loan C's position_id; OWNER ITEM, 1 row, -5 thousand at 2026-06-30)",
    "hypotheses": [
-    "industry_from_identifier_re: no; the explicit-member identifiers carry no industry text.",
-    "page reader: finds none of the humanised names (658 not_found); issuer_bridges per row would be about 700 entries.",
-    "axis industry: bdc_holdings.industry is filled on every row from EquitySecuritiesByIndustryAxis, but staging never reads it; a wrapper-gated read is shared code needing a test and a cohort measurement, and the humanised labels ('Commercial Services Supplies') would need the printed form."
+    "position_match_overrides reject applied: the C -> D pair left position_matches (rflac) but published position_id did not change; the id is assigned by the durable identity registry, which the sandbox seeds from an earlier state. Not traced; a force-pair is not possible (Term Loan B 2026-03-31 has no pair to re-target)."
    ]
   },
   {
-   "finding": "oracle D06 2026-06-30 (RVQ_REV_f25717654bd1, confirmed error) and observation issuer-name-from-member-differs-from-page",
+   "finding": "observation industry-heading-published-as-representative-sub-industry (26 rows, 305.8M summed over quarters: Vensure 18 rows 206.3M, Accession 6 rows 40.7M, Ardonagh 2 rows 58.8M; OWNER ITEM)",
    "hypotheses": [
-    "issuer_name_strip_re: cannot restore punctuation or spacing.",
-    "per-row issuer bridges or corrections: about 700 rows, row-pinned; not done."
-   ]
-  },
-  {
-   "finding": "observation position-chain-links-rows-of-different-size (Ambient Term Loan C/D mispaired at 2026-06-30, Term Loan B chain broken 2026-03-31 to 2026-06-30)",
-   "hypotheses": [
-    "Printed lines read: 2026-03-31 'Ambient Enterprises Holdco LLC, (Delayed Draw 2025 Term Loan B) (7) 3M S + 5.25 % 8.95 % 6/28/2030 462 457 458' and '(Delayed Draw 2025 Term Loan C) (7) 3M S + 5.25 % N/A 6/28/2030 - ( 4 ) ( 3 )'; 2026-06-30 Term Loan B 652 647 640, Term Loan C 249 245 240, Term Loan D - ( 4 ) ( 5 ). Same tranches by name across quarters; D is new.",
-    "Fix needs a rebuild: none left in this run.",
-    "Next action, next build: data/overrides/position_match_overrides/0002008748.json with a reject directive for the pair 2026-03-31 'Delayed Draw 2025 Term Loan C' (-3,000) -> 2026-06-30 'Delayed Draw 2026 Term Loan D' (-5,000), and replay to confirm Term Loan C (2026-03-31 -3,000 -> 2026-06-30 240,000) and Term Loan B (458,000 -> 640,000) then chain; if the matcher does not re-pair them, record the residual as that example does."
+    "dispatch.industry_label_gics maps a heading to one sub-industry for the whole fund, so it cannot keep Vensure's and ComPsych's different labels under one 'Professional Services' heading; a shared change (keep a cached label inside the heading's industry) is the fix and is the owner's (D-236 item 1)."
    ]
   }
  ],
@@ -446,24 +635,26 @@
   },
   {
    "observation_key": "member-names-another-tranche",
-   "what": "Flourish Research Acquisition's revolver (printed '(Revolver) ... ( 57 ) ( 31 )' at 2025-06-30, '523 468 492' at 2025-09-30) is tagged on a member named 'Delayed Draw 1' and was published as a delayed draw; corrected to Revolver.",
+   "what": "Flourish Research Acquisition's revolver (printed '(Revolver) ... ( 57 ) ( 31 )' at 2025-06-30, '523 468 492' at 2025-09-30) is tagged on a member named 'Delayed Draw 1' and was published as a delayed draw; corrected to Revolver. Round 2: three more, found by comparing every published instrument with its row's printed tranche: RJW Logistics 2024-12-31 c16 (member Revolver, printed '(Delayed Draw)'), RSC Acquisition 2024-12-31 c77 (member Term Loan, printed '(Delayed Draw)', 7.1M), TransnetYX 2026-03-31 c232 (member Revolver, printed '(Term Loan)', 11.5M); fixed by row corrections.",
    "field": "instrument_description",
    "quarters": [
+    "2024-12-31",
     "2025-06-30",
-    "2025-09-30"
+    "2025-09-30",
+    "2026-03-31"
    ],
-   "fair_value_m": 0.5,
+   "fair_value_m": 19.1,
    "cause": "row",
    "action": "fixed",
-   "suggested_check": "",
+   "suggested_check": "Per published row, compare instrument_description with the tranche printed on the row's own schedule line located by the fair-value tag's contextRef (typed and explicit members alike); flag a different tranche word (Revolver / Delayed Draw / Term Loan).",
    "quote": {
     "accession": "0000930413-25-003431",
     "text": "Flourish Research Acquistion, LLC (Revolver) (7) 3M S + 5.00 % 9.22 % 11/6/2031 523 468 492 0.12"
    },
    "detection_decision": {
-    "action": "not_feasible",
-    "rationale": "The member name is the only tag-side signal and it is wrong; only a page comparison of the tranche word finds it, which the typed unfunded-table contexts could support for this filer but not in general.",
-    "reference": ""
+    "action": "propose_detector",
+    "rationale": "Round 2 shows a page comparison by contextRef works for this filer's explicit-member filings (r2_page_rows.py read 1,416 rows, every published row joined); the tranche-word comparison over 873 joined rows found exactly the 3 rows above, each confirmed by its context's tagged values equal to the printed line.",
+    "reference": "scratch/fund_runs/0002008748/r2_page_rows.py, r2_gen_corrections.py (INSTRUMENT CHANGES notes)"
    }
   },
   {
@@ -490,9 +681,10 @@
   },
   {
    "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
-   "what": "Meta Buyer's euro and Australian-dollar term loans (2026-03-31, 2026-06-30) tag their par with the usd unit (16,762,000 and 19,733,000 beside dollar costs 19,445,000 and 12,921,000); published as dollar par. Corrected with H.10 reference conversion.",
+   "what": "Meta Buyer's euro and Australian-dollar term loans (2026-03-31, 2026-06-30) tag their par with the usd unit (16,762,000 and 19,733,000 beside dollar costs 19,445,000 and 12,921,000); published as dollar par. Corrected with H.10 reference conversion. Round 2: the same two loans at 2025-12-31 (printed '3M E' 16,804 and '3M B' 19,782, published USD) were missed by round 1; fixed at the build's FRED rates for that date.",
    "field": "principal_amount_usd",
    "quarters": [
+    "2025-12-31",
     "2026-03-31",
     "2026-06-30"
    ],
@@ -512,7 +704,7 @@
   },
   {
    "observation_key": "reference-rate-guessed-from-date-where-column-printed",
-   "what": "Reference rates are guessed from the date (SOFR) where the filer tags no code: the AUD loan prints BBSY ('3M B'), the MGS MFG and Leg Purchaser revolvers print Prime ('1M P', '3M P'). Corrected by row corrections (6 rows); the 184 other SOFR guesses at 2026-06-30 agree with the page where the reader confirmed them (156 of 158).",
+   "what": "Reference rates are guessed from the date (SOFR) where the filer tags no code: the AUD loan prints BBSY ('3M B'), the MGS MFG and Leg Purchaser revolvers print Prime ('1M P', '3M P'). Corrected by row corrections (6 rows); the 184 other SOFR guesses at 2026-06-30 agree with the page where the reader confirmed them (156 of 158). Round 2: five more rows found by comparing every printed reference code with the published type (r2_q11_refcodes.sql): Meta Buyer 2025-12-31 EURIBOR/BBSY (4 rows incl. undrawn delayed draw and revolver), PRIME on Cards-Live Oak and the JV's Meridian revolver 2025-12-31 and eShipping 2026-03-31; fixed.",
    "field": "reference_rate_type",
    "quarters": [
     "2025-12-31",
@@ -558,7 +750,7 @@
   },
   {
    "observation_key": "industry-heading-not-read-from-the-page",
-   "what": "No published row before 2026-06-30 carries the filer's industry (0 of 33 to 141 rows a quarter; GICS on about a third, from the name cache). The XBRL carries it on EquitySecuritiesByIndustryAxis (bdc_holdings.industry filled for every row) but staging never reads that column into extracted_industry, and the page reader finds none of the humanised member names (658 'not_found'). At 2026-06-30 the typed members hold the printed names and 149 of 150 rows get the printed industry. Not fixed: needs shared code (an opt-in axis-industry read) with a cohort measurement.",
+   "what": "No published row before 2026-06-30 carried the filer's industry (0 of 33 to 141 rows a quarter), and the 2026-06-30 JV rows carried none. Cause (shared): the inline page reader (pipeline/bdc_xbrl_html_bridge.py, context map near line 1510) anchors rows only on typed InvestmentIdentifierAxis members; this filer used explicit srt:OwnershipAxis members to 2026-03-31, so the reader matched no row. Fixed for this fund by 718 context-keyed row corrections from the heading printed above each row (r2_page_rows.py reads every schedule row by contextRef); the heading equals the filer's EquitySecuritiesByIndustryAxis member on every own row except four filer axis swaps (r2_q5_join.sql) and the page reader's 2026-06-30 reading on all 149 own rows. Cleared industry_coverage x7.",
    "field": "extracted_industry",
    "quarters": [
     "2024-09-30",
@@ -571,21 +763,21 @@
    ],
    "fair_value_m": 1413.0,
    "cause": "shared",
-   "action": "parked",
+   "action": "fixed",
    "suggested_check": "A fund-quarter where bdc_holdings.industry is filled on most rows and extracted_industry on none is flagged.",
    "quote": {
     "accession": "0000930413-26-001612",
     "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"
    },
    "detection_decision": {
-    "action": "propose_detector",
-    "rationale": "Both columns exist in the build; a fill-rate comparison has no judgment in it.",
-    "reference": "pipeline/staging_bdc.py (extracted_industry from _hier_industry only)"
+    "action": "existing_detector",
+    "rationale": "industry_coverage fired on all seven quarters in the untouched build rflaa (RVQ ids in rflaa's ledger) and clears in rflac.",
+    "reference": "pipeline/candidate_rules.py industry_coverage; rflaa ledger identity/industry_coverage x7"
    }
   },
   {
    "observation_key": "issuer-name-from-member-differs-from-page",
-   "what": "Issuer names of 2024-09-30 to 2026-03-31 are the build's humanised explicit-member names ('JFL Atomic Acquisition Co Inc', 'Lead Venture Inc', 'Com Psych Investment Corp') where the page prints 'JFL-Atomic AcquisitionCo, Inc.', 'LeadVenture, Inc', 'ComPsych Investment Corp.'; from 2026-06-30 the printed names. Position matching links the quarters (83 of 150) but the name text changes form (D06). Not fixed: per-row issuer bridges for about 700 rows.",
+   "what": "Issuer names 2024-09-30 to 2026-03-31 were the build's humanisation of explicit members ('JFL Atomic Acquisition Co Inc', 'Com Psych Investment Corp', 'e Shipping LLC') where the page prints 'JFL-Atomic AcquisitionCo, Inc.', 'ComPsych Investment Corp.', 'eShipping LLC'; six printed companies were split into two entities each. Fixed by 453 context-keyed corrections from each row's own printed line (same cause as industry-heading-not-read-from-the-page); 100 printed companies = 100 entities (r2_q14_entities.sql). Cleared D06 2026-06-30.",
    "field": "issuer_name",
    "quarters": [
     "2024-09-30",
@@ -598,7 +790,7 @@
    ],
    "fair_value_m": 1413.0,
    "cause": "shared",
-   "action": "parked",
+   "action": "fixed",
    "suggested_check": "For every published row, compare issuer_name with the company name printed on the row's own schedule line (normalised for case, punctuation and spacing); a row whose name does not match is flagged in every quarter, so a stable wrong form (2024-09-30 to 2026-03-31) is caught, not only the quarter the form changes.",
    "quote": {
     "accession": "0000930413-26-001612",
@@ -606,13 +798,13 @@
    },
    "detection_decision": {
     "action": "propose_detector",
-    "rationale": "The candidate rule pipeline/candidate_rules.py issuer-name-differs-from-page (branch worktree-agent-abbf79b781e80b96a commit 6751318, not merged or switched on) cannot see these filings: it reads the printed line from the page matches in bdc_ixbrl_field_status, which are empty for every row of 2024-09-30 to 2026-03-31 (the reader locates rows by name, and the humanised names are not on the page; found for 139 of 150 rows at 2026-06-30), so run read-only on laye it flags none of the humanised names. It needs page access by another key: match each row's printed line by maturity, cost and fair value (as scratch/fund_runs/0002008748/gen_spread_specs.py does, 142 of 142 rows located in three filings with no conflict), or by the context's own iXBRL fact positions, then compare names.",
-    "reference": "pipeline/candidate_rules.py, rule issuer-name-differs-from-page, branch worktree-agent-abbf79b781e80b96a commit 6751318 (worktree .claude/worktrees/agent-abbf79b781e80b96a), built and measured 2026-10-17, not merged or switched on; page-match method: scratch/fund_runs/0002008748/gen_spread_specs.py"
+    "rationale": "D06 fired only at the quarter where the form changed (2026-06-30); no rule compares names in the explicit-member quarters because the page reader has no rows there. The comparison in suggested_check works once rows are read by contextRef.",
+    "reference": "scratch/fund_runs/0002008748/r2_q6_names.sql; candidate rule issuer-name-differs-from-page (commit 6751318) needs page rows"
    }
   },
   {
    "observation_key": "gics-label-depends-on-build-composition",
-   "what": "SolarWinds Holdings Inc (3 rows, 2025-09-30 to 2026-03-31) had Information Technology / Application Software in sponfb (a 32-fund sandbox) and none in a one-fund build; the row's name did not change.",
+   "what": "SolarWinds Holdings Inc (3 rows, 2025-09-30 to 2026-03-31) had Information Technology / Application Software in sponfb (a 32-fund sandbox) and none in a one-fund build; the row's name did not change. Round 2: the SolarWinds rows now take their label from the printed heading 'Software', so this fund no longer depends on the cache; the shared dependence is unchanged.",
    "field": "gics_sector",
    "quarters": [
     "2025-09-30",
@@ -658,14 +850,14 @@
   },
   {
    "observation_key": "member-carries-another-rows-name",
-   "what": "The filer swapped the issuer and industry axes on four contexts. 2025-12-31 (0000930413-26-000841) c70 and c72: ownership member CommercialServicesSuppliesMember, industry member 'Ambient Enterprises Holdco LLC Term Loan 2025 2nd / 3rd Amendment'; published with issuer 'Commercial Services Supplies' and no instrument (379 and 308 thousand). 2025-06-30 c176 and 2025-09-30 c190: tranche on the industry axis ('Databricks Inc Term Loan'); fixed (instrument 'Term Loan'). c70 and c72 are LEFT: both rows have the same identifier 'Commercial Services Supplies' in the same filing, so a row correction (keyed on accession and identifier) cannot tell them apart, and source_encodings.context_identifiers never renames a context that already has an identifier member. No other context of the fund's eight filings has an industry-named issuer or a tranche-named industry (q32.sql).",
+   "what": "The filer swapped the issuer and industry axes on four contexts. 2025-12-31 (0000930413-26-000841) c70 and c72: ownership member CommercialServicesSuppliesMember, industry member 'Ambient Enterprises Holdco LLC Term Loan 2025 2nd / 3rd Amendment'; published with issuer 'Commercial Services Supplies' and no instrument (379 and 308 thousand). 2025-06-30 c176 and 2025-09-30 c190: tranche on the industry axis ('Databricks Inc Term Loan'); fixed (instrument 'Term Loan'). c70 and c72: fixed in round 2 by context-keyed row corrections (src_context_id), which separate the two rows that share one identifier: issuer 'Ambient Enterprises Holdco LLC', instruments 'Term Loan 2025 2nd Amendment' / '3rd Amendment', industry 'Commercial Services & Supplies'. No other context of the fund's eight filings has an industry-named issuer or a tranche-named industry (q32.sql).",
    "field": "issuer_name",
    "quarters": [
     "2025-12-31"
    ],
    "fair_value_m": 0.7,
    "cause": "row",
-   "action": "left",
+   "action": "fixed",
    "suggested_check": "A published row whose issuer_name equals an industry label of the same filing, or whose industry member names a tranche, is flagged.",
    "quote": {
     "accession": "0000930413-26-000841",
@@ -679,13 +871,16 @@
   },
   {
    "observation_key": "position-chain-links-rows-of-different-size",
-   "what": "Position ids of Ambient Enterprises Holdco's delayed-draw tranches are mispaired in layf. At 2026-06-30 c94, the undrawn 'Delayed Draw 2026 Term Loan D' (fair value -5 thousand) carries id 7179acdf-..., the id of 'Delayed Draw 2025 Term Loan C' at 2025-12-31 (c78) and 2026-03-31 (c74); the real Term Loan C at 2026-06-30 (c92, 240) is on a new id 827d06ea-...; in laye Term Loan D had its own id. Older break: Term Loan B (2026-03-31 c72, 458) does not chain to 2026-06-30 (c90, 640), which is on new id 7b672e5e-.... Cause: the shared matching step pairs by name and figures after the issuer strip; once the strip made the issuer 'Ambient Enterprises Holdco LLC' in every quarter (layf), the undrawn Term Loan D (negative value like the undrawn Term Loan C of the quarter before) won the pairing over the now-drawn Term Loan C. Published values are right; only the chain is wrong.",
+   "what": "Ambient Enterprises Holdco delayed-draw chains: at 2026-06-30 c94 the new undrawn 'Delayed Draw 2026 Term Loan D' (-5 thousand) carries id 7179acdf-..., the id of 'Delayed Draw 2025 Term Loan C' at 2025-12-31 and 2026-03-31; Term Loan C 2026-06-30 (240) and Term Loan B 2026-06-30 (640) start new ids. Round 2 added a position_match_overrides reject for C(-3k) -> D(-5k): the pair left position_matches, but the published position_id of D did not change (ids come from the durable identity registry, which this build seeds; not traced further). Round 2 also moved links: 48 consecutive-quarter links gained (mostly 2026-03-31 -> 2026-06-30 now that names agree), 3 lost (r2_q22_links.sql): Meta Buyer 2025-12-31 EUR/AUD term loans had swapped chains in rgA6 (EUR row on the AUD chain) and are now on their own chains; United Flow Technologies' term loan 2025-03-31 -> 2025-06-30 stopped linking in rflab/rflac because the 2025-03-31 schedule prints 'Intermediate Holdco II,LLC' (no space); fixed in rflad (D-249) by spelling the three 2025-03-31 rows 'II, LLC' as the filer's other quarters and the same filing's unfunded table do; the link is back (2025-06-30 c66 on id 61db88c7 as in rflaa). JV look-through link Meridian Delayed Draw 2026-03-31 (3.8M) -> 'Delayed Draw 2026 Term Loan' 2026-06-30 (0.1M) is gained and doubtful (not published basis). Published values are right; only chains are affected.",
    "field": "position_id",
    "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-12-31",
     "2026-03-31",
     "2026-06-30"
    ],
-   "fair_value_m": 0.9,
+   "fair_value_m": 12.8,
    "cause": "shared",
    "action": "left",
    "suggested_check": "A position chain whose instrument text changes tranche letter (Term Loan C -> Term Loan D) or vintage year (2025 -> 2026) between consecutive quarters, or that skips a same-issuer row whose instrument text is identical in both quarters, is flagged.",
@@ -697,6 +892,83 @@
     "action": "propose_detector",
     "rationale": "No ledger rule saw it: the chain links rows of one issuer with plausible figures. The instrument text is published on both ends, so a tranche-letter or vintage change along a chain is a mechanical test; false positives are re-cut tranches the filer renames (the wrapper's edge case LORD_ABBETT_TRAILING_LOT_LABELS_ARE_DISTINCT_TRANCHES), which the test would list for reading rather than repair.",
     "reference": "position_match_overrides lane (worked example data/overrides/position_match_overrides/0002052152.json)"
+   }
+  },
+  {
+   "observation_key": "cash-plus-pik-spread-is-cash-leg-only",
+   "what": "Falcon Parent (2026-03-31, 2026-06-30, own term loan and delayed draw, JV term loan) prints '3M S + 5.50% (Incl. 2.75% PIK)'. No pik_rate was published on any of the 6 rows, and at 2026-06-30 the own rows published spread 2.75 (the filer tags the cash part). The PIK part is tagged only on hidden custom concepts (ReferenceRateAndSpreadPIK on c172, PaidInKindBasisSpreadVariableRate on c1267) or not at all. Fixed by row corrections (spread 5.50, pik 2.75) and filed_rate_reading all_in (interest_rate 9.17/9.15 kept, cash leg 6.42/6.40). Par growth 36,031 -> 36,185 (+154) is about 2.75/4 x par less the 0.25 pct amortisation step, consistent with the PIK being capitalised.",
+   "field": "pik_rate",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 41.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "pik_printed should test every published row with a printed PIK figure, own and JV schedule, in every quarter; here it flagged 1 of 6 rows (2026-06-30 delayed draw) because the reader has no rows before 2026-06-30 and the identifier repeats between the fund's and the JV's schedule.",
+   "quote": {
+    "accession": "0000930413-26-002499",
+    "text": "Falcon Parent Holdings Inc (Term Loan) 3M S + 5.50% (Incl. 2.75% PIK) 9.15 % 11/6/2031 36,185 35,850 35,551 4.86"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The existing rule fired once (RVQ_BLK_89296380eb1c in rflaa) and missed 5 rows for reasons stated; extending its row population is the concrete check.",
+    "reference": "pipeline/candidate_rules.py pik_printed_not_published"
+   }
+  },
+  {
+   "observation_key": "industry-heading-published-as-representative-sub-industry",
+   "what": "With the printed heading now read, the shared printed-industry map replaces 26 more specific name-cache labels that lay inside the heading's GICS industry by the heading's single representative sub-industry: Vensure Employer Services (a professional employer organisation) 'Human Resource & Employment Services' -> 'Research & Consulting Services' (18 rows, 206.3M summed over quarters), Accession Risk Management Group (6 rows, 40.7M) and Ardonagh Midco 3 (2 rows, 58.8M), insurance brokers, 'Insurance Brokers' -> 'Property & Casualty Insurance' (r2_q24_fv.sql). Vensure's own 2026-06-30 row already published the representative label in the untouched build (its JV 2026-06-30 row moves with this round); Accession and Ardonagh are not held at 2026-06-30. Owner ruling 2026-10-11 (printed heading wins over the name cache) applied as built; not changed here.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 305.8,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Where a printed heading is a GICS industry (not a sub-industry), keep a published sub-industry whose parent industry equals the heading (the rule D-236's carry-back already applies) and flag the rows where the map would replace it.",
+   "quote": {
+    "accession": "0000930413-25-001811",
+    "text": "Insurance Accession Risk Management Group, Inc 3M S + 4.75% 9.05 % 11/1/2029 17,064 17,003 17,021 6.30"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Deterministic against data/reference/gics_hierarchy.json; r2_gics_change.py lists the 26 rows.",
+    "reference": "pipeline/unified_holdings.py _apply_printed_industry; scratch/fund_runs/0002008748/r2_gics_change.py"
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-page",
+   "what": "instrument_description came from member text: the 2024-12-31 term loans had none (member 'BCM One Inc Term Loan' cut to issuer only; page prints '(Term Loan)'), and the build's member numbering ('Delayed Draw 1', 'Term Loan 2', 'Term Loan One') and humanised digits ('Term Loan 20252 nd Amendment') differ from the printed tranche. 424 instrument lines written from the printed tranche, 38 rows changed against rgA6 (440.6M summed over quarters, r2_q24_fv.sql); 10 rows keep the member's suffix where the page prints the same label twice for one company in a quarter (e.g. Meta Buyer 2025-12-31 three '(Term Loan)' lines).",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 440.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Same comparison as member-names-another-tranche, on the full instrument text.",
+   "quote": {
+    "accession": "0000930413-25-000900",
+    "text": "RJW Logistics Group, Inc (Delayed Draw) (8) 3M S + 5.25% N/A 11/26/2031 - ( 17 ) ( 17 ) ( 0.01 )"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No ledger rule compares instrument text with the page for explicit-member filings.",
+    "reference": "scratch/fund_runs/0002008748/r2_gen_corrections.txt"
    }
   }
  ],
@@ -722,7 +994,8 @@
    "hypotheses_tested": [
     "Percent mis-scaled: rejected; published-basis sum 244.41 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
     "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
-    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
   },
@@ -746,7 +1019,8 @@
    "hypotheses_tested": [
     "Percent mis-scaled: rejected; published-basis sum 232.18 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
     "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
-    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
   },
@@ -770,7 +1044,8 @@
    "hypotheses_tested": [
     "Percent mis-scaled: rejected; published-basis sum 257.44 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
     "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
-    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
   },
@@ -794,7 +1069,8 @@
    "hypotheses_tested": [
     "Percent mis-scaled: rejected; published-basis sum 226.60 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
     "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
-    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
   },
@@ -818,7 +1094,8 @@
    "hypotheses_tested": [
     "Percent mis-scaled: rejected; published-basis sum 248.07 equals the printed Total Investments percent and every row's percent is fair value over net assets (2025-06-30 was 100x small in laya and is fixed by pct_tagged_as_ratio).",
     "Rows over-included (JV look-through, totals): rejected; the sum is over published-basis rows only and published fair value equals the filed investments total in all eight quarters.",
-    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter."
+    "Leverage: confirmed; investments are 210 to 257 pct of net assets in every quarter.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-PCT01-2008748-3 (reason pct01-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
   },
@@ -845,7 +1122,8 @@
    "conclusion": "false_alarm",
    "hypotheses_tested": [
     "Mis-scaled percent: rejected; Playpower 33.36, GCOM 30.79 and Continental Buyer 25.32 equal the printed percents.",
-    "Fair value or net assets wrong: rejected; fair value equals printed and published total 313,562 equals the filed total; net assets 128,293 printed."
+    "Fair value or net assets wrong: rejected; fair value equals printed and published total 313,562 equals the filed total; net assets 128,293 printed.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-pct_position_concentration-2008748-1 (reason concentration-large-loan-of-a-young-levered-fund-as-printed) for the owner."
   },
@@ -875,7 +1153,8 @@
    "hypotheses_tested": [
     "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
     "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
-    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions).",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
   },
@@ -905,7 +1184,8 @@
    "hypotheses_tested": [
     "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
     "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
-    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions).",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
   },
@@ -933,7 +1213,8 @@
    "hypotheses_tested": [
     "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
     "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
-    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions).",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
   },
@@ -959,7 +1240,8 @@
    "hypotheses_tested": [
     "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
     "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
-    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions).",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
   },
@@ -989,7 +1271,8 @@
    "hypotheses_tested": [
     "Percent of the JV's net assets rather than the fund's: confirmed; every flagged row is accounting_record_class underlying_schedule from the SBLA Private Credit LLC schedule, whose percent column is of the JV's net assets; the top row's printed percent equals the published one.",
     "An own-book row above 25 pct: rejected; the largest published-basis percent in these quarters is 22.06 (Security 101, 2025-06-30).",
-    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions)."
+    "Mis-scaled percent: rejected; verify_rows.py finds each flagged row's fair value followed by its published percent on the page (0 exceptions).",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-pct_position_concentration-2008748-2 (reason concentration-jv-lookthrough-row-percent-of-jv-net-assets) for the owner."
   },
@@ -1022,7 +1305,8 @@
    "conclusion": "false_alarm",
    "hypotheses_tested": [
     "Outliers mis-scaled: rejected; the three rows above 25 pct print the same percents.",
-    "Sum out of band: rejected; 244.41 is inside 250 and equals the printed total."
+    "Sum out of band: rejected; 244.41 is inside 250 and equals the printed total.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-A07-2008748-4 (reason a07-outlier-percent-is-the-printed-row) for the owner."
   },
@@ -1053,7 +1337,8 @@
    "conclusion": "false_alarm",
    "hypotheses_tested": [
     "Percent 100x small (sum 2.57 in laya): confirmed and fixed; c138 tags 0.2206 and prints 22.06; the staging rule took the filing as already in percent. pct_tagged_as_ratio for 0000930413-25-002470 multiplies every tagged percent by 100.",
-    "After the fix the sum, 257.44, is out of A07's 250 band: as printed; 856,850 / 332,815 = 257.4 pct."
+    "After the fix the sum, 257.44, is out of A07's 250 band: as printed; 856,850 / 332,815 = 257.4 pct.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-A07-2008748-5 (reason a07-percent-sum-is-the-printed-total-of-a-levered-fund) for the owner."
   },
@@ -1220,7 +1505,8 @@
     "Undrawn lines printed with a dash and not published: confirmed for 37 own-period contexts of 2024-09-30 to 2025-12-31 and fixed (untagged_values fair_value 0); B01 cleared in four quarters.",
     "Remaining typed contexts are positions: rejected; they carry only InvestmentMaturityDate and lordabbett:UnfundedLoanCommitment (c346: 2,162,000; c360: 4,185,000), the rows of the schedule's 'Investments Maturity Date Unfunded' table. Every current-period one matches a published explicit-member row by issuer and tranche (query q17.sql: 39 of 39 at 2025-06-30, 41 of 41 at 2025-09-30, Flourish's revolver under its 'Delayed Draw 1' member).",
     "Remaining explicit contexts are positions: rejected; the 5 a quarter are dated 2024-12-31, the prior year-end comparative schedule.",
-    "Per-row check (verify_rows.py, every affected context): each typed context has no fair value fact and its maturity and unfunded amount appear on the page as an unfunded-table line under the same issuer (e.g. 'Flourish Research Acquistion, LLC (Delayed Draw) 11/6/2031 2,302'); each explicit one is dated 2024-12-31 with an empty fair value fact. 0 exceptions."
+    "Per-row check (verify_rows.py, every affected context): each typed context has no fair value fact and its maturity and unfunded amount appear on the page as an unfunded-table line under the same issuer (e.g. 'Flourish Research Acquistion, LLC (Delayed Draw) 11/6/2031 2,302'); each explicit one is dated 2024-12-31 with an empty fair value fact. 0 exceptions.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-B01-2008748-6 (reason b01-unfunded-commitment-table-rows-not-positions) for the owner. The source-only verdict 'source_unavailable' of the earlier reviewer is superseded: the filing is cached and was read."
   },
@@ -1391,7 +1677,8 @@
     "Undrawn lines printed with a dash and not published: confirmed for 37 own-period contexts of 2024-09-30 to 2025-12-31 and fixed (untagged_values fair_value 0); B01 cleared in four quarters.",
     "Remaining typed contexts are positions: rejected; they carry only InvestmentMaturityDate and lordabbett:UnfundedLoanCommitment (c346: 2,162,000; c360: 4,185,000), the rows of the schedule's 'Investments Maturity Date Unfunded' table. Every current-period one matches a published explicit-member row by issuer and tranche (query q17.sql: 39 of 39 at 2025-06-30, 41 of 41 at 2025-09-30, Flourish's revolver under its 'Delayed Draw 1' member).",
     "Remaining explicit contexts are positions: rejected; the 5 a quarter are dated 2024-12-31, the prior year-end comparative schedule.",
-    "Per-row check (verify_rows.py, every affected context): each typed context has no fair value fact and its maturity and unfunded amount appear on the page as an unfunded-table line under the same issuer (e.g. 'Flourish Research Acquistion, LLC (Delayed Draw) 11/6/2031 2,302'); each explicit one is dated 2024-12-31 with an empty fair value fact. 0 exceptions."
+    "Per-row check (verify_rows.py, every affected context): each typed context has no fair value fact and its maturity and unfunded amount appear on the page as an unfunded-table line under the same issuer (e.g. 'Flourish Research Acquistion, LLC (Delayed Draw) 11/6/2031 2,302'); each explicit one is dated 2024-12-31 with an empty fair value fact. 0 exceptions.",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-B01-2008748-6 (reason b01-unfunded-commitment-table-rows-not-positions) for the owner. The source-only verdict 'source_unavailable' of the earlier reviewer is superseded: the filing is cached and was read."
   },
@@ -1417,7 +1704,8 @@
    "hypotheses_tested": [
     "Unit count tagged with the share concept and dropped: rejected; the context carries InvestmentOwnedBalancePrincipalAmount in usd (890,000 at 2026-03-31 and 2026-06-30, decimals -3) and no share fact.",
     "units_tagged_as_par would publish 890,000 units: not applied; the printed cell equals cost in thousands, so it may be a dollar amount, and the table prints share amounts unscaled ('except share amounts'), so it may be 890 shares; the filing does not say which.",
-    "Row is not equity: rejected; printed under 'Equity' (classed equity by row correction in this run, which is why C04 now counts it)."
+    "Row is not equity: rejected; printed under 'Equity' (classed equity by row correction in this run, which is why C04 now counts it).",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-C04-2008748-7 (reason c04-equity-count-cell-equals-cost-tagged-as-dollar-par); the owner decides whether the cell is a count."
   },
@@ -1441,7 +1729,8 @@
    "hypotheses_tested": [
     "Unit count tagged with the share concept and dropped: rejected; the context carries InvestmentOwnedBalancePrincipalAmount in usd (890,000 at 2026-03-31 and 2026-06-30, decimals -3) and no share fact.",
     "units_tagged_as_par would publish 890,000 units: not applied; the printed cell equals cost in thousands, so it may be a dollar amount, and the table prints share amounts unscaled ('except share amounts'), so it may be 890 shares; the filing does not say which.",
-    "Row is not equity: rejected; printed under 'Equity' (classed equity by row correction in this run, which is why C04 now counts it)."
+    "Row is not equity: rejected; printed under 'Equity' (classed equity by row correction in this run, which is why C04 now counts it).",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-C04-2008748-7 (reason c04-equity-count-cell-equals-cost-tagged-as-dollar-par); the owner decides whether the cell is a count."
   },
@@ -1465,55 +1754,59 @@
    "hypotheses_tested": [
     "Unit count tagged with the share concept and dropped: rejected; the context carries InvestmentOwnedBalancePrincipalAmount in usd (890,000 at 2026-03-31 and 2026-06-30, decimals -3) and no share fact.",
     "units_tagged_as_par would publish 890,000 units: not applied; the printed cell equals cost in thousands, so it may be a dollar amount, and the table prints share amounts unscaled ('except share amounts'), so it may be 890 shares; the filing does not say which.",
-    "Row is not equity: rejected; printed under 'Equity' (classed equity by row correction in this run, which is why C04 now counts it)."
+    "Row is not equity: rejected; printed under 'Equity' (classed equity by row correction in this run, which is why C04 now counts it).",
+    "Round 2 (rflac, rechecked on rflad): flagged population rebuilt with affected.py and compared with round 1 (affected_layf.json): identical row keys; the rows' values the rule reads are unchanged (round 2 changed names, instruments, industries and Falcon/Meta/Prime fields only; FV and cost tie the printed totals in 8 of 8 quarters, r2_q17_totals.sql)."
    ],
    "next_action": "Proposal PD-C04-2008748-7 (reason c04-equity-count-cell-equals-cost-tagged-as-dollar-par); the owner decides whether the cell is a count."
   },
   {
-   "finding_id": "RVQ_REV_f25717654bd1",
+   "finding_id": "RVQ_REV_2dacd0ab6a8a",
    "coverage": {
     "affected_rows": [
-     "0002008748|2026-06-30|D06|issuer_name_continuity"
+     "0002008748|2025-06-30|F21|holdings_fv_over_net_assets"
     ],
     "reviewed_rows": [
-     "0002008748|2026-06-30|D06|issuer_name_continuity"
+     "0002008748|2025-06-30|F21|holdings_fv_over_net_assets"
     ]
    },
    "evidence": [
     {
-     "accession": "0000930413-26-001612",
-     "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.41 % 2/20/2031 46,004 45,405 45,371 6.75"
+     "accession": "0000930413-25-002470",
+     "text": "Total investments at fair value (cost of $ 856,319 , $ 471,418 , respectively) $ 856,850 $ 472,588"
     },
     {
-     "accession": "0000930413-26-002499",
-     "text": "JFL-Atomic AcquisitionCo, Inc. (Term Loan) 3M S + 4.75 % 8.39 % 2/20/2031 45,988 45,412 45,357 6.20"
+     "accession": "0000930413-25-002470",
+     "text": "Total liabilities $ 538,411 $ 388,433 Total net assets $ 332,815 $ 203,539"
+    },
+    {
+     "accession": "0000930413-25-002470",
+     "text": "Debt (net of deferred financing costs $ 4,855 and $ 3,652 respectively) (Note 5) $ 527,945 $ 382,230"
     }
    ],
-   "conclusion": "confirmed_error",
+   "conclusion": "false_alarm",
    "hypotheses_tested": [
-    "Filer spelling differs between filings: rejected; both the 10-Q for 2026-03-31 and the 10-Q for 2026-06-30 print 'JFL-Atomic AcquisitionCo, Inc.' (quotes above).",
-    "Portfolio turned over: rejected; 83 of 150 own-book rows carry a 2026-03-31 position id (85 of 141 the quarter before), 52 of 65 entity ids persist.",
-    "Build error: confirmed. Up to 2026-03-31 the issuer name is the pipeline's humanisation of the filer's explicit member (lordabbett:JFLAtomicAcquisitionCoIncTermLoanMember -> 'JFL Atomic Acquisition Co Inc'), which drops punctuation and re-spaces words; from 2026-06-30 the typed member holds the printed name and the build publishes it. The published names of 2024-09-30 to 2026-03-31 are wrong against the page; the continuity break is the correct form arriving.",
-    "Fund-level fix: none found within the build cap. issuer_name_strip_re cannot restore punctuation or spacing; industry or name bridges per row (about 700 rows over seven quarters) are row-pinned; the 2026-06-30 filing's typed comparatives cover only 2025-12-31."
+    "Holdings over-counted (JV look-through or totals in the sum): rejected; the published-basis sum 856,850 thousand equals the printed investments total (r2_q17_totals.sql), JV rows excluded.",
+    "Net assets mis-read: rejected; 332,815 thousand is the printed total net assets; 856,850 / 332,815 = 2.5746, the rule's value.",
+    "Leverage: confirmed; printed debt 527,945 thousand and total liabilities 538,411 thousand; holdings over net assets run 2.10 to 2.57 across the eight quarters (fund_financials.csv in rflac).",
+    "Why new in round 2: F21 was SKIP in rgA6 (fund_financials.csv in rgA6 has no net_assets for this fund in any quarter); in rflaa, rflac and rflad it carries net assets, so the 2.5 ceiling is tested; 2025-06-30 is the only quarter above it."
    ],
-   "next_action": "Left open, no proposal (PD-D06-2008748-8 withdrawn). Repair: a name map from each explicit member to the printed issuer for this filer (the typed comparative members of 0000930413-26-002499 give the printed name for every 2025-12-31 member; earlier members need the page reader to match by maturity and value, as gen_spread_specs.py does), or the candidate rule issuer-name-differs-from-page to detect it. Owner or a later run decides."
+   "next_action": "Proposal PD-F21-2008748-9 under the existing reason key f21-holdings-over-net-assets-of-a-levered-fund (owner queue) for the owner."
   }
  ],
  "tests_run": [
-  "tests/test_source_encodings.py: 97 passed",
-  "wrapper JSON validated against schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json (classify_check.py)",
-  "strip dry run on every published name and identifier (scratch/fund_runs/0002008748/strip_dry.py): 17 changed, 0 emptied"
+  "No pipeline, schema or test code changed; no pytest run.",
+  "Wrapper JSON validated against schemas/bdc_xbrl_wrapper/wrapper_v3.schema.json (scratch/fund_runs/0002008748/classify_check.py: schema ok).",
+  "Issuer/instrument strip dry run on every corrected value (r2_strip_dry.py): 0 changed.",
+  "Quotes: r2_quotes.py, every report quote found in its cached filing.",
+  "Builds: rflaa (untouched), rflab, rflac, rflad (4 of 6). Row corrections: 1,625 + 3 superseding lines appended (D-249), all applied in rflad, 0 unmatched, no 'matches 2 rows'; every HEAD line of row_corrections.csv still present (sorted comm: 0 missing)."
  ],
  "not_done": [
-  "No shared code changed; the cohort effect of the wrapper is nil by construction (one fund's wrapper and rows).",
-  "Industry before 2026-06-30 and humanised issuer names: parked, see observations.",
-  "JV look-through rows (underlying_schedule) were read only where a finding named them; their fields were not compared with the JV schedule.",
-  "Fund-level figures (net assets, income) were not compared with the balance sheet beyond the net assets used for percents.",
-  "B01 and concentration rows were checked one by one by script (scratch/fund_runs/0002008748/verify_rows.py, results in verify_rows.json); read by eye on the page: c346, c356, c359, c360, c385 (2025-06-30), c376, c377 (2025-09-30) and one JV row per quarter.",
-  "J01 (position-match tier rate 63.1 pct) fails in the oracle but is not a ledger finding; not investigated.",
-  "All findings cleared or proposed is not data correct: no rule checks unit counts, floors or the JV schedule's fields.",
-  "Ambient Enterprises c70/c72 at 2025-12-31 still publish issuer 'Commercial Services Supplies' (0.69M): no correction can address one of two rows with the same identifier.",
-  "Ambient Enterprises Holdco position ids: Term Loan D (2026-06-30 c94) carries Term Loan C's id and Term Loan C / Term Loan B start new ids at 2026-06-30 (introduced or left by layf); needs a position_match_overrides reject directive and a rebuild, none left."
+  "No shared code changed. The root cause (page reader anchors only typed InvestmentIdentifierAxis contexts) is worked around by 1,625 row-pinned corrections; they cover the historical explicit-member quarters 2024-09-30 to 2026-03-31, which will not recur while the filer keeps typed members (as from 2026-06-30).",
+  "F28 2024-03-31 is cleared by an accepted check; the 10-Qs for 2024-03-31 and 2024-06-30 are not in the cache (first cached filing 2024-09-30), so their schedules were not read.",
+  "JV look-through rows: names, industries, Falcon PIK and Meridian PRIME corrected; their other fields were compared with the JV schedule only through r2_q12_fields.sql (spread, rate, maturity, par, cost, FV on every joined row: all equal except Falcon).",
+  "Fund-level figures beyond net assets and investments totals (income, expenses) were not compared with the statements.",
+  "The 20-row page sample of the final build is the orchestrator's.",
+  "All findings cleared or proposed is not data correct: no rule checks unit counts, floors or chain identity."
  ],
  "review_responses": [
   {
@@ -1545,6 +1838,15 @@
     "issuer-name-differs-from-page: detection decision changed to propose_detector, citing the candidate rule and its page-access limit for this filer.",
     "New observation position-chain-links-rows-of-different-size (Ambient Term Loan C/D mispair, Term Loan B break), read on the page; left, next action a position_match_overrides reject directive; added to parked and not_done. No rebuild."
    ]
+  }
+ ],
+ "round_history": [
+  {
+   "round": 1,
+   "label": "layf",
+   "before": "sponfb",
+   "investigator_id": "lordabbett_fund_agent_2026-10-17",
+   "decision": "D-205"
   }
  ]
 }
