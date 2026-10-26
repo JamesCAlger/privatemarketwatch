@@ -1,74 +1,1200 @@
 {
  "cik": "0001950976",
- "label": "tnxc",
- "before": "spoff3",
+ "investigator_id": "claude-fund-agent-26north-rf26",
+ "label": "rf26c",
+ "before": "rgA5",
  "shared_code": false,
  "declared_changes": [
-  {"column": "cost", "rows": 31, "why": "2025-06-30: 31 undrawn-line costs tagged positive, set to the printed bracketed value by row correction"},
-  {"column": "cost_reported", "rows": 31, "why": "follows cost on the same 31 rows"},
-  {"column": "instrument_description", "rows": 6, "why": "row corrections from the printed line: Unlimited Technology revolver (2025-03-31, 2025-06-30) and Mindbody revolver (2026-06-30) named term loan by the member; Coding Solutions 5/15/2025 delayed draw named term loan (2025-06-30); Coding Solutions term loan 'First Lien Secured' (2025-03-31, 2025-06-30); Zone & Company 'Delayed Payment Draw' (2024-09-30). 2026-06-30 Mindbody is a new-quarter row, so 6 rows against spoff3"},
-  {"column": "shares_held", "rows": 18, "why": "equity unit counts tagged with the face-amount concept now published (units_tagged_as_par, 7 filings; 15 rows in common with spoff3) plus FH DMI 400,429,000 at 2024-12-31 to 2025-06-30 by row correction"},
-  {"column": "src_transforms", "rows": 18, "why": "shares_held:from_principal_tag added on the same equity rows (and shares_held:pow10_shares on the three FH DMI rows)"},
-  {"column": "shares_held_source", "rows": 3, "why": "FH DMI 2024-12-31 to 2025-06-30: the shared share-count step labels them derived_proxy; the value is then set to the printed count by row correction (label not reset, see observation)"},
-  {"column": "corrected_fields", "rows": 38, "why": "the 31 cost rows, the instrument rows and the 3 FH DMI unit counts"},
-  {"column": "pct_of_net_assets", "rows": 38, "why": "0.0 to -0.0 on undrawn lines whose tagged percent is a negative zero; present in the untouched build tnxa, no edit of mine, value unchanged"},
-  {"column": "position_id", "rows": 106, "why": "97 already in the untouched build tnxa against spoff3 (new 2026-06-30 quarter links chains; spoff3 resolved names across 77 funds); the rest from the 4 restored Coding Solutions delayed-draw rows and the instrument corrections re-pairing chains"}
+  {
+   "column": "issuer_name",
+   "rows": 18,
+   "why": "row corrections: Apple Bidco x6, UFT Buyer x3, Celerion x1, SingleStore x1 (row was published as Serrano), Excalibur x7"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 17,
+   "why": "row corrections to the printed instrument (Univista x2, Thunder, CB Buyer, Philz x2, Four Winds x2, Syndigo x2, Arc Falcon x2, Zone x3, CData, Coding)"
+  },
+  {
+   "column": "principal_amount",
+   "rows": 6,
+   "why": "2026-03-31 par tagged without scale, set to printed x 1,000"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 6,
+   "why": "same six rows (USD loans)"
+  },
+  {
+   "column": "interest_rate",
+   "rows": 4,
+   "why": "Great Dane preferred 14.00 % printed"
+  },
+  {
+   "column": "coupon_type",
+   "rows": 4,
+   "why": "Great Dane preferred, Fixed"
+  },
+  {
+   "column": "interest_rate_reported",
+   "rows": 4,
+   "why": "follows interest_rate on the Great Dane rows"
+  },
+  {
+   "column": "interest_rate_kind",
+   "rows": 4,
+   "why": "Great Dane rows: unresolved -> all_in (fund setting filed_rate_reading all_in)"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 3,
+   "why": "Great Dane PIK quarters: all-in 14 less PIK 14 = 0"
+  },
+  {
+   "column": "extracted_industry",
+   "rows": 5,
+   "why": "Project Alliance x4 'Pharmaceuticals'; SingleStore row 'Software'"
+  },
+  {
+   "column": "gics_sub_industry",
+   "rows": 5,
+   "why": "derived from the corrected industry by the existing mapping (Pharmaceuticals x4, Application Software x1)"
+  },
+  {
+   "column": "gics_sector",
+   "rows": 4,
+   "why": "Project Alliance x4 Health Care (SingleStore stays Information Technology)"
+  },
+  {
+   "column": "corrected_fields",
+   "rows": 48,
+   "why": "the rows above"
+  },
+  {
+   "column": "position_id",
+   "rows": 10,
+   "why": "rows re-paired after name/instrument corrections (Apple, UFT, SingleStore, CData 2024-09-30, Zone, Coding)"
+  },
+  {
+   "column": "pct_of_net_assets",
+   "rows": 57,
+   "why": "0.0 vs -0.0 on undrawn lines; present in the untouched rf26a against rgA5, no edit of mine, value unchanged"
+  }
  ],
- "rows_added": 148,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
-  {"what": "Equity unit counts: the filer tags the Par Amount/Shares cell of every equity row with InvestmentOwnedUnderlyingFaceAmountAtMarketValue (value = printed x 1,000, schedule in thousands), so no unit count was published (C04 at every equity quarter). Wrapper source_encodings.units_tagged_as_par lists the 7 filings with equity rows; 22 equity rows now publish the tagged count. C04 x7 cleared, including the two with real-error verdicts (2025-12-31, 2026-03-31), which this fixes.", "kind": "wrapper",
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+  {
+   "what": "Par tagged without the thousands scale in the 10-Q for 2026-03-31 (InvestmentOwnedUnderlyingFaceAmountAtMarketValue = 39250, decimals 0, while cost and value are tagged in dollars): six funded term loans published par 1,000 times too small (Apple Bidco, Archduke, CData x2, Four Winds, Gainsight; 168.4M of par, 166.0M fair value). principal_amount and principal_amount_usd set to the printed par x 1,000 by row correction. No rule flagged it; found by rate_cmp.py (par of every row against its printed line).",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31"
+   ],
    "quotes": [
-    {"accession": "0001193125-26-214004", "text": "Excalibur Parent Holdings LP Common Stock IT Services 7/2/2024 519 $ - $ - - FH DMI Buyer Inc (11) Common Stock Health Care Equipment & Supplies 10/11/2024 593 612 614 0.08 %"},
-    {"accession": "0001193125-26-214004", "text": "Consolidated Schedule of Investments as of March 31, 2026 (in thousands) (Unaudited)"},
-    {"accession": "0001193125-25-272386", "text": "Philz Coffee, Inc. (11) Common Stock Hotels, Restaurants & Leisure 8/5/2025 25,831 2,583 2,583 0.43 %"}
-   ]},
-  {"what": "Coding Solutions 8/7/2024 delayed draw line (fair value 0, par 0, cost -36) dropped in 2025-09-30 to 2026-06-30 by the unified dimension-path dedup, whose key leaves cost out and so folded it into the 5/15/2025 delayed draw line. Wrapper staging.distinct_member_suffix_re '(?s)^.*$' (whole member) keeps the two apart; source reconciliation showed these 4 rows as the fund's only dedup exclusions. Published cost now ties to the filed total in those quarters (was +36).", "kind": "wrapper",
-   "quarters": ["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"],
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Apple Bidco Holdings, Inc. First Lien Senior Secured Term Loan Diversified Consumer Services SOFR + 4.500 % 8.169 % 1/22/2026 1/22/2033 39,250 39,065 39,054 4.79 %"
+    },
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Gainsight Inc (12) First Lien Senior Secured Term Loan Software SOFR + 5.500 % 9.418 % 4/1/2025 7/30/2027 36,618 36,512 35,885 4.40 %"
+    }
+   ]
+  },
+  {
+   "what": "Issuer names from the member that differ from the page: UFT Buyer LLC at 2026-03-31 (member 'United Flow Technologies'; the page and the member print UFT Buyer in 2025-12-31 and 2026-06-30), Apple Bidco Holdings, Inc. at 2026-03-31 and 2026-06-30 (two member spellings had made two entities), Celerion Buyer, Inc. ('Inc.One' row word glued on), Excalibur Parent Holdings (', L.P., LLC' / ', L.P'; printed form per filing). 18 rows by row correction; each borrower now one entity across its quarters. With the SingleStore row these are the 9 rows issuer_name_printed flagged as real errors in the untouched build (UFT x3, Apple x4, Celerion, SingleStore); the 7 Excalibur rows were found by the text comparison.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0001193125-26-214004", "text": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%"},
-    {"accession": "0001193125-26-214004", "text": "Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 25 ) - ( 0.00 )%"}
-   ]},
-  {"what": "10-Q 2025-06-30 tags 31 undrawn-line costs positive while the page prints them in brackets (published cost was 3,036 above the filed total, 2 x 1,518). Row correction per row with its printed line; cost now ties. The 2024-09-30 United Flow delayed draw cost 42 is printed positive and was left.", "kind": "row_correction",
-   "quarters": ["2025-06-30"],
+    {
+     "accession": "0001193125-26-214004",
+     "text": "UFT Buyer LLC First Lien Senior Secured Term Loan Multi-Utilities SOFR + 5.000 % (Incl. 2.750 % PIK) 8.700 % 12/3/2025 12/6/2032 13,532 13,406 13,397 1.64 %"
+    },
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Apple Bidco Holdings, Inc. First Lien Senior Secured Term Loan Diversified Consumer Services SOFR + 4.500 % 8.169 % 1/22/2026 1/22/2033 39,250 39,065 39,054 4.79 %"
+    },
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Pharmaceuticals SOFR + 5.000 % 8.666 % 12/22/2025 11/3/2029 4,207 4,188 4,186 0.51 %"
+    },
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Excalibur Parent Holdings LP Common Stock IT Services 7/2/2024 519 $ - $ - -"
+    },
+    {
+     "accession": "0000950170-25-030258",
+     "text": "Excalibur Parent Holdings, L.P. Common Stock IT Services 7/2/2024 519 $ - $ - -"
+    }
+   ]
+  },
+  {
+   "what": "2026-06-30: the row published as Serrano Parent LLC (member names Serrano and IT Services) carries SingleStore's term loan figures (29,889 / 29,628 / 29,590, SOFR + 6.250 %, 10/16/2025 to 10/16/2031); Serrano's own line (26,737) is published separately. issuer_name 'SingleStore Inc' and extracted_industry 'Software' set by row correction; the row now chains to SingleStore's term loan of 2025-12-31 and 2026-03-31.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0000950170-25-104137", "text": "Four Winds Interactive LLC (3)(7)(10) First Lien Senior Secured Revolving Loan Interactive Media & Services SOFR + 6.500 % 2/20/2025 2/20/2030 - ( 90 ) ( 97 ) ( 0.02 )%"},
-    {"accession": "0000950170-25-104137", "text": "Total Investments $ 979,701 $ 980,694 206.47 %"}
-   ]},
-  {"what": "Member names another instrument than the printed line found by the row's own figures: Unlimited Technology revolver as term loan (2025-03-31, 2025-06-30), Mindbody revolver as term loan with LogRhythm's dates (2026-06-30), Coding Solutions 5/15/2025 delayed draw as term loan (2025-06-30), Coding Solutions term loan without 'Senior' (2025-03-31, 2025-06-30), Zone & Company 'Delayed Payment Draw' (2024-09-30). instrument_description set from the page by row correction.", "kind": "row_correction",
-   "quarters": ["2024-09-30", "2025-03-31", "2025-06-30", "2026-06-30"],
+    {
+     "accession": "0001193125-26-340235",
+     "text": "SingleStore Inc (11) First Lien Senior Secured Term Loan Software SOFR + 6.250 % 9.942 % 10/16/2025 10/16/2031 29,889 29,628 29,590 3.03 %"
+    },
+    {
+     "accession": "0001193125-26-340235",
+     "text": "Serrano Parent LLC First Lien Senior Secured Term Loan IT Services SOFR + 6.500 % 10.150 % 10/18/2023 5/13/2030 28,368 27,921 26,737 2.73 %"
+    }
+   ]
+  },
+  {
+   "what": "Instrument named differently from the printed line (17 rows): Univista last-out tranche published 'First Lien First Out Term Loan' (2026-03-31, 2026-06-30); Thunder Buyer revolver published as a delayed draw (2025-09-30); 'Revolving Term Loan' / 'Term Revolving Loan' (CB Buyer, Philz); 'Delayed Draw' without 'Term Loan' (Four Winds); industry run into the instrument (Syndigo); 'Senior' added to the Arc Falcon bond; Zone & Company, CData, Coding Solutions delayed-draw wording. instrument_description set to the printed text by row correction. instrument_type is not re-derived by a correction (Thunder revolver keeps 'Delayed Draw Term Loan'), see observation.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
    "quotes": [
-    {"accession": "0000950170-25-065764", "text": "Unlimited Technology Holdings, LLC (3)(7)(11) First Lien Senior Secured Revolving Loan Health Care Technology SOFR + 4.750 % 3/12/2025 3/12/2032 - ( 11 ) ( 11 ) 0.00 %"},
-    {"accession": "0001193125-26-340235", "text": "Mindbody, Inc. (3)(7)(11) First Lien Senior Secured Revolving Loan Hotels, Restaurants & Leisure SOFR + 6.000 % 3/26/2026 3/30/2033 - ( 167 ) ( 173 ) ( 0.02 )%"}
-   ]},
-  {"what": "FH DMI Buyer common stock 2024-12-31 to 2025-06-30: tagged and printed unit count 400,429 (thousands) was replaced by the shared share-count step with the 400,000 of 2025-09-30 (derived_proxy). Set to the printed count by row correction.", "kind": "row_correction",
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30"],
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Univista Intermediate Holdco, LLC First Lien Last Out Term Loan Insurance SOFR + 6.531 % 10.172 % 1/10/2025 1/10/2030 20,811 20,447 20,342 2.49 %"
+    },
+    {
+     "accession": "0001193125-25-272386",
+     "text": "Thunder Buyer Inc (3)(7) First Lien Senior Secured Revolving Loan Life Sciences Tools & Services SOFR + 4.750 % 9.042 % 10/17/2024 10/17/2030 390 338 342 0.06 %"
+    },
+    {
+     "accession": "0001193125-26-340235",
+     "text": "CB Buyer Inc (3)(7)(11) First Lien Senior Secured Revolving Loan Software SOFR + 5.250 % 8.994 % 7/1/2024 7/1/2031 220 201 161 0.02 %"
+    },
+    {
+     "accession": "0001193125-25-272386",
+     "text": "Philz Coffee, Inc. (3)(7)(11) First Lien Senior Secured Revolving Loan Hotels, Restaurants & Leisure SOFR + 4.750 % 8/5/2025 8/6/2031 - ( 115 ) ( 118 ) ( 0.02 )%"
+    },
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Syndigo LLC First Lien Senior Secured Term Loan Food & Staples Retailing SOFR + 5.000 % 8.673 % 8/29/2025 9/2/2032 25,930 25,699 25,670 3.15 %"
+    },
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Arc Falcon I Inc (11) First Lien Corporate Bond Chemicals 9.750 % 3/4/2026 3/1/2033 21,114 19,860 20,347 2.49 %"
+    },
+    {
+     "accession": "0001193125-24-254123",
+     "text": "CData Software, Inc. (2)(3) First Lien Senior Secured Payment Delayed Draw Term Loan IT Services SOFR + 5.750 % 10.354 % 7/18/2030 776 776 701 0.30 %"
+    }
+   ]
+  },
+  {
+   "what": "Project Alliance Buyer 2025-09-30 and 2025-12-31 (4 rows): the member spells the industry 'Pharmaceutical', which maps to nothing, so no industry or GICS label was published. extracted_industry 'Pharmaceuticals' (printed) set by row correction; GICS Pharmaceuticals / Health Care now derived by the existing mapping.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
    "quotes": [
-    {"accession": "0000950170-25-104137", "text": "FH DMI Buyer Inc (10) Common Stock Health Care Equipment & Supplies 10/11/2024 400,429 400 372 0.08 %"}
-   ]}
+    {
+     "accession": "0001193125-25-272386",
+     "text": "Project Alliance Buyer LLC First Lien Senior Secured Term Loan Pharmaceuticals SOFR + 5.000 % 9.198 % 8/27/2025 8/27/2031 $ 24,232 $ 23,869 $ 23,869 3.96 %"
+    }
+   ]
+  },
+  {
+   "what": "Great Dane preferred equity: the printed 14.00 % dividend rate was not published (2025-09-30: tagged PreferredStockDividendRatePercentage on the duration context only; later quarters: '14.00 % PIK', pik_rate published from the member but no rate). interest_rate 14.0 and coupon_type Fixed set in four quarters; with the PIK quarters the build derives all_in, cash leg 0 (whole coupon PIK, D-232 form; units 20,000 to 21,268 to 22,765 thousand). 2025-09-30 keeps no pik_rate: that page does not print PIK.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-272386",
+     "text": "Great Dane Intermediate Holding I LLC (11) Preferred Equity Software 14.00 % 7/21/2025 20,000 19,450 19,450 3.23 %"
+    },
+    {
+     "accession": "0001193125-26-091756",
+     "text": "Great Dane Intermediate Holding I LLC (11) Preferred Equity Software 14.00 % PIK 7/21/2025 21,268 20,718 20,789 3.42 %"
+    }
+   ]
+  }
  ],
  "total_exceptions": [],
  "parked": [],
  "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "REQ-rf26-1",
+   "classification": "verification_bug",
+   "resolution": "deferred",
+   "response": "Deferred, not rejected. Same verification bug as REQ-rfab-2 (D-237): the page reader joins text across a <br/> without a space. Repairing it changes printed_row for every fund, so it goes to the end-of-run shared-code batch with a cohort measurement. The two Penn TRGRP findings stay outstanding with the fund agent's false-alarm proposal. AMENDED: Widened after independent review rf26c: the defect is any block-level break inside a table cell (<br/>, </div><div>, </p><p>) that the page reader joins without a space, not only <br/>. Penn TRGRP 2024-03-31 uses <br/>; 2024-09-30 uses </div><div ...>LLC. A repair that reads only <br/> would not clear the 2024-09-30 finding. Still deferred to the end-of-run shared-code batch; the same widening applies to REQ-rfab-2 (Mykaarma, D-237).",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-243; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rf26-1",
+    "classification": "verification_bug",
+    "file": "page reader behind output/bdc_ixbrl_field_status printed_row (scripts/refresh_ixbrl_field_status.py and its parser)",
+    "what": "Read <br/> inside a table cell as a space when building printed_row.",
+    "why": "26North prints 'Penn TRGRP Holdings<br/>LLC'; printed_row becomes 'Penn TRGRP HoldingsLLC' and issuer_name_printed raises spacing_only on a correct published name (2024-03-31, 2024-09-30). Test: a cell 'A<br/>LLC' must give 'A LLC'; a cell 'AB' with no break must still give 'AB'.",
+    "quotes": [
+     {
+      "accession": "0001193125-24-135945",
+      "text": "Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 13.059 % 09/27/2030 25,225 24,737 24,720 16.95 %"
+     }
+    ],
+    "next_action": "Orchestrator: fix in the shared reader with the two tests, re-run the ledger; the two Penn findings should clear and PD-issuer_name_printed-1950976-1 can be withdrawn. Until then the proposal stands."
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-135945",
+     "text": "Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 13.059 % 09/27/2030 25,225 24,737 24,720 16.95 %"
+    },
+    {
+     "accession": "0001193125-24-254123",
+     "text": "Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 12.354 % 9/27/2030 25,225 24,796 24,847 10.59 %"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-rf26-2",
+   "classification": "verification_bug",
+   "resolution": "deferred",
+   "response": "Deferred; no change needed for this fund. The missing context keys are the same shared-tooling defect as REQ-rfjc-1 and REQ-rffc-1 (0 unmatched, 0 multi-row matches here; no JV schedule). The em dash in 8 reason texts needs no edit: row_corrections.csv is data, not a log, and HEAD already holds 1,385 non-ASCII lines; the lines stay as written.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-243; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rf26-2",
+    "classification": "verification_bug",
+    "file": "scripts/v05_evidence/make_row_corrections.py (26North block) and data/overrides/row_corrections.csv (my own uncommitted lines)",
+    "what": "(a) The 26North block passes no correction_context, so my 60 new lines are keyed by exact identifier, not src_context_id. (b) 8 of those lines carry non-ASCII characters copied from printed rows in their reason text (em dash); permission asked to replace them with ASCII in the reason text only (no field or value change).",
+    "why": "Effect measured: 0 'Row correction unmatched' and 0 'matches 2 rows' for this fund in rf26c; every identifier is unique in its quarter (gen_specs_rf26.py checks it). The ASCII rule for files I write is otherwise broken for those 8 reason strings.",
+    "quotes": [],
+    "next_action": "Orchestrator: either allow the 8 reason-text edits (lines I appended, uncommitted) or leave them; add context keying for this fund in the shared-tooling batch with REQ-rffc-1."
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Apple Bidco Holdings, Inc. First Lien Senior Secured Term Loan Diversified Consumer Services SOFR + 4.500 % 8.169 % 1/22/2026 1/22/2033 39,250 39,065 39,054 4.79 %"
+    }
+   ]
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_BLK_0637a7d49010",
+   "coverage": {
+    "affected_rows": [
+     "ROW-1f020b1b1328db74"
+    ],
+    "reviewed_rows": [
+     "ROW-1f020b1b1328db74"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-065764",
+     "text": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.053 % 11/22/2024 11/5/2029 69,260 67,676 67,528 14.39 %"
+    },
+    {
+     "accession": "0000950170-25-030258",
+     "text": "Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.304 % 11/22/2024 11/5/2029 69,521 67,827 67,783 19.25 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Another issuer published on this row (member of another row): rejected; the row's own figures and dates (11/22/2024, 11/5/2029, par and value as in the printed line) are the Alegeus term loan, and it is the only Alegeus line in the quarter.",
+    "Filer renamed the borrower: not supported; the member keeps 'Alegeus Technologies Holdings Corp.' in every quarter and the 10-K for 2024-12-31 prints that full name for the same loan, so the later page form is an abbreviation of the same company.",
+    "Publish each quarter's printed form by row correction: tested on paper; it would give one borrower two names (2024-12-31 full, later short) and split entity 98b5e55f and its position chain, so it is left as an owner choice in the proposal."
+   ],
+   "next_action": "Proposal PD-issuer_name_printed-1950976-2 (reason issuer-name-printed-variant-of-same-issuer, same key as the Priority Holdings proposal): owner rules once whether the published name follows the legal name the filer tags and prints first, or each quarter's printed form."
+  },
+  {
+   "finding_id": "RVQ_BLK_0f4961623dbe",
+   "coverage": {
+    "affected_rows": [
+     "ROW-7667bd4af75c9896"
+    ],
+    "reviewed_rows": [
+     "ROW-7667bd4af75c9896"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-091756",
+     "text": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.340 % 11/22/2024 11/5/2029 68,478 67,100 67,446 11.05 %"
+    },
+    {
+     "accession": "0000950170-25-030258",
+     "text": "Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.304 % 11/22/2024 11/5/2029 69,521 67,827 67,783 19.25 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Another issuer published on this row (member of another row): rejected; the row's own figures and dates (11/22/2024, 11/5/2029, par and value as in the printed line) are the Alegeus term loan, and it is the only Alegeus line in the quarter.",
+    "Filer renamed the borrower: not supported; the member keeps 'Alegeus Technologies Holdings Corp.' in every quarter and the 10-K for 2024-12-31 prints that full name for the same loan, so the later page form is an abbreviation of the same company.",
+    "Publish each quarter's printed form by row correction: tested on paper; it would give one borrower two names (2024-12-31 full, later short) and split entity 98b5e55f and its position chain, so it is left as an owner choice in the proposal."
+   ],
+   "next_action": "Proposal PD-issuer_name_printed-1950976-2 (reason issuer-name-printed-variant-of-same-issuer, same key as the Priority Holdings proposal): owner rules once whether the published name follows the legal name the filer tags and prints first, or each quarter's printed form."
+  },
+  {
+   "finding_id": "RVQ_BLK_2c0ec445d4cd",
+   "coverage": {
+    "affected_rows": [
+     "ROW-f4d5aa840ff90139"
+    ],
+    "reviewed_rows": [
+     "ROW-f4d5aa840ff90139"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-272386",
+     "text": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.058 % 11/22/2024 11/5/2029 68,739 67,293 67,362 11.19 %"
+    },
+    {
+     "accession": "0000950170-25-030258",
+     "text": "Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.304 % 11/22/2024 11/5/2029 69,521 67,827 67,783 19.25 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Another issuer published on this row (member of another row): rejected; the row's own figures and dates (11/22/2024, 11/5/2029, par and value as in the printed line) are the Alegeus term loan, and it is the only Alegeus line in the quarter.",
+    "Filer renamed the borrower: not supported; the member keeps 'Alegeus Technologies Holdings Corp.' in every quarter and the 10-K for 2024-12-31 prints that full name for the same loan, so the later page form is an abbreviation of the same company.",
+    "Publish each quarter's printed form by row correction: tested on paper; it would give one borrower two names (2024-12-31 full, later short) and split entity 98b5e55f and its position chain, so it is left as an owner choice in the proposal."
+   ],
+   "next_action": "Proposal PD-issuer_name_printed-1950976-2 (reason issuer-name-printed-variant-of-same-issuer, same key as the Priority Holdings proposal): owner rules once whether the published name follows the legal name the filer tags and prints first, or each quarter's printed form."
+  },
+  {
+   "finding_id": "RVQ_BLK_3cf994d5b893",
+   "coverage": {
+    "affected_rows": [
+     "ROW-adfd3580fef786fd"
+    ],
+    "reviewed_rows": [
+     "ROW-adfd3580fef786fd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-104137",
+     "text": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.030 % 11/22/2024 11/5/2029 69,000 67,492 67,278 14.17 %"
+    },
+    {
+     "accession": "0000950170-25-030258",
+     "text": "Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.304 % 11/22/2024 11/5/2029 69,521 67,827 67,783 19.25 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Another issuer published on this row (member of another row): rejected; the row's own figures and dates (11/22/2024, 11/5/2029, par and value as in the printed line) are the Alegeus term loan, and it is the only Alegeus line in the quarter.",
+    "Filer renamed the borrower: not supported; the member keeps 'Alegeus Technologies Holdings Corp.' in every quarter and the 10-K for 2024-12-31 prints that full name for the same loan, so the later page form is an abbreviation of the same company.",
+    "Publish each quarter's printed form by row correction: tested on paper; it would give one borrower two names (2024-12-31 full, later short) and split entity 98b5e55f and its position chain, so it is left as an owner choice in the proposal."
+   ],
+   "next_action": "Proposal PD-issuer_name_printed-1950976-2 (reason issuer-name-printed-variant-of-same-issuer, same key as the Priority Holdings proposal): owner rules once whether the published name follows the legal name the filer tags and prints first, or each quarter's printed form."
+  },
+  {
+   "finding_id": "RVQ_BLK_832241c27cd1",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e79b7fd88de1bc7e"
+    ],
+    "reviewed_rows": [
+     "ROW-e79b7fd88de1bc7e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-214004",
+     "text": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.167 % 11/22/2024 11/5/2029 80,236 78,919 79,887 9.77 %"
+    },
+    {
+     "accession": "0000950170-25-030258",
+     "text": "Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.304 % 11/22/2024 11/5/2029 69,521 67,827 67,783 19.25 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Another issuer published on this row (member of another row): rejected; the row's own figures and dates (11/22/2024, 11/5/2029, par and value as in the printed line) are the Alegeus term loan, and it is the only Alegeus line in the quarter.",
+    "Filer renamed the borrower: not supported; the member keeps 'Alegeus Technologies Holdings Corp.' in every quarter and the 10-K for 2024-12-31 prints that full name for the same loan, so the later page form is an abbreviation of the same company.",
+    "Publish each quarter's printed form by row correction: tested on paper; it would give one borrower two names (2024-12-31 full, later short) and split entity 98b5e55f and its position chain, so it is left as an owner choice in the proposal.",
+    "In the untouched build rf26a the rule also flagged six more rows at 2026-03-31: UFT Buyer x3 (ROW-7d86be17a7388428, ROW-010a38e20b0b620f, ROW-04dafa1dc063855b; member 'United Flow Technologies'), Apple Bidco revolver and delayed draw (ROW-a873aee77c708f84, ROW-4ffd7f38f4992897; member 'Apple Bidco Holding Inc') and Celerion (ROW-e1048ad0f0adddb3, 'Celerion Buyer, Inc.One'). All six were real errors and are fixed by row corrections in rf26b; in rf26c the rule flags only the Alegeus row. Untouched-build total: the rule flagged 17 rows (Alegeus x6, Penn x2, and 9 real errors: these 6 plus 3 at 2026-06-30); all 9 fixed."
+   ],
+   "next_action": "Proposal PD-issuer_name_printed-1950976-2 (reason issuer-name-printed-variant-of-same-issuer, same key as the Priority Holdings proposal): owner rules once whether the published name follows the legal name the filer tags and prints first, or each quarter's printed form."
+  },
+  {
+   "finding_id": "RVQ_BLK_da7eb0ccf235",
+   "coverage": {
+    "affected_rows": [
+     "ROW-39e8d12be535e354"
+    ],
+    "reviewed_rows": [
+     "ROW-39e8d12be535e354"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-340235",
+     "text": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.163 % 11/22/2024 11/5/2029 68,892 67,716 68,662 7.02 %"
+    },
+    {
+     "accession": "0000950170-25-030258",
+     "text": "Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.304 % 11/22/2024 11/5/2029 69,521 67,827 67,783 19.25 %"
+    }
+   ],
+   "conclusion": "source_ambiguity",
+   "hypotheses_tested": [
+    "Another issuer published on this row (member of another row): rejected; the row's own figures and dates (11/22/2024, 11/5/2029, par and value as in the printed line) are the Alegeus term loan, and it is the only Alegeus line in the quarter.",
+    "Filer renamed the borrower: not supported; the member keeps 'Alegeus Technologies Holdings Corp.' in every quarter and the 10-K for 2024-12-31 prints that full name for the same loan, so the later page form is an abbreviation of the same company.",
+    "Publish each quarter's printed form by row correction: tested on paper; it would give one borrower two names (2024-12-31 full, later short) and split entity 98b5e55f and its position chain, so it is left as an owner choice in the proposal.",
+    "In rf26a the rule also flagged Apple Bidco x2 (ROW-0eb76f78b658e17b, ROW-f5c983064280a759) and the row published as Serrano Parent LLC (ROW-9ab37baa0f384a5c) whose figures are SingleStore's term loan; all three fixed by row correction (name, and industry 'Software' for the SingleStore row); in rf26c only the Alegeus row is flagged. Untouched-build total across the rule: 17 flagged, 9 real errors fixed (6 at 2026-03-31, 3 at 2026-06-30), 8 left (Alegeus x6, Penn x2)."
+   ],
+   "next_action": "Proposal PD-issuer_name_printed-1950976-2 (reason issuer-name-printed-variant-of-same-issuer, same key as the Priority Holdings proposal): owner rules once whether the published name follows the legal name the filer tags and prints first, or each quarter's printed form."
+  },
+  {
+   "finding_id": "RVQ_BLK_959b4d543ce8",
+   "coverage": {
+    "affected_rows": [
+     "ROW-543842ca5aa23382"
+    ],
+    "reviewed_rows": [
+     "ROW-543842ca5aa23382"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-135945",
+     "text": "Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 13.059 % 09/27/2030 25,225 24,737 24,720 16.95 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published name lacks or adds a space the page prints: rejected; the page text prints 'Penn TRGRP Holdings LLC' with a space, equal to the published issuer and to the member 'Debt Investments|Penn TRGRP Holdings LLC|...'.",
+    "Rule's printed row is a faithful copy of the cell: rejected; the cached HTML (data/raw/filings/bdc_html/1950976/000119312524135945.html) holds 'Penn TRGRP Holdings<br/>LLC <div style=\"font-size: 75%; ...\">(2)' (one <br/> inside the term-loan company cell); the page reader drops the <br/> without a space, giving 'Penn TRGRP HoldingsLLC (2)', which the rule calls spacing_only. Two other Penn cells in this file are 'Penn TRGRP <br/>Holdings <br/>LLC' and 'Penn TRGRP <br/>Holdings<br/>LLC' (not flagged).",
+    "Other Penn rows in the quarter: the delayed draw and revolver lines are not flagged; only the term loan cell is broken over lines."
+   ],
+   "next_action": "Proposal PD-issuer_name_printed-1950976-1 (reason issuer-name-printed-line-break-read-as-no-space, false alarm). Shared fix deferred with REQ-rf26-1 (D-243); for it to clear both quarters the reader must read any block-level break inside a cell (<br/>, a closing/opening div or p) as a space, not only <br/>; the orchestrator amends the deferred request."
+  },
+  {
+   "finding_id": "RVQ_BLK_9552f282c367",
+   "coverage": {
+    "affected_rows": [
+     "ROW-4542d1dcc947d629"
+    ],
+    "reviewed_rows": [
+     "ROW-4542d1dcc947d629"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-254123",
+     "text": "Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 12.354 % 9/27/2030 25,225 24,796 24,847 10.59 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published name lacks or adds a space the page prints: rejected; the page text prints 'Penn TRGRP Holdings LLC (2)', equal to the published issuer and the member.",
+    "Same <br/> mechanism as 2024-03-31: rejected after re-reading; data/raw/filings/bdc_html/1950976/000119312524254123.html has no <br/> in any Penn cell (19 cells read 'Penn TRGRP Holdings LLC' on one line, one is split). The flagged term-loan cell is 'Penn TRGRP Holdings</div><div style=\"margin-top: 0pt; margin-bottom: 1pt; margin-left: 3em; text-indent: -1em; font-size: 8pt; ...\">LLC<div style=\"font-size:75%; ...\">(2)' (two block-level div elements inside the cell; no <br/> anywhere in that file's Penn cells). The reader joins the two div blocks without a space, giving 'Penn TRGRP HoldingsLLC(2)'.",
+    "Cause common to both quarters: a block-level line break inside a table cell (br in 2024-03-31, div in 2024-09-30) read as no space by the page reader; a fix limited to <br/> would leave this finding open.",
+    "Other Penn rows in the quarter: the delayed draw and revolver cells are on one line and not flagged."
+   ],
+   "next_action": "Proposal PD-issuer_name_printed-1950976-1 (reason issuer-name-printed-line-break-read-as-no-space, false alarm). Shared fix deferred with REQ-rf26-1 (D-243); for it to clear both quarters the reader must read any block-level break inside a cell (<br/>, a closing/opening div or p) as a space, not only <br/>; the orchestrator amends the deferred request."
+  },
+  {
+   "finding_id": "RVQ_REV_a82386de26c2",
+   "coverage": {
+    "affected_rows": [
+     "ROW-82a3cc808046e88c",
+     "ROW-7023abcfe3391a56"
+    ],
+    "reviewed_rows": [
+     "ROW-82a3cc808046e88c",
+     "ROW-7023abcfe3391a56"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-272386",
+     "text": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%"
+    },
+    {
+     "accession": "0001193125-25-272386",
+     "text": "Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 28 ) - ( 0.00 )%"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Repeated fact (one line published twice): rejected; the two rows sit on contexts C_f49dc0a0-4883-48e2-816a-fa956d10443e and C_c1f79a63-d4f7-4705-b4ed-8c72ea1831d7 and the page prints two lines, acquired 8/7/2024 cost ( 36 ) and 5/15/2025 cost ( 28 ).",
+    "B02 terms can tell them apart: rejected; B02 compares maturity, rates, spread, PIK, par, units and fair value (all equal: 8/7/2031, SOFR + 5.000, no rate, par 0, fair value 0) and not cost or acquisition date (b02rows.sql).",
+    "A printed position missing instead: rejected; page_row_contexts.py counts 106 identifier rows at 2025-09-30, equal to the 106 published rows."
+   ],
+   "next_action": "Proposal PD-B02-1950976-1 (reason b02-twin-undrawn-lines-printed-separately); no fix applies to the data."
+  },
+  {
+   "finding_id": "RVQ_REV_d6646b0748f7",
+   "coverage": {
+    "affected_rows": [
+     "ROW-fa1b1c0bd0eda899",
+     "ROW-ddb796d51a63b31f"
+    ],
+    "reviewed_rows": [
+     "ROW-fa1b1c0bd0eda899",
+     "ROW-ddb796d51a63b31f"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-091756",
+     "text": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - -"
+    },
+    {
+     "accession": "0001193125-26-091756",
+     "text": "Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 27 ) - -"
+    },
+    {
+     "accession": "0001193125-26-091756",
+     "text": "Alert SRC Newco LLC (3)(8)(11) First Lien Senior Secured Delayed Draw Term Loan Commercial Services & Supplies SOFR + 5.000 % 8.843 % 9/19/2025 12/11/2030 343 292 239 0.04 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Earlier real-error verdict (Alert SRC Newco lines collapsed): checked in rf26c; all four Alert SRC lines are published with the printed figures (term loan 22,240/21,960/22,018; delayed draw 7,233/7,134/7,160; delayed draw 343/292/239; revolver -/( 28 )/( 22 )) and B02 no longer flags them; the verdict described an earlier build and does not stand.",
+    "Repeated fact: rejected; the two flagged rows are the Coding Solutions delayed draws on contexts C_4d91a24b-2d00-4334-a875-ca2a0b29e540 (8/7/2024, cost ( 36 )) and C_7e6573da-9b7a-4c07-a7a7-e1868707cf57 (5/15/2025, cost ( 27 )), printed as two lines.",
+    "A printed position missing: rejected; 123 identifier rows plus the Dreyfus money market row = 124 published rows."
+   ],
+   "next_action": "Proposal PD-B02-1950976-1 with addresses_verdict for 2025-12-31; no fix applies."
+  },
+  {
+   "finding_id": "RVQ_REV_15ca1a421247",
+   "coverage": {
+    "affected_rows": [
+     "ROW-02d5c7d8ec623f38",
+     "ROW-0588c449f177b31a",
+     "ROW-05ff52e2416b124e",
+     "ROW-0f7b1396d02eed7b",
+     "ROW-2f2d77147f057d08",
+     "ROW-31669f920fba7e10",
+     "ROW-3a00637865b84216",
+     "ROW-41c294f78080bbdb",
+     "ROW-48e4cea001191dd5",
+     "ROW-4a6f50a976a72e9f",
+     "ROW-4c77e919350de47a",
+     "ROW-54030e194b8f1080",
+     "ROW-6d3d2101619084cc",
+     "ROW-6db562fd66260bc2",
+     "ROW-88e484047773a74b",
+     "ROW-995b41010473d5df",
+     "ROW-9ca38630a69e0041",
+     "ROW-aac00514998ff2dd",
+     "ROW-abec37b486ec7100",
+     "ROW-ae725932b31c6625",
+     "ROW-b28aa86c3158e822",
+     "ROW-b7f0d8aa14b91cf9",
+     "ROW-bd01d956500371c1",
+     "ROW-c1f1dc602091df5e",
+     "ROW-c3d8d8ea36e166ac",
+     "ROW-d4c9ab35fc9a0ce8",
+     "ROW-e63e20dbb95779c7",
+     "ROW-e9095b03afc30977",
+     "ROW-f58cfbb720cbfca8",
+     "ROW-f6a500c80ebbb2e3",
+     "ROW-fe024b932840e131"
+    ],
+    "reviewed_rows": [
+     "ROW-02d5c7d8ec623f38",
+     "ROW-0588c449f177b31a",
+     "ROW-05ff52e2416b124e",
+     "ROW-0f7b1396d02eed7b",
+     "ROW-2f2d77147f057d08",
+     "ROW-31669f920fba7e10",
+     "ROW-3a00637865b84216",
+     "ROW-41c294f78080bbdb",
+     "ROW-48e4cea001191dd5",
+     "ROW-4a6f50a976a72e9f",
+     "ROW-4c77e919350de47a",
+     "ROW-54030e194b8f1080",
+     "ROW-6d3d2101619084cc",
+     "ROW-6db562fd66260bc2",
+     "ROW-88e484047773a74b",
+     "ROW-995b41010473d5df",
+     "ROW-9ca38630a69e0041",
+     "ROW-aac00514998ff2dd",
+     "ROW-abec37b486ec7100",
+     "ROW-ae725932b31c6625",
+     "ROW-b28aa86c3158e822",
+     "ROW-b7f0d8aa14b91cf9",
+     "ROW-bd01d956500371c1",
+     "ROW-c1f1dc602091df5e",
+     "ROW-c3d8d8ea36e166ac",
+     "ROW-d4c9ab35fc9a0ce8",
+     "ROW-e63e20dbb95779c7",
+     "ROW-e9095b03afc30977",
+     "ROW-f58cfbb720cbfca8",
+     "ROW-f6a500c80ebbb2e3",
+     "ROW-fe024b932840e131"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-104137",
+     "text": "Four Winds Interactive LLC (3)(7)(10) First Lien Senior Secured Revolving Loan Interactive Media & Services SOFR + 6.500 % 2/20/2025 2/20/2030 - ( 90 ) ( 97 ) ( 0.02 )%"
+    },
+    {
+     "accession": "0000950170-25-104137",
+     "text": "LogRhythm Inc (3)(7)(10) First Lien Senior Secured Revolving Loan IT Services SOFR + 7.500 % 7/2/2024 7/2/2029 - ( 150 ) ( 164 ) ( 0.03 )%"
+    },
+    {
+     "accession": "0000950170-25-104137",
+     "text": "Total Investments $ 979,701 $ 980,694 206.47 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Negative cost is a sign error: rejected; all 31 flagged rows are undrawn revolvers or delayed draws whose page prints the cost in brackets; rate_cmp.py compares every published cost with its printed row and finds no difference in rf26c.",
+    "Published cost differs from the tag (the accepted C107 check reads the tag): confirmed; the 10-Q tags these 31 costs positive, and the 2026-10-16 row corrections (still applied, 31 of 31 rows carry 'cost' in corrected_fields) set the printed negative value; sum of their costs -1,518 thousand, and published cost now equals the printed total 979,701.",
+    "Other negative-cost rows in the quarter outside the flagged set: none; C107 flags all 31 negative-cost rows of 2025-06-30 (c107.sql)."
+   ],
+   "next_action": "Proposal PD-C107-1950976-1 (reason undrawn-line-negative-cost-from-unamortized-fees); owner rules on the corrected quarter."
+  },
+  {
+   "finding_id": "RVQ_REV_f7f3fcd51564",
+   "coverage": {
+    "affected_rows": [
+     "0001950976/2024-06-30/F24/position_count_ratio"
+    ],
+    "reviewed_rows": [
+     "0001950976/2024-06-30/F24/position_count_ratio"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-135945",
+     "text": "Non-controlled/non-affiliated investments at fair value (amortized cost $ 115,130 and $ 52,628 , respectively) $ 114,847 $ 52,566"
+    },
+    {
+     "accession": "0001193125-24-197748",
+     "text": "Non-controlled/non-affiliated investments at fair value (amortized cost $ 218,399 and $ 52,628 , respectively) $ 218,139 $ 52,566"
+    },
+    {
+     "accession": "0001193125-24-135945",
+     "text": "The Company commenced operations on October 11, 2023."
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rows dropped at 2024-03-31 or duplicated at 2024-06-30: rejected; identifier rows on the page 12 and 25 (page_row_contexts.py) equal published rows 12 and 25, and published fair value equals the printed totals 114,847 and 218,139.",
+    "Ratio 25/12 = 2.08 against the bound 2.0 reflects ramp-up after commencement in October 2023 (investments nearly doubled)."
+   ],
+   "next_action": "Proposal PD-F24-1950976-1 (reason f24-ramp-up-fund-position-count-doubles); no fix applies."
+  },
+  {
+   "finding_id": "RVQ_REV_69231161f9a6",
+   "coverage": {
+    "affected_rows": [
+     "0001950976/2024-09-30/F25/fv_growth_minus_total_assets_growth"
+    ],
+    "reviewed_rows": [
+     "0001950976/2024-09-30/F25/fv_growth_minus_total_assets_growth"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-197748",
+     "text": "$ 218,139 $ 52,566 Cash and cash equivalents 154,665 67,664"
+    },
+    {
+     "accession": "0001193125-24-254123",
+     "text": "$ 493,548 $ 52,566 Cash and cash equivalents 52,413 67,664"
+    },
+    {
+     "accession": "0001193125-24-254123",
+     "text": "Total Assets $ 555,288 $ 132,669"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Holdings over-published at 2024-09-30: rejected; 49 identifier rows = 49 published, fair value 493,548 = printed.",
+    "Total assets misread: rejected; fund_financials total assets 555,288 thousand equals the printed balance sheet; the gap (0.81) is cash 154,665 to 52,413 invested in loans in the quarter."
+   ],
+   "next_action": "Proposal PD-F25-1950976-1 (reason f25-ramp-up-fund-deploys-cash-into-investments); no fix applies."
+  },
+  {
+   "finding_id": "RVQ_REV_f7b1adb9809a",
+   "coverage": {
+    "affected_rows": [
+     "0001950976/2024-03-31/F26/leverage_view_gap"
+    ],
+    "reviewed_rows": [
+     "0001950976/2024-03-31/F26/leverage_view_gap"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-135945",
+     "text": "$ 114,847 $ 52,566 Cash and cash equivalents 102,982 67,664"
+    },
+    {
+     "accession": "0001193125-24-135945",
+     "text": "Total Assets $ 234,972 $ 132,669 Liabilities Debt 77,730 52,250"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Fund figures wrong: rejected; fund_financials 2024-03-31 total assets 234,972, net assets 145,855, borrowings 77,730, investments 114,847 thousand all equal the printed balance sheet.",
+    "Gap 0.60 explained by cash 102,982 held against investments below net assets during ramp-up; the holdings leverage view ignores cash."
+   ],
+   "next_action": "Proposal PD-F26-1950976-1 (reason f26-ramp-up-fund-holds-cash-not-borrowings); no fix applies."
+  },
+  {
+   "finding_id": "RVQ_REV_6cd7eaf76710",
+   "coverage": {
+    "affected_rows": [
+     "0001950976/2024-06-30/F26/leverage_view_gap"
+    ],
+    "reviewed_rows": [
+     "0001950976/2024-06-30/F26/leverage_view_gap"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-197748",
+     "text": "$ 218,139 $ 52,566 Cash and cash equivalents 154,665 67,664"
+    },
+    {
+     "accession": "0001193125-24-197748",
+     "text": "Total Assets $ 382,840 $ 132,669 Liabilities Debt 227,050 52,250"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Fund figures wrong: rejected; total assets 382,840, net assets 147,129, borrowings 227,050, investments 218,139 thousand equal the printed balance sheet.",
+    "Gap 0.27 explained by cash 154,665 thousand funded by debt and subscriptions not yet invested."
+   ],
+   "next_action": "Proposal PD-F26-1950976-1 (same reason as 2024-03-31); no fix applies."
+  },
+  {
+   "finding_id": "RVQ_REV_13636d08275a",
+   "coverage": {
+    "affected_rows": [
+     "0001950976/2024-03-31/F33/distribution_rate"
+    ],
+    "reviewed_rows": [
+     "0001950976/2024-03-31/F33/distribution_rate"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-24-135945",
+     "text": "During the three months ended March 31, 2024 , no distributions were declared or paid by the Company."
+    },
+    {
+     "accession": "0001193125-24-135945",
+     "text": "Net increase (decrease) in net assets from operations 0.14 Distributions declared ( 3 ) - Total increase (decrease) in net assets 0.14"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution dropped by extraction: rejected; the 10-Q states no distribution was declared or paid in the quarter.",
+    "Rate 0 from a missing denominator: rejected; net assets 145,855 thousand are published; the next quarter publishes 0.30 per share."
+   ],
+   "next_action": "Proposal PD-F33-1950976-1 (reason start-up-quarter-no-distribution-declared); no fix applies."
+  },
+  {
+   "finding_id": "RVQ_BLK_7fc747bbafb7",
+   "coverage": {
+    "affected_rows": [
+     "0001950976/2025-12-31/income_identity/violation_pct"
+    ],
+    "reviewed_rows": [
+     "0001950976/2025-12-31/income_identity/violation_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-091756",
+     "text": "Total expenses $ 62,360 $ 23,946 $ 4,900 Less: Expense support (Note 3) - ( 1,726 ) ( 3,474 ) Expense support recoupment (Note 3) 3,450 1,067 - Net expenses 65,810 23,287 1,426"
+    },
+    {
+     "accession": "0001193125-26-091756",
+     "text": "Total investment income $ 113,730 $ 37,210 $ 1,490 Net operating expenses 65,810 23,287 1,426 Net investment income before excise tax 47,920 13,923 64"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "NII or expenses mis-mapped: rejected; published Q4 2025 total investment income 35,140, total expenses 18,266, net expenses 20,066, NII 15,074 thousand (inc.sql); 35,140 - 20,066 = 15,074 exactly, so NII ties on the net-expense basis.",
+    "Identity gap from expense support recoupment: confirmed; the year prints total expenses 62,360 and net expenses 65,810 (recoupment 3,450), so income less total expenses overstates NII; Q4 carries 1,800 of it."
+   ],
+   "next_action": "Proposal PD-INCOME-1950976-1 (reason income-identity-expense-recoupment-net-above-gross); no fix applies."
+  }
+ ],
  "observations": [
-  {"observation_key": "undrawn-line-cost-sign-dropped-by-filer", "what": "10-Q 2025-06-30 tags 31 undrawn-line costs positive; the page prints them negative. Corrected by row correction. The accepted C107 check (values as filed) compares with the tag, so the corrected quarter stays outstanding until the owner rules.", "field": "cost", "quarters": ["2025-06-30"], "fair_value_m": -1.4, "cause": "fund", "action": "fixed", "suggested_check": "Sum of published cost against the filed total cost, per quarter, with the sign-flip test (residual = 2 x sum of positive costs on rows with non-positive value).", "quote": {"accession": "0000950170-25-104137", "text": "LogRhythm Inc (3)(7)(10) First Lien Senior Secured Revolving Loan IT Services SOFR + 7.500 % 7/2/2024 7/2/2029 - ( 150 ) ( 164 ) ( 0.03 )%"}},
-  {"observation_key": "twin-lines-collapsed-by-dimension-dedup", "what": "Shared step pipeline/unified_holdings.py bdc_dim_ranked keys on issuer, instrument, fair value, par and units, not cost: two undrawn lines of one issuer with value 0 and par 0 fold into one. Here the Coding Solutions delayed draws (cost -36 and -28/-27/-25/-24). Fixed for this fund with the wrapper's distinct_member_suffix_re; any fund with two undrawn zero-value lines of one instrument type is exposed.", "field": "rows", "quarters": ["2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "shared", "action": "fixed", "suggested_check": "Source reconciliation: count excluded_affiliation_dedup rows whose cost differs from the kept row; each is a real line dropped.", "quote": {"accession": "0001193125-25-272386", "text": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%"}},
-  {"observation_key": "unit-count-printed-not-published", "what": "Every equity row's printed unit count was tagged with the face-amount concept (InvestmentOwnedUnderlyingFaceAmountAtMarketValue, unit USD) and so dropped for equity; 22 rows now publish it via units_tagged_as_par.", "field": "shares_held", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31", "2026-03-31", "2026-06-30"], "fair_value_m": 24.7, "cause": "fund", "action": "fixed", "suggested_check": "C04 already flags it; read the equity contexts for a face-amount fact when C04 fails.", "quote": {"accession": "0001193125-26-340235", "text": "Philz Coffee, Inc. (11) Common Stock Hotels, Restaurants & Leisure 8/5/2025 25,831 2,583 2,653 0.27 %"}},
-  {"observation_key": "unit-count-replaced-by-issuer-proxy", "what": "The shared share-count step (unified_holdings with_shares_fix, by cik and issuer_name) replaced FH DMI's printed and tagged 400,429 thousand units with 400,000 from 2025-09-30 (the filer's count changes to 400 then 593 thousand; 400,429 looks like a filer slip but is what the page prints). Set back to the printed count by row correction; shares_held_source stays 'derived_proxy' after the correction (the label is not reset).", "field": "shares_held", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30"], "fair_value_m": 0.4, "cause": "shared", "action": "fixed", "suggested_check": "A row correction of shares_held should reset shares_held_source; and a proxy should not replace a count that equals the tag and the page.", "quote": {"accession": "0000950170-25-065764", "text": "FH DMI Buyer Inc Common Stock Health Care Equipment & Supplies 10/11/2024 400,429 400 348 0.07 %"}},
-  {"observation_key": "member-names-another-tranche", "what": "Six rows whose member names another instrument than the printed line (Unlimited Technology and Mindbody revolvers as term loans; Mindbody's member also carries LogRhythm's dates; Coding Solutions delayed draw as term loan). Fixed by row correction of instrument_description; instrument_type stays 'Term Loan' on the corrected revolvers and delayed draw because the row correction does not re-derive it (not a correctable field).", "field": "instrument_description", "quarters": ["2025-03-31", "2025-06-30", "2026-06-30"], "fair_value_m": -0.2, "cause": "row", "action": "fixed", "suggested_check": "Row with no par and non-positive value whose instrument is a plain term loan: compare with the printed line; and re-derive instrument_type after an instrument correction.", "quote": {"accession": "0000950170-25-104137", "text": "Unlimited Technology Holdings, LLC (3)(7)(10) First Lien Senior Secured Revolving Loan Health Care Technology SOFR + 4.750 % 3/12/2025 3/12/2032 - ( 11 ) ( 11 ) ( 0.00 )%"}},
-  {"observation_key": "issuer-name-from-member-differs-from-page", "what": "Excalibur Parent Holdings published 'Excalibur Parent Holdings, L.P., LLC' (2024-12-31 to 2025-12-31) from the member text; the page prints 'Excalibur Parent Holdings, L.P.' (2024-12-31) and 'Excalibur Parent Holdings LP' (later). Fair value 0 in every quarter. Left: one zero-value row, and the name is stable across those quarters for matching.", "field": "issuer_name", "quarters": ["2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30", "2025-12-31"], "fair_value_m": 0.0, "cause": "row", "action": "left", "suggested_check": "Issuer name ending ', LLC' after an 'L.P.' form.", "quote": {"accession": "0000950170-25-030258", "text": "Excalibur Parent Holdings, L.P. Common Stock IT Services 7/2/2024 519 $ - $ - -"}},
-  {"observation_key": "promoted-row-add-rule-superseded", "what": "agent_investigate_rules/1950976/add_2025_short_term_investment.json (row add, 2025-12-31, Dreyfus money market fund) is superseded: the Dreyfus row is extracted from the filing in 2025-12-31, 2026-03-31 and 2026-06-30 and the rule adds no second row (one Dreyfus row per quarter in tnxc). Left in place: retiring a promoted rule is not this agent's to do.", "field": "rows", "quarters": ["2025-12-31"], "fair_value_m": 65.1, "cause": "fund", "action": "left", "suggested_check": "A row_add rule whose row is also extracted from the filing should fail the build.", "quote": {"accession": "0001193125-26-340235", "text": "Short-Term Investments Dreyfus Treasury Obligations Cash Management Money Market Fund 3.52 % 37,381 37,381 3.82 %"}},
-  {"observation_key": "position-key-changes-with-member-format", "what": "From 2026-03-31 the filer's member puts spaces around every pipe, and the canonical key then keeps the industry ('... term loan commercial services supplies') where earlier quarters' keys end at the instrument; the same position has two keys across the format change (Alert SRC, Coding Solutions). Position chains may break at 2026-03-31; not measured.", "field": "position_key", "quarters": ["2026-03-31", "2026-06-30"], "fair_value_m": 0.0, "cause": "fund", "action": "left", "suggested_check": "Count positions with a chain ending at 2025-12-31 and a new chain at 2026-03-31 with the same issuer, instrument and maturity.", "quote": {"accession": "0001193125-26-214004", "text": "Coding Solutions Acquisition Inc First Lien Senior Secured Term Loan Health Care Technology SOFR + 5.000 % 8.668 % 8/7/2024 8/7/2031 34,285 33,853 34,285 4.20 %"}}
+  {
+   "observation_key": "par-printed-in-thousands-tagged-unscaled",
+   "what": "10-Q 2026-03-31 tags the face amount of six funded term loans without the thousands scale (39250 for 39,250 thousand); published par was 1,000 times too small (168.4M of par on rows worth 166.0M). Fixed by row correction. No rule fired on it.",
+   "field": "principal_amount",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 166.0,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a funded loan (fair value above 1M) whose principal_amount is below 1 pct of its fair value.",
+   "quote": {
+    "accession": "0001193125-26-214004",
+    "text": "Apple Bidco Holdings, Inc. First Lien Senior Secured Term Loan Diversified Consumer Services SOFR + 4.500 % 8.169 % 1/22/2026 1/22/2033 39,250 39,065 39,054 4.79 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No row rule compares par with value; C-rules check sign and presence only. The ratio test is cheap and cannot fire on undrawn lines (fair value at or below zero).",
+    "reference": "rate_cmp.py par column, scratch/fund_runs/0001950976/rf26"
+   }
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "what": "2026-06-30: SingleStore's term loan sits on a member naming Serrano Parent LLC and IT Services, so the row was published as a second Serrano loan with the wrong industry and SingleStore lost its term loan. Fixed by row correction (name and industry).",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "fair_value_m": 29.6,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed already flags the name; extend it to raise extracted_industry differing from the printed industry cell.",
+   "quote": {
+    "accession": "0001193125-26-340235",
+    "text": "SingleStore Inc (11) First Lien Senior Secured Term Loan Software SOFR + 6.250 % 9.942 % 10/16/2025 10/16/2031 29,889 29,628 29,590 3.03 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "identity/issuer_name_printed fired on this row in the untouched build rf26a (ROW-9ab37baa0f384a5c, kind not_the_printed_name); the industry part was not detected.",
+    "reference": "identity/issuer_name_printed RVQ_BLK_da7eb0ccf235 (rf26a output/shadow/page_rule_findings.csv)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-row-number-left",
+   "what": "Celerion Buyer, Inc.One at 2026-03-31 (member carries a row word). Fixed by row correction.",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-03-31"
+   ],
+   "fair_value_m": 4.2,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Issuer name ending in a spelled number glued to a legal form ('Inc.One').",
+   "quote": {
+    "accession": "0001193125-26-214004",
+    "text": "Pharmaceuticals SOFR + 5.000 % 8.666 % 12/22/2025 11/3/2029 4,207 4,188 4,186 0.51 %"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired on ROW-e1048ad0f0adddb3 in rf26a; the gate's name-shape count also covers row words.",
+    "reference": "identity/issuer_name_printed RVQ_BLK_832241c27cd1 (rf26a)"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Fixed: UFT Buyer 2026-03-31 (member 'United Flow Technologies'), Apple Bidco 2026-03-31/06-30 (two spellings made two entities), Excalibur ', L.P., LLC' (7 rows, fair value 0). Left: Ascend Partner Services LLC (28 rows, 2024-09-30 to 2026-06-30): the 10-K 2024-12-31 prints 'Ascend Partner Services LLC', later filings print 'Ascend Partners Services LLC'; one entity, one chain; same treatment as Alegeus (proposal PD-issuer_name_printed-1950976-2). issuer_name_printed did not flag Ascend.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 94.6,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Compare the published issuer with the printed company cell after removing footnote marks and legal form; flag any remaining token difference (Partner/Partners, a trailing ', LLC' after 'L.P.').",
+   "quote": {
+    "accession": "0001193125-26-214004",
+    "text": "UFT Buyer LLC First Lien Senior Secured Term Loan Multi-Utilities SOFR + 5.000 % (Incl. 2.750 % PIK) 8.700 % 12/3/2025 12/6/2032 13,532 13,406 13,397 1.64 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "issuer_name_printed fired on UFT and Apple but not on Excalibur or Ascend (its similarity tolerance passes one-token variants); a token-level comparison would see them.",
+    "reference": "text_cmp.py, scratch/fund_runs/0001950976/rf26"
+   }
+  },
+  {
+   "observation_key": "member-names-another-tranche",
+   "what": "Univista last-out tranche published 'First Lien First Out Term Loan' (2026-03-31, 2026-06-30; two 'first out' rows in the quarter) and Thunder Buyer's revolver published as a delayed draw (2025-09-30). Fixed by row correction of instrument_description; instrument_type is not re-derived by a correction (Thunder revolver keeps 'Delayed Draw Term Loan'; the 2025 Unlimited Technology and Mindbody revolvers keep 'Term Loan'), and the Thunder revolver chain breaks at 2025-12-31 (6427dbb0 to 890ad6fc).",
+   "field": "instrument_description",
+   "quarters": [
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 41.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Compare instrument_description with the printed instrument cell; flag differing tranche words (First Out/Last Out, Revolving/Delayed Draw/Term) and re-derive instrument_type after an instrument correction.",
+   "quote": {
+    "accession": "0001193125-26-214004",
+    "text": "Univista Intermediate Holdco, LLC First Lien Last Out Term Loan Insurance SOFR + 6.531 % 10.172 % 1/10/2025 1/10/2030 20,811 20,447 20,342 2.49 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in rf26a; B02 and C-rules do not read the instrument text.",
+    "reference": "text_cmp.py INSTR lines, scratch/fund_runs/0001950976/rf26"
+   }
+  },
+  {
+   "observation_key": "instrument-from-member-differs-from-page",
+   "what": "Member wording differs from the printed instrument on 14 more rows ('Term Revolving Loan', 'Revolving Term Loan', 'Delayed Draw' without 'Term Loan', 'Term Loan Food & Staples Retailing', 'First Lien Senior Corporate Bond', delayed-draw word order). Fixed by row correction.",
+   "field": "instrument_description",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 103.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Same check as member-names-another-tranche: token comparison of instrument_description with the printed cell.",
+   "quote": {
+    "accession": "0001193125-26-214004",
+    "text": "Syndigo LLC First Lien Senior Secured Term Loan Food & Staples Retailing SOFR + 5.000 % 8.673 % 8/29/2025 9/2/2032 25,930 25,699 25,670 3.15 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares instrument text with the page; these were found only by the fund-level text comparison.",
+    "reference": "text_cmp.py"
+   }
+  },
+  {
+   "observation_key": "industry-in-member-spelled-off-pattern",
+   "what": "Project Alliance Buyer 2025-09-30, 2025-12-31: member 'Pharmaceutical' maps to no industry; 4 rows (47.5M) published no industry or GICS. Fixed by row correction.",
+   "field": "extracted_industry",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
+   "fair_value_m": 47.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Funded row with no extracted_industry where the printed row has a non-empty industry cell.",
+   "quote": {
+    "accession": "0001193125-25-272386",
+    "text": "Project Alliance Buyer LLC First Lien Senior Secured Term Loan Pharmaceuticals SOFR + 5.000 % 9.198 % 8/27/2025 8/27/2031 $ 24,232 $ 23,869 $ 23,869 3.96 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "industry_coverage judges whole fund-quarters against 80 pct and passed here; a row-level test against the printed cell would catch single companies.",
+    "reference": "industry_coverage (pipeline/candidate_rules.py) does not fire below its threshold"
+   }
+  },
+  {
+   "observation_key": "preferred-dividend-rate-on-period-context-not-published",
+   "what": "Great Dane preferred printed '14.00 %' (2025-09-30; PreferredStockDividendRatePercentage on the duration context) and '14.00 % PIK' later; no rate was published. Fixed by row correction in four quarters.",
+   "field": "interest_rate",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 81.7,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Preferred equity row with a dividend-rate fact on any context of its member, or a percent in its printed row, and a null interest_rate.",
+   "quote": {
+    "accession": "0001193125-25-272386",
+    "text": "Great Dane Intermediate Holding I LLC (11) Preferred Equity Software 14.00 % 7/21/2025 20,000 19,450 19,450 3.23 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired; equity rows are outside the rate rules. The shared extractor reads the instant context only (filing_grep.py shows the fact on C_e3253eac-..., 2025-01-01 to 2025-09-30).",
+    "reference": "filing_grep.py xml C_22ef70c1-53b5-494d-bcf9-701b725b108d"
+   }
+  },
+  {
+   "observation_key": "page-reader-printed-row-joins-words",
+   "what": "The page reader joins the two lines of a table cell without a space when the filer breaks the cell with a block-level element: 2024-03-31 'Penn TRGRP Holdings<br/>LLC', 2024-09-30 'Penn TRGRP Holdings</div><div ...>LLC'. printed_row reads 'HoldingsLLC' and issuer_name_printed raises spacing_only on a correct name (2 findings). Left: shared reader; REQ-rf26-1 deferred (D-243).",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-03-31",
+    "2024-09-30"
+   ],
+   "fair_value_m": 49.6,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Before raising spacing_only, re-test the name against the cell text with every block-level boundary inside the cell (<br/>, </div><div>, </p><p>) read as a space.",
+   "quote": {
+    "accession": "0001193125-24-254123",
+    "text": "Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 12.354 % 9/27/2030 25,225 24,796 24,847 10.59 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The defect is in the verifier, not the data. The re-test reads block boundaries (br, div, p) as spaces, so it clears both Penn quarters (br in 2024-03-31, div in 2024-09-30); a cell with no block boundary compares as before, so real spacing errors still fire.",
+    "reference": "REQ-rf26-1 (deferred, D-243); needs widening from <br/> to block boundaries"
+   }
+  },
+  {
+   "observation_key": "reference-rate-code-in-member-not-read-guessed",
+   "what": "49 rows at 2024-06-30 and 2024-09-30 publish SOFR as inferred_post_libor (member runs the industry into the code, 'Multi-UtilitiesSOFR + 6.750'); the page prints SOFR on every one of them (rate_cmp.py: 810 reference codes compared, 0 differ). Right value, guessed source. Left.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30"
+   ],
+   "fair_value_m": 576.8,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "Count rows whose reference_rate_source is inferred while the printed row carries a benchmark code; read the code from the printed row instead.",
+   "quote": {
+    "accession": "0001193125-24-254123",
+    "text": "Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 12.354 % 9/27/2030 25,225 24,796 24,847 10.59 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Nothing flags a guessed code that happens to be right; the day the fund holds a non-SOFR loan in this member format the guess is wrong silently.",
+    "reference": "rate_cmp.py refsrc counts"
+   }
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "what": "10-Q 2025-06-30 tags 31 undrawn-line costs positive; the page prints them in brackets. Fixed by the 2026-10-16 row corrections (still applied in rf26c; cost ties to the printed 979,701). C107 2025-06-30 stays outstanding (proposal).",
+   "field": "cost",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": -1.4,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Sum of published cost against the filed total, with the sign-flip test (residual = 2 x sum of positive costs on rows with non-positive value).",
+   "quote": {
+    "accession": "0000950170-25-104137",
+    "text": "Four Winds Interactive LLC (3)(7)(10) First Lien Senior Secured Revolving Loan Interactive Media & Services SOFR + 6.500 % 2/20/2025 2/20/2030 - ( 90 ) ( 97 ) ( 0.02 )%"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C103 fired before the correction existed (tnxa); in this run's untouched build the correction is already applied, so no rule fired here.",
+    "reference": "C103 cost conservation"
+   }
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "what": "Shared dedup (unified_holdings bdc_dim_ranked keys without cost) folds two undrawn zero-value lines of one issuer; kept apart for this fund by staging.distinct_member_suffix_re since 2026-10-16. Still effective in rf26c (Coding Solutions pair published 2025-09-30 to 2026-06-30).",
+   "field": "rows",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Source reconciliation: count excluded_affiliation_dedup rows whose cost differs from the kept row.",
+   "quote": {
+    "accession": "0001193125-25-272386",
+    "text": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "B02 sees twins only after they are published; nothing reports the collapse itself.",
+    "reference": "source_reconciliation_detail status excluded_affiliation_dedup"
+   }
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "what": "FH DMI common stock 2024-12-31 to 2025-06-30: the printed 400,429 thousand units are restored by row correction, but shares_held_source stays 'derived_proxy' (rf26c).",
+   "field": "shares_held_source",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "fair_value_m": 0.4,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "A row correction of shares_held should reset shares_held_source.",
+   "quote": {
+    "accession": "0000950170-25-104137",
+    "text": "FH DMI Buyer Inc (10) Common Stock Health Care Equipment & Supplies 10/11/2024 400,429 400 372 0.08 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "units_printed did not fire (count equals page); the stale source label is visible only in the provenance column.",
+    "reference": "unified_holdings with_shares_fix"
+   }
+  },
+  {
+   "observation_key": "promoted-row-add-rule-superseded",
+   "what": "agent_investigate_rules/1950976/add_2025_short_term_investment.json (row add, 2025-12-31, Dreyfus) adds no second row; the Dreyfus row is extracted from the filing in 2025-12-31 to 2026-06-30 (one row each, 124/139/145 published rows = identifier rows + 1). Ledger keeps BDCSRC 2025-12-31 PIPELINE_ONLY_POSITION in needs_human (not counted outstanding). Left: retiring a promoted rule is not the fund agent's.",
+   "field": "rows",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 65.1,
+   "cause": "fund",
+   "action": "left",
+   "suggested_check": "A row_add rule whose row is also extracted from the filing should fail the build.",
+   "quote": {
+    "accession": "0001193125-26-340235",
+    "text": "Short-Term Investments Dreyfus Treasury Obligations Cash Management Money Market Fund 3.52 % 37,381 37,381 3.82 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No check compares row_add rules with extracted rows.",
+    "reference": "data/overrides/agent_investigate_rules/1950976/"
+   }
+  },
+  {
+   "observation_key": "position-chain-breaks-without-a-change-on-the-page",
+   "what": "Coding Solutions' undrawn revolver and delayed draw lines (fair value 0) get a new position_id every quarter 2025-03-31 to 2026-06-30; Thunder Buyer revolver chain breaks at 2025-12-31. Shared matcher (zero-value singletons). Left.",
+   "field": "position_id",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.3,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Chain break where the same issuer, instrument, maturity and acquisition date appear in consecutive quarters.",
+   "quote": {
+    "accession": "0001193125-26-091756",
+    "text": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Chain-completeness work (docs/superpowers/plans/2026-09-08-chain-completeness.md) measures singletons but no ledger rule raises them per fund.",
+    "reference": "chain.sql, scratch/fund_runs/0001950976/rf26"
+   }
+  }
  ],
  "name_shape_exceptions": [],
- "tests_run": ["tests/test_source_encodings.py tests/test_bdc_xbrl_wrapper_oracle.py: 206 passed"],
+ "tests_run": [
+  "None: no wrapper, pipeline or test code changed in this run (row corrections and specs only); fund_gate.py check run on the final label."
+ ],
+ "entity_note": "entity_id and canonical_name differ from rgA5 on 172/62 rows already in the untouched rf26a (163/45: sandbox resolves names within this fund only); the corrections merge Apple Bidco into one entity and UFT Buyer 2026-03-31 into UFT Buyer's entity; Excalibur keeps its entity.",
  "not_done": [
-  "Full pytest suite not run (no shared code changed).",
-  "Position-chain continuity across the 2026-03-31 member format change not measured.",
-  "Rates, maturities and industry read against the page only for six issuers at 2026-06-30 (all matched) and the rows named above; the rest of the 837 rows not read.",
-  "Fund-level figures (income, NAV, shares) read only where a finding pointed.",
-  "The two pre-2024 quarters (2022-12-31, 2023-12-31) have no holdings; not examined.",
-  "All findings cleared or proposed is not data correct: 7 outstanding findings carry proposals awaiting the owner."
+  "Full pytest suite, cohort regression, semantic diff and export not run (no shared code changed).",
+  "Ascend Partner/Partners spelling (28 rows) left as is; Alegeus left as is pending the owner's ruling on PD-issuer_name_printed-1950976-2.",
+  "Fund-level figures (income, NAV, shares) read only where a finding pointed (2024 balance sheets, 2025 income and expenses).",
+  "instrument_type not re-derived on corrected instruments (not a correctable field).",
+  "Position chains not repaired (shared matcher).",
+  "The 20-row random page sample is the orchestrator's.",
+  "All findings proposed is not data correct: 17 outstanding findings carry proposals awaiting the owner or a check."
  ]
 }

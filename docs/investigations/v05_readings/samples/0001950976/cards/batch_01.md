@@ -842,7 +842,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2031-08-27  (tag: equal)
-- corrected_fields = 
+- corrected_fields = extracted_industry
 - interest_rate_source = 
 - basis_spread_source = xbrl_field
 - pik_rate_source = 

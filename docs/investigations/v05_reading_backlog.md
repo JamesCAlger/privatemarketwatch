@@ -217,3 +217,4 @@ Manulife 0001988280.
 | 2026-10-26 | 0001976336 Antares Private Credit Fund | rfape | PASS (investigation COMPLETE) | 40 findings,23 outstanding (27 before),23 proposed;7/7 tie exactly;sample 0/20;D-031 31 PIK rows,CORRA 21 rows,FV signs | D-240 |
 | 2026-10-26 | 0002012139 Fortress Private Lending Fund | rffpe | PASS (investigation COMPLETE) | 19 findings,14 outstanding (17 before),14 proposed;5/5 tie;sample 0/20;industry fill,CORRA/SONIA,Albion EUR,EagleView PIK | D-241 |
 | 2026-10-26 | 0001899996 Fidelity Private Credit Company | rffcf | PASS (investigation COMPLETE) | 51 findings,22 outstanding (22 before),22 proposed;12/12 tie;sample 0/20;3 dropped positions published,31 undrawn rates withdrawn,distributions | D-242 |
+| 2026-10-26 | 0001950976 26North BDC | rf26c | PASS (investigation COMPLETE) | 28 findings,17 outstanding (17 before),17 proposed;10/10 tie;sample 0/20;par x1000 six loans,SingleStore/Serrano,Univista last-out | D-243 |

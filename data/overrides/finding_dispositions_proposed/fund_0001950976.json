@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "tnxc",
+ "sandbox": "rf26c",
  "dispositions": [
   {
    "disposition_id": "PD-B02-1950976-1",
@@ -8,21 +8,46 @@
    "engine": "oracle",
    "rule_name": "B02",
    "reason_key": "b02-twin-undrawn-lines-printed-separately",
-   "ciks": ["0001950976"],
-   "quarters": ["2025-09-30", "2025-12-31"],
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31"
+   ],
    "statement": "The repeated key is two undrawn Coding Solutions delayed draw lines with the same terms, no par and fair value 0. The page prints them as two lines with different acquisition dates (8/7/2024 and 5/15/2025) and different costs (( 36 ) and ( 28 ) / ( 27 )); each sits on its own member and context. Both are positions. Until this run the 8/7/2024 line was dropped by the unified dimension-path dedup (its key leaves cost out); staging.distinct_member_suffix_re now keeps the two apart, which is what makes B02 see them. No fix applies: the check's terms (no cost, no acquisition date) cannot tell them apart.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-25-272386", "verbatim": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%", "quote": "'Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%': first line, acquired 8/7/2024, cost (36), 2025-09-30."},
-    {"source": "filing", "accession": "0001193125-25-272386", "verbatim": "Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 28 ) - ( 0.00 )%", "quote": "'Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 28 ) - ( 0.00 )%': second line, acquired 5/15/2025, cost (28), 2025-09-30."},
-    {"source": "filing", "accession": "0001193125-26-091756", "verbatim": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - -", "quote": "'... 8/7/2024 8/7/2031 - ( 36 ) - -': the first line at 2025-12-31."},
-    {"source": "filing", "accession": "0001193125-26-091756", "verbatim": "Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 27 ) - -", "quote": "'... 5/15/2025 8/7/2031 - ( 27 ) - -': the second line at 2025-12-31."}
+    {
+     "source": "filing",
+     "accession": "0001193125-25-272386",
+     "verbatim": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%",
+     "quote": "'Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - ( 0.00 )%': first line, acquired 8/7/2024, cost (36), 2025-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-272386",
+     "verbatim": "Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 28 ) - ( 0.00 )%",
+     "quote": "'Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 28 ) - ( 0.00 )%': second line, acquired 5/15/2025, cost (28), 2025-09-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-091756",
+     "verbatim": "Coding Solutions Acquisition Inc (3)(8) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 8/7/2024 8/7/2031 - ( 36 ) - -",
+     "quote": "'... 8/7/2024 8/7/2031 - ( 36 ) - -': the first line at 2025-12-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-091756",
+     "verbatim": "Coding Solutions Acquisition Inc (3)(7)(11) First Lien Senior Secured Delayed Draw Term Loan Health Care Technology SOFR + 5.000 % 5/15/2025 8/7/2031 - ( 27 ) - -",
+     "quote": "'... 5/15/2025 8/7/2031 - ( 27 ) - -': the second line at 2025-12-31."
+    }
    ],
    "addresses_verdict": {
     "2025-12-31": "An earlier reviewer found B02 collapsing the Alert SRC Newco lines (term loan, two delayed draws, revolver) into one key. In this build all four are published with the printed figures (22,018; 7,160; 239; (22)) and B02 no longer names Alert SRC; the finding is now the Coding Solutions pair, which is two real lines. Printed: 'Alert SRC Newco LLC (3)(8)(11) First Lien Senior Secured Delayed Draw Term Loan Commercial Services & Supplies SOFR + 5.000 % 8.843 % 9/19/2025 12/11/2030 343 292 239 0.04 %'."
    },
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc; re-read in rf26c); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -31,16 +56,30 @@
    "engine": "row_validation",
    "rule_name": "C107",
    "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
-   "ciks": ["0001950976"],
-   "quarters": ["2025-06-30"],
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
    "statement": "Negative costs on undrawn revolvers and delayed draws, as printed. The 10-Q for 2025-06-30 tags 31 of these costs positive while the page prints them in brackets; this run sets them to the printed negative value by row correction (each with its printed line), which ties published cost to the filed total. The accepted check (values as filed) compares with the tag and so cannot clear these 31 rows; the other rows of the quarter are as tagged. No fix applies: the published value is the page's.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-25-104137", "verbatim": "Four Winds Interactive LLC (3)(7)(10) First Lien Senior Secured Revolving Loan Interactive Media & Services SOFR + 6.500 % 2/20/2025 2/20/2030 - ( 90 ) ( 97 ) ( 0.02 )%", "quote": "'Four Winds Interactive LLC (3)(7)(10) First Lien Senior Secured Revolving Loan ... - ( 90 ) ( 97 ) ( 0.02 )%': cost printed (90), tagged 90000 on its context."},
-    {"source": "filing", "accession": "0000950170-25-104137", "verbatim": "LogRhythm Inc (3)(7)(10) First Lien Senior Secured Revolving Loan IT Services SOFR + 7.500 % 7/2/2024 7/2/2029 - ( 150 ) ( 164 ) ( 0.03 )%", "quote": "'LogRhythm Inc (3)(7)(10) First Lien Senior Secured Revolving Loan ... - ( 150 ) ( 164 ) ( 0.03 )%': cost printed (150), tagged 150000."}
+    {
+     "source": "filing",
+     "accession": "0000950170-25-104137",
+     "verbatim": "Four Winds Interactive LLC (3)(7)(10) First Lien Senior Secured Revolving Loan Interactive Media & Services SOFR + 6.500 % 2/20/2025 2/20/2030 - ( 90 ) ( 97 ) ( 0.02 )%",
+     "quote": "'Four Winds Interactive LLC (3)(7)(10) First Lien Senior Secured Revolving Loan ... - ( 90 ) ( 97 ) ( 0.02 )%': cost printed (90), tagged 90000 on its context."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-104137",
+     "verbatim": "LogRhythm Inc (3)(7)(10) First Lien Senior Secured Revolving Loan IT Services SOFR + 7.500 % 7/2/2024 7/2/2029 - ( 150 ) ( 164 ) ( 0.03 )%",
+     "quote": "'LogRhythm Inc (3)(7)(10) First Lien Senior Secured Revolving Loan ... - ( 150 ) ( 164 ) ( 0.03 )%': cost printed (150), tagged 150000."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc; re-read in rf26c); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -49,17 +88,36 @@
    "engine": "fund_financials",
    "rule_name": "F24",
    "reason_key": "f24-ramp-up-fund-position-count-doubles",
-   "ciks": ["0001950976"],
-   "quarters": ["2024-06-30"],
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2024-06-30"
+   ],
    "statement": "The fund commenced operations on 11 October 2023 and was ramping up: investments at fair value rose from 114,847 to 218,139 thousand in the quarter, and the published rows from 12 to 25 (ratio 2.08 against the check's bound of 2.0). Both quarters' published fair value equals the filed total. No fix applies: the count follows the filed schedule.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-24-135945", "verbatim": "Non-controlled/non-affiliated investments at fair value (amortized cost $ 115,130 and $ 52,628 , respectively) $ 114,847 $ 52,566", "quote": "Investments 114,847 thousand at 2024-03-31."},
-    {"source": "filing", "accession": "0001193125-24-197748", "verbatim": "Non-controlled/non-affiliated investments at fair value (amortized cost $ 218,399 and $ 52,628 , respectively) $ 218,139 $ 52,566", "quote": "Investments 218,139 thousand at 2024-06-30."},
-    {"source": "filing", "accession": "0001193125-24-135945", "verbatim": "The Company commenced operations on October 11, 2023.", "quote": "Start of operations, October 2023."}
+    {
+     "source": "filing",
+     "accession": "0001193125-24-135945",
+     "verbatim": "Non-controlled/non-affiliated investments at fair value (amortized cost $ 115,130 and $ 52,628 , respectively) $ 114,847 $ 52,566",
+     "quote": "Investments 114,847 thousand at 2024-03-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-197748",
+     "verbatim": "Non-controlled/non-affiliated investments at fair value (amortized cost $ 218,399 and $ 52,628 , respectively) $ 218,139 $ 52,566",
+     "quote": "Investments 218,139 thousand at 2024-06-30."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-135945",
+     "verbatim": "The Company commenced operations on October 11, 2023.",
+     "quote": "Start of operations, October 2023."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc; re-read in rf26c); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -68,17 +126,36 @@
    "engine": "fund_financials",
    "rule_name": "F25",
    "reason_key": "f25-ramp-up-fund-deploys-cash-into-investments",
-   "ciks": ["0001950976"],
-   "quarters": ["2024-09-30"],
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
    "statement": "Ramp-up quarter: investments rose 126 pct (218,139 to 493,548 thousand) while total assets rose 45 pct (382,840 to 555,288), because cash fell from 154,665 to 52,413 as it was invested. All figures are the filer's balance sheet; published investments equal them. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-24-197748", "verbatim": "$ 218,139 $ 52,566 Cash and cash equivalents 154,665 67,664", "quote": "2024-06-30: investments 218,139, cash 154,665."},
-    {"source": "filing", "accession": "0001193125-24-254123", "verbatim": "$ 493,548 $ 52,566 Cash and cash equivalents 52,413 67,664", "quote": "2024-09-30: investments 493,548, cash 52,413."},
-    {"source": "filing", "accession": "0001193125-24-254123", "verbatim": "Total Assets $ 555,288 $ 132,669", "quote": "2024-09-30: total assets 555,288 (382,840 at 2024-06-30)."}
+    {
+     "source": "filing",
+     "accession": "0001193125-24-197748",
+     "verbatim": "$ 218,139 $ 52,566 Cash and cash equivalents 154,665 67,664",
+     "quote": "2024-06-30: investments 218,139, cash 154,665."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-254123",
+     "verbatim": "$ 493,548 $ 52,566 Cash and cash equivalents 52,413 67,664",
+     "quote": "2024-09-30: investments 493,548, cash 52,413."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-254123",
+     "verbatim": "Total Assets $ 555,288 $ 132,669",
+     "quote": "2024-09-30: total assets 555,288 (382,840 at 2024-06-30)."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc; re-read in rf26c); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -87,17 +164,37 @@
    "engine": "fund_financials",
    "rule_name": "F26",
    "reason_key": "f26-ramp-up-fund-holds-cash-not-borrowings",
-   "ciks": ["0001950976"],
-   "quarters": ["2024-03-31", "2024-06-30"],
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-06-30"
+   ],
    "statement": "Ramp-up quarters with large cash balances: at 2024-03-31 cash 102,982 against investments 114,847 and net assets 145,855 (investments below net assets, so the holdings leverage proxy is negative while debt was 77,730); at 2024-06-30 cash 154,665 against investments 218,139 and debt 227,050. The holdings view ignores cash funded by debt and subscriptions, so the two leverage views diverge. Figures are the filer's balance sheets. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-24-135945", "verbatim": "$ 114,847 $ 52,566 Cash and cash equivalents 102,982 67,664", "quote": "2024-03-31: investments 114,847, cash 102,982."},
-    {"source": "filing", "accession": "0001193125-24-135945", "verbatim": "Total Assets $ 234,972 $ 132,669 Liabilities Debt 77,730 52,250", "quote": "2024-03-31: total assets 234,972, debt 77,730."},
-    {"source": "filing", "accession": "0001193125-24-197748", "verbatim": "Total Assets $ 382,840 $ 132,669 Liabilities Debt 227,050 52,250", "quote": "2024-06-30: total assets 382,840, debt 227,050, with cash 154,665."}
+    {
+     "source": "filing",
+     "accession": "0001193125-24-135945",
+     "verbatim": "$ 114,847 $ 52,566 Cash and cash equivalents 102,982 67,664",
+     "quote": "2024-03-31: investments 114,847, cash 102,982."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-135945",
+     "verbatim": "Total Assets $ 234,972 $ 132,669 Liabilities Debt 77,730 52,250",
+     "quote": "2024-03-31: total assets 234,972, debt 77,730."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-197748",
+     "verbatim": "Total Assets $ 382,840 $ 132,669 Liabilities Debt 227,050 52,250",
+     "quote": "2024-06-30: total assets 382,840, debt 227,050, with cash 154,665."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc; re-read in rf26c); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -106,16 +203,30 @@
    "engine": "fund_financials",
    "rule_name": "F33",
    "reason_key": "start-up-quarter-no-distribution-declared",
-   "ciks": ["0001950976"],
-   "quarters": ["2024-03-31"],
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
    "statement": "Distribution rate 0 at 2024-03-31: the fund declared no distribution in the quarter; the highlights print a dash. First distribution in the next quarter (published 0.30 per share at 2024-06-30). No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-24-135945", "verbatim": "During the three months ended March 31, 2024 , no distributions were declared or paid by the Company.", "quote": "No distribution declared in Q1 2024."},
-    {"source": "filing", "accession": "0001193125-24-135945", "verbatim": "Net increase (decrease) in net assets from operations 0.14 Distributions declared ( 3 ) - Total increase (decrease) in net assets 0.14", "quote": "Highlights print a dash for distributions declared."}
+    {
+     "source": "filing",
+     "accession": "0001193125-24-135945",
+     "verbatim": "During the three months ended March 31, 2024 , no distributions were declared or paid by the Company.",
+     "quote": "No distribution declared in Q1 2024."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-135945",
+     "verbatim": "Net increase (decrease) in net assets from operations 0.14 Distributions declared ( 3 ) - Total increase (decrease) in net assets 0.14",
+     "quote": "Highlights print a dash for distributions declared."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc; re-read in rf26c); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -124,16 +235,125 @@
    "engine": "identity",
    "rule_name": "income_identity",
    "reason_key": "income-identity-expense-recoupment-net-above-gross",
-   "ciks": ["0001950976"],
-   "quarters": ["2025-12-31"],
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2025-12-31"
+   ],
    "statement": "The identity takes total investment income less total expenses as net investment income. In 2025 the adviser recouped 3,450 of earlier expense support, so net expenses (65,810) exceed total expenses (62,360) and NII is below income less total expenses. The fourth quarter (year less nine months) shows the same: published total expenses 18,266, net expenses 20,066, NII 15,074 against income 35,140. No fix applies: the figures are the filer's.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001193125-26-091756", "verbatim": "Total expenses $ 62,360 $ 23,946 $ 4,900 Less: Expense support (Note 3) - ( 1,726 ) ( 3,474 ) Expense support recoupment (Note 3) 3,450 1,067 - Net expenses 65,810 23,287 1,426", "quote": "2025: total expenses 62,360, recoupment 3,450, net expenses 65,810."}
+    {
+     "source": "filing",
+     "accession": "0001193125-26-091756",
+     "verbatim": "Total expenses $ 62,360 $ 23,946 $ 4,900 Less: Expense support (Note 3) - ( 1,726 ) ( 3,474 ) Expense support recoupment (Note 3) 3,450 1,067 - Net expenses 65,810 23,287 1,426",
+     "quote": "2025: total expenses 62,360, recoupment 3,450, net expenses 65,810."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox tnxc; re-read in rf26c); not accepted by the owner",
    "decided_on": "2026-10-16"
+  },
+  {
+   "disposition_id": "PD-issuer_name_printed-1950976-1",
+   "class": "false_alarm",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "reason_key": "issuer-name-printed-line-break-read-as-no-space",
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2024-03-31",
+    "2024-09-30"
+   ],
+   "statement": "The rule reports 'spacing_only': its printed row reads 'Penn TRGRP HoldingsLLC'. In both quarters the filer breaks the company cell of the term loan over two lines with a block-level element, and the page reader joins the lines without a space. 2024-03-31 (0001193125-24-135945): 'Penn TRGRP Holdings<br/>LLC <div style=\"font-size: 75%; ...\">(2)' (one <br/> inside the term-loan company cell). 2024-09-30 (0001193125-24-254123): 'Penn TRGRP Holdings</div><div style=\"margin-top: 0pt; margin-bottom: 1pt; margin-left: 3em; text-indent: -1em; font-size: 8pt; ...\">LLC<div style=\"font-size:75%; ...\">(2)' (two block-level div elements inside the cell; no <br/> anywhere in that file's Penn cells). The page text prints 'Penn TRGRP Holdings LLC' in both, the same as the member and the published issuer name. Nothing is wrong with the published row; no fix applies in the fund. The shared reader should read any block-level break inside a cell (br, div, p) as a space (REQ-rf26-1, deferred under D-243).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001193125-24-135945",
+     "verbatim": "Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 13.059 % 09/27/2030 25,225 24,737 24,720 16.95 %",
+     "quote": "'Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 13.059 % 09/27/2030 25,225 24,737 24,720 16.95 %': page text at 2024-03-31 prints the published name with a space; the cell's HTML is 'Penn TRGRP Holdings<br/>LLC <div style=\"font-size: 75%; ...\">(2)' (one <br/> inside the term-loan company cell)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-24-254123",
+     "verbatim": "Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 12.354 % 9/27/2030 25,225 24,796 24,847 10.59 %",
+     "quote": "'Penn TRGRP Holdings LLC (2) First Lien Senior Secured Term Loan Diversified Financial Services SOFR + 7.750 % 12.354 % 9/27/2030 25,225 24,796 24,847 10.59 %': page text at 2024-09-30 prints the published name with a space; the cell's HTML is 'Penn TRGRP Holdings</div><div style=\"margin-top: 0pt; margin-bottom: 1pt; margin-left: 3em; text-indent: -1em; font-size: 8pt; ...\">LLC<div style=\"font-size:75%; ...\">(2)' (two block-level div elements inside the cell; no <br/> anywhere in that file's Penn cells)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
+   "decided_by": "PROPOSED by agent claude-fund-agent-26north-rf26 2026-10-26 (fund-clearing loop, sandbox rf26c); not accepted by the owner",
+   "decided_on": "2026-10-26"
+  },
+  {
+   "disposition_id": "PD-issuer_name_printed-1950976-2",
+   "class": "as_filed",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "reason_key": "issuer-name-printed-variant-of-same-issuer",
+   "ciks": [
+    "0001950976"
+   ],
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "statement": "One term loan, the same in every quarter (acquired 11/22/2024, maturity 11/5/2029, par 69,521 to 68,892 thousand). The 10-K for 2024-12-31 prints the company as 'Alegeus Technologies Holdings Corp.'; from 2025-03-31 the page shortens it to 'Alegeus Technologies'. The filer's member names 'Alegeus Technologies Holdings Corp.' in all seven quarters, and that is published, so the issuer is one entity (98b5e55f) and one position chain across 2024-12-31 to 2026-06-30. Correcting the six later quarters to the shortened form would publish two names for one borrower and split it from 2024-12-31; the shortened form is the page's abbreviation, not another issuer. Owner choice: keep the legal name the filer prints first and tags throughout (proposed), or publish each quarter's printed form.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-030258",
+     "verbatim": "Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.304 % 11/22/2024 11/5/2029 69,521 67,827 67,783 19.25 %",
+     "quote": "'Alegeus Technologies Holdings Corp. First Lien Senior Secured Term Loan ... 69,521 67,827 67,783 19.25 %': the 10-K for 2024-12-31 prints the full legal name that is published."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-065764",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.053 % 11/22/2024 11/5/2029 69,260 67,676 67,528 14.39 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.053 % 11/22/2024 11/5/2029 69,260 67,676 67,528 14.39 %': 2025-03-31 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-104137",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.030 % 11/22/2024 11/5/2029 69,000 67,492 67,278 14.17 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.030 % 11/22/2024 11/5/2029 69,000 67,492 67,278 14.17 %': 2025-06-30 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-272386",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.058 % 11/22/2024 11/5/2029 68,739 67,293 67,362 11.19 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.750 % 11.058 % 11/22/2024 11/5/2029 68,739 67,293 67,362 11.19 %': 2025-09-30 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-091756",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.340 % 11/22/2024 11/5/2029 68,478 67,100 67,446 11.05 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.340 % 11/22/2024 11/5/2029 68,478 67,100 67,446 11.05 %': 2025-12-31 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-214004",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.167 % 11/22/2024 11/5/2029 80,236 78,919 79,887 9.77 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.167 % 11/22/2024 11/5/2029 80,236 78,919 79,887 9.77 %': 2026-03-31 prints the shortened name for the same loan (same dates)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-340235",
+     "verbatim": "Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.163 % 11/22/2024 11/5/2029 68,892 67,716 68,662 7.02 %",
+     "quote": "'Alegeus Technologies First Lien Senior Secured Term Loan Health Care Technology SOFR + 6.500 % 10.163 % 11/22/2024 11/5/2029 68,892 67,716 68,662 7.02 %': 2026-06-30 prints the shortened name for the same loan (same dates)."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001950976 --report docs/investigations/v05_readings/reports/0001950976.json",
+   "decided_by": "PROPOSED by agent claude-fund-agent-26north-rf26 2026-10-26 (fund-clearing loop, sandbox rf26c); not accepted by the owner",
+   "decided_on": "2026-10-26"
   }
  ]
 }
