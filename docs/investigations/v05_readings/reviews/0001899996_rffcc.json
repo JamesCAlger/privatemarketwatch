@@ -1,0 +1,494 @@
+{
+ "reviewer_id": "claude-independent-reviewer-fidelitypcc-rffcc",
+ "report_digest": "e97d07682cc30c8dd77787117ca452de3a4fa33b47be8f14fa6321250abf7041",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_101a5f2b460b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (f). oracle check_failures A01 2023-06-30: parent_key 'investments', rollup 1,216,949,424 against one child of 1,353,796, the money-market fund whose name contains the word; 51 of 52 rollups pass. Published rows equal the printed 'Total Investment Portfolio'. A rule false alarm, as proposed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Fidelity Investments Money Market Government Portfolio Class I 4.99 % (g)(i)(k) 1,353,796 1,353,796 1,353,796"
+    },
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Total Investment Portfolio 1,221,635,082 1,216,949,424 194.51 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0409bd9d9d35",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2025-12-31: published income_yield_pct 12.98 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-119504",
+     "text": "Net investment income (loss) to average net assets 12.98 % 14.43 % 13.93 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0856b00d72e2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2023-12-31: published income_yield_pct 13.93 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035352",
+     "text": "Net investment income (loss) 13.93 % 9.34 % 5.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_172cba3285bd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2024-09-30: 80 excluded_no_fair_value contexts, set-equal to affected_rows. Point (f). Each listed context carries only InvestmentAcquisitionDate or only InvestmentOwnedAtCost (the restricted-holdings acquisition table), or a single rate or spread fact of a row published from its sibling context; checked by contextRef in the raw iXBRL for every listed context.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125367",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5a2cc0739f34",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2024-03-31: published income_yield_pct 13.77 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057681",
+     "text": "Net investment income (loss) C 13.77 % 14.40 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_628d31a59ee8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F16 2023-12-31 FAIL 0.53: distribution_rate 21.43 = 0.54 x 4 / NAV 10.08 against 1.5 x 13.93. Point (a)/(b). The published quarterly distribution is the 10-K's monthly declarations summed (Q4 2023 0.14 + 0.10 + 0.30 = 0.54; Q4 2024 0.12 + 0.11 + 0.53 = 0.76, the December figure carrying the year's 0.17 return of capital, so the year is 1.48 + 0.17 = 1.65). A December declaration is a distribution of the quarter, so including it is right. The rate fires because one large year-end declaration is annualised. Reason-key note: the proposals reuse 'f16-quarter-distribution-includes-catch-up-declaration' (Jefferies, a catch-up after a move to monthly payment); here the mechanism is a year-end special and return of capital. The statement describes it correctly, but a dedicated key would keep check-based acceptance from carrying one mechanism's approval to another.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035352",
+     "text": "October 2023 0.14 8,879,552 2,927,901 November 2023 0.10 6,476,842 2,175,410 December 2023 0.30 19,608,732 6,660,544 $ 1.29"
+    },
+    {
+     "accession": "0000950170-24-035352",
+     "text": "Net investment income (loss) 13.93 % 9.34 % 5.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6fb9634538ff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: rffcc oracle B01 2024-06-30 excluded_no_fair_value contexts = 59, set-equal to affected_rows (the listing's other 41 are comparative). Point (f). Each listed context carries only InvestmentAcquisitionDate or only InvestmentOwnedAtCost (the restricted-holdings acquisition table), or a single rate or spread fact of a row published from its sibling context; checked by contextRef in the raw iXBRL for every listed context.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094714",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_95940a6f4794",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2024-06-30: published income_yield_pct 14.11 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094714",
+     "text": "Net investment income (loss) C 14.11 % 14.33 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9ff2e4d48042",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2025-09-30: published income_yield_pct 13.51 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277220",
+     "text": "Net investment income (loss) to average net assets B 13.51 % 14.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a320e9ba3693",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2024-12-31: published income_yield_pct 14.43 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Net investment income (loss) 14.43 % 13.93 % 9.34 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b4b5f45e440c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2024-09-30: published income_yield_pct 14.32 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125367",
+     "text": "Net investment income (loss) D 14.32 % 13.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b55b126592ee",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": false,
+   "rationale": "Coverage incomplete and one unpublished position missed. B01 2025-06-30 reports 233 residual rows; check_failures lists 200, and affected_rows are its 109 no-fair-value contexts. The raw iXBRL has at least 16 more current-period contexts without a fair value: 14 acquisition-table rows (Lake Air, USW, VIP Medical, Warshaw, WCI-BXC), one USW Buyer revolver twin (C_ea2027ea; the revolver itself is published from C_abbb5bd5), and NE Ortho Management Services' second delayed draw, C_9fc950b8 (member '... One Delayed Draw Term Loan Maturity Date 12/13/2030', cost -16,554). The page prints that line '- - 12/13/2030 - ( 16,554 ) -' and rffcc publishes no row for it; the other NE Ortho dash lines are published at 0. So 'every schedule dash line is published at 0' does not hold at 2025-06-30. The value is 0 and the FV totals still tie; the cost (-16,554) is missing. Needed: add C_9fc950b8 to untagged_values (fair value 0) and re-derive the B01 population uncapped.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 16,554 ) -"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 44,145 ) -"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "USW Buyer, LLC (f)(i)(q) Revolving Credit Facility SOFR + 6.25 % 10.65 % 11/3/2028 3,030,000 2,971,095 2,555,000"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bb95cf705a6d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "B01 2024-12-31: 98 excluded_no_fair_value contexts, set-equal to affected_rows. Point (f). Each listed context carries only InvestmentAcquisitionDate or only InvestmentOwnedAtCost (the restricted-holdings acquisition table), or a single rate or spread fact of a row published from its sibling context; checked by contextRef in the raw iXBRL for every listed context.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c017ac476731",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2025-06-30: published income_yield_pct 13.23 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Net investment income (loss) to average net assets B 13.23 % 14.11 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c154fa63bf37",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2025-03-31: published income_yield_pct 13.66 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070235",
+     "text": "Net investment income (loss) to average net assets B 13.66 % 13.77 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c2255b609cad",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2023-06-30: published income_yield_pct 14.33 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Net investment income (loss) C 14.33 % 7.60 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d51a41bff159",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2023-09-30: published income_yield_pct 13.97 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-063075",
+     "text": "Net investment income (loss) C 13.97 % 5.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d9cea8e88da5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F16 2024-12-31 FAIL 9.76: 31.40 = 0.76 x 4 / 9.68 against 1.5 x 14.43. Point (a)/(b). The published quarterly distribution is the 10-K's monthly declarations summed (Q4 2023 0.14 + 0.10 + 0.30 = 0.54; Q4 2024 0.12 + 0.11 + 0.53 = 0.76, the December figure carrying the year's 0.17 return of capital, so the year is 1.48 + 0.17 = 1.65). A December declaration is a distribution of the quarter, so including it is right. The rate fires because one large year-end declaration is annualised. Reason-key note: the proposals reuse 'f16-quarter-distribution-includes-catch-up-declaration' (Jefferies, a catch-up after a move to monthly payment); here the mechanism is a year-end special and return of capital. The statement describes it correctly, but a dedicated key would keep check-based acceptance from carrying one mechanism's approval to another.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041961",
+     "text": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Distributions ( 1.48 ) ( 1.29 ) Distributions from tax return of capital ( 0.17 ) - Net asset value per unit, end of period $ 9.68 $ 10.08"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_db2c1cadb306",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2026-03-31: published income_yield_pct 12.09 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "Net investment income (loss) to average net assets B 12.09 % 13.66 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_db87e1c6a4e5",
+   "outcome": "rejected",
+   "coverage_verified": false,
+   "source_comparison_verified": true,
+   "rationale": "Coverage not verified. oracle check_results B01 2025-03-31 reports 218 residual rows, but check_failures lists only 200 (the listing is capped), and affected_rows are the 103 excluded_no_fair_value contexts of the capped list. The raw iXBRL holds 107 current-period investment contexts of these shapes without a fair value (59 acquisition-date only, 47 cost only, 1 percent only): at least 4 flagged contexts (USW Holdings Class A-1 '1 Units' and Warshaw Series A Preferred acquisition rows, the State Street money-market percent fact) are outside affected_rows and were not read. They are the same kind, so the conclusion is likely right, but the claim that all flagged contexts were read is not. Rebuild the population from the uncapped rule output or from the instance.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070235",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e97b66f210d7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 2024-12-31 FAIL 31.40 above the 30 pct bound; same quarter and mechanism. Point (a)/(b). The published quarterly distribution is the 10-K's monthly declarations summed (Q4 2023 0.14 + 0.10 + 0.30 = 0.54; Q4 2024 0.12 + 0.11 + 0.53 = 0.76, the December figure carrying the year's 0.17 return of capital, so the year is 1.48 + 0.17 = 1.65). A December declaration is a distribution of the quarter, so including it is right. The rate fires because one large year-end declaration is annualised. Reason-key note: the proposals reuse 'f16-quarter-distribution-includes-catch-up-declaration' (Jefferies, a catch-up after a move to monthly payment); here the mechanism is a year-end special and return of capital. The statement describes it correctly, but a dedicated key would keep check-based acceptance from carrying one mechanism's approval to another.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041961",
+     "text": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Distributions ( 1.48 ) ( 1.29 ) Distributions from tax return of capital ( 0.17 ) - Net asset value per unit, end of period $ 9.68 $ 10.08"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "zero-rate-tag-on-dash-printed-row-published-as-coupon",
+   "outcome": "supported",
+   "rationale": "Point (c). rffca -> rffcc: interest_rate changes on 32 rows (31 withdrawals plus AEP) and coupon type on 9; all 31 are undrawn lines with no par and the page prints '-' in the rate cells (Fertility, Perimeter, MRI 2024-03-31 read). The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277220",
+     "text": "Fertility (ITC) Investment Holdco, LLC / Fertility (ITC) Buyer, Inc. (f)(i)(q) Revolving Credit Facility - - 1/3/2029 - ( 37,480 ) -"
+    },
+    {
+     "accession": "0001193125-26-119504",
+     "text": "Perimeter Solutions Group, LLC (f)(i)(q) Delayed Draw Term Loan - - 10/2/2030 - ( 11,119 ) ( 6,705 )"
+    },
+    {
+     "accession": "0000950170-24-057681",
+     "text": "MRI Acquisitions, Inc (f)(h) Delayed Draw Term Loan - - 12/30/2025 - ( 56,335 ) ( 220,000 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Cytracom 2026-03-31 delayed draw prints '- - 7/1/2029 - ( 20,523 ) ( 39,482 )'; rffcc publishes no rate and no coupon type (was 9.67 Fixed). The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "Cytracom LLC (f)(i)(q) Delayed Draw Term Loan - - 7/1/2029 - $ ( 20,523 ) $ ( 39,482 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "tagged-rate-enumeration-overridden-by-member-text",
+   "outcome": "supported",
+   "rationale": "Point (d). La-Co revolver 2026-03-31 publishes PRIME, spread 4.00, 10.75 (Prime 6.75 + 4.00), as printed. reference_rate_source still reads identifier_text on the corrected row (cosmetic).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "La-Co Industries, Inc (f)(i)(q) Revolving Credit Facility Prime + 4.00 % 10.75 % 7/2/2030 38,023 29,858 38,023"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-tag-rounded-below-printed-precision",
+   "outcome": "supported",
+   "rationale": "Point (d). AEP Passion revolver 2026-03-31 publishes 10.32, the printed figure (written '10.3 2%'), like the issuer's term loan and delayed draw; spread 6.50 includes the 4.75 PIK (D-031), cash leg 5.57.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "Aep Passion Intermediate Holdings, Inc. (f)(i)(q) Revolving Credit Facility SOFR + 6.50 % ( 4.75 % PIK) 10.3 2% 10/5/2027 602,127 583,392 500,357"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Point (e). rffca -> rffcc: instrument changes on exactly 37 rows; issuer on 2 (Copperweld); entity and canonical name on the same 2 only; GICS on none; values on none. Spot-read: WCI-BXC 2024-03-31 Term Loan, Double E 2024-09-30 Revolving Credit Facility, Dragonfly 2025-06-30 Delayed Draw Term Loan, as printed. Copperweld Group's term loan and revolver now chain 2023-06-30 to 2025-06-30 in entity d208781f (canonical 'Copperweld Group, Inc.').",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057681",
+     "text": "WCI-BXC Purchaser, LLC (i)(k) Term Loan SOFR + 6.25 % 11.54 % 11/6/2030 23,397,354 22,834,514 23,397,354"
+    },
+    {
+     "accession": "0000950170-24-125367",
+     "text": "Double E Company, LLC (f)(h) Revolving Credit Facility SOFR + 6.75 % 11.50 % 6/21/2028 2,044,053 2,044,053 1,741,938"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Dragonfly Pond Works (f)(i)(q) Delayed Draw Term Loan SOFR + 5.25 % 9.55 % 8/16/2030 1,276,860 1,245,966 1,276,860"
+    },
+    {
+     "accession": "0000950170-24-057681",
+     "text": "Copperweld Group, Inc. (h)(k) Term Loan SOFR + 6.00 % 11.56 % 3/31/2026 38,033,874 37,002,884 37,463,365"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "outcome": "supported",
+   "rationale": "The workaround is visible in rffcc: corrected instruments publish as the correction value (e.g. Dragonfly 'Delayed Draw Term Loan'). The check against the correction value is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Dragonfly Pond Works (f)(i)(q) Delayed Draw Term Loan SOFR + 5.25 % 9.55 % 8/16/2030 1,276,860 1,245,966 1,276,860"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-carries-member-maturity-and-ordinal",
+   "outcome": "supported",
+   "rationale": "The 22 wrapper changes remove only row words and the 2025-09-30 'Maturity m/d/yyyy' tail; no published instrument in rffcc ends in a row word except where the page prints the class.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277220",
+     "text": "Rxstrategies, Inc (f)(i)(q) Revolving Credit Facility - - 8/12/2030 - ( 45,796 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-per-share-period-to-date-in-quarter",
+   "outcome": "supported",
+   "rationale": "Point (a), each figure against the 10-K tables: 2023-03-31 0.23 = 0.00* + 0.11 + 0.12; 2023-12-31 0.54 = 0.14 + 0.10 + 0.30; 2024-12-31 0.76 = 0.12 + 0.11 + 0.53 (December carries the 0.17 return of capital); 2025-12-31 0.48 = 0.11 + 0.11 + 0.26. 2023-06-30 0.24 is not the table sum: April 0.12 + May 0.13 + June '-' = 0.25. It equals the printed six-month 0.47 less 0.23, and 2023-09-30's 0.28 is likewise 0.75 - 0.47 (table 0.27). Both series sum to the year's 1.29, so the published figures are defensible, but the claim 'from the 10-K monthly tables' is wrong for 2023-06-30. The table-sum detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035352",
+     "text": "January 2023 $ - * $ 4,917,124 $ 4,917,124 February 2023 0.11 5,887,203 5,887,204 March 2023 0.12 6,708,882 6,708,882 April 2023 0.12 6,893,872 6,753,294 May 2023 0.13 7,984,318 7,508,716"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "May 2023 0.13 7,984,318 7,508,716 June 2023 - - - July 2023 0.05 3,152,702 2,920,181 August 2023 0.11 7,221,550 2,320,830 September 2023 0.11 7,296,972 2,387,948"
+    },
+    {
+     "accession": "0000950170-24-035352",
+     "text": "October 2023 0.14 8,879,552 2,927,901 November 2023 0.10 6,476,842 2,175,410 December 2023 0.30 19,608,732 6,660,544 $ 1.29"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Distributions ( 1.48 ) ( 1.29 ) Distributions from tax return of capital ( 0.17 ) - Net asset value per unit, end of period $ 9.68 $ 10.08"
+    },
+    {
+     "accession": "0001193125-26-119504",
+     "text": "October 2025 0.11 9,091,918 4,908,288 November 2025 0.11 9,232,678 5,011,015 December 2025 0.26 21,673,177 11,860,662 $ 1.31"
+    },
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Total from investment operations 10.47 Distributions ( 0.47 ) Net asset value per unit, end of period $ 10.00"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-row-before-inception",
+   "outcome": "supported",
+   "rationale": "rffcc fund_financials 2022-12-31 nav_per_share blank; the 10-Q prints 0 units and '-' for that date.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Net Asset Value per unit ( 62,554,536 and 0 units issued and outstanding as of June 30, 2023 and December 31, 2022, respectively) $ 10.00 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-blank-on-declared-value-rows",
+   "outcome": "supported",
+   "rationale": "Disclosed residual on zero-value rows; the detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277220",
+     "text": "Fertility (ITC) Investment Holdco, LLC / Fertility (ITC) Buyer, Inc. (f)(i)(q) Revolving Credit Facility - - 1/3/2029 - ( 37,480 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-rate-excludes-pik-in-one-quarter",
+   "outcome": "supported",
+   "rationale": "Double E 2024-03-31 published as printed (rate 9.45, spread 6.75, PIK 2.75); the ambiguity is the filer's cell. not_feasible is fair.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057681",
+     "text": "Double E Company, LLC (h)(k) Term Loan SOFR + 6.75 % ( 2.75 % PIK) 9.45 % 6/21/2028 15,690,086 15,539,302 13,995,557"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rffc-1",
+   "outcome": "supported",
+   "rationale": "Shared-tooling defect, rightly classed and deferred with REQ-rfjc-1 and the Bain helper crash. Impact here is nil: rebuild.log shows 0 unmatched and 0 'matches 2 rows' for 0001899996, and the fund files no JV schedule. The date_added stamp of 2026-10-13 is a provenance blemish worth fixing in the same batch.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "La-Co Industries, Inc (f)(i)(q) Revolving Credit Facility Prime + 4.00 % 10.75 % 7/2/2030 38,023 29,858 38,023"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "Point (g): 18 random loan rows plus the 6 Dynamic Connections CAD/CORRA rows, 5 of the 9 Prime lines (AB Centers 2023-09-30, Aeron, Lake Air, NE Ortho 2025-12-31, La-Co) and the PIK lines read (STG, All States, AEP) match their printed lines on reference code, spread, PIK, rate, par, currency and value.",
+  "B01's check_failures listing is capped at 200 rows per quarter; findings built on it at 2025-03-31 and 2025-06-30 miss part of the flagged population (see the two rejections). Worth a shared fix: write the full listing, or have the gate compare affected_rows with residual_rows.",
+  "entity_id differs from rgA2 on 178 rows (fields check), of which only 2 change in this run (Copperweld); the rest is build drift.",
+  "Clean findings are not proof the data is correct: none of these checks would see a wrong rate on a row the page prints the same way, or offsetting errors in totals."
+ ]
+}

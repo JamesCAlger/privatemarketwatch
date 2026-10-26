@@ -1,0 +1,593 @@
+{
+ "reviewer_id": "claude-independent-reviewer-fidelitypcc-rffcf",
+ "report_digest": "4c8bf46077d5934826390423675cf5e2c1c7647340214a7bee4454087eccb64a",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_101a5f2b460b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Point (f). oracle check_failures A01 2023-06-30: parent_key 'investments', rollup 1,216,949,424 against one child of 1,353,796, the money-market fund whose name contains the word; 51 of 52 rollups pass. Published rows equal the printed 'Total Investment Portfolio'. A rule false alarm, as proposed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Fidelity Investments Money Market Government Portfolio Class I 4.99 % (g)(i)(k) 1,353,796 1,353,796 1,353,796"
+    },
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Total Investment Portfolio 1,221,635,082 1,216,949,424 194.51 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0409bd9d9d35",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2025-12-31: published income_yield_pct 12.98 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-119504",
+     "text": "Net investment income (loss) to average net assets 12.98 % 14.43 % 13.93 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0856b00d72e2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2023-12-31: published income_yield_pct 13.93 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035352",
+     "text": "Net investment income (loss) 13.93 % 9.34 % 5.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_172cba3285bd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (a). The rffcd rejection is cured. Population rebuilt again on rffcf with the rule's logic (b01_rule_f.py): 121 contexts, equal to residual_rows and set-equal to affected_rows; reviewed_rows = affected_rows; the 871 total is unchanged. My q_acq3 re-run on rffcf (q_acq3_f.sql) leaves 0 unmatched current acquisition-table contexts in every quarter (6 in rffcd). rffcf publishes 'VIP Medical Holdings, LLC | Class A Units | 1,000,000 | 10 | 10' from C_79715348, as printed; the Health Care Services equity rows sum to 3,411,471, the printed subtotal. False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125367",
+     "text": "VIP Medical Holdings, LLC (n) Class A Units 1,000,000 10 10"
+    },
+    {
+     "accession": "0000950170-24-125367",
+     "text": "VIP Medical Holdings, LLC (n) Series A Preferred Units 1,000,000 1,000,000 910,000 3,004,631 3,411,471"
+    },
+    {
+     "accession": "0000950170-24-125367",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5a2cc0739f34",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2024-03-31: published income_yield_pct 13.77 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057681",
+     "text": "Net investment income (loss) C 13.77 % 14.40 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_628d31a59ee8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F16 2023-12-31 FAIL 0.53: distribution_rate 21.43 = 0.54 x 4 / NAV 10.08 against 1.5 x 13.93. Point (a)/(b). The published quarterly distribution is the 10-K's monthly declarations summed (Q4 2023 0.14 + 0.10 + 0.30 = 0.54; Q4 2024 0.12 + 0.11 + 0.53 = 0.76, the December figure carrying the year's 0.17 return of capital, so the year is 1.48 + 0.17 = 1.65). A December declaration is a distribution of the quarter, so including it is right. The rate fires because one large year-end declaration is annualised. Reason key now f16-/f33-year-end-special-distribution-annualised, its own mechanism (the rffcc note is resolved).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035352",
+     "text": "October 2023 0.14 8,879,552 2,927,901 November 2023 0.10 6,476,842 2,175,410 December 2023 0.30 19,608,732 6,660,544 $ 1.29"
+    },
+    {
+     "accession": "0000950170-24-035352",
+     "text": "Net investment income (loss) 13.93 % 9.34 % 5.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6fb9634538ff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (a). The rffcd rejection is cured. Population rebuilt again on rffcf with the rule's logic (b01_rule_f.py): 100 contexts, equal to residual_rows and set-equal to affected_rows; reviewed_rows = affected_rows; the 871 total is unchanged. My q_acq3 re-run on rffcf (q_acq3_f.sql) leaves 0 unmatched current acquisition-table contexts in every quarter (6 in rffcd). rffcf publishes 'VIP Medical Holdings | Class A Units | 1,000,000 | cost 10 | FV 10' from C_5779a838, as printed. The four published Health Care Services equity rows sum to 3,569,324, the printed subtotal. The rewritten hypothesis records the rffcd failure and the fix. False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094714",
+     "text": "VIP Medical Holdings (n) Class A Units 1,000,000 10 10"
+    },
+    {
+     "accession": "0000950170-24-094714",
+     "text": "VIP Medical Holdings (n) Series A Preferred Units 1,000,000 1,000,000 1,120,000 3,004,631 3,569,324"
+    },
+    {
+     "accession": "0000950170-24-094714",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_86d059b6db34",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (d). B02 2025-06-30 message '2 duplicate position keys (e.g. ne ortho management services llc delayed draw term loan matu...)'. The two rows are C_9a7dff36 (cost -44,145) and C_9fc950b8 (cost -16,554). Both have maturity 2030-12-13, no rate, spread or par, and FV 0, which are the B02 term columns; cost is not one of them. The page prints two separate lines with those costs (quoted). In every other quarter the two NE Ortho delayed-draw lines differ in FV (2024-12-31 -48,465/-18,174; from 2025-09-30 one is drawn), so B02 passes there. The finding was created by this run's fix, and the agent says so. The two lines are distinct positions, as filed. The reason key b02-twin-undrawn-lines-printed-separately is already proposed for 5 other funds with the same shape. Note: the 2025-06-30 rows get new position_ids (a0924f4f, ba9295b6) rather than continuing e220fd4b/76b96aaa from 2025-03-31. That is a chain break, not this finding.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 44,145 ) -"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 16,554 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_95940a6f4794",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2024-06-30: published income_yield_pct 14.11 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-094714",
+     "text": "Net investment income (loss) C 14.11 % 14.33 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9ff2e4d48042",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2025-09-30: published income_yield_pct 13.51 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277220",
+     "text": "Net investment income (loss) to average net assets B 13.51 % 14.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a320e9ba3693",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2024-12-31: published income_yield_pct 14.43 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Net investment income (loss) 14.43 % 13.93 % 9.34 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b4b5f45e440c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2024-09-30: published income_yield_pct 14.32 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125367",
+     "text": "Net investment income (loss) D 14.32 % 13.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b55b126592ee",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (a). The rffcd rejection is cured. Population rebuilt again on rffcf with the rule's logic (b01_rule_f.py): 233 contexts, equal to residual_rows and set-equal to affected_rows; reviewed_rows = affected_rows; the 871 total is unchanged. My q_acq3 re-run on rffcf (q_acq3_f.sql) leaves 0 unmatched current acquisition-table contexts in every quarter (6 in rffcd). rffcf publishes 'Dpt Management, LLC | Preferred Units | 10,753 | 33,333 | 35,699' from C_f98d218e (status now reconciled), in the DPT entity 765533df and the Preferred chain 796c5618 (2024-12-31 to 2026-03-31). The six Health Care Services equity rows sum to 3,847,295, the printed subtotal. USW twin C_ea2027ea as before. False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Dpt Management, LLC (o) Preferred Units 10,753 33,333 35,699"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Dpt Management, LLC Preferred Units 12/18/2024 33,333"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "VIP Medical Holdings, LLC (o) Series A Preferred Units 1,000,000 1,000,000 1,360,000 3,094,504 3,847,295"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bb95cf705a6d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Re-run on rffcf: 139 contexts, set-equal to affected_rows; q_acq3 0 unmatched. Population rebuilt by me with the rule's own logic (oracle_checks.check_B01: *_position_leaf rows of rffcd source_reconciliation_detail.csv with blank source_fair_value, less same accession/period/member twins of a valued row; review_fc/b01_rule.py): 139 contexts (98 current-date, 41 comparative-date), equal to check_results residual_rows and set-equal to affected_rows; reviewed_rows = affected_rows. All ten B01 quarters total 871, the report's figure. Comparative contexts: each is a prior-date acquisition-table context (member 'Investment, ...', no cost) or a prior dash line published in its own quarter at the printed cost (cost match to that quarter's build; Roofing Services Common Units 2024-12-31 published with 166 units, cost 0). Current contexts: InvestmentAcquisitionDate-only or InvestmentOwnedAtCost-only rows of the restricted-holdings table, plus one rate-only money-market twin (C_04fe153a, State Street 4.34%). I matched every current acquisition-table context to a published row of the same quarter by issuer and instrument (review_fc/q_acq3.sql). All 98 match (Sabrosura 'Class A Units' against the published 'Class A Interests', 323,750 units, cost 388,500). False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c017ac476731",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2025-06-30: published income_yield_pct 13.23 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Net investment income (loss) to average net assets B 13.23 % 14.11 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c154fa63bf37",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2025-03-31: published income_yield_pct 13.66 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070235",
+     "text": "Net investment income (loss) to average net assets B 13.66 % 13.77 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c2255b609cad",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2023-06-30: published income_yield_pct 14.33 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Net investment income (loss) C 14.33 % 7.60 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d51a41bff159",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2023-09-30: published income_yield_pct 13.97 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-063075",
+     "text": "Net investment income (loss) C 13.97 % 5.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d9cea8e88da5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F16 2024-12-31 FAIL 9.76: 31.40 = 0.76 x 4 / 9.68 against 1.5 x 14.43. Point (a)/(b). The published quarterly distribution is the 10-K's monthly declarations summed (Q4 2023 0.14 + 0.10 + 0.30 = 0.54; Q4 2024 0.12 + 0.11 + 0.53 = 0.76, the December figure carrying the year's 0.17 return of capital, so the year is 1.48 + 0.17 = 1.65). A December declaration is a distribution of the quarter, so including it is right. The rate fires because one large year-end declaration is annualised. Reason key now f16-/f33-year-end-special-distribution-annualised, its own mechanism (the rffcc note is resolved).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041961",
+     "text": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Distributions ( 1.48 ) ( 1.29 ) Distributions from tax return of capital ( 0.17 ) - Net asset value per unit, end of period $ 9.68 $ 10.08"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_db2c1cadb306",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F27 2026-03-31: published income_yield_pct 12.09 = the printed ratio of net investment income to average net assets; the fund holds about twice its net assets in investments (194 to 210 pct in rffcc fund_financials), so income over net assets exceeds the holdings coupon plus 200bp by leverage. The 31 withdrawn zero rates are on undrawn lines with value near 0 and do not move the WAC. Rule-basis proposal, as for the other levered funds.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "Net investment income (loss) to average net assets B 12.09 % 13.66 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_db87e1c6a4e5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Re-run on rffcf: 218 contexts, set-equal to affected_rows; q_acq3 0 unmatched. Population rebuilt by me with the rule's own logic (oracle_checks.check_B01: *_position_leaf rows of rffcd source_reconciliation_detail.csv with blank source_fair_value, less same accession/period/member twins of a valued row; review_fc/b01_rule.py): 218 contexts (106 current-date, 112 comparative-date), equal to check_results residual_rows and set-equal to affected_rows; reviewed_rows = affected_rows. All ten B01 quarters total 871, the report's figure. Comparative contexts: each is a prior-date acquisition-table context (member 'Investment, ...', no cost) or a prior dash line published in its own quarter at the printed cost (cost match to that quarter's build; Roofing Services Common Units 2024-12-31 published with 166 units, cost 0). Current contexts: InvestmentAcquisitionDate-only or InvestmentOwnedAtCost-only rows of the restricted-holdings table, plus nothing else. I matched every current acquisition-table context to a published row of the same quarter by issuer and instrument (review_fc/q_acq3.sql). All 106 match. The rffcc rejection (200-row listing) is cured. False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070235",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e97b66f210d7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). F33 2024-12-31 FAIL 31.40 above the 30 pct bound; same quarter and mechanism. Point (a)/(b). The published quarterly distribution is the 10-K's monthly declarations summed (Q4 2023 0.14 + 0.10 + 0.30 = 0.54; Q4 2024 0.12 + 0.11 + 0.53 = 0.76, the December figure carrying the year's 0.17 return of capital, so the year is 1.48 + 0.17 = 1.65). A December declaration is a distribution of the quarter, so including it is right. The rate fires because one large year-end declaration is annualised. Reason key now f16-/f33-year-end-special-distribution-annualised, its own mechanism (the rffcc note is resolved).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-041961",
+     "text": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Distributions ( 1.48 ) ( 1.29 ) Distributions from tax return of capital ( 0.17 ) - Net asset value per unit, end of period $ 9.68 $ 10.08"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "zero-rate-tag-on-dash-printed-row-published-as-coupon",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Point (c). rffca -> rffcc: interest_rate changes on 32 rows (31 withdrawals plus AEP) and coupon type on 9; all 31 are undrawn lines with no par and the page prints '-' in the rate cells (Fertility, Perimeter, MRI 2024-03-31 read). The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277220",
+     "text": "Fertility (ITC) Investment Holdco, LLC / Fertility (ITC) Buyer, Inc. (f)(i)(q) Revolving Credit Facility - - 1/3/2029 - ( 37,480 ) -"
+    },
+    {
+     "accession": "0001193125-26-119504",
+     "text": "Perimeter Solutions Group, LLC (f)(i)(q) Delayed Draw Term Loan - - 10/2/2030 - ( 11,119 ) ( 6,705 )"
+    },
+    {
+     "accession": "0000950170-24-057681",
+     "text": "MRI Acquisitions, Inc (f)(h) Delayed Draw Term Loan - - 12/30/2025 - ( 56,335 ) ( 220,000 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-or-spread-read-from-stale-member-text",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Cytracom 2026-03-31 delayed draw prints '- - 7/1/2029 - ( 20,523 ) ( 39,482 )'; rffcc publishes no rate and no coupon type (was 9.67 Fixed). The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "Cytracom LLC (f)(i)(q) Delayed Draw Term Loan - - 7/1/2029 - $ ( 20,523 ) $ ( 39,482 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "tagged-rate-enumeration-overridden-by-member-text",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Point (d). La-Co revolver 2026-03-31 publishes PRIME, spread 4.00, 10.75 (Prime 6.75 + 4.00), as printed. reference_rate_source still reads identifier_text on the corrected row (cosmetic).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "La-Co Industries, Inc (f)(i)(q) Revolving Credit Facility Prime + 4.00 % 10.75 % 7/2/2030 38,023 29,858 38,023"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-tag-rounded-below-printed-precision",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Point (d). AEP Passion revolver 2026-03-31 publishes 10.32, the printed figure (written '10.3 2%'), like the issuer's term loan and delayed draw; spread 6.50 includes the 4.75 PIK (D-031), cash leg 5.57.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "Aep Passion Intermediate Holdings, Inc. (f)(i)(q) Revolving Credit Facility SOFR + 6.50 % ( 4.75 % PIK) 10.3 2% 10/5/2027 602,127 583,392 500,357"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Point (e). rffca -> rffcc: instrument changes on exactly 37 rows; issuer on 2 (Copperweld); entity and canonical name on the same 2 only; GICS on none; values on none. Spot-read: WCI-BXC 2024-03-31 Term Loan, Double E 2024-09-30 Revolving Credit Facility, Dragonfly 2025-06-30 Delayed Draw Term Loan, as printed. Copperweld Group's term loan and revolver now chain 2023-06-30 to 2025-06-30 in entity d208781f (canonical 'Copperweld Group, Inc.').",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057681",
+     "text": "WCI-BXC Purchaser, LLC (i)(k) Term Loan SOFR + 6.25 % 11.54 % 11/6/2030 23,397,354 22,834,514 23,397,354"
+    },
+    {
+     "accession": "0000950170-24-125367",
+     "text": "Double E Company, LLC (f)(h) Revolving Credit Facility SOFR + 6.75 % 11.50 % 6/21/2028 2,044,053 2,044,053 1,741,938"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Dragonfly Pond Works (f)(i)(q) Delayed Draw Term Loan SOFR + 5.25 % 9.55 % 8/16/2030 1,276,860 1,245,966 1,276,860"
+    },
+    {
+     "accession": "0000950170-24-057681",
+     "text": "Copperweld Group, Inc. (h)(k) Term Loan SOFR + 6.00 % 11.56 % 3/31/2026 38,033,874 37,002,884 37,463,365"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-correction-prefixed-by-issuer-strip",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). The workaround is visible in rffcc: corrected instruments publish as the correction value (e.g. Dragonfly 'Delayed Draw Term Loan'). The check against the correction value is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Dragonfly Pond Works (f)(i)(q) Delayed Draw Term Loan SOFR + 5.25 % 9.55 % 8/16/2030 1,276,860 1,245,966 1,276,860"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-carries-member-maturity-and-ordinal",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). The 22 wrapper changes remove only row words and the 2025-09-30 'Maturity m/d/yyyy' tail; no published instrument in rffcc ends in a row word except where the page prints the class.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277220",
+     "text": "Rxstrategies, Inc (f)(i)(q) Revolving Credit Facility - - 8/12/2030 - ( 45,796 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-per-share-period-to-date-in-quarter",
+   "outcome": "supported",
+   "rationale": "Point (c)/(d) of rffcc re-checked. The figures are now described correctly: 2023-06-30 0.24 = six months 0.47 less 0.23, not the monthly-table sum 0.25 (April 0.12 + May 0.13 + June '-'); 2023-09-30 0.28 = 0.75 - 0.47, against a table sum of 0.27. The disclosure is honest. Which split is right is a rounding ambiguity in the filing, and both series sum to the year's 1.29. 2023-03-31 0.23, 2023-12-31 0.54 (0.14 + 0.10 + 0.30), 2024-12-31 0.76 (0.12 + 0.11 + 0.53) and 2025-12-31 0.48 (0.11 + 0.11 + 0.26) are the table sums. F16/F33 now carry their own keys (f16-/f33-year-end-special-distribution-annualised), as the rffcc review asked. The table-sum detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-035352",
+     "text": "January 2023 $ - * $ 4,917,124 $ 4,917,124 February 2023 0.11 5,887,203 5,887,204 March 2023 0.12 6,708,882 6,708,882 April 2023 0.12 6,893,872 6,753,294 May 2023 0.13 7,984,318 7,508,716"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "May 2023 0.13 7,984,318 7,508,716 June 2023 - - - July 2023 0.05 3,152,702 2,920,181 August 2023 0.11 7,221,550 2,320,830 September 2023 0.11 7,296,972 2,387,948"
+    },
+    {
+     "accession": "0000950170-24-035352",
+     "text": "October 2023 0.14 8,879,552 2,927,901 November 2023 0.10 6,476,842 2,175,410 December 2023 0.30 19,608,732 6,660,544 $ 1.29"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "Distributions ( 1.48 ) ( 1.29 ) Distributions from tax return of capital ( 0.17 ) - Net asset value per unit, end of period $ 9.68 $ 10.08"
+    },
+    {
+     "accession": "0001193125-26-119504",
+     "text": "October 2025 0.11 9,091,918 4,908,288 November 2025 0.11 9,232,678 5,011,015 December 2025 0.26 21,673,177 11,860,662 $ 1.31"
+    },
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Total from investment operations 10.47 Distributions ( 0.47 ) Net asset value per unit, end of period $ 10.00"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-row-before-inception",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). rffcc fund_financials 2022-12-31 nav_per_share blank; the 10-Q prints 0 units and '-' for that date.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-041853",
+     "text": "Net Asset Value per unit ( 62,554,536 and 0 units issued and outstanding as of June 30, 2023 and December 31, 2022, respectively) $ 10.00 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-blank-on-declared-value-rows",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Now 204 rows, the extra one being the DPT Preferred row of 2025-06-30 published from a declared identifier. It has no extracted_industry and no GICS, while the entity's other 23 rows carry Health Care Services. Disclosed; fair value 35,699. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277220",
+     "text": "Fertility (ITC) Investment Holdco, LLC / Fertility (ITC) Buyer, Inc. (f)(i)(q) Revolving Credit Facility - - 1/3/2029 - ( 37,480 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-rate-excludes-pik-in-one-quarter",
+   "outcome": "supported",
+   "rationale": "Unchanged in rffcf (rffcd -> rffcf: +3 rows, VIP Medical Class A 2024-06-30 / 2024-09-30 and DPT Preferred 2025-06-30; entity_id on 22 VIP Medical rows; position_id on 4; no other value, name or instrument). Double E 2024-03-31 published as printed (rate 9.45, spread 6.75, PIK 2.75); the ambiguity is the filer's cell. not_feasible is fair.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057681",
+     "text": "Double E Company, LLC (h)(k) Term Loan SOFR + 6.75 % ( 2.75 % PIK) 9.45 % 6/21/2028 15,690,086 15,539,302 13,995,557"
+    }
+   ]
+  },
+  {
+   "observation_key": "oracle-failure-listing-capped",
+   "outcome": "supported",
+   "rationale": "Verified: rffcd check_failures holds 200 B01 rows at 2025-03-31 and 2025-06-30 against residual_rows 218 and 233; my rule-logic rebuild equals residual_rows in all ten B01 quarters (871). The suggested check (fail when affected_rows is below residual_rows) is concrete, cheap and has no false positives on a correct report. propose_detector is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)"
+    }
+   ]
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "outcome": "supported",
+   "rationale": "Point (b). The wrapper adds the alternative \\s(One|...|Ten)\\s+(Delayed|Revolving|Term)\\b to staging.distinct_member_suffix_re. The key can only split dedup partitions, never merge them. It matches 28 member strings across the cached filings (Soteria, Pave America, Houseworks, Smilist, MoboTrex, Refresh, Quick Roofing, NE Ortho). Effect measured on rffcc -> rffcd: 2,770 common rows with no change to value, name, instrument or position_id; one row added (NE Ortho C_9fc950b8, FV 0, cost -16,554, as printed); excluded_affiliation_dedup counts identical in every other quarter (the rest are subtotal contexts and one 2023-06-30 money-market twin). Pavement Partners 2024-03-31 is a true twin: one printed line, 'Pavement Partners Interco, LLC (f)(h) Revolving Credit Facility - - 2/7/2028 - ( 89,735 )', whose maturity is tagged on C_2aea6736 (published) and whose cost on C_f1a2fa7d (deduped). Point (c), entity relabel: all 25 NE Ortho Management Services rows (2024-12-31 to 2026-03-31) carry one entity_id 3d3c2284 (was 89bb027f on 24), canonical name unchanged, the legacy alias ENT-00000113 now maps to 3d3c2284, and no other entity moved. Mechanism: durable_identity mints identity_id = uuid5('initial-observation:' || min(row_id)), and the new row's ROW-0117b78a... is the group's smallest row_id. The relabel is consistent, but it shows entity ids are not stable when a row is added in an unpinned sandbox build. The suggested detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 16,554 ) -"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 44,145 ) -"
+    },
+    {
+     "accession": "0000950170-24-057681",
+     "text": "Pavement Partners Interco, LLC (f)(h) Revolving Credit Facility - - 2/7/2028 - ( 89,735 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-dropped-as-aggregate-or-subtotal",
+   "outcome": "supported",
+   "rationale": "Points (a)-(d). (a) The three rows are on the pages as published, and the printed Health Care Services equity subtotals tie exactly (3,569,324; 3,411,471; 3,847,295). (b) rffcd -> rffcf: 2,771 common rows with no change to any value, issuer, instrument, canonical name or industry; source-reconciliation status changes on exactly these 3 contexts (VIP ones now diagnostic_field_mismatch for principal on an equity row, the class already held by 224 rows; DPT reconciled). The side effects are 22 VIP Medical entity_id relabels (one entity a6faa427, canonical unchanged; the same min(row_id) identity mechanism as NE Ortho in rffcd) and 4 position_id joins (DPT Preferred and VIP Class A 2024-12-31 / 2025-03-31 onto the new rows' chains). (c) My q_acq3 leaves 0. (d) I re-ran subtotal_roll.py on rffcf: 199 checked, 14 gaps, and read every gap. Each is a single-leaf industry whose leaf is tagged under the neighbouring industry and published there (CMI Buyer and Central Moloney, Electrical Components & Equipment; CUB Financing, Diversified Financial; Soteria 15,097,285, Commodity Chemicals vs Automotive; STG 27,433,922, Second Lien Diversified Financial vs Air Freight). Or it is an industry subtotal tagged on the last issuer's member (RxStrategies 71,962,542 and MoboTrex 120,941,277, which equal the published Health Care Technology and Industrial Machinery first-lien sums). Or it is an undrawn line with a member variant the key misses (Mustang revolver -23,683 / -37,893, 'Service' singular; Future Care revolver -70,000, no industry in the member; both published). Or it is the 2023-06-30 Health Care Services equity subtotal 2,561,877 tagged as Industrial Machinery (its leaves published). No remaining gap is a hidden position. Limit: subtotal_roll keys on section and industry text, so a leaf tagged with a subtotal-like member in an industry whose total still ties by coincidence would escape it. The q_acq3 cross-check covers equity, not debt. The proposed detector pair is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108878",
+     "text": "Dpt Management, LLC (o) Preferred Units 10,753 33,333 35,699"
+    },
+    {
+     "accession": "0000950170-25-108878",
+     "text": "VIP Medical Holdings, LLC (o) Series A Preferred Units 1,000,000 1,000,000 1,360,000 3,094,504 3,847,295"
+    },
+    {
+     "accession": "0000950170-24-094714",
+     "text": "VIP Medical Holdings (n) Series A Preferred Units 1,000,000 1,000,000 1,120,000 3,004,631 3,569,324"
+    },
+    {
+     "accession": "0000950170-24-125367",
+     "text": "VIP Medical Holdings, LLC (n) Series A Preferred Units 1,000,000 1,000,000 910,000 3,004,631 3,411,471"
+    },
+    {
+     "accession": "0000950170-25-041961",
+     "text": "RxStrategies, Inc (f)(i) Revolving Credit Facility - - 8/12/2030 - ( 52,708 ) ( 33,750 ) 71,854,762 71,962,542"
+    },
+    {
+     "accession": "0000950170-24-125367",
+     "text": "Diversified Financial Services CUB Financing Intermediate, LLC (j)(k) Term Loan SOFR + 4.75 % 9.35 % 6/28/2030 5,138,889 5,088,962 5,138,889"
+    },
+    {
+     "accession": "0000950170-23-041853",
+     "text": "VIP Medical Holdings, LLC Class A (l) 1,000,000 1,000,000 911,000 2,309,866 2,561,877"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rffc-1",
+   "outcome": "supported",
+   "rationale": "Request history, unchanged from rffcc and rffcd: Shared-tooling defect, rightly classed and deferred with REQ-rfjc-1 and the Bain helper crash. Impact here is nil: rebuild.log shows 0 unmatched and 0 'matches 2 rows' for 0001899996, and the fund files no JV schedule. The date_added stamp of 2026-10-13 is a provenance blemish worth fixing in the same batch. The response (deferred to the shared-tooling batch, nil impact for this fund) is sound.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-214221",
+     "text": "La-Co Industries, Inc (f)(i)(q) Revolving Credit Facility Prime + 4.00 % 10.75 % 7/2/2030 38,023 29,858 38,023"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "Published diff rffcd -> rffcf (holdings parquet): 2,774 vs 2,771 rows; added only C_5779a838, C_79715348, C_f98d218e; no row removed; on common rows 0 value, issuer, instrument, canonical or industry changes, 22 entity_id (VIP Medical only), 4 position_id (DPT Preferred, VIP Class A 2024-12-31 and 2025-03-31).",
+  "Point (b): wrapper diff adds leaf_marker_re '\\sClass\\s+[A-Z]\\s*$', an issuer_name_strip_re alternative ending in '\\s+Class\\s' and one source_encodings.context_identifiers line for C_f98d218e. Source-reconciliation statuses differ from rffcd on exactly the three target contexts (6,336 contexts compared).",
+  "Point (e), the 21 'Dpt Management, LLC' rows (plus 'DPT Management LLC' 2025-03-31 term loan and 'Dpt Management,LLC' 2025-12-31 preferred, 24 rows, one entity 765533df): names are unchanged from rffcd and rffcc and equal those in rgA2. The pages print 'Dpt' from 2025-06-30 on and 'DPT' at 2024-12-31 and 2025-03-31, so 7 of the 21 differ from their own filing by case only. The issuer name is a shared casing vote across quarters, which the rffce declared identifier flipped to 'DPT' for all 21. That is fixed in rffcf. Cosmetic, pre-existing, and not tied to a finding.",
+  "Chain note: VIP Medical Class A 2024-03-31 (FV 350,000, chain ea058813) does not continue into 2024-06-30 (FV 10, chain 9d2bd482); the page does print 10, so the value drop is real and the break is the matcher's cost.",
+  "All findings cleared is not data correct: no rule here detects a wrong rate on the right row or offsetting errors that leave totals intact."
+ ]
+}

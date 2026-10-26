@@ -1,0 +1,46 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001899996",
+ "entity_name": "Fidelity Private Credit Co LLC",
+ "version": 1,
+ "figure_corrections": [
+  {
+   "report_date": "2022-12-31",
+   "field": "nav_per_share",
+   "value": null,
+   "withdraw": true,
+   "evidence": "0000950170-23-041853 (10-Q, 2023-06-30) balance sheet: 'Net Asset Value per unit ( 62,554,536 and 0 units issued and outstanding as of June 30, 2023 and December 31, 2022, respectively) $ 10.00 -': no units and no value per unit at 2022-12-31. The 9.93 published for that date is the value at the first issue (10-K 2023: 'Period January 31, 2023 through December 31, 2023 A Per Unit Activity Net asset value per unit, beginning of period $ 9.93'). Published 9.93; blank as printed."
+  },
+  {
+   "report_date": "2023-03-31",
+   "field": "distribution_per_share",
+   "value": 0.23,
+   "evidence": "0000950170-24-035352 (10-K, 2023-12-31) monthly distributions table: 'January 2023 $ - * $ 4,917,124 $ 4,917,124 February 2023 0.11 5,887,203 5,887,204 March 2023 0.12 6,708,882 6,708,882' (January was a capital distribution before units existed): 0.11 + 0.12 = 0.23 a unit. No 10-Q for 2023-03-31 in the cache. Published blank."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "distribution_per_share",
+   "value": 0.24,
+   "evidence": "0000950170-23-041853 (10-Q, 2023-06-30) financial highlights, period January 31, 2023 through June 30, 2023: 'Distributions ( 0.47 )'; less the first quarter 0.23 (10-K monthly table, February 0.11 and March 0.12) = 0.24. This is the printed six-month figure less the first quarter, not the monthly-table sum (April 0.12 + May 0.13, June '-' = 0.25); the two differ by rounding of the printed per-unit figures. Published 0.235, half of the six months."
+  },
+  {
+   "report_date": "2023-12-31",
+   "field": "distribution_per_share",
+   "value": 0.54,
+   "evidence": "0000950170-24-035352 (10-K, 2023-12-31) financial highlights 'Distributions B ( 1.29 )' for January 31 to December 31, 2023, less nine months 0.75 (10-Q 2023-09-30 'Distributions ( 0.75 )') = 0.54; monthly table 'October 2023 0.14 8,879,552 2,927,901 November 2023 0.10 6,476,842 2,175,410 December 2023 0.30 19,608,732 6,660,544 $ 1.29' gives 0.14 + 0.10 + 0.30 = 0.54. Published 0.3225 (the year divided by four)."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "distribution_per_share",
+   "value": 0.76,
+   "evidence": "0000950170-25-041961 (10-K, 2024-12-31) monthly table 'October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095': 0.12 + 0.11 + 0.53 = 0.76; highlights 'Distributions ( 1.48 ) Distributions from tax return of capital ( 0.17 )' = 1.65 for the year, less nine months 0.89 = 0.76. Published 0.59 (the 0.17 return of capital left out)."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "distribution_per_share",
+   "value": 0.48,
+   "evidence": "0001193125-26-119504 (10-K, 2025-12-31) monthly table 'October 2025 0.11 9,091,918 4,908,288 November 2025 0.11 9,232,678 5,011,015 December 2025 0.26 21,673,177 11,860,662 $ 1.31': 0.11 + 0.11 + 0.26 = 0.48; highlights 'Distributions ( 1.28 ) ( 1.48 ) ( 1.29 ) Distributions from tax return of capital ( 0.03 )' = 1.31 for 2025, less nine months 0.83 = 0.48. Published 0.45 (the 0.03 return of capital left out)."
+  }
+ ],
+ "notes": "Fund-clearing loop 2026-10-26 (rffc): NAV per unit withdrawn for the comparative year-end before units existed; quarterly distributions per unit set from the 10-K monthly tables where the build split a year-to-date figure wrongly or left out the year-end return of capital. Quarters 2024-03-31 to 2024-09-30, 2025-03-31 to 2025-09-30, 2026-03-31 already equal the printed figures; 2023-09-30 0.28 is likewise the printed nine months 0.75 less six months 0.47, not the monthly-table sum (July 0.05 + August 0.11 + September 0.11 = 0.27)."
+}

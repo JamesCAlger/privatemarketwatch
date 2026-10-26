@@ -594,11 +594,11 @@
 - pct_of_net_assets = 
 - interest_rate = 
 - basis_spread = 
-- reference_rate_type = PRIME
+- reference_rate_type = 
 - coupon_type = 
 - pik_rate = 
 - maturity_date = 2029-10-18  (tag: equal)
-- corrected_fields = 
+- corrected_fields = reference_rate_type;reference_rate_source
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 

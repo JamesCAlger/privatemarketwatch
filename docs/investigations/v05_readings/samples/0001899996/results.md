@@ -10,28 +10,27 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 | row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | issuer_name | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | instrument_and_class | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| fair_value | 19 | 0.0% (0.0-16.8) | 0 | 0 | 0.0% (0.0-16.8) | 0 | 0 | 0 | 0 |
+| fair_value | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 0 | 0 | 0 | 1 |
 | cost | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | principal_amount | 14 | 0.0% (0.0-21.5) | 0 | 0 | 7.1% (1.3-31.5) | 1 | 0 | 0 | 0 |
 | shares_held | 3 | 0.0% (0.0-56.2) | 0 | 0 | 33.3% (6.1-79.2) | 1 | 0 | 0 | 0 |
 | pct_of_net_assets | 0 | - | 0 | 0 | - | 0 | 0 | 0 | 0 |
 | interest_rate | 13 | 0.0% (0.0-22.8) | 0 | 0 | 0.0% (0.0-22.8) | 0 | 0 | 0 | 0 |
 | basis_spread | 13 | 0.0% (0.0-22.8) | 0 | 0 | 0.0% (0.0-22.8) | 0 | 0 | 0 | 0 |
-| reference_rate_type | 14 | 7.1% (1.3-31.5) | 0 | 1 | 15.4% (4.3-42.2) | 0 | 0 | 0 | 2 |
+| reference_rate_type | 13 | 0.0% (0.0-22.8) | 0 | 0 | 15.4% (4.3-42.2) | 0 | 0 | 0 | 2 |
 | pik_rate | 1 | 0.0% (0.0-79.3) | 0 | 0 | 0.0% (0.0-79.3) | 0 | 0 | 0 | 0 |
 | maturity_date | 17 | 0.0% (0.0-18.4) | 0 | 0 | 0.0% (0.0-18.4) | 0 | 0 | 0 | 0 |
 
 | Fund | cards | cards with any published error | with any tag error |
 |---|---|---|---|
-| 0001899996 | 20 | 5.0% (0.9-23.6) | 15.0% (5.2-36.0) |
+| 0001899996 | 20 | 0.0% (0.0-16.1) | 20.0% (8.1-41.6) |
 
 | Era | cards | with any published error | with any tag error |
 |---|---|---|---|
-| to 2023-12-31 | 3 | 0.0% (0.0-56.2) | 33.3% (6.1-79.2) |
-| 2024 on | 17 | 5.9% (1.0-27.0) | 11.8% (3.3-34.3) |
+| to 2023-12-31 | 3 | 0.0% (0.0-56.2) | 66.7% (20.8-93.9) |
+| 2024 on | 17 | 0.0% (0.0-18.4) | 11.8% (3.3-34.3) |
 
-Published errors: 1
+Published errors: 0
 
 | Card | Quarter | Field | Published | Cause | Note |
 |---|---|---|---|---|---|
-| C012 | 2024-06-30 | reference_rate_type | extra | pipeline | reference rate cell prints '-' and no fact or member text names a rate; we publish PRIME |

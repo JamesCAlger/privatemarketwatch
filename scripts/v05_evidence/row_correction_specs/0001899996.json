@@ -1453,5 +1453,487 @@
    "issuer_name": "Warshaw Opco LLC"
   },
   "reason": "The filer's member names the issuer 'Warshaw Opco'; the page prints 'Warshaw Opco LLC'. Printed (0001193125-25-277220): 'Warshaw Opco LLC (i)(q) Term Loan SOFR + 5.75 % 9.75 % 3/27/2030 743,314 733,062 709,121'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt, Building Productst, Copperweld Group, Inc., Revolving Credit Facility, Reference Rate and Spread SOFR + 6.00%, Interest Rate 11.75%, Maturity Date 3/31/2026",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Copperweld Group, Inc."
+  },
+  "reason": "The filer's member reads 'Building Productst, Copperweld Group, Inc.' (heading typo), so the name kept 'Productst, '; the page prints the company as 'Copperweld Group, Inc.' Printed (0000950170-24-057681, context C_8c0a6829-c0bf-4af1-9071-49436b1f677b): 'Copperweld Group, Inc. (f)(h) Revolving Credit Facility SOFR + 6.00 % 11.57 % 3/31/2026 3,553,299 3,421,310 3,477,157'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt, Building Productst, Copperweld Group, Inc., Term Loan, Reference Rate and Spread SOFR + 6.00%, Interest Rate 11.56%, Maturity Date 3/31/2026",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Copperweld Group, Inc."
+  },
+  "reason": "The filer's member reads 'Building Productst, Copperweld Group, Inc.' (heading typo), so the name kept 'Productst, '; the page prints the company as 'Copperweld Group, Inc.' Printed (0000950170-24-057681, context C_b9bd970f-b2ff-42ae-9b64-aec3bad3733b): 'Copperweld Group, Inc. (h)(k) Term Loan SOFR + 6.00 % 11.56 % 3/31/2026 38,033,874 37,002,884 37,463,365'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Industrial Machinery & Supplies & Components La-Co Industries, Inc Type Revolving Credit Facility Reference Rate and Spread SOFR + 4.00% Interest Rate 10.75% Maturity Date 7/02/2030",
+  "exact": true,
+  "fields": {
+   "reference_rate_type": "PRIME"
+  },
+  "reason": "The member text reads 'SOFR + 4.00%' and set SOFR; the tagged enumeration is PrimeRateMember and the page prints Prime. Printed (0001193125-26-214221, context C_7142bc99-002a-4a46-a86b-5f2b169758ac): 'La-Co Industries, Inc (f)(i)(q) Revolving Credit Facility Prime + 4.00 % 10.75 % 7/2/2030 38,023 29,858 38,023'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Electronic Components Aep Passion Intermediate Holdings, Inc. Type Revolving Credit Facility Reference Rate and Spread SOFR + 6.50% (4.75% PIK) Interest Rate 10.32% Maturity Date 10/05/2027",
+  "exact": true,
+  "fields": {
+   "interest_rate": "10.32"
+  },
+  "reason": "InvestmentInterestRate is tagged 0.103 with decimals 3 (rounded); the page prints 10.32 %, as on the issuer's two other lines. Printed (0001193125-26-214221, context C_54b3fc12-7576-4436-a7bf-1bb7e928de32): 'Aep Passion Intermediate Holdings, Inc. (f)(i)(q) Revolving Credit Facility SOFR + 6.50 % ( 4.75 % PIK) 10.3 2% 10/5/2027 602,127 583,392 500,357'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Health Care Services Fertility (ITC) Investment Holdco, LLC / Fertility (ITC) Buyer, Inc. Type Revolving Credit Facility Reference Rate and Spread 0.00% Interest Rate 0.00% Maturity Date 1/3/2029",
+  "exact": true,
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate and coupon type Fixed was published (rate 0.0 from identifier_text). The rate is withdrawn with the coupon type. Printed (0001193125-25-277220, context C_01611b86-b217-49b6-9d02-cb391cbd9a9e): 'Fertility (ITC) Investment Holdco, LLC / Fertility (ITC) Buyer, Inc. (f)(i)(q) Revolving Credit Facility - - 1/3/2029 - ( 37,480 ) -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Diversified Support Services Perimeter Solutions Group, LLC Type Delayed Draw Term Loan Maturity Date 10/2/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_064c1337-4ba1-439f-a0dc-0d2a54989d1d): 'Perimeter Solutions Group, LLC (f)(i)(q) Delayed Draw Term Loan - - 10/2/2030 - ( 11,119 ) ( 6,705 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Health Care Services Bebright Mso, LLC Type Delayed Draw Term Loan Maturity Date 6/3/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_0a68acbe-6bb4-4adb-bf53-8eb60e9cb89d): 'Bebright Mso, LLC (f)(i)(q) Delayed Draw Term Loan - - 6/3/2030 - ( 3,813 ) -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Environmental & Facilities Services Dragonfly Pond Works Type Maturity Date 8/16/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_0b026e08-a11e-4339-a558-60242c316c79): 'Dragonfly Pond Works (f)(i)(q) Revolving Credit Facility - - 8/16/2030 - ( 10,165 ) -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Diversified Support Services National Power, LLC Type Revolving Credit Facility Maturity Date 10/20/2029",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_14f9478a-a083-4d9b-a320-614542d0a13a): 'National Power, LLC (f)(i)(q) Revolving Credit Facility - - 10/20/2029 - ( 2,881 ) ( 1,494 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Health Care Services Bebright Mso, LLC Type Revolving Credit Facility Maturity Date 6/3/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_1be41d94-93b3-4980-acea-667faadf4021): 'Bebright Mso, LLC (f)(i)(q) Revolving Credit Facility - - 6/3/2030 - ( 15,077 ) -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Diversified Support Services National Power, LLC Type Delayed Draw Term Loan Maturity Date 10/20/2029",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_1f584f61-e672-40e9-af7f-1e0b191e1611): 'National Power, LLC (f)(i)(q) Delayed Draw Term Loan - - 10/20/2029 - ( 3,223 ) ( 1,674 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Environmental & Facilities Services Scp Mechanical Services Buyer, LLC Type Revolving Credit Facility Maturity Date 8/20/2031",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_276533ba-defd-42bf-8235-9c758fbfb167): 'Scp Mechanical Services Buyer, LLC (f)(i)(q) Revolving Credit Facility - - 8/20/2031 - ( 16,948 ) -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Diversified Support Services National Power, LLC Type Delayed Draw Term Loan Reference Rate and Spread 0.00% Interest Rate 0.00% Maturity Date 10/20/2029",
+  "exact": true,
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate and coupon type Fixed was published (rate 0.0 from identifier_text). The rate is withdrawn with the coupon type. Printed (0001193125-25-277220, context C_3b0be8dd-c6bd-456e-bce3-3d0f630defb1): 'National Power, LLC (f)(i)(q) Delayed Draw Term Loan - - 10/20/2029 - ( 6,124 ) ( 2,241 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Electrical Components & Equipment Luminii LLC Type Delayed Draw Term Loan Maturity Date 3/21/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_4627883f-5d79-4589-8235-8f3bb611976a): 'Luminii LLC (f)(i)(q) Delayed Draw Term Loan - - 3/21/2030 - ( 9,913 ) -'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Application Software Cytracom LLC Type Delayed Draw Term Loan Interest Rate 9.67% Maturity Date 7/1/2029",
+  "exact": true,
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate and coupon type Fixed was published (rate 9.67 from identifier_text). The rate is withdrawn with the coupon type. Printed (0001193125-26-214221, context C_5f3592fb-da01-494c-91da-1ee251e3d26e): 'Cytracom LLC (f)(i)(q) Delayed Draw Term Loan - - 7/1/2029 - $ ( 20,523 ) $ ( 39,482 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Diversified Support Services Eversmith Brands Intermediate Holding Company Type Revolving Credit Facility Maturity Date 6/17/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_6c988363-f50b-4c05-9c6c-8457a0ebc1cc): 'Eversmith Brands Intermediate Holding Company (f)(i)(q) Revolving Credit Facility - - 6/17/2030 - ( 1,155 ) -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Health Care Services NE Ortho Management Services, LLC Type Revolving Credit Facility Reference Rate and Spread 0.00% Interest Rate 0.00% Maturity Date 12/13/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate and coupon type Fixed was published (rate 0.0 from identifier_text). The rate is withdrawn with the coupon type. Printed (0001193125-25-277220, context C_6d03f971-5020-4442-91a3-6f73223d5865): 'NE Ortho Management Services, LLC (f)(i)(q) Revolving Credit Facility - - 12/13/2030 - ( 10,529 ) -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Electronic Manufacturing Services Principal Lighting Group Holdings, LLC Type Maturity Date 11/4/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_834de0dc-900e-479c-b216-c7292b0914e3): 'Principal Lighting Group Holdings, LLC (f)(i)(q) Revolving Credit Facility - - 11/4/2030 - ( 37,769 ) ( 9,319 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Health Care Services Ab Centers Acquisition Corporation Type Revolving Credit Facility Maturity Date 7/2/2031",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_8ff6614f-0c3f-4234-91e6-97629a88d480): 'Ab Centers Acquisition Corporation (f)(j)(q) Revolving Credit Facility - - 7/2/2031 - ( 23,427 ) ( 3,681 )'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Health Care Services Bebright Mso, LLC Type Revolving Credit Facility Reference Rate and Spread 0.00% Interest Rate 0.00% Maturity Date 6/3/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate and coupon type Fixed was published (rate 0.0 from identifier_text). The rate is withdrawn with the coupon type. Printed (0001193125-25-277220, context C_9288a521-1113-4d37-9f45-c31ec75f5099): 'Bebright Mso, LLC (f)(i)(q) Revolving Credit Facility - - 6/3/2030 - ( 15,925 ) -'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Diversified Support Services Perimeter Solutions Group, LLC Type Revolving Credit Facility Maturity Date 10/2/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_9414cea5-93aa-44dc-9a87-ea91be3721f3): 'Perimeter Solutions Group, LLC (f)(i)(q) Revolving Credit Facility - - 10/2/2030 - ( 43,972 ) ( 42,608 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Diversified Support Services Hy-Tek Opco, LLC Type Revolving Credit Facility Maturity Date 9/19/2028",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_948fde00-c824-40ad-aa09-1c82ba88b85f): 'Hy-Tek Opco, LLC (f)(i)(q) Revolving Credit Facility - - 9/19/2028 - ( 28,812 ) ( 88,961 )'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Health Care Services Future Care Associates LLC Type Revolving Credit Facility Reference Rate and Spread 0.00% Interest Rate 0.00% Maturity Date 12/30/2028",
+  "exact": true,
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate and coupon type Fixed was published (rate 0.0 from identifier_text). The rate is withdrawn with the coupon type. Printed (0001193125-25-277220, context C_95e2b6ea-76f1-4595-9994-39f8d29921f2): 'Future Care Associates LLC (f)(i)(q) Revolving Credit Facility - - 12/30/2028 - ( 69,311 ) ( 15,000 )'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Health Care Services Ab Centers Acquisition Corporation Type Revolving Credit Facility Reference Rate and Spread 0.00% Interest Rate 0.00% Maturity Date 7/2/2031",
+  "exact": true,
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate and coupon type Fixed was published (rate 0.0 from identifier_text). The rate is withdrawn with the coupon type. Printed (0001193125-25-277220, context C_a7db2725-07b4-4574-8eb1-b7de231ff089): 'Ab Centers Acquisition Corporation (f)(j)(q) Revolving Credit Facility - - 7/2/2031 - ( 24,481 ) ( 7,362 )'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt, Diversified Support Services, MRI Acquisitions, Inc, Delayed Draw Term Loan, Maturity Date 12/30/2025",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0000950170-24-057681, context C_b293d9b6-86a1-494e-9917-27a1df748716): 'MRI Acquisitions, Inc (f)(h) Delayed Draw Term Loan - - 12/30/2025 - ( 56,335 ) ( 220,000 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Electronic Components Eds Buyer, LLC Type Revolving Credit Facility Maturity Date 1/10/2029",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_b8cf1a9d-d06b-4b5a-a7bb-c8e0630f7402): 'Eds Buyer, LLC (f)(i)(q) Revolving Credit Facility - - 1/10/2029 - ( 1,088 ) -'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Trading Companies & Distributors Belt Power Holdings LLC Revolving Credit Facility Reference Rate and Spread Interest Rate 0.00% Maturity Date 8/22/2028",
+  "exact": true,
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate and coupon type Fixed was published (rate 0.0 from identifier_text). The rate is withdrawn with the coupon type. Printed (0000950170-25-108878, context C_bc30187c-4780-41c8-9a20-d6fe23183e68): 'Belt Power Holdings LLC (f)(i)(q) Revolving Credit Facility - - 8/22/2028 - ( 37,405 ) -'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt, Commodity Chemicals, Soteria Flexibles Corporation, Delayed Draw Term Loan, , Maturity Date 8/15/2029",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0000950170-24-057681, context C_be2a1eae-0be7-4b53-9f42-0874cb3e8d9a): 'Soteria Flexibles Corporation (f)(h) Delayed Draw Term Loan - - 8/15/2029 - ( 81,827 ) ( 29,148 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Health Care Services Behavioral Framework LLC Type Revolving Credit Facility Maturity Date 11/20/2031",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_d01fe1ba-ad81-4a7f-8bb2-c5a9f4ddbae0): 'Behavioral Framework LLC (f)(i)(q) Revolving Credit Facility - - 11/20/2031 - ( 15,786 ) ( 16,086 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Diversified Support Services Eversmith Brands Intermediate Holding Company Type Delayed Draw Term Loan Maturity Date 6/17/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_dacc5c54-e8f5-49f9-9afe-bb3302f4cb50): 'Eversmith Brands Intermediate Holding Company (f)(i)(q) Delayed Draw Term Loan - - 6/17/2030 - ( 9,205 ) -'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Health Care Services Dpt Management, LLC Type Delayed Draw Term Loan Reference Rate and Spread 0.00% Interest Rate 0.00% Maturity Date 12/18/2027",
+  "exact": true,
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate and coupon type Fixed was published (rate 0.0 from identifier_text). The rate is withdrawn with the coupon type. Printed (0001193125-25-277220, context C_dd8fad1c-f322-4f2c-b171-e1f1f68eb352): 'Dpt Management, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/18/2027 - ( 3,088 ) ( 22,083 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Environmental & Facilities Services Scp Mechanical Services Buyer, LLC Type Delayed Draw Term Loan",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_ea9bd496-aa1d-4791-815d-e75b2ae49e1a): 'Scp Mechanical Services Buyer, LLC (f)(i)(q) Delayed Draw Term Loan - - 8/20/2031 - ( 39,574 ) -'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt, Commodity Chemicals, Soteria Flexibles Corporation, Revolving Credit Facility, , Maturity Date 8/15/2029",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0000950170-24-057681, context C_f8ab564b-016b-4ff9-824e-37076c849473): 'Soteria Flexibles Corporation (f)(h) Revolving Credit Facility - - 8/15/2029 - ( 132,551 ) ( 23,630 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Electrical Components & Equipment Luminii LLC Type Revolving Credit Facility Maturity Date 3/21/2030",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_f94d798a-7939-43cf-8adf-beb533a71552): 'Luminii LLC (f)(i)(q) Revolving Credit Facility - - 3/21/2030 - ( 13,954 ) ( 3,297 )'"
+ },
+ {
+  "quarter": "2025-12-31",
+  "identifier": "Debt Health Care Services Dpt Management, LLC Type Delayed Draw Term Loan Maturity Date 12/18/2027",
+  "exact": true,
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Undrawn line: the page prints '-' in the reference-rate and rate columns, but an interest rate was published (rate 0.0 from xbrl_field). The rate is withdrawn. Printed (0001193125-26-119504, context C_fbd6b79f-9c11-49cc-a1eb-65cba2ab2121): 'Dpt Management, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/18/2027 - ( 2,744 ) ( 20,417 )'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Debt, Life Sciences Tools & Services, WCI-BXC Purchaser, LLC, Revolving Credit Facility, Reference Rate and Spread SOFR + 6.25%, Interest Rate 11.54%, Maturity Date 11/6/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Term Loan"
+  },
+  "reason": "Published instrument 'Revolving Credit Facility'; the printed line of the context names the instrument as shown. Printed (0000950170-24-057681, context C_0d002d6f-27b1-4784-abad-bd299e3c3e75): 'WCI-BXC Purchaser, LLC (i)(k) Term Loan SOFR + 6.25 % 11.54 % 11/6/2030 23,397,354 22,834,514 23,397,354'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "identifier": "Health Care Services, Tiger Healthcare Holdings, LLC, Class A Units",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Class A Interest"
+  },
+  "reason": "Published instrument 'Class A Units'; the printed line of the context names the instrument as shown. Printed (0000950170-24-057681, context C_513517df-d3e2-46d2-8134-6f247726563d): 'Tiger Healthcare Holdings, LLC (n) Class A Interest 97,500 125,000 124,800'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Industrial Machinery & Supplies & Components MoboTrex, LLC Delayed Draw Revolving Credit Facility Maturity Date 6/7/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Revolving Credit Facility",
+   "issuer_name": "MoboTrex, LLC"
+  },
+  "reason": "Published instrument 'Delayed Draw Revolving Credit Facility'; the printed line of the context names the instrument as shown. The issuer name is set to the published name so the name strip no longer moves tranche words ('Delayed Draw', 'Revolving Credit Facility') in front of the instrument. Printed (0000950170-24-094714, context C_95aa5219-59fb-4daa-bff1-ed6f40b0ccc9): 'MoboTrex, LLC (f)(h) Revolving Credit Facility - - 6/7/2030 - ( 2,075 ) ( 2,098 )'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Debt Health Care Services Tiger Healthcare Buyer, LLC Delayed Draw Delayed Draw Term Loan Maturity Date 2/27/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Delayed Draw Term Loan",
+   "issuer_name": "Tiger Healthcare Buyer, LLC"
+  },
+  "reason": "Published instrument 'Delayed Draw Delayed Draw Term Loan'; the printed line of the context names the instrument as shown. The issuer name is set to the published name so the name strip no longer moves tranche words ('Delayed Draw', 'Revolving Credit Facility') in front of the instrument. Printed (0000950170-24-094714, context C_23b42d85-165a-44bd-b61d-bd700661dc18): 'Tiger Healthcare Buyer, LLC (f)(h) Delayed Draw Term Loan - - 2/27/2030 - ( 1,329 ) ( 3,125 )'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Application Software Cytracom, LLC Delayed Draw Term Loan Interest Maturity Date 6/28/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Delayed Draw Term Loan"
+  },
+  "reason": "Published instrument 'Delayed Draw Term Loan Interest'; the printed line of the context names the instrument as shown. Printed (0000950170-24-125367, context C_faf9aa95-d980-416d-812c-2099d944d30e): 'Cytracom, LLC (f)(h) Delayed Draw Term Loan - - 6/28/2027 - ( 4,640 ) ( 5,056 )'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Application Software Cytracom, LLC Revolving Credit Facility Interest Maturity Date 6/28/2027",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Revolving Credit Facility"
+  },
+  "reason": "Published instrument 'Revolving Credit Facility Interest'; the printed line of the context names the instrument as shown. Printed (0000950170-24-125367, context C_5d69fc26-0f8f-4b2d-a57c-1b760f6a19e9): 'Cytracom, LLC (f)(h) Revolving Credit Facility - - 6/28/2027 - ( 5,154 ) ( 5,618 )'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Debt Industrial Machinery & Supplies & Components Double E Company, LLC Term Loan Reference Rate and Spread SOFR + 6.75% Interest Rate 11.50% Maturity Date 6/21/2028",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Revolving Credit Facility"
+  },
+  "reason": "Published instrument 'Term Loan'; the printed line of the context names the instrument as shown. Printed (0000950170-24-125367, context C_2cce725e-701e-4c94-83c4-8d5cb4e30391): 'Double E Company, LLC (f)(h) Revolving Credit Facility SOFR + 6.75 % 11.50 % 6/21/2028 2,044,053 2,044,053 1,741,938'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Air Freight & Logistics R1 Holdings, LLC Revolving Credit Facility Loan Reference Rate and Spread SOFR + 6.25% Interest Rate 10.84% Maturity Date 12/29/2028",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Revolving Credit Facility"
+  },
+  "reason": "Published instrument 'Revolving Credit Facility Loan'; the printed line of the context names the instrument as shown. Printed (0000950170-25-041961, context C_53cce4fa-fc15-455c-acba-bc0e6b2cafdd): 'R1 Holdings, LLC (f)(i) Revolving Credit Facility SOFR + 6.25 % 10.84 % 12/29/2028 1,235,294 1,124,353 1,235,294'"
+ },
+ {
+  "quarter": "2024-12-31",
+  "identifier": "Debt Commodity Chemicals Soteria Flexibles Corporation One Delayed Draw Term Loan Maturity Date 8/15/2029",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Revolving Credit Facility"
+  },
+  "reason": "Published instrument 'Delayed Draw Term Loan'; the printed line of the context names the instrument as shown. Printed (0000950170-25-041961, context C_9ae34a28-a7b5-4a23-b2f0-ffb3f4ca3338): 'Soteria Flexibles Corporation (f)(i) Revolving Credit Facility - - 8/15/2029 - ( 114,428 ) ( 64,981 )'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Environmental & Facilities Services Dragonfly Pond Works Delayed Draw Term Loan Reference Rate and Spread SOFR + 5.25% Interest Rate 9.55% Maturity Date 8/16/2030",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Term Loan"
+  },
+  "reason": "Published instrument 'Delayed Draw Term Loan'; the printed line of the context names the instrument as shown. Printed (0000950170-25-108878, context C_8e415d16-92a8-456d-9739-668e1174d72a): 'Dragonfly Pond Works (i)(q) Term Loan SOFR + 5.25 % 9.55 % 8/16/2030 2,970,551 2,930,950 2,970,551'"
+ },
+ {
+  "quarter": "2025-06-30",
+  "identifier": "Debt Environmental & Facilities Services Dragonfly Pond Works Revolving Credit Facility Reference Rate and Spread - Interest Rate - Maturity Date 8/16/2030",
+  "exact": true,
+  "fields": {
+   "issuer_name": "Dragonfly Pond Works"
+  },
+  "reason": "Published instrument 'Revolving Credit Facility Delayed Draw Term Loan'; the printed line of the context names the instrument as shown. The issuer name is set to the published name so the name strip no longer moves tranche words ('Delayed Draw', 'Revolving Credit Facility') in front of the instrument. Printed (0000950170-25-108878, context C_dc7d42b6-28cf-4a8d-a451-6e50f35f90d7): 'Dragonfly Pond Works (f)(i)(q) Delayed Draw Term Loan SOFR + 5.25 % 9.55 % 8/16/2030 1,276,860 1,245,966 1,276,860'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Advertising Penn Quarter Partners, LLC Type evolving Credit Facility Maturity Date 8/25/2031",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Revolving Credit Facility"
+  },
+  "reason": "Published instrument 'evolving Credit Facility'; the printed line of the context names the instrument as shown. Printed (0001193125-25-277220, context C_f5e97fec-46d4-4391-a5af-0fce0dd08a71): 'Penn Quarter Partners, LLC (f)(i)(q) Revolving Credit Facility - - 8/25/2031 - ( 17,248 ) ( 17,536 )'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Building Products Tgnl Purchaser LLC Type Delayed Draw Revolving Credit Facility Maturity Date 6/25/2031",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Revolving Credit Facility",
+   "issuer_name": "Tgnl Purchaser LLC"
+  },
+  "reason": "Published instrument 'Delayed Draw Revolving Credit Facility'; the printed line of the context names the instrument as shown. The issuer name is set to the published name so the name strip no longer moves tranche words ('Delayed Draw', 'Revolving Credit Facility') in front of the instrument. Printed (0001193125-25-277220, context C_d7843b5c-89b7-4a1b-a3c7-aced2e60d4a0): 'Tgnl Purchaser LLC (f)(i)(q) Revolving Credit Facility - - 6/25/2031 - ( 1,982 ) ( 2,072 )'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "identifier": "Debt Building Products Tgnl Purchaser LLC Type Delayed Draw Term Loan Reference Rate and Spread SOFR + 5.00% Interest Rate 9.16% Maturity Date 6/25/2031",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Term Loan"
+  },
+  "reason": "Published instrument 'Delayed Draw Term Loan'; the printed line of the context names the instrument as shown. Printed (0001193125-25-277220, context C_472f116b-fb30-4c97-be01-07c38b2d8293): 'Tgnl Purchaser LLC (i)(q) Term Loan SOFR + 5.00 % 9.16 % 6/25/2031 826,657 816,669 816,324'"
+ },
+ {
+  "quarter": "2026-03-31",
+  "identifier": "Debt Air Freight & Logistics STG Distribution LLC Type Term Loan Reference Rate and Spread 8.00% (8.00% PIK) Interest Rate 8.00% Maturity Date 7/13/2026",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Delayed Draw Term Loan"
+  },
+  "reason": "Published instrument 'Term Loan'; the printed line of the context names the instrument as shown. Printed (0001193125-26-214221, context C_116acd89-f233-4e70-aaf9-766ca0efe5af): 'STG Distribution LLC (m)(q) Delayed Draw Term Loan 8.00 % ( 8.00 % PIK) 8.00 % 7/13/2026 8,847,093 8,075,909 8,847,093'"
+ },
+ {
+  "quarter": "2024-06-30",
+  "identifier": "Health Care Services VIP Medical Holdings Class A",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Class A Units",
+   "issuer_name": "VIP Medical Holdings"
+  },
+  "reason": "Published from rffce (member cut at 'Class A', context C_5779a838-b19b-423c-a5f8-58637ef33f97); the instrument came out 'Class A' from the name strip. Instrument and issuer as printed (0000950170-24-094714): 'VIP Medical Holdings (n) Class A Units 1,000,000 10 10'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "identifier": "Health Care Services VIP Medical Holdings Class A",
+  "exact": true,
+  "fields": {
+   "instrument_description": "Class A Units",
+   "issuer_name": "VIP Medical Holdings, LLC"
+  },
+  "reason": "Published from rffce (member cut at 'Class A', context C_79715348-528a-4605-963e-06fd8adff9e6); the instrument came out 'Class A' from the name strip. Instrument and issuer as printed (0000950170-24-125367): 'VIP Medical Holdings, LLC (n) Class A Units 1,000,000 10 10'"
  }
 ]

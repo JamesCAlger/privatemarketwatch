@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "fcxe",
+ "sandbox": "rffcf",
  "dispositions": [
   {
    "disposition_id": "PD-F27-1899996-1",
@@ -101,9 +101,9 @@
      "quote": "Net investment income (loss) to average net assets B 12.09 % 13.66 % -- 2026-03-31 financial highlights; published income_yield_pct 12.09; investments 1662.5M on net assets 797.3M (209 pct)"
     }
    ],
-   "rerun": "python scripts/v05_evidence/left.py fcxe F27",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
-   "decided_on": "2026-10-16"
+   "rerun": "python scripts/v05_evidence/left.py rffcf F27",
+   "decided_by": "PROPOSED by agent claude-fund-agent-fidelitypcc-rffc 2026-10-26 (sandbox rffcf); not accepted by the owner",
+   "decided_on": "2026-10-26"
   },
   {
    "disposition_id": "PD-B01-1899996-2",
@@ -121,7 +121,7 @@
     "2025-06-30"
    ],
    "reason_key": "b01-restricted-holdings-acquisition-table-contexts",
-   "statement": "Every context B01 counts without a fair value in these quarters belongs to the note table 'Additional information on each restricted holding' (columns Investment, Type, Acquisition Date, Acquisition Cost), which the filer tags with InvestmentOwnedAtCost and InvestmentAcquisitionDate on contexts of their own (58, 80, 95, 102 and 109 contexts), plus three single rate-only twin contexts of published rows. They are not positions; each equity line is published once from the schedule, and the quarter totals tie to the filed total. Every schedule line printed with a dash for fair value is now published at 0 (untagged_values). No fix applies: these contexts must not be published.",
+   "statement": "B01 flags 100, 121, 139, 218 and 233 contexts without a fair value in 2024-06-30 to 2025-06-30 (check_results residual_rows; the oracle's failure listing stops at 200 rows, so the population was rebuilt with the rule's own logic from the per-CIK source detail, b01_full.py, counts equal in every quarter). Every context was read by contextRef on the page (scratch/fund_runs/0001899996/b01full_rffcf.tsv): 763 are rows of the note table 'Additional information on each restricted holding' (Investment, Type, Acquisition Date, Acquisition Cost), tagged with InvestmentOwnedAtCost and InvestmentAcquisitionDate on contexts of their own, 461 of the current date and 302 of the comparative date; 43 are dash lines of the comparative (prior year-end) schedule printed in the same filing; 5 are twin contexts carrying only a rate, spread or percent fact of a published row. Every current-date acquisition-table context was matched to a published row of the same quarter by issuer and instrument (q_acq3.sql, after the independent review of rffcd): in rffcd six did not match, because the printed positions they describe were not published (VIP Medical Holdings Class A Units 2024-06-30 and 2024-09-30, member cut at 'Class A'; DPT Management Preferred Units 2025-06-30, member cut at the industry). Those three rows are published from rffce (wrapper leaf_marker_re and context_identifiers); after that every acquisition-table context matches a published row, and every comparative dash line and twin row is published in its own quarter (b01_prior_check.py). The remaining contexts carry no position of their own; no fix applies to them.",
    "basis": "read",
    "evidence": [
     {
@@ -153,11 +153,23 @@
      "accession": "0000950170-25-108878",
      "verbatim": "Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)",
      "quote": "2025-06-30: 109 acquisition-table contexts without a fair value; 'Additional information on each restricted holding is as follows: Investment Type Acquisition Date Acquisition Cost ($)'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108878",
+     "verbatim": "Belt Power Holdings LLC (f)(i) Revolving Credit Facility - - 8/22/2028 - ( 42,952 ) -",
+     "quote": "Belt Power Holdings LLC (f)(i) Revolving Credit Facility - - 8/22/2028 - ( 42,952 ) - -- comparative 2024-12-31 dash line in the 2025-06-30 10-Q, a B01 prior-period context; published in the 2024-12-31 build"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108878",
+     "verbatim": "Belt Power Holdings LLC (f)(i) Revolving Credit Facility - - 8/22/2028 - ( 42,952 ) -",
+     "quote": "Belt Power Holdings LLC (f)(i) Revolving Credit Facility - - 8/22/2028 - ( 42,952 ) - -- comparative 2024-12-31 dash line in the 2025-06-30 10-Q, a B01 prior-period context; published in the 2024-12-31 build"
     }
    ],
-   "rerun": "python scripts/v05_evidence/left.py fcxe B01",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
-   "decided_on": "2026-10-16"
+   "rerun": "python scripts/v05_evidence/left.py rffcf B01",
+   "decided_by": "PROPOSED by agent claude-fund-agent-fidelitypcc-rffc 2026-10-26 (sandbox rffcf); not accepted by the owner",
+   "decided_on": "2026-10-26"
   },
   {
    "disposition_id": "PD-A01-1899996-3",
@@ -187,73 +199,9 @@
      "quote": "The rollup: 1,215,595,628 non-affiliated plus 1,353,796 affiliated money-market fund"
     }
    ],
-   "rerun": "python scripts/v05_evidence/left.py fcxe A01",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
-   "decided_on": "2026-10-16"
-  },
-  {
-   "disposition_id": "PD-nav_identity-1899996-4",
-   "class": "as_filed",
-   "engine": "identity",
-   "rule_name": "nav_identity",
-   "ciks": [
-    "0001899996"
-   ],
-   "quarters": [
-    "2022-12-31"
-   ],
-   "reason_key": "nav-identity-comparative-year-end-before-units-issued",
-   "statement": "2022-12-31 is a comparative year-end before the fund issued units: the balance sheet prints 0 units outstanding and a dash for the value per unit beside net assets of 462,571,059. The 9.93 per unit published for that date is the value at the first issue on 2023-01-31 (company facts date it to the year-end). Units times value cannot equal net assets when no units exist. No wrapper setting withdraws a fund-level figure (figure_corrections set numbers only), so the published 9.93 is left and listed as an observation.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-23-041853",
-     "verbatim": "Net Asset Value per unit ( 62,554,536 and 0 units issued and outstanding as of June 30, 2023 and December 31, 2022, respectively) $ 10.00 -",
-     "quote": "0 units outstanding at 2022-12-31 and a dash for the net asset value per unit"
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-035352",
-     "verbatim": "Period January 31, 2023 through December 31, 2023 A Per Unit Activity Net asset value per unit, beginning of period $ 9.93",
-     "quote": "The 9.93 published for 2022-12-31 is the value per unit at the first issue, 2023-01-31"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/left.py fcxe nav_identity",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
-   "decided_on": "2026-10-16"
-  },
-  {
-   "disposition_id": "PD-F11-1899996-5",
-   "class": "as_filed",
-   "engine": "fund_financials",
-   "rule_name": "F11",
-   "ciks": [
-    "0001899996"
-   ],
-   "quarters": [
-    "2022-12-31"
-   ],
-   "reason_key": "nav-identity-comparative-year-end-before-units-issued",
-   "statement": "2022-12-31 is a comparative year-end before the fund issued units: the balance sheet prints 0 units outstanding and a dash for the value per unit beside net assets of 462,571,059. The 9.93 per unit published for that date is the value at the first issue on 2023-01-31 (company facts date it to the year-end). Units times value cannot equal net assets when no units exist. No wrapper setting withdraws a fund-level figure (figure_corrections set numbers only), so the published 9.93 is left and listed as an observation.",
-   "basis": "read",
-   "evidence": [
-    {
-     "source": "filing",
-     "accession": "0000950170-23-041853",
-     "verbatim": "Net Asset Value per unit ( 62,554,536 and 0 units issued and outstanding as of June 30, 2023 and December 31, 2022, respectively) $ 10.00 -",
-     "quote": "0 units outstanding at 2022-12-31 and a dash for the net asset value per unit"
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-24-035352",
-     "verbatim": "Period January 31, 2023 through December 31, 2023 A Per Unit Activity Net asset value per unit, beginning of period $ 9.93",
-     "quote": "The 9.93 published for 2022-12-31 is the value per unit at the first issue, 2023-01-31"
-    }
-   ],
-   "rerun": "python scripts/v05_evidence/left.py fcxe F11",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
-   "decided_on": "2026-10-16"
+   "rerun": "python scripts/v05_evidence/left.py rffcf A01",
+   "decided_by": "PROPOSED by agent claude-fund-agent-fidelitypcc-rffc 2026-10-26 (sandbox rffcf); not accepted by the owner",
+   "decided_on": "2026-10-26"
   },
   {
    "disposition_id": "PD-F16-1899996-6",
@@ -264,22 +212,93 @@
     "0001899996"
    ],
    "quarters": [
+    "2023-12-31",
     "2024-12-31"
    ],
-   "reason_key": "f16-quarter-distribution-includes-catch-up-declaration",
-   "statement": "The fourth quarter of 2024 carries the December declaration of 0.53 a unit (40,168,766) beside 0.12 and 0.11 in October and November, against 0.09 to 0.13 in every other month of the year: a year-end distribution, so the quarter's annualised rate exceeds 1.5 times the income yield. The other quarters pass. As printed.",
+   "reason_key": "f16-year-end-special-distribution-annualised",
+   "statement": "The fourth quarter of 2023 and of 2024 each carry a year-end December declaration (0.30 and 0.53 a unit) beside 0.05 to 0.14 a month in the rest of the year; the quarter's distribution (0.54 and 0.76, the monthly tables summed, now published) annualised exceeds 1.5 times the income ratio (13.93 and 14.43). The published distribution equals the page; the check's annualising of a year-end special is what fires. 2025-12-31 (December 0.26) already has an adjudicated false-alarm verdict. As printed; no fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-035352",
+     "verbatim": "October 2023 0.14 8,879,552 2,927,901 November 2023 0.10 6,476,842 2,175,410 December 2023 0.30 19,608,732 6,660,544 $ 1.29",
+     "quote": "October 2023 0.14 8,879,552 2,927,901 November 2023 0.10 6,476,842 2,175,410 December 2023 0.30 19,608,732 6,660,544 $ 1.29 -- 2023 Q4 = 0.54 a unit (published 0.54 after the figure correction), December 0.30 against 0.05 to 0.14 in the other months"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-041961",
+     "verbatim": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095",
+     "quote": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095 -- 2024 Q4 = 0.76 a unit (published 0.76 after the figure correction; was 0.59), December 0.53 against 0.09 to 0.13 in the other months"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/left.py rffcf F16",
+   "decided_by": "PROPOSED by agent claude-fund-agent-fidelitypcc-rffc 2026-10-26 (sandbox rffcf); not accepted by the owner",
+   "decided_on": "2026-10-26"
+  },
+  {
+   "disposition_id": "PD-F33-1899996-7",
+   "class": "as_filed",
+   "engine": "fund_financials",
+   "rule_name": "F33",
+   "ciks": [
+    "0001899996"
+   ],
+   "quarters": [
+    "2024-12-31"
+   ],
+   "reason_key": "f33-year-end-special-distribution-annualised",
+   "statement": "2024-12-31 distribution rate 31.4 pct (0.76 x 4 / NAV 9.68) is above the check's 30 pct bound because the quarter holds the December 2024 year-end declaration of 0.53 a unit (0.12 and 0.11 in October and November). The quarter's 0.76 is the page's monthly table summed and equals the year's 1.48 distributions plus 0.17 return of capital less nine months 0.89. As printed; no fix applies.",
    "basis": "read",
    "evidence": [
     {
      "source": "filing",
      "accession": "0000950170-25-041961",
      "verbatim": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095",
-     "quote": "Distributions declared by month in 2024; December 0.53"
+     "quote": "October 2024 0.12 8,410,556 3,774,843 November 2024 0.11 8,317,477 3,834,646 December 2024 0.53 40,168,766 19,117,156 $ 1.65 $ 118,342,863 $ 49,277,095 -- 2024 Q4 = 0.76 a unit (published 0.76 after the figure correction; was 0.59), December 0.53 against 0.09 to 0.13 in the other months"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-041961",
+     "verbatim": "Distributions ( 1.48 ) ( 1.29 ) Distributions from tax return of capital ( 0.17 ) - Net asset value per unit, end of period $ 9.68 $ 10.08",
+     "quote": "Distributions ( 1.48 ) ( 1.29 ) Distributions from tax return of capital ( 0.17 ) - Net asset value per unit, end of period $ 9.68 $ 10.08 -- 2024: 1.65 declared for the year, NAV 9.68"
     }
    ],
-   "rerun": "python scripts/v05_evidence/left.py fcxe F16",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund loop fcx, sandbox fcxe); not accepted by the owner",
-   "decided_on": "2026-10-16"
+   "rerun": "python scripts/v05_evidence/left.py rffcf F33",
+   "decided_by": "PROPOSED by agent claude-fund-agent-fidelitypcc-rffc 2026-10-26 (sandbox rffcf); not accepted by the owner",
+   "decided_on": "2026-10-26"
+  },
+  {
+   "disposition_id": "PD-B02-1899996-8",
+   "class": "as_filed",
+   "engine": "oracle",
+   "rule_name": "B02",
+   "ciks": [
+    "0001899996"
+   ],
+   "quarters": [
+    "2025-06-30"
+   ],
+   "reason_key": "b02-twin-undrawn-lines-printed-separately",
+   "statement": "The two repeated keys at 2025-06-30 are NE Ortho Management Services' two undrawn delayed-draw lines, both printed with a dash for par and fair value and the same maturity, so every term B02 compares is equal. The page prints them as two lines with their own costs (-44,145 and -16,554), on two members ('... Delayed Draw Term Loan ...' and '... One Delayed Draw Term Loan ...'). Both are positions; the second was published in this run (it had been folded by the affiliation dedup). No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108878",
+     "verbatim": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 44,145 ) -",
+     "quote": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 44,145 ) - -- first undrawn delayed draw, context C_9a7dff36"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-108878",
+     "verbatim": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 16,554 ) -",
+     "quote": "NE Ortho Management Services, LLC (f)(i)(q) Delayed Draw Term Loan - - 12/13/2030 - ( 16,554 ) - -- second undrawn delayed draw, context C_9fc950b8"
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/b02.py rffcf 0001899996",
+   "decided_by": "PROPOSED by agent claude-fund-agent-fidelitypcc-rffc 2026-10-26 (sandbox rffcf); not accepted by the owner",
+   "decided_on": "2026-10-26"
   }
  ]
 }
