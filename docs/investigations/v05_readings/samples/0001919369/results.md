@@ -9,7 +9,7 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 |---|---|---|---|---|---|---|---|---|---|
 | row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | issuer_name | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
-| instrument_and_class | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
+| instrument_and_class | 20 | 0.0% (0.0-16.1) | 0 | 0 | 25.0% (11.2-46.9) | 0 | 0 | 0 | 5 |
 | fair_value | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | cost | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | principal_amount | 20 | 5.0% (0.9-23.6) | 0 | 1 | 5.0% (0.9-23.6) | 1 | 0 | 0 | 0 |
@@ -34,4 +34,4 @@ Published errors: 1
 
 | Card | Quarter | Field | Published | Cause | Note |
 |---|---|---|---|---|---|
-| C002 | 2025-06-30 | principal_amount | missing | pipeline | Prints 4,320 par (thousands); footnote 1 explicitly treats preferred equity amounts as par, but published principal is blank. |
+| C002 | 2025-06-30 | principal_amount | missing | pipeline | footnote 1: par amount (in thousands) shown for preferred equity; prints 4,320, tagged 4,320,000; published blank |

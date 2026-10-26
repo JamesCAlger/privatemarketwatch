@@ -1,0 +1,550 @@
+{
+ "reviewer_id": "claude-independent-reviewer-vista-rfvsc",
+ "report_digest": "d0c790c706ac78076a024d6fb125fd426be5b89d605938ca03ad58b9c424b580",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_REV_06e8d078edb4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F16 2024-06-30: rfvsb fund_financials gives distribution_per_share 0.26, income_per_share 0.30, income_yield_pct 1.29, distribution_rate 5.29. The quarter figures equal the printed year-to-date per-share differences (quoted), and the filing says its ratios are not annualised. So the check compares a quarterly slice with an annualised rate: a rule problem, as proposed.",
+   "evidence": [
+    {
+     "accession": "0001628280-24-034374",
+     "text": "These ratios to average net assets have not been annualized."
+    },
+    {
+     "accession": "0001628280-24-034374",
+     "text": "Net asset value per share, beginning of period $ 19.60 Net investment income (loss) (1) 0.32 Net realized gains (loss) and change in unrealized appreciation (depreciation) on investments (2) 0.01 Net increase (decrease) in net assets resulting in operations 0.33 Shareholder distributions from net investment income ( 0.26 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0f18b24c3673",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F16 2023-12-31: first quarter of operations, distribution 0, income_per_share -4.48 and income_yield_pct -2.85 (the year's -11.41 / 4) in rfvsb. Negative income fails F16 even at zero distribution, as the hypotheses say. Per point (d), the quarter's income lines are now right (780 / 94 / 23, see the fix).",
+   "evidence": [
+    {
+     "accession": "0001628280-24-009900",
+     "text": "Net investment income (loss) (2) ( 4.48 ) Net realized gains (loss) and change in unrealized appreciation (depreciation) on investments 0.49 Net increase (decrease) in net assets resulting in operations ( 3.99 ) Effect of offering price of subscriptions (3) 3.59 Net asset value per share, end of period $ 19.60"
+    },
+    {
+     "accession": "0001628280-24-009900",
+     "text": "Total investment income 780 - Expenses: Organization costs 1,111 647"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1b290c18855c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F16 2024-12-31: rfvsb fund_financials gives distribution_per_share 0.45 (1.02 - 0.57), income_per_share 0.41 (1.15 - 0.74), income_yield_pct 1.78, distribution_rate 9.09. The quarter figures equal the printed year-to-date per-share differences (quoted), and the filing says its ratios are not annualised. So the check compares a quarterly slice with an annualised rate: a rule problem, as proposed.",
+   "evidence": [
+    {
+     "accession": "0001919369-25-000009",
+     "text": "Distributions declared from net investment income (4) ( 1.02 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1e23b6377695",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F16 2025-06-30: rfvsb fund_financials gives distribution_per_share 0.48 (0.96 - 0.48), income_per_share 0.42, income_yield_pct 1.61, distribution_rate 9.77. The quarter figures equal the printed year-to-date per-share differences (quoted), and the filing says its ratios are not annualised. So the check compares a quarterly slice with an annualised rate: a rule problem, as proposed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-104174",
+     "text": "Shareholder distributions from net investment income (3) ( 0.96 ) ( 0.26 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_229032a530ee",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). C04 population from rfvsb oracle/check_results.csv: '2025-06-30: 60.0% of 5 equity rows have shares'. The affected rows are the fund-quarter key plus every equity row of the quarter (same five lines), and each is published with the values the page prints. The two rows without a unit count are the Metropolis 16.00 % and 17.50 % preferred lines. The filing's footnote says that column is a par amount (in thousands) for preferred equity, so a missing unit count is as filed. The proposal's reasoning holds. The separate par gap is reviewed under observation preferred-units-column-is-a-face-amount, now widened and supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-104174",
+     "text": "The total par amount (in thousands) is presented for all debt investment and preferred equity."
+    },
+    {
+     "accession": "0000950170-25-104174",
+     "text": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.9 % Metropolis Technologies, Inc. (4) N/A 17.50 % 5/16/2034 480 456 480 0.1"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_499702c1a6f1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F30 2023-09-30: nav_per_share -227.01, net assets -284,000 published, equal to the printed balance sheet before any investment.",
+   "evidence": [
+    {
+     "accession": "0001628280-23-037925",
+     "text": "Total net assets $ ( 284 ) $ - Total liabilities and net assets $ 4,513 $ 1,283 Net asset value per share $ ( 227.01 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_778c78895756",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). C04 population from rfvsb oracle/check_results.csv: '2024-12-31: 50.0% of 4 equity rows have shares'. The affected rows are the fund-quarter key plus every equity row of the quarter (Metropolis 16% and 17.5% preferred, Metropolis Other Equity 280,000, Mews 192,000; the 10-K footnote puts Other Equity units in thousands), and each is published with the values the page prints. The two rows without a unit count are the Metropolis 16.00 % and 17.50 % preferred lines. The filing's footnote says that column is a par amount (in thousands) for preferred equity, so a missing unit count is as filed. The proposal's reasoning holds. The separate par gap is reviewed under observation preferred-units-column-is-a-face-amount, now widened and supported.",
+   "evidence": [
+    {
+     "accession": "0001919369-25-000009",
+     "text": "is presented for all debt investment and preferred equity. Unit amount (in thousands) is presented for Other Equity."
+    },
+    {
+     "accession": "0001919369-25-000009",
+     "text": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 4,277 4,281 1.6"
+    },
+    {
+     "accession": "0001919369-25-000009",
+     "text": "Hotels, Restaurants & Leisure Mews Systems B.V. (4) (5) (15) (19) 9/14/2029 192 1,312 1,227 0.5"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_82d9fab67eff",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "New C04 2025-09-30 finding, created by this run's fix. rfvsc oracle: '66.7% of 6 equity rows have shares'. The affected rows are the key plus the six equity rows of the quarter (HPC GPFS is FUND and not counted): Metropolis 16.00 % and 17.50 % preferred (units withdrawn), and Rapyd 80,991, BusBud 178,935, Metropolis Other Equity 280 and Mews 19,200, each published as printed. The same footnote says the preferred column is a par in thousands, so withdrawing 4,320 / 480 corrects a published error, and the remaining shortfall is the filing's layout. PD-C04-1919369-1 now lists 2025-09-30, and its statement describes the tag, the withdrawal and the 4-of-6 coverage. False alarm supported.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-271488",
+     "text": "The total par amount (in thousands) is presented for all debt investment and preferred equity."
+    },
+    {
+     "accession": "0001193125-25-271488",
+     "text": "Metropolis Technologies, Inc. (4) (22) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.7 %"
+    },
+    {
+     "accession": "0001193125-25-271488",
+     "text": "Metropolis Technologies, Inc. (4) (22) N/A 17.50 % 5/16/2034 480 456 480 0.1"
+    },
+    {
+     "accession": "0001193125-25-271488",
+     "text": "BusBud Inc. (4) (5) (15) (20) (22) 8/11/2030 178,935 1,359 1,359 0.2"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8ec64e7b2e5c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F16 2025-03-31: rfvsb fund_financials gives distribution_per_share 0.48, income_per_share 0.42, income_yield_pct 2.04, distribution_rate 9.80. The quarter figures equal the printed year-to-date per-share differences (quoted), and the filing says its ratios are not annualised. So the check compares a quarterly slice with an annualised rate: a rule problem, as proposed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-066695",
+     "text": "Shareholder distributions from net investment income (3) ( 0.48 ) -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a005486e4c1f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F33 2024-03-31: distribution 0, the same printed shape; the first distribution (0.26) is published at 2024-06-30.",
+   "evidence": [
+    {
+     "accession": "0001628280-24-020226",
+     "text": "Net asset value per share, beginning of period $ 19.60 Net investment income (loss) (1) 0.02 Net realized gains (loss) and change in unrealized appreciation (depreciation) on investments (2) 0.03 Net increase (decrease) in net assets resulting in operations 0.05 Net asset value per share, end of period $ 19.65"
+    },
+    {
+     "accession": "0001628280-24-034374",
+     "text": "Net asset value per share, beginning of period $ 19.60 Net investment income (loss) (1) 0.32 Net realized gains (loss) and change in unrealized appreciation (depreciation) on investments (2) 0.01 Net increase (decrease) in net assets resulting in operations 0.33 Shareholder distributions from net investment income ( 0.26 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c78e7e6baeea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F33 2023-12-31: distribution_per_share 0; the highlights go from operations to the end NAV with no distribution line.",
+   "evidence": [
+    {
+     "accession": "0001628280-24-009900",
+     "text": "Net investment income (loss) (2) ( 4.48 ) Net realized gains (loss) and change in unrealized appreciation (depreciation) on investments 0.49 Net increase (decrease) in net assets resulting in operations ( 3.99 ) Effect of offering price of subscriptions (3) 3.59 Net asset value per share, end of period $ 19.60"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_cd5dc6341768",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F25 2024-03-31: rfvsb total assets 239,397,000. My reverse check: 19 valued investment contexts, all 19 published, summing to 180,487,000, the printed investments line.",
+   "evidence": [
+    {
+     "accession": "0001628280-24-020226",
+     "text": "Investments - non-controlled/non-affiliated, at fair value (amortized cost of $ 180,078 and $ 104,685 , respectively) $ 180,487 $ 104,869 Cash and cash equivalents 53,410 61,943"
+    },
+    {
+     "accession": "0001628280-24-020226",
+     "text": "Total assets $ 239,397 $ 172,277 Liabilities Secured borrowings (Note 5) $ 84,250 $ 77,250 Payable for investments purchased 34,931 13,871"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d861d3a64af4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). C04 population from rfvsb oracle/check_results.csv: '2025-03-31: 60.0% of 5 equity rows have shares'. The affected rows are the fund-quarter key plus every equity row of the quarter (the two preferred lines, Metropolis Other Equity 280, Mews 19,200, Rapyd 80,991), and each is published with the values the page prints. The two rows without a unit count are the Metropolis 16.00 % and 17.50 % preferred lines. The filing's footnote says that column is a par amount (in thousands) for preferred equity, so a missing unit count is as filed. The proposal's reasoning holds. The separate par gap is reviewed under observation preferred-units-column-is-a-face-amount, now widened and supported.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-066695",
+     "text": "is presented for all debt investment and preferred equity. Unit amount is presented for Other Equity."
+    },
+    {
+     "accession": "0000950170-25-066695",
+     "text": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 $ 4,276 $ 4,320 1.4 % Metropolis Technologies, Inc. (4) N/A 17.50 % 5/16/2034 480 456 480 0.2"
+    },
+    {
+     "accession": "0000950170-25-066695",
+     "text": "Rapyd Financial Network, Ltd. (4) (15) (19) 9/13/2030 80,991 2,938 2,938 0.9"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_dff5d7077fe9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). F16 2024-09-30: rfvsb fund_financials gives distribution_per_share 0.31 (0.57 - 0.26), income_per_share 0.42 (0.74 - 0.32), income_yield_pct 1.98, distribution_rate 6.32. The quarter figures equal the printed year-to-date per-share differences (quoted), and the filing says its ratios are not annualised. So the check compares a quarterly slice with an annualised rate: a rule problem, as proposed.",
+   "evidence": [
+    {
+     "accession": "0001919369-24-000032",
+     "text": "Net asset value per share, beginning of period $ 19.60 Net investment income (loss) (1) 0.74 Net realized gains (loss) and change in unrealized appreciation (depreciation) on investments (2) ( 0.15 ) Net increase (decrease) in net assets resulting in operations 0.59 Shareholder distributions from net investment income ( 0.57 )"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "industry-heading-left-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). Point (a). rfvsa -> rfvsb holdings (454 rows each, 0 added or removed): issuer_name changes on exactly 9 rows. 7 are wrapper rows: Enverus 2025-06-30 and 2025-09-30; Edition 2026-03-31 and 2026-06-30 (with 2025-12-31 counted under the next observation); G3 Frax 2026-03-31 and 2026-06-30. The others are the Maverick 'nvestments' row and HPC Preferred 'L.P' -> 'L.P.'. instrument_description changes on 1 row (Maverick), and no value field changes on any row. The wrapper diff only adds the two literal headings ahead of the shared label placeholder, and 'I?nvestments' in four patterns anchored at the start. So the dry-run claim (8 identifiers change, all targeted) agrees with the build diff. Published names equal the pages.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-213661",
+     "text": "Utilities & Utility Equipment and Services Edition Holdings, Inc. (9) (21) (22) (23) (24) SOFR + 4.50 % 8.17 % 12/20/2032 32,546 32,405 32,434 3.4"
+    },
+    {
+     "accession": "0001193125-26-213661",
+     "text": "Retail - Consumer Staples G3 Frax Acquisition LLC (4) (10) (21) (22) SOFR + 6.00 % 9.67 % 1/30/2032 52,500 51,494 51,472 5.3"
+    },
+    {
+     "accession": "0000950170-25-104174",
+     "text": "Utilities & Utility Equipment and Services Enverus Holdings, Inc. (9) (20) (21) SOFR + 5.50 % 9.83 % 12/24/2029 17,049 16,834 17,017 3.4"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). Point (b). Edition Holdings: 2025-12-31 to 2026-06-30 in one entity e85efc2d, canonical 'Edition Holdings, Inc.', one chain bf113095 (27,787 / 32,546 / 36,836 thousand, maturity 12/20/2032). Enverus Holdings: 2023-12-31 to 2025-09-30 in one entity 23eaa541, one chain a1d75f11; its 2025-06-30 and 2025-09-30 rows rejoined (were 29faeddc / a31c30c5). Maverick Bidco: 2025-12-31 to 2026-06-30 in one entity 2332dc6c, one chain 6282bc59. Diligent's own term loan keeps its entity 98e1850d and chain 7875ecac in every quarter, and its new 2026-06-30 PIK line has its own chain (printed 'SOFR + 8.42 % ( 8.42 % PIK) 12.09 %', published as printed). Edition has no GICS label, which is disclosed under filer-industry-coarser-than-gics.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-101986",
+     "text": "Utilities & Utility Equipment and Services Edition Holdings, Inc. (4) (9) (21) (22) (23) SOFR + 4.50 % 8.20 % 12/20/2032 27,787 27,652 27,629 2.9"
+    },
+    {
+     "accession": "0001193125-26-101986",
+     "text": "Maverick Bidco Inc. (4) (9) (21) (22) (23) SOFR + 4.75 % 8.54 % 12/2/2031 59,633 59,320 59,308 6.3"
+    },
+    {
+     "accession": "0001193125-26-213661",
+     "text": "Maverick Bidco Inc. (4) (9) (21) (22) (23) (24) SOFR + 4.75 % 8.42 % 12/2/2031 59,633 59,329 59,308 6.2"
+    },
+    {
+     "accession": "0001193125-26-339655",
+     "text": "Diligent Corporation (4) (9) (22) (23) (24) (25) SOFR + 8.42 % ( 8.42 % PIK) 12.09 % 8/2/2030 2,189 2,177 2,180 0.3"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-interest-classed-private-equity-under-preferred-section",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). Point (c). The 10-Q for 2026-03-31 lists HPC GPFS, HPC Preferred Opportunities and Tactical Equipment III under the NAV practical expedient; the 2025-12-31 10-K lists HPC GPFS and Tactical. rfvsb now classes all five rows FUND / FUND / PRIVATE_EQUITY_FUND / FUND / PRIVATE_EQUITY, the same as HPC GPFS in every quarter. Fair values and costs are unchanged. Correct: NAV-valued LP interests are fund exposures, not direct preferred or common equity. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-213661",
+     "text": "The Company, as a practical expedient, estimates the fair value of these investments using the net asset value of the Companys interests in HPC GPFS Arsenal Co-Invest (Cayman) LP, HPC Preferred Opportunities, L.P. and Tactical Equipment III, L.P."
+    },
+    {
+     "accession": "0001193125-26-101986",
+     "text": "practical expedient, estimates the fair value of these investments using the net asset value of the Companys interests in HPC GPFS Arsenal Co-Invest (Cayman) LP and Tactical Equipment III, L.P."
+    },
+    {
+     "accession": "0001193125-26-213661",
+     "text": "HPC Preferred Opportunities, L.P. (22) (24) (26) 1/30/2036 10,065 10,065 10,063 1.0"
+    },
+    {
+     "accession": "0001193125-26-339655",
+     "text": "Tactical Equipment III, L.P. (21) (23) (27) 3/17/2033 30,000 29,069 29,069 3.2"
+    }
+   ]
+  },
+  {
+   "observation_key": "quarterly-income-from-first-annual-period-divided-evenly",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). Point (d). The 2023 10-K prints income 780 for the year, management fee 94 and incentive fee 23, all earned after the 10/10/2023 start. The 10-Q for 2023-09-30 prints expenses only (nine months: total 1,422 before support, net 309, NII -309). rfvsb 2023-12-31: total investment income 780,000, management fee 94,000, incentive fee 23,000. Total expenses 2,453,000 = 3,875 - 1,422; net expenses 2,170,000 = 2,479 - 309; NII -1,390,000 = -1,699 + 309. All tie to the printed statements. 2023-09-30 publishes 0 for income and fees (blank before), with NII -309 unchanged. nil_income_quarters is an existing wrapper key, and its evidence text quotes the filings. The income ratio stays at the year's / 4, disclosed.",
+   "evidence": [
+    {
+     "accession": "0001628280-24-009900",
+     "text": "Total investment income 780 - Expenses: Organization costs 1,111 647"
+    },
+    {
+     "accession": "0001628280-24-009900",
+     "text": "Management fees (Note 4) 94 - Incentive fees (Note 4) 23 -"
+    },
+    {
+     "accession": "0001628280-24-009900",
+     "text": "Net expenses after expense support and waivers 2,479 - Net investment income (loss) ( 1,699 ) -"
+    },
+    {
+     "accession": "0001628280-23-037925",
+     "text": "Net expenses after expense support and waivers 309 - 309 - Net investment income (loss) ( 309 ) - ( 309 ) -"
+    },
+    {
+     "accession": "0001628280-23-037925",
+     "text": "Total expenses before expense support and waivers 309 143 1,422 590"
+    },
+    {
+     "accession": "0001628280-24-009900",
+     "text": "The Company commenced operations on October 10, 2023."
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-margin-convention-changes-between-filings",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). Point (e). The pages print 'SOFR + 6.85 % ( 1.00 % PIK)' from 2024-03-31 to 2025-03-31 and 'SOFR + 5.85 % ( 1.00 % PIK)' from 2025-06-30, and rfvsb publishes each as printed. One more fact supports the observation: the 2023 10-K prints 'SOFR + 5.85 % 11.29 %' with no PIK on the first 15,000 draw. So 5.85 cash plus 1.00 PIK = 6.85 total is the likely reading of the 2024 lines, and the 2025-12-31 rate 9.82 % fits 5.85 as a cash margin. Still, the page does not state the convention, and D-240 forbids an inferred margin. 'Left for the owner' is right, and the detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001628280-24-009900",
+     "text": "Acronis International (4) (5) (10) (13) (14) SOFR + 5.85 % 11.29 % 4/1/2027 15,000 14,746 14,737 19.7"
+    },
+    {
+     "accession": "0001628280-24-020226",
+     "text": "Acronis International (4) (5) (10) (13) (14) SOFR + 6.85 % ( 1.00 % PIK) 12.28 % 4/1/2027 20,002 19,678 19,652 17.1"
+    },
+    {
+     "accession": "0001193125-25-271488",
+     "text": "Acronis International (4) (5) (6) (10) (17) (21) SOFR + 5.85 % ( 1.00 % PIK) 10.23 % 4/1/2027 20,309 20,136 20,309 3.5"
+    },
+    {
+     "accession": "0001193125-26-101986",
+     "text": "Acronis International (4) (5) (6) (10) (17) (21) SOFR + 5.85 % ( 1.00 % PIK) 9.82 % 4/1/2027 20,361 20,215 20,361 2.2"
+    }
+   ]
+  },
+  {
+   "observation_key": "broad-printed-heading-mapped-to-one-sub-industry",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). Disclosed shared residual (Enverus Oil & Gas then Application Software is visible in my query). The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-339655",
+     "text": "Telecom Services & IT Hardware Angel Lux Bidco SA RL (4) (5) (6) (7) (17) (22) (23) (24) (25) SOFR + 5.25 % 8.89 % 12/19/2032 67,666 67,015 66,916 7.3"
+    }
+   ]
+  },
+  {
+   "observation_key": "filer-industry-coarser-than-gics",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). Edition, G3 Frax, Angel Lux, Galaxy and Tactical publish no GICS label in rfvsb; the headings are broader than a sub-industry. Disclosed under D-131 / D-198. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-339655",
+     "text": "Life Sciences, Biotechnology, and Pharmaceuticals Galaxy Buyer Inc (4) (10) (23) (24) (25) SOFR + 4.75 % 8.42 % 1/12/2033 54,256 53,696 53,729 5.8"
+    },
+    {
+     "accession": "0001193125-26-339655",
+     "text": "Telecom Services & IT Hardware Angel Lux Bidco SA RL (4) (5) (6) (7) (17) (22) (23) (24) (25) SOFR + 5.25 % 8.89 % 12/19/2032 67,666 67,015 66,916 7.3"
+    }
+   ]
+  },
+  {
+   "observation_key": "preferred-units-column-is-a-face-amount",
+   "outcome": "supported",
+   "rationale": "Re-checked; the rfvsb rejection is cured. The observation now covers 2024-06-30 / 2024-09-30 (par '$ 4,800' tagged as principal, contexts c-70 / c-77, published blank), 2024-12-31 to 2025-06-30 (4,320 / 480, published blank) and 2025-09-30 (par tagged as shares). Two context-keyed lines fixed 2025-09-30: rows ROW-b664b062fa478015 (C_0d34951a) and ROW-659e61f8ab30ba1a (C_b78654b0) now publish no shares_held. I checked the two lines: row_corrections.csv lines 24077-24078 have all 11 columns, with field shares_held, an empty value, the footnote quoted in the reason, source_evidence pointing to the cached 10-Q, author v05-decision-D-1919369-fundloop, date 2026-10-26, and src_context_id filled; ASCII only. rebuild.log shows both applied once ('Row correction applied: field=shares_held value=None reason=\"Footnote 1 of this 10-Q (0001193125-25-271488)'), and the build diff changes exactly these two rows. The detector now also catches par published as units. Principal stays an owner item, which is correct parking given the tested shared rule.",
+   "evidence": [
+    {
+     "accession": "0001628280-24-034374",
+     "text": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 $ 4,800 4,732 4,733 2.9"
+    },
+    {
+     "accession": "0001919369-24-000032",
+     "text": "Metropolis Technologies, Inc. (4) (20) N/A 16.00 % 5/16/2034 $ 4,800 4,732 4,734 2.5"
+    },
+    {
+     "accession": "0001193125-25-271488",
+     "text": "Metropolis Technologies, Inc. (4) (22) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.7 %"
+    },
+    {
+     "accession": "0001193125-25-271488",
+     "text": "Metropolis Technologies, Inc. (4) (22) N/A 17.50 % 5/16/2034 480 456 480 0.1"
+    },
+    {
+     "accession": "0001193125-25-271488",
+     "text": "The total par amount (in thousands) is presented for all debt investment and preferred equity."
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-replaced-by-issuer-proxy",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). rfvsb Metropolis 2025-12-31 to 2026-06-30: 17.50 % preferred 480,000 units and Other Equity 280 units, as printed. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-339655",
+     "text": "Metropolis Technologies, Inc. (4) (23) (24) N/A 17.50 % 5/16/2034 480,000 456 480 0.1"
+    }
+   ]
+  },
+  {
+   "observation_key": "equity-section-rows-published-as-loans",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). D-198 fix still effective: Mews, Metropolis and Rapyd Other Equity publish as equity with their printed counts.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-066695",
+     "text": "Rapyd Financial Network, Ltd. (4) (15) (19) 9/13/2030 80,991 2,938 2,938 0.9"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-interest-units-equal-contributed-capital",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). HPC GPFS, HPC Preferred and Tactical publish no unit count in rfvsb; the units cell is contributed capital (footnote). The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-339655",
+     "text": "Tactical Equipment III, L.P. (21) (23) (27) 3/17/2033 30,000 29,069 29,069 3.2"
+    },
+    {
+     "accession": "0001193125-26-213661",
+     "text": "HPC Preferred Opportunities, L.P. (22) (24) (26) 1/30/2036 10,065 10,065 10,063 1.0"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-basis-changes-between-filings",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). Mews 192 (2024-12-31, footnote 'Unit amount (in thousands)') vs 19,200 later, same cost 1,312. Published as each page says; left with a concrete detector.",
+   "evidence": [
+    {
+     "accession": "0001919369-25-000009",
+     "text": "Hotels, Restaurants & Leisure Mews Systems B.V. (4) (5) (15) (19) 9/14/2029 192 1,312 1,227 0.5"
+    },
+    {
+     "accession": "0001919369-25-000009",
+     "text": "is presented for all debt investment and preferred equity. Unit amount (in thousands) is presented for Other Equity."
+    }
+   ]
+  },
+  {
+   "observation_key": "income-ratio-unannualised-compared-with-annualised-distribution",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). As reviewed under the five F16 findings.",
+   "evidence": [
+    {
+     "accession": "0001628280-24-034374",
+     "text": "These ratios to average net assets have not been annualized."
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-per-share-missing-after-share-classes",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). Point (e). rfvsb fund_financials has distribution_per_share, income_per_share, income_yield_pct and distribution_rate blank from 2025-09-30 to 2026-06-30, while the statement of changes prints distributions by class. Parking for an owner choice of class basis is right: putting one class's figure into a one-per-fund field would mislead. Note that nav_per_share in those quarters is derived (19.6501...), not a printed class NAV; it belongs to the same owner question. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-213661",
+     "text": "Shareholder distributions declared from net investment income Class I - - - ( 20,963 ) ( 20,963 ) Class S - - - ( 2,335 ) ( 2,335 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "value-keyed-promoted-rescale-rule",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). QF Holdings 2025-12-31 published 33,449 / 33,242 / 33,224 thousand as printed. The fragility of the promoted rules is correctly left to the orchestrator.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-101986",
+     "text": "QF Holdings, Inc. (4) (8) (22) (23) SOFR + 4.50 % 8.19 % 12/15/2032 33,449 33,242 33,224 3.5"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-keeps-member-words",
+   "outcome": "supported",
+   "rationale": "Unchanged in rfvsc (rfvsb -> rfvsc: shares_held and corrected_fields on the two 2025-09-30 Metropolis preferred rows only; 454 rows, none added or removed; fund_financials unchanged). rfvsb 2024-12-31 and 2025-03-31 publish 'Preferred Equity 1' / 'Preferred Equity 2'; the page prints 'Preferred Equity'. Cosmetic and disclosed; the detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-066695",
+     "text": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 $ 4,276 $ 4,320 1.4 % Metropolis Technologies, Inc. (4) N/A 17.50 % 5/16/2034 480 456 480 0.2"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-follows-unrelated-line",
+   "outcome": "supported",
+   "rationale": "Verified in rfvsc: chain 5d5e3c14 runs from the 16.00 % preferred (par $ 4,800 then 4,320, maturity 5/16/2034, to 2025-09-30) into the 12.00 % preferred printed 'N/A 12.00 % N/A 11,082 $ 355 $ 362' from 2025-12-31, with no maturity, and unit counts 11,082 to 2026-06-30. The 2025 10-K's only Metropolis note outside the schedule is footnote 26 (the 17.50 % line is held through Sharp FundingCo LP); nothing describes an exchange of the 16.00 % line. Left as shared matcher behaviour with a concrete detector: correct, since chains are not row-correctable.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-271488",
+     "text": "Metropolis Technologies, Inc. (4) (22) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.7 %"
+    },
+    {
+     "accession": "0001193125-26-101986",
+     "text": "Metropolis Technologies, Inc. (4) (22) N/A 12.00 % N/A 11,082 $ 355 $ 362 0.0 %"
+    },
+    {
+     "accession": "0001193125-26-101986",
+     "text": "The Companys preferred equity investment is held through a limited partnership interest in Sharp FundingCo LP, whose sole underlying investments are preferred equity and warrants in Metropolis Technologies, Inc."
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rfvs-1",
+   "outcome": "supported",
+   "rationale": "Deferral unchanged and sound. This round shows the defect concretely: the VISTA helper block could not write src_context_id, so the agent appended the two 2025-09-30 lines with the shared writer correction_csv.append_record from its own script, and they carry the context. The end-of-run tooling fix is still needed for the helper block.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-101986",
+     "text": "Utilities & Utility Equipment and Services Edition Holdings, Inc. (4) (9) (21) (22) (23) SOFR + 4.50 % 8.20 % 12/20/2032 27,787 27,652 27,629 2.9"
+    },
+    {
+     "accession": "0001193125-26-101986",
+     "text": "Maverick Bidco Inc. (4) (9) (21) (22) (23) SOFR + 4.75 % 8.54 % 12/2/2031 59,633 59,320 59,308 6.3"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "Correction to my rfvsb review: I accepted the SumUp 'U+FFFD' claim and called the name visibly corrupt. That was wrong. review_vs/codepoints.py prints the published issuer_name and canonical_name in both rfvsb and rfvsc as 'SumUp Holdings Midco S.\\xe0 r.l' (U+00E0, the filing's &#224;), and no row in either build holds U+FFFD in issuer, canonical or instrument. The agent's retraction is right, and so is not changing the name to ASCII.",
+  "rfvsb -> rfvsc (holdings parquet, 454 rows, 0 added/removed): only shares_held and corrected_fields differ, on ROW-b664b062fa478015 and ROW-659e61f8ab30ba1a; 0 differences in names, values, rates, entities, chains, category or GICS.",
+  "Reused from rfvsb after confirming the report diff: the reverse check (every valued identifier context published in all 11 quarters) and the 21-row spot-check (21 of 21) still hold, since no value changed.",
+  "A stray background grep I started (a regex over the proposal file) was stopped; its three processes were killed by PID (11664, 17472, 11372). No file was written.",
+  "All findings proposed is not data correct: no rule here detects a wrong rate on the right row or offsetting errors."
+ ]
+}

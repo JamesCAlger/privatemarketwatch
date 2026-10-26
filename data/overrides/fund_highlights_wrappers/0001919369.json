@@ -1,0 +1,13 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001919369",
+ "entity_name": "VISTA CREDIT STRATEGIC LENDING CORP.",
+ "version": 1,
+ "nil_income_quarters": [
+  {
+   "report_date": "2023-09-30",
+   "evidence": "0001628280-23-037925 (10-Q, 2023-09-30) statement of operations prints no investment income line, only expenses: 'For the Three Months Ended September 30, 2023 ... Expenses: Organization costs $ 15 ... Net expenses after expense support and waivers 309 - 309 - Net investment income (loss) ( 309 )'; the same 10-Q: 'had not funded any investments as of September 30, 2023'. No income fact is tagged for the quarter. 0001628280-24-009900 (10-K, 2023-12-31): 'The Company commenced operations on October 10, 2023.'"
+  }
+ ],
+ "notes": "First income year 2023. 0001628280-24-009900 (10-K, 2023-12-31) 'Total investment income 780' for the year, all earned after operations began on 2023-10-10. The 2023-03-31 and 2023-06-30 quarters carry income figures of 0 and the 2023-09-30 quarter carries none, so only two of three quarters counted and the fourth quarter was published as 780 / 4 = 195 (income_identity 2023-12-31). With 2023-09-30 nil the fourth quarter is 780 less 0 = 780; net investment income (-1,699 for the year, -309 in the third quarter, -1,390 in the fourth) is unchanged. first_income_year_ends does not apply: the earlier quarters were filed."
+}

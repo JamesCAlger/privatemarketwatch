@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "vixc",
+ "sandbox": "rfvsc",
  "dispositions": [
   {
    "disposition_id": "PD-C04-1919369-1",
@@ -8,33 +8,73 @@
    "engine": "oracle",
    "rule_name": "C04",
    "reason_key": "c04-preferred-equity-printed-with-par-not-units",
-   "ciks": ["0001919369"],
-   "quarters": ["2024-12-31", "2025-03-31", "2025-06-30"],
-   "statement": "The equity rows without a unit count are the two Metropolis Technologies preferred lines (16.00 % and 17.50 %). Footnote 1 of each filing says the 'Par Amount/Units' column holds a par amount in thousands for debt and preferred equity and a unit amount only for Other Equity; the filer tags the preferred figure (4,320 and 480) with the principal concept. So no unit count is printed for these rows, and none is published. Every Other Equity row in these quarters now publishes its unit count (this run: 'Other Equity' classed as equity, the 2025-03-31 counts set to the printed figures), which raises the coverage to 2 of 4, 3 of 5 and 3 of 5; the check wants 70 pct. The preferred par itself is not published because equity rows carry no principal field (recorded as an observation). From 2025-12-31 the filer prints the 17.50 % line as 480,000 units and tags a share count; those quarters pass. No fix applies: publishing the par as a unit count would be wrong.",
+   "ciks": [
+    "0001919369"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "statement": "The equity rows without a unit count are the two Metropolis Technologies preferred lines (16.00 % and 17.50 %). Footnote 1 of each filing says the 'Par Amount/Units' column holds a par amount in thousands for debt and preferred equity and a unit amount only for Other Equity; the filer tags the preferred figure (4,320 and 480) with the principal concept. So no unit count is printed for these rows, and none is published. Every Other Equity row in these quarters now publishes its unit count (this run: 'Other Equity' classed as equity, the 2025-03-31 counts set to the printed figures), which raises the coverage to 2 of 4, 3 of 5 and 3 of 5; the check wants 70 pct. The preferred par itself is not published either: the shared holdings step clears principal_amount on every preferred-equity row (pipeline/unified_holdings.py, tests TestEquityPrincipalAmountNulled), so the printed par 4,320 / 480 thousand is an unpublished figure, parked as observation preferred-units-column-is-a-face-amount for an owner ruling; it is not a unit count and C04 counts unit counts only. At 2025-09-30 the same footnote holds, but the filer tagged the two preferred pars as share counts (InvestmentOwnedBalanceShares 4320 and 480) and the build published them as unit counts; those two counts were withdrawn by context-keyed row corrections (D-244), which leaves 4 of 6 equity rows with a unit count (66.7 pct, below 70 pct). The four are the Other Equity lines (Rapyd 80,991, BusBud 178,935, Metropolis 280, Mews 19,200), as printed. From 2025-12-31 the filer prints the 17.50 % line as 480,000 units and tags a share count; those quarters pass. No fix applies: publishing the par as a unit count would be wrong.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001919369-25-000009",
+    {
+     "source": "filing",
+     "accession": "0001919369-25-000009",
      "verbatim": "is presented for all debt investment and preferred equity. Unit amount (in thousands) is presented for Other Equity.",
-     "quote": "'is presented for all debt investment and preferred equity. Unit amount (in thousands) is presented for Other Equity.': 10-K 2024-12-31, footnote 1: the column is a par for preferred equity."},
-    {"source": "filing", "accession": "0001919369-25-000009",
+     "quote": "'is presented for all debt investment and preferred equity. Unit amount (in thousands) is presented for Other Equity.': 10-K 2024-12-31, footnote 1: the column is a par for preferred equity."
+    },
+    {
+     "source": "filing",
+     "accession": "0001919369-25-000009",
      "verbatim": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 4,277 4,281 1.6",
-     "quote": "'Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 4,277 4,281 1.6': 2024-12-31, preferred line; 4,320 is par in thousands (cost 4,277)."},
-    {"source": "filing", "accession": "0000950170-25-066695",
+     "quote": "'Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 4,277 4,281 1.6': 2024-12-31, preferred line; 4,320 is par in thousands (cost 4,277)."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-066695",
      "verbatim": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 $ 4,276 $ 4,320 1.4 % Metropolis Technologies, Inc. (4) N/A 17.50 % 5/16/2034 480 456 480 0.2",
-     "quote": "'... 16.00 % 5/16/2034 4,320 $ 4,276 $ 4,320 1.4 % ... 17.50 % 5/16/2034 480 456 480 0.2': 2025-03-31, the two preferred lines."},
-    {"source": "filing", "accession": "0000950170-25-066695",
+     "quote": "'... 16.00 % 5/16/2034 4,320 $ 4,276 $ 4,320 1.4 % ... 17.50 % 5/16/2034 480 456 480 0.2': 2025-03-31, the two preferred lines."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-066695",
      "verbatim": "is presented for all debt investment and preferred equity. Unit amount is presented for Other Equity.",
-     "quote": "'is presented for all debt investment and preferred equity. Unit amount is presented for Other Equity.': 2025-03-31 footnote 1."},
-    {"source": "filing", "accession": "0000950170-25-104174",
+     "quote": "'is presented for all debt investment and preferred equity. Unit amount is presented for Other Equity.': 2025-03-31 footnote 1."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-104174",
      "verbatim": "Metropolis Technologies, Inc. (4) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.9 % Metropolis Technologies, Inc. (4) N/A 17.50 % 5/16/2034 480 456 480 0.1",
-     "quote": "'... 4,320 $ 4,277 $ 4,320 0.9 % ... 480 456 480 0.1': 2025-06-30, the two preferred lines, par in thousands under the same footnote."}
+     "quote": "'... 4,320 $ 4,277 $ 4,320 0.9 % ... 480 456 480 0.1': 2025-06-30, the two preferred lines, par in thousands under the same footnote."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-271488",
+     "verbatim": "The total par amount (in thousands) is presented for all debt investment and preferred equity.",
+     "quote": "'The total par amount (in thousands) is presented for all debt investment and preferred equity.': 10-Q 2025-09-30 footnote 1: the column is a par for preferred equity."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-271488",
+     "verbatim": "Metropolis Technologies, Inc. (4) (22) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.7 %",
+     "quote": "'Metropolis Technologies, Inc. (4) (22) N/A 16.00 % 5/16/2034 4,320 $ 4,277 $ 4,320 0.7 %': 2025-09-30, 16.00 % line: 4,320 is par in thousands (cost 4,277), tagged as shares."
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-271488",
+     "verbatim": "Metropolis Technologies, Inc. (4) (22) N/A 17.50 % 5/16/2034 480 456 480 0.1",
+     "quote": "'Metropolis Technologies, Inc. (4) (22) N/A 17.50 % 5/16/2034 480 456 480 0.1': 2025-09-30, 17.50 % line: 480 is par in thousands (cost 456), tagged as shares."
+    }
    ],
    "addresses_verdict": {
     "2024-12-31": "The reviewer read 4,320 and 480 in the 'Par Amount/Units' column as unit counts the build failed to map. Footnote 1 of the same 10-K says that column holds a par amount in thousands for preferred equity; units are printed only for Other Equity. The two Other Equity rows of this quarter (Metropolis 280, Mews 192, in thousands of units per the same footnote) were classed as loans and now publish 280,000 and 192,000 units.",
     "2025-06-30": "The reviewer listed the Metropolis preferred 4,320 and 480 as missing unit counts. Under footnote 1 these are pars in thousands for preferred equity, not units. The Other Equity rows the reviewer also cited (Rapyd 80,991, Mews 19,200, Metropolis 280) are published with those counts; only the two preferred lines lack one, which is the filing's own layout."
    },
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001919369 --report docs/investigations/v05_readings/reports/0001919369.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); re-read on the page 2026-10-26 by claude-fund-agent-vista-rfvs in sandbox rfvsc, values unchanged; not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -43,23 +83,40 @@
    "engine": "fund_financials",
    "rule_name": "F16",
    "reason_key": "f16-income-ratio-printed-not-annualised",
-   "ciks": ["0001919369"],
-   "quarters": ["2024-06-30", "2024-09-30", "2024-12-31", "2025-03-31", "2025-06-30"],
+   "ciks": [
+    "0001919369"
+   ],
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
    "statement": "The filer prints its ratio of net investment income to average net assets for the year to date and says it is not annualised. The company-facts step splits that running ratio into quarters, so income_yield_pct holds one quarter's unannualised ratio (1.29 to 2.04), while distribution_rate is annualised (5.3 to 9.8). F16 compares the two, so it fails whenever the fund pays out near its income. On a like basis the quarters pass: distributions per share 0.26, 0.31, 0.45, 0.48, 0.48 against net investment income per share 0.30, 0.42, 0.41, 0.42, 0.42 (the 2025-06-30 six-month figure 0.84 less 0.42). No fix applies at fund level; the check's two inputs are on different bases.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0000950170-25-104174",
+    {
+     "source": "filing",
+     "accession": "0000950170-25-104174",
      "verbatim": "These ratios to average net assets have not been annualized.",
-     "quote": "'These ratios to average net assets have not been annualized.': 10-Q 2025-06-30 highlights, footnote (5)."},
-    {"source": "filing", "accession": "0001628280-24-034374",
+     "quote": "'These ratios to average net assets have not been annualized.': 10-Q 2025-06-30 highlights, footnote (5)."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-034374",
      "verbatim": "These ratios to average net assets have not been annualized.",
-     "quote": "'These ratios to average net assets have not been annualized.': 10-Q 2024-06-30 highlights."},
-    {"source": "filing", "accession": "0000950170-25-104174",
+     "quote": "'These ratios to average net assets have not been annualized.': 10-Q 2024-06-30 highlights."
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-104174",
      "verbatim": "Net investment income (loss) (1) 0.84 0.32 Net realized gains (loss) and change in unrealized appreciation (depreciation) on investments (2) ( 0.02 ) 0.01",
-     "quote": "'Net investment income (loss) (1) 0.84 0.32 ...': six-month NII per share 0.84 (2025) and 0.32 (2024); distributions 0.96 and 0.26 for the same periods."}
+     "quote": "'Net investment income (loss) (1) 0.84 0.32 ...': six-month NII per share 0.84 (2025) and 0.32 (2024); distributions 0.96 and 0.26 for the same periods."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001919369 --report docs/investigations/v05_readings/reports/0001919369.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); re-read on the page 2026-10-26 by claude-fund-agent-vista-rfvs in sandbox rfvsc, values unchanged; not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -68,20 +125,30 @@
    "engine": "fund_financials",
    "rule_name": "F16",
    "reason_key": "f16-no-distribution-negative-income-first-quarter",
-   "ciks": ["0001919369"],
-   "quarters": ["2023-12-31"],
+   "ciks": [
+    "0001919369"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
    "statement": "First quarter of operations. No distribution was declared (distribution rate 0) and net investment income was negative (the year's ratio is printed as (11.41) %). F16 tests distribution rate <= 1.5 x income yield; with a negative yield even a zero distribution fails. The highlights print no distribution line for the year. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001628280-24-009900",
+    {
+     "source": "filing",
+     "accession": "0001628280-24-009900",
      "verbatim": "Net investment income (loss) (2) ( 4.48 ) Net realized gains (loss) and change in unrealized appreciation (depreciation) on investments 0.49 Net increase (decrease) in net assets resulting in operations ( 3.99 ) Effect of offering price of subscriptions (3) 3.59 Net asset value per share, end of period $ 19.60",
-     "quote": "'Net investment income (loss) (2) ( 4.48 ) ... Net asset value per share, end of period $ 19.60': 10-K 2023 highlights, no distribution line."},
-    {"source": "filing", "accession": "0001628280-24-009900",
+     "quote": "'Net investment income (loss) (2) ( 4.48 ) ... Net asset value per share, end of period $ 19.60': 10-K 2023 highlights, no distribution line."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-009900",
      "verbatim": "Net investment income (loss) ( 11.41 ) % Interest Expense and credit facility fees 2.83 %",
-     "quote": "'Net investment income (loss) ( 11.41 ) %': the year's ratio, negative."}
+     "quote": "'Net investment income (loss) ( 11.41 ) %': the year's ratio, negative."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001919369 --report docs/investigations/v05_readings/reports/0001919369.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); re-read on the page 2026-10-26 by claude-fund-agent-vista-rfvs in sandbox rfvsc, values unchanged; not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -90,20 +157,31 @@
    "engine": "fund_financials",
    "rule_name": "F33",
    "reason_key": "f33-no-distribution-in-ramp-up-quarters",
-   "ciks": ["0001919369"],
-   "quarters": ["2023-12-31", "2024-03-31"],
+   "ciks": [
+    "0001919369"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31"
+   ],
    "statement": "Distribution rate 0 in the fund's first two quarters of operations: no distribution was declared. The 10-K highlights for 2023 and the 10-Q highlights for 2024-03-31 go from net increase from operations straight to net asset value at end of period, with no distribution line; the first distribution (0.26 a share) is in the second quarter of 2024. F33 expects a rate above 0. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001628280-24-020226",
+    {
+     "source": "filing",
+     "accession": "0001628280-24-020226",
      "verbatim": "Net asset value per share, beginning of period $ 19.60 Net investment income (loss) (1) 0.02 Net realized gains (loss) and change in unrealized appreciation (depreciation) on investments (2) 0.03 Net increase (decrease) in net assets resulting in operations 0.05 Net asset value per share, end of period $ 19.65",
-     "quote": "'... Net increase (decrease) in net assets resulting in operations 0.05 Net asset value per share, end of period $ 19.65': 2024-03-31, no distribution line."},
-    {"source": "filing", "accession": "0001628280-24-009900",
+     "quote": "'... Net increase (decrease) in net assets resulting in operations 0.05 Net asset value per share, end of period $ 19.65': 2024-03-31, no distribution line."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-009900",
      "verbatim": "Net increase (decrease) in net assets resulting in operations ( 3.99 ) Effect of offering price of subscriptions (3) 3.59 Net asset value per share, end of period $ 19.60",
-     "quote": "'... ( 3.99 ) Effect of offering price of subscriptions (3) 3.59 Net asset value per share, end of period $ 19.60': 2023, no distribution line."}
+     "quote": "'... ( 3.99 ) Effect of offering price of subscriptions (3) 3.59 Net asset value per share, end of period $ 19.60': 2023, no distribution line."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001919369 --report docs/investigations/v05_readings/reports/0001919369.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); re-read on the page 2026-10-26 by claude-fund-agent-vista-rfvs in sandbox rfvsc, values unchanged; not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -112,17 +190,24 @@
    "engine": "fund_financials",
    "rule_name": "F30",
    "reason_key": "f30-negative-nav-before-first-investor",
-   "ciks": ["0001919369"],
-   "quarters": ["2023-09-30"],
+   "ciks": [
+    "0001919369"
+   ],
+   "quarters": [
+    "2023-09-30"
+   ],
    "statement": "At 2023-09-30 the fund had not commenced operations: 1,250 seed shares, organisation costs had taken net assets to (284) thousand, and the balance sheet prints net asset value per share of (227.01). Published as printed; F30 expects a value above 0.01. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001628280-23-037925",
+    {
+     "source": "filing",
+     "accession": "0001628280-23-037925",
      "verbatim": "Total net assets $ ( 284 ) $ - Total liabilities and net assets $ 4,513 $ 1,283 Net asset value per share $ ( 227.01 )",
-     "quote": "'Total net assets $ ( 284 ) $ - Total liabilities and net assets $ 4,513 $ 1,283 Net asset value per share $ ( 227.01 )': 10-Q 2023-09-30 balance sheet."}
+     "quote": "'Total net assets $ ( 284 ) $ - Total liabilities and net assets $ 4,513 $ 1,283 Net asset value per share $ ( 227.01 )': 10-Q 2023-09-30 balance sheet."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001919369 --report docs/investigations/v05_readings/reports/0001919369.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); re-read on the page 2026-10-26 by claude-fund-agent-vista-rfvs in sandbox rfvsc, values unchanged; not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -131,20 +216,30 @@
    "engine": "fund_financials",
    "rule_name": "F25",
    "reason_key": "f25-ramp-up-fund-deploys-cash-into-investments",
-   "ciks": ["0001919369"],
-   "quarters": ["2024-03-31"],
+   "ciks": [
+    "0001919369"
+   ],
+   "quarters": [
+    "2024-03-31"
+   ],
    "statement": "Second quarter of operations: investments rose from 104,869 to 180,487 (72 pct) while total assets rose from 172,277 to 239,397 (39 pct); cash fell from 61,943 to 53,410 and payables for investments purchased rose to 34,931. Published investments equal the printed figure in both quarters. F25 allows 30 points between the two growth rates. No fix applies.",
    "basis": "read",
    "evidence": [
-    {"source": "filing", "accession": "0001628280-24-020226",
+    {
+     "source": "filing",
+     "accession": "0001628280-24-020226",
      "verbatim": "Investments - non-controlled/non-affiliated, at fair value (amortized cost of $ 180,078 and $ 104,685 , respectively) $ 180,487 $ 104,869 Cash and cash equivalents 53,410 61,943",
-     "quote": "'... $ 180,487 $ 104,869 Cash and cash equivalents 53,410 61,943': investments and cash, 2024-03-31 and 2023-12-31."},
-    {"source": "filing", "accession": "0001628280-24-020226",
+     "quote": "'... $ 180,487 $ 104,869 Cash and cash equivalents 53,410 61,943': investments and cash, 2024-03-31 and 2023-12-31."
+    },
+    {
+     "source": "filing",
+     "accession": "0001628280-24-020226",
      "verbatim": "Total assets $ 239,397 $ 172,277 Liabilities Secured borrowings (Note 5) $ 84,250 $ 77,250 Payable for investments purchased 34,931 13,871",
-     "quote": "'Total assets $ 239,397 $ 172,277 ... Payable for investments purchased 34,931 13,871': total assets and payables."}
+     "quote": "'Total assets $ 239,397 $ 172,277 ... Payable for investments purchased 34,931 13,871': total assets and payables."
+    }
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0001919369 --report docs/investigations/v05_readings/reports/0001919369.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox vixc); re-read on the page 2026-10-26 by claude-fund-agent-vista-rfvs in sandbox rfvsc, values unchanged; not accepted by the owner",
    "decided_on": "2026-10-16"
   }
  ]
