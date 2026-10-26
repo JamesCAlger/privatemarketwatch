@@ -693,13 +693,13 @@
 - principal_amount_currency = USD
 - shares_held = 
 - pct_of_net_assets = 33.1  (tag: equal, differs)
-- interest_rate = 
+- interest_rate = 4.32
 - basis_spread = 
 - reference_rate_type = 
-- coupon_type = 
+- coupon_type = Fixed
 - pik_rate = 
 - maturity_date = 2025-10-21  (tag: equal, differs)
-- corrected_fields = 
+- corrected_fields = interest_rate;coupon_type
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 
@@ -886,7 +886,7 @@
 **Member (identifier text):** `Investments Non-controlled/non-affiliated senior secured debt Debt investments Automobile Components LS Group OpCo Acquistion LLC First lien senior secured term loan Interest Rate SOFR + 2.50% Maturity Date 4/23/2031`
 
 **Published:**
-- issuer_name = LS Group OpCo Acquistion LLC
+- issuer_name = LS Group OpCo Acquisition LLC
 - instrument_description = First lien senior secured term loan
 - asset_category = LOAN
 - fair_value = 6904000.0  (tag: equal)
@@ -901,7 +901,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2031-04-23  (tag: equal)
-- corrected_fields = 
+- corrected_fields = issuer_name;instrument_description
 - interest_rate_source = 
 - basis_spread_source = xbrl_field
 - pik_rate_source = 

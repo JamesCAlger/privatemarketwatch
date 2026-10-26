@@ -42,7 +42,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -54,7 +54,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -72,7 +72,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -125,7 +125,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -137,7 +137,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -155,7 +155,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -208,7 +208,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -220,7 +220,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -232,13 +232,13 @@
     "published": "ok",
     "tag": "untagged",
     "cause": "",
-    "note": "prints SOFR; no rate-type enumeration on this context (only in member text)"
+    "note": "prints SOFR; no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -291,7 +291,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -303,7 +303,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -315,13 +315,13 @@
     "published": "ok",
     "tag": "untagged",
     "cause": "",
-    "note": "prints SOFR; no rate-type enumeration on this context (only in member text)"
+    "note": "prints SOFR; no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -374,7 +374,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -386,7 +386,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -404,7 +404,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -457,7 +457,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -469,7 +469,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -487,7 +487,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -540,7 +540,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -552,7 +552,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -564,13 +564,13 @@
     "published": "ok",
     "tag": "untagged",
     "cause": "",
-    "note": "prints SOFR; no rate-type enumeration on this context (only in member text)"
+    "note": "prints SOFR; no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -623,7 +623,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -635,7 +635,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -647,13 +647,13 @@
     "published": "ok",
     "tag": "untagged",
     "cause": "",
-    "note": "prints SOFR; no rate-type enumeration on this context (only in member text)"
+    "note": "prints SOFR; no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -706,7 +706,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -718,7 +718,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -736,7 +736,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -789,7 +789,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -801,7 +801,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -813,13 +813,13 @@
     "published": "ok",
     "tag": "untagged",
     "cause": "",
-    "note": "prints SOFR; no rate-type enumeration on this context (only in member text)"
+    "note": "prints SOFR; no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -872,7 +872,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -884,7 +884,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -902,7 +902,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -955,7 +955,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -967,7 +967,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -985,7 +985,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1002,7 +1002,7 @@
     "published": "ok",
     "tag": "right",
     "cause": "",
-    "note": "member text says Maturity Date 8/30/2029 but page and maturity fact say 8/30/2030; values agree"
+    "note": ""
    },
    "issuer_name": {
     "published": "ok",
@@ -1038,7 +1038,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1050,7 +1050,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -1062,13 +1062,13 @@
     "published": "ok",
     "tag": "untagged",
     "cause": "",
-    "note": "prints SOFR; no rate-type enumeration on this context (only in member text)"
+    "note": "prints SOFR; no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1121,7 +1121,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1130,28 +1130,28 @@
     "note": ""
    },
    "interest_rate": {
-    "published": "missing",
+    "published": "ok",
     "tag": "right",
-    "cause": "pipeline",
-    "note": "prints 4.32 % fixed, tagged InvestmentFixedInterestRate 0.0432; none published"
+    "cause": "",
+    "note": ""
    },
    "basis_spread": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Treasury bill; fixed yield, no spread printed"
    },
    "reference_rate_type": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Treasury bill; no reference rate printed"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1204,7 +1204,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1216,7 +1216,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -1234,7 +1234,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1287,7 +1287,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1299,7 +1299,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -1317,7 +1317,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1370,7 +1370,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1382,7 +1382,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -1394,13 +1394,13 @@
     "published": "ok",
     "tag": "untagged",
     "cause": "",
-    "note": "prints SOFR; no rate-type enumeration on this context (only in member text)"
+    "note": "prints SOFR; no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1420,10 +1420,10 @@
     "note": ""
    },
    "issuer_name": {
-    "published": "wrong",
+    "published": "ok",
     "tag": "wrong_label",
-    "cause": "tag",
-    "note": "prints LS Group OpCo Acquisition LLC; member and published misspell Acquistion"
+    "cause": "",
+    "note": "prints 'LS Group OpCo Acquisition LLC'; member text has 'Acquistion'; published corrected"
    },
    "instrument_and_class": {
     "published": "ok",
@@ -1453,7 +1453,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1465,7 +1465,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -1483,7 +1483,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1536,7 +1536,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1548,7 +1548,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -1566,7 +1566,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1613,13 +1613,13 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "prints - (unfunded); blank published"
+    "note": "undrawn; par printed as '-', published blank"
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1631,7 +1631,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "Interest Rate column prints only 'SOFR + spread'; no all-in coupon; published blank"
    },
    "basis_spread": {
     "published": "ok",
@@ -1649,7 +1649,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",

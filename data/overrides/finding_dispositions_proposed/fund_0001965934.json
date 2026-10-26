@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "ovye",
+ "sandbox": "rfovb",
  "dispositions": [
   {
    "disposition_id": "PD-0001965934-A07-1",
@@ -307,6 +307,64 @@
    "rerun": "python scratch/fund_runs/0001965934/q.py scratch/fund_runs/0001965934/names.sql ovye",
    "decided_by": "PROPOSED by agent overland_fund_agent_2026-10-17 (fund-clearing loop); not accepted by the owner",
    "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-0001965934-issuer_name_printed-8",
+   "class": "false_alarm",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "ciks": [
+    "0001965934"
+   ],
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "reason_key": "issuer-name-printed-equal-to-its-own-section-heading",
+   "statement": "Each flagged row is the fund's U.S. Treasury bill (one row per quarter, CASH class). The page prints the section heading 'U.S. Treasury Bill' and then the holding, also named 'U.S. Treasury Bill', followed by a dash in the industry/reference cell, the yield, maturity, par, cost and value. The published issuer_name 'U.S. Treasury Bill' is therefore the printed name. The rule flags it for two artefacts of its own: (a) 2024-12-31 and 2025-03-31 (kind not_the_printed_name): the first cell is set aside as an industry label and the next cell, an em dash (U+2014, '&#8212;' in the HTML), is taken as the name cell because candidate_rules._STOP_SYMBOLS admits only the ASCII hyphen; (b) 2025-06-30, 2025-09-30, 2025-12-31, 2026-06-30 (kind equals_industry_label): the bill context has no identifier member (it is named by the wrapper's context_identifiers), the page rules find no printed row for it, and the shape test flags any name equal to one of the fund's labels when no printed row is known. No data fix applies: renaming the bill away from its printed name would make it wrong. Rule repair requested (REQ-rfov-1, REQ-rfov-2).",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-25-045206",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %",
+     "quote": "2024-12-31: heading 'U.S. Treasury Bill' then the holding printed 'U.S. Treasury Bill'; published issuer_name 'U.S. Treasury Bill'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-071771",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %",
+     "quote": "2025-03-31: heading 'U.S. Treasury Bill' then the holding printed 'U.S. Treasury Bill'; published issuer_name 'U.S. Treasury Bill'"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-109383",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %",
+     "quote": "2025-06-30: heading 'U.S. Treasury Bill' then the holding printed 'U.S. Treasury Bill'; published issuer_name 'U.S. Treasury Bill'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-25-272318",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %",
+     "quote": "2025-09-30: heading 'U.S. Treasury Bill' then the holding printed 'U.S. Treasury Bill'; published issuer_name 'U.S. Treasury Bill'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-117368",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %",
+     "quote": "2025-12-31: heading 'U.S. Treasury Bill' then the holding printed 'U.S. Treasury Bill'; published issuer_name 'U.S. Treasury Bill'"
+    },
+    {
+     "source": "filing",
+     "accession": "0001193125-26-346556",
+     "verbatim": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %",
+     "quote": "2026-06-30: heading 'U.S. Treasury Bill' then the holding printed 'U.S. Treasury Bill'; published issuer_name 'U.S. Treasury Bill'"
+    }
+   ]
   }
  ],
  "withdrawn": [

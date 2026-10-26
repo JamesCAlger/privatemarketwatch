@@ -1,277 +1,60 @@
 {
  "cik": "0001965934",
- "label": "ovye",
- "before": "spon3",
- "shared_code": true,
- "investigator_id": "overland_fund_agent_2026-10-17",
+ "label": "rfovb",
+ "before": "rgA6",
+ "shared_code": false,
+ "investigator_id": "claude-fund-agent-overland-rfov",
  "declared_changes": [
   {
-   "column": "issuer_name",
-   "rows": 20,
-   "why": "8 rows: 'Material Quikrete Holdings Inc' / 'Material Summit Materials LLC' to the printed names (filer heading 'Construction Material' added to extra_industry_labels). 3 rows (2025-03-31 to 2025-09-30): 'LS Group OpCo Acquistion LLC' to the printed 'LS Group OpCo Acquisition LLC' (row corrections; page-sample card C018). 9 rows (every quarter): the money-market fund to its printed name 'BlackRock Liquidity FedFund - Institutional' (was 'Cash Equivalents BlackRock Liquidity FedFund' to 2025-03-31, the section heading in the name, and 'Black Rock Liquidity Fed Fund Institutional' after); independent review of ovyd."
+   "column": "cost",
+   "rows": 9,
+   "why": "Triwest DDTL 2024-09-30 +608,000 to -608,000 (printed sign); 8 money-fund rows null to the printed cost."
   },
   {
-   "column": "instrument_description",
-   "rows": 4,
-   "why": "Restated with the LS Group name corrections (unchanged value: 'First lien senior secured term loan'), so the name correction does not blank it. Money-fund 2024-06-30: 'Institutional' withdrawn (now part of the printed name)."
+   "column": "cost_reported",
+   "rows": 9,
+   "why": "Follows cost."
+  },
+  {
+   "column": "src_facts",
+   "rows": 9,
+   "why": "Provenance of the same 9 cost values (sign event / declared value)."
   },
   {
    "column": "interest_rate",
-   "rows": 5,
-   "why": "Treasury bill printed yields: 2024-12-31 4.27 (tag was a spread), 2025-03-31 4.28, 2025-06-30 4.32, 2025-09-30 3.89, 2025-12-31 3.61 (tag ck0001965934:InvestmentFixedInterestRate, not read; card C014). The 2026-06-30 bill (3.79) is a new row, so not counted here."
+   "rows": 8,
+   "why": "Money-fund printed yields 2025-06-30 to 2026-06-30 (row corrections)."
   },
   {
    "column": "interest_rate_reported",
-   "rows": 5,
-   "why": "Follows the bill rates."
+   "rows": 8,
+   "why": "Follows interest_rate."
   },
   {
    "column": "interest_rate_kind",
-   "rows": 5,
-   "why": "Bill rate now present: unresolved to all_in."
-  },
-  {
-   "column": "basis_spread",
-   "rows": 3,
-   "why": "Money-fund and bill yields tagged as InvestmentBasisSpreadVariableRate withdrawn (2024-09-30, 2024-12-31)."
-  },
-  {
-   "column": "reference_rate_type",
-   "rows": 3,
-   "why": "SOFR guessed for the same three cash rows withdrawn."
-  },
-  {
-   "column": "reference_rate_source",
-   "rows": 3,
-   "why": "Same three rows."
-  },
-  {
-   "column": "coupon_type",
    "rows": 8,
-   "why": "Floating withdrawn on the two money-fund rows; Fixed on the bill in 2024-12-31 and in the five bill quarters (four counted against spon3). Money-fund 2025-03-31: 'Fixed' withdrawn (the page prints a yield)."
+   "why": "Rate now present on the 8 money-fund rows: unresolved to all_in."
   },
   {
    "column": "corrected_fields",
-   "rows": 16,
-   "why": "Audit field of the row corrections."
-  },
-  {
-   "column": "position_id",
-   "rows": 32,
-   "why": "Fund-only identity allocation in a one-fund sandbox (whole chains re-keyed: Advanced Technology Services, CI (MG), ECLAT, Hand Family, JF Acquisition, Stark Tech, Technique Midco, BlackRock money fund). Identical in ovya, which has no edit. Not a comparison key. The LS Group chain keeps one position_id over its six quarters. Money-fund 2024-06-30 to 2025-03-31 now share the chain of 2025-06-30 to 2025-12-31 (4 rows re-keyed); 2026-03-31 and 2026-06-30 stay a separate chain, as in spon3."
+   "rows": 8,
+   "why": "Audit field of the 8 rate corrections."
   }
  ],
- "rows_added": 45,
+ "rows_added": 0,
  "rows_removed": 0,
- "fixes": [
+ "total_exceptions": [],
+ "parked": [
   {
-   "what": "2026-06-30 Treasury bill tagged on a context with no identifier member (107.377M unpublished): context_identifiers entry 'C_316c1d7d-650d-4452-8f95-30698413bb51 => U.S. Treasury Bill'.",
-   "kind": "wrapper",
-   "quarters": [
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-26-346556",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
-    }
-   ]
-  },
-  {
-   "what": "Filer heading 'Construction Material' added to staging.extra_industry_labels: issuer names no longer start with 'Material' (8 rows).",
-   "kind": "wrapper",
-   "quarters": [
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Construction Material Quikrete Holdings Inc(7) First lien senior secured term loan SOFR + 2.50 % 4/14/2031 5,970 5,993 5,970 2.12 %"
-    },
-    {
-     "accession": "0000950170-25-109383",
-     "text": "Construction Material Quikrete Holdings Inc(7)(14) First lien senior secured term loan SOFR + 2.25 % 4/14/2031 5,925 5,944 5,912 0.91 %"
-    }
-   ]
-  },
-  {
-   "what": "New highlights wrapper data/overrides/fund_highlights_wrappers/0001965934.json: figure_corrections cash_equivalents_at_fair_value for six quarters from the printed schedule (the filer files the undimensioned fact only from 2025-12-31), so the published-rows anchor adds the money fund printed below Total Investments. Needs FIGURE_FIELDS to accept the field (shared code, inert unless listed).",
-   "kind": "shared_code",
-   "quarters": [
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-24-097213",
-     "text": "Total Investments $ 346,841 $ 344,676 178.22 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 %"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
-    },
-    {
-     "accession": "0000950170-25-045206",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %"
-    },
-    {
-     "accession": "0000950170-25-071771",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
-    },
-    {
-     "accession": "0000950170-25-109383",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %"
-    },
-    {
-     "accession": "0001193125-25-272318",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.02 % - 29,677 $ 29,677 $ 29,677 4.55 %"
-    }
-   ]
-  },
-  {
-   "what": "New highlights-wrapper key nil_income_quarters (pipeline/fund_highlights_wrapper.py, pipeline/fund_financials.quarter_income_sql, schema): the 2024-03-31 quarter, printed with a dash for income before operations began, counts as nil; Q4 2024 income 6.431 to 13.271M and NII 2.400 to 4.610M.",
-   "kind": "shared_code",
-   "quarters": [
-    "2024-03-31",
-    "2024-12-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-24-059780",
-     "text": "For the three months ended March 31, 2024 Investment income $ - Expenses Organization costs 32,880"
-    },
-    {
-     "accession": "0000950170-24-059780",
-     "text": "Less expenses paid by the Advisor (Note 3) ( 884,913 ) Net investment income (loss) -"
-    },
-    {
-     "accession": "0000950170-25-045206",
-     "text": "For the Year Ended December 31, 2024 Total investment income $ 25,722 Net expenses 16,123 Net investment income 9,599"
-    },
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Three Months Ended September 30, 2024 Nine Months Ended September 30, 2024 Total investment income $ 9,058 $ 12,451 Net expenses 5,656 7,462 Net investment income 3,402 4,989"
-    }
-   ]
-  },
-  {
-   "what": "13 row corrections (row_correction_specs/0001965934.json): cash-row yields tagged as a variable-rate spread withdrawn; bill rate 4.27 fixed.",
-   "kind": "row_correction",
-   "quarters": [
-    "2024-09-30",
-    "2024-12-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-24-127235",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
-    },
-    {
-     "accession": "0000950170-25-045206",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %"
-    },
-    {
-     "accession": "0000950170-25-045206",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
-    }
-   ]
-  },
-  {
-   "what": "Page-sample card C014: the Treasury bill's rate is tagged with the filer's own ck0001965934:InvestmentFixedInterestRate in every bill quarter from 2025-03-31 and the shared concept map does not read it. 10 row corrections set the printed rate and coupon_type Fixed in all five quarters (2025-03-31 4.28, 2025-06-30 4.32, 2025-09-30 3.89, 2025-12-31 3.61, 2026-06-30 3.79); with 2024-12-31 (4.27) every bill row now carries its printed rate. No fund-level setting exists for a rate concept; a global map entry would reach six other filers that use the same local name.",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-25-071771",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
-    },
-    {
-     "accession": "0000950170-25-109383",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
-    },
-    {
-     "accession": "0001193125-25-272318",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
-    },
-    {
-     "accession": "0001193125-26-117368",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
-    },
-    {
-     "accession": "0001193125-26-346556",
-     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
-    }
-   ]
-  },
-  {
-   "what": "Page-sample card C018: the filer's member misspells 'Acquistion' in 2025-03-31 to 2025-09-30 while the page prints 'Acquisition'; 3 issuer-name corrections (with the instrument restated). The page itself prints 'Acquistion' at 2024-06-30 and 2024-09-30, so those two rows are left as printed. The position chain was never broken: one position_id over all six quarters, before and after.",
-   "kind": "row_correction",
-   "quarters": [
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-25-071771",
-     "text": "LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,965 $ 7,002 $ 6,904 1.45 %"
-    },
-    {
-     "accession": "0000950170-25-109383",
-     "text": "LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,948 $ 6,984 $ 6,934 1.07 %"
-    },
-    {
-     "accession": "0001193125-25-272318",
-     "text": "LS Group OpCo Acquisition LLC(7)(8)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,930 $ 6,964 $ 6,900 1.06 %"
-    }
-   ]
-  },
-  {
-   "what": "Independent review of ovyd: the money-market fund's issuer name held the 'Cash Equivalents' section heading and dropped '- Institutional' (2024-06-30 to 2025-03-31), and read 'Black Rock Liquidity Fed Fund Institutional' from 2025-06-30, so its chain split. 19 row corrections set the printed name 'BlackRock Liquidity FedFund - Institutional' in all nine quarters (instrument blank) and withdraw coupon_type 'Fixed' at 2025-03-31.",
-   "kind": "row_correction",
-   "quarters": [
-    "2024-06-30",
-    "2024-09-30",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-24-097213",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 %"
-    },
-    {
-     "accession": "0000950170-25-071771",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
-    },
-    {
-     "accession": "0000950170-25-109383",
-     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %"
-    }
+   "finding": "money-fund pct_of_net_assets 2025-12-31, 2026-03-31, 2026-06-30 (6 CASH rows, not an outstanding finding)",
+   "hypotheses": [
+    "The percent is tagged with the filer's ck0001965934:CashEquivalentsPercentOfNetAssets, which the shared map does not read.",
+    "Row correction tried in rfovb: pct_of_net_assets is not in unified_holdings._CORRECTABLE_FIELDS, so the build skipped the 6 lines (rebuild.log: 'row_corrections.csv contains uncorrectable field(s): pct_of_net_assets -- these rows will be skipped'). The 6 inert lines were removed under D-247 (none in HEAD; rfovb data unaffected).",
+    "untagged_values admits fair_value, cost and principal_amount only; no fund-level setting reads a percent concept.",
+    "Stays parked as a non-correctable field: making pct_of_net_assets correctable or reading the concept is a shared change, an owner item."
    ]
   }
  ],
- "total_exceptions": [],
- "parked": [],
  "orchestrator_requests": [],
  "observations": [
   {
@@ -368,7 +151,7 @@
   },
   {
    "observation_key": "cash-row-fields-on-filer-custom-concepts-not-read",
-   "what": "Cash rows lack fields the page prints and the filer tags on its own concepts: money-fund yield (ck0001965934:InvestmentYieldPercentage, 2025-06-30 on), money-fund cost (not tagged, printed equal to value, 2025-06-30 on) and money-fund percent of net assets (ck0001965934:CashEquivalentsPercentOfNetAssets, 2025-12-31 on; sum 205.70 published against 207.04 printed). Left: cash rows only. The Treasury-bill rate on ck0001965934:InvestmentFixedInterestRate is now set by row correction (separate observation rate-on-filer-custom-concept-not-read).",
+   "what": "Cash rows lacked fields the page prints and the filer tags on its own or other concepts. Fixed in rfovb: money-fund yield (ck0001965934:InvestmentYieldPercentage, 2025-06-30 on, 8 rows, row corrections) and money-fund cost (tagged CashEquivalentsAtCarryingValue, 8 rows, untagged_values). Parked as a non-correctable field (owner item): money-fund percent of net assets (ck0001965934:CashEquivalentsPercentOfNetAssets, 2025-12-31 on, 6 rows); pct_of_net_assets is not in _CORRECTABLE_FIELDS and no wrapper key reads a percent concept. The 6 row-correction lines tried for it were skipped by the build and removed under D-247. Cash rows only; not in published fair value.",
    "field": "interest_rate",
    "quarters": [
     "2025-06-30",
@@ -379,7 +162,7 @@
    ],
    "fair_value_m": 18.711,
    "cause": "fund",
-   "action": "left",
+   "action": "parked",
    "suggested_check": "A CASH row with no interest_rate where the context carries a fact named *Rate* or *Yield*.",
    "quote": {
     "accession": "0001193125-26-117368",
@@ -586,6 +369,73 @@
     "action": "propose_detector",
     "rationale": "Money funds have no coupon; any coupon_type on a money-fund CASH row is inferred, not printed. Bills and notes carry a printed fixed rate and must be excluded by name.",
     "reference": "new row rule on index_classification = 'CASH'"
+   }
+  },
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "what": "Triwest delayed-draw 2024-09-30: cost printed ( 608 ) and tagged 608 with no sign attribute, while its fair value and percent are tagged sign='-'. Published +608,000; published cost over the printed Total Investments cost by 1,216 thousand. Fixed by bracketed_unsigned_values for the filing. Found by the row-by-row page comparison (cmp_rows.py) and the cost tie, not by a rule.",
+   "field": "cost",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "fair_value_m": -0.656,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Per fund-quarter, published cost (ex cash) against the filed or printed total investments cost; and an undrawn row whose fair value is negative while its cost is positive.",
+   "quote": {
+    "accession": "0000950170-24-127235",
+    "text": "Triwest Healthcare Alliance Corp(6)(11)(12) First lien senior secured delayed draw term loan SOFR + 5.50 % 12/27/2027 - ( 608 ) ( 656 ) ( 0.23 )%"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C107 now fires on the corrected negative cost (check-accepted), not on the wrong positive cost; cost_conservation did not flag a 1.2M gap at 2024-09-30. A sign-mismatch check (fair value < 0 and cost > 0 on a row with par 0 or dash) is cheap and has few false positives (a written-up undrawn line is rare).",
+    "reference": "proposal: row_validation sign check fv<0 and cost>0 with zero/dash par"
+   }
+  },
+  {
+   "observation_key": "page-rule-em-dash-cell-read-as-issuer-name",
+   "what": "issuer_name_printed (pipeline/candidate_rules.issuer_name_differs_from_page) treats a cell holding only an em dash (U+2014) as a name cell: _STOP_SYMBOLS admits the ASCII hyphen but not U+2012-U+2015 or U+2212. On Overland's bill rows the dash follows the label cell, so the rule reports not_the_printed_name (2024-12-31, 2025-03-31) on a correct name. Shared step, may misfire on any filer printing an em-dash placeholder after the company or label.",
+   "field": "issuer_name",
+   "quarters": [
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 292.75,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Unit test in tests for candidate_rules: a printed row 'Label | — | 4.27% | ...' with issuer 'Label' passes; a real different name still flags.",
+   "quote": {
+    "accession": "0000950170-25-045206",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "A false alarm in a detector; recurrence is caught by a regression test on the rule (dash-only cells of any dash code point are stop cells), not by a data rule.",
+    "reference": "REQ-rfov-1"
+   }
+  },
+  {
+   "observation_key": "page-rule-no-printed-row-for-wrapper-named-context",
+   "what": "Page rules join printed rows by member text; a row named by the wrapper's context_identifiers (no InvestmentIdentifierAxis member) gets no printed_row, and issuer_name_printed falls to its shape test, which flags a name equal to a fund label even though the page prints it as the name (bill rows 2025-06-30, 2025-09-30, 2025-12-31, 2026-06-30). Related to page-rules-skip-rows-with-repeated-identifier: the page rule cannot see rows it cannot join.",
+   "field": "issuer_name",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 586.232,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Join page-rule printed rows by context id (the <tr> carrying the row's fair-value fact) when the member text is absent; count rows without a printed row per fund-quarter in the blind-spot table.",
+   "quote": {
+    "accession": "0000950170-25-109383",
+    "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The blind-spot table (page_rules_name_blind_spots.csv) already counts rows with no printed row but does not stop the shape test flagging them; a context-id join removes the blind spot.",
+    "reference": "REQ-rfov-2"
    }
   }
  ],
@@ -1086,19 +936,168 @@
     "Denominator wrong: rejected; net assets 429.053M = printed net assets; fund is levered (borrowings 450.0M)."
    ],
    "next_action": "Proposal PD-0001965934-PCT01-4 (pct01-percent-sum-is-the-printed-total-of-a-levered-fund); no data change."
+  },
+  {
+   "finding_id": "RVQ_BLK_6a896a4b1e56",
+   "coverage": {
+    "affected_rows": [
+     "ROW-c48465a1b582eb5d"
+    ],
+    "reviewed_rows": [
+     "ROW-c48465a1b582eb5d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rule output (rfovb output/shadow/page_rule_findings.csv) flags exactly one row in this fund-quarter: ROW-c48465a1b582eb5d, issuer_name 'U.S. Treasury Bill', kind not_the_printed_name, context C_7ab6a300-276d-46c9-bc1a-9d46f2917931. No other row of the fund is flagged by this rule in any quarter apart from the bill rows of the six listed quarters (2026-03-31 has no bill).",
+    "Published name against the page: the page prints the section heading 'U.S. Treasury Bill' and then the holding named 'U.S. Treasury Bill' (line quoted); the published issuer_name equals the printed name. Not an instrument, row number or heading carried into a different company's name.",
+    "Why the rule fires: printed_row cells (page_rule_findings.csv) are 'U.S. Treasury Bill | <em dash> | <yield> | <maturity> | ...'. The first cell is removed as one of the fund's industry labels, and the second cell is an em dash (code point U+2014, '&#8212;' in the HTML, printed by scratch/fund_runs/0001965934/r2/cp.py), which candidate_rules._STOP_SYMBOLS does not treat as a stop cell (it admits the ASCII hyphen only). The dash becomes the only name cell and cannot match. Not tested by a rule run: that an ASCII hyphen there would make the row pass is read from the code (_STOP_SYMBOLS), not measured.",
+    "Fix tested and rejected: renaming the issuer (e.g. 'United States Treasury') would publish a name the page does not print; removing the heading from the fund's labels changes the bill's industry, not the rule's handling. The repair belongs in the rule (REQ-rfov-1 / REQ-rfov-2)."
+   ],
+   "next_action": "Proposal PD-0001965934-issuer_name_printed-8 (issuer-name-printed-equal-to-its-own-section-heading); rule repair REQ-rfov-1 (em-dash stop cell)."
+  },
+  {
+   "finding_id": "RVQ_BLK_fb22a66f09aa",
+   "coverage": {
+    "affected_rows": [
+     "ROW-d90a262344069396"
+    ],
+    "reviewed_rows": [
+     "ROW-d90a262344069396"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rule output (rfovb output/shadow/page_rule_findings.csv) flags exactly one row in this fund-quarter: ROW-d90a262344069396, issuer_name 'U.S. Treasury Bill', kind not_the_printed_name, context C_50c97654-ed63-4747-89e4-2c23f6e7d0ff. No other row of the fund is flagged by this rule in any quarter apart from the bill rows of the six listed quarters (2026-03-31 has no bill).",
+    "Published name against the page: the page prints the section heading 'U.S. Treasury Bill' and then the holding named 'U.S. Treasury Bill' (line quoted); the published issuer_name equals the printed name. Not an instrument, row number or heading carried into a different company's name.",
+    "Why the rule fires: printed_row cells (page_rule_findings.csv) are 'U.S. Treasury Bill | <em dash> | <yield> | <maturity> | ...'. The first cell is removed as one of the fund's industry labels, and the second cell is an em dash (code point U+2014, '&#8212;' in the HTML, printed by scratch/fund_runs/0001965934/r2/cp.py), which candidate_rules._STOP_SYMBOLS does not treat as a stop cell (it admits the ASCII hyphen only). The dash becomes the only name cell and cannot match. Not tested by a rule run: that an ASCII hyphen there would make the row pass is read from the code (_STOP_SYMBOLS), not measured.",
+    "Fix tested and rejected: renaming the issuer (e.g. 'United States Treasury') would publish a name the page does not print; removing the heading from the fund's labels changes the bill's industry, not the rule's handling. The repair belongs in the rule (REQ-rfov-1 / REQ-rfov-2)."
+   ],
+   "next_action": "Proposal PD-0001965934-issuer_name_printed-8 (issuer-name-printed-equal-to-its-own-section-heading); rule repair REQ-rfov-1 (em-dash stop cell)."
+  },
+  {
+   "finding_id": "RVQ_BLK_4416cba842f4",
+   "coverage": {
+    "affected_rows": [
+     "ROW-3312a49f24f4ac79"
+    ],
+    "reviewed_rows": [
+     "ROW-3312a49f24f4ac79"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rule output (rfovb output/shadow/page_rule_findings.csv) flags exactly one row in this fund-quarter: ROW-3312a49f24f4ac79, issuer_name 'U.S. Treasury Bill', kind equals_industry_label, context C_c76d3700-980c-4440-be68-efa8999a8a7c. No other row of the fund is flagged by this rule in any quarter apart from the bill rows of the six listed quarters (2026-03-31 has no bill).",
+    "Published name against the page: the page prints the section heading 'U.S. Treasury Bill' and then the holding named 'U.S. Treasury Bill' (line quoted); the published issuer_name equals the printed name. Not an instrument, row number or heading carried into a different company's name.",
+    "Why the rule fires: the bill's context has no InvestmentIdentifierAxis member; the build names it through the wrapper's context_identifiers. The page rules join the printed row by member text, so printed_row is empty; the shape test then flags any name equal to one of the fund's labels ('U.S. Treasury Bill' is the bill's own extracted industry) when no printed row is known.",
+    "Fix tested and rejected: renaming the issuer (e.g. 'United States Treasury') would publish a name the page does not print; removing the heading from the fund's labels changes the bill's industry, not the rule's handling. The repair belongs in the rule (REQ-rfov-1 / REQ-rfov-2)."
+   ],
+   "next_action": "Proposal PD-0001965934-issuer_name_printed-8 (issuer-name-printed-equal-to-its-own-section-heading); rule repair REQ-rfov-2 (printed row for wrapper-named contexts)."
+  },
+  {
+   "finding_id": "RVQ_BLK_3cf9188a7640",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a54f24c511376927"
+    ],
+    "reviewed_rows": [
+     "ROW-a54f24c511376927"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-272318",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rule output (rfovb output/shadow/page_rule_findings.csv) flags exactly one row in this fund-quarter: ROW-a54f24c511376927, issuer_name 'U.S. Treasury Bill', kind equals_industry_label, context C_01f0afac-076d-4ec3-9d0d-5d4a2d99ff01. No other row of the fund is flagged by this rule in any quarter apart from the bill rows of the six listed quarters (2026-03-31 has no bill).",
+    "Published name against the page: the page prints the section heading 'U.S. Treasury Bill' and then the holding named 'U.S. Treasury Bill' (line quoted); the published issuer_name equals the printed name. Not an instrument, row number or heading carried into a different company's name.",
+    "Why the rule fires: the bill's context has no InvestmentIdentifierAxis member; the build names it through the wrapper's context_identifiers. The page rules join the printed row by member text, so printed_row is empty; the shape test then flags any name equal to one of the fund's labels ('U.S. Treasury Bill' is the bill's own extracted industry) when no printed row is known.",
+    "Fix tested and rejected: renaming the issuer (e.g. 'United States Treasury') would publish a name the page does not print; removing the heading from the fund's labels changes the bill's industry, not the rule's handling. The repair belongs in the rule (REQ-rfov-1 / REQ-rfov-2)."
+   ],
+   "next_action": "Proposal PD-0001965934-issuer_name_printed-8 (issuer-name-printed-equal-to-its-own-section-heading); rule repair REQ-rfov-2 (printed row for wrapper-named contexts)."
+  },
+  {
+   "finding_id": "RVQ_BLK_daea3dc66428",
+   "coverage": {
+    "affected_rows": [
+     "ROW-48f313edd60297c8"
+    ],
+    "reviewed_rows": [
+     "ROW-48f313edd60297c8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-117368",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rule output (rfovb output/shadow/page_rule_findings.csv) flags exactly one row in this fund-quarter: ROW-48f313edd60297c8, issuer_name 'U.S. Treasury Bill', kind equals_industry_label, context C_985fc7a8-0626-4580-a745-4c28b52f7160. No other row of the fund is flagged by this rule in any quarter apart from the bill rows of the six listed quarters (2026-03-31 has no bill).",
+    "Published name against the page: the page prints the section heading 'U.S. Treasury Bill' and then the holding named 'U.S. Treasury Bill' (line quoted); the published issuer_name equals the printed name. Not an instrument, row number or heading carried into a different company's name.",
+    "Why the rule fires: the bill's context has no InvestmentIdentifierAxis member; the build names it through the wrapper's context_identifiers. The page rules join the printed row by member text, so printed_row is empty; the shape test then flags any name equal to one of the fund's labels ('U.S. Treasury Bill' is the bill's own extracted industry) when no printed row is known.",
+    "Fix tested and rejected: renaming the issuer (e.g. 'United States Treasury') would publish a name the page does not print; removing the heading from the fund's labels changes the bill's industry, not the rule's handling. The repair belongs in the rule (REQ-rfov-1 / REQ-rfov-2)."
+   ],
+   "next_action": "Proposal PD-0001965934-issuer_name_printed-8 (issuer-name-printed-equal-to-its-own-section-heading); rule repair REQ-rfov-2 (printed row for wrapper-named contexts)."
+  },
+  {
+   "finding_id": "RVQ_BLK_1a384129880c",
+   "coverage": {
+    "affected_rows": [
+     "ROW-7f94c1c95bac7e7e"
+    ],
+    "reviewed_rows": [
+     "ROW-7f94c1c95bac7e7e"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-346556",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rule output (rfovb output/shadow/page_rule_findings.csv) flags exactly one row in this fund-quarter: ROW-7f94c1c95bac7e7e, issuer_name 'U.S. Treasury Bill', kind equals_industry_label, context C_316c1d7d-650d-4452-8f95-30698413bb51. No other row of the fund is flagged by this rule in any quarter apart from the bill rows of the six listed quarters (2026-03-31 has no bill).",
+    "Published name against the page: the page prints the section heading 'U.S. Treasury Bill' and then the holding named 'U.S. Treasury Bill' (line quoted); the published issuer_name equals the printed name. Not an instrument, row number or heading carried into a different company's name.",
+    "Why the rule fires: the bill's context has no InvestmentIdentifierAxis member; the build names it through the wrapper's context_identifiers. The page rules join the printed row by member text, so printed_row is empty; the shape test then flags any name equal to one of the fund's labels ('U.S. Treasury Bill' is the bill's own extracted industry) when no printed row is known.",
+    "Fix tested and rejected: renaming the issuer (e.g. 'United States Treasury') would publish a name the page does not print; removing the heading from the fund's labels changes the bill's industry, not the rule's handling. The repair belongs in the rule (REQ-rfov-1 / REQ-rfov-2)."
+   ],
+   "next_action": "Proposal PD-0001965934-issuer_name_printed-8 (issuer-name-printed-equal-to-its-own-section-heading); rule repair REQ-rfov-2 (printed row for wrapper-named contexts)."
   }
  ],
  "tests_run": [
-  "tests/test_fund_financials.py, test_fourth_quarter_income.py, test_fund_highlights_wrapper.py, test_validate_fund_financials.py: 190 passed (2 new tests in each of the two changed test files)",
-  "tests/test_bdc_xbrl_wrapper.py, test_wrapper_content_signatures.py: 598 passed"
+  "None this round: no code changed (wrapper keys, untagged values and row corrections only)."
  ],
  "not_done": [
-  "No cohort build: the two shared keys (FIGURE_FIELDS cash_equivalents_at_fair_value, nil_income_quarters) are inert unless a wrapper lists them, and no other wrapper does; the extra_industry_labels union change was checked only against spon3 identifiers (no other fund has 'Construction Material' without s). Semantic diff not run.",
-  "Cash-row yields, money-fund cost and percent (custom concepts) not published: observation cash-row-fields-on-filer-custom-concepts-not-read.",
-  "Industry labels and GICS not compared with the page beyond the seven sample rows (all matched par, cost, value, percent, spread, maturity).",
-  "The 20-card page sample was taken on ovyc; ovyd changed 8 rows (5 bill rates, 3 names) and was not re-sampled. Independent investigation review not done (orchestrator's step).",
-  "Five builds used (ovya-ovye). The money fund's remaining chain split at 2026-03-31 (pre-existing in spon3) is not fixed.",
-  "docs/agent_changelog.md not appended: another session has it modified (brief forbids editing it)."
+  "Two builds used (rfova untouched, rfovb). No cohort build, semantic diff, export or full suite.",
+  "Money-fund percent of net assets 2025-12-31 to 2026-06-30 still unpublished (parked: non-correctable field, owner item).",
+  "Money-fund chain split at 2026-03-31 (BlackRock position_id changes; pre-existing) not fixed; entity_id/canonical_name differ from rgA6 on 27/19 rows already in the untouched rfova (fund-only identity build), not caused by this run.",
+  "Industry labels and GICS not compared row by row with the page (cmp_rows.py compares spread, reference code, maturity, par, cost, fair value, percent, PIK and currency text on every published row).",
+  "The 20-row page sample is the orchestrator's step; the earlier sample was on ovyc. Independent review of this report not done.",
+  "docs/agent_changelog.md not appended (modified by another session)."
  ],
  "sample": {
   "path": "docs/investigations/v05_readings/samples/0001965934/results.md",
@@ -1171,6 +1170,388 @@
    "response": "implemented by owner ruling 2026-10-17 (2a), D-202",
    "authority": "owner",
    "resolution": "pipeline/validate_fund_financials.py: F27's coupon leaves out CASH rows and F27 is skipped when under 50 pct of non-cash FV carries a rate (F27_MIN_RATED_SHARE). ovye re-run from validate by the orchestrator (no build counted): all seven F27 findings gone, 19 outstanding. Proposal PD-0001965934-F27-7 withdrawn."
+  },
+  {
+   "request_id": "REQ-rfov-3",
+   "classification": "acceptance_change",
+   "file": "data/overrides/row_corrections.csv / pipeline/unified_holdings.py",
+   "what": "Six lines I appended this run set pct_of_net_assets on the money-fund rows 2025-12-31 to 2026-06-30; pct_of_net_assets is not in _CORRECTABLE_FIELDS, so the build skips them with a warning. Either (a) authorise me (or the orchestrator) to remove those six lines (author claude-fund-agent-overland-rfov, field pct_of_net_assets, cik 0001965934), or (b) add pct_of_net_assets to _CORRECTABLE_FIELDS (shared, owner).",
+   "why": "Inert lines in an append-only file add a build warning; the printed percent remains unpublished on 6 CASH rows.",
+   "quotes": [
+    {
+     "accession": "0001193125-26-221960",
+     "text": "BlackRock Liquidity FedFund - Institutional - 3.54 % - 49,105 $ 49,105 $ 49,105 6.67 %"
+    }
+   ],
+   "evidence": [
+    {
+     "accession": "0001193125-26-117368",
+     "text": "BlackRock Liquidity FedFund - Institutional - 3.64 % - 9,670 $ 9,670 $ 9,670 1.32 %"
+    },
+    {
+     "accession": "0001193125-26-346556",
+     "text": "Goldman Sachs Financial Square Government Fund Institutional Shares 3.52 % - 4,709 4,709 4,709 0.60 %"
+    }
+   ],
+   "next_action": "Orchestrator: choose (a) or (b). No rebuild needed for (a); (b) needs a test and the owner.",
+   "resolution": "implemented",
+   "response": "6 inert uncommitted pct_of_net_assets lines removed by the fund agent under orchestrator authorisation (D-247); none in HEAD; rfovb data unaffected",
+   "authority": "orchestrator, D-247"
+  },
+  {
+   "request_id": "REQ-rfov-1",
+   "classification": "verification_bug",
+   "resolution": "deferred",
+   "response": "Deferred, not rejected. Page-reader verification bug (an em-dash cell U+2014 is not a stop cell and is read as the company name), in the same shared-code family as REQ-rfab-2 / REQ-rf26-1 (block breaks in a cell). Repairing it changes printed_row for every fund, so it goes to the end-of-run shared-code batch with a cohort measurement. The two findings stay outstanding under PD-0001965934-issuer_name_printed-8.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-247; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rfov-1",
+    "classification": "verification_bug",
+    "file": "pipeline/candidate_rules.py",
+    "what": "Treat a cell of dash characters only (ASCII '-', U+2012-U+2015, U+2212, with spaces) as a stop cell in issuer_name_differs_from_page (_STOP_SYMBOLS).",
+    "why": "The em dash printed after the label cell is read as the company name, so a correct name fails (Overland bill 2024-12-31, 2025-03-31).",
+    "quotes": [
+     {
+      "accession": "0000950170-25-045206",
+      "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+     }
+    ],
+    "next_action": "Orchestrator: change _STOP_SYMBOLS with a test (em-dash row with the printed name passes; em-dash row with a different published name still flags); re-run shadow/ledger for rfovb. Until then the proposal PD-0001965934-issuer_name_printed-8 stands."
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-rfov-2",
+   "classification": "verification_bug",
+   "resolution": "deferred",
+   "response": "Deferred, not rejected. Page rules find no printed line for rows named through the wrapper's context_identifiers, so a correct name is flagged; a shared verification bug in candidate_rules / the page reader join. End-of-run shared-code batch with a cohort measurement. The four findings stay outstanding under PD-0001965934-issuer_name_printed-8.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-247; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rfov-2",
+    "classification": "verification_bug",
+    "file": "scripts/shadow_identity_engine.py / pipeline/candidate_rules.py",
+    "what": "Give page rules the printed row of a context named by source_encodings.context_identifiers (join by the <tr> carrying the context's fair-value fact), or skip the equals_industry_label shape test when the row has no printed row and its name is the wrapper's declared identifier.",
+    "why": "Four bill rows have no printed_row and are flagged equals_industry_label although the page prints the name the build publishes.",
+    "quotes": [
+     {
+      "accession": "0000950170-25-109383",
+      "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+     }
+    ],
+    "next_action": "Orchestrator decides: a context-id join is the robust fix (then the page test sees the printed name and passes); a test must show a wrapper-named row with a different printed name still flags."
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-272318",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
+    },
+    {
+     "accession": "0001193125-26-117368",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
+    },
+    {
+     "accession": "0001193125-26-346556",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+    }
+   ]
   }
- ]
+ ],
+ "fixes_from_earlier_runs": [
+  {
+   "what": "2026-06-30 Treasury bill tagged on a context with no identifier member (107.377M unpublished): context_identifiers entry 'C_316c1d7d-650d-4452-8f95-30698413bb51 => U.S. Treasury Bill'.",
+   "kind": "wrapper",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-346556",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+    }
+   ]
+  },
+  {
+   "what": "Filer heading 'Construction Material' added to staging.extra_industry_labels: issuer names no longer start with 'Material' (8 rows).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Construction Material Quikrete Holdings Inc(7) First lien senior secured term loan SOFR + 2.50 % 4/14/2031 5,970 5,993 5,970 2.12 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Construction Material Quikrete Holdings Inc(7)(14) First lien senior secured term loan SOFR + 2.25 % 4/14/2031 5,925 5,944 5,912 0.91 %"
+    }
+   ]
+  },
+  {
+   "what": "New highlights wrapper data/overrides/fund_highlights_wrappers/0001965934.json: figure_corrections cash_equivalents_at_fair_value for six quarters from the printed schedule (the filer files the undimensioned fact only from 2025-12-31), so the published-rows anchor adds the money fund printed below Total Investments. Needs FIGURE_FIELDS to accept the field (shared code, inert unless listed).",
+   "kind": "shared_code",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Total Investments $ 346,841 $ 344,676 178.22 % Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 %"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %"
+    },
+    {
+     "accession": "0001193125-25-272318",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.02 % - 29,677 $ 29,677 $ 29,677 4.55 %"
+    }
+   ]
+  },
+  {
+   "what": "New highlights-wrapper key nil_income_quarters (pipeline/fund_highlights_wrapper.py, pipeline/fund_financials.quarter_income_sql, schema): the 2024-03-31 quarter, printed with a dash for income before operations began, counts as nil; Q4 2024 income 6.431 to 13.271M and NII 2.400 to 4.610M.",
+   "kind": "shared_code",
+   "quarters": [
+    "2024-03-31",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-059780",
+     "text": "For the three months ended March 31, 2024 Investment income $ - Expenses Organization costs 32,880"
+    },
+    {
+     "accession": "0000950170-24-059780",
+     "text": "Less expenses paid by the Advisor (Note 3) ( 884,913 ) Net investment income (loss) -"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "For the Year Ended December 31, 2024 Total investment income $ 25,722 Net expenses 16,123 Net investment income 9,599"
+    },
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Three Months Ended September 30, 2024 Nine Months Ended September 30, 2024 Total investment income $ 9,058 $ 12,451 Net expenses 5,656 7,462 Net investment income 3,402 4,989"
+    }
+   ]
+  },
+  {
+   "what": "13 row corrections (row_correction_specs/0001965934.json): cash-row yields tagged as a variable-rate spread withdrawn; bill rate 4.27 fixed.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-09-30",
+    "2024-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.84 % - 17,324 $ 17,324 $ 17,324 6.15 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.36 % - 26,055 $ 26,055 $ 26,055 6.07 %"
+    },
+    {
+     "accession": "0000950170-25-045206",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.27 % 5/1/2025 137,000 $ 135,140 $ 135,117 31.49 %"
+    }
+   ]
+  },
+  {
+   "what": "Page-sample card C014: the Treasury bill's rate is tagged with the filer's own ck0001965934:InvestmentFixedInterestRate in every bill quarter from 2025-03-31 and the shared concept map does not read it. 10 row corrections set the printed rate and coupon_type Fixed in all five quarters (2025-03-31 4.28, 2025-06-30 4.32, 2025-09-30 3.89, 2025-12-31 3.61, 2026-06-30 3.79); with 2024-12-31 (4.27) every bill row now carries its printed rate. No fund-level setting exists for a rate concept; a global map entry would reach six other filers that use the same local name.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.28 % 8/7/2025 160,000 $ 157,670 $ 157,633 33.12 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 4.32 % 10/21/2025 218,000 $ 215,167 $ 215,151 33.10 %"
+    },
+    {
+     "accession": "0001193125-25-272318",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.89 % 1/29/2026 92,000 $ 90,848 $ 90,840 13.92 %"
+    },
+    {
+     "accession": "0001193125-26-117368",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.61 % 4/7/2026 174,487 $ 172,875 $ 172,864 23.60 %"
+    },
+    {
+     "accession": "0001193125-26-346556",
+     "text": "U.S. Treasury Bill U.S. Treasury Bill - 3.79 % 10/6/2026 108,459 $ 107,392 $ 107,377 13.72 %"
+    }
+   ]
+  },
+  {
+   "what": "Page-sample card C018: the filer's member misspells 'Acquistion' in 2025-03-31 to 2025-09-30 while the page prints 'Acquisition'; 3 issuer-name corrections (with the instrument restated). The page itself prints 'Acquistion' at 2024-06-30 and 2024-09-30, so those two rows are left as printed. The position chain was never broken: one position_id over all six quarters, before and after.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-071771",
+     "text": "LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,965 $ 7,002 $ 6,904 1.45 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "LS Group OpCo Acquisition LLC(7)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,948 $ 6,984 $ 6,934 1.07 %"
+    },
+    {
+     "accession": "0001193125-25-272318",
+     "text": "LS Group OpCo Acquisition LLC(7)(8)(14) First lien senior secured term loan SOFR + 2.50 % 4/23/2031 $ 6,930 $ 6,964 $ 6,900 1.06 %"
+    }
+   ]
+  },
+  {
+   "what": "Independent review of ovyd: the money-market fund's issuer name held the 'Cash Equivalents' section heading and dropped '- Institutional' (2024-06-30 to 2025-03-31), and read 'Black Rock Liquidity Fed Fund Institutional' from 2025-06-30, so its chain split. 19 row corrections set the printed name 'BlackRock Liquidity FedFund - Institutional' in all nine quarters (instrument blank) and withdraw coupon_type 'Fixed' at 2025-03-31.",
+   "kind": "row_correction",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-097213",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - - - - $ 11,226 $ 11,226 5.80 %"
+    },
+    {
+     "accession": "0000950170-25-071771",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.23 % - 33,436 $ 33,436 $ 33,436 7.02 %"
+    },
+    {
+     "accession": "0000950170-25-109383",
+     "text": "Cash Equivalents BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %"
+    }
+   ]
+  }
+ ],
+ "fixes": [
+  {
+   "what": "Triwest delayed-draw 2024-09-30: cost fact tagged unsigned (608000) where the page prints ( 608 ); fair value and percent on the same row carry sign='-'. Wrapper source_encodings.bracketed_unsigned_values ['0000950170-24-127235'] (pipeline/printed_sign.py) publishes the printed sign; cost -608,000. No other fact in that filing changed (holdings_field_diff rfovb rfova: cost 9 rows = this row + 8 money-fund rows). Published cost now ties the printed Total Investments cost in 2024-09-30 (was +1,216 thousand).",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-127235",
+     "text": "Triwest Healthcare Alliance Corp(6)(11)(12) First lien senior secured delayed draw term loan SOFR + 5.50 % 12/27/2027 - ( 608 ) ( 656 ) ( 0.23 )%"
+    }
+   ]
+  },
+  {
+   "what": "Money-market fund cost printed and not published (8 CASH rows, 2025-06-30 to 2026-06-30): the cost column is tagged us-gaap:CashEquivalentsAtCarryingValue, not InvestmentOwnedAtCost. Declared from the page with source_encodings.untagged_values (context-keyed, cost only, filled only where no cost fact exists).",
+   "kind": "untagged_value",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %"
+    },
+    {
+     "accession": "0001193125-25-272318",
+     "text": "BlackRock Liquidity FedFund - Institutional - 4.02 % - 29,677 $ 29,677 $ 29,677 4.55 %"
+    },
+    {
+     "accession": "0001193125-26-117368",
+     "text": "Goldman Sachs Financial Square Government Fund Institutional Shares 3.69 % - 124 124 124 0.02 %"
+    },
+    {
+     "accession": "0001193125-26-221960",
+     "text": "Goldman Sachs Financial Square Government Fund Institutional Shares 3.55 % - 7,644 7,644 7,644 1.04 %"
+    },
+    {
+     "accession": "0001193125-26-346556",
+     "text": "BlackRock Liquidity FedFund - Institutional - 3.54 % - 14,002 $ 14,002 $ 14,002 1.79 %"
+    }
+   ]
+  },
+  {
+   "what": "Money-market fund yield printed and not published (8 CASH rows, 2025-06-30 to 2026-06-30; tagged ck0001965934:InvestmentYieldPercentage, not read). 8 context-keyed row corrections set interest_rate to the printed yield, as the build already does for 2024-09-30 to 2025-03-31 (4.84, 4.36, 4.23). Written with correction_csv.append_record by scratch/fund_runs/0001965934/r2/add_corrections.py (src_context_id set; no 'matches 2 rows' and no unmatched line for this fund in rfovb rebuild.log). coupon_type left blank, as in the earlier quarters.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-109383",
+     "text": "BlackRock Liquidity FedFund - Institutional - 4.18 % - 22,895 $ 22,895 $ 22,895 3.53 %"
+    },
+    {
+     "accession": "0001193125-26-117368",
+     "text": "BlackRock Liquidity FedFund - Institutional - 3.64 % - 9,670 $ 9,670 $ 9,670 1.32 %"
+    },
+    {
+     "accession": "0001193125-26-221960",
+     "text": "BlackRock Liquidity FedFund - Institutional - 3.54 % - 49,105 $ 49,105 $ 49,105 6.67 %"
+    },
+    {
+     "accession": "0001193125-26-346556",
+     "text": "Goldman Sachs Financial Square Government Fund Institutional Shares 3.52 % - 4,709 4,709 4,709 0.60 %"
+    }
+   ]
+  }
+ ],
+ "checks_this_round": {
+  "row_by_row": "scratch/fund_runs/0001965934/r2/cmp_rows.py on rfovb: 521 published rows, every row in all 9 quarters compared with its printed <tr> on reference code, spread, maturity, par, cost, fair value, percent; no PIK, non-USD or non-SOFR line printed. Differences left: money-fund percent on 6 rows (parked). Output cmp_rfovb.txt.",
+  "reverse": "Every current-period fair-value-tagged printed row not published is a total, subtotal, industry subtotal, balance-sheet or notes row (cmp_rfovb.txt UNPUBLISHED lines); page_untagged_rows.py finds no untagged schedule line (untagged.txt); no dash-only position lines.",
+  "totals": "costtie.sql: published FV and cost (non-cash plus the Treasury bill) equal printed Total Investments FV and cost in all 9 quarters on rfovb."
+ }
 }

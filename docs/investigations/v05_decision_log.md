@@ -5557,3 +5557,14 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Reviews: rfcrf (1 finding + 4 observations rejected: claimed fixes the data did not show), r2 (the "not located" label wrong: 6 of 7 found), r3 (IVC common 2023-06-30 printed), r4 (+66k residual from a mis-keyed staged sign fix), r5 COMPLETE: 60/60 findings, 17/17 observations, 1/1 history; digest 09994c51...
 - Page sample rfcrf: 0/20 published errors (C002 Eagle D-232 convention). Twenty cards can miss a problem on under about 15 pct of rows.
 - Gate rfcrf (snapshot at c02b944): INCOMPLETE, investigation COMPLETE. Not "data correct": the parked errors above are known and published. Crescent goes to the follow-up fix pass with AB (D-237) and GS PMMC II (D-245).
+
+### D-247 Overland Advantage: cleared with fixes (sandbox `rfovb`), gate PASS (2026-10-26)
+
+- Before rgA6 (2026-06-30 added). Two builds (rfova, rfovb). 37 findings, 25 outstanding, all proposed: 19 carried over from D-203 (A07 x5, concentration x5, C202 x4, fmt_issuer_name x4, PCT01) on unchanged rows, and 6 new issuer_name_printed on the Treasury bill row (the page prints the heading "U.S. Treasury Bill" and the holding of the same name; reason key issuer-name-printed-equal-to-its-own-section-heading). One new C107 2024-09-30 cleared by an accepted reason through make_batch_dispositions.py. FV and COST tie to printed Total Investments to the thousand in 9/9 quarters.
+- Fixed: wrapper bracketed_unsigned_values for 0000950170-24-127235 (Triwest delayed-draw cost printed "( 608 )", tagged unsigned; only that value flips; 2024-09-30 cost tie +1,216k -> 0); untagged_values cost for 8 money-market rows (tagged only as CashEquivalentsAtCarryingValue); 8 context-keyed row corrections for the printed money-fund yield.
+- Row-by-row check on all 521 rows; reverse check finds no unpublished printed position (reviewer confirmed, 15/15 spot rows).
+- Requests (D-247): REQ-rfov-1 (page reader: em-dash cell read as the issuer) and REQ-rfov-2 (no printed row for context_identifiers-named rows), deferred to the shared batch; REQ-rfov-3 implemented: 6 inert pct_of_net_assets lines (uncorrectable field, skipped by the build) removed by the fund agent, none in HEAD.
+- Owner items: money-fund percent of net assets unpublished on 6 rows (field not correctable); bdc_fund_income.csv keeps the 2024 10-K year/4 figures that fund_financials.csv corrects; BlackRock money fund chain split at 2026-03-31.
+- Page sample rfovb: 0/20 published errors. Twenty cards can miss a problem on under about 15 pct of rows.
+- Independent review reviews/0001965934_rfovb.json: 25/25 findings, 16/16 observations, 5/5 history; investigation COMPLETE; digest 3c3b7f49...
+- Gate rfovb (snapshot at 9846b3d): PASS. A zero is not "data correct".

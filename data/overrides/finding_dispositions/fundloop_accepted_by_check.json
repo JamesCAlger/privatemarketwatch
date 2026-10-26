@@ -969,17 +969,18 @@
     "0001965934"
    ],
    "quarters": [
+    "2024-09-30",
     "2026-06-30"
    ],
    "statement": "Negative cost on undrawn revolvers and delayed draws, filed net of fees.",
    "evidence": [
     {
      "source": "query",
-     "quote": "Check values_as_filed passed on sandbox ovya for each quarter listed: 7 flagged rows tested, none failing."
+     "quote": "Check values_as_filed passed on sandbox rfovb for each quarter listed: 1 flagged rows tested, none failing."
     }
    ],
-   "rerun": "python scripts/v05_evidence/issue_shape.py ovya C107 3",
-   "decided_by": "check passed on sandbox ovya; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "rerun": "python scripts/v05_evidence/issue_shape.py rfovb C107 3",
+   "decided_by": "check passed on sandbox rfovb; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {

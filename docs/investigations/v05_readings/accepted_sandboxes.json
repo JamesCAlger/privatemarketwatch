@@ -245,9 +245,9 @@
   "basis": "D-246, gate INCOMPLETE with investigation COMPLETE (independent review rfcrf_r5, 60/60 findings, 17/17 observations, 1/1 history): 119 findings, 60 outstanding, 55 proposed, 5 without; 14/14 FV quarters tie, cost short (unpublished printed lines); page sample 0/20; six builds. Known parked published errors with staged fixes (D-246). Replaces ccza (D-200)"
  },
  "0001965934": {
-  "label": "ovye",
-  "accepted_on": "2026-10-17",
-  "basis": "D-203, gate PASS after owner rulings D-202 (T-bill counted in the investments total; F27 over non-cash rows): 19 outstanding, all proposed; 9/9 quarters tie ex-cash; investigation COMPLETE (third independent review, 19/19 findings, 13/13 observations); sample 2/20 errors on ovyc, both fixed; five builds"
+  "label": "rfovb",
+  "accepted_on": "2026-10-26",
+  "basis": "D-247, gate PASS with investigation COMPLETE (independent review rfovb, 25/25 findings, 16/16 observations, 5/5 history): 37 findings, 25 outstanding, all proposed; 9/9 quarters tie on FV and cost; page sample 0/20; two builds. Replaces ovye (D-203)"
  },
  "0001766037": {
   "label": "nmyd",
