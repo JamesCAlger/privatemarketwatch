@@ -7,14 +7,14 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 
 | Field | n | Published wrong | of which tag | of which pipeline | Tag wrong (any) | wrong label | wrong value | wrong row | untagged |
 |---|---|---|---|---|---|---|---|---|---|
-| row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 10.0% (2.8-30.1) | 2 | 0 | 0 | 0 |
+| row_identity | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 1 | 0 | 0 | 0 |
 | issuer_name | 20 | 0.0% (0.0-16.1) | 0 | 0 | 5.0% (0.9-23.6) | 1 | 0 | 0 | 0 |
 | instrument_and_class | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | fair_value | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | cost | 19 | 0.0% (0.0-16.8) | 0 | 0 | 0.0% (0.0-16.8) | 0 | 0 | 0 | 0 |
 | principal_amount | 16 | 0.0% (0.0-19.4) | 0 | 0 | 50.0% (28.0-72.0) | 0 | 8 | 0 | 0 |
 | shares_held | 0 | - | 0 | 0 | - | 0 | 0 | 0 | 0 |
-| pct_of_net_assets | 16 | 6.2% (1.1-28.3) | 0 | 0 | 6.2% (1.1-28.3) | 0 | 1 | 0 | 0 |
+| pct_of_net_assets | 16 | 0.0% (0.0-19.4) | 0 | 0 | 0.0% (0.0-19.4) | 0 | 0 | 0 | 0 |
 | interest_rate | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | basis_spread | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
 | reference_rate_type | 20 | 0.0% (0.0-16.1) | 0 | 0 | 0.0% (0.0-16.1) | 0 | 0 | 0 | 0 |
@@ -23,15 +23,14 @@ Rates are over cards where the page prints the field or we publish it (blank on 
 
 | Fund | cards | cards with any published error | with any tag error |
 |---|---|---|---|
-| 0002012139 | 20 | 5.0% (0.9-23.6) | 45.0% (25.8-65.8) |
+| 0002012139 | 20 | 0.0% (0.0-16.1) | 40.0% (21.9-61.3) |
 
 | Era | cards | with any published error | with any tag error |
 |---|---|---|---|
 | to 2023-12-31 | 0 | - | - |
-| 2024 on | 20 | 5.0% (0.9-23.6) | 45.0% (25.8-65.8) |
+| 2024 on | 20 | 0.0% (0.0-16.1) | 40.0% (21.9-61.3) |
 
-Published errors: 1
+Published errors: 0
 
 | Card | Quarter | Field | Published | Cause | Note |
 |---|---|---|---|---|---|
-| C005 | 2025-06-30 | pct_of_net_assets | wrong | page | page prints '66' for a $661k position (term loan $10,591k prints '1,054'): % column lost its decimal, true value ~0.066%; tag 0.66 and published 66.0 (%) follow the broken print |

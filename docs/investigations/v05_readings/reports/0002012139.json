@@ -1,90 +1,370 @@
 {
  "cik": "0002012139",
- "label": "foxd",
- "before": "spoff3",
- "shared_code": true,
+ "investigator_id": "claude-fund-agent-fortress-rffp",
+ "label": "rffpe",
+ "before": "rgA5",
+ "shared_code": false,
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 14,
-   "why": "hierarchy prefixes the issuer regex did not cut (Identifier [Axis], industry words not in the label list, 'Investment' after the industry, no 'Investment' word before 'First Lien') plus Sweet Oak row correction 2026-03-31"
+   "rows": 3,
+   "why": "Ducky's Holdco, LLC on the Class A units 2026-03-31 and 2026-06-30 (member names Ducky's Opco); Trucordia Insurance Holdings, LLC 2026-06-30 as printed"
   },
   {
    "column": "instrument_description",
-   "rows": 7,
-   "why": "issuer text left in front of 'First Lien' removed (instrument_description_strip_re; Vibrant 2025-09-30, NADC 'Trusts (REITs) ...'); Sweet Oak correction"
-  },
-  {
-   "column": "cost",
-   "rows": 1,
-   "why": "North America Data Center 2025-12-31 cost 12,596 declared from the page (untagged_values; was a fair-value proxy 12,632)"
-  },
-  {
-   "column": "cost_reported",
-   "rows": 1,
-   "why": "same row as cost"
-  },
-  {
-   "column": "pct_of_net_assets",
-   "rows": 52,
-   "why": "2025-06-30 filing tags percent as a ratio (24.28 for printed 2,428): pct_tagged_as_ratio, x100"
-  },
-  {
-   "column": "pct_of_net_assets_calculated",
-   "rows": 54,
-   "why": "2025-06-30 net assets now 1,004,000 (was 1,004,000,000)"
+   "rows": 5,
+   "why": "replacement character from the member's en-dash entity removed on 5 rows (Jupiter Canada revolver 2026-03-31 and 2026-06-30, Superior revolver, Vomela term loan and revolver 2026-06-30)"
   },
   {
    "column": "shares_held",
-   "rows": 4,
-   "why": "warrant counts tagged as principal, 2025-06-30 and 2025-09-30, set from the page (row corrections)"
+   "rows": 2,
+   "why": "Ducky's Holdco Class A units 5,857 printed, tagged with the principal concept"
+  },
+  {
+   "column": "principal_amount_currency",
+   "rows": 1,
+   "why": "Albion 2025-09-30 par printed 'EUR 23,592,695', tagged unit USD"
+  },
+  {
+   "column": "principal_amount_usd",
+   "rows": 1,
+   "why": "Albion 2025-09-30 at the build's H.10 rate for 2025-09-30 (1.1735): 27,686,027.58"
+  },
+  {
+   "column": "principal_fx_rate_to_usd",
+   "rows": 1,
+   "why": "Albion 2025-09-30, 1.1735"
+  },
+  {
+   "column": "principal_fx_status",
+   "rows": 1,
+   "why": "Albion 2025-09-30, reference_fx"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 5,
+   "why": "2025-09-30 Jupiter Canada x3 CORRA (was SOFR, guessed) and Ruby x2 SONIA (was none), as printed"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 5,
+   "why": "same 5 rows, printed_schedule"
+  },
+  {
+   "column": "pik_rate",
+   "rows": 5,
+   "why": "EagleView term loan 1.00 in all five quarters: footnote (8) 'Interest rate includes 1 % of PIK'"
+  },
+  {
+   "column": "interest_rate_cash",
+   "rows": 5,
+   "why": "EagleView: cash leg derived as printed all-in rate less the 1.00 PIK (9.80, 9.48, 9.20, 9.20, 9.20)"
   },
   {
    "column": "corrected_fields",
-   "rows": 5,
-   "why": "row corrections on existing rows (4 warrants, Sweet Oak)"
+   "rows": 24,
+   "why": "row corrections of this run on 24 rows (5 reference, 1 FX, 3 names, 5 PIK, 5 instrument, 5 industry)"
   },
   {
-   "column": "asset_class",
-   "rows": 3,
-   "why": "North America Data Center first-lien loan REAL_ESTATE -> PRIVATE_CREDIT once the issuer name no longer carries 'REITs'"
+   "column": "extracted_industry",
+   "rows": 58,
+   "why": "round 2: NADC 2025-12-31 to 2026-06-30 Specialized REITs and Iris 2025-12-31 and 2026-03-31 Containers & Packaging, the same company's 2025-09-30 heading (row corrections); industry_from_identifier_re fills rows with no industry: 52 at 2025-06-30 (2 already had one), NADC x3 'Equity Real Estate Investment Trusts (REITs)', Olo revolver 2025-12-31, Iris 2026-03-31"
   },
   {
    "column": "gics_sub_industry",
-   "rows": 2,
-   "why": "NADC and EagleView label from the cleaned name"
+   "rows": 54,
+   "why": "follows extracted_industry through the build's existing label map (2025-06-30 rows; NADC Specialized REITs; Olo; Iris Metal, Glass & Plastic Containers)"
   },
   {
    "column": "gics_sector",
-   "rows": 2,
+   "rows": 50,
    "why": "with gics_sub_industry"
-  },
-  {
-   "column": "src_transforms",
-   "rows": 53,
-   "why": "pct_of_net_assets:rate_x100 on 2025-06-30 rows; NADC cost declared"
-  },
-  {
-   "column": "src_facts",
-   "rows": 1,
-   "why": "NADC 2025-12-31 declared cost"
-  },
-  {
-   "column": "position_key",
-   "rows": 21,
-   "why": "canonical_strip_re now removes the new hierarchy prefixes, so the key starts at the issuer"
-  },
-  {
-   "column": "position_id",
-   "rows": 99,
-   "why": "follows position_key and the new 2026-06-30 quarter"
   }
  ],
- "rows_added": 157,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
   {
-   "what": "2026-06-30 10-Q prints par in thousands and tags the printed figure at decimals 0: principal x1,000 on all 121 loan rows with a par (principal_amount_usd at the build's own H.10 rate for EUR/GBP/CAD)",
+   "what": "2025-06-30 10-Q: 44 of 54 rows had no industry although the member carries the printed heading ('... Debt investments Building Products A-AG US GSI Bidco, Inc. Investment ...'). New wrapper key dispatch.industry_from_identifier_re (an existing setting) with the fund's own industry label list, longest first; it fills only rows with no industry. 2025-06-30 sums by industry now equal the printed industry table within rounding (Software 47,036 vs 47,035; IT Services 34,374 vs 34,373; 14 of 14 headings). Also fills NADC (3 rows), Olo revolver 2025-12-31 and Iris 2026-03-31 with their printed headings, mapped as the build already maps those headings.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Debt investments Building Products A-AG US GSI Bidco, Inc. First Lien - Term Loan SOFR + 500 (9) 9.30 10/31/2031 $ 2,708,520 $ 2,658 $ 2,688 268"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Building Products $ 27,031 8.1 % Chemicals 7,131 2.1 Commercial Services & Supplies 14,051 4.2"
+    }
+   ]
+  },
+  {
+   "what": "2025-09-30 reference rates: the page reader left the reference blank on the Jupiter Canada and Ruby rows (status validation_needed), so the build guessed SOFR for 3 CORRA lines and published none for 2 SONIA lines; the filer tags CanadianOvernightRepoRateAverageMember and SterlingOvernightIndexAverageMember (fortress.com 2025-09-30 namespace). Set CORRA x3 and SONIA x2 from each line and the filing's own legend.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Jupiter Refuel Canada Buyer, Inc. (6) (16) First Lien - Term Loan CORRA + 525 (12) 7.70 6/30/2031 C$ 31,789,715 $ 23,002 $ 22,609 2.96"
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "(12) The interest rate on these loans is subject to 3 month CORRA, which as of September 30, 2025 was 2.45 %."
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Ruby Bidco Holdings Limited (6) (16) First Lien - Term Loan SONIA + 500 (14) 9.11 9/12/2032 GBP 16,203,704 $ 21,554 $ 21,466 2.81"
+    }
+   ]
+  },
+  {
+   "what": "Albion Fortress 2025-09-30: par printed in euros but tagged unit USD, so the build published USD 23,592,695. Currency EUR, USD par 27,686,027.58 at the build's FRED H.10 rate for 2025-09-30 (1.1735, DEXUSEU), status reference_fx (other quarters of the loan already EUR).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Albion Fortress Intermediate Holdings LLC (6) (16) First Lien - Term Loan EURIBOR + 575 (13) 7.78 7/31/2031 EUR 23,592,695 $ 26,248 $ 27,145 3.55"
+    }
+   ]
+  },
+  {
+   "what": "Ducky's Class A units 2026-03-31 and 2026-06-30: printed issuer 'Ducky's Holdco, LLC' (member names the borrower Ducky's Opco) and 5,857 units, tagged with the principal concept so no count was published (issuer_name_printed x2). Name and units set; the rows now resolve to their own Ducky's Holdco entity, the Opco term loan keeps its entity.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Ducky's Holdco, LLC (18) (19) Class A Units N/A N/A N/A 5,857 $ 5,932 $ 6,751 0.6"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Ducky's Holdco, LLC (19) (20) Class A Units N/A N/A N/A $ 5,857 $ 5,932 $ 6,688 0.7"
+    }
+   ]
+  },
+  {
+   "what": "Trucordia 2026-06-30: printed 'Trucordia Insurance Holdings, LLC', member keeps 'TRUCORDIA INS HLDGS LLC' (issuer_name_printed). CORRECTION (round 2, reviewer): the earlier claim that entity, canonical name and GICS were unchanged was wrong. GICS is unchanged (Property & Casualty Insurance), but the renamed row resolves to a new entity 5309e40a (canonical 'Trucordia Insurance Holdings, LLC') while 2025-09-30 to 2026-03-31 stay in 52f981be ('TRUCORDIA INS HLDGS LLC'): one company split across two entities. The earlier quarters print the abbreviation in their own filings, so renaming them would publish a name the page does not print. Not resolved here: see REQ-rffp-1.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Trucordia Insurance Holdings, LLC (10) First Lien - Term Loan SOFR + 325 7.0 6/17/2032 5,639 5,680 5,019 0.5"
+    }
+   ]
+  },
+  {
+   "what": "EagleView term loan, all five quarters: footnote (8) says the rate includes 1 % PIK; the build published pik_rate blank. The printed rate is benchmark + the printed 650 (2026-06-30: 3.73 + 6.50 = 10.23, printed 10.2), so the margin and rate are totals: spread 6.50 kept (D-031, cash + PIK), pik_rate 1.00, interest_rate_kind all_in, cash leg 9.2. Par grows about 121 thousand a quarter (48,270,187; 48,393,544; 48,514,528; 48,637 thousand) = 1 pct a year; the fund's PIK income 121 thousand in Q1 2026.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "(8) Investment earned part of investment income as paid-in-kind interest income. Interest rate includes 1.00 % of PIK."
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "EagleView Technology Corporation (7) (8) (10) First Lien - Term Loan SOFR + 650 10.2 8/14/2028 48,637 47,846 46,216 4.3"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "(10) The interest rate on these loans is subject to 3 month SOFR, which as of June 30, 2026 was 3.73 %"
+    }
+   ]
+  },
+  {
+   "what": "5 instrument descriptions published 'First Lien ? Revolving Credit Facility' / 'First Lien ? Term Loan' (member writes the dash as the entity &#x2013;; the build emits a replacement character). Set to the printed text.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Vomela Purchaser LLC and Vomela Canada Inc. (9) First Lien - Revolving Credit Facility SOFR + 550 9.2 12/31/2029 1,429 1,402 1,400 0.1"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Jupiter Refuel Canada Buyer, Inc. (6) (13) (18) First Lien - Revolving Credit Facility CORRA + 525 7.5 6/30/2031 767,868 519 522 0.1"
+    }
+   ]
+  },
+  {
+   "what": "Round 2: NADC 2025-12-31 to 2026-06-30 printed under 'Equity Real Estate Investment Trusts (REITs)' (mapped to Diversified REITs) and Iris 2025-12-31 and 2026-03-31 under 'Materials' (mapped to Diversified Metals & Mining): extracted_industry set to the same company's narrower 2025-09-30 heading ('Specialized REITs'; 'Containers & Packaging'), which lies inside the broad heading. 5 rows; gics_sector unchanged.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Specialized REITs North America Data Center Acquisition LLC First Lien - Term Loan SOFR + 500 (10) 8.98 5/8/2030 $ 12,681,250 $ 12,593 $ 12,666 1.66"
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Containers & Packaging Clydesdale Acquisition Holdings, Inc. First Lien - Term Loan SOFR + 318 (9) (7) 7.31 4/13/2029 $ 20,000,000 $ 20,045 $ 19,966 2.61 Iris Holding, Inc. First Lien - Term Loan SOFR"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Equity Real Estate Investment Trusts (REITs) North America Data Center Acquisition LLC (12) First Lien - Term Loan SOFR + 500 8.7 5/8/2030 $ 12,681 $ 12,605 $ 12,618 1.2"
+    }
+   ]
+  },
+  {
+   "what": "Earlier run (D-195, foxd), still applied in this build: 2025-06-30 10-Q: 44 of 54 rows had no industry although the member carries the printed heading ('... Debt investments Building Products A-AG US GSI Bidco, Inc. Investment ...'). New wrapper key dispatch.industry_from_identifier_re (an existing setting) with the fund's own industry label list, longest first; it fills only rows with no industry. 2025-06-30 sums by industry now equal the printed industry table within rounding (Software 47,036 vs 47,035; IT Services 34,374 vs 34,373; 14 of 14 headings). Also fills NADC (3 rows), Olo revolver 2025-12-31 and Iris 2026-03-31 with their printed headings, mapped as the build already maps those headings.",
+   "kind": "wrapper",
+   "quarters": [
+    "2025-06-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Debt investments Building Products A-AG US GSI Bidco, Inc. First Lien - Term Loan SOFR + 500 (9) 9.30 10/31/2031 $ 2,708,520 $ 2,658 $ 2,688 268"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Building Products $ 27,031 8.1 % Chemicals 7,131 2.1 Commercial Services & Supplies 14,051 4.2"
+    }
+   ]
+  },
+  {
+   "what": "Earlier run (D-195, foxd), still applied in this build: 2025-09-30 reference rates: the page reader left the reference blank on the Jupiter Canada and Ruby rows (status validation_needed), so the build guessed SOFR for 3 CORRA lines and published none for 2 SONIA lines; the filer tags CanadianOvernightRepoRateAverageMember and SterlingOvernightIndexAverageMember (fortress.com 2025-09-30 namespace). Set CORRA x3 and SONIA x2 from each line and the filing's own legend.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Jupiter Refuel Canada Buyer, Inc. (6) (16) First Lien - Term Loan CORRA + 525 (12) 7.70 6/30/2031 C$ 31,789,715 $ 23,002 $ 22,609 2.96"
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "(12) The interest rate on these loans is subject to 3 month CORRA, which as of September 30, 2025 was 2.45 %."
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Ruby Bidco Holdings Limited (6) (16) First Lien - Term Loan SONIA + 500 (14) 9.11 9/12/2032 GBP 16,203,704 $ 21,554 $ 21,466 2.81"
+    }
+   ]
+  },
+  {
+   "what": "Earlier run (D-195, foxd), still applied in this build: Albion Fortress 2025-09-30: par printed in euros but tagged unit USD, so the build published USD 23,592,695. Currency EUR, USD par 27,686,027.58 at the build's FRED H.10 rate for 2025-09-30 (1.1735, DEXUSEU), status reference_fx (other quarters of the loan already EUR).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Albion Fortress Intermediate Holdings LLC (6) (16) First Lien - Term Loan EURIBOR + 575 (13) 7.78 7/31/2031 EUR 23,592,695 $ 26,248 $ 27,145 3.55"
+    }
+   ]
+  },
+  {
+   "what": "Earlier run (D-195, foxd), still applied in this build: Ducky's Class A units 2026-03-31 and 2026-06-30: printed issuer 'Ducky's Holdco, LLC' (member names the borrower Ducky's Opco) and 5,857 units, tagged with the principal concept so no count was published (issuer_name_printed x2). Name and units set; the rows now resolve to their own Ducky's Holdco entity, the Opco term loan keeps its entity.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Ducky's Holdco, LLC (18) (19) Class A Units N/A N/A N/A 5,857 $ 5,932 $ 6,751 0.6"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Ducky's Holdco, LLC (19) (20) Class A Units N/A N/A N/A $ 5,857 $ 5,932 $ 6,688 0.7"
+    }
+   ]
+  },
+  {
+   "what": "Earlier run (D-195, foxd), still applied in this build: Trucordia 2026-06-30: printed 'Trucordia Insurance Holdings, LLC', member keeps 'TRUCORDIA INS HLDGS LLC' (issuer_name_printed). Earlier quarters print the abbreviation and are left as printed; entity, canonical name and GICS unchanged.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Trucordia Insurance Holdings, LLC (10) First Lien - Term Loan SOFR + 325 7.0 6/17/2032 5,639 5,680 5,019 0.5"
+    }
+   ]
+  },
+  {
+   "what": "Earlier run (D-195, foxd), still applied in this build: EagleView term loan, all five quarters: footnote (8) says the rate includes 1 % PIK; the build published pik_rate blank. The printed rate is benchmark + the printed 650 (2026-06-30: 3.73 + 6.50 = 10.23, printed 10.2), so the margin and rate are totals: spread 6.50 kept (D-031, cash + PIK), pik_rate 1.00, interest_rate_kind all_in, cash leg 9.2. Par grows about 121 thousand a quarter (48,270,187; 48,393,544; 48,514,528; 48,637 thousand) = 1 pct a year; the fund's PIK income 121 thousand in Q1 2026.",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "(8) Investment earned part of investment income as paid-in-kind interest income. Interest rate includes 1.00 % of PIK."
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "EagleView Technology Corporation (7) (8) (10) First Lien - Term Loan SOFR + 650 10.2 8/14/2028 48,637 47,846 46,216 4.3"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "(10) The interest rate on these loans is subject to 3 month SOFR, which as of June 30, 2026 was 3.73 %"
+    }
+   ]
+  },
+  {
+   "what": "Earlier run (D-195, foxd), still applied in this build: 5 instrument descriptions published 'First Lien ? Revolving Credit Facility' / 'First Lien ? Term Loan' (member writes the dash as the entity &#x2013;; the build emits a replacement character). Set to the printed text.",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Vomela Purchaser LLC and Vomela Canada Inc. (9) First Lien - Revolving Credit Facility SOFR + 550 9.2 12/31/2029 1,429 1,402 1,400 0.1"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Jupiter Refuel Canada Buyer, Inc. (6) (13) (18) First Lien - Revolving Credit Facility CORRA + 525 7.5 6/30/2031 767,868 519 522 0.1"
+    }
+   ]
+  },
+  {
+   "what": "Earlier run (D-195, foxd), still applied in this build: Earlier run (D-195, foxd), still applied in this build: 2026-06-30 10-Q prints par in thousands and tags the printed figure at decimals 0: principal x1,000 on all 121 loan rows with a par (principal_amount_usd at the build's own H.10 rate for EUR/GBP/CAD)",
    "kind": "row_correction",
    "quarters": [
     "2026-06-30"
@@ -101,7 +381,7 @@
    ]
   },
   {
-   "what": "2026-06-30 members naming another issuer: SonicWall US Holdings (3 rows under 'Olo Parent, Inc. Investment SOFR+500'), Superior Intermediate (4 rows under 'Vomela Purchaser LLC and Vibrant Canada'), Discovery Global (date where the industry belongs)",
+   "what": "Earlier run (D-195, foxd), still applied in this build: Earlier run (D-195, foxd), still applied in this build: 2026-06-30 members naming another issuer: SonicWall US Holdings (3 rows under 'Olo Parent, Inc. Investment SOFR+500'), Superior Intermediate (4 rows under 'Vomela Purchaser LLC and Vibrant Canada'), Discovery Global (date where the industry belongs)",
    "kind": "row_correction",
    "quarters": [
     "2026-06-30"
@@ -118,7 +398,7 @@
    ]
   },
   {
-   "what": "Sweet Oak Parent 2026-03-31: member names the industry and no issuer",
+   "what": "Earlier run (D-195, foxd), still applied in this build: Earlier run (D-195, foxd), still applied in this build: Sweet Oak Parent 2026-03-31: member names the industry and no issuer",
    "kind": "row_correction",
    "quarters": [
     "2026-03-31"
@@ -131,7 +411,7 @@
    ]
   },
   {
-   "what": "warrant unit counts tagged with the principal concept (C04 x2)",
+   "what": "Earlier run (D-195, foxd), still applied in this build: Earlier run (D-195, foxd), still applied in this build: warrant unit counts tagged with the principal concept (C04 x2)",
    "kind": "row_correction",
    "quarters": [
     "2025-06-30",
@@ -149,7 +429,7 @@
    ]
   },
   {
-   "what": "issuer/instrument split for the changed member prefixes (C201 x2, 2026-06-30 'NCNA Inv. Debt Inv.' and 'Non-controlled, Non-affiliated Debt Investments' forms, Telecommunication Services, Specialized REITs, Identifier [Axis]); canonical_strip_re aligned",
+   "what": "Earlier run (D-195, foxd), still applied in this build: Earlier run (D-195, foxd), still applied in this build: issuer/instrument split for the changed member prefixes (C201 x2, 2026-06-30 'NCNA Inv. Debt Inv.' and 'Non-controlled, Non-affiliated Debt Investments' forms, Telecommunication Services, Specialized REITs, Identifier [Axis]); canonical_strip_re aligned",
    "kind": "wrapper",
    "quarters": [
     "2025-06-30",
@@ -166,7 +446,7 @@
    ]
   },
   {
-   "what": "2025-06-30 percent of net assets tagged as a ratio (PCT identity, F23)",
+   "what": "Earlier run (D-195, foxd), still applied in this build: Earlier run (D-195, foxd), still applied in this build: 2025-06-30 percent of net assets tagged as a ratio (PCT identity, F23)",
    "kind": "wrapper",
    "quarters": [
     "2025-06-30"
@@ -179,7 +459,7 @@
    ]
   },
   {
-   "what": "dash-valued rows with a cost tag and no fair value published at 0 (Olo revolver 2025-12-31, Iris 2026-03-31); NADC 2025-12-31 cost on a second member declared (cost ties)",
+   "what": "Earlier run (D-195, foxd), still applied in this build: Earlier run (D-195, foxd), still applied in this build: dash-valued rows with a cost tag and no fair value published at 0 (Olo revolver 2025-12-31, Iris 2026-03-31); NADC 2025-12-31 cost on a second member declared (cost ties)",
    "kind": "untagged_value",
    "quarters": [
     "2025-12-31",
@@ -197,7 +477,7 @@
    ]
   },
   {
-   "what": "2025-06-30 net assets published 1,004,000,000 by a mislabelled scale override (pipeline/config.py, 'Owl Rock'); override removed, the seed balance sheet exempted from the TA/NA scale fix by a new highlights-wrapper key scale_fix_exempt_dates (opt-in, schema key, 3 tests). Net assets 1,004,000 and total assets 346,971,000 now as printed",
+   "what": "Earlier run (D-195, foxd), still applied in this build: Earlier run (D-195, foxd), still applied in this build: 2025-06-30 net assets published 1,004,000,000 by a mislabelled scale override (pipeline/config.py, 'Owl Rock'); override removed, the seed balance sheet exempted from the TA/NA scale fix by a new highlights-wrapper key scale_fix_exempt_dates (opt-in, schema key, 3 tests). Net assets 1,004,000 and total assets 346,971,000 now as printed",
    "kind": "shared_code",
    "quarters": [
     "2025-06-30"
@@ -213,10 +493,697 @@
  "total_exceptions": [],
  "parked": [],
  "orchestrator_requests": [],
+ "request_resolution_history": [
+  {
+   "request_id": "REQ-rffp-1",
+   "classification": "acceptance_change",
+   "resolution": "deferred",
+   "response": "Deferred; neither option taken in this run (orchestrator under D-207, recorded in D-241). Option A would knowingly publish an issuer name that differs from the 2026-06-30 page; option B edits the shared entity_overrides.json table, which also moves Antares (0001976336, accepted in D-240) and belongs with the end-of-run shared-code batch and regression. Decision for now: keep the printed name \"Trucordia Insurance Holdings, LLC\" at 2026-06-30 (published value matches the page); the within-fund entity split (5309e40a vs 52f981be; position chain and GICS unchanged) is a recorded residual, and the same company is already a separate entity across funds (Antares 46aa570f) in rgA5. Proposed shared fix for the owner: one merge in entity_overrides.json joining the abbreviated and full names, canonical \"Trucordia Insurance Holdings, LLC\", measured by the end-of-run regression.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-241; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rffp-1",
+    "classification": "acceptance_change",
+    "file": "data/overrides/row_corrections.csv (my uncommitted Trucordia line) or data/overrides/entity_overrides.json (shared)",
+    "what": "Trucordia entity split. Choose one: (A) withdraw my own uncommitted Trucordia issuer_name line (row_corrections.csv, 2026-06-30, value 'Trucordia Insurance Holdings, LLC') and its spec, so the 2026-06-30 row returns to 52f981be with the member's abbreviation; issuer_name_printed 2026-06-30 then reopens for that one row and I propose it. (B) keep the printed name and add one merge to the shared entity_overrides.json joining 'TRUCORDIA INS HLDGS LLC' and 'Trucordia Insurance Holdings, LLC' (source bdc), canonical 'Trucordia Insurance Holdings, LLC'; this also joins Antares's rows (46aa570f in rgA5) and is a shared-table change (D-211). Renaming the three earlier quarters is not an option: their own filings print the abbreviation.",
+    "why": "The hard rules require asking before I remove a line I appended, and forbid editing shared tables. Recommendation: B (printed name kept, one entity across quarters and funds); A if a shared merge is not wanted now.",
+    "quotes": [],
+    "next_action": "Orchestrator picks A or B. A: I remove my line and spec, rebuild (last build), propose the reopened issuer_name_printed row. B: orchestrator adds the merge (or authorises me), I rebuild and verify entity_id and canonical_name on all four quarters."
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Trucordia Insurance Holdings, LLC (10) First Lien - Term Loan SOFR + 325 7.0 6/17/2032 5,639 5,680 5,019 0.5"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "TRUCORDIA INS HLDGS LLC (9) First Lien - Term Loan SOFR + 325 6.9 6/17/2032 10,577,288 10,659 9,731 1.0"
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Trucordia INS HLDGS LLC First Lien - Term Loan SOFR + 325 (9) 7.38 6/17/2032 13,000,000 13,108 13,016 1.70"
+    }
+   ]
+  }
+ ],
+ "investigations": [
+  {
+   "finding_id": "RVQ_REV_095f4cab3de1",
+   "coverage": {
+    "affected_rows": [
+     "0002012139/2025-06-30/F21/holdings_fv_to_net_assets"
+    ],
+    "reviewed_rows": [
+     "0002012139/2025-06-30/F21/holdings_fv_to_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Net assets published at the wrong scale (the earlier 1,004,000,000 from a config override): rejected, fund_financials 2025-06-30 net_assets 1,004,000 equals the printed 'Total Net Assets 1,004' (thousands) and total assets 346,971,000 the printed total.",
+    "Percent of net assets mis-scaled (tagged as a ratio): rejected, pct_tagged_as_ratio is applied to this filing and the published percents equal the printed ones on all 32 rows above 100 (cov_rows.py, e.g. Steele 2,428).",
+    "Holdings over-included (subtotals or footnote local-currency rows published): rejected, 54 rows sum to 335,388 thousand against the printed total 335,387 and the industry table ties heading by heading."
+   ],
+   "next_action": "Proposal PD-SEED-F21-2012139 (reason seed-quarter-holdings-hundreds-of-times-net-assets): one owner ruling for the seed quarter, where net assets were 1,004 thousand before shares were issued; nothing to fix."
+  },
+  {
+   "finding_id": "RVQ_REV_c5e8b8af3b88",
+   "coverage": {
+    "affected_rows": [
+     "0002012139/2025-06-30/F22/sum_pct_of_net_assets"
+    ],
+    "reviewed_rows": [
+     "0002012139/2025-06-30/F22/sum_pct_of_net_assets"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Net assets published at the wrong scale (the earlier 1,004,000,000 from a config override): rejected, fund_financials 2025-06-30 net_assets 1,004,000 equals the printed 'Total Net Assets 1,004' (thousands) and total assets 346,971,000 the printed total.",
+    "Percent of net assets mis-scaled (tagged as a ratio): rejected, pct_tagged_as_ratio is applied to this filing and the published percents equal the printed ones on all 32 rows above 100 (cov_rows.py, e.g. Steele 2,428).",
+    "Holdings over-included (subtotals or footnote local-currency rows published): rejected, 54 rows sum to 335,388 thousand against the printed total 335,387 and the industry table ties heading by heading."
+   ],
+   "next_action": "Proposal PD-SEED-F22-2012139 (reason seed-quarter-holdings-hundreds-of-times-net-assets): one owner ruling for the seed quarter, where net assets were 1,004 thousand before shares were issued; nothing to fix."
+  },
+  {
+   "finding_id": "RVQ_REV_47f8b0773f9a",
+   "coverage": {
+    "affected_rows": [
+     "0002012139/2025-06-30/A07/oracle_metric_sum_pct"
+    ],
+    "reviewed_rows": [
+     "0002012139/2025-06-30/A07/oracle_metric_sum_pct"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Net assets published at the wrong scale (the earlier 1,004,000,000 from a config override): rejected, fund_financials 2025-06-30 net_assets 1,004,000 equals the printed 'Total Net Assets 1,004' (thousands) and total assets 346,971,000 the printed total.",
+    "Percent of net assets mis-scaled (tagged as a ratio): rejected, pct_tagged_as_ratio is applied to this filing and the published percents equal the printed ones on all 32 rows above 100 (cov_rows.py, e.g. Steele 2,428).",
+    "Holdings over-included (subtotals or footnote local-currency rows published): rejected, 54 rows sum to 335,388 thousand against the printed total 335,387 and the industry table ties heading by heading."
+   ],
+   "next_action": "Proposal PD-SEED-A07-2012139 (reason seed-quarter-holdings-hundreds-of-times-net-assets): one owner ruling for the seed quarter, where net assets were 1,004 thousand before shares were issued; nothing to fix."
+  },
+  {
+   "finding_id": "RVQ_REV_c95b402d4536",
+   "coverage": {
+    "affected_rows": [
+     "0002012139/2025-06-30/PCT01/pct_identity_issue_row"
+    ],
+    "reviewed_rows": [
+     "0002012139/2025-06-30/PCT01/pct_identity_issue_row"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Net assets published at the wrong scale (the earlier 1,004,000,000 from a config override): rejected, fund_financials 2025-06-30 net_assets 1,004,000 equals the printed 'Total Net Assets 1,004' (thousands) and total assets 346,971,000 the printed total.",
+    "Percent of net assets mis-scaled (tagged as a ratio): rejected, pct_tagged_as_ratio is applied to this filing and the published percents equal the printed ones on all 32 rows above 100 (cov_rows.py, e.g. Steele 2,428).",
+    "Holdings over-included (subtotals or footnote local-currency rows published): rejected, 54 rows sum to 335,388 thousand against the printed total 335,387 and the industry table ties heading by heading."
+   ],
+   "next_action": "Proposal PD-SEED-PCT01-2012139 (reason seed-quarter-holdings-hundreds-of-times-net-assets): one owner ruling for the seed quarter, where net assets were 1,004 thousand before shares were issued; nothing to fix."
+  },
+  {
+   "finding_id": "RVQ_REV_180b443d6bd6",
+   "coverage": {
+    "affected_rows": [
+     "0002012139/2025-06-30/fmt_pct_of_net_assets/weak_metric_60.38_of_53_rows"
+    ],
+    "reviewed_rows": [
+     "0002012139/2025-06-30/fmt_pct_of_net_assets/weak_metric_60.38_of_53_rows"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Net assets published at the wrong scale (the earlier 1,004,000,000 from a config override): rejected, fund_financials 2025-06-30 net_assets 1,004,000 equals the printed 'Total Net Assets 1,004' (thousands) and total assets 346,971,000 the printed total.",
+    "Percent of net assets mis-scaled (tagged as a ratio): rejected, pct_tagged_as_ratio is applied to this filing and the published percents equal the printed ones on all 32 rows above 100 (cov_rows.py, e.g. Steele 2,428).",
+    "Holdings over-included (subtotals or footnote local-currency rows published): rejected, 54 rows sum to 335,388 thousand against the printed total 335,387 and the industry table ties heading by heading."
+   ],
+   "next_action": "Proposal PD-SEED-FMTPCT-2012139 (reason seed-quarter-holdings-hundreds-of-times-net-assets): one owner ruling for the seed quarter, where net assets were 1,004 thousand before shares were issued; nothing to fix."
+  },
+  {
+   "finding_id": "RVQ_REV_b7f4233144bb",
+   "coverage": {
+    "affected_rows": [
+     "0002012139/2025-06-30/pct_position_concentration/weak_metric_94.87_of_39_units"
+    ],
+    "reviewed_rows": [
+     "0002012139/2025-06-30/pct_position_concentration/weak_metric_94.87_of_39_units"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Net assets published at the wrong scale (the earlier 1,004,000,000 from a config override): rejected, fund_financials 2025-06-30 net_assets 1,004,000 equals the printed 'Total Net Assets 1,004' (thousands) and total assets 346,971,000 the printed total.",
+    "Percent of net assets mis-scaled (tagged as a ratio): rejected, pct_tagged_as_ratio is applied to this filing and the published percents equal the printed ones on all 32 rows above 100 (cov_rows.py, e.g. Steele 2,428).",
+    "Holdings over-included (subtotals or footnote local-currency rows published): rejected, 54 rows sum to 335,388 thousand against the printed total 335,387 and the industry table ties heading by heading."
+   ],
+   "next_action": "Proposal PD-SEED-CONC-2012139 (reason seed-quarter-holdings-hundreds-of-times-net-assets): one owner ruling for the seed quarter, where net assets were 1,004 thousand before shares were issued; nothing to fix."
+  },
+  {
+   "finding_id": "RVQ_BLK_d32441cfe22d",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-203968/C_8876527c-5f90-4ce9-9f3d-4799008918aa/ROW-1e830f4baae8f20f",
+     "0001193125-25-203968/C_9d6dc2e8-cb41-424a-98f7-1f935acaadaf/ROW-328a3318c908dd56",
+     "0001193125-25-203968/C_e9f11b65-b99e-440b-ad6f-43709733bdcd/ROW-be7e2245754f04ed",
+     "0001193125-25-203968/C_86835d6c-cc34-4836-99e1-fbd31b0b3d66/ROW-14e7011c078ad862",
+     "0001193125-25-203968/C_69a5f6ff-ca2e-45d5-8ddc-b9fc18c9f400/ROW-cbb07dd5ae5fcafe",
+     "0001193125-25-203968/C_c155f3af-2712-41b1-9a10-d0f216bc810b/ROW-3ff8dd124aac4583",
+     "0001193125-25-203968/C_95a6eb52-e42b-47bc-a320-7ad2075f18dc/ROW-d5a0bfd69c6223ed",
+     "0001193125-25-203968/C_e6703fbf-c82d-4758-860e-29fba0512e05/ROW-a31b2a87f3f6736f",
+     "0001193125-25-203968/C_b4db0a49-97a7-4d39-ac19-6a95b5eff30b/ROW-2b760be4e026e442",
+     "0001193125-25-203968/C_43021056-35b4-46b4-99b1-ddc87944d53b/ROW-4ef60287da9e53b4",
+     "0001193125-25-203968/C_b70735e0-9e26-4478-ab00-4df5670e1c2c/ROW-d19ce987b75dd360",
+     "0001193125-25-203968/C_eb1499dc-931e-4bf1-a486-9d6069f0ae7e/ROW-109585aceda16aa8",
+     "0001193125-25-203968/C_8a794e9e-eba1-46e0-bec1-be7a9da50342/ROW-2eb716d21209b242",
+     "0001193125-25-203968/C_761faf2e-eb8e-4037-b169-6fc30f26158f/ROW-9b3ee5f5562b6286",
+     "0001193125-25-203968/C_d21fb41b-3955-4c0b-8898-681154bf1a06/ROW-0bee1055c6128de7",
+     "0001193125-25-203968/C_d7ed976f-8d99-4e21-973e-961d4b6309ea/ROW-d022ab84e36d621c",
+     "0001193125-25-203968/C_19e6dd7c-64d3-4cde-99ee-5b1248ea22d2/ROW-7f9208cea4cb17fe",
+     "0001193125-25-203968/C_18209ab5-a7cc-467e-a4fc-4e98eca1c72f/ROW-6fcf4a1fcaa654bc",
+     "0001193125-25-203968/C_ab1f559f-9823-4867-8dd7-07c7db6cd676/ROW-27c25734526efc69",
+     "0001193125-25-203968/C_325d3514-3acf-4d5e-9dd5-2b744b3459e0/ROW-01c3fbb66678617d",
+     "0001193125-25-203968/C_2fc2e4ad-6d34-46a7-b410-4e7ff82e1507/ROW-bea51922e1701592",
+     "0001193125-25-203968/C_05bcf7e7-30bd-4e0a-a785-354545d696f5/ROW-394bb1f1f964ec58",
+     "0001193125-25-203968/C_698b0eed-a09c-45b4-a9ba-3ee921374517/ROW-208d8b779a140bef",
+     "0001193125-25-203968/C_5f52044b-280f-45e9-a71c-4b99ef889350/ROW-1ee82c3e2e395b20",
+     "0001193125-25-203968/C_6529a518-00b0-481b-b1b4-fee326d7baee/ROW-5eaa3f211ed1dafa",
+     "0001193125-25-203968/C_cbd07962-3430-4400-826c-16986affc309/ROW-6ff56ff31604e9b4",
+     "0001193125-25-203968/C_3c92bddb-b097-4ffa-b509-c67c364331ff/ROW-14a52fd0c1ea0c81",
+     "0001193125-25-203968/C_4a76a3b5-4f6a-4c27-8a6f-c8f928b81c56/ROW-9ff6503f2a40e847",
+     "0001193125-25-203968/C_1c4f7700-f360-4172-a738-20bf1b580e2d/ROW-22773eb490197419",
+     "0001193125-25-203968/C_902fd10c-316b-4801-90ca-3b0e20acc187/ROW-100d1815aa90e10f",
+     "0001193125-25-203968/C_461dc823-97ce-42e5-a2b5-7ac84085dae7/ROW-bfaaf72b98acc726",
+     "0001193125-25-203968/C_61ab4c91-eaae-4aa3-920e-275d6b69f03c/ROW-b77369343823325d"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-203968/C_8876527c-5f90-4ce9-9f3d-4799008918aa/ROW-1e830f4baae8f20f",
+     "0001193125-25-203968/C_9d6dc2e8-cb41-424a-98f7-1f935acaadaf/ROW-328a3318c908dd56",
+     "0001193125-25-203968/C_e9f11b65-b99e-440b-ad6f-43709733bdcd/ROW-be7e2245754f04ed",
+     "0001193125-25-203968/C_86835d6c-cc34-4836-99e1-fbd31b0b3d66/ROW-14e7011c078ad862",
+     "0001193125-25-203968/C_69a5f6ff-ca2e-45d5-8ddc-b9fc18c9f400/ROW-cbb07dd5ae5fcafe",
+     "0001193125-25-203968/C_c155f3af-2712-41b1-9a10-d0f216bc810b/ROW-3ff8dd124aac4583",
+     "0001193125-25-203968/C_95a6eb52-e42b-47bc-a320-7ad2075f18dc/ROW-d5a0bfd69c6223ed",
+     "0001193125-25-203968/C_e6703fbf-c82d-4758-860e-29fba0512e05/ROW-a31b2a87f3f6736f",
+     "0001193125-25-203968/C_b4db0a49-97a7-4d39-ac19-6a95b5eff30b/ROW-2b760be4e026e442",
+     "0001193125-25-203968/C_43021056-35b4-46b4-99b1-ddc87944d53b/ROW-4ef60287da9e53b4",
+     "0001193125-25-203968/C_b70735e0-9e26-4478-ab00-4df5670e1c2c/ROW-d19ce987b75dd360",
+     "0001193125-25-203968/C_eb1499dc-931e-4bf1-a486-9d6069f0ae7e/ROW-109585aceda16aa8",
+     "0001193125-25-203968/C_8a794e9e-eba1-46e0-bec1-be7a9da50342/ROW-2eb716d21209b242",
+     "0001193125-25-203968/C_761faf2e-eb8e-4037-b169-6fc30f26158f/ROW-9b3ee5f5562b6286",
+     "0001193125-25-203968/C_d21fb41b-3955-4c0b-8898-681154bf1a06/ROW-0bee1055c6128de7",
+     "0001193125-25-203968/C_d7ed976f-8d99-4e21-973e-961d4b6309ea/ROW-d022ab84e36d621c",
+     "0001193125-25-203968/C_19e6dd7c-64d3-4cde-99ee-5b1248ea22d2/ROW-7f9208cea4cb17fe",
+     "0001193125-25-203968/C_18209ab5-a7cc-467e-a4fc-4e98eca1c72f/ROW-6fcf4a1fcaa654bc",
+     "0001193125-25-203968/C_ab1f559f-9823-4867-8dd7-07c7db6cd676/ROW-27c25734526efc69",
+     "0001193125-25-203968/C_325d3514-3acf-4d5e-9dd5-2b744b3459e0/ROW-01c3fbb66678617d",
+     "0001193125-25-203968/C_2fc2e4ad-6d34-46a7-b410-4e7ff82e1507/ROW-bea51922e1701592",
+     "0001193125-25-203968/C_05bcf7e7-30bd-4e0a-a785-354545d696f5/ROW-394bb1f1f964ec58",
+     "0001193125-25-203968/C_698b0eed-a09c-45b4-a9ba-3ee921374517/ROW-208d8b779a140bef",
+     "0001193125-25-203968/C_5f52044b-280f-45e9-a71c-4b99ef889350/ROW-1ee82c3e2e395b20",
+     "0001193125-25-203968/C_6529a518-00b0-481b-b1b4-fee326d7baee/ROW-5eaa3f211ed1dafa",
+     "0001193125-25-203968/C_cbd07962-3430-4400-826c-16986affc309/ROW-6ff56ff31604e9b4",
+     "0001193125-25-203968/C_3c92bddb-b097-4ffa-b509-c67c364331ff/ROW-14a52fd0c1ea0c81",
+     "0001193125-25-203968/C_4a76a3b5-4f6a-4c27-8a6f-c8f928b81c56/ROW-9ff6503f2a40e847",
+     "0001193125-25-203968/C_1c4f7700-f360-4172-a738-20bf1b580e2d/ROW-22773eb490197419",
+     "0001193125-25-203968/C_902fd10c-316b-4801-90ca-3b0e20acc187/ROW-100d1815aa90e10f",
+     "0001193125-25-203968/C_461dc823-97ce-42e5-a2b5-7ac84085dae7/ROW-bfaaf72b98acc726",
+     "0001193125-25-203968/C_61ab4c91-eaae-4aa3-920e-275d6b69f03c/ROW-b77369343823325d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Steele Solutions, Inc. First Lien - Term Loan SOFR + 575 (10) 10.01 3/18/2030 24,675,382 24,435 24,384 2,428"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Net assets published at the wrong scale (the earlier 1,004,000,000 from a config override): rejected, fund_financials 2025-06-30 net_assets 1,004,000 equals the printed 'Total Net Assets 1,004' (thousands) and total assets 346,971,000 the printed total.",
+    "Percent of net assets mis-scaled (tagged as a ratio): rejected, pct_tagged_as_ratio is applied to this filing and the published percents equal the printed ones on all 32 rows above 100 (cov_rows.py, e.g. Steele 2,428).",
+    "Rows read: each of the 32 flagged rows' printed percent cell (field status, current period) is above 100 and within 0.6 of the published percent (cov_rows.py rffpd: 32 of 32)."
+   ],
+   "next_action": "Proposal PD-SEED-X09-2012139 (reason seed-quarter-holdings-hundreds-of-times-net-assets): one owner ruling for the seed quarter, where net assets were 1,004 thousand before shares were issued; nothing to fix."
+  },
+  {
+   "finding_id": "RVQ_REV_434715722a37",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-224353/C_2a87e0fa-6a1b-4659-82a0-7d924a244b66/ROW-cdbf52e8209c006c"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-224353/C_2a87e0fa-6a1b-4659-82a0-7d924a244b66/ROW-cdbf52e8209c006c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-224353",
+     "text": "PMI US BIDCO INC (10) (20) First Lien - Delayed Draw Term Loan SOFR + 325 6.9 3/16/2028 - - 2 -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Par tagged and dropped: rejected, the context carries rate, spread, maturity and fair value 2,000 only; no principal fact.",
+    "Par printed and not published: rejected, the page prints a dash for par and for cost (page_line.py read; the field-status cells show the dash as a replacement character, so cov_rows.py's automatic test did not pass it and the row was read on the page instead).",
+    "Value is another row's: rejected, the term loan above prints 4,310,345 / 4,289 / 4,324 and is published separately."
+   ],
+   "next_action": "Proposal PD-X11-2012139-1 (x11-undrawn-line-par-printed-as-dash): undrawn delayed-draw line, value 2 thousand with no par, as printed; check or owner to accept."
+  },
+  {
+   "finding_id": "RVQ_REV_ec356ff79bf6",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-344953/C_0e00b782-dcd4-4892-9478-601481081568/ROW-4e09b33f2fa282c8"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-344953/C_0e00b782-dcd4-4892-9478-601481081568/ROW-4e09b33f2fa282c8"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "PMI (US) Bidco, Inc. (10) (19) First Lien - Delayed Draw Term Loan SOFR+ 325 7.0 3/16/2033 - - 2 -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Par printed in thousands and corrected elsewhere: rejected, this line prints a dash for par and cost; no principal fact on the context.",
+    "Par printed and not published: rejected (page_line.py read of the line).",
+    "Fair value belongs to another row: rejected, the term loan prints 4,310 / 4,290 / 4,324 on its own line."
+   ],
+   "next_action": "Proposal PD-X11-2012139-1 (x11-undrawn-line-par-printed-as-dash); check or owner to accept."
+  },
+  {
+   "finding_id": "RVQ_REV_2534dbccec48",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-128496/C_5ae92a33-1a1a-41a7-be59-18d0f92e3621/ROW-75867625a7c41b59"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-128496/C_5ae92a33-1a1a-41a7-be59-18d0f92e3621/ROW-75867625a7c41b59"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-128496",
+     "text": "Daintree Bidco Pty Limited (6) (20) First Lien - Term Loan (16) 11/25/2032 9,000,000 8,865 8,933 1.0"
+    },
+    {
+     "accession": "0001193125-26-128496",
+     "text": "(16) As of December 31, 2025 , the deal was unsettled globally and as such no contract information was available."
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rate printed and not read: rejected, the line has no reference, margin or coupon cell (footnote 16 in their place).",
+    "Rate tagged and dropped: rejected, the context carries no rate, spread or rate-type fact.",
+    "Earlier verdict (real_error, genuine_value_defect): the blank is the filing's own (deal unsettled), nothing to publish; from 2026-06-30 the loan prints 'SOFR + 450 8.2' and the build publishes it."
+   ],
+   "next_action": "Proposal PD-X02-2012139-1 (x02-no-rate-printed-on-the-row) with addresses_verdict; check or owner to accept."
+  },
+  {
+   "finding_id": "RVQ_REV_c24c69247585",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-224353/C_b5a2d72f-fd16-4aed-ae3a-e89c3712c9a9/ROW-eb011a603cc624e9"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-224353/C_b5a2d72f-fd16-4aed-ae3a-e89c3712c9a9/ROW-eb011a603cc624e9"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Daintree Bidco Pty Limited (6) (7) (16) (20) First Lien - Term Loan 11/25/2032 9,000,000 8,865 8,827 0.9"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "(16) As of March 31, 2026 , the deal was unsettled globally and as such no contract information was available."
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Rate printed and not read: rejected (no rate cell on the line).",
+    "Earlier verdict cited the footnote (18) local-currency table rows: those are not published (exclusion rule for non-position rows) and their schedule lines carry rates (rate_cmp.py: every Albion, Jupiter, Ruby, Urban Gym schedule row agrees on code, spread and rate).",
+    "Rate on another context of the member: rejected, no rate fact on any context of this member in the filing."
+   ],
+   "next_action": "Proposal PD-X02-2012139-1 with addresses_verdict; check or owner to accept."
+  },
+  {
+   "finding_id": "RVQ_REV_b76443108720",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-26-224353/C_a140897c-9b9c-4def-9281-997a0e976a68/ROW-789a1fd7ee7dfe53",
+     "0001193125-26-224353/C_c991f9bb-eca1-41ce-a55f-ed7c42a782cc/ROW-e9ee9be903832360",
+     "0001193125-26-224353/C_7dd639b1-0717-4bd2-9ca6-33e75fb7012f/ROW-0a3fe5a6482a78b9",
+     "0001193125-26-224353/C_37d79c6a-1eb7-408d-b729-aac9592440dc/ROW-ad5f3d1b545ef091",
+     "0001193125-26-224353/C_3cf06d91-05b0-4bd1-a3a0-155cb9663979/ROW-4e397e3125271d2f",
+     "0001193125-26-224353/C_7a4e7293-ca06-4de9-ac14-e45b591cb621/ROW-ca09b2d394e254b7",
+     "0001193125-26-224353/C_7c299f30-971f-467b-988c-c2788cb957d6/ROW-2c805205b19a2ee2",
+     "0001193125-26-224353/C_bc6337ea-81e8-4112-9601-44f3f6dfab13/ROW-d4cb2510b51edf30",
+     "0001193125-26-224353/C_50c8922b-43ed-49ab-b3c0-4c8bfdb843cf/ROW-9c67a2a7be9e1779",
+     "0001193125-26-224353/C_4316c882-9f04-4000-83ec-98773e3cf927/ROW-d2279ad659f05b26",
+     "0001193125-26-224353/C_de0d609b-589e-43a1-904c-9502b842b03a/ROW-68ea6b9e5134f1e6",
+     "0001193125-26-224353/C_f5754860-8160-48e0-ae56-e056499c5e80/ROW-82382a0321c497e0",
+     "0001193125-26-224353/C_cdfc6577-5c2a-47d3-b7c8-e47010c4b144/ROW-25e829ad235196f9",
+     "0001193125-26-224353/C_27c11472-509a-413d-b156-5ab4a785e705/ROW-5ce4888071fdee6d",
+     "0001193125-26-224353/C_e81fc652-f9be-47d6-abfe-7dd16110fd3a/ROW-10a371e7a7ad1b6d",
+     "0001193125-26-224353/C_f30b9544-5bcb-4db1-82fe-268fce61b94f/ROW-6aa00ece44df5423",
+     "0001193125-26-224353/C_bfd2f1ee-3cc1-442c-9f77-6ed9df1d9677/ROW-0d5ef2d5423f0fbe",
+     "0001193125-26-224353/C_e1a62af2-8a21-422d-b230-d092089d8c1e/ROW-84102ad3dd9e297a"
+    ],
+    "reviewed_rows": [
+     "0001193125-26-224353/C_a140897c-9b9c-4def-9281-997a0e976a68/ROW-789a1fd7ee7dfe53",
+     "0001193125-26-224353/C_c991f9bb-eca1-41ce-a55f-ed7c42a782cc/ROW-e9ee9be903832360",
+     "0001193125-26-224353/C_7dd639b1-0717-4bd2-9ca6-33e75fb7012f/ROW-0a3fe5a6482a78b9",
+     "0001193125-26-224353/C_37d79c6a-1eb7-408d-b729-aac9592440dc/ROW-ad5f3d1b545ef091",
+     "0001193125-26-224353/C_3cf06d91-05b0-4bd1-a3a0-155cb9663979/ROW-4e397e3125271d2f",
+     "0001193125-26-224353/C_7a4e7293-ca06-4de9-ac14-e45b591cb621/ROW-ca09b2d394e254b7",
+     "0001193125-26-224353/C_7c299f30-971f-467b-988c-c2788cb957d6/ROW-2c805205b19a2ee2",
+     "0001193125-26-224353/C_bc6337ea-81e8-4112-9601-44f3f6dfab13/ROW-d4cb2510b51edf30",
+     "0001193125-26-224353/C_50c8922b-43ed-49ab-b3c0-4c8bfdb843cf/ROW-9c67a2a7be9e1779",
+     "0001193125-26-224353/C_4316c882-9f04-4000-83ec-98773e3cf927/ROW-d2279ad659f05b26",
+     "0001193125-26-224353/C_de0d609b-589e-43a1-904c-9502b842b03a/ROW-68ea6b9e5134f1e6",
+     "0001193125-26-224353/C_f5754860-8160-48e0-ae56-e056499c5e80/ROW-82382a0321c497e0",
+     "0001193125-26-224353/C_cdfc6577-5c2a-47d3-b7c8-e47010c4b144/ROW-25e829ad235196f9",
+     "0001193125-26-224353/C_27c11472-509a-413d-b156-5ab4a785e705/ROW-5ce4888071fdee6d",
+     "0001193125-26-224353/C_e81fc652-f9be-47d6-abfe-7dd16110fd3a/ROW-10a371e7a7ad1b6d",
+     "0001193125-26-224353/C_f30b9544-5bcb-4db1-82fe-268fce61b94f/ROW-6aa00ece44df5423",
+     "0001193125-26-224353/C_bfd2f1ee-3cc1-442c-9f77-6ed9df1d9677/ROW-0d5ef2d5423f0fbe",
+     "0001193125-26-224353/C_e1a62af2-8a21-422d-b230-d092089d8c1e/ROW-84102ad3dd9e297a"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Xponential Fitness LLC (6) (9) (20) First Lien - Revolving Credit Facility SOFR + 675 10.4 12/9/2030 - ( 29 ) ( 39 ) -"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Sign flipped by the build: rejected, all 18 printed rows show a bracketed cost and value with par a dash (cov_rows.py rffpd 18 of 18), published cost and value equal them (Xponential -29,000 / -39,000).",
+    "Earlier verdict (published cost -39,000 vs page -29,000): rejected, published cost is -29,000 and fair value -39,000.",
+    "Rows are subtotals: rejected, each is an undrawn delayed-draw or revolving line of a named issuer with its own maturity and margin."
+   ],
+   "next_action": "Proposal PD-C107-2012139-1 (c107-negative-cost-undrawn) with addresses_verdict; check or owner to accept."
+  },
+  {
+   "finding_id": "RVQ_REV_0533c4eb90e8",
+   "coverage": {
+    "affected_rows": [
+     "0002012139/2025-12-31/F16/distribution_rate_7.95_vs_income_yield_2.14"
+    ],
+    "reviewed_rows": [
+     "0002012139/2025-12-31/F16/distribution_rate_7.95_vs_income_yield_2.14"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-128496",
+     "text": "Ratios of net investment income (loss) to average net assets 8.5 Portfolio turnover rate 30.1 %"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Distribution rate mis-annualised (earlier verdict: 40.3 pct): rejected for this build, distribution_rate 7.95 (0.49 a share in the quarter on NAV 24.64).",
+    "Income yield wrong: income_yield_pct 2.14 is a quarter split of the year's printed 8.5, which is itself unannualised and covers five months; neither figure is an annual yield, so the comparison with an annualised distribution rate is on two bases.",
+    "On one basis the check passes: 4 x 2.14 x 1.5 = 12.8 > 7.95."
+   ],
+   "next_action": "Proposal PD-F16-2012139-1 (f16-income-ratio-printed-not-annualised, rule_problem) with addresses_verdict; the field's annualisation basis is a shared owner decision (observation income-ratio-unannualised-compared-with-annual)."
+  },
+  {
+   "finding_id": "RVQ_REV_533296b16cf0",
+   "coverage": {
+    "affected_rows": [
+     "0002012139/2026-06-30/F16/distribution_rate_8.77_vs_income_yield_2.30"
+    ],
+    "reviewed_rows": [
+     "0002012139/2026-06-30/F16/distribution_rate_8.77_vs_income_yield_2.30"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Ratios of net investment income (loss) to average net assets 2.3 643.6 4.6 1,208.9"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Income and expenses have not been annualized in calculating these ratios."
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "income_yield_pct misread: rejected, 2.30 equals the printed three-month ratio 2.3.",
+    "Distribution rate overstated: rejected, 8.77 annualises the quarter's distribution on NAV 24.18; the page does not print a rate.",
+    "Same basis comparison: 4 x 2.3 x 1.5 = 13.8 > 8.77, so the check fires only because the printed ratio is not annualised."
+   ],
+   "next_action": "Proposal PD-F16-2012139-1 (rule_problem); shared decision on the income ratio's basis."
+  }
+ ],
  "observations": [
   {
+   "observation_key": "reference-rate-guessed-on-unvalidated-printed-row",
+   "what": "2025-09-30: the page reader left the reference rate blank (validation_needed, maturity blank too) on the 3 Jupiter Canada and 2 Ruby rows; the build published SOFR (inferred_post_libor) on the CORRA lines and nothing on the SONIA lines. The filing tags the members in its own 2025-09-30 namespace. Fixed by 10 row-correction lines; the cause (reader) is shared.",
+   "field": "reference_rate_type",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 44.5,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Where the filer tags InvestmentVariableInterestRateTypeExtensibleEnumeration, flag a published reference rate whose code differs from the tagged member's local name (CanadianOvernightRepoRateAverage = CORRA, SterlingOvernightIndexAverage = SONIA) or is blank.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these 5 rows in the untouched build rffpa; printed_rates_check section 2 compares only rows the reader confirmed, and these were not confirmed. The tagged enumeration member is an independent source to compare against.",
+    "reference": "scratch/fund_runs/0002012139/rate_cmp.py (rate_cmp_rffpa.txt lists the 5 rows)"
+   },
+   "quote": {
+    "accession": "0001193125-25-276098",
+    "text": "Jupiter Refuel Canada Buyer, Inc. (6) (16) First Lien - Term Loan CORRA + 525 (12) 7.70 6/30/2031 C$ 31,789,715 $ 23,002 $ 22,609 2.96"
+   }
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "what": "Albion 2025-09-30: par tagged unit USD while printed 'EUR 23,592,695'; published USD par 23.59M instead of 27.69M. FX01 did not fire (the unit says USD). Fixed by row correction at the build's rate.",
+   "field": "principal_amount_currency",
+   "quarters": [
+    "2025-09-30"
+   ],
+   "fair_value_m": 27.1,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a loan whose printed par cell carries a currency marker (EUR, GBP, C$) or whose printed reference rate is EURIBOR/SONIA/CORRA while the published principal currency is USD.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "FX01 tests only units already foreign; a USD unit on a euro line passes every rule. The printed marker and the reference code are independent evidence, and in this fund they identify the one row without false positives (rate_cmp.py: 0 other rows).",
+    "reference": "scratch/fund_runs/0002012139/rate_cmp.py"
+   },
+   "quote": {
+    "accession": "0001193125-25-276098",
+    "text": "Albion Fortress Intermediate Holdings LLC (6) (16) First Lien - Term Loan EURIBOR + 575 (13) 7.78 7/31/2031 EUR 23,592,695 $ 26,248 $ 27,145 3.55"
+   }
+  },
+  {
+   "observation_key": "pik-term-printed-not-tagged",
+   "what": "EagleView term loan: footnote (8) 'Interest rate includes 1 % of PIK' in all five 10-Qs; no PIK tag, so pik_rate was blank on a 46-48M position. Fixed by row corrections (pik 1.00, all-in kind). The fund's other loans carry no PIK footnote.",
+   "field": "pik_rate",
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 46.2,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "Flag a loan row carrying a footnote marker whose legend text contains 'PIK' or 'paid-in-kind' while pik_rate is blank; corroborate with par growth between quarters with no draw.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired in rffpa; the PIK appears only in a footnote legend. The page reader already records the footnote markers per row, so the legend join is concrete and narrow.",
+    "reference": "scratch/fund_runs/0002012139/q_fn8.sql"
+   },
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "(8) Investment earned part of investment income as paid-in-kind interest income. Interest rate includes 1.00 % of PIK."
+   }
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "what": "2025-06-30: 44 of 54 rows (287.7M) had no industry; the page reader also gave every row of that filing the sector 'Building Products' (field status, not published). Fixed by the wrapper's industry_from_identifier_re; the 14 printed industry totals now tie.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 287.7,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "industry_coverage (fired in rffpa).",
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "industry_coverage raised RVQ_BLK_690909d7af68 on 2025-06-30 in the untouched build rffpa and cleared in rffpb.",
+    "reference": "industry_coverage, rffpa shadow/page_rule_findings.csv"
+   },
+   "quote": {
+    "accession": "0001193125-25-203968",
+    "text": "Debt investments Building Products A-AG US GSI Bidco, Inc. First Lien - Term Loan SOFR + 500 (9) 9.30 10/31/2031 $ 2,708,520 $ 2,658 $ 2,688 268"
+   }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "what": "Ducky's Class A units printed under 'Ducky's Holdco, LLC' (member: Ducky's Opco) and Trucordia 2026-06-30 printed in full. Fixed by row corrections. Ducky's units are now their own Holdco entity (intended). Trucordia: the corrected name moved the 2026-06-30 row to a new entity (5309e40a) while the three earlier quarters, printed with the abbreviation, stay in 52f981be; the company is split across two entities (the reviewer found it; my first report said otherwise). In the rgA5 cohort build Antares (0001976336) publishes the same company as 'Trucordia Insurance Holdings, LLC' in its own entity 46aa570f, so the abbreviation was already a separate entity across funds. The resulting entity split is recorded under corrected-issuer-name-splits-entity (REQ-rffp-1 deferred, D-241).",
+   "field": "issuer_name",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 18.5,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "issuer_name_printed (fired on all 3 rows in rffpa).",
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed raised RVQ_BLK_20524d67cfea and RVQ_BLK_29194502e26a on exactly these 3 rows in rffpa (kind not_the_printed_name).",
+    "reference": "issuer_name_printed (pipeline/candidate_rules.py); rffpa shadow/page_rule_findings.csv"
+   },
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "Ducky's Holdco, LLC (18) (19) Class A Units N/A N/A N/A 5,857 $ 5,932 $ 6,751 0.6"
+   }
+  },
+  {
+   "observation_key": "unit-count-tag-differs-from-printed-count",
+   "what": "Ducky's Holdco units 5,857 tagged with InvestmentOwnedBalancePrincipalAmount unit USD; the build dropped it as principal on an equity row and published no unit count (C04 did not fire). Fixed by row corrections. Same shape as the 2025 warrant rows fixed by the earlier run.",
+   "field": "shares_held",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 6.8,
+   "cause": "fund",
+   "action": "fixed",
+   "suggested_check": "On an equity row with no published unit count, take a principal-concept fact on the same context as the unit count when the printed units cell holds the same number.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "C04 did not flag these rows in rffpa; the principal fact on the equity context is a direct, low false-positive signal.",
+    "reference": "scratch/fund_runs/0002012139/q_eq.sql"
+   },
+   "quote": {
+    "accession": "0001193125-26-224353",
+    "text": "Ducky's Holdco, LLC (19) (20) Class A Units N/A N/A N/A $ 5,857 $ 5,932 $ 6,688 0.7"
+   }
+  },
+  {
+   "observation_key": "instrument-text-mojibake-from-en-dash-entity",
+   "what": "Members written with the en-dash entity publish a replacement character in the instrument (5 rows, 56.9M). Fixed per row by row correction this run; the decoding step is shared and will recur on new members.",
+   "field": "instrument_description",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 56.9,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Fail any published text field holding U+FFFD.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule tests published text for replacement characters; a character test has no false positives.",
+    "reference": "scratch/fund_runs/0002012139/q_fffd.sql"
+   },
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "Vomela Purchaser LLC and Vomela Canada Inc. (9) First Lien - Revolving Credit Facility SOFR + 550 9.2 12/31/2029 1,429 1,402 1,400 0.1"
+   }
+  },
+  {
+   "observation_key": "income-ratio-unannualised-compared-with-annual",
+   "what": "income_yield_pct holds the printed unannualised ratio (2.20, 2.30) or a quarter split of the year's unannualised 8.5 (2.14), while distribution_rate is annualised; F16 fires on the basis mismatch. Left (shared field basis); proposed under F16.",
+   "field": "income_yield_pct",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Store whether a printed ratio is annualised with the figure and compare on one basis.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "F16 fires but cannot tell a basis mismatch from a real excess; the filer's own note ('have not been annualized') is machine-readable.",
+    "reference": "PD-F16-2012139-1"
+   },
+   "quote": {
+    "accession": "0001193125-26-344953",
+    "text": "Income and expenses have not been annualized in calculating these ratios."
+   }
+  },
+  {
    "observation_key": "par-printed-in-thousands-tagged-unscaled",
-   "what": "From the 10-Q for 2026-06-30 the filer prints par in thousands and tags the printed figure at decimals 0; every loan's principal was 1,000 times small and no rule fired (FX01, X11 do not test par against value). Fixed by row corrections for this quarter; the next quarter will need the same unless a wrapper setting exists.",
+   "what": "Earlier run (D-195), still fixed in this build: Earlier run (D-195), still fixed in this build: From the 10-Q for 2026-06-30 the filer prints par in thousands and tags the printed figure at decimals 0; every loan's principal was 1,000 times small and no rule fired (FX01, X11 do not test par against value). Fixed by row corrections for this quarter; the next quarter will need the same unless a wrapper setting exists.",
    "field": "principal_amount",
    "quarters": [
     "2026-06-30"
@@ -228,11 +1195,16 @@
    "quote": {
     "accession": "0001193125-26-344953",
     "text": "(2) The total par amount is presented in thousands for debt investments"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on the 121 rows in foxa; a par-to-value ratio test per fund-quarter against the fund's other quarters is concrete and rarely wrong.",
+    "reference": "D-195"
    }
   },
   {
    "observation_key": "fund-scale-override-multiplies-a-correct-figure",
-   "what": "pipeline/config.py FUND_FINANCIALS_SCALE_OVERRIDES listed this CIK (commented 'Owl Rock Core Income Corp') with x1000; the companyfacts figures for 2025-06-30 were right, so net assets were published 1,000 times too large. Removed; the dict is now empty (the empty-CASE path is tested).",
+   "what": "Earlier run (D-195), still fixed in this build: Earlier run (D-195), still fixed in this build: pipeline/config.py FUND_FINANCIALS_SCALE_OVERRIDES listed this CIK (commented 'Owl Rock Core Income Corp') with x1000; the companyfacts figures for 2025-06-30 were right, so net assets were published 1,000 times too large. Removed; the dict is now empty (the empty-CASE path is tested).",
    "field": "net_assets",
    "quarters": [
     "2025-06-30"
@@ -244,11 +1216,16 @@
    "quote": {
     "accession": "0001193125-25-203968",
     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "The override was a hard-coded constant with no printed figure behind it; requiring each override to carry the printed value it reproduces makes it testable.",
+    "reference": "D-195"
    }
   },
   {
    "observation_key": "member-carries-another-rows-name",
-   "what": "2026-06-30 members name the wrong issuer for SonicWall (under Olo Parent) and Superior Intermediate (under Vomela/Vibrant); the values were the other issuer's. Fixed by row corrections.",
+   "what": "Earlier run (D-195), still fixed in this build: Earlier run (D-195), still fixed in this build: 2026-06-30 members name the wrong issuer for SonicWall (under Olo Parent) and Superior Intermediate (under Vomela/Vibrant); the values were the other issuer's. Fixed by row corrections.",
    "field": "issuer_name",
    "quarters": [
     "2026-06-30"
@@ -260,27 +1237,16 @@
    "quote": {
     "accession": "0001193125-26-344953",
     "text": "Superior Intermediate LLC (9) First Lien - Delayed Draw Term Loan SOFR + 550 9.2 12/18/2030 3,620 3,563 3,553"
-   }
-  },
-  {
-   "observation_key": "industry-heading-left-in-issuer-name",
-   "what": "The 2026-06-30 10-Q changes the member prefix ('Investments NCNA Inv. Debt Inv.', 'Non-controlled, Non-affiliated Debt Investments', 'Investments Non-controlled,Non-affiliated'); about 20 issuer names carried the hierarchy. The names gate counted 9 rows (1.6 pct) only through industry_in_name; the prefix form itself was not counted.",
-   "field": "issuer_name",
-   "quarters": [
-    "2026-06-30"
-   ],
-   "fair_value_m": 320.0,
-   "cause": "fund",
-   "action": "fixed",
-   "suggested_check": "Count issuer names that start with an affiliation word ('Investments', 'Non-controlled', 'NCNA') in the names gate.",
-   "quote": {
-    "accession": "0001193125-26-344953",
-    "text": "Blue Raven Solutions, LLC, Triman Industries, Inc. and Crestwood Technology Group, LLC (9) First Lien - Term Loan SOFR + 600 9.7 1/16/2032 $ 70,521 69,319 69,36"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compared member issuer against the printed line; issuer_name_printed now covers part of this, but a member naming another issuer whose terms match that issuer is a separate check.",
+    "reference": "D-195; issuer_name_printed"
    }
   },
   {
    "observation_key": "asset-class-from-industry-text-in-issuer-name",
-   "what": "North America Data Center's first-lien loan was classed REAL_ESTATE while its issuer name carried 'Specialized REITs' / 'Trusts (REITs)'; now PRIVATE_CREDIT. Its instrument still reads 'First Lien - Team Loan' (the member's typo; printed 'Term Loan'): left, cosmetic.",
+   "what": "Earlier run (D-195), still fixed in this build: Earlier run (D-195), still fixed in this build: North America Data Center's first-lien loan was classed REAL_ESTATE while its issuer name carried 'Specialized REITs' / 'Trusts (REITs)'; now PRIVATE_CREDIT. Its instrument still reads 'First Lien - Team Loan' (the member's typo; printed 'Term Loan'): left, cosmetic.",
    "field": "asset_class",
    "quarters": [
     "2025-09-30",
@@ -295,69 +1261,93 @@
    "quote": {
     "accession": "0001193125-26-344953",
     "text": "Equity Real Estate Investment Trusts (REITs) North America Data Center Acquisition LLC (12) First Lien - Term Loan SOFR + 500 8.7 5/8/2030 $ 12,681 $ 12,605 $ 12,618"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "Asset class must not follow industry words left in a name; with the industry now filled from the heading, NADC stays PRIVATE_CREDIT in rffpd (checked: no asset_class change).",
+    "reference": "D-195"
    }
   },
   {
-   "observation_key": "unit-count-printed-not-published",
-   "what": "Ducky's Class A units: printed 5,857 units at 2026-06-30 (issuer printed 'Ducky's Holdco, LLC', now under controlled affiliates); published issuer 'Ducky's Opco, LLC' and no unit count, every quarter. Left: no share tag found in the time available.",
-   "field": "shares_held",
+   "observation_key": "page-reader-sector-repeats-first-heading",
+   "what": "In the 2025-06-30 filing the page reader gives every row the sector 'Building Products' (sector_status value on 54 of 54 rows), the first heading of the schedule. It is not published here (gics came from the member text after this run's fix), but the field status is wrong for that filing.",
+   "field": "gics_sector",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "shared",
+   "action": "left",
+   "suggested_check": "Flag a filing where one printed sector covers more than 90 pct of rows while the members name several industries.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reads field-status sectors against member industries; the test is per filing and cheap.",
+    "reference": "scratch/fund_runs/0002012139/q_fs_sector.sql"
+   },
+   "quote": {
+    "accession": "0001193125-25-203968",
+    "text": "Building Products $ 27,031 8.1 % Chemicals 7,131 2.1 Commercial Services & Supplies 14,051 4.2"
+   }
+  },
+  {
+   "observation_key": "broad-printed-heading-mapped-to-one-sub-industry",
+   "what": "The shared heading map turns a broad printed heading into one specific sub-industry: 'Equity Real Estate Investment Trusts (REITs)' (an industry group) -> Diversified REITs for North America Data Center, a data-centre borrower printed under 'Specialized REITs' at 2025-09-30; 'Materials' (a sector) -> Diversified Metals & Mining for Iris Holding, printed under 'Containers & Packaging' at 2025-09-30. Fixed at fund level by 5 row corrections carrying the same company's narrower 2025-09-30 heading (NADC 2025-12-31, 2026-03-31, 2026-06-30; Iris 2025-12-31, 2026-03-31); the shared map is not edited. NADC 2025-06-30 keeps its own printed 'IT Services'. Residual: 'Specialized REITs' is still an industry, not the sub-industry (GICS Data Center REITs), which the page does not print. Same family as the D-236 owner item.",
+   "field": "gics_sub_industry",
+   "quarters": [
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 20.1,
+   "cause": "shared",
+   "action": "fixed",
+   "suggested_check": "Flag a fund-quarter row whose printed heading is a GICS sector or industry group (not an industry) while the same company prints a narrower heading in another quarter of the same fund.",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in rffpa or rffpd; the reviewer found them. The GICS hierarchy level of each printed heading is known from the reference table, so the check is concrete.",
+    "reference": "reviews/0002012139_rffpd.json reviewer_notes; scratch/fund_runs/0002012139/q_iris.sql"
+   },
+   "quote": {
+    "accession": "0001193125-25-276098",
+    "text": "Specialized REITs North America Data Center Acquisition LLC First Lien - Term Loan SOFR + 500 (10) 8.98 5/8/2030 $ 12,681,250 $ 12,593 $ 12,666 1.66"
+   }
+  },
+  {
+   "observation_key": "corrected-issuer-name-splits-entity",
+   "what": "Trucordia first-lien term loan, within this fund: the 2026-06-30 row carries the printed name 'Trucordia Insurance Holdings, LLC' (row correction) and resolves to entity 5309e40a-6895-552e-9672-2348017e739e (canonical the same name); the 2025-09-30, 2025-12-31 and 2026-03-31 rows, whose own filings print the abbreviation, stay in entity 52f981be-b56c-59ae-b029-400757b5080b (canonical 'TRUCORDIA INS HLDGS LLC'). In the untouched build rffpa all four quarters were in 52f981be. The position chain is unchanged: position_id 89dcc6ba-cb65-52bb-b939-7ccc2a401c34 and the same position_key on all four quarters in rffpa and rffpe; GICS Property & Casualty Insurance on all four. Cross-fund precedent: in the 7-fund build rgA5, Antares (0001976336) publishes the company as 'Trucordia Insurance Holdings, LLC' in its own entity 46aa570f-b622-54a8-bdfd-319fc71674bf, so the abbreviated name was already a separate entity from Antares before this run; in a combined build the 2026-06-30 row would likely join Antares's entity by name (not verified: single-fund sandbox). Left as is: the printed name is kept (orchestrator, D-241); a merge in the shared entity_overrides.json is in the end-of-run batch (REQ-rffp-1, deferred).",
+   "field": "entity_id",
    "quarters": [
     "2025-09-30",
     "2025-12-31",
     "2026-03-31",
     "2026-06-30"
    ],
-   "fair_value_m": 6.8,
-   "cause": "row",
-   "action": "left",
-   "suggested_check": "C04 should count an equity row whose printed units cell holds a number and whose published count is blank.",
-   "quote": {
-    "accession": "0001193125-26-344953",
-    "text": "Ducky's Holdco, LLC (18) (19) Class A Units N/A N/A N/A 5,857 $ 5,932 $ 6,751 0.6"
-   }
-  },
-  {
-   "observation_key": "instrument-text-mojibake-from-en-dash-entity",
-   "what": "Members written with '&#x2013;' (en dash) publish the instrument with a replacement character ('First Lien ? Revolving Credit Facility'): Jupiter Refuel Canada revolver, Vomela term loan and revolver, Superior revolver. Left: shared decoding step.",
-   "field": "instrument_description",
-   "quarters": [
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "fair_value_m": 56.0,
+   "fair_value_m": 5.0,
    "cause": "shared",
    "action": "left",
-   "suggested_check": "Fail any published text field holding U+FFFD.",
+   "suggested_check": "After the row corrections, flag a position_id whose rows resolve to more than one entity_id within a fund (here 89dcc6ba spans 52f981be and 5309e40a).",
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on this split in rffpe; the independent reviewer found it. A position chain that crosses entities is a direct, cheap test with few legitimate exceptions (a real change of borrower, which the page would show).",
+    "reference": "scratch/fund_runs/0002012139/q_truc.sql (rffpa and rffpe); reviews/0002012139_rffpd.json"
+   },
    "quote": {
     "accession": "0001193125-26-344953",
-    "text": "Jupiter Refuel Canada Buyer, Inc. (6) (13) (17) First Lien - Revolving Credit Facility CORRA + 525 7.5 6/30/2031 768 525 529 0.1"
-   }
-  },
-  {
-   "observation_key": "income-ratio-unannualised-compared-with-annual",
-   "what": "income_yield_pct 2025-12-31 is 2.14, a quarter split of the year's printed 8.5, which is itself unannualised and computed on five months of net assets. Left; proposed under F16.",
-   "field": "income_yield_pct",
-   "quarters": [
-    "2025-12-31"
-   ],
-   "fair_value_m": 0.0,
-   "cause": "shared",
-   "action": "left",
-   "suggested_check": "Store whether a printed ratio is annualised with the figure.",
-   "quote": {
-    "accession": "0001193125-26-128496",
-    "text": "Ratios of net investment income (loss) to average net assets 8.5 Portf"
+    "text": "Trucordia Insurance Holdings, LLC (10) First Lien - Term Loan SOFR + 325 7.0 6/17/2032 5,639 5,680 5,019 0.5"
    }
   }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
-  "tests/test_fund_financials.py + tests/test_fund_highlights_wrapper.py + tests/test_source_encodings.py + tests/test_bdc_xbrl_wrapper.py: 811 passed (final state, 3 new tests in test_fund_financials.py)"
+  "tests/test_bdc_xbrl_wrapper.py: 557 passed (after adding industry_from_identifier_re)"
  ],
+ "entity_note": "entity_id differs on 59 rows and canonical_name on 23 against rgA5; 56 / 20 of those already differ in the untouched build rffpa (single-fund sandbox against the 7-fund rgA5 build: entity ids and casing votes depend on build composition). The other 3 are Ducky x2 (intended Holdco entity) and Trucordia 2026-06-30 (the split in REQ-rffp-1).",
  "not_done": [
-  "Regression build of other funds for the shared change (config override removal affects only this CIK; scale_fix_exempt_dates is opt-in and set for this fund only)",
-  "Ducky's unit count and affiliation change not fixed",
-  "Neighbour sampling limited to about 30 rows (top 25 at 2026-06-30 and the rows of the findings)",
-  "Full pytest suite not run"
+  "Row-by-row comparison (rate_cmp.py) covers reference code, spread, rate, maturity, principal currency and par on every published row joined to its printed row (562 rows); it does not compare cost, fair value or percent row by row (totals tie 5 of 5 quarters, ex_cash).",
+  "No PIK line other than EagleView: no printed row contains 'PIK' and footnote (8) marks only EagleView; the fund-level PIK income (121-244 thousand a quarter) is consistent with 1 pct on EagleView alone, not proven exhaustive.",
+  "NADC 2025-12-31 to 2026-06-30 now map 'Equity Real Estate Investment Trusts (REITs)' to Diversified REITs (the build's existing map for that heading); a data-centre borrower would be Data Center REITs, which the page does not print.",
+  "Ducky's Holdco and Opco are separate entities now; no owner rule on parent/borrower grouping.",
+  "Full pytest suite and tests/test_unified_holdings.py not run (no shared code changed).",
+  "20-row random page sample and independent review: orchestrator's step."
  ]
 }

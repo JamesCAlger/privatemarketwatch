@@ -215,3 +215,4 @@ Manulife 0001988280.
 | 2026-10-25 | 0001899017 Bain Capital Private Credit | rfbne | PASS (investigation COMPLETE) | 80 findings,48 outstanding (54 before),48 proposed;13/13 tie;sample 0/20;FX principal 33 rows,D-031 75 rows,D-232 10 rows | D-238 |
 | 2026-10-25 | 0001959604 Jefferies Credit Partners BDC | rfjcd | PASS (investigation COMPLETE) | 20 findings,7 outstanding (13 before),7 proposed;11/11 tie;sample 0/20;issuer/instrument strips;KL Stockton D-232 | D-239 |
 | 2026-10-26 | 0001976336 Antares Private Credit Fund | rfape | PASS (investigation COMPLETE) | 40 findings,23 outstanding (27 before),23 proposed;7/7 tie exactly;sample 0/20;D-031 31 PIK rows,CORRA 21 rows,FV signs | D-240 |
+| 2026-10-26 | 0002012139 Fortress Private Lending Fund | rffpe | PASS (investigation COMPLETE) | 19 findings,14 outstanding (17 before),14 proposed;5/5 tie;sample 0/20;industry fill,CORRA/SONIA,Albion EUR,EagleView PIK | D-241 |

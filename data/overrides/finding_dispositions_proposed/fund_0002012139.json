@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "foxd",
+ "sandbox": "rffpe",
  "dispositions": [
   {
    "disposition_id": "PD-SEED-F21-2012139",
@@ -17,7 +17,7 @@
     {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Investments $ 334,683 $ 335,387 33,392", "quote": "'Total Investments $ 334,683 $ 335,387 33,392': fair value 335,387 thousand, printed as 33,392 pct of net assets."}
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -35,7 +35,7 @@
     {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Steele Solutions, Inc. First Lien - Term Loan SOFR + 575 (10) 10.01 3/18/2030 24,675,382 24,435 24,384 2,428", "quote": "'... 24,675,382 24,435 24,384 2,428': a single loan printed at 2,428 pct of net assets."}
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -52,7 +52,7 @@
     {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Investments $ 334,683 $ 335,387 33,392", "quote": "'Total Investments $ 334,683 $ 335,387 33,392': printed total percent 33,392."}
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -69,7 +69,7 @@
     {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Investments $ 334,683 $ 335,387 33,392", "quote": "'Total Investments $ 334,683 $ 335,387 33,392': printed total percent 33,392."}
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -86,7 +86,7 @@
     {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Steele Solutions, Inc. First Lien - Term Loan SOFR + 575 (10) 10.01 3/18/2030 24,675,382 24,435 24,384 2,428", "quote": "'... 24,435 24,384 2,428': one loan printed at 2,428 pct of net assets."}
    ],
    "rerun": "python scripts/v05_evidence/flagged.py <label> X09 0002012139 2025-06-30",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -103,7 +103,7 @@
     {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Steele Solutions, Inc. First Lien - Term Loan SOFR + 575 (10) 10.01 3/18/2030 24,675,382 24,435 24,384 2,428", "quote": "'... 24,384 2,428': printed percent 2,428."}
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -120,7 +120,7 @@
     {"source": "filing", "accession": "0001193125-25-203968", "verbatim": "Total Investments $ 334,683 $ 335,387 33,392", "quote": "'Total Investments $ 334,683 $ 335,387 33,392': investments 334 times net assets."}
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -144,7 +144,7 @@
     {"source": "filing", "accession": "0001193125-26-224353", "verbatim": "As of March 31, 2026 , the deal was unsettled globally and as such no contract info", "quote": "'As of March 31, 2026 , the deal was unsettled globally and as such no contract info': footnote 16."}
    ],
    "rerun": "python scripts/v05_evidence/flagged.py <label> X02 0002012139 2026-03-31",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -162,7 +162,7 @@
     {"source": "filing", "accession": "0001193125-26-344953", "verbatim": "PMI (US) Bidco, Inc. (10) (19) First Lien - Delayed Draw Term Loan SOFR+ 325 7.0 3/16/2033 - - 2 -", "quote": "'... 3/16/2033 - - 2 -': the same at 2026-06-30."}
    ],
    "rerun": "python scripts/v05_evidence/flagged.py <label> X11 0002012139 2026-06-30",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -182,7 +182,7 @@
     {"source": "filing", "accession": "0001193125-26-224353", "verbatim": "Xponential Fitness LLC (6) (9) (20) First Lien - Revolving Credit Facility SOFR + 675 10.4 12/9/2030 - ( 29 ) ( 39 ) -", "quote": "'... 12/9/2030 - ( 29 ) ( 39 ) -': cost (29), value (39), par a dash."}
    ],
    "rerun": "python scripts/v05_evidence/flagged.py <label> C107 0002012139 2026-03-31",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   },
   {
@@ -204,7 +204,7 @@
     {"source": "filing", "accession": "0001193125-26-128496", "verbatim": "Ratios of net investment income (loss) to average net assets 8.5 Portf", "quote": "'Ratios of net investment income (loss) to average net assets 8.5': 2025, from the August share issuance, not annualised."}
    ],
    "rerun": "python scripts/v05_evidence/fund_gate.py check --label <label> --cik 0002012139 --report docs/investigations/v05_readings/reports/0002012139.json",
-   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent 2026-10-16 (fund-clearing loop, sandbox foxd; re-read on the pages 2026-10-26 in sandboxes rffpd and rffpe, rf run); not accepted by the owner",
    "decided_on": "2026-10-16"
   }
  ]

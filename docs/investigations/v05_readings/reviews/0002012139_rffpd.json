@@ -1,0 +1,469 @@
+{
+ "reviewer_id": "claude-independent-reviewer-fortress-rffpd",
+ "report_digest": "67393612ec7bcb9812407a286f20727dd25c937e8c845371df2b7c8c8e54fdd9",
+ "finding_reviews": [
+  {
+   "finding_id": "RVQ_BLK_d32441cfe22d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Reconstructed: rffpd row_validation_issues X09 2025-06-30 = 32 row_ids, set-equal to affected_rows. The printed percent cells exceed 100 on the page (Steele 2,428 against net assets 1,004). Point (f). Seed quarter: the balance sheet prints net assets 1,004 thousand against total assets 346,971 thousand and investments of 335,387 thousand; rffpd publishes net assets 1,004,000 and 54 rows summing to 335,388 thousand, and the fourteen printed industry totals tie heading by heading. Holdings at about 334 times net assets are the filer's seed structure, not an extraction error; one owner ruling for the seed quarter is the right route.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Steele Solutions, Inc. First Lien - Term Loan SOFR + 575 (10) 10.01 3/18/2030 24,675,382 24,435 24,384 2,428"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0533c4eb90e8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (f). F16 2025-12-31 FAIL 4.74 = distribution_rate 7.95 - 1.5 x income_yield 2.14. The 10-K's printed ratio 8.5 is unannualised over five months; split into a quarter it is not an annual yield. The basis mismatch is the cause; rule_problem is the right class.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-128496",
+     "text": "Ratios of net investment income (loss) to average net assets 8.5 Portfolio turnover rate 30.1 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_095f4cab3de1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fund_financials F21 2025-06-30 FAIL 334.05 = 335,387 / 1,004. Point (f). Seed quarter: the balance sheet prints net assets 1,004 thousand against total assets 346,971 thousand and investments of 335,387 thousand; rffpd publishes net assets 1,004,000 and 54 rows summing to 335,388 thousand, and the fourteen printed industry totals tie heading by heading. Holdings at about 334 times net assets are the filer's seed structure, not an extraction error; one owner ruling for the seed quarter is the right route.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_180b443d6bd6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Weak fmt_pct_of_net_assets 2025-06-30 warn, metric 60.38 of 53 rows. Point (f). Seed quarter: the balance sheet prints net assets 1,004 thousand against total assets 346,971 thousand and investments of 335,387 thousand; rffpd publishes net assets 1,004,000 and 54 rows summing to 335,388 thousand, and the fourteen printed industry totals tie heading by heading. Holdings at about 334 times net assets are the filer's seed structure, not an extraction error; one owner ruling for the seed quarter is the right route.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2534dbccec48",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2025-12-31 = ROW-75867625a7c41b59 = affected row. Daintree prints no reference, margin or coupon, footnote (16) says the deal was unsettled; published rate blank is right. From 2026-06-30 it publishes SOFR + 4.50 / 8.2 as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-128496",
+     "text": "Daintree Bidco Pty Limited (6) (20) First Lien - Term Loan (16) 11/25/2032 9,000,000 8,865 8,933 1.0"
+    },
+    {
+     "accession": "0001193125-26-128496",
+     "text": "(16) As of December 31, 2025 , the deal was unsettled globally and as such no contract information was available."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_434715722a37",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2026-03-31 = ROW-cdbf52e8209c006c = affected row. The page prints dashes for par and cost and value 2 on PMI's undrawn delayed draw; nothing to publish for par.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224353",
+     "text": "PMI US BIDCO INC (10) (20) First Lien - Delayed Draw Term Loan SOFR + 325 6.9 3/16/2028 - - 2 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_47f8b0773f9a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "oracle A07 2025-06-30 fail: pct_sum 33,392, 37 outliers above 25 pct. Point (f). Seed quarter: the balance sheet prints net assets 1,004 thousand against total assets 346,971 thousand and investments of 335,387 thousand; rffpd publishes net assets 1,004,000 and 54 rows summing to 335,388 thousand, and the fourteen printed industry totals tie heading by heading. Holdings at about 334 times net assets are the filer's seed structure, not an extraction error; one owner ruling for the seed quarter is the right route.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_533296b16cf0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F16 2026-06-30 FAIL 5.32 = 8.77 - 1.5 x 2.30; 2.30 is the printed three-month ratio, which the filer says is not annualised.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Ratios of net investment income (loss) to average net assets 2.3 643.6 4.6 1,208.9"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Income and expenses have not been annualized in calculating these ratios."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b76443108720",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (f). C107 2026-03-31 = 18 row_ids, set-equal to affected_rows. Read on the page: Xponential '- ( 29 ) ( 39 )' published -29,000 / -39,000 (so the earlier real-error verdict, cost -39,000, does not stand), GS AcquisitionCo '- ( 13 ) ( 726 )', EXEMPLIS '- ( 195 ) ( 255 )', Superior '- ( 159 ) ( 313 )': undrawn lines with bracketed cost and value, published as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Xponential Fitness LLC (6) (9) (20) First Lien - Revolving Credit Facility SOFR + 675 10.4 12/9/2030 - ( 29 ) ( 39 ) -"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "GS AcquisitionCo, Inc. (10) (20) First Lien - Delayed Draw Term Loan SOFR + 525 8.9 5/25/2028 - ( 13 ) ( 726 ) ( 0.1 )"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "EXEMPLIS LLC (9) (20) First Lien - Revolving Credit Facility SOFR + 525 8.9 12/23/2030 - ( 195 ) ( 255 ) ( 0.0 )"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Superior Intermediate LLC (9) (20) First Lien - Delayed Draw Term Loan SOFR + 550 9.2 12/18/2030 - ( 159 ) ( 313 ) ( 0.0 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b7f4233144bb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Weak pct_position_concentration 2025-06-30 warn, 94.87 of 39 units. Point (f). Seed quarter: the balance sheet prints net assets 1,004 thousand against total assets 346,971 thousand and investments of 335,387 thousand; rffpd publishes net assets 1,004,000 and 54 rows summing to 335,388 thousand, and the fourteen printed industry totals tie heading by heading. Holdings at about 334 times net assets are the filer's seed structure, not an extraction error; one owner ruling for the seed quarter is the right route.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c24c69247585",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2026-03-31 = ROW-eb011a603cc624e9 = affected row; same unsettled-deal footnote.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Daintree Bidco Pty Limited (6) (7) (16) (20) First Lien - Term Loan 11/25/2032 9,000,000 8,865 8,827 0.9"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "(16) As of March 31, 2026 , the deal was unsettled globally and as such no contract information was available."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c5e8b8af3b88",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2025-06-30 FAIL 33,392 = the printed percent total ('33,392'). Point (f). Seed quarter: the balance sheet prints net assets 1,004 thousand against total assets 346,971 thousand and investments of 335,387 thousand; rffpd publishes net assets 1,004,000 and 54 rows summing to 335,388 thousand, and the fourteen printed industry totals tie heading by heading. Holdings at about 334 times net assets are the filer's seed structure, not an extraction error; one owner ruling for the seed quarter is the right route.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c95b402d4536",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT01 2025-06-30: one fund-quarter issue, value 33,392. Point (f). Seed quarter: the balance sheet prints net assets 1,004 thousand against total assets 346,971 thousand and investments of 335,387 thousand; rffpd publishes net assets 1,004,000 and 54 rows summing to 335,388 thousand, and the fourteen printed industry totals tie heading by heading. Holdings at about 334 times net assets are the filer's seed structure, not an extraction error; one owner ruling for the seed quarter is the right route.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Investments $ 334,683 $ 335,387 33,392"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ec356ff79bf6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X11 2026-06-30 = ROW-4e09b33f2fa282c8 = affected row; same undrawn line, dashes for par and cost.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "PMI (US) Bidco, Inc. (10) (19) First Lien - Delayed Draw Term Loan SOFR+ 325 7.0 3/16/2033 - - 2 -"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "reference-rate-guessed-on-unvalidated-printed-row",
+   "outcome": "supported",
+   "rationale": "Point (b). rffpd 2025-09-30: Jupiter Canada term loan, revolver and delayed draw publish CORRA, spread 5.25, rate 7.70, as printed ('CORRA + 525 (12) 7.70'); footnote (12) gives 3-month CORRA 2.45, and 2.45 + 5.25 = 7.70. Ruby term and delayed draw publish SONIA, spread 5.00, 9.11 ('SONIA + 500 (14) 9.11'; footnote (14) SONIA 4.11 + 5.00 = 9.11). The enumeration-tag detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Jupiter Refuel Canada Buyer, Inc. (6) (16) First Lien - Term Loan CORRA + 525 (12) 7.70 6/30/2031 C$ 31,789,715 $ 23,002 $ 22,609 2.96"
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "(12) The interest rate on these loans is subject to 3 month CORRA, which as of September 30, 2025 was 2.45 %."
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Ruby Bidco Holdings Limited (6) (16) First Lien - Term Loan SONIA + 500 (14) 9.11 9/12/2032 GBP 16,203,704 $ 21,554 $ 21,466 2.81"
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "(14) The interest rate on these loans is subject to 3 month SONIA, which as of September 30, 2025 was 4.11 %."
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-currency-from-unit-tag-not-checked-against-page",
+   "outcome": "supported",
+   "rationale": "Point (c). Albion 2025-09-30 publishes EUR 23,592,695, USD par 27,686,027.58 at rate 1.1735 (23,592,695 x 1.1735 = 27,686,027.6), beside fair value 27,145,000; other quarters EUR at 1.1736 / 1.1518 / 1.1417. The printed-marker check is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-276098",
+     "text": "Albion Fortress Intermediate Holdings LLC (6) (16) First Lien - Term Loan EURIBOR + 575 (13) 7.78 7/31/2031 EUR 23,592,695 $ 26,248 $ 27,145 3.55"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-term-printed-not-tagged",
+   "outcome": "supported",
+   "rationale": "Point (d). Benchmark plus printed margin gives the printed coupon in every quarter: 4.29 + 6.50 = 10.79 (printed 10.80), 3.98 + 6.50 = 10.48, 3.65 + 6.50 = 10.15 (10.2), 3.68 + 6.50 = 10.18 (10.2), 3.73 + 6.50 = 10.23 (10.2). The 1 pct PIK is therefore inside the 6.50 margin and the coupon, so 6.50 is the total margin (D-031 shape) and 7.50 would double-count. rffpd publishes spread 6.50, pik 1.00, all-in 10.80 / 10.48 / 10.2 / 10.2 / 10.2, cash leg 9.80 / 9.48 / 9.20 / 9.20 / 9.20. Par grows 123,357 then 120,984 a quarter (about 1 pct a year). The footnote-legend detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "EagleView Technology Corporation (7,8) First Lien - Term Loan SOFR + 650 (9) 10.80 8/14/2028 9,975,918 9,550 9,689 965"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "subject to 3 month SOFR, which as of June 30, 2025 was 4.29"
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "EagleView Technology Corporation (8) (18) First Lien - Term Loan SOFR + 650 (10) (7) 10.48 8/14/2028 48,270,187 47,317"
+    },
+    {
+     "accession": "0001193125-25-276098",
+     "text": "subject to 3 month SOFR, which as of September 30, 2025 was 3.98 %"
+    },
+    {
+     "accession": "0001193125-26-128496",
+     "text": "EagleView Technology Corporation (8) First Lien - Term Loan SOFR + 650 (10) (7) 10.2 8/14/2028 48,393,544 47,422 46,488"
+    },
+    {
+     "accession": "0001193125-26-128496",
+     "text": "subject to 3 month SOFR, which as of December 31, 2025 was 3.65 %"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "EagleView Technology Corporation (7) (8) (10) First Lien - Term Loan SOFR + 650 10.2 8/14/2028 48,514,528 47,651 43,956"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "subject to 3 month SOFR, which as of March 31, 2026 was 3.68"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "EagleView Technology Corporation (7) (8) (10) First Lien - Term Loan SOFR + 650 10.2 8/14/2028 48,637 47,846 46,216 4.3"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "(8) Investment earned part of investment income as paid-in-kind interest income. Interest rate includes 1.00 % of PIK."
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "Point (a). 2025-06-30: rffpd extracted industries give 14 headings whose fair value sums equal the printed industry table within 1 thousand (e.g. Software 47,036 vs 47,035, Oil, Gas & Consumable Fuels 66,160 vs 66,161; total 335,388 vs 335,387). The fill only touched rows without an industry. industry_coverage is the right existing detector. The labels it gave in other quarters are a separate problem (reviewer notes): NADC and Iris receive sub-industries the page does not support.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Building Products $ 27,031 8.1 % Chemicals 7,131 2.1 Commercial Services & Supplies 14,051 4.2 Construction & Engineering 9,165 2.7 Distributors 12,600 3.8"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "IT Services 34,373 10.2 Leisure Products 14,682 4.4 Oil, Gas & Consumable Fuels 66,161 19.7 Software 47,035 14.0 Total $ 335,387 100.0 %"
+    },
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Debt investments Building Products A-AG US GSI Bidco, Inc. First Lien - Term Loan SOFR + 500 (9) 9.30 10/31/2031 $ 2,708,520 $ 2,658 $ 2,688 268"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "rejected",
+   "rationale": "Point (e). Ducky's is supported: the Class A units print under 'Ducky's Holdco, LLC' with 5,857 units, and rffpd publishes them as their own entity (6ec0edc7, GICS Specialized Consumer Services) while the Opco term loan keeps 1a48c0bf. Rejected on Trucordia. The fix text says 'entity, canonical name and GICS unchanged', but in rffpd the 2026-06-30 row now resolves to a new entity 5309e40a with canonical 'Trucordia Insurance Holdings, LLC', while 2025-09-30 to 2026-03-31 stay in 52f981be ('TRUCORDIA INS HLDGS LLC'); rffpa had all four in 52f981be. Position chain and GICS are unchanged, but the company is now split across two entities. Needed: keep the 2026-06-30 row in the earlier entity (or rename all quarters consistently) and correct the claim.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Trucordia Insurance Holdings, LLC (10) First Lien - Term Loan SOFR + 325 7.0 6/17/2032 5,639 5,680 5,019 0.5"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "TRUCORDIA INS HLDGS LLC (9) First Lien - Term Loan SOFR + 325 6.9 6/17/2032 10,577,288 10,659 9,731 1.0"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Ducky's Holdco, LLC (18) (19) Class A Units N/A N/A N/A 5,857 $ 5,932 $ 6,751 0.6"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-differs-from-printed-count",
+   "outcome": "supported",
+   "rationale": "Ducky's Holdco Class A 2026-03-31 and 2026-06-30 publish shares 5,857, the printed count. The principal-on-equity detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Ducky's Holdco, LLC (18) (19) Class A Units N/A N/A N/A 5,857 $ 5,932 $ 6,751 0.6"
+    },
+    {
+     "accession": "0001193125-26-224353",
+     "text": "Ducky's Holdco, LLC (19) (20) Class A Units N/A N/A N/A $ 5,857 $ 5,932 $ 6,688 0.7"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-text-mojibake-from-en-dash-entity",
+   "outcome": "supported",
+   "rationale": "Vomela 2026-06-30 and the Jupiter Canada revolvers publish 'First Lien - ...' as printed. The U+FFFD check is direct.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Vomela Purchaser LLC and Vomela Canada Inc. (9) First Lien - Revolving Credit Facility SOFR + 550 9.2 12/31/2029 1,429 1,402 1,400 0.1"
+    }
+   ]
+  },
+  {
+   "observation_key": "income-ratio-unannualised-compared-with-annual",
+   "outcome": "supported",
+   "rationale": "Confirmed by the filer's note and the printed ratios (2.3 three-month, 8.5 for 2025). Basis decision is shared.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Income and expenses have not been annualized in calculating these ratios."
+    },
+    {
+     "accession": "0001193125-26-128496",
+     "text": "Ratios of net investment income (loss) to average net assets 8.5 Portfolio turnover rate 30.1 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "par-printed-in-thousands-tagged-unscaled",
+   "outcome": "supported",
+   "rationale": "rffpd 2026-06-30 pars are in dollars (e.g. CB Biotechnology 43,621,000 against value 43,831,000), consistent with the filer's note that par is presented in thousands.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "(2) The total par amount is presented in thousands for debt investments"
+    },
+    {
+     "accession": "0001193125-26-344953",
+     "text": "CB Biotechnology, LLC (9) First Lien - Term Loan SOFR+ 635 10.0 3/21/2030 $ 43,621 $ 43,260 $ 43,831"
+    }
+   ]
+  },
+  {
+   "observation_key": "fund-scale-override-multiplies-a-correct-figure",
+   "outcome": "supported",
+   "rationale": "Net assets 2025-06-30 published 1,004,000, the printed 1,004 thousand.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Total Net Assets 1,004 - Total Liabilities and Net Assets $ 346,971 $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Superior Intermediate 2026-06-30 delayed draw publishes 3,620 / 3,563 / 3,553 thousand under its own printed name.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Superior Intermediate LLC (9) First Lien - Delayed Draw Term Loan SOFR + 550 9.2 12/18/2030 3,620 3,563 3,553"
+    }
+   ]
+  },
+  {
+   "observation_key": "asset-class-from-industry-text-in-issuer-name",
+   "outcome": "supported",
+   "rationale": "NADC stays PRIVATE_CREDIT in every rffpd quarter. The 'Team Loan' instrument is a cosmetic member typo, disclosed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344953",
+     "text": "Equity Real Estate Investment Trusts (REITs) North America Data Center Acquisition LLC (12) First Lien - Term Loan SOFR + 500 8.7 5/8/2030 $ 12,681 $ 12,605 $ 12,618"
+    }
+   ]
+  },
+  {
+   "observation_key": "page-reader-sector-repeats-first-heading",
+   "outcome": "supported",
+   "rationale": "Not published; the extracted industries at 2025-06-30 tie to the printed table, so the reader's single-sector field status did not reach output.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-203968",
+     "text": "Building Products $ 27,031 8.1 % Chemicals 7,131 2.1 Commercial Services & Supplies 14,051 4.2 Construction & Engineering 9,165 2.7 Distributors 12,600 3.8"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [],
+ "reviewer_notes": [
+  "Point (a): NADC from 2025-12-31 maps the printed 'Equity Real Estate Investment Trusts (REITs)' heading to 'Diversified REITs' (rffpa had 'Data Processing & Outsourced Services'). That is not right: the heading is an industry, not a sub-industry, the borrower is a data-centre owner (GICS 'Data Center REITs'), and the filer printed it under 'Specialized REITs' at 2025-09-30. The sector (Real Estate) is now plausible; the sub-industry is a guess the page does not support. Disclosed by the agent.",
+  "Point (a): Iris Holding 2026-03-31 (newly filled; FV 0, dash row) gets the sector heading 'Materials' mapped to 'Diversified Metals & Mining', while Iris prints under 'Containers & Packaging' at 2025-09-30 (Metal, Glass & Plastic Containers). The same mapping already applied at 2025-12-31. Not recorded. Both come from the shared heading-to-sub-industry map, as in D-236's representative sub-industry owner item.",
+  "Point (g): 24 random loan rows across all 5 quarters (spot.py) match their printed lines on reference code, spread, rate, par, currency and value; SonicWall 2025-09-30 instrument 'Team Loan' is the member's typo (printed 'Term Loan').",
+  "Clean findings are not proof the data is correct: none of these checks would see a wrong rate on a row the page prints the same way, or offsetting errors in totals."
+ ]
+}
