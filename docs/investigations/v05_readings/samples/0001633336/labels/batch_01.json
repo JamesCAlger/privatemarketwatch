@@ -42,7 +42,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -64,9 +64,9 @@
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "prints the S/L prefix (legend: SOFR (S), LIBOR or L); no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
@@ -125,7 +125,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -143,19 +143,19 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "prints 1067 PIK, fixed, no spread"
+    "note": "fixed PIK coupon; no reference rate or spread printed"
    },
    "reference_rate_type": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "prints 1067 PIK, no benchmark"
+    "note": "fixed PIK coupon; no reference rate printed"
    },
    "pik_rate": {
-    "published": "ok",
+    "published": "convention",
     "tag": "right",
     "cause": "",
-    "note": ""
+    "note": "D-232: prints '1067 PIK' at 10.67 %; whole coupon PIK; published pik 10.67, cash leg 0"
    },
    "maturity_date": {
     "published": "ok",
@@ -188,57 +188,57 @@
    },
    "fair_value": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "fair value printed as a dash; no fact; published 0"
    },
    "cost": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "cost printed as a dash; no fact; published blank"
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "principal column prints a dash or nothing"
+    "note": ""
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "printed as a dash; published blank"
    },
    "interest_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no rate printed"
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "basis_spread": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no spread printed"
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "reference_rate_type": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no reference rate printed"
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -283,15 +283,15 @@
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "principal printed as a dash, published blank"
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -301,27 +301,27 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -366,15 +366,15 @@
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "principal column prints a dash or nothing"
+    "note": ""
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -384,33 +384,33 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no rate printed"
+    "note": ""
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no spread printed"
+    "note": ""
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no reference rate printed"
+    "note": ""
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no maturity printed"
+    "note": ""
    }
   }
  },
@@ -449,15 +449,15 @@
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no principal printed"
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -467,33 +467,33 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no rate, term or maturity printed"
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no rate, term or maturity printed"
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no rate, term or maturity printed"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no rate, term or maturity printed"
    }
   }
  },
@@ -540,7 +540,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -562,15 +562,15 @@
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "prints the S/L prefix (legend: SOFR (S), LIBOR or L); no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -623,7 +623,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -653,7 +653,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -706,7 +706,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -728,15 +728,15 @@
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "prints the S/L prefix (legend: SOFR (S), LIBOR or L); no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -789,7 +789,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -811,15 +811,15 @@
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "prints the S/L prefix (legend: SOFR (S), LIBOR or L); no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -857,22 +857,22 @@
     "note": ""
    },
    "cost": {
-    "published": "wrong",
-    "tag": "wrong_value",
-    "cause": "tag",
-    "note": "prints cost (12) i.e. -12k; tag and published +12000"
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "principal column prints a dash or nothing"
+    "note": ""
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -882,27 +882,27 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no rate printed"
+    "note": ""
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no spread printed"
+    "note": ""
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "untagged",
     "cause": "",
-    "note": "no reference rate printed"
+    "note": "prints the S/L prefix (legend: SOFR (S), LIBOR or L); no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -941,21 +941,21 @@
    },
    "cost": {
     "published": "ok",
-    "tag": "right",
+    "tag": "wrong_value",
     "cause": "",
-    "note": ""
+    "note": "prints bracketed cost (12); tagged positive; published corrected negative"
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "principal printed as a dash, published blank"
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -965,27 +965,27 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1030,15 +1030,15 @@
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "principal column prints a dash or nothing"
+    "note": ""
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1048,33 +1048,33 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no rate printed"
+    "note": ""
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no spread printed"
+    "note": ""
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "untagged",
     "cause": "",
-    "note": "no reference rate printed"
+    "note": "prints the S/L prefix (legend: SOFR (S), LIBOR or L); no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no maturity printed"
+    "note": ""
    }
   }
  },
@@ -1101,9 +1101,9 @@
    },
    "fair_value": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "fair value printed as a dash; no fact; published 0"
    },
    "cost": {
     "published": "ok",
@@ -1113,15 +1113,15 @@
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "principal printed as a dash, published blank"
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1131,27 +1131,27 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "pik_rate": {
-    "published": "missing",
-    "tag": "right",
-    "cause": "pipeline",
-    "note": "prints S + 650 (100 Floor) (including 75 PIK); terms text tagged, no pik_rate published"
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1174,7 +1174,7 @@
     "published": "ok",
     "tag": "right",
     "cause": "",
-    "note": ""
+    "note": "page prints 'IVC Evidenisa' (page typo); member and published 'IVC Evidensia', same company"
    },
    "instrument_and_class": {
     "published": "ok",
@@ -1196,15 +1196,15 @@
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no principal printed"
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1214,33 +1214,33 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no rate, term or maturity printed"
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no rate, term or maturity printed"
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no rate, term or maturity printed"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "equity line; no rate, term or maturity printed"
    }
   }
  },
@@ -1279,15 +1279,15 @@
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "principal column prints a dash or nothing"
+    "note": ""
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1297,27 +1297,27 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no rate printed"
+    "note": ""
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no spread printed"
+    "note": ""
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "untagged",
     "cause": "",
-    "note": "no reference rate printed"
+    "note": "prints the S/L prefix (legend: SOFR (S), LIBOR or L); no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "untagged",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "prints '(including 75 PIK)' in the interest-term text only; no PIK-rate fact; published 0.75 by correction"
    },
    "maturity_date": {
     "published": "ok",
@@ -1350,57 +1350,57 @@
    },
    "fair_value": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "fair value printed as a dash; no fact; published 0"
    },
    "cost": {
     "published": "ok",
-    "tag": "right",
+    "tag": "wrong_value",
     "cause": "",
-    "note": ""
+    "note": "prints bracketed cost (15); tagged positive; published corrected negative"
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "principal printed as a dash, published blank"
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "printed as a dash; published blank"
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1453,7 +1453,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1463,27 +1463,27 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no rate printed"
+    "note": ""
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "right",
     "cause": "",
-    "note": "no spread printed"
+    "note": ""
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "not_printed",
+    "tag": "untagged",
     "cause": "",
-    "note": "no reference rate printed"
+    "note": "prints the S/L prefix (legend: SOFR (S), LIBOR or L); no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1528,15 +1528,15 @@
    },
    "principal_amount": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "principal printed as a dash, published blank"
    },
    "shares_held": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1546,27 +1546,27 @@
    },
    "interest_rate": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "basis_spread": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "undrawn or written-off line; no rate or interest term printed"
    },
    "pik_rate": {
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no PIK printed"
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",
@@ -1619,7 +1619,7 @@
     "published": "ok",
     "tag": "not_printed",
     "cause": "",
-    "note": "no share count printed on this line"
+    "note": "no unit count printed"
    },
    "pct_of_net_assets": {
     "published": "ok",
@@ -1641,15 +1641,15 @@
    },
    "reference_rate_type": {
     "published": "ok",
-    "tag": "right",
+    "tag": "untagged",
     "cause": "",
-    "note": ""
+    "note": "prints the S/L prefix (legend: SOFR (S), LIBOR or L); no rate-type fact on this context"
    },
    "pik_rate": {
     "published": "ok",
-    "tag": "right",
+    "tag": "not_printed",
     "cause": "",
-    "note": ""
+    "note": "no PIK printed on this line"
    },
    "maturity_date": {
     "published": "ok",

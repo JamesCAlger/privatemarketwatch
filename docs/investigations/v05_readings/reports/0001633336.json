@@ -1,150 +1,116 @@
 {
  "cik": "0001633336",
- "label": "ccza",
- "before": "spon2",
- "shared_code": true,
+ "label": "rfcrf",
+ "before": "rgA6",
+ "shared_code": false,
+ "investigator_id": "claude-fund-agent-crescent-rfcr",
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 995,
-   "why": "Fund-local hierarchy parsing (ccyb) plus the ccza wrapper widening for typed member variants (InvestmenType, Investment<FFFD>Type, bare 'Investment', dropped 'I', leading row number, no Debt Investments level, Senior Secured terminator, maturity-only members) and 15 name row corrections from printed lines (BioAgilytix, Galway, United Language Group, TriStrux, Certify, Cedar, CC Amulet, Pye-Barker); trailing commas no longer kept in instruments."
+   "rows": 160,
+   "why": "wrapper issuer pattern drops footnote markers and row words (111 rows); row corrections: members naming another company (HS Spa, Infobase, SQAD, New Era, Lightspeed, Sandvine, Explorer, Vantage, Great Lakes), spellings (Banker's, Vensure, Slickdeals, Nephron, Centria), cash heading"
   },
   {
    "column": "instrument_description",
-   "rows": 995,
-   "why": "Fund-local hierarchy parsing (ccyb) plus the ccza wrapper widening for typed member variants (InvestmenType, Investment<FFFD>Type, bare 'Investment', dropped 'I', leading row number, no Debt Investments level, Senior Secured terminator, maturity-only members) and 15 name row corrections from printed lines (BioAgilytix, Galway, United Language Group, TriStrux, Certify, Cedar, CC Amulet, Pye-Barker); trailing commas no longer kept in instruments."
+   "rows": 105,
+   "why": "wrapper instrument pattern stops before rate text (90 rows); corrections: Lash, OEM, iLending, Hospice x2, Affinitiv x2, SQAD, Sandvine, New Era, Mario x2; dash rows SolutionReach, Belay"
   },
   {
    "column": "cost",
-   "rows": 6,
-   "why": "Printed untagged costs and parenthesized undrawn costs restored; all affected rows source-read."
+   "rows": 171,
+   "why": "138 + 33 undrawn costs tagged unsigned, printed in parentheses; Receivable Solutions"
+  },
+  {
+   "column": "cost_reported",
+   "rows": 171,
+   "why": "follows cost"
   },
   {
    "column": "shares_held",
-   "rows": 12,
-   "why": "Integrity common units restored287484 after name normalization mistakenly borrowed preferred1247; Doxa257116 source-verified."
+   "rows": 33,
+   "why": "printed unit counts where the shares normaliser had put another line's count"
   },
   {
-   "column": "principal_amount",
-   "rows": 4,
-   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
+   "column": "basis_spread",
+   "rows": 110,
+   "why": "printed total margin (D-031) on 'plus N PIK' rows, Hospice, Mario swap; Eagle restored to tagged (D-246); Annuity withdrawn"
   },
   {
-   "column": "principal_amount_usd",
-   "rows": 4,
-   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
+   "column": "pik_rate",
+   "rows": 70,
+   "why": "printed PIK on rows with no PIK tag; D-232 whole-coupon PIK = coupon (D-246); Mario swap"
   },
   {
-   "column": "principal_fx_rate_to_usd",
-   "rows": 4,
-   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
+   "column": "interest_rate_cash",
+   "rows": 70,
+   "why": "follows pik_rate / interest_rate_kind"
   },
   {
-   "column": "principal_fx_status",
-   "rows": 4,
-   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
+   "column": "interest_rate_kind",
+   "rows": 45,
+   "why": "all_in on D-232 rows"
   },
   {
    "column": "interest_rate",
    "rows": 2,
-   "why": "Printed Omni12.70, Ingenio12.53, TSX9.91 restored; iLending unsupported8.5 withdrawn."
-  },
-  {
-   "column": "basis_spread",
-   "rows": 1,
-   "why": "Unsupported iLending spread withdrawn because current source rate/terms cells are blank."
-  },
-  {
-   "column": "reference_rate_type",
-   "rows": 261,
-   "why": "Exact printed Interest Term header and current/historical legend codes mapped in this fund wrapper."
-  },
-  {
-   "column": "reference_rate_source",
-   "rows": 274,
-   "why": "Reference rate provenance follows source-header/code decoding."
-  },
-  {
-   "column": "coupon_type",
-   "rows": 1,
-   "why": "iLending unsupported fixed-rate inference withdrawn alongside its rate."
-  },
-  {
-   "column": "maturity_date",
-   "rows": 4,
-   "why": "Marlin two rows corrected to printedJuly2026; Matilda two staleDecember2022 dates withdrawn where current page blank."
-  },
-  {
-   "column": "src_transforms",
-   "rows": 8,
-   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
-  },
-  {
-   "column": "shares_held_source",
-   "rows": 7,
-   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
-  },
-  {
-   "column": "principal_amount_source",
-   "rows": 4,
-   "why": "Source principal declarations supply printed USD amounts and associated FX/provenance metadata."
-  },
-  {
-   "column": "src_facts",
-   "rows": 4,
-   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
-  },
-  {
-   "column": "corrected_fields",
-   "rows": 50,
-   "why": "Audit field: row corrections applied (names, non-accrual flag, earlier cost/rate/maturity/unit fixes)."
-  },
-  {
-   "column": "position_key",
-   "rows": 995,
-   "why": "Recomputed from corrected names."
-  },
-  {
-   "column": "position_id",
-   "rows": 1280,
-   "why": "Fresh fund-only identity allocation (403 ids already in ccya) plus name repairs, MHS twins and 3 restored rows. Not a comparison key."
-  },
-  {
-   "column": "cost_reported",
-   "rows": 6,
-   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
+   "why": "Annuity Health undrawn line (no printed rate)"
   },
   {
    "column": "interest_rate_reported",
    "rows": 2,
-   "why": "Audit/provenance field records the declared source corrections and name-driven unit normalization; source facts retained."
+   "why": "follows interest_rate"
   },
   {
-   "column": "interest_rate_kind",
-   "rows": 1,
-   "why": "Omni printed numeric rate restored from unresolved to all_in."
+   "column": "coupon_type",
+   "rows": 3,
+   "why": "VetStrategy 2023-09-30 Floating; Annuity withdrawn"
+  },
+  {
+   "column": "reference_rate_type",
+   "rows": 2,
+   "why": "Annuity withdrawn"
+  },
+  {
+   "column": "reference_rate_source",
+   "rows": 2,
+   "why": "Annuity withdrawn"
+  },
+  {
+   "column": "maturity_date",
+   "rows": 15,
+   "why": "Lightspeed x3, SQAD, Receivable Solutions, Mario x2, dash rows x5, others from printed month"
+  },
+  {
+   "column": "maturity_precision",
+   "rows": 15,
+   "why": "month, with the corrected dates"
   },
   {
    "column": "maturity_status",
-   "rows": 2,
-   "why": "Matilda stale dates withdrawn, status now not_disclosed."
+   "rows": 15,
+   "why": "follows maturity"
   },
   {
-   "column": "nonaccrual_footnote",
-   "rows": 13,
-   "why": "Printed footnote (9) non-accrual on 13 rows whose XBRL footnote link is missing or points at the comparative date's note; row correction (new correctable field)."
+   "column": "corrected_fields",
+   "rows": 400,
+   "why": "audit list of the corrections"
   },
   {
-   "column": "nonaccrual_status",
-   "rows": 13,
-   "why": "Derived from nonaccrual_footnote by the financial step: unknown -> nonaccrual on the same 13 rows."
+   "column": "position_key",
+   "rows": 200,
+   "why": "follows issuer/instrument names"
+  },
+  {
+   "column": "position_id",
+   "rows": 160,
+   "why": "follows position_key"
   }
  ],
- "rows_added": 607,
+ "rows_added": 473,
  "rows_removed": 0,
  "fixes": [
   {
-   "what": "Expand this fund hierarchy parsing; retain distinct MHS625/650 loan keys. Restores20 previously collapsed unnamed instruments and11MHS twins.",
+   "what": "Wrapper hierarchy_issuer_re: trailing footnote markers '(9)', '(4)(5)' and the row words One..Five are not part of the issuer (dry run on every identifier: 111 rows, 42 names, no collisions).",
    "kind": "wrapper",
    "quarters": [
     "2023-03-31",
@@ -164,17 +130,13 @@
    ],
    "quotes": [
     {
-     "accession": "0001193125-26-342351",
-     "text": "APC Bidco Limited (11) Unitranche First Lien Term Loan SN + 636.93 10.22 % 10/2030 GBP 4,339 $ 5,238 0.9 % $ 5,756"
-    },
-    {
-     "accession": "0001193125-26-342351",
-     "text": "en Revolver S + 600 , 100 Floor 9.81 % 07/2027 90 90 0.0 90 MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 , 100 Floor 10.06 % 07/2027 39 39 0.0 39 MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 650 , 100 Floor 10.31 % 07/2027 39 39 0.0 39 Minuteman Security Technologies, Inc. (4)(5) Senior Secured First Lien Delayed Draw Term Loan 02/2029 - ( 10 ) 0.0 ( 14 ) Minuteman Security Technologies, Inc. Senior Secured First Lien Term Loan S + "
+     "accession": "0000950170-25-023153",
+     "text": "Vantage Insurance Partners, Inc. Unitranche First Lien Term Loan S + 600 ( 100 Floor) 10.33 % 12/2028 4,483 4,445 0.6"
     }
    ]
   },
   {
-   "what": "Decode only printed reference-rate columns using filer legends.",
+   "what": "Wrapper hierarchy_instrument_re / trailing_re: the instrument ends before 'Investment Term S + ..', 'Interest S + ..', 'Term S + ..', 'Dissolution Date' and a bare mm/yyyy; trailing suffix limited to row words (90 rows).",
    "kind": "wrapper",
    "quarters": [
     "2023-03-31",
@@ -194,165 +156,207 @@
    ],
    "quotes": [
     {
-     "accession": "0000950170-23-040555",
-     "text": "London Interbank Offered Rate (LIBOR or L), Prime (P), SOFR (S), CDOR (C), EURIBOR (E), SONIA (SN), or BBSY (\"B\")"
+     "accession": "0000950170-24-017903",
+     "text": "Care Buyer, Inc. (5) Unitranche First Lien Revolver S + 750 ( 100 Floor) (including 500 PIK) 12.98 % 12/2026 369 346 0.0 292"
     }
    ]
   },
   {
-   "what": "Declare four untagged printed principals/costs for Alpine, Omni, Loadmaster and Ingenio.",
-   "kind": "untagged_value",
+   "what": "Wrapper distinct_member_suffix_re: Pye-Barker 2023-12-31 11/2027 revolver (-8 / -20) had been collapsed into the 11/2026 twin; restored.",
+   "kind": "wrapper",
    "quarters": [
-    "2023-03-31",
-    "2023-06-30",
     "2023-12-31"
    ],
    "quotes": [
     {
-     "accession": "0000950170-23-020540",
-     "text": "Alpine SG, LLC Senior Secured First Lien Term Loan S + 600 ( 100 Floor) 10.83 % 11/2027 536 525 0.1 520"
-    },
-    {
      "accession": "0000950170-24-017903",
-     "text": "Loadmaster Derrick & Equipment, Inc. (5)(7)(9) Senior Secured First Lien Revolver 20,878 1,557 0.8 6,287"
+     "text": "Pye-Barker Fire & Safety, LLC (4)(5) Unitranche First Lien Revolver 11/2027 - ( 20 ) ( 0.0 ) ( 8 )"
     }
    ]
   },
   {
-   "what": "Restore14Integrity common-unit counts; correct cost signs, rates, Marlin maturities, Service Logic name/instrument; withdraw unsupported iLending rate and Matilda dates. Each row correction spec records its printed source.",
+   "what": "Row corrections (context-keyed): 21 rows tagged on another company's member published under that company (HS Spa, Infobase, SQAD, New Era, Lightspeed, Sandvine, Explorer, Vantage, Great Lakes), with maturity/instrument where the member differed.",
    "kind": "row_correction",
    "quarters": [
     "2023-03-31",
     "2023-06-30",
     "2023-09-30",
-    "2023-12-31",
-    "2024-03-31",
-    "2024-06-30",
-    "2024-09-30",
     "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-23-020540",
-     "text": "Integrity Marketing Acquisition, LLC Common Stock 287,484 533 0.1 937"
-    },
-    {
-     "accession": "0001193125-26-342351",
-     "text": "TSX Fiber Senior Secured First Lien Term Loan S + 600 ( 400 PIK), 100 Floor 9.91 % 11/2030 872 872 0.1 872"
-    },
-    {
-     "accession": "0000950170-23-020540",
-     "text": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 17 ) 0.0 21"
-    },
-    {
-     "accession": "0000950170-23-040555",
-     "text": "Omni Ophthalmic Management Consultants, LLC Senior Secured First Lien Term Loan S + 750 ( 100 Floor) 12.70 % 09/2025 6,703 6,619 0.9 6,615"
-    },
-    {
-     "accession": "0000950170-23-040555",
-     "text": "Matilda Jane Holdings, Inc. (9) Senior Secured First Lien Term Loan 11,961 - 0.0 291"
-    }
-   ]
-  },
-  {
-   "what": "Existing investments_total_excludes cash_rows setting aligns schedule investment boundary: do not add entire balance-sheet cash39422000 to investment1598857000; schedule money-market is2110000.",
-   "kind": "wrapper",
-   "quarters": [
-    "2024-12-31"
-   ],
-   "quotes": [
-    {
-     "accession": "0000950170-25-023153",
-     "text": "Total Investments $ 1,623,906 213.5 % $ 1,598,857 Cash Equivalents Goldman Sachs Financial Square Government Fund 4.41 % $ 2,110 0.3 $ 2,110 Cash Equivalents Total $ 2,110 0.3 % $ 2,110 Investments and Cash Equivalents Total $ 1,626,016 213.8 % $ 1,600,967"
-    }
-   ]
-  },
-  {
-   "what": "Wrapper hierarchy_issuer_re / hierarchy_instrument_re / hierarchy_condition_extra widened for the filer's typed member variants; a duplicate 'Investments in Non-Control, Non-Affiliate' member tree is kept out. Dry run on all 6079 identifiers: 81 outputs change, all read; admits 3 real current rows that were dropped (Pye-Barker revolver 2023-03-31, NRG Controls delayed draw 2024-12-31, Painters revolver 2026-03-31) and nothing else published.",
-   "kind": "wrapper",
-   "quarters": [
-    "2023-03-31",
-    "2023-06-30",
-    "2023-09-30",
-    "2023-12-31",
-    "2024-03-31",
-    "2024-12-31",
-    "2025-03-31",
-    "2025-06-30",
-    "2025-09-30",
-    "2025-12-31",
-    "2026-03-31",
-    "2026-06-30"
-   ],
-   "quotes": [
-    {
-     "accession": "0001193125-26-221936",
-     "text": "Painters Supply & Equipment Company (4)(5) Unitranche First Lien Revolver 08/2027 - ( 2 ) 0.0 ( 17 )"
-    },
-    {
-     "accession": "0000950170-25-023153",
-     "text": "NRG Controls (4)(5) Senior Secured First Lien Delayed Draw Term Loan 10/2030 - ( 6 ) 0.0 ( 10 )"
-    },
-    {
-     "accession": "0001193125-25-277533",
-     "text": "1959 Holdings, LLC Senior Secured First Lien Term Loan S + 650 , 100 Floor 10.79 % 07/2030 5,000 $ 4,953 0.7 % 4,950"
-    }
-   ]
-  },
-  {
-   "what": "Non-accrual flag from the printed footnote (9) on 13 rows (Seko x4, Sandvine, iLending, TriStrux x3, Action Signature x4): row corrections of nonaccrual_footnote, a field made row-correctable in pipeline/unified_holdings.py (true/false only, kept in the column's own type).",
-   "kind": "shared_code",
-   "quarters": [
-    "2024-06-30",
-    "2024-09-30",
-    "2025-03-31",
-    "2025-09-30",
     "2025-12-31"
    ],
    "quotes": [
     {
-     "accession": "0000950170-24-095458",
-     "text": "Seko Global Logistics Network, LLC (9)(11) Senior Secured First Lien Term Loan 07/2027 4,924 4,883 0.5 3,501"
+     "accession": "0000950170-25-023153",
+     "text": "Explorer Investor, Inc. Unitranche First Lien Term Loan S + 600 ( 50 Floor) 10.48 % 06/2029 13,446 12,975 1.7 12,505 FH MD"
     },
     {
-     "accession": "0000950170-24-095458",
-     "text": "(9) The investment is on non-accrual status as of June 30, 2024"
-    },
-    {
-     "accession": "0001193125-25-277533",
-     "text": "TriStrux, LLC (9) Senior Secured First Lien Term Loan 12/2027 2,700 2,674 0.2 1,514"
+     "accession": "0000950170-23-040555",
+     "text": "New Era Technology, Inc. (5) Unitranche First Lien Delayed Draw Term Loan S + 625 ( 100 Floor) 11.75 % 10/2026 5,971 5,907 0.8"
     }
    ]
   },
   {
-   "what": "Names and instruments from printed lines where the member omits or garbles them; Pye-Barker 2023-03-31 revolver cost -24000 as printed.",
+   "what": "Row corrections: PIK and total margin from the printed rate term on 131 rows without a PIK tag or with the cash leg as spread (D-031: spread = cash + PIK, pik_rate = PIK). NOT complete: 35 '(including p PIK)' rows (31 at 2025-03-31) still publish the cash leg as spread; parked, staged.",
    "kind": "row_correction",
    "quarters": [
     "2023-03-31",
     "2023-06-30",
     "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
     "2025-06-30",
     "2025-09-30",
-    "2026-03-31"
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
    ],
    "quotes": [
     {
-     "accession": "0000950170-23-040555",
-     "text": "Galway Borrower, LLC Unitranche First Lien Term Loan S + 525 ( 75 Floor) 10.59 % 09/2028 14,485 14,299 1.9 13,978"
+     "accession": "0000950170-24-017903",
+     "text": "Lighthouse Behavioral Health Solutions, LLC Senior Secured First Lien Term Loan S + 650 ( 100 Floor) (including 75 PIK) 11.36 % 03/2028 2,256 2,246 0.3 1,966"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections (D-246): Eagle Midco 2025-12-31 spreads back to the tagged 7.75/7.75/7.5 (printed 'plus N PIK' repeats the whole margin: 11.72 = SOFR + 7.75).",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-071922",
+     "text": "Eagle Midco B.V. (Avania) (11) Unitranche First Lien Term Loan S + 775 (plus 775 PIK) 11.72 % 07/2029 EUR 3,705 3,649 0.4 2,708"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections (D-232, D-246): whole-coupon PIK on 39 rows of 6 loans whose par grows by the coupon (pik_rate = coupon, interest_rate_kind all_in); AX VI 2025-12-31 pik 12.06; Mario Purchaser 2024-12-31 two members carrying each other's values swapped back. Missed Mario Purchaser last-out 2025-03-31 (own test file: par +3.87 % vs coupon/4 3.79 %); parked, staged.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "MeriCal, LLC Unitranche First Lien Term Loan S + 775 PIK 13.39 % 11/2024 7,452 7,452 0.6 4,248 Savers"
     },
     {
-     "accession": "0000950170-23-061089",
-     "text": "United Language Group, Inc. Senior Secured First Lien Term Loan S + 875 ( 100 Floor) (including 200 PIK) 14.17 % 06/2024 4,510 4,516 0.6 4,462"
+     "accession": "0000950170-25-023153",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344 Mario"
     },
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Mario Purchaser, LLC Unitranche First Lien Delayed Draw Term Loan S + 575.3 ( 100 Floor) 10.21 % 04/2029 475 392 0.1 475 Marlin DTC-LS"
+    },
+    {
+     "accession": "0001193125-26-071922",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan 1206.2 PIK 12.06 % 08/2030 EUR 3,151 2,743 0.4 3,151 AX VI INV2"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections: 33 unit counts the shares normaliser had replaced (derived_proxy) set to the printed count.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "ACI Group Holdings, Inc. Preferred Stock 3,719 3,645 0.7 5,030"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections: 171 undrawn-line costs tagged without sign set negative from the printed parentheses (138 published rows + 33 dash rows), each re-checked against printed fair value, maturity and cost. NOT complete: 7 more rows (Explorer x2, Auveco x2, Bankers Toolbox, SolutionReach, USA Hometown) still publish a positive cost; parked, staged in costsign_specs.json.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-06-30"
+   ],
+   "quotes": [
     {
      "accession": "0000950170-23-020540",
-     "text": "Pye-Barker Fire & Safety, LLC (4)(5) Unitranche First Lien Revolver 11/2027 - ( 24 ) ( 0.0 ) ( 37 )"
+     "text": "United Flow Technologies (4)(5) Unitranche First Lien Revolver 10/2027 - ( 25 ) ( 0.0 ) ( 43 )"
+    }
+   ]
+  },
+  {
+   "what": "untagged_values: 472 schedule lines printed with a dash for fair value published at fair value 0, each matched to its printed line. Of the other 294: 289 located and staged (272 round 2, 17 round 3), 4 twins of published rows, 1 twin; plus WCT and UP Acquisition staged. Not applied.",
+   "kind": "untagged_value",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "OEM Group, LLC (7)(9) Senior Secured Second Lien Revolver 09/2025 17,887 - 0.0 -"
+    },
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Annuity Health (4)(5) Senior Secured First Lien Revolver 02/2029 - ( 7 ) 0.0 -"
+    }
+   ]
+  },
+  {
+   "what": "Row corrections on newly published dash rows (checked before the last build): 5 maturities, 2 instruments, Annuity Health member-text rate/spread/benchmark withdrawn.",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-09-30",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Annuity Health (4)(5) Senior Secured First Lien Revolver 02/2029 - ( 7 ) 0.0 -"
     }
    ]
   }
@@ -360,48 +364,913 @@
  "total_exceptions": [],
  "parked": [
   {
-   "finding": "provenance_reverify financial_convention_unresolved 2023-03-31",
-   "status": "source_contradiction",
+   "finding": "PUBLISHED ERRORS found by the rfcrf independent review, not fixed (no build left); fixes staged, not applied",
+   "staged_dir": "scratch/fund_runs/0001633336/staged/",
+   "groups": [
+    {
+     "what": "undrawn rows publishing a positive cost; the page prints it in parentheses",
+     "rows": 7,
+     "cost_published_k": 322.0,
+     "staged": "costsign_specs.json",
+     "detail": [
+      {
+       "row_id": "ROW-dfea4f8209b4f709",
+       "quarter": "2023-03-31",
+       "issuer": "Auveco Holdings",
+       "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+       "published": {
+        "cost": 7000.0
+       },
+       "staged": {
+        "cost": "-7000.0"
+       },
+       "fair_value": -36000.0,
+       "cost": 7000.0
+      },
+      {
+       "row_id": "ROW-57ca01b05789d216",
+       "quarter": "2023-03-31",
+       "issuer": "Bankers Toolbox, Inc",
+       "instrument": "Unitranche First Lien Revolver",
+       "published": {
+        "cost": 35000.0
+       },
+       "staged": {
+        "cost": "-35000.0"
+       },
+       "fair_value": -85000.0,
+       "cost": 35000.0
+      },
+      {
+       "row_id": "ROW-b9bd583d2eec8e83",
+       "quarter": "2023-03-31",
+       "issuer": "Explorer Investor, Inc.",
+       "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+       "published": {
+        "cost": 130000.0
+       },
+       "staged": {
+        "cost": "-130000.0"
+       },
+       "fair_value": -132000.0,
+       "cost": 130000.0
+      },
+      {
+       "row_id": "ROW-ff19f9426abc1ba4",
+       "quarter": "2023-06-30",
+       "issuer": "Auveco Holdings",
+       "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+       "published": {
+        "cost": 7000.0
+       },
+       "staged": {
+        "cost": "-7000.0"
+       },
+       "fair_value": -22000.0,
+       "cost": 7000.0
+      },
+      {
+       "row_id": "ROW-2f2a194e7b9cb90e",
+       "quarter": "2023-06-30",
+       "issuer": "Explorer Investor, Inc.",
+       "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+       "published": {
+        "cost": 125000.0
+       },
+       "staged": {
+        "cost": "-125000.0"
+       },
+       "fair_value": -132000.0,
+       "cost": 125000.0
+      },
+      {
+       "row_id": "ROW-54b05065a1ed8a11",
+       "quarter": "2023-09-30",
+       "issuer": "SolutionReach, Inc",
+       "instrument": "First Lien Revolver",
+       "published": {
+        "cost": 2000.0
+       },
+       "staged": {
+        "cost": "-2000.0"
+       },
+       "fair_value": -7000.0,
+       "cost": 2000.0
+      },
+      {
+       "row_id": "ROW-ffe34e945cf160e1",
+       "quarter": "2023-12-31",
+       "issuer": "USA Hometown Experts, Inc",
+       "instrument": "First Lien Delayed Draw Term Loan",
+       "published": {
+        "cost": 16000.0
+       },
+       "staged": {
+        "cost": "-16000.0"
+       },
+       "fair_value": -16000.0,
+       "cost": 16000.0
+      }
+     ],
+     "why_missed": "z_costsign.py only read rows with cost < 100,000 (Explorer 130 / 125 excluded), matched the issuer exactly as published (Bankers vs printed Banker's; 'SolutionReach, Inc' / 'USA Hometown Experts, Inc' vs printed 'Inc.') and did not allow a '$' between cells (Auveco '- $ ( 7 )').",
+     "checked_as_printed": [
+      {
+       "row_id": "ROW-273d5862d7445186",
+       "quarter": "2024-12-31",
+       "printed_line": "HGH Purchaser, Inc. (4)(5) Unitranche First Lien Revolver 11/2026 - 3 0.0 ( 84 )",
+       "why": "Printed cost is positive (3); published +3,000 is as printed. Not an error."
+      }
+     ]
+    },
+    {
+     "what": "spread published as the cash leg on '(including p PIK)' rows where the coupon shows the printed margin is cash only (D-031 needs cash + PIK)",
+     "rows": 35,
+     "fv_m": 105.7,
+     "by_quarter": {
+      "2023-03-31": 3,
+      "2024-12-31": 1,
+      "2025-03-31": 31
+     },
+     "staged": "including_pik_spread_specs.json",
+     "detail": [
+      {
+       "row_id": "ROW-8a647911e33f305b",
+       "quarter": "2023-03-31",
+       "issuer": "Professional Physical Therapy",
+       "instrument": "First Lien Revolver",
+       "published": {
+        "basis_spread": 10.5
+       },
+       "staged": {
+        "basis_spread": "15.0"
+       },
+       "fair_value": 41000.0,
+       "cost": 41000.0
+      },
+      {
+       "row_id": "ROW-0809e3f2c93d3e86",
+       "quarter": "2023-03-31",
+       "issuer": "BioAgilytix",
+       "instrument": "First Lien Delayed Draw Term Loan",
+       "published": {
+        "basis_spread": 6.25
+       },
+       "staged": {
+        "basis_spread": "9.0"
+       },
+       "fair_value": 527000.0,
+       "cost": 661000.0
+      },
+      {
+       "row_id": "ROW-b6589e86201225e7",
+       "quarter": "2023-03-31",
+       "issuer": "BioAgilytix",
+       "instrument": "First Lien Term Loan",
+       "published": {
+        "basis_spread": 6.25
+       },
+       "staged": {
+        "basis_spread": "9.0"
+       },
+       "fair_value": 12418000.0,
+       "cost": 12971000.0
+      },
+      {
+       "row_id": "ROW-786327e9dfd957ba",
+       "quarter": "2024-12-31",
+       "issuer": "Isagenix International, LLC",
+       "instrument": "First Lien Term Loan",
+       "published": {
+        "basis_spread": 6.5
+       },
+       "staged": {
+        "basis_spread": "10.6"
+       },
+       "fair_value": 2005000.0,
+       "cost": 2962000.0
+      },
+      {
+       "row_id": "ROW-2e98c9a3a7b7cd9b",
+       "quarter": "2025-03-31",
+       "issuer": "Eagle Midco B.V. (Avania)",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 3.81
+       },
+       "staged": {
+        "basis_spread": "5.9975"
+       },
+       "fair_value": 3117000.0,
+       "cost": 3423000.0
+      },
+      {
+       "row_id": "ROW-60409819764f7d9a",
+       "quarter": "2025-03-31",
+       "issuer": "Ingenio, LLC",
+       "instrument": "Unitranche First Lien Term Loan - One",
+       "published": {
+        "basis_spread": 2.0
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 1924000.0,
+       "cost": 2057000.0
+      },
+      {
+       "row_id": "ROW-b1ec02e8ea00d2bc",
+       "quarter": "2025-03-31",
+       "issuer": "Affinitiv, Inc",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 7.000000000000001
+       },
+       "staged": {
+        "basis_spread": "9.0"
+       },
+       "fair_value": 5907000.0,
+       "cost": 6079000.0
+      },
+      {
+       "row_id": "ROW-a2c4d64461774659",
+       "quarter": "2025-03-31",
+       "issuer": "Affinitiv, Inc.",
+       "instrument": "Unitranche First Lien Revolver",
+       "published": {
+        "basis_spread": 7.000000000000001
+       },
+       "staged": {
+        "basis_spread": "9.0"
+       },
+       "fair_value": 41000.0,
+       "cost": 55000.0
+      },
+      {
+       "row_id": "ROW-bf66d2fdbee8d2fe",
+       "quarter": "2025-03-31",
+       "issuer": "Gener8, LLC",
+       "instrument": "First Lien Revolver",
+       "published": {
+        "basis_spread": 2.0
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 658000.0,
+       "cost": 1257000.0
+      },
+      {
+       "row_id": "ROW-906182cda1c4fee7",
+       "quarter": "2025-03-31",
+       "issuer": "Gener8, LLC",
+       "instrument": "First Lien Term Loan - One",
+       "published": {
+        "basis_spread": 2.0
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 155000.0,
+       "cost": 253000.0
+      },
+      {
+       "row_id": "ROW-9a46c06896b3be5e",
+       "quarter": "2025-03-31",
+       "issuer": "Gener8, LLC",
+       "instrument": "First Lien Term Loan",
+       "published": {
+        "basis_spread": 2.0
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 3610000.0,
+       "cost": 5872000.0
+      },
+      {
+       "row_id": "ROW-ee1811b36eca7597",
+       "quarter": "2025-03-31",
+       "issuer": "A&R Logistics Holdings, Inc.",
+       "instrument": "Unitranche First Lien Term Loan - Two",
+       "published": {
+        "basis_spread": 2.65
+       },
+       "staged": {
+        "basis_spread": "6.9"
+       },
+       "fair_value": 43000.0,
+       "cost": 42000.0
+      },
+      {
+       "row_id": "ROW-1926945da7fbf270",
+       "quarter": "2025-03-31",
+       "issuer": "A&R Logistics Holdings, Inc.",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 2.65
+       },
+       "staged": {
+        "basis_spread": "6.9"
+       },
+       "fair_value": 2335000.0,
+       "cost": 2320000.0
+      },
+      {
+       "row_id": "ROW-715d3ecdb46d3a6f",
+       "quarter": "2025-03-31",
+       "issuer": "A&R Logistics Holdings, Inc.",
+       "instrument": "Unitranche First Lien Term Loan - One",
+       "published": {
+        "basis_spread": 2.65
+       },
+       "staged": {
+        "basis_spread": "6.9"
+       },
+       "fair_value": 437000.0,
+       "cost": 439000.0
+      },
+      {
+       "row_id": "ROW-248a9c44ac328622",
+       "quarter": "2025-03-31",
+       "issuer": "HGH Purchaser, Inc.",
+       "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+       "published": {
+        "basis_spread": 4.5
+       },
+       "staged": {
+        "basis_spread": "7.0"
+       },
+       "fair_value": 3182000.0,
+       "cost": 3336000.0
+      },
+      {
+       "row_id": "ROW-8cbd4e6e0b4b1fb1",
+       "quarter": "2025-03-31",
+       "issuer": "HGH Purchaser, Inc.",
+       "instrument": "Unitranche First Lien Delayed Draw Term Loan - One",
+       "published": {
+        "basis_spread": 4.5
+       },
+       "staged": {
+        "basis_spread": "7.0"
+       },
+       "fair_value": 3152000.0,
+       "cost": 3303000.0
+      },
+      {
+       "row_id": "ROW-e841ae78550d7e02",
+       "quarter": "2025-03-31",
+       "issuer": "HGH Purchaser, Inc.",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 4.5
+       },
+       "staged": {
+        "basis_spread": "7.0"
+       },
+       "fair_value": 7499000.0,
+       "cost": 7810000.0
+      },
+      {
+       "row_id": "ROW-438c3bd720e33b3e",
+       "quarter": "2025-03-31",
+       "issuer": "Ingenio, LLC",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 2.0
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 4343000.0,
+       "cost": 4651000.0
+      },
+      {
+       "row_id": "ROW-05ce38edc9d45d33",
+       "quarter": "2025-03-31",
+       "issuer": "Isagenix International, LLC",
+       "instrument": "First Lien Term Loan",
+       "published": {
+        "basis_spread": 6.5
+       },
+       "staged": {
+        "basis_spread": "10.6"
+       },
+       "fair_value": 1698000.0,
+       "cost": 3045000.0
+      },
+      {
+       "row_id": "ROW-8f9d248120cd79a9",
+       "quarter": "2025-03-31",
+       "issuer": "ACI Group Holdings, Inc.",
+       "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+       "published": {
+        "basis_spread": 2.75
+       },
+       "staged": {
+        "basis_spread": "6.0"
+       },
+       "fair_value": 1289000.0,
+       "cost": 1313000.0
+      },
+      {
+       "row_id": "ROW-60a6147996da07ff",
+       "quarter": "2025-03-31",
+       "issuer": "ACI Group Holdings, Inc.",
+       "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+       "published": {
+        "basis_spread": 2.75
+       },
+       "staged": {
+        "basis_spread": "6.0"
+       },
+       "fair_value": 1191000.0,
+       "cost": 1222000.0
+      },
+      {
+       "row_id": "ROW-27a31447165dc69a",
+       "quarter": "2025-03-31",
+       "issuer": "ACI Group Holdings, Inc.",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 2.75
+       },
+       "staged": {
+        "basis_spread": "6.0"
+       },
+       "fair_value": 6711000.0,
+       "cost": 6830000.0
+      },
+      {
+       "row_id": "ROW-00d4fa2152b5a1ec",
+       "quarter": "2025-03-31",
+       "issuer": "Avalign Technologies, Inc.",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 3.6249999999999996
+       },
+       "staged": {
+        "basis_spread": "7.25"
+       },
+       "fair_value": 12190000.0,
+       "cost": 12916000.0
+      },
+      {
+       "row_id": "ROW-077e43ef8f2274ac",
+       "quarter": "2025-03-31",
+       "issuer": "BVI Medical Inc.",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 1.25
+       },
+       "staged": {
+        "basis_spread": "6.25"
+       },
+       "fair_value": 9983000.0,
+       "cost": 9983000.0
+      },
+      {
+       "row_id": "ROW-1df553f3cef9bde3",
+       "quarter": "2025-03-31",
+       "issuer": "Great Lakes Dental Partners, LLC",
+       "instrument": "Unitranche First Lien Revolver",
+       "published": {
+        "basis_spread": 4.25
+       },
+       "staged": {
+        "basis_spread": "7.25"
+       },
+       "fair_value": 292000.0,
+       "cost": 308000.0
+      },
+      {
+       "row_id": "ROW-ac8f81ae656d1502",
+       "quarter": "2025-03-31",
+       "issuer": "Great Lakes Dental Partners, LLC",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 4.25
+       },
+       "staged": {
+        "basis_spread": "7.25"
+       },
+       "fair_value": 4755000.0,
+       "cost": 4935000.0
+      },
+      {
+       "row_id": "ROW-20883ab46cae5b12",
+       "quarter": "2025-03-31",
+       "issuer": "Omni Ophthalmic Management Consultants, LLC",
+       "instrument": "First Lien Revolver",
+       "published": {
+        "basis_spread": 4.5
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 932000.0,
+       "cost": 981000.0
+      },
+      {
+       "row_id": "ROW-a9b002e77e4c6657",
+       "quarter": "2025-03-31",
+       "issuer": "Omni Ophthalmic Management Consultants, LLC",
+       "instrument": "First Lien Term Loan",
+       "published": {
+        "basis_spread": 4.5
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 6469000.0,
+       "cost": 6815000.0
+      },
+      {
+       "row_id": "ROW-2347c2a33fb62e24",
+       "quarter": "2025-03-31",
+       "issuer": "Omni Ophthalmic Management Consultants, LLC",
+       "instrument": "First Lien Term Loan - One",
+       "published": {
+        "basis_spread": 4.5
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 849000.0,
+       "cost": 890000.0
+      },
+      {
+       "row_id": "ROW-f371f92df990add1",
+       "quarter": "2025-03-31",
+       "issuer": "Omni Ophthalmic Management Consultants, LLC",
+       "instrument": "First Lien Term Loan - Three",
+       "published": {
+        "basis_spread": 4.5
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 239000.0,
+       "cost": 249000.0
+      },
+      {
+       "row_id": "ROW-cba9fc9d952e6c5f",
+       "quarter": "2025-03-31",
+       "issuer": "Omni Ophthalmic Management Consultants, LLC",
+       "instrument": "First Lien Term Loan - Two",
+       "published": {
+        "basis_spread": 4.5
+       },
+       "staged": {
+        "basis_spread": "8.0"
+       },
+       "fair_value": 288000.0,
+       "cost": 303000.0
+      },
+      {
+       "row_id": "ROW-5034834a1f4df103",
+       "quarter": "2025-03-31",
+       "issuer": "Lash Opco LLC",
+       "instrument": "Unitranche First Lien Revolver",
+       "published": {
+        "basis_spread": 2.65
+       },
+       "staged": {
+        "basis_spread": "7.75"
+       },
+       "fair_value": 375000.0,
+       "cost": 387000.0
+      },
+      {
+       "row_id": "ROW-39a6ad9f50bd91d2",
+       "quarter": "2025-03-31",
+       "issuer": "Lash Opco LLC",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 2.65
+       },
+       "staged": {
+        "basis_spread": "7.75"
+       },
+       "fair_value": 3017000.0,
+       "cost": 3116000.0
+      },
+      {
+       "row_id": "ROW-5fb30130fd1b96b9",
+       "quarter": "2025-03-31",
+       "issuer": "Lash Opco LLC",
+       "instrument": "Unitranche First Lien Term Loan - One",
+       "published": {
+        "basis_spread": 2.65
+       },
+       "staged": {
+        "basis_spread": "7.75"
+       },
+       "fair_value": 3076000.0,
+       "cost": 3172000.0
+      },
+      {
+       "row_id": "ROW-75956b3d73c9e395",
+       "quarter": "2025-03-31",
+       "issuer": "Lash Opco LLC",
+       "instrument": "Unitranche First Lien Term Loan",
+       "published": {
+        "basis_spread": 2.65
+       },
+       "staged": {
+        "basis_spread": "7.75"
+       },
+       "fair_value": 998000.0,
+       "cost": 1031000.0
+      }
+     ]
+    },
+    {
+     "what": "Mario Purchaser last-out 2025-03-31: whole-coupon PIK published as margin (pik 10.79, cash leg 4.38)",
+     "rows": 1,
+     "fv_m": 4.5,
+     "staged": "pik_maturity_units_specs.json",
+     "detail": [
+      {
+       "row_id": "ROW-a68a8147eec65a00",
+       "quarter": "2025-03-31",
+       "issuer": "Mario Purchaser, LLC",
+       "instrument": "Unitranche First Lien - Last Out Term Loan",
+       "published": {
+        "pik_rate": 10.79,
+        "interest_rate_kind": null,
+        "basis_spread": null
+       },
+       "staged": {
+        "pik_rate": "15.17",
+        "interest_rate_kind": "all_in",
+        "basis_spread": "10.79"
+       },
+       "fair_value": 4499000.0,
+       "cost": 4343000.0
+      }
+     ]
+    },
+    {
+     "what": "AX VI second lien 2025-03-31: maturity 2029-08-31 from the tag, printed 08/2030",
+     "rows": 1,
+     "fv_m": 2.73,
+     "staged": "pik_maturity_units_specs.json",
+     "detail": [
+      {
+       "row_id": "ROW-f161e08b510ad7be",
+       "quarter": "2025-03-31",
+       "issuer": "AX VI INV2 Holding AB (Voff)",
+       "instrument": "Second Lien Term Loan",
+       "published": {
+        "maturity_date": "2029-08-31",
+        "maturity_precision": null
+       },
+       "staged": {
+        "maturity_date": "2030-08-31",
+        "maturity_precision": "month"
+       },
+       "fair_value": 2729000.0,
+       "cost": 2548000.0
+      }
+     ]
+    },
+    {
+     "what": "Sandvine common (fair value 0) publishes no unit count; page prints 81,818",
+     "rows": 1,
+     "staged": "pik_maturity_units_specs.json",
+     "detail": [
+      {
+       "row_id": "ROW-fd1955bc74e93de9",
+       "quarter": "2025-03-31",
+       "issuer": "Sandvine Corporation",
+       "instrument": "Common Stock",
+       "published": {
+        "shares_held": null
+       },
+       "staged": {
+        "shares_held": "81818"
+       },
+       "fair_value": 0.0,
+       "cost": null
+      }
+     ]
+    },
+    {
+     "what": "printed positions not published: schedule lines with a cost / par / unit tag and no fair-value tag (dash, or 4 printed values on twin contexts)",
+     "contexts_staged": 291,
+     "contexts_skipped_already_published": 4,
+     "contexts_not_located": [
+      {
+       "quarter": "2023-09-30",
+       "ctx": "C_0535d7fe-71cd-4478-886f-40eea9a4e70c",
+       "issuer": "MeriCal, LLC",
+       "instrument": "Preferred Stock",
+       "tagged": {
+        "units": 521
+       },
+       "label": "twin",
+       "twin_staged_in_r2": true,
+       "why": "Units-only context of the printed 'MeriCal, LLC Preferred Stock 521 103 - -'; its cost 103 is on context C_f87165ea (staged in round 2). Publishing both would double the line; the staged row needs shares_held 521 instead."
+      }
+     ],
+     "staged": "dash_untagged_values.json (272, round 2) + dash_untagged_values_r3.json (19, round 3, with the extra corrections each needs); dash_skipped_duplicates.json (4 twins); dash_not_located.json (final: 1 twin)",
+     "cost_gap_by_quarter": [
+      {
+       "quarter": "2023-03-31",
+       "printed_total_cost": 1603588000,
+       "published_cost": 1602443000,
+       "published_minus_printed": -1145000.0,
+       "cost_sign_fix_effect": -344000.0,
+       "staged_dash_round2_cost": 1489000,
+       "staged_dash_round3_cost": 0,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,603,588 218.0 % $ 1,566,045"
+      },
+      {
+       "quarter": "2023-06-30",
+       "printed_total_cost": 1609639000,
+       "published_cost": 1608930000,
+       "published_minus_printed": -709000.0,
+       "cost_sign_fix_effect": -264000.0,
+       "staged_dash_round2_cost": 943000,
+       "staged_dash_round3_cost": 30000,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,609,639 217.8 % $ 1,581,130"
+      },
+      {
+       "quarter": "2023-09-30",
+       "printed_total_cost": 1595542000,
+       "published_cost": 1592849000,
+       "published_minus_printed": -2693000.0,
+       "cost_sign_fix_effect": -4000.0,
+       "staged_dash_round2_cost": 2685000,
+       "staged_dash_round3_cost": 12000,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,595,542 214.3 % $ 1,564,828"
+      },
+      {
+       "quarter": "2023-12-31",
+       "printed_total_cost": 1592688000,
+       "published_cost": 1588516000,
+       "published_minus_printed": -4172000.0,
+       "cost_sign_fix_effect": -32000.0,
+       "staged_dash_round2_cost": 2582000,
+       "staged_dash_round3_cost": 14000,
+       "residual_after_staged": -1608000,
+       "printed_line": "Total Investments $ 1,592,688 213.0 % $ 1,582,075"
+      },
+      {
+       "quarter": "2024-03-31",
+       "printed_total_cost": 1569840000,
+       "published_cost": 1567222000,
+       "published_minus_printed": -2618000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 2618000,
+       "staged_dash_round3_cost": 0,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,569,840 206.2 % $ 1,563,343"
+      },
+      {
+       "quarter": "2024-06-30",
+       "printed_total_cost": 1612888000,
+       "published_cost": 1610192000,
+       "published_minus_printed": -2696000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 2696000,
+       "staged_dash_round3_cost": 0,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,612,888 214.6 % $ 1,610,775"
+      },
+      {
+       "quarter": "2024-09-30",
+       "printed_total_cost": 1601015000,
+       "published_cost": 1600100000,
+       "published_minus_printed": -915000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 946000,
+       "staged_dash_round3_cost": -31000,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,601,015 212.5 % $ 1,591,433"
+      },
+      {
+       "quarter": "2024-12-31",
+       "printed_total_cost": 1623906000,
+       "published_cost": 1622956000,
+       "published_minus_printed": -950000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 950000,
+       "staged_dash_round3_cost": 0,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,623,906 213.5 % $ 1,598,857"
+      },
+      {
+       "quarter": "2025-03-31",
+       "printed_total_cost": 1647935000,
+       "published_cost": 1647473000,
+       "published_minus_printed": -462000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 471000,
+       "staged_dash_round3_cost": -9000,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,647,935 $ 222.9 % $ 1,620,741"
+      },
+      {
+       "quarter": "2025-06-30",
+       "printed_total_cost": 1616150000,
+       "published_cost": 1614853000,
+       "published_minus_printed": -1297000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 1297000,
+       "staged_dash_round3_cost": 0,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,616,150 $ 220.8 % $ 1,600,692"
+      },
+      {
+       "quarter": "2025-09-30",
+       "printed_total_cost": 1603099000,
+       "published_cost": 1602059000,
+       "published_minus_printed": -1040000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 1055000,
+       "staged_dash_round3_cost": -15000,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,603,099 $ 220.9 % $ 1,580,678"
+      },
+      {
+       "quarter": "2025-12-31",
+       "printed_total_cost": 1603469000,
+       "published_cost": 1601478000,
+       "published_minus_printed": -1991000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 1963000,
+       "staged_dash_round3_cost": 28000,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,603,469 $ 222.3 % $ 1,569,418"
+      },
+      {
+       "quarter": "2026-03-31",
+       "printed_total_cost": 1618654000,
+       "published_cost": 1613022000,
+       "published_minus_printed": -5632000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 5632000,
+       "staged_dash_round3_cost": 0,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,618,654 231.8 % $ 1,562,470"
+      },
+      {
+       "quarter": "2026-06-30",
+       "printed_total_cost": 1625061000,
+       "published_cost": 1624020000,
+       "published_minus_printed": -1041000.0,
+       "cost_sign_fix_effect": -0.0,
+       "staged_dash_round2_cost": 1041000,
+       "staged_dash_round3_cost": 0,
+       "residual_after_staged": 0,
+       "printed_line": "Total Investments $ 1,625,061 239.3 % $ 1,570,668"
+      }
+     ],
+     "accounting_766": {
+      "candidates": 766,
+      "published_in_rfcrf_at_fv0": 472,
+      "staged_round2": 272,
+      "twins_of_published_rows_round2": 4,
+      "staged_round3": 17,
+      "not_on_page": 0,
+      "twin_of_staged_context": 1
+     },
+     "plus_outside_the_766": [
+      "WCT Group Holdings revolver 2025-03-31 (C_02e1520d, cost -9; tagged only under the excluded 'Non-Control, Non-Affiliate' member tree)",
+      "UP Acquisition revolver 2023-09-30 (C_6563ede4, cost -3; member names no instrument)"
+     ],
+     "cost_gap_note": "Published fair value ties to the printed Total Investments ex cash in 14 of 14 quarters; published cost does not. After all staged dash rows and cost signs (incl. the Banker's Toolbox 2023-06-30 sign fix, earlier mis-keyed) the residual is 0 in 13 of 14 quarters; non-zero: 2023-12-31 -1608k. Same basis in every quarter (cost_gap_basis).",
+     "cost_gap_basis": "printed cost = the 'Total Investments $ cost ... $ fv' line of the current schedule (the one whose fair\nvalue matches the published ex-cash fair value); published cost = sum of rfcrf cost ex cash ex underlying_schedule; residual =\npublished - printed - 2 x |cost| of each staged cost-sign row + the cost each staged dash context would publish (signed)."
+    },
+    {
+     "what": "Park Place Technologies canonical_name holds the hierarchy path",
+     "rows": 24,
+     "staged": "park_place_canonical_rows.json (shared entity step; no correctable field)"
+    }
+   ]
+  },
+  {
+   "finding": "provenance_reverify financial_convention_unresolved 2023-03-31 / 2025-06-30 / 2026-06-30",
    "hypotheses": [
     "PPV two loans print0.00 all-in but1300PIK; comparative13.00 is not authority to replace the current0.00.",
     "Read the printed rate/PIK terms; simple cash=all-in-minus-PIK would be negative. No evidence supports adding PIK to the printed all-in column.",
-    "Same rows flag X02 2023-03-31 (RVQ_REV_e2856b9eb0a7): published rate is blank because the 0.00 reading is unresolved."
+    "Same rows flag X02 2023-03-31 (RVQ_REV_e2856b9eb0a7): published rate is blank because the 0.00 reading is unresolved.",
+    "Mario revolver prints10.18rate and1079PIK, so PIK10.79 exceeds disclosed rate."
    ],
-   "remaining_uncertainty": "Published all-in remains unresolved despite a printed numeric rate; this is not an as-filed published value. Correct rate convention cannot be established from these contradictory columns.",
-   "next_action": "Inspect the relevant footnotes/amendment evidence and obtain an explicit per-row convention decision; preserve reported source numbers and unresolved status until supported.",
    "quotes": [
     {
      "accession": "0000950170-23-020540",
      "text": "PPV Intermediate Holdings LLC (Vetcor) (8) Unsecured Debt 1300 PIK 0.00 % 08/2030 758 741 0.1 646"
-    }
-   ]
-  },
-  {
-   "finding": "provenance_reverify financial_convention_unresolved 2025-06-30",
-   "status": "source_contradiction",
-   "hypotheses": [
-    "Mario revolver prints10.18rate and1079PIK, so PIK10.79 exceeds disclosed rate.",
-    "Read the printed rate/PIK terms; simple cash=all-in-minus-PIK would be negative. No evidence supports adding PIK to the printed all-in column."
-   ],
-   "remaining_uncertainty": "Published all-in remains unresolved despite a printed numeric rate; this is not an as-filed published value. Correct rate convention cannot be established from these contradictory columns.",
-   "next_action": "Inspect the relevant footnotes/amendment evidence and obtain an explicit per-row convention decision; preserve reported source numbers and unresolved status until supported.",
-   "quotes": [
+    },
     {
      "accession": "0000950170-25-108024",
      "text": "Mario Purchaser, LLC Unitranche First Lien Revolver S + 1079 PIK 10.18 % 04/2028 174 162 0.0 144"
-    }
-   ]
-  },
-  {
-   "finding": "provenance_reverify financial_convention_unresolved 2026-06-30",
-   "status": "source_contradiction",
-   "hypotheses": [
-    "Three Eagle loans print8.58/10.49/10.32 versus PIK9.53/11.39/11.39; Mario prints14.58 versusPIK14.60. TSX separate100x scale bug was corrected9.91.",
-    "Read the printed rate/PIK terms; simple cash=all-in-minus-PIK would be negative. No evidence supports adding PIK to the printed all-in column."
-   ],
-   "remaining_uncertainty": "Published all-in remains unresolved despite a printed numeric rate; this is not an as-filed published value. Correct rate convention cannot be established from these contradictory columns.",
-   "next_action": "Inspect the relevant footnotes/amendment evidence and obtain an explicit per-row convention decision; preserve reported source numbers and unresolved status until supported.",
-   "quotes": [
+    },
     {
      "accession": "0001193125-26-342351",
      "text": "Eagle Midco B.V. (Avania) (11) Unitranche First Lien Term Loan E + 750 ( 953 PIK) 8.58 % 07/2029 EUR 2,439 $ 2,533 0.3 % $ 1,656"
@@ -409,47 +1278,51 @@
    ]
   },
   {
+   "finding": "row_validation X02 2023-03-31 (PPV '1300 PIK 0.00 %')",
+   "hypotheses": [
+    "Confirmed error, not fixed: 3 rows of this finding publish a positive cost (staged); PPV reading needs an owner decision."
+   ]
+  },
+  {
    "finding": "html_extract html_carry 2022-03-31",
-   "status": "unfinished_historical_review",
    "hypotheses": [
     "Cached HTML has current total1288601000 and comparative1270366000. Validation artifact has416rows/FV2363790000, carry_rate0.351, NO_DATA filed anchor.",
     "No XBRL cache available for accession0000950170-22-008487; no2022published holdings in this sandbox."
+   ]
+  },
+  {
+   "finding": "Seko Global Logistics 2025-12-31 printed rate",
+   "hypotheses": [
+    "Printed 'S + 100 (100 Floor) (plus 950 PIK) 11.50 %': SOFR ~4 + 1.00 + 9.50 = 14.5, not 11.50; kept D-031 (spread 10.5, PIK 9.5) per D-246, printed rate recorded as open."
    ],
-   "remaining_uncertainty": "Company carry and current/comparative membership have not been fully reviewed. Sum discrepancy is evidence requiring investigation, not proof of one specific mechanism.",
-   "next_action": "Inspect carried company cells and schedule date boundaries in the historical template; rerun bounded HTML extraction and establish an independent current total.",
    "quotes": [
     {
-     "accession": "0000950170-22-008487",
-     "text": "Total Investments $ 1,267,678 196.9 % $ 1,288,601"
+     "accession": "0001193125-26-071922",
+     "text": "Seko Global Logistics Network, LLC Senior Secured First Lien Term Loan S + 100 ( 100 Floor) (plus 950 PIK) 11.50 % 11/2029 107 108 0.0 108 UHY"
     }
    ]
   },
   {
-   "finding": "page sample C011 / observation source-negative-cost-sign-lost (no ledger rule)",
-   "status": "confirmed_error_no_build_left",
+   "finding": "PIK lines that fit neither par-growth reading",
+   "rows": 171,
+   "detail": {
+    "coupon_pik/semi_annual_coupon_over_2": 2,
+    "part/draw_repayment_or_restructuring": 28,
+    "part/flat_no_capitalisation_this_quarter": 23,
+    "part/other": 73,
+    "margin_pik/other": 7,
+    "margin_pik/semi_annual_coupon_over_2": 3,
+    "coupon_pik/flat_no_capitalisation_this_quarter": 4,
+    "coupon_pik/draw_repayment_or_restructuring": 6,
+    "margin_pik/flat_no_capitalisation_this_quarter": 3,
+    "coupon_pik/other": 15,
+    "margin_pik/draw_repayment_or_restructuring": 4,
+    "part/semi_annual_coupon_over_2": 3
+   },
+   "list": "scratch/fund_runs/0001633336/pik_neither_rfcrf.csv",
    "hypotheses": [
-    "138 undrawn lines in 2023 (53 at 03-31, 57 at 06-30, 2 at 09-30, 26 at 12-31) print cost in parentheses and publish a positive cost (sum 1.914M); the instance facts are positive, so the filer tagged cost unsigned.",
-    "Row corrections can set each; with no build left none was made beyond the four already fixed."
-   ],
-   "next_action": "Next build: one row correction per row from z_costsign_ccza.json, or a fund opt-in that signs a cost from the printed parentheses; then rebuild."
-  },
-  {
-   "finding": "page sample C014 / observation pik-term-printed-not-tagged (no ledger rule)",
-   "status": "confirmed_error_no_build_left",
-   "hypotheses": [
-    "Case-sensitive 'Including' match: rejected; 296 of 311 lowercase '(including N PIK)' rows publish pik_rate, all from a tagged fact.",
-    "Cause: the filer omits the PIK rate fact on 34 rows and nothing reads the PIK figure from the tagged terms text."
-   ],
-   "next_action": "Next build: declare pik_rate from the printed terms for the 34 rows (row corrections, list from scratch/fund_runs/0001633336/z_pikgap.py), or a fund opt-in that reads 'N PIK' from InvestmentInterestRateTerms; check the all-in/cash split on each."
-  },
-  {
-   "finding": "row_validation C103 2024-06-30 (RVQ_REV_74861b16865a)",
-   "status": "confirmed_error_no_build_left",
-   "hypotheses": [
-    "Negative fair value sign error: rejected; ROW-22c2622aac4a8b08 is printed as the Affinitiv revolver with dash par, dash cost and value ( 3 ).",
-    "Instrument: the filer's member for this context says 'Unitranche First Lien Term Loan', so the row publishes as a term loan; the page prints it as the Unitranche First Lien Revolver, and the real term loan (6,119 / 6,114 / 6,088) is a separate published row (ROW-0abe9fad6de538a9). The published instrument is wrong. Same at 2024-03-31: ROW-f56f34ad7edbacb9 (value -1) is printed as 'Affinitiv, Inc. (4)(5) Unitranche First Lien Revolver 08/2024 - ( 1 ) ( 0.0 ) ( 1 )' and published as a term loan."
-   ],
-   "next_action": "Next build: row corrections instrument_description='Unitranche First Lien Revolver' for ROW-22c2622aac4a8b08 (2024-06-30) and ROW-f56f34ad7edbacb9 (2024-03-31); then re-file the as-printed proposal for the negative mark. The C103 proposal is withdrawn until then."
+    "Of 739 PIK lines, 304 have a measurable next-quarter par; 171 fit neither pik/4 nor coupon/4: semi-annual capitalisation, flat quarters, draws/repayments/restructurings. No value changed on them beyond the printed term reading."
+   ]
   }
  ],
  "orchestrator_requests": [],
@@ -536,7 +1409,7 @@
   },
   {
    "observation_key": "source-negative-cost-sign-lost",
-   "what": "Seniorlink fixed earlier. The ccza page read finds 138 more undrawn lines in the 2023 quarters published with a positive cost while the page prints it in parentheses (United Flow (25), Bankers Toolbox (35), Effective School (17)...); the instance facts are positive, so the filer tagged the cost unsigned. Sample card C011 (Team Select delayed draw 2023-06-30, printed ( 12 ), published +12000) is one of these 138 (ROW-be38105e547b53c7 in z_costsign_ccza.json). Left: no build remaining.",
+   "what": "171 undrawn lines corrected from the printed parentheses (138 published 2023 rows + 33 dash rows), but the check missed 7 rows that still publish a positive cost: Explorer Investor delayed draw 2023-03-31 (+130) and 2023-06-30 (+125), Auveco delayed draw 2023-03-31 and 2023-06-30 (+7), Bankers Toolbox revolver 2023-03-31 (+35), SolutionReach revolver 2023-09-30 (+2), USA Hometown delayed draw 2023-12-31 (+16). Missed because: cost < 100,000 filter, exact published issuer name (Bankers vs Banker's, 'Inc' vs 'Inc.'), no '$' between cells. A re-run over every quarter and every size (r2_costsign.py) finds only these 7 plus HGH 2024-12-31, which prints a positive 3 (as printed). Fix staged in staged/costsign_specs.json; not applied (no build left).",
    "field": "cost",
    "quarters": [
     "2023-03-31",
@@ -549,7 +1422,7 @@
    "suggested_check": "For undrawn lines, a published cost must carry the sign of the printed cost cell (parentheses mean negative).",
    "quote": {
     "accession": "0000950170-23-020540",
-    "text": "United Flow Technologies (4)(5) Unitranche First Lien Revolver 10/2027 - ( 25 ) ( 0.0 ) ( 43 )"
+    "text": "Explorer Investor, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 130 ) ( 0.0 ) ( 132 )"
    },
    "detection_decision": {
     "action": "propose_detector",
@@ -658,7 +1531,7 @@
   },
   {
    "observation_key": "member-names-another-issuer",
-   "what": "The filer attaches a member that names a different issuer or instrument than the printed line: (a) 2024-12-31 row published as Patriot Growth Insurance Services delayed draw (12/2028, cost -19, value -107) prints as Vantage Insurance Partners, Inc.; (b) the Affinitiv undrawn revolvers, 2024-03-31 ROW-f56f34ad7edbacb9 (value -1) and 2024-06-30 ROW-22c2622aac4a8b08 (value -3), publish as 'Unitranche First Lien Term Loan' while the page prints 'Unitranche First Lien Revolver' and the term loan is a separate row. Left: no build remaining.",
+   "what": "21 rows tagged on another company's member (Vantage/Patriot, Affinitiv revolvers, HS Spa/HGH, Infobase/Hsid, SQAD/Smartronix, New Era/MRI, Lightspeed/Lighthouse Lab, Sandvine/PDFTron, Explorer/EMS, Great Lakes/GrapeTree) corrected from the printed line; the issuer_name_printed page rule found them.",
    "field": "issuer_name, instrument_description",
    "quarters": [
     "2024-03-31",
@@ -667,20 +1540,21 @@
    ],
    "fair_value_m": 0.111,
    "cause": "row",
-   "action": "left",
+   "action": "fixed",
    "suggested_check": "Compare the published issuer and instrument with the printed line found by value and maturity; flag when the printed line names a different issuer or instrument type (revolver vs term loan).",
    "quote": {
     "accession": "0000950170-25-023153",
-    "text": "Vantage Insurance Partners, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 12/2028 - ( 19 ) 0.0 ( 107 )"
+    "text": "Explorer Investor, Inc. Unitranche First Lien Term Loan S + 600 ( 50 Floor) 10.48 % 06/2029 13,446 12,975 1.7 12,505 FH MD"
    },
    "detection_decision": {
-    "action": "propose_detector",
-    "rationale": "Only a page comparison sees a wrong member; no tag-based rule can. The 20-row page sample is the only current catch."
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed (identity page rule) flagged these rows in the untouched rfcra build.",
+    "reference": "pipeline/candidate_rules.py issuer_name_differs_from_page"
    }
   },
   {
    "observation_key": "canonical-name-from-hierarchy-alias",
-   "what": "Entity resolution gives Park Place Technologies the canonical name '3 Investments United States Debt Investments Software & Services Park ...' on 20 rows in ccza (it was 'Park Place Technologies, LLC' in ccye) although every issuer_name is now clean. Shared entity step; exempt column, not changed.",
+   "what": "Entity resolution gives Park Place Technologies the canonical name '3 Investments United States Debt Investments Software & Services Park ...' on 24 rows in rfcrf (20 counted in ccza) (it was 'Park Place Technologies, LLC' in ccye) although every issuer_name is now clean. Shared entity step; exempt column, not changed.",
    "field": "canonical_name",
    "quarters": [
     "2023-03-31",
@@ -710,7 +1584,7 @@
   },
   {
    "observation_key": "pik-term-printed-not-tagged",
-   "what": "Sample card C014: Lighthouse Behavioral Health term loan 2023-12-31 prints 'S + 650 ( 100 Floor) (including 75 PIK)' and publishes no pik_rate. Cause is not the capital 'Including' in the member: Crescent's pik_rate comes only from a tagged PIK rate fact (701 of 735 rows whose terms mention PIK have one, all 701 tagged); the terms text (ccap:InvestmentInterestRateTerms) is never parsed for PIK. 34 published rows mention PIK in the terms but carry no PIK fact and publish none: 15 '(including N PIK)', 3 '(Including N PIK)', 2 '(plus N PIK)', 13 'N PIK' without brackets, 1 '1121PIK'; 15 of them at 2023-12-31; about 81M fair value. interest_rate is published on these rows, so only the PIK leg is lost.",
+   "what": "PIK / total margin set from the printed term on 131 rows (incl. sample card C014). Incomplete: 35 rows printed 'X + c (including p PIK)' where the coupon shows c is the cash margin (coupon - c is no benchmark; coupon - (c + p) is) still publish c as the spread: 31 at 2025-03-31 (A&R x3, ACI x3, BVI, Gener8 x3, Ingenio x2, Lash x4, HGH x3, Isagenix, Avalign, Great Lakes x2, Omni x5, Affinitiv x2, Eagle), BioAgilytix x2 and Professional Physical Therapy at 2023-03-31, Isagenix 2024-12-31. ACI prints 'S + 600 (including 325 PIK)' at 2024-12-31 (published 6.0) and 'S + 275 (including 325 PIK) 10.42 %' at 2025-03-31 (published 2.75). Staged spread = c + p in staged/including_pik_spread_specs.json (r2_included.py); not applied.",
    "field": "pik_rate",
    "quarters": [
     "2023-03-31",
@@ -731,86 +1605,327 @@
    "sample_cards": [
     "C014"
    ],
-   "suggested_check": "For rows whose printed or tagged interest terms contain 'N PIK', require a published pik_rate equal to N/100.",
+   "suggested_check": "On a loan row printing 'X + c (... p PIK)' compare the printed coupon with c and with c + p: flag when coupon - published spread is not a plausible benchmark for the quarter but coupon - (spread + pik) is.",
    "quote": {
-    "accession": "0000950170-24-017903",
-    "text": "Lighthouse Behavioral Health Solutions, LLC Senior Secured First Lien Revolver S + 650 ( 100 Floor) (including 75 PIK) 12.11 % 03/2028 1,149 1,144 0.1 1,001"
+    "accession": "0000950170-25-071368",
+    "text": "Ingenio, LLC Unitranche First Lien Term Loan S + 200 ( 100 Floor) (including 600 PIK) 12.44 % 08/2027 4,682 4,651 0.6"
    },
    "detection_decision": {
     "action": "propose_detector",
-    "rationale": "No ledger rule compares pik_rate with the PIK figure in the terms text; the gap was found only by the page sample. The terms fact is tagged on every Crescent row, so a text-vs-field comparison is cheap and fund-agnostic."
+    "rationale": "No rule compares the printed coupon with the published spread; pik_printed only checks the PIK figure.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "printed-plus-pik-repeats-whole-margin",
+   "what": "Eagle Midco 2025-12-31 prints 'S + 775 (plus 775 PIK) 11.72 %' and 'E + 750 (plus 750 PIK) 9.53 %': the coupon equals benchmark + the tagged margin, so the 'plus N PIK' repeats the whole margin. Reading it as cash + PIK (D-031) doubled the spread (15.5) and raised C115 / fmt_basis_spread; spread restored to the tagged margin (D-246) and recorded as source ambiguity. 94 of the fund's 98 'plus' rows do fit cash + PIK.",
+   "field": "basis_spread",
+   "quarters": [
+    "2025-12-31"
+   ],
+   "fair_value_m": 5.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "On a 'plus N PIK' row, flag when printed rate - (cash margin + PIK margin) is below 1.5 or above 6 (an implausible benchmark), before applying the cash + PIK reading.",
+   "quote": {
+    "accession": "0001193125-26-071922",
+    "text": "Eagle Midco B.V. (Avania) (11) Unitranche First Lien Term Loan S + 775 (plus 775 PIK) 11.72 % 07/2029 EUR 3,705 3,649 0.4 2,708"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "C115 and fmt_basis_spread flagged the doubled spread in rfcrb/rfcrc; nothing flags the source wording itself.",
+    "reference": "row_validation C115; weak fmt_basis_spread"
+   }
+  },
+  {
+   "observation_key": "member-values-swapped-between-sibling-members",
+   "what": "Mario Purchaser 2024-12-31: the last-out member carries the delayed-draw loan's values and the delayed-draw 'One' member the last-out's (instrument, maturity, PIK and spread disagree with the printed line). Fixed by corrections on both rows. Found only by reading the PIK test output.",
+   "field": "instrument_description, maturity_date, basis_spread, pik_rate",
+   "quarters": [
+    "2024-12-31"
+   ],
+   "fair_value_m": 4.8,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag a row whose member maturity or instrument differs from the printed line the page reader joins it to by values (maturity month mismatch is enough).",
+   "quote": {
+    "accession": "0000950170-25-023153",
+    "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344 Mario"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares the member's maturity with the printed line's.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "dash-fair-value-row-not-published",
+   "what": "766 cost / par / unit-only schedule contexts with no fair-value tag. 472 published at fair value 0 in rfcrf (reviewer sample 19 of 20 right; Sandvine 2025-03-31 lacks its printed 81,818 units, staged). The other 294 are not unlocatable: round 2 staged 272 (a units-cell bug and exact-name matching had hidden them) and found 4 cost/par twins of published rows; round 3 read the last 18 on the page and staged 17 (Seniorlink, Stepping Stones, Banker's Toolbox, Vivid Seats x4, Lexipol revolver tagged on the term-loan member with cost +16, Advanced Diabetes, First Eagle x2, IVC common x3, Team Select x2, VetStrategy common on the preferred member); 1 is a twin (MeriCal preferred units 2023-09-30, cost on another context). Two more printed lines outside the 766 are staged: WCT revolver 2025-03-31 (only in the excluded Non-Control member tree) and UP Acquisition revolver 2023-09-30. Several need a second correction (maturity, instrument, issuer, cost sign, units) recorded with each staged entry. Published cost is short of the printed total cost by these contexts (e.g. 2026-03-31 5,632 thousand); after the staged fixes the residual is 0 in 13 of 14 quarters (2023-12-31 -1608k unexplained). Nothing applied (no build left).",
+   "field": "row_presence",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "Per fund-quarter count contexts with a schedule member and a cost or par tag but no fair-value fact that are not published; flag above zero.",
+   "quote": {
+    "accession": "0000950170-23-061089",
+    "text": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 15 ) - -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reports unpublished cost-only schedule contexts; source reconciliation keys on fair value.",
+    "reference": "suggested_check"
+   }
+  },
+  {
+   "observation_key": "whole-coupon-pik-read-as-margin",
+   "what": "Whole-coupon PIK set on 39 rows of 6 loans (D-232, D-246). Missed: Mario Purchaser last-out 2025-03-31 ('S + 1079 PIK 15.17 %', par 4,422 -> 4,593, +3.87 %% vs coupon/4 3.79 %%; my own test verdict 'coupon') still publishes pik 10.79, cash leg 4.38, no spread, between whole-coupon quarters 2024-12-31 and 2025-06-30. The round-1 selection keyed on instrument text that changed this quarter. Staged (pik 15.17, all_in, spread 10.79); not applied.",
+   "field": "pik_rate",
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "fair_value_m": 30.0,
+   "cause": "fund",
+   "action": "parked",
+   "suggested_check": "For every PIK line with next-quarter par, compare par growth with pik/4 and coupon/4 (or /2); flag rows fitting coupon but published with pik < coupon.",
+   "quote": {
+    "accession": "0000950170-25-071368",
+    "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1079 PIK 15.17 % 04/2032 4,422 4,343 0.6 4,499 Mario"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "pik_printed cannot tell margin from coupon in basis-point form (REQ-rfcr-1); the par-growth test is in scratch only.",
+    "reference": "scratch/fund_runs/0001633336/r_pik_test.py"
+   }
+  },
+  {
+   "observation_key": "undrawn-member-text-carries-drawn-rate",
+   "what": "Annuity Health 2024-06-30 undrawn revolver: the member text carries 'S + 525 ... 10.57%' while the printed line prints no rate; published rate/spread/benchmark came from the member. Withdrawn.",
+   "field": "interest_rate",
+   "quarters": [
+    "2024-06-30"
+   ],
+   "fair_value_m": 0.0,
+   "cause": "row",
+   "action": "fixed",
+   "suggested_check": "Flag an undrawn line (fair value 0 or no par) whose rate comes from identifier text while the printed line prints none.",
+   "quote": {
+    "accession": "0000950170-24-095458",
+    "text": "Annuity Health (4)(5) Senior Secured First Lien Revolver 02/2029 - ( 7 ) 0.0 -"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "X05 flagged the row once the rate was withdrawn without the coupon type (rfcre); nothing flags the member-text rate itself.",
+    "reference": "row_validation X05"
+   }
+  },
+  {
+   "observation_key": "printed-maturity-differs-from-tag",
+   "what": "AX VI second lien 2025-03-31 publishes maturity 2029-08-31 from the tag; the page and member print 08/2030. Staged, not applied.",
+   "field": "maturity_date",
+   "quarters": [
+    "2025-03-31"
+   ],
+   "fair_value_m": 2.73,
+   "cause": "row",
+   "action": "parked",
+   "suggested_check": "Flag a row whose maturity month differs from the 'MM/YYYY' printed on its own line.",
+   "quote": {
+    "accession": "0000950170-25-071368",
+    "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 12.39 % 08/2030 EUR 2,729 2,548 0.4"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares published maturity with the printed line.",
+    "reference": "suggested_check"
    }
   }
  ],
  "name_shape_exceptions": [],
  "tests_run": [
-  "tests/test_crescent_wrapper_reading.py and tests/test_source_encodings.py:100passed initially; final focused wrapper file4passed before ccye; protected-output checks passed.",
-  "Five cached single-fund builds; every processing stage passed. Ledger exit1 reflects outstanding findings.",
-  "tests/test_row_correction_nonaccrual.py: 4 passed (incl. int-typed column regression); tests/test_unified_holdings.py -k RowCorrections: 22 passed",
-  "tests/test_crescent_wrapper_reading.py: 6 passed (2 new: typed member variants in DuckDB, Non-Control duplicate kept out); tests/test_bdc_xbrl_wrapper.py: 557 passed",
-  "Build ccza: first run stopped at rebuild (int/bool mix from the new correctable field, 'Type BOOLEAN does not match with INTEGER'); fixed and resumed the same sandbox from the rebuild stage (fund_ledger_trial.py --from rebuild); all stages exit 0, ledger exit 1 = outstanding findings.",
-  "ccza vs ccye: 3 rows added, 0 removed; changed columns issuer_name 65, instrument_description 86, nonaccrual_footnote/status 13, corrected_fields 24, position_key 67, position_id 127 (+exempt entity_id/canonical_name); 91 columns identical."
+  "tests/test_crescent_wrapper_reading.py: 6 passed (run before builds rfcrb and rfcrd)",
+  "Six single-fund builds rfcra..rfcrf with 2026-06-30; every processing stage exit 0; ledger exit 1 = outstanding findings; 0 Crescent 'Row correction unmatched' and 0 'matches 2 rows' in rfcrc..rfcrf (2 unmatched in rfcrb, fixed in rfcrc)",
+  "fund_gate.py check rfcrf (no snapshot): see report run notes"
  ],
  "not_done": [
-  "49 outstanding at ccza (51 raw, 2 cleared by accepted check reasons); 43 have a proposal; 6 have none and are parked (3 financial_convention_unresolved, html_carry 2022-03-31, X02 2023-03-31 with 53 sign errors and the PPV question, C103 2024-06-30 with a wrong instrument).",
-  "Found after the only build, not fixed: 138 negative undrawn costs published positive in 2023 (incl. sample card C011), 34 PIK terms printed but no pik_rate published (sample card C014), and the Vantage/Patriot wrong member.",
-  "Only one build was allowed; it failed once at the rebuild stage on my own type defect and was resumed in the same sandbox, not rebuilt under a new label. The orchestrator should decide whether that counts.",
-  "No full test suite, no cohort run of the shared change (inert without a correction row; no other fund has a nonaccrual_footnote correction), no semantic diff, no publish.",
-  "Totals: gate tolerance only, not exact; 2022 HTML quarter unpublished and unanchored.",
-  "The two sample errors are not ledger findings, so they have no entry under investigations (an investigation must match an outstanding review_id); they are recorded as observations and parked entries."
+  "No full test suite, cohort regression, semantic diff or publish.",
+  "Extracted industry is blank on 465 of the 472 newly published fair-value-0 rows (GICS on 323); not checked against the printed industry headings.",
+  "Process slip: one command began with a bare 'python3 -' and hung about 10 minutes; both processes (11772, 9344) killed by PID; nothing written.",
+  "Round 2 (report-only): every fix for the review's findings is staged under scratch/fund_runs/0001633336/staged/ and NOT applied; rfcrf data unchanged.",
+  "Dash contexts: 291 staged, not applied; 1 twin left unstaged (MeriCal 2023-09-30 units).",
+  "Patriot 'Common Stock One' and similar row words in instrument names are this fund's convention (ASP MCS, Action Signature); not counted as errors.",
+  "Fair value ties to the printed Total Investments ex cash in 14 of 14 quarters, but published COST does not: it is short of the printed total cost by the unpublished cost-only contexts and the 7 cost-sign errors (all staged, not applied); with them applied the residual is 0 in 13 of 14 quarters; non-zero: 2023-12-31 -1608k. 2022 HTML quarter not published."
  ],
- "investigator_id": "crescent_fund_agent_2026-10-17",
  "investigations": [
-  {
-   "finding_id": "RVQ_REV_74861b16865a",
-   "coverage": {
-    "affected_rows": [
-     "ROW-22c2622aac4a8b08"
-    ],
-    "reviewed_rows": [
-     "ROW-22c2622aac4a8b08"
-    ]
-   },
-   "conclusion": "confirmed_error",
-   "evidence": [
-    {
-     "accession": "0000950170-24-095458",
-     "text": "Affinitiv, Inc. (4)(5) Unitranche First Lien Revolver 01/2025 - - ( 0.0 ) ( 3 )"
-    },
-    {
-     "accession": "0000950170-24-095458",
-     "text": "Affinitiv, Inc. Unitranche First Lien Term Loan S + 600 ( 100 Floor) 11.60 % 01/2025 6,119 6,114 0.8 6,088"
-    },
-    {
-     "accession": "0000950170-24-095458",
-     "text": "TecoStar Holdings, Inc. Common Stock 500,000 500 0.0 3"
-    }
-   ],
-   "hypotheses_tested": [
-    "Negative fair value sign error: rejected; ROW-22c2622aac4a8b08 is printed as the Affinitiv revolver with dash par, dash cost and value ( 3 ).",
-    "Instrument: the filer's member for this context says 'Unitranche First Lien Term Loan', so the row publishes as a term loan; the page prints it as the Unitranche First Lien Revolver, and the real term loan (6,119 / 6,114 / 6,088) is a separate published row (ROW-0abe9fad6de538a9). The published instrument is wrong. Same at 2024-03-31: ROW-f56f34ad7edbacb9 (value -1) is printed as 'Affinitiv, Inc. (4)(5) Unitranche First Lien Revolver 08/2024 - ( 1 ) ( 0.0 ) ( 1 )' and published as a term loan.",
-    "Earlier verdict (TecoStar -3000): TecoStar publishes +3000 as printed; not the flagged row."
-   ],
-   "next_action": "Next build: row corrections instrument_description='Unitranche First Lien Revolver' for ROW-22c2622aac4a8b08 (2024-06-30) and ROW-f56f34ad7edbacb9 (2024-03-31); then re-file the as-printed proposal for the negative mark. The C103 proposal is withdrawn until then."
-  },
   {
    "finding_id": "RVQ_REV_1621ca854476",
    "coverage": {
     "affected_rows": [
+     "ROW-894250d955789945",
+     "ROW-89411dfb15df92a0",
+     "ROW-05949c2b9c3ac0bd",
+     "ROW-c3aef2bf66fe37a3",
+     "ROW-9b940e69060fd29d",
+     "ROW-9a6564426e0cf413",
+     "ROW-eba1232bc5ef881e",
+     "ROW-ec41bbf447972374",
+     "ROW-eadd1a6c34e19936",
+     "ROW-46776011d32b5715",
+     "ROW-ebb972e2bead2d7a",
+     "ROW-994997aee8e52da8",
      "ROW-42306ddbc9d18289",
+     "ROW-7825b1c7b2739cbc",
+     "ROW-75f66c2a1b0bc4ef",
+     "ROW-1f15338ba0586142",
+     "ROW-2d99ac4d76c3e619",
+     "ROW-4797658c84293628",
      "ROW-a1054c90c705d9d7",
+     "ROW-b3d8b2ad09d7f5e9",
+     "ROW-4bb3acad667dab96",
+     "ROW-bb453add1c12f596",
+     "ROW-5e233fc630940936",
+     "ROW-01c9897ecbc80c8c",
+     "ROW-affe459903b26d92",
+     "ROW-dd05c07a2d8456cd",
      "ROW-93462b357b0fe258",
-     "ROW-389bd40945288388"
+     "ROW-e49bd2604783a9cd",
+     "ROW-f7e3d4c6454f6618",
+     "ROW-b9a6c1bd237b1233",
+     "ROW-d33bb458f2316386",
+     "ROW-31f478a3aab8a30f",
+     "ROW-e8278ad2c26c9e58",
+     "ROW-9c73d58e4aef4376",
+     "ROW-71e51cf28f437ec7",
+     "ROW-389bd40945288388",
+     "ROW-b3b90079e692ccd7",
+     "ROW-522bf62833b54510",
+     "ROW-6a58385d2c0d15fa",
+     "ROW-af64d783a498517e",
+     "ROW-1caf53162b4cde93",
+     "ROW-cc58febd26e6809a",
+     "ROW-2f1fb7145089373c",
+     "ROW-d57a8e0ffc253319",
+     "ROW-cc269f1e2a2117cd",
+     "ROW-00512eaba8121e2c",
+     "ROW-b1a8e1f82b566c31",
+     "ROW-dfccd40e173faeb8",
+     "ROW-4662078d43aad7af",
+     "ROW-c0bbb0c4bde65901",
+     "ROW-1a180e24c61b38fb",
+     "ROW-df1da6ff4efe84d2",
+     "ROW-af2023f5fd1b34ab",
+     "ROW-cfafe14485296c79",
+     "ROW-a2acd61f004f540c",
+     "ROW-fd27293f989932bb",
+     "ROW-bf3eb7bf042ea081",
+     "ROW-5fdc904dc5429359",
+     "ROW-dd31333dfed8edad",
+     "ROW-599a9a1dba1bb8a7",
+     "ROW-735c8857966e4fe3",
+     "ROW-0242bc328c58697e",
+     "ROW-9c7b27f7fc35936c",
+     "ROW-eed9fd3fe6e75cd1",
+     "ROW-c31d0f7445c71938",
+     "ROW-19644e511b9d938a"
     ],
     "reviewed_rows": [
+     "ROW-00512eaba8121e2c",
+     "ROW-01c9897ecbc80c8c",
+     "ROW-0242bc328c58697e",
+     "ROW-05949c2b9c3ac0bd",
+     "ROW-19644e511b9d938a",
+     "ROW-1a180e24c61b38fb",
+     "ROW-1caf53162b4cde93",
+     "ROW-1f15338ba0586142",
+     "ROW-2d99ac4d76c3e619",
+     "ROW-2f1fb7145089373c",
+     "ROW-31f478a3aab8a30f",
+     "ROW-389bd40945288388",
      "ROW-42306ddbc9d18289",
-     "ROW-a1054c90c705d9d7",
+     "ROW-4662078d43aad7af",
+     "ROW-46776011d32b5715",
+     "ROW-4797658c84293628",
+     "ROW-4bb3acad667dab96",
+     "ROW-522bf62833b54510",
+     "ROW-599a9a1dba1bb8a7",
+     "ROW-5e233fc630940936",
+     "ROW-5fdc904dc5429359",
+     "ROW-6a58385d2c0d15fa",
+     "ROW-71e51cf28f437ec7",
+     "ROW-735c8857966e4fe3",
+     "ROW-75f66c2a1b0bc4ef",
+     "ROW-7825b1c7b2739cbc",
+     "ROW-89411dfb15df92a0",
+     "ROW-894250d955789945",
      "ROW-93462b357b0fe258",
-     "ROW-389bd40945288388"
+     "ROW-994997aee8e52da8",
+     "ROW-9a6564426e0cf413",
+     "ROW-9b940e69060fd29d",
+     "ROW-9c73d58e4aef4376",
+     "ROW-9c7b27f7fc35936c",
+     "ROW-a1054c90c705d9d7",
+     "ROW-a2acd61f004f540c",
+     "ROW-af2023f5fd1b34ab",
+     "ROW-af64d783a498517e",
+     "ROW-affe459903b26d92",
+     "ROW-b1a8e1f82b566c31",
+     "ROW-b3b90079e692ccd7",
+     "ROW-b3d8b2ad09d7f5e9",
+     "ROW-b9a6c1bd237b1233",
+     "ROW-bb453add1c12f596",
+     "ROW-bf3eb7bf042ea081",
+     "ROW-c0bbb0c4bde65901",
+     "ROW-c31d0f7445c71938",
+     "ROW-c3aef2bf66fe37a3",
+     "ROW-cc269f1e2a2117cd",
+     "ROW-cc58febd26e6809a",
+     "ROW-cfafe14485296c79",
+     "ROW-d33bb458f2316386",
+     "ROW-d57a8e0ffc253319",
+     "ROW-dd05c07a2d8456cd",
+     "ROW-dd31333dfed8edad",
+     "ROW-df1da6ff4efe84d2",
+     "ROW-dfccd40e173faeb8",
+     "ROW-e49bd2604783a9cd",
+     "ROW-e8278ad2c26c9e58",
+     "ROW-eadd1a6c34e19936",
+     "ROW-eba1232bc5ef881e",
+     "ROW-ebb972e2bead2d7a",
+     "ROW-ec41bbf447972374",
+     "ROW-eed9fd3fe6e75cd1",
+     "ROW-f7e3d4c6454f6618",
+     "ROW-fd27293f989932bb"
     ]
    },
    "conclusion": "false_alarm",
    "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "United Flow Technologies (4)(5) Unitranche First Lien Revolver 10/2027 - ( 25 ) ( 0.0 ) ( 43 )"
+    },
     {
      "accession": "0000950170-23-020540",
      "text": "Pye-Barker Fire & Safety, LLC (4)(5) Unitranche First Lien Revolver 11/2027 - ( 24 ) ( 0.0 ) ( 37 )"
@@ -818,15 +1933,12 @@
     {
      "accession": "0000950170-23-020540",
      "text": "Patriot Growth Insurance Services, LLC (4)(5) Unitranche First Lien Revolver 10/2028 - ( 11 ) ( 0.0 ) ( 32 )"
-    },
-    {
-     "accession": "0000950170-23-020540",
-     "text": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 17 ) 0.0 21"
     }
    ],
    "hypotheses_tested": [
     "Cost sign flipped by the build: rejected; all four rows print the cost in parentheses (Pye-Barker 24, Patriot 11, Socius 5, Seniorlink 17).",
-    "Pye-Barker 11/2027 revolver was missing before ccza (member without issuer); restored with the printed negative cost."
+    "Pye-Barker 11/2027 revolver was missing before ccza (member without issuer); restored with the printed negative cost.",
+    "rfcrf population vs ccza: +62 rows. 9 are dash lines newly published at fair value 0 (untagged_values); each was matched to its printed line by r_gen_dash.py and prints its cost in parentheses. 53 are undrawn lines whose tagged cost lost its sign, corrected this run from the printed parentheses and re-checked line by line (r_gen_costsign.py)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-C107-8 (reason undrawn-line-negative-cost-from-unamortized-fees)."
   },
@@ -857,12 +1969,12 @@
    "finding_id": "RVQ_REV_bdf3eee31d85",
    "coverage": {
     "affected_rows": [
-     "PP02|2023-12-31|row_key=1758",
-     "PP02|2023-12-31|row_key=1759"
+     "PP02|2023-12-31|row_key=1823",
+     "PP02|2023-12-31|row_key=1824"
     ],
     "reviewed_rows": [
-     "PP02|2023-12-31|row_key=1758",
-     "PP02|2023-12-31|row_key=1759"
+     "PP02|2023-12-31|row_key=1823",
+     "PP02|2023-12-31|row_key=1824"
     ]
    },
    "conclusion": "false_alarm",
@@ -874,7 +1986,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -882,12 +1995,12 @@
    "finding_id": "RVQ_REV_89539f086534",
    "coverage": {
     "affected_rows": [
-     "PP02|2024-03-31|row_key=2261",
-     "PP02|2024-03-31|row_key=2262"
+     "PP02|2024-03-31|row_key=2358",
+     "PP02|2024-03-31|row_key=2359"
     ],
     "reviewed_rows": [
-     "PP02|2024-03-31|row_key=2261",
-     "PP02|2024-03-31|row_key=2262"
+     "PP02|2024-03-31|row_key=2358",
+     "PP02|2024-03-31|row_key=2359"
     ]
    },
    "conclusion": "false_alarm",
@@ -899,7 +2012,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -907,12 +2021,12 @@
    "finding_id": "RVQ_REV_08561fe77cfc",
    "coverage": {
     "affected_rows": [
-     "PP02|2024-06-30|row_key=2772",
-     "PP02|2024-06-30|row_key=2773"
+     "PP02|2024-06-30|row_key=2910",
+     "PP02|2024-06-30|row_key=2911"
     ],
     "reviewed_rows": [
-     "PP02|2024-06-30|row_key=2772",
-     "PP02|2024-06-30|row_key=2773"
+     "PP02|2024-06-30|row_key=2910",
+     "PP02|2024-06-30|row_key=2911"
     ]
    },
    "conclusion": "false_alarm",
@@ -924,7 +2038,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -932,12 +2047,12 @@
    "finding_id": "RVQ_REV_ccc7d6ca3efd",
    "coverage": {
     "affected_rows": [
-     "PP02|2024-09-30|row_key=3290",
-     "PP02|2024-09-30|row_key=3291"
+     "PP02|2024-09-30|row_key=3473",
+     "PP02|2024-09-30|row_key=3474"
     ],
     "reviewed_rows": [
-     "PP02|2024-09-30|row_key=3290",
-     "PP02|2024-09-30|row_key=3291"
+     "PP02|2024-09-30|row_key=3473",
+     "PP02|2024-09-30|row_key=3474"
     ]
    },
    "conclusion": "false_alarm",
@@ -949,7 +2064,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -957,12 +2073,12 @@
    "finding_id": "RVQ_REV_67c17b619f3f",
    "coverage": {
     "affected_rows": [
-     "PP02|2024-12-31|row_key=3846",
-     "PP02|2024-12-31|row_key=3847"
+     "PP02|2024-12-31|row_key=4067",
+     "PP02|2024-12-31|row_key=4068"
     ],
     "reviewed_rows": [
-     "PP02|2024-12-31|row_key=3846",
-     "PP02|2024-12-31|row_key=3847"
+     "PP02|2024-12-31|row_key=4067",
+     "PP02|2024-12-31|row_key=4068"
     ]
    },
    "conclusion": "false_alarm",
@@ -974,7 +2090,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -982,12 +2099,12 @@
    "finding_id": "RVQ_REV_01715f9d8dec",
    "coverage": {
     "affected_rows": [
-     "PP02|2025-03-31|row_key=4389",
-     "PP02|2025-03-31|row_key=4390"
+     "PP02|2025-03-31|row_key=4648",
+     "PP02|2025-03-31|row_key=4649"
     ],
     "reviewed_rows": [
-     "PP02|2025-03-31|row_key=4389",
-     "PP02|2025-03-31|row_key=4390"
+     "PP02|2025-03-31|row_key=4648",
+     "PP02|2025-03-31|row_key=4649"
     ]
    },
    "conclusion": "false_alarm",
@@ -999,7 +2116,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -1007,12 +2125,12 @@
    "finding_id": "RVQ_REV_577484d14873",
    "coverage": {
     "affected_rows": [
-     "PP02|2025-06-30|row_key=4953",
-     "PP02|2025-06-30|row_key=4954"
+     "PP02|2025-06-30|row_key=5251",
+     "PP02|2025-06-30|row_key=5252"
     ],
     "reviewed_rows": [
-     "PP02|2025-06-30|row_key=4953",
-     "PP02|2025-06-30|row_key=4954"
+     "PP02|2025-06-30|row_key=5251",
+     "PP02|2025-06-30|row_key=5252"
     ]
    },
    "conclusion": "false_alarm",
@@ -1024,7 +2142,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -1032,12 +2151,12 @@
    "finding_id": "RVQ_REV_b5efa4a41ed1",
    "coverage": {
     "affected_rows": [
-     "PP02|2025-09-30|row_key=5509",
-     "PP02|2025-09-30|row_key=5510"
+     "PP02|2025-09-30|row_key=5845",
+     "PP02|2025-09-30|row_key=5846"
     ],
     "reviewed_rows": [
-     "PP02|2025-09-30|row_key=5509",
-     "PP02|2025-09-30|row_key=5510"
+     "PP02|2025-09-30|row_key=5845",
+     "PP02|2025-09-30|row_key=5846"
     ]
    },
    "conclusion": "false_alarm",
@@ -1049,7 +2168,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -1057,12 +2177,12 @@
    "finding_id": "RVQ_REV_b0c3eaceb202",
    "coverage": {
     "affected_rows": [
-     "PP02|2025-12-31|row_key=6030",
-     "PP02|2025-12-31|row_key=6031"
+     "PP02|2025-12-31|row_key=6408",
+     "PP02|2025-12-31|row_key=6409"
     ],
     "reviewed_rows": [
-     "PP02|2025-12-31|row_key=6030",
-     "PP02|2025-12-31|row_key=6031"
+     "PP02|2025-12-31|row_key=6408",
+     "PP02|2025-12-31|row_key=6409"
     ]
    },
    "conclusion": "false_alarm",
@@ -1074,7 +2194,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -1082,12 +2203,12 @@
    "finding_id": "RVQ_REV_ac7d88fbea3a",
    "coverage": {
     "affected_rows": [
-     "PP02|2026-03-31|row_key=6539",
-     "PP02|2026-03-31|row_key=6540"
+     "PP02|2026-03-31|row_key=6948",
+     "PP02|2026-03-31|row_key=6949"
     ],
     "reviewed_rows": [
-     "PP02|2026-03-31|row_key=6539",
-     "PP02|2026-03-31|row_key=6540"
+     "PP02|2026-03-31|row_key=6948",
+     "PP02|2026-03-31|row_key=6949"
     ]
    },
    "conclusion": "false_alarm",
@@ -1099,7 +2220,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -1107,12 +2229,12 @@
    "finding_id": "RVQ_REV_21aad79ff24b",
    "coverage": {
     "affected_rows": [
-     "PP02|2026-06-30|row_key=7115",
-     "PP02|2026-06-30|row_key=7116"
+     "PP02|2026-06-30|row_key=7556",
+     "PP02|2026-06-30|row_key=7557"
     ],
     "reviewed_rows": [
-     "PP02|2026-06-30|row_key=7115",
-     "PP02|2026-06-30|row_key=7116"
+     "PP02|2026-06-30|row_key=7556",
+     "PP02|2026-06-30|row_key=7557"
     ]
    },
    "conclusion": "false_alarm",
@@ -1124,7 +2246,8 @@
    ],
    "hypotheses_tested": [
     "Duplicate context of one loan: rejected. Both PP02 rows (row_key pair, matched by the rule's identifier) print as separate MHS term loans, spreads S+625 and S+650 with different coupons, each with par, cost and value of the same size.",
-    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line."
+    "Published values differ from the page: rejected. Published rate, par, cost and fair value of each row equal its own printed line.",
+    "rfcrf row_keys renumbered by the rebuild; the two flagged rows are still the MHS S+625 / S+650 pair of this quarter (identifiers checked)."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-PP02-1 (reason pp02-twin-lines-printed-separately); no data change."
   },
@@ -1202,17 +2325,17 @@
      "ROW-ec41bbf447972374",
      "ROW-eadd1a6c34e19936",
      "ROW-46776011d32b5715",
-     "ROW-994997aee8e52da8",
      "ROW-ebb972e2bead2d7a",
+     "ROW-994997aee8e52da8",
      "ROW-7825b1c7b2739cbc",
      "ROW-42306ddbc9d18289",
      "ROW-75f66c2a1b0bc4ef",
      "ROW-dfea4f8209b4f709",
-     "ROW-14e914b8f9bcad2d",
      "ROW-1f15338ba0586142",
+     "ROW-14e914b8f9bcad2d",
      "ROW-2d99ac4d76c3e619",
-     "ROW-a1054c90c705d9d7",
      "ROW-4797658c84293628",
+     "ROW-a1054c90c705d9d7",
      "ROW-b3d8b2ad09d7f5e9",
      "ROW-4bb3acad667dab96",
      "ROW-bb453add1c12f596",
@@ -1221,20 +2344,20 @@
      "ROW-affe459903b26d92",
      "ROW-dd05c07a2d8456cd",
      "ROW-93462b357b0fe258",
-     "ROW-d33bb458f2316386",
      "ROW-b9a6c1bd237b1233",
-     "ROW-31f478a3aab8a30f",
+     "ROW-d33bb458f2316386",
      "ROW-e49bd2604783a9cd",
      "ROW-f7e3d4c6454f6618",
+     "ROW-31f478a3aab8a30f",
      "ROW-e8278ad2c26c9e58",
      "ROW-9c73d58e4aef4376",
      "ROW-b3b90079e692ccd7",
-     "ROW-389bd40945288388",
      "ROW-71e51cf28f437ec7",
+     "ROW-389bd40945288388",
      "ROW-522bf62833b54510",
      "ROW-6a58385d2c0d15fa",
-     "ROW-1caf53162b4cde93",
      "ROW-af64d783a498517e",
+     "ROW-1caf53162b4cde93",
      "ROW-cc58febd26e6809a",
      "ROW-2f1fb7145089373c",
      "ROW-cc269f1e2a2117cd",
@@ -1242,121 +2365,156 @@
      "ROW-b1a8e1f82b566c31",
      "ROW-00512eaba8121e2c",
      "ROW-dfccd40e173faeb8",
-     "ROW-c0bbb0c4bde65901",
-     "ROW-1a180e24c61b38fb",
      "ROW-4662078d43aad7af",
+     "ROW-c0bbb0c4bde65901",
      "ROW-df1da6ff4efe84d2",
-     "ROW-af2023f5fd1b34ab",
+     "ROW-1a180e24c61b38fb",
      "ROW-cfafe14485296c79",
-     "ROW-fd27293f989932bb",
+     "ROW-af2023f5fd1b34ab",
      "ROW-bf3eb7bf042ea081",
      "ROW-9328d5616b25b6b7",
+     "ROW-fd27293f989932bb",
      "ROW-a2acd61f004f540c",
-     "ROW-5a64c8fec3980d82"
+     "ROW-5a64c8fec3980d82",
+     "ROW-aa787f6d3eda94d0",
+     "ROW-599a9a1dba1bb8a7",
+     "ROW-46bea120efe0d0d9",
+     "ROW-735c8857966e4fe3",
+     "ROW-a15b26d1353bb33f",
+     "ROW-5fdc904dc5429359",
+     "ROW-5d25eb25c2d18be1",
+     "ROW-6189beced807782d",
+     "ROW-eed9fd3fe6e75cd1",
+     "ROW-0242bc328c58697e",
+     "ROW-9c7b27f7fc35936c",
+     "ROW-c31d0f7445c71938",
+     "ROW-dd31333dfed8edad",
+     "ROW-19644e511b9d938a"
     ],
     "reviewed_rows": [
-     "ROW-52685e24b7037c96",
-     "ROW-48dc97b0b952463f",
-     "ROW-01a3bdbed7a46f9c",
-     "ROW-9b0c2ff91bcf2351",
-     "ROW-807ab49983801ff7",
-     "ROW-8b3a947ee2097eca",
-     "ROW-58ff8f03ba8abc9f",
-     "ROW-d0a4c8c90bbccf81",
-     "ROW-241fe1731ca32143",
-     "ROW-d5beeab1a6978ad5",
-     "ROW-ef740132a08079be",
-     "ROW-0f6b65ab97e117fa",
-     "ROW-894250d955789945",
-     "ROW-b9bd583d2eec8e83",
-     "ROW-89411dfb15df92a0",
-     "ROW-57ca01b05789d216",
-     "ROW-05949c2b9c3ac0bd",
-     "ROW-c3aef2bf66fe37a3",
-     "ROW-9b940e69060fd29d",
-     "ROW-9a6564426e0cf413",
-     "ROW-eba1232bc5ef881e",
-     "ROW-ec41bbf447972374",
-     "ROW-eadd1a6c34e19936",
-     "ROW-46776011d32b5715",
-     "ROW-994997aee8e52da8",
-     "ROW-ebb972e2bead2d7a",
-     "ROW-7825b1c7b2739cbc",
-     "ROW-42306ddbc9d18289",
-     "ROW-75f66c2a1b0bc4ef",
-     "ROW-dfea4f8209b4f709",
-     "ROW-14e914b8f9bcad2d",
-     "ROW-1f15338ba0586142",
-     "ROW-2d99ac4d76c3e619",
-     "ROW-a1054c90c705d9d7",
-     "ROW-4797658c84293628",
-     "ROW-b3d8b2ad09d7f5e9",
-     "ROW-4bb3acad667dab96",
-     "ROW-bb453add1c12f596",
-     "ROW-5e233fc630940936",
-     "ROW-01c9897ecbc80c8c",
-     "ROW-affe459903b26d92",
-     "ROW-dd05c07a2d8456cd",
-     "ROW-93462b357b0fe258",
-     "ROW-d33bb458f2316386",
-     "ROW-b9a6c1bd237b1233",
-     "ROW-31f478a3aab8a30f",
-     "ROW-e49bd2604783a9cd",
-     "ROW-f7e3d4c6454f6618",
-     "ROW-e8278ad2c26c9e58",
-     "ROW-9c73d58e4aef4376",
-     "ROW-b3b90079e692ccd7",
-     "ROW-389bd40945288388",
-     "ROW-71e51cf28f437ec7",
-     "ROW-522bf62833b54510",
-     "ROW-6a58385d2c0d15fa",
-     "ROW-1caf53162b4cde93",
-     "ROW-af64d783a498517e",
-     "ROW-cc58febd26e6809a",
-     "ROW-2f1fb7145089373c",
-     "ROW-cc269f1e2a2117cd",
-     "ROW-d57a8e0ffc253319",
-     "ROW-b1a8e1f82b566c31",
      "ROW-00512eaba8121e2c",
-     "ROW-dfccd40e173faeb8",
-     "ROW-c0bbb0c4bde65901",
+     "ROW-01a3bdbed7a46f9c",
+     "ROW-01c9897ecbc80c8c",
+     "ROW-0242bc328c58697e",
+     "ROW-05949c2b9c3ac0bd",
+     "ROW-0f6b65ab97e117fa",
+     "ROW-14e914b8f9bcad2d",
+     "ROW-19644e511b9d938a",
      "ROW-1a180e24c61b38fb",
+     "ROW-1caf53162b4cde93",
+     "ROW-1f15338ba0586142",
+     "ROW-241fe1731ca32143",
+     "ROW-2d99ac4d76c3e619",
+     "ROW-2f1fb7145089373c",
+     "ROW-31f478a3aab8a30f",
+     "ROW-389bd40945288388",
+     "ROW-42306ddbc9d18289",
      "ROW-4662078d43aad7af",
-     "ROW-df1da6ff4efe84d2",
-     "ROW-af2023f5fd1b34ab",
-     "ROW-cfafe14485296c79",
-     "ROW-fd27293f989932bb",
-     "ROW-bf3eb7bf042ea081",
+     "ROW-46776011d32b5715",
+     "ROW-46bea120efe0d0d9",
+     "ROW-4797658c84293628",
+     "ROW-48dc97b0b952463f",
+     "ROW-4bb3acad667dab96",
+     "ROW-522bf62833b54510",
+     "ROW-52685e24b7037c96",
+     "ROW-57ca01b05789d216",
+     "ROW-58ff8f03ba8abc9f",
+     "ROW-599a9a1dba1bb8a7",
+     "ROW-5a64c8fec3980d82",
+     "ROW-5d25eb25c2d18be1",
+     "ROW-5e233fc630940936",
+     "ROW-5fdc904dc5429359",
+     "ROW-6189beced807782d",
+     "ROW-6a58385d2c0d15fa",
+     "ROW-71e51cf28f437ec7",
+     "ROW-735c8857966e4fe3",
+     "ROW-75f66c2a1b0bc4ef",
+     "ROW-7825b1c7b2739cbc",
+     "ROW-807ab49983801ff7",
+     "ROW-89411dfb15df92a0",
+     "ROW-894250d955789945",
+     "ROW-8b3a947ee2097eca",
      "ROW-9328d5616b25b6b7",
+     "ROW-93462b357b0fe258",
+     "ROW-994997aee8e52da8",
+     "ROW-9a6564426e0cf413",
+     "ROW-9b0c2ff91bcf2351",
+     "ROW-9b940e69060fd29d",
+     "ROW-9c73d58e4aef4376",
+     "ROW-9c7b27f7fc35936c",
+     "ROW-a1054c90c705d9d7",
+     "ROW-a15b26d1353bb33f",
      "ROW-a2acd61f004f540c",
-     "ROW-5a64c8fec3980d82"
+     "ROW-aa787f6d3eda94d0",
+     "ROW-af2023f5fd1b34ab",
+     "ROW-af64d783a498517e",
+     "ROW-affe459903b26d92",
+     "ROW-b1a8e1f82b566c31",
+     "ROW-b3b90079e692ccd7",
+     "ROW-b3d8b2ad09d7f5e9",
+     "ROW-b9a6c1bd237b1233",
+     "ROW-b9bd583d2eec8e83",
+     "ROW-bb453add1c12f596",
+     "ROW-bf3eb7bf042ea081",
+     "ROW-c0bbb0c4bde65901",
+     "ROW-c31d0f7445c71938",
+     "ROW-c3aef2bf66fe37a3",
+     "ROW-cc269f1e2a2117cd",
+     "ROW-cc58febd26e6809a",
+     "ROW-cfafe14485296c79",
+     "ROW-d0a4c8c90bbccf81",
+     "ROW-d33bb458f2316386",
+     "ROW-d57a8e0ffc253319",
+     "ROW-d5beeab1a6978ad5",
+     "ROW-dd05c07a2d8456cd",
+     "ROW-dd31333dfed8edad",
+     "ROW-df1da6ff4efe84d2",
+     "ROW-dfccd40e173faeb8",
+     "ROW-dfea4f8209b4f709",
+     "ROW-e49bd2604783a9cd",
+     "ROW-e8278ad2c26c9e58",
+     "ROW-eadd1a6c34e19936",
+     "ROW-eba1232bc5ef881e",
+     "ROW-ebb972e2bead2d7a",
+     "ROW-ec41bbf447972374",
+     "ROW-eed9fd3fe6e75cd1",
+     "ROW-ef740132a08079be",
+     "ROW-f7e3d4c6454f6618",
+     "ROW-fd27293f989932bb"
     ]
    },
    "conclusion": "confirmed_error",
    "evidence": [
     {
      "accession": "0000950170-23-020540",
+     "text": "Auveco Holdings (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2028 - $ ( 7 ) ( 0.0 ) % $ ( 36 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Banker's Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 35 ) ( 0.0 ) ( 85 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Explorer Investor, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 130 ) ( 0.0 ) ( 132 )"
+    },
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Annuity Health (4)(5) Senior Secured First Lien Revolver 02/2029 - ( 7 ) 0.0 -"
+    },
+    {
+     "accession": "0000950170-23-020540",
      "text": "United Flow Technologies (4)(5) Unitranche First Lien Revolver 10/2027 - ( 25 ) ( 0.0 ) ( 43 )"
-    },
-    {
-     "accession": "0000950170-23-020540",
-     "text": "PPV Intermediate Holdings LLC (Vetcor) (8) Unsecured Debt 1300 PIK 0.00 % 08/2030 758 741 0.1 646"
-    },
-    {
-     "accession": "0000950170-23-040555",
-     "text": "PPV Intermediate Holdings LLC (Vetcor) (8) Unsecured Debt 1300 PIK 13.00 % 08/2030 783 767 0.1 668"
-    },
-    {
-     "accession": "0000950170-23-020540",
-     "text": "OEM Group, LLC (7)(9) Senior Secured First Lien Term Loan 09/2025 9,385 9,011 1.3 9,314"
     }
    ],
    "hypotheses_tested": [
     "All 75 flagged rows read: none prints an Interest Term or Interest Rate except the two PPV notes ('1300 PIK 0.00 %'). The blank rates are as printed; that part of the flag is not an error.",
     "Cost sign on the same rows: 53 of the 75 are undrawn lines printed with the cost in parentheses (United Flow '( 25 )', Effective School '( 17 )', Explorer Investor '( 130 )') but published with a positive cost, because the filer tagged the cost unsigned. That is an open published error on these rows (observation source-negative-cost-sign-lost), not as printed. With the sign right they would also meet the standing undrawn reason by negative cost.",
-    "PPV notes: the tagged 0.00 is published as unresolved, so the row shows no rate; the next quarter prints 13.00 % on the same note. Which reading holds for this line is not settled by the page; a later figure is not authority for this quarter's cell."
+    "PPV notes: the tagged 0.00 is published as unresolved, so the row shows no rate; the next quarter prints 13.00 % on the same note. Which reading holds for this line is not settled by the page; a later figure is not authority for this quarter's cell.",
+    "rfcrf population vs ccza: +14 rows. 14 are dash lines newly published at fair value 0 (untagged_values); each was matched to its printed line by r_gen_dash.py and prints no rate or spread. ",
+    "PPV Intermediate (Vetcor) unsecured lines print '1300 PIK 0.00 %': under D-232 the coupon would be 13.00 all PIK, but the printed Interest Rate is 0.00; which the filer means is not settled by the page (par 758 -> next quarter growth not clean). Kept blank and unresolved.",
+    "Cost-sign errors fixed: only partly. 50 of the rows flagged here were corrected from the printed parentheses, but Explorer Investor (ROW-b9bd583d2eec8e83, +130), Auveco (ROW-dfea4f8209b4f709, +7) and Bankers Toolbox (ROW-57ca01b05789d216, +35) still publish a positive cost against a bracketed printed cost (r2_costsign.py over all quarters). Confirmed published errors, not fixed in rfcrf."
    ],
-   "next_action": "Next build: row corrections setting the printed negative cost on the 53 rows (list in scratch/fund_runs/0001633336/z_costsign_ccza.json) or a fund opt-in signing undrawn costs from the printed parentheses; and an owner decision on the PPV 2023-03-31 rate reading. Only then propose a disposition for the blank-rate flag. No proposal is filed for this finding."
+   "next_action": "Apply the staged cost lines in scratch/fund_runs/0001633336/staged/costsign_specs.json (7 rows, 3 of them in this finding) in the next build; owner decision on the PPV '1300 PIK 0.00 %' reading. No proposal filed."
   },
   {
    "finding_id": "RVQ_REV_221af15ac586",
@@ -1390,80 +2548,152 @@
      "ROW-4618c232c1dfd533",
      "ROW-e4318afb2a83bf6f",
      "ROW-fc37afccf3c2dcc4",
-     "ROW-b166280666b82afc",
      "ROW-a61df5857549a210",
      "ROW-f9009282c469e271",
+     "ROW-b166280666b82afc",
      "ROW-c1dd3d325ece797a",
      "ROW-6eadffd1bbcbb26d",
-     "ROW-c740564bf072db69",
      "ROW-75bd97d94156b026",
+     "ROW-c740564bf072db69",
      "ROW-f8d3b49b8b8cb5ea",
-     "ROW-d60cbbb87e95b714",
-     "ROW-37f7197ad333af2a",
-     "ROW-57a22cfeb12cc3e2",
      "ROW-ad88b95bfa6ef832",
      "ROW-17aebbf180cee662",
-     "ROW-3b98e760e251285e",
+     "ROW-57a22cfeb12cc3e2",
+     "ROW-37f7197ad333af2a",
+     "ROW-d60cbbb87e95b714",
      "ROW-fa3192d101f07544",
+     "ROW-3b98e760e251285e",
      "ROW-7e4fa687061cee7c",
      "ROW-d06bac9c56897f70",
      "ROW-59173e3a2ecb4978",
-     "ROW-57b2de7ec803af07",
+     "ROW-52dc0d23f013def9",
+     "ROW-51acf927cd0e16f8",
+     "ROW-c8fdb44c045658e9",
+     "ROW-d7cf985ef731fcc1",
+     "ROW-c73c253dd5c6cefd",
+     "ROW-ab777461df8dff05",
+     "ROW-67695d12de0344b4",
+     "ROW-9a71419dada307e2",
+     "ROW-1a805543c3143d3b",
+     "ROW-ae7c949278177734",
+     "ROW-127fced98eca3d5e",
+     "ROW-25ed4747d603aa53",
+     "ROW-459a6dc9ce44e71f",
+     "ROW-a389c4b56820928c",
+     "ROW-8cb9200f5fe694e2",
+     "ROW-a121f17f375a1af0",
+     "ROW-fd860e804a822a86",
      "ROW-7b07fe2c21d81d9b",
+     "ROW-e545a4eafdb64cd5",
+     "ROW-62fe73f90e9db899",
+     "ROW-9fa00d18c117031a",
+     "ROW-ad0fa09834d38b99",
+     "ROW-ed3a6c71a1ccb7ec",
+     "ROW-61443ea75daab4e8",
+     "ROW-346d364947aedb97",
      "ROW-953f055e419b8f56",
-     "ROW-086473030b9c07ed"
+     "ROW-de23403d55c70dba",
+     "ROW-1a6a8db811ecd6b4",
+     "ROW-18b624cfc2596166",
+     "ROW-57b2de7ec803af07",
+     "ROW-83944ab9f96c4c14",
+     "ROW-7ce2d557594f5312",
+     "ROW-9f06cebb862c3b2d",
+     "ROW-e396fd0d028703db",
+     "ROW-fdbb15842d89e612",
+     "ROW-086473030b9c07ed",
+     "ROW-698eda5a64c7dae9",
+     "ROW-a050ae92361a6f54",
+     "ROW-b320f55e152ad253",
+     "ROW-7b59fe45ac4c278a"
     ],
     "reviewed_rows": [
-     "ROW-d87ad42cbfbfe25b",
-     "ROW-7f7f323531d7582c",
-     "ROW-53443f11c02c5a7e",
-     "ROW-3c0c956eee4bf8fa",
-     "ROW-18d15d19c559c682",
-     "ROW-9c9eaa5244f83599",
-     "ROW-06529c69b286469c",
-     "ROW-193b985f00328367",
-     "ROW-829aaf2bcae906b8",
-     "ROW-599b9c4aba67889b",
-     "ROW-be419769617b52da",
-     "ROW-97c45e2c79bdf2de",
-     "ROW-9035bc5435082171",
-     "ROW-e591f7250b4adf93",
-     "ROW-9440b8043d4b51a6",
-     "ROW-80a697a10bb07e78",
-     "ROW-3242d1a72085fb1e",
-     "ROW-e826acdfaf7d8570",
-     "ROW-568f7259f264f0ce",
-     "ROW-0b392495c607bfdc",
-     "ROW-8c5cc91447caa6cf",
-     "ROW-ecb40bce8eeadef7",
      "ROW-00c1a69ced223e23",
-     "ROW-f3ec24ce17a69522",
-     "ROW-c27e35e33c1caf4b",
-     "ROW-4618c232c1dfd533",
-     "ROW-e4318afb2a83bf6f",
-     "ROW-fc37afccf3c2dcc4",
-     "ROW-b166280666b82afc",
-     "ROW-a61df5857549a210",
-     "ROW-f9009282c469e271",
-     "ROW-c1dd3d325ece797a",
-     "ROW-6eadffd1bbcbb26d",
-     "ROW-c740564bf072db69",
-     "ROW-75bd97d94156b026",
-     "ROW-f8d3b49b8b8cb5ea",
-     "ROW-d60cbbb87e95b714",
-     "ROW-37f7197ad333af2a",
-     "ROW-57a22cfeb12cc3e2",
-     "ROW-ad88b95bfa6ef832",
+     "ROW-06529c69b286469c",
+     "ROW-086473030b9c07ed",
+     "ROW-0b392495c607bfdc",
+     "ROW-127fced98eca3d5e",
      "ROW-17aebbf180cee662",
+     "ROW-18b624cfc2596166",
+     "ROW-18d15d19c559c682",
+     "ROW-193b985f00328367",
+     "ROW-1a6a8db811ecd6b4",
+     "ROW-1a805543c3143d3b",
+     "ROW-25ed4747d603aa53",
+     "ROW-3242d1a72085fb1e",
+     "ROW-346d364947aedb97",
+     "ROW-37f7197ad333af2a",
      "ROW-3b98e760e251285e",
-     "ROW-fa3192d101f07544",
-     "ROW-7e4fa687061cee7c",
-     "ROW-d06bac9c56897f70",
-     "ROW-59173e3a2ecb4978",
+     "ROW-3c0c956eee4bf8fa",
+     "ROW-459a6dc9ce44e71f",
+     "ROW-4618c232c1dfd533",
+     "ROW-51acf927cd0e16f8",
+     "ROW-52dc0d23f013def9",
+     "ROW-53443f11c02c5a7e",
+     "ROW-568f7259f264f0ce",
+     "ROW-57a22cfeb12cc3e2",
      "ROW-57b2de7ec803af07",
+     "ROW-59173e3a2ecb4978",
+     "ROW-599b9c4aba67889b",
+     "ROW-61443ea75daab4e8",
+     "ROW-62fe73f90e9db899",
+     "ROW-67695d12de0344b4",
+     "ROW-698eda5a64c7dae9",
+     "ROW-6eadffd1bbcbb26d",
+     "ROW-75bd97d94156b026",
      "ROW-7b07fe2c21d81d9b",
+     "ROW-7b59fe45ac4c278a",
+     "ROW-7ce2d557594f5312",
+     "ROW-7e4fa687061cee7c",
+     "ROW-7f7f323531d7582c",
+     "ROW-80a697a10bb07e78",
+     "ROW-829aaf2bcae906b8",
+     "ROW-83944ab9f96c4c14",
+     "ROW-8c5cc91447caa6cf",
+     "ROW-8cb9200f5fe694e2",
+     "ROW-9035bc5435082171",
+     "ROW-9440b8043d4b51a6",
      "ROW-953f055e419b8f56",
-     "ROW-086473030b9c07ed"
+     "ROW-97c45e2c79bdf2de",
+     "ROW-9a71419dada307e2",
+     "ROW-9c9eaa5244f83599",
+     "ROW-9f06cebb862c3b2d",
+     "ROW-9fa00d18c117031a",
+     "ROW-a050ae92361a6f54",
+     "ROW-a121f17f375a1af0",
+     "ROW-a389c4b56820928c",
+     "ROW-a61df5857549a210",
+     "ROW-ab777461df8dff05",
+     "ROW-ad0fa09834d38b99",
+     "ROW-ad88b95bfa6ef832",
+     "ROW-ae7c949278177734",
+     "ROW-b166280666b82afc",
+     "ROW-b320f55e152ad253",
+     "ROW-be419769617b52da",
+     "ROW-c1dd3d325ece797a",
+     "ROW-c27e35e33c1caf4b",
+     "ROW-c73c253dd5c6cefd",
+     "ROW-c740564bf072db69",
+     "ROW-c8fdb44c045658e9",
+     "ROW-d06bac9c56897f70",
+     "ROW-d60cbbb87e95b714",
+     "ROW-d7cf985ef731fcc1",
+     "ROW-d87ad42cbfbfe25b",
+     "ROW-de23403d55c70dba",
+     "ROW-e396fd0d028703db",
+     "ROW-e4318afb2a83bf6f",
+     "ROW-e545a4eafdb64cd5",
+     "ROW-e591f7250b4adf93",
+     "ROW-e826acdfaf7d8570",
+     "ROW-ecb40bce8eeadef7",
+     "ROW-ed3a6c71a1ccb7ec",
+     "ROW-f3ec24ce17a69522",
+     "ROW-f8d3b49b8b8cb5ea",
+     "ROW-f9009282c469e271",
+     "ROW-fa3192d101f07544",
+     "ROW-fc37afccf3c2dcc4",
+     "ROW-fd860e804a822a86",
+     "ROW-fdbb15842d89e612"
     ]
    },
    "conclusion": "false_alarm",
@@ -1478,15 +2708,16 @@
     },
     {
      "accession": "0000950170-24-124474",
-     "text": "Seko Global Logistics Network, LLC (9)(11) Senior Secured First Lien Term Loan 07/2027 4,973 4,883 0.5 3,432"
+     "text": "Patriot Acquisition Topco S.A.R.L (11) Common Stock 16,416 46 - -"
     }
    ],
    "hypotheses_tested": [
     "All 50 flagged rows read on the current schedule: none prints an Interest Term or Interest Rate; all but one are non-accrual (9), undrawn with a negative cost or PIK-only and meet the standing reason.",
     "The remaining row (ROW-75bd97d94156b026) is an undrawn line printed with a dash for par and cost and a small positive mark; the tags carry no rate.",
-    "Seko 2024-09-30 non-accrual flag missing (XBRL footnote linked to the comparative note): fixed in ccza by row correction, now explained."
+    "Seko 2024-09-30 non-accrual flag missing (XBRL footnote linked to the comparative note): fixed in ccza by row correction, now explained.",
+    "rfcrf population vs ccza: +36 rows. 36 are dash lines newly published at fair value 0 (untagged_values); each was matched to its printed line by r_gen_dash.py and prints no rate or spread. "
    ],
-   "next_action": "Owner/check acceptance of PD-0001633336-X02-12 (reason x02-no-rate-printed-on-the-row); no rate exists to add."
+   "next_action": "Owner/check acceptance of PD-0001633336-X02-12 (reason x02-no-rate-printed-on-the-row)."
   },
   {
    "finding_id": "RVQ_REV_964d89d6624e",
@@ -1504,8 +2735,8 @@
      "ROW-db85a12ed802146b",
      "ROW-7b277af15330c738",
      "ROW-223dc4e6de9c12d3",
-     "ROW-4178ac77935a4306",
      "ROW-273d5862d7445186",
+     "ROW-4178ac77935a4306",
      "ROW-1fca85ea1412fce1",
      "ROW-2f85e00b0feaf7da",
      "ROW-b8a23ddd4c3622e1",
@@ -1522,11 +2753,11 @@
      "ROW-ab93a8647ccc606d",
      "ROW-af38bc410dd90b14",
      "ROW-38ea6ddfb549d7b4",
-     "ROW-29b052875283bcba",
      "ROW-414c2cd6f2b1ceda",
+     "ROW-29b052875283bcba",
      "ROW-53aaf94ec8b99b85",
-     "ROW-6bc2c8b918a38b5d",
      "ROW-00268415ef095041",
+     "ROW-6bc2c8b918a38b5d",
      "ROW-7e86c947dadff07c",
      "ROW-3799c2e637c9283f",
      "ROW-bf396b590f0363dd",
@@ -1538,92 +2769,164 @@
      "ROW-782d16e358baa8e1",
      "ROW-c87ff906bc1fdc23",
      "ROW-c2ab9b0afe2d55e7",
-     "ROW-af1d5e09c8951aa1",
-     "ROW-d83e55c5be4a5bb9",
      "ROW-d20a8d1562c4765c",
-     "ROW-3e97acf3a1af647d",
+     "ROW-d83e55c5be4a5bb9",
+     "ROW-af1d5e09c8951aa1",
      "ROW-d14ef81e16cb05ab",
      "ROW-4097f0e718077c1c",
      "ROW-aec3d76241542cb9",
+     "ROW-3e97acf3a1af647d",
      "ROW-cfa30b55139c607a",
      "ROW-175efcad6ff641f0",
-     "ROW-7b5801f78ced0b25",
      "ROW-a3b6f4f42506389a",
-     "ROW-d60c505fe5c9fd7a",
      "ROW-d1a845d206d7e5b8",
+     "ROW-7b5801f78ced0b25",
      "ROW-32da136a32940a87",
-     "ROW-68c9127d63572d18",
+     "ROW-d60c505fe5c9fd7a",
      "ROW-0e65661f849458b8",
+     "ROW-68c9127d63572d18",
      "ROW-35e86d977c7bc900",
      "ROW-2b513de7cad495cf",
-     "ROW-4c77eb2d0d26eafc"
+     "ROW-4c77eb2d0d26eafc",
+     "ROW-b4ec4e01733a9385",
+     "ROW-0d83214a1a69302d",
+     "ROW-9c31b58115f968f3",
+     "ROW-724fedd09c6dd799",
+     "ROW-04d09c49fbbce651",
+     "ROW-7c4e8004ce37144f",
+     "ROW-c44a6fcee19509e7",
+     "ROW-190344322eb88ff1",
+     "ROW-7bebe30ab481cbee",
+     "ROW-218a7c0cb4140f94",
+     "ROW-e3b20fbe1983fdc2",
+     "ROW-a333cb3805332b92",
+     "ROW-5446a732a844bbc3",
+     "ROW-2d3021c7a599178e",
+     "ROW-eb8f6f694ad640b5",
+     "ROW-c2ce6f0377ff28e3",
+     "ROW-dbbd1d38117e976f",
+     "ROW-142a0466866d444d",
+     "ROW-5f321ccebca692b3",
+     "ROW-4446e912ab8d14d1",
+     "ROW-bb4bc8e5d1c9fbd3",
+     "ROW-3f0a045a81baf94f",
+     "ROW-6c39dce7a40f0262",
+     "ROW-783dc3ec3db48df5",
+     "ROW-84d113bf85a124e9",
+     "ROW-c1aec84477b4866e",
+     "ROW-5c5d2c70951a8351",
+     "ROW-348da66fe1fdf311",
+     "ROW-7ed83a98ba6d23af",
+     "ROW-cbe35231c930132a",
+     "ROW-92dadb02b2d83f88",
+     "ROW-e6f0aa0c4734b5b4",
+     "ROW-48eada15c67b41a1",
+     "ROW-db48efb17f175279",
+     "ROW-dd38850b00e12555",
+     "ROW-681a205edcc75a9b"
     ],
     "reviewed_rows": [
-     "ROW-7fcfbad8a1baaf17",
-     "ROW-1a489a2b62c12477",
-     "ROW-05d15939a3b25e92",
-     "ROW-a2cedf100e02d8b5",
-     "ROW-31c416548cab574d",
-     "ROW-41cd34f6ca1f9ab3",
-     "ROW-5cca4d992d7af3a4",
-     "ROW-ee541af538cccc07",
-     "ROW-23a093b22f2b4b9e",
-     "ROW-db85a12ed802146b",
-     "ROW-7b277af15330c738",
-     "ROW-223dc4e6de9c12d3",
-     "ROW-4178ac77935a4306",
-     "ROW-273d5862d7445186",
-     "ROW-1fca85ea1412fce1",
-     "ROW-2f85e00b0feaf7da",
-     "ROW-b8a23ddd4c3622e1",
-     "ROW-0d55c174b6f62ac6",
-     "ROW-d078cb9323d564ed",
-     "ROW-10e26aa21df64dd3",
-     "ROW-f3cb5b7d5ab9f553",
-     "ROW-9455877cff18e2c5",
-     "ROW-0308f3a7f29be49d",
-     "ROW-f9581341000fa84e",
-     "ROW-c167039fe7760223",
-     "ROW-1065a1c662bfafc1",
-     "ROW-3707e2bac4763d1b",
-     "ROW-ab93a8647ccc606d",
-     "ROW-af38bc410dd90b14",
-     "ROW-38ea6ddfb549d7b4",
-     "ROW-29b052875283bcba",
-     "ROW-414c2cd6f2b1ceda",
-     "ROW-53aaf94ec8b99b85",
-     "ROW-6bc2c8b918a38b5d",
      "ROW-00268415ef095041",
-     "ROW-7e86c947dadff07c",
-     "ROW-3799c2e637c9283f",
-     "ROW-bf396b590f0363dd",
-     "ROW-c604f75910cb382f",
-     "ROW-fb32fc609bb6a50f",
-     "ROW-c80a98659e2210c2",
-     "ROW-8281780d3afe82c1",
-     "ROW-ecbb6d7e3a118dd8",
-     "ROW-782d16e358baa8e1",
-     "ROW-c87ff906bc1fdc23",
-     "ROW-c2ab9b0afe2d55e7",
-     "ROW-af1d5e09c8951aa1",
-     "ROW-d83e55c5be4a5bb9",
-     "ROW-d20a8d1562c4765c",
-     "ROW-3e97acf3a1af647d",
-     "ROW-d14ef81e16cb05ab",
-     "ROW-4097f0e718077c1c",
-     "ROW-aec3d76241542cb9",
-     "ROW-cfa30b55139c607a",
-     "ROW-175efcad6ff641f0",
-     "ROW-7b5801f78ced0b25",
-     "ROW-a3b6f4f42506389a",
-     "ROW-d60c505fe5c9fd7a",
-     "ROW-d1a845d206d7e5b8",
-     "ROW-32da136a32940a87",
-     "ROW-68c9127d63572d18",
+     "ROW-0308f3a7f29be49d",
+     "ROW-04d09c49fbbce651",
+     "ROW-05d15939a3b25e92",
+     "ROW-0d55c174b6f62ac6",
+     "ROW-0d83214a1a69302d",
      "ROW-0e65661f849458b8",
-     "ROW-35e86d977c7bc900",
+     "ROW-1065a1c662bfafc1",
+     "ROW-10e26aa21df64dd3",
+     "ROW-142a0466866d444d",
+     "ROW-175efcad6ff641f0",
+     "ROW-190344322eb88ff1",
+     "ROW-1a489a2b62c12477",
+     "ROW-1fca85ea1412fce1",
+     "ROW-218a7c0cb4140f94",
+     "ROW-223dc4e6de9c12d3",
+     "ROW-23a093b22f2b4b9e",
+     "ROW-273d5862d7445186",
+     "ROW-29b052875283bcba",
      "ROW-2b513de7cad495cf",
-     "ROW-4c77eb2d0d26eafc"
+     "ROW-2d3021c7a599178e",
+     "ROW-2f85e00b0feaf7da",
+     "ROW-31c416548cab574d",
+     "ROW-32da136a32940a87",
+     "ROW-348da66fe1fdf311",
+     "ROW-35e86d977c7bc900",
+     "ROW-3707e2bac4763d1b",
+     "ROW-3799c2e637c9283f",
+     "ROW-38ea6ddfb549d7b4",
+     "ROW-3e97acf3a1af647d",
+     "ROW-3f0a045a81baf94f",
+     "ROW-4097f0e718077c1c",
+     "ROW-414c2cd6f2b1ceda",
+     "ROW-4178ac77935a4306",
+     "ROW-41cd34f6ca1f9ab3",
+     "ROW-4446e912ab8d14d1",
+     "ROW-48eada15c67b41a1",
+     "ROW-4c77eb2d0d26eafc",
+     "ROW-53aaf94ec8b99b85",
+     "ROW-5446a732a844bbc3",
+     "ROW-5c5d2c70951a8351",
+     "ROW-5cca4d992d7af3a4",
+     "ROW-5f321ccebca692b3",
+     "ROW-681a205edcc75a9b",
+     "ROW-68c9127d63572d18",
+     "ROW-6bc2c8b918a38b5d",
+     "ROW-6c39dce7a40f0262",
+     "ROW-724fedd09c6dd799",
+     "ROW-782d16e358baa8e1",
+     "ROW-783dc3ec3db48df5",
+     "ROW-7b277af15330c738",
+     "ROW-7b5801f78ced0b25",
+     "ROW-7bebe30ab481cbee",
+     "ROW-7c4e8004ce37144f",
+     "ROW-7e86c947dadff07c",
+     "ROW-7ed83a98ba6d23af",
+     "ROW-7fcfbad8a1baaf17",
+     "ROW-8281780d3afe82c1",
+     "ROW-84d113bf85a124e9",
+     "ROW-92dadb02b2d83f88",
+     "ROW-9455877cff18e2c5",
+     "ROW-9c31b58115f968f3",
+     "ROW-a2cedf100e02d8b5",
+     "ROW-a333cb3805332b92",
+     "ROW-a3b6f4f42506389a",
+     "ROW-ab93a8647ccc606d",
+     "ROW-aec3d76241542cb9",
+     "ROW-af1d5e09c8951aa1",
+     "ROW-af38bc410dd90b14",
+     "ROW-b4ec4e01733a9385",
+     "ROW-b8a23ddd4c3622e1",
+     "ROW-bb4bc8e5d1c9fbd3",
+     "ROW-bf396b590f0363dd",
+     "ROW-c167039fe7760223",
+     "ROW-c1aec84477b4866e",
+     "ROW-c2ab9b0afe2d55e7",
+     "ROW-c2ce6f0377ff28e3",
+     "ROW-c44a6fcee19509e7",
+     "ROW-c604f75910cb382f",
+     "ROW-c80a98659e2210c2",
+     "ROW-c87ff906bc1fdc23",
+     "ROW-cbe35231c930132a",
+     "ROW-cfa30b55139c607a",
+     "ROW-d078cb9323d564ed",
+     "ROW-d14ef81e16cb05ab",
+     "ROW-d1a845d206d7e5b8",
+     "ROW-d20a8d1562c4765c",
+     "ROW-d60c505fe5c9fd7a",
+     "ROW-d83e55c5be4a5bb9",
+     "ROW-db48efb17f175279",
+     "ROW-db85a12ed802146b",
+     "ROW-dbbd1d38117e976f",
+     "ROW-dd38850b00e12555",
+     "ROW-e3b20fbe1983fdc2",
+     "ROW-e6f0aa0c4734b5b4",
+     "ROW-eb8f6f694ad640b5",
+     "ROW-ecbb6d7e3a118dd8",
+     "ROW-ee541af538cccc07",
+     "ROW-f3cb5b7d5ab9f553",
+     "ROW-f9581341000fa84e",
+     "ROW-fb32fc609bb6a50f"
     ]
    },
    "conclusion": "false_alarm",
@@ -1638,15 +2941,16 @@
     },
     {
      "accession": "0000950170-25-023153",
-     "text": "OEM Group, LLC (7)(9) Senior Secured First Lien Term Loan 09/2025 8,853 6,014 0.4 2,779"
+     "text": "Patriot Acquisition Topco S.A.R.L (11) Common Stock Class B 16,416 46 0.0 -"
     }
    ],
    "hypotheses_tested": [
     "All 65 flagged rows read on the current schedule: none prints an Interest Term or Interest Rate; all but one are non-accrual (9), undrawn with a negative cost or PIK-only and meet the standing reason.",
     "The remaining row (ROW-a3b6f4f42506389a) is an undrawn line printed with a dash for par and cost and a small positive mark; the tags carry no rate.",
-    "Seko 2024-09-30 non-accrual flag missing (XBRL footnote linked to the comparative note): fixed in ccza by row correction, now explained."
+    "Seko 2024-09-30 non-accrual flag missing (XBRL footnote linked to the comparative note): fixed in ccza by row correction, now explained.",
+    "rfcrf population vs ccza: +36 rows. 36 are dash lines newly published at fair value 0 (untagged_values); each was matched to its printed line by r_gen_dash.py and prints no rate or spread. "
    ],
-   "next_action": "Owner/check acceptance of PD-0001633336-X02-12 (reason x02-no-rate-printed-on-the-row); no rate exists to add."
+   "next_action": "Owner/check acceptance of PD-0001633336-X02-12 (reason x02-no-rate-printed-on-the-row)."
   },
   {
    "finding_id": "RVQ_REV_b9e026b499e2",
@@ -1687,107 +2991,173 @@
      "ROW-e6100b8f5467aa3b",
      "ROW-e0778508d70b036e",
      "ROW-258ea6afe1eca12f",
-     "ROW-7235058570155a09",
      "ROW-bf3e7117079dc20f",
+     "ROW-7235058570155a09",
      "ROW-5e18bcd64acf74a8",
      "ROW-cd5b85e1bdb1a769",
      "ROW-9b0f4c9306ce10b5",
-     "ROW-2ad390ae23f2c089",
      "ROW-543c2b03631a997d",
      "ROW-06c4d7f1142f84e1",
+     "ROW-2ad390ae23f2c089",
      "ROW-7e2206b1cb2b0259",
-     "ROW-5753b5832e8791a9",
      "ROW-b06217b3c8225258",
+     "ROW-5753b5832e8791a9",
      "ROW-4f2efe3257457cbe",
      "ROW-543d7f34635a15bc",
      "ROW-c263d60d761d6db6",
      "ROW-5528bdf665d2540d",
      "ROW-8730f096a3fc5b43",
      "ROW-14df945ff411cc81",
-     "ROW-2f3402fd1b44a357",
+     "ROW-243da0f90abe54e6",
      "ROW-1db6251ba949140f",
      "ROW-94465bcc6a0da744",
-     "ROW-1767bd473f8e82cc",
      "ROW-23c4b54925368f53",
+     "ROW-2f3402fd1b44a357",
      "ROW-e611d5ae0f2067ec",
-     "ROW-243da0f90abe54e6",
-     "ROW-12817ca9f0a29efd",
-     "ROW-8cb4e28092fb17f7",
+     "ROW-1767bd473f8e82cc",
+     "ROW-fb7535aac7925d0f",
      "ROW-3deda75d5bb09e8b",
      "ROW-4c7622def47c43b9",
-     "ROW-fb7535aac7925d0f",
-     "ROW-158e4c3b56bc88dd",
+     "ROW-12817ca9f0a29efd",
+     "ROW-8cb4e28092fb17f7",
      "ROW-8e8344d16cb76e3c",
-     "ROW-4771a45195fcf4ac"
+     "ROW-158e4c3b56bc88dd",
+     "ROW-4771a45195fcf4ac",
+     "ROW-b4a646e13701aa8f",
+     "ROW-5c92e08fba1223af",
+     "ROW-d73331b12cf4ee2d",
+     "ROW-c49483cb5c2fb0b3",
+     "ROW-b6c6dd10f7457655",
+     "ROW-8fb1ff9546215874",
+     "ROW-e180dfcae59d6333",
+     "ROW-ebf79afe9c97ee5f",
+     "ROW-3853e7b323cbf52a",
+     "ROW-01b17a52ad89e250",
+     "ROW-63b998912c810734",
+     "ROW-ba0b14b35d1bb274",
+     "ROW-f27e07891a086383",
+     "ROW-5f76731942fbbd28",
+     "ROW-aae4a131fcc5a7be",
+     "ROW-0bee8a7b0a69ae9b",
+     "ROW-550705af2cb16d9b",
+     "ROW-c51a8614ec19ad12",
+     "ROW-eacca584db8a35bb",
+     "ROW-95e5e64f5b3ce84f",
+     "ROW-4b1a2b9114cbd48c",
+     "ROW-33525c8d59a43f22",
+     "ROW-bd5d9be780867092",
+     "ROW-cddade03f1a5db20",
+     "ROW-53f25bd2bdd9d029",
+     "ROW-6adcf0f76ab85b44",
+     "ROW-019760be799717e4",
+     "ROW-24785ccace620f4c",
+     "ROW-1dc877bdea9b03f4",
+     "ROW-795eec66acfe03c6",
+     "ROW-e49031005dab03ed",
+     "ROW-044202a95af1fd75",
+     "ROW-b64ffa398b4aa600"
     ],
     "reviewed_rows": [
-     "ROW-e907b161cbf5cc95",
+     "ROW-019760be799717e4",
+     "ROW-01b17a52ad89e250",
+     "ROW-044202a95af1fd75",
+     "ROW-06c4d7f1142f84e1",
+     "ROW-0bee8a7b0a69ae9b",
+     "ROW-0ce201d8bc85c32b",
+     "ROW-0f0608b8745c4c0b",
+     "ROW-12817ca9f0a29efd",
+     "ROW-14df945ff411cc81",
+     "ROW-158e4c3b56bc88dd",
+     "ROW-15d907f7c9a9c43d",
+     "ROW-1767bd473f8e82cc",
+     "ROW-1db6251ba949140f",
+     "ROW-1dc877bdea9b03f4",
+     "ROW-23c4b54925368f53",
+     "ROW-243da0f90abe54e6",
+     "ROW-24785ccace620f4c",
+     "ROW-258ea6afe1eca12f",
+     "ROW-2ad390ae23f2c089",
+     "ROW-2f3402fd1b44a357",
+     "ROW-33525c8d59a43f22",
+     "ROW-3621bf33aaca34e7",
+     "ROW-3853e7b323cbf52a",
+     "ROW-3deda75d5bb09e8b",
+     "ROW-4771a45195fcf4ac",
+     "ROW-4b1a2b9114cbd48c",
+     "ROW-4c7622def47c43b9",
+     "ROW-4f2efe3257457cbe",
+     "ROW-5015014909dea393",
+     "ROW-503b847b8ae1405b",
+     "ROW-52295c4369620f39",
+     "ROW-53f25bd2bdd9d029",
+     "ROW-543c2b03631a997d",
+     "ROW-543d7f34635a15bc",
+     "ROW-550705af2cb16d9b",
+     "ROW-5528bdf665d2540d",
+     "ROW-5753b5832e8791a9",
+     "ROW-5c92e08fba1223af",
+     "ROW-5e18bcd64acf74a8",
+     "ROW-5f76731942fbbd28",
      "ROW-616961db108d853e",
      "ROW-6329903588a13db6",
+     "ROW-63b998912c810734",
+     "ROW-69622e55732e6169",
+     "ROW-6adcf0f76ab85b44",
+     "ROW-7235058570155a09",
+     "ROW-73ea30f20ed4173c",
+     "ROW-795eec66acfe03c6",
+     "ROW-7e2206b1cb2b0259",
+     "ROW-8730f096a3fc5b43",
+     "ROW-8c7139d3690279ee",
+     "ROW-8cb4e28092fb17f7",
+     "ROW-8e8344d16cb76e3c",
+     "ROW-8fb1ff9546215874",
+     "ROW-94465bcc6a0da744",
+     "ROW-95e5e64f5b3ce84f",
+     "ROW-9b0f4c9306ce10b5",
+     "ROW-9b6f3687b05b99a1",
+     "ROW-a773916f0ea06e42",
+     "ROW-a8f6721f2993a84e",
+     "ROW-aae4a131fcc5a7be",
+     "ROW-ac5732f9213d32da",
+     "ROW-b06217b3c8225258",
+     "ROW-b36283a5bdb6fae1",
+     "ROW-b4a646e13701aa8f",
+     "ROW-b64ffa398b4aa600",
+     "ROW-b6c6dd10f7457655",
+     "ROW-ba0b14b35d1bb274",
+     "ROW-ba8e29d4f8a95ecf",
+     "ROW-bc7779459f117389",
+     "ROW-bd5d9be780867092",
+     "ROW-befa2cba2fd6cbb9",
+     "ROW-bf3e7117079dc20f",
+     "ROW-bfa3789890a12850",
+     "ROW-c0f1fb26883f8145",
+     "ROW-c263d60d761d6db6",
+     "ROW-c49483cb5c2fb0b3",
+     "ROW-c51a8614ec19ad12",
      "ROW-c7d34c6720e00d91",
      "ROW-ca31da392432ba4f",
-     "ROW-0f0608b8745c4c0b",
-     "ROW-d50a1c0f7768a551",
-     "ROW-dbe50250e1519eb1",
-     "ROW-a773916f0ea06e42",
-     "ROW-8c7139d3690279ee",
-     "ROW-f70f15cd6f033912",
-     "ROW-5015014909dea393",
-     "ROW-f9ab56653a0df699",
-     "ROW-9b6f3687b05b99a1",
-     "ROW-b36283a5bdb6fae1",
-     "ROW-f60c2e0475f13f8a",
-     "ROW-bfa3789890a12850",
-     "ROW-0ce201d8bc85c32b",
-     "ROW-a8f6721f2993a84e",
-     "ROW-ac5732f9213d32da",
-     "ROW-15d907f7c9a9c43d",
-     "ROW-bc7779459f117389",
-     "ROW-3621bf33aaca34e7",
-     "ROW-c0f1fb26883f8145",
-     "ROW-503b847b8ae1405b",
-     "ROW-73ea30f20ed4173c",
-     "ROW-ed6ee9140a9b92de",
-     "ROW-fe00d3ca507f9246",
-     "ROW-52295c4369620f39",
-     "ROW-69622e55732e6169",
-     "ROW-ba8e29d4f8a95ecf",
-     "ROW-befa2cba2fd6cbb9",
-     "ROW-e6100b8f5467aa3b",
-     "ROW-e0778508d70b036e",
-     "ROW-258ea6afe1eca12f",
-     "ROW-7235058570155a09",
-     "ROW-bf3e7117079dc20f",
-     "ROW-5e18bcd64acf74a8",
      "ROW-cd5b85e1bdb1a769",
-     "ROW-9b0f4c9306ce10b5",
-     "ROW-2ad390ae23f2c089",
-     "ROW-543c2b03631a997d",
-     "ROW-06c4d7f1142f84e1",
-     "ROW-7e2206b1cb2b0259",
-     "ROW-5753b5832e8791a9",
-     "ROW-b06217b3c8225258",
-     "ROW-4f2efe3257457cbe",
-     "ROW-543d7f34635a15bc",
-     "ROW-c263d60d761d6db6",
-     "ROW-5528bdf665d2540d",
-     "ROW-8730f096a3fc5b43",
-     "ROW-14df945ff411cc81",
-     "ROW-2f3402fd1b44a357",
-     "ROW-1db6251ba949140f",
-     "ROW-94465bcc6a0da744",
-     "ROW-1767bd473f8e82cc",
-     "ROW-23c4b54925368f53",
+     "ROW-cddade03f1a5db20",
+     "ROW-d50a1c0f7768a551",
+     "ROW-d73331b12cf4ee2d",
+     "ROW-dbe50250e1519eb1",
+     "ROW-e0778508d70b036e",
+     "ROW-e180dfcae59d6333",
+     "ROW-e49031005dab03ed",
+     "ROW-e6100b8f5467aa3b",
      "ROW-e611d5ae0f2067ec",
-     "ROW-243da0f90abe54e6",
-     "ROW-12817ca9f0a29efd",
-     "ROW-8cb4e28092fb17f7",
-     "ROW-3deda75d5bb09e8b",
-     "ROW-4c7622def47c43b9",
+     "ROW-e907b161cbf5cc95",
+     "ROW-eacca584db8a35bb",
+     "ROW-ebf79afe9c97ee5f",
+     "ROW-ed6ee9140a9b92de",
+     "ROW-f27e07891a086383",
+     "ROW-f60c2e0475f13f8a",
+     "ROW-f70f15cd6f033912",
+     "ROW-f9ab56653a0df699",
      "ROW-fb7535aac7925d0f",
-     "ROW-158e4c3b56bc88dd",
-     "ROW-8e8344d16cb76e3c",
-     "ROW-4771a45195fcf4ac"
+     "ROW-fe00d3ca507f9246"
     ]
    },
    "conclusion": "false_alarm",
@@ -1802,15 +3172,16 @@
     },
     {
      "accession": "0000950170-25-071368",
-     "text": "New Era Technology, Inc. (9) Unitranche First Lien Delayed Draw Term Loan 10/2026 6,377 6,339 0.6 4,506"
+     "text": "Patriot Acquisition Topco S.A.R.L (11) Common Stock 16,416 46 0.0 -"
     }
    ],
    "hypotheses_tested": [
     "All 67 flagged rows read on the current schedule: none prints an Interest Term or Interest Rate; all but one are non-accrual (9), undrawn with a negative cost or PIK-only and meet the standing reason.",
     "The remaining row (ROW-3deda75d5bb09e8b) is an undrawn line printed with a dash for par and cost and a small positive mark; the tags carry no rate.",
-    "Seko 2024-09-30 non-accrual flag missing (XBRL footnote linked to the comparative note): fixed in ccza by row correction, now explained."
+    "Seko 2024-09-30 non-accrual flag missing (XBRL footnote linked to the comparative note): fixed in ccza by row correction, now explained.",
+    "rfcrf population vs ccza: +33 rows. 33 are dash lines newly published at fair value 0 (untagged_values); each was matched to its printed line by r_gen_dash.py and prints no rate or spread. "
    ],
-   "next_action": "Owner/check acceptance of PD-0001633336-X02-12 (reason x02-no-rate-printed-on-the-row); no rate exists to add."
+   "next_action": "Owner/check acceptance of PD-0001633336-X02-12 (reason x02-no-rate-printed-on-the-row)."
   },
   {
    "finding_id": "RVQ_REV_f4ed8fd7f29b",
@@ -1851,123 +3222,185 @@
      "ROW-a94a30abc8f0c1ea",
      "ROW-a40141aa705bb448",
      "ROW-8e57dc90c6f1dd1f",
-     "ROW-f0e068fa69b4ed4b",
      "ROW-f23bab9b5a1784f9",
+     "ROW-f0e068fa69b4ed4b",
      "ROW-d46cdb55e0e31e66",
      "ROW-fd3b70ef38de181d",
-     "ROW-1c42aff43b130e3e",
      "ROW-7de91e10ba49063a",
      "ROW-d9f91b0dcb8dc680",
+     "ROW-1c42aff43b130e3e",
      "ROW-c837ad5c0c6619ad",
      "ROW-35e416fe68a72e76",
      "ROW-da2d44d253906bd0",
      "ROW-7598a25ad474d092",
      "ROW-1aaa9207e7d353bb",
      "ROW-aa85bb094da34adc",
-     "ROW-0f552c8bbe6e6081",
      "ROW-31bba75796d72711",
      "ROW-6febaa55f04f4bbb",
+     "ROW-0f552c8bbe6e6081",
      "ROW-6cc89a24cff8d4f1",
      "ROW-d774ea364a7a8d45",
      "ROW-5fe696556d2914c5",
      "ROW-9df245b8d7a647dd",
-     "ROW-0d37f81fb714e1d9",
      "ROW-2d3ef122fff642e2",
+     "ROW-0d37f81fb714e1d9",
      "ROW-54b684591c65b54d",
-     "ROW-18b1d0ca53f86faf",
      "ROW-b5646ef895aeb0a0",
+     "ROW-18b1d0ca53f86faf",
      "ROW-5655605e25e68f30",
      "ROW-a20d4c5294fd1ffc",
-     "ROW-84817cc961b1133f",
      "ROW-0304c104d5110304",
+     "ROW-84817cc961b1133f",
      "ROW-041f7273a3d81a30",
-     "ROW-312fdfac04bd6d55",
-     "ROW-96dfaec1682280e9",
-     "ROW-8ffc1e9607bcbffb",
-     "ROW-d22863e9e9050326",
      "ROW-dc692477e956c835",
      "ROW-580f4c5381d16263",
+     "ROW-d22863e9e9050326",
+     "ROW-8ffc1e9607bcbffb",
+     "ROW-312fdfac04bd6d55",
+     "ROW-96dfaec1682280e9",
+     "ROW-58985195000ff949",
      "ROW-e5b9c9cb291e5be9",
      "ROW-a1e7d3ce0602a673",
-     "ROW-58985195000ff949",
-     "ROW-c24ce8af7770a434"
+     "ROW-3d4925db930bcaa5",
+     "ROW-6e2a425651bce102",
+     "ROW-bd00b84d0b5669e0",
+     "ROW-897ccf337b312f0a",
+     "ROW-fe61f5f336c09c16",
+     "ROW-303f71b1788267ac",
+     "ROW-958316b7cd3bae43",
+     "ROW-c61cbbe4a620ad2c",
+     "ROW-b9cd061e8f6d448a",
+     "ROW-f40f6432e1bbba89",
+     "ROW-5c246e314dcc4bfb",
+     "ROW-6a765070e27b993d",
+     "ROW-cd80aa543c8621b1",
+     "ROW-6154d7d3f14179e1",
+     "ROW-8704127056374008",
+     "ROW-e1082a3e0c1fb4eb",
+     "ROW-df46c4363cf62650",
+     "ROW-9b8643618c74f60b",
+     "ROW-24460f31f24efd60",
+     "ROW-051ae10062c32c08",
+     "ROW-9a60ea2394773e55",
+     "ROW-8b07d93bb8cd432f",
+     "ROW-9bc773e7fac599bd",
+     "ROW-246006ef8504fc5b",
+     "ROW-9128aecb25d8bb61",
+     "ROW-c5209e5235484e35",
+     "ROW-88819322f3ffbf64",
+     "ROW-7165c48e39c3bab5",
+     "ROW-eba3530602177052",
+     "ROW-c24ce8af7770a434",
+     "ROW-7b04326e17bca818",
+     "ROW-5b983ff5560b0fbc"
     ],
     "reviewed_rows": [
-     "ROW-9f63657ae346a17e",
-     "ROW-0e67f23fc4bc0fda",
-     "ROW-84476ed297eec3ae",
-     "ROW-e585a504e76ef0d5",
-     "ROW-9350133c868b5973",
-     "ROW-6320136fd339d3b8",
-     "ROW-9a55b9b2a5832691",
-     "ROW-49df10839784c735",
-     "ROW-53249399c4351ffe",
-     "ROW-919f92f58637a605",
-     "ROW-0f6f3ee73a2013b2",
-     "ROW-29a67c48102ffce7",
-     "ROW-66915ed3b6640359",
-     "ROW-ae3f99576dd40c6f",
-     "ROW-4f60c47913530af3",
-     "ROW-3e2d41777a8e89f6",
-     "ROW-a3a208a6c51287e4",
-     "ROW-f800e4654a7eebb8",
-     "ROW-6ba5daebabc9e4e7",
-     "ROW-261a10e025fd77b3",
-     "ROW-abf84ec21f3b33b1",
-     "ROW-7dd8082fe0403595",
-     "ROW-1f6a5c007dbd835c",
-     "ROW-897d7cacc6cc55f2",
-     "ROW-e745fd5e2deffe89",
-     "ROW-6f537c0fe062332b",
-     "ROW-6503102f8dc6699a",
-     "ROW-4dd8beeda5fd614c",
-     "ROW-a5dfc7f3d485c0ca",
-     "ROW-69188f06241262ff",
-     "ROW-9719098950574849",
-     "ROW-a7ed3b0dd109ac52",
-     "ROW-a94a30abc8f0c1ea",
-     "ROW-a40141aa705bb448",
-     "ROW-8e57dc90c6f1dd1f",
-     "ROW-f0e068fa69b4ed4b",
-     "ROW-f23bab9b5a1784f9",
-     "ROW-d46cdb55e0e31e66",
-     "ROW-fd3b70ef38de181d",
-     "ROW-1c42aff43b130e3e",
-     "ROW-7de91e10ba49063a",
-     "ROW-d9f91b0dcb8dc680",
-     "ROW-c837ad5c0c6619ad",
-     "ROW-35e416fe68a72e76",
-     "ROW-da2d44d253906bd0",
-     "ROW-7598a25ad474d092",
-     "ROW-1aaa9207e7d353bb",
-     "ROW-aa85bb094da34adc",
-     "ROW-0f552c8bbe6e6081",
-     "ROW-31bba75796d72711",
-     "ROW-6febaa55f04f4bbb",
-     "ROW-6cc89a24cff8d4f1",
-     "ROW-d774ea364a7a8d45",
-     "ROW-5fe696556d2914c5",
-     "ROW-9df245b8d7a647dd",
-     "ROW-0d37f81fb714e1d9",
-     "ROW-2d3ef122fff642e2",
-     "ROW-54b684591c65b54d",
-     "ROW-18b1d0ca53f86faf",
-     "ROW-b5646ef895aeb0a0",
-     "ROW-5655605e25e68f30",
-     "ROW-a20d4c5294fd1ffc",
-     "ROW-84817cc961b1133f",
      "ROW-0304c104d5110304",
      "ROW-041f7273a3d81a30",
+     "ROW-051ae10062c32c08",
+     "ROW-0d37f81fb714e1d9",
+     "ROW-0e67f23fc4bc0fda",
+     "ROW-0f552c8bbe6e6081",
+     "ROW-0f6f3ee73a2013b2",
+     "ROW-18b1d0ca53f86faf",
+     "ROW-1aaa9207e7d353bb",
+     "ROW-1c42aff43b130e3e",
+     "ROW-1f6a5c007dbd835c",
+     "ROW-24460f31f24efd60",
+     "ROW-246006ef8504fc5b",
+     "ROW-261a10e025fd77b3",
+     "ROW-29a67c48102ffce7",
+     "ROW-2d3ef122fff642e2",
+     "ROW-303f71b1788267ac",
      "ROW-312fdfac04bd6d55",
-     "ROW-96dfaec1682280e9",
-     "ROW-8ffc1e9607bcbffb",
-     "ROW-d22863e9e9050326",
-     "ROW-dc692477e956c835",
+     "ROW-31bba75796d72711",
+     "ROW-35e416fe68a72e76",
+     "ROW-3d4925db930bcaa5",
+     "ROW-3e2d41777a8e89f6",
+     "ROW-49df10839784c735",
+     "ROW-4dd8beeda5fd614c",
+     "ROW-4f60c47913530af3",
+     "ROW-53249399c4351ffe",
+     "ROW-54b684591c65b54d",
+     "ROW-5655605e25e68f30",
      "ROW-580f4c5381d16263",
-     "ROW-e5b9c9cb291e5be9",
-     "ROW-a1e7d3ce0602a673",
      "ROW-58985195000ff949",
-     "ROW-c24ce8af7770a434"
+     "ROW-5b983ff5560b0fbc",
+     "ROW-5c246e314dcc4bfb",
+     "ROW-5fe696556d2914c5",
+     "ROW-6154d7d3f14179e1",
+     "ROW-6320136fd339d3b8",
+     "ROW-6503102f8dc6699a",
+     "ROW-66915ed3b6640359",
+     "ROW-69188f06241262ff",
+     "ROW-6a765070e27b993d",
+     "ROW-6ba5daebabc9e4e7",
+     "ROW-6cc89a24cff8d4f1",
+     "ROW-6e2a425651bce102",
+     "ROW-6f537c0fe062332b",
+     "ROW-6febaa55f04f4bbb",
+     "ROW-7165c48e39c3bab5",
+     "ROW-7598a25ad474d092",
+     "ROW-7b04326e17bca818",
+     "ROW-7dd8082fe0403595",
+     "ROW-7de91e10ba49063a",
+     "ROW-84476ed297eec3ae",
+     "ROW-84817cc961b1133f",
+     "ROW-8704127056374008",
+     "ROW-88819322f3ffbf64",
+     "ROW-897ccf337b312f0a",
+     "ROW-897d7cacc6cc55f2",
+     "ROW-8b07d93bb8cd432f",
+     "ROW-8e57dc90c6f1dd1f",
+     "ROW-8ffc1e9607bcbffb",
+     "ROW-9128aecb25d8bb61",
+     "ROW-919f92f58637a605",
+     "ROW-9350133c868b5973",
+     "ROW-958316b7cd3bae43",
+     "ROW-96dfaec1682280e9",
+     "ROW-9719098950574849",
+     "ROW-9a55b9b2a5832691",
+     "ROW-9a60ea2394773e55",
+     "ROW-9b8643618c74f60b",
+     "ROW-9bc773e7fac599bd",
+     "ROW-9df245b8d7a647dd",
+     "ROW-9f63657ae346a17e",
+     "ROW-a1e7d3ce0602a673",
+     "ROW-a20d4c5294fd1ffc",
+     "ROW-a3a208a6c51287e4",
+     "ROW-a40141aa705bb448",
+     "ROW-a5dfc7f3d485c0ca",
+     "ROW-a7ed3b0dd109ac52",
+     "ROW-a94a30abc8f0c1ea",
+     "ROW-aa85bb094da34adc",
+     "ROW-abf84ec21f3b33b1",
+     "ROW-ae3f99576dd40c6f",
+     "ROW-b5646ef895aeb0a0",
+     "ROW-b9cd061e8f6d448a",
+     "ROW-bd00b84d0b5669e0",
+     "ROW-c24ce8af7770a434",
+     "ROW-c5209e5235484e35",
+     "ROW-c61cbbe4a620ad2c",
+     "ROW-c837ad5c0c6619ad",
+     "ROW-cd80aa543c8621b1",
+     "ROW-d22863e9e9050326",
+     "ROW-d46cdb55e0e31e66",
+     "ROW-d774ea364a7a8d45",
+     "ROW-d9f91b0dcb8dc680",
+     "ROW-da2d44d253906bd0",
+     "ROW-dc692477e956c835",
+     "ROW-df46c4363cf62650",
+     "ROW-e1082a3e0c1fb4eb",
+     "ROW-e585a504e76ef0d5",
+     "ROW-e5b9c9cb291e5be9",
+     "ROW-e745fd5e2deffe89",
+     "ROW-eba3530602177052",
+     "ROW-f0e068fa69b4ed4b",
+     "ROW-f23bab9b5a1784f9",
+     "ROW-f40f6432e1bbba89",
+     "ROW-f800e4654a7eebb8",
+     "ROW-fd3b70ef38de181d",
+     "ROW-fe61f5f336c09c16"
     ]
    },
    "conclusion": "false_alarm",
@@ -1982,15 +3415,16 @@
     },
     {
      "accession": "0001193125-26-071922",
-     "text": "MeriCal, LLC (9) Unitranche First Lien Term Loan 01/2026 8,470 7,053 0.5 3,768"
+     "text": "Patriot Acquisition Topco S.A.R.L Common Stock 16,416 46 0.0 -"
     }
    ],
    "hypotheses_tested": [
     "All 75 flagged rows read on the current schedule: none prints an Interest Term or Interest Rate; all but one are non-accrual (9), undrawn with a negative cost or PIK-only and meet the standing reason.",
     "The remaining row (ROW-4dd8beeda5fd614c) is an undrawn line printed with a dash for par and cost and a small positive mark; the tags carry no rate.",
-    "Seko 2024-09-30 non-accrual flag missing (XBRL footnote linked to the comparative note): fixed in ccza by row correction, now explained."
+    "Seko 2024-09-30 non-accrual flag missing (XBRL footnote linked to the comparative note): fixed in ccza by row correction, now explained.",
+    "rfcrf population vs ccza: +31 rows. 31 are dash lines newly published at fair value 0 (untagged_values); each was matched to its printed line by r_gen_dash.py and prints no rate or spread. "
    ],
-   "next_action": "Owner/check acceptance of PD-0001633336-X02-12 (reason x02-no-rate-printed-on-the-row); no rate exists to add."
+   "next_action": "Owner/check acceptance of PD-0001633336-X02-12 (reason x02-no-rate-printed-on-the-row)."
   },
   {
    "finding_id": "RVQ_REV_356c5911030f",
@@ -2467,7 +3901,8 @@
    "hypotheses_tested": [
     "Rows read: the printed PIK figure equals or exceeds the printed Interest Rate (PPV 0.00 vs 1300 PIK; Mario 10.18 vs S+1079 PIK; Eagle 8.58/10.49/10.32 vs 953/1139 PIK; Mario note 14.58 vs 1460 PIK). Treating the rate as all-in gives a negative cash leg.",
     "Treating the rate as the cash leg: not supported; Crescent's column is all-in on other rows (TSX 9.91 with 400 PIK).",
-    "Scale error like TSX: rejected; the published reported rates equal the printed percents."
+    "Scale error like TSX: rejected; the published reported rates equal the printed percents.",
+    "Not a D-232 case: these Eagle/Mario lines print a cash margin and a separate PIK figure above the printed rate; par growth does not settle it."
    ],
    "next_action": "Owner decision per row on what the printed Interest Rate means where PIK exceeds it; keep reported values and the unresolved status until then."
   },
@@ -2520,6 +3955,87 @@
     "Published impact: none; the sandbox publishes no 2022 rows for this fund (holdings start 2023-03-31)."
    ],
    "next_action": "Owner decision whether pre-2023 HTML quarters are in scope; if so repair the 2020_9col_with_company template's date boundary. Parked."
+  },
+  {
+   "finding_id": "RVQ_BLK_26fa0550b4b0",
+   "coverage": {
+    "affected_rows": [
+     "ROW-59fc2849aabd796d"
+    ],
+    "reviewed_rows": [
+     "ROW-59fc2849aabd796d"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-040555",
+     "text": "IVC Evidenisa (11) Preferred Stock - 746 0.2 1,581 IVC"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "IVC Evidensia (f/k/a VetStrategy) Investment Type Preferred"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Wrong issuer on the row (member of another company): rejected; values, section and member are IVC Evidensia's.",
+    "Published name differs from the page because of the reader: rejected; the page itself prints 'Evidenisa' (letters transposed) in 2023-06-30 to 2023-12-31 only."
+   ],
+   "next_action": "Owner/check acceptance of PD-0001633336-issuer_name_printed-14 (reason issuer-name-printed-typo-filer-spells-correctly-elsewhere); no data change."
+  },
+  {
+   "finding_id": "RVQ_BLK_639aad709595",
+   "coverage": {
+    "affected_rows": [
+     "ROW-91e140f3e8ec0f08"
+    ],
+    "reviewed_rows": [
+     "ROW-91e140f3e8ec0f08"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061089",
+     "text": "IVC Evidenisa (11) Preferred Stock - 894 0.2 1,631 IVC"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "IVC Evidensia (f/k/a VetStrategy) Investment Type Preferred"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Wrong issuer on the row (member of another company): rejected; values, section and member are IVC Evidensia's.",
+    "Published name differs from the page because of the reader: rejected; the page itself prints 'Evidenisa' (letters transposed) in 2023-06-30 to 2023-12-31 only."
+   ],
+   "next_action": "Owner/check acceptance of PD-0001633336-issuer_name_printed-14 (reason issuer-name-printed-typo-filer-spells-correctly-elsewhere); no data change."
+  },
+  {
+   "finding_id": "RVQ_BLK_80da833d9bd0",
+   "coverage": {
+    "affected_rows": [
+     "ROW-e8166ee8529e4964"
+    ],
+    "reviewed_rows": [
+     "ROW-e8166ee8529e4964"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "IVC Evidenisa (11) Preferred Stock 1,503,839 894 0.2 1,785"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "IVC Evidensia (f/k/a VetStrategy) Investment Type Preferred"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Wrong issuer on the row (member of another company): rejected; values, section and member are IVC Evidensia's.",
+    "Published name differs from the page because of the reader: rejected; the page itself prints 'Evidenisa' (letters transposed) in 2023-06-30 to 2023-12-31 only."
+   ],
+   "next_action": "Owner/check acceptance of PD-0001633336-issuer_name_printed-14 (reason issuer-name-printed-typo-filer-spells-correctly-elsewhere); no data change."
   },
   {
    "finding_id": "RVQ_REV_87630dcb4d6e",
@@ -2647,11 +4163,9 @@
    "finding_id": "RVQ_REV_0307147a7ea0",
    "coverage": {
     "affected_rows": [
-     "ROW-c22898ae28f7ea3f|fair_value",
      "ROW-c22898ae28f7ea3f|pct_of_net_assets"
     ],
     "reviewed_rows": [
-     "ROW-c22898ae28f7ea3f|fair_value",
      "ROW-c22898ae28f7ea3f|pct_of_net_assets"
     ]
    },
@@ -2664,7 +4178,8 @@
    ],
    "hypotheses_tested": [
     "Each excluded field compared with the printed line: fair value, cost and percent equal the printed cells (Patriot, Arrow, Tricor).",
-    "Missing interest_rate on Envocore, BVI Medical and Action Signature: the printed Interest Rate cell is blank (PIK terms only); nothing to restore. Omni 2023-06-30 12.70 was restored earlier and no longer appears."
+    "Missing interest_rate on Envocore, BVI Medical and Action Signature: the printed Interest Rate cell is blank (PIK terms only); nothing to restore. Omni 2023-06-30 12.70 was restored earlier and no longer appears.",
+    "rfcrf flags 1 of the 2 earlier fields; the others no longer fail."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-merged_context_excluded-3 (reason merged-context-value-equals-printed-row)."
   },
@@ -2695,13 +4210,9 @@
    "finding_id": "RVQ_REV_30151ba43339",
    "coverage": {
     "affected_rows": [
-     "ROW-54515ba5dbe54d00|fair_value",
-     "ROW-54515ba5dbe54d00|cost",
      "ROW-54515ba5dbe54d00|pct_of_net_assets"
     ],
     "reviewed_rows": [
-     "ROW-54515ba5dbe54d00|fair_value",
-     "ROW-54515ba5dbe54d00|cost",
      "ROW-54515ba5dbe54d00|pct_of_net_assets"
     ]
    },
@@ -2714,7 +4225,8 @@
    ],
    "hypotheses_tested": [
     "Each excluded field compared with the printed line: fair value, cost and percent equal the printed cells (Patriot, Arrow, Tricor).",
-    "Missing interest_rate on Envocore, BVI Medical and Action Signature: the printed Interest Rate cell is blank (PIK terms only); nothing to restore. Omni 2023-06-30 12.70 was restored earlier and no longer appears."
+    "Missing interest_rate on Envocore, BVI Medical and Action Signature: the printed Interest Rate cell is blank (PIK terms only); nothing to restore. Omni 2023-06-30 12.70 was restored earlier and no longer appears.",
+    "rfcrf flags 1 of the 3 earlier fields; the others no longer fail."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-merged_context_excluded-3 (reason merged-context-value-equals-printed-row)."
   },
@@ -2854,6 +4366,314 @@
     "Wrong net-assets denominator in the build: not the cause; the filer's printed percents themselves do not equal fair value over net assets within the rule's band."
    ],
    "next_action": "Owner/check acceptance of PD-0001633336-pct_of_net_assets_identity-11 (reason pct-identity-printed-percent-is-the-filers-own-figure); do not recompute the filer's percent."
+  },
+  {
+   "finding_id": "RVQ_BLK_f9144bec7d1b",
+   "coverage": {
+    "affected_rows": [
+     "ROW-dba10b9a111c05fd"
+    ],
+    "reviewed_rows": [
+     "ROW-dba10b9a111c05fd"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.66 % 04/2032 3,207 3,103 0.4 3,107"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate wrong: rejected. Each row (Mario Purchaser, LLC) prints '<benchmark> + N PIK <coupon> %'; the loan's par grows by the coupon (pik_test_rows_rfcrf.csv: Mario +4.05..4.28% vs coupon/4 3.9..4.2; MeriCal +3.42% vs 3.35; Integro +4.45..4.58% vs 4.40; BioAgilytix +2.89..2.98% vs 2.80; Bayside +3.12..3.76% vs 3.20..3.62; AX VI +6.78/+7.03% every other quarter vs coupon/2 6.6..6.97), so under D-232 the whole coupon is PIK and pik_rate = coupon (set this run, D-246).",
+    "Rule exemption applies: rejected. pik_printed's D-232 exemption reads only a margin printed with '%'; Crescent prints the margin in basis points."
+   ],
+   "next_action": "Repair pik_printed to read a basis-point margin in the D-232 exemption (REQ-rfcr-1); meanwhile proposal PD-0001633336-pik_printed-13."
+  },
+  {
+   "finding_id": "RVQ_BLK_eff22694da7c",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a3802318b1996489",
+     "ROW-d4182f874a2660c1"
+    ],
+    "reviewed_rows": [
+     "ROW-a3802318b1996489",
+     "ROW-d4182f874a2660c1"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-040555",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 13.23 % 08/2030 EUR 1,931 1,902 0.3 2,107"
+    },
+    {
+     "accession": "0000950170-23-040555",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.95 % 04/2032 3,337 3,237 0.4 3,254"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate wrong: rejected. Each row (AX VI INV2 Holding AB (Voff), Mario Purchaser, LLC) prints '<benchmark> + N PIK <coupon> %'; the loan's par grows by the coupon (pik_test_rows_rfcrf.csv: Mario +4.05..4.28% vs coupon/4 3.9..4.2; MeriCal +3.42% vs 3.35; Integro +4.45..4.58% vs 4.40; BioAgilytix +2.89..2.98% vs 2.80; Bayside +3.12..3.76% vs 3.20..3.62; AX VI +6.78/+7.03% every other quarter vs coupon/2 6.6..6.97), so under D-232 the whole coupon is PIK and pik_rate = coupon (set this run, D-246).",
+    "Rule exemption applies: rejected. pik_printed's D-232 exemption reads only a margin printed with '%'; Crescent prints the margin in basis points."
+   ],
+   "next_action": "Repair pik_printed to read a basis-point margin in the D-232 exemption (REQ-rfcr-1); meanwhile proposal PD-0001633336-pik_printed-13."
+  },
+  {
+   "finding_id": "RVQ_BLK_a7b2ebff4dd6",
+   "coverage": {
+    "affected_rows": [
+     "ROW-33ef96797e5cf7db",
+     "ROW-1df6bbc352df59f4",
+     "ROW-82e66bd182f8936e",
+     "ROW-504049df3792df58",
+     "ROW-175a039892094994"
+    ],
+    "reviewed_rows": [
+     "ROW-33ef96797e5cf7db",
+     "ROW-1df6bbc352df59f4",
+     "ROW-82e66bd182f8936e",
+     "ROW-504049df3792df58",
+     "ROW-175a039892094994"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-23-061089",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 13.94 % 08/2030 EUR 2,062 2,046 0.3 2,122"
+    },
+    {
+     "accession": "0000950170-23-061089",
+     "text": "Bayside Opco, LLC (6) Senior Secured First Lien Term Loan S + 725 PIK 12.79 % 05/2026 4,206 4,206 0.6 4,206"
+    },
+    {
+     "accession": "0000950170-23-061089",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 16.17 % 04/2032 3,475 3,376 0.5 3,372"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate wrong: rejected. Each row (AX VI INV2 Holding AB (Voff), Bayside Opco, LLC, Mario Purchaser, LLC) prints '<benchmark> + N PIK <coupon> %'; the loan's par grows by the coupon (pik_test_rows_rfcrf.csv: Mario +4.05..4.28% vs coupon/4 3.9..4.2; MeriCal +3.42% vs 3.35; Integro +4.45..4.58% vs 4.40; BioAgilytix +2.89..2.98% vs 2.80; Bayside +3.12..3.76% vs 3.20..3.62; AX VI +6.78/+7.03% every other quarter vs coupon/2 6.6..6.97), so under D-232 the whole coupon is PIK and pik_rate = coupon (set this run, D-246).",
+    "Rule exemption applies: rejected. pik_printed's D-232 exemption reads only a margin printed with '%'; Crescent prints the margin in basis points."
+   ],
+   "next_action": "Repair pik_printed to read a basis-point margin in the D-232 exemption (REQ-rfcr-1); meanwhile proposal PD-0001633336-pik_printed-13."
+  },
+  {
+   "finding_id": "RVQ_BLK_0e55d14e8c2f",
+   "coverage": {
+    "affected_rows": [
+     "ROW-3fd9b6da5888e4d6",
+     "ROW-37f73006291bd4b7",
+     "ROW-487c352acd429776",
+     "ROW-4f7750750dfe4ae0"
+    ],
+    "reviewed_rows": [
+     "ROW-3fd9b6da5888e4d6",
+     "ROW-37f73006291bd4b7",
+     "ROW-487c352acd429776",
+     "ROW-4f7750750dfe4ae0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "MeriCal, LLC Unitranche First Lien Term Loan S + 775 PIK 13.39 % 11/2024 7,452 7,452 0.6 4,248"
+    },
+    {
+     "accession": "0000950170-24-017903",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 16.96 % 04/2032 3,619 3,522 0.5 3,619"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate wrong: rejected. Each row (AX VI INV2 Holding AB (Voff), Integro Parent, Inc., Mario Purchaser, LLC, MeriCal, LLC) prints '<benchmark> + N PIK <coupon> %'; the loan's par grows by the coupon (pik_test_rows_rfcrf.csv: Mario +4.05..4.28% vs coupon/4 3.9..4.2; MeriCal +3.42% vs 3.35; Integro +4.45..4.58% vs 4.40; BioAgilytix +2.89..2.98% vs 2.80; Bayside +3.12..3.76% vs 3.20..3.62; AX VI +6.78/+7.03% every other quarter vs coupon/2 6.6..6.97), so under D-232 the whole coupon is PIK and pik_rate = coupon (set this run, D-246).",
+    "Rule exemption applies: rejected. pik_printed's D-232 exemption reads only a margin printed with '%'; Crescent prints the margin in basis points."
+   ],
+   "next_action": "Repair pik_printed to read a basis-point margin in the D-232 exemption (REQ-rfcr-1); meanwhile proposal PD-0001633336-pik_printed-13."
+  },
+  {
+   "finding_id": "RVQ_BLK_b423a2834ffd",
+   "coverage": {
+    "affected_rows": [
+     "ROW-6afee1cf43629826",
+     "ROW-8f520c0f832aba18",
+     "ROW-9e5810fe18647a4c",
+     "ROW-098a291933f3e394",
+     "ROW-922ee1a37c961832",
+     "ROW-776a6656be22285a",
+     "ROW-52d4c98656a49d12"
+    ],
+    "reviewed_rows": [
+     "ROW-6afee1cf43629826",
+     "ROW-8f520c0f832aba18",
+     "ROW-9e5810fe18647a4c",
+     "ROW-098a291933f3e394",
+     "ROW-922ee1a37c961832",
+     "ROW-776a6656be22285a",
+     "ROW-52d4c98656a49d12"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-055626",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 13.92 % 08/2030 EUR 2,207 2,205 0.3 2,382"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate wrong: rejected. Each row (AX VI INV2 Holding AB (Voff), Bayside Opco, LLC, Integro Parent, Inc., Mario Purchaser, LLC, MeriCal, LLC) prints '<benchmark> + N PIK <coupon> %'; the loan's par grows by the coupon (pik_test_rows_rfcrf.csv: Mario +4.05..4.28% vs coupon/4 3.9..4.2; MeriCal +3.42% vs 3.35; Integro +4.45..4.58% vs 4.40; BioAgilytix +2.89..2.98% vs 2.80; Bayside +3.12..3.76% vs 3.20..3.62; AX VI +6.78/+7.03% every other quarter vs coupon/2 6.6..6.97), so under D-232 the whole coupon is PIK and pik_rate = coupon (set this run, D-246).",
+    "Rule exemption applies: rejected. pik_printed's D-232 exemption reads only a margin printed with '%'; Crescent prints the margin in basis points."
+   ],
+   "next_action": "Repair pik_printed to read a basis-point margin in the D-232 exemption (REQ-rfcr-1); meanwhile proposal PD-0001633336-pik_printed-13."
+  },
+  {
+   "finding_id": "RVQ_BLK_2153856e7be6",
+   "coverage": {
+    "affected_rows": [
+     "ROW-ec5d21763214a6b7",
+     "ROW-2adb4de3a91dae5c",
+     "ROW-d609bf792eff4c37",
+     "ROW-5235d91f72f4a8ef",
+     "ROW-e335ce712def31b4",
+     "ROW-48ace179d6ae6123"
+    ],
+    "reviewed_rows": [
+     "ROW-ec5d21763214a6b7",
+     "ROW-2adb4de3a91dae5c",
+     "ROW-d609bf792eff4c37",
+     "ROW-5235d91f72f4a8ef",
+     "ROW-e335ce712def31b4",
+     "ROW-48ace179d6ae6123"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 16.19 % 04/2032 3,926 3,836 0.5 4,043"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate wrong: rejected. Each row (BioAgilytix, Integro Parent, Inc., Mario Purchaser, LLC, MeriCal, LLC) prints '<benchmark> + N PIK <coupon> %'; the loan's par grows by the coupon (pik_test_rows_rfcrf.csv: Mario +4.05..4.28% vs coupon/4 3.9..4.2; MeriCal +3.42% vs 3.35; Integro +4.45..4.58% vs 4.40; BioAgilytix +2.89..2.98% vs 2.80; Bayside +3.12..3.76% vs 3.20..3.62; AX VI +6.78/+7.03% every other quarter vs coupon/2 6.6..6.97), so under D-232 the whole coupon is PIK and pik_rate = coupon (set this run, D-246).",
+    "Rule exemption applies: rejected. pik_printed's D-232 exemption reads only a margin printed with '%'; Crescent prints the margin in basis points."
+   ],
+   "next_action": "Repair pik_printed to read a basis-point margin in the D-232 exemption (REQ-rfcr-1); meanwhile proposal PD-0001633336-pik_printed-13."
+  },
+  {
+   "finding_id": "RVQ_BLK_d5dda94bc7df",
+   "coverage": {
+    "affected_rows": [
+     "ROW-c30c6e87bd572927",
+     "ROW-27ecde331b5d9413",
+     "ROW-53120c5871804873",
+     "ROW-5f73e8830f3651dc",
+     "ROW-d9f0b6a33bbfe650",
+     "ROW-857e5827ca3eae24",
+     "ROW-0ca0b07b58f0496c"
+    ],
+    "reviewed_rows": [
+     "ROW-c30c6e87bd572927",
+     "ROW-27ecde331b5d9413",
+     "ROW-53120c5871804873",
+     "ROW-5f73e8830f3651dc",
+     "ROW-d9f0b6a33bbfe650",
+     "ROW-857e5827ca3eae24",
+     "ROW-0ca0b07b58f0496c"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "MeriCal, LLC Unitranche First Lien Term Loan S + 775 PIK 13.39 % 11/2024 7,452 7,452 0.6 4,248 Savers"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate wrong: rejected. Each row (Bayside Opco, LLC, BioAgilytix, Integro Parent, Inc., Mario Purchaser, LLC, MeriCal, LLC) prints '<benchmark> + N PIK <coupon> %'; the loan's par grows by the coupon (pik_test_rows_rfcrf.csv: Mario +4.05..4.28% vs coupon/4 3.9..4.2; MeriCal +3.42% vs 3.35; Integro +4.45..4.58% vs 4.40; BioAgilytix +2.89..2.98% vs 2.80; Bayside +3.12..3.76% vs 3.20..3.62; AX VI +6.78/+7.03% every other quarter vs coupon/2 6.6..6.97), so under D-232 the whole coupon is PIK and pik_rate = coupon (set this run, D-246).",
+    "Rule exemption applies: rejected. pik_printed's D-232 exemption reads only a margin printed with '%'; Crescent prints the margin in basis points."
+   ],
+   "next_action": "Repair pik_printed to read a basis-point margin in the D-232 exemption (REQ-rfcr-1); meanwhile proposal PD-0001633336-pik_printed-13."
+  },
+  {
+   "finding_id": "RVQ_BLK_90343f884782",
+   "coverage": {
+    "affected_rows": [
+     "ROW-a4b45f3da0e5d6df",
+     "ROW-b1e1595ea3982496",
+     "ROW-7e8eba0c40d795e3",
+     "ROW-eaaa68b73d3a2cc1",
+     "ROW-f40d4bd697a1acda"
+    ],
+    "reviewed_rows": [
+     "ROW-a4b45f3da0e5d6df",
+     "ROW-b1e1595ea3982496",
+     "ROW-7e8eba0c40d795e3",
+     "ROW-eaaa68b73d3a2cc1",
+     "ROW-f40d4bd697a1acda"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate wrong: rejected. Each row (Bayside Opco, LLC, BioAgilytix, Integro Parent, Inc., Mario Purchaser, LLC) prints '<benchmark> + N PIK <coupon> %'; the loan's par grows by the coupon (pik_test_rows_rfcrf.csv: Mario +4.05..4.28% vs coupon/4 3.9..4.2; MeriCal +3.42% vs 3.35; Integro +4.45..4.58% vs 4.40; BioAgilytix +2.89..2.98% vs 2.80; Bayside +3.12..3.76% vs 3.20..3.62; AX VI +6.78/+7.03% every other quarter vs coupon/2 6.6..6.97), so under D-232 the whole coupon is PIK and pik_rate = coupon (set this run, D-246).",
+    "Rule exemption applies: rejected. pik_printed's D-232 exemption reads only a margin printed with '%'; Crescent prints the margin in basis points."
+   ],
+   "next_action": "Repair pik_printed to read a basis-point margin in the D-232 exemption (REQ-rfcr-1); meanwhile proposal PD-0001633336-pik_printed-13."
+  },
+  {
+   "finding_id": "RVQ_BLK_8ed8715f000e",
+   "coverage": {
+    "affected_rows": [
+     "ROW-f161e08b510ad7be"
+    ],
+    "reviewed_rows": [
+     "ROW-f161e08b510ad7be"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 12.39 % 08/2030 EUR 2,729 2,548 0.4 2,729"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "pik_rate wrong: rejected. Each row (AX VI INV2 Holding AB (Voff)) prints '<benchmark> + N PIK <coupon> %'; the loan's par grows by the coupon (pik_test_rows_rfcrf.csv: Mario +4.05..4.28% vs coupon/4 3.9..4.2; MeriCal +3.42% vs 3.35; Integro +4.45..4.58% vs 4.40; BioAgilytix +2.89..2.98% vs 2.80; Bayside +3.12..3.76% vs 3.20..3.62; AX VI +6.78/+7.03% every other quarter vs coupon/2 6.6..6.97), so under D-232 the whole coupon is PIK and pik_rate = coupon (set this run, D-246).",
+    "Rule exemption applies: rejected. pik_printed's D-232 exemption reads only a margin printed with '%'; Crescent prints the margin in basis points."
+   ],
+   "next_action": "Repair pik_printed to read a basis-point margin in the D-232 exemption (REQ-rfcr-1); meanwhile proposal PD-0001633336-pik_printed-13."
+  }
+ ],
+ "request_resolution_history": [
+  {
+   "request_id": "REQ-rfcr-1",
+   "classification": "verification_bug",
+   "resolution": "deferred",
+   "response": "Deferred, not rejected. Same family as REQ-rfbn-1 (D-238): the pik_printed whole-coupon exemption (orchestrator's D-235 repair) reads only a margin printed as a percent after \"benchmark +\"; Crescent prints basis points (\"S + 1075 PIK\"). The repair changes pik_printed output for every fund and must also require independent whole-coupon evidence (par growth), so it goes to the end-of-run shared-code batch with a cohort ledger re-run. The 9 findings (38 rows, all published under D-232 with par-growth evidence) stay outstanding under PD-0001633336-pik_printed-13.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-246; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rfcr-1",
+    "classification": "verification_bug",
+    "file": "pipeline/candidate_rules.py",
+    "what": "pik_printed D-232 exemption: also read a margin printed in basis points ('<code> + 1075 PIK 15.66 %', no '%' after the margin).",
+    "why": "9 findings (38 rows) at 2023-03-31 to 2025-03-31 are whole-coupon PIK loans published under D-232 (pik_rate = printed coupon); the exemption regex needs 'm %' so they are flagged as pik_value_mismatch. Same reason as the owner-accepted pik-printed-rule-reads-margin-of-whole-coupon-pik-loan.",
+    "next_action": "Repair in a worktree with a positive test (bps margin, pik_rate = printed coupon passes) and a false-positive test (bps margin, pik_rate = margin on a loan whose coupon is not all PIK still fails); re-run this fund's ledger. Until then proposal PD-0001633336-pik_printed-13."
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "MeriCal, LLC Unitranche First Lien Term Loan S + 775 PIK 13.39 % 11/2024 7,452 7,452 0.6 4,248 Savers"
+    },
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344 Mario"
+    }
+   ]
   }
  ]
 }

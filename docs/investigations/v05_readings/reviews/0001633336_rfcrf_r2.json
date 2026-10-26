@@ -1,0 +1,1302 @@
+{
+ "reviewer_id": "claude-independent-reviewer-crescent-rfcrf-r2",
+ "report_digest": "06b39626a7e2c826631840f6e34ffa6cc215192dfdbfebc522651075f4894ac6",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001633336_2024-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_a65894e63f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Ancora 2024-12-31 / 2025-03-31: the source value 6,271 / 6,438 thousand equals the term loan plus the negative delayed draw as printed, so it is the filer's loan subtotal on a position-shaped member. Kept excluded.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Ancora Bidco PTY LTD (4)(5)(11) Unitranche First Lien Delayed Draw Term Loan 11/2030 AUD 0 $ ( 28 ) 0.0 $ ( 27 ) Ancora Bidco PTY LTD (11) Unitranche First Lien Term Loan B + 500 ( 50 Floor) 9.38 % 11/2030 AUD 6,430 6,686 0.8 6,298 AUD 6,430 6,658 0.8 6,271"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001633336_2025-03-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_0f3fb1cea0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Ancora 2024-12-31 / 2025-03-31: the source value 6,271 / 6,438 thousand equals the term loan plus the negative delayed draw as printed, so it is the filer's loan subtotal on a position-shaped member. Kept excluded.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Ancora Bidco PTY LTD (4)(5)(11) Unitranche First Lien Delayed Draw Term Loan 11/2030 AUD 0 $ ( 27 ) 0.0 $ ( 8 ) Ancora Bidco PTY LTD (11) Unitranche First Lien Term Loan B + 500 ( 50 Floor) 9.15 % 11/2030 AUD 6,487 6,692 0.9 6,446 AUD 6,487 6,665 0.9 6,438"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0e55d14e8c2f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). pik_printed 2023-12-31: page-rule count 4 = affected_rows. Each flagged row prints '<code> + N PIK <coupon> %' and publishes pik_rate = the coupon under D-232. Par growth fits the coupon, e.g. Mario last-out 3,207 -> 3,337 -> 3,475 -> 3,619 -> 3,768 -> 3,926 -> 4,094 -> 4,258 (+4.0 to 4.3 pct a quarter, against coupon/4 3.8 to 4.2). AX VI grows semi-annually (2,207 flat at 2024-06-30, then +7.0 pct = coupon/2). The finding is the rule's basis-point blind spot (REQ-rfcr-1). See the Mario 2025-03-31 miss under whole-coupon-pik-read-as-margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "MeriCal, LLC Unitranche First Lien Term Loan S + 775 PIK 13.39 % 11/2024 7,452 7,452 0.6 4,248"
+    },
+    {
+     "accession": "0000950170-24-017903",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 16.96 % 04/2032 3,619 3,522 0.5 3,619"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1a0b1aa31a99",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Ancora 2024-12-31 / 2025-03-31: the source value 6,271 / 6,438 thousand equals the term loan plus the negative delayed draw as printed, so it is the filer's loan subtotal on a position-shaped member. Kept excluded.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Ancora Bidco PTY LTD (4)(5)(11) Unitranche First Lien Delayed Draw Term Loan 11/2030 AUD 0 $ ( 28 ) 0.0 $ ( 27 ) Ancora Bidco PTY LTD (11) Unitranche First Lien Term Loan B + 500 ( 50 Floor) 9.38 % 11/2030 AUD 6,430 6,686 0.8 6,298 AUD 6,430 6,658 0.8 6,271"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_2153856e7be6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). pik_printed 2024-06-30: page-rule count 6 = affected_rows. Each flagged row prints '<code> + N PIK <coupon> %' and publishes pik_rate = the coupon under D-232. Par growth fits the coupon, e.g. Mario last-out 3,207 -> 3,337 -> 3,475 -> 3,619 -> 3,768 -> 3,926 -> 4,094 -> 4,258 (+4.0 to 4.3 pct a quarter, against coupon/4 3.8 to 4.2). AX VI grows semi-annually (2,207 flat at 2024-06-30, then +7.0 pct = coupon/2). The finding is the rule's basis-point blind spot (REQ-rfcr-1). See the Mario 2025-03-31 miss under whole-coupon-pik-read-as-margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 16.19 % 04/2032 3,926 3,836 0.5 4,043"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_26fa0550b4b0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. issuer_name_printed 2023-06-30: the page itself prints 'IVC Evidenisa' that quarter, and 'IVC Evidensia' elsewhere (quoted); the rule reads the filer's typo. Proposal fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040555",
+     "text": "IVC Evidenisa (11) Preferred Stock - 746 0.2 1,581 IVC"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "IVC Evidensia (f/k/a VetStrategy) Investment Type Preferred"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_441acfd012f4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. pct_of_net_assets_identity 2025-06-30 (3.55 pct of 394 = 14 rows = affected): same.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108024",
+     "text": "Freeport Financial SBIC Fund LP (11)(13)(14) Partnership Interest 1,312 0.2 959"
+    },
+    {
+     "accession": "0000950170-25-108024",
+     "text": "Hamsard 3778 Limited Unitranche First Lien - Last Out Term Loan S + 550 9.72 % 10/2031 GBP 9,790"
+    },
+    {
+     "accession": "0000950170-25-108024",
+     "text": "Sun Acquirer Corp. Unitranche First Lien Term Loan S + 500 ( 75 Floor) 9.33 % 09/2028 2,413 2,386 0.4 2,404"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_639aad709595",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. issuer_name_printed 2023-09-30: the page itself prints 'IVC Evidenisa' that quarter, and 'IVC Evidensia' elsewhere (quoted); the rule reads the filer's typo. Proposal fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061089",
+     "text": "IVC Evidenisa (11) Preferred Stock - 894 0.2 1,631 IVC"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "IVC Evidensia (f/k/a VetStrategy) Investment Type Preferred"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_80da833d9bd0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. issuer_name_printed 2023-12-31: the page itself prints 'IVC Evidenisa' that quarter, and 'IVC Evidensia' elsewhere (quoted); the rule reads the filer's typo. Proposal fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "IVC Evidenisa (11) Preferred Stock 1,503,839 894 0.2 1,785"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "IVC Evidensia (f/k/a VetStrategy) Investment Type Preferred"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_8ed8715f000e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). pik_printed 2025-03-31: page-rule count 1 = affected_rows. Each flagged row prints '<code> + N PIK <coupon> %' and publishes pik_rate = the coupon under D-232. Par growth fits the coupon, e.g. Mario last-out 3,207 -> 3,337 -> 3,475 -> 3,619 -> 3,768 -> 3,926 -> 4,094 -> 4,258 (+4.0 to 4.3 pct a quarter, against coupon/4 3.8 to 4.2). AX VI grows semi-annually (2,207 flat at 2024-06-30, then +7.0 pct = coupon/2). The finding is the rule's basis-point blind spot (REQ-rfcr-1). See the Mario 2025-03-31 miss under whole-coupon-pik-read-as-margin. Note on this row (AX VI 2025-03-31): it publishes maturity 2029-08-31, the tag ('31/08/2029'), while the page prints 08/2030; this is a maturity error unrelated to the rule.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 12.39 % 08/2030 EUR 2,729 2,548 0.4 2,729"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Senior Secured Second Lien Term Loan E + 1000 PIK 12.39 % 08/2030 EUR 2,729 2,548 0.4 2,729"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_90343f884782",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). pik_printed 2024-12-31: page-rule count 5 = affected_rows. Each flagged row prints '<code> + N PIK <coupon> %' and publishes pik_rate = the coupon under D-232. Par growth fits the coupon, e.g. Mario last-out 3,207 -> 3,337 -> 3,475 -> 3,619 -> 3,768 -> 3,926 -> 4,094 -> 4,258 (+4.0 to 4.3 pct a quarter, against coupon/4 3.8 to 4.2). AX VI grows semi-annually (2,207 flat at 2024-06-30, then +7.0 pct = coupon/2). The finding is the rule's basis-point blind spot (REQ-rfcr-1). See the Mario 2025-03-31 miss under whole-coupon-pik-read-as-margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a7b2ebff4dd6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). pik_printed 2023-09-30: page-rule count 5 = affected_rows. Each flagged row prints '<code> + N PIK <coupon> %' and publishes pik_rate = the coupon under D-232. Par growth fits the coupon, e.g. Mario last-out 3,207 -> 3,337 -> 3,475 -> 3,619 -> 3,768 -> 3,926 -> 4,094 -> 4,258 (+4.0 to 4.3 pct a quarter, against coupon/4 3.8 to 4.2). AX VI grows semi-annually (2,207 flat at 2024-06-30, then +7.0 pct = coupon/2). The finding is the rule's basis-point blind spot (REQ-rfcr-1). See the Mario 2025-03-31 miss under whole-coupon-pik-read-as-margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061089",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 13.94 % 08/2030 EUR 2,062 2,046 0.3 2,122"
+    },
+    {
+     "accession": "0000950170-23-061089",
+     "text": "Bayside Opco, LLC (6) Senior Secured First Lien Term Loan S + 725 PIK 12.79 % 05/2026 4,206 4,206 0.6 4,206"
+    },
+    {
+     "accession": "0000950170-23-061089",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 16.17 % 04/2032 3,475 3,376 0.5 3,372"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_af9d5bf07969",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Ancora 2024-12-31 / 2025-03-31: the source value 6,271 / 6,438 thousand equals the term loan plus the negative delayed draw as printed, so it is the filer's loan subtotal on a position-shaped member. Kept excluded.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Ancora Bidco PTY LTD (4)(5)(11) Unitranche First Lien Delayed Draw Term Loan 11/2030 AUD 0 $ ( 27 ) 0.0 $ ( 8 ) Ancora Bidco PTY LTD (11) Unitranche First Lien Term Loan B + 500 ( 50 Floor) 9.15 % 11/2030 AUD 6,487 6,692 0.9 6,446 AUD 6,487 6,665 0.9 6,438"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b423a2834ffd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). pik_printed 2024-03-31: page-rule count 7 = affected_rows. Each flagged row prints '<code> + N PIK <coupon> %' and publishes pik_rate = the coupon under D-232. Par growth fits the coupon, e.g. Mario last-out 3,207 -> 3,337 -> 3,475 -> 3,619 -> 3,768 -> 3,926 -> 4,094 -> 4,258 (+4.0 to 4.3 pct a quarter, against coupon/4 3.8 to 4.2). AX VI grows semi-annually (2,207 flat at 2024-06-30, then +7.0 pct = coupon/2). The finding is the rule's basis-point blind spot (REQ-rfcr-1). See the Mario 2025-03-31 miss under whole-coupon-pik-read-as-margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-055626",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 13.92 % 08/2030 EUR 2,207 2,205 0.3 2,382"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_d5dda94bc7df",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). pik_printed 2024-09-30: page-rule count 7 = affected_rows. Each flagged row prints '<code> + N PIK <coupon> %' and publishes pik_rate = the coupon under D-232. Par growth fits the coupon, e.g. Mario last-out 3,207 -> 3,337 -> 3,475 -> 3,619 -> 3,768 -> 3,926 -> 4,094 -> 4,258 (+4.0 to 4.3 pct a quarter, against coupon/4 3.8 to 4.2). AX VI grows semi-annually (2,207 flat at 2024-06-30, then +7.0 pct = coupon/2). The finding is the rule's basis-point blind spot (REQ-rfcr-1). See the Mario 2025-03-31 miss under whole-coupon-pik-read-as-margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "MeriCal, LLC Unitranche First Lien Term Loan S + 775 PIK 13.39 % 11/2024 7,452 7,452 0.6 4,248 Savers"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e7c2f91d0cfa",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. pct_of_net_assets_identity 2025-03-31 (1.25 pct of 401 = 5 rows = affected): each prints the published percent; the filer's own percents miss the identity band.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Solvias AG (4)(5)(6)(11) Senior Secured First Lien Revolver 02/2032 CHF - ( 71 ) 0.1 ( 74 )"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Continental Battery Company (9) Unitranche First Lien Term Loan 01/2027 7,522 7,469 0.7 4,627"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Alera Group Inc. Unitranche First Lien Delayed Draw Term Loan S + 575 ( 75 Floor) 10.07 % 09/2028 9,779 9,658 1.5 9,871"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_eff22694da7c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). pik_printed 2023-06-30: page-rule count 2 = affected_rows. Each flagged row prints '<code> + N PIK <coupon> %' and publishes pik_rate = the coupon under D-232. Par growth fits the coupon, e.g. Mario last-out 3,207 -> 3,337 -> 3,475 -> 3,619 -> 3,768 -> 3,926 -> 4,094 -> 4,258 (+4.0 to 4.3 pct a quarter, against coupon/4 3.8 to 4.2). AX VI grows semi-annually (2,207 flat at 2024-06-30, then +7.0 pct = coupon/2). The finding is the rule's basis-point blind spot (REQ-rfcr-1). See the Mario 2025-03-31 miss under whole-coupon-pik-read-as-margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040555",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 13.23 % 08/2030 EUR 1,931 1,902 0.3 2,107"
+    },
+    {
+     "accession": "0000950170-23-040555",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.95 % 04/2032 3,337 3,237 0.4 3,254"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f9144bec7d1b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). pik_printed 2023-03-31: page-rule count 1 = affected_rows. Each flagged row prints '<code> + N PIK <coupon> %' and publishes pik_rate = the coupon under D-232. Par growth fits the coupon, e.g. Mario last-out 3,207 -> 3,337 -> 3,475 -> 3,619 -> 3,768 -> 3,926 -> 4,094 -> 4,258 (+4.0 to 4.3 pct a quarter, against coupon/4 3.8 to 4.2). AX VI grows semi-annually (2,207 flat at 2024-06-30, then +7.0 pct = coupon/2). The finding is the rule's basis-point blind spot (REQ-rfcr-1). See the Mario 2025-03-31 miss under whole-coupon-pik-read-as-margin.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Mario Purchaser, LLC (10) Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.66 % 04/2032 3,207 3,103 0.4 3,107"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_01715f9d8dec",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2025-03-31: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 ( 100 Floor) 10.69 % 07/2027 39"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0307147a7ea0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. merged_context_excluded 2023-09-30 (n_units 1 = affected_rows): the published field equals the printed cell, or the cell is blank (PIK terms only); the re-verifier cannot replay a merged context.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-061089",
+     "text": "Patriot Acquisition Topco S.A.R.L (11) Unitranche First Lien Term Loan S + 675 ( 100 Floor) 12.27 % 01/2028 1,417 1,388 0.2 1,362"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_059fd058c781",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. merged_context_excluded 2024-03-31 (n_units 1 = affected_rows): the published field equals the printed cell, or the cell is blank (PIK terms only); the re-verifier cannot replay a merged context.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-055626",
+     "text": "Arrow Management Acquisition, LLC Senior Secured First Lien Term Loan S + 500 ( 100 Floor) 10.18 % 10/2027 4,839 4,776 0.6 4,803"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_07d7a9701145",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2025-03-31: shadow ledger n_units 4 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Stepping Stones Healthcare Services, LLC (4)(5) Unitranche First Lien Revolver 12/2026 - ( 21 ) 0.0 19"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Essential Services Holding Corporation (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2030 - ( 7 ) 0.0 2"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.1 2"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_08561fe77cfc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2024-06-30: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095458",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 ( 100 Floor) 11.71 % 07/2027 60"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1621ca854476",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. C107 2023-03-31: n_units 66 = affected_rows. The negative costs equal the printed bracketed costs (United Flow, Pye-Barker, Patriot quoted). This finding covers the negative-cost rows only; the rows still published positive are under the X02 2023-03-31 rejection.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "United Flow Technologies (4)(5) Unitranche First Lien Revolver 10/2027 - ( 25 ) ( 0.0 ) ( 43 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Pye-Barker Fire & Safety, LLC (4)(5) Unitranche First Lien Revolver 11/2027 - ( 24 ) ( 0.0 ) ( 37 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Patriot Growth Insurance Services, LLC (4)(5) Unitranche First Lien Revolver 10/2028 - ( 11 ) ( 0.0 ) ( 32 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1b1e95c39240",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2024-12-31: shadow ledger n_units 3 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Iris Buyer, LLC (4)(5) Unitranche First Lien Revolver 10/2029 - ( 33 ) 0.0 15"
+    },
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.1 2"
+    },
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Galway Borrower, LLC (4)(5) Unitranche First Lien Revolver 09/2028 - ( 1"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_21aad79ff24b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2026-06-30: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342351",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 , 100 Floor 10.06 % 07/2027 39"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_221af15ac586",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X02 2024-09-30: shadow ledger n_units 86 = affected_rows. The rows read on the page print no Interest Term and no Interest Rate (non-accrual (9), undrawn lines, PIK-only notes, equity); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124474",
+     "text": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.0 7"
+    },
+    {
+     "accession": "0000950170-24-124474",
+     "text": "OEM Group, LLC (7)(9) Senior Secured First Lien Term Loan 09/2025 8,768 6,336 0.5 3,593"
+    },
+    {
+     "accession": "0000950170-24-124474",
+     "text": "Patriot Acquisition Topco S.A.R.L (11) Common Stock 16,416 46 - -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_24f58b933070",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2024-09-30: shadow ledger n_units 5 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124474",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 23 ) 0.0 26"
+    },
+    {
+     "accession": "0000950170-24-124474",
+     "text": "Sun Acquirer Corp. (4)(5) Unitranche First Lien Revolver 09/2027 - ( 21 ) 0.0 14"
+    },
+    {
+     "accession": "0000950170-24-124474",
+     "text": "HS Spa Holdings Inc. (Hand & Stone) (4)(5)(10) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 4 ) 0.0 8"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_287f923858ae",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (f): financial_convention_unresolved 2023-03-31 (PPV) (rule n_units 2 = affected). The printed PIK figure equals or exceeds the printed Interest Rate (quoted), so neither all-in nor cash-leg reading is consistent. The rate is kept as reported and unresolved, with an owner decision per row as the next action. Complete and concrete; no proposal is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "PPV Intermediate Holdings LLC (Vetcor) (8) Unsecured Debt 1300 PIK 0.00 % 08/2030 758 741 0.1 646"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "PPV Intermediate Holdings LLC (Vetcor) (5)(8) Unsecured Debt 1300 PIK 0.00 % 08/2030 207 204 0.0 172"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_30151ba43339",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. merged_context_excluded 2024-06-30 (n_units 1 = affected_rows): the published field equals the printed cell, or the cell is blank (PIK terms only); the re-verifier cannot replay a merged context.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Tricor Borrower, LLC (5) Unitranche First Lien Revolver S + 500 ( 100 Floor) 10.45 % 10/2026 213"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_356c5911030f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2023-03-31: shadow ledger n_units 1 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 17 ) 0.0 21"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_37e30b097609",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2024-06-30: shadow ledger n_units 3 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095458",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 20 ) ( 0.0 ) 43"
+    },
+    {
+     "accession": "0000950170-24-095458",
+     "text": "MB2 Dental (4)(5) Unitranche First Lien Delayed Draw Term Loan 02/2031 - ( 24 ) ( 0.0 ) 26"
+    },
+    {
+     "accession": "0000950170-24-095458",
+     "text": "HS Spa Holdings Inc. (Hand & Stone) (4)(5)(10) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 5 ) ( 0.0 ) 10"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3b8c9598569d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2023-12-31: shadow ledger n_units 1 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "Pye-Barker Fire & Safety, LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 11/2027 - ( 16 ) 0.0 3"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5022abf91317",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. merged_context_excluded 2023-06-30 (n_units 1 = affected_rows): the published field equals the printed cell, or the cell is blank (PIK terms only); the re-verifier cannot replay a merged context.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040555",
+     "text": "Envocore Holding, LLC (7)(8)(9) Senior Secured Second Lien Term Loan 1000 PIK 12/2026 8,265 7,055 0.6 4,637"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_577484d14873",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2025-06-30: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108024",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 ( 100 Floor) 10.68 % 07/2027 39"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5f76e8b54bac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. fmt_interest_rate 2023-03-31 (0.24 pct of 409 = 1 row): Integro prints 25.40 % and publishes 25.4.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Integro Parent, Inc. (11) Senior Secured First Lien Term Loan L + 1025 PIK 25.40 % 612"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_67c17b619f3f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2024-12-31: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 ( 100 Floor) 11.65 % 07/2027 39"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_87630dcb4d6e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. maturity_not_past 2023-03-31 (weak metric x units = 2 rows = affected): non-accrual loans printed with a past maturity (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Matilda Jane Holdings, Inc. (9) Senior Secured First Lien Revolver 12/2022 1,426 196 0.0 35"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Matilda Jane Holdings, Inc. (9) Senior Secured First Lien Term Loan 12/2022 11,961 - 0.0 291"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_89539f086534",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2024-03-31: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-055626",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 ( 100 Floor) 11.71 % 07/2027 60"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8ba15e197fae",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2026-03-31: shadow ledger n_units 1 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221936",
+     "text": "Headlands Buyer, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 09/2032 - ( 3 ) 0.0 7"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_964d89d6624e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X02 2024-12-31: shadow ledger n_units 101 = affected_rows. The rows read on the page print no Interest Term and no Interest Rate (non-accrual (9), undrawn lines, PIK-only notes, equity); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.1 2"
+    },
+    {
+     "accession": "0000950170-25-023153",
+     "text": "MeriCal, LLC (9) Unitranche First Lien Term Loan 11/2025 7,290 7,307 0.5 3,706"
+    },
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Patriot Acquisition Topco S.A.R.L (11) Common Stock Class B 16,416 46 0.0 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a8263489d79a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. maturity_not_past 2026-03-31 (weak metric x units = 3 rows = affected): non-accrual loans printed with a past maturity (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221936",
+     "text": "Gener8, LLC (5)(9) Senior Secured First Lien Revolver 02/2026 1,322 1,289 0.0 169"
+    },
+    {
+     "accession": "0001193125-26-221936",
+     "text": "Gener8, LLC (9) Senior Secured First Lien Term Loan 02/2026 6,162 6,005 0.3 1,779"
+    },
+    {
+     "accession": "0001193125-26-221936",
+     "text": "Gener8, LLC (9) Senior Secured First Lien Term Loan 02/2026 265 259 0.0 77"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ac7d88fbea3a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2026-03-31: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221936",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 , 100 Floor 10.07 % 07/2027 39"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b0c3eaceb202",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2025-12-31: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-071922",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 ( 100 Floor) 10.24 % 07/2027 39"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b5efa4a41ed1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2025-09-30: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277533",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 , 100 Floor 10.71 % 07/2027 39"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b9574283aba5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PCT01 2026-06-30: the percents sum to the printed 239.3 %, as filed for a levered fund.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342351",
+     "text": "Total Investments $ 1,625,061 239.3 % $ 1,570,668"
+    },
+    {
+     "accession": "0001193125-26-342351",
+     "text": "Total Investments $ 1,625,061 239.3 % $ 1,570,668"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b9e026b499e2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X02 2025-03-31: shadow ledger n_units 100 = affected_rows. The rows read on the page print no Interest Term and no Interest Rate (non-accrual (9), undrawn lines, PIK-only notes, equity); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Integrity Marketing Acquisition, LLC (5) Unitranche First Lien Revolver 08/2028 - - 0.1 2"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Continental Battery Company (9) Unitranche First Lien Term Loan 01/2027 7,522 7,469 0.7 4,627"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Patriot Acquisition Topco S.A.R.L (11) Common Stock 16,416 46 0.0 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bdaa5124ae00",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2025-06-30: shadow ledger n_units 3 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108024",
+     "text": "RN Enterprises, LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 10/2031 - ( 12 ) 0.0 28"
+    },
+    {
+     "accession": "0000950170-25-108024",
+     "text": "FS Whitewater Borrower, LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 12/2029 - ( 17 ) 0.0 10"
+    },
+    {
+     "accession": "0000950170-25-108024",
+     "text": "Alpine SG, LLC (4)(5) Senior Secured First Lien Revolver 11/2027 - ( 1"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bdf3eee31d85",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2023-12-31: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-017903",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 ( 100 Floor) 11.77 % 07/2027 63 63 0.0 64"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c5092db1b812",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. maturity_not_past 2026-06-30 (weak metric x units = 3 rows = affected): non-accrual loans printed with a past maturity (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342351",
+     "text": "Gener8, LLC (5)(9) Senior Secured First Lien Revolver 05/2026 1,322 1,289 0.0 151"
+    },
+    {
+     "accession": "0001193125-26-342351",
+     "text": "Gener8, LLC (9) Senior Secured First Lien Term Loan 05/2026 6,162 6,005 0.3 1,708"
+    },
+    {
+     "accession": "0001193125-26-342351",
+     "text": "Gener8, LLC (9) Senior Secured First Lien Term Loan 05/2026 265 259 0.0 74"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c57d0f215f1f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (f): financial_convention_unresolved 2026-06-30 (Eagle, Mario note) (rule n_units 4 = affected). The printed PIK figure equals or exceeds the printed Interest Rate (quoted), so neither all-in nor cash-leg reading is consistent. The rate is kept as reported and unresolved, with an owner decision per row as the next action. Complete and concrete; no proposal is right.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342351",
+     "text": "Eagle Midco B.V. (Avania) (11) Unitranche First Lien Delayed Draw Term Loan S + 775 ( 1139 PIK) 10.49 % 07/2029 1,418 1,418 0.1 842"
+    },
+    {
+     "accession": "0001193125-26-342351",
+     "text": "Eagle Midco B.V. (Avania) (11) Unitranche First Lien Term Loan E + 750 ( 953 PIK) 8.58 % 07/2029 EUR 2,439 $ 2,533 0.3 % $ 1,656"
+    },
+    {
+     "accession": "0001193125-26-342351",
+     "text": "Eagle Midco B.V. (Avania) (11) Unitranche First Lien Term Loan S + 775 ( 1139 PIK) 10.32 % 07/2029 3,800 3,750 0.3 2,256"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c949950cabea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (f): financial_convention_unresolved 2025-06-30 (Mario revolver) (rule n_units 1 = affected). The printed PIK figure equals or exceeds the printed Interest Rate (quoted), so neither all-in nor cash-leg reading is consistent. The rate is kept as reported and unresolved, with an owner decision per row as the next action. Complete and concrete; no proposal is right.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108024",
+     "text": "Mario Purchaser, LLC Unitranche First Lien Revolver S + 1079 PIK 10.18 % 04/2028 174 162 0.0 144"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_ccc7d6ca3efd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. PP02 2024-09-30: rfcrf shadow ledger n_units 2 = affected_rows. The MHS S + 625 and S + 650 term loans are printed as two lines with different coupons and published as such (the report quotes the S + 625 line). The reason pp02-twin-lines-printed-separately fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-124474",
+     "text": "MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 ( 100 Floor) 11.73 % 07/2027 39"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d531257ea78f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. merged_context_excluded 2025-03-31 (n_units 6 = affected_rows): the published field equals the printed cell, or the cell is blank (PIK terms only); the re-verifier cannot replay a merged context.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "BVI Medical Inc. (4)(5)(6) Unitranche First Lien Delayed Draw Term Loan S + 125 ( 75 Floor) (including 500 PIK) 03/2032 - ( 3 ) 0.0 ( 7 )"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "BVI Medical Inc. (4)(5)(6) Unitranche First Lien Revolver S + 125 ( 75 Floor) (including 500 PIK) 03/2032 - ( 12 )"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Action Signature Acquisition, Inc. (9) Unitranche First Lien Term Loan 1140 PIK 12/2027 3,200 3,188 0.1 646"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_da5f5a18e8d2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (f): html_carry 2022-03-31. confirmed_error, with the 2.36 bn HTML sum against the printed 1.29 bn current total; rfcrf publishes no 2022 rows. The next action is concrete (an owner ruling on the pre-2023 scope, then the template's date-boundary repair). Complete.",
+   "evidence": [
+    {
+     "accession": "0000950170-22-008487",
+     "text": "Total Investments $ 1,267,678 196.9 % $ 1,288,601"
+    },
+    {
+     "accession": "0000950170-22-008487",
+     "text": "Total Investments $ 1,244,846 194.8 % $ 1,270,366"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e2856b9eb0a7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): Re-checked; my rejection is cured. X02 2023-03-31 (n_units 89 = affected_rows) is now confirmed_error, and the hypothesis says what rfcrf shows: 50 cost signs corrected, while Explorer (ROW-b9bd583d2eec8e83, +130), Auveco (ROW-dfea4f8209b4f709, +7) and Bankers Toolbox (ROW-57ca01b05789d216, +35) still publish a positive cost. Bankers prints '- ( 35 ) ( 0.0 ) ( 85 )'. The next action names the staged costsign_specs.json and the open PPV owner question. Complete and honest; no proposal, by design.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Auveco Holdings (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2028 - $ ( 7 ) ( 0.0 ) % $ ( 36 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Banker's Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 35 ) ( 0.0 ) ( 85 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Explorer Investor, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 130 ) ( 0.0 ) ( 132 )"
+    },
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Annuity Health (4)(5) Senior Secured First Lien Revolver 02/2029 - ( 7 ) 0.0 -"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "United Flow Technologies (4)(5) Unitranche First Lien Revolver 10/2027 - ( 25 ) ( 0.0 ) ( 43 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Explorer Investor, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 130 ) ( 0.0 ) ( 132 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Auveco Holdings (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2028 - $ ( 7 ) ( 0.0 ) % $ ( 36 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 35 ) ( 0.0 ) ( 85 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f4ed8fd7f29b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X02 2025-12-31: shadow ledger n_units 106 = affected_rows. The rows read on the page print no Interest Term and no Interest Rate (non-accrual (9), undrawn lines, PIK-only notes, equity); as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-071922",
+     "text": "Arrow Management Acquisition, LLC (5) Unitranche First Lien Delayed Draw Term Loan 07/2032 - - 0.0 59"
+    },
+    {
+     "accession": "0001193125-26-071922",
+     "text": "Continental Battery Company (9) Unitranche First Lien Term Loan 07/2028 8,428 7,469 0.6 3,884"
+    },
+    {
+     "accession": "0001193125-26-071922",
+     "text": "Patriot Acquisition Topco S.A.R.L Common Stock 16,416 46 0.0 -"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f8abed4f9f9e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2025-09-30: shadow ledger n_units 1 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277533",
+     "text": "FS Whitewater Borrower, LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 12/2029 - ( 16 ) 0.0 13"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fb7f288bfe7c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2025-12-31: shadow ledger n_units 2 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-071922",
+     "text": "Arrow Management Acquisition, LLC (5) Unitranche First Lien Delayed Draw Term Loan 07/2032 - - 0.0 59"
+    },
+    {
+     "accession": "0001193125-26-071922",
+     "text": "Headlands Buyer, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 09/2032 - ( 3 ) 0.0 1"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fbf4d6565c14",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. X11 2024-03-31: shadow ledger n_units 5 = affected_rows. The flagged rows are undrawn revolvers or delayed draws printed with a dash in the par column (quoted); as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-055626",
+     "text": "Iris Buyer, LLC (4)(5) Unitranche First Lien Revolver 10/2029 - ( 38 ) 0.0 34"
+    },
+    {
+     "accession": "0000950170-24-055626",
+     "text": "Mario Purchaser, LLC (4)(5) Unitranche First Lien Revolver 04/2028 - ( 15 ) 0.0 9"
+    },
+    {
+     "accession": "0000950170-24-055626",
+     "text": "WCT Group Holdings, LLC (4)(5) Unitranche First Lien Revolver 12/2029 - ( 11 ) 0.0 9"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "unit-count-rescaled-by-issuer-normaliser",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (d). 33 shares_held changes in the rgA6 -> rfcrf diff; the Integrity common 287,484 line is quoted. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Integrity Marketing Acquisition, LLC Common Stock 287,484 533 0.1 937"
+    }
+   ]
+  },
+  {
+   "observation_key": "distinct-equal-value-loans-collapsed",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. The MHS S + 625 / S + 650 twins are published as two rows in every quarter (the PP02 findings). The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342351",
+     "text": "en Revolver S + 600 , 100 Floor 9.81 % 07/2027 90 90 0.0 90 MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 625 , 100 Floor 10.06 % 07/2027 39 39 0.0 39 MHS Acquisition Holdings, LLC Senior Secured First Lien Term Loan S + 650 , 100 Floor 10.31 % 07/2027 39 39 0.0 39 Minuteman Security Technologies, Inc. (4)(5) Senior Secured First Lien Delayed Draw Term Loan 02/2029 - ( 10 ) 0.0 ( 14 ) Minuteman Security Technologies, Inc. Senior Secured First Lien Term Loan S + "
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-percent-rate-scaled-down-100x",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. TSX 2026-06-30 prints 9.91 % with 400 PIK; restored. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-342351",
+     "text": "TSX Fiber Senior Secured First Lien Term Loan S + 600 ( 400 PIK), 100 Floor 9.91 % 11/2030 872 872 0.1 872"
+    }
+   ]
+  },
+  {
+   "observation_key": "source-negative-cost-sign-lost",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): Re-checked; my rejection is cured. Recount on rfcrf (undrawn lines with no par, cost > 0, fair value <= 0): Explorer x2, Auveco x2, Bankers Toolbox, SolutionReach and USA Hometown are the 7 the observation names, each printed in brackets. HGH 2024-12-31 is the eighth row of that shape, but its page prints '- 3 0.0 ( 84 )', a positive 3, so excluding it is right. costsign_specs.json carries the 7 with negative values. 'parked', not 'fixed', matches rfcrf.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Explorer Investor, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 130 ) ( 0.0 ) ( 132 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Explorer Investor, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 130 ) ( 0.0 ) ( 132 )"
+    },
+    {
+     "accession": "0000950170-23-040555",
+     "text": "Explorer Investor, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 125 ) ( 0.0 ) ( 132 )"
+    },
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Auveco Holdings (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2028 - $ ( 7 ) ( 0.0 ) % $ ( 36 )"
+    },
+    {
+     "accession": "0000950170-23-061089",
+     "text": "SolutionReach, Inc. (4)(5) Senior Secured First Lien Revolver 07/2025 - ( 2 ) ( 0.0 ) ( 7 )"
+    },
+    {
+     "accession": "0000950170-24-017903",
+     "text": "USA Hometown Experts, Inc. (4)(5) Senior Secured First Lien Delayed Draw Term Loan 11/2029 - ( 16 ) ( 0.0 ) ( 16 )"
+    },
+    {
+     "accession": "0000950170-25-023153",
+     "text": "HGH Purchaser, Inc. (4)(5) Unitranche First Lien Revolver 11/2026 - 3 0.0 ( 84 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-rate-lost-during-context-merge",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Omni 2023-06-30 12.70 published; the merged-context finding rationale agrees.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040555",
+     "text": "Omni Ophthalmic Management Consultants, LLC Senior Secured First Lien Term Loan S + 750 ( 100 Floor) 12.70 % 09/2025 6,703 6,619 0.9 6,615"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-footnote-linked-to-comparative-note",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Disclosed fix; the detector is concrete. Not re-read row by row.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Seko Global Logistics Network, LLC (9)(11) Senior Secured First Lien Term Loan 07/2027 4,924 4,883 0.5 3,501"
+    }
+   ]
+  },
+  {
+   "observation_key": "nonaccrual-flag-without-printed-marker",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. XBRL and page disagree; left for the owner, with a concrete detector. Honest.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-108024",
+     "text": "BioAgilytix Senior Secured First Lien Term Loan S + 250 (plus 400 PIK) 10.90 % 12/2028 15,382 $ 15,223 1.8 % 12,741"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-is-hierarchy-path",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (e). rfcrf: no issuer name contains 'Investments', 'Investment Type', 'Interest', 'Maturity', a footnote marker, 'Floor', a lien word or a trailing row word. The renames I listed (rgA6 -> rfcrf) only drop markers, row words and 'Type' (e.g. 'Lion Cashmere Bidco Limited One' -> '... Limited'), or fix spellings; 'Concord III' keeps its numeral. No over-strip found.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277533",
+     "text": "1959 Holdings, LLC Senior Secured First Lien Term Loan S + 650 , 100 Floor 10.79 % 07/2030 5,000 $ 4,953 0.7 % 4,950"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-names-another-issuer",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (d). The 21 rows (HS Spa, Infobase, SQAD, New Era, Lightspeed, Sandvine, Explorer, Vantage, Great Lakes) show in the rename list. No canonical name maps to two entities, no entity carries two canonical names, and no two entities differ only by punctuation.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Explorer Investor, Inc. Unitranche First Lien Term Loan S + 600 ( 50 Floor) 10.48 % 06/2029 13,446 12,975 1.7 12,505 FH MD"
+    }
+   ]
+  },
+  {
+   "observation_key": "canonical-name-from-hierarchy-alias",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Confirmed and left (shared). Count: rfcrf has 24 rows with canonical '3 Investments United States Debt Investments ... Park Place Technologies', not 20.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-040555",
+     "text": "Park Place Technologies, LLC (8) Unsecured Debt 1250 PIK 12.50 % 05/2029 940 940 0.1 792"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-term-printed-not-tagged",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): Re-checked; my rejection is cured. My own coupon test on rfcrf (coupon - spread is no plausible benchmark, coupon - (spread + PIK) is) finds 29 rows at 2025-03-31, 1 at 2024-12-31 (Isagenix) and 3 at 2023-03-31 (BioAgilytix x2, Professional Physical Therapy). With Affinitiv x2 (printed 'S + 700 (including 200 PIK) 13.56 %': 13.56 - 7 = 6.56 is just inside my cut-off; staged 9.0 is right), that is the 35 listed. Spot-check of the staged values: ACI 6.0, Gener8 8.0, HGH 7.0, Omni 8.0, Lash 7.75, A&R 6.9, Ingenio 8.0, BVI 6.25, Avalign 7.25, Affinitiv 9.0. All equal c + p of the printed term. Minor: BVI's two undrawn lines at 2025-03-31 print the same 'S + 125 (including 500 PIK)', still publish 1.25, and have no coupon to test, so they are outside the list's rule but carry the same error.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Ingenio, LLC Unitranche First Lien Term Loan S + 200 ( 100 Floor) (including 600 PIK) 12.44 % 08/2027 4,682 4,651 0.6"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "ACI Group Holdings, Inc. Unitranche First Lien Term Loan S + 275 ( 75 Floor) (including 325 PIK) 10.42 % 08/2028 6,924 6,830 0.9"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "ACI Group Holdings, Inc. Unitranche First Lien Term Loan S + 600 ( 75 Floor) (including 325 PIK) 10.46 % 08/2028 6,865 6,770 0.9"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Affinitiv, Inc. Unitranche First Lien Revolver S + 700 ( 100 Floor) (including 200 PIK) 13.56 % 07/2027 57 55 0.0 41"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Gener8, LLC Senior Secured First Lien Term Loan S + 200 (including 600 PIK) 12.56 % 08/2025 5,872 5,872 0.5 3,610"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Lash Opco LLC Unitranche First Lien Term Loan S + 265 ( 100 Floor) (including 510 PIK) 12.14 % 03/2026 3,126 3,116 0.4 3,017"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-plus-pik-repeats-whole-margin",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Eagle 2025-12-31: 11.72 = SOFR + 7.75, so the 'plus 775 PIK' repeats the margin; the tagged spread is kept and recorded as ambiguous. Defensible.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-071922",
+     "text": "Eagle Midco B.V. (Avania) (11) Unitranche First Lien Term Loan S + 775 (plus 775 PIK) 11.72 % 07/2029 EUR 3,705 3,649 0.4 2,708"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-values-swapped-between-sibling-members",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Point (a). rfcrf 2024-12-31: last-out 4,258 / 4,177 / 4,344, S + 1075, pik 15.21, 04/2032; delayed draw 475 / 392 / 475, S + 575.3, 10.21, 04/2029. Both as printed; the chains continue.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344 Mario"
+    },
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344"
+    }
+   ]
+  },
+  {
+   "observation_key": "dash-fair-value-row-not-published",
+   "outcome": "rejected",
+   "rationale": "Rejected (the 272 are good; the residual is still misdescribed and incomplete). Point (a): the 272 staged entries check out. Every printed_line is on its page, none of the 272 contexts is already published, no context repeats, and the five lines claimed by two contexts (Online Labels delayed draws 2024-03-31 to 2024-12-31, Seniorlink 2025-06-30) are printed twice. The 12 I read (Continental Battery, Banker's Toolbox, Allied, Envocore, Park Place x3, Auveco, Slickdeals, MeriCal x2, Lexipol) match. With 472 + 272 + 4 twins + 18 = 766 the accounting is right.\nPoint (d): the 18 'not located' are not unlocatable. I tried 7 and found 6 printed on their own pages:\n- Seniorlink revolver 2023-09-30 '- ( 15 ) - -'; Stepping Stones revolver 2024-09-30 '- ( 23 ) - -'.\n- Banker's Toolbox revolver 2025-09-30 '- ( 15 ) 0.0 -'.\n- Vivid Seats common 143 x2 at 2026-03-31.\n- Lexipol revolver 2023-12-31 '- ( 16 ) - -' (tagged as the term loan, cost +16).\n- Advanced Diabetes Supply revolver 2024-09-30 '- ( 3 ) - -'.\nOnly IVC common 2023-06-30 was not on the page.\nAlso not in any list: WCT Group revolver 2025-03-31 (C_02e1520d, cost -9), printed '- ( 9 ) 0.0 -' and unpublished. A cost-only UP Acquisition context at 2023-09-30 (C_6563ede4, cost 3) is likewise unlisted (review_cr/costonly2.py).\nNeeds: re-label the located ones as printed unpublished positions (staged or named), and add WCT. The 2023-12-31 residual of about -1.6 M in cost_gap_by_quarter is honestly stated as unexplained.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020540",
+     "text": "Envocore Holding, LLC (7) Common Stock 521,354 - - -"
+    },
+    {
+     "accession": "0000950170-23-061089",
+     "text": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 15 ) - -"
+    },
+    {
+     "accession": "0000950170-24-124474",
+     "text": "Stepping Stones Healthcare Services, LLC (4)(5) Unitranche First Lien Revolver 12/2026 - ( 23 ) - -"
+    },
+    {
+     "accession": "0001193125-25-277533",
+     "text": "Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 15 ) 0.0 -"
+    },
+    {
+     "accession": "0001193125-26-221936",
+     "text": "Vivid Seats Ltd. (12) Common Stock 143 - 0.0 - Vivid Seats Ltd. (12) Common Stock 143 - 0.0 -"
+    },
+    {
+     "accession": "0000950170-24-017903",
+     "text": "Lexipol (Ranger Buyer, Inc.) (4)(5) Unitranche First Lien Revolver 11/2027 - ( 16 ) - -"
+    },
+    {
+     "accession": "0000950170-24-124474",
+     "text": "Advanced Diabetes Supply (4)(5) Senior Secured First Lien Revolver 12/2027 - ( 3 ) - -"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "WCT Group Holdings, LLC (4)(5) Unitranche First Lien Revolver 12/2029 - ( 9 ) 0.0 -"
+    },
+    {
+     "accession": "0000950170-24-055626",
+     "text": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 3 ) - - Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 3 ) - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "whole-coupon-pik-read-as-margin",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): Re-checked; my rejection is cured. Mario last-out 2025-03-31 is now named as missed, with par evidence (+3.87 pct against coupon/4 3.79) and staged values (pik 15.17, all_in, spread 10.79), matching the page 'S + 1079 PIK 15.17 %'.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1079 PIK 15.17 % 04/2032 4,422 4,343 0.6 4,499 Mario"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1079 PIK 15.17 % 04/2032 4,422 4,343 0.6 4,499"
+    },
+    {
+     "accession": "0000950170-25-108024",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan 1517.7 PIK 15.18 % 04/2032 4,593 4,519 0.6 4,474"
+    }
+   ]
+  },
+  {
+   "observation_key": "undrawn-member-text-carries-drawn-rate",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): unchanged from my rfcrf review. Annuity Health 2024-06-30 prints no rate ('- ( 7 ) 0.0 -'); withdrawn.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095458",
+     "text": "Annuity Health (4)(5) Senior Secured First Lien Revolver 02/2029 - ( 7 ) 0.0 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-maturity-differs-from-tag",
+   "outcome": "supported",
+   "rationale": "r2 (report-only round; rfcrf data unchanged; staged fixes not applied): Matches what I found: the tag reads '31/08/2029', while the page and member print 08/2030. Parked with a staged fix and a concrete detector.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-071368",
+     "text": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 12.39 % 08/2030 EUR 2,729 2,548 0.4"
+    },
+    {
+     "accession": "0000950170-25-071368",
+     "text": "Senior Secured Second Lien Term Loan E + 1000 PIK 12.39 % 08/2030 EUR 2,729 2,548 0.4 2,729"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rfcr-1",
+   "outcome": "supported",
+   "rationale": "The pik_printed exemption reads only a '%'-margin; Crescent prints basis points. The deferral to the shared batch, with a false-positive test, is sound. The 9 findings are published under D-232 with par-growth evidence.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-023153",
+     "text": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "r2 checks on rfcrf (unchanged data). Recounts: cost signs 7 (+HGH excluded, prints +3); including-PIK spreads 35 (my coupon test 33 + Affinitiv 2; BVI's undrawn x2 carry the same term but no coupon); Park Place canonical on 24 rows; Mario 2025-03-31 and the AX VI maturity as stated; Sandvine units confirmed.",
+  "Patriot 'Common Stock One' is listed as an error, but this fund keeps row words in instrument_description on hundreds of rows by design (e.g. ASP MCS 'Common Stock One' in every quarter, Action Signature 'Term Loan - Two'). The listing is harmless but inconsistent with the wrapper's rule.",
+  "Staged fixes not applied; the fund's data still carry every error the report now lists as parked. All findings proposed is not data correct."
+ ]
+}

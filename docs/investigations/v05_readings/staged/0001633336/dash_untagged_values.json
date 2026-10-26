@@ -1,0 +1,4084 @@
+[
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_fe23fd08-7ae1-4a88-b43e-8f458fc0e0ed",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-23-020540 C_fe23fd08-7ae1-4a88-b43e-8f458fc0e0ed fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_0474688c-9bac-4bcb-9d26-080734e149f6",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-23-020540 C_0474688c-9bac-4bcb-9d26-080734e149f6 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_b815bd64-e73c-41b8-b14a-3e4021ae246a",
+  "issuer": "IGT Holdings LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 1000000.0
+  },
+  "untagged_values": "0000950170-23-020540 C_b815bd64-e73c-41b8-b14a-3e4021ae246a fair_value 0",
+  "printed_line": "IGT Holdings LLC Common Stock 1,000,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_3712464e-3ec0-4087-b92b-b2941a52b556",
+  "issuer": "IGT Holdings LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 645730.0
+  },
+  "untagged_values": "0000950170-23-020540 C_3712464e-3ec0-4087-b92b-b2941a52b556 fair_value 0",
+  "printed_line": "IGT Holdings LLC Preferred Stock 645,730 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_6345944d-3f9e-4a8f-9fa9-bbd6c5940562",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 4538.0
+  },
+  "untagged_values": "0000950170-23-020540 C_6345944d-3f9e-4a8f-9fa9-bbd6c5940562 fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 4,538 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_4fff82f2-bf78-4642-b90d-200b3a5110fb",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2063.0
+  },
+  "untagged_values": "0000950170-23-020540 C_4fff82f2-bf78-4642-b90d-200b3a5110fb fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 2,063 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_e10b9bea-9e6b-487a-b901-32e5c5aefabb",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12131.0
+  },
+  "untagged_values": "0000950170-23-020540 C_e10b9bea-9e6b-487a-b901-32e5c5aefabb fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Common Stock 12,131 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_f8dd987c-f35d-4364-a163-7e8844e7f4b7",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2956.0
+  },
+  "untagged_values": "0000950170-23-020540 C_f8dd987c-f35d-4364-a163-7e8844e7f4b7 fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Preferred Stock 2,956 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_68949990-48ca-42d0-9e40-c37fbc8978fe",
+  "issuer": "Integro Parent, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 454000.0,
+   "par": null,
+   "units": 4468.0
+  },
+  "untagged_values": "0000950170-23-020540 C_68949990-48ca-42d0-9e40-c37fbc8978fe fair_value 0",
+  "printed_line": "Integro Parent, Inc. (11) Common Stock 4,468 454 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_6639b351-a05c-4e23-a7e4-1bac0384825f",
+  "issuer": "Teal Acquisition Co., Inc",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 556000.0,
+   "par": null,
+   "units": 5555.0
+  },
+  "untagged_values": "0000950170-23-020540 C_6639b351-a05c-4e23-a7e4-1bac0384825f fair_value 0",
+  "printed_line": "Teal Acquisition Co., Inc Common Stock 5,555 556 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_afa1ffa3-4718-4312-b3c8-4a604211594f",
+  "issuer": "Matilda Jane Holdings, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2587855.0
+  },
+  "untagged_values": "0000950170-23-020540 C_afa1ffa3-4718-4312-b3c8-4a604211594f fair_value 0",
+  "printed_line": "Matilda Jane Holdings, Inc. Preferred Stock 2,587,855 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_88ae291a-fa60-4e67-b5d0-ac68bc0f7429",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-23-020540 C_88ae291a-fa60-4e67-b5d0-ac68bc0f7429 fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_560057ba-ba1e-4999-835f-93ac55a789bb",
+  "issuer": "OEM Group, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 20000.0
+  },
+  "untagged_values": "0000950170-23-020540 C_560057ba-ba1e-4999-835f-93ac55a789bb fair_value 0",
+  "printed_line": "OEM Group, LLC (7) Common Stock 20,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_5de54f1f-0028-4065-9c26-9b33769862cc",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-23-020540 C_5de54f1f-0028-4065-9c26-9b33769862cc fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_38248ee5-c323-4756-b47b-31df92453d33",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-23-020540 C_38248ee5-c323-4756-b47b-31df92453d33 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 479 479 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-03-31",
+  "accession": "0000950170-23-020540",
+  "ctx": "C_f339dbc7-3299-4197-8f01-bc2dcd0b5078",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock Two",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-23-020540 C_f339dbc7-3299-4197-8f01-bc2dcd0b5078 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 685,018 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_f48b6800-2347-46ab-95d7-0263a83bfd37",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-23-040555 C_f48b6800-2347-46ab-95d7-0263a83bfd37 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_fce382ec-442c-4411-a3bc-fa5e44e6cbfb",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-23-040555 C_fce382ec-442c-4411-a3bc-fa5e44e6cbfb fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_40cc64c9-be81-4327-97c7-86ec841a318c",
+  "issuer": "IGT Holdings LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 1000000.0
+  },
+  "untagged_values": "0000950170-23-040555 C_40cc64c9-be81-4327-97c7-86ec841a318c fair_value 0",
+  "printed_line": "IGT Holdings LLC Common Stock 1,000,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_56615ea7-99bc-4cd1-b70c-b17ee3637dc5",
+  "issuer": "IGT Holdings LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 645730.0
+  },
+  "untagged_values": "0000950170-23-040555 C_56615ea7-99bc-4cd1-b70c-b17ee3637dc5 fair_value 0",
+  "printed_line": "IGT Holdings LLC Preferred Stock 645,730 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_4ecdef63-fa99-41e0-af3c-caa45885ffa7",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 4538.0
+  },
+  "untagged_values": "0000950170-23-040555 C_4ecdef63-fa99-41e0-af3c-caa45885ffa7 fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 4,538 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_623069d9-6919-490d-9488-81384a7a5c31",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2063.0
+  },
+  "untagged_values": "0000950170-23-040555 C_623069d9-6919-490d-9488-81384a7a5c31 fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 2,063 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_cefcd065-b3bf-4874-bae1-513080e0d32c",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12131.0
+  },
+  "untagged_values": "0000950170-23-040555 C_cefcd065-b3bf-4874-bae1-513080e0d32c fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Common Stock 12,131 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_be590ce8-23ba-4df0-b348-15f62527a723",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2956.0
+  },
+  "untagged_values": "0000950170-23-040555 C_be590ce8-23ba-4df0-b348-15f62527a723 fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Preferred Stock 2,956 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_cfcff1d4-e989-40d8-a680-08592a3fc0d8",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202884.0
+  },
+  "untagged_values": "0000950170-23-040555 C_cfcff1d4-e989-40d8-a680-08592a3fc0d8 fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,884 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_ccefc26e-4d89-4d17-84eb-7af22c1a0e19",
+  "issuer": "Bayside Opco, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 1976.0
+  },
+  "untagged_values": "0000950170-23-040555 C_ccefc26e-4d89-4d17-84eb-7af22c1a0e19 fair_value 0",
+  "printed_line": "Bayside Opco, LLC (6) Common Stock 1,976 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_00a376ed-a497-4739-b7e1-27e9047d5769",
+  "issuer": "Patriot Acquisition Topco S.A.R.L",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": 42000.0,
+   "par": null,
+   "units": 15809.0
+  },
+  "untagged_values": "0000950170-23-040555 C_00a376ed-a497-4739-b7e1-27e9047d5769 fair_value 0",
+  "printed_line": "Patriot Acquisition Topco S.A.R.L (11) Common Stock 15,809 42 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_9aa67274-7ad1-4718-a663-52c838eb8911",
+  "issuer": "Integro Parent, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 454000.0,
+   "par": null,
+   "units": 4468.0
+  },
+  "untagged_values": "0000950170-23-040555 C_9aa67274-7ad1-4718-a663-52c838eb8911 fair_value 0",
+  "printed_line": "Integro Parent, Inc. (11) Common Stock 4,468 454 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_68954d8f-b575-4e02-a405-640d60ef001d",
+  "issuer": "Matilda Jane Holdings, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2587855.0
+  },
+  "untagged_values": "0000950170-23-040555 C_68954d8f-b575-4e02-a405-640d60ef001d fair_value 0",
+  "printed_line": "Matilda Jane Holdings, Inc. Preferred Stock 2,587,855 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_fe8fb26b-b548-4d15-bef3-0f8a755a07a8",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-23-040555 C_fe8fb26b-b548-4d15-bef3-0f8a755a07a8 fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_658cd7e7-2910-4dc2-84dd-fc3fd9e20c4b",
+  "issuer": "OEM Group, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 20000.0
+  },
+  "untagged_values": "0000950170-23-040555 C_658cd7e7-2910-4dc2-84dd-fc3fd9e20c4b fair_value 0",
+  "printed_line": "OEM Group, LLC (7) Common Stock 20,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_810d10b1-74af-4be5-90bf-4992ea473273",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-23-040555 C_810d10b1-74af-4be5-90bf-4992ea473273 fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_681f7f60-f138-4184-8af6-13e6da164030",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-23-040555 C_681f7f60-f138-4184-8af6-13e6da164030 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 479 479 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_e9d07873-10d8-435c-99ac-e1665c1133cd",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock Two",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-23-040555 C_e9d07873-10d8-435c-99ac-e1665c1133cd fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 685,018 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_5597088c-6c61-4095-ac85-07ed45ac4da9",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-23-061089 C_5597088c-6c61-4095-ac85-07ed45ac4da9 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_1dcbe970-fe97-4d75-8036-083ad9d9d3fe",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-23-061089 C_1dcbe970-fe97-4d75-8036-083ad9d9d3fe fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_4b846c17-d426-4222-ad1d-fab23874bf7a",
+  "issuer": "IGT Holdings LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 1000000.0
+  },
+  "untagged_values": "0000950170-23-061089 C_4b846c17-d426-4222-ad1d-fab23874bf7a fair_value 0",
+  "printed_line": "IGT Holdings LLC Common Stock 1,000,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_1fe6a77b-3499-4ba3-92dd-2bb9f3f8e1b6",
+  "issuer": "IGT Holdings LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 645730.0
+  },
+  "untagged_values": "0000950170-23-061089 C_1fe6a77b-3499-4ba3-92dd-2bb9f3f8e1b6 fair_value 0",
+  "printed_line": "IGT Holdings LLC Preferred Stock 645,730 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_7adac125-17d5-4f27-85df-0ed051e54c2d",
+  "issuer": "smarTours, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1682000.0,
+   "par": null,
+   "units": 2403.0
+  },
+  "untagged_values": "0000950170-23-061089 C_7adac125-17d5-4f27-85df-0ed051e54c2d fair_value 0",
+  "printed_line": "smarTours, LLC (6) Common Stock 2,403 1,682 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_97955bac-5708-4d61-96dc-258eacee873f",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 4538.0
+  },
+  "untagged_values": "0000950170-23-061089 C_97955bac-5708-4d61-96dc-258eacee873f fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 4,538 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_a105dd86-d183-4863-94f5-74f46315a030",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2063.0
+  },
+  "untagged_values": "0000950170-23-061089 C_a105dd86-d183-4863-94f5-74f46315a030 fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 2,063 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_26dba133-6174-4ad4-86d7-0fd1e41bcc0a",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12131.0
+  },
+  "untagged_values": "0000950170-23-061089 C_26dba133-6174-4ad4-86d7-0fd1e41bcc0a fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Common Stock 12,131 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_09a81742-0913-46a1-81ba-f92b36fb6a2e",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2956.0
+  },
+  "untagged_values": "0000950170-23-061089 C_09a81742-0913-46a1-81ba-f92b36fb6a2e fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Preferred Stock 2,956 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_5fedc1cb-48bb-4379-8c6b-ac83ba519bff",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202884.0
+  },
+  "untagged_values": "0000950170-23-061089 C_5fedc1cb-48bb-4379-8c6b-ac83ba519bff fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,884 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_2f78f583-bb07-4109-a084-8f8ab87b67f8",
+  "issuer": "Bayside Opco, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 1976.0
+  },
+  "untagged_values": "0000950170-23-061089 C_2f78f583-bb07-4109-a084-8f8ab87b67f8 fair_value 0",
+  "printed_line": "Bayside Opco, LLC (6) Common Stock 1,976 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_10492537-56f2-424f-ab77-46e2c3cb1b25",
+  "issuer": "Integro Parent, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 454000.0,
+   "par": null,
+   "units": 4468.0
+  },
+  "untagged_values": "0000950170-23-061089 C_10492537-56f2-424f-ab77-46e2c3cb1b25 fair_value 0",
+  "printed_line": "Integro Parent, Inc. (11) Common Stock 4,468 454 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_00a1cb6a-3437-437d-8043-041eb96271d5",
+  "issuer": "Matilda Jane Holdings, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2587855.0
+  },
+  "untagged_values": "0000950170-23-061089 C_00a1cb6a-3437-437d-8043-041eb96271d5 fair_value 0",
+  "printed_line": "Matilda Jane Holdings, Inc. Preferred Stock 2,587,855 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_510c0e75-6595-4ff7-9f7d-59e55f37ab2d",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-23-061089 C_510c0e75-6595-4ff7-9f7d-59e55f37ab2d fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_e4a4106f-0e36-4489-99c5-c6bda5dc1a7f",
+  "issuer": "Palmetto Moon LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 61.0
+  },
+  "untagged_values": "0000950170-23-061089 C_e4a4106f-0e36-4489-99c5-c6bda5dc1a7f fair_value 0",
+  "printed_line": "Palmetto Moon LLC Common Stock 61 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_b1a60b23-0c25-4fff-bd47-52cfe76b2bdb",
+  "issuer": "OEM Group, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 20000.0
+  },
+  "untagged_values": "0000950170-23-061089 C_b1a60b23-0c25-4fff-bd47-52cfe76b2bdb fair_value 0",
+  "printed_line": "OEM Group, LLC (7) Common Stock 20,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_17e77b8f-83c5-4b35-9e5d-9d696d6972ef",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-23-061089 C_17e77b8f-83c5-4b35-9e5d-9d696d6972ef fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_4241fda5-c240-4df7-a878-418b7b8136d0",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-23-061089 C_4241fda5-c240-4df7-a878-418b7b8136d0 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 479 479 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_b7416893-d10e-42e8-9e98-7c22ea31b5bb",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock Two",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-23-061089 C_b7416893-d10e-42e8-9e98-7c22ea31b5bb fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 685,018 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_8e6b1635-68c3-4297-a344-279922a4fc17",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-24-017903 C_8e6b1635-68c3-4297-a344-279922a4fc17 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_080561da-dceb-48da-836a-85d237014d10",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-24-017903 C_080561da-dceb-48da-836a-85d237014d10 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_e24ff466-c385-4757-8c6f-fa55ce155a68",
+  "issuer": "IGT Holdings LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 1000000.0
+  },
+  "untagged_values": "0000950170-24-017903 C_e24ff466-c385-4757-8c6f-fa55ce155a68 fair_value 0",
+  "printed_line": "IGT Holdings LLC Common Stock 1,000,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_d3dcc6af-abeb-4a0a-bfbb-80f05cc3343a",
+  "issuer": "IGT Holdings LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 645730.0
+  },
+  "untagged_values": "0000950170-24-017903 C_d3dcc6af-abeb-4a0a-bfbb-80f05cc3343a fair_value 0",
+  "printed_line": "IGT Holdings LLC Preferred Stock 645,730 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_cf4390d2-8030-438d-bab1-17f58c1964d5",
+  "issuer": "Iris Buyer, LLC",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 576923.0
+  },
+  "untagged_values": "0000950170-24-017903 C_cf4390d2-8030-438d-bab1-17f58c1964d5 fair_value 0",
+  "printed_line": "Iris Buyer, LLC Common Stock 576,923 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_4e3da3b3-b170-40d3-8452-574b25ee359d",
+  "issuer": "smarTours, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1682000.0,
+   "par": null,
+   "units": 2403.0
+  },
+  "untagged_values": "0000950170-24-017903 C_4e3da3b3-b170-40d3-8452-574b25ee359d fair_value 0",
+  "printed_line": "smarTours, LLC (6) Common Stock 2,403 1,682 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_4b2a073b-f8e9-4b97-b775-5ccf73c03ab3",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 4538.0
+  },
+  "untagged_values": "0000950170-24-017903 C_4b2a073b-f8e9-4b97-b775-5ccf73c03ab3 fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 4,538 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_895f834c-c66f-45c0-b8b6-73116357574d",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2063.0
+  },
+  "untagged_values": "0000950170-24-017903 C_895f834c-c66f-45c0-b8b6-73116357574d fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 2,063 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_384e6c65-2cac-4dba-a7a0-458884821545",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12131.0
+  },
+  "untagged_values": "0000950170-24-017903 C_384e6c65-2cac-4dba-a7a0-458884821545 fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Common Stock 12,131 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_b687c7d3-810d-4aae-ba80-1d5476dddaca",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2956.0
+  },
+  "untagged_values": "0000950170-24-017903 C_b687c7d3-810d-4aae-ba80-1d5476dddaca fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Preferred Stock 2,956 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_7abef2b0-ef48-4f85-bc8e-e2214e318f4d",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202884.0
+  },
+  "untagged_values": "0000950170-24-017903 C_7abef2b0-ef48-4f85-bc8e-e2214e318f4d fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,884 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_5890d317-fb5a-4a55-a4e9-3c0f1a1c4fe2",
+  "issuer": "Bayside Opco, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 1976.0
+  },
+  "untagged_values": "0000950170-24-017903 C_5890d317-fb5a-4a55-a4e9-3c0f1a1c4fe2 fair_value 0",
+  "printed_line": "Bayside Opco, LLC (6) Common Stock 1,976 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_c48b8e64-1a8b-45eb-b3eb-2b2eeb03462f",
+  "issuer": "Integro Parent, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 454000.0,
+   "par": null,
+   "units": 4468.0
+  },
+  "untagged_values": "0000950170-24-017903 C_c48b8e64-1a8b-45eb-b3eb-2b2eeb03462f fair_value 0",
+  "printed_line": "Integro Parent, Inc. (11) Common Stock 4,468 454 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_7d5f17d9-d547-4eb6-b5b1-985112f16490",
+  "issuer": "Matilda Jane Holdings, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2587855.0
+  },
+  "untagged_values": "0000950170-24-017903 C_7d5f17d9-d547-4eb6-b5b1-985112f16490 fair_value 0",
+  "printed_line": "Matilda Jane Holdings, Inc. Preferred Stock 2,587,855 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_81e9ac6b-7698-42f6-9055-71cc88ba9f18",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-24-017903 C_81e9ac6b-7698-42f6-9055-71cc88ba9f18 fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_d00ddf38-d83d-4a39-9c3d-8f0f28e98d3b",
+  "issuer": "Palmetto Moon LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 61.0
+  },
+  "untagged_values": "0000950170-24-017903 C_d00ddf38-d83d-4a39-9c3d-8f0f28e98d3b fair_value 0",
+  "printed_line": "Palmetto Moon LLC Common Stock 61 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_0f541c36-ac1e-41f9-aec1-e96ea26e2b35",
+  "issuer": "OEM Group, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 20000.0
+  },
+  "untagged_values": "0000950170-24-017903 C_0f541c36-ac1e-41f9-aec1-e96ea26e2b35 fair_value 0",
+  "printed_line": "OEM Group, LLC (7) Common Stock 20,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_38ed6816-7903-4b30-89fe-dc523670ff5c",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-24-017903 C_38ed6816-7903-4b30-89fe-dc523670ff5c fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_ad52e033-28ac-415c-adc9-e1c93303d898",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-24-017903 C_ad52e033-28ac-415c-adc9-e1c93303d898 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 479 479 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_653aeeea-19ad-4d03-ac05-8f34fb2ced46",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock Two",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-24-017903 C_653aeeea-19ad-4d03-ac05-8f34fb2ced46 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 685,018 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_31766def-c321-40dd-aef4-950b16da0672",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-24-055626 C_31766def-c321-40dd-aef4-950b16da0672 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_f70fe6d6-9ce8-4225-a609-f3d7e28b06b1",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-24-055626 C_f70fe6d6-9ce8-4225-a609-f3d7e28b06b1 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_1861ea2b-92c1-4ea3-8bd7-80ac50b4e24e",
+  "issuer": "smarTours, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1682000.0,
+   "par": null,
+   "units": 2403.0
+  },
+  "untagged_values": "0000950170-24-055626 C_1861ea2b-92c1-4ea3-8bd7-80ac50b4e24e fair_value 0",
+  "printed_line": "smarTours, LLC (6) Common Stock 2,403 1,682 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_7c5580b0-28e8-486d-abc0-0e88e5c8be83",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 4538.0
+  },
+  "untagged_values": "0000950170-24-055626 C_7c5580b0-28e8-486d-abc0-0e88e5c8be83 fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 4,538 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_5ce44810-0360-4b63-aef4-6c007cabe19d",
+  "issuer": "Allied Wireline Services, LLC",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2063.0
+  },
+  "untagged_values": "0000950170-24-055626 C_5ce44810-0360-4b63-aef4-6c007cabe19d fair_value 0",
+  "printed_line": "Allied Wireline Services, LLC Common Stock 2,063 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_c474bd93-bcbd-4401-97ce-6136149ed69a",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12131.0
+  },
+  "untagged_values": "0000950170-24-055626 C_c474bd93-bcbd-4401-97ce-6136149ed69a fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Common Stock 12,131 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_c8ff16ae-07c1-4e5d-9712-08c2464e679d",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2956.0
+  },
+  "untagged_values": "0000950170-24-055626 C_c8ff16ae-07c1-4e5d-9712-08c2464e679d fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Preferred Stock 2,956 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_099a4c16-306d-4b80-bd90-7b63d2a2f85b",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202884.0
+  },
+  "untagged_values": "0000950170-24-055626 C_099a4c16-306d-4b80-bd90-7b63d2a2f85b fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,884 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_ce424032-99dd-40cb-bc0c-67b4799bb8c8",
+  "issuer": "Bayside Opco, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 1976.0
+  },
+  "untagged_values": "0000950170-24-055626 C_ce424032-99dd-40cb-bc0c-67b4799bb8c8 fair_value 0",
+  "printed_line": "Bayside Opco, LLC (6) Common Stock 1,976 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_15209cf8-ca68-4809-bce5-602f038040ba",
+  "issuer": "Integro Parent, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 454000.0,
+   "par": null,
+   "units": 4468.0
+  },
+  "untagged_values": "0000950170-24-055626 C_15209cf8-ca68-4809-bce5-602f038040ba fair_value 0",
+  "printed_line": "Integro Parent, Inc. (11) Common Stock 4,468 454 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_a252720c-b0d9-47db-89c7-9966b5cf1710",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 69.0
+  },
+  "untagged_values": "0000950170-24-055626 C_a252720c-b0d9-47db-89c7-9966b5cf1710 fair_value 0",
+  "printed_line": "A&A Global Imports, LLC Common Stock 69 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_d35e5f43-6674-44ad-9d16-1b8489f71f4d",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-24-055626 C_d35e5f43-6674-44ad-9d16-1b8489f71f4d fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_fdf80a0d-bd9f-43f4-bced-871fe778e8fd",
+  "issuer": "OEM Group, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 20000.0
+  },
+  "untagged_values": "0000950170-24-055626 C_fdf80a0d-bd9f-43f4-bced-871fe778e8fd fair_value 0",
+  "printed_line": "OEM Group, LLC (7) Common Stock 20,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_85663bdd-5fb0-4670-942c-9f2e13b00efb",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-24-055626 C_85663bdd-5fb0-4670-942c-9f2e13b00efb fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_f989b07a-8c5b-4913-907d-b8154de9e4e7",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-24-055626 C_f989b07a-8c5b-4913-907d-b8154de9e4e7 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 479 479 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_cad9f47a-d560-406b-9e62-bb4014cd9910",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-24-055626 C_cad9f47a-d560-406b-9e62-bb4014cd9910 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 685,018 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_2b725f98-e5c6-4539-9c61-5e4b57e7c297",
+  "issuer": "VetStrategy",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 30000.0,
+   "par": null,
+   "units": 26595.0
+  },
+  "untagged_values": "0000950170-24-055626 C_2b725f98-e5c6-4539-9c61-5e4b57e7c297 fair_value 0",
+  "printed_line": "VetStrategy (11) Common Stock 26,595 30 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_0c6a80a2-1ca9-410f-af4c-fce393a6d02f",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-24-095458 C_0c6a80a2-1ca9-410f-af4c-fce393a6d02f fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_b358ca59-b4b4-48b2-b9ad-2c7139bc861d",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-24-095458 C_b358ca59-b4b4-48b2-b9ad-2c7139bc861d fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_84dc13b8-b120-41c1-a269-dec442a17517",
+  "issuer": "MHS Acquisition Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 9000.0,
+   "par": null,
+   "units": 11.0
+  },
+  "untagged_values": "0000950170-24-095458 C_84dc13b8-b120-41c1-a269-dec442a17517 fair_value 0",
+  "printed_line": "MHS Acquisition Holdings, LLC Common Stock 11 9 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_f7d5758c-bc94-4fb4-bfe5-cf5e51d1b390",
+  "issuer": "smarTours, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1682000.0,
+   "par": null,
+   "units": 2403.0
+  },
+  "untagged_values": "0000950170-24-095458 C_f7d5758c-bc94-4fb4-bfe5-cf5e51d1b390 fair_value 0",
+  "printed_line": "smarTours, LLC (6) Common Stock 2,403 1,682 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_2899748b-109b-4343-90b6-92280b707fde",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12131.0
+  },
+  "untagged_values": "0000950170-24-095458 C_2899748b-109b-4343-90b6-92280b707fde fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Common Stock 12,131 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_a9a6ceea-0dde-46ee-beb4-942d0d8c02ee",
+  "issuer": "Loadmaster Derrick & Equipment, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 2956.0
+  },
+  "untagged_values": "0000950170-24-095458 C_a9a6ceea-0dde-46ee-beb4-942d0d8c02ee fair_value 0",
+  "printed_line": "Loadmaster Derrick & Equipment, Inc. (7) Preferred Stock 2,956 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_9bc2102f-0753-45d7-ad69-f4dac38b8b8d",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202884.0
+  },
+  "untagged_values": "0000950170-24-095458 C_9bc2102f-0753-45d7-ad69-f4dac38b8b8d fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,884 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_d17675ef-686b-4295-a787-11b99048b7a9",
+  "issuer": "Bayside Opco, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 1976.0
+  },
+  "untagged_values": "0000950170-24-095458 C_d17675ef-686b-4295-a787-11b99048b7a9 fair_value 0",
+  "printed_line": "Bayside Opco, LLC (6) Common Stock 1,976 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_7f6e2f22-c504-4b38-81d1-5f523a73c925",
+  "issuer": "Patriot Acquisition Topco S.A.R.L",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": 46000.0,
+   "par": null,
+   "units": 16417.0
+  },
+  "untagged_values": "0000950170-24-095458 C_7f6e2f22-c504-4b38-81d1-5f523a73c925 fair_value 0",
+  "printed_line": "Patriot Acquisition Topco S.A.R.L (11) Common Stock 16,417 46 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_825fd3ed-7ac5-490e-b8a9-2f0677d0c774",
+  "issuer": "Integro Parent, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 454000.0,
+   "par": null,
+   "units": 4468.0
+  },
+  "untagged_values": "0000950170-24-095458 C_825fd3ed-7ac5-490e-b8a9-2f0677d0c774 fair_value 0",
+  "printed_line": "Integro Parent, Inc. (11) Common Stock 4,468 454 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_0d306450-c918-47ea-94f7-6caac0da85ef",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 69.0
+  },
+  "untagged_values": "0000950170-24-095458 C_0d306450-c918-47ea-94f7-6caac0da85ef fair_value 0",
+  "printed_line": "A&A Global Imports, LLC Common Stock 69 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_89e1ce8f-5e66-4ca0-a446-dc58bb98e81d",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-24-095458 C_89e1ce8f-5e66-4ca0-a446-dc58bb98e81d fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_e548023a-4112-4764-a80b-0c34a28c6421",
+  "issuer": "OEM Group, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 20000.0
+  },
+  "untagged_values": "0000950170-24-095458 C_e548023a-4112-4764-a80b-0c34a28c6421 fair_value 0",
+  "printed_line": "OEM Group, LLC (7) Common Stock 20,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_03216b54-eea5-4bed-a321-0fbd64893856",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-24-095458 C_03216b54-eea5-4bed-a321-0fbd64893856 fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_8b302b39-4372-4089-8d59-2b74c11f7626",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-24-095458 C_8b302b39-4372-4089-8d59-2b74c11f7626 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 479 479 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_872f4dec-02da-4a2d-98ca-a3aeb1783633",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-24-095458 C_872f4dec-02da-4a2d-98ca-a3aeb1783633 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 685,018 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_ae9f0c49-02b4-488c-9146-e38cf3b634ad",
+  "issuer": "Sandvine Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 81818.0
+  },
+  "untagged_values": "0000950170-24-095458 C_ae9f0c49-02b4-488c-9146-e38cf3b634ad fair_value 0",
+  "printed_line": "Sandvine Corporation Common Stock 81,818 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_90711241-0bbc-409c-b7cc-13ac07e31f87",
+  "issuer": "VetStrategy",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 30000.0,
+   "par": null,
+   "units": 26595.0
+  },
+  "untagged_values": "0000950170-24-095458 C_90711241-0bbc-409c-b7cc-13ac07e31f87 fair_value 0",
+  "printed_line": "VetStrategy (11) Common Stock 26,595 30 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_f9fb843e-1e90-440f-aca1-71697e95348e",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-24-124474 C_f9fb843e-1e90-440f-aca1-71697e95348e fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_f71b163d-e908-4bb1-8b31-a79ac7906780",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-24-124474 C_f71b163d-e908-4bb1-8b31-a79ac7906780 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_f245ced8-8cc3-4343-85f4-4337afdecf90",
+  "issuer": "MHS Acquisition Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 9000.0,
+   "par": null,
+   "units": 11.0
+  },
+  "untagged_values": "0000950170-24-124474 C_f245ced8-8cc3-4343-85f4-4337afdecf90 fair_value 0",
+  "printed_line": "MHS Acquisition Holdings, LLC Common Stock 11 9 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_c791367f-e893-4894-ae68-a97ff96aba16",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202844.0
+  },
+  "untagged_values": "0000950170-24-124474 C_c791367f-e893-4894-ae68-a97ff96aba16 fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,844 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_d701ecd5-a0e6-4b13-af3c-3835f80cca0f",
+  "issuer": "Integro Parent, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 454000.0,
+   "par": null,
+   "units": 4468.0
+  },
+  "untagged_values": "0000950170-24-124474 C_d701ecd5-a0e6-4b13-af3c-3835f80cca0f fair_value 0",
+  "printed_line": "Integro Parent, Inc. (11) Common Stock 4,468 454 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_d084358c-0711-4f65-a251-6e6172c9449f",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 69.0
+  },
+  "untagged_values": "0000950170-24-124474 C_d084358c-0711-4f65-a251-6e6172c9449f fair_value 0",
+  "printed_line": "A&A Global Imports, LLC Common Stock 69 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_078c3f8b-b67b-4288-abd0-e91ecca60bcb",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-24-124474 C_078c3f8b-b67b-4288-abd0-e91ecca60bcb fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_7a3db015-0e2e-458a-af95-1f661a3916f4",
+  "issuer": "OEM Group, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 20000.0
+  },
+  "untagged_values": "0000950170-24-124474 C_7a3db015-0e2e-458a-af95-1f661a3916f4 fair_value 0",
+  "printed_line": "OEM Group, LLC (7) Common Stock 20,000 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_22f154d6-1620-4e97-b061-6436baa5c3ad",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-24-124474 C_22f154d6-1620-4e97-b061-6436baa5c3ad fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_ee7f7ab7-1de3-4425-8d6f-ce8a19389e29",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-24-124474 C_ee7f7ab7-1de3-4425-8d6f-ce8a19389e29 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 479 479 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_8a3a2961-a12c-408f-a3dd-699e67bad1d8",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-24-124474 C_8a3a2961-a12c-408f-a3dd-699e67bad1d8 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 685,018 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_999bcba2-c2c8-4a1d-9e81-75f46ff1c7e7",
+  "issuer": "Miraclon Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1000.0,
+   "par": null,
+   "units": 1025.0
+  },
+  "untagged_values": "0000950170-24-124474 C_999bcba2-c2c8-4a1d-9e81-75f46ff1c7e7 fair_value 0",
+  "printed_line": "Miraclon Corporation (11) Common Stock 1,025 1 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_384c270a-3a7f-4348-b3fb-d949b2a17a08",
+  "issuer": "Sandvine Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 81818.0
+  },
+  "untagged_values": "0000950170-24-124474 C_384c270a-3a7f-4348-b3fb-d949b2a17a08 fair_value 0",
+  "printed_line": "Sandvine Corporation Common Stock 81,818 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_593ec0d1-d13d-4fd2-85ec-8b59be625c62",
+  "issuer": "VetStrategy",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 30000.0,
+   "par": null,
+   "units": 37612.0
+  },
+  "untagged_values": "0000950170-24-124474 C_593ec0d1-d13d-4fd2-85ec-8b59be625c62 fair_value 0",
+  "printed_line": "VetStrategy (11) Common Stock 37,612 30 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_a570e0bc-f617-4154-9d31-757e4f728a17",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-25-023153 C_a570e0bc-f617-4154-9d31-757e4f728a17 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_b2313b7a-0a4b-4295-95ee-5fe42692c914",
+  "issuer": "MHS Acquisition Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 9000.0,
+   "par": null,
+   "units": 11.0
+  },
+  "untagged_values": "0000950170-25-023153 C_b2313b7a-0a4b-4295-95ee-5fe42692c914 fair_value 0",
+  "printed_line": "MHS Acquisition Holdings, LLC Common Stock 11 9 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_b8644fc3-3892-4b79-b642-992c5afd9fb4",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202844.0
+  },
+  "untagged_values": "0000950170-25-023153 C_b8644fc3-3892-4b79-b642-992c5afd9fb4 fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,844 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_52be5a51-4891-4be3-b47f-1348716a6664",
+  "issuer": "Integro Parent, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 454000.0,
+   "par": null,
+   "units": 4468.0
+  },
+  "untagged_values": "0000950170-25-023153 C_52be5a51-4891-4be3-b47f-1348716a6664 fair_value 0",
+  "printed_line": "Integro Parent, Inc. (11) Common Stock 4,468 454 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_0a8f0bdb-3c5b-4922-9288-73133b0da043",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 69.0
+  },
+  "untagged_values": "0000950170-25-023153 C_0a8f0bdb-3c5b-4922-9288-73133b0da043 fair_value 0",
+  "printed_line": "A&A Global Imports, LLC Common Stock 69 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_76ddfae8-3096-4e9f-8860-bc864002a847",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-25-023153 C_76ddfae8-3096-4e9f-8860-bc864002a847 fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_5ed33fd2-09df-43c7-a339-bd8547e9d424",
+  "issuer": "OEM Group, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 20000.0
+  },
+  "untagged_values": "0000950170-25-023153 C_5ed33fd2-09df-43c7-a339-bd8547e9d424 fair_value 0",
+  "printed_line": "OEM Group, LLC (7) Common Stock 20,000 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_4ce6162c-2b74-4d00-867d-01c0d3968ca4",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-25-023153 C_4ce6162c-2b74-4d00-867d-01c0d3968ca4 fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_4196a0d7-74db-41f1-8496-6c174cd897dc",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock Class A2",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-25-023153 C_4196a0d7-74db-41f1-8496-6c174cd897dc fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock Class A2 479 479 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_f96fc4df-da7b-42a2-91a6-a6200343b6c4",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock Class W",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-25-023153 C_f96fc4df-da7b-42a2-91a6-a6200343b6c4 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock Class W 685,018 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_132963b7-a5fe-4287-b912-773fa6c35921",
+  "issuer": "Miraclon Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1000.0,
+   "par": null,
+   "units": 1025.0
+  },
+  "untagged_values": "0000950170-25-023153 C_132963b7-a5fe-4287-b912-773fa6c35921 fair_value 0",
+  "printed_line": "Miraclon Corporation (11) Common Stock EUR 1,025 $ 1 0.0 $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_f7c48a32-a191-44cf-bce3-0ba6e6301f5a",
+  "issuer": "Sandvine Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 81818.0
+  },
+  "untagged_values": "0000950170-25-023153 C_f7c48a32-a191-44cf-bce3-0ba6e6301f5a fair_value 0",
+  "printed_line": "Sandvine Corporation Common Stock 81,818 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_1f22cace-9499-4708-a9ff-843319cdaf3d",
+  "issuer": "VetStrategy",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 30000.0,
+   "par": null,
+   "units": 37612.0
+  },
+  "untagged_values": "0000950170-25-023153 C_1f22cace-9499-4708-a9ff-843319cdaf3d fair_value 0",
+  "printed_line": "VetStrategy (11) Common Stock GBP 37,612 30 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_f2bef115-39b8-45f9-b706-d57d0dc14888",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-25-071368 C_f2bef115-39b8-45f9-b706-d57d0dc14888 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_3b97a4d8-a124-4991-92b3-d14e15e598b2",
+  "issuer": "MHS Acquisition Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 9000.0,
+   "par": null,
+   "units": 11.0
+  },
+  "untagged_values": "0000950170-25-071368 C_3b97a4d8-a124-4991-92b3-d14e15e598b2 fair_value 0",
+  "printed_line": "MHS Acquisition Holdings, LLC Common Stock 11 9 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_fee1a6bf-b212-4109-adf8-2638a8587016",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202844.0
+  },
+  "untagged_values": "0000950170-25-071368 C_fee1a6bf-b212-4109-adf8-2638a8587016 fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,844 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_67d7ee81-da4a-4b60-9a89-97ff83887ae3",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 69.0
+  },
+  "untagged_values": "0000950170-25-071368 C_67d7ee81-da4a-4b60-9a89-97ff83887ae3 fair_value 0",
+  "printed_line": "A&A Global Imports, LLC Common Stock 69 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_8266126e-5092-4365-897e-4740b6767b89",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-25-071368 C_8266126e-5092-4365-897e-4740b6767b89 fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_626fdec3-2c0d-4000-a898-29364c944fd6",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-25-071368 C_626fdec3-2c0d-4000-a898-29364c944fd6 fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_49b0aa56-5f0b-4d94-8991-43f250ebe820",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-25-071368 C_49b0aa56-5f0b-4d94-8991-43f250ebe820 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 479 479 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_a23f4d2b-0ad5-4f97-8bf5-6a15e7b23655",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock Two",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-25-071368 C_a23f4d2b-0ad5-4f97-8bf5-6a15e7b23655 fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 685,018 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_d56215c2-71f7-4e56-9e7a-1e3801bad6b7",
+  "issuer": "Xpress Global Systems, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12544.0
+  },
+  "untagged_values": "0000950170-25-071368 C_d56215c2-71f7-4e56-9e7a-1e3801bad6b7 fair_value 0",
+  "printed_line": "Xpress Global Systems, LLC Common Stock 12,544 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_4f25b854-3394-4491-9afd-138f927c7d37",
+  "issuer": "Miraclon Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1000.0,
+   "par": null,
+   "units": 1025.0
+  },
+  "untagged_values": "0000950170-25-071368 C_4f25b854-3394-4491-9afd-138f927c7d37 fair_value 0",
+  "printed_line": "Miraclon Corporation (11) Common Stock EUR 1,025 $ 1 0.0 $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_247cb32a-6211-4706-b0e8-591118033bc4",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0000950170-25-108024 C_247cb32a-6211-4706-b0e8-591118033bc4 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_e5718edd-4c26-405c-83a8-cdaa329254a4",
+  "issuer": "MHS Acquisition Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 9000.0,
+   "par": null,
+   "units": 11.0
+  },
+  "untagged_values": "0000950170-25-108024 C_e5718edd-4c26-405c-83a8-cdaa329254a4 fair_value 0",
+  "printed_line": "MHS Acquisition Holdings, LLC Common Stock 11 9 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_d462dd74-f729-477c-abff-44faa746ce3e",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202844.0
+  },
+  "untagged_values": "0000950170-25-108024 C_d462dd74-f729-477c-abff-44faa746ce3e fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,844 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_0dd292ff-2ad1-4d96-942a-4e0a9af28deb",
+  "issuer": "Slickdeals Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 891000.0,
+   "par": null,
+   "units": 89.0
+  },
+  "untagged_values": "0000950170-25-108024 C_0dd292ff-2ad1-4d96-942a-4e0a9af28deb fair_value 0",
+  "printed_line": "Slickdeals Holdings, LLC (6) Common Stock 89 891 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_52cb95e0-6b5a-450b-8354-8f804bba0fce",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 638.0
+  },
+  "untagged_values": "0000950170-25-108024 C_52cb95e0-6b5a-450b-8354-8f804bba0fce fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) Common Stock 638 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_b5b61c53-53f6-4702-b57d-b53948eeda5d",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 479000.0,
+   "par": null,
+   "units": 479.0
+  },
+  "untagged_values": "0000950170-25-108024 C_b5b61c53-53f6-4702-b57d-b53948eeda5d fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 479 479 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_3d744f34-e3d2-47fa-9a0f-7b75363bf79e",
+  "issuer": "Park Place Technologies, LLC",
+  "instrument": "Common Stock Two",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 685018.0
+  },
+  "untagged_values": "0000950170-25-108024 C_3d744f34-e3d2-47fa-9a0f-7b75363bf79e fair_value 0",
+  "printed_line": "Park Place Technologies, LLC Common Stock 685,018 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_3371656e-b304-49c6-8ceb-e7a6ecc16629",
+  "issuer": "Xpress Global Systems, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12544.0
+  },
+  "untagged_values": "0000950170-25-108024 C_3371656e-b304-49c6-8ceb-e7a6ecc16629 fair_value 0",
+  "printed_line": "Xpress Global Systems, LLC Common Stock 12,544 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_77ce8005-6107-4d56-9d3b-cc28e3c733da",
+  "issuer": "Sandvine Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 81818.0
+  },
+  "untagged_values": "0000950170-25-108024 C_77ce8005-6107-4d56-9d3b-cc28e3c733da fair_value 0",
+  "printed_line": "Sandvine Corporation Common Stock 81,818 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_db647cf2-9344-49b5-8032-350bb9947237",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0001193125-25-277533 C_db647cf2-9344-49b5-8032-350bb9947237 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_d8967c02-1c3c-46bf-b4d4-2cfc62639b3b",
+  "issuer": "MHS Acquisition Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 9000.0,
+   "par": null,
+   "units": 11.0
+  },
+  "untagged_values": "0001193125-25-277533 C_d8967c02-1c3c-46bf-b4d4-2cfc62639b3b fair_value 0",
+  "printed_line": "MHS Acquisition Holdings, LLC Common Stock 11 9 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_461998f0-5565-4666-993c-efee5991be4d",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202844.0
+  },
+  "untagged_values": "0001193125-25-277533 C_461998f0-5565-4666-993c-efee5991be4d fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,844 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_cb93ea19-b86c-4411-b21f-6fe458c23c63",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0001193125-25-277533 C_cb93ea19-b86c-4411-b21f-6fe458c23c63 fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_ce413fac-c1ee-47d7-b2e9-7ed625e59454",
+  "issuer": "Slickdeals Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 283.0
+  },
+  "untagged_values": "0001193125-25-277533 C_ce413fac-c1ee-47d7-b2e9-7ed625e59454 fair_value 0",
+  "printed_line": "Slickdeals Holdings, LLC (7) Common Stock 283 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_df00657d-dc3e-463e-b9de-efc91547333a",
+  "issuer": "New Era Technology, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 4269.0
+  },
+  "untagged_values": "0001193125-25-277533 C_df00657d-dc3e-463e-b9de-efc91547333a fair_value 0",
+  "printed_line": "New Era Technology, Inc. Common Stock 4,269 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_01048144-531c-497b-bb40-53c2fe26bc9b",
+  "issuer": "Xpress Global Systems, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12544.0
+  },
+  "untagged_values": "0001193125-25-277533 C_01048144-531c-497b-bb40-53c2fe26bc9b fair_value 0",
+  "printed_line": "Xpress Global Systems, LLC Common Stock 12,544 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_6ebc6bc4-1afe-48f1-8a44-ff7e44945b5e",
+  "issuer": "Sandvine Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 81818.0
+  },
+  "untagged_values": "0001193125-25-277533 C_6ebc6bc4-1afe-48f1-8a44-ff7e44945b5e fair_value 0",
+  "printed_line": "Sandvine Corporation (11) Common Stock 81,818 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_32250866-ed83-48f1-a526-f310e273e496",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 534722.0
+  },
+  "untagged_values": "0001193125-26-071922 C_32250866-ed83-48f1-a526-f310e273e496 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Preferred Stock 534,722 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_52c7e70e-5a5b-4a9e-a7d8-6283121fd4d1",
+  "issuer": "MHS Acquisition Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 9000.0,
+   "par": null,
+   "units": 11.0
+  },
+  "untagged_values": "0001193125-26-071922 C_52c7e70e-5a5b-4a9e-a7d8-6283121fd4d1 fair_value 0",
+  "printed_line": "MHS Acquisition Holdings, LLC Common Stock 11 9 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_72087ec5-dfbd-4bfa-ad86-17da5dc91a94",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0001193125-26-071922 C_72087ec5-dfbd-4bfa-ad86-17da5dc91a94 fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_9a3c5b10-693e-4cff-820c-5b707a9f8a43",
+  "issuer": "Slickdeals Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 283.0
+  },
+  "untagged_values": "0001193125-26-071922 C_9a3c5b10-693e-4cff-820c-5b707a9f8a43 fair_value 0",
+  "printed_line": "Slickdeals Holdings, LLC (7) Common Stock 283 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_0bf4cc99-1d40-44de-bd0a-1a2a7384ebbf",
+  "issuer": "New Era Technology, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 4269.0
+  },
+  "untagged_values": "0001193125-26-071922 C_0bf4cc99-1d40-44de-bd0a-1a2a7384ebbf fair_value 0",
+  "printed_line": "New Era Technology, Inc. Common Stock 4,269 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_24773e2d-cad0-4f31-aa58-20f2d3b9d025",
+  "issuer": "Xpress Global Systems, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12544.0
+  },
+  "untagged_values": "0001193125-26-071922 C_24773e2d-cad0-4f31-aa58-20f2d3b9d025 fair_value 0",
+  "printed_line": "Xpress Global Systems, LLC Common Stock 12,544 - - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_8e40b062-a4b4-4fae-bc55-1048392120c9",
+  "issuer": "Sandvine Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 81818.0
+  },
+  "untagged_values": "0001193125-26-071922 C_8e40b062-a4b4-4fae-bc55-1048392120c9 fair_value 0",
+  "printed_line": "Sandvine Corporation (11) Common Stock 81,818 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_cb126c80-871e-41ab-9c8c-ef272a71583b",
+  "issuer": "Ingenio, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 104.0
+  },
+  "untagged_values": "0001193125-26-071922 C_cb126c80-871e-41ab-9c8c-ef272a71583b fair_value 0",
+  "printed_line": "Ingenio, LLC Common Stock 104 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_dfe2d254-8465-4e74-ab58-451f609fc764",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202844.0
+  },
+  "untagged_values": "0001193125-26-071922 C_dfe2d254-8465-4e74-ab58-451f609fc764 fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,844 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_ca7001c2-cb2c-4407-a653-70f6babf8e8e",
+  "issuer": "ACI Group Holdings, Inc.",
+  "instrument": "Preferred Stock One",
+  "tagged": {
+   "cost": 40000.0,
+   "par": null,
+   "units": 684903.0
+  },
+  "untagged_values": "0001193125-26-071922 C_ca7001c2-cb2c-4407-a653-70f6babf8e8e fair_value 0",
+  "printed_line": "ACI Group Holdings, Inc. Preferred Stock 684,903 40 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_6162c4a9-b2c3-47cc-82e1-e8ce538946c0",
+  "issuer": "MHS Acquisition Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 9000.0,
+   "par": null,
+   "units": 11.0
+  },
+  "untagged_values": "0001193125-26-221936 C_6162c4a9-b2c3-47cc-82e1-e8ce538946c0 fair_value 0",
+  "printed_line": "MHS Acquisition Holdings, LLC Common Stock 11 9 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_c2bdcbba-1374-4d74-b4a6-cbcc621c40b7",
+  "issuer": "Ingenio, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 104.0
+  },
+  "untagged_values": "0001193125-26-221936 C_c2bdcbba-1374-4d74-b4a6-cbcc621c40b7 fair_value 0",
+  "printed_line": "Ingenio, LLC Common Stock 104 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_a7bc9371-19d0-4ad9-9ce3-a4538fece6da",
+  "issuer": "iLending LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 9924110.0
+  },
+  "untagged_values": "0001193125-26-221936 C_a7bc9371-19d0-4ad9-9ce3-a4538fece6da fair_value 0",
+  "printed_line": "iLending LLC Common Stock 9,924,110 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_1a485e38-4930-4952-a219-21587d73f0c0",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202844.0
+  },
+  "untagged_values": "0001193125-26-221936 C_1a485e38-4930-4952-a219-21587d73f0c0 fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,844 $ - 0.0 $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_fc66d55a-8307-4294-ad26-0bdce2948ba1",
+  "issuer": "ACI Group Holdings, Inc.",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": 3645000.0,
+   "par": null,
+   "units": 3719.0
+  },
+  "untagged_values": "0001193125-26-221936 C_fc66d55a-8307-4294-ad26-0bdce2948ba1 fair_value 0",
+  "printed_line": "ACI Group Holdings, Inc. Preferred Stock 3,719 3,645 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_9469eda1-5269-4909-aa20-c3788b5068c1",
+  "issuer": "ACI Group Holdings, Inc.",
+  "instrument": "Preferred Stock One",
+  "tagged": {
+   "cost": 40000.0,
+   "par": null,
+   "units": 684903.0
+  },
+  "untagged_values": "0001193125-26-221936 C_9469eda1-5269-4909-aa20-c3788b5068c1 fair_value 0",
+  "printed_line": "ACI Group Holdings, Inc. Preferred Stock 684,903 40 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_a1e60251-e9d3-4fb2-bbb1-b017e98827a1",
+  "issuer": "Nephron Pharmaceuticals, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 128000.0
+  },
+  "untagged_values": "0001193125-26-221936 C_a1e60251-e9d3-4fb2-bbb1-b017e98827a1 fair_value 0",
+  "printed_line": "Nephron Pharmaceuticals, LLC Common Stock 128,000 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_26f381b4-0fae-4eb4-ad52-43fa2d4ff8af",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0001193125-26-221936 C_26f381b4-0fae-4eb4-ad52-43fa2d4ff8af fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_ad09ccd6-9dda-4492-9592-5e8b6ebd35e3",
+  "issuer": "Slickdeals Holdings, LLC",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 283.0
+  },
+  "untagged_values": "0001193125-26-221936 C_ad09ccd6-9dda-4492-9592-5e8b6ebd35e3 fair_value 0",
+  "printed_line": "Slickdeals Holdings, LLC (7) Common Stock 283 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_d801e061-f952-4ea1-8a69-b5126fed015a",
+  "issuer": "New Era Technology, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 4269.0
+  },
+  "untagged_values": "0001193125-26-221936 C_d801e061-f952-4ea1-8a69-b5126fed015a fair_value 0",
+  "printed_line": "New Era Technology, Inc. Common Stock 4,269 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_e7b73470-2c36-43f7-a87c-1a4af39711e6",
+  "issuer": "Transportation Insight, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 9.0
+  },
+  "untagged_values": "0001193125-26-221936 C_e7b73470-2c36-43f7-a87c-1a4af39711e6 fair_value 0",
+  "printed_line": "Transportation Insight, LLC (6) Common Stock 9 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_3b136fbd-5a48-4898-9441-4e28343baa9d",
+  "issuer": "TSX Fiber",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5218.0
+  },
+  "untagged_values": "0001193125-26-342351 C_3b136fbd-5a48-4898-9441-4e28343baa9d fair_value 0",
+  "printed_line": "TSX Fiber Common Stock 5,218 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_08003e39-e217-44ca-86a3-3585b8a9bc85",
+  "issuer": "MHS Acquisition Holdings, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 9000.0,
+   "par": null,
+   "units": 11.0
+  },
+  "untagged_values": "0001193125-26-342351 C_08003e39-e217-44ca-86a3-3585b8a9bc85 fair_value 0",
+  "printed_line": "MHS Acquisition Holdings, LLC Common Stock 11 9 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_0f7284fc-2f53-46a5-9e48-0c5ef74a3319",
+  "issuer": "Ingenio, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 104.0
+  },
+  "untagged_values": "0001193125-26-342351 C_0f7284fc-2f53-46a5-9e48-0c5ef74a3319 fair_value 0",
+  "printed_line": "Ingenio, LLC Common Stock 104 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_b0b3b96f-63fa-4564-aec6-08c2663918a6",
+  "issuer": "iLending LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 9924110.0
+  },
+  "untagged_values": "0001193125-26-342351 C_b0b3b96f-63fa-4564-aec6-08c2663918a6 fair_value 0",
+  "printed_line": "iLending LLC Common Stock 9,924,110 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_96af766b-bc41-4822-b35a-49c33333a8d2",
+  "issuer": "Arrow Management Acquisition, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 11000.0,
+   "par": null,
+   "units": 10664.0
+  },
+  "untagged_values": "0001193125-26-342351 C_96af766b-bc41-4822-b35a-49c33333a8d2 fair_value 0",
+  "printed_line": "Arrow Management Acquisition, LLC Common Stock 10,664 11 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_63995d02-5120-4ac6-ae3e-fef6ac5d0102",
+  "issuer": "Nephron Pharmaceuticals, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 128000.0
+  },
+  "untagged_values": "0001193125-26-342351 C_63995d02-5120-4ac6-ae3e-fef6ac5d0102 fair_value 0",
+  "printed_line": "Nephron Pharmaceuticals, LLC Common Stock 128,000 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_0db86fa6-4ac9-444a-acb3-546a24944407",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0001193125-26-342351 C_0db86fa6-4ac9-444a-acb3-546a24944407 fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_083ef7c1-4135-41f9-91a3-a7c7daa20657",
+  "issuer": "Slickdeals Holdings, LLC",
+  "instrument": "Common Stock One",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 283.0
+  },
+  "untagged_values": "0001193125-26-342351 C_083ef7c1-4135-41f9-91a3-a7c7daa20657 fair_value 0",
+  "printed_line": "Slickdeals Holdings, LLC (7) Common Stock 283 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_82452070-658e-4cf4-906c-e2fdf80c3738",
+  "issuer": "New Era Technology, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 4269.0
+  },
+  "untagged_values": "0001193125-26-342351 C_82452070-658e-4cf4-906c-e2fdf80c3738 fair_value 0",
+  "printed_line": "New Era Technology, Inc. Common Stock 4,269 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_5f7f594c-df2d-4605-adea-65b5207c70dc",
+  "issuer": "Transportation Insight, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 9.0
+  },
+  "untagged_values": "0001193125-26-342351 C_5f7f594c-df2d-4605-adea-65b5207c70dc fair_value 0",
+  "printed_line": "Transportation Insight, LLC (6) Common Stock 9 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_379af7a3-bd13-4af7-9d65-82eee3126b06",
+  "issuer": "Banker\u2019s Toolbox, Inc",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": 33000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-23-040555 C_379af7a3-bd13-4af7-9d65-82eee3126b06 fair_value 0",
+  "printed_line": "Banker's Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 33 ) - -",
+  "also_needs": {
+   "cost": "-33000.0"
+  }
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_2a977c00-3ebe-49a8-a1c7-9809bc7d4a63",
+  "issuer": "Benesys Inc.",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": 1000.0,
+   "par": 4000.0,
+   "units": null
+  },
+  "untagged_values": "0000950170-23-040555 C_2a977c00-3ebe-49a8-a1c7-9809bc7d4a63 fair_value 0",
+  "printed_line": "Benesys Inc. (5) Senior Secured First Lien Revolver S + 525 ( 100 Floor) 10.45 % 10/2024 4 1 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_f87165ea-2e31-4204-92e4-a17dde1c9895",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Preferred Stock Preferred stock",
+  "tagged": {
+   "cost": 103000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-23-061089 C_f87165ea-2e31-4204-92e4-a17dde1c9895 fair_value 0",
+  "printed_line": "MeriCal, LLC Preferred Stock 521 103 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_c25a28af-84cb-4fe3-9470-ec70ff7d2414",
+  "issuer": "Affinitiv, Inc",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-23-061089 C_c25a28af-84cb-4fe3-9470-ec70ff7d2414 fair_value 0",
+  "printed_line": "Affinitiv, Inc. (4)(5) Unitranche First Lien Revolver 08/2024 - ( 2 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_dbae86e0-db19-42d6-adc3-e35d5209363b",
+  "issuer": "Banker\u2019s Toolbox, Inc",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -31000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-23-061089 C_dbae86e0-db19-42d6-adc3-e35d5209363b fair_value 0",
+  "printed_line": "Banker's Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 31 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_38bde158-d36a-4490-8db2-3021c454ad04",
+  "issuer": "Auveco Holdings",
+  "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -6000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-017903 C_38bde158-d36a-4490-8db2-3021c454ad04 fair_value 0",
+  "printed_line": "Auveco Holdings (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2028 - $ ( 6 ) - % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_fc07566d-9f13-41be-a75e-b9da46d9f979",
+  "issuer": "Hepaco, LLC",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": 3000.0,
+   "par": 3000.0,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-017903 C_fc07566d-9f13-41be-a75e-b9da46d9f979 fair_value 0",
+  "printed_line": "Hepaco, LLC (5) Senior Secured First Lien Revolver P + 400 ( 100 Floor) 12.50 % 02/2025 3 3 - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_7638045c-d98e-4b86-95c4-063c83fc9851",
+  "issuer": "Affinitiv, Inc",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -1000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-017903 C_7638045c-d98e-4b86-95c4-063c83fc9851 fair_value 0",
+  "printed_line": "Affinitiv, Inc. (4)(5) Unitranche First Lien Revolver 08/2024 - ( 1 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_f91aced2-3980-42df-83b7-030dadc6fb18",
+  "issuer": "Banker\u2019s Toolbox, Inc",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -29000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-017903 C_f91aced2-3980-42df-83b7-030dadc6fb18 fair_value 0",
+  "printed_line": "Banker's Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 29 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_af00b880-cfc1-4e97-a49c-ce20b588e793",
+  "issuer": "Auveco Holdings",
+  "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -6000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-055626 C_af00b880-cfc1-4e97-a49c-ce20b588e793 fair_value 0",
+  "printed_line": "Auveco Holdings (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2028 - $ ( 6 ) - % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_3fffb769-37a0-44bb-b765-63536df6f1af",
+  "issuer": "USA Hometown Experts, Inc",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -15000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-055626 C_3fffb769-37a0-44bb-b765-63536df6f1af fair_value 0",
+  "printed_line": "USA Hometown Experts, Inc. (4)(5) Senior Secured First Lien Delayed Draw Term Loan 11/2029 - ( 15 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_5bb72d8d-c397-44dd-adc2-640da22a72f9",
+  "issuer": "Online Labels Group, LLC",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -3000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-055626 C_5bb72d8d-c397-44dd-adc2-640da22a72f9 fair_value 0",
+  "printed_line": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 3 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-03-31",
+  "accession": "0000950170-24-055626",
+  "ctx": "C_086001e7-88ee-43d1-b68b-303707b97b47",
+  "issuer": "Online Labels Group, LLC",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -3000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-055626 C_086001e7-88ee-43d1-b68b-303707b97b47 fair_value 0",
+  "printed_line": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 3 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_3751d151-cb8c-4cb0-aca1-ad70c5850bed",
+  "issuer": "Online Labels Group, LLC",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-095458 C_3751d151-cb8c-4cb0-aca1-ad70c5850bed fair_value 0",
+  "printed_line": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 2 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-06-30",
+  "accession": "0000950170-24-095458",
+  "ctx": "C_1cbef326-e5ba-4b25-8457-7bc28b01f926",
+  "issuer": "Online Labels Group, LLC",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-095458 C_1cbef326-e5ba-4b25-8457-7bc28b01f926 fair_value 0",
+  "printed_line": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 2 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_4474414e-c699-4515-b208-00ad46561203",
+  "issuer": "Online Labels Group, LLC",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-124474 C_4474414e-c699-4515-b208-00ad46561203 fair_value 0",
+  "printed_line": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 2 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_ecc9a1c2-328c-487d-b026-be9b8cbedd92",
+  "issuer": "Online Labels Group, LLC",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-124474 C_ecc9a1c2-328c-487d-b026-be9b8cbedd92 fair_value 0",
+  "printed_line": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 2 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_bca91e68-bec3-45c3-9b51-144b6864302b",
+  "issuer": "Bankers Toolbox, Inc.",
+  "instrument": "Unitranche First Lien Revolve",
+  "tagged": {
+   "cost": -23000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-24-124474 C_bca91e68-bec3-45c3-9b51-144b6864302b fair_value 0",
+  "printed_line": "Banker's Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 23 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_74f28c53-6f1e-4ec9-890a-5450e5432433",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-25-023153 C_74f28c53-6f1e-4ec9-890a-5450e5432433 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_e1c63388-53b8-45ec-9771-936c72a047af",
+  "issuer": "Pitch MidCo B.V",
+  "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -19000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-25-023153 C_e1c63388-53b8-45ec-9771-936c72a047af fair_value 0",
+  "printed_line": "Pitch MidCo B.V. (4)(5)(11) Unitranche First Lien Delayed Draw Term Loan 04/2031 EUR - ( 19 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_7afa4efa-6a9a-46a3-a911-d223cf12d18e",
+  "issuer": "Online Labels Group, LLC",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-25-023153 C_7afa4efa-6a9a-46a3-a911-d223cf12d18e fair_value 0",
+  "printed_line": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 2 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2024-12-31",
+  "accession": "0000950170-25-023153",
+  "ctx": "C_a6c5e5f5-e014-4a47-bf10-928a9417f1eb",
+  "issuer": "Online Labels Group, LLC",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-25-023153 C_a6c5e5f5-e014-4a47-bf10-928a9417f1eb fair_value 0",
+  "printed_line": "Online Labels Group, LLC (4)(5) Senior Secured First Lien Delayed Draw Term Loan 12/2029 - ( 2 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_7c5d7342-1c83-4223-b16a-01272c8fa78b",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-25-071368 C_7c5d7342-1c83-4223-b16a-01272c8fa78b fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_8e1410fe-d2ac-4fc4-9b26-1168d0850c01",
+  "issuer": "Pitch MidCo B.V",
+  "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -18000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-25-071368 C_8e1410fe-d2ac-4fc4-9b26-1168d0850c01 fair_value 0",
+  "printed_line": "Pitch MidCo B.V. (4)(5)(11) Unitranche First Lien Delayed Draw Term Loan 04/2031 EUR - ( 18 ) - -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_7ffd2849-4607-486b-8638-29c8e273b614",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0000950170-25-108024 C_7ffd2849-4607-486b-8638-29c8e273b614 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock 521,354 - 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_27ee781a-49ef-441e-b069-a0f76804bb4f",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 5334.0
+  },
+  "untagged_values": "0000950170-25-108024 C_27ee781a-49ef-441e-b069-a0f76804bb4f fair_value 0",
+  "printed_line": "MeriCal, LLC Common Stock 5,334 - 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_f6ae035f-9425-4e8f-9c62-15d46f7450c3",
+  "issuer": "Miraclon Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1000.0,
+   "par": null,
+   "units": 1025.0
+  },
+  "untagged_values": "0000950170-25-108024 C_f6ae035f-9425-4e8f-9c62-15d46f7450c3 fair_value 0",
+  "printed_line": "Miraclon Corporation Common Stock EUR 1,025 $ 1 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_101105b6-54fe-4d8d-bb41-0317b55f2989",
+  "issuer": "Solvias AG",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -67000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-25-108024 C_101105b6-54fe-4d8d-bb41-0317b55f2989 fair_value 0",
+  "printed_line": "Solvias AG (4)(5)(6) Senior Secured First Lien Revolver 02/2032 CHF - ( 67 ) 0.1 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_b9fae538-ea7e-4a94-b41b-d6bf9d995a62",
+  "issuer": "Seniorlink Incorporated",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -6000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-25-108024 C_b9fae538-ea7e-4a94-b41b-d6bf9d995a62 fair_value 0",
+  "printed_line": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 12/2027 - ( 6 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_692a241b-f6df-49bb-98d4-f708e6c47b7d",
+  "issuer": "Seniorlink Incorporated",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -6000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-25-108024 C_692a241b-f6df-49bb-98d4-f708e6c47b7d fair_value 0",
+  "printed_line": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 12/2027 - ( 6 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-06-30",
+  "accession": "0000950170-25-108024",
+  "ctx": "C_b8547af4-ef68-49b2-ba0f-7d94e04d13ff",
+  "issuer": "Centria Subsidiary Holdings, LLC.",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -4000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0000950170-25-108024 C_b8547af4-ef68-49b2-ba0f-7d94e04d13ff fair_value 0",
+  "printed_line": "Centria Subsidiary Holdings, LLC (4)(5) Unitranche First Lien Revolver 06/2027 - ( 4 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_2174a2bf-349f-485e-8727-6da73a723918",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0001193125-25-277533 C_2174a2bf-349f-485e-8727-6da73a723918 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock ` 521,354 - 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_3fd8e957-4f21-4193-b510-748809d9c417",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": 103000.0,
+   "par": null,
+   "units": 521.0
+  },
+  "untagged_values": "0001193125-25-277533 C_3fd8e957-4f21-4193-b510-748809d9c417 fair_value 0",
+  "printed_line": "MeriCal, LLC Preferred Stock 521 103 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_ea30240d-be33-4ee9-83a7-3ba88d33b8b0",
+  "issuer": "Miraclon Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1000.0,
+   "par": null,
+   "units": 1025.0
+  },
+  "untagged_values": "0001193125-25-277533 C_ea30240d-be33-4ee9-83a7-3ba88d33b8b0 fair_value 0",
+  "printed_line": "Miraclon Corporation (11) Common Stock EUR 1,025 $ 1 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_a19b5328-7f8b-4dc8-b5e1-66e95e094db0",
+  "issuer": "Solvias AG",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -63000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-25-277533 C_a19b5328-7f8b-4dc8-b5e1-66e95e094db0 fair_value 0",
+  "printed_line": "Solvias AG (4)(5)(6)(11) Senior Secured First Lien Revolver 02/2032 CHF - ( 63 ) 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_9f7199bc-a007-436e-a23f-7390181f006e",
+  "issuer": "VetStrategy",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 30000.0,
+   "par": 37612000.0,
+   "units": null
+  },
+  "untagged_values": "0001193125-25-277533 C_9f7199bc-a007-436e-a23f-7390181f006e fair_value 0",
+  "printed_line": "VetStrategy (11) Common Stock GBP 37,612 $ 30 - % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_1fe87ac6-55fa-42b9-8b7b-c2d32d74e6c1",
+  "issuer": "Centria Subsidiary Holdings, LLC.",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-25-277533 C_1fe87ac6-55fa-42b9-8b7b-c2d32d74e6c1 fair_value 0",
+  "printed_line": "Centria Subsidiary Holdings, LLC (4)(5)(6) Unitranche First Lien Revolver 06/2027 - ( 2 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_4f3ebb29-0451-4b95-b153-3bebce40130a",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "First Lien Term Loan",
+  "tagged": {
+   "cost": 992000.0,
+   "par": 1601000.0,
+   "units": null
+  },
+  "untagged_values": "0001193125-25-277533 C_4f3ebb29-0451-4b95-b153-3bebce40130a fair_value 0",
+  "printed_line": "A&A Global Imports, LLC (9) Senior Secured First Lien Term Loan 06/2026 1,601 $ 992 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_7151259b-65c8-410b-9e54-1cc724a1cf0b",
+  "issuer": "SQAD Holdco, Inc.",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -9000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-25-277533 C_7151259b-65c8-410b-9e54-1cc724a1cf0b fair_value 0",
+  "printed_line": "SQAD Holdco, Inc. (4)(5) Unitranche First Lien Revolver 04/2028 - $ ( 9 ) 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_527b6611-abc4-422d-97a3-517f15b3932a",
+  "issuer": "Strata Information Group, Inc",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -6000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-25-277533 C_527b6611-abc4-422d-97a3-517f15b3932a fair_value 0",
+  "printed_line": "Strata Information Group, Inc. (4)(5) Senior Secured First Lien Revolver 12/2030 - ( 6 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_71752b08-6891-42d0-a4d5-0e6068da981f",
+  "issuer": "Continental Battery Company",
+  "instrument": "Common Stock Common Equity",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12345.0
+  },
+  "untagged_values": "0001193125-26-071922 C_71752b08-6891-42d0-a4d5-0e6068da981f fair_value 0",
+  "printed_line": "Continental Battery Company Common Stock 12,345 $ - 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_8bf64f30-29be-40dd-9364-400a48d03353",
+  "issuer": "Envocore Holding, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 521354.0
+  },
+  "untagged_values": "0001193125-26-071922 C_8bf64f30-29be-40dd-9364-400a48d03353 fair_value 0",
+  "printed_line": "Envocore Holding, LLC (7) Common Stock ` 521,354 $ - 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_604609fb-fefd-4484-8e70-d795940d2349",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": 103000.0,
+   "par": null,
+   "units": 521.0
+  },
+  "untagged_values": "0001193125-26-071922 C_604609fb-fefd-4484-8e70-d795940d2349 fair_value 0",
+  "printed_line": "MeriCal, LLC Preferred Stock 521 103 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_ac3a98c3-111d-44dd-b5dc-87c2c14cd910",
+  "issuer": "Solvias AG",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -59000.0,
+   "par": 0.0,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-071922 C_ac3a98c3-111d-44dd-b5dc-87c2c14cd910 fair_value 0",
+  "printed_line": "Solvias AG (4)(5)(11) Senior Secured First Lien Revolver 02/2032 CHF 0 ( 59 ) 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_3d76a5bd-7796-4c9e-80d3-da228ca9b836",
+  "issuer": "USA Hometown Experts, Inc",
+  "instrument": "First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -17000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-071922 C_3d76a5bd-7796-4c9e-80d3-da228ca9b836 fair_value 0",
+  "printed_line": "USA Hometown Experts, Inc. (4)(5) Senior Secured First Lien Delayed Draw Term Loan 11/2029 - ( 17 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_6c60f427-222a-4d09-993b-ef0a04a15292",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "First Lien Term Loan",
+  "tagged": {
+   "cost": 992000.0,
+   "par": 1645000.0,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-071922 C_6c60f427-222a-4d09-993b-ef0a04a15292 fair_value 0",
+  "printed_line": "A&A Global Imports, LLC (9) Senior Secured First Lien Term Loan 06/2026 1,645 $ 992 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_e6634b1d-ca80-45a9-975a-6b2b86ce82a7",
+  "issuer": "SQAD Holdco, Inc.",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -8000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-071922 C_e6634b1d-ca80-45a9-975a-6b2b86ce82a7 fair_value 0",
+  "printed_line": "SQAD Holdco, Inc. (4)(5) Unitranche First Lien Revolver 04/2028 - $ ( 8 ) 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_24d4091c-748d-4107-9b94-f1bcdee35e7c",
+  "issuer": "Strata Information Group, Inc",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -6000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-071922 C_24d4091c-748d-4107-9b94-f1bcdee35e7c fair_value 0",
+  "printed_line": "Strata Information Group, Inc. (4)(5) Senior Secured First Lien Revolver 12/2030 - ( 6 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_0bbaf23e-1b49-4301-8db0-bc9206bb7545",
+  "issuer": "ACI Group Holdings, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 909000.0,
+   "par": null,
+   "units": 907499.0
+  },
+  "untagged_values": "0001193125-26-071922 C_0bbaf23e-1b49-4301-8db0-bc9206bb7545 fair_value 0",
+  "printed_line": "ACI Group Holdings, Inc. Common Stock 907,499 $ 909 0.0 % -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_f60b3acb-9b3f-4160-a8bb-4128b5d49df8",
+  "issuer": "Miraclon Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1000.0,
+   "par": null,
+   "units": 1025.0
+  },
+  "untagged_values": "0001193125-26-221936 C_f60b3acb-9b3f-4160-a8bb-4128b5d49df8 fair_value 0",
+  "printed_line": "Miraclon Corporation (11) Common Stock 1,025 $ 1 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_32f052ff-6397-4078-ade8-b71142e02246",
+  "issuer": "Sandvine Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 81818.0
+  },
+  "untagged_values": "0001193125-26-221936 C_32f052ff-6397-4078-ade8-b71142e02246 fair_value 0",
+  "printed_line": "Sandvine Corporation (11) Common Stock 81,818 $ - 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_0d1aba2f-e9d4-4f66-bb5f-fe6bd45fb8b5",
+  "issuer": "AX VI INV2 Holding AB (Voff)",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -4000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-221936 C_0d1aba2f-e9d4-4f66-bb5f-fe6bd45fb8b5 fair_value 0",
+  "printed_line": "AX VI INV2 Holding AB (Voff) (4)(5)(6)(11) Senior Secured First Lien Revolver 08/2029 EUR - $ ( 4 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_f8369c39-8bee-4426-bccd-cb1e80335773",
+  "issuer": "Solvias AG",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -55000.0,
+   "par": 0.0,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-221936 C_f8369c39-8bee-4426-bccd-cb1e80335773 fair_value 0",
+  "printed_line": "Solvias AG (4)(5)(11) Senior Secured First Lien Revolver 02/2032 CHF 0 $ ( 55 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_48529144-cd26-4dd2-b266-b5c815e97389",
+  "issuer": "VetStrategy",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 30000.0,
+   "par": null,
+   "units": 37612.0
+  },
+  "untagged_values": "0001193125-26-221936 C_48529144-cd26-4dd2-b266-b5c815e97389 fair_value 0",
+  "printed_line": "VetStrategy (11) Common Stock 37,612 $ 30 - % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_0ac45da0-8fc2-4f63-b501-cb6a510600fc",
+  "issuer": "Auveco Holdings",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-221936 C_0ac45da0-8fc2-4f63-b501-cb6a510600fc fair_value 0",
+  "printed_line": "Auveco Holdings (4)(5) Unitranche First Lien Revolver 05/2028 - $ ( 2 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_e55c6ad2-f5c3-4c53-84eb-093e0b0840a2",
+  "issuer": "Hamsard 3778 Limited",
+  "instrument": "Unitranche First Lien - Last Out Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -15000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-221936 C_e55c6ad2-f5c3-4c53-84eb-093e0b0840a2 fair_value 0",
+  "printed_line": "Hamsard 3778 Limited (4)(5)(10) Unitranche First Lien - Last Out Delayed Draw Term Loan 10/2031 - $ ( 15 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_3436e70b-c9e8-4a62-a398-19c2ba808e90",
+  "issuer": "USA Hometown Experts, Inc",
+  "instrument": "First Lien Delayed Draw Term",
+  "tagged": {
+   "cost": -16000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-221936 C_3436e70b-c9e8-4a62-a398-19c2ba808e90 fair_value 0",
+  "printed_line": "USA Hometown Experts, Inc. (4)(5) Senior Secured First Lien Delayed Draw Term Loan 11/2029 - ( 16 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_1909a603-f983-4b25-ba39-973ec4e634b0",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "First Lien Term Loan",
+  "tagged": {
+   "cost": 990000.0,
+   "par": 1690000.0,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-221936 C_1909a603-f983-4b25-ba39-973ec4e634b0 fair_value 0",
+  "printed_line": "A&A Global Imports, LLC (9) Senior Secured First Lien Term Loan 06/2026 1,690 $ 990 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_e6a12861-47a1-4ea8-a253-a9a5e188422e",
+  "issuer": "Odessa Technologies, Inc.",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -13000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-221936 C_e6a12861-47a1-4ea8-a253-a9a5e188422e fair_value 0",
+  "printed_line": "Odessa Technologies, Inc. (4)(5) Senior Secured First Lien Revolver 10/2027 - $ ( 13 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_c4f1fc4f-8208-4e34-885f-460ffababa39",
+  "issuer": "Security Risk Advisors Intl, LLC",
+  "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -1000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-221936 C_c4f1fc4f-8208-4e34-885f-460ffababa39 fair_value 0",
+  "printed_line": "Security Risk Advisors Intl, LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 09/2031 - $ ( 1 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_62638f2c-77cf-4466-8f36-b9abb360ac27",
+  "issuer": "Continental Battery Company",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12345.0
+  },
+  "untagged_values": "0001193125-26-221936 C_62638f2c-77cf-4466-8f36-b9abb360ac27 fair_value 0",
+  "printed_line": "Continental Battery Company Common Stock 12,345 $ - 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_8ae1a7fe-ba14-40da-b9f7-2f6d11dd75cf",
+  "issuer": "ACI Group Holdings, Inc.",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 909000.0,
+   "par": null,
+   "units": 907499.0
+  },
+  "untagged_values": "0001193125-26-221936 C_8ae1a7fe-ba14-40da-b9f7-2f6d11dd75cf fair_value 0",
+  "printed_line": "ACI Group Holdings, Inc. Common Stock 907,499 $ 909 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_4a7530df-0924-40f4-a60f-ab2613ee1224",
+  "issuer": "Arrow Management Acquisition, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 11000.0,
+   "par": null,
+   "units": 10664.0
+  },
+  "untagged_values": "0001193125-26-221936 C_4a7530df-0924-40f4-a60f-ab2613ee1224 fair_value 0",
+  "printed_line": "Arrow Management Acquisition, LLC Common Stock 10,664 $ 11 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_5dbfaa9a-a6ef-4e1f-ba8a-29f208f01c25",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 69.0
+  },
+  "untagged_values": "0001193125-26-221936 C_5dbfaa9a-a6ef-4e1f-ba8a-29f208f01c25 fair_value 0",
+  "printed_line": "A&A Global Imports, LLC Common Stock 69 $ - 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_88773f00-de5b-4db0-8e6b-6e0183c3bcf4",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": 103000.0,
+   "par": null,
+   "units": 521.0
+  },
+  "untagged_values": "0001193125-26-221936 C_88773f00-de5b-4db0-8e6b-6e0183c3bcf4 fair_value 0",
+  "printed_line": "MeriCal, LLC Preferred Stock 521 $ 103 0.1 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_e5f66e81-f0f0-4eb0-b865-dfcb50a9abd8",
+  "issuer": "Miraclon Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 1000.0,
+   "par": null,
+   "units": 1025.0
+  },
+  "untagged_values": "0001193125-26-342351 C_e5f66e81-f0f0-4eb0-b865-dfcb50a9abd8 fair_value 0",
+  "printed_line": "Miraclon Corporation (11) Common Stock 1,025 $ 1 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_3856567e-4a53-4e54-97f7-a160fb4744ce",
+  "issuer": "Sandvine Corporation",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 81818.0
+  },
+  "untagged_values": "0001193125-26-342351 C_3856567e-4a53-4e54-97f7-a160fb4744ce fair_value 0",
+  "printed_line": "Sandvine Corporation (11) Common Stock 81,818 $ - 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_d915844f-2cf8-4a75-a5c2-ae10c056fb0c",
+  "issuer": "Solvias AG",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -51000.0,
+   "par": 0.0,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-342351 C_d915844f-2cf8-4a75-a5c2-ae10c056fb0c fair_value 0",
+  "printed_line": "Solvias AG (4)(5)(11) Senior Secured First Lien Revolver 02/2032 CHF 0 $ ( 51 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_76f28fa2-ded0-4fdf-ba88-75b22e482b6a",
+  "issuer": "VetStrategy",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": 30000.0,
+   "par": null,
+   "units": 37612.0
+  },
+  "untagged_values": "0001193125-26-342351 C_76f28fa2-ded0-4fdf-ba88-75b22e482b6a fair_value 0",
+  "printed_line": "VetStrategy (11) Common Stock 37,612 $ 30 - % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_83121ce2-5150-4c42-9c75-253e6f11b116",
+  "issuer": "Auveco Holdings",
+  "instrument": "Unitranche First Lien Revolver",
+  "tagged": {
+   "cost": -2000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-342351 C_83121ce2-5150-4c42-9c75-253e6f11b116 fair_value 0",
+  "printed_line": "Auveco Holdings (4)(5) Unitranche First Lien Revolver 05/2028 - $ ( 2 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_5e24aef2-fc60-417e-9315-95c57c2b9079",
+  "issuer": "Hamsard 3778 Limited",
+  "instrument": "Unitranche First Lien - Last Out Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -15000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-342351 C_5e24aef2-fc60-417e-9315-95c57c2b9079 fair_value 0",
+  "printed_line": "Hamsard 3778 Limited (4)(5)(10) Unitranche First Lien - Last Out Delayed Draw Term Loan 10/2031 - $ ( 15 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_c43ffaa1-ef87-4106-b0af-e50370573384",
+  "issuer": "Vendure Employer Services, Inc.",
+  "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -25000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-342351 C_c43ffaa1-ef87-4106-b0af-e50370573384 fair_value 0",
+  "printed_line": "Vensure Employer Services, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 09/2031 - ( 25 ) 0.0 -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_13498316-d77b-4c61-b1e7-728ddf16387b",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "First Lien Term Loan",
+  "tagged": {
+   "cost": 992000.0,
+   "par": 1737000.0,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-342351 C_13498316-d77b-4c61-b1e7-728ddf16387b fair_value 0",
+  "printed_line": "A&A Global Imports, LLC (9) Senior Secured First Lien Term Loan 06/2026 1,737 $ 992 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_6d3baf9b-729e-414e-8e01-7f63762c122d",
+  "issuer": "Odessa Technologies, Inc.",
+  "instrument": "First Lien Revolver",
+  "tagged": {
+   "cost": -11000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-342351 C_6d3baf9b-729e-414e-8e01-7f63762c122d fair_value 0",
+  "printed_line": "Odessa Technologies, Inc. (4)(5) Senior Secured First Lien Revolver 10/2027 - $ ( 11 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_b7f75680-1454-4ee8-abd2-926512e1a41e",
+  "issuer": "Security Risk Advisors Intl, LLC",
+  "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+  "tagged": {
+   "cost": -1000.0,
+   "par": null,
+   "units": null
+  },
+  "untagged_values": "0001193125-26-342351 C_b7f75680-1454-4ee8-abd2-926512e1a41e fair_value 0",
+  "printed_line": "Security Risk Advisors Intl, LLC (4)(5) Unitranche First Lien Delayed Draw Term Loan 09/2031 - $ ( 1 ) 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_6813e5a8-9219-4d8e-810d-77435345ab22",
+  "issuer": "Continental Battery Company",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 12345.0
+  },
+  "untagged_values": "0001193125-26-342351 C_6813e5a8-9219-4d8e-810d-77435345ab22 fair_value 0",
+  "printed_line": "Continental Battery Company Common Stock 12,345 $ - 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_9c570f78-9d80-440c-baae-152f1ea73d6d",
+  "issuer": "Isagenix International, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 202844.0
+  },
+  "untagged_values": "0001193125-26-342351 C_9c570f78-9d80-440c-baae-152f1ea73d6d fair_value 0",
+  "printed_line": "Isagenix International, LLC (6) Common Stock 202,844 $ - 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_a2435ec5-15c0-43f3-9006-1e4bbaedc3fa",
+  "issuer": "A&A Global Imports, LLC",
+  "instrument": "Common Stock",
+  "tagged": {
+   "cost": null,
+   "par": null,
+   "units": 69.0
+  },
+  "untagged_values": "0001193125-26-342351 C_a2435ec5-15c0-43f3-9006-1e4bbaedc3fa fair_value 0",
+  "printed_line": "A&A Global Imports, LLC Common Stock 69 $ - 0.0 % $ -",
+  "also_needs": {}
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_162c9bdd-cd5e-4691-9cf1-43309e543e4b",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "cost": 103000.0,
+   "par": null,
+   "units": 521.0
+  },
+  "untagged_values": "0001193125-26-342351 C_162c9bdd-cd5e-4691-9cf1-43309e543e4b fair_value 0",
+  "printed_line": "MeriCal, LLC Preferred Stock 521 $ 103 0.0 % $ -",
+  "also_needs": {}
+ }
+]

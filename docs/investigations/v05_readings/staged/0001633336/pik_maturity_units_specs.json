@@ -1,0 +1,164 @@
+{
+ "what": "Mario 2025-03-31 whole-coupon PIK; AX VI 2025-03-31 maturity; Sandvine units; Patriot instrument",
+ "specs": [
+  {
+   "row_id": "ROW-a68a8147eec65a00",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_4e95de06-a447-4c2e-8b33-fe507ed1dccf",
+   "identifier": "Investments United States Debt Investments Consumer Services Mario Purchaser, LLC Investment\u00a0Type Unitranche First Lien - Last Out Term Loan Interest Term 1079 PIK Interest Rate 15.17% Maturity/ Dissolution Date 04/2032",
+   "issuer": "Mario Purchaser, LLC",
+   "instrument": "Unitranche First Lien - Last Out Term Loan",
+   "published": {
+    "pik_rate": 10.79,
+    "interest_rate_kind": null,
+    "basis_spread": null
+   },
+   "fields": {
+    "pik_rate": "15.17",
+    "interest_rate_kind": "all_in",
+    "basis_spread": "10.79"
+   },
+   "printed_line": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1079 PIK 15.17 % 04/2032 4,422 4,343 0.6 4,499 Mario",
+   "why": "D-232: par 4,422 -> 4,593 (+3.87 %, coupon 15.17/4 = 3.79); the whole coupon is PIK, as at 2024-12-31 and 2025-06-30."
+  },
+  {
+   "row_id": "ROW-f161e08b510ad7be",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_0f7f561e-384d-4571-b9da-d797611e852b",
+   "identifier": "Investments Sweden Debt Investments Retailing AX VI INV2 Holding AB (Voff) Investment Type Senior Secured Second Lien Term Loan Interest Term E + 1000 PIK Interest Rate 12.39% Maturity/ Dissolution Date 08/2030",
+   "issuer": "AX VI INV2 Holding AB (Voff)",
+   "instrument": "Second Lien Term Loan",
+   "published": {
+    "maturity_date": "2029-08-31",
+    "maturity_precision": null
+   },
+   "fields": {
+    "maturity_date": "2030-08-31",
+    "maturity_precision": "month"
+   },
+   "printed_line": "AX VI INV2 Holding AB (Voff) (6)(11) Senior Secured Second Lien Term Loan E + 1000 PIK 12.39 % 08/2030 EUR 2,729 2,548 0.4",
+   "why": "Maturity tag 2029-08-31; the printed line and the member text say 08/2030."
+  },
+  {
+   "row_id": "ROW-3965109e786f323d",
+   "quarter": "2024-09-30",
+   "accession": "0000950170-24-124474",
+   "src_context_id": "C_5ab59261-9608-4115-a463-763bc0f84fd3",
+   "identifier": "Equity Investments Health Care Equipment & Services Patriot Acquisition Topco S.A.R.L Common Stock One",
+   "issuer": "Patriot Acquisition Topco S.A.R.L",
+   "instrument": "Common Stock One",
+   "published": {
+    "instrument_description": null
+   },
+   "fields": {
+    "instrument_description": "Common Stock"
+   },
+   "printed_line": "Patriot Acquisition Topco S.A.R.L (11) Common Stock 16,416 46 - - Seniorlink",
+   "why": "Member row word 'One'; the page prints 'Common Stock'."
+  },
+  {
+   "row_id": "ROW-ee592671a9307a1b",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_71e54a99-125b-423d-acea-54db698f2d31",
+   "identifier": "Equity Investments Health Care Equipment & Services Patriot Acquisition Topco S.A.R.L Investment Type Common Stock One",
+   "issuer": "Patriot Acquisition Topco S.A.R.L",
+   "instrument": "Common Stock One",
+   "published": {
+    "instrument_description": null
+   },
+   "fields": {
+    "instrument_description": "Common Stock"
+   },
+   "printed_line": "Patriot Acquisition Topco S.A.R.L (11) Common Stock 16,416 46 0.0 -",
+   "why": "Member row word 'One'; the page prints 'Common Stock'."
+  },
+  {
+   "row_id": "ROW-fd1955bc74e93de9",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_a945800f-310d-417e-84c7-95366e09522b",
+   "identifier": "Investments Canada Equity Investments Telecommunication Services Sandvine Corporation Common Stock",
+   "issuer": "Sandvine Corporation",
+   "instrument": "Common Stock",
+   "published": {
+    "shares_held": null
+   },
+   "fields": {
+    "shares_held": "81818"
+   },
+   "printed_line": "Sandvine Corporation (11) Common Stock 81,818 - 0.0 -",
+   "why": "Context carries no share fact; the page prints 81,818 units."
+  },
+  {
+   "row_id": "ROW-f27d1aa7f8897ad2",
+   "quarter": "2025-06-30",
+   "accession": "0000950170-25-108024",
+   "src_context_id": "C_804572d0-faa4-459b-88e7-b4e02bcc8acd",
+   "identifier": "Equity Investments Health Care Equipment & Services Patriot Acquisition Topco S.A.R.L Investment Type Common Stock One",
+   "issuer": "Patriot Acquisition Topco S.A.R.L",
+   "instrument": "Common Stock One",
+   "published": {
+    "instrument_description": null
+   },
+   "fields": {
+    "instrument_description": "Common Stock"
+   },
+   "printed_line": "Patriot Acquisition Topco S.A.R.L Common Stock 16,416 46 0.0 -",
+   "why": "Member row word 'One'; the page prints 'Common Stock'."
+  },
+  {
+   "row_id": "ROW-846e46383d1fef36",
+   "quarter": "2025-09-30",
+   "accession": "0001193125-25-277533",
+   "src_context_id": "C_d57607f6-9547-4009-964c-a7f83afc7a81",
+   "identifier": "Equity Investments Health Care Equipment & Services Patriot Acquisition Topco S.A.R.L Investment Type Common Stock One",
+   "issuer": "Patriot Acquisition Topco S.A.R.L",
+   "instrument": "Common Stock One",
+   "published": {
+    "instrument_description": null
+   },
+   "fields": {
+    "instrument_description": "Common Stock"
+   },
+   "printed_line": "Patriot Acquisition Topco S.A.R.L (11) Common Stock 16,416 46 0.0 -",
+   "why": "Member row word 'One'; the page prints 'Common Stock'."
+  },
+  {
+   "row_id": "ROW-8ad22250968c492f",
+   "quarter": "2025-12-31",
+   "accession": "0001193125-26-071922",
+   "src_context_id": "C_ff274878-9812-4a58-b81a-b2bf8bb76beb",
+   "identifier": "Equity Investments Health Care Equipment & Services Patriot Acquisition Topco S.A.R.L Investment Type Common Stock One",
+   "issuer": "Patriot Acquisition Topco S.A.R.L",
+   "instrument": "Common Stock One",
+   "published": {
+    "instrument_description": null
+   },
+   "fields": {
+    "instrument_description": "Common Stock"
+   },
+   "printed_line": "Patriot Acquisition Topco S.A.R.L Common Stock 16,416 46 0.0 -",
+   "why": "Member row word 'One'; the page prints 'Common Stock'."
+  },
+  {
+   "row_id": "ROW-fe061ff74b772697",
+   "quarter": "2026-03-31",
+   "accession": "0001193125-26-221936",
+   "src_context_id": "C_d591e560-a7c9-4c52-91bd-d4dec8f92316",
+   "identifier": "Investments United States Equity Investments Health Care Equipment & Services Patriot Acquisition Topco S.A.R.L Investment Type Common Stock One",
+   "issuer": "Patriot Acquisition Topco S.A.R.L",
+   "instrument": "Common Stock One",
+   "published": {
+    "instrument_description": null
+   },
+   "fields": {
+    "instrument_description": "Common Stock"
+   },
+   "printed_line": "Patriot Acquisition Topco S.A.R.L Common Stock 16,416 46 0.0 -",
+   "why": "Member row word 'One'; the page prints 'Common Stock'."
+  }
+ ]
+}

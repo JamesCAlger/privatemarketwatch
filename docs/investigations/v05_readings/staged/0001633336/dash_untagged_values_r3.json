@@ -1,0 +1,281 @@
+[
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_7cc8dc07-71cd-4f24-8546-5834fb02a817",
+  "issuer": "First Eagle Greenway Fund II, LLC",
+  "tagged": {
+   "cost": 0
+  },
+  "untagged_values": "0000950170-23-061089 C_7cc8dc07-71cd-4f24-8546-5834fb02a817 fair_value 0",
+  "printed_line": "First Eagle Greenway Fund II, LLC (11)(13)(14) Partnership Interest 0.0 - -",
+  "also_needs": {},
+  "note": ""
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_756341fc-1a69-4fc7-afca-b57ec8f49d95",
+  "issuer": "First Eagle Greenway Fund II, LLC",
+  "tagged": {
+   "cost": 0
+  },
+  "untagged_values": "0000950170-24-017903 C_756341fc-1a69-4fc7-afca-b57ec8f49d95 fair_value 0",
+  "printed_line": "First Eagle Greenway Fund II, LLC (11)(13)(14) Partnership Interest 0.0 - -",
+  "also_needs": {},
+  "note": ""
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_6aedd7e8-ac76-456d-9666-92b1372954bf",
+  "issuer": "IVC Evidensia",
+  "tagged": {
+   "cost": 30000
+  },
+  "untagged_values": "0000950170-23-061089 C_6aedd7e8-ac76-456d-9666-92b1372954bf fair_value 0",
+  "printed_line": "IVC Evidenisa (11) Common Stock - 30 - -",
+  "also_needs": {},
+  "note": ""
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_2bb5f4bc-c497-415c-9529-07b37c405894",
+  "issuer": "IVC Evidensia",
+  "tagged": {
+   "cost": 30000,
+   "par": 26595000
+  },
+  "untagged_values": "0000950170-24-017903 C_2bb5f4bc-c497-415c-9529-07b37c405894 fair_value 0",
+  "printed_line": "IVC Evidenisa (11) Common Stock 26,595 30 - -",
+  "also_needs": {
+   "principal_amount": "",
+   "shares_held": "26595"
+  },
+  "note": "The unit count 26,595 is tagged as principal (x1000); staged as units."
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_88d90b32-4858-4db0-953b-816718e5f6ed",
+  "issuer": "Seniorlink Incorporated",
+  "tagged": {
+   "cost": -15000
+  },
+  "untagged_values": "0000950170-23-061089 C_88d90b32-4858-4db0-953b-816718e5f6ed fair_value 0",
+  "printed_line": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 15 ) - -",
+  "also_needs": {
+   "maturity_date": "2026-07-31",
+   "maturity_precision": "month"
+  },
+  "note": "Member maturity 06/2025; the printed revolver line is 07/2026."
+ },
+ {
+  "quarter": "2023-12-31",
+  "accession": "0000950170-24-017903",
+  "ctx": "C_2c2dbffc-0190-4da2-b504-b287f37b569c",
+  "issuer": "Lexipol (Ranger Buyer, Inc.)",
+  "tagged": {
+   "cost": 16000
+  },
+  "untagged_values": "0000950170-24-017903 C_2c2dbffc-0190-4da2-b504-b287f37b569c fair_value 0",
+  "printed_line": "Lexipol (Ranger Buyer, Inc.) (4)(5) Unitranche First Lien Revolver 11/2027 - ( 16 ) - -",
+  "also_needs": {
+   "instrument_description": "Unitranche First Lien Revolver",
+   "cost": "-16000.0",
+   "interest_rate": "",
+   "basis_spread": ""
+  },
+  "note": "Tagged on the term-loan member (with its rate text) and with an unsigned cost +16; the values are the undrawn revolver's printed line."
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_a06fd46d-fbae-42b5-9ad9-739f34124be1",
+  "issuer": "Stepping Stones Healthcare Services, LLC",
+  "tagged": {
+   "cost": -23000
+  },
+  "untagged_values": "0000950170-24-124474 C_a06fd46d-fbae-42b5-9ad9-739f34124be1 fair_value 0",
+  "printed_line": "Stepping Stones Healthcare Services, LLC (4)(5) Unitranche First Lien Revolver 12/2026 - ( 23 ) - -",
+  "also_needs": {
+   "maturity_date": "2026-12-31",
+   "maturity_precision": "month",
+   "interest_rate": "",
+   "basis_spread": ""
+  },
+  "note": "Member carries the term loan's rate text and 12/2028; the printed revolver line is 12/2026 with no rate."
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_3ed31bfe-fe42-4db9-8fa3-572f9a9a0c48",
+  "issuer": "Advanced Diabetes Supply",
+  "tagged": {
+   "cost": -3000
+  },
+  "untagged_values": "0000950170-24-124474 C_3ed31bfe-fe42-4db9-8fa3-572f9a9a0c48 fair_value 0",
+  "printed_line": "Advanced Diabetes Supply (4)(5) Senior Secured First Lien Revolver 12/2027 - ( 3 ) - -",
+  "also_needs": {
+   "maturity_date": "2027-12-31",
+   "maturity_precision": "month"
+  },
+  "note": "Member maturity 02/2029; the printed line is 12/2027."
+ },
+ {
+  "quarter": "2024-09-30",
+  "accession": "0000950170-24-124474",
+  "ctx": "C_fe445932-cb5b-49e1-9da3-c67597702e25",
+  "issuer": "Team Select (CSC TS Merger SUB, LLC)",
+  "tagged": {
+   "cost": -5000
+  },
+  "untagged_values": "0000950170-24-124474 C_fe445932-cb5b-49e1-9da3-c67597702e25 fair_value 0",
+  "printed_line": "Team Select (CSC TS Merger SUB, LLC) (4)(5) Senior Secured First Lien Revolver 05/2029 - ( 5 ) - -",
+  "also_needs": {
+   "issuer_name": "Team Select (CSC TS Merger SUB, LLC)"
+  },
+  "note": "The member names no issuer ('... Health Care Equipment & Services Investment Type Senior Secured First Lien Revolver 05/2029'); the row also needs a context name declaration to be admitted, then the issuer correction."
+ },
+ {
+  "quarter": "2025-09-30",
+  "accession": "0001193125-25-277533",
+  "ctx": "C_45eb80be-10ba-4bda-acd4-f0ba59d0f2c5",
+  "issuer": "Banker's Toolbox, Inc.",
+  "tagged": {
+   "cost": -15000
+  },
+  "untagged_values": "0001193125-25-277533 C_45eb80be-10ba-4bda-acd4-f0ba59d0f2c5 fair_value 0",
+  "printed_line": "Banker's Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 15 ) 0.0 -",
+  "also_needs": {
+   "issuer_name": "Banker's Toolbox, Inc."
+  },
+  "note": ""
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_c95e74bd-37fd-4645-a7fe-2e5b5d9ce883",
+  "issuer": "VetStrategy",
+  "tagged": {
+   "cost": 30000,
+   "units": 37612
+  },
+  "untagged_values": "0001193125-26-071922 C_c95e74bd-37fd-4645-a7fe-2e5b5d9ce883 fair_value 0",
+  "printed_line": "VetStrategy (11) Common Stock GBP 37,612 $ 30 - % -",
+  "also_needs": {
+   "instrument_description": "Common Stock"
+  },
+  "note": "Member names the preferred stock; units 37,612 and cost 30 are the printed common line."
+ },
+ {
+  "quarter": "2025-12-31",
+  "accession": "0001193125-26-071922",
+  "ctx": "C_fcaeeea9-077b-456b-ac06-76480696e952",
+  "issuer": "Team Select (CSC TS Merger SUB, LLC)",
+  "tagged": {
+   "cost": -2000
+  },
+  "untagged_values": "0001193125-26-071922 C_fcaeeea9-077b-456b-ac06-76480696e952 fair_value 0",
+  "printed_line": "Team Select (CSC TS Merger SUB, LLC) (4)(5) Senior Secured First Lien Revolver 05/2029 - ( 2 ) 0.0 -",
+  "also_needs": {
+   "maturity_date": "2029-05-31",
+   "maturity_precision": "month"
+  },
+  "note": "Member maturity 06/2029; the printed line is 05/2029."
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_ff6554f3-8335-4aaa-b73b-ec03592b23b6",
+  "issuer": "Vivid Seats Ltd.",
+  "tagged": {
+   "units": 143
+  },
+  "untagged_values": "0001193125-26-221936 C_ff6554f3-8335-4aaa-b73b-ec03592b23b6 fair_value 0",
+  "printed_line": "Vivid Seats Ltd. (12) Common Stock 143 - 0.0 -",
+  "also_needs": {},
+  "note": "The page prints two identical lines 'Vivid Seats Ltd. (12) Common Stock 143 - 0.0 -'; one context each (members 'Two', 'Three')."
+ },
+ {
+  "quarter": "2026-03-31",
+  "accession": "0001193125-26-221936",
+  "ctx": "C_85e9e237-7b23-47ea-ac25-79b25c46c162",
+  "issuer": "Vivid Seats Ltd.",
+  "tagged": {
+   "units": 143
+  },
+  "untagged_values": "0001193125-26-221936 C_85e9e237-7b23-47ea-ac25-79b25c46c162 fair_value 0",
+  "printed_line": "Vivid Seats Ltd. (12) Common Stock 143 - 0.0 -",
+  "also_needs": {},
+  "note": "The page prints two identical lines 'Vivid Seats Ltd. (12) Common Stock 143 - 0.0 -'; one context each (members 'Two', 'Three')."
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_64c05756-438f-44d4-be9a-cd43c93ef317",
+  "issuer": "Vivid Seats Ltd.",
+  "tagged": {
+   "units": 143
+  },
+  "untagged_values": "0001193125-26-342351 C_64c05756-438f-44d4-be9a-cd43c93ef317 fair_value 0",
+  "printed_line": "Vivid Seats Ltd. (12) Common Stock 143 - 0.0 -",
+  "also_needs": {},
+  "note": "The page prints two identical lines 'Vivid Seats Ltd. (12) Common Stock 143 - 0.0 -'; one context each (members 'Two', 'Three')."
+ },
+ {
+  "quarter": "2026-06-30",
+  "accession": "0001193125-26-342351",
+  "ctx": "C_c9bf5664-2595-438e-944c-0833c808a0f4",
+  "issuer": "Vivid Seats Ltd.",
+  "tagged": {
+   "units": 143
+  },
+  "untagged_values": "0001193125-26-342351 C_c9bf5664-2595-438e-944c-0833c808a0f4 fair_value 0",
+  "printed_line": "Vivid Seats Ltd. (12) Common Stock 143 - 0.0 -",
+  "also_needs": {},
+  "note": "The page prints two identical lines 'Vivid Seats Ltd. (12) Common Stock 143 - 0.0 -'; one context each (members 'Two', 'Three')."
+ },
+ {
+  "quarter": "2025-03-31",
+  "accession": "0000950170-25-071368",
+  "ctx": "C_02e1520d-a7f3-4943-b813-a7e11ecf56a8",
+  "issuer": "WCT Group Holdings, LLC",
+  "tagged": {
+   "cost": -9000
+  },
+  "untagged_values": "0000950170-25-071368 C_02e1520d-a7f3-4943-b813-a7e11ecf56a8 fair_value 0",
+  "printed_line": "WCT Group Holdings, LLC (4)(5) Unitranche First Lien Revolver 12/2029 - ( 9 ) 0.0 -",
+  "also_needs": {},
+  "note": "Tagged only under the filer's duplicate 'Investments in Non-Control, Non-Affiliate Portfolio Companies' member tree, which the wrapper excludes; needs a context name declaration (or a narrow condition) as well as the untagged value."
+ },
+ {
+  "quarter": "2023-09-30",
+  "accession": "0000950170-23-061089",
+  "ctx": "C_6563ede4-bd41-4829-9ce9-0484746c8a73",
+  "issuer": "UP Acquisition Corp.",
+  "tagged": {
+   "cost": -3000
+  },
+  "untagged_values": "0000950170-23-061089 C_6563ede4-bd41-4829-9ce9-0484746c8a73 fair_value 0",
+  "printed_line": "UP Acquisition Corp. (4)(5) Unitranche First Lien Revolver 05/2024 - ( 3 ) - -",
+  "also_needs": {
+   "instrument_description": "Unitranche First Lien Revolver"
+  },
+  "note": "Member names no instrument ('UP Acquisition Corp. Maturity/Dissolution Date 05/2024')."
+ },
+ {
+  "quarter": "2023-06-30",
+  "accession": "0000950170-23-040555",
+  "ctx": "C_1b355693-af75-4012-b721-2e7869560702",
+  "issuer": "IVC Evidensia",
+  "tagged": {
+   "cost": 30000
+  },
+  "untagged_values": "0000950170-23-040555 C_1b355693-af75-4012-b721-2e7869560702 fair_value 0",
+  "printed_line": "IVC Evidenisa (11) Common Stock - 30 - -",
+  "also_needs": {},
+  "note": "Round 4: printed with the filer's misspelling 'Evidenisa' (as 2023-09-30 and 2023-12-31); my round-3 reason had quoted the December 31, 2022 comparative line."
+ }
+]

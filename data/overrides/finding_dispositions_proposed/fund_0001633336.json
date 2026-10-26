@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. Ledger does not read this directory.",
- "sandbox": "ccza",
+ "sandbox": "rfcrf",
  "dispositions": [
   {
    "disposition_id": "PD-0001633336-PP02-1",
@@ -393,9 +393,15 @@
     "2023-03-31"
    ],
    "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
-   "statement": "All four C107 rows at 2023-03-31 were read: Pye-Barker 11/2027, Patriot and Socius revolvers and the Seniorlink revolver are undrawn lines printed with a dash for par and the cost in parentheses (24, 11, 5 and 17 thousand); published costs are those negatives. The Pye-Barker row was restored in ccza (its member omits the issuer) with the printed negative cost. Inventing positive costs would contradict the page.",
+   "statement": "C107 2023-03-31 flags 66 undrawn revolver / delayed-draw lines published with a negative cost. All 66 print the cost in parentheses ('MM/YYYY - ( c ) ...'): 4 were read in ccza (Pye-Barker, Patriot, Socius, Seniorlink), 53 are lines whose tagged cost lost its sign and were corrected from the printed parentheses in this run (each re-checked by r_gen_costsign.py against the printed fair value, maturity and cost), 9 are dash lines newly published at fair value 0 whose printed cost is in parentheses (r_gen_dash.py). A negative cost on an undrawn line is the unamortised fee, printed so. No fix applies.",
    "basis": "read",
    "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020540",
+     "verbatim": "United Flow Technologies (4)(5) Unitranche First Lien Revolver 10/2027 - ( 25 ) ( 0.0 ) ( 43 )",
+     "quote": "United Flow Technologies (4)(5) Unitranche First Lien Revolver 10/2027 - ( 25 ) ( 0.0 ) ( 43 ) -- cost printed in parentheses, published -25,000"
+    },
     {
      "source": "filing",
      "accession": "0000950170-23-020540",
@@ -407,18 +413,6 @@
      "accession": "0000950170-23-020540",
      "verbatim": "Patriot Growth Insurance Services, LLC (4)(5) Unitranche First Lien Revolver 10/2028 - ( 11 ) ( 0.0 ) ( 32 )",
      "quote": "Patriot Growth Insurance Services, LLC (4)(5) Unitranche First Lien Revolver 10/2028 - ( 11 ) ( 0.0 ) ( 32 )"
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-23-020540",
-     "verbatim": "Socius Insurance Services, Inc. (4)(5) Unitranche First Lien Revolver 06/2027 - ( 5 ) ( 0.0 ) ( 15 )",
-     "quote": "Socius Insurance Services, Inc. (4)(5) Unitranche First Lien Revolver 06/2027 - ( 5 ) ( 0.0 ) ( 15 )"
-    },
-    {
-     "source": "filing",
-     "accession": "0000950170-23-020540",
-     "verbatim": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 17 ) 0.0 21",
-     "quote": "Seniorlink Incorporated (4)(5) Unitranche First Lien Revolver 07/2026 - ( 17 ) 0.0 21"
     }
    ],
    "addresses_verdict": {},
@@ -529,7 +523,7 @@
     "2025-12-31"
    ],
    "reason_key": "x02-no-rate-printed-on-the-row",
-   "statement": "Every X02 row in these four quarters was read on the current schedule (50, 65, 67 and 75 rows). All but one per quarter fall under the standing reason (undrawn, non-accrual or PIK). The one left each quarter is an undrawn line printed with a dash for par, a dash for cost, no Interest Term and no Interest Rate, and a small positive mark: the Integrity Marketing revolver (7, 2 and 2 thousand) and the Arrow Management delayed draw (59 thousand). The tags carry no rate or spread either. The standing reason misses them only because cost is blank, not negative. No rate can be supplied.",
+   "statement": "Every X02 row in these four quarters was read on the current schedule (50, 65, 67 and 75 rows). All but one per quarter fall under the standing reason (undrawn, non-accrual or PIK). The one left each quarter is an undrawn line printed with a dash for par, a dash for cost, no Interest Term and no Interest Rate, and a small positive mark: the Integrity Marketing revolver (7, 2 and 2 thousand) and the Arrow Management delayed draw (59 thousand). The tags carry no rate or spread either. The standing reason misses them only because cost is blank, not negative. No rate can be supplied. Since rfcrd the population also holds the undrawn lines newly published at fair value 0 from untagged_values (36 at 2024-09-30, 36 at 2024-12-31, 33 at 2025-03-31, 31 at 2025-12-31): each one's printed line was matched (issuer, instrument, maturity, cells) and prints no rate or spread ('MM/YYYY - ( c ) 0.0 -').",
    "basis": "read",
    "evidence": [
     {
@@ -552,9 +546,9 @@
     },
     {
      "source": "filing",
-     "accession": "0001193125-26-071922",
-     "verbatim": "Arrow Management Acquisition, LLC (5) Unitranche First Lien Delayed Draw Term Loan 07/2032 - - 0.0 59",
-     "quote": "Arrow Management Acquisition, LLC (5) Unitranche First Lien Delayed Draw Term Loan 07/2032 - - 0.0 59"
+     "accession": "0000950170-24-095458",
+     "verbatim": "Annuity Health (4)(5) Senior Secured First Lien Revolver 02/2029 - ( 7 ) 0.0 -",
+     "quote": "Annuity Health (4)(5) Senior Secured First Lien Revolver 02/2029 - ( 7 ) 0.0 - -- undrawn line, no rate printed"
     }
    ],
    "addresses_verdict": {
@@ -564,6 +558,80 @@
    "rerun": "ccza; scratch/fund_runs/0001633336/notes.md",
    "decided_by": "PROPOSED by fund agent; not accepted",
    "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-0001633336-pik_printed-13",
+   "class": "not_applicable",
+   "engine": "identity",
+   "rule_name": "pik_printed",
+   "ciks": [
+    "0001633336"
+   ],
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31"
+   ],
+   "reason_key": "pik-printed-rule-reads-margin-of-whole-coupon-pik-loan",
+   "statement": "All flagged rows are whole-coupon PIK loans printed '<benchmark> + <margin in basis points> PIK <coupon> %' (Mario Purchaser last-out 'S + 1075 PIK', MeriCal 'S + 775 PIK', Integro 'S + 1225 PIK', BioAgilytix 'S + 650 PIK', Bayside 'S + 700/725/1000 PIK', AX VI second lien 'E + 1000 PIK'). Their par grows by the coupon each quarter (coupon/4; AX VI semi-annually by coupon/2), so under D-232 pik_rate is the printed coupon and the cash leg is 0 (row corrections approved by the orchestrator, D-246). The rule reads the margin before 'PIK' as the PIK rate; its D-232 exemption only parses a margin printed with '%' ('S + 7.50 % PIK'), not basis points ('S + 1075 PIK'). Request REQ-rfcr-1. No data fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-017903",
+     "verbatim": "MeriCal, LLC Unitranche First Lien Term Loan S + 775 PIK 13.39 % 11/2024 7,452 7,452 0.6 4,248 Savers",
+     "quote": "MeriCal, LLC Unitranche First Lien Term Loan S + 775 PIK 13.39 % 11/2024 7,452 7,452 0.6 4,248 Savers -- par 7,452 then 7,707 at 2024-03-31 (+3.42%, coupon 13.39/4 = 3.35): whole coupon PIK"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-25-023153",
+     "verbatim": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344 Mario",
+     "quote": "Mario Purchaser, LLC Unitranche First Lien - Last Out Term Loan S + 1075 PIK 15.21 % 04/2032 4,258 4,177 0.6 4,344 Mario -- pik_rate 15.21 published, margin 10.75 printed"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001633336.json",
+   "decided_by": "PROPOSED by agent claude-fund-agent-crescent-rfcr (2026-10-26); not accepted by the owner",
+   "decided_on": "2026-10-26"
+  },
+  {
+   "disposition_id": "PD-0001633336-issuer_name_printed-14",
+   "class": "not_applicable",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "ciks": [
+    "0001633336"
+   ],
+   "quarters": [
+    "2023-06-30",
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "reason_key": "issuer-name-printed-typo-filer-spells-correctly-elsewhere",
+   "statement": "The three flagged rows (2023-06-30, 2023-09-30, 2023-12-31) are the IVC Evidensia preferred stock. The page prints 'IVC Evidenisa' (letters transposed) on these lines; the filer's member, its 2023-03-31 schedule ('IVC Evidensia (f/k/a VetStrategy)') and the company's own name spell 'Evidensia'. The published name is the issuer's name; copying the misprint would split the entity. No fix applies.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-017903",
+     "verbatim": "IVC Evidenisa (11) Preferred Stock 1,503,839 894 0.2 1,785 IVC Evidenisa",
+     "quote": "IVC Evidenisa (11) Preferred Stock 1,503,839 894 0.2 1,785 IVC Evidenisa -- printed misspelling"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-23-020540",
+     "verbatim": "IVC Evidensia (f/k/a VetStrategy) Investment Type Preferred",
+     "quote": "IVC Evidensia (f/k/a VetStrategy) Investment Type Preferred -- same filer, correct spelling"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001633336.json",
+   "decided_by": "PROPOSED by agent claude-fund-agent-crescent-rfcr (2026-10-26); not accepted by the owner",
+   "decided_on": "2026-10-26"
   }
  ]
 }

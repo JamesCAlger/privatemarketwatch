@@ -1,0 +1,600 @@
+{
+ "what": "spread published as the cash leg on '(including p PIK)' rows (D-031)",
+ "specs": [
+  {
+   "row_id": "ROW-8a647911e33f305b",
+   "quarter": "2023-03-31",
+   "accession": "0000950170-23-020540",
+   "src_context_id": "C_dab567a9-b824-4b44-80fc-f1c09d2cc000",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Professional Physical Therapy Investment Type Senior Secured First Lien Revolver Interest Term L + 1050 (100 Floor) (including 450 PIK) Interest Rate 19.84% Maturity/Dissolution Date 05/2023",
+   "issuer": "Professional Physical Therapy",
+   "instrument": "First Lien Revolver",
+   "published": {
+    "basis_spread": 10.5
+   },
+   "fields": {
+    "basis_spread": "15.0"
+   },
+   "printed_line": "Professional Physical Therapy (9) Senior Secured First Lien Term Loan 05/2023 10,070 8,907 0.7 5,158 Professional Physical Therapy (5) Senior Secured First Lien Revolver L + 1050 ( 100 Floor) (including 450 PIK) 19.84 % 05/2023 41 41 0.0 41",
+   "why": "Printed 'L + 1050 (100 Floor) (including 450 PIK) | 19.84%', coupon 19.84 %: coupon - 10.50 = 9.34 is no plausible benchmark, coupon - (10.50 + 4.50) = 4.84 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 15.00 (pik_rate 4.50 unchanged)."
+  },
+  {
+   "row_id": "ROW-0809e3f2c93d3e86",
+   "quarter": "2023-03-31",
+   "accession": "0000950170-23-020540",
+   "src_context_id": "C_30dd887a-8566-49d8-8205-6d2d9d344159",
+   "identifier": "Investments United States Debt Investments Pharmaceuticals, Biotechnology & Life Sciences BioAgilytix (5) Investment\u00a0Type Senior Secured First Lien Delayed Draw Term Loan Interest Term\u00a0L + 625 (75 Floor) (including 275 PIK) Interest Rate 14.16% Maturity/ Dissolution Date 12/2028",
+   "issuer": "BioAgilytix",
+   "instrument": "First Lien Delayed Draw Term Loan",
+   "published": {
+    "basis_spread": 6.25
+   },
+   "fields": {
+    "basis_spread": "9.0"
+   },
+   "printed_line": "BioAgilytix Senior Secured First Lien Term Loan L + 625 ( 75 Floor) (including 275 PIK) 14.16 % 12/2028 13,220 12,971 1.7",
+   "why": "Printed 'Interest Term\u00a0L + 625 (75 Floor) (including 275 PIK) Interes', coupon 14.16 %: coupon - 6.25 = 7.91 is no plausible benchmark, coupon - (6.25 + 2.75) = 5.16 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 9.00 (pik_rate 2.75 unchanged)."
+  },
+  {
+   "row_id": "ROW-b6589e86201225e7",
+   "quarter": "2023-03-31",
+   "accession": "0000950170-23-020540",
+   "src_context_id": "C_883a1bc2-65e3-4e0d-b616-95b013128bb5",
+   "identifier": "Investments United States Debt Investments Pharmaceuticals, Biotechnology & Life Sciences BioAgilytix Investment\u00a0Type Senior Secured First Lien Term Loan Interest Term\u00a0L + 625 (75 Floor) (including 275 PIK) Interest Rate 14.16% Maturity/ Dissolution Date 12/2028",
+   "issuer": "BioAgilytix",
+   "instrument": "First Lien Term Loan",
+   "published": {
+    "basis_spread": 6.25
+   },
+   "fields": {
+    "basis_spread": "9.0"
+   },
+   "printed_line": "BioAgilytix Senior Secured First Lien Term Loan L + 625 ( 75 Floor) (including 275 PIK) 14.16 % 12/2028 13,220 12,971 1.7",
+   "why": "Printed 'Interest Term\u00a0L + 625 (75 Floor) (including 275 PIK) Interes', coupon 14.16 %: coupon - 6.25 = 7.91 is no plausible benchmark, coupon - (6.25 + 2.75) = 5.16 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 9.00 (pik_rate 2.75 unchanged)."
+  },
+  {
+   "row_id": "ROW-786327e9dfd957ba",
+   "quarter": "2024-12-31",
+   "accession": "0000950170-25-023153",
+   "src_context_id": "C_b0d8d84b-e847-41ef-93f2-dc88b165a06f",
+   "identifier": "Investments United States Debt Investments Food & Staples Retailing Isagenix International, LLC Investment Type Senior Secured First Lien Term Loan Interest Term S + 650 (100 Floor) (including 410 PIK) Interest Rate 15.35% Maturity / Dissolution Date 04/2028",
+   "issuer": "Isagenix International, LLC",
+   "instrument": "First Lien Term Loan",
+   "published": {
+    "basis_spread": 6.5
+   },
+   "fields": {
+    "basis_spread": "10.6"
+   },
+   "printed_line": "Isagenix International, LLC (6) Senior Secured First Lien Term Loan S + 650 ( 100 Floor) (including 410 PIK) 15.35 % 04/2028 3,166 2,962 0.3",
+   "why": "Printed 'S + 650 (100 Floor) (including 410 PIK) | 15.35%', coupon 15.35 %: coupon - 6.50 = 8.85 is no plausible benchmark, coupon - (6.50 + 4.10) = 4.75 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 10.60 (pik_rate 4.10 unchanged)."
+  },
+  {
+   "row_id": "ROW-2e98c9a3a7b7cd9b",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_ed9178ca-4c99-4d52-89c6-e3c9e19c0dac",
+   "identifier": "Investments Netherlands Debt Investments Pharmaceuticals, Biotechnology & Life Sciences Eagle Midco B.V. (Avania) Investment Type Unitranche First Lien Term Loan Interest Term S + 381 (including 218.75 PIK) Interest Rate 10.53% Maturity/ Dissolution Date 07/2029",
+   "issuer": "Eagle Midco B.V. (Avania)",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 3.81
+   },
+   "fields": {
+    "basis_spread": "5.9975"
+   },
+   "printed_line": "Eagle Midco B.V. (Avania) (11) Unitranche First Lien Term Loan S + 381 (including 218.75 PIK) 10.53 % 07/2029 EUR 3,487 3,423 0.4",
+   "why": "Printed 'S + 381 (including 218.75 PIK) | 10.53%', coupon 10.53 %: coupon - 3.81 = 6.72 is no plausible benchmark, coupon - (3.81 + 2.19) = 4.53 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 6.00 (pik_rate 2.19 unchanged)."
+  },
+  {
+   "row_id": "ROW-60409819764f7d9a",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_d5398bc9-22a2-4cc4-8859-fb8986ad45b4",
+   "identifier": "Investments United States Debt Investments Consumer Services Ingenio, LLC Investment Type Unitranche First Lien Term Loan Interest Term S + 200 (100 Floor) (including 600 PIK) Interest Rate 12.44% Maturity/ Dissolution Date 08/2027 One",
+   "issuer": "Ingenio, LLC",
+   "instrument": "Unitranche First Lien Term Loan - One",
+   "published": {
+    "basis_spread": 2.0
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Ingenio, LLC Unitranche First Lien Term Loan S + 200 ( 100 Floor) (including 600 PIK) 12.44 % 08/2027 4,682 4,651 0.6",
+   "why": "Printed 'S + 200 (100 Floor) (including 600 PIK) | 12.44%', coupon 12.44 %: coupon - 2.00 = 10.44 is no plausible benchmark, coupon - (2.00 + 6.00) = 4.44 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 6.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-b1ec02e8ea00d2bc",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_b7588870-114e-4c3d-bf19-aee44cf9b163",
+   "identifier": "Investments United States Debt Investments Software & Services Affinitiv, Inc Investment Type Unitranche First Lien Term Loan Interest Term S + 700 (100 Floor) (including 200 PIK) Interest Rate 13.56% Maturity/Dissolution Date 07/2027",
+   "issuer": "Affinitiv, Inc",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 7.000000000000001
+   },
+   "fields": {
+    "basis_spread": "9.0"
+   },
+   "printed_line": "Affinitiv, Inc. Unitranche First Lien Revolver S + 700 ( 100 Floor) (including 200 PIK) 13.56 % 07/2027 57 55 0.0 41",
+   "why": "Printed 'S + 700 (100 Floor) (including 200 PIK) | 13.56%', coupon 13.56 %: coupon - 7.00 = 6.56 is no plausible benchmark, coupon - (7.00 + 2.00) = 4.56 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 9.00 (pik_rate 2.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-a2c4d64461774659",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_05d19b1b-e156-496d-a47e-def631c953a2",
+   "identifier": "Investments United States Debt Investments Software & Services Affinitiv, Inc. Investment Type Unitranche First Lien Revolver Interest Term S + 500 (100 Floor) (Including 200 PIK) Interest Rate 13.56% Maturity/Dissolution Date 07/2027",
+   "issuer": "Affinitiv, Inc.",
+   "instrument": "Unitranche First Lien Revolver",
+   "published": {
+    "basis_spread": 7.000000000000001
+   },
+   "fields": {
+    "basis_spread": "9.0"
+   },
+   "printed_line": "Affinitiv, Inc. Unitranche First Lien Revolver S + 700 ( 100 Floor) (including 200 PIK) 13.56 % 07/2027 57 55 0.0 41",
+   "why": "Printed 'S + 700 (100 Floor) (including 200 PIK) | 13.56%', coupon 13.56 %: coupon - 7.00 = 6.56 is no plausible benchmark, coupon - (7.00 + 2.00) = 4.56 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 9.00 (pik_rate 2.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-bf66d2fdbee8d2fe",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_cbe31346-7bf8-4d70-a27e-30a922b4299e",
+   "identifier": "Investments United States Debt Investments Technology, Hardware & Equipment Gener8, LLC Investment Type Senior Secured First Lien Revolver Interest Term S + 200 (including 600 PIK) Interest Rate 12.56% Maturity/Dissolution Date 08/2025",
+   "issuer": "Gener8, LLC",
+   "instrument": "First Lien Revolver",
+   "published": {
+    "basis_spread": 2.0
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Gener8, LLC Senior Secured First Lien Term Loan S + 200 (including 600 PIK) 12.56 % 08/2025 5,872 5,872 0.5",
+   "why": "Printed 'S + 200 (including 600 PIK) | 12.56%', coupon 12.56 %: coupon - 2.00 = 10.56 is no plausible benchmark, coupon - (2.00 + 6.00) = 4.56 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 6.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-906182cda1c4fee7",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_3a716ad6-4d0d-4b79-8cb2-562b21fb6404",
+   "identifier": "Investments United States Debt Investments Technology, Hardware & Equipment Gener8, LLC Investment Type Senior Secured First Lien Term Loan Interest Term S + 200 (100 Floor) (including 600 PIK) Interest Rate 12.56% Maturity/Dissolution Date 08/2025 One",
+   "issuer": "Gener8, LLC",
+   "instrument": "First Lien Term Loan - One",
+   "published": {
+    "basis_spread": 2.0
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Gener8, LLC Senior Secured First Lien Term Loan S + 200 (including 600 PIK) 12.56 % 08/2025 5,872 5,872 0.5",
+   "why": "Printed 'S + 200 (100 Floor) (including 600 PIK) | 12.56%', coupon 12.56 %: coupon - 2.00 = 10.56 is no plausible benchmark, coupon - (2.00 + 6.00) = 4.56 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 6.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-9a46c06896b3be5e",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_841ed102-1fa8-44ba-971f-539f2e12a269",
+   "identifier": "Investments United States Debt Investments Technology, Hardware & Equipment Gener8, LLC Investment Type Senior Secured First Lien Term Loan Interest Term S + 200 (including 600 PIK) Interest Rate 12.56% Maturity/Dissolution Date 08/2025",
+   "issuer": "Gener8, LLC",
+   "instrument": "First Lien Term Loan",
+   "published": {
+    "basis_spread": 2.0
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Gener8, LLC Senior Secured First Lien Term Loan S + 200 (including 600 PIK) 12.56 % 08/2025 5,872 5,872 0.5",
+   "why": "Printed 'S + 200 (including 600 PIK) | 12.56%', coupon 12.56 %: coupon - 2.00 = 10.56 is no plausible benchmark, coupon - (2.00 + 6.00) = 4.56 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 6.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-ee1811b36eca7597",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_1c95256d-f66d-4df2-ad04-ae3ca15fe92b",
+   "identifier": "Investments United States Debt Investments Transportation A&R Logistics Holdings, Inc. Investment Type Unitranche First Lien Term Loan Interest Term S + 265 (100 Floor) (including 425 PIK) Interest Rate 11.36% Maturity/Dissolution Date 08/2026 Two",
+   "issuer": "A&R Logistics Holdings, Inc.",
+   "instrument": "Unitranche First Lien Term Loan - Two",
+   "published": {
+    "basis_spread": 2.65
+   },
+   "fields": {
+    "basis_spread": "6.9"
+   },
+   "printed_line": "A&R Logistics Holdings, Inc. Unitranche First Lien Term Loan S + 265 (including 425 PIK) 11.36 % 08/2026 2,346 2,320 0.3",
+   "why": "Printed 'S + 265 (100 Floor) (including 425 PIK) | 11.36%', coupon 11.36 %: coupon - 2.65 = 8.71 is no plausible benchmark, coupon - (2.65 + 4.25) = 4.46 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 6.90 (pik_rate 4.25 unchanged)."
+  },
+  {
+   "row_id": "ROW-1926945da7fbf270",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_b2bf0e79-3c90-4a2c-850a-0f15a2480f0c",
+   "identifier": "Investments United States Debt Investments Transportation A&R Logistics Holdings, Inc. Investment Type Unitranche First Lien Term Loan Interest Term S + 265 (including 425 PIK) Interest Rate 11.36% Maturity/Dissolution Date 08/2026",
+   "issuer": "A&R Logistics Holdings, Inc.",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 2.65
+   },
+   "fields": {
+    "basis_spread": "6.9"
+   },
+   "printed_line": "A&R Logistics Holdings, Inc. Unitranche First Lien Term Loan S + 265 (including 425 PIK) 11.36 % 08/2026 2,346 2,320 0.3",
+   "why": "Printed 'S + 265 (including 425 PIK) | 11.36%', coupon 11.36 %: coupon - 2.65 = 8.71 is no plausible benchmark, coupon - (2.65 + 4.25) = 4.46 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 6.90 (pik_rate 4.25 unchanged)."
+  },
+  {
+   "row_id": "ROW-715d3ecdb46d3a6f",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_0aa6a5b4-3907-43f3-8e58-5bbf1b99aef8",
+   "identifier": "Investments United States Debt Investments Transportation A&R Logistics Holdings, Inc. Investment Type Unitranche First Lien Term Loan Interest Term S + 265 (including 425 PIK) Interest Rate 11.36% Maturity/Dissolution Date 08/2026 One",
+   "issuer": "A&R Logistics Holdings, Inc.",
+   "instrument": "Unitranche First Lien Term Loan - One",
+   "published": {
+    "basis_spread": 2.65
+   },
+   "fields": {
+    "basis_spread": "6.9"
+   },
+   "printed_line": "A&R Logistics Holdings, Inc. Unitranche First Lien Term Loan S + 265 (including 425 PIK) 11.36 % 08/2026 2,346 2,320 0.3",
+   "why": "Printed 'S + 265 (including 425 PIK) | 11.36%', coupon 11.36 %: coupon - 2.65 = 8.71 is no plausible benchmark, coupon - (2.65 + 4.25) = 4.46 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 6.90 (pik_rate 4.25 unchanged)."
+  },
+  {
+   "row_id": "ROW-248a9c44ac328622",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_74b8d489-805f-49a2-8c98-15c09d4e5072",
+   "identifier": "Investments United States Debt Investments Consumer Services HGH Purchaser, Inc. Investment\u00a0Type Unitranche First Lien Delayed Draw Term Loan Interest Term S + 450 (75 Floor) (including 250 PIK) Interest Rate 11.39% Maturity/ Dissolution Date 11/2026",
+   "issuer": "HGH Purchaser, Inc.",
+   "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+   "published": {
+    "basis_spread": 4.5
+   },
+   "fields": {
+    "basis_spread": "7.0"
+   },
+   "printed_line": "HGH Purchaser, Inc. Unitranche First Lien Delayed Draw Term Loan S + 450 ( 75 Floor) (including 250 PIK) 11.39 % 11/2026 3,344 3,336 0.4",
+   "why": "Printed 'Interest Term S + 450 (75 Floor) (including 250 PIK) Interes', coupon 11.39 %: coupon - 4.50 = 6.89 is no plausible benchmark, coupon - (4.50 + 2.50) = 4.39 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.00 (pik_rate 2.50 unchanged)."
+  },
+  {
+   "row_id": "ROW-8cbd4e6e0b4b1fb1",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_d918af42-fbc8-4488-a2e5-b4f60e1eea20",
+   "identifier": "Investments United States Debt Investments Consumer Services HGH Purchaser, Inc. Investment\u00a0Type Unitranche First Lien Delayed Draw Term Loan Interest Term S + 450 (75 Floor) (including 250 PIK) Interest Rate 11.39% Maturity/ Dissolution Date 11/2026 One",
+   "issuer": "HGH Purchaser, Inc.",
+   "instrument": "Unitranche First Lien Delayed Draw Term Loan - One",
+   "published": {
+    "basis_spread": 4.5
+   },
+   "fields": {
+    "basis_spread": "7.0"
+   },
+   "printed_line": "HGH Purchaser, Inc. Unitranche First Lien Delayed Draw Term Loan S + 450 ( 75 Floor) (including 250 PIK) 11.39 % 11/2026 3,344 3,336 0.4",
+   "why": "Printed 'Interest Term S + 450 (75 Floor) (including 250 PIK) Interes', coupon 11.39 %: coupon - 4.50 = 6.89 is no plausible benchmark, coupon - (4.50 + 2.50) = 4.39 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.00 (pik_rate 2.50 unchanged)."
+  },
+  {
+   "row_id": "ROW-e841ae78550d7e02",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_691cab26-335c-4b0d-aa51-76abb0ca87eb",
+   "identifier": "Investments United States Debt Investments Consumer Services HGH Purchaser, Inc. Investment\u00a0Type Unitranche First Lien Term Loan Interest Term S + 450 (75 Floor) (including 250 PIK) Interest Rate 11.39% Maturity/ Dissolution Date 11/2026",
+   "issuer": "HGH Purchaser, Inc.",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 4.5
+   },
+   "fields": {
+    "basis_spread": "7.0"
+   },
+   "printed_line": "HGH Purchaser, Inc. Unitranche First Lien Delayed Draw Term Loan S + 450 ( 75 Floor) (including 250 PIK) 11.39 % 11/2026 3,344 3,336 0.4",
+   "why": "Printed 'Interest Term S + 450 (75 Floor) (including 250 PIK) Interes', coupon 11.39 %: coupon - 4.50 = 6.89 is no plausible benchmark, coupon - (4.50 + 2.50) = 4.39 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.00 (pik_rate 2.50 unchanged)."
+  },
+  {
+   "row_id": "ROW-438c3bd720e33b3e",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_f5973236-ebcd-4dc9-83ee-41eb304a5fdd",
+   "identifier": "Investments United States Debt Investments Consumer Services Ingenio, LLC Investment\u00a0Type Unitranche First Lien Term Loan Interest Term S + 200 (100 Floor) (including 600 PIK) Interest Rate 12.44% Maturity/ Dissolution Date 08/2027",
+   "issuer": "Ingenio, LLC",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 2.0
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Ingenio, LLC Unitranche First Lien Term Loan S + 200 ( 100 Floor) (including 600 PIK) 12.44 % 08/2027 4,682 4,651 0.6",
+   "why": "Printed 'Interest Term S + 200 (100 Floor) (including 600 PIK) Intere', coupon 12.44 %: coupon - 2.00 = 10.44 is no plausible benchmark, coupon - (2.00 + 6.00) = 4.44 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 6.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-05ce38edc9d45d33",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_e8bcc1a9-4de1-44a2-9e08-86f780b81477",
+   "identifier": "Investments United States Debt Investments Food & Staples Retailing Isagenix International, LLC Investment\u00a0Type Senior Secured First Lien Term Loan Interest Term S + 650 (100 Floor) (including 410 PIK) Interest Rate 14.91% Maturity/ Dissolution Date 04/2028",
+   "issuer": "Isagenix International, LLC",
+   "instrument": "First Lien Term Loan",
+   "published": {
+    "basis_spread": 6.5
+   },
+   "fields": {
+    "basis_spread": "10.6"
+   },
+   "printed_line": "Isagenix International, LLC (6) Senior Secured First Lien Term Loan S + 650 ( 100 Floor) (including 410 PIK) 14.91 % 04/2028 3,237 3,045 0.2",
+   "why": "Printed 'Interest Term S + 650 (100 Floor) (including 410 PIK) Intere', coupon 14.91 %: coupon - 6.50 = 8.41 is no plausible benchmark, coupon - (6.50 + 4.10) = 4.31 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 10.60 (pik_rate 4.10 unchanged)."
+  },
+  {
+   "row_id": "ROW-8f9d248120cd79a9",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_d90ad4e9-d11a-45d8-8413-d895f9c548ca",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services ACI Group Holdings, Inc. Investment\u00a0Type Unitranche First Lien Delayed Draw Term Loan Interest Term S + 275 (75 Floor) (including 325 PIK) Interest Rate 10.41% Maturity/ Dissolution Date 08/2028",
+   "issuer": "ACI Group Holdings, Inc.",
+   "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+   "published": {
+    "basis_spread": 2.75
+   },
+   "fields": {
+    "basis_spread": "6.0"
+   },
+   "printed_line": "ACI Group Holdings, Inc. Unitranche First Lien Delayed Draw Term Loan S + 275 ( 75 Floor) (including 325 PIK) 10.41 % 08/2028 1,329 1,313 0.2",
+   "why": "Printed 'Interest Term S + 275 (75 Floor) (including 325 PIK) Interes', coupon 10.41 %: coupon - 2.75 = 7.66 is no plausible benchmark, coupon - (2.75 + 3.25) = 4.41 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 6.00 (pik_rate 3.25 unchanged)."
+  },
+  {
+   "row_id": "ROW-60a6147996da07ff",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_68c252e3-85b5-4d4f-9e20-229366e70594",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services ACI Group Holdings, Inc. Investment\u00a0Type Unitranche First Lien Delayed Draw Term Loan Interest Term S + 275 (75 Floor) (including 325 PIK) Interest Rate 10.42% Maturity/ Dissolution Date 08/2028",
+   "issuer": "ACI Group Holdings, Inc.",
+   "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+   "published": {
+    "basis_spread": 2.75
+   },
+   "fields": {
+    "basis_spread": "6.0"
+   },
+   "printed_line": "ACI Group Holdings, Inc. Unitranche First Lien Term Loan S + 275 ( 75 Floor) (including 325 PIK) 10.42 % 08/2028 6,924 6,830 0.9",
+   "why": "Printed 'Interest Term S + 275 (75 Floor) (including 325 PIK) Interes', coupon 10.42 %: coupon - 2.75 = 7.67 is no plausible benchmark, coupon - (2.75 + 3.25) = 4.42 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 6.00 (pik_rate 3.25 unchanged)."
+  },
+  {
+   "row_id": "ROW-27a31447165dc69a",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_5c195f13-bfd4-4176-8bbc-4b727620a514",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services ACI Group Holdings, Inc. Investment\u00a0Type Unitranche First Lien Term Loan Interest Term S + 275 (75 Floor) (including 325 PIK) Interest Rate 10.42% Maturity/ Dissolution Date 08/2028",
+   "issuer": "ACI Group Holdings, Inc.",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 2.75
+   },
+   "fields": {
+    "basis_spread": "6.0"
+   },
+   "printed_line": "ACI Group Holdings, Inc. Unitranche First Lien Term Loan S + 275 ( 75 Floor) (including 325 PIK) 10.42 % 08/2028 6,924 6,830 0.9",
+   "why": "Printed 'Interest Term S + 275 (75 Floor) (including 325 PIK) Interes', coupon 10.42 %: coupon - 2.75 = 7.67 is no plausible benchmark, coupon - (2.75 + 3.25) = 4.42 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 6.00 (pik_rate 3.25 unchanged)."
+  },
+  {
+   "row_id": "ROW-00d4fa2152b5a1ec",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_cdf677b4-52fa-4ed6-acc7-9d8b0706878b",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Avalign Technologies, Inc. Investment\u00a0Type Unitranche First Lien Term Loan Interest Term S +362.5 (75 Floor) (including 362.5 PIK) Interest Rate 11.56% Maturity/ Dissolution Date 12/2028",
+   "issuer": "Avalign Technologies, Inc.",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 3.6249999999999996
+   },
+   "fields": {
+    "basis_spread": "7.25"
+   },
+   "printed_line": "Avalign Technologies, Inc. Unitranche First Lien Term Loan S + 362.5 ( 75 Floor) (including 362.5 PIK) 11.56 % 12/2028 13,124 12,916 1.7",
+   "why": "Printed 'Interest Term S +362.5 (75 Floor) (including 362.5 PIK) Inte', coupon 11.56 %: coupon - 3.62 = 7.94 is no plausible benchmark, coupon - (3.62 + 3.62) = 4.31 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.25 (pik_rate 3.62 unchanged)."
+  },
+  {
+   "row_id": "ROW-077e43ef8f2274ac",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_e1073183-caf5-4a68-8024-b9fadbf4134d",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services BVI Medical Inc. Investment\u00a0Type Unitranche First Lien Term Loan Interest Term S + 125 (75 Floor) (including 500 PIK) Interest Rate 10.57% Maturity/ Dissolution Date 03/2032",
+   "issuer": "BVI Medical Inc.",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 1.25
+   },
+   "fields": {
+    "basis_spread": "6.25"
+   },
+   "printed_line": "BVI Medical Inc. (4)(5)(6) Unitranche First Lien Revolver S + 125 ( 75 Floor) (including 500 PIK) 03/2032 - ( 12 ) 0.0 ( 12 ) BVI Medical Inc. (6) Unitranche First Lien Term Loan S + 125 ( 75 Floor) (including 500 PIK) 10.57 % 03/2032 10,135 9,983 1.4",
+   "why": "Printed 'Interest Term S + 125 (75 Floor) (including 500 PIK) Interes', coupon 10.57 %: coupon - 1.25 = 9.32 is no plausible benchmark, coupon - (1.25 + 5.00) = 4.32 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 6.25 (pik_rate 5.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-1df553f3cef9bde3",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_a3e49d1c-2c9f-49e7-a563-f59d5aab41ba",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Great Lakes Dental Partners, LLC Investment\u00a0Type Unitranche First Lien Revolver Interest Term S + 425 (100 Floor) (including 300 PIK) Interest Rate 11.69% Maturity/ Dissolution Date 06/2027",
+   "issuer": "Great Lakes Dental Partners, LLC",
+   "instrument": "Unitranche First Lien Revolver",
+   "published": {
+    "basis_spread": 4.25
+   },
+   "fields": {
+    "basis_spread": "7.25"
+   },
+   "printed_line": "Great Lakes Dental Partners, LLC Unitranche First Lien Term Loan S + 425 ( 100 Floor) (including 300 PIK) 11.69 % 06/2027 4,964 4,935 0.7",
+   "why": "Printed 'Interest Term S + 425 (100 Floor) (including 300 PIK) Intere', coupon 11.69 %: coupon - 4.25 = 7.44 is no plausible benchmark, coupon - (4.25 + 3.00) = 4.44 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.25 (pik_rate 3.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-ac8f81ae656d1502",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_22b624f9-a0c6-4761-8aea-04c04ee5d7d6",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Great Lakes Dental Partners, LLC Investment\u00a0Type Unitranche First Lien Term Loan Interest Term S + 425 (100 Floor) (including 300 PIK) Interest Rate 11.69% Maturity/ Dissolution Date 06/2027",
+   "issuer": "Great Lakes Dental Partners, LLC",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 4.25
+   },
+   "fields": {
+    "basis_spread": "7.25"
+   },
+   "printed_line": "Great Lakes Dental Partners, LLC Unitranche First Lien Term Loan S + 425 ( 100 Floor) (including 300 PIK) 11.69 % 06/2027 4,964 4,935 0.7",
+   "why": "Printed 'Interest Term S + 425 (100 Floor) (including 300 PIK) Intere', coupon 11.69 %: coupon - 4.25 = 7.44 is no plausible benchmark, coupon - (4.25 + 3.00) = 4.44 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.25 (pik_rate 3.00 unchanged)."
+  },
+  {
+   "row_id": "ROW-20883ab46cae5b12",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_75c5d340-98a7-4806-9706-db740e903260",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Omni Ophthalmic Management Consultants, LLC Investment\u00a0Type Senior Secured First Lien Revolver Interest Term S + 450 (100 Floor) (including 350 PIK) Interest Rate 12.40% Maturity/ Dissolution Date 09/2025",
+   "issuer": "Omni Ophthalmic Management Consultants, LLC",
+   "instrument": "First Lien Revolver",
+   "published": {
+    "basis_spread": 4.5
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Omni Ophthalmic Management Consultants, LLC Senior Secured First Lien Revolver S + 450 ( 100 Floor) (including 350 PIK) 12.40 % 09/2025 981 981 0.1 932 Omni",
+   "why": "Printed 'Interest Term S + 450 (100 Floor) (including 350 PIK) Intere', coupon 12.40 %: coupon - 4.50 = 7.90 is no plausible benchmark, coupon - (4.50 + 3.50) = 4.40 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 3.50 unchanged)."
+  },
+  {
+   "row_id": "ROW-a9b002e77e4c6657",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_dbbb7cfb-0a84-4474-953f-c0a571556689",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Omni Ophthalmic Management Consultants, LLC Investment\u00a0Type Senior Secured First Lien Term Loan Interest Term S + 450 (100 Floor) (including 350 PIK) Interest Rate 12.40% Maturity/ Dissolution Date 09/2025",
+   "issuer": "Omni Ophthalmic Management Consultants, LLC",
+   "instrument": "First Lien Term Loan",
+   "published": {
+    "basis_spread": 4.5
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Omni Ophthalmic Management Consultants, LLC Senior Secured First Lien Revolver S + 450 ( 100 Floor) (including 350 PIK) 12.40 % 09/2025 981 981 0.1 932 Omni",
+   "why": "Printed 'Interest Term S + 450 (100 Floor) (including 350 PIK) Intere', coupon 12.40 %: coupon - 4.50 = 7.90 is no plausible benchmark, coupon - (4.50 + 3.50) = 4.40 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 3.50 unchanged)."
+  },
+  {
+   "row_id": "ROW-2347c2a33fb62e24",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_b00a9232-800e-421d-a170-7372d4363a68",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Omni Ophthalmic Management Consultants, LLC Investment\u00a0Type Senior Secured First Lien Term Loan Interest Term S + 450 (100 Floor) (including 350 PIK) Interest Rate 12.40% Maturity/ Dissolution Date 09/2025 One",
+   "issuer": "Omni Ophthalmic Management Consultants, LLC",
+   "instrument": "First Lien Term Loan - One",
+   "published": {
+    "basis_spread": 4.5
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Omni Ophthalmic Management Consultants, LLC Senior Secured First Lien Revolver S + 450 ( 100 Floor) (including 350 PIK) 12.40 % 09/2025 981 981 0.1 932 Omni",
+   "why": "Printed 'Interest Term S + 450 (100 Floor) (including 350 PIK) Intere', coupon 12.40 %: coupon - 4.50 = 7.90 is no plausible benchmark, coupon - (4.50 + 3.50) = 4.40 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 3.50 unchanged)."
+  },
+  {
+   "row_id": "ROW-f371f92df990add1",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_3be4187e-fd7f-412c-a867-998afae58b5d",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Omni Ophthalmic Management Consultants, LLC Investment\u00a0Type Senior Secured First Lien Term Loan Interest Term S + 450 (100 Floor) (including 350 PIK) Interest Rate 12.40% Maturity/ Dissolution Date 09/2025 Three",
+   "issuer": "Omni Ophthalmic Management Consultants, LLC",
+   "instrument": "First Lien Term Loan - Three",
+   "published": {
+    "basis_spread": 4.5
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Omni Ophthalmic Management Consultants, LLC Senior Secured First Lien Revolver S + 450 ( 100 Floor) (including 350 PIK) 12.40 % 09/2025 981 981 0.1 932 Omni",
+   "why": "Printed 'Interest Term S + 450 (100 Floor) (including 350 PIK) Intere', coupon 12.40 %: coupon - 4.50 = 7.90 is no plausible benchmark, coupon - (4.50 + 3.50) = 4.40 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 3.50 unchanged)."
+  },
+  {
+   "row_id": "ROW-cba9fc9d952e6c5f",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_325fdab1-7e9d-4457-874c-e10947a5737c",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Omni Ophthalmic Management Consultants, LLC Investment\u00a0Type Senior Secured First Lien Term Loan Interest Term S + 450 (100 Floor) (including 350 PIK) Interest Rate 12.40% Maturity/ Dissolution Date 09/2025 Two",
+   "issuer": "Omni Ophthalmic Management Consultants, LLC",
+   "instrument": "First Lien Term Loan - Two",
+   "published": {
+    "basis_spread": 4.5
+   },
+   "fields": {
+    "basis_spread": "8.0"
+   },
+   "printed_line": "Omni Ophthalmic Management Consultants, LLC Senior Secured First Lien Revolver S + 450 ( 100 Floor) (including 350 PIK) 12.40 % 09/2025 981 981 0.1 932 Omni",
+   "why": "Printed 'Interest Term S + 450 (100 Floor) (including 350 PIK) Intere', coupon 12.40 %: coupon - 4.50 = 7.90 is no plausible benchmark, coupon - (4.50 + 3.50) = 4.40 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 8.00 (pik_rate 3.50 unchanged)."
+  },
+  {
+   "row_id": "ROW-5034834a1f4df103",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_3145bfe0-1ec8-4fb0-aa37-488c33dec8db",
+   "identifier": "Investments United States Debt Investments Household & Personal Products Lash Opco LLC Investment\u00a0Type Unitranche First Lien Revolver Interest Term S + 265 (100 Floor) (including 510 PIK) Interest Rate 12.14% Maturity/ Dissolution Date 09/2025",
+   "issuer": "Lash Opco LLC",
+   "instrument": "Unitranche First Lien Revolver",
+   "published": {
+    "basis_spread": 2.65
+   },
+   "fields": {
+    "basis_spread": "7.75"
+   },
+   "printed_line": "Lash Opco LLC Unitranche First Lien Term Loan S + 265 ( 100 Floor) (including 510 PIK) 12.14 % 03/2026 3,126 3,116 0.4",
+   "why": "Printed 'Interest Term S + 265 (100 Floor) (including 510 PIK) Intere', coupon 12.14 %: coupon - 2.65 = 9.49 is no plausible benchmark, coupon - (2.65 + 5.10) = 4.39 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.75 (pik_rate 5.10 unchanged)."
+  },
+  {
+   "row_id": "ROW-39a6ad9f50bd91d2",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_df99cfc8-99a8-4149-a9be-bcc79253bae6",
+   "identifier": "Investments United States Debt Investments Household & Personal Products Lash Opco LLC Investment\u00a0Type Unitranche First Lien Term Loan Interest Term S + 265 (100 Floor) (including 510 PIK) Interest Rate 12.14% Maturity/ Dissolution Date 03/2026",
+   "issuer": "Lash Opco LLC",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 2.65
+   },
+   "fields": {
+    "basis_spread": "7.75"
+   },
+   "printed_line": "Lash Opco LLC Unitranche First Lien Term Loan S + 265 ( 100 Floor) (including 510 PIK) 12.14 % 03/2026 3,126 3,116 0.4",
+   "why": "Printed 'Interest Term S + 265 (100 Floor) (including 510 PIK) Intere', coupon 12.14 %: coupon - 2.65 = 9.49 is no plausible benchmark, coupon - (2.65 + 5.10) = 4.39 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.75 (pik_rate 5.10 unchanged)."
+  },
+  {
+   "row_id": "ROW-5fb30130fd1b96b9",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_0975da57-cf18-4065-b317-e6176f33f769",
+   "identifier": "Investments United States Debt Investments Household & Personal Products Lash Opco LLC Investment\u00a0Type Unitranche First Lien Term Loan Interest Term S + 265 (100 Floor) (including 510 PIK) Interest Rate 12.14% Maturity/ Dissolution Date 03/2026 One",
+   "issuer": "Lash Opco LLC",
+   "instrument": "Unitranche First Lien Term Loan - One",
+   "published": {
+    "basis_spread": 2.65
+   },
+   "fields": {
+    "basis_spread": "7.75"
+   },
+   "printed_line": "Lash Opco LLC Unitranche First Lien Term Loan S + 265 ( 100 Floor) (including 510 PIK) 12.14 % 03/2026 3,126 3,116 0.4",
+   "why": "Printed 'Interest Term S + 265 (100 Floor) (including 510 PIK) Intere', coupon 12.14 %: coupon - 2.65 = 9.49 is no plausible benchmark, coupon - (2.65 + 5.10) = 4.39 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.75 (pik_rate 5.10 unchanged)."
+  },
+  {
+   "row_id": "ROW-75956b3d73c9e395",
+   "quarter": "2025-03-31",
+   "accession": "0000950170-25-071368",
+   "src_context_id": "C_a1a68188-c887-4045-91f4-7510fe5639a6",
+   "identifier": "Investments United States Debt Investments Household & Personal Products Lash Opco LLC Investment\u00a0Type Unitranche First Lien Term Loan Interest Term S + 265 (including 510 PIK) Interest Rate 12.14% Maturity/ Dissolution Date 03/2026",
+   "issuer": "Lash Opco LLC",
+   "instrument": "Unitranche First Lien Term Loan",
+   "published": {
+    "basis_spread": 2.65
+   },
+   "fields": {
+    "basis_spread": "7.75"
+   },
+   "printed_line": "Lash Opco LLC Unitranche First Lien Term Loan S + 265 ( 100 Floor) (including 510 PIK) 12.14 % 03/2026 3,126 3,116 0.4",
+   "why": "Printed 'Interest Term S + 265 (including 510 PIK) Interest Rate 12.1', coupon 12.14 %: coupon - 2.65 = 9.49 is no plausible benchmark, coupon - (2.65 + 5.10) = 4.39 is; the printed figure before '(including ..)' is the cash margin, so D-031 gives spread = cash + PIK = 7.75 (pik_rate 5.10 unchanged)."
+  }
+ ]
+}

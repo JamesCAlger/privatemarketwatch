@@ -1,0 +1,133 @@
+{
+ "what": "cost sign: undrawn rows publishing a positive cost against a bracketed printed cost",
+ "why_missed_in_round_1": "z_costsign.py only read rows with cost < 100,000 (Explorer 130 / 125 excluded), matched the issuer exactly as published (Bankers vs printed Banker's; 'SolutionReach, Inc' / 'USA Hometown Experts, Inc' vs printed 'Inc.') and did not allow a '$' between cells (Auveco '- $ ( 7 )').",
+ "specs": [
+  {
+   "row_id": "ROW-dfea4f8209b4f709",
+   "quarter": "2023-03-31",
+   "accession": "0000950170-23-020540",
+   "src_context_id": "C_e8a62a2d-8326-46fe-b635-f9c1410fbc72",
+   "identifier": "Investments United States Debt Investments Automobile & Components Auveco Holdings Investment Type Unitranche First Lien Delayed Draw Term Loan Maturity/Dissolution Date 05/2028",
+   "issuer": "Auveco Holdings",
+   "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+   "published": {
+    "cost": 7000.0
+   },
+   "fields": {
+    "cost": "-7000.0"
+   },
+   "printed_line": "Auveco Holdings (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2028 - $ ( 7 ) ( 0.0 ) % $ ( 36 )",
+   "why": "Undrawn line; cost tagged without its sign, printed in parentheses."
+  },
+  {
+   "row_id": "ROW-57ca01b05789d216",
+   "quarter": "2023-03-31",
+   "accession": "0000950170-23-020540",
+   "src_context_id": "C_bd3b0673-0893-4d8d-9410-f694b5b9a0e2",
+   "identifier": "Investments United States Debt Investments Software & Services Bankers Toolbox, Inc Investment\u00a0Type Unitranche First Lien Revolver Maturity/ Dissolution Date 07/2027",
+   "issuer": "Bankers Toolbox, Inc",
+   "instrument": "Unitranche First Lien Revolver",
+   "published": {
+    "cost": 35000.0
+   },
+   "fields": {
+    "cost": "-35000.0"
+   },
+   "printed_line": "Banker's Toolbox, Inc. (4)(5) Unitranche First Lien Revolver 07/2027 - ( 35 ) ( 0.0 ) ( 85 )",
+   "why": "Undrawn line; cost tagged without its sign, printed in parentheses."
+  },
+  {
+   "row_id": "ROW-b9bd583d2eec8e83",
+   "quarter": "2023-03-31",
+   "accession": "0000950170-23-020540",
+   "src_context_id": "C_630367b3-1538-41b9-87f7-ebfefbcc4286",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Explorer Investor, Inc. Investment Type Unitranche First Lien Delayed Draw Term Loan Maturity/Dissolution Date 06/2029",
+   "issuer": "Explorer Investor, Inc.",
+   "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+   "published": {
+    "cost": 130000.0
+   },
+   "fields": {
+    "cost": "-130000.0"
+   },
+   "printed_line": "Explorer Investor, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 130 ) ( 0.0 ) ( 132 )",
+   "why": "Undrawn line; cost tagged without its sign, printed in parentheses."
+  },
+  {
+   "row_id": "ROW-ff19f9426abc1ba4",
+   "quarter": "2023-06-30",
+   "accession": "0000950170-23-040555",
+   "src_context_id": "C_138ae851-c958-46fb-867a-bda459fc842c",
+   "identifier": "Investments United States Debt Investments Automobiles & Components Auveco Holdings Investment Type Unitranche First Lien Delayed Draw Term Loan Maturity/Dissolution Date 05/2028",
+   "issuer": "Auveco Holdings",
+   "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+   "published": {
+    "cost": 7000.0
+   },
+   "fields": {
+    "cost": "-7000.0"
+   },
+   "printed_line": "Auveco Holdings (4)(5) Unitranche First Lien Delayed Draw Term Loan 05/2028 - $ ( 7 ) ( 0.0 ) % $ ( 22 )",
+   "why": "Undrawn line; cost tagged without its sign, printed in parentheses."
+  },
+  {
+   "row_id": "ROW-2f2a194e7b9cb90e",
+   "quarter": "2023-06-30",
+   "accession": "0000950170-23-040555",
+   "src_context_id": "C_40cb8d79-4d14-425b-b9d5-efc06c37fa1d",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services Explorer Investor, Inc. Investment Type Unitranche First Lien Delayed Draw Term Loan Maturity/Dissolution Date 06/2029",
+   "issuer": "Explorer Investor, Inc.",
+   "instrument": "Unitranche First Lien Delayed Draw Term Loan",
+   "published": {
+    "cost": 125000.0
+   },
+   "fields": {
+    "cost": "-125000.0"
+   },
+   "printed_line": "Explorer Investor, Inc. (4)(5) Unitranche First Lien Delayed Draw Term Loan 06/2029 - ( 125 ) ( 0.0 ) ( 132 )",
+   "why": "Undrawn line; cost tagged without its sign, printed in parentheses."
+  },
+  {
+   "row_id": "ROW-54b05065a1ed8a11",
+   "quarter": "2023-09-30",
+   "accession": "0000950170-23-061089",
+   "src_context_id": "C_12b642f7-a189-42ba-b48f-f7657760de4f",
+   "identifier": "Investments United States Debt Investments Health Care Equipment & Services SolutionReach, Inc Investment Type Senior Secured First Lien Revolver Maturity/Dissolution Date 07/2025",
+   "issuer": "SolutionReach, Inc",
+   "instrument": "First Lien Revolver",
+   "published": {
+    "cost": 2000.0
+   },
+   "fields": {
+    "cost": "-2000.0"
+   },
+   "printed_line": "SolutionReach, Inc. (4)(5) Senior Secured First Lien Revolver 07/2025 - ( 2 ) ( 0.0 ) ( 7 )",
+   "why": "Undrawn line; cost tagged without its sign, printed in parentheses."
+  },
+  {
+   "row_id": "ROW-ffe34e945cf160e1",
+   "quarter": "2023-12-31",
+   "accession": "0000950170-24-017903",
+   "src_context_id": "C_2438c2c6-fe69-4431-9136-fe6be688b19e",
+   "identifier": "Investments United States Debt Investments Consumer Services USA Hometown Experts, Inc Investment Type Senior Secured First Lien Delayed Draw Term Loan Maturity/Dissolution Date 11/2029",
+   "issuer": "USA Hometown Experts, Inc",
+   "instrument": "First Lien Delayed Draw Term Loan",
+   "published": {
+    "cost": 16000.0
+   },
+   "fields": {
+    "cost": "-16000.0"
+   },
+   "printed_line": "USA Hometown Experts, Inc. (4)(5) Senior Secured First Lien Delayed Draw Term Loan 11/2029 - ( 16 ) ( 0.0 ) ( 16 )",
+   "why": "Undrawn line; cost tagged without its sign, printed in parentheses."
+  }
+ ],
+ "checked_as_printed": [
+  {
+   "row_id": "ROW-273d5862d7445186",
+   "quarter": "2024-12-31",
+   "printed_line": "HGH Purchaser, Inc. (4)(5) Unitranche First Lien Revolver 11/2026 - 3 0.0 ( 84 )",
+   "why": "Printed cost is positive (3); published +3,000 is as printed. Not an error."
+  }
+ ]
+}

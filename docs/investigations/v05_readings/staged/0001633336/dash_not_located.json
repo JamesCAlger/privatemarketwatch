@@ -1,0 +1,14 @@
+[
+ {
+  "quarter": "2023-09-30",
+  "ctx": "C_0535d7fe-71cd-4478-886f-40eea9a4e70c",
+  "issuer": "MeriCal, LLC",
+  "instrument": "Preferred Stock",
+  "tagged": {
+   "units": 521
+  },
+  "label": "twin",
+  "twin_staged_in_r2": true,
+  "why": "Units-only context of the printed 'MeriCal, LLC Preferred Stock 521 103 - -'; its cost 103 is on context C_f87165ea (staged in round 2). Publishing both would double the line; the staged row needs shares_held 521 instead."
+ }
+]

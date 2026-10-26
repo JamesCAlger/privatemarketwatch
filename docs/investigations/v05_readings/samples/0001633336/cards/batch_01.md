@@ -100,7 +100,56 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;pik_rate:rate_x100;pct_of_net_assets:rate_x100
 
-### C003 | 0001633336 | 2025-09-30 | 0001193125-25-277533
+### C003 | 0001633336 | 2024-06-30 | 0000950170-24-095458
+
+**Table header rows:** Crescent Capital BDC, Inc. Consolidated Schedule of Investments June 30, 2024 (in thousands, except share and per share data) (Unaudited) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
+
+**Lines printed before it:**
+- 21,912 | 21,924 | 2.5 | 18,594
+- Semiconductor and Semiconductor Equipment
+- OEM Group, LLC (7)(9) | Senior Secured First Lien Term Loan | 09/2025 | 8,608 | 6,570 | 0.7 | 5,557
+
+**The printed line** (cell text, then the facts tagged in that cell):
+1. `OEM Group, LLC (7)(9)`
+2. `Senior Secured Second Lien Term Loan`
+3. `09/2025`  <- DebtInvestmentMaturityOrDissolutionDate = 09/2025 (same investment, other period context)
+4. `27,025`  <- InvestmentOwnedBalancePrincipalAmount = 27025000.0
+5. `—`
+6. `—`
+7. `—`
+
+**Lines printed after it:**
+- OEM Group, LLC (7)(9) | Senior Secured Second Lien Revolver | 09/2025 | 15,044 | — | — | —
+- OEM Group, LLC (5)(7)(9) | Senior Secured Second Lien Term Loan | 09/2025 | 12,993 | — | — | —
+
+**Facts on this context not on the printed line:** InvestmentOwnedBalancePrincipalAmount = 27025000.0 (another printed line, other period context); DebtInvestmentMaturityOrDissolutionDate = 09/2025 (another printed line, other period context)
+
+**Member (identifier text):** `Investments United States Debt Investments Semiconductor and Semiconductor Equipment OEM Group, LLC Investment Type Senior Secured Second Lien Term Loan Maturity/Dissolution Date 09/2025`
+
+**Published:**
+- issuer_name = OEM Group, LLC
+- instrument_description = Second Lien Term Loan
+- asset_category = LOAN
+- fair_value = 0.0
+- cost = 
+- principal_amount = 27025000.0  (tag: equal, equal)
+- principal_amount_currency = USD
+- shares_held = 
+- pct_of_net_assets = 
+- interest_rate = 
+- basis_spread = 
+- reference_rate_type = 
+- coupon_type = 
+- pik_rate = 
+- maturity_date = 2025-09-30
+- corrected_fields = 
+- interest_rate_source = 
+- basis_spread_source = 
+- pik_rate_source = 
+- shares_held_source = 
+- src_transforms = 
+
+### C004 | 0001633336 | 2025-09-30 | 0001193125-25-277533
 
 **Table header rows:** CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments September 30, 2025 (in thousands, except share and per share data) (Unaudited) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -151,7 +200,7 @@
 - shares_held_source = 
 - src_transforms = pct_of_net_assets:rate_x100
 
-### C004 | 0001633336 | 2025-06-30 | 0000950170-25-108024
+### C005 | 0001633336 | 2025-06-30 | 0000950170-25-108024
 
 **Table header rows:** CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments June 30, 2025 (in thousands, except share and per share data) (Unaudited) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -202,7 +251,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C005 | 0001633336 | 2024-06-30 | 0000950170-24-095458
+### C006 | 0001633336 | 2024-06-30 | 0000950170-24-095458
 
 **Table header rows:** Crescent Capital BDC, Inc. Consolidated Schedule of Investments June 30, 2024 (in thousands, except share and per share data) (Unaudited) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value // Diversified Financials
 
@@ -249,7 +298,7 @@
 - shares_held_source = 
 - src_transforms = pct_of_net_assets:rate_x100
 
-### C006 | 0001633336 | 2023-09-30 | 0000950170-23-061089
+### C007 | 0001633336 | 2023-09-30 | 0000950170-23-061089
 
 **Table header rows:** CRESCENT CAPITAL BDC, INC. Consolidated Schedule of Investments September 30, 2023 (in thousands, except share and per share data) (Unaudited) // Company/Security/Country | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -299,7 +348,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C007 | 0001633336 | 2025-12-31 | 0001193125-26-071922
+### C008 | 0001633336 | 2025-12-31 | 0001193125-26-071922
 
 **Table header rows:** CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments December 31, 2025 (in thousands, except share and per share data) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -350,7 +399,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C008 | 0001633336 | 2024-12-31 | 0000950170-25-023153
+### C009 | 0001633336 | 2024-12-31 | 0000950170-25-023153
 
 **Table header rows:** CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments December 31, 2024 (in thousands, except share and per share data) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -401,7 +450,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C009 | 0001633336 | 2023-03-31 | 0000950170-23-020540
+### C010 | 0001633336 | 2023-03-31 | 0000950170-23-020540
 
 **Table header rows:** CRESCENT CAPITAL BDC, INC. Consolidated Schedule of Investments March 31, 2023 (in thousands, except share and per share data) (Unaudited) // Company/Security/Country | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -451,7 +500,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C010 | 0001633336 | 2023-09-30 | 0000950170-23-061089
+### C011 | 0001633336 | 2023-09-30 | 0000950170-23-061089
 
 **Table header rows:** CRESCENT CAPITAL BDC, INC. Consolidated Schedule of Investments September 30, 2023 (in thousands, except share and per share data) (Unaudited) // Company/Security/Country | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -501,7 +550,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C011 | 0001633336 | 2023-06-30 | 0000950170-23-040555
+### C012 | 0001633336 | 2023-06-30 | 0000950170-23-040555
 
 **Table header rows:** CRESCENT CAPITAL BDC, INC. Consolidated Schedule of Investments June 30, 2023 (in thousands, except share and per share data) (Unaudited) // Company/Security/Country | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -534,7 +583,7 @@
 - instrument_description = First Lien Delayed Draw Term Loan
 - asset_category = LOAN
 - fair_value = -12000.0  (tag: equal)
-- cost = 12000.0  (tag: equal)
+- cost = -12000.0  (tag: differs)
 - principal_amount = 
 - principal_amount_currency = 
 - shares_held = 
@@ -545,14 +594,14 @@
 - coupon_type = 
 - pik_rate = 
 - maturity_date = 2029-05-31
-- corrected_fields = 
+- corrected_fields = cost
 - interest_rate_source = 
 - basis_spread_source = 
 - pik_rate_source = 
 - shares_held_source = 
 - src_transforms = pct_of_net_assets:rate_x100
 
-### C012 | 0001633336 | 2024-03-31 | 0000950170-24-055626
+### C013 | 0001633336 | 2024-03-31 | 0000950170-24-055626
 
 **Table header rows:** CRESCENT CAPITAL BDC, INC. Consolidated Schedule of Investments March 31, 2024 (in thousands, except share and per share data) (Unaudited) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -603,7 +652,57 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C013 | 0001633336 | 2023-09-30 | 0000950170-23-061089
+### C014 | 0001633336 | 2025-12-31 | 0001193125-26-071922
+
+**Table header rows:** CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments December 31, 2025 (in thousands, except share and per share data) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
+
+**Lines printed before it:**
+- Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
+- Sydney US Buyer Corp. (3B Scientific) (5) | Unitranche First Lien Delayed Draw Term Loan | S + 600 | 10.01 % | 07/2029 | 6,310 | $ | 6,120 | 0.9 | % | 6,310
+- Team Select (CSC TS Merger SUB, LLC) | Senior Secured First Lien Term Loan | S + 475 ( 100 Floor) | 8.47 % | 05/2029 | 6,143 | 6,102 | 0.9 | 6,143
+
+**The printed line** (cell text, then the facts tagged in that cell):
+1. `Team Select (CSC TS Merger SUB, LLC) (4)(5)`
+2. `Senior Secured First Lien Revolver`
+3. `05/2029`
+4. `—`
+5. `( 4`  <- InvestmentOwnedAtCost = -4000.0
+6. `)`
+7. `0.0`  <- InvestmentOwnedPercentOfNetAssets = 0.0
+8. `—`
+
+**Lines printed after it:**
+- Team Select (CSC TS Merger SUB, LLC) | Senior Secured First Lien Delayed Draw Term Loan | S + 475 ( 100 Floor) | 8.47 % | 05/2029 | 1,190 | 1,183 | 0.2 | 1,190
+- Team Select (CSC TS Merger SUB, LLC) | Senior Secured First Lien Delayed Draw Term Loan | S + 475 ( 100 Floor) | 8.62 % | 06/2030 | 798 | 798 | 0.1 | 798
+
+**Facts on this context not on the printed line:** InvestmentMaturityDate = 31/05/2029 (hidden, other period context); InvestmentOwnedAtCost = -5000.0 (another printed line, other period context); InvestmentOwnedPercentOfNetAssets = 0.0 (another printed line, other period context); InvestmentMaturityDate = 05/31/2029 (hidden)
+
+**Member (identifier text):** `Investments United States Debt Investments Health Care Equipment & Services Team Select (CSC TS Merger SUB, LLC) Investment Type Senior Secured First Lien Revolver Maturity/ Dissolution Date 05/2029`
+
+**Published:**
+- issuer_name = Team Select (CSC TS Merger SUB, LLC)
+- instrument_description = First Lien Revolver
+- asset_category = LOAN
+- fair_value = 0.0
+- cost = -4000.0  (tag: equal, differs)
+- principal_amount = 
+- principal_amount_currency = 
+- shares_held = 
+- pct_of_net_assets = 0.0  (tag: equal, equal)
+- interest_rate = 
+- basis_spread = 
+- reference_rate_type = 
+- coupon_type = 
+- pik_rate = 
+- maturity_date = 2029-05-31  (tag: differs, equal)
+- corrected_fields = 
+- interest_rate_source = 
+- basis_spread_source = 
+- pik_rate_source = 
+- shares_held_source = 
+- src_transforms = pct_of_net_assets:rate_x100
+
+### C015 | 0001633336 | 2023-09-30 | 0000950170-23-061089
 
 **Table header rows:** CRESCENT CAPITAL BDC, INC. Consolidated Schedule of Investments September 30, 2023 (in thousands, except share and per share data) (Unaudited) // Company/Security/Country | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -651,7 +750,7 @@
 - shares_held_source = 
 - src_transforms = pct_of_net_assets:rate_x100
 
-### C014 | 0001633336 | 2023-12-31 | 0000950170-24-017903
+### C016 | 0001633336 | 2023-12-31 | 0000950170-24-017903
 
 **Table header rows:** CRESCENT CAPITAL BDC, INC. Consolidated Schedule of Investments December 31, 2023 (in thousands, except share and per share data) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -693,16 +792,65 @@
 - basis_spread = 6.5
 - reference_rate_type = SOFR
 - coupon_type = Floating
-- pik_rate = 
+- pik_rate = 0.75
 - maturity_date = 2028-03-31
-- corrected_fields = 
+- corrected_fields = pik_rate
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C015 | 0001633336 | 2023-12-31 | 0000950170-24-017903
+### C017 | 0001633336 | 2023-03-31 | 0000950170-23-020540
+
+**Table header rows:** Investments (1)(2)(3) // United States // Debt Investments // Automobiles & Components
+
+**Lines printed before it:**
+- Envocore Holding, LLC (7)(8) | Senior Secured Second Lien Term Loan | 1000 PIK | 10.00 % | 12/2026 | 7,868 | 7,055 | 0.7 | 4,982
+- Envocore Holding, LLC (4)(5)(7)(8) | Senior Secured First Lien Revolver | 12/2025 | — | ( 5 | ) | — | —
+- Eshipping | Senior Secured First Lien Term Loan | L + 500 ( 100 Floor) | 9.84 % | 11/2027 | 6,555 | 6,451 | 0.9 | 6,555
+
+**The printed line** (cell text, then the facts tagged in that cell):
+1. `Eshipping (4)(5)`
+2. `Senior Secured First Lien Delayed Draw Term Loan`
+3. `11/2027`  <- DebtInvestmentMaturityOrDissolutionDate = 11/2027 (same investment, other period context)
+4. `—`
+5. `( 15`  <- InvestmentOwnedAtCost = 15000.0
+6. `)`
+7. `—`
+8. `—`
+
+**Lines printed after it:**
+- Eshipping (4)(5) | Senior Secured First Lien Revolver | 11/2027 | — | ( 18 | ) | — | —
+
+**Facts on this context not on the printed line:** DebtInvestmentMaturityOrDissolutionDate = 11/2027 (another printed line, other period context); InvestmentOwnedAtCost = 15000.0 (another printed line, other period context)
+
+**Member (identifier text):** `Investments United States Debt Investments Capital Goods Eshipping Investment Type Senior Secured First Lien Delayed Draw Term Loan Maturity/Dissolution Date 11/2027`
+
+**Published:**
+- issuer_name = Eshipping
+- instrument_description = First Lien Delayed Draw Term Loan
+- asset_category = LOAN
+- fair_value = 0.0
+- cost = -15000.0  (tag: differs, differs)
+- principal_amount = 
+- principal_amount_currency = 
+- shares_held = 
+- pct_of_net_assets = 
+- interest_rate = 
+- basis_spread = 
+- reference_rate_type = 
+- coupon_type = 
+- pik_rate = 
+- maturity_date = 2027-11-30
+- corrected_fields = cost
+- interest_rate_source = 
+- basis_spread_source = 
+- pik_rate_source = 
+- shares_held_source = 
+- src_transforms = 
+
+### C018 | 0001633336 | 2023-12-31 | 0000950170-24-017903
 
 **Table header rows:** CRESCENT CAPITAL BDC, INC. Consolidated Schedule of Investments December 31, 2023 (in thousands, except share and per share data) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -753,7 +901,7 @@
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
 
-### C016 | 0001633336 | 2024-06-30 | 0000950170-24-095458
+### C019 | 0001633336 | 2024-06-30 | 0000950170-24-095458
 
 **Table header rows:** Crescent Capital BDC, Inc. Consolidated Schedule of Investments June 30, 2024 (in thousands, except share and per share data) (Unaudited) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -804,7 +952,7 @@
 - shares_held_source = 
 - src_transforms = pct_of_net_assets:rate_x100
 
-### C017 | 0001633336 | 2024-03-31 | 0000950170-24-055626
+### C020 | 0001633336 | 2024-03-31 | 0000950170-24-055626
 
 **Table header rows:** CRESCENT CAPITAL BDC, INC. Consolidated Schedule of Investments March 31, 2024 (in thousands, except share and per share data) (Unaudited) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
 
@@ -854,154 +1002,3 @@
 - pik_rate_source = 
 - shares_held_source = 
 - src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
-
-### C018 | 0001633336 | 2025-06-30 | 0000950170-25-108024
-
-**Table header rows:** CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments June 30, 2025 (in thousands, except share and per share data) (Unaudited) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
-
-**Lines printed before it:**
-- Action Signature Acquisition, Inc. (9) | Unitranche First Lien Term Loan | 12/2027 | 3,592 | 3,188 | 0.1 | 494
-- Action Signature Acquisition, Inc. (9) | Unitranche First Lien Term Loan | 12/2027 | 560 | 498 | 0.0 | 77
-- Action Signature Acquisition, Inc. | Unitranche First Lien Revolver | 1140 PIK | 11.40 % | 12/2027 | 484 | 426 | 0.1 | 483
-
-**The printed line** (cell text, then the facts tagged in that cell):
-1. `Action Signature Acquisition, Inc. (9)`
-2. `Unitranche First Lien Term Loan`
-3. `12/2027`
-4. `273`  <- InvestmentOwnedBalancePrincipalAmount = 273000.0
-5. `242`  <- InvestmentOwnedAtCost = 242000.0
-6. `0.0`  <- InvestmentOwnedPercentOfNetAssets = 0.0
-7. `37`  <- InvestmentOwnedAtFairValue = 37000.0
-
-**Lines printed after it:**
-- Action Signature Acquisition, Inc. (9) | Unitranche First Lien Term Loan | 12/2027 | 930 | 826 | 0.0 | 128
-- Online Labels Group, LLC | Senior Secured First Lien Term Loan | S + 525 ( 100 Floor) | 9.55 % | 12/2029 | 4,236 | 4,202 | 0.6 | 4,236
-
-**Facts on this context not on the printed line:** InvestmentMaturityDate = 12/31/2027 (hidden)
-
-**Member (identifier text):** `Investments United States Debt Investments Materials Action Signature Acquisition, Inc. Investment Type Unitranche First Lien Term Loan Maturity/Dissolution Date 12/2027 Two`
-
-**Published:**
-- issuer_name = Action Signature Acquisition, Inc.
-- instrument_description = Unitranche First Lien Term Loan - Two
-- asset_category = LOAN
-- fair_value = 37000.0  (tag: equal)
-- cost = 242000.0  (tag: equal)
-- principal_amount = 273000.0  (tag: equal)
-- principal_amount_currency = USD
-- shares_held = 
-- pct_of_net_assets = 0.0  (tag: equal)
-- interest_rate = 
-- basis_spread = 
-- reference_rate_type = 
-- coupon_type = 
-- pik_rate = 
-- maturity_date = 2027-12-31  (tag: equal)
-- corrected_fields = 
-- interest_rate_source = 
-- basis_spread_source = 
-- pik_rate_source = 
-- shares_held_source = 
-- src_transforms = pct_of_net_assets:rate_x100
-
-### C019 | 0001633336 | 2024-12-31 | 0000950170-25-023153
-
-**Table header rows:** CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments December 31, 2024 (in thousands, except share and per share data) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
-
-**Lines printed before it:**
-- Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
-- Guardian Access Solutions | Senior Secured First Lien Delayed Draw Term Loan | S + 600 ( 100 Floor) | 10.33 % | 08/2029 | 1,068 | 1,048 | 0.1 | 1,060
-- Guardian Access Solutions | Senior Secured First Lien Revolver | S + 600 ( 100 Floor) | 10.33 % | 08/2029 | 338 | 322 | 0.0 | 334
-
-**The printed line** (cell text, then the facts tagged in that cell):
-1. `Guardian Access Solutions`
-2. `Senior Secured First Lien Term Loan`
-3. `S + 600 ( 100 Floor)`  <- InvestmentInterestRateTerms = S + 600 ( 100 Floor) (same investment, other period context)
-4. `10.51 %`  <- InvestmentInterestRate = 0.1051
-5. `08/2029`  <- DebtInvestmentMaturityOrDissolutionDate = 08/2029 (same investment, other period context)
-6. `2,864`  <- InvestmentOwnedBalancePrincipalAmount = 2864000.0
-7. `2,806`  <- InvestmentOwnedAtCost = 2806000.0
-8. `0.4`  <- InvestmentOwnedPercentOfNetAssets = 0.004
-9. `2,852`  <- InvestmentOwnedAtFairValue = 2852000.0
-
-**Lines printed after it:**
-- Flow Service Partners Intermediate Holdco LLC (4)(5) | Senior Secured First Lien Delayed Draw Term Loan | 11/2030 | — | ( 7 | ) | 0.0 | ( 17 | )
-- Flow Service Partners Intermediate Holdco LLC (4)(5) | Senior Secured First Lien Revolver | 11/2030 | — | ( 10 | ) | 0.0 | ( 10 | )
-
-**Facts on this context not on the printed line:** none
-
-**Member (identifier text):** `Investments United States Debt Investments Commercial & Professional Services Guardian Access Solutions Investment Type Senior Secured First Lien Term Loan Interest Term S + 600 (100 Floor) Interest Rate 10.51% Maturity/Dissolution Date 08/2029`
-
-**Published:**
-- issuer_name = Guardian Access Solutions
-- instrument_description = First Lien Term Loan
-- asset_category = LOAN
-- fair_value = 2852000.0  (tag: equal)
-- cost = 2806000.0  (tag: equal)
-- principal_amount = 2864000.0  (tag: equal)
-- principal_amount_currency = USD
-- shares_held = 
-- pct_of_net_assets = 0.4  (tag: equal)
-- interest_rate = 10.51  (tag: equal)
-- basis_spread = 6.0
-- reference_rate_type = SOFR
-- coupon_type = Floating
-- pik_rate = 
-- maturity_date = 2029-08-31
-- corrected_fields = 
-- interest_rate_source = xbrl_field
-- basis_spread_source = xbrl_field
-- pik_rate_source = 
-- shares_held_source = 
-- src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pct_of_net_assets:rate_x100
-
-### C020 | 0001633336 | 2024-12-31 | 0000950170-25-023153
-
-**Table header rows:** CRESCENT CAPITAL BDC, Inc. Consolidated Schedule of Investments December 31, 2024 (in thousands, except share and per share data) // Country/Security/Industry/Company | Investment Type | Interest Term * | Interest Rate | Maturity/ Dissolution Date | Principal Amount, Par Value or Shares ** | Cost | Percentage of Net Assets *** | Fair Value
-
-**Lines printed before it:**
-- Painters Supply & Equipment Company | Unitranche First Lien Term Loan | S + 550 ( 100 Floor) | 9.93 % | 08/2027 | 1,983 | 1,963 | 0.3 | 1,965
-- Painters Supply & Equipment Company | Unitranche First Lien Term Loan | S + 550 ( 100 Floor) | 10.19 % | 04/2030 | 846 | 846 | 0.1 | 838
-- TriStrux, LLC | Senior Secured First Lien Term Loan | S + 800 ( 100 Floor) (including 200 PIK) | 12.48 % | 12/2026 | 2,717 | 2,679 | 0.3 | 1,970
-
-**The printed line** (cell text, then the facts tagged in that cell):
-1. `TriStrux, LLC`
-2. `Senior Secured First Lien Revolver`
-3. `S + 800 ( 100 Floor) (including 200 PIK)`  <- InvestmentInterestRateTerms = S + 800 ( 100 Floor) (including 200 PIK) (same investment, other period context)
-4. `12.48 %`  <- InvestmentInterestRate = 0.1248
-5. `12/2026`  <- DebtInvestmentMaturityOrDissolutionDate = 12/2026 (same investment, other period context)
-6. `959`  <- InvestmentOwnedBalancePrincipalAmount = 959000.0
-7. `945`  <- InvestmentOwnedAtCost = 945000.0
-8. `0.1`  <- InvestmentOwnedPercentOfNetAssets = 0.001
-9. `669`  <- InvestmentOwnedAtFairValue = 669000.0
-
-**Lines printed after it:**
-- TriStrux, LLC | Senior Secured First Lien Delayed Draw Term Loan | S + 800 ( 100 Floor) (including 200 PIK) | 12.48 % | 12/2026 | 953 | 940 | 0.1 | 691
-- 39,332 | 36,718 | 3.9 | 30,005
-
-**Facts on this context not on the printed line:** none
-
-**Member (identifier text):** `Investments United States Debt Investments Capital Goods TriStrux, LLC Investment Type Senior Secured First Lien Revolver Interest Term S + 800 (100 Floor) (including 200 PIK) Interest Rate 12.48% Maturity/Dissolution Date 12/2026`
-
-**Published:**
-- issuer_name = TriStrux, LLC
-- instrument_description = First Lien Revolver
-- asset_category = LOAN
-- fair_value = 669000.0  (tag: equal)
-- cost = 945000.0  (tag: equal)
-- principal_amount = 959000.0  (tag: equal)
-- principal_amount_currency = USD
-- shares_held = 
-- pct_of_net_assets = 0.1  (tag: equal)
-- interest_rate = 12.479999999999999  (tag: equal)
-- basis_spread = 8.0
-- reference_rate_type = SOFR
-- coupon_type = Floating
-- pik_rate = 2.0
-- maturity_date = 2026-12-31
-- corrected_fields = 
-- interest_rate_source = xbrl_field
-- basis_spread_source = xbrl_field
-- pik_rate_source = xbrl_field
-- shares_held_source = 
-- src_transforms = interest_rate:rate_x100;basis_spread:rate_x100;pik_rate:rate_x100;pct_of_net_assets:rate_x100
