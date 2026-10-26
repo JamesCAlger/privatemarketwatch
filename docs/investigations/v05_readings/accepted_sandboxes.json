@@ -235,9 +235,9 @@
   "basis": "D-244, gate PASS with investigation COMPLETE (independent review rfvsc, 14/14 findings, 17/17 observations, 1/1 history): 23 findings, 14 outstanding, all proposed; 11/11 quarters tie; page sample 1 error of 20 (preferred-equity par suppressed by shared rule, owner item); three builds. Replaces viya (D-198)"
  },
  "0001772704": {
-  "label": "gpyf",
-  "accepted_on": "2026-10-16",
-  "basis": "D-199, gate INCOMPLETE: 38 outstanding, 27 proposed, 11 uncovered; two identical-key principal errors also parked. First sample six field errors; final sample zero of 20 cards. 14/14 FV quarters tie; six builds used"
+  "label": "rfgsf",
+  "accepted_on": "2026-10-26",
+  "basis": "D-245, gate PASS with investigation COMPLETE (independent review rfgsf, 50/50 findings, 23/23 observations, 2/2 history): 114 findings, 50 outstanding, all proposed; 14/14 quarters tie exactly; page sample 0/20; six builds. Known parked: 10 published errors on newly published dash rows (fixes staged). Replaces gpyf (D-199)"
  },
  "0001633336": {
   "label": "ccza",

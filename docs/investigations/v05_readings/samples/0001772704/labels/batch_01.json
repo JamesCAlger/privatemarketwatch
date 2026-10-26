@@ -1,1662 +1,1662 @@
 [
-  {
-    "card": "C001",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Equity line prints shares, cost and fair value; this field is absent."
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Equity line prints shares, cost and fair value; this field is absent."
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Equity line prints shares, cost and fair value; this field is absent."
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Equity line prints shares, cost and fair value; this field is absent."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Equity line prints shares, cost and fair value; this field is absent."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Equity line prints shares, cost and fair value; this field is absent."
-      }
-    }
-  },
-  {
-    "card": "C002",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "wrong",
-        "tag": "wrong_value",
-        "cause": "tag",
-        "note": "Prints 35,280 in thousands (35280000 USD); tag and published principal are 35280, 1000 times too small."
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed S benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C003",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "wrong",
-        "tag": "wrong_value",
-        "cause": "tag",
-        "note": "Prints 26,054 in thousands (26054000 USD); tag and published principal are 26054, 1000 times too small."
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed L benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C004",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C005",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed S benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C006",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C007",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed S benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C008",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed S benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C009",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed S benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C010",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "wrong",
-        "tag": "wrong_value",
-        "cause": "tag",
-        "note": "Prints 68,747 in thousands (68747000 USD); tag and published principal are 68747, 1000 times too small."
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed L benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C011",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C012",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed L benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C013",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Line prints only reference rate and spread; coupon is blank."
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C014",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C015",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "wrong",
-        "tag": "wrong_value",
-        "cause": "tag",
-        "note": "Prints 10,234 in thousands (10234000 USD); tag and published principal are 10234, 1000 times too small."
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed L benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C016",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed S benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C017",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed S benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C018",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "wrong",
-        "tag": "right",
-        "cause": "pipeline",
-        "note": "Prints Wellness AcquisitionCo, Inc. (dba SPINS); published issuer appends the separate IT Services industry."
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "wrong",
-        "tag": "wrong_value",
-        "cause": "tag",
-        "note": "Prints 2,400 in thousands (2400000 USD); tag and published principal are 2400, 1000 times too small."
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Line prints only reference rate and spread; coupon is blank."
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed S benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C019",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
-  },
-  {
-    "card": "C020",
-    "fields": {
-      "row_identity": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "issuer_name": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "instrument_and_class": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "fair_value": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "cost": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "principal_amount": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "shares_held": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "Par column prints principal, not shares."
-      },
-      "pct_of_net_assets": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No position percent of net assets is printed."
-      },
-      "interest_rate": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "basis_spread": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      },
-      "reference_rate_type": {
-        "published": "ok",
-        "tag": "untagged",
-        "cause": "",
-        "note": "Printed S benchmark matches published value; no benchmark fact is on the context."
-      },
-      "pik_rate": {
-        "published": "ok",
-        "tag": "not_printed",
-        "cause": "",
-        "note": "No PIK component is printed on this line."
-      },
-      "maturity_date": {
-        "published": "ok",
-        "tag": "right",
-        "cause": "",
-        "note": ""
-      }
-    }
+ {
+  "card": "C001",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "common stock; Shares column, no par"
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "equity table; no rate, index or maturity columns"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "equity table; no rate, index or maturity columns"
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "equity table; no rate, index or maturity columns"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "equity table; no rate, index or maturity columns"
+   }
   }
+ },
+ {
+  "card": "C002",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "wrong_value",
+    "cause": "",
+    "note": "prints 35,280 in a dollars-in-thousands schedule; tagged unscaled; published corrected x1,000"
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C003",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "wrong_value",
+    "cause": "",
+    "note": "prints 26,054 in a dollars-in-thousands schedule; tagged unscaled; published corrected x1,000"
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C004",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C005",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C006",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C007",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C008",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "wrong_label",
+    "cause": "",
+    "note": "prints HealthEdge Software, Inc.; member text adds '(dba Insightsoftware)' from the line above; published corrected"
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C009",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C010",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "wrong_value",
+    "cause": "",
+    "note": "prints 68,747 in a dollars-in-thousands schedule; tagged unscaled; published corrected x1,000"
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C011",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C012",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C013",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "undrawn; no interest rate printed, published blank"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C014",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C015",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "wrong_value",
+    "cause": "",
+    "note": "prints 10,234 in a dollars-in-thousands schedule; tagged unscaled; published corrected x1,000"
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C016",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C017",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C018",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "wrong_value",
+    "cause": "",
+    "note": "prints 2,400 in a dollars-in-thousands schedule; tagged unscaled; published corrected x1,000"
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "undrawn; no interest rate printed, published blank"
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C019",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ },
+ {
+  "card": "C020",
+  "fields": {
+   "row_identity": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "issuer_name": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "instrument_and_class": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "fair_value": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "cost": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "principal_amount": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "shares_held": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "loan; no unit count"
+   },
+   "pct_of_net_assets": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no per-line % of net assets column; only section headings carry it"
+   },
+   "interest_rate": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "basis_spread": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   },
+   "reference_rate_type": {
+    "published": "ok",
+    "tag": "untagged",
+    "cause": "",
+    "note": "prints the S/L prefix; no rate-type fact on this context"
+   },
+   "pik_rate": {
+    "published": "ok",
+    "tag": "not_printed",
+    "cause": "",
+    "note": "no PIK printed on this line"
+   },
+   "maturity_date": {
+    "published": "ok",
+    "tag": "right",
+    "cause": "",
+    "note": ""
+   }
+  }
+ }
 ]

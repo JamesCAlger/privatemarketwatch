@@ -81,7 +81,7 @@
 - asset_category = LOAN
 - fair_value = 34222000.0
 - cost = 34774000.0
-- principal_amount = 35280.0  (tag: equal)
+- principal_amount = 35280000.0  (tag: differs)
 - principal_amount_currency = USD
 - shares_held = 
 - pct_of_net_assets = 
@@ -91,7 +91,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2026-07-01  (tag: equal)
-- corrected_fields = 
+- corrected_fields = principal_amount;principal_amount_currency;principal_amount_usd;principal_fx_rate_to_usd;principal_fx_status
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -132,7 +132,7 @@
 - asset_category = LOAN
 - fair_value = 25598000.0
 - cost = 24808000.0
-- principal_amount = 26054.0  (tag: equal)
+- principal_amount = 26054000.0  (tag: differs)
 - principal_amount_currency = USD
 - shares_held = 
 - pct_of_net_assets = 
@@ -142,7 +142,7 @@
 - coupon_type = Floating
 - pik_rate = 2.5  (tag: equal)
 - maturity_date = 2026-11-24  (tag: equal)
-- corrected_fields = 
+- corrected_fields = principal_amount;principal_amount_currency;principal_amount_usd;principal_fx_rate_to_usd;principal_fx_status
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = xbrl_field
@@ -382,7 +382,7 @@
 **Member (identifier text):** `Investment 1st Lien/Senior Secured Debt - 202.09% HealthEdge Software, Inc. (dba Insightsoftware) Industry Health Care Technology Interest Rate 12.43% Reference Rate and Spread S + 7.00% Maturity 04/09/26`
 
 **Published:**
-- issuer_name = HealthEdge Software, Inc. (dba Insightsoftware)
+- issuer_name = HealthEdge Software, Inc.
 - instrument_description = 1st Lien/Senior Secured Debt
 - asset_category = LOAN
 - fair_value = 31520000.0  (tag: equal)
@@ -397,7 +397,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2026-04-09  (tag: equal)
-- corrected_fields = 
+- corrected_fields = issuer_name
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -489,7 +489,7 @@
 - asset_category = LOAN
 - fair_value = 67200000.0
 - cost = 67739000.0
-- principal_amount = 68747.0  (tag: equal)
+- principal_amount = 68747000.0  (tag: differs)
 - principal_amount_currency = USD
 - shares_held = 
 - pct_of_net_assets = 
@@ -499,7 +499,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2027-04-06  (tag: equal)
-- corrected_fields = 
+- corrected_fields = principal_amount;principal_amount_currency;principal_amount_usd;principal_fx_rate_to_usd;principal_fx_status
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -535,7 +535,7 @@
 **Member (identifier text):** `Investment Debt Investments - 171.0% United States -166.9% 1st Lien/Senior Secured Debt -162.7% ESO Solutions, Inc Industry Health Care Technology Interest Rate 11.07% Reference Rate and Spread S + 6.75% Maturity 05/03/27`
 
 **Published:**
-- issuer_name = ESO Solutions, Inc
+- issuer_name = ESO Solutions, Inc.
 - instrument_description = 1st Lien/Senior Secured Debt
 - asset_category = LOAN
 - fair_value = 35931000.0  (tag: equal)
@@ -550,7 +550,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2027-05-03  (tag: equal)
-- corrected_fields = 
+- corrected_fields = issuer_name
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -745,7 +745,7 @@
 - asset_category = LOAN
 - fair_value = 2673000.0
 - cost = 2838000.0
-- principal_amount = 10234.0  (tag: equal)
+- principal_amount = 10234000.0  (tag: differs)
 - principal_amount_currency = USD
 - shares_held = 
 - pct_of_net_assets = 
@@ -755,7 +755,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2025-01-02  (tag: equal)
-- corrected_fields = 
+- corrected_fields = principal_amount;principal_amount_currency;principal_amount_usd;principal_fx_rate_to_usd;principal_fx_status
 - interest_rate_source = xbrl_field
 - basis_spread_source = xbrl_field
 - pik_rate_source = 
@@ -894,12 +894,12 @@
 **Member (identifier text):** `Investment 1st Lien/Senior Secured Debt - 203.92% Wellness AcquisitionCo, Inc. (dba SPINS) IT Services Reference Rate and Spread S + 5.50% Maturity 01/20/2027 One`
 
 **Published:**
-- issuer_name = Wellness AcquisitionCo, Inc. (dba SPINS) IT Services
+- issuer_name = Wellness AcquisitionCo, Inc. (dba SPINS)
 - instrument_description = 1st Lien/Senior Secured Debt
 - asset_category = LOAN
 - fair_value = -36000.0
 - cost = -31000.0
-- principal_amount = 2400.0  (tag: equal)
+- principal_amount = 2400000.0  (tag: differs)
 - principal_amount_currency = USD
 - shares_held = 
 - pct_of_net_assets = 
@@ -909,7 +909,7 @@
 - coupon_type = Floating
 - pik_rate = 
 - maturity_date = 2027-01-20  (tag: equal)
-- corrected_fields = 
+- corrected_fields = principal_amount;principal_amount_currency;principal_amount_usd;principal_fx_rate_to_usd;principal_fx_status
 - interest_rate_source = 
 - basis_spread_source = xbrl_field
 - pik_rate_source = 

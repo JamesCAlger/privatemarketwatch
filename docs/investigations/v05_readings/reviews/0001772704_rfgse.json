@@ -1,0 +1,1086 @@
+{
+ "reviewer_id": "claude-independent-reviewer-gspmmc2-rfgse",
+ "report_digest": "c67788d365f44abc97b8f622ba4a75154ee544e7d9fd25b79ee2a1fa18a44bb0",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001772704_2023-09-30_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_4df9376b81",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Source blocking row 2023-09-30. Re-read on the page: the filer tags the fair value without the thousands scale, and rfgse publishes the printed value (GHA -70,000, Helios -27,000 at 2023-09-30; BSI3 -135,000 at 2023-12-31, printed '( 13 5 )' split across cells). The rule's rows equal affected_rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060342",
+     "text": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749 ( 18 ) ( 70 )"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199 ( 24 ) ( 27 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001772704_2023-12-31_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_a2a1d334d9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Source blocking row 2023-12-31. Re-read on the page: the filer tags the fair value without the thousands scale, and rfgse publishes the printed value (GHA -70,000, Helios -27,000 at 2023-09-30; BSI3 -135,000 at 2023-12-31, printed '( 13 5 )' split across cells). The rule's rows equal affected_rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026141",
+     "text": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924"
+    },
+    {
+     "accession": "0000950170-24-026141",
+     "text": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924 ( 23 ) ( 13 5 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_00fea17cb6af",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2025-12-31: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088646",
+     "text": "Total investments, at fair value (cost of $ 1,596,478 and $ 2,124,410 ) $ 1,534,345 $ 2,087,081 Investments in affiliated money market fund (cost of $ 124,974 and $ 84,647 ) 124,974 84,647 Cash 22,089 27,340 Interest and dividends"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0de332fcda40",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2025-12-31: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088646",
+     "text": "Total investments, at fair value (cost of $ 1,596,478 and $ 2,124,410 ) $ 1,534,345 $ 2,087,081 Investments in affiliated money market fund (cost of $ 124,974 and $ 84,647 ) 124,974 84,647 Cash 22,089 27,340 Interest and dividends"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_0fae2d151f42",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "SRC_BDC03 2023-09-30 (n_units 2). Re-read on the page: the filer tags the fair value without the thousands scale, and rfgse publishes the printed value (GHA -70,000, Helios -27,000 at 2023-09-30; BSI3 -135,000 at 2023-12-31, printed '( 13 5 )' split across cells). The rule's rows equal affected_rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060342",
+     "text": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "GHA Buyer Inc. (dba Cedar Gate) Health Care Technology S + 8.25 % (incl. 3.75 % PIK) 06/24/26 1,749 ( 18 ) ( 70 )"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services S + 6.00 % 12/15/26 2,199 ( 24 ) ( 27 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_24f2b8a7bdd4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "cost_conservation 2026-03-31: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Total investments, at fair value (cost of $ 1,557,384 and $ 1,596,478 ) $ 1,469,243 $ 1,534,345 Investments in affiliated money market fund (cost of $ 122,393 and $ 124,974 ) 122,393 124,974 Cash 19,091 22,089 Interest and dividends"
+    },
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 122,393,185 $ 122,393 $ 122,393"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_390c42c546ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "cost_conservation 2025-09-30: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Total investments, at fair value (cost of $ 1,695,459 and $ 2,124,410 ) $ 1,643,780 $ 2,087,081 Investments in affiliated money market fund (cost of $ 148,322 and $ 84,647 ) 148,322 84,647 Cash 70,486 27,340 Interest and dividends"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_4fd5126838fc",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2025-09-30: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Total investments, at fair value (cost of $ 1,695,459 and $ 2,124,410 ) $ 1,643,780 $ 2,087,081 Investments in affiliated money market fund (cost of $ 148,322 and $ 84,647 ) 148,322 84,647 Cash 70,486 27,340 Interest and dividends"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_559167c654ec",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X06 2023-03-31: n_units 5 = affected_rows. Partly drawn lines whose printed par is the whole commitment, with footnote (8). As filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Total Vision LLC Health Care Providers & Services 11.01 % S + 6.00 % 07/15/26 9,492"
+    },
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Businessolver.com, Inc. Health Care Technology 9.88 % L + 5.50 % 12/01/27 4,527"
+    },
+    {
+     "accession": "0000950170-23-019617",
+     "text": "(8) Position or portion thereof is an unfunded loan commitment,"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_577cf5426f27",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "cost_conservation 2026-06-30: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344590",
+     "text": "Total investments, at fair value (cost of $ 1,467,586 and $ 1,596,478 ) $ 1,369,235 $ 1,534,345 Investments in affiliated money market fund (cost of $ 91,664 and $ 124,974 ) 91,664 124,974 Cash 6,015 22,089 Interest and dividends receivable"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a4eefd6660df",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2026-06-30: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344590",
+     "text": "Total investments, at fair value (cost of $ 1,467,586 and $ 1,596,478 ) $ 1,369,235 $ 1,534,345 Investments in affiliated money market fund (cost of $ 91,664 and $ 124,974 ) 91,664 124,974 Cash 6,015 22,089 Interest and dividends receivable"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_b5f31875e029",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "SRC_BDC03 2023-12-31 (n_units 1). Re-read on the page: the filer tags the fair value without the thousands scale, and rfgse publishes the printed value (GHA -70,000, Helios -27,000 at 2023-09-30; BSI3 -135,000 at 2023-12-31, printed '( 13 5 )' split across cells). The rule's rows equal affected_rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026141",
+     "text": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924"
+    },
+    {
+     "accession": "0000950170-24-026141",
+     "text": "BSI3 Menu Buyer, Inc (dba Kydia) Financial Services S + 6.00 % 0 1/25/28 1,924 ( 23 ) ( 13 5 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bc2e829173ec",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2026-03-31: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Total investments, at fair value (cost of $ 1,557,384 and $ 1,596,478 ) $ 1,469,243 $ 1,534,345 Investments in affiliated money market fund (cost of $ 122,393 and $ 124,974 ) 122,393 124,974 Cash 19,091 22,089 Interest and dividends"
+    },
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 122,393,185 $ 122,393 $ 122,393"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_c33aa715a5d3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "cost_conservation 2025-12-31: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088646",
+     "text": "Total investments, at fair value (cost of $ 1,596,478 and $ 2,124,410 ) $ 1,534,345 $ 2,087,081 Investments in affiliated money market fund (cost of $ 124,974 and $ 84,647 ) 124,974 84,647 Cash 22,089 27,340 Interest and dividends"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_de36ad52f465",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2026-06-30: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344590",
+     "text": "Total investments, at fair value (cost of $ 1,467,586 and $ 1,596,478 ) $ 1,369,235 $ 1,534,345 Investments in affiliated money market fund (cost of $ 91,664 and $ 124,974 ) 91,664 124,974 Cash 6,015 22,089 Interest and dividends receivable"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_e6ba096bd5fe",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A04 2026-03-31: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Total investments, at fair value (cost of $ 1,557,384 and $ 1,596,478 ) $ 1,469,243 $ 1,534,345 Investments in affiliated money market fund (cost of $ 122,393 and $ 124,974 ) 122,393 124,974 Cash 19,091 22,089 Interest and dividends"
+    },
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 122,393,185 $ 122,393 $ 122,393"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_f2521b6901b9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "E01 2025-09-30: the rule compares holdings including the affiliated money market fund (published as CASH from 2025-09-30) with the printed ex-cash total. The money market row equals the printed line (quoted); my reverse check (review_gs/reverse.py) finds every valued identifier context of the quarter published, apart from section subtotals, so nothing else carries the excess. The proposal reuses the existing reason key. The inconsistent treatment of the money market fund across quarters (excluded to 2025-06-30, when the fund holds 169,995 thousand, and published after) is correctly left to the owner under cash-row-treatment-differs-across-quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Total investments, at fair value (cost of $ 1,695,459 and $ 2,124,410 ) $ 1,643,780 $ 2,087,081 Investments in affiliated money market fund (cost of $ 148,322 and $ 84,647 ) 148,322 84,647 Cash 70,486 27,340 Interest and dividends"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_142d6c8502ea",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (e). rfgse fund_financials distribution_per_share before -> after: 2022-06-30 1.45 -> 2.90, 2023-06-30 1.515 -> 3.03, 2024-06-30 1.46 -> 3.44, 2025-06-30 1.185 -> 2.37, 2024-12-31 4.93 -> 4.94, 2025-09-30 2.18 -> 5.79, 2025-12-31 5.79 -> 8.22, 2026-06-30 blank -> 2.72. Each equals the printed three-month column, or the year less nine months for fourth quarters (2025-06-30 and 2023-06-30 quoted). F16 2023-12-31: 6.26 = 12.83 - 6.57, two record dates in the quarter.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026141",
+     "text": "Distributions per unit $ 12.83 $ 11.32 $"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "Distributions per unit $ 3.54 $ 2.72 $ 6.57"
+    },
+    {
+     "accession": "0000950170-24-026141",
+     "text": "Date Declared Record Date Payment Date Amount Per Unit For the Year Ended December 31, 2023 May 3, 2023 May 8, 2023 May 25, 2023 $ 3.03 September 19, 2023 September 18, 2023 September 29, 2023 $ 3.54 November 1, 2023 October 3, 2023 November 27, 2023 $ 2.60 November 1, 2023 December 29, 2023 January"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1544204a8c95",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2024-12-31: shadow-ledger n_units 3 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032221",
+     "text": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,559"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_19fdc39e48a6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (e). rfgse fund_financials distribution_per_share before -> after: 2022-06-30 1.45 -> 2.90, 2023-06-30 1.515 -> 3.03, 2024-06-30 1.46 -> 3.44, 2025-06-30 1.185 -> 2.37, 2024-12-31 4.93 -> 4.94, 2025-09-30 2.18 -> 5.79, 2025-12-31 5.79 -> 8.22, 2026-06-30 blank -> 2.72. Each equals the printed three-month column, or the year less nine months for fourth quarters (2025-06-30 and 2023-06-30 quoted). F33 2025-12-31: 8.22 x 4 / 68.62 = 47.9 pct. The earlier verdict used the annual ratio; the rule annualises the quarter.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088646",
+     "text": "Distributions per unit $ 16.38 $ 11.16 $"
+    },
+    {
+     "accession": "0001193125-26-088646",
+     "text": "From return of capital ( 6.04 )"
+    },
+    {
+     "accession": "0001193125-26-088646",
+     "text": "Date Declared Record Date Payment Date Amount Per Unit For the Year Ended December 31, 2025 February 26, 2025 April 2, 2025 May 7, 2025 $ 2.37 May 7, 2025 July 2, 2025 July 31, 2025 $ 5.79 August 6, 2025 October 2, 2025 November 4, 2025 $ 6.41 (1) November 5, 2025 December 31, 2025 January 28, 2026 $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_262a00c564d9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (e). rfgse fund_financials distribution_per_share before -> after: 2022-06-30 1.45 -> 2.90, 2023-06-30 1.515 -> 3.03, 2024-06-30 1.46 -> 3.44, 2025-06-30 1.185 -> 2.37, 2024-12-31 4.93 -> 4.94, 2025-09-30 2.18 -> 5.79, 2025-12-31 5.79 -> 8.22, 2026-06-30 blank -> 2.72. Each equals the printed three-month column, or the year less nine months for fourth quarters (2025-06-30 and 2023-06-30 quoted). F33 2025-09-30, new: 5.79 x 4 / NAV 75.81 = 30.6 pct, in a fund returning capital.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Distributions per unit $ 5.79 $ 2.78 $ 8.16"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "From return of capital ( 3.61 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2807509e9b97",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "maturity_not_past 2024-09-30: 4 CFS rows print 07/15/24 and publish 2024-07-15. As printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125352",
+     "text": "CFS Management, LLC (dba Center for Sight Management) Health Care Providers & Services 13.87 % S + 9.00 % (Incl. 2.75 % PIK) 07/15/24"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2e25d2540c5f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2025-12-31: rule n_units 20 = affected_rows 20 (Pacvue '3,991 ( 24 )' quoted). The earlier Zarya / Pluralsight verdict no longer applies; neither publishes a negative cost.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088646",
+     "text": "Pacvue Intermediate LLC (fka Assembly Intermediate LLC) Diversified Consumer Services S + 5.25 % 10/19/27 3,991 ( 24 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_3f4f667e1b0d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2023-03-31: income_yield_pct 13.96 is the printed ratio to average members' capital of a levered fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Ratio of net investment income to average Members Capital"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4331515b5ad3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C107 2023-12-31: rule n_units 34 = affected_rows 34. Undrawn lines printing a bracketed cost, e.g. One GI '3,246 ( 28 )'. As filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026141",
+     "text": "One GI LLC Health Care Providers & Services S + 6.75 % 12/22/25 3,246 ( 28 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4983797f4638",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "maturity_not_past 2026-06-30: 5 One GI rows print 12/22/25 and are on non-accrual. As printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344590",
+     "text": "One GI LLC Health Care Providers & Services S + 6.75 % 12/22/25 20,282"
+    },
+    {
+     "accession": "0001193125-26-344590",
+     "text": "(11) The investment is on non-accrual status."
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_50156f863a77",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "financial_convention_unresolved 2025-09-30 Streamland: the page prints 9.76 % with 10.06 % PIK inside it; neither reading fits, the rate is withheld. source_ambiguity is honest.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Streamland Media Midco LLC Entertainment 9.76 % S + 6.50 % (Incl. 10.06 % PIK)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5330c2e3f4f0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2025-06-30: shadow-ledger n_units 3 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107341",
+     "text": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,559"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5afc29d1d9bd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2024-03-31: shadow-ledger n_units 2 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056976",
+     "text": "Sweep Midco LLC Commercial Services & Supplies 06/30/27 5,052"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_752337a414e3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2026-06-30: shadow-ledger n_units 3 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344590",
+     "text": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7e264f56871c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (e). rfgse fund_financials distribution_per_share before -> after: 2022-06-30 1.45 -> 2.90, 2023-06-30 1.515 -> 3.03, 2024-06-30 1.46 -> 3.44, 2025-06-30 1.185 -> 2.37, 2024-12-31 4.93 -> 4.94, 2025-09-30 2.18 -> 5.79, 2025-12-31 5.79 -> 8.22, 2026-06-30 blank -> 2.72. Each equals the printed three-month column, or the year less nine months for fourth quarters (2025-06-30 and 2023-06-30 quoted). F16 2025-09-30, new from the correction: 5.79, partly a return of capital (3.61 for the nine months), as printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Distributions per unit $ 5.79 $ 2.78 $ 8.16"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "From return of capital ( 3.61 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8ece739bac10",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C103 2023-09-30: rfgse shadow ledger counts 3 units, equal to affected_rows. The HumanState and iCIMS undrawn lines print cost '-' or 1 with a bracketed value, as published. Proposal key fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060342",
+     "text": "HumanState Limited (dba PayProp) Diversified Consumer Services SN + 6.00 % 11/23/28 GBP 100"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "HumanState Limited (dba PayProp) Diversified Consumer Services SN + 6.00 % 11/23/28 GBP 270"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "iCIMS, Inc. Professional Services S + 6.75 % 08/18/28 8,999"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9fe9a5fbd81d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2024-06-30: shadow-ledger n_units 2 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096216",
+     "text": "Sweep Midco LLC Commercial Services & Supplies 06/30/27 5,052"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a06a38762590",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2025-03-31: shadow-ledger n_units 3 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070313",
+     "text": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,559"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a4b1b18ae1de",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2025-12-31: shadow-ledger n_units 3 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-088646",
+     "text": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a5a36f18c3a1",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2023-06-30: shadow-ledger n_units 1 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed. This finding is new after the MedeAnalytics '3.00 % PIK' row stopped publishing LIBOR + 3.0 Floating.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039902",
+     "text": "MedeAnalytics, Inc. Health Care Technology 3.00 % PIK 10/09/26 9,333 6,075 6,075 (5) (6) (7)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b25256261faf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (e). rfgse fund_financials distribution_per_share before -> after: 2022-06-30 1.45 -> 2.90, 2023-06-30 1.515 -> 3.03, 2024-06-30 1.46 -> 3.44, 2025-06-30 1.185 -> 2.37, 2024-12-31 4.93 -> 4.94, 2025-09-30 2.18 -> 5.79, 2025-12-31 5.79 -> 8.22, 2026-06-30 blank -> 2.72. Each equals the printed three-month column, or the year less nine months for fourth quarters (2025-06-30 and 2023-06-30 quoted). F16 2026-06-30, new: 2.72, all return of capital.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-344590",
+     "text": "Distributions per unit $ 2.72 $ 2.37 $ 2.72"
+    },
+    {
+     "accession": "0001193125-26-344590",
+     "text": "From return of capital ( 2.72 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b6060b934af8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (e). rfgse fund_financials distribution_per_share before -> after: 2022-06-30 1.45 -> 2.90, 2023-06-30 1.515 -> 3.03, 2024-06-30 1.46 -> 3.44, 2025-06-30 1.185 -> 2.37, 2024-12-31 4.93 -> 4.94, 2025-09-30 2.18 -> 5.79, 2025-12-31 5.79 -> 8.22, 2026-06-30 blank -> 2.72. Each equals the printed three-month column, or the year less nine months for fourth quarters (2025-06-30 and 2023-06-30 quoted). F16 2024-12-31: 4.94 = 11.16 - 6.22.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032221",
+     "text": "Distributions per unit $ 11.16 $ 12.83 $"
+    },
+    {
+     "accession": "0000950170-24-125352",
+     "text": "Distributions per unit $ 2.78 $ 3.54 $ 6.22"
+    },
+    {
+     "accession": "0000950170-25-032221",
+     "text": "Date Declared Record Date Payment Date Amount Per Unit For the Year Ended December 31, 2024 February 27, 2024 April 2, 2024 May 8, 2024 $ 3.44 (1) May 1, 2024 July 2, 2024 August 5, 2024 $ 2.78 August 8, 2024 October 2, 2024 November 4, 2024 $ 2.62 November 7, 2024 December 31, 2024 January 31, 2025"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_bf9f89973bdd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2026-03-31: shadow-ledger n_units 3 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219875",
+     "text": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/24 02/25/33 $"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c16a77dae259",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "Point (e). rfgse fund_financials distribution_per_share before -> after: 2022-06-30 1.45 -> 2.90, 2023-06-30 1.515 -> 3.03, 2024-06-30 1.46 -> 3.44, 2025-06-30 1.185 -> 2.37, 2024-12-31 4.93 -> 4.94, 2025-09-30 2.18 -> 5.79, 2025-12-31 5.79 -> 8.22, 2026-06-30 blank -> 2.72. Each equals the printed three-month column, or the year less nine months for fourth quarters (2025-06-30 and 2023-06-30 quoted). F16 2022-12-31: 5.70 = 11.32 - 5.62; the fourth quarter carries two record dates.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-005853",
+     "text": "Distributions per unit $ 11.32 $ 10.72 $"
+    },
+    {
+     "accession": "0000950170-22-023399",
+     "text": "Distributions per unit $ 2.72 $ 2.64 $ 5.62"
+    },
+    {
+     "accession": "0000950170-23-005853",
+     "text": "Date Declared Record Date Payment Date Amount Per Unit For the Year Ended December 31, 2022 March 2, 2022 April 4, 2022 April 29, 2022 $ 2.90 May 3, 2022 July 5, 2022 July 29, 2022 $ 2.72 November 2, 2022 December 30, 2022 January 31, 2023 $ 5.70 For the Year Ended"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_de2c184040d0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2023-06-30: 13.90, the printed ratio; same mechanism.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039902",
+     "text": "Ratio of net investment income to average Members Capital"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e5217bcf863f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2024-09-30: shadow-ledger n_units 3 = affected_rows. The flagged rows are Sweep Midco second lien, mPulse unsecured and / or MedeAnalytics '3.00 % PIK', which print no rate and no reference spread. Earlier verdict rows (Admiral, BSI3, Charger, Streamland) now publish their printed spreads. As printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125352",
+     "text": "mPulse Mobile, Inc. (dba Zipari Inc.) Health Care Technology 09/05/31 $ 7,649 $ 6,569"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "member-rate-text-zero-published-as-coupon",
+   "outcome": "supported",
+   "rationale": "rgA5 publishes interest_rate 0 on 32 rows of this fund; rfgse on none. The lines print no rate (Zodiac quoted in the report). The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060342",
+     "text": "Zodiac Intermediate, LLC (dba Zipari) Health Care Technology S + 8.00 % 12/21/26 46,540"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-concept-tagged-with-spread-value",
+   "outcome": "supported",
+   "rationale": "Point (b). 16 rows lose pik_rate. I read the printed lines: Kaseya, Helios, CorePower 633 (2024-12-31), Gainsight 2024-12-31 and Thrasio 2026-03-31 / 2026-06-30 print the margin with no 'PIK'. Par is flat or falling: GHA 939 -> 936 -> 934, Kaseya 17,261 -> 17,218, Gainsight 49,986 flat. On the cash-leg claim: interest_rate_cash is blank, not equal to the rate, on these rows. That is the build's convention for every non-PIK row (2,123 of 2,123 with a rate and no PIK carry a blank cash leg), so the data are right and the wording 'cash leg now equals the printed rate' is loose. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032221",
+     "text": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services 10.43 % S + 6.00 % 12/15/26 17,200"
+    },
+    {
+     "accession": "0000950170-24-096216",
+     "text": "Kaseya Inc. IT Services 10.83 % S + 5.50 % 06/25/29 17,261"
+    },
+    {
+     "accession": "0000950170-25-032221",
+     "text": "Helios Buyer, Inc. (dba Heartland) Diversified Consumer Services 10.43 % S + 6.00 % 12/15/26 17,200 17,084 16,598"
+    },
+    {
+     "accession": "0000950170-25-032221",
+     "text": "CorePower Yoga LLC Diversified Consumer Services 10.54 % S + 6.00 % 05/14/26 633 374 352"
+    },
+    {
+     "accession": "0000950170-25-032221",
+     "text": "Gainsight, Inc. Software 10.66 % S + 6.00 % 07/30/27 49,986 49,667 49,736"
+    },
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Thrasio, LLC Broadline Retail 11.93 % S + 8.00 % 06/18/29 4,729 4,722 4,682"
+    }
+   ]
+  },
+  {
+   "observation_key": "whole-coupon-pik-published-as-margin",
+   "outcome": "rejected",
+   "rationale": "Rejected: incomplete. Point (b). Gainsight and CivicPlus are right under D-232.\n- Gainsight term loan par 41,752 -> 42,920 -> 44,218 -> 45,604 -> 47,035 -> 48,472 -> 49,986: about +3.0 pct a quarter, which is coupon/4 (margin/4 is 1.7). On the partly drawn line, cost grows about coupon/4 on the drawn amount. Both stop at 2024-12-31, when the page prints 'S + 6.00 %' with no PIK.\n- CivicPlus par 6,214 -> 8,626 over seven quarters averages coupon-sized growth. It is lumpy (flat 2023-09-30 / 2023-12-31, then +13 pct), not 'each quarter'.\nBut the same test, applied as the agent applies it, catches a third loan the report does not mention. Volt Bidco (dba Power Factors) prints 'S + 6.50 % PIK' from 2025-06-30 to 2026-03-31, and its par grows 33,643 -> 34,571 -> 35,499 -> 36,402: +2.76, +2.68, +2.54 pct, against coupon/4 of 2.70, 2.63, 2.55 and margin/4 of 1.63. The other funded lines grow the same way (6,417 -> 6,594 -> 6,771 -> 6,943). rfgse publishes pik_rate 6.5 with a cash leg of 4.30 / 4.00 / 3.67 / 3.70 on these rows, which is the error this observation fixed for Gainsight. Volt is not in the D-232 fix, not in whole-coupon-pik-evidence-mixed, and not parked.\nNeeds: Volt corrected under D-232 (or parked with its par-growth evidence), and the par-growth detector run over every 'PIK' line of the fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096216",
+     "text": "Gainsight, Inc. Software 12.23 % S + 6.75 % PIK 07/30/27 48,472"
+    },
+    {
+     "accession": "0000950170-24-096216",
+     "text": "Gainsight, Inc. Software 12.23 % S + 6.75 % PIK 07/30/27 48,472 48,097 47,987"
+    },
+    {
+     "accession": "0000950170-24-125352",
+     "text": "Gainsight, Inc. Software 12.15 % S + 6.75 % PIK 07/30/27 49,986 49,640 49,736"
+    },
+    {
+     "accession": "0000950170-24-125352",
+     "text": "CivicPlus LLC Software 16.35 % S + 11.75 % PIK 06/09/34 8,294"
+    },
+    {
+     "accession": "0000950170-25-107341",
+     "text": "Volt Bidco, Inc. (dba Power Factors) Independent Power and Renewable Electricity Producers 10.80 % S + 6.50 % PIK 08/11/27 33,643 33,374 30,952"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Volt Bidco, Inc. (dba Power Factors) Independent Power and Renewable Electricity Producers 10.50 % S + 6.50 % PIK 08/11/27 34,571 34,332 31,460"
+    },
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Volt Bidco, Inc. (dba Power Factors) Independent Power and Renewable Electricity Producers 10.20 % S + 6.50 % PIK 08/11/27 36,402 36,223 34,764"
+    }
+   ]
+  },
+  {
+   "observation_key": "whole-coupon-pik-evidence-mixed",
+   "outcome": "supported",
+   "rationale": "Sweep Purchaser and Thrasio: the par-growth evidence is mixed, as stated; parking for the owner is honest. See the Volt omission under whole-coupon-pik-published-as-margin.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Sweep Purchaser LLC Commercial Services & Supplies 9.52 % S + 5.75 % PIK 06/30/27 20,668"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Volt Bidco, Inc. (dba Power Factors) Independent Power and Renewable Electricity Producers 10.50 % S + 6.50 % PIK 08/11/27 34,571 34,332 31,460"
+    }
+   ]
+  },
+  {
+   "observation_key": "spread-published-as-coupon",
+   "outcome": "supported",
+   "rationale": "Sweep Purchaser 2024-12-31 to 2025-06-30 publishes spread 5.75, as printed (in the declared basis_spread diff). The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-070313",
+     "text": "Sweep Purchaser LLC Commercial Services & Supplies 10.15 % S + 5.75 % PIK 06/30/27 18,920"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-codes-unread-where-page-reader-has-no-rows",
+   "outcome": "supported",
+   "rationale": "Point (c). The 2023-03-31 and 2023-06-30 legends read 'LIBOR (\"L\"), SOFR ... (\"S\"), SONIA (\"SN\"), or alternate base rate (commonly based on the U.S. Prime Rate (\"P\"))'. All 34 changes are SONIA (GBP), PRIME for P / CDN P lines (12.50-14.50 pct coupons, prime-sized), and Exostar 2023-06-30 LIBOR ('L+ 6.25%'). CDN P (Everest, CAD) is Canadian prime, published as the generic PRIME code; acceptable, but not the US prime the legend describes. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039902",
+     "text": "Clearcourse Partnership Acquireco Finance Limited IT Services 11.68 % SN + 7.50 % 07/25/28 GBP"
+    },
+    {
+     "accession": "0000950170-23-019617",
+     "text": "SONIA (\"SN\"), or alternate base rate (commonly based on the U.S. Prime Rate (\"P\"), unless otherwise noted)"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "1272775 B.C. LTD. (dba Everest Clinical Research) Professional Services 12.20 % CDN P + 4.75 % 11/06/26 CAD 418 312 304"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-cell-leaks-into-issuer-name",
+   "outcome": "supported",
+   "rationale": "Point (d). rfgse has no issuer name containing an industry, rate, maturity or acquisition-date residue (one regex sweep over 3,259 rows). No canonical name maps to two entities and no entity carries two canonical names; the only punctuation-variant entity split is Rubrik (REQ-rfgs-2). The existing detector fired in rfgsa.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056976",
+     "text": "WSO2, Inc. IT Services 11/04/21 509,767 8,052 8,052"
+    },
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Rubrik,Inc. Software 12.64 % S + 7.00 % 06/10/27 32,242"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-industry-column-not-read",
+   "outcome": "supported",
+   "rationale": "Point (d). Supported for the quarters it covers (2023-09-30 onward: 0 rows without extracted_industry). But 2023-03-31 still publishes 79 rows (746 M) with no extracted_industry, and 2023-06-30 12 rows (56 M). Their GICS comes from the name cache and is sometimes wrong against the printed column: Syntellis 'IT Consulting & Other Services' where the page prints Health Care Technology; Sweep Purchaser 'Application Software' vs Commercial Services & Supplies; Zodiac 'Application Software' vs Health Care Technology. not_done says only that those quarters were checked where the member carried an industry. The size should be stated; it is the reader gap recorded under reference-rate-codes-unread-where-page-reader-has-no-rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-032221",
+     "text": "Gainsight, Inc. Software 10.66 % S + 6.00 % 07/30/27 49,986"
+    },
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Syntellis Performance Solutions, LLC (dba Axiom) Health Care Technology 11.31 % S + 6.50 % 08/02/27 37,282 36,507 36,536"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Bullhorn publishes Professional Services / Research & Consulting in all 66 rows; ESO Health Care Technology throughout. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060342",
+     "text": "HealthEdge Software, Inc. Health Care Technology 12.43 % S + 7.00 % 04/09/26 32,000"
+    },
+    {
+     "accession": "0000950170-25-032221",
+     "text": "Southeast Mechanical, LLC (dba. SEM Holdings, LLC) Diversified Consumer Services 10.47 % S + 6.00 % 07/06/27 9,653 9,545 9,580"
+    }
+   ]
+  },
+  {
+   "observation_key": "undrawn-line-dash-fair-value-not-published",
+   "outcome": "supported",
+   "rationale": "24 rows added (rgA5 -> rfgse: 3,235 -> 3,259, none removed), each an undrawn line with a negative cost and fair value 0 (Assembly/Pacvue, Bullhorn, Superman, Fullsteam, Gainsight, Summit, GHA, Broadway), as printed. Correct.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107341",
+     "text": "Summit Buyer, LLC (dba Classic Collision) Specialty Retail S + 5.00 % 05/31/30 2,178 ( 18 ) -"
+    },
+    {
+     "accession": "0000950170-24-056976",
+     "text": "Charger Debt Merger Sub, LLC (dba Classic Collision) Specialty Retail S + 5.00 % 03/01/29 2,387 - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "zero-value-printed-lines-not-published",
+   "outcome": "rejected",
+   "rationale": "Rejected. Point (a). This is the same gap as the 24 lines just published, and parking it as an owner question about 'nil positions' is not justified.\n(1) These are held positions printed on the schedule: Thrasio Holdings common '235,056 $ - $ -' (2024-06-30 to 2026-06-30), MedeAnalytics common '373 - -', Sweep Midco commitment '$ 14,704 $ - $ -' (10 quarters) and four Fullsteam delayed draws ('26,415 - -' etc., 2023-06-30 and 2023-09-30). This run publishes undrawn lines at fair value 0, and 26North publishes Excalibur's '519 $ - $ -' common line at 0. Leaving these out understates positions, not totals.\n(2) The stated blocker is not shown. pipeline/page_labelled_contexts.fill_untagged_values fills a declared value on any context that carries at least one fact. These contexts carry InvestmentOwnedBalancePrincipalAmount or InvestmentOwnedBalanceShares (e.g. C_20b8a20b 2026-06-30 shares 235,056; C_ad06b59f par 14,704), so the existing key could declare fair_value 0 and cost 0. Whether staging then publishes them was not tried.\n(3) The list is incomplete. My nil-context check (review_gs/reverse.py) also finds Charger Debt Merger Sub (dba Classic Collision) at 2024-03-31: three undrawn lines printed '2,387 - -', '10,230 - -' and '18,755 - -' (31,083 of commitment), none published.\nNeeds: try untagged_values (fair_value 0, cost 0) on these contexts in a sandbox. If staging rejects them, record a shared defect with that evidence. The observation must list Charger.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-056976",
+     "text": "Sweep Midco LLC Commercial Services & Supplies 06/30/27 $ 14,704 $ - $ -"
+    },
+    {
+     "accession": "0001193125-26-344590",
+     "text": "Thrasio Holdings, Inc. Broadline Retail 06/18/24 235,056 $ - $ -"
+    },
+    {
+     "accession": "0000950170-23-039902",
+     "text": "MedeAnalytics, Inc. Health Care Technology 04/21/23 373 - -"
+    },
+    {
+     "accession": "0001193125-26-344590",
+     "text": "Sweep Midco LLC Commercial Services & Supplies 03/12/36 $ 14,704 $ - $ -"
+    },
+    {
+     "accession": "0000950170-23-039902",
+     "text": "Fullsteam Operations LLC Diversified Financial Services S + 8.25 % 05/01/30 26,415 - -"
+    },
+    {
+     "accession": "0000950170-24-056976",
+     "text": "Charger Debt Merger Sub, LLC (dba Classic Collision) Specialty Retail S + 5.00 % 03/01/29 2,387 - -"
+    },
+    {
+     "accession": "0000950170-24-056976",
+     "text": "Charger Debt Merger Sub, LLC (dba Classic Collision) Specialty Retail S + 5.00 % 03/01/31 18,755 - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "distribution-per-unit-halved-from-six-month-figure",
+   "outcome": "supported",
+   "rationale": "Verified under point (e) on all eight quarters.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-096216",
+     "text": "Distributions per unit $ 3.44 $ 3.03 $ 3.44 $ 3.03"
+    },
+    {
+     "accession": "0000950170-25-107341",
+     "text": "Distributions per unit $ 2.37 $ 3.44 $ 2.37 $ 3.44"
+    },
+    {
+     "accession": "0000950170-23-039902",
+     "text": "Distributions per unit $ 3.03 $ 2.90 $ 3.03 $ 2.90"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-name-spelling-splits-entity",
+   "outcome": "supported",
+   "rationale": "Point (f). Rubrik,Inc. 2023-03-31 is its own entity, as printed; the merge is a shared-table change (REQ-rfgs-2).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Rubrik,Inc. Software 12.64 % S + 7.00 % 06/10/27 32,242"
+    },
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Rubrik,Inc. Software 12.64 % S + 7.00 % 06/10/27 32,242"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-row-treatment-differs-across-quarters",
+   "outcome": "supported",
+   "rationale": "Point (f). Confirmed: the money market fund is excluded to 2025-06-30 (2023-03-31 139,371 thousand, 2025-06-30 169,995 thousand, valued contexts unpublished) and published as CASH from 2025-09-30 (148,322 / 124,974 / 122,393 / 91,664, equal to the printed lines). Leaving one treatment to the owner is right, since either change moves the headline basis. The 12 A04 / E01 / cost_conservation findings follow from it.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    },
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Goldman Sachs Financial Square Government Fund - Institutional Shares 122,393,185 $ 122,393 $ 122,393"
+    }
+   ]
+  },
+  {
+   "observation_key": "principal-tag-omits-thousand-scale",
+   "outcome": "supported",
+   "rationale": "Diligent 2023-03-31: 1,084,000 and 20,555,000 published, as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Diligent Corporation Professional Services 11.09 % L + 6.25 % 08/04/25 1,084 1,071 1,081"
+    },
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Rubrik,Inc. Software 12.64 % S + 7.00 % 06/10/27 32,242"
+    }
+   ]
+  },
+  {
+   "observation_key": "rate-taken-from-another-context-of-the-row",
+   "outcome": "supported",
+   "rationale": "Everest 2023-06-30 rate 11.39 as printed (declared interest_rate change).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-039902",
+     "text": "Everest Clinical Research Corporation Professional Services 11.39 % S + 6.00 % 11/06/26 5,423"
+    },
+    {
+     "accession": "0000950170-23-060342",
+     "text": "1272775 B.C. LTD. (dba Everest Clinical Research) Professional Services 12.20 % CDN P + 4.75 % 11/06/26 CAD 418 312 304"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-differs-from-printed-line",
+   "outcome": "supported",
+   "rationale": "Whitewater 2023-12-31 maturity 2027-12-21 for printed '1 2/21/27'.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-026141",
+     "text": "Whitewater Holding Company LLC Diversified Consumer Services 11.26 % S + 5.75 % 1 2/21/27 2,100"
+    },
+    {
+     "accession": "0000950170-24-026141",
+     "text": "Whitewater Holding Company LLC Diversified Consumer Services 11.26 % S + 5.75 % 1 2/21/27 2,100"
+    }
+   ]
+  },
+  {
+   "observation_key": "printed-total-investment-income-not-carried-to-financials",
+   "outcome": "supported",
+   "rationale": "Shared gap, disclosed. The detector is concrete.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-219875",
+     "text": "Total investment income $ 37,870 $ 56,406"
+    },
+    {
+     "accession": "0001193125-25-277541",
+     "text": "Investments in affiliated money market fund (cost of $ 148,322"
+    }
+   ]
+  },
+  {
+   "observation_key": "all-in-rate-below-disclosed-pik-rate",
+   "outcome": "supported",
+   "rationale": "Checked in rfgse. Streamland 2025-06-30: the 1,029 line publishes rate 10.07, spread 5.50 and PIK 9.07, as printed ('10.07 % S + 5.50 % (Incl. 9.07 % PIK)'); the 7,296 line 11.06 / 6.50 / 10.06. At 2025-09-30 the 7,465 line prints 9.76 % with 10.06 % PIK inside it; rfgse withholds the rate (kind unresolved) and keeps the printed spread 6.50 and PIK 10.06. A PIK component above the all-in rate cannot be right, and no printed figure settles it, so leaving the rate blank is the honest choice. financial_convention_unresolved fired on it (RVQ_REV_50156f863a77), so the existing detector covers recurrence.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107341",
+     "text": "Streamland Media Midco LLC Entertainment 10.07 % S + 5.50 % (Incl. 9.07 % PIK)"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-printed-variant-of-same-issuer",
+   "outcome": "supported",
+   "rationale": "Aria 'Inc.' vs printed 'LLC', and ESO punctuation, left; cosmetic, with a legal-form caveat.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107341",
+     "text": "Aria Systems, LLC Financial Services 12.44 % S + 8.00 % 06/30/26 24,236"
+    },
+    {
+     "accession": "0000950170-25-032221",
+     "text": "Southeast Mechanical, LLC (dba. SEM Holdings, LLC) Diversified Consumer Services 10.47 % S + 6.00 % 07/06/27 9,653 9,545 9,580"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rfgs-1",
+   "outcome": "supported",
+   "rationale": "Context-key tooling defect, deferred with the others. All 296 lines were written through correction_csv.append_record with src_context_id; the build diff shows only declared columns changing.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Rubrik,Inc. Software 12.64 % S + 7.00 % 06/10/27 32,242"
+    }
+   ]
+  },
+  {
+   "request_id": "REQ-rfgs-2",
+   "outcome": "supported",
+   "rationale": "acceptance_change correctly sent to the owner and the shared-table batch; the published names follow each page.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-019617",
+     "text": "Rubrik,Inc. Software 12.64 % S + 7.00 % 06/10/27 32,242"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "rgA5 -> rfgse (holdings parquet): 3,235 -> 3,259 rows (24 added, 0 removed). Common rows: issuer 145, extracted_industry 257, GICS sub-industry 137, pik 38, rate 34, reference rate 34, spread 5, par 2, maturity 1; fair value and cost 0. entity_id 189 and canonical_name 55 differ (sandbox resolution plus the name corrections); no canonical name has two entities.",
+  "Point (g) reverse check (review_gs/reverse.py) on all 14 quarters: every current-date identifier context with a fair-value fact is published, except section / category subtotals and the money market fund before 2025-09-30. Unpublished nil contexts (par or units, no cost or value) are the Thrasio Holdings, MedeAnalytics, Sweep Midco and Fullsteam lines the report lists, plus Charger 2024-03-31 x3 (not listed). Fullsteam 2023-03-31 C_7a3d2018 and ESO 2023-06-30 C_e970a130 are twins of published rows.",
+  "Spot-check of 18 random funded rows (seed rvgs) against their printed lines: 18 of 18 match on spread, rate, par, cost, fair value and maturity (SEM, Premier Care, Everest CAD, IMO, Rodeo, Fullsteam, Broadway, Honor, CivicPlus, Syntellis, Streamland, money market, Elemica, HOPCo, Clearcourse, AQ Helios, CORA).",
+  "Pre-existing, not from this run: the Gainsight term loan and its partly drawn line swap position chains at 2024-06-30 (488772df / 5cfd7ff2 -> 00cb1744 / 488772df); rgA5 has the same swap.",
+  "All findings proposed is not data correct: Volt Bidco's PIK reading and the unpublished nil positions above are known errors with no finding."
+ ]
+}

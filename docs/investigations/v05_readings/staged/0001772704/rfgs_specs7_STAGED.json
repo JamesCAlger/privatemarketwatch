@@ -1,0 +1,88 @@
+[
+ {
+  "quarter": "2023-06-30",
+  "context": "C_09173074-0928-4470-bdc3-425f98bfbea1",
+  "fields": {
+   "issuer_name": "MedeAnalytics, Inc.",
+   "extracted_industry": "Health Care Technology"
+  },
+  "reason": "Member name keeps the industry; printed line (0000950170-23-039902): 'MedeAnalytics, Inc. Health Care Technology 04/21/23 373 - - (7)'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "context": "C_b62ba846-725f-46af-a706-8294f38b3dde",
+  "fields": {
+   "issuer_name": "MedeAnalytics, Inc.",
+   "extracted_industry": "Health Care Technology"
+  },
+  "reason": "Member name keeps the industry; printed line (0000950170-23-060342): 'MedeAnalytics, Inc. Health Care Technology 04/21/23 373 - - (7)'"
+ },
+ {
+  "quarter": "2023-12-31",
+  "context": "C_65e599db-e350-4e32-88f0-e8402a88df39",
+  "fields": {
+   "issuer_name": "MedeAnalytics, Inc.",
+   "extracted_industry": "Health Care Technology"
+  },
+  "reason": "Member name keeps the industry; printed line (0000950170-24-026141): 'MedeAnalytics, Inc. Health Care Technology 04/21/23 373 - - (7)'"
+ },
+ {
+  "quarter": "2024-03-31",
+  "context": "C_36457e3a-4414-4f5e-8e3f-f4b432d86a72",
+  "fields": {
+   "issuer_name": "MedeAnalytics, Inc.",
+   "extracted_industry": "Health Care Technology"
+  },
+  "reason": "Member name keeps the industry; printed line (0000950170-24-056976): 'MedeAnalytics, Inc. Health Care Technology 04/21/23 373 - - (7)'"
+ },
+ {
+  "quarter": "2024-09-30",
+  "context": "C_ca5061a7-5361-481c-a3ec-be6d441301c2",
+  "fields": {
+   "issuer_name": "MedeAnalytics, Inc.",
+   "extracted_industry": "Health Care Technology"
+  },
+  "reason": "Member name keeps the industry; printed line (0000950170-24-125352): 'MedeAnalytics, Inc. Health Care Technology 04/21/23 373 - - (6)'"
+ },
+ {
+  "quarter": "2025-09-30",
+  "context": "C_954cee59-b2b2-47c9-9124-5d44962bd9fb",
+  "fields": {
+   "interest_rate": "",
+   "coupon_type": ""
+  },
+  "reason": "Member text 'Interest Rate 0.00% Reference Rate and Spread 0'; the page prints no rate: 'Sweep Midco LLC Commercial Services & Supplies 03/12/36 $ 14,704'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "context": "C_e8719dc8-819d-446b-b824-70dfb77903fa",
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Member text carries a rate; the undrawn line prints none: '... 05/01/30 26,415 - -'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "context": "C_187b0a56-4888-4b74-bbcd-2ad0da81cf27",
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Member text carries a rate; the undrawn line prints none: '... 05/01/28 1,478 - -'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "context": "C_cd559e49-092c-4aac-9485-af076ce60b81",
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Member text carries a rate; the undrawn line prints none: '... 05/01/30 3,694 - -'"
+ },
+ {
+  "quarter": "2023-09-30",
+  "context": "C_018626a6-e742-46ab-a9cf-df2d0033916f",
+  "fields": {
+   "interest_rate": ""
+  },
+  "reason": "Member text carries a rate; the undrawn line prints none: '... 05/01/30 8,313 - -'"
+ }
+]

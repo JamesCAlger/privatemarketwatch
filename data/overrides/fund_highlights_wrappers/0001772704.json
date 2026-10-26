@@ -1,10 +1,74 @@
 {
- "schema_version":"fund-highlights-wrapper.v1",
- "cik":"0001772704",
- "entity_name":"Goldman Sachs Private Middle Market Credit II LLC",
- "version":1,
- "concept_overrides":[{"xbrl_concept_substring":"investmentincomenet","target_field":"total_investment_income","action":"map","evidence":"0001193125-26-219875: Total investment income $ 37,870 $ 56,406; Net investment income $ 23,280 $ 29,136. Companyfacts tags the former InvestmentIncomeNet and the latter NetInvestmentIncome."}],
- "income_concept_suppress":["investmentincomenet"],
- "figure_corrections":[{"report_date":"2024-09-30","field":"nav_per_share","value":82.21,"evidence":"0000950170-24-125352: Net asset value per unit $ 82.21 $ 85.41. Current quarter 82.21, prior year 85.41; extracted 90.58 is not current NAV."}],
- "notes":"Fund clearing 2026-10-16: correct total versus net investment income mapping and one source-declared NAV. No inferred amount."
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001772704",
+ "entity_name": "Goldman Sachs Private Middle Market Credit II LLC",
+ "version": 1,
+ "concept_overrides": [
+  {
+   "xbrl_concept_substring": "investmentincomenet",
+   "target_field": "total_investment_income",
+   "action": "map",
+   "evidence": "0001193125-26-219875: Total investment income $ 37,870 $ 56,406; Net investment income $ 23,280 $ 29,136. Companyfacts tags the former InvestmentIncomeNet and the latter NetInvestmentIncome."
+  }
+ ],
+ "income_concept_suppress": [
+  "investmentincomenet"
+ ],
+ "figure_corrections": [
+  {
+   "report_date": "2024-09-30",
+   "field": "nav_per_share",
+   "value": 82.21,
+   "evidence": "0000950170-24-125352: Net asset value per unit $ 82.21 $ 85.41. Current quarter 82.21, prior year 85.41; extracted 90.58 is not current NAV."
+  },
+  {
+   "report_date": "2022-06-30",
+   "field": "distribution_per_share",
+   "value": 2.9,
+   "evidence": "0000950170-22-016027 (10-Q 2022-06-30): 'Distributions per unit $ 2.90 $ 2.82 $ 2.90 $ 2.82' (three months, prior three months, six months, prior six months; no first-quarter distribution). Published 1.45, half of the six months."
+  },
+  {
+   "report_date": "2023-06-30",
+   "field": "distribution_per_share",
+   "value": 3.03,
+   "evidence": "0000950170-23-039902 (10-Q 2023-06-30): 'Distributions per unit $ 3.03 $ 2.90 $ 3.03 $ 2.90'. Published 1.515, half of the six months."
+  },
+  {
+   "report_date": "2024-06-30",
+   "field": "distribution_per_share",
+   "value": 3.44,
+   "evidence": "0000950170-24-096216 (10-Q 2024-06-30): 'Distributions per unit $ 3.44 $ 3.03 $ 3.44 $ 3.03'. Published 1.46."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "distribution_per_share",
+   "value": 4.94,
+   "evidence": "0000950170-25-032221 (10-K 2024): 'Distributions per unit $ 11.16 $ 12.83 $ 11.32' less nine months 6.22 (0000950170-24-125352: 'Distributions per unit $ 2.78 $ 3.54 $ 6.22 $ 6.57') = 4.94. Published 4.93."
+  },
+  {
+   "report_date": "2025-06-30",
+   "field": "distribution_per_share",
+   "value": 2.37,
+   "evidence": "0000950170-25-107341 (10-Q 2025-06-30): 'Distributions per unit $ 2.37 $ 3.44 $ 2.37 $ 3.44'. Published 1.185, half of the six months."
+  },
+  {
+   "report_date": "2025-09-30",
+   "field": "distribution_per_share",
+   "value": 5.79,
+   "evidence": "0001193125-25-277541 (10-Q 2025-09-30): 'Distributions per unit $ 5.79 $ 2.78 $ 8.16 $ 6.22'. Published 2.18."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "distribution_per_share",
+   "value": 8.22,
+   "evidence": "0001193125-26-088646 (10-K 2025): 'Distributions per unit $ 16.38 $ 11.16 $ 12.83' less nine months 8.16 (0001193125-25-277541) = 8.22; distributions are recorded on the record date (Aug 6 declaration, record Oct 2, 6.41; Nov 5 declaration, record Dec 31, 1.81: 8.22). Published 5.79, the third quarter."
+  },
+  {
+   "report_date": "2026-06-30",
+   "field": "distribution_per_share",
+   "value": 2.72,
+   "evidence": "0001193125-26-344590 (10-Q 2026-06-30): 'Distributions per unit $ 2.72 $ 2.37 $ 2.72 $ 2.37'. Published blank."
+  }
+ ],
+ "notes": "Fund clearing 2026-10-16: correct total versus net investment income mapping and one source-declared NAV. No inferred amount. Fund clearing 2026-10-26 (rfgs): quarterly distributions per unit from the printed statements of changes in members' capital (three-month column; fourth quarter = printed year less printed nine months)."
 }
