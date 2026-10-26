@@ -250,9 +250,9 @@
   "basis": "D-247, gate PASS with investigation COMPLETE (independent review rfovb, 25/25 findings, 16/16 observations, 5/5 history): 37 findings, 25 outstanding, all proposed; 9/9 quarters tie on FV and cost; page sample 0/20; two builds. Replaces ovye (D-203)"
  },
  "0001766037": {
-  "label": "nmyd",
-  "accepted_on": "2026-10-17",
-  "basis": "D-204, gate PASS: 59 outstanding, all proposed; 14/14 quarters tie (five were off before); investigation COMPLETE after three independent reviews; sample 0/20 errors; NMY-R1 re-verifier fix (4b579bf); four builds"
+  "label": "rfnsf",
+  "accepted_on": "2026-10-26",
+  "basis": "D-248, gate INCOMPLETE with investigation COMPLETE (independent review rfnsf_r2, 70/70 findings, 25/25 observations, 2/2 history): 97 findings, 70 outstanding, 61 proposed, 9 industry_coverage waiting on owner (REQ-rfns-1); 14/14 quarters tie on FV and cost; page sample 0/20; six builds. Known parked published errors with staged fixes (D-248). Replaces nmyd (D-204)"
  },
  "0002008748": {
   "label": "layf",

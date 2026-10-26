@@ -1,0 +1,1096 @@
+{
+ "status": "STAGED, not applied (reviewer gap on rfnsf; no build left). Append as context-keyed lines with correction_csv.append_record. Numbered where one issuer has several such lines in a quarter (page order); check position chains after applying.",
+ "specs": [
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-359",
+   "identifier": "Affinipay Midco, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-359): 'Undrawn - - - 05/2021 05/2027 271 ( 2 ) - - % Affinipay Midco, LLC Software First Lien(3)(4) - Undrawn - - - 07/2022 06/2028 273 ( 2 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-398",
+   "identifier": "Allworth Financial Group, L.P.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-398): '06/2024 1,288 ( 10 ) - 2,316 ( 18 ) - - % Allworth Financial Group, L.P. First Lien(3)(4) - Undrawn - - - 12/2020 12/2026 3,507 ( 18 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-358",
+   "identifier": "Appriss Health, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-358): '- - - 02/2020 02/2026 701 ( 1 ) - - % Appriss Health, LLC Healthcare First Lien(3)(4) - Undrawn - - - 05/2021 05/2027 271 ( 2 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-366",
+   "identifier": "Associations, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-366): '- - - 11/2022 04/2028 225 ( 3 ) - - % Associations, Inc. Business Services First Lien(3)(4) - Undrawn - - - 07/2021 07/2027 955 ( 5 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-468",
+   "identifier": "Atlas AU Bidco Pty Ltd",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-468): 'Debt Investments - Australia Atlas AU Bidco Pty Ltd** Business Services First Lien(3)(4) - Undrawn - - - 12/2022 12/2028 $ 208 $ ( 3 ) $ -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-400",
+   "identifier": "Avalara, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-400): '- Undrawn - - - 01/2023 02/2029 1,807 ( 19 ) - - % Avalara, Inc. Software First Lien(3)(4) - Undrawn - - - 10/2022 10/2028 2,001 ( 20 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-423",
+   "identifier": "Bluefin Holding, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-423): '- 09/2021 09/2027 291 ( 3 ) ( 5 ) ( 0.00 ) % Bluefin Holding, LLC Software First Lien(3)(4) - Undrawn - - - 09/2023 09/2029 407 ( 5 ) ( 5 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-360",
+   "identifier": "Bullhorn, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-360): '- Undrawn - - - 07/2022 06/2028 273 ( 2 ) - - % Bullhorn, Inc. Software First Lien(3)(4) - Undrawn - - - 09/2020 09/2026 693 ( 2 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-433",
+   "identifier": "CG Group Holdings, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-433): '6 ) ( 6 ) ( 0.00 ) % CG Group Holdings, LLC Specialty Chemicals & Materials First Lien(3)(4) - Undrawn - - - 07/2021 07/2026 147 ( 2 ) ( 6 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-414",
+   "identifier": "Calabrio, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-414): '09/2029 246 ( 2 ) ( 2 ) 478 ( 2 ) ( 2 ) ( 0.00 ) % Calabrio, Inc. Software First Lien(4) - Undrawn - - - 04/2021 04/2027 206 ( 2 ) ( 2 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-352",
+   "identifier": "Coyote Buyer, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-352): '- 09/2021 09/2027 83 - - - % Coyote Buyer, LLC Specialty Chemicals & Materials First Lien(4) - Undrawn - - - 03/2020 02/2025 395 - -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-421",
+   "identifier": "DECA Dental Holdings LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-421): '3 ) ( 3 ) 3,199 ( 3 ) ( 3 ) ( 0.00 ) % DECA Dental Holdings LLC Healthcare First Lien(3)(4) - Undrawn - - - 08/2021 08/2027 180 ( 2 ) ( 3 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-453",
+   "identifier": "DOCS, MSO, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-453): '943 ( 9 ) ( 15 ) 1,360 ( 9 ) ( 18 ) ( 0.00 ) % DOCS, MSO, LLC Healthcare First Lien(3)(4) - Undrawn - - - 06/2022 06/2028 1,078 - ( 19 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-454",
+   "identifier": "Diligent Corporation",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-454): '- - 06/2022 06/2028 1,078 - ( 19 ) ( 0.00 ) % Diligent Corporation Software First Lien(3)(4) - Undrawn - - - 08/2020 08/2025 1,090 ( 14 ) ( 21 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-407",
+   "identifier": "GC Waves Holdings, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-407): '- - - 03/2022 03/2028 $ 4,012 $ ( 40 ) $ - - % GC Waves Holdings, Inc. First Lien(3)(4) - Undrawn - - - 07/2023 12/2024 4,543 ( 57 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-369",
+   "identifier": "GS Acquisitionco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-369): '- - - 08/2020 07/2025 1,202 ( 5 ) - - % GS Acquisitionco, Inc. Software First Lien(3)(4) - Undrawn - - - 02/2020 05/2026 1,918 ( 5 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-371",
+   "identifier": "Granicus, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-371): '- Undrawn - - - 05/2022 05/2028 844 ( 6 ) - - % Granicus, Inc. Software First Lien(3)(4) - Undrawn - - - 01/2021 01/2027 955 ( 7 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-361",
+   "identifier": "GraphPAD Software, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-361): 'Cost Fair Value Percent of Net Assets GraphPAD Software, LLC Healthcare First Lien(3)(4) - Undrawn - - - 04/2021 04/2027 $ 500 $ ( 3 ) $ -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-438",
+   "identifier": "Healthspan Buyer, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-438): '348 ( 3 ) ( 3 ) 724 ( 6 ) ( 7 ) ( 0.00 ) % Healthspan Buyer, LLC Healthcare First Lien(3)(4) - Undrawn - - - 10/2023 10/2030 799 ( 8 ) ( 8 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-383",
+   "identifier": "IG Investments Holdings, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-383): 'Value Percent of Net Assets IG Investments Holdings, LLC Business Services First Lien(3)(4) - Undrawn - - - 09/2021 09/2027 $ 1,825 $ ( 12 ) $ -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-367",
+   "identifier": "Infogain Corporation",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-367): '- - 07/2021 07/2027 955 ( 5 ) - - % Infogain Corporation Business Services First Lien(3)(4) - Undrawn - - - 07/2021 07/2026 1,236 ( 5 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-445",
+   "identifier": "KPSKY Acquisition Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-445): '- ( 7 ) 876 ( 2 ) ( 9 ) ( 0.00 ) % KPSKY Acquisition Inc. Business Services First Lien(3)(4) - Undrawn - - - 11/2023 11/2025 1,019 - ( 10 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-387",
+   "identifier": "KWOR Acquisition, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-387): '2,124 ( 7 ) - 2,632 ( 12 ) - - % KWOR Acquisition, Inc. Business Services First Lien(3)(4) - Undrawn - - - 12/2021 12/2027 1,644 ( 12 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-357",
+   "identifier": "Kele Holdco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-357): '01/2023 05/2025 120 ( 1 ) - - % Kele Holdco, Inc. Distribution & Logistics First Lien(3)(4) - Undrawn - - - 02/2020 02/2026 701 ( 1 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-370",
+   "identifier": "Legal Spend Holdings, LLC (fka Bottomline Technologies, Inc.)",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-370): '- % Legal Spend Holdings, LLC (fka Bottomline Technologies, Inc.) Software First Lien(3)(4) - Undrawn - - - 05/2022 05/2028 844 ( 6 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-465",
+   "identifier": "Notorious Topco, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-465): '( 23 ) 1,642 ( 7 ) ( 39 ) ( 0.00 ) % Notorious Topco, LLC Consumer Products First Lien(3)(4) - Undrawn - - - 11/2021 05/2027 1,721 ( 13 ) ( 127 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-404",
+   "identifier": "OA Buyer, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-404): '07/2023 07/2025 1,119 ( 20 ) - 1,407 ( 22 ) - - % OA Buyer, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 12/2021 12/2028 3,041 ( 22 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-458",
+   "identifier": "OB Hospitalist Group, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-458): '- ( 15 ) 828 ( 2 ) ( 22 ) ( 0.00 ) % OB Hospitalist Group, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 09/2021 09/2027 910 ( 9 ) ( 23 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-348",
+   "identifier": "Ocala Bidco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-348): '- Undrawn - - - 12/2021 12/2024 1,886 - - - % Ocala Bidco, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 12/2021 05/2024 1,630 - -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-399",
+   "identifier": "Oranje Holdco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-399): '- - - 12/2020 12/2026 3,507 ( 18 ) - - % Oranje Holdco, Inc. Education First Lien(3)(4) - Undrawn - - - 01/2023 02/2029 1,807 ( 19 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-349",
+   "identifier": "PPV Intermediate Holdings, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-349): '05/2024 1,630 - - - % PPV Intermediate Holdings, LLC Consumer Services First Lien(3)(4) - Undrawn - - - 09/2023 09/2025 5,964 - -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-388",
+   "identifier": "Pioneer Buyer I, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-388): '- - - 12/2021 12/2027 1,644 ( 12 ) - - % Pioneer Buyer I, LLC Software First Lien(3)(4) - Undrawn - - - 11/2021 11/2027 2,045 ( 13 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-449",
+   "identifier": "Power Grid Holdings, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-449): ') 1,057 ( 6 ) ( 14 ) ( 0.00 ) % Power Grid Holdings, Inc. Business Products First Lien(3)(4) - Undrawn - - - 11/2023 12/2030 1,435 ( 14 ) ( 14 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-466",
+   "identifier": "Project Essential Bidco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-466): '1,721 ( 13 ) ( 127 ) ( 0.01 ) % Project Essential Bidco, Inc. Software First Lien(3)(4) - Undrawn - - - 04/2021 04/2027 2,241 ( 11 ) ( 168 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-356",
+   "identifier": "Project Power Buyer, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-356): '10/2027 516 ( 1 ) - 924 ( 1 ) - - % Project Power Buyer, LLC Software First Lien(3)(4) - Undrawn - - - 01/2023 05/2025 120 ( 1 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-405",
+   "identifier": "Pye-Barker Fire & Safety, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-405): '12/2028 3,041 ( 22 ) - - % Pye-Barker Fire & Safety, LLC Business Services First Lien(3)(4) - Undrawn - - - 11/2021 11/2026 2,275 ( 33 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-365",
+   "identifier": "Radwell Parent, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-365): '484 ( 3 ) - 866 ( 3 ) - - % Radwell Parent, LLC Distribution & Logistics First Lien(3)(4) - Undrawn - - - 11/2022 04/2028 225 ( 3 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-368",
+   "identifier": "Recorded Future, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-368): '- - - 07/2021 07/2026 1,236 ( 5 ) - - % Recorded Future, Inc. Software First Lien(3)(4) - Undrawn - - - 08/2020 07/2025 1,202 ( 5 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-375",
+   "identifier": "Relativity ODA LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-375): '- 10/2021 10/2027 731 ( 7 ) - 1,095 ( 7 ) - - % Relativity ODA LLC Software First Lien(3)(4) - Undrawn - - - 05/2021 05/2027 1,061 ( 7 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-351",
+   "identifier": "Safety Borrower Holdings LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-351): '- - - 10/2021 12/2024 2,430 - - - % Safety Borrower Holdings LLC Software First Lien(3)(4) - Undrawn - - - 09/2021 09/2027 83 - -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-434",
+   "identifier": "Specialtycare, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-434): '- 07/2021 07/2026 147 ( 2 ) ( 6 ) ( 0.00 ) % Specialtycare, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 06/2021 06/2026 192 ( 3 ) ( 7 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-422",
+   "identifier": "Sun Acquirer Corp.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-422): '08/2027 180 ( 2 ) ( 3 ) ( 0.00 ) % Sun Acquirer Corp. Consumer Services First Lien(3)(4) - Undrawn - - - 09/2021 09/2027 291 ( 3 ) ( 5 )'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-376",
+   "identifier": "Xactly Corporation",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-376): 'Undrawn - - - 05/2021 05/2027 1,061 ( 7 ) - - % Xactly Corporation Software First Lien(3)(4) - Undrawn - - - 06/2020 07/2025 551 ( 9 ) -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-350",
+   "identifier": "YLG Holdings, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-350): '- - - 09/2023 09/2025 5,964 - - - % YLG Holdings, Inc. Business Services First Lien(3)(4) - Undrawn - - - 10/2021 12/2024 2,430 - -'"
+  },
+  {
+   "quarter": "2023-12-31",
+   "accession": "0001766037-24-000005",
+   "context": "c-406",
+   "identifier": "Zone Climate Services, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000005, context c-406): 'Value Percent of Net Assets Zone Climate Services, Inc. Business Services First Lien(3)(4) - Undrawn - - - 03/2022 03/2028 $ 4,012 $ ( 40 ) $ -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-350",
+   "identifier": "Affinipay Midco, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-350): 'Undrawn - - - 09/2021 09/2027 363 ( 2 ) - - % Affinipay Midco, LLC Software First Lien(3)(4) - Undrawn - - - 07/2022 06/2028 273 ( 2 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-398",
+   "identifier": "Allworth Financial Group, L.P.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-398): '1,327 ( 17 ) - - % Allworth Financial Group, L.P. Financial Services First Lien(3)(4) - Undrawn - - - 12/2020 12/2026 3,507 ( 17 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-360",
+   "identifier": "Associations, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-360): 'Cost Fair Value Percent of Net Assets Associations, Inc. Business Services First Lien(3)(4) - Undrawn - - - 07/2021 07/2027 $ 719 $ ( 4 ) $ -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-463",
+   "identifier": "Atlas AU Bidco Pty Ltd",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-463): 'Debt Investments - Australia Atlas AU Bidco Pty Ltd** Business Services First Lien(3)(4) - Undrawn - - - 12/2022 12/2028 $ 208 $ ( 2 ) $ -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-400",
+   "identifier": "Avalara, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-400): '- Undrawn - - - 01/2023 02/2029 1,807 ( 18 ) - - % Avalara, Inc. Software First Lien(3)(4) - Undrawn - - - 10/2022 10/2028 2,001 ( 19 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-352",
+   "identifier": "Bamboo Health Holdings, LLC (f/k/a Appriss Health, LLC)",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-352): ') - - % Bamboo Health Holdings, LLC (f/k/a Appriss Health, LLC) Healthcare First Lien(3)(4) - Undrawn - - - 05/2021 05/2027 244 ( 2 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-423",
+   "identifier": "Bluefin Holding, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-423): '491 ( 2 ) ( 2 ) 2,148 ( 2 ) ( 2 ) ( 0.00 ) % Bluefin Holding, LLC Software First Lien(3)(4) - Undrawn - - - 09/2023 09/2029 407 ( 5 ) ( 2 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-351",
+   "identifier": "Bullhorn, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-351): '- Undrawn - - - 07/2022 06/2028 273 ( 2 ) - - % Bullhorn, Inc. Software First Lien(3)(4) - Undrawn - - - 09/2020 09/2026 693 ( 2 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-416",
+   "identifier": "CG Group Holdings, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-416): '2 ) ( 2 ) ( 0.00 ) % CG Group Holdings, LLC Specialty Chemicals & Materials First Lien(3)(4) - Undrawn - - - 07/2021 07/2026 147 ( 2 ) ( 2 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-429",
+   "identifier": "Calabrio, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-429): '- - - 05/2022 05/2028 844 ( 6 ) ( 4 ) ( 0.00 ) % Calabrio, Inc. Software First Lien(3)(4) - Undrawn - - - 04/2021 04/2027 480 ( 2 ) ( 5 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-430",
+   "identifier": "Community Brands ParentCo, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-430): 'Fair Value Percent of Net Assets Community Brands ParentCo, LLC Software First Lien(3)(4) - Undrawn - - - 02/2022 02/2028 $ 276 $ ( 2 ) $ ( 5 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-439",
+   "identifier": "DOCS, MSO, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-439): '- - - 10/2023 10/2030 799 ( 8 ) ( 8 ) ( 0.00 ) % DOCS, MSO, LLC Healthcare First Lien(3)(4) - Undrawn - - - 06/2022 06/2028 1,078 - ( 9 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-397",
+   "identifier": "Diligent Corporation",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-397): '03/2024 03/2026 2,258 - - 4,399 ( 17 ) - - % Diligent Corporation Software First Lien(3)(4) - Undrawn - - - 08/2020 08/2025 1,327 ( 17 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-409",
+   "identifier": "GC Waves Holdings, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-409): '1,413 ( 9 ) - 3,970 ( 35 ) - - % GC Waves Holdings, Inc. Financial Services First Lien(3)(4) - Undrawn - - - 07/2023 12/2024 4,237 - -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-431",
+   "identifier": "GS Acquisitionco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-431): '02/2028 $ 276 $ ( 2 ) $ ( 5 ) ( 0.00 ) % GS Acquisitionco, Inc. Software First Lien(4) - Undrawn - - - 02/2020 05/2028 1,918 ( 5 ) ( 5 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-438",
+   "identifier": "Healthspan Buyer, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-438): '06/2021 06/2026 183 ( 3 ) ( 7 ) ( 0.00 ) % Healthspan Buyer, LLC Healthcare First Lien(3)(4) - Undrawn - - - 10/2023 10/2030 799 ( 8 ) ( 8 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-378",
+   "identifier": "IG Investments Holdings, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-378): '12/2027 1,255 ( 9 ) - - % IG Investments Holdings, LLC Business Services First Lien(3)(4) - Undrawn - - - 09/2021 09/2027 1,825 ( 11 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-432",
+   "identifier": "Icefall Parent, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-432): '02/2020 05/2028 1,918 ( 5 ) ( 5 ) ( 0.00 ) % Icefall Parent, Inc. Software First Lien(3)(4) - Undrawn - - - 01/2024 01/2030 538 ( 5 ) ( 5 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-368",
+   "identifier": "Infogain Corporation",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-368): '09/2024 198 ( 2 ) - 574 ( 4 ) - - % Infogain Corporation Business Services First Lien(3)(4) - Undrawn - - - 07/2021 07/2026 1,236 ( 4 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-377",
+   "identifier": "KWOR Acquisition, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-377): '962 ( 9 ) - 1,924 ( 9 ) - - % KWOR Acquisition, Inc. Business Services First Lien(3)(4) - Undrawn - - - 12/2021 12/2027 1,255 ( 9 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-347",
+   "identifier": "Kele Holdco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-347): '91 ( 1 ) - 352 ( 1 ) - - % Kele Holdco, Inc. Distribution & Logistics First Lien(3)(4) - Undrawn - - - 02/2020 02/2026 226 ( 1 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-428",
+   "identifier": "Legal Spend Holdings, LLC (fka Bottomline Technologies, Inc.)",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-428): ') % Legal Spend Holdings, LLC (fka Bottomline Technologies, Inc.) Software First Lien(3)(4) - Undrawn - - - 05/2022 05/2028 844 ( 6 ) ( 4 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-460",
+   "identifier": "Notorious Topco, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-460): '( 20 ) 1,426 ( 7 ) ( 38 ) ( 0.01 ) % Notorious Topco, LLC Consumer Products First Lien(3)(4) - Undrawn - - - 11/2021 05/2027 1,229 ( 9 ) ( 89 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-404",
+   "identifier": "OA Buyer, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-404): '07/2023 07/2025 1,119 ( 20 ) - 1,407 ( 22 ) - - % OA Buyer, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 12/2021 12/2028 2,635 ( 26 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-443",
+   "identifier": "OB Hospitalist Group, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-443): '- ( 7 ) 856 ( 2 ) ( 9 ) ( 0.00 ) % OB Hospitalist Group, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 09/2021 09/2027 910 ( 9 ) ( 11 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-379",
+   "identifier": "Ocala Bidco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-379): '- - - 09/2021 09/2027 1,825 ( 11 ) - - % Ocala Bidco, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 12/2021 05/2024 867 ( 11 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-399",
+   "identifier": "Oranje Holdco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-399): '- - - 12/2020 12/2026 3,507 ( 17 ) - - % Oranje Holdco, Inc. Education First Lien(3)(4) - Undrawn - - - 01/2023 02/2029 1,807 ( 18 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-383",
+   "identifier": "Pioneer Buyer I, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-383): 'Shares Cost Fair Value Percent of Net Assets Pioneer Buyer I, LLC Software First Lien(3)(4) - Undrawn - - - 11/2021 11/2027 $ 2,590 $ ( 13 ) $ -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-453",
+   "identifier": "Power Grid Holdings, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-453): ') 1,904 ( 8 ) ( 15 ) ( 0.00 ) % Power Grid Holdings, Inc. Business Products First Lien(3)(4) - Undrawn - - - 11/2023 12/2030 1,473 ( 15 ) ( 15 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-424",
+   "identifier": "Project Accelerate Parent, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-424): '09/2029 407 ( 5 ) ( 2 ) ( 0.00 ) % Project Accelerate Parent, LLC Software First Lien(3)(4) - Undrawn - - - 02/2024 02/2031 579 ( 3 ) ( 3 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-461",
+   "identifier": "Project Essential Bidco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-461): '1,229 ( 9 ) ( 89 ) ( 0.01 ) % Project Essential Bidco, Inc. Software First Lien(3)(4) - Undrawn - - - 04/2021 04/2027 2,240 ( 10 ) ( 235 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-343",
+   "identifier": "Project Power Buyer, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-343): '10/2027 516 ( 1 ) - 633 ( 1 ) - - % Project Power Buyer, LLC Software First Lien(3)(4) - Undrawn - - - 01/2023 05/2025 120 ( 1 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-405",
+   "identifier": "Pye-Barker Fire & Safety, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-405): '12/2028 2,635 ( 26 ) - - % Pye-Barker Fire & Safety, LLC Business Services First Lien(3)(4) - Undrawn - - - 11/2021 11/2026 2,275 ( 30 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-359",
+   "identifier": "Radwell Parent, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-359): '484 ( 3 ) - 793 ( 3 ) - - % Radwell Parent, LLC Distribution & Logistics First Lien(3)(4) - Undrawn - - - 11/2022 04/2029 225 ( 3 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-364",
+   "identifier": "Recorded Future, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-364): '02/2022 02/2028 603 ( 4 ) - 690 ( 4 ) - - % Recorded Future, Inc. Software First Lien(3)(4) - Undrawn - - - 08/2020 07/2025 1,202 ( 4 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-369",
+   "identifier": "Relativity ODA LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-369): 'Undrawn - - - 07/2021 07/2026 1,236 ( 4 ) - - % Relativity ODA LLC Software First Lien(3)(4) - Undrawn - - - 05/2021 05/2027 1,061 ( 7 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-348",
+   "identifier": "Safety Borrower Holdings LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-348): '- - - 02/2020 02/2026 226 ( 1 ) - - % Safety Borrower Holdings LLC Software First Lien(3)(4) - Undrawn - - - 09/2021 09/2027 283 ( 1 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-437",
+   "identifier": "Specialtycare, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-437): '03/2028 2,858 ( 29 ) ( 5 ) ( 0.00 ) % Specialtycare, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 06/2021 06/2026 183 ( 3 ) ( 7 )'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-349",
+   "identifier": "Sun Acquirer Corp.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-349): '- - - 09/2021 09/2027 283 ( 1 ) - - % Sun Acquirer Corp. Consumer Services First Lien(3)(4) - Undrawn - - - 09/2021 09/2027 363 ( 2 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-373",
+   "identifier": "Xactly Corporation",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-373): '- 10/2021 10/2027 737 ( 7 ) - 1,101 ( 7 ) - - % Xactly Corporation Software First Lien(3)(4) - Undrawn - - - 06/2020 07/2025 551 ( 7 ) -'"
+  },
+  {
+   "quarter": "2024-03-31",
+   "accession": "0001766037-24-000008",
+   "context": "c-436",
+   "identifier": "Zone Climate Services, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000008, context c-436): ') 690 ( 3 ) ( 5 ) ( 0.00 ) % Zone Climate Services, Inc. Business Services First Lien(3)(4) - Undrawn - - - 03/2022 03/2028 2,858 ( 29 ) ( 5 )'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-443",
+   "identifier": "Al Altius US Bidco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-443): '- 05/2024 05/2026 1,980 - - - % Al Altius US Bidco, Inc. Business Services First Lien(3)(4) - Undrawn - - - 05/2024 05/2026 2,000 - -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-397",
+   "identifier": "Allworth Financial Group, L.P.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-397): '- - 4,269 ( 15 ) - - % Allworth Financial Group, L.P. Financial Services First Lien(3)(4) - Undrawn - - - 12/2020 12/2027 3,507 ( 15 ) -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-489",
+   "identifier": "Atlas AU Bidco Pty Ltd",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-489): 'Debt Investments - Australia Atlas AU Bidco Pty Ltd** Business Services First Lien(3)(4) - Undrawn - - - 12/2022 12/2028 $ 208 $ ( 2 ) $ -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-399",
+   "identifier": "Avalara, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-399): '- Undrawn - - - 01/2023 02/2029 1,807 ( 17 ) - - % Avalara, Inc. Software First Lien(3)(4) - Undrawn - - - 10/2022 10/2028 2,001 ( 18 ) -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-414",
+   "identifier": "Bluefin Holding, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-414): '01/2024 02/2031 491 ( 2 ) - 1,624 ( 2 ) - - % Bluefin Holding, LLC Software First Lien(3)(4) - Undrawn - - - 09/2023 09/2029 407 ( 4 ) -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-455",
+   "identifier": "CG Group Holdings, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-455): '1 ) ( 1 ) ( 0.00 ) % CG Group Holdings, LLC Specialty Chemicals & Materials First Lien(3)(4) - Undrawn - - - 07/2021 07/2026 147 ( 2 ) ( 1 )'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-451",
+   "identifier": "CentralSquare Technologies, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-451): '2,172 ( 11 ) - 5,648 ( 11 ) - - % CentralSquare Technologies, LLC Software First Lien(3)(4) - Undrawn - - - 04/2024 04/2030 1,708 ( 21 ) -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-477",
+   "identifier": "DOCS, MSO, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-477): '- - - 12/2021 12/2027 663 ( 5 ) ( 10 ) ( 0.00 ) % DOCS, MSO, LLC Healthcare First Lien(3)(4) - Undrawn - - - 06/2022 06/2028 1,078 - ( 12 )'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-442",
+   "identifier": "DOXA Insurance Holdings LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-442): '( 28 ) - 11,816 ( 28 ) - - % DOXA Insurance Holdings LLC Business Services First Lien(3)(4) - Undrawn - - - 05/2024 05/2026 1,980 - -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-407",
+   "identifier": "GC Waves Holdings, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-407): '1,413 ( 8 ) - 3,195 ( 8 ) - - % GC Waves Holdings, Inc. Financial Services First Lien(3)(4) - Undrawn - - - 07/2023 12/2024 3,387 - -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-447",
+   "identifier": "Galway Borrower LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-447): '05/2030 433 ( 4 ) - 1,114 ( 4 ) - - % Galway Borrower LLC Business Services First Lien(3)(4) - Undrawn - - - 04/2024 10/2025 1,200 ( 9 ) -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-476",
+   "identifier": "KWOR Acquisition, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-476): '2,590 ( 12 ) ( 10 ) ( 0.00 ) % KWOR Acquisition, Inc. Business Services First Lien(3)(4) - Undrawn - - - 12/2021 12/2027 663 ( 5 ) ( 10 )'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-486",
+   "identifier": "Notorious Topco, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-486): '3,957 ( 40 ) ( 37 ) ( 0.01 ) % Notorious Topco, LLC Consumer Products First Lien(3)(4) - Undrawn - - - 11/2021 05/2027 1,844 ( 8 ) ( 129 )'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-403",
+   "identifier": "OA Buyer, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-403): '- - - 07/2023 07/2025 867 - - 1,155 ( 1 ) - - % OA Buyer, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 12/2021 12/2028 2,787 ( 28 ) -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-429",
+   "identifier": "OB Hospitalist Group, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-429): '08/2025 353 - - 494 ( 1 ) - - % OB Hospitalist Group, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 09/2021 09/2027 811 ( 8 ) -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-398",
+   "identifier": "Oranje Holdco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-398): '- - - 12/2020 12/2027 3,507 ( 15 ) - - % Oranje Holdco, Inc. Education First Lien(3)(4) - Undrawn - - - 01/2023 02/2029 1,807 ( 17 ) -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-475",
+   "identifier": "Pioneer Buyer I, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-475): '( 10 ) ( 10 ) 5,900 ( 10 ) ( 10 ) ( 0.00 ) % Pioneer Buyer I, LLC Software First Lien(3)(4) - Undrawn - - - 11/2021 11/2027 2,590 ( 12 ) ( 10 )'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-478",
+   "identifier": "Power Grid Holdings, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-478): '1,078 - ( 12 ) ( 0.00 ) % Power Grid Holdings, Inc. Business Products First Lien(3)(4) - Undrawn - - - 11/2023 12/2030 1,511 ( 14 ) ( 15 )'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-415",
+   "identifier": "Project Accelerate Parent, LLC",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-415): '- - 09/2023 09/2029 407 ( 4 ) - - % Project Accelerate Parent, LLC Software First Lien(3)(4) - Undrawn - - - 02/2024 02/2031 579 ( 3 ) -'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-487",
+   "identifier": "Project Essential Bidco, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-487): 'Fair Value Percent of Net Assets Project Essential Bidco, Inc. Software First Lien(3)(4) - Undrawn - - - 04/2021 04/2027 $ 2,241 $ ( 9 ) $ ( 167 )'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-459",
+   "identifier": "Specialtycare, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-459): '( 1 ) ( 1 ) 2,968 ( 2 ) ( 2 ) ( 0.00 ) % Specialtycare, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 06/2021 06/2026 139 ( 2 ) ( 4 )'"
+  },
+  {
+   "quarter": "2024-06-30",
+   "accession": "0001766037-24-000012",
+   "context": "c-485",
+   "identifier": "Zone Climate Services, Inc.",
+   "fields": {
+    "instrument_description": "First Lien Undrawn"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-24-000012, context c-485): '( 31 ) ( 31 ) ( 0.01 ) % Zone Climate Services, Inc. Business Services First Lien(3)(4) - Undrawn - - - 03/2022 03/2028 3,957 ( 40 ) ( 37 )'"
+  },
+  {
+   "quarter": "2025-09-30",
+   "accession": "0001766037-25-000018",
+   "context": "c-80",
+   "identifier": "Acumatica Holdings, Inc., Software",
+   "fields": {
+    "instrument_description": "First Lien"
+   },
+   "reason": "Member names the issuer only, so no instrument is published; the printed line gives the instrument. Printed (0001766037-25-000018, context c-80): '142 21,307 21,282 21,307 2.19 % Acumatica Holdings, Inc. Software First Lien(2)(3)(6) SOFR(Q) 4.75 % 9.06 % 07/2025 07/2032 21,024 21,024 21,024'"
+  }
+ ],
+ "problems": []
+}

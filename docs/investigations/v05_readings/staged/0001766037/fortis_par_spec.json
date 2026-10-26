@@ -1,0 +1,15 @@
+{
+ "status": "STAGED, not applied (reviewer gap on rfnsf; no build left).",
+ "specs": [
+  {
+   "quarter": "2023-09-30",
+   "accession": "0001766037-23-000014",
+   "context": "c-405",
+   "identifier": "Fortis Solutions Group, LLC First Lien Undrawn",
+   "fields": {
+    "principal_amount": "1722000"
+   },
+   "reason": "The printed par 1,722 of this undrawn line is tagged on the sibling context c-404 ('Fortis Solutions Group, LLC First Lien Undrawn - 1', no values); c-405 carries the line's cost and value. Printed (0001766037-23-000014): 'Fortis Solutions Group, LLC Packaging First lien (3)(4) - Undrawn - - - 10/2021 10/2027 1,722 ( 12 ) ( 19 )'"
+  }
+ ]
+}

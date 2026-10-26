@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "nmyd",
+ "sandbox": "rfnsf",
  "dispositions": [
   {
    "disposition_id": "PD-F23-1766037-1",
@@ -56,7 +56,7 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17",
    "addresses_verdict": {
     "2025-12-31": "The earlier reviewer found published fair value 6.916M above the filed 1,512,098. Fixed in this run: the DCA non-accrual note aggregate (c-1112, 6,376) is excluded and the bracketed undrawn values tagged with no sign (+540) take the printed sign; published now equals 1,512,098. What F23 still reports is the per-issuer percent printing.",
@@ -114,7 +114,7 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17",
    "addresses_verdict": {
     "2024-06-30": "The earlier reviewer read the gap between the published percent sum and the printed total percent as rows missing from extraction. It is not: the remaining percents are printed only on issuer total lines and tagged on non-position group contexts; published fair value equals the filed total in this quarter, so no position is missing. At 2024-06-30 published fair value is 1,385,068 = printed total.",
@@ -172,7 +172,7 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17",
    "addresses_verdict": {
     "2026-03-31": "The earlier reviewer read the gap between the published percent sum and the printed total percent as rows missing from extraction. It is not: the remaining percents are printed only on issuer total lines and tagged on non-position group contexts; published fair value equals the filed total in this quarter, so no position is missing. At 2026-03-31 published fair value is 1,457,048 = printed total (DigiCert corrected, bracket signs read)."
@@ -229,7 +229,7 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17",
    "addresses_verdict": {
     "2026-03-31": "The earlier reviewer read the gap between the published percent sum and the printed total percent as rows missing from extraction. It is not: the remaining percents are printed only on issuer total lines and tagged on non-position group contexts; published fair value equals the filed total in this quarter, so no position is missing. At 2026-03-31 published fair value is 1,457,048 = printed total."
@@ -273,7 +273,7 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17"
   },
   {
@@ -330,7 +330,7 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17"
   },
   {
@@ -346,7 +346,7 @@
     "2023-12-31",
     "2024-03-31"
    ],
-   "statement": "The rate fields of these rows come from a sibling context of the same loan (src_filled_fields), which the re-verifier does not replay. Each published value equals the printed line: CommerceHub 2023-12-31 spread 6.25 and rate 11.79 (rate-only context c-249 joined to c-250, the context this run names from the page) and 2024-03-31 6.25 / 11.58 (c-232 joined to c-233, source_encodings.rate_only_contexts adopt_adjacent); TigerConnect drawn 2023-12-31 spread 3.38 and PIK 3.38 merged from the duplicate-member context (dedupe), printed '3.38 % + 3.38 %/PIK 12.28 %'. The TigerConnect spread is the cash part of a 6.76 margin (owner question D-092, printed_margin_reading not set).",
+   "statement": "The rate fields of these rows come from a sibling context of the same loan (src_filled_fields), which the re-verifier does not replay. Each published value equals the printed line: CommerceHub 2023-12-31 spread 6.25 and rate 11.79 (rate-only context c-249 joined to c-250, the context named from the page by context_identifiers) and 2024-03-31 6.25 / 11.58 (c-232 joined to c-233, source_encodings.rate_only_contexts adopt_adjacent); TigerConnect drawn 2023-12-31 PIK 3.38 and rate 12.28 merged from the duplicate-member context (dedupe), printed '3.38 % + 3.38 %/PIK 12.28 %'; its spread is published as the total margin 6.76 (cash 3.38 + PIK 3.38, D-031) by a context-keyed row correction in this run.",
    "basis": "read",
    "evidence": [
     {
@@ -365,12 +365,12 @@
      "source": "filing",
      "accession": "0001766037-24-000005",
      "verbatim": "First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190",
-     "quote": "'First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190': TigerConnect drawn line: cash margin 3.38 and PIK 3.38, as published."
+     "quote": "'First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190': TigerConnect drawn line: cash 3.38 plus PIK 3.38; published spread 6.76 (D-031), PIK 3.38, rate 12.28."
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
-   "decided_on": "2026-10-17"
+   "decided_by": "PROPOSED by agent claude-fund-agent-nmfslf-rfns (fund-clearing loop, sandbox rfnsf); not accepted by the owner",
+   "decided_on": "2026-10-26"
   },
   {
    "disposition_id": "PD-SRC_BDC01-1766037-6",
@@ -401,7 +401,7 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17"
   },
   {
@@ -433,7 +433,7 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17"
   },
   {
@@ -465,7 +465,7 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17"
   },
   {
@@ -497,8 +497,66 @@
     }
    ],
    "rerun": "see docs/investigations/v05_readings/reports/0001766037.json and scratch/fund_runs/0001766037/",
-   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd); not accepted by the owner",
+   "decided_by": "PROPOSED by agent nmfslf_fund_agent_2026-10-17 (fund-clearing loop, sandbox nmyd; carried to rfnsf unchanged); not accepted by the owner",
    "decided_on": "2026-10-17"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1766037-8",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "reason_key": "maturity-not-past-loan-held-past-printed-maturity",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2024-09-30"
+   ],
+   "statement": "The two flagged rows are CFS Management's first-lien loans at 2024-09-30. The 10-Q prints their maturity as 08/2024, a month before the report date; the loans were still held (value 7,757 and 2,968 against cost 8,743 and 3,345, PIK margin 2.75). The 10-K for 2024-12-31 prints the same loans with maturity 09/2026, so the maturity was extended after the quarter. The build had withheld the printed date (page reading: before the report date); this run publishes it from the printed line by row correction, which raises the check. No fix applies: the published maturity is the printed one.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-24-000017",
+     "verbatim": "CFS Management, LLC Healthcare First Lien(2)(3)(6) SOFR(Q)* 6.25 % + 2.75 %/PIK 13.87 % 09/2021 08/2024 8,743 8,743 7,757",
+     "quote": "'CFS Management, LLC Healthcare First Lien(2)(3)(6) SOFR(Q)* 6.25 % + 2.75 %/PIK 13.87 % 09/2021 08/2024 8,743 8,743 7,757': maturity 08/2024 printed at 2024-09-30, as published."
+    },
+    {
+     "source": "filing",
+     "accession": "0001766037-25-000003",
+     "verbatim": "CFS Management, LLC Healthcare First Lien(2)(3)(6) SOFR(Q)* 6.25 % + 2.25 %/PIK 13.09 % 09/2021 09/2026 9,173 9,173 8,256",
+     "quote": "'CFS Management, LLC Healthcare First Lien(2)(3)(6) SOFR(Q)* 6.25 % + 2.25 %/PIK 13.09 % 09/2021 09/2026 9,173 9,173 8,256': next quarter the same loan prints 09/2026 (extended)."
+    }
+   ],
+   "rerun": "scratch/fund_runs/0001766037/r2/rowcmp.py rfnsf; docs/investigations/v05_readings/reports/0001766037.json",
+   "decided_by": "PROPOSED by agent claude-fund-agent-nmfslf-rfns (fund-clearing loop, sandbox rfnsf); not accepted by the owner",
+   "decided_on": "2026-10-26"
+  },
+  {
+   "disposition_id": "PD-maturity_not_past-1766037-9",
+   "class": "as_filed",
+   "engine": "weak",
+   "rule_name": "maturity_not_past",
+   "reason_key": "maturity-not-past-undrawn-commitment-printed-after-its-expiry",
+   "ciks": [
+    "0001766037"
+   ],
+   "quarters": [
+    "2023-03-31"
+   ],
+   "statement": "The flagged row is TigerConnect's second undrawn line at 2023-03-31 (par 238, cost 0, value -1). The 10-Q prints its expiry 02/2023, before the report date: an undrawn commitment whose availability period had ended but which the filer still lists. The build had withheld the printed date; this run publishes it from the printed line by row correction, which raises the check. No fix applies: the published date is the printed one. Different reason from a funded loan held past maturity, so its own key.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001766037-23-000006",
+     "verbatim": "First lien (2)(3)(4) - Undrawn - - - 02/2022 02/2023 238 - ( 1 )",
+     "quote": "'First lien (2)(3)(4) - Undrawn - - - 02/2022 02/2023 238 - ( 1 )': TigerConnect undrawn line, expiry 02/2023 printed at 2023-03-31, as published."
+    }
+   ],
+   "rerun": "scratch/fund_runs/0001766037/r2/rowcmp.py rfnsf; docs/investigations/v05_readings/reports/0001766037.json",
+   "decided_by": "PROPOSED by agent claude-fund-agent-nmfslf-rfns (fund-clearing loop, sandbox rfnsf); not accepted by the owner",
+   "decided_on": "2026-10-26"
   }
  ]
 }

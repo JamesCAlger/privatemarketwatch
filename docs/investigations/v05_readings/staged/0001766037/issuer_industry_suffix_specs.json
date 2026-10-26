@@ -1,0 +1,12 @@
+{
+ "status": "STAGED, not applied (found after the last build of the rfns run). Append as context-keyed issuer_name corrections with correction_csv.append_record; also restore instrument_description to the published value (a corrected name is applied before the wrapper strip, see observation issuer-name-correction-blanks-instrument-description).",
+ "specs": [
+  {"quarter": "2024-06-30", "accession": "0001766037-24-000012", "context": "c-393", "issuer_name": "Foreside Financial Group, LLC", "instrument_description": "First Lien Undrawn 1", "printed": "Foreside Financial Group, LLC Business Services First Lien(3)(4) - Undrawn - - - 05/2022 09/2027 $ 977 $ ( 6 ) $ -"},
+  {"quarter": "2024-06-30", "accession": "0001766037-24-000012", "context": "c-394", "issuer_name": "Foreside Financial Group, LLC", "instrument_description": "First Lien Undrawn 2", "printed": "First Lien(3)(4) - Undrawn - - - 05/2022 11/2024 1,034 ( 9 ) -"},
+  {"quarter": "2024-06-30", "accession": "0001766037-24-000012", "context": "c-395", "issuer_name": "Foreside Financial Group, LLC", "instrument_description": "First Lien Undrawn 3", "printed": "third undrawn line of the Foreside block (03/2024)"},
+  {"quarter": "2024-06-30", "accession": "0001766037-24-000012", "context": "c-430", "issuer_name": "Ncontracts, LLC", "instrument_description": "First Lien Undrawn 1", "printed": "Ncontracts, LLC Software First Lien(3)(4) - Undrawn - - - 12/2023 12/2029 335 ( 4 ) -"},
+  {"quarter": "2024-06-30", "accession": "0001766037-24-000012", "context": "c-431", "issuer_name": "Ncontracts, LLC", "instrument_description": "First Lien Undrawn 2", "printed": "First Lien(3)(4) - Undrawn - - - 12/2023 12/2025 502 - -"},
+  {"quarter": "2025-03-31", "accession": "0001766037-25-000006", "context": "c-31", "issuer_name": "GS Acquisitionco, Inc.", "instrument_description": "First Lien", "printed": "GS Acquisitionco, Inc. Software First Lien(2)(3)(6) SOFR(Q) 5.25 % 9.55 % 02/2020 05/2028 29,418 29,372 29,418 3.00 %"},
+  {"quarter": "2025-09-30", "accession": "0001766037-25-000018", "context": "c-80", "issuer_name": "Acumatica Holdings, Inc.", "instrument_description": "First Lien", "printed": "Acumatica Holdings, Inc. Software First Lien(2)(3)(6) SOFR(Q) 4.75 % 9.06 % 07/2025 07/2032 21,024 21,024 21,024 2.16 %"}
+ ]
+}

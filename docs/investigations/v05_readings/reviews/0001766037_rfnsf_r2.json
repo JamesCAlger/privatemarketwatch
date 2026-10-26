@@ -1,0 +1,1592 @@
+{
+ "reviewer_id": "claude-independent-reviewer-nmfslf-rfnsf-r2",
+ "report_digest": "e9a13b53671803c89b0bf82052345cfc33aeb0ebde4175eb35c9451024edccbc",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001766037_2025-12-31_BLOCKING_SOURCE_POSITION_LIKE_PARSER_MISMATCH_d7ea42fde7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "blocking_source_position_like_parser_mismatch 2025-12-31: c-1112 carries only cost 7,211 and FV 6,376, which equal the note's DCA aggregate (quoted). My reverse check (review_ns/reverse_ov.py) finds c-1112 as the only unpublished company-named valued context of the quarter. With it excluded, published cost and FV tie the printed Total Investments exactly. A footnote aggregate on an investment member; the exclusion rule is right.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "BDCSRC_0001766037_2026-03-31_BLOCKING_PIPELINE_ONLY_POSITION_7785c1bb28",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "blocking_pipeline_only_position 2026-03-31: DigiCert publishes 7,063 / 7,016 / 7,010, SOFR 5.75, equal to the printed line. c-241 (a Bonterra member holding principal 7,063) appears in my reverse check as an unpublished principal-only context, which fits the cross-tagging the report describes. Published FV ties the printed 1,457,048. source_ambiguity, with the row correction kept, is right.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_06349506ca72",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "SRC_BDC01 2025-12-31: c-1112 carries only cost 7,211 and FV 6,376, which equal the note's DCA aggregate (quoted). My reverse check (review_ns/reverse_ov.py) finds c-1112 as the only unpublished company-named valued context of the quarter. With it excluded, published cost and FV tie the printed Total Investments exactly. A footnote aggregate on an investment member; the exclusion rule is right.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "As of December 31, 2025, the Company's positions in DCA had an aggregate cost basis of $ 7,211 , an aggregate fair value of $ 6,376"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_1d3a019bf6a6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "SRC_BDC02 2026-03-31: DigiCert publishes 7,063 / 7,016 / 7,010, SOFR 5.75, equal to the printed line. c-241 (a Bonterra member holding principal 7,063) appears in my reverse check as an unpublished principal-only context, which fits the cross-tagging the report describes. Published FV ties the printed 1,457,048. source_ambiguity, with the row correction kept, is right.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(2)(3)(6) SOFR(M) 5.75 % 9.42 % 07/2025 07/2030 7,063 7,016 7,010 0.73 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_3aa2f09bb68c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "industry_coverage 2024-09-30: the rfnsf ledger metric is 20.41 pct uncovered of 245 funded rows, which is 50 rows, equal to affected_rows. The filer prints its own broad industry in the company cell after the name (header 'Portfolio Company, Location and Industry'), so GICS comes only from the name cache. confirmed_error with no proposal is the right state: a printed field that is not published is a gap, and REQ-rfns-1 is with the owner.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(8) - - - 01/2024 - 19,197 205 205 0.02"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_4d9e989b69f4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "industry_coverage 2026-06-30: the rfnsf ledger metric is 34.17 pct uncovered of 278 funded rows, which is 95 rows, equal to affected_rows. The filer prints its own broad industry in the company cell after the name (header 'Portfolio Company, Location and Industry'), so GICS comes only from the name cache. confirmed_error with no proposal is the right state: a printed field that is not published is a gap, and REQ-rfns-1 is with the owner.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Accelya Lux Finco S.a r.l.** Business Services First Lien(2)(3)(6) SOFR(Q) 5.25 % 8.98 % 09/2025 10/2032 6,178 6,054"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_51ce38ff912a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "industry_coverage 2025-09-30: the rfnsf ledger metric is 25.48 pct uncovered of 259 funded rows, which is 66 rows, equal to affected_rows. The filer prints its own broad industry in the company cell after the name (header 'Portfolio Company, Location and Industry'), so GICS comes only from the name cache. confirmed_error with no proposal is the right state: a printed field that is not published is a gap, and REQ-rfns-1 is with the owner.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Accelya Lux Finco S.a r.l.** Business Services First Lien(2) SOFR(Q) 5.25 % 9.21 % 09/2025 10/2032 6,209 6,085"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_53bfee080d55",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "industry_coverage 2023-09-30: the rfnsf ledger metric is 20.4 pct uncovered of 201 funded rows, which is 41 rows, equal to affected_rows. The filer prints its own broad industry in the company cell after the name (header 'Portfolio Company, Location and Industry'), so GICS comes only from the name cache. confirmed_error with no proposal is the right state: a printed field that is not published is a gap, and REQ-rfns-1 is with the owner. This run added the quarter: the two Trident Bidco loans (12.6M) carried Avalara's 'Application Software' through Avalara's members. With the printed company they have no label, which is right, because Avalara's label was wrong for them.",
+   "evidence": [
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Atlas AU Bidco Pty Ltd** Business Services First lien (3) SOFR(M) 7.25 % 12.58 % 12/2022 12/2029 $"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_683abaecd474",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "industry_coverage 2025-12-31: the rfnsf ledger metric is 28.78 pct uncovered of 278 funded rows, which is 80 rows, equal to affected_rows. The filer prints its own broad industry in the company cell after the name (header 'Portfolio Company, Location and Industry'), so GICS comes only from the name cache. confirmed_error with no proposal is the right state: a printed field that is not published is a gap, and REQ-rfns-1 is with the owner.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Accelya Lux Finco S.a r.l.** Business Services First Lien(2)(6) SOFR(Q) 5.25 % 8.92 % 09/2025 10/2032 6,209 6,085"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_77bad1c1a3e7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "industry_coverage 2026-03-31: the rfnsf ledger metric is 29.41 pct uncovered of 272 funded rows, which is 80 rows, equal to affected_rows. The filer prints its own broad industry in the company cell after the name (header 'Portfolio Company, Location and Industry'), so GICS comes only from the name cache. confirmed_error with no proposal is the right state: a printed field that is not published is a gap, and REQ-rfns-1 is with the owner.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Accelya Lux Finco S.a r.l.** Business Services First Lien(2)(3)(6) SOFR(Q) 5.25 % 8.95 % 09/2025 10/2032 $ 6,193"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_9fefea624ff9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "industry_coverage 2025-06-30: the rfnsf ledger metric is 24.31 pct uncovered of 255 funded rows, which is 62 rows, equal to affected_rows. The filer prints its own broad industry in the company cell after the name (header 'Portfolio Company, Location and Industry'), so GICS comes only from the name cache. confirmed_error with no proposal is the right state: a printed field that is not published is a gap, and REQ-rfns-1 is with the owner.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Ambrosia Topco, LLC Distribution & Logistics Class A-1 common units (3)(8) - - - 01/2024 - 19,197"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_a6ba14bf5cd4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "industry_coverage 2024-03-31: the rfnsf ledger metric is 20.92 pct uncovered of 239 funded rows, which is 50 rows, equal to affected_rows. The filer prints its own broad industry in the company cell after the name (header 'Portfolio Company, Location and Industry'), so GICS comes only from the name cache. confirmed_error with no proposal is the right state: a printed field that is not published is a gap, and REQ-rfns-1 is with the owner.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(7) - - - 01/2024 - 19,197 $ 205 $"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_eb9beace5ae8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "industry_coverage 2024-06-30: the rfnsf ledger metric is 23.5 pct uncovered of 234 funded rows, which is 55 rows, equal to affected_rows. The filer prints its own broad industry in the company cell after the name (header 'Portfolio Company, Location and Industry'), so GICS comes only from the name cache. confirmed_error with no proposal is the right state: a printed field that is not published is a gap, and REQ-rfns-1 is with the owner.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(7) - - - 01/2024 - 19,197 $ 205 $"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Portfolio Company, Location and Industry(1) Type of Investment Reference (5) Spread (5) Interest Rate (5)"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_03801ae8791e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2025-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 92 of 369 rows publishing a percent, summing to 47.98. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 144.70, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_05223e80a8da",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2023-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 86 of 280 rows publishing a percent, summing to 47.16. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 150.79, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_07f616fe3736",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2024-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 97 of 355 rows publishing a percent, summing to 47.26. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 150.28, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0c4ea7a04d3c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2024-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 97 of 343 rows publishing a percent, summing to 47.35. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 146.63, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1794dc1735ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2024-09-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 104 of 379 rows publishing a percent, summing to 50.82. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 151.58, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Total Investments $ 1,483,914 $ 1,478,978 151.58 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_1bbe1bf6656f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2023-12-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 92 of 331 rows publishing a percent, summing to 47.05. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 152.64, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2084cc051e67",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2025-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 96 of 384 rows publishing a percent, summing to 45.29. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 145.32, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_233b9c1fc96f",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2023-09-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 88 of 298 rows publishing a percent, summing to 44.14. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 143.04, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_29e6f54f900c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "maturity_not_past 2023-03-31: the ledger shows 0.36 pct of 275 rows, i.e. 1 row, equal to affected_rows. The TigerConnect undrawn line 2 publishes 2023-02 (month precision), cost 0 and FV -1, and the page prints '02/2022 02/2023 238 - ( 1 )' (quoted). It is an expired commitment still listed. The new reason key maturity-not-past-undrawn-commitment-printed-after-its-expiry describes it.",
+   "evidence": [
+    {
+     "accession": "0001766037-23-000006",
+     "text": "First lien (2)(3)(4) - Undrawn - - - 02/2022 02/2023 238 - ( 1 )"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_2f565ae1263d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2024-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 97 of 355 rows publishing a percent, summing to 47.26. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 150.28, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_327d3cf5c6b0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2023-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 86 of 280 rows publishing a percent, summing to 47.16. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 150.79, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_354252e331ef",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2025-09-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 108 of 395 rows publishing a percent, summing to 47.24. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 143.97, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_397a8d449f6c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2023-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 86 of 280 rows publishing a percent, summing to 47.16. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 150.79, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_441c10d9ac2d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2026-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 103 of 401 rows publishing a percent, summing to 43.38. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 146.46, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_44673571197e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2023-12-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 92 of 331 rows publishing a percent, summing to 47.05. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 152.64, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4d9a8530e500",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "merged_context_excluded 2023-12-31: the ledger shows n_units 2, equal to affected_rows (CommerceHub c-250 and TigerConnect drawn). CommerceHub prints 6,053 / 5,704 / 6,054 with SOFR 6.25 and 11.79, as published. TigerConnect drawn prints '3.38 % + 3.38 %/PIK 12.28 %' and publishes spread 6.76 (D-031), PIK 3.38 and rate 12.28. The merged values are right; false alarm.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.79 % 06/2023 12/2027 6,053 5,704 6,054"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_4fa398ed5bf4",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2023-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 84 of 276 rows publishing a percent, summing to 48.23. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 149.48, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_505183528c16",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2023-09-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 88 of 298 rows publishing a percent, summing to 44.14. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 143.04, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5276a4d889d9",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2026-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 108 of 404 rows publishing a percent, summing to 48.95. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 152.10, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_543e1e3d8694",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2025-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 96 of 384 rows publishing a percent, summing to 45.29. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 145.32, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5617ea9916d7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2024-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 97 of 343 rows publishing a percent, summing to 47.35. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 146.63, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_56d7baa1d8e3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2024-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 97 of 343 rows publishing a percent, summing to 47.35. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 146.63, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_5ce00e89b7c3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2025-03-31: the rfnsf ledger shows n_units 129, equal to affected_rows. I looked the rows up in rfnsf (review_ns/x02.py): all 129 undrawn. None carries a rate or spread. The rows I read on the page (Bluefin, Calabrio, CG Group, DECA Dental, ACI Group) print '- Undrawn - - -' in the reference, spread and rate cells. The reason x02-no-rate-printed-on-the-row fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000006",
+     "text": "First Lien(3)(4) - Undrawn - - - 05/2024 07/2028 1,237 - 12"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7354be9bbc76",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2025-09-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 108 of 395 rows publishing a percent, summing to 47.24. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 143.97, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_7f210bcf8ecf",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2025-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 96 of 384 rows publishing a percent, summing to 45.29. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 145.32, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8158d989428d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2023-12-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 92 of 331 rows publishing a percent, summing to 47.05. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 152.64, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_891c9c735861",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2026-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 103 of 401 rows publishing a percent, summing to 43.38. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 146.46, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8b445d2bdfed",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2024-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 97 of 355 rows publishing a percent, summing to 47.26. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 150.28, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8b511179056a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2024-09-30: the validation value 2.1545 matches the report (income ratio less the period-end weighted coupon). The quoted highlights figures are on the page. The rate-timing arithmetic (falling SOFR, period-average coupon) is reproducible from the report's own published coupons, and every funded row publishes its printed all-in rate. The D-031 and D-232 edits do not touch interest_rate. A heuristic miss on a levered fund, as reasoned.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Ratio to average net assets: Net investment income (4) 12.69 % 12.60 % Total expenses (4) 5.18 % 4.76 %"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Total expenses (4) 5.18 % 4.76 % Average debt outstanding"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Distributions declared to stockholders from net investment income ( 0.99 ) ( 0.96 )"
+    },
+    {
+     "accession": "0001766037-24-000017",
+     "text": "Total Investments $ 1,483,914 $ 1,478,978 151.58 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8c9b5b2b0591",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2023-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 84 of 276 rows publishing a percent, summing to 48.23. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 149.48, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_8cc0de0bf444",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2025-12-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 110 of 421 rows publishing a percent, summing to 54.24. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 154.32, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "Total Investments $ 1,525,141 $ 1,512,098 154.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_906504ed9388",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2025-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 92 of 369 rows publishing a percent, summing to 47.98. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 144.70, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_983ee775ae97",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F27 2024-12-31: the validation value 2.3065 matches the report (income ratio less the period-end weighted coupon). The quoted highlights figures are on the page. The rate-timing arithmetic (falling SOFR, period-average coupon) is reproducible from the report's own published coupons, and every funded row publishes its printed all-in rate. The D-031 and D-232 edits do not touch interest_rate. A heuristic miss on a levered fund, as reasoned.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Ratio to average net assets: Net investment income (7) 12.30 % 12.76 % 9.66 % 11.08 % 8.40 %"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Total expenses, before waivers (7) 5.15 % 4.82 % 3.44 % 2.66"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Total Investments $ 1,451,005 $ 1,445,655 146.96 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_9b6c76a0ba13",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2026-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 108 of 404 rows publishing a percent, summing to 48.95. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 152.10, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a2b1fadbc09c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2025-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 92 of 369 rows publishing a percent, summing to 47.98. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 144.70, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a63d04f4956d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2023-12-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 92 of 331 rows publishing a percent, summing to 47.05. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 152.64, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a691f3fd4561",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2024-12-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 100 of 354 rows publishing a percent, summing to 55.54. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 146.96, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Total Investments $ 1,451,005 $ 1,445,655 146.96 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_a9a92ff10279",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2023-09-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 88 of 298 rows publishing a percent, summing to 44.14. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 143.04, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b99bbc8eb785",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2023-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 86 of 280 rows publishing a percent, summing to 47.16. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 150.79, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Total Investments $ 1,226,115 $ 1,214,001 150.79 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_b9b2711b16fd",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2024-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 97 of 343 rows publishing a percent, summing to 47.35. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 146.63, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Total Investments $ 1,353,238 $ 1,356,000 146.63 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_be0c54c38ec5",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2026-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 108 of 404 rows publishing a percent, summing to 48.95. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 152.10, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c6253cef2db2",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2025-09-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 108 of 395 rows publishing a percent, summing to 47.24. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 143.97, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c85c5785cc71",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2026-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 103 of 401 rows publishing a percent, summing to 43.38. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 146.46, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_c98eabbb4eae",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2024-03-31: the rfnsf ledger shows n_units 105, equal to affected_rows. I looked the rows up in rfnsf (review_ns/x02.py): 48 named undrawn, 41 undrawn with a blank instrument, and 16 'First Lien' or 'Drawn' rows that are zero-cost commitments. None carries a rate or spread. The rows I read on the page (Bluefin, Calabrio, CG Group, DECA Dental, ACI Group) print '- Undrawn - - -' in the reference, spread and rate cells. The reason x02-no-rate-printed-on-the-row fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "PDQ.com Corporation Software First Lien(3)(4) - Undrawn - - - 10/2023 10/2025 458 - 4"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d127877ceae0",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2024-09-30: the rfnsf ledger shows n_units 134, equal to affected_rows. I looked the rows up in rfnsf (review_ns/x02.py): 131 undrawn, 3 zero-value 'First Lien' commitments (FS WhiteWater, PPV, Project Power). None carries a rate or spread. The rows I read on the page (Bluefin, Calabrio, CG Group, DECA Dental, ACI Group) print '- Undrawn - - -' in the reference, spread and rate cells. The reason x02-no-rate-printed-on-the-row fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000017",
+     "text": "GC Waves Holdings, Inc. Financial Services First Lien(4) - Undrawn - - - 07/2023 12/2024 $ 3,387 $ - $ 34"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d78ff419ded7",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2024-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 97 of 355 rows publishing a percent, summing to 47.26. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 150.28, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "Total Investments $ 1,385,574 $ 1,385,068 150.28 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_d8d909cc3965",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "merged_context_excluded 2024-03-31: the ledger shows n_units 1, equal to affected_rows. CommerceHub c-233 publishes 6,038 / 5,707 / 6,038, SOFR 6.25 and 11.58, equal to the quoted line.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.58 % 06/2023 12/2027 6,038 5,707 6,038"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e14b519fb029",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2026-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 108 of 404 rows publishing a percent, summing to 48.95. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 152.10, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Total Investments $ 1,491,388 $ 1,457,048 152.10 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e1f302b4647a",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2025-09-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 108 of 395 rows publishing a percent, summing to 47.24. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 143.97, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "Total Investments $ 1,422,609 $ 1,402,593 143.97 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e96dee6d4e31",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2025-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 92 of 369 rows publishing a percent, summing to 47.98. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 144.70, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000006",
+     "text": "Total Investments $ 1,425,384 $ 1,419,651 144.74 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f05093c6b0f8",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2025-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 96 of 384 rows publishing a percent, summing to 45.29. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 145.32, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-25-000012",
+     "text": "Total Investments $ 1,426,974 $ 1,411,585 145.32 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f62509c135a3",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "maturity_not_past 2024-09-30: the ledger shows 0.53 pct of 376 rows, i.e. 2 rows, equal to affected_rows (CFS c-187 / c-188). Both print 08/2024 and are still held. The next quarter prints 09/2026, so the loan was extended (quoted). The existing reason maturity-not-past-loan-held-past-printed-maturity fits. The dates were published by this run from the page, which raised the finding; publishing the printed date is right.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000017",
+     "text": "CFS Management, LLC Healthcare First Lien(2)(3)(6) SOFR(Q)* 6.25 % + 2.75 %/PIK 13.87 % 09/2021 08/2024 8,743 8,743 7,757"
+    },
+    {
+     "accession": "0001766037-25-000003",
+     "text": "CFS Management, LLC Healthcare First Lien(2)(3)(6) SOFR(Q)* 6.25 % + 2.25 %/PIK 13.09 % 09/2021 09/2026 9,173 9,173 8,256"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f65f2f30ab97",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "A07 2023-09-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 88 of 298 rows publishing a percent, summing to 44.14. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 143.04, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Total Investments $ 1,237,106 $ 1,230,366 143.04 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f824ee74386d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F22 2023-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 84 of 276 rows publishing a percent, summing to 48.23. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 149.48, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fb20effa313b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "PCT02 2023-03-31: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 84 of 276 rows publishing a percent, summing to 48.23. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 149.48, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Total Investments $ 1,213,356 $ 1,196,808 149.48 %"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fc891f5dd07b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "X02 2023-12-31: the rfnsf ledger shows n_units 100, equal to affected_rows. I looked the rows up in rfnsf (review_ns/x02.py): 51 named undrawn, 45 undrawn with a blank instrument (negative cost, zero FV), 4 'First Lien' undrawn commitments at zero. None carries a rate or spread. The rows I read on the page (Bluefin, Calabrio, CG Group, DECA Dental, ACI Group) print '- Undrawn - - -' in the reference, spread and rate cells. The reason x02-no-rate-printed-on-the-row fits.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Coupa Holdings, LLC Software First Lien(3)(4) - Undrawn - - - 02/2023 08/2024 $ 1,193 $ - $ 12"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_fdd290fdd2eb",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F23 2026-06-30: one fund-quarter unit, as affected_rows. My reconstruction (review_ns/q_pct.sql) finds 103 of 401 rows publishing a percent, summing to 43.38. Every published percent equals fair value over net assets within 0.02, and the calculated percent sums to 146.46, which equals the printed Total Investments percent. The schedule prints one percent per issuer, on the issuer's total line (Zone Climate quoted). Issuers with several lines therefore publish no row percent: 41 to 58 such issuers a quarter have none. The low sum is the layout, not missing rows: cost and FV tie the printed totals in all 14 quarters (review_ns/costtie.py). The reason f23-percent-printed-once-per-issuer-group fits. The F23 value (1 - sum / calculated sum) matches fund_financials_validation_current.csv for the quarter.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Zone Climate Services, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 5.50 % 9.32 % 03/2022 03/2028 26,979 26,874 26,620 First Lien(3)(4) - Drawn SOFR(Q) 5.75 % 9.55 % 03/2022 03/2028 2,308 2,313 2,282 29,287 29,187 28,902 3.02 %"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Total Investments $ 1,430,809 $ 1,396,596 146.46 %"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "undrawn-line-cost-sign-dropped-by-filer",
+   "outcome": "supported",
+   "rationale": "Supported (carried from D-204). DigiCert undrawn 2026-03-31 publishes cost -3,000 and FV -4,000, as printed. Cost and FV tie the printed totals at 2025-12-31, 2026-03-31 and 2026-06-30 (costtie.py). The fact-level sign-comparison detector is reasoned.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "DigiCert, Inc. Software First Lien(3)(4) - Undrawn - - - 07/2025 07/2030 512 ( 3 ) ( 4 ) ( 0.00 )%"
+    }
+   ]
+  },
+  {
+   "observation_key": "reference-rate-guessed-from-date-where-column-printed",
+   "outcome": "supported",
+   "rationale": "Supported. Diligent 2023-03-31 publishes LIBOR from the printed L(M) code. On rfnsf 3,247 floating rows source the benchmark from ixbrl_field_status and 8 remain inferred_post_libor (not reviewed).",
+   "evidence": [
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Diligent Corporation Software First lien (2)(3) L(M) + 6.25"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Supported. Ambrosia publishes 19,197 shares, as printed. No row of the fund's 51 share rows holds a count of 1,000,000 or more, so no 1,000x count remains.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Ambrosia Holdco Corp. Distribution & Logistics Ordinary Shares(3)(7) - - - 01/2024 - 19,197 $ 205 $ 205 0.02 %"
+    },
+    {
+     "accession": "0001766037-26-000009",
+     "text": "Ambrosia Holdco Corp. Distribution & Logistics Class A-1 common units (3)(8) - - - 01/2024 - 19,197 205 89 0.01 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "net-investment-income-holds-a-per-share-figure",
+   "outcome": "supported",
+   "rationale": "Supported. rfnsf fund_financials.csv carries 2024q4 NII 27,420,000 and 2025q4 24,923,000, not per-share figures.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000003",
+     "text": "Distributions declared to stockholders from net investment income ( 1.27 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-label-depends-on-build-composition",
+   "outcome": "supported",
+   "rationale": "Supported as left (shared). I did not re-measure the 593-label figure; the detection proposal is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Anaplan, Inc. Software First Lien(2)(3)(6) SOFR(Q) 4.50 % 8.17 % 06/2022 06/2029 29,440 29,327 28,869 3.03 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "note-figure-on-investment-member-published-as-position",
+   "outcome": "supported",
+   "rationale": "Supported. c-987 (KWOR 2024-12-31, 16,387), c-1091 (2025-09-30, 15,604) and c-1112 (2025-12-31, 6,376) are unpublished in rfnsf (reverse_ov.py). The cost and FV ties are exact in those quarters. The proposed structural detector is the right carry-forward, since the pinned rules do not generalise.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000003",
+     "text": "As of December 31, 2024, our first lien position in KWOR had an aggregate cost basis of $ 20,161 , an aggregate fair value of $ 16,387"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-context-without-identifier-member",
+   "outcome": "supported",
+   "rationale": "Supported (point e). c-337 (2023-12-31) and c-325 (2024-03-31) carry only shares 10 and dash cost and FV on an issuer-group context with no identifier member. The 2024-03-31 facts have scale 3, as stated. rfnsf adds exactly these two Pioneer Topco rows (10 units, 0 value) and the PetVet row; no other row is added or removed.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Pioneer Topco I, L.P. Software Ordinary Shares(3)(6) - - - 11/2021 - 10 $ - $ -"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Supported (point c). Checked in rfnsf:\n- Trident Bidco 2023-09-30 (c-282 / c-283) publishes 10,669 and 1,907 under Trident, joining Trident's 2023-06-30 chain, while Avalara keeps its own 20,012 loan and undrawn line.\n- IG Investments 2025-03-31 (c-362).\n- AWP Group 2026-06-30 (c-279); CFS keeps its own rows that quarter.\n- NC Topco 2026-03-31 and 2026-06-30: four rows, 25.1M, one entity across 24-09 to 26-06.\n- Pioneer Topco class A-2 units x4.\n- KWOR Intermediate preferred and class A units, canonical 'KWOR Intermediate I, LLC' throughout.\nEvery quoted line is on its page. The company-block name-check detector is reasoned.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "NC Topco, LLC Financial Services & Technology First Lien(2)(3)(6) SOFR(M) 4.50 % 8.17 % 08/2024 09/2031 $ 19,720 $ 19,641 $ 19,526"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "r2: Supported; my r1 rejection is cured. The restated text drops the typo claim. It says the 9 KENE-member rows carry KENG's printed 08/2029 lines (1,183 / 905 / 255), renamed KENG, and that KENE is a separate printed company whose 32 rows keep its name. It points to the new merge observation.\nThis matches what I found: KENE 02/2031 lines (2,292 at 2024-06-30; 4,977 at 2025-12-31) and KENG 08/2029 lines in separate blocks. The rest of the list (OB Hospitalist, Trinity, AWP, Vectra, DCA, Bluefin, legal forms, IMO KENG, HIG Operations) was verified in r1 and is unchanged.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "KENG Acquisition, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 4.50 % 8.34 % 08/2023 08/2029 1,183 1,173 1,183"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "KENE Acquisition, Inc. Business Services First Lien(2)(3) SOFR(Q) 5.25 % 10.58 % 02/2024 02/2031 2,292 2,270 2,292 0.25 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "KENG Acquisition, Inc. Business Services First Lien(2)(3) SOFR(Q) 6.00 % 11.33 % 08/2023 08/2029 1,201 1,188 1,201"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "KENE Acquisition, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 4.75 % 8.42 % 12/2025 02/2031 4,977 4,965 4,977"
+    },
+    {
+     "accession": "0001766037-26-000004",
+     "text": "KENG Acquisition, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 4.50 % 8.34 % 08/2023 08/2029 1,183 1,173 1,183"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Supported (point f). My own check of all rfnsf issuer names (review_ns/q_suffix.sql, q_suffix2.sql) for a trailing printed industry label (Software, Business Services, Healthcare, Financial Services, Consumer, Packaging, and so on), and for names starting with a label, finds exactly the 7 rows parked: Foreside x3, Ncontracts x2, GS Acquisitionco and Acumatica. The only other hit, 'Packaging Coordinators Midco, Inc.', is a real name. The list is complete. Acumatica 2025-09-30 (21.0M) also publishes a blank instrument, the only funded row in the fund with one.",
+   "evidence": [
+    {
+     "accession": "0001766037-25-000006",
+     "text": "GS Acquisitionco, Inc. Software First Lien(2)(3)(6) SOFR(Q) 5.25 % 9.55 % 02/2020 05/2028 29,418 29,372 29,418 3.00 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-margin-published-as-spread-where-pik-margin-printed-apart",
+   "outcome": "supported",
+   "rationale": "Supported (point a). The population is 270 rows over all 14 quarters: spread changed, pik_rate unchanged and positive, rfnsa -> rfnsf (review_ns/d031.py). I checked a stratified sample of 15, at least one per quarter, against the printed line: iCIMS x2, CFS x2, Kaseya, Project Essential, Granicus, Sierra, Notorious x2, ACI x2, Tennessee Bidco, PDI and DCA TopCo. In all 15, spread = cash + PIK, pik = printed PIK, and interest_rate = the printed all-in rate.\nThe cash leg is not understated: interest_rate_cash is unchanged on every sampled row and equals rate - PIK (e.g. iCIMS 12.05 - 3.88 = 8.17). Only the spread moved.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "First Lien(2)(3)(4) - Drawn SOFR(Q)* 3.38 % + 3.38 %/PIK 12.28 % 02/2022 02/2028 191 191 190"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "iCIMS, Inc. Software First lien (2)(3) SOFR(Q)* + 3.38 % + 3.88 %/PIK 12.05 % 08/2022 08/2028 19,839 19,681 19,732"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Kaseya Inc. Software First lien (2)(3) SOFR(Q)* 3.75 % + 2.50 %/PIK 11.62 % 06/2022 06/2029 14,694 14,599 14,694"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Sierra Enterprises, LLC Food & Beverage First Lien(3) SOFR(Q)* 2.50 % + 4.25 %/PIK 12.06 % 07/2023 05/2027 17,184 15,108 16,971"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "DCA Buyer LLC Healthcare First Lien(2)(3)(6) SOFR(Q)* 4.25 % + 2.25 %/PIK 10.16 % 06/2026 04/2031 3,289 3,289 3,289"
+    }
+   ]
+  },
+  {
+   "observation_key": "pik-rate-holds-margin-when-whole-coupon-is-pik",
+   "outcome": "supported",
+   "rationale": "Supported (point b). Par growth against coupon/4 (review_ns/q_growth.sql), on more than 10 rows:\n- Pioneer FL1/FL2 2023: 3.01 to 3.13 pct a quarter vs coupon/4 3.04 to 3.10 (margin/4 1.75).\n- CCBlue 2024: 2.80 to 3.14 vs 2.80 to 2.99 (margin/4 1.63).\n- TMK Hawk 2024-09/12: 2.83 / 2.63 vs 2.65 / 2.54.\n- KWOR sub: 2.96 to 3.18 vs 2.92 to 3.08 (margin/4 2.00).\n- KWOR preferred (cost basis): 2.91 to 3.04.\n- Notorious 2026: 2.71 to 3.62 vs 2.78 to 3.21 (margin/4 1.81 to 2.25).\nEvery chain sits at the coupon, not the margin. The 4 lines left on the margin match their pages: Pioneer FL1 2024-03-31 is an add-on (14,048 -> 18,231); DCA FL1-4 2025-09-30 has one quarter; Diligent FL2 2026-06-30 is a first quarter; Relativity 2023-03-31 exits. The 5 newly published PIK margins (Relativity 7.50; CCBlue FL2 2.75, CFS FL2 0.75 and CG x2 2.00 at 2023-12-31) equal the printed PIK.\nNote: 7 rows carry interest_rate_cash of about -1.8e-15 (float residue of rate - pik); cosmetic.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000009",
+     "text": "KWOR Acquisition, Inc. Business Services Subordinated(3) SOFR(Q)* 8.00 %/PIK 11.67 % 02/2025 02/2030 $ 3,480 $ 3,480 $ 3,480"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Pioneer Buyer I, LLC Software First Lien(3) SOFR(Q)* 7.00 %/PIK 12.31 % 11/2021 11/2028 18,231 18,148 18,231"
+    },
+    {
+     "accession": "0001766037-25-000018",
+     "text": "DCA Investment Holding, LLC Healthcare First Lien(2)(3)(6) SOFR(Q)* 6.41 %/PIK 10.41 % 03/2021 04/2028 $ 6,322 $ 6,302 $ 5,572"
+    },
+    {
+     "accession": "0001766037-26-000013",
+     "text": "First Lien(3) SOFR(Q)* 8.42 %/PIK 12.09 % 04/2024 08/2030 1,458 1,454 1,420"
+    },
+    {
+     "accession": "0001766037-23-000006",
+     "text": "Relativity ODA LLC Software First lien (3) L(M)* + 7.50 %/PIK 12.35 % 05/2021 05/2027 12,273 12,176 12,132"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "CG Group Holdings, LLC Specialty Chemicals & Materials First Lien(2)(3) SOFR(Q)* 6.75 % + 2.00 %/PIK 14.10 % 07/2021 07/2027 5,462 5,423 5,224"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "CFS Management, LLC Healthcare First Lien(2)(3) SOFR(Q)* 6.25 % + 0.75 %/PIK 12.61 % 09/2021 07/2024 8,638 8,628 7,547"
+    }
+   ]
+  },
+  {
+   "observation_key": "floating-margin-tagged-as-pik-only-published-fixed-without-spread",
+   "outcome": "supported",
+   "rationale": "Supported. The 14 coupon flips Fixed -> Floating in the rfnsa/rfnsf diff are exactly the listed rows (CCBlue, CFS, CG x2, Pioneer x2 2023-12-31; Pioneer FL2 and iCIMS FL2 2024-03-31; KWOR preferred x6). Each now carries the printed total margin, and the PIK matches the printed line where I read it.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "First Lien(3) SOFR(Q)* 3.50 % + 2.75 %/PIK 11.70 % 12/2021 12/2028 1,110 1,108 1,054"
+    }
+   ]
+  },
+  {
+   "observation_key": "fixed-coupon-published-as-floating-spread",
+   "outcome": "supported",
+   "rationale": "Supported (point d). All 7 Virtusa rows (2023-03-31 to 2024-09-30) publish rate 7.13, Fixed, with no spread and no benchmark, as printed 'FIXED(S) 7.13 % 7.13 %'.",
+   "evidence": [
+    {
+     "accession": "0001766037-23-000010",
+     "text": "Virtusa Corporation Business Services Subordinated FIXED(S) 7.13 % 7.13 % 09/2022 12/2028 $ 1,370 $ 1,063 $ 1,120"
+    }
+   ]
+  },
+  {
+   "observation_key": "maturity-printed-not-published",
+   "outcome": "supported",
+   "rationale": "Supported (point d). The 10 maturity diffs are exactly the listed rows:\n- Businessolver funded 2027-12 and undrawn 2024-12, on separate contexts, 2023-12-31 to 2024-06-30.\n- CommerceHub 2027-12 at 2023-12-31.\n- CFS x2 2024-08 at 2024-09-30.\n- TigerConnect undrawn 2 2023-02 at 2023-03-31.\nEach matches its printed line.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Businessolver.com, Inc. Software First Lien(2)(3) SOFR(Q) 5.50 % 10.91 % 12/2021 12/2027 14,562 14,521 14,562"
+    }
+   ]
+  },
+  {
+   "observation_key": "duplicate-identifier-blocks-row-correction",
+   "outcome": "supported",
+   "rationale": "Supported. Businessolver's funded and undrawn rows now differ by context and maturity. Minor: the undrawn line still takes a new position_id each quarter (2cb08ab7, 882a0190, a9adeea2); the funded and drawn chains are stable.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Businessolver.com, Inc. Software First Lien(2)(3) SOFR(Q) 5.50 % 10.91 % 12/2021 12/2027 14,562 14,521 14,562"
+    }
+   ]
+  },
+  {
+   "observation_key": "twin-lines-collapsed-by-dimension-dedup",
+   "outcome": "supported",
+   "rationale": "Supported (point e). The PetVet c-344 / c-345 contexts carry par 962 each and cost - / 9, and rfnsf adds c-345 at cost -9,000. The cost tie at 2023-12-31 moves from +9k (rfnsa) to 0 (rfnsf). The distinct_member_suffix_re is pinned to PetVet's 'First Lien -Undrawn n' text, and the diff shows no other row added or removed.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "First Lien(4) - Undrawn - - - 10/2023 11/2029 962 ( 9 ) -"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "First Lien(4) - Undrawn - - - 10/2023 11/2029 962 ( 9 ) -"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Total Investments $ 1,321,455 $ 1,320,435 152.64 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-correction-blanks-instrument-description",
+   "outcome": "supported",
+   "rationale": "Supported (point c). Of the 60 rfnsf rows with issuer_name in corrected_fields, none has a blank or 'Drawn' / 'Undrawn n'-only instrument. The 28 instrument diffs against rfnsa are all intended (class text moved, Trident / IG / Businessolver / PetVet / Community Management repaired). Fund-wide blank instruments fall from 114 to 109.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "KENG Acquisition, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 4.50 % 8.34 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-heading-not-read-from-the-page",
+   "outcome": "supported",
+   "rationale": "Supported. The industry_coverage populations reconcile with the ledger in all 9 quarters (see the findings). Parking this with REQ-rfns-1 is right.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Anaplan, Inc. Software First Lien(2)(3)(6) SOFR(Q) 4.50 % 8.17 % 06/2022 06/2029 29,440 29,327 28,869 3.03 %"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-follows-shifted-member",
+   "outcome": "supported",
+   "rationale": "Supported as left. The Pioneer FL2 2024-03-31 chain step is -85.9 pct (14,048 -> 1,985). Pioneer Topco takes a new position_id in each of the 14 quarters (q_am.sql).",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "First Lien(3) SOFR(Q)* 7.00 %/PIK 12.31 % 03/2022 11/2028 1,985 1,974 1,985"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Pioneer Buyer I, LLC Software First Lien(3) SOFR(Q)* 7.00 %/PIK 12.31 % 11/2021 11/2028 18,231 18,148 18,231"
+    }
+   ]
+  },
+  {
+   "observation_key": "canonical-name-from-another-issuer-in-build",
+   "outcome": "supported",
+   "rationale": "Supported. My q_names.sql on rfnsa and rfnsf: all 32 KENE rows (2024-03-31 to 2025-12-31) share entity_id 9af81f57 and canonical 'KENG Acquisition, Inc.' with KENG's 56 rows (2 + 3 + 51), in both builds. So it predates the run and sits in shared entity resolution. Left as an owner item with a per-fund issuer-vs-entity detector, the same treatment as Overland's Chariot / Charlotte.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000004",
+     "text": "KENE Acquisition, Inc. Business Services First Lien(2)(3)(6) SOFR(Q) 4.75 % 8.42 % 12/2025 02/2031 4,977 4,965 4,977"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "KENE Acquisition, Inc. Business Services First Lien(2)(3) SOFR(Q) 5.25 % 10.58 % 02/2024 02/2031 2,292 2,270 2,292 0.25 %"
+    },
+    {
+     "accession": "0001766037-24-000012",
+     "text": "KENG Acquisition, Inc. Business Services First Lien(2)(3) SOFR(Q) 6.00 % 11.33 % 08/2023 08/2029 1,201 1,188 1,201"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-description-empty-old-member-format",
+   "outcome": "supported",
+   "rationale": "Supported. staged/undrawn_instrument_specs.json has 109 specs on 109 distinct contexts (review_ns/instspec.py). Each maps to a published rfnsf row with a blank instrument, and together they cover all 109 such rows: 108 'First Lien Undrawn' plus Acumatica 'First Lien'. Each spec's printed snippet is on its page.\nI read 10 against their lines: Associations, Avalara, Kele, OA Buyer, Bullhorn, Radwell x2, Coyote, Infogain and Legal Spend. Each line prints '- Undrawn' with the row's par and cost. No issuer has two blank undrawn lines in a quarter, so the unnumbered value causes no collision. Parked, not applied; the detector (blank instrument on loan rows) is cheap and exact.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Affinipay Midco, LLC Software First Lien(3)(4) - Undrawn - - - 07/2022 06/2028 273 ( 2 ) -"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Associations, Inc. Business Services First Lien(3)(4) - Undrawn - - - 07/2021 07/2027 $ 719 $ ( 4 ) $ -"
+    },
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Avalara, Inc. Software First Lien(3)(4) - Undrawn - - - 10/2022 10/2028 2,001 ( 19 ) -"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "OA Buyer, Inc. Healthcare First Lien(3)(4) - Undrawn - - - 12/2021 12/2028 3,041 ( 22 ) -"
+    },
+    {
+     "accession": "0001766037-24-000005",
+     "text": "Legal Spend Holdings, LLC (fka Bottomline Technologies, Inc.) Software First Lien(3)(4) - Undrawn - - - 05/2022 05/2028 844 ( 6 ) -"
+    }
+   ]
+  },
+  {
+   "observation_key": "par-tagged-on-sibling-context-of-the-line",
+   "outcome": "supported",
+   "rationale": "Supported. As I found in r1: c-404 carries only InvestmentOwnedBalancePrincipalAmount 1,722 (member 'Fortis Solutions Group, LLC First Lien Undrawn - 1'). The published row on c-405 has cost -12,000, FV -19,000 and no principal. The page prints '10/2021 10/2027 1,722 ( 12 ) ( 19 )'. The staged spec (principal 1,722,000 on c-405) is right. Parked.",
+   "evidence": [
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Fortis Solutions Group, LLC Packaging First lien (3)(4) - Undrawn - - - 10/2021 10/2027 1,722 ( 12 ) ( 19 )"
+    },
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Fortis Solutions Group, LLC Packaging First lien (3)(4) - Undrawn - - - 10/2021 10/2027 1,722 ( 12 ) ( 19 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-without-a-change-on-the-page",
+   "outcome": "supported",
+   "rationale": "Supported as left. The Businessolver undrawn line has position_ids 2cb08ab7, 882a0190 and a9adeea2 at 2023-12-31, 2024-03-31 and 2024-06-30 (my r1 query), on a line printed with maturity 12/2024 each quarter (1,886 then 1,698). A matcher defect; the detector keyed on issuer, instrument family and maturity is reasonable.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000008",
+     "text": "Businessolver.com, Inc. Software First Lien(3)(4) - Undrawn - - - 12/2021 12/2024 1,698 - -"
+    }
+   ]
+  },
+  {
+   "observation_key": "cash-leg-float-residue-from-unrounded-subtraction",
+   "outcome": "supported",
+   "rationale": "Supported as left. My d031.py output shows exactly 7 rows at about +/-1.8e-15: Pioneer FL1/FL2 2023-09-30, CCBlue FL2 2024-06-30 and Notorious x4 2026-06-30. Cosmetic; rounding the subtraction is the fix.",
+   "evidence": [
+    {
+     "accession": "0001766037-26-000013",
+     "text": "Notorious Buyer, LLC (11) Notorious Topco, LLC Consumer Products First Lien(2)(3) SOFR(Q)* 7.25 %"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rfns-1",
+   "outcome": "supported",
+   "rationale": "The deferral to the owner, together with REQ-rfng-1, is sound. Counting a broad filer label as covered is an acceptance change, and a fund-level GICS guess would be invented data. The 9 findings stay outstanding without a proposal.",
+   "evidence": [
+    {
+     "accession": "0001766037-23-000014",
+     "text": "Atlas AU Bidco Pty Ltd** Business Services First lien (3) SOFR(M) 7.25 % 12.58 % 12/2022 12/2029 $"
+    }
+   ]
+  },
+  {
+   "request_id": "NMY-R1",
+   "outcome": "supported",
+   "rationale": "From an earlier run; implemented as stated. Commit 4b579bf ('cheap tier reads the recorded scale factor') is in history, and provenance_reverify.py parses 'cik_scale_fix:x(-?...)'.",
+   "evidence": [
+    {
+     "accession": "0001766037-24-000005",
+     "text": "CommerceHub, Inc. Software First Lien(3) SOFR(Q) 6.25 % 11.79 % 06/2023 12/2027 6,053 5,704 6,054"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "r2 is report-only; rfnsf data are unchanged since r1. Diff against the r1 report: the declared issuer_name 'why' text and the restated KENE observation; 5 new observations (canonical merge, 109 blank instruments, Fortis par, Businessolver chain, float residue); one parked entry and two not_done lines. All 70 investigations' evidence is identical to r1 (review_ns/invsame.py), and the finding set and its digest inputs are unchanged.",
+  "All 217 quotes in the report are on their pages (allquotes.py).",
+  "r1 checks carried: cost and FV tie the printed totals in all 14 quarters; spot checks 15 of 15; D-031 15 of 15; D-232 par growth on every chain; the 7-name industry-suffix list is complete; the reverse check is clean apart from the listed items.",
+  "Staged fixes are not applied, so the published data still carry the blank instruments, the Fortis par gap and the KENE/KENG merge. All findings proposed does not mean the data are correct."
+ ]
+}

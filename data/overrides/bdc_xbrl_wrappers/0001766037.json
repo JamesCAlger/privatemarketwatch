@@ -104,8 +104,12 @@
     ],
     "canonical_strip_re": "\\s*\\|\\s*(?:Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer|\\|\\s*Non-Affiliated\\s+Issuer|\\|\\s*Affiliated\\s+Issuer)\\s*$",
     "category_marker_re": "(?i)^\\s*(?:Total\\s+)?(?:Investments?|Debt\\s+Investments|Equity\\s+Investments|Subtotal|Sub-Total|Non-Affiliated\\s+Issuer|Affiliated\\s+Issuer)\\s*$",
-    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+|(?<=\\.))(?:First\\s+lien?(?:\\s*\\()?|Second\\s+lien|Subordinated|Preferred\\s+shares|Ordinary\\s+shares|Common\\s+(?:shares|units|stock))(?:\\s*-?\\s*(?:Undrawn|Drawn|Funded|Unfunded|Revolver|Delayed\\s+Draw))?(?:\\s*\\d{1,2})?\\s*$",
+    "issuer_name_strip_re": "(?i)(?:\\s*,\\s*|\\s+|(?<=\\.))(?:First\\s+lien?(?:\\s*\\()?|Second\\s+lien|Subordinated|Preferred\\s+shares|Ordinary\\s+shares|Common\\s+(?:shares|units|stock)|Class\\s+[A-Z](?:\\s*-\\s*\\d)?(?:\\s+common\\s+(?:units|stock))?)(?:\\s*-?\\s*(?:Undrawn|Drawn|Funded|Unfunded|Revolver|Delayed\\s+Draw))?(?:\\s*\\d{1,2})?\\s*$",
     "issuer_name_strip_to_instrument": true
+  },
+  "staging": {
+    "strategy": "default",
+    "distinct_member_suffix_re": "(?i)PetVet Care Centers, LLC, First Lien\\s*-\\s*Undrawn \\d\\s*$"
   },
   "identifier_format": {
     "delimiter": " | ",
@@ -218,7 +222,9 @@
     ],
     "context_identifiers": [
       "0001766037-24-000005 c-250 => CommerceHub, Inc., First Lien",
-      "0001766037-24-000008 c-324 => Ambrosia Holdco Corp., Ordinary Shares"
+      "0001766037-24-000008 c-324 => Ambrosia Holdco Corp., Ordinary Shares",
+      "0001766037-24-000005 c-337 => Pioneer Topco I, L.P., Ordinary Shares",
+      "0001766037-24-000008 c-325 => Pioneer Topco I, L.P., Ordinary Shares"
     ],
     "rate_only_contexts": [
       "adopt_adjacent"
