@@ -5588,3 +5588,14 @@ Compared with `sponfb`; six builds (mlfa to mlff) plus three recorded in-place r
 - Page sample rflad: 0/20 published errors (no PIK, non-USD or non-SOFR line drawn; the reviewer checked those directly). Twenty cards can miss a problem on under about 15 pct of rows.
 - Independent review reviews/0002008748_rflad.json: 19/19 findings, 19/19 observations; investigation COMPLETE; digest 34ffa209...
 - Gate rflad (snapshot at 74d6f8d): PASS. A zero is not "data correct".
+
+### D-250 TCW Direct Lending VIII: cleared with fixes (sandbox `rftcc`), gate PASS (2026-10-26)
+
+- Before rgA6 (2026-06-30 added). Three builds (rftca to rftcc), two rounds. Untouched rftca 13 outstanding; final 21 findings, 11 outstanding, all proposed (incl. a false alarm for D&D Buyer revolver 2023-12-31: Alorica's fair value is tagged on the revolver's context; reason issuer-name-printed-row-located-by-cross-tagged-fair-value). FV and cost tie the printed totals in 14/14 quarters (to the dollar).
+- Fixed: wrapper instrument regex ends at a hyphen only when a space is on one side (Fenix "Delayed Draw Term Loan B-1", 9 rows; dry run on 947 member texts changes only those); 19 context-keyed row corrections (append-only, correction_csv.append_record): HydroSource 3rd Amendment TL 2025-06-30 published under Harvey Gulf (chain re-joined); Lumos names (one entity, one position); Cinelease ABL spread 7.50 where the 2.50 floor was tagged as spread; 12 instrument texts from the printed tranche (Rising Pharma, Great Kitchens x2, ADAN-B, Power x2, Sunland x3, Florida Marine, RPM) and the CSAT warrant expiry.
+- Checked: all-PIK lines publish D-232 (pik = coupon, cash leg 0) with par growth at coupon/4 (reviewer read 7); the filer prints the total margin including PIK (D-031 holds). Instrument compare is now exact-match after removing punctuation (the first round's prefix compare missed 12 rows; the reviewer caught them).
+- Request REQ-rftc-1 (shared pipeline ordering: instrument_type derived before row corrections and never re-derived; 5 stale rows here, same defect seen on 26North): deferred to the shared batch.
+- Owner items: warrants published as common equity (31 rows; page sample C016 published error, cause pipeline, kept); blank fair_value_currency on 6 declared / untagged rows (shared); Hoffmaster 'Materials' heading to Diversified Metals & Mining (shared heading map); Signature DDTL A and Cinelease warrant chain breaks (pre-existing).
+- Page sample rftcb/rftcc: 1/20 published error (C016 warrant class, owner item). Twenty cards can miss a problem on under about 15 pct of rows.
+- Independent reviews reviews/0001825265_rftcb.json (1 rejection: 12 instrument rows) and _rftcc.json: 11/11 findings, 25/25 observations, 6/6 history; investigation COMPLETE; digest 8bc6c1ea...
+- Gate rftcc (snapshot at 096f81a): PASS. A zero is not "data correct".

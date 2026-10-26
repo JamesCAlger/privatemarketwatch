@@ -1,0 +1,613 @@
+{
+ "reviewer_id": "claude-independent-reviewer-tcwdl8-rftcb",
+ "report_digest": "734b46c42d85fb769b958243f05f2f87cd29da3a83b256f2b24c391fc347b230",
+ "finding_reviews": [
+  {
+   "finding_id": "BDCSRC_0001825265_2023-12-31_BLOCKING_FAIR_VALUE_SCALE_OR_UNIT_CANDIDATE_4cfe193968",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "blocking_fair_value_scale_or_unit_candidate 2023-12-31 (point e): I read the raw contexts (review_tc/ctxfacts.py). The revolver context C_55ae7aaf carries InvestmentOwnedAtFairValue 33,046,946, which is Alorica's printed value, beside the revolver's own par, cost, rate and maturity. Alorica's context C_fa46a8e5 has no fair value, and C_0ef4405c holds the revolver's 1,130,534. rftcb publishes the revolver at 1,130,534 and Alorica at 33,046,946, each equal to its printed line. The D&D term loan (own context, 31,654,959) is unaffected. Cost and FV tie the printed 'Total Debt Investments' at 2023-12-31 (review_tc/costtie2.py). This is a cross-tagged fact corrected from the page; 33.0M / 1.13M is not a power of ten, so not a scale error.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Total Debt Investments (2) 161.5 % 738,207,203 742,916,128"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "D&D Buyer, LLC 10/04/23 Term Loan - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 6.9 % 32,300,978 10/04/28 31,280,506 31,654,959"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_bd8396ead567",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "SRC_BDC03 2023-12-31 (point e): I read the raw contexts (review_tc/ctxfacts.py). The revolver context C_55ae7aaf carries InvestmentOwnedAtFairValue 33,046,946, which is Alorica's printed value, beside the revolver's own par, cost, rate and maturity. Alorica's context C_fa46a8e5 has no fair value, and C_0ef4405c holds the revolver's 1,130,534. rftcb publishes the revolver at 1,130,534 and Alorica at 33,046,946, each equal to its printed line. The D&D term loan (own context, 31,654,959) is unaffected. Cost and FV tie the printed 'Total Debt Investments' at 2023-12-31 (review_tc/costtie2.py). This is a cross-tagged fact corrected from the page; the ledger shows n_units 1, equal to affected_rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Total Debt Investments (2) 161.5 % 738,207,203 742,916,128"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "D&D Buyer, LLC 10/04/23 Term Loan - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 6.9 % 32,300,978 10/04/28 31,280,506 31,654,959"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_BLK_ed59103afd2c",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "issuer_name_printed 2023-12-31 (point e): I read the raw contexts (review_tc/ctxfacts.py). The revolver context C_55ae7aaf carries InvestmentOwnedAtFairValue 33,046,946, which is Alorica's printed value, beside the revolver's own par, cost, rate and maturity. Alorica's context C_fa46a8e5 has no fair value, and C_0ef4405c holds the revolver's 1,130,534. rftcb publishes the revolver at 1,130,534 and Alorica at 33,046,946, each equal to its printed line. The D&D term loan (own context, 31,654,959) is unaffected. Cost and FV tie the printed 'Total Debt Investments' at 2023-12-31 (review_tc/costtie2.py). This is a cross-tagged fact corrected from the page; the ledger shows 3.13 pct of 32 rows, i.e. 1 row, equal to affected_rows. The rule reads Alorica's line because the fair-value fact sits on the revolver's context. The published name 'D&D Buyer, LLC' is right, and the false-alarm proposal fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_0052719b46af",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F25 2023-06-30: one unit, as affected_rows. Holdings rose from 403.5M to 615.3M (printed 'Total Debt Investments', equal to published at both dates per costtie2.py). Printed total investments including the Treasury bill went from 686.2M to 772.9M, so the growth came from deploying the bill and money fund. f25-cash-deployed-into-investments fits.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020390",
+     "text": "Total Debt Investments (2) 124.4 % 405,255,392 403,510,457"
+    },
+    {
+     "accession": "0000950170-23-020390",
+     "text": "U.S. Treasury Bill, Yield 4.59 % 60.8 % 200,000,000 197,360,000 197,360,000"
+    },
+    {
+     "accession": "0000950170-23-020390",
+     "text": "Total Investments ( 211.5 %) $ 687,902,445 $ 686,157,510"
+    },
+    {
+     "accession": "0000950170-23-040379",
+     "text": "Total Debt Investments (2) 161.6 % 612,870,293 615,303,176"
+    },
+    {
+     "accession": "0000950170-23-040379",
+     "text": "Total Investments ( 203.1 %) $ 770,456,020 $ 772,888,903"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_061bea727d9b",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fmt_basis_spread 2025-06-30: one row (ROW-b8e6e17a39f35f4a), as affected_rows; the ledger shows 1.59 pct of 63 rows, i.e. 1. The page prints 'Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK)' (quoted), and the published spread 17.5 and PIK 22.03 equal it. The row is consistent with later quarters, where the filer reprices it to a fixed 17.50 % all PIK (2025-09-30 onward, published Fixed with no spread).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107434",
+     "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK) 0.8 % 6,838,469 05/04/28 6,588,966 6,838,469"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 17.50 % inc PIK ( 17.50 %, Fixed Coupon, all PIK) 0.9 % 7,419,002 05/04/28 7,213,727 7,419,002"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_234516ae77ac",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "fmt_pik_rate 2025-06-30: one row (ROW-b8e6e17a39f35f4a), as affected_rows; the ledger shows 6.67 pct of 15 rows, i.e. 1. The page prints 'Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK)' (quoted), and the published spread 17.5 and PIK 22.03 equal it. The row is consistent with later quarters, where the filer reprices it to a fixed 17.50 % all PIK (2025-09-30 onward, published Fixed with no spread).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107434",
+     "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK) 0.8 % 6,838,469 05/04/28 6,588,966 6,838,469"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 17.50 % inc PIK ( 17.50 %, Fixed Coupon, all PIK) 0.9 % 7,419,002 05/04/28 7,213,727 7,419,002"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_6025bbb345b6",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F28 2026-08-12: the only fund row for that date carries shares_outstanding 6,310,260 from the 10-Q cover page (quoted); the date is not a reporting quarter. Fits.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346657",
+     "text": "The number of the Registrants common units outstanding at August 12, 2026 was 6,310,260"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_cb691056b0ed",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 2023-03-31: the quoted statement of changes for the quarter has no distributions line, only operations and contributions. Published net assets 324,485k, as printed. A distribution rate of 0 is as filed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020390",
+     "text": "Members Capital at January 1, 2023 $ 198,894 $ ( 2,876 ) $ 196,018 Net Increase (Decrease) in Members Capital Resulting from Operations: Net investment income - 5,357 5,357"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_e841f5c9083e",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C117 2025-06-30: one row (ROW-b8e6e17a39f35f4a), as affected_rows; the only PIK rate above 20. The page prints 'Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK)' (quoted), and the published spread 17.5 and PIK 22.03 equal it. The row is consistent with later quarters, where the filer reprices it to a fixed 17.50 % all PIK (2025-09-30 onward, published Fixed with no spread).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107434",
+     "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK) 0.8 % 6,838,469 05/04/28 6,588,966 6,838,469"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 17.50 % inc PIK ( 17.50 %, Fixed Coupon, all PIK) 0.9 % 7,419,002 05/04/28 7,213,727 7,419,002"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f1627e2d2018",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "C115 2025-06-30: one row (ROW-b8e6e17a39f35f4a), as affected_rows; the only row above a 15 spread. The page prints 'Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK)' (quoted), and the published spread 17.5 and PIK 22.03 equal it. The row is consistent with later quarters, where the filer reprices it to a fixed 17.50 % all PIK (2025-09-30 onward, published Fixed with no spread).",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107434",
+     "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 22.03 % inc PIK ( SOFR + 17.50 %, 1.75 % Floor, all PIK) 0.8 % 6,838,469 05/04/28 6,588,966 6,838,469"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 17.50 % inc PIK ( 17.50 %, Fixed Coupon, all PIK) 0.9 % 7,419,002 05/04/28 7,213,727 7,419,002"
+    }
+   ]
+  },
+  {
+   "finding_id": "RVQ_REV_f552f2c7e38d",
+   "outcome": "supported",
+   "coverage_verified": true,
+   "source_comparison_verified": true,
+   "rationale": "F33 2026-06-30: the quoted statement shows the exchange-offer transfer and no distribution in the quarter (six-month 25,000 = first quarter). As filed.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346657",
+     "text": "Transfer of net assets to Perpetual Fund pursuant to Exchange Offer on April 1, 2026 ( 444,314 ) 32,510 ( 411,804 ) Total (Decrease) Increase in Members Capital for the three months ended June 30, 2026"
+    },
+    {
+     "accession": "0001193125-26-346657",
+     "text": "Distributions to Members from distributable earnings ( 25,000 ) ( 50,000 )"
+    }
+   ]
+  }
+ ],
+ "observation_reviews": [
+  {
+   "observation_key": "net-assets-concept-not-mapped",
+   "outcome": "supported",
+   "rationale": "Supported. rftcb fund_financials net assets are 815,597,000 at 2026-03-31 and 380,619,000 at 2023-06-30, equal to the printed Total Members Capital (quoted).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221923",
+     "text": "Common Unitholders capital 879,986 879,986 Accumulated overdistributed earnings ( 64,389 ) ( 60,886 ) Total Members Capital 815,597 819,100"
+    }
+   ]
+  },
+  {
+   "observation_key": "mixed-scale-attributes-in-whole-dollar-filing",
+   "outcome": "supported",
+   "rationale": "Supported. 2023-03-31 published cost and FV equal the printed 'Total Debt Investments 405,255,392 403,510,457' (costtie2.py).",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020390",
+     "text": "HOP Energy, LLC 06/17/22 Term Loan - 14.94 % inc PIK (SOFR + 10.00 %, 2.00 % Floor, 2.75 % PIK) 6.5 % 22,548,887 06/17/27 22,130,144 21,218,503"
+    }
+   ]
+  },
+  {
+   "observation_key": "member-carries-another-rows-name",
+   "outcome": "supported",
+   "rationale": "Supported (point e). D&D and Alorica as in the findings. The D&D revolver publishes industry Specialty Retail.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"
+    }
+   ]
+  },
+  {
+   "observation_key": "dash-valued-row-not-published",
+   "outcome": "supported",
+   "rationale": "Supported. HOP Energy Term Loan B is published at FV 0 with the printed cost, e.g. 2025-03-31 '5,960,319 12/09/27 5,345,831 -'. The cost ties in all 14 quarters.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346657",
+     "text": "HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.76 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 3,524,465 12/09/27 2,646,672 -"
+    },
+    {
+     "accession": "0000950170-25-070652",
+     "text": "HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 14.56 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 5,960,319 12/09/27 5,345,831 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "industry-blank-on-declared-value-rows",
+   "outcome": "supported",
+   "rationale": "Supported. Alorica 2023-12-31 and the HOP Term Loan B rows carry their printed industries in rftcb.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"
+    }
+   ]
+  },
+  {
+   "observation_key": "all-pik-printed-no-pik-tag-pik-rate-not-published",
+   "outcome": "supported",
+   "rationale": "Supported (point d). I read on the page 7 all-PIK lines in addition to the report's quote: HOP Term Loan 2025-12-31, Signature 9th Amendment TL A 2025-12-31, Signature DDTL A 2025-09-30, Superior TL 2025-09-30, HydroSource Midstream TL 2026-06-30, HOP TL B 2025-03-31 and Black Rock Coffee 2023-03-31 (partial PIK). Each all-PIK row publishes pik = printed coupon and cash leg 0 (D-232).\nPar growth against coupon/4 (review_tc/q_pik.sql):\n- HOP TL: 3.89 / 3.71 / 3.43 / 3.48 / 3.39 / 3.23 vs 3.89 / 3.63 / 3.39 / 3.36 / 3.32 / 3.21.\n- Signature TL: 3.59 / 3.60 / 3.63 / 3.57 / 3.42 vs 3.57 / 3.52 / 3.49 / 3.49 / 3.40.\n- Signature 9th Amendment: 4.54 / 4.44 vs 4.38.\n- HOP Term Loan C and DDTL B: 3.49 vs 3.46.\n- Superior TL: 3.05 vs 2.96.\nAll sit at the coupon, not the margin. Steps of -48 pct at 2026-06-30 are the exchange offer.\nThe partial-PIK form '(SOFR + m %, f % Floor, p % PIK)' prints m as the total margin (HOP 2023-03-31: 14.94 = SOFR + 10.00 incl. 2.75 PIK), so spread = m and pik = p, as published (D-031).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346657",
+     "text": "HOP Energy, LLC (2)(5) 06/17/22 Term Loan - 12.76 % inc PIK ( SOFR + 9.00 %, 2.00 % Floor, all PIK) 0.9 % 16,430,785 12/09/27 14,316,415 4,375,518"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "HOP Energy, LLC (2)(5) 06/17/22 Term Loan - 12.83 % inc PIK ( SOFR + 9.00 %, 2.00 % Floor, all PIK) 1.3 % 31,132,535 12/09/27 29,208,187 10,379,587"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Signature Brands, LLC 05/05/25 9th Amendment Term Loan A - 17.50 % inc PIK ( 17.50 %, Fixed Coupon, all PIK) 0.9 % 7,419,002 05/04/28 7,213,727 7,419,002"
+    },
+    {
+     "accession": "0001193125-25-276913",
+     "text": "Signature Brands, LLC 02/29/24 Delayed Draw Term Loan A - 10.96 % inc PIK (SOFR + 6.50 %, 1.75 % Floor, all PIK) 0.2 % 1,985,418 05/04/28"
+    },
+    {
+     "accession": "0001193125-25-276913",
+     "text": "Superior Industries International, Inc. (2)(5)(6) 08/14/24 Term Loan - 11.66 % inc PIK (SOFR + 7.50 %, 2.50 % Floor, all PIK) 1.4 % 21,367,666 12/15/28"
+    },
+    {
+     "accession": "0001193125-26-346657",
+     "text": "HydroSource Midstream, LLC (9) 04/30/26 Term Loan - 14.93 % inc PIK ( SOFR + 11.00 %, 2.50 % Floor, all PIK) 3.5 % 18,097,276 04/30/31"
+    },
+    {
+     "accession": "0000950170-23-020390",
+     "text": "Black Rock Coffee Holdings, LLC 04/29/22 Term Loan - 12.12 % inc PIK (SOFR + 7.00 %, 1.00 % Floor, 1.00 % PIK) 5.7 % 19,026,771 04/29/25 18,702,169 18,551,101"
+    }
+   ]
+  },
+  {
+   "observation_key": "unit-count-tag-concept-and-scale-change-between-filings",
+   "outcome": "supported",
+   "rationale": "Supported. HydroSource warrant 2025-06-30 publishes 247 units and Cinelease 215,403, as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095507",
+     "text": "HydroSource Logistics, LLC 04/05/24 Warrant, expires 4/4/34 0.2 % 380 - 1,115,411"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-in-member-differs-from-page",
+   "outcome": "rejected",
+   "rationale": "Rejected (point c): the round-rftc claim of a complete row-by-row instrument compare does not hold.\nMy own compare of every published instrument against the instrument on its printed line (review_tc/instcmp.py; 682 rows located) finds 12 rows still published with an instrument other than the printed one. That excludes the Sigmatron '12/1/29' vs '12/01/29' format difference.\n- Fenix Intermediate 'Delayed Draw Term Loan B' in all 9 quarters 2024-06-30 to 2026-06-30, where the page and the member both read 'Delayed Draw Term Loan B-1'. The wrapper's own hierarchy_instrument_re ends the instrument at a non-alphanumeric character followed by a digit, so it cuts '-1'. This is the C015 row, and the shape is systematic.\n- Sunland Asphalt 'Term Loan' at 2023-09-30 and 2023-12-31, printed 'Term Loan B'.\n- Florida Marine Transporters 'Term Loan' at 2023-12-31, printed 'Term Loan B'.\nThe member text lacks the B in the last two, which is the same class as the 9 corrected rows. Chains are intact (Fenix B-1 one id, Sunland and Florida Marine one id), so only the instrument text is wrong.\nThe observation says the proposed printed-instrument comparison, 'run on rftcb', fires only on two non-error rows. It fires on these 12.\nNeeds:\n- correct the 12 rows, or fix the regex for 'B-1' and correct the 3 member cases;\n- restate the compare's coverage.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346657",
+     "text": "CF Newco, Inc. 12/11/25 Amendment No. 1 Term Loan - 9.92 % ( SOFR + 6.25 %, 1.50 % Floor) 1.0 % 4,941,633 12/10/29 4,874,888 4,971,283"
+    },
+    {
+     "accession": "0001193125-26-346657",
+     "text": "Fenix Intermediate, LLC 03/28/24 Delayed Draw Term Loan B-1 - 10.74 % (SOFR + 7.00 %, 1.75 % Floor) 0.2 % 873,239 03/28/29 873,239 792,901"
+    },
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Sunland Asphalt & Construction, LLC 06/16/23 Term Loan B - 12.99 % inc PIK (SOFR + 7.50 %, 1.75 % Floor, 0.50 % PIK) 4.3 % 19,058,504 06/16/28"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Sunland Asphalt & Construction, LLC 06/16/23 Term Loan B - 12.96 % inc PIK (SOFR + 7.50 %, 1.75 % Floor, 0.50 % PIK) 4.1 % 19,041,190 06/16/28"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Florida Marine Transporters, LLC 03/17/23 Term Loan B - 13.47 % (SOFR + 8.00 %, 2.00 % Floor) 8.4 % 39,193,607 03/17/28 38,266,969 38,880,058"
+    }
+   ]
+  },
+  {
+   "observation_key": "row-printed-not-tagged",
+   "outcome": "supported",
+   "rationale": "Supported. The three 2023-09-30 rows are published with printed_page contexts and sources, and the quarter ties 723,775,772 / 720,198,416.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    }
+   ]
+  },
+  {
+   "observation_key": "pct-calculated-withheld-when-net-assets-concept-outside-nav-list",
+   "outcome": "supported",
+   "rationale": "Supported. pct_of_net_assets_calculated is present on every row of every quarter, and its sum equals the printed total percent (e.g. 124.4 at 2023-03-31, 160.6 at 2026-03-31).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221923",
+     "text": "Common Unitholders capital 879,986 879,986 Accumulated overdistributed earnings ( 64,389 ) ( 60,886 ) Total Members Capital 815,597 819,100"
+    }
+   ]
+  },
+  {
+   "observation_key": "quarter-distribution-derived-negative-from-missing-year-figure",
+   "outcome": "supported",
+   "rationale": "Supported as stated (figure_correction 1.46 = 1.87 - 0.41, both quoted).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Less Distributions: From net investment income ( 5.28 ) ( 1.87 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "zero-value-equity-chain-fragmented",
+   "outcome": "supported",
+   "rationale": "Supported as left. The HOP Term Loan B rows publish FV 0, as printed; the chain breaks are shared matcher behaviour.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221923",
+     "text": "HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.78 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 6,876,841 12/09/27 5,345,831 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "nav-per-unit-accrual-base-includes-undrawn-commitments",
+   "outcome": "supported",
+   "rationale": "Supported as left. Published as printed; the caveat is stated.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346657",
+     "text": "Net Asset Value Per Unit (accrual base) (Note 10) (1) $ 98.71 $ 94.43"
+    }
+   ]
+  },
+  {
+   "observation_key": "units-outstanding-only-from-cover-page",
+   "outcome": "supported",
+   "rationale": "Supported as left. It is consistent with the F28 cover-date row.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346657",
+     "text": "Common Unitholders commitment: ( 6,310,260 and 12,745,660 units issued and outstanding, respectively) 631,026 1,274,566"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-truncated-in-member",
+   "outcome": "supported",
+   "rationale": "Supported. Harvey Gulf 2024-03-31 Term Loan B publishes 'Harvey Gulf Holdings, LLC' on the chain 58578ec9 (review_tc/q_h.sql).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-057006",
+     "text": "Harvey Gulf Holdings, LLC 01/19/24 Term Loan B - 11.56 % (SOFR + 6.25 %, 2.00 % Floor) 7.8 % 39,325,580 01/19/29 38,985,791 39,010,975"
+    }
+   ]
+  },
+  {
+   "observation_key": "warrant-published-as-common-equity",
+   "outcome": "supported",
+   "rationale": "Supported as an owner item. The warrant rows are EQUITY_COMMON (the C016 sample error); the enum has no warrant value.",
+   "evidence": [
+    {
+     "accession": "0001193125-25-276913",
+     "text": "HydroSource Logistics, LLC (2)(4) 04/05/24 Warrant, expires 4/4/34 4.4 % 247 357,421 37,612,239"
+    }
+   ]
+  },
+  {
+   "observation_key": "interest-expense-reads-noninterest-expense",
+   "outcome": "supported",
+   "rationale": "Supported. Not re-measured beyond the quoted lines; the fix is opt-in for this fund.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-125154",
+     "text": "Interest and credit facility expenses 9,831 7,049 27,186 14,011"
+    }
+   ]
+  },
+  {
+   "observation_key": "name-only-match-crosses-tranches-of-one-issuer",
+   "outcome": "supported",
+   "rationale": "Supported. Harvey Gulf Term Loan A runs on one id 99939aa5 and Term Loan B on one id 7ce59e69 from 2023-03-31 to 2023-12-31, with par falling smoothly on each (q_h.sql).",
+   "evidence": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan B - 12.64 % (SOFR + 7.00 %, 1.00 % Floor) 4.6 % 20,549,504 08/10/27 20,078,648 21,124,890"
+    }
+   ]
+  },
+  {
+   "observation_key": "declared-page-row-carries-no-rate-maturity-or-percent",
+   "outcome": "supported",
+   "rationale": "Supported. The three declared rows carry rate, spread, maturity and percent as printed.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    }
+   ]
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "outcome": "supported",
+   "rationale": "Supported (point a):\n- HydroSource 3rd Amendment TL runs on one id 2b74d04f from 2025-06-30 to 2026-03-31 under entity 2005543b, with the other HydroSource Logistics rows.\n- Lumos has one entity (e4d598d2) and one id (9c007d3e) from 2025-09-30 to 2026-06-30, every row named 'Lumos Holdings US Acquisition Co. (Life Fitness)' as printed. Canonical is 'Lumos Holdings US Acquisition Co.'.\n- At 2026-06-30 the old HydroSource Logistics TL, 3rd Amendment TL and revolver are exited in the affiliate rollforward (quoted), not missing.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107434",
+     "text": "HydroSource Logistics, LLC 04/14/25 3rd Amendment Term Loan - 13.06 % ( SOFR + 8.50 %, 2.00 % Floor) 5.2 % 42,688,924 04/04/29 41,075,941 42,688,924"
+    },
+    {
+     "accession": "0001193125-26-346657",
+     "text": "HydroSource Logistics, LLC 3rd Amendment Term Loan 40,240,512 - ( 38,923,804 )"
+    }
+   ]
+  },
+  {
+   "observation_key": "floor-tagged-as-spread",
+   "outcome": "supported",
+   "rationale": "Supported (point b). Cinelease ABL TL publishes spread 7.5 at 2026-03-31 and 2026-06-30 (rftca 2.5), equal to the printed 'SOFR + 7.50 %, 2.50 % Floor'. 2025-09-30 also publishes 7.5. The rates 11.17 / 11.12 are consistent with SOFR about 3.6 plus 7.50.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221923",
+     "text": "Cinelease, LLC 08/07/25 ABL Term Loan - 11.17 % (SOFR + 7.50 %, 2.50 % Floor) 2.2 % 18,069,109 07/31/30 17,334,550 18,267,869"
+    }
+   ]
+  },
+  {
+   "observation_key": "instrument-type-not-rederived-after-instrument-correction",
+   "outcome": "supported",
+   "rationale": "Supported. Confirmed stale instrument_type on Great Kitchens revolver x2 and ADAN-B revolver 2026-03-31 ('Term Loan'), Rising Pharma TL 2023-12-31 ('Delayed Draw Term Loan') and RPM DDTL B 2024-03-31 ('Term Loan') (q_pw.sql). ADAN-B 2026-06-30, not corrected, reads Revolver.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095507",
+     "text": "Great Kitchens Food Company, Inc. 05/31/24 Revolver - 11.34 % (SOFR + 6.00 %, 1.25 % Floor) 0.1 % 698,600 05/31/29 698,600 684,628"
+    }
+   ]
+  },
+  {
+   "observation_key": "declared-value-row-currency-blank",
+   "outcome": "supported",
+   "rationale": "Supported (point f). fair_value_currency is null on exactly 6 rows: the 3 declared 2023-09-30 rows, Alorica 2023-12-31, and HOP TL B 2026-03-31 / 2026-06-30. principal_amount_currency is null on 29 rows. 3 of those carry a par (the declared 2023-09-30 rows); the other 26 are warrants and units with no par (review_tc/q_cur.sql).",
+   "evidence": [
+    {
+     "accession": "0001193125-26-346657",
+     "text": "HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.76 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 3,524,465 12/09/27 2,646,672 -"
+    }
+   ]
+  },
+  {
+   "observation_key": "position-chain-breaks-at-maturity-extension",
+   "outcome": "supported",
+   "rationale": "Supported as left. The Signature DDTL A maturity 03/31/26 -> 05/04/28 is printed; this is a shared matcher break.",
+   "evidence": [
+    {
+     "accession": "0000950170-25-107434",
+     "text": "Signature Brands, LLC 02/29/24 Delayed Draw Term Loan A - 13.94 % inc PIK (SOFR + 9.50 %, 1.75 % Floor, all PIK) 0.2 % 1,930,680 05/04/28 1,930,680 1,930,680"
+    }
+   ]
+  },
+  {
+   "observation_key": "gics-subindustry-guessed-from-sector-level-heading",
+   "outcome": "supported",
+   "rationale": "Supported as left. extracted_industry is as printed, and only the derived GICS is a guess.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-020390",
+     "text": "Materials Hoffmaster Group, Inc. 02/24/23 Revolver - 12.35 % (SOFR + 7.50 %, 2.00 % Floor) 0.2 % $ 558,813 02/24/28 $ 558,813 $ 551,548"
+    }
+   ]
+  }
+ ],
+ "request_reviews": [],
+ "request_history_reviews": [
+  {
+   "request_id": "REQ-rftc-1",
+   "outcome": "supported",
+   "rationale": "Deferral is sound. I confirmed the 5 stale instrument_type rows in rftcb. The fix re-derives a published field in shared code for every fund, so it needs a test and a cohort measurement.",
+   "evidence": [
+    {
+     "accession": "0000950170-24-095507",
+     "text": "Great Kitchens Food Company, Inc. 05/31/24 Revolver - 11.34 % (SOFR + 6.00 %, 1.25 % Floor) 0.1 % 698,600 05/31/29 698,600 684,628"
+    }
+   ]
+  },
+  {
+   "request_id": "OVR-T8Y-R1",
+   "outcome": "supported",
+   "rationale": "Implemented as stated: pct_of_net_assets_calculated is published on every row, and its quarterly sum equals the printed total percent.",
+   "evidence": [
+    {
+     "accession": "0001193125-26-221923",
+     "text": "Common Unitholders capital 879,986 879,986 Accumulated overdistributed earnings ( 64,389 ) ( 60,886 ) Total Members Capital 815,597 819,100"
+    }
+   ]
+  },
+  {
+   "request_id": "OVR-T8Y-R2",
+   "outcome": "supported",
+   "rationale": "The owner ruling is applied: the three 2023-09-30 rows publish from printed_page contexts and the quarter ties to the printed total.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    }
+   ]
+  },
+  {
+   "request_id": "OVR-T8Z-R1",
+   "outcome": "supported",
+   "rationale": "Implemented. No 2023-09-30 pipeline-only, SRC_BDC02 or E07 finding is outstanding in rftcb.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    }
+   ]
+  },
+  {
+   "request_id": "OVR-T8Z-R2",
+   "outcome": "supported",
+   "rationale": "Implemented. The declared rows carry the printed rate, spread, maturity and percent, and X02 / F23 at 2023-09-30 are not outstanding.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Lenox Holdings, Inc. 07/08/22 Term Loan - 14.31% (SOFR + 8.75%, 1.00% Floor) 8.5 % $ 37,883,211 07/08/27 $ 37,312,266 $ 36,708,831"
+    }
+   ]
+  },
+  {
+   "request_id": "OVR-T8Z-R3",
+   "outcome": "supported",
+   "rationale": "Verification bug fixed by the orchestrator; no provenance_wrong finding is outstanding for the declared rows.",
+   "evidence": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
+    }
+   ]
+  }
+ ],
+ "reviewer_notes": [
+  "Point (g):\n- Cost tie (review_tc/costtie2.py): printed schedule total cost and FV equal published in all 14 quarters, to the dollar.\n- Spot check of 15 random rows (seed rev-tc-2; review_tc/spot_tc.py): 15 of 15 match the printed line on par or units, cost, FV, spread, PIK, rate, maturity and percent (HOP TL B, Superior Take Back, Rising Pharma DDTL, CF Newco, Red Robin revolver, HydroSource and Cinelease warrants, D&D DDTL, Comprehensive Logistics, Resco, Alorica, Harvey Gulf TL A, Black Rock Coffee, Propulsion, Sunland TL B).\n- Reverse check (review_tc/reverse_ov.py): no unpublished current-period position. The unpublished identifier contexts are the D&D cross-tag third context and affiliate rollforward rows (Superior 2025-09-30; HydroSource 2026-06-30, including the exited Logistics loans), each matching a published row or an exit.",
+  "rftca vs rftcb (fdiff.py): 688 = 688 rows. Only the declared columns changed (issuer 5, instrument 9, spread 2), plus entity_id 4, canonical_name 2 and position_id 15, which follow them.",
+  "Page-sample notes: C016 (HydroSource warrant EQUITY_COMMON) is the parked owner item. C015's 'B-1' is systematic: 9 Fenix rows, from the wrapper's instrument regex. C008's blank principal currency is one of the 26 equity rows without par, or a declared row.",
+  "All 194 quotes in the report are on their pages (allquotes.py). All findings proposed does not mean the data are correct."
+ ]
+}

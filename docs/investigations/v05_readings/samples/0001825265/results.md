@@ -34,4 +34,4 @@ Published errors: 1
 
 | Card | Quarter | Field | Published | Cause | Note |
 |---|---|---|---|---|---|
-| C016 | 2025-09-30 | instrument_and_class | wrong | pipeline | prints 'Warrant, expires 4/4/34'; asset_category published EQUITY_COMMON (no warrant class) |
+| C016 | 2025-09-30 | instrument_and_class | wrong | pipeline | prints 'Warrant, expires 4/4/34'; asset_category EQUITY_COMMON (known owner item: warrants published as common) |

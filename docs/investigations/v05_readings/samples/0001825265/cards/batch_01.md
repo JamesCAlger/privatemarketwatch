@@ -717,7 +717,7 @@
 
 **Published:**
 - issuer_name = Fenix Intermediate, LLC
-- instrument_description = Delayed Draw Term Loan B
+- instrument_description = Delayed Draw Term Loan B-1
 - asset_category = LOAN
 - fair_value = 1744309.0  (tag: equal)
 - cost = 1790871.0  (tag: equal)

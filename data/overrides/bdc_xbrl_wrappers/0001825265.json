@@ -98,7 +98,7 @@
   "staging": {
     "strategy": "hierarchy_extract",
     "hierarchy_issuer_re": "(?i)^\\s*(?:(?:Debt|Equity)\\s+Investments,\\s+)+(?:(?:(?:MSD_INDUSTRY_LABELS)|Housewares\\s+&\\s+Specialties|Retailing)(?:\\s*,\\s*|\\s+))*(.+?),?\\s+Acquisition\\s+Date\\s+",
-    "hierarchy_instrument_re": "(?i)\\bAcquisition\\s+Date\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?),?\\s+(.+?)(?:\\s*[^A-Za-z0-9\\s/,.]\\s*\\d|\\s+Net\\s+Assets\\b|\\s+%\\s+of\\s+Net\\s+Assets\\b|$)",
+    "hierarchy_instrument_re": "(?i)\\bAcquisition\\s+Date\\s+(?:\\d{1,2}/\\d{1,2}/\\d{2,4}(?:\\s*&\\s*\\d{1,2}/\\d{1,2}/\\d{2,4})?),?\\s+(.+?)(?:\\s*[^A-Za-z0-9\\s/,.\\-]\\s*\\d|\\s+-\\s*\\d|-\\s+\\d|\\s+Net\\s+Assets\\b|\\s+%\\s+of\\s+Net\\s+Assets\\b|$)",
     "hierarchy_condition_extra": "regexp_matches(_clean, '(?i)^\\s*(?:Debt|Equity)\\s+Investments,\\s+.*\\bAcquisition\\s+Date\\s+.*\\b(?:Term\\s+Loan|Delayed\\s+Draw|Revolver|Last\\s+Out|Take\\s+Back|Warrants?|Common\\s+(?:Units|Stock)|Preferred\\s+(?:Units|Stock|Equity)|Class\\s+[A-Z0-9]+\\s+Units|Equity)\\b')",
     "extra_industry_labels": [
       "Automobile Components",

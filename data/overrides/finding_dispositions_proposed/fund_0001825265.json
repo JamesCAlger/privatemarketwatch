@@ -1,6 +1,6 @@
 {
  "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
- "sandbox": "t8zc",
+ "sandbox": "rftcb",
  "dispositions": [
   {
    "disposition_id": "PD-0001825265-F25-1",
@@ -296,6 +296,38 @@
    "rerun": "see docs/investigations/v05_readings/reports/0001825265.json",
    "decided_by": "PROPOSED by agent tcwviii_fund_agent_2026-10-17 (2026-10-18, sandbox t8yf); not accepted by the owner",
    "decided_on": "2026-10-18"
+  },
+  {
+   "disposition_id": "PD-0001825265-issuer_name_printed-11",
+   "class": "false_alarm",
+   "engine": "identity",
+   "rule_name": "issuer_name_printed",
+   "ciks": [
+    "0001825265"
+   ],
+   "quarters": [
+    "2023-12-31"
+   ],
+   "reason_key": "issuer-name-printed-row-located-by-cross-tagged-fair-value",
+   "statement": "The flagged row is the D&D Buyer revolver of 2023-12-31 (ROW-09837033ef0f35f0, context C_55ae7aaf-0205-4376-954b-fd4d37c2891f). The rule compares the published name with the printed line that the page reader attached to the row's member, and the reader places a member on the line where its fair-value fact sits. The filer tagged Alorica's fair value 33,046,946 on this revolver's context, so the reader attached Alorica's line. The published row (D&D Buyer, LLC, Revolver, par and cost 1,153,606, fair value 1,130,534, SOFR + 7.00 %, maturity 2028-10-04, industry Specialty Retail) equals the printed revolver line in every field; Alorica is published on its own row from the printed line. The published name is right; the printed row the rule read is another company's. No fix applies: the printed_row link is produced by the shared page reader from the tagged fact's position, and no wrapper key or row correction sets it.",
+   "basis": "read",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037182",
+     "verbatim": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534",
+     "quote": "the printed revolver line: every published field of the flagged row equals it"
+    },
+    {
+     "source": "filing",
+     "accession": "0000950170-24-037182",
+     "verbatim": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946",
+     "quote": "the line the rule read: Alorica's fair value 33,046,946 is the fact tagged on the revolver's context"
+    }
+   ],
+   "rerun": "see docs/investigations/v05_readings/reports/0001825265.json",
+   "decided_by": "PROPOSED by agent claude-fund-agent-tcwdl8-rftc (2026-10-26, sandbox rftcb); not accepted by the owner",
+   "decided_on": "2026-10-26"
   }
  ]
 }

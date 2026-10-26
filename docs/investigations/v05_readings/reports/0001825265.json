@@ -1,47 +1,42 @@
 {
  "cik": "0001825265",
- "label": "t8zd",
- "before": "t8yf",
+ "label": "rftcc",
+ "before": "rgA6",
  "shared_code": true,
- "investigator_id": "tcwviii_fund_agent_r2_2026-10-18",
+ "investigator_id": "claude-fund-agent-tcwdl8-rftc",
  "declared_changes": [
   {
    "column": "issuer_name",
-   "rows": 1,
-   "why": "Harvey Gulf 2024-03-31 Term Loan B: member cut at 'Harvey Gulf Holdings, LL'; row correction to the printed 'LLC'"
+   "rows": 5,
+   "why": "HydroSource 3rd Amendment Term Loan 2025-06-30 published under Harvey Gulf (member names Harvey Gulf) -> 'HydroSource Logistics, LLC'; Lumos 2025-09-30 'ALumos ...' and 2025-12-31..2026-06-30 'Lumos Holdings US Acquisition Co.' -> printed 'Lumos Holdings US Acquisition Co. (Life Fitness)' (row corrections, context-keyed)"
+  },
+  {
+   "column": "instrument_description",
+   "rows": 21,
+   "why": "member text names the sibling tranche or misspells it; set to the printed instrument: Rising Pharma 2023-12-31 Term Loan; Great Kitchens 2024-06-30 / 2025-03-31 Revolver; ADAN-B 2026-03-31 Revolver; Power Acquisition 2026-03-31 / 2026-06-30 Incremental Term Loan B; Sunland 2026-03-31 Term Loan B; RPM 2024-03-31 'Delayed Draw Term Loan B'; CSAT warrant 2025-06-30 'expires 03/05/32'; round 2 (rftcc, after the independent review of rftcb): Fenix Intermediate 'Delayed Draw Term Loan B' -> printed 'Delayed Draw Term Loan B-1' on 9 rows 2024-06-30..2026-06-30 (wrapper hierarchy_instrument_re no longer cuts a hyphen joining a letter to a digit), Sunland 2023-09-30 / 2023-12-31 and Florida Marine 2023-12-31 'Term Loan' -> printed 'Term Loan B' (3 context-keyed row corrections). holdings_field_diff rftcc rftcb: instrument_description 12, corrected_fields 3, nothing else."
+  },
+  {
+   "column": "basis_spread",
+   "rows": 2,
+   "why": "Cinelease ABL Term Loan 2026-03-31 and 2026-06-30: spread fact tagged 0.025 (the floor); printed SOFR + 7.50 % -> 7.5"
   },
   {
    "column": "corrected_fields",
-   "rows": 1,
-   "why": "the same row records issuer_name as corrected"
+   "rows": 19,
+   "why": "the 16 corrected rows record the corrected field (issuer_name 5, instrument_description 9, basis_spread 2); plus the 3 round-2 instrument corrections (Sunland x2, Florida Marine)"
   },
   {
    "column": "position_id",
-   "rows": 14,
-   "why": "Harvey Gulf Term Loans A and B and the Lenox Term Loan chain through 2023-09-30 now that its three rows are published (each Harvey tranche one id 2023-03-31 to 2023-12-31, kept apart by two force_pair overrides). holdings_field_diff t8zc t8yf: 14 rows."
+   "rows": 15,
+   "why": "chains rejoined by the corrections: HydroSource 3rd Amendment TL one id 2025-06-30..2026-03-31; Lumos one id 2025-09-30..2026-06-30 (entity merged); Rising Pharma TL 2023-03-31..2024-09-30; Great Kitchens revolver rows leave the term-loan chain; ADAN-B revolver 2026-03-31..06-30; Power Incremental TL B 2025-09-30..2026-06-30; Sunland TL B 2026-03-31 rejoins TL B. holdings_field_diff rftcb rgA6: 15 rows. Chain-break query (rftc/breaks.sql) gives the same 12 breaks in rgA6 and rftcb: none added."
   },
   {
-   "column": "extracted_industry",
+   "column": "src_facts",
    "rows": 1,
-   "why": "D&D Buyer revolver 2023-12-31 (ROW-09837033ef0f35f0): 'Professional Services' (Alorica's heading, via the shared fair-value context) -> printed 'Specialty Retail' (row correction)"
-  },
-  {
-   "column": "gics_sub_industry",
-   "rows": 1,
-   "why": "follows the D&D revolver industry: Research & Consulting Services -> Specialty Stores"
-  },
-  {
-   "column": "gics_sector",
-   "rows": 1,
-   "why": "follows the D&D revolver industry: Industrials -> Consumer Discretionary"
-  },
-  {
-   "column": "corrected_fields",
-   "rows": 2,
-   "why": "Harvey Gulf issuer (1) and the D&D revolver now also records extracted_industry (1)"
+   "why": "not aimed at: D&D Buyer revolver 2023-12-31 _financial_fair_value.raw '1130534.0' -> '1130534' (same value); already present in the untouched build rftca, so it comes from shared code changed after rgA6, not from this round's edits"
   }
  ],
- "rows_added": 3,
+ "rows_added": 0,
  "rows_removed": 0,
  "fixes": [
   {
@@ -448,6 +443,159 @@
      "text": "Harvey Gulf Holdings, LLC 08/10/22 Term Loan A - 12.63% (SOFR + 7.00%, 1.00% Floor) 6.6 % 28,265,379 08/10/27 27,883,696 28,434,971"
     }
    ]
+  },
+  {
+   "what": "HydroSource 3rd Amendment Term Loan 2025-06-30 published under Harvey Gulf: issuer set to the printed HydroSource Logistics, LLC (row correction, context C_2eaf15ec-a561-4c9b-a725-6e9199d9f2d6); chain now one id 2025-06-30..2026-03-31",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-25-107434",
+     "text": "HydroSource Logistics, LLC 04/14/25 3rd Amendment Term Loan - 13.06 % ( SOFR + 8.50 %, 2.00 % Floor) 5.2 % 42,688,924 04/04/29 41,075,941 42,688,924"
+    }
+   ]
+  },
+  {
+   "what": "Lumos issuer name: 'ALumos ...' (2025-09-30) and missing '(Life Fitness)' (2025-12-31..2026-06-30) set to the printed 'Lumos Holdings US Acquisition Co. (Life Fitness)' on 4 rows; one entity, one position id",
+   "kind": "row_correction",
+   "quarters": [
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-25-276913",
+     "text": "Lumos Holdings US Acquisition Co. (Life Fitness) 08/05/25 Term Loan - 9.82 % ( SOFR + 5.50 %, 1.50 % Floor) 6.9 % 58,827,578 08/05/30 57,972,709 58,121,647"
+    },
+    {
+     "accession": "0001193125-26-126676",
+     "text": "Lumos Holdings US Acquisition Co. (Life Fitness) 08/05/25 Term Loan - 9.40 % ( SOFR + 5.50 %, 1.50 % Floor) 7.1 % 58,680,509 08/05/30 57,872,125 57,976,343"
+    },
+    {
+     "accession": "0001193125-26-221923",
+     "text": "Lumos Holdings US Acquisition Co. (Life Fitness) 08/05/25 Term Loan - 9.16 % ( SOFR + 5.50 %, 1.50 % Floor) 7.2 % 58,533,440 08/05/30 57,770,358 58,416,373"
+    },
+    {
+     "accession": "0001193125-26-346657",
+     "text": "Lumos Holdings US Acquisition Co. (Life Fitness) 08/05/25 Term Loan - 9.16 % ( SOFR + 5.50 %, 1.50 % Floor) 5.8 % 28,906,560 08/05/30 28,551,322 28,906,560"
+    }
+   ]
+  },
+  {
+   "what": "Cinelease ABL Term Loan spread 2.5 (floor tagged as spread) -> printed 7.50 on 2 rows",
+   "kind": "row_correction",
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221923",
+     "text": "Cinelease, LLC 08/07/25 ABL Term Loan - 11.17 % (SOFR + 7.50 %, 2.50 % Floor) 2.2 % 18,069,109 07/31/30 17,334,550 18,267,869"
+    },
+    {
+     "accession": "0001193125-26-346657",
+     "text": "Cinelease, LLC 08/07/25 ABL Term Loan - 11.12 % (SOFR + 7.50 %, 2.50 % Floor) 1.9 % 10,019,271 07/31/30 9,676,517 9,628,519"
+    }
+   ]
+  },
+  {
+   "what": "Instrument text from the sibling tranche's member set to the printed instrument on 9 rows (Rising Pharma, Great Kitchens x2, ADAN-B, Power x2, Sunland, RPM, CSAT warrant expiry)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Rising Pharma Holdings, Inc. 02/08/22 Term Loan - 12.65 % (SOFR + 7.00 %, 1.00 % Floor) 2.7 % 12,838,027 12/13/26 12,578,206 12,555,590"
+    },
+    {
+     "accession": "0000950170-24-095507",
+     "text": "Great Kitchens Food Company, Inc. 05/31/24 Revolver - 11.34 % (SOFR + 6.00 %, 1.25 % Floor) 0.1 % 698,600 05/31/29 698,600 684,628"
+    },
+    {
+     "accession": "0000950170-25-070652",
+     "text": "Great Kitchens Food Company, Inc. 05/31/24 Revolver - 10.32 % ( SOFR + 6.00 %, 1.25 % Floor) 0.1 % 552,187 05/31/29 552,187 548,322"
+    },
+    {
+     "accession": "0001193125-26-221923",
+     "text": "ADAN-B LLC (24 Hour Fitness) 4/30/2025 & 12/31/25 Revolver - 9.46 % ( SOFR + 5.75 %, 1.50 % Floor) 0.2 % 1,858,455 12/31/30 1,858,455 1,843,587"
+    },
+    {
+     "accession": "0001193125-26-221923",
+     "text": "Power Acquisition LLC 07/11/25 Incremental Term Loan B - 10.67 % ( SOFR + 7.00 %, 1.50 % Floor) 0.3 % 2,724,408 01/22/30 2,682,734 2,607,259"
+    },
+    {
+     "accession": "0001193125-26-346657",
+     "text": "Power Acquisition LLC 07/11/25 Incremental Term Loan B - 10.66 % (SOFR + 7.00 %, 1.50 % Floor) 0.3 % 1,348,830 01/22/30 1,329,546 1,293,528"
+    },
+    {
+     "accession": "0001193125-26-221923",
+     "text": "Sunland Asphalt & Construction, LLC 06/16/23 Term Loan B - 10.77 % ( SOFR + 7.00 %, 1.75 % Floor) 2.4 % 19,070,701 06/16/28 18,758,417 19,234,709"
+    },
+    {
+     "accession": "0000950170-24-057006",
+     "text": "RPM Purchaser, Inc. 09/11/23 Delayed Draw Term Loan B - 11.82 % (SOFR + 6.25 %, 2.00 % Floor) 0.8 % $ 3,920,028 09/11/28 $ 3,920,028 $ 3,920,028"
+    },
+    {
+     "accession": "0000950170-25-107434",
+     "text": "CSAT Investment Holdings LLC (2)(4) 03/05/25 Warrant, expires 03/05/32 0.0 % 1,145,950 $ 508,373 $ 276,862"
+    }
+   ]
+  },
+  {
+   "what": "Fenix Intermediate Delayed Draw Term Loan B-1 published as 'Delayed Draw Term Loan B' in all 9 quarters 2024-06-30..2026-06-30: the wrapper's hierarchy_instrument_re stopped at any non-alphanumeric character followed by a digit, cutting '-1'. It now stops at a hyphen only with whitespace on either side ('B-1 - 10.43%' keeps 'B-1'; 'Revolver- 12.71%' still stops). Dry run on all 947 distinct member identifiers of the fund (rftc/dry_instr.py): exactly the 9 Fenix identifiers change; Python and DuckDB RE2 captures identical.",
+   "kind": "wrapper",
+   "quarters": [
+    "2024-06-30",
+    "2024-09-30",
+    "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "quotes": [
+    {
+     "accession": "0001193125-26-221923",
+     "text": "Fenix Intermediate, LLC 03/28/24 Delayed Draw Term Loan B-1 - 10.70 % ( SOFR + 7.00 %, 1.75 % Floor) 0.2 % 1,763,873 03/28/29 1,763,873 1,673,916"
+    }
+   ]
+  },
+  {
+   "what": "Sunland Asphalt Term Loan B 2023-09-30 and 2023-12-31 and Florida Marine Term Loan B 2023-12-31: member drops the tranche letter; instrument set to the printed 'Term Loan B' (3 context-keyed row corrections)",
+   "kind": "row_correction",
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31"
+   ],
+   "quotes": [
+    {
+     "accession": "0000950170-23-060972",
+     "text": "Sunland Asphalt & Construction, LLC 06/16/23 Term Loan B - 12.99 % inc PIK (SOFR + 7.50 %, 1.75 % Floor, 0.50 % PIK) 4.3 % 19,058,504 06/16/28 18,391,786 18,734,509"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Sunland Asphalt & Construction, LLC 06/16/23 Term Loan B - 12.96 % inc PIK (SOFR + 7.50 %, 1.75 % Floor, 0.50 % PIK) 4.1 % 19,041,190 06/16/28 18,411,206 18,984,066"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Florida Marine Transporters, LLC 03/17/23 Term Loan B - 13.47 % (SOFR + 8.00 %, 2.00 % Floor) 8.4 % 39,193,607 03/17/28 38,266,969 38,880,058"
+    }
+   ]
   }
  ],
  "total_exceptions": [],
@@ -647,6 +795,45 @@
     "decision": "Verification bug, fixed by the orchestrator: provenance_reverify gives declared rows cheap status/reason printed_page_declared (never verified, never provenance_wrong); shadow_adapter treats it as a weak pass.",
     "implemented": "Re-run in t8zc."
    }
+  },
+  {
+   "request_id": "REQ-rftc-1",
+   "classification": "verification_bug",
+   "resolution": "deferred",
+   "response": "Deferred to the end-of-run shared-code batch. Classification note: this is a pipeline ordering defect in shared code (unified_holdings derives instrument_type before row corrections apply and never re-derives it), not a check; it publishes a stale instrument_type on 5 corrected rows here and likely on every fund with instrument corrections (also seen on 26North, D-243). The fix needs a test and a cohort measurement; the 5 rows are recorded as an observation.",
+   "authority": "orchestrator under the owner's standing delegation (D-207), recorded in D-250; precedent SCI-R1 / TDL-R1",
+   "original_request": {
+    "request_id": "REQ-rftc-1",
+    "classification": "verification_bug",
+    "file": "pipeline/unified_holdings.py",
+    "what": "instrument_type is derived (instrument_classification._sql_classify_instrument_type, around line 1058-1366) before row corrections are applied (_apply_row_corrections, line 1532), and is not re-derived, so a corrected instrument_description leaves a stale instrument_type. Proposed: re-run the instrument_type (and lien) classification on rows whose corrected_fields include instrument_description, with a test (a revolver row corrected from 'Term Loan' gets instrument_type 'Revolver'; an uncorrected row keeps its type). Classified verification_bug for want of a better class: no check is weakened and nothing changes what counts as a finding; it is a shared ordering defect that publishes a value inconsistent with the corrected, page-backed instrument. Not edited by the fund agent (shared code).",
+    "why": "rftcb publishes 5 rows whose instrument_type contradicts their corrected, printed instrument: Great Kitchens revolver 2024-06-30 and 2025-03-31 and ADAN-B revolver 2026-03-31 'Term Loan' (printed Revolver); Rising Pharma 2023-12-31 'Delayed Draw Term Loan' (printed Term Loan); Sunland 2026-03-31 'Delayed Draw Term Loan' (printed Term Loan B); RPM 2024-03-31 'Term Loan' (printed Delayed Draw Term Loan B). Query rftc/itype.sql. Every fund with instrument_description row corrections is exposed (e.g. Lord Abbett's 424 instrument lines, D-249).",
+    "quotes": [
+     {
+      "accession": "0000950170-24-095507",
+      "text": "Great Kitchens Food Company, Inc. 05/31/24 Revolver - 11.34 % (SOFR + 6.00 %, 1.25 % Floor) 0.1 % 698,600 05/31/29 698,600 684,628"
+     },
+     {
+      "accession": "0001193125-26-221923",
+      "text": "ADAN-B LLC (24 Hour Fitness) 4/30/2025 & 12/31/25 Revolver - 9.46 % ( SOFR + 5.75 %, 1.50 % Floor) 0.2 % 1,858,455 12/31/30 1,858,455 1,843,587"
+     }
+    ],
+    "next_action": "Orchestrator: decide whether to re-derive instrument_type after row corrections (shared code with a focused test and a false-positive test, then a cohort regression), or make instrument_type correctable. Until then the 5 rows stay as observation instrument-type-not-rederived-after-instrument-correction; this fund needs no further edit beyond a rebuild."
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-095507",
+     "text": "Great Kitchens Food Company, Inc. 05/31/24 Revolver - 11.34 % (SOFR + 6.00 %, 1.25 % Floor) 0.1 % 698,600 05/31/29 698,600 684,628"
+    },
+    {
+     "accession": "0001193125-26-221923",
+     "text": "ADAN-B LLC (24 Hour Fitness) 4/30/2025 & 12/31/25 Revolver - 9.46 % ( SOFR + 5.75 %, 1.50 % Floor) 0.2 % 1,858,455 12/31/30 1,858,455 1,843,587"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Rising Pharma Holdings, Inc. 02/08/22 Term Loan - 12.65 % (SOFR + 7.00 %, 1.00 % Floor) 2.7 % 12,838,027 12/13/26 12,578,206 12,555,590"
+    }
+   ]
   }
  ],
  "orchestrator_requests": [],
@@ -832,26 +1019,32 @@
    "field": "instrument_description",
    "cause": "fund",
    "action": "fixed",
-   "fair_value_m": 5.0,
+   "fair_value_m": 47.9,
    "quarters": [
     "2023-03-31",
     "2023-06-30",
+    "2023-09-30",
     "2023-12-31",
     "2024-03-31",
+    "2024-06-30",
+    "2024-09-30",
     "2024-12-31",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
     "2025-12-31",
     "2026-03-31",
     "2026-06-30"
    ],
-   "what": "Instrument text was null where the member writes 'Acquisition Date dd/mm/yy,' (comma), cut to 'Amendment No' at 'No. 1', and the Sigmatron 2024-12-31 member says 'expires 12/1/35' where the page prints 12/1/29. Issuer names were null or ',Alorica' where the industry heading is not in the shared label list or the prefix is doubled, and EagleRock's whole member was its issuer. Fixed in the wrapper's staging regexes (dry run: 20 of 672 identifiers change, all intended) and one row correction.",
-   "suggested_check": "Instrument text that ends in 'No', 'No.' or is null on a row whose member has an Acquisition Date.",
+   "what": "Instrument text was null where the member writes 'Acquisition Date dd/mm/yy,' (comma), cut to 'Amendment No' at 'No. 1', and the Sigmatron 2024-12-31 member says 'expires 12/1/35' where the page prints 12/1/29. Issuer names were null or ',Alorica' where the industry heading is not in the shared label list or the prefix is doubled, and EagleRock's whole member was its issuer. Fixed in the wrapper's staging regexes (dry run: 20 of 672 identifiers change, all intended) and one row correction. Round rftc (row-by-row compare of all 682 rows that have a printed line, rftc/cmp_printed.py): 9 more rows carry the sibling tranche's member text (Rising Pharma 2023-12-31 'Delayed Draw' on the term loan; Great Kitchens 2024-06-30 / 2025-03-31 and ADAN-B 2026-03-31 'Term Loan' on the revolver; Power 2026-03-31 / 2026-06-30 'Term Loan B' on the incremental tranche; Sunland 2026-03-31 'Delayed Draw' on Term Loan B), RPM 2024-03-31 'Delay Draw', and the CSAT warrant 2025-06-30 'expires 03/05/37' (page 03/05/32). Fixed by 9 context-keyed row corrections; 4 chains rejoined. Round 2 (rftcc): the round-rftc claim of a complete instrument compare was wrong. rftc/cmp_printed.py accepted a published instrument that was a PREFIX of the printed one, so it missed 12 rows the independent review found: Fenix 'Delayed Draw Term Loan B' for the printed 'B-1' (9 rows, 2024-06-30..2026-06-30; the wrapper regex cut '-1', a fund-level cause) and Sunland 2023-09-30 / 2023-12-31 and Florida Marine 2023-12-31 'Term Loan' for the printed 'Term Loan B' (member drops the letter). Fixed by the wrapper regex and 3 row corrections. The compare now tests exact equality after removing punctuation and spaces; on rftcb it flags 14 rows (the 12, the D&D revolver whose printed line is Alorica's, and Sigmatron 2025-06-30 '12/1/29' vs printed '12/01/29', same date), on rftcc 2 (those two). The reviewer's script (scratch/2026-10-25_fix_run/review_tc/instcmp.py, run on rftcc as rftc/instcmp_rftcc.py) agrees: 682 rows located, 1 mismatch (Sigmatron date format).",
+   "suggested_check": "Instrument text that ends in 'No', 'No.' or is null on a row whose member has an Acquisition Date. And: two rows of one issuer in one filing with the same instrument text but different printed instruments on their printed lines (page reader printed_row) is a finding. The comparison must be exact (normalised), not prefix: a printed tranche suffix ('B-1', 'B') the published text lacks is a finding.",
    "quote": {
     "accession": "0001193125-26-346657",
     "text": "CF Newco, Inc. 12/11/25 Amendment No. 1 Term Loan - 9.92 % ( SOFR + 6.25 %, 1.50 % Floor) 1.0 % 4,941,633 12/10/29 4,874,888 4,971,283"
    },
    "detection_decision": {
     "action": "propose_detector",
-    "rationale": "C201/C206 caught the null and leaked issuer names only; no rule caught the null instruments, the cut 'Amendment No' or the Sigmatron expiry. Proposed: instrument text null, or ending in 'No' / 'No.', on a row whose member has an Acquisition Date; and an expiry or maturity date in the instrument text that differs from the tagged maturity.",
+    "rationale": "C201/C206 caught the null and leaked issuer names only; no rule caught the null instruments, the cut 'Amendment No' or the Sigmatron expiry. Proposed: instrument text null, or ending in 'No' / 'No.', on a row whose member has an Acquisition Date; and an expiry or maturity date in the instrument text that differs from the tagged maturity. No rule fired on the 9 rftc rows in the untouched build rftca; the proposed printed-instrument comparison fires on all 9 and, run on rftcb, only on two rows that are not errors (D&D revolver, whose printed_row is Alorica's line, and Sigmatron '12/1/29' vs printed '12/01/29').",
     "reference": "suggested_check in this observation"
    }
   },
@@ -1145,6 +1338,145 @@
     "rationale": "X02 and F23 now pass; nothing tests precision against a valid date. A check that a row with a full-date maturity_date never has maturity_precision unknown / status unresolved would have caught the 3 rows and is quiet on xbrl_field and nport rows.",
     "reference": "suggested_check in this observation"
    }
+  },
+  {
+   "observation_key": "issuer-name-from-member-differs-from-page",
+   "field": "issuer_name",
+   "cause": "fund",
+   "action": "fixed",
+   "fair_value_m": 246.10000000000002,
+   "quarters": [
+    "2025-06-30",
+    "2025-09-30",
+    "2025-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "HydroSource's 3rd Amendment Term Loan 2025-06-30 (42.7M) carries a Harvey Gulf member and was published under Harvey Gulf, on the Harvey Gulf entity and chain; the Lumos member reads 'ALumos ...' at 2025-09-30 and drops the printed '(Life Fitness)' from 2025-12-31, so the position split over two entities. Fixed by 5 context-keyed row corrections.",
+   "suggested_check": "The published issuer is compared with the name cell of the row's printed line (as issuer_name_printed does) and also against the same position's name in neighbouring quarters; a name that is a one-character variant or loses a printed parenthetical is a finding.",
+   "quote": {
+    "accession": "0000950170-25-107434",
+    "text": "HydroSource Logistics, LLC 04/14/25 3rd Amendment Term Loan - 13.06 % ( SOFR + 8.50 %, 2.00 % Floor) 5.2 % 42,688,924 04/04/29 41,075,941 42,688,924"
+   },
+   "detection_decision": {
+    "action": "existing_detector",
+    "rationale": "issuer_name_printed fired in the untouched build rftca on HydroSource 2025-06-30 (RVQ_BLK_cd852aa33084) and ALumos 2025-09-30 (RVQ_BLK_84d4a2949812); both cleared in rftcb. It did not fire on the three Lumos rows that drop '(Life Fitness)' (prefix match), found by the row-by-row compare.",
+    "reference": "identity/issuer_name_printed"
+   }
+  },
+  {
+   "observation_key": "floor-tagged-as-spread",
+   "field": "basis_spread",
+   "cause": "row",
+   "action": "fixed",
+   "fair_value_m": 27.9,
+   "quarters": [
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "Cinelease ABL Term Loan: the spread fact is 0.025 (the 2.50 % floor) at 2026-03-31 and 2026-06-30, while 2025-09-30 and 2025-12-31 tag 0.075; published spread 2.5 against printed SOFR + 7.50 %. Fixed by two row corrections.",
+   "suggested_check": "A floating loan whose published spread equals its printed floor and differs from the printed margin, or whose spread falls by more than 2 points between quarters with an unchanged printed margin.",
+   "quote": {
+    "accession": "0001193125-26-221923",
+    "text": "Cinelease, LLC 08/07/25 ABL Term Loan - 11.17 % (SOFR + 7.50 %, 2.50 % Floor) 2.2 % 18,069,109 07/31/30 17,334,550 18,267,869"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule fired on these rows in rftca (spread 2.5 with rate 11.17 is plausible on its own). The proposed comparison against the printed margin fires on these 2 rows only in this fund (rftc/cmp_printed.py SPREAD flag on rftca: 3 rows, the third being the D&D revolver whose printed_row is another company's line).",
+    "reference": "suggested_check in this observation"
+   }
+  },
+  {
+   "observation_key": "instrument-type-not-rederived-after-instrument-correction",
+   "field": "instrument_type",
+   "cause": "shared",
+   "action": "parked",
+   "fair_value_m": 38.699999999999996,
+   "quarters": [
+    "2023-12-31",
+    "2024-03-31",
+    "2024-06-30",
+    "2025-03-31",
+    "2026-03-31"
+   ],
+   "what": "pipeline/unified_holdings.py derives instrument_type before applying row corrections and does not re-derive it. Five rows corrected this round keep the old member's type: Great Kitchens revolvers 2024-06-30 / 2025-03-31 and ADAN-B revolver 2026-03-31 'Term Loan'; Rising Pharma 2023-12-31 'Delayed Draw Term Loan' (printed Term Loan); Sunland 2026-03-31 'Delayed Draw Term Loan' (printed Term Loan B); RPM 2024-03-31 'Term Loan' (printed Delayed Draw Term Loan B). Shared step; every fund with instrument_description corrections is exposed. Request REQ-rftc-1.",
+   "suggested_check": "For every row with instrument_description in corrected_fields, instrument_type must equal the classifier's output on the corrected text.",
+   "quote": {
+    "accession": "0000950170-24-095507",
+    "text": "Great Kitchens Food Company, Inc. 05/31/24 Revolver - 11.34 % (SOFR + 6.00 %, 1.25 % Floor) 0.1 % 698,600 05/31/29 698,600 684,628"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule compares instrument_type with the corrected instrument text. The proposed check is exact (classifier re-run on the corrected text) so it has no false positives by construction; on rftcb it fires on these 5 rows.",
+    "reference": "REQ-rftc-1; suggested_check in this observation"
+   }
+  },
+  {
+   "observation_key": "declared-value-row-currency-blank",
+   "field": "fair_value_currency",
+   "cause": "shared",
+   "action": "left",
+   "fair_value_m": 125.4,
+   "quarters": [
+    "2023-09-30",
+    "2023-12-31",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "what": "Rows whose values come from a page declaration publish a blank fair_value_currency: the three 2023-09-30 printed_rows_without_context rows (also blank cost and principal currency) and the three untagged_values rows (Alorica 2023-12-31, HOP Energy Term Loan B 2026-03-31 and 2026-06-30). The schedule is in US dollars ('$' printed); principal_amount_usd and principal_fx_status 'source_usd' are filled. Left: fair_value_currency is not a correctable field and the declaration paths are shared code.",
+   "suggested_check": "A published row with a non-null fair value and a null fair_value_currency in a fund whose other rows are all USD.",
+   "quote": {
+    "accession": "0001193125-26-346657",
+    "text": "HOP Energy, LLC (2)(5) 02/29/24 Term Loan B - 13.76 % inc PIK ( SOFR + 10.00 %, 2.00 % Floor, all PIK) 0.0 % 3,524,465 12/09/27 2,646,672 -"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reads currency completeness. The proposed check fires on exactly these 6 rows in rftcb (rftc/fvcur.sql) and on no tagged row.",
+    "reference": "suggested_check in this observation"
+   }
+  },
+  {
+   "observation_key": "position-chain-breaks-at-maturity-extension",
+   "field": "position_id",
+   "cause": "shared",
+   "action": "left",
+   "fair_value_m": 1.9,
+   "quarters": [
+    "2025-06-30"
+   ],
+   "what": "Signature Brands Delayed Draw Term Loan A (acquired 02/29/24) prints maturity 03/31/26 at 2025-03-31 and 05/04/28 at 2025-06-30 (9th amendment); the matcher's maturity veto starts a new position_id. Pre-existing (same break in rgA6). Also seen, pre-existing: Cinelease warrant gets a new id at 2026-06-30 when the printed units halve (215,403 to 106,644) in the exchange offer. Not fixable by position_match_overrides (force_pair replaces an existing pair only).",
+   "suggested_check": "Two rows of consecutive quarters with the same issuer, instrument text and printed acquisition date but different position_id.",
+   "quote": {
+    "accession": "0000950170-25-107434",
+    "text": "Signature Brands, LLC 02/29/24 Delayed Draw Term Loan A - 13.94 % inc PIK (SOFR + 9.50 %, 1.75 % Floor, all PIK) 0.2 % 1,930,680 05/04/28 1,930,680 1,930,680"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule reports chain breaks with an unchanged acquisition date. rftc/breaks.sql (same issuer and instrument text, consecutive quarters, different id) lists 12 breaks in rftcb: 7 HOP Energy (zero-value / cross-instrument, known), 2 Harvey Gulf (new loans with new acquisition dates: correct breaks), Signature DDTL A and Cinelease warrant; adding the acquisition-date condition would drop the two correct Harvey breaks.",
+    "reference": "suggested_check in this observation"
+   }
+  },
+  {
+   "observation_key": "gics-subindustry-guessed-from-sector-level-heading",
+   "field": "gics_sub_industry",
+   "cause": "shared",
+   "action": "left",
+   "fair_value_m": 45.0,
+   "quarters": [
+    "2023-03-31",
+    "2023-06-30"
+   ],
+   "what": "In 2023-03-31 and 2023-06-30 the filer prints some sector-level headings ('Materials', 'Capital Goods', 'Energy', 'Consumer Services', 'Retailing'); the shared heading map turns 'Materials' into Diversified Metals & Mining for Hoffmaster (tableware; later quarters print Containers & Packaging), 'Capital Goods' into Industrial Machinery for Sunland. extracted_industry is as printed; only the derived GICS is a guess. Left: GICS is not correctable per row and the heading map is a shared table.",
+   "suggested_check": "An issuer whose gics_sub_industry changes between quarters while its printed heading only becomes more specific.",
+   "quote": {
+    "accession": "0000950170-23-020390",
+    "text": "Materials Hoffmaster Group, Inc. 02/24/23 Revolver - 12.35 % (SOFR + 7.50 %, 2.00 % Floor) 0.2 % $ 558,813 02/24/28 $ 558,813 $ 551,548"
+   },
+   "detection_decision": {
+    "action": "propose_detector",
+    "rationale": "No rule looks at GICS stability per issuer. rftc/ind.sql lists 11 issuers with more than one heading in this fund; the proposed check would fire on Hoffmaster, Sunland, Five Star and Follett (heading made more specific) and not on the others, whose GICS is unchanged.",
+    "reference": "suggested_check in this observation"
+   }
   }
  ],
  "name_shape_exceptions": [],
@@ -1155,23 +1487,32 @@
   "round two: tests/test_printed_rows.py 13 passed; tests/test_income_interest_fallback.py 4 passed; tests/test_bdc_fund_income.py + tests/test_fund_highlights_wrapper.py with it 70 passed; tests/test_whole_dollar_scale.py + tests/test_net_assets_concepts.py 8 passed (with test_printed_rows 21)",
   "round two: tests/test_bdc_filings.py, test_page_labelled_contexts.py, test_position_match_overrides.py, test_source_encodings.py, test_output_schemas.py: 288 passed",
   "round three: tests/test_printed_rows.py 36 passed (orchestrator's R1/R3 tests plus 11 new R2 tests)",
-  "round four: tests/test_financial_conventions.py 86 passed (3 new: printed_page full date -> day/dated; '2027-08' and '' -> unknown)"
+  "round four: tests/test_financial_conventions.py 86 passed (3 new: printed_page full date -> day/dated; '2027-08' and '' -> unknown)",
+  "round rftc: no code changed; no tests run (row corrections and a proposal only)",
+  "round 2 (rftcc): no code changed (wrapper regex and row corrections only); no tests run"
  ],
  "not_done": [
-  "Full pytest suite, cohort regression and semantic diff not run (whole_dollar_scale_filings and net_assets_concepts are opt-in, on for this fund only; the refactor of _normalize_mixed_decimals_monetary_facts keeps the old path but is not measured on the cohort).",
+  "Round one (t8yf): full pytest suite, cohort regression and semantic diff not run (whole_dollar_scale_filings and net_assets_concepts are opt-in, on for this fund only; the refactor of _normalize_mixed_decimals_monetary_facts keeps the old path but is not measured on the cohort).",
   "Printed 'Total Investments' including cash at 2023-03-31 and 2023-06-30 read only for F25; cash and Treasury-bill rows are not published at all for this fund (no CASH rows) and were not investigated.",
   "Unfunded commitments table, non-accrual flags against the page, acquisition dates and floors not checked row by row.",
   "Industry heading on 2026-06-30 Helix Sleep reads 'Consumer Discretionary Textiles, Apparel & Luxury Goods' as printed (two headings run together on the page); left.",
   "The first build of this run (t8ya) already differed from spon3 only by the added quarter's rows and 65 position_ids; nothing else in spon3 was re-read.",
   "Process note: one bare 'python -' was typed by mistake during reading (it hung on stdin); killed by its own PID 19188; a second stray one (PID 7460) while recording the page sample, also killed by PID; no build or file was affected.",
-  "A cleared ledger would not establish data correctness; 20 findings remain outstanding (13 with proposals, 7 parked).",
+  "Round one (t8yf): a cleared ledger would not establish data correctness; 20 findings then remained outstanding (13 with proposals, 7 parked).",
   "Round two (t8za, t8zb; 2 of 3 builds): cohort regression and semantic diff not run for the new shared code (printed_rows_without_context and interest_expense fallback are opt-in, one wrapper each; the staging CASE branches only fire on a 'printed_page:' context id, which no other fund produces).",
-  "No independent review of round two yet; page sample not re-run on t8zb.",
+  "Round two (t8zb): no independent review of round two at the time; page sample not re-run on t8zb (the t8zd review and the t8zc page sample came later, D-208).",
   "HOP Energy cross-instrument chain links (Protective Advance / Term Loan B / Term Loan / Term Loan C) seen in position_matches and not read against the page.",
   "2022-12-31 income-statement quarter (total investment income, interest expense) is blank in the income table, as in t8yf; not investigated.",
   "Round three (t8zc, the last build): tests/test_unified_holdings.py left to the orchestrator as instructed; full suite, cohort regression and semantic diff not run.",
   "Whether the matcher would separate the Harvey Gulf tranches without the overrides was not rebuilt (no build left); judged from the printed lines (same maturity, same 2023-09-30 coupon).",
-  "Round four (t8zd): the Harvey Gulf force_pair overrides were not tested by a build without them (no build left); kept on the printed evidence (same maturity for both tranches)."
+  "Round four (t8zd): the Harvey Gulf force_pair overrides were not tested by a build without them (no build left); kept on the printed evidence (same maturity for both tranches).",
+  "Round rftc (rftca untouched, rftcb final; 2 of 6 builds): compared every published row that has a page-reader printed line (682 of 688; the 6 without are the 3 declared 2023-09-30 rows, Alorica 2023-12-31 and HOP Energy TL B 2026-03-31 / 2026-06-30, all read on the page in earlier rounds) on fair value, cost, par, maturity, all-in rate, reference rate, spread, PIK, coupon type, percent of net assets, unit count, instrument and name (rftc/cmp_printed.py; 646 debt lines incl. 146 PIK lines (51 all PIK), 1 LIBOR, 3 PRIME, 4 fixed; principal currency USD only). Industry headings only checked for consistency per issuer (rftc/ind.sql), not line by line.",
+  "Round rftc: instrument_type stays stale on 5 corrected rows (REQ-rftc-1, shared code, not edited). No cohort regression, semantic diff or pytest run (no code changed).",
+  "Round rftc: PIK par growth tested on every all-PIK line (rftc/pik_growth.sql): 19 consistent with coupon/4; the 14 others are explained by draws, the 2026-06-30 exchange offer (about half of each position transferred) or a coupon change in the quarter. Not every partial-PIK line tested the same way (their par also amortises).",
+  "Round rftc process note: one stray bare 'python -' was sent by mistake inside a sed command while editing this report script (after both builds); it hung on stdin and was killed by its own PID 16140; no build or data file was affected.",
+  "A cleared or proposed ledger would not establish data correctness; 11 findings remain outstanding, all with a proposal.",
+  "Round rftc, earlier statement corrected: the first instrument compare (rftcb) accepted prefix matches and so did not cover tranche suffixes; the 'every row compared' claim held for the numeric fields only. Superseded by the round-2 entry.",
+  "Round 2 (rftcc, build 3 of 6): instrument compared on every published row with exact normalised equality against its printed line: 682 of 688 located (own compare via page-reader printed_row and the reviewer's page-text compare both); the 6 not located (3 declared 2023-09-30 rows, Alorica 2023-12-31, HOP Energy Term Loan B 2026-03-31 / 2026-06-30) carry the printed instrument as declared or read in earlier rounds. 2 differences remain, both not errors: the D&D revolver (page reader attaches Alorica's line) and Sigmatron warrant 2025-06-30 'expires 12/1/29' vs printed '12/01/29' (same date, format only; left). The other fields of the row compare (FV, cost, par, maturity, rate, spread, PIK, reference, coupon, pct, units, name) are unchanged from rftcb."
  ],
  "investigations": [
   {
@@ -1452,6 +1793,35 @@
     "A mechanism to move a fact to another context: none exists (untagged_values fills only a missing value; it cannot replace the revolver's tagged value)."
    ],
    "next_action": "Proposal PD-0001825265-blocking_fair_value_scale_or_unit_candidate-10 (reason src-fv-tagged-on-neighbour-context-corrected-from-page) for the owner."
+  },
+  {
+   "finding_id": "RVQ_BLK_ed59103afd2c",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-24-037182|C_55ae7aaf-0205-4376-954b-fd4d37c2891f|ROW-09837033ef0f35f0"
+    ],
+    "reviewed_rows": [
+     "0000950170-24-037182|C_55ae7aaf-0205-4376-954b-fd4d37c2891f|ROW-09837033ef0f35f0"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-24-037182",
+     "text": "D&D Buyer, LLC 10/04/23 Revolver - 12.45 % (SOFR + 7.00 %, 2.00 % Floor) 0.2 % 1,153,606 10/04/28 1,153,606 1,130,534"
+    },
+    {
+     "accession": "0000950170-24-037182",
+     "text": "Alorica Inc. 12/21/22 Term Loan - 12.23 % (SOFR + 6.88 %, 1.50 % Floor) 7.2 % 33,686,999 03/02/27 33,285,743 33,046,946"
+    }
+   ],
+   "conclusion": "false_alarm",
+   "hypotheses_tested": [
+    "Published name wrong: rejected. The flagged row (D&D Buyer, LLC, Revolver, par 1,153,606, cost 1,153,606, fair value 1,130,534, SOFR + 7.00 %, maturity 2028-10-04, Specialty Retail) equals the printed D&D revolver line in every field.",
+    "Rule population: shadow/page_rule_findings.csv for rftca has exactly one 2023-12-31 row for this fund (ROW-09837033ef0f35f0, kind not_the_printed_name, printed_row = the Alorica line); no prior-period comparative context is flagged.",
+    "Why the rule reads Alorica's line: the page reader attaches a member to the line where its fair-value fact sits; the filer tagged Alorica's 33,046,946 on this revolver's context (same cause as SRC_BDC03 and the source-recon finding of this quarter). Alorica itself is published from its printed line (untagged_values).",
+    "Fix by wrapper or row correction: none; printed_row is produced by the shared page reader from the tagged fact's position, and no wrapper key or correctable field sets it. Changing the published name to Alorica would make the row wrong."
+   ],
+   "next_action": "Proposal PD-0001825265-issuer_name_printed-11 (reason issuer-name-printed-row-located-by-cross-tagged-fair-value) for the owner; the rule could skip rows whose fair_value was overridden from the page."
   }
  ],
  "resolved_investigations": [
@@ -2078,6 +2448,50 @@
    ],
    "next_action": "Parked with X02: owner decision OVR-T8Z-R2.",
    "resolution": "no longer raised in t8zc: OVR-T8Z-R1 (declared rows non-blocking printed_page_declared in source recon, SRC_BDC02P, E07) and OVR-T8Z-R2 (printed terms carried) under D-208"
+  },
+  {
+   "finding_id": "RVQ_BLK_cd852aa33084",
+   "conclusion": "confirmed_error",
+   "coverage": {
+    "affected_rows": [
+     "0000950170-25-107434|C_2eaf15ec-a561-4c9b-a725-6e9199d9f2d6|ROW-0dae575e6d6ed466"
+    ],
+    "reviewed_rows": [
+     "0000950170-25-107434|C_2eaf15ec-a561-4c9b-a725-6e9199d9f2d6|ROW-0dae575e6d6ed466"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0000950170-25-107434",
+     "text": "HydroSource Logistics, LLC 04/14/25 3rd Amendment Term Loan - 13.06 % ( SOFR + 8.50 %, 2.00 % Floor) 5.2 % 42,688,924 04/04/29 41,075,941 42,688,924"
+    }
+   ],
+   "hypotheses_tested": [
+    "Member names Harvey Gulf while the context's values (par and fair value 42,688,924, cost 41,075,941, 13.06 %, maturity 04/04/29) are the printed HydroSource 3rd Amendment line: confirmed."
+   ],
+   "next_action": "Fixed in rftcb by a context-keyed issuer_name row correction; finding gone from the rftcb ledger."
+  },
+  {
+   "finding_id": "RVQ_BLK_84d4a2949812",
+   "conclusion": "confirmed_error",
+   "coverage": {
+    "affected_rows": [
+     "0001193125-25-276913|C_015fbb11-d200-47fe-9c55-7cf544b46944|ROW-6f3495a8615043b5"
+    ],
+    "reviewed_rows": [
+     "0001193125-25-276913|C_015fbb11-d200-47fe-9c55-7cf544b46944|ROW-6f3495a8615043b5"
+    ]
+   },
+   "evidence": [
+    {
+     "accession": "0001193125-25-276913",
+     "text": "Lumos Holdings US Acquisition Co. (Life Fitness) 08/05/25 Term Loan - 9.82 % ( SOFR + 5.50 %, 1.50 % Floor) 6.9 % 58,827,578 08/05/30 57,972,709 58,121,647"
+    }
+   ],
+   "hypotheses_tested": [
+    "Member text reads 'ALumos Holdings US Acquisition Co. (Life Fitness)'; the page prints 'Lumos ...': stray leading letter in the member, confirmed. Later quarters drop '(Life Fitness)' (not flagged, fixed with it)."
+   ],
+   "next_action": "Fixed in rftcb by 4 context-keyed issuer_name row corrections; finding gone from the rftcb ledger."
   }
  ]
 }
