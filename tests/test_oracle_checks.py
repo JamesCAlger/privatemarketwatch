@@ -281,6 +281,66 @@ class TestA04GavReconciliation:
         assert [r.status for r in results] == [status]
         assert "no investments figure filed" in results[0].message
 
+    # Silver Point 2023-06-30 shape (D-2026-11-04 repair): schedule 847.4M plus a money-market
+    # row 84.6M; the filed investments line is 847.4M and leaves the cash row out.
+    @staticmethod
+    def _with_cash(non_cash="847380000", cash="84630000"):
+        return _holdings([{"fair_value": non_cash},
+                          {"fair_value": cash, "asset_category": "CASH", "index_classification": "CASH",
+                           "issuer_name": "First American Treasury Obligations Fund"}])
+
+    def test_declared_ex_cash_filer_is_compared_without_its_cash_rows(self):
+        ff = _fund_financials([{"investments_at_fair_value": "847380000"}])
+        holdings = self._with_cash()
+        old = check_A04_gav_reconciliation(holdings, ff, cash_outside_total=frozenset(),
+                                           cash_inside_total=frozenset())
+        assert [r.status for r in old] == ["fail"]
+        new = check_A04_gav_reconciliation(holdings, ff, cash_outside_total=frozenset({"0001786108"}),
+                                           cash_inside_total=frozenset())
+        assert [r.status for r in new] == ["pass"]
+        assert "wrapper says the investments total excludes them" in new[0].message
+
+    def test_declared_ex_cash_filer_still_fails_a_short_schedule(self):
+        """False-positive guard: ex cash the schedule is 20 pct under the filed line."""
+        ff = _fund_financials([{"investments_at_fair_value": "847380000"}])
+        holdings = self._with_cash(non_cash="677900000")
+        results = check_A04_gav_reconciliation(holdings, ff, cash_outside_total=frozenset({"0001786108"}),
+                                               cash_inside_total=frozenset())
+        assert [r.status for r in results] == ["fail"]
+
+    def test_undeclared_filer_detected_when_cash_rows_equal_filed_cash(self):
+        """Silver Capital 2025-09-30 shape: cash row 127.6M equals the filed cash equivalents."""
+        ff = _fund_financials([{"investments_at_fair_value": "334010000",
+                                "cash_equivalents_at_fair_value": "127600000"}])
+        holdings = self._with_cash(non_cash="334010000", cash="127600000")
+        results = check_A04_gav_reconciliation(holdings, ff, cash_outside_total=frozenset(),
+                                               cash_inside_total=frozenset())
+        assert [r.status for r in results] == ["pass"]
+        assert "equal the filed cash equivalents" in results[0].message
+
+    @pytest.mark.parametrize("filed_cash, inside", [
+        ("", frozenset()),                        # no filed cash figure: no evidence of the basis
+        ("40000000", frozenset()),                # cash rows 127.6M do not equal the filed 40.0M
+        ("117600000", frozenset()),               # 10M apart: 3 pct of the line, above the 0.5 pct band
+        ("127600000", frozenset({"0001786108"})),  # wrapper says the line holds the cash rows
+    ])
+    def test_undeclared_filer_without_evidence_still_fails(self, filed_cash, inside):
+        ff = _fund_financials([{"investments_at_fair_value": "334010000",
+                                "cash_equivalents_at_fair_value": filed_cash}])
+        holdings = self._with_cash(non_cash="334010000", cash="127600000")
+        results = check_A04_gav_reconciliation(holdings, ff, cash_outside_total=frozenset(),
+                                               cash_inside_total=inside)
+        assert [r.status for r in results] == ["fail"]
+
+    def test_cash_rows_inside_a_matching_line_are_not_removed(self):
+        """A filer whose line holds the money-market fund: the total with cash ties and stays."""
+        ff = _fund_financials([{"investments_at_fair_value": "931000000",
+                                "cash_equivalents_at_fair_value": "84630000"}])
+        results = check_A04_gav_reconciliation(self._with_cash(), ff, cash_outside_total=frozenset(),
+                                               cash_inside_total=frozenset())
+        assert [r.status for r in results] == ["pass"]
+        assert "ex cash" not in results[0].message
+
 
 class TestA07PctSum:
     def test_pass_normal_sum(self):

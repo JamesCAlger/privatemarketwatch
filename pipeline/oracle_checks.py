@@ -250,16 +250,49 @@ def check_A01_subtotal_arithmetic(
 _TOTAL_ASSETS_FLOOR = 0.85
 
 
+# How closely the schedule's cash rows must equal the filed cash-equivalents figure (share of
+# the investments line) before A04 reads the line as ex cash without a wrapper declaration:
+# the fair-value conservation band (config.FV_CONSERVATION_BAND_PCT), not A04's 5 pct.
+_CASH_EVIDENCE_BAND = 0.005
+
+
+def _wrapper_cash_bases() -> tuple[frozenset[str], frozenset[str]]:
+    """(filers whose wrapper says the filed investments total leaves the cash rows out,
+    filers whose wrapper says it holds them), from source_encodings."""
+    from pipeline.source_encodings import load_encodings
+    encodings = load_encodings()
+    outside = frozenset(c for c, e in encodings.items() if e.get("investments_total_excludes") == ["cash_rows"])
+    inside = frozenset(c for c, e in encodings.items() if e.get("investments_total_includes_cash"))
+    return outside, inside
+
+
 def check_A04_gav_reconciliation(
     holdings_df: pd.DataFrame,
     fund_financials_df: pd.DataFrame | None = None,
     *,
     bdc_tolerance: float = 0.05,
     nport_tolerance: float = 0.10,
+    cash_outside_total: frozenset[str] | None = None,
+    cash_inside_total: frozenset[str] | None = None,
 ) -> list[CheckResult]:
-    """A04: GAV reconciliation -- sum(leaf_fv) vs investments_at_fair_value."""
+    """A04: GAV reconciliation -- sum(leaf_fv) vs investments_at_fair_value.
+
+    Like with like (owner ruling 2026-11-04, repairing the check): the published total holds
+    the schedule's cash rows (asset_category CASH), and some filers' investments line leaves
+    them out. The comparison is then made without the cash rows: (a) for a filer whose wrapper
+    declares investments_total_excludes = ["cash_rows"] (the declaration the conservation
+    engine and the GAV reconciliation already read, D-070); (b) for any other filer not
+    declared to hold cash in the line, only when the total with cash rows fails, the total
+    without them ties, AND the cash rows equal the filed cash-equivalents figure within 0.5 pct
+    of the line (independent evidence that the filer reports them outside the investments line).
+    Silver Point 2023-06-30: published with the money-market row 932.0M, filed 847.4M, ex
+    cash 847.4M. The total-assets stand-in is unchanged: total assets hold the cash."""
     # Published basis (owner ruling 2026-09-30): the BDC's own book, no JV look-through rows.
     holdings_df = holdings_df[published_fv_mask(holdings_df)]
+    if cash_outside_total is None or cash_inside_total is None:
+        outside, inside = _wrapper_cash_bases()
+        cash_outside_total = outside if cash_outside_total is None else cash_outside_total
+        cash_inside_total = inside if cash_inside_total is None else cash_inside_total
     results = []
     if holdings_df.empty:
         return [_make_result("A04", "global", "skip", 0, bdc_tolerance,
@@ -315,12 +348,29 @@ def check_A04_gav_reconciliation(
         is_bdc = source_str.str.lower().eq("bdc").any()
         tol = bdc_tolerance if is_bdc else nport_tolerance
         diff_pct = _pct_diff(holdings_fv, comparison)
+        basis_note = ""
+        cash_fv = (_col_float(group[_col_str(group, "asset_category").str.upper().eq("CASH")], "fair_value").sum()
+                   if "asset_category" in group.columns else 0.0)
+        if cash_fv != 0:
+            ex_cash_fv = holdings_fv - cash_fv
+            ex_cash_diff = _pct_diff(ex_cash_fv, comparison)
+            cik10 = cik_s.zfill(10)
+            filed_cash = _safe_float(ff_match.iloc[0].get("cash_equivalents_at_fair_value", 0))
+            if cik10 in cash_outside_total:
+                diff_pct, basis_note = ex_cash_diff, (
+                    f"; compared ex cash rows ({cash_fv:,.0f}): wrapper says the investments total excludes them")
+            elif (cik10 not in cash_inside_total and diff_pct > tol and ex_cash_diff <= tol
+                  and filed_cash > 0 and abs(cash_fv - filed_cash) <= _CASH_EVIDENCE_BAND * comparison):
+                diff_pct, basis_note = ex_cash_diff, (
+                    f"; compared ex cash rows ({cash_fv:,.0f}): with them {holdings_fv:,.0f} is "
+                    f"{_pct_diff(holdings_fv, comparison):.1%} off, and they equal the filed cash "
+                    f"equivalents ({filed_cash:,.0f}) reported outside the investments line")
         status = "pass" if diff_pct <= tol else "fail"
 
         results.append(_make_result(
             "A04", "cik_quarter", status, diff_pct, tol,
             f"{cik_s}/{rd_s}: holdings_fv={holdings_fv:,.0f} vs "
-            f"comparison={comparison:,.0f} ({diff_pct:.1%} diff, tol={tol:.0%})",
+            f"comparison={comparison:,.0f} ({diff_pct:.1%} diff, tol={tol:.0%})" + basis_note,
             cik=cik_s, report_date=rd_s,
         ))
 
