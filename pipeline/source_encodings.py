@@ -31,7 +31,7 @@ def load_encodings(wrapper_directory=None):
             raise ValueError('Source encodings require wrapper v3: '+str(path))
         if not isinstance(encoding,dict) or set(encoding)-{'cash_identifiers','reporting_entity_suffixes','reporting_entity_identifier_suffixes',
                 'detached_schedule_labels','principal_usd_reference','legal_entity_members',
-                'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','rate_only_contexts',
+                'foreign_unit_values','filed_rate_reading','pik_only_tag_reading','pik_margin_reading','rate_only_contexts',
                 'reference_rate_columns','reference_rate_codes','printed_margin_reading',
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','unfunded_note_aliases','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns','printed_industry_labels','gics_industry_carry_back',
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
@@ -101,6 +101,8 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('The only admitted rate-only context handling is adopt_adjacent: '+str(path))
             if key=='pik_only_tag_reading' and values not in (['coupon'],['margin'],['coupon','margin']):
                 raise ValueError('PIK-only tag reading must be coupon, margin, or coupon then margin: '+str(path))
+            if key=='pik_margin_reading' and values!=['whole_coupon']:
+                raise ValueError('The only admitted PIK margin reading is whole_coupon: '+str(path))
             if key=='reference_rate_codes' and not _codes_are_unambiguous(values):
                 raise ValueError('Reference rate code must read "CODE=BENCHMARK", optionally "to" or "from" a date, '
                     'with one meaning per code on any date: '+str(path))
@@ -331,6 +333,12 @@ def printed_margin_funds(encodings=None):
     """{cik10} whose wrappers set printed_margin_reading: the spread tag is the cash margin where the page prints cash and PIK apart."""
     configured=load_encodings() if encodings is None else encodings
     return {cik for cik,encoding in configured.items() if encoding.get('printed_margin_reading')}
+
+
+def whole_coupon_pik_funds(encodings=None):
+    """{cik10} whose wrappers set pik_margin_reading: ['whole_coupon'] (pipeline.whole_coupon_pik, D-232)."""
+    configured=load_encodings() if encodings is None else encodings
+    return {cik for cik,encoding in configured.items() if encoding.get('pik_margin_reading')==['whole_coupon']}
 
 
 def equity_instrument_expression(cik,instrument,encodings=None):

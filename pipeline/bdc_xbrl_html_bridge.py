@@ -1213,6 +1213,31 @@ _OVERLAY_FIELDS = {
 }
 
 
+def overlay_member_key(frame: "pd.DataFrame", identifier_col: str = "bdc_investment_identifier",
+                       dims_col: str = "bdc_dimensions_raw") -> "pd.Series":
+    """Full inline-XBRL InvestmentIdentifierAxis member, lowercased -- matches
+    the artifact's raw_id_lower. From bdc_dimensions_raw ('...axis=<member>'),
+    falling back to identifier_col when dims is absent/unparseable."""
+    ident = frame[identifier_col].map(_norm_text)
+    if dims_col in frame.columns:
+        # astype("string") first: an all-null dims column is inferred as
+        # nullable Int32, and Int32.fillna("") raises (the all-NULL->Int32
+        # pitfall). Coerce to StringDtype so fillna("") is valid; null rows
+        # become "" and fall through to the identifier fallback below.
+        dims = frame[dims_col].astype("string").fillna("")
+        # A detached-schedule label is appended by staging, not filed; the
+        # artifact's raw_id_lower is the filed member without it.
+        from pipeline import source_encodings
+        derived = source_encodings.derived_segment_pattern()
+        if derived:
+            dims = dims.str.replace(derived, "", regex=True)
+        mem = dims.str.replace(r"^[^=]*=", "", regex=True).map(_norm_text)
+        mem = mem.where(dims.str.contains("=", regex=False) & (mem.str.strip() != ""), ident)
+    else:
+        mem = ident
+    return mem.str.lower()
+
+
 def apply_ixbrl_field_status_overlay(
     df: "pd.DataFrame",
     status_rows: Iterable[dict[str, Any]],
@@ -1260,27 +1285,7 @@ def apply_ixbrl_field_status_overlay(
         return df
 
     def _member_lower(frame: "pd.DataFrame") -> "pd.Series":
-        """Full inline-XBRL InvestmentIdentifierAxis member, lowercased -- matches
-        the artifact's raw_id_lower. From bdc_dimensions_raw ('...axis=<member>'),
-        falling back to identifier_col when dims is absent/unparseable."""
-        ident = frame[identifier_col].map(_norm_text)
-        if dims_col in frame.columns:
-            # astype("string") first: an all-null dims column is inferred as
-            # nullable Int32, and Int32.fillna("") raises (the all-NULL->Int32
-            # pitfall). Coerce to StringDtype so fillna("") is valid; null rows
-            # become "" and fall through to the identifier fallback below.
-            dims = frame[dims_col].astype("string").fillna("")
-            # A detached-schedule label is appended by staging, not filed; the
-            # artifact's raw_id_lower is the filed member without it.
-            from pipeline import source_encodings
-            derived = source_encodings.derived_segment_pattern()
-            if derived:
-                dims = dims.str.replace(derived, "", regex=True)
-            mem = dims.str.replace(r"^[^=]*=", "", regex=True).map(_norm_text)
-            mem = mem.where(dims.str.contains("=", regex=False) & (mem.str.strip() != ""), ident)
-        else:
-            mem = ident
-        return mem.str.lower()
+        return overlay_member_key(frame, identifier_col, dims_col)
 
     result = df.copy()
     for fld in _OVERLAY_FIELDS:

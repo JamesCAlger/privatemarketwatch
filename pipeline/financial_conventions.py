@@ -88,6 +88,10 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
     rate and its coupon_type is Fixed (the filer's reference-rate column prints 'N/A' or
     nothing). Anything else stays as filed.
 
+    A row marked ``pik_rate:whole_coupon_printed`` by staging (pipeline/whole_coupon_pik.py, funds
+    with pik_margin_reading whole_coupon, owner ruling D-232) whose pik_rate is its filed rate is
+    read as all-in: the whole coupon is PIK and the cash leg is 0.
+
     Explicit kinds/precision may be supplied by governed source producers. A
     previous v2 row is idempotent: use the retained reported rate and cost, never
     add PIK to an already normalized all-in rate or rematch using proxy cost.
@@ -177,6 +181,7 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
                 coalesce(CAST(instrument_description AS VARCHAR),'')),'(^|[^a-z])pik([^a-z]|$)|paid.in.kind|payment.in.kind') AS names_pik,
             lpad(regexp_replace(CAST(input.cik AS VARCHAR),'[^0-9]','','g'),10,'0') IN (SELECT cik FROM no_untagged_pik_funds)
                 AS no_untagged_pik,
+            regexp_matches(coalesce(CAST(src_transforms AS VARCHAR),''),'(^|;)pik_rate:whole_coupon_printed(;|$)') AS whole_coupon_pik,
             cost_currency,cost_source,corrected_fields,src_conflict_fields,src_filled_fields,
             src_field_overrides,src_transforms,source,fair_value_source,src_context_id,
             maturity_precision,maturity_date_source,maturity_date,
@@ -207,6 +212,9 @@ def prepare(frame,*,nav=None,hierarchy=None,prior_states=None,source_frame=False
                  WHEN upper(trim(fair_value_currency))='USD' THEN 'explicit_usd'
                  ELSE 'assumed_usd' END AS fv_state,
             CASE WHEN NULLIF(NULLIF(interest_rate_kind,''),'unresolved') IS NOT NULL THEN interest_rate_kind
+                 -- D-232 whole-coupon PIK read from the printed row by staging (pipeline/whole_coupon_pik.py,
+                 -- opt-in per fund): pik_rate is the filed rate, so the rate is the all-in coupon, cash leg 0.
+                 WHEN whole_coupon_pik AND isfinite(reported_rate) AND abs(coalesce(pik,-1)-reported_rate)<=0.011 THEN 'all_in'
                  WHEN rate_concept LIKE '%effectiveyield%' OR rate_concept LIKE '%yieldtomaturity%' THEN 'effective_yield'
                  WHEN rate_concept IN ('investmentinterestratepaidincash','investmentcashinterestrate') THEN 'cash'
                  WHEN rate_concept LIKE '%allininterestrate%' THEN 'all_in'

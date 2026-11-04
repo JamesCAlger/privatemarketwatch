@@ -713,6 +713,13 @@
           "items": {"type": "string", "pattern": "^[A-Za-z]{1,8}=[A-Z]{2,12}( (to|from) [0-9]{4}-[0-9]{2}-[0-9]{2})?$"},
           "description": "Codes this filer prints in its reference-rate column that the shared table does not know, as CODE=BENCHMARK (SR=SOFR). Take them from the filing's own legend. A code whose meaning changed is entered twice, once 'to' the last report date of the old meaning and once 'from' the first of the new (C=CDOR to 2024-03-31, C=CORRA from 2024-06-30); the loader refuses overlapping entries."
         },
+        "pik_margin_reading": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"const": "whole_coupon"},
+          "description": "Set where the filer prints a loan whose only margin is PIK as '<benchmark> + <margin> PIK <coupon> %' ('S + 1075 PIK 15.66 %', 'S + 12.00 % PIK', 'EURIBOR | 10.00% PIK | 13.25%') and the whole floating coupon is paid in kind (owner ruling D-232). On a loan row whose printed row has that form once, whose rate tag is the printed coupon, and whose PIK and spread tags (if any) are the margin, staging publishes pik_rate = the rate tag (transform pik_rate:whole_coupon_printed) and the finalizer reads the rate as all-in, so the cash leg is 0. Evidence required: par growing by about coupon/4 per quarter (coupon/2 for semi-annual capitalisation) on the filer's printed lines, not margin/4. The same print means a cash benchmark plus a PIK margin for other filers (0001913724: par grows by margin/4), so this is never a default (pipeline/whole_coupon_pik.py)."
+        },
         "printed_margin_reading": {
           "type": "array",
           "minItems": 1,
