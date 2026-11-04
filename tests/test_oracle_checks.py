@@ -127,7 +127,8 @@ def _source_detail(rows):
         "issuer_category": "",
         "evidence": "",
     }
-    merged = [{**defaults, **row} for row in rows]
+    # each row its own XBRL context unless the test names one
+    merged = [{**defaults, "context_id": f"ctx{i}", **row} for i, row in enumerate(rows)]
     return pd.DataFrame(merged)
 
 
@@ -310,6 +311,30 @@ class TestA01SubtotalArithmetic:
         ])
         assert [r.status for r in results] == ["fail"]
         assert results[0].detail["child_sum_fv"].tolist() == [4088620.0]
+
+    @staticmethod
+    def _nexii(leaves):
+        rows = [{"source_wrapper_disposition": "debt_issuer_rollup", "context_id": "C_rollup",
+                 "source_wrapper_parent_key": "debt canada nexii", "source_fair_value": "14802000"}]
+        rows += [{"source_wrapper_disposition": "debt_position_leaf", "context_id": ctx,
+                  "source_wrapper_parent_key": "debt canada nexii", "source_fair_value": fv,
+                  "source_row_id": row_id} for ctx, fv, row_id in leaves]
+        return check_A01_subtotal_arithmetic(_source_detail(rows))
+
+    def test_a_context_on_two_dimension_paths_is_one_child(self):
+        """Trinity Capital 2023-03-31: each line's context appears twice in the detail (the second
+        dimension path, source_row_id '#2'); Nexii 14,802 found children of 29,604."""
+        results = self._nexii([("C_a", "10009000", "src:C_a"), ("C_a", "10009000", "src:C_a#2"),
+                               ("C_b", "4793000", "src:C_b"), ("C_b", "4793000", "src:C_b#2"),
+                               ("C_dur", "", "src:C_dur"), ("C_dur", "", "src:C_dur#2")])
+        assert [r.status for r in results] == ["pass"]
+
+    def test_two_lines_on_two_contexts_both_count_and_a_shortfall_still_fails(self):
+        """False-positive guard: distinct contexts with the same key are distinct positions."""
+        assert [r.status for r in self._nexii([("C_a", "10009000", "1"), ("C_b", "4793000", "2")])] == ["pass"]
+        results = self._nexii([("C_a", "10009000", "src:C_a"), ("C_a", "10009000", "src:C_a#2")])
+        assert [r.status for r in results] == ["fail"]
+        assert results[0].detail["child_sum_fv"].tolist() == [10009000.0]
 
     def test_a_current_subtotal_that_does_not_tie_still_fails_beside_a_comparative_one(self):
         """False-positive guard: dropping comparative subtotals must not hide a current mismatch."""

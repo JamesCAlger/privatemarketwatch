@@ -230,6 +230,14 @@ def check_A01_subtotal_arithmetic(
                 child_mask = child_mask & (_col_str(group_leaves, "source_wrapper_family") == family)
 
             children = group_leaves[child_mask]
+            # One fact per context: the detail carries a context once per dimension path
+            # (status collapsed_duplicate_dimension_path, source_row_id '...#2'), and both copies
+            # matched the key, so every child counted twice (Trinity Capital: 2,097,658 against
+            # the printed 1,048,829; owner ruling 2026-11-04, reason a01-children-counted-on-two-paths).
+            # (group_leaves are one filing's, so the context id alone identifies the fact.)
+            if "context_id" in children.columns and len(children):
+                context = _col_str(children, "context_id").str.strip()
+                children = children[~(context.duplicated() & context.ne(""))]
             if children.empty:
                 continue
 
