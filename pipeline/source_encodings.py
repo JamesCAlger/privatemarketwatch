@@ -37,7 +37,8 @@ def load_encodings(wrapper_directory=None):
                 'equity_instrument_labels','unspecified_reference_labels','page_labelled_contexts','misdated_contexts','investments_total_excludes','fair_value_concepts','untagged_values','context_identifiers','unfunded_rows','unfunded_note_aliases','schedule_row_tags','rate_tag_reading','untagged_pik','par_tagged_as_units','units_tagged_as_par','cost_in_two_units','industry_columns','printed_industry_labels','gics_industry_carry_back',
                 'pct_tagged_as_ratio','section_total_reading','investments_total_includes_cash','bracketed_unsigned_values',
                 'whole_dollar_scale_filings','net_assets_concepts','printed_rows_without_context',
-                'cash_rows_include_concepts','subtotal_members','cost_total_excludes','thousands_scale_filings','rate_verification_anchors'}:
+                'cash_rows_include_concepts','subtotal_members','cost_total_excludes','thousands_scale_filings','rate_verification_anchors',
+                'twin_lines_on_distinct_members'}:
             raise ValueError('Invalid source encodings: '+str(path))
         cik=wrapper.get('cik','')
         if len(cik)!=10 or not cik.isdigit() or cik in result:
@@ -167,6 +168,8 @@ def load_encodings(wrapper_directory=None):
                     raise ValueError('The only admitted exclusion from the cost total is cash_rows: '+str(path))
                 if encoding.get('investments_total_excludes')!=['cash_rows']:
                     raise ValueError('cost_total_excludes needs investments_total_excludes cash_rows: '+str(path))
+            if key=='twin_lines_on_distinct_members' and values!=['financing_facility']:
+                raise ValueError('The only admitted twin-line reading is financing_facility: '+str(path))
             if key=='cost_in_two_units' and values!=['foreign_is_par']:
                 raise ValueError('The only admitted reading of a cost in two units is foreign_is_par: '+str(path))
             if key=='foreign_unit_values' and values!=['reported_in_usd']:
