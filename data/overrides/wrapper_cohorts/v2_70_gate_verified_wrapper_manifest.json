@@ -1,8 +1,8 @@
 {
   "schema_version": "wrapper-cohort-manifest.v1",
-  "cohort_id": "v2_70_gate_verified_wrapper_bdc",
-  "description": "v3 wrapper-covered BDCs that pass the FV conservation gate (unified <= 1.05x total assets, or within 10% of investments_at_fair_value when total assets absent).",
-  "cohort_basis": "all_v3_wrapper_files_minus_fv_conservation_gate_failures",
+  "cohort_id": "v1_61_owner_deferred_wrapper_bdc",
+  "description": "61 active v1 wrapper-cohort BDCs after the owner's 2026-10-20 deferral of nine smaller funds. Existing admission holdbacks remain separate.",
+  "cohort_basis": "gate_verified_wrapper_entries_minus_owner_deferred_funds",
   "basis_note": "2026-06-15: 77 v3 wrapper files; gate-verified against fund_financials.investments_at_fair_value/total_assets at each fund's latest anchored quarter. 68 clean + 2 no-anchor admitted (70). 7 HELD BACK for over-inclusion (unified/total_assets>1.05): 0002052153 Apollo Origination II (1.73x), 0001988280 Manulife (1.26x), 0001975736 KKR FS Income Trust Select (1.18x), 0001377936 Saratoga (1.16x), 0001930679 KKR FS Income Trust (1.15x), 0002037804 New Mountain (1.10x), 0001278752 MidCap Financial (1.05x). These need wrapper/dedup fixes (issuer-subtotal duplication) before admission. None of the 7 were in the prior v1_39 cohort, so no currently-published fund is affected.",
   "created_date": "2026-06-15",
   "supersedes": "v1_39_wrapper_bdc",
@@ -45,12 +45,6 @@
       "cik": "0001925309",
       "entity_name": "Sixth Street Lending Partners",
       "wrapper_file": "0001925309.json"
-    },
-    {
-      "rank": 6,
-      "cik": "0001905824",
-      "entity_name": "PIMCO Capital Solutions BDC Corp.",
-      "wrapper_file": "0001905824.json"
     },
     {
       "rank": 7,
@@ -101,12 +95,6 @@
       "wrapper_file": "0001851322.json"
     },
     {
-      "rank": 15,
-      "cik": "0001901037",
-      "entity_name": "Stellus Private Credit BDC",
-      "wrapper_file": "0001901037.json"
-    },
-    {
       "rank": 16,
       "cik": "0001742313",
       "entity_name": "Monroe Capital Income Plus Corp",
@@ -135,12 +123,6 @@
       "cik": "0001913724",
       "entity_name": "TPG Twin Brook Capital Income Fund",
       "wrapper_file": "0001913724.json"
-    },
-    {
-      "rank": 21,
-      "cik": "0001633858",
-      "entity_name": "Audax Credit BDC Inc.",
-      "wrapper_file": "0001633858.json"
     },
     {
       "rank": 22,
@@ -269,12 +251,6 @@
       "wrapper_file": "0001572694.json"
     },
     {
-      "rank": 43,
-      "cik": "0001588272",
-      "entity_name": "NexPoint Capital, Inc.",
-      "wrapper_file": "0001588272.json"
-    },
-    {
       "rank": 44,
       "cik": "0001603480",
       "entity_name": "TCW Direct Lending LLC",
@@ -305,12 +281,6 @@
       "wrapper_file": "0001715933.json"
     },
     {
-      "rank": 49,
-      "cik": "0001743415",
-      "entity_name": "SCP Private Credit Income BDC LLC",
-      "wrapper_file": "0001743415.json"
-    },
-    {
       "rank": 50,
       "cik": "0001766037",
       "entity_name": "NMF SLF I, Inc.",
@@ -335,34 +305,16 @@
       "wrapper_file": "0001786108.json"
     },
     {
-      "rank": 54,
-      "cik": "0001792509",
-      "entity_name": "TriplePoint Private Venture Credit Inc.",
-      "wrapper_file": "0001792509.json"
-    },
-    {
       "rank": 55,
       "cik": "0001825265",
       "entity_name": "TCW Direct Lending VIII LLC",
       "wrapper_file": "0001825265.json"
     },
     {
-      "rank": 56,
-      "cik": "0001834543",
-      "entity_name": "BlackRock Direct Lending Corp.",
-      "wrapper_file": "0001834543.json"
-    },
-    {
       "rank": 57,
       "cik": "0001841514",
       "entity_name": "Commonwealth Credit Partners BDC I, Inc.",
       "wrapper_file": "0001841514.json"
-    },
-    {
-      "rank": 58,
-      "cik": "0001860424",
-      "entity_name": "Onex Direct Lending BDC Fund",
-      "wrapper_file": "0001860424.json"
     },
     {
       "rank": 59,
@@ -381,12 +333,6 @@
       "cik": "0001916099",
       "entity_name": "Diameter Credit Co",
       "wrapper_file": "0001916099.json"
-    },
-    {
-      "rank": 62,
-      "cik": "0001916608",
-      "entity_name": "TCW Star Direct Lending LLC",
-      "wrapper_file": "0001916608.json"
     },
     {
       "rank": 63,
@@ -436,5 +382,75 @@
       "entity_name": "",
       "wrapper_file": "0002008748.json"
     }
-  ]
+  ],
+  "deferred_entries": [
+    {
+      "rank": 6,
+      "cik": "0001905824",
+      "entity_name": "PIMCO Capital Solutions BDC Corp.",
+      "wrapper_file": "0001905824.json"
+    },
+    {
+      "rank": 15,
+      "cik": "0001901037",
+      "entity_name": "Stellus Private Credit BDC",
+      "wrapper_file": "0001901037.json"
+    },
+    {
+      "rank": 21,
+      "cik": "0001633858",
+      "entity_name": "Audax Credit BDC Inc.",
+      "wrapper_file": "0001633858.json"
+    },
+    {
+      "rank": 43,
+      "cik": "0001588272",
+      "entity_name": "NexPoint Capital, Inc.",
+      "wrapper_file": "0001588272.json"
+    },
+    {
+      "rank": 49,
+      "cik": "0001743415",
+      "entity_name": "SCP Private Credit Income BDC LLC",
+      "wrapper_file": "0001743415.json"
+    },
+    {
+      "rank": 54,
+      "cik": "0001792509",
+      "entity_name": "TriplePoint Private Venture Credit Inc.",
+      "wrapper_file": "0001792509.json"
+    },
+    {
+      "rank": 56,
+      "cik": "0001834543",
+      "entity_name": "BlackRock Direct Lending Corp.",
+      "wrapper_file": "0001834543.json"
+    },
+    {
+      "rank": 58,
+      "cik": "0001860424",
+      "entity_name": "Onex Direct Lending BDC Fund",
+      "wrapper_file": "0001860424.json"
+    },
+    {
+      "rank": 62,
+      "cik": "0001916608",
+      "entity_name": "TCW Star Direct Lending LLC",
+      "wrapper_file": "0001916608.json"
+    }
+  ],
+  "scope_updated_date": "2026-10-20",
+  "deferral": {
+    "date": "2026-10-20",
+    "authority": "Owner: let's defer, amend the v1 scope",
+    "reason": "Prioritize validation of larger funds; retain deferred funds' cached filings, holdings, fixes and findings for later re-entry by owner decision.",
+    "basis_quarter": "2026-03-31",
+    "prior_cohort_funds": 70,
+    "active_cohort_funds": 61,
+    "deferred_nav": 1822054907,
+    "prior_cohort_nav": 204389892577,
+    "deferred_positions": 1748,
+    "prior_cohort_positions": 30143,
+    "basis_note": "Published holdings excluding underlying_schedule; NAV after five source-backed backfills. Scope deferral does not resolve or disposition ledger findings."
+  }
 }

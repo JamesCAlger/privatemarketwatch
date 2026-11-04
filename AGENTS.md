@@ -1,6 +1,6 @@
 # Private Markets Data Platform — SEC XBRL Pipeline
 
-The user has ADHD and requires a cocise communication style.
+The user has ADHD and requires a cocise communication style. Don't use mannered prose.
 
 ## Project Goal
 
@@ -10,14 +10,32 @@ Build a data platform for SEC-registered private markets vehicles (BDCs, interva
 
 See `private_markets_index_spec.md` for the full specification including the four target indices.
 
+## Scope: v0.5 (Current Working Scope)
+
+Owner ruling 2026-10-05: work on a small sample before widening it. **v0.5 is the five largest cohort funds by 2026-03-31 fair value. All data-quality work, quarter sign-off and filer-profile work targets these five first.**
+
+| CIK | Fund |
+|---|---|
+| 0001803498 | Blackstone Private Credit Fund (BCRED) |
+| 0001812554 | Blue Owl Credit Income Corp. |
+| 0001287750 | Ares Capital Corp |
+| 0001838126 | HPS Corporate Lending Fund |
+| 0001837532 | Apollo Debt Solutions BDC |
+
+- **What v0.5 means:** these five are roughly half of cohort fair value. A quarter is signed off only when they have zero outstanding findings (see Quarter Acceptance Contract). The machine-readable list is `findings_scope.ciks` in `data/reference/quarter_acceptance_thresholds.json`; change the scope there, not in code.
+- **What v0.5 does not change:** the public site shows the active manifest cohort described under V1 Scope (61 funds after the owner's 2026-10-20 deferral). Do not cut it to the five-fund remediation scope.
+- **Do not widen on your own.** Work on the other ~65 funds only when it is needed to fix a v0.5 fund (a global rule, a shared extractor path) or the owner asks. Widening to v1 follows once v0.5 signs off cleanly.
+- **Global fixes are still global.** An extractor or rule fix made for a v0.5 fund applies to every fund; check its effect on the full cohort with the semantic diff before accepting it.
+
 ## V1 Scope (Current Public Product)
 
-The indices above describe the long-term vision. **The shipping v1 product is deliberately narrower: only the underlying position-level holdings data for the ~70 unlisted BDCs in the wrapper-cohort sample.** Keep this front of mind — do not reintroduce index surfaces or non-BDC vehicles into the public site without an explicit decision to expand scope.
+The indices above describe the long-term vision. **The shipping v1 product is deliberately narrower: only the underlying position-level holdings data for the active BDCs in the wrapper-cohort manifest (61 as of 2026-10-20).** Keep this front of mind — do not reintroduce index surfaces or non-BDC vehicles into the public site without an explicit decision to expand scope.
 
-- **What v1 ships:** for the ~70-BDC cohort, the underlying position data (every loan, equity stake, and credit facility each fund discloses) plus per-fund and aggregate portfolio analytics (instrument/industry mix, concentration, spreads, credit stress, PIK).
+- **What v1 ships:** for the active manifest cohort, the underlying position data (every loan, equity stake, and credit facility each fund discloses) plus per-fund and aggregate portfolio analytics (instrument/industry mix, concentration, spreads, credit stress, PIK).
+- **Owner deferral, 2026-10-20:** nine smaller funds are deferred from public v1 and routine fund-clearing dispatch: NexPoint Capital (0001588272), SCP Private Credit Income (0001743415), PIMCO Capital Solutions (0001905824), BlackRock Direct Lending (0001834543), TCW Star (0001916608), Onex Direct Lending (0001860424), TriplePoint Private Venture Credit (0001792509), Audax Credit (0001633858), and Stellus Private Credit (0001901037). The manifest's `deferred_entries` preserves them separately from admission holdbacks; Saratoga remains an existing holdback. Retain their raw data, canonical holdings, corrections and unresolved findings. Deferral is not a disposition or a quality pass. Re-entry requires an owner decision. The acceptance five-fund scope is unchanged.
 - **No indices in v1.** Position-level indices, index returns, "constituents", "indexed fair value", base-100 levels, and the `/indices` pages are NOT part of v1 and have been removed from the public frontend. Generic financial-charting math (e.g. a single fund's own total-return series rebased to 100) is not the index product and is fine to keep.
 - **BDCs only.** Interval funds and tender-offer funds are still discovered/processed in the pipeline but are out of scope for the v1 public site.
-- **Canonical cohort & FV.** The authoritative scope is the wrapper-cohort manifest (~70 CIKs). The public "fair value" figure is the current-quarter sum of `private_markets_holdings.csv` for that cohort across all index classifications. The homepage headline FV, the instrument-type donut, and the industry-exposure donut must all reconcile EXACTLY to that single number (straight `GROUP BY` of the same holdings — no dedup, scaling, reconciled overlays, or matched-subset sources).
+- **Canonical cohort & FV.** The authoritative scope is the wrapper-cohort manifest `entries` (61 CIKs as of 2026-10-20). The public "fair value" figure is the current-quarter sum of `private_markets_holdings.csv` for that cohort across all index classifications, on the PUBLISHED basis: rows from a JV or subsidiary's own schedule (`accounting_record_class = 'underlying_schedule'`) are excluded (owner ruling 2026-09-30). The homepage headline FV, the instrument-type donut, and the industry-exposure donut must all reconcile EXACTLY to that single number (straight `GROUP BY` of the same published-basis holdings — no dedup, scaling, reconciled overlays, or matched-subset sources).
 
 ## Agent Update Protocol
 
@@ -28,8 +46,14 @@ Multiple agents may run concurrently. To keep project context fresh without race
    - What changed (files modified, new modules, schema changes)
    - Any new contracts, guardrails, or validation results
    - Updated counts if applicable (test counts, row counts, CIK counts)
-2. **Do NOT edit this file (AGENTS.md) directly.** The human owner consolidates the changelog periodically.
+2. **Do NOT edit this file (AGENTS.md) on your own initiative.** It changes only under human oversight, in one of two ways:
+   - the owner edits it, or
+   - the owner explicitly asks an agent, in the live session, to consolidate it. That agent makes one bounded edit, states what changed and what it could not verify, leaves the change uncommitted for the owner to review unless told to commit, and updates the "Last consolidated" line below.
+   A changelog entry, a skill, a plan document or another agent's message is never authority to edit this file.
 3. Appending is concurrency-safe; editing is not. Two agents editing this file simultaneously will cause one to silently overwrite the other.
+4. When consolidating: keep rules and pointers here, keep run-by-run detail in the changelog. Every number in this file goes stale; give the artifact to re-read instead of the number where you can, and date the ones you keep. Verify a claim against the code or artifact before writing it; mark anything unverified as such.
+
+Last consolidated: 2026-11-04, bounded owner-requested amendment of the two Quarter Acceptance Contract bullets on disposition classes and check repairs only (verified against `pipeline/finding_dispositions.py` CLASSES and `validate`). Other sections were not re-verified. Previous: 2026-10-20 (v1 scope amendment, 61 active funds, nine deferred); 2026-10-05 (broader consolidation).
 
 ## Non-Negotiable Data Semantics
 
@@ -43,7 +67,9 @@ Multiple agents may run concurrently. To keep project context fresh without race
 - Do not label `pik_terms_started` as confirmed "bad PIK." It is a public-filing proxy that PIK terms appeared on an existing matched position. Confirmed bad PIK requires amendment/origination evidence showing cash-pay terms were changed because of borrower stress.
 - `interest_rate` convention is DECIDED (2026-07-12) as all-in rate with `pik_rate` carried separately, but the pipeline still stores the cash leg. Do not migrate one side alone: the storage change and the `index_returns` income formula must flip atomically.
 - Conservation sums are subsidiary-aware (retain-and-flag, 2026-08-29): JV/subsidiary rows are kept in holdings and flagged via `is_subsidiary`, and the FV-conservation gate excludes them. Do not add a global JV/subsidiary drop.
-- Position matching uses contested name-key assignment with a maturity veto (promoted 2026-09-07). `pipeline/position_id_registry.py` exists but is opt-in (`use_registry` defaults False, not on the production path), so production `position_id` values still renumber per rebuild. Do not use raw pids as cross-rebuild keys.
+- JV look-through rows are retained but NOT published (owner ruling 2026-09-30). The headline, the fund-level reconciliations, the PIK summaries and the acceptance gate all use the published basis, which excludes `underlying_schedule` rows. Do not swap a JV position for its underlying companies in the headline: the sum would stop reconciling to the fund's filed total, and gross JV assets are not comparable to the fund's stake. A look-through view, if built, is a separate labelled surface.
+- Position matching uses contested name-key assignment with a maturity veto (promoted 2026-09-07) and is deterministic since 3810a8f (2026-09-30). The finalizer allocates identities through a durable registry (`pipeline/durable_identity.py`, `data/output/identity_registry.duckdb`); the older `pipeline/position_id_registry.py` stays opt-in (`use_registry` defaults False). Cross-rebuild stability of `position_id` was not re-measured at the 2026-10-05 consolidation: verify before using raw pids as cross-rebuild keys.
+- Review-queue and findings-ledger ids are per fund, rule and period. Dates in id inputs must be `YYYY-MM-DD` strings: a pandas frame read from the typed parquet turns DATE into a timestamp and `CAST(... AS VARCHAR)` then yields `YYYY-MM-DD 00:00:00`, which has silently broken id hashing and period filters three times (0f28433, and the two 2026-10-04 changelog entries).
 
 ## Contracts
 
@@ -58,6 +84,8 @@ These are harm-category restrictions. Violating them causes data loss, silent co
 - **Commit messages.** Include a short subject line plus a brief body (2-4 bullet points or sentences) explaining what changed and why. Keep it concise -- no walls of text.
 - **No ad-hoc inline Python scripts.** Do not launch `python -`, here-strings piped to Python, or long `python -c` snippets for repo-scale diagnostics. These have repeatedly left hidden high-memory processes running. Prefer existing scripts, targeted `pytest`, DuckDB CLI/SQL, `rg`, or short PowerShell inspection commands. If a temporary Python diagnostic is unavoidable, put it in a named temp file with explicit row limits, progress output, and a short timeout, and check/kill the process before continuing.
 - **No duplicate long-running test jobs.** Before starting a full pytest suite or rebuild, check for existing pytest/rebuild processes from other agents. Do not run overlapping full suites or rebuilds unless the user explicitly asks.
+- **Rebuilds are long and memory-bound.** `rebuild_outputs.py --unified` takes about 75-90 minutes on the full universe (not a minute), and its last stage needs well over 11 GB for the Python process on a 23.8 GB machine. Two runs on 2026-10-04 were killed for low memory with about 13 GB free at the start. Check free memory first, ask the owner before closing their applications, and log to `scratch/<date>_<topic>/`.
+- **No code edits or pytest in a checkout while it rebuilds.** The build imports some modules late and stamps the release with hashes of its own source files; pytest's protected-output snapshot fails when the build publishes. Make changes in a git worktree (`.claude/worktrees/<name>`, `core.longpaths=true`) and merge after the build exits.
 - **Do not revert user changes.** This repository often has a dirty worktree with active experiments, generated data, and ad-hoc scripts.
 
 ## Anti-Sycophancy Requirement
@@ -202,10 +230,15 @@ Phases 1-6 (through the 2026-05 compatibility refactor) are complete; see [`docs
 
 ### Quarter Acceptance Contract (the live quality gate)
 
-- Thresholds are data: `data/reference/quarter_acceptance_thresholds.json`, evaluated by `pipeline/quarter_acceptance.py`. Nine checks: fund_coverage, reconcile_rate, flagged_fv_share, source_blocking_fv_share, verified_fv_share, promoted_rule_drift, promoted_rule_health, over_inclusion_fv_share, unfinished_investigations.
+- Thresholds are data: `data/reference/quarter_acceptance_thresholds.json`, evaluated by `pipeline/quarter_acceptance.py`. Ten checks under v4: fund_coverage, reconcile_rate, flagged_fv_share, source_blocking_fv_share, verified_fv_share, promoted_rule_drift, promoted_rule_health, over_inclusion_fv_share, unfinished_investigations, outstanding_findings.
+- **Sign-off rule (owner ruling 2026-10-05, v4 provisional): passing the FV-share bars is not enough.** `outstanding_findings` requires zero findings for the v0.5 funds at the sign-off quarter in any unresolved state: open in either lane, confirmed real with no fix, fix staged or pulled, waiting on a human, or waiting on evidence. Every finding ends fixed (data or extractor), cleared by a repaired check, or closed with a recorded disposition. The disposition store (`pipeline/finding_dispositions.py`) accepts only `as_filed`, `not_applicable` and `informational`. A finding where the check misfires (`rule_problem`, or a `false_alarm` caused by the check) is not a disposition: it clears only when the check is repaired (owner ruling 2026-11-04). Proposals must use the store's classes and carry a `rerun`. The source is the findings lifecycle ledger (`scripts/findings_ledger.py`; the quarter pass writes `findings_ledger_pre.csv` / `_post.csv`). A missing ledger or an unknown state fails the check.
+- Never clear `outstanding_findings` by editing the scope or the ledger, or by widening a rule's tolerance. A check repair is allowed only with the owner's ruling, focused tests plus a test that a real error still fails, and a measurement on every accepted sandbox: list what it clears and adds, and it clears no finding that carries a real-error verdict (pattern: d7df345, 2026-11-04 changelog). A disposition needs cited evidence; an agent may propose it, a deterministic check or the owner accepts it. A rule that keeps misfiring for the same fund quarter after quarter gets repaired or retired for that fund.
+- "All findings cleared" is not "data correct". No rule detects a change in what a field means, a wrong rate on the right row, or offsetting errors that leave totals intact. Say so wherever a clean result is reported.
+- Why the rule exists: both signed-off quarters passed with more than half of their cohort findings outstanding (Q4-2025 434 of 796, Q1-2026 525 of 888 in the final pass ledgers), most of them confirmed errors never sent for a fix. For the v0.5 funds about 62 pct of confirmed-unfixed findings were systematic extraction gaps (no USD conversion of foreign principal, rates not captured, pct of net assets not extracted, currency fields from the wrong column, footnote non-accrual not carried), not row-level corrections. Fix those in the extractor or the filer's wrapper with a test; do not route them to B2. See `docs/investigations/agent_campaigns.md` (2026-10-05 entries).
 - v2 signed off by the owner 2026-08-20 (reconcile >= 90, flagged <= 10, blocking <= 1, verified_fv >= 70).
 - Q4-2025 (2025-12-31) PASS 7/7 under v2, git tag `signoff-2025-12-31`. Q1-2026 (2026-03-31) PASS 7/7 twice-stable, signed off 2026-09-05, git tag `signoff-2026-03-31`.
-- v3 (2026-09-07, provisional) moves the numerator to the PUBLISHED basis and adds over_inclusion and unfinished_investigations. Q1-2026 re-run under v3 is EXPECTED to fail the FV-share checks; that is the gate seeing the ~$4B over-inclusion, not a regression. Calibrate v4 on Q2-2026 actuals.
+- v3 (2026-09-07, provisional) moves the numerator to the PUBLISHED basis and adds over_inclusion and unfinished_investigations. Q1-2026 re-run under v3 is EXPECTED to fail the FV-share checks; that is the gate seeing the over-inclusion, not a regression. The FV-share bars are still to be calibrated on Q2-2026 actuals.
+- **Both signed-off quarters currently REGRESS on re-attestation** (since the 2026-09-30 base build, and they will also fail `outstanding_findings`). Treat the sign-off tags as history, not as a statement about today's build. Run `python scripts/reattest_quarters.py check` for the current reading before quoting either quarter as passing.
 - Remediation cycle: `scripts/run_quarter_pass.py` (staged: rebuild, oracle, validate, provenance, shadow, queue, ledger, preflight, select) plus the `quarter-pass-operator` skill for Codex fleet dispatch and verify/promote. `scripts/reattest_quarters.py` re-attests signed-off quarters after any pipeline change; a regression there is a stop-and-report event.
 
 ### Current Blocker Accounting
@@ -220,11 +253,19 @@ Relevant artifacts:
 
 At the 2026-09-08 rebuild the source-only pool was 9,335 blocking rows (of 15,338 source-only rows reviewed). The old 25-bundle `data/output/bdc_cik_review/` batch is historical only; do not regenerate a queue from it. Blocker selection now runs inside a quarter pass and ranks by output-side FV with a fund-leverage tiebreaker. Always state which artifact and timestamp/count basis you used.
 
-### In flight (branch `ensemble-fp-experiment`, 2026-09-08)
+### In flight (2026-10-05; this block goes stale fastest, check the changelog)
 
-- Published-basis gate (v3) shipped, rollout PAUSED pending owner decisions; see `docs/superpowers/specs/2026-09-07-published-basis-conservation-gate-design.md`.
-- Match-quality program: mg3 full-cohort gold set (535 packets) done, contested assignment promoted to production, chain-completeness work ongoing (`docs/superpowers/plans/2026-09-08-chain-completeness.md`).
-- Production stack: 11 typed Parquet companions live beside the CSVs (PR-1); CSV remains canonical until the reader flip (PR-2). R2 backup and dbt phase 2 planned under `docs/production_stack/`.
+Main checkout is on `ensemble-fp-experiment`. Other work lives in worktrees under `.claude/worktrees/`.
+
+- **Published data is the 2026-10-01 build.** Fixes committed since then (GICS labels no longer depend on the previous run, load-rejected promoted inputs fail the gate, review-id fixes) are not in the published holdings until a unified rebuild completes, followed by `--returns`, the frontend export, the semantic diff and re-attestation. Check `scratch/` for the latest rebuild log before starting another.
+- **Acceptance v4** (`outstanding_findings`): commit 1907eaf, merged into `ensemble-fp-experiment` 2026-10-05. Open defect: outside a quarter pass the check reads `data/output/agent_b2/findings_ledger.csv`, which was last written 2026-08-16, and nothing rejects a stale ledger. Regenerate the ledger (`scripts/findings_ledger.py`) before trusting a standalone acceptance or re-attestation reading.
+- **The unified rebuild does not complete on this machine at present.** Three attempts since 2026-10-04 were stopped for low memory (two at the hand-off to the finalizer, one inside it); the last completed build predates commit b665895. Cause not established. Do not start another without the owner; see the 2026-10-05 changelog entry.
+- **Filer profiles** (branch `filer-profile-pilot`, pushed, not rebased): per-filer documents built for 8 pilot filers at 2025-12-31; nothing in production reads them; the sub-project 3 exit test is NOT met. Spec `docs/superpowers/specs/2026-09-29-filer-profile-programme-design.md` on that branch. Direction under review by the owner: the profile's first job becomes carrying finding dispositions forward (stable identity, validity condition, evidence) for the v0.5 funds, ahead of completing the full per-field document. Only two of the v0.5 funds (BCRED, Ares) are among the 8 pilot filers.
+- **Known open defects on v0.5 funds:** HPS 2026-03-31 holdings sum about 6 pct above its filed total (a B2 fix was rejected by its gate); HPS net asset value per share extracted as 1000; BCRED drops 11 real positions; an Ares issuer rollup is double-counted. Re-check each against the current build before acting.
+- Published-basis gate (v3) shipped with the underlying-schedule exclusion; remaining owner items in `docs/superpowers/specs/2026-09-07-published-basis-conservation-gate-design.md` and the 2026-09-30 changelog entries.
+- Refactor "programme" builds: V13 retired by owner ruling, no V14. `data/programme/candidates/` keeps the two newest candidates only; history in `docs/production_stack/candidate_history_2026-10-03.md`.
+- Jev screening pilot (worktree `jev-screening-pilot`): paused at the owner's request 2026-10-04; see its changelog entries before resuming.
+- Match quality and chain completeness (`docs/superpowers/plans/2026-09-08-chain-completeness.md`) and the production stack (`docs/production_stack/`; Parquet companions live, CSV canonical until the reader flip) are unchanged since 2026-09-08 as far as this consolidation checked.
 
 ## Pipeline Architecture
 
@@ -232,7 +273,7 @@ At the 2026-09-08 rebuild the source-only pool was 9,335 blocking rows (of 15,33
 python -m pipeline.main                  # Universe discovery (~5 min)
 python -m pipeline.main --holdings       # + BDC XBRL extraction (~1-3 hrs first run)
 python -m pipeline.main --ciks 1418076   # Holdings for specific CIKs only
-python -m pipeline.main --unified        # Build unified private markets holdings (~60s)
+python -m pipeline.main --unified        # Build unified private markets holdings (~75-90 min, memory-bound; see Contracts)
 python scripts/rebuild_outputs.py --pik-status  # Strict current PIK status artifacts
 python scripts/rebuild_outputs.py --pik-proxy   # S&P-style schedule-rate PIK proxy artifacts
 python scripts/run_quarter_pass.py --list                                   # list quarter-pass stages
@@ -286,6 +327,7 @@ npm run build             # Static export to frontend/out/
 | `scripts/learn_template.py` | Manage per-CIK HTML extraction templates. Auto-detect, validate, inspect, accept, batch revalidate. | `--auto-detect <CIK>`, `--auto-detect-all`, `--validate <CIK>`, `--validate-only <CIK>`, `--next`, `--inspect <CIK>`, `--accept <CIK> --justification "..."`, `--revalidate-all`, `--add-periods <CIK\|ALL>`, `--list` |
 | `scripts/run_quarter_pass.py` | Staged quarter remediation pass: rebuild, oracle, validate, provenance re-verify, shadow rules, queue, ledger, preflight, packet selection. Writes to `data/output/quarter_pass/<pass_id>/`. | `--pass-id <id> --quarter YYYY-MM-DD [--from/--until <stage>] [--force] [--dry-run] [--list]` |
 | `scripts/reattest_quarters.py` | Record and re-check attestations for signed-off quarters. Run `check` after any pipeline change that touches cohort holdings. | `attest --quarter Q --source <battery.json>`, `check [--quarter Q]` |
+| `scripts/findings_ledger.py` | Findings lifecycle ledger: one state per finding across the review queue, verdicts and correction stores. Source of the `outstanding_findings` sign-off check. Read-only on production. | `python scripts/findings_ledger.py --out <csv> [--compare <prior.csv>]` |
 | `scripts/shadow_validation_runner.py` | Run the shadow-rule engines (conservation, identity, cross-source, weak, Agent A) and emit the disposition ledger. Invoked by the quarter pass; runnable standalone. | `python scripts/shadow_validation_runner.py` |
 | `scripts/run_codex_worker.ps1`, `scripts/dispatch_*_workers.ps1` | Sandboxed Codex worker fleets (Agent A / B / B2 / anchor / convention / investigation). Dispatch from an ADMIN PowerShell; MaxParallel ceiling is 2. See `docs/reference/codex_worker_dispatch.md`. | per-lane dispatch script |
 | `scripts/backup_raw_to_r2.ps1` | Sync the raw EDGAR cache (optionally baselines) to Cloudflare R2 via rclone. Setup in `docs/reference/cloud_backup_setup.md`. | `.\scripts\backup_raw_to_r2.ps1` |
@@ -309,6 +351,8 @@ Skills under `.claude/skills/` (invoke by name; read the SKILL.md before use):
 - `docs/agentic_data_quality.md`: the agentic validation architecture (2026-05 proposal; now largely implemented as the quarter-pass cycle).
 - `pipeline/quarter_acceptance.py` and `data/reference/quarter_acceptance_thresholds.json`: the live quality gate and its thresholds.
 - `scripts/run_quarter_pass.py`: the remediation cycle that feeds the gate.
+- `scripts/findings_ledger.py`: the finding lifecycle states behind the sign-off rule.
+- `docs/investigations/agent_campaigns.md` (2026-10-05 entries): rule carry-forward between sign-offs and what the v0.5 funds' unfixed findings are.
 - `docs/production_stack/production_data_stack_plan.md`: Parquet/dbt/R2 production stack plan and phase status.
 - `docs/reference/match_gold_dispatch.md`: how position-match gold-set fleets are dispatched and scored.
 - `pipeline/unified_holdings.py`: central holdings construction and classification.
@@ -336,10 +380,15 @@ Avoid large aesthetic rewrites. The productive refactor is one that reduces sile
 
 ## Current Tracks
 
-Track 2 (data quality first) was chosen and its original six-step sequence is done: the quarter acceptance contract, deterministic source reconciliation, fund-strategy validation, audited per-CIK corrections, agents scoped to residuals with escalation, and quality tiers in the shadow ledger. The open tracks as of 2026-09-08:
+Track 2 (data quality first) was chosen and its original six-step sequence is done: the quarter acceptance contract, deterministic source reconciliation, fund-strategy validation, audited per-CIK corrections, agents scoped to residuals with escalation, and quality tiers in the shadow ledger. The objective behind them (owner, 2026-10-05): cut the per-fund, per-quarter work. A fix or a disposition made in quarter x should keep working in quarter x+1, with a check that says when it has stopped fitting. Measured baseline between the two sign-offs: no wrapper changed, but 35 new rules were needed across 27 of 70 funds and 30 of those 35 are tied to one filing's rows, so they cannot carry forward.
 
-1. **Published-basis gate rollout.** Resume the paused v3 rollout, then calibrate v4 on Q2-2026 actuals. Ship before the Q2 fleet runs.
-2. **Production stack.** Parquet reader flip (PR-2) in a quiet window with the full suite, R2 backup once the Cloudflare setup exists, then dbt phase 2 per `docs/production_stack/`.
-3. **Match quality and chain completeness.** Continuation metric built but not dispatched; fingerprint drift classes unvalidated; null-issuer wrapper pending.
+The open tracks as of 2026-10-05, in priority order, all scoped to the v0.5 funds first:
+
+1. **Restore a trustworthy current build.** Complete the unified rebuild, `--returns`, frontend export, semantic diff and re-attestation; merge acceptance v4.
+2. **Clear the v0.5 backlog.** Fix the systematic extraction gaps in the extractor or wrapper (start with the HPS overshoot, then foreign-currency principal, rate capture, pct of net assets). Route the row-level remainder through B2. Give every remaining finding a recorded disposition. Target: `outstanding_findings` = 0 for the sign-off quarter.
+3. **Make dispositions and rules carry forward.** Filer profiles, re-aimed at storing dispositions and reusable (not row-pinned) rules for the v0.5 funds. Headline measure per quarter: share of findings auto-cleared by a still-valid disposition versus newly reviewed, and the count of new per-fund fixes.
+4. **Detection beyond the existing rules.** Pipeline integrity checks on every build (determinism, unique ids, explained row-count change); then the pilot checks (rollup, composition, row-by-row census comparison); then an agent reading pass for changes of meaning, measured on recall, false alarms and repeat-run stability before it is relied on.
+5. **First out-of-sample quarter.** Q2-2026 for the v0.5 funds. Downloading the filings needs the owner's explicit go.
+6. **Then widen** to v1 (the active manifest cohort) and resume the parked tracks: FV-share bar calibration, the production stack reader flip and R2 backup, match quality and chain completeness.
 
 Before starting new work, read the last few `docs/agent_changelog.md` entries: the state above moves faster than this file.

@@ -28,8 +28,8 @@ def run(output, quarter):
              PUBLIC / "portfolio_characteristics.json", PUBLIC / "gics_sector_breakdown.json"]
     hashes = {str(p.relative_to(ROOT)): sha(p) for p in paths}
     ciks = sorted({str(r["cik"]).zfill(10) for r in read_json(WRAPPER_COHORT_MANIFEST_FILE)["entries"]})
-    if len(ciks) != 70:
-        raise ValueError("E5 expects the authoritative 70-fund wrapper cohort")
+    if not ciks:
+        raise ValueError("E5 requires a nonempty authoritative wrapper cohort")
     hierarchy = read_json(GICS_HIERARCHY_FILE)
     mapping = sorted((name, item["sector"]) for name, item in hierarchy.items())
     atomic_json(output / "request.json", dict(experiment="E5", started_utc=now(), quarter=quarter,
@@ -79,7 +79,7 @@ def run(output, quarter):
         if sha(ROOT / relative) != expected:
             raise ValueError("E5 input changed: " + relative)
     atomic_json(output / "summary.json", dict(experiment="E5", completed_utc=now(), quarter=quarter,
-        elapsed_seconds=time.monotonic()-started, cohort_funds=70, rows=rows, missing_fv_rows=missing,
+        elapsed_seconds=time.monotonic()-started, cohort_funds=len(ciks), rows=rows, missing_fv_rows=missing,
         negative_fv_rows=negative, zero_fv_rows=zero, signed_fv=str(signed), positive_only_fv=str(positive),
         removal_of_positive_filter_delta=str(signed-positive), published_headline=str(headline),
         published_as_of=published.get("asOf"), signed_minus_published=str(signed-headline),

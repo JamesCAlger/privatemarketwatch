@@ -13,6 +13,7 @@ def manifest(tmp_path):
     p.write_text(json.dumps({
         "cohort_id": "test_cohort",
         "held_back_ciks": ["0001377936"],
+        "deferred_entries": [{"cik": "0001588272", "entity_name": "NexPoint"}],
         "entries": [
             {"rank": 1, "cik": "0001918712", "entity_name": "Ares Strategic"},
             {"rank": 2, "cik": "0001812554", "entity_name": "Blue Owl CIC"},
@@ -25,6 +26,7 @@ def test_load_cohort_pads_and_excludes_held_back(manifest):
     cohort = load_cohort_ciks(manifest)
     assert cohort == {"0001918712", "0001812554"}
     assert "0001377936" not in cohort   # held back = failed admission gate
+    assert "0001588272" not in cohort   # owner-deferred, not an admission failure
 
 
 def test_in_cohort_worklist_passes(manifest):

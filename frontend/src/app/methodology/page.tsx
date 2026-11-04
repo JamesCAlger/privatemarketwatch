@@ -35,7 +35,7 @@ export default function MethodologyPage() {
           </div>
           <div>
             <span className="text-[10px] uppercase tracking-[0.12em] text-ink3 block">Last Updated</span>
-            <span className="text-ink font-medium">June 2026</span>
+            <span className="text-ink font-medium">October 2026</span>
           </div>
           <div>
             <span className="text-[10px] uppercase tracking-[0.12em] text-ink3 block">Format</span>
@@ -81,6 +81,16 @@ export default function MethodologyPage() {
               </ol>
 
               <h4>Exclusions</h4>
+              <p>
+                As of 20 October 2026, v1 covers 61 funds. Nine smaller funds are
+                deferred while validation focuses on the retained cohort:
+                NexPoint Capital, SCP Private Credit Income, TCW Star Direct Lending,
+                PIMCO Capital Solutions, Onex Direct Lending, BlackRock Direct Lending,
+                Stellus Private Credit, Audax Credit and TriplePoint Private Venture Credit.
+                At 31 March 2026, these nine represented 0.89% of the previous
+                cohort&apos;s recorded NAV and 5.80% of its published positions.
+                Deferral is a coverage decision, not a finding that their data is incorrect.
+              </p>
               <p>
                 Listed (publicly traded) BDCs are excluded. The unlisted BDC reference
                 list is cross-validated against third-party sources. Consumer and
