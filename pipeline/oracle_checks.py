@@ -149,6 +149,14 @@ def _make_result(
 # CATEGORY A: ARITHMETIC INVARIANTS
 # ===================================================================
 
+def _a01_child_key_pattern(parent_key: str) -> str:
+    """Regex for leaf keys under a rollup key: the key at the start, optionally after a repeat
+    of the key's own leading words (filer members that print a heading twice)."""
+    words = parent_key.split()
+    repeats = "|".join(re.escape(" ".join(words[:i])) for i in range(len(words), 0, -1))
+    return (f"(?:(?:{repeats}) )?" if repeats else "") + re.escape(parent_key)
+
+
 def check_A01_subtotal_arithmetic(
     source_detail_df: pd.DataFrame,
     *,
@@ -172,6 +180,15 @@ def check_A01_subtotal_arithmetic(
 
     rollups = df[rollup_mask].copy()
     leaves = df[leaf_mask].copy()
+    # Only the quarter's own subtotals. A filing also prints the prior year-end schedule; its
+    # subtotals are that period's figures and are checked as current in the filing for that
+    # period. Compared here they failed against the comparative rows, which are often tagged on
+    # an older member format (Sixth Street 2,568,814 at 2023-03-31 is the 2022-12-31 column;
+    # owner ruling 2026-11-04, reason a01-subtotal-of-the-comparative-schedule). A rollup with no
+    # period is kept.
+    if "period" in rollups.columns:
+        rollup_period = _col_str(rollups, "period").str.strip().str[:10]
+        rollups = rollups[rollup_period.eq("") | rollup_period.eq(_col_str(rollups, "report_date").str[:10])]
 
     for group_key, group in rollups.groupby(
         ["cik", "report_date", "accession_number"], dropna=False
@@ -192,12 +209,16 @@ def check_A01_subtotal_arithmetic(
             if not parent_key:
                 continue
 
-            # Find child leaves whose parent_key contains this rollup's parent_key
-            child_mask = (
-                _col_str(group_leaves, "source_wrapper_parent_key").str.contains(
-                    re.escape(parent_key), na=False, regex=True
-                )
-            )
+            # Child leaves sit under this rollup in the key path: the leaf key starts with the
+            # rollup key. A substring test matched issuer text further down the path
+            # ('investments' in 'Fidelity Investments Money Market ...', 'media' in 'Sovos Brands
+            # Intermediate'; owner ruling 2026-11-04, reason a01-parent-key-matches-issuer-name-text).
+            # Two filer spellings stay children: a member that repeats the leading heading words
+            # ('Debt Investments Debt Investments Manufacturing ...', 'Investments Investments
+            # Non-Controlled ...'), and one printed without the space between heading and issuer
+            # ('MediaRed Ventures'), so no word break is required after the key.
+            child_mask = _col_str(group_leaves, "source_wrapper_parent_key").str.match(
+                _a01_child_key_pattern(parent_key), na=False)
             # ... and that belong to the rollup's own period. A filing carries the prior period's
             # rows and subtotals too; summing both periods' rows against one period's subtotal
             # failed every subtotal of a filer whose subtotal members carry no period in their
@@ -209,6 +230,14 @@ def check_A01_subtotal_arithmetic(
                 child_mask = child_mask & (_col_str(group_leaves, "source_wrapper_family") == family)
 
             children = group_leaves[child_mask]
+            # One fact per context: the detail carries a context once per dimension path
+            # (status collapsed_duplicate_dimension_path, source_row_id '...#2'), and both copies
+            # matched the key, so every child counted twice (Trinity Capital: 2,097,658 against
+            # the printed 1,048,829; owner ruling 2026-11-04, reason a01-children-counted-on-two-paths).
+            # (group_leaves are one filing's, so the context id alone identifies the fact.)
+            if "context_id" in children.columns and len(children):
+                context = _col_str(children, "context_id").str.strip()
+                children = children[~(context.duplicated() & context.ne(""))]
             if children.empty:
                 continue
 
@@ -438,6 +467,16 @@ def check_B01_leaf_completeness(
     df = source_detail_df.copy()
     leaf_mask = _col_str(df, "source_wrapper_disposition").str.endswith("_position_leaf")
     leaves = df[leaf_mask]
+    # Positions of the quarter only (owner ruling 2026-11-04, reason
+    # b01-leaves-without-value-are-the-comparative-schedule): a filing also prints the prior
+    # year-end schedule, whose undrawn and nil lines carry no value and are not this quarter's
+    # positions; and a context whose only fact is the acquisition date (a duration context beside
+    # the valued instant one) is not a position. A leaf with no period is kept.
+    if "period" in leaves.columns:
+        period = _col_str(leaves, "period").str.strip().str[:10]
+        leaves = leaves[period.eq("") | period.eq(_col_str(leaves, "report_date").str[:10])]
+    if "concept_names" in leaves.columns:
+        leaves = leaves[_col_str(leaves, "concept_names").str.strip().ne("InvestmentAcquisitionDate")]
 
     if leaves.empty:
         return [_make_result("B01", "global", "skip", 0, 0, "No leaf rows found")]

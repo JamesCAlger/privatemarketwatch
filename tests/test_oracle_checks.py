@@ -127,7 +127,8 @@ def _source_detail(rows):
         "issuer_category": "",
         "evidence": "",
     }
-    merged = [{**defaults, **row} for row in rows]
+    # each row its own XBRL context unless the test names one
+    merged = [{**defaults, "context_id": f"ctx{i}", **row} for i, row in enumerate(rows)]
     return pd.DataFrame(merged)
 
 
@@ -234,11 +235,13 @@ class TestA01SubtotalArithmetic:
         with no period in their name. Each subtotal must meet its own period's rows."""
         def rollup(period, value):
             return {"source_wrapper_disposition": "debt_issuer_rollup", "source_wrapper_parent_key": "debt investments",
-                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period}
+                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period,
+                    "report_date": "2023-12-31"}
 
         def leaf(period, value, name):
             return {"source_wrapper_disposition": "debt_position_leaf", "source_wrapper_parent_key": "debt investments " + name,
-                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period}
+                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period,
+                    "report_date": "2023-12-31"}
         rows = [rollup("2023-12-31", "3000"), rollup("2022-12-31", "800000"),
                 leaf("2023-12-31", "1000", "a"), leaf("2023-12-31", "2000", "b"), leaf("2022-12-31", "800000", "a")]
         assert all(r.status == "pass" for r in check_A01_subtotal_arithmetic(_source_detail(rows)))
@@ -247,6 +250,106 @@ class TestA01SubtotalArithmetic:
         short[0] = rollup("2023-12-31", "3000000")
         short[2] = leaf("2023-12-31", "1000000", "a")
         assert any(r.status == "fail" for r in check_A01_subtotal_arithmetic(_source_detail(short)))
+
+    def test_the_comparative_schedule_subtotal_is_not_checked_in_the_later_quarter(self):
+        """Sixth Street 2023-03-31: the 10-Q prints the 2022-12-31 schedule too; its debt subtotal
+        2,568,814 met comparative rows tagged on an older member format. Only the quarter's own
+        subtotals are compared (owner ruling 2026-11-04)."""
+        base = {"report_date": "2023-03-31", "source_wrapper_family": "debt"}
+        rows = [
+            {**base, "period": "2023-03-31", "source_wrapper_disposition": "debt_category_rollup",
+             "source_wrapper_parent_key": "debt investments", "source_fair_value": "2707407000"},
+            {**base, "period": "2023-03-31", "source_wrapper_disposition": "debt_position_leaf",
+             "source_wrapper_parent_key": "debt investments a", "source_fair_value": "2707407000"},
+            {**base, "period": "2022-12-31", "source_wrapper_disposition": "debt_category_rollup",
+             "source_wrapper_parent_key": "debt investments", "source_fair_value": "2568814000"},
+            {**base, "period": "2022-12-31", "source_wrapper_disposition": "debt_position_leaf",
+             "source_wrapper_parent_key": "debt investments a", "source_fair_value": "2164017534"},
+        ]
+        results = check_A01_subtotal_arithmetic(_source_detail(rows))
+        assert [r.status for r in results] == ["pass"]
+        assert "1/1 rollups" in results[0].message
+
+    @staticmethod
+    def _tree(rollup_key, rollup_fv, leaves):
+        rows = [{"source_wrapper_disposition": "mixed_category_rollup", "source_wrapper_family": "mixed",
+                 "source_wrapper_parent_key": rollup_key, "source_fair_value": rollup_fv}]
+        rows += [{"source_wrapper_disposition": "mixed_position_leaf", "source_wrapper_family": "mixed",
+                  "source_wrapper_parent_key": key, "source_fair_value": fv} for key, fv in leaves]
+        return check_A01_subtotal_arithmetic(_source_detail(rows))
+
+    def test_issuer_name_text_containing_the_rollup_key_is_not_a_child(self):
+        """Fidelity Private Credit 2023-06-30: the 'investments' total took as its only child the
+        money fund 'Fidelity Investments Money Market ...'; BCP Special Opportunities: 'media'
+        took 'Sovos Brands Intermediate' rows. Children must sit under the key in the path."""
+        results = self._tree("investments", "1216949424", [
+            ("affiliated mutual funds money market mutual funds fidelity investments money market", "1353796"),
+        ])  # no child: nothing to compare
+        assert [r.status for r in results] == ["pass"]
+        assert results[0].detail is None or results[0].detail.empty
+        results = self._tree("media", "9198672", [
+            ("media nep group inc first lien term loan", "4088620"),
+            ("media streamland media midco llc first lien term loan", "5110052"),
+            ("food products sovos brands intermediate inc first lien term loan", "497840"),
+            ("insurance alliant holdings intermediate llc first lien term loan", "2109604"),
+        ])
+        assert [r.status for r in results] == ["pass"]
+
+    def test_a_member_that_repeats_its_heading_or_drops_a_space_is_still_a_child(self):
+        results = self._tree("investments non controlled secured debt aerospace", "10000000", [
+            ("investments non controlled secured debt aerospace acme term loan", "6000000"),
+            ("investments investments non controlled secured debt aerospace bleriot term loan", "3000000"),
+            ("investments non controlled secured debt aerospacered ventures term loan", "1000000"),
+        ])
+        assert [r.status for r in results] == ["pass"]
+
+    def test_a_rollup_missing_a_child_under_its_key_still_fails(self):
+        """False-positive guard: the structural match must not hide a real shortfall."""
+        results = self._tree("media", "9198672", [
+            ("media nep group inc first lien term loan", "4088620"),
+            ("food products sovos brands intermediate inc first lien term loan", "5110052"),
+        ])
+        assert [r.status for r in results] == ["fail"]
+        assert results[0].detail["child_sum_fv"].tolist() == [4088620.0]
+
+    @staticmethod
+    def _nexii(leaves):
+        rows = [{"source_wrapper_disposition": "debt_issuer_rollup", "context_id": "C_rollup",
+                 "source_wrapper_parent_key": "debt canada nexii", "source_fair_value": "14802000"}]
+        rows += [{"source_wrapper_disposition": "debt_position_leaf", "context_id": ctx,
+                  "source_wrapper_parent_key": "debt canada nexii", "source_fair_value": fv,
+                  "source_row_id": row_id} for ctx, fv, row_id in leaves]
+        return check_A01_subtotal_arithmetic(_source_detail(rows))
+
+    def test_a_context_on_two_dimension_paths_is_one_child(self):
+        """Trinity Capital 2023-03-31: each line's context appears twice in the detail (the second
+        dimension path, source_row_id '#2'); Nexii 14,802 found children of 29,604."""
+        results = self._nexii([("C_a", "10009000", "src:C_a"), ("C_a", "10009000", "src:C_a#2"),
+                               ("C_b", "4793000", "src:C_b"), ("C_b", "4793000", "src:C_b#2"),
+                               ("C_dur", "", "src:C_dur"), ("C_dur", "", "src:C_dur#2")])
+        assert [r.status for r in results] == ["pass"]
+
+    def test_two_lines_on_two_contexts_both_count_and_a_shortfall_still_fails(self):
+        """False-positive guard: distinct contexts with the same key are distinct positions."""
+        assert [r.status for r in self._nexii([("C_a", "10009000", "1"), ("C_b", "4793000", "2")])] == ["pass"]
+        results = self._nexii([("C_a", "10009000", "src:C_a"), ("C_a", "10009000", "src:C_a#2")])
+        assert [r.status for r in results] == ["fail"]
+        assert results[0].detail["child_sum_fv"].tolist() == [10009000.0]
+
+    def test_a_current_subtotal_that_does_not_tie_still_fails_beside_a_comparative_one(self):
+        """False-positive guard: dropping comparative subtotals must not hide a current mismatch."""
+        base = {"report_date": "2023-03-31", "source_wrapper_family": "debt"}
+        rows = [
+            {**base, "period": "2023-03-31", "source_wrapper_disposition": "debt_category_rollup",
+             "source_wrapper_parent_key": "debt investments", "source_fair_value": "3000000000"},
+            {**base, "period": "2023-03-31", "source_wrapper_disposition": "debt_position_leaf",
+             "source_wrapper_parent_key": "debt investments a", "source_fair_value": "2707407000"},
+            {**base, "period": "2022-12-31", "source_wrapper_disposition": "debt_category_rollup",
+             "source_wrapper_parent_key": "debt investments", "source_fair_value": "2707407000"},
+        ]
+        results = check_A01_subtotal_arithmetic(_source_detail(rows))
+        assert [r.status for r in results] == ["fail"]
+        assert results[0].detail["rollup_fv"].tolist() == [3000000000.0]
 
 
 class TestA04GavReconciliation:
@@ -374,7 +477,7 @@ class TestB01LeafCompleteness:
         assert results[0].status == "skip"
 
     def test_a_date_only_twin_of_a_valued_context_is_not_a_leaf_without_value(self):
-        twin = {"accession_number": "a1", "period": "2026-03-31"}
+        twin = {"accession_number": "a1", "period": "2026-03-31", "report_date": "2026-03-31"}
         detail = _source_detail([
             {**twin, "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": "5000000"},
             {**twin, "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": ""},
@@ -386,16 +489,47 @@ class TestB01LeafCompleteness:
         assert "2/2 leaves" in results[0].message
 
     def test_a_context_without_value_and_without_a_valued_twin_still_counts(self):
-        twin = {"accession_number": "a1", "period": "2026-03-31"}
+        twin = {"accession_number": "a1", "period": "2026-03-31", "report_date": "2026-03-31"}
         detail = _source_detail([
             {**twin, "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": "5000000"},
             {**twin, "raw_investment_identifier": "Hippo first-lien loan", "source_fair_value": ""},
-            # the same member in another period is not a twin
-            {"accession_number": "a1", "period": "2025-12-31", "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": ""},
+            # the same member in another period is not a twin (and, being the comparative
+            # schedule, is not counted at all)
+            {"accession_number": "a1", "period": "2025-12-31", "report_date": "2026-03-31",
+             "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": ""},
         ])
         results = check_B01_leaf_completeness(detail)
         assert [r.status for r in results] == ["fail"]
-        assert "1/3 leaves" in results[0].message
+        assert "1/2 leaves" in results[0].message
+
+    def test_comparative_schedule_and_acquisition_date_only_contexts_are_not_counted(self):
+        """Owner ruling 2026-11-04 (b01-leaves-without-value-are-the-comparative-schedule):
+        Silver Capital 2023-09-30 counted 19 prior year-end contexts (undrawn and nil lines of the
+        2022-12-31 schedule); Sixth Street counted contexts carrying only an acquisition date."""
+        cur = {"accession_number": "a1", "period": "2023-09-30", "report_date": "2023-09-30"}
+        comp = {**cur, "period": "2022-12-31"}
+        rows = [{**cur, "raw_investment_identifier": f"Loan {i}", "source_fair_value": "1000000"} for i in range(20)]
+        rows += [{**comp, "raw_investment_identifier": f"Old revolver {i}", "source_fair_value": ""} for i in range(19)]
+        rows += [{**cur, "raw_investment_identifier": f"Acquired {i}", "source_fair_value": "",
+                  "concept_names": "InvestmentAcquisitionDate"} for i in range(5)]
+        results = check_B01_leaf_completeness(_source_detail(rows))
+        assert [r.status for r in results] == ["pass"]
+        assert "20/20 leaves" in results[0].message
+
+    def test_current_leaves_without_value_fail_even_beside_a_valued_comparative_schedule(self):
+        """False-positive guard (and the old dilution): 2 of 20 current lines without a value fail,
+        however many valued comparative rows the filing also prints; a current context with an
+        acquisition date and a rate is still a leaf."""
+        cur = {"accession_number": "a1", "period": "2023-09-30", "report_date": "2023-09-30"}
+        rows = [{**cur, "raw_investment_identifier": f"Loan {i}", "source_fair_value": "1000000"} for i in range(18)]
+        rows += [{**cur, "raw_investment_identifier": "Unvalued A", "source_fair_value": "",
+                  "concept_names": "InvestmentAcquisitionDate|InvestmentInterestRate"},
+                 {**cur, "raw_investment_identifier": "Unvalued B", "source_fair_value": ""}]
+        rows += [{**cur, "period": "2022-12-31", "raw_investment_identifier": f"Old {i}", "source_fair_value": "5"}
+                 for i in range(40)]
+        results = check_B01_leaf_completeness(_source_detail(rows))
+        assert [r.status for r in results] == ["fail"]
+        assert "18/20 leaves" in results[0].message
 
 
 class TestB02UniquePositionKeys:
