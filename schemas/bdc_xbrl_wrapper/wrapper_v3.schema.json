@@ -716,9 +716,10 @@
         "pik_margin_reading": {
           "type": "array",
           "minItems": 1,
-          "maxItems": 1,
-          "items": {"const": "whole_coupon"},
-          "description": "Set where the filer prints a loan whose only margin is PIK as '<benchmark> + <margin> PIK <coupon> %' ('S + 1075 PIK 15.66 %', 'S + 12.00 % PIK', 'EURIBOR | 10.00% PIK | 13.25%') and the whole floating coupon is paid in kind (owner ruling D-232). On a loan row whose printed row has that form once, whose rate tag is the printed coupon, and whose PIK and spread tags (if any) are the margin, staging publishes pik_rate = the rate tag (transform pik_rate:whole_coupon_printed) and the finalizer reads the rate as all-in, so the cash leg is 0. Evidence required: par growing by about coupon/4 per quarter (coupon/2 for semi-annual capitalisation) on the filer's printed lines, not margin/4. The same print means a cash benchmark plus a PIK margin for other filers (0001913724: par grows by margin/4), so this is never a default (pipeline/whole_coupon_pik.py)."
+          "uniqueItems": true,
+          "prefixItems": [{"const": "whole_coupon"}],
+          "items": {"type": "string", "pattern": "^not [0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+$"},
+          "description": "First value whole_coupon; later values 'not ACCESSION CONTEXT' name rows of the fund whose par grows by margin/4, which are left as filed. Set where the filer prints a loan whose only margin is PIK as '<benchmark> + <margin> PIK <coupon> %' ('S + 1075 PIK 15.66 %', 'S + 12.00 % PIK', 'EURIBOR | 10.00% PIK | 13.25%') and the whole floating coupon is paid in kind (owner ruling D-232). On a loan row whose printed row has that form once, whose rate tag is the printed coupon, and whose PIK and spread tags (if any) are the margin, staging publishes pik_rate = the rate tag (transform pik_rate:whole_coupon_printed) and the finalizer reads the rate as all-in, so the cash leg is 0. Evidence required: par growing by about coupon/4 per quarter (coupon/2 for semi-annual capitalisation) on the filer's printed lines, not margin/4. The same print means a cash benchmark plus a PIK margin for other filers (0001913724: par grows by margin/4), so this is never a default (pipeline/whole_coupon_pik.py)."
         },
         "printed_margin_reading": {
           "type": "array",

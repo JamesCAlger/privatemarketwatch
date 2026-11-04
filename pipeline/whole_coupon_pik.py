@@ -10,7 +10,8 @@ the margin in kind: both print 'S + 650 PIK 11.93 %' and both tag rate 11.93 / P
 tells them apart, and it needs the position chain, which exists only after matching, so it is not
 available here. The rule is therefore on only for funds whose wrapper declares the reading
 (``source_encodings.pik_margin_reading: ["whole_coupon"]``), after par growth was read for that
-filer. Rows it changes carry ``pik_rate:whole_coupon_printed`` in src_transforms.
+filer. Rows it changes carry ``pik_rate:whole_coupon_printed`` in src_transforms. A row of such a fund
+whose par grows by margin/4 is listed after the reading as "not ACCESSION CONTEXT" and left as filed.
 
 Not read (left as filed): a fixed cash leg after the PIK margin ('SOFR + 2.00 % PIK + 5.00 % 12.30 %',
 D-218), a PIK part inside a bracket ('S + 650 (including 75 PIK)'), a toggle, a row that names cash
@@ -100,9 +101,12 @@ def printed_rows(status_path, ciks) -> pd.DataFrame:
             HAVING count(DISTINCT CAST(printed_row AS VARCHAR)) = 1""").fetchdf()
 
 
-def apply(result: pd.DataFrame, status_path, funds=None) -> pd.DataFrame:
+def apply(result: pd.DataFrame, status_path, funds=None, exclusions=None) -> pd.DataFrame:
     """Staging step: for funds that declare pik_margin_reading whole_coupon, publish the printed coupon as
-    pik_rate on loan rows printed in the whole-coupon PIK form whose tags agree with the page."""
+    pik_rate on loan rows printed in the whole-coupon PIK form whose tags agree with the page.
+
+    ``exclusions`` ({(cik10, accession, context)}; default: the wrapper's "not ACCESSION CONTEXT" entries)
+    are rows of an opted-in fund whose par grows by margin/4: they are left as filed."""
     from pathlib import Path
     from pipeline.bdc_xbrl_html_bridge import _norm_text, normalize_cik, overlay_member_key
     needed = {"cik", "accession_number", "report_date", "bdc_investment_identifier", "interest_rate", "pik_rate",
@@ -128,6 +132,13 @@ def apply(result: pd.DataFrame, status_path, funds=None) -> pd.DataFrame:
     parsed = parse(printed)
     # a row already at the coupon is marked too: the finalizer reads the mark as the all-in kind
     take = eligible(sub, parsed)
+    if exclusions is None:
+        from pipeline.source_encodings import whole_coupon_pik_exclusions
+        exclusions = whole_coupon_pik_exclusions()
+    if exclusions and "src_context_id" in sub.columns:
+        listed = pd.Series(list(zip(ciks[in_fund], sub["accession_number"].map(_norm_text),
+                                    sub["src_context_id"].map(_norm_text))), index=sub.index).isin(set(exclusions))
+        take &= ~listed
     if not take.any():
         return result
     out = result.copy()

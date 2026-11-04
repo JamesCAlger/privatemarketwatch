@@ -14,6 +14,7 @@ _ACCESSION_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6}')
 # par_tagged_as_units entry for a filing whose share-count facts hold the par in thousands (printed scale)
 _ACCESSION_X1000_RE=re.compile('([0-9]{10}-[0-9]{2}-[0-9]{6}):x1000')
 _CONTEXT_IDENTIFIER_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ => .*[A-Za-z].*')
+_NOT_CONTEXT_RE=re.compile('not [0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+')
 _MISDATED_CONTEXT_RE=re.compile('[0-9]{10}-[0-9]{2}-[0-9]{6} [^ ]+ [0-9]{4}-[0-9]{2}-[0-9]{2} -> [0-9]{4}-[0-9]{2}-[0-9]{2}')
 
 
@@ -101,8 +102,10 @@ def load_encodings(wrapper_directory=None):
                 raise ValueError('The only admitted rate-only context handling is adopt_adjacent: '+str(path))
             if key=='pik_only_tag_reading' and values not in (['coupon'],['margin'],['coupon','margin']):
                 raise ValueError('PIK-only tag reading must be coupon, margin, or coupon then margin: '+str(path))
-            if key=='pik_margin_reading' and values!=['whole_coupon']:
-                raise ValueError('The only admitted PIK margin reading is whole_coupon: '+str(path))
+            # whole_coupon, then optional rows it must not read: "not ACCESSION CONTEXT" (par grows by margin/4)
+            if key=='pik_margin_reading' and (values[0]!='whole_coupon'
+                    or any(not _NOT_CONTEXT_RE.fullmatch(v) for v in values[1:])):
+                raise ValueError('PIK margin reading is whole_coupon, then "not ACCESSION CONTEXT" entries: '+str(path))
             if key=='reference_rate_codes' and not _codes_are_unambiguous(values):
                 raise ValueError('Reference rate code must read "CODE=BENCHMARK", optionally "to" or "from" a date, '
                     'with one meaning per code on any date: '+str(path))
@@ -338,7 +341,14 @@ def printed_margin_funds(encodings=None):
 def whole_coupon_pik_funds(encodings=None):
     """{cik10} whose wrappers set pik_margin_reading: ['whole_coupon'] (pipeline.whole_coupon_pik, D-232)."""
     configured=load_encodings() if encodings is None else encodings
-    return {cik for cik,encoding in configured.items() if encoding.get('pik_margin_reading')==['whole_coupon']}
+    return {cik for cik,encoding in configured.items() if (encoding.get('pik_margin_reading') or [''])[0]=='whole_coupon'}
+
+
+def whole_coupon_pik_exclusions(encodings=None):
+    """{(cik10, accession, context)} listed as "not ACCESSION CONTEXT" under pik_margin_reading."""
+    configured=load_encodings() if encodings is None else encodings
+    return {(cik,)+tuple(v.split(' ')[1:3]) for cik,encoding in configured.items()
+            for v in (encoding.get('pik_margin_reading') or [])[1:]}
 
 
 def equity_instrument_expression(cik,instrument,encodings=None):

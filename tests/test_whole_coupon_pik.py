@@ -143,6 +143,25 @@ def test_apply_is_off_for_a_fund_without_the_setting(tmp_path):
     assert out.loc[0, "pik_rate"] == pytest.approx(6.5) and wc.TRANSFORM not in out.loc[0, "src_transforms"]
 
 
+def test_apply_leaves_a_listed_margin_row_of_an_opted_in_fund(tmp_path):
+    # HPS Chord Searchlight 2025-12-31: printed 'SF + | 6.75% PIK | 10.59%', par grows 1.60 % a quarter (margin/4 1.69)
+    hps = "0001838126"
+    chord = "Chord Searchlight, L.P (4)(5)(6)(10)(25) | SF + | 6.75% PIK | 10.59 | % | 7/16/2030 | 111,493"
+    status = _status(tmp_path, [
+        {"cik": hps, "accession_number": "0001628280-26-020206", "report_date": "2025-12-31", "period_role": "current",
+         "raw_id_lower": "chord", "printed_row": chord},
+        {"cik": hps, "accession_number": "0001628280-26-020206", "report_date": "2025-12-31", "period_role": "current",
+         "raw_id_lower": "pcp", "printed_row": chord.replace("Chord Searchlight, L.P", "PCP CW")},
+    ])
+    base = dict(cik=hps, accession_number="0001628280-26-020206", report_date="2025-12-31",
+                interest_rate=10.59, pik_rate=6.75, basis_spread=None)
+    staged = pd.DataFrame([_staged(**base, bdc_investment_identifier="chord", src_context_id="c-841"),
+                           _staged(**base, bdc_investment_identifier="pcp", src_context_id="c-900")])
+    out = wc.apply(staged, status, funds={hps}, exclusions={(hps, "0001628280-26-020206", "c-841")})
+    assert out.loc[0, "pik_rate"] == pytest.approx(6.75) and wc.TRANSFORM not in out.loc[0, "src_transforms"]
+    assert out.loc[1, "pik_rate"] == pytest.approx(10.59) and wc.TRANSFORM in out.loc[1, "src_transforms"]
+
+
 def test_apply_leaves_a_member_printed_twice_and_a_disagreeing_tag(tmp_path):
     status = _status(tmp_path, [
         {"cik": CRESCENT, "accession_number": "a1", "report_date": "2023-03-31", "period_role": "current",

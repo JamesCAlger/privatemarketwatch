@@ -422,7 +422,13 @@ def test_pik_margin_reading_admits_whole_coupon_only(tmp_path):
     path.write_text(json.dumps({'schema_version': 'bdc-xbrl-wrapper.v3', 'cik': '0001633336',
                                 'source_encodings': {'pik_margin_reading': ['whole_coupon']}}), encoding='utf-8')
     assert source_encodings.whole_coupon_pik_funds(source_encodings.load_encodings(tmp_path)) == {'0001633336'}
-    for bad in (['margin'], ['whole_coupon', 'margin']):
+    path.write_text(json.dumps({'schema_version': 'bdc-xbrl-wrapper.v3', 'cik': '0001633336', 'source_encodings': {
+        'pik_margin_reading': ['whole_coupon', 'not 0001628280-26-020206 c-841']}}), encoding='utf-8')
+    encodings = source_encodings.load_encodings(tmp_path)
+    assert source_encodings.whole_coupon_pik_funds(encodings) == {'0001633336'}
+    assert source_encodings.whole_coupon_pik_exclusions(encodings) == {('0001633336', '0001628280-26-020206', 'c-841')}
+    for bad in (['margin'], ['whole_coupon', 'margin'], ['not 0001628280-26-020206 c-841'],
+                ['whole_coupon', 'not 0001628280-26-020206']):
         path.write_text(json.dumps({'schema_version': 'bdc-xbrl-wrapper.v3', 'cik': '0001633336',
                                     'source_encodings': {'pik_margin_reading': bad}}), encoding='utf-8')
         with pytest.raises(ValueError):
