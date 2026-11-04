@@ -226,7 +226,7 @@
   },
   {
    "disposition_id": "PD-B01-2008748-6",
-   "class": "false_alarm",
+   "class": "not_applicable",
    "engine": "oracle",
    "rule_name": "B01",
    "reason_key": "b01-unfunded-commitment-table-rows-not-positions",

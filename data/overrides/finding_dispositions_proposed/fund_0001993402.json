@@ -49,7 +49,7 @@
   },
   {
    "disposition_id": "PD-F27-1993402-4",
-   "class": "false_alarm", "engine": "fund_financials", "rule_name": "F27",
+   "class": "not_applicable", "engine": "fund_financials", "rule_name": "F27",
    "reason_key": "income-yield-high-while-fund-ramps",
    "ciks": ["0001993402"],
    "quarters": ["2024-06-30","2024-09-30","2024-12-31"],

@@ -64,7 +64,7 @@
   },
   {
    "disposition_id": "PD-ASIF-SRC_BDC01-20261020",
-   "class": "false_alarm",
+   "class": "not_applicable",
    "engine": "row_validation",
    "rule_name": "SRC_BDC01",
    "reason_key": "numeric-only-exact-source-subtotal",
@@ -112,7 +112,7 @@
   },
   {
    "disposition_id": "PD-ASIF-blocking_source_short_plain_unresolved-20261020",
-   "class": "false_alarm",
+   "class": "not_applicable",
    "engine": "source_recon",
    "rule_name": "blocking_source_short_plain_unresolved",
    "reason_key": "numeric-only-exact-source-subtotal",

@@ -95,7 +95,7 @@
     },
     {
       "disposition_id": "PD-MAIC-RVQ_REV_8042302abd8a",
-      "class": "false_alarm",
+      "class": "not_applicable",
       "engine": "oracle",
       "rule_name": "B01",
       "ciks": [
@@ -130,7 +130,7 @@
     },
     {
       "disposition_id": "PD-MAIC-RVQ_BLK_f5daf9d7a904",
-      "class": "false_alarm",
+      "class": "not_applicable",
       "engine": "row_validation",
       "rule_name": "SRC_BDC01",
       "ciks": [
@@ -165,7 +165,7 @@
     },
     {
       "disposition_id": "PD-MAIC-BDCSRC_2026-03-31_PARSER_MISMATCH",
-      "class": "false_alarm",
+      "class": "not_applicable",
       "engine": "source_recon",
       "rule_name": "blocking_source_position_like_parser_mismatch",
       "ciks": [

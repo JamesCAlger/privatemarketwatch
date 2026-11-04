@@ -7,6 +7,7 @@
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "C117",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-041105 \"02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-037856 \"02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-057614 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-095898 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-126078 \"02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-047910 \"02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-071647 \"02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-107759 \"02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-25-279849 \"02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %\" 1 149",
    "ciks": [
     "0001603480"
    ],
@@ -101,6 +102,7 @@
    "class": "as_filed",
    "engine": "weak",
    "rule_name": "fmt_pik_rate",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-041105 \"02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-037856 \"02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-057614 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-095898 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-126078 \"02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-047910 \"02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-071647 \"02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-107759 \"02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-25-279849 \"02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %\" 1 149",
    "ciks": [
     "0001603480"
    ],
@@ -195,6 +197,7 @@
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "C115",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-041105 \"02/01/23 Incremental Term Loan - 21.26 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,573,019 02/24/25 1,573,019 2,928,332 2.5 % 8,441,765\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-037856 \"02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-057614 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-095898 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-126078 \"02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-047910 \"02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-107759 \"02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,402,739 02/24/27 2,402,739 2,928,000 4.9 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-25-279849 \"02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday\" 1 156",
    "ciks": [
     "0001603480"
    ],
@@ -278,6 +281,7 @@
    "class": "as_filed",
    "engine": "weak",
    "rule_name": "fmt_basis_spread",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"02/01/23 Incremental Term Loan - 20.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,486,709 02/24/25 1,486,709 2,940,116 2.6 % 8,484,328\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"02/01/23 Incremental Term Loan - 21.43 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.7 % 1,659,318 02/24/25 1,659,318 2,976,817 2.4 % 8,563,646\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-037856 \"02/01/23 Incremental Term Loan - 21.46 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,750,883 02/24/25 1,750,883 2,940,257 2.6 % 8,447,138\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-057614 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.8 % 1,847,537 02/24/25 1,847,537 2,928,001 2.7 % 8,645,863\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-095898 \"02/01/23 Incremental Term Loan - 21.44 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 0.9 % 1,949,454 02/24/25 1,949,454 2,928,002 2.9 % 8,656,192\" 1 159 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-126078 \"02/01/23 Incremental Term Loan - 21.32 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.0 % 2,057,067 02/24/27 2,057,067 2,928,009 4.2 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-047910 \"02/01/23 Incremental Term Loan - 20.65 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,168,392 02/24/27 2,168,392 2,928,001 4.8 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-071647 \"02/01/23 Incremental Term Loan - 20.44 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.1 % 2,282,765 02/24/27 2,282,765 2,928,011 4.8 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-25-279849 \"02/01/23 Incremental Term Loan - 20.39 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.2 % 2,529,062 02/24/27 2,529,062 2,928,001 5.3 %\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-140703 \"02/01/23 Incremental Term Loan - 19.98 % inc PIK ( SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.3 % 2,660,747 02/24/27 2,660,747 2,928,001 5.7 %\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"02/01/23 Incremental Term Loan - 19.73 % inc PIK (SOFR + 16.00 %, 1.25 % Floor, all PIK) 1.6 % 2,938,671 02/24/27 2,938,671 2,928,000 Ruby Tuesday\" 1 156",
    "ciks": [
     "0001603480"
    ],
@@ -376,6 +380,7 @@
    "class": "as_filed",
    "engine": "weak",
    "rule_name": "pct_position_concentration",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065\" 1 156 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-041105 \"06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755\" 1 156 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541\" 1 156 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-037856 \"06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450\" 1 152 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-057614 \"06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-095898 \"06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 %\" 1 158",
    "ciks": [
     "0001603480"
    ],
@@ -442,6 +447,7 @@
    "class": "as_filed",
    "engine": "oracle",
    "rule_name": "A07",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"06/30/15 Term Loan - 13.41 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.5 % 130,270,359 11/12/25 130,179,065 130,270,359 33.5 % 130,179,065\" 1 156 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-041105 \"06/30/15 Term Loan - 13.70 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 33.2 % 130,270,359 11/12/25 130,187,755 130,270,359 33.2 % 130,187,755\" 1 156 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"06/30/15 Term Loan - 13.92 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 32.6 % 130,270,359 11/12/25 130,196,541 130,270,359 32.6 % 130,196,541\" 1 156 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-037856 \"06/30/15 Term Loan - 13.96 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 26.8 % 98,278,214 11/12/25 98,230,450 98,278,214 26.8 % 98,230,450\" 1 152 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-057614 \"06/30/15 Term Loan - 13.93 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 28.0 % 101,742,840 11/12/25 101,701,459 101,539,355 H-D Advanced\" 1 150 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-095898 \"06/30/15 Term Loan - 13.94 % inc PIK (SOFR + 8.50 %, 1.50 % Floor, all PIK) 30.3 % 105,406,494 11/12/25 105,371,495 99,609,137 H-D Advanced\" 1 149 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"Precision Products Machining Group, LLC (fka H-D Advanced Manufacturing Company) (2)(3)(6) Class A Units 25.1 % 100,000 62,647,925 46,616,419 25.1 %\" 1 158",
    "ciks": [
     "0001603480"
    ],
@@ -508,6 +514,7 @@
    "class": "as_filed",
    "engine": "fund_financials",
    "rule_name": "F33",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"Less Distributions: Return of capital - ( 0.89 ) Total distributions (2) - ( 0.89 )\" 1 93 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"Less Distributions: From net investment income ( 0.55 ) ( 0.93 ) Return of capital ( 0.22 ) ( 1.19 ) Total distributions (3) ( 0.77 ) ( 2.12 )\" 1 152 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-041105 \"Return of capital ( 0.22 ) ( 0.89 ) Total distributions (2) ( 0.77 ) ( 1.42 )\" 1 87 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-126078 \"Less Distributions: From net investment income ( 0.36 ) ( 0.55 ) Return of capital - ( 0.22 ) Total distributions ( 0.36 ) ( 0.77 )\" 1 141 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-107759 \"Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )\" 1 98 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-071647 \"Less Distributions: From net investment income (loss) - ( 0.14 ) Total distributions - ( 0.14 )\" 1 105 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-25-279849 \"Less Distributions: From net investment income - ( 0.36 ) Total distributions - ( 0.36 )\" 1 98",
    "ciks": [
     "0001603480"
    ],
@@ -579,6 +586,7 @@
    "class": "as_filed",
    "engine": "fund_financials",
    "rule_name": "F16",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-22-009572 \"Less Distributions: From net investment income - (0.75 ) Return of capital (0.89 ) - Total distributions (2) (0.89 ) (0.75 )\" 1 134 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"Less Distributions: Return of capital ( 0.68 ) - Total distributions ( 0.68 ) -\" 1 89",
    "ciks": [
     "0001603480"
    ],
@@ -610,6 +618,7 @@
    "class": "as_filed",
    "engine": "fund_financials",
    "rule_name": "F16",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-037856 \"Return of capital ( 0.16 ) ( 0.71 ) ( 12.17 ) ( 11.74 ) ( 0.20 ) Total distributions (3) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 ) ( 6.40 )\" 1 145 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"Total distributions (3) ( 0.77 ) ( 2.12 )\" 1 51 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-047910 \"Total distributions (3) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 ) ( 15.48 )\" 1 80 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-24-126078 \"Total distributions ( 0.36 ) ( 0.77 )\" 1 47 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-140703 \"Total distributions (3) ( 0.30 ) ( 0.98 ) ( 2.60 ) ( 2.20 ) ( 14.06 )\" 1 79 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-140703 \"Net investment income 0.34 0.90 2.08 1.67 1.78\" 1 56 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-140703 \"Ratio of net investment income to average net assets 2.42 % 4.87 % 9.60 % 7.67 % 7.02 %\" 1 97",
    "ciks": [
     "0001603480"
    ],
@@ -675,6 +684,7 @@
    "class": "as_filed",
    "engine": "fund_strategy",
    "rule_name": "fund_strategy_validation",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-071647 \"Total Debt Investments 62.7 % 280,211,107 166,032,809\" 1 63 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-071647 \"Total Equity Investments 63.3 % 145,153,218 167,602,355\" 1 65 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-107759 \"Total Debt Investments 65.9 % 287,734,298 168,757,151\" 1 63 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-25-107759 \"Total Equity Investments 62.2 % 145,153,218 159,075,179\" 1 65 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-25-279849 \"Total Debt Investments 57.6 % 267,031,949 139,685,748\" 1 63 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-25-279849 \"Total Equity Investments 62.7 % 144,513,218 151,785,778\" 1 65 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-140703 \"Total Debt Investments 48.1 % 246,859,409 112,090,217\" 1 63 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-140703 \"Total Equity Investments 65.2 % 144,513,218 151,633,878\" 1 65 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-221900 \"Total Debt Investments 39.8 % 86,770,613 86,897,322\" 1 61 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-221900 \"Total Equity Investments 74.6 % 171,528,465 162,797,111\" 1 65 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"Total Debt Investments 27.4 % 50,699,585 50,710,476\" 1 61 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"Total Equity Investments 68.7 % 158,728,465 127,635,544\" 1 65 && python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"Precision Products Machining Group, LLC was acquired through an investment restructuring\" 1 98",
    "ciks": [
     "0001603480"
    ],
@@ -780,6 +790,7 @@
    "class": "as_filed",
    "engine": "fund_financials",
    "rule_name": "F11",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"Net Asset Value Per Unit (accrual base) (Note 10) \\$ 32.63 \\$ 32.84\" 1 75 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )\" 1 115 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit\" 1 156",
    "ciks": [
     "0001603480"
    ],
@@ -816,6 +827,7 @@
    "class": "as_filed",
    "engine": "identity",
    "rule_name": "nav_identity",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"Net Asset Value Per Unit (accrual base) (Note 10) \\$ 32.63 \\$ 32.84\" 1 75 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )\" 1 115 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit\" 1 156",
    "ciks": [
     "0001603480"
    ],
@@ -852,6 +864,7 @@
    "class": "as_filed",
    "engine": "oracle",
    "rule_name": "E04",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"Net Asset Value Per Unit (accrual base) (Note 10) \\$ 32.63 \\$ 32.84\" 1 75 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"Common Unitholders undrawn commitment: ( 18,034,649 units issued and outstanding) ( 199,120 ) ( 199,120 )\" 1 115 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-020966 \"accrual base Net Asset Value is calculated by subtracting the per unit loss from investment operations from the beginning Net Asset Value per unit\" 1 156",
    "ciks": [
     "0001603480"
    ],
@@ -888,6 +901,7 @@
    "class": "as_filed",
    "engine": "fund_financials",
    "rule_name": "F28",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0001193125-26-346645 \"The number of the Registrants common units outstanding at August 12, 2026 was 18,034,649\" 1 98",
    "ciks": [
     "0001603480"
    ],
@@ -912,6 +926,7 @@
    "class": "as_filed",
    "engine": "oracle",
    "rule_name": "B01",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"09/15/20 Term Loan - 13.42 % (SOFR + 8.00 %, 1.25 % Floor) 2.3 % 8,993,842 12/29/26 8,970,536 8,993,842\" 1 113 && python scripts/v05_evidence/page_line.py 0001603480 0000950170-23-061710 \"Total Debt & Equity Investments (9) 118.8 % 516,645,118 474,204,801\" 1 77",
    "ciks": [
     "0001603480"
    ],

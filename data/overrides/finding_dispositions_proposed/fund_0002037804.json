@@ -97,7 +97,7 @@
   },
   {
    "disposition_id": "PD-SRC_BDC01-2037804-6",
-   "class": "false_alarm",
+   "class": "not_applicable",
    "engine": "row_validation",
    "rule_name": "SRC_BDC01",
    "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
@@ -117,7 +117,7 @@
   },
   {
    "disposition_id": "PD-blocking_source_position_like_parser_mismatch-2037804-7",
-   "class": "false_alarm",
+   "class": "not_applicable",
    "engine": "source_recon",
    "rule_name": "blocking_source_position_like_parser_mismatch",
    "reason_key": "src-missing-row-is-a-footnote-aggregate-on-an-investment-member",
