@@ -65,11 +65,19 @@ foreach ($Path in $ReadGrantPaths) {
   if ($WriteSet.Contains($Resolved)) { continue }
   if ($SeenReads.Add($Resolved)) { $ReadOnlyDirs += $Resolved }
 }
+# Codex CLI 0.160.0 (2026-10) refuses the elevated Windows sandbox unless the profile has
+# effective read on ":root" (":minimal" plus named folders fails every worker at session
+# start). Grant it, and deny the operator's credential folders by name instead. A worker
+# can therefore read outside the repo: the prompt's allowed-reads list is the only limit
+# there, so audit traces for out-of-bounds reads when blinding matters.
 $FsLines = @(
-  '":minimal" = "read"'
+  '":root" = "read"'
 )
 $FsLines += ($ReadOnlyDirs | ForEach-Object { "$(ConvertTo-TomlLiteralKey $_) = ""read""" })
 $FsLines += ($ResolvedWriteDirs | ForEach-Object { "$(ConvertTo-TomlLiteralKey $_) = ""write""" })
+$DenyDirs = @((Join-Path $HOME '.codex'), (Join-Path $HOME '.ssh')) |
+  Where-Object { (Test-Path -LiteralPath $_) -and -not $SeenReads.Contains($_) -and -not $WriteSet.Contains($_) }
+$FsLines += ($DenyDirs | ForEach-Object { "$(ConvertTo-TomlLiteralKey $_) = ""deny""" })
 $FsLines += @('":tmpdir" = "deny"', '":slash_tmp" = "deny"')
 $FsBlock = $FsLines -join "`n"
 

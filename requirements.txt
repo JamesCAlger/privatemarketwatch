@@ -8,6 +8,7 @@ lxml>=4.9
 openpyxl>=3.0
 rapidfuzz>=3.0
 duckdb>=0.9
+tiktoken>=0.7
 openai>=1.0
 python-dotenv>=1.0
 jsonschema>=4.24

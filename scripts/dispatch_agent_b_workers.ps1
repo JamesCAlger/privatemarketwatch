@@ -97,6 +97,7 @@ function New-WorkerWrapper {
   -CodexBin $(Quote-ForWrapper $CodexBin) ``
   -TraceDir $(Quote-ForWrapper $TraceDir) ``
   -TracePrefix $(Quote-ForWrapper $TracePrefix) ``
+  -AuthSyncBack $(Quote-ForWrapper $sourceAuth) ``
   -NoSetup
 exit `$LASTEXITCODE
 "@
