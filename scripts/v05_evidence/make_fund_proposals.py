@@ -34,7 +34,14 @@ with open(REPO / "scratch/fund_sandbox" / label / "findings_ledger.csv", newline
             open_by[(row["engine"], row["rule_name"])].add(row["report_date"][:10])
 
 entries, covered = [], defaultdict(set)
+sys.path.insert(0, str(REPO))
+from pipeline.finding_dispositions import CLASSES  # noqa: E402
+
 for number, group in enumerate(spec["groups"], 1):
+    if group["class"] not in CLASSES:
+        # A misfiring check is repaired, not dispositioned (owner ruling 2026-11-04).
+        sys.exit("group %d (%s): class %r is not one of %s; a check that misfires is an orchestrator "
+                 "request for a check repair, not a proposal" % (number, group["rule_name"], group["class"], ", ".join(CLASSES)))
     key = (group["engine"], group["rule_name"])
     quarters = sorted(open_by.get(key, set()) & set(group.get("quarters") or open_by.get(key, set())))
     if not quarters:

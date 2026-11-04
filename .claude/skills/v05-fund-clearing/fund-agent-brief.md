@@ -69,6 +69,10 @@ JSON you must write).
    `"addresses_verdict": {"<quarter>": "<what that reviewer found, and why it does not stand or how it was fixed>"}`.
    A figure the page prints and the build does not publish is a gap to fix or to park, never
    "as filed": if one row correction can set it in one quarter, the same holds in the others.
+   `class` is one of `as_filed`, `not_applicable`, `informational` (the store refuses any other),
+   and every entry carries a `rerun` (the command that reproduces the evidence). Where the data is
+   right and the check misfires, do not propose a disposition: raise an orchestrator request
+   classified `verification_bug` for a check repair (owner ruling 2026-11-04).
    One reason per entry. Say why no fix applies. Give each entry a `reason_key`: a short slug for
    the reason itself, not the fund (`x11-undrawn-line-par-printed-as-dash`), reusing a key from
    `docs/investigations/v05_owner_queue.md` where the reason is the same, so the owner is asked once.
@@ -96,7 +100,8 @@ You may run the gate on your own result (`fund_gate.py check`, without `--snapsh
 - Accept a disposition. You propose; a check or the owner accepts. Never write under
   `data/overrides/finding_dispositions/` except through `make_batch_dispositions.py`.
 - Change a rule, a threshold, a check, the ledger, the gate, a test fixture, or this skill to
-  clear a finding. A rule you believe is wrong is a proposal with evidence.
+  clear a finding. A rule you believe is wrong is an orchestrator request (`verification_bug`)
+  with evidence, not a disposition proposal.
 - Add a rule that inserts a row or a value without the printed line that shows it. No plug that
   makes a total tie.
 - Use the network, run a build of more than this fund, write under `data/output/` or
