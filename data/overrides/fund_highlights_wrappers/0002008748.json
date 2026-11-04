@@ -1,0 +1,15 @@
+{
+  "schema_version": "fund-highlights-wrapper.v1",
+  "cik": "0002008748",
+  "entity_name": "Lord Abbett Private Credit Fund",
+  "version": 1,
+  "figure_corrections": [
+    {
+      "report_date": "2026-03-31",
+      "field": "net_assets",
+      "value": 672019000,
+      "evidence": "Cached 0000930413-26-001612 (10-Q, 2026-03-31), balance sheet in thousands: 'Total net assets $ 672,019 $ 528,047'. Cached companyfacts us-gaap:AssetsNet reports USD 672019000 for 2026-03-31 in this accession and 0000930413-26-002499. AssetsNet is absent from the shared net_assets concept map; the published financials value was blank."
+    }
+  ],
+  "notes": "2026-10-20 owner-requested March 2026 NAV backfill. Exact fund/date correction; no change to cohort scope or global concept precedence."
+}
