@@ -207,6 +207,65 @@ def test_cost_rule_split_still_fails_non_cash_cost_that_is_off(monkeypatch, tmp_
                         value_column="cost", cost_split=True, loans=782360413.0)[1] == "undershoot"
 
 
+# ------------------------------------------------------------------ plus-cash anchor, no double add
+
+
+def _plus_cash_case(monkeypatch, tmp_path, *, loans, cash_row, ifv, filed_cash, fv_declared=False):
+    """Barings Private Credit Corp II 2025-06-30 shape (owner ruling 2026-11-04): the filed
+    investments line already holds the money-market row; the filed cash figure is a stale
+    62,915,000 the filer re-tags each quarter."""
+    import scripts.shadow_conservation_engine as sce
+    monkeypatch.setattr(sce, "cash_outside_total_ciks", lambda: ["0000000001"] if fv_declared else [])
+    monkeypatch.setattr(sce, "cash_inside_total_ciks", lambda: [])
+    monkeypatch.setattr(sce, "filed_cash_addend_rows", lambda: [])
+    monkeypatch.setattr(sce, "cost_split_ciks", lambda: [])
+    ff = tmp_path / "fund_financials.csv"
+    ff.write_text("cik,report_date,source,investments_at_fair_value,cash_equivalents_at_fair_value,investments_at_cost\n"
+                  "0000000001,2025-06-30,companyfacts,%s,%s,%s\n" % (ifv, filed_cash, ifv), encoding="utf-8")
+    monkeypatch.setattr(sce, "FUND_FINANCIALS_FILE", ff)
+    con = duckdb.connect()
+    con.execute("CREATE TABLE wrapped(cik VARCHAR)")
+    con.execute("INSERT INTO wrapped VALUES ('0000000001')")
+    con.execute(f"""CREATE TABLE unified_tbl AS SELECT * FROM (VALUES
+        ('0000000001', '2025-06-30', {loans}, {loans}, 'x=y', 'LOAN', 'parent_schedule'),
+        ('0000000001', '2025-06-30', {cash_row}, {cash_row}, 'c=MMF', 'CASH', 'parent_schedule')
+        ) AS t(cik, report_date, fair_value, cost, bdc_dimensions_raw, asset_category, accounting_record_class)""")
+    monkeypatch.setattr(sce, "_unified", lambda: "unified_tbl")
+    anchors = (sce.Anchor("fund_financials_plus_cash", "companyfacts_fv_plus_cash",
+                          "investments_at_fair_value", basis="published_rows"),
+               sce.Anchor("fund_financials", "companyfacts_fv", "investments_at_fair_value",
+                          basis="investments_ex_cash"))
+    sce.run_rule(con, sce.ConservationRule(name="r_pc", value_column="fair_value", anchors=anchors,
+                                           tolerance_pct=0.005))
+    return con.execute("SELECT anchor_used, status FROM result_r_pc").fetchone()
+
+
+def test_plus_cash_anchor_not_added_to_a_line_that_already_holds_the_cash_rows(monkeypatch, tmp_path):
+    # Published 3,101,926,000 + 58,644,000 = 3,160,570,000 = filed investments; + 62,915,000 is -1.95 pct.
+    assert _plus_cash_case(monkeypatch, tmp_path, loans=3101926000.0, cash_row=58644000.0,
+                           ifv=3160570000, filed_cash=62915000) == ("companyfacts_fv", "reconciles")
+
+
+def test_plus_cash_anchor_kept_where_the_line_leaves_the_cash_rows_out(monkeypatch, tmp_path):
+    # 2025-03-31 shape: the line (2,586.3M) excludes the T-Fund row; published = line + cash rows.
+    assert _plus_cash_case(monkeypatch, tmp_path, loans=2586320000.0, cash_row=69928000.0,
+                           ifv=2586320000, filed_cash=69928000) == ("companyfacts_fv_plus_cash", "reconciles")
+
+
+def test_plus_cash_anchor_kept_for_a_real_shortfall(monkeypatch, tmp_path):
+    # False-positive guard: 2 pct short of the line and of line + cash: still a finding.
+    assert _plus_cash_case(monkeypatch, tmp_path, loans=3038800000.0, cash_row=58644000.0,
+                           ifv=3160570000, filed_cash=62915000) == ("companyfacts_fv_plus_cash", "undershoot")
+
+
+def test_plus_cash_double_add_rule_off_for_a_declared_ex_cash_filer(monkeypatch, tmp_path):
+    # The wrapper says the line leaves the cash rows out: the published-equals-line reading is
+    # not available, the plus-cash anchor stays and the shortfall stays visible.
+    assert _plus_cash_case(monkeypatch, tmp_path, loans=3101926000.0, cash_row=58644000.0,
+                           ifv=3160570000, filed_cash=62915000, fv_declared=True) == (
+        "companyfacts_fv_plus_cash", "undershoot")
+
+
 # ------------------------------------------------------------------ SPL-R1 GAV reconciliation
 
 

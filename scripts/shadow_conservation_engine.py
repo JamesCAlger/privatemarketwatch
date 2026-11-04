@@ -195,8 +195,9 @@ def ensure_anchor_overrides(con: duckdb.DuckDBPyConnection) -> int:
     return len(rows)
 
 
-def _anchor_table_sql(anchor: Anchor) -> str:
-    """SQL returning (cik, report_date, anchor_value) for one anchor kind."""
+def _anchor_table_sql(anchor: Anchor, sum_table: str | None = None) -> str:
+    """SQL returning (cik, report_date, anchor_value) for one anchor kind. sum_table: the rule's
+    published-sum table (cik, report_date, value_sum), read by the plus-cash anchor."""
     if anchor.kind == "verified_override":
         # Reads the table built by ensure_anchor_overrides() (promoted adjudications).
         b = anchor.basis.replace("'", "''")
@@ -209,6 +210,21 @@ def _anchor_table_sql(anchor: Anchor) -> str:
         ).fetchall()}
         if "cash_equivalents_at_fair_value" not in cols:
             return "SELECT CAST(NULL AS VARCHAR) AS cik, CAST(NULL AS VARCHAR) AS report_date, CAST(NULL AS DOUBLE) AS anchor_value WHERE false"
+        band = FV_CONSERVATION_BAND_PCT / 100.0
+        # No double add (owner ruling 2026-11-04, conservation-anchor-adds-stale-cash-
+        # equivalents-already-in-investments): where the published total, cash rows included,
+        # already equals the filed investments line and the line plus the filed cash figure does
+        # not, the line holds the cash rows; adding the filed cash counts them twice. The anchor
+        # then gives way to the next (companyfacts_fv). Barings Private Credit Corp II from
+        # 2025-06-30: published 3,160,570,000 = filed investments, which hold the BlackRock
+        # T-Fund row; the filed cash-equivalents figure 62,915,000 is the 2024-12-31 value the
+        # filer re-tags each quarter. Not applied to a filer whose wrapper says the line leaves
+        # the cash rows out.
+        no_double_add = "" if not sum_table else f"""
+              AND NOT (f.cik NOT IN (SELECT cik FROM _cash_outside_total)
+                       AND abs(t.value_sum - f.ifv) <= {band} * abs(f.ifv)
+                       AND abs(t.value_sum - (f.ifv + f.cash)) > {band} * abs(f.ifv + f.cash))"""
+        sum_join = f"JOIN {sum_table} t USING (cik, report_date)" if sum_table else ""
         return f"""
             SELECT f.cik, f.report_date, f.ifv + f.cash AS anchor_value
             FROM (
@@ -232,7 +248,8 @@ def _anchor_table_sql(anchor: Anchor) -> str:
             ) f
             JOIN _cash_rows c USING (cik, report_date)
             JOIN _cash_sum s USING (cik, report_date)
-            WHERE f.ifv IS NOT NULL AND f.cash IS NOT NULL
+            {sum_join}
+            WHERE f.ifv IS NOT NULL AND f.cash IS NOT NULL{no_double_add}
               -- For a filer whose wrapper says its investments total leaves the cash rows out:
               -- comparable only when the filed figure IS the schedule's cash rows. A
               -- balance-sheet figure that also holds deposits (Oaktree 2025-06-30: filed 471.3M,
@@ -327,8 +344,9 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
     if cost_split:
         con.executemany("INSERT INTO _cost_cash_split VALUES (?)", [(c,) for c in cost_split])
     anchor_ctes, coalesce_val, coalesce_label, coalesce_basis = [], [], [], []
+    sum_table = f"_sum_{rule.name}"
     for i, a in enumerate(rule.anchors):
-        con.execute(f"CREATE OR REPLACE TEMP TABLE _a{i}_{rule.name} AS {_anchor_table_sql(a)}")
+        con.execute(f"CREATE OR REPLACE TEMP TABLE _a{i}_{rule.name} AS {_anchor_table_sql(a, sum_table=sum_table)}")
         anchor_ctes.append(f"LEFT JOIN _a{i}_{rule.name} a{i} USING (cik, report_date)")
         coalesce_val.append(f"a{i}.anchor_value")
         coalesce_label.append(f"WHEN a{i}.anchor_value IS NOT NULL THEN '{a.label}'")
