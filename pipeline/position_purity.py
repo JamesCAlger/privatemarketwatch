@@ -236,6 +236,18 @@ def build_position_purity_diagnostics(
                 ROUND(principal_num, 2), ROUND(shares_num, 6)
             HAVING COUNT(*) > 1
                AND COUNT(DISTINCT COALESCE(CAST(bdc_dimensions_raw AS VARCHAR), '')) > 1
+               -- Distinct members are not dimension duplicates (owner ruling 2026-11-04, b02-twin-
+               -- lines-by-financing-facility-printed-separately). A dimension duplicate is one fact
+               -- on several dimension paths of the SAME investment member. SPX prints 'Kite Midco
+               -- II LTD Term Loan B1' once per financing facility and tags each line on its own
+               -- member ('... 11/19/2031', '... 11/19/2031 One', or with a member-name typo), so
+               -- the rows are separate printed positions. A group whose every row sits on its own
+               -- distinct, non-empty member is therefore not a candidate. Still candidates: a
+               -- member repeated on a second dimension path, and a row without a member.
+               AND NOT (
+                   COUNT(NULLIF(TRIM(CAST(bdc_investment_identifier AS VARCHAR)), '')) = COUNT(*)
+                   AND COUNT(DISTINCT NULLIF(TRIM(CAST(bdc_investment_identifier AS VARCHAR)), '')) = COUNT(*)
+               )
         ),
         duplicate_rows AS (
             SELECT
