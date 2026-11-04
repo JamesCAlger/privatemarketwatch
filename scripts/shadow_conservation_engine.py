@@ -195,8 +195,9 @@ def ensure_anchor_overrides(con: duckdb.DuckDBPyConnection) -> int:
     return len(rows)
 
 
-def _anchor_table_sql(anchor: Anchor) -> str:
-    """SQL returning (cik, report_date, anchor_value) for one anchor kind."""
+def _anchor_table_sql(anchor: Anchor, sum_table: str | None = None) -> str:
+    """SQL returning (cik, report_date, anchor_value) for one anchor kind. sum_table: the rule's
+    published-sum table (cik, report_date, value_sum), read by the plus-cash anchor."""
     if anchor.kind == "verified_override":
         # Reads the table built by ensure_anchor_overrides() (promoted adjudications).
         b = anchor.basis.replace("'", "''")
@@ -209,6 +210,21 @@ def _anchor_table_sql(anchor: Anchor) -> str:
         ).fetchall()}
         if "cash_equivalents_at_fair_value" not in cols:
             return "SELECT CAST(NULL AS VARCHAR) AS cik, CAST(NULL AS VARCHAR) AS report_date, CAST(NULL AS DOUBLE) AS anchor_value WHERE false"
+        band = FV_CONSERVATION_BAND_PCT / 100.0
+        # No double add (owner ruling 2026-11-04, conservation-anchor-adds-stale-cash-
+        # equivalents-already-in-investments): where the published total, cash rows included,
+        # already equals the filed investments line and the line plus the filed cash figure does
+        # not, the line holds the cash rows; adding the filed cash counts them twice. The anchor
+        # then gives way to the next (companyfacts_fv). Barings Private Credit Corp II from
+        # 2025-06-30: published 3,160,570,000 = filed investments, which hold the BlackRock
+        # T-Fund row; the filed cash-equivalents figure 62,915,000 is the 2024-12-31 value the
+        # filer re-tags each quarter. Not applied to a filer whose wrapper says the line leaves
+        # the cash rows out.
+        no_double_add = "" if not sum_table else f"""
+              AND NOT (f.cik NOT IN (SELECT cik FROM _cash_outside_total)
+                       AND abs(t.value_sum - f.ifv) <= {band} * abs(f.ifv)
+                       AND abs(t.value_sum - (f.ifv + f.cash)) > {band} * abs(f.ifv + f.cash))"""
+        sum_join = f"JOIN {sum_table} t USING (cik, report_date)" if sum_table else ""
         return f"""
             SELECT f.cik, f.report_date, f.ifv + f.cash AS anchor_value
             FROM (
@@ -232,7 +248,8 @@ def _anchor_table_sql(anchor: Anchor) -> str:
             ) f
             JOIN _cash_rows c USING (cik, report_date)
             JOIN _cash_sum s USING (cik, report_date)
-            WHERE f.ifv IS NOT NULL AND f.cash IS NOT NULL
+            {sum_join}
+            WHERE f.ifv IS NOT NULL AND f.cash IS NOT NULL{no_double_add}
               -- For a filer whose wrapper says its investments total leaves the cash rows out:
               -- comparable only when the filed figure IS the schedule's cash rows. A
               -- balance-sheet figure that also holds deposits (Oaktree 2025-06-30: filed 471.3M,
@@ -327,8 +344,9 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
     if cost_split:
         con.executemany("INSERT INTO _cost_cash_split VALUES (?)", [(c,) for c in cost_split])
     anchor_ctes, coalesce_val, coalesce_label, coalesce_basis = [], [], [], []
+    sum_table = f"_sum_{rule.name}"
     for i, a in enumerate(rule.anchors):
-        con.execute(f"CREATE OR REPLACE TEMP TABLE _a{i}_{rule.name} AS {_anchor_table_sql(a)}")
+        con.execute(f"CREATE OR REPLACE TEMP TABLE _a{i}_{rule.name} AS {_anchor_table_sql(a, sum_table=sum_table)}")
         anchor_ctes.append(f"LEFT JOIN _a{i}_{rule.name} a{i} USING (cik, report_date)")
         coalesce_val.append(f"a{i}.anchor_value")
         coalesce_label.append(f"WHEN a{i}.anchor_value IS NOT NULL THEN '{a.label}'")
@@ -350,10 +368,43 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
     # whose wrapper also sets cost_total_excludes = ["cash_rows"] (Silver Point 2023-06-30: cost
     # with cash 948.4M against filed 863.2M, non-cash 863.8M). The cash rows' own status
     # (cash_status) is read from the fair-value rule only: the filed cash figure is a fair value.
+    # Detected cost basis (owner ruling 2026-11-04, cost-conservation-cash-rows-against-ex-cash-
+    # cost-total): without cost_total_excludes the cost rule compared cost with the cash rows
+    # against a filed cost total that leaves them out (Silver Capital 2025-09-30: 485.0M against
+    # 357.4M; the money fund's cost 127.6M; non-cash cost equals the filed cost). The cash rows'
+    # cost is now taken out also when (1) with them the cost fails, (2) without them it ties,
+    # and (3) there is evidence the filer reports the cash rows outside its investments: the
+    # wrapper declares investments_total_excludes, or the cash rows' fair value equals the filed
+    # cash-equivalents figure (within the 0.5 pct fair-value band of the anchor, not the cost
+    # rule's 5 pct). Never for a filer declaring investments_total_includes_cash.
+    con.execute("CREATE OR REPLACE TEMP TABLE _cash_inside_total(cik VARCHAR)")
+    inside = cash_inside_total_ciks()
+    if inside:
+        con.executemany("INSERT INTO _cash_inside_total VALUES (?)", [(c,) for c in inside])
+    con.execute(
+        f"""
+        CREATE OR REPLACE TEMP TABLE _cash_fv_sum AS
+        SELECT lpad(regexp_replace(CAST(cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') AS cik,
+               substr(CAST(report_date AS VARCHAR), 1, 10) AS report_date,
+               coalesce(sum(TRY_CAST(fair_value AS DOUBLE)), 0) AS cash_fv
+        FROM {_unified()}
+        WHERE upper(COALESCE(CAST(asset_category AS VARCHAR), '')) = 'CASH' AND ({PUBLISHED_ROWS_WHERE_SQL})
+        GROUP BY 1, 2
+        """
+    )
+    detected = f"""(anchor_basis = 'investments_ex_cash' AND cash_sum <> 0 AND anchor_value IS NOT NULL
+                    AND cik NOT IN (SELECT cik FROM _cash_inside_total)
+                    AND abs(value_sum - anchor_value) > {tol} * abs(anchor_value)
+                    AND abs(value_sum - cash_sum - anchor_value) <= {tol} * abs(anchor_value)
+                    AND (declared OR (filed_cash IS NOT NULL
+                                      AND abs(cash_fv - filed_cash)
+                                          <= {FV_CONSERVATION_BAND_PCT / 100.0} * abs(anchor_value))))"""
+    declared_split = "(declared AND anchor_basis = 'investments_ex_cash')"
     if rule.value_column == "fair_value":
-        split, split_status = "true", "true"
+        split, split_status = declared_split, "true"
     elif rule.value_column == "cost":
-        split, split_status = "(cik IN (SELECT cik FROM _cost_cash_split))", "false"
+        split = f"((cik IN (SELECT cik FROM _cost_cash_split) AND {declared_split}) OR {detected})"
+        split_status = "false"
     else:
         split, split_status = "false", "false"
     con.execute(
@@ -362,15 +413,16 @@ def run_rule(con: duckdb.DuckDBPyConnection, rule: ConservationRule) -> None:
         WITH joined AS (
             SELECT s.cik, s.report_date, s.n_rows, s.value_sum,
                    {val_expr} AS anchor_value, {label_expr} AS anchor_used, {basis_expr} AS anchor_basis,
-                   coalesce(cs.cash_sum, 0) AS cash_sum, fc.filed_cash,
+                   coalesce(cs.cash_sum, 0) AS cash_sum, fc.filed_cash, coalesce(cf.cash_fv, 0) AS cash_fv,
                    s.cik IN (SELECT cik FROM _cash_outside_total) AS declared
             FROM _sum_{rule.name} s
             {' '.join(anchor_ctes)}
             LEFT JOIN _cash_sum cs USING (cik, report_date)
             LEFT JOIN _filed_cash fc USING (cik, report_date)
+            LEFT JOIN _cash_fv_sum cf USING (cik, report_date)
         ), compared AS (
             SELECT *,
-                   CASE WHEN {split} AND declared AND anchor_basis = 'investments_ex_cash' THEN value_sum - cash_sum
+                   CASE WHEN {split} THEN value_sum - cash_sum
                         ELSE value_sum END AS compared_sum,
                    CASE WHEN NOT ({split_status}) OR NOT declared OR anchor_basis <> 'investments_ex_cash' OR cash_sum = 0 THEN ''
                         WHEN filed_cash IS NULL THEN 'no_filed_figure'
@@ -410,6 +462,13 @@ def cash_outside_total_ciks() -> list[str]:
     from pipeline.source_encodings import load_encodings
     return sorted(cik for cik, encoding in load_encodings().items()
                   if encoding.get("investments_total_excludes") == ["cash_rows"])
+
+
+def cash_inside_total_ciks() -> list[str]:
+    """Filers whose wrapper says the filed investments total holds the schedule's cash rows."""
+    from pipeline.source_encodings import load_encodings
+    return sorted(cik for cik, encoding in load_encodings().items()
+                  if encoding.get("investments_total_includes_cash"))
 
 
 def cost_split_ciks() -> list[str]:

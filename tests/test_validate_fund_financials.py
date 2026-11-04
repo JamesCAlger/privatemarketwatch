@@ -348,3 +348,58 @@ def test_validate_cross_level_without_class_column_keeps_all_rows():
     f21 = result[result["check_code"] == "F21"].iloc[0]
     assert float(f21["value"]) == 3.0
     assert _status(result, "F21") == STATUS_FAIL
+
+
+# F20 canonical GAV with the raw source numerator (owner ruling 2026-11-04,
+# f20-canonical-gav-reads-total-assets-where-investments-line-printed). Bain Capital Private
+# Credit 2023-09-30: investments line 1,215,000 printed; total assets 31,021,803 (escrow cash).
+
+def _bain_fund():
+    return _fund_df([{"cik": "0001899017", "report_quarter": "2023q3", "report_date": "2023-09-30",
+                      "total_assets": "31021803", "net_assets": "32210532", "investments_at_fair_value": "1215000"}])
+
+
+def _bain_holdings():
+    return _holdings_df([{"cik": "0001899017", "report_date": "2023-09-30", "fair_value": "1215000",
+                          "pct_of_net_assets": "3.8", "source": "bdc"}])
+
+
+def _bain_source(fair_value="1215000"):
+    return pd.DataFrame([{"cik": "0001899017", "report_date": "2023-09-30", "period": "2023-09-30",
+                          "fair_value": fair_value, "investment_identifier": "Acme Holdings LLC, First Lien Term Loan",
+                          "accession_number": "0001899017-23-000010", "form_type": "10-Q",
+                          "filing_date": "2023-11-13"}])
+
+
+def test_f20_reads_total_assets_without_source_rows():
+    assert _status(validate_cross_level(_bain_fund(), _bain_holdings()), "F20") == STATUS_FAIL
+
+
+def test_f20_keeps_a_printed_investments_line_the_source_corroborates():
+    result = validate_cross_level(_bain_fund(), _bain_holdings(), bdc_source_df=_bain_source())
+    f20 = result[result["check_code"] == "F20"].iloc[0]
+    assert f20["status"] == STATUS_PASS
+    assert "source=investments_at_fair_value" in f20["note"]
+
+
+def test_f20_source_far_from_the_line_still_reads_total_assets():
+    """False-positive guard: source FV 0.1x the line does not rescue it."""
+    result = validate_cross_level(_bain_fund(), _bain_holdings(), bdc_source_df=_bain_source("121500"))
+    assert _status(result, "F20") == STATUS_FAIL
+
+
+def test_gav_rescue_source_reads_only_suspect_quarters(monkeypatch, tmp_path):
+    import duckdb
+    from pipeline import config
+    from pipeline.validate_fund_financials import _gav_rescue_source
+    rows = pd.concat([_bain_source(), _bain_source().assign(report_date="2023-12-31", period="2023-12-31")])
+    path = tmp_path / "bdc_holdings.parquet"
+    with duckdb.connect() as con:
+        con.register("rows", rows)
+        con.execute(f"COPY (SELECT * FROM rows) TO '{path.as_posix()}' (FORMAT PARQUET)")
+    monkeypatch.setattr(config, "BDC_HOLDINGS_PARQUET_FILE", path)
+    fund = pd.concat([_bain_fund(), _bain_fund().assign(report_date="2023-12-31", total_assets="1300000",
+                                                         investments_at_fair_value="1215000")])
+    got = _gav_rescue_source(fund)
+    assert list(got["report_date"]) == ["2023-09-30"]
+    assert list(got["cik"]) == ["0001899017"]
