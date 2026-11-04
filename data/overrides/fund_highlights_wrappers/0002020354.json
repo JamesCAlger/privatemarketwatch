@@ -1,0 +1,10 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0002020354",
+ "entity_name": "West Bay BDC LLC",
+ "version": 1,
+ "notes": "Owner queue f16-income-ratio-printed-not-annualised (owner ruling 2026-11-04: income_yield_pct is the annualised year-to-date ratio). The fund began operating 2024-05-01; its annualised 2025 ratio climbed from -0.88 (three months) to 2.29, 4.44 and 6.24 (year), which the company-facts running-total vote read as a ratio printed for the period.",
+ "income_ratio_as_filed": {
+  "evidence": "0000950170-25-107346 (10-Q, 2025-06-30) financial highlights: 'Ratio of net investment income (loss) to average Members' Capital 2.29 %', footnote '(4) Ratios are annualized, except for, as applicable, organization costs'; the same footnote in 0001193125-26-219870 (10-Q, 2026-03-31). Kept as filed: 2025 publishes -0.88 / 2.29 / 4.44 / 6.24, not -3.52 / 4.58 / 5.92 / 6.24."
+ }
+}

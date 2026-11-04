@@ -65,6 +65,9 @@ class HighlightsWrapperSpec:
     # Report dates whose balance sheet is printed as filed with total assets far from net assets (a
     # seed quarter): the TA/NA power-of-ten scale fix in fund_financials leaves them alone
     scale_fix_exempt_dates: tuple[str, ...] = ()
+    # Fiscal-period start from which the net investment income ratio is kept as filed (the filer
+    # annualises it) whatever the company-facts running-total vote says; None: the vote decides
+    income_ratio_as_filed_from: str | None = None
     notes: str = ""
 
 
@@ -163,8 +166,37 @@ def _load_wrapper_from_path(path: Path) -> HighlightsWrapperSpec | None:
             str(entry.get("report_date", "")) for entry in (data.get("scale_fix_exempt_dates") or [])
             if isinstance(entry, dict) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(entry.get("report_date", "")))
             and str(entry.get("evidence", "")).strip()),
+        income_ratio_as_filed_from=_parse_income_ratio_as_filed(path.name, data.get("income_ratio_as_filed")),
         notes=data.get("notes", ""),
     )
+
+
+def _parse_income_ratio_as_filed(name: str, entry: Any) -> str | None:
+    """``income_ratio_as_filed``: {"from_period_start": "YYYY-MM-DD" (optional), "evidence": "..."}.
+
+    Without ``from_period_start`` every period of the fund is kept as filed. Evidence (the printed
+    annualisation footnote) is required; an entry without it is ignored with a warning.
+    """
+    if entry is None:
+        return None
+    day = str(entry.get("from_period_start", "0000-00-00")) if isinstance(entry, dict) else ""
+    if (not isinstance(entry, dict) or len(str(entry.get("evidence", "")).strip()) < 20
+            or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", day)):
+        logger.warning("Highlights wrapper %s: income_ratio_as_filed ignored: %r", name, entry)
+        return None
+    return day
+
+
+def income_ratio_as_filed_from(cik: Any) -> str | None:
+    """Period start from which this fund's NII ratio is kept as filed (None for every other fund).
+
+    Opt-in: ``income_ratio_as_filed``. A fund that annualises its ratio can still trip the
+    running-total vote in ``extract_companyfacts._running_ratio_periods`` when the ratio climbs in
+    its first year (KKR FS Income Trust 2023: 4.60 for six months, 8.05 for nine, 9.59 for the
+    year, all printed annualised); the wrapper keeps those figures as filed.
+    """
+    spec = load_highlights_wrapper(cik)
+    return spec.income_ratio_as_filed_from if spec else None
 
 
 def _ensure_cache_loaded() -> None:

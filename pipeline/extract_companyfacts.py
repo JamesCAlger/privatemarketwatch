@@ -55,26 +55,87 @@ def _prior_quarter_end(end_date: str) -> str:
         return ""
 
 
-def _year_to_date_step(value: float, prior: float, span_months: int, ratio: bool) -> float:
-    """This quarter's part of a year-to-date value, given the previous year-to-date value."""
-    quarters = max(2, round(span_months / 3))
-    # A running total grows by quarters/(quarters-1); an annualised ratio stays near 1.
-    if ratio and prior != 0 and abs(value) < abs(prior) * (1 + 0.5 / (quarters - 1)):
-        return value
+def _year_to_date_step(value: float, prior: float) -> float:
+    """This quarter's part of a year-to-date amount, given the previous year-to-date amount."""
     return value - prior
 
 
+def _grows_like_running_total(value: float, prior: float, span_months: int) -> bool:
+    """True when a year-to-date ratio grew from the previous one as a running total does.
+
+    A running total over n quarters is n/(n-1) times the (n-1)-quarter figure; an annualised
+    ratio stays near 1. The cut is halfway: 1 + 0.5/(n-1).
+    """
+    quarters = max(2, round(span_months / 3))
+    return prior != 0 and abs(value) >= abs(prior) * (1 + 0.5 / (quarters - 1))
+
+
+_MIN_VOTING_RATIO = 0.015
+
+
+def _running_ratio_periods(entries_by_end: dict[str, list[tuple[str, float]]]) -> tuple[dict[str, bool], bool]:
+    """Which fiscal periods of a ratio the filer prints as a running total, not annualised.
+
+    Each pair of year-to-date figures with the same start (three and six months, six and nine,
+    nine and twelve) votes, as does a three-month figure filed beside a year-to-date one; a pair
+    whose earlier figure is under 1.5 pct does not vote. A period with two or more votes is a
+    running total when most of them say so; a period with one vote, or a tie, takes the fund's
+    default: running only when most of all its votes say so and two or more periods are running
+    totals. One jump in an annualised ratio, or one new fund's ramp-up year, therefore does not
+    set the basis. Returns ({period start: running}, fund default).
+    """
+    by_period: dict[tuple[str, str], float] = {}
+    for end_date, candidates in entries_by_end.items():
+        for start, value in candidates:
+            by_period.setdefault((start, end_date), value)
+    votes: dict[str, list[bool]] = {}
+    for (start, end_date), value in by_period.items():
+        span = _months_between(start, end_date)
+        prior = by_period.get((start, _prior_quarter_end(end_date)))
+        # A prior under 1.5 pct (a new fund's first months) votes nothing: an annualised ratio
+        # climbing from near zero grows like a running total.
+        if span > 4 and prior is not None and abs(prior) >= _MIN_VOTING_RATIO:
+            votes.setdefault(start, []).append(_grows_like_running_total(value, prior, span))
+    # A three-month figure filed beside the year to date (2026-04-01 to 06-30 beside 01-01 to 06-30)
+    # votes too: on a running total it is about the year to date less the previous one.
+    for (start, end_date), value in by_period.items():
+        span = _months_between(start, end_date)
+        prior = by_period.get((start, _prior_quarter_end(end_date)))
+        if span <= 4 or prior is None:
+            continue
+        for (q_start, q_end), quarter in by_period.items():
+            if q_end == end_date and q_start > start and _months_between(q_start, q_end) <= 4:
+                votes.setdefault(start, []).append(abs(quarter - (value - prior)) < abs(quarter - value))
+    every = [v for vs in votes.values() for v in vs]
+    # The fund's default needs running-total votes from two fiscal periods, not one ramp-up year.
+    periods_running = sum(1 for vs in votes.values() if sum(vs) * 2 > len(vs))
+    default = len(every) >= 2 and sum(every) * 2 > len(every) and periods_running >= 2
+    running = {}
+    for start, vs in votes.items():
+        yes = sum(vs)
+        running[start] = default if len(vs) < 2 or yes * 2 == len(vs) else yes * 2 > len(vs)
+    return running, default
+
+
+def _ratio_is_running(start: str, end_date: str, running: dict[str, bool], default: bool) -> bool:
+    """Basis of one ratio figure: its own fiscal period's, else the period it falls in, else the fund's."""
+    if start in running:
+        return running[start]
+    within = [s for s in running if s <= start and _months_between(s, end_date) <= 12]
+    return running[max(within)] if within else default
+
+
 def _split_without_year_to_date(value: float, end_date: str, span_months: int,
-                                quarters: dict[str, float], ratio: bool, quarter_only: bool = False) -> float | None:
+                                quarters: dict[str, float], quarter_only: bool = False) -> float | None:
     """This quarter's part of a figure covering several quarters when no earlier year-to-date figure is filed.
 
     Where every earlier quarter of the period already has a value (a fund that files each 10-Q
     quarter on its own and the year in the 10-K), the quarter is the figure less those quarters.
-    Otherwise, and for a ratio, the figure is spread evenly: an average, not the quarter.
+    Otherwise the figure is spread evenly: an average, not the quarter. (Ratios never come here.)
     ``quarter_only`` fields take no average: None is returned and the date gets no value.
     """
     count = max(1, round(span_months / 3))
-    if not ratio and count > 1:
+    if count > 1:
         earlier, day = [], end_date
         for _ in range(count - 1):
             day = _prior_quarter_end(day)
@@ -94,6 +155,7 @@ def _extract_duration_series(
     unit_key: str = "USD",
     ratio: bool = False,
     quarter_only: bool = False,
+    ratio_as_filed_from: str | None = None,
 ) -> dict[str, float]:
     """Extract quarterly values from duration concepts.
 
@@ -103,10 +165,16 @@ def _extract_duration_series(
     3. When only YTD exists, deltas against prior quarter's YTD
     4. Fallback: divides by period length in quarters
 
-    ``ratio`` marks a rate such as the net investment income ratio, which most filers
-    annualise for each year-to-date period. Such a value does not grow with the period, so
-    it is kept as filed; a ratio that does grow like a running total (n/(n-1) from the
-    previous year-to-date value) is still split by quarter.
+    ``ratio`` marks a rate such as the net investment income ratio. It is never split or
+    averaged: the stored figure is the filed ratio for the shortest period ending on the date,
+    on an annualised basis. Most filers annualise it for each year-to-date period and it is
+    kept as filed. A filer that prints it for the period, not annualised (it grows like a
+    running total, see ``_running_ratio_periods``), has it annualised: times four over the
+    period's quarters, so the year's figure in a 10-K is unchanged.
+
+    ``ratio_as_filed_from`` (a fund's highlights wrapper, ``income_ratio_as_filed``): figures
+    whose period starts on or after this date are kept as filed whatever the votes say, for a
+    filer whose annualised ratio climbs like a running total (a new fund's first year).
 
     ``quarter_only`` drops a date whose only figure covers several quarters and cannot be
     split (step 4): the field then has no value there instead of an average.
@@ -163,6 +231,9 @@ def _extract_duration_series(
     result: dict[str, float] = {}
     ytd_at: dict[tuple[str, str], float] = {}  # YTD values keyed by (start_date, end_date)
 
+    if ratio:
+        running, default = _running_ratio_periods(entries_by_end)
+
     for end_date in sorted(entries_by_end):
         candidates = entries_by_end[end_date]
         # Sort by period length ascending (shortest first)
@@ -171,7 +242,15 @@ def _extract_duration_series(
         )
         span = _months_between(best_start, end_date)
 
-        if span <= 4:
+        if ratio:
+            # A rate, not an amount: annualise a running-total filer's figure, keep the rest as filed.
+            forced = ratio_as_filed_from is not None and best_start >= ratio_as_filed_from
+            if not forced and _ratio_is_running(best_start, end_date, running, default):
+                # _months_between counts month ends (2 for a calendar quarter), so go by quarters
+                result[end_date] = best_value * 4 / max(1, round(span / 3))
+            else:
+                result[end_date] = best_value
+        elif span <= 4:
             # Already single-quarter (3-month or stub) -- use directly
             result[end_date] = best_value
         else:
@@ -185,8 +264,7 @@ def _extract_duration_series(
 
             # Look for prior quarter's YTD with the same start_date
             if (best_start, prior_end) in ytd_at:
-                result[end_date] = _year_to_date_step(
-                    best_value, ytd_at[(best_start, prior_end)], span, ratio)
+                result[end_date] = _year_to_date_step(best_value, ytd_at[(best_start, prior_end)])
             elif prior_end in entries_by_end:
                 # Prior end exists but wasn't YTD -- check if any entry
                 # shares same start_date (same fiscal year)
@@ -200,13 +278,13 @@ def _extract_duration_series(
                         key=lambda x: _months_between(x[0], prior_end),
                     )
                     ytd_at[(best_start, prior_end)] = prior_ytd
-                    result[end_date] = _year_to_date_step(best_value, prior_ytd, span, ratio)
+                    result[end_date] = _year_to_date_step(best_value, prior_ytd)
                 else:
                     # No same-FY prior YTD: less the filed quarters, else divide by quarters
-                    result[end_date] = _split_without_year_to_date(best_value, end_date, span, result, ratio, quarter_only)
+                    result[end_date] = _split_without_year_to_date(best_value, end_date, span, result, quarter_only)
             else:
                 # No prior quarter data at all (Q1 or annual-only filer)
-                result[end_date] = _split_without_year_to_date(best_value, end_date, span, result, ratio, quarter_only)
+                result[end_date] = _split_without_year_to_date(best_value, end_date, span, result, quarter_only)
 
     return {day: value for day, value in result.items() if value is not None}
 
@@ -475,6 +553,7 @@ def _extract_bdc_balance_sheet(cik: str, facts: dict) -> list[dict]:
     """Extract balance-sheet + extended time series from one CIK's companyfacts."""
     if not facts:
         return []
+    from pipeline.fund_highlights_wrapper import income_ratio_as_filed_from
 
     # Extract each concept series (exact match first, then fallback)
     concept_series: dict[str, dict[str, float]] = {}
@@ -508,14 +587,15 @@ def _extract_bdc_balance_sheet(cik: str, facts: dict) -> list[dict]:
                     )
             else:
                 # Duration concepts: use YTD -> quarterly conversion
+                as_filed_from = income_ratio_as_filed_from(cik) if spec.get("ratio") else None
                 series = _extract_duration_series(
                     facts, spec["exact"], spec["unit"], ratio=bool(spec.get("ratio")),
-                    quarter_only=bool(spec.get("quarter_only")),
+                    quarter_only=bool(spec.get("quarter_only")), ratio_as_filed_from=as_filed_from,
                 )
                 if not series and spec.get("fallback"):
                     series = _extract_duration_series(
                         facts, spec["fallback"], spec["unit"], ratio=bool(spec.get("ratio")),
-                        quarter_only=bool(spec.get("quarter_only")),
+                        quarter_only=bool(spec.get("quarter_only")), ratio_as_filed_from=as_filed_from,
                     )
             concept_series[field] = series
 

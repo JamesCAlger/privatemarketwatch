@@ -188,10 +188,11 @@ def test_companyfacts_year_figure_is_split_by_the_filed_quarters_when_no_nine_mo
     assert out["2024-12-31"] == pytest.approx(657.2 - 140.0 - 150.0 - 178.0) and out["2024-09-30"] == 178.0
     # a quarter missing: still the average, as before
     assert _extract_duration_series(_facts(quarters[1:] + [year]), ["NetExpenses"], "USD")["2024-12-31"] == pytest.approx(657.2 / 4)
-    # an annual-only filer, and an annualised ratio, are spread evenly as before
+    # an annual-only filer is spread evenly as before
     assert _extract_duration_series(_facts([year]), ["NetExpenses"], "USD")["2024-12-31"] == pytest.approx(657.2 / 4)
+    # a ratio is a rate, never spread: the year's figure is kept (owner queue f16-income-ratio-printed-not-annualised)
     ratio = _extract_duration_series(_facts(quarters + [year]), ["NetExpenses"], "USD", ratio=True)
-    assert ratio["2024-12-31"] == pytest.approx(657.2 / 4)
+    assert ratio["2024-12-31"] == pytest.approx(657.2)
 
 
 def test_a_quarter_only_field_gets_no_value_from_a_year_figure_that_cannot_be_split():
