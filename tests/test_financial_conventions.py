@@ -712,3 +712,23 @@ def test_printed_page_maturity_gets_day_precision_only_with_a_full_date(maturity
         assert row.maturity_status == status
     else:
         assert row.maturity_status != "dated"
+
+
+def test_whole_coupon_pik_mark_reads_the_rate_as_all_in_with_cash_leg_zero():
+    # D-232: staging marks pik_rate:whole_coupon_printed and sets pik_rate to the filed rate (Crescent Mario 15.66)
+    marked=dict(interest_rate_kind="",interest_rate="15.66",pik_rate="15.66",basis_spread="10.75",asset_category="LOAN",
+        src_transforms="interest_rate:rate_x100;pik_rate:whole_coupon_printed",
+        src_facts=json.dumps({"interest_rate":{"c":"investmentinterestrate"}}))
+    result,_=prepare(rows(marked,
+        # false positive guards: the same row unmarked stays unresolved (generic concept, PIK on the row);
+        # marked but pik_rate is no longer the filed rate
+        dict(marked,row_id="R2",src_transforms="interest_rate:rate_x100"),
+        dict(marked,row_id="R3",pik_rate="10.75")),
+        rate_readings={},pik_only_coupon=set(),pik_only_margin=set(),no_untagged_pik=set())
+    by_id=result.set_index("row_id")
+    assert by_id.loc["R1","interest_rate_kind"]=="all_in"
+    assert by_id.loc["R1","interest_rate"]==pytest.approx(15.66)
+    assert by_id.loc["R1","interest_rate_cash"]==pytest.approx(0.0)
+    assert "pik_rate:whole_coupon_printed" in by_id.loc["R1","src_transforms"]
+    for row_id in ("R2","R3"):
+        assert by_id.loc[row_id,"interest_rate_kind"]=="unresolved"

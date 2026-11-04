@@ -3324,6 +3324,11 @@ def _prepare_bdc(
                     | (_sdf["reference_rate_status"].isin(["value", "not_applicable"]))
                     | (_sdf.get("sector_status", pd.Series("", index=_sdf.index)) == "value")]
         result = apply_ixbrl_field_status_overlay(result, _sdf)
+        # Whole-coupon PIK printed '<benchmark> + m PIK <coupon> %' (D-232), for the funds whose wrapper
+        # declares pik_margin_reading whole_coupon: pik_rate is the printed coupon. Reads only those funds'
+        # printed rows that name PIK.
+        from pipeline import whole_coupon_pik
+        result = whole_coupon_pik.apply(result, BDC_IXBRL_FIELD_STATUS_FILE)
 
     # Agent A basis_spread corrections: audited, keyed OVERRIDE (NOT blank-only) of the
     # per-position spreads where the freeform-identifier spread reconciles with all-in+SOFR

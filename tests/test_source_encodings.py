@@ -417,6 +417,24 @@ def test_malformed_reference_rate_encoding_fails(tmp_path, encoding):
         source_encodings.load_encodings(tmp_path)
 
 
+def test_pik_margin_reading_admits_whole_coupon_only(tmp_path):
+    path = tmp_path / '0001633336.json'
+    path.write_text(json.dumps({'schema_version': 'bdc-xbrl-wrapper.v3', 'cik': '0001633336',
+                                'source_encodings': {'pik_margin_reading': ['whole_coupon']}}), encoding='utf-8')
+    assert source_encodings.whole_coupon_pik_funds(source_encodings.load_encodings(tmp_path)) == {'0001633336'}
+    path.write_text(json.dumps({'schema_version': 'bdc-xbrl-wrapper.v3', 'cik': '0001633336', 'source_encodings': {
+        'pik_margin_reading': ['whole_coupon', 'not 0001628280-26-020206 c-841']}}), encoding='utf-8')
+    encodings = source_encodings.load_encodings(tmp_path)
+    assert source_encodings.whole_coupon_pik_funds(encodings) == {'0001633336'}
+    assert source_encodings.whole_coupon_pik_exclusions(encodings) == {('0001633336', '0001628280-26-020206', 'c-841')}
+    for bad in (['margin'], ['whole_coupon', 'margin'], ['not 0001628280-26-020206 c-841'],
+                ['whole_coupon', 'not 0001628280-26-020206']):
+        path.write_text(json.dumps({'schema_version': 'bdc-xbrl-wrapper.v3', 'cik': '0001633336',
+                                    'source_encodings': {'pik_margin_reading': bad}}), encoding='utf-8')
+        with pytest.raises(ValueError):
+            source_encodings.load_encodings(tmp_path)
+
+
 def test_blue_owl_wrapper_names_its_reference_rate_column():
     # 10-Q 2023-03-31 prints 'SR + | 6.25% (2.75% PIK)' under 'Interest'; 10-K 2025-12-31 prints 'S+' under 'Ref. Rate'
     reading = source_encodings.reference_rate_reading(OWL)

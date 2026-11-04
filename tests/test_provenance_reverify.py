@@ -293,6 +293,29 @@ def test_a_spread_published_as_cash_plus_pik_margin_replays_from_both_facts():
     assert cheap_tier(holdings_df=plain).query("field=='basis_spread'").iloc[0].cheap_status=='fail'
 
 
+def test_a_whole_coupon_pik_rate_replays_from_the_rate_fact():
+    # D-232, HPS PCP CW 2023-09-30: printed 'SF + | 9.25% PIK | 14.69%', rate tag 0.1469, PIK tag 0.0925;
+    # published pik_rate 14.69 (pipeline/whole_coupon_pik.py, transform pik_rate:whole_coupon_printed)
+    from lxml import etree
+    events='interest_rate:rate_x100;pik_rate:rate_x100;pik_rate:whole_coupon_printed'
+    frame=pd.DataFrame([_row(interest_rate=14.69,pik_rate=14.69,basis_spread=None,
+        src_facts=json.dumps({'interest_rate':{'r':.1469},'pik_rate':{'r':.0925}}),src_transforms=events)])
+    replay=cheap_tier(holdings_df=frame)
+    pik=replay[replay.field=='pik_rate']
+    assert pik.iloc[0].expected==pytest.approx(14.69) and pik.iloc[0].cheap_status=='pass'
+    def loader(cik,accession,rate='.1469'):
+        xml=('<xbrl xmlns:g="http://fasb.org/us-gaap/2024">'
+            f'<g:InvestmentInterestRate contextRef="ctx1">{rate}</g:InvestmentInterestRate>'
+            '<g:InvestmentInterestRatePaidInKind contextRef="ctx1">.0925</g:InvestmentInterestRatePaidInKind></xbrl>')
+        return etree.ElementTree(etree.fromstring(xml.encode()))
+    assert full_tier(pik,xml_loader=loader).iloc[0].full_status=='raw_match'
+    assert full_tier(pik,xml_loader=lambda c,a:loader(c,a,'.12')).iloc[0].full_status=='published_mismatch'
+    # false positive guards: a pik_rate that is not the rate fact fails; without the label the coupon does not replay
+    assert cheap_tier(holdings_df=frame.assign(pik_rate=12.0)).query("field=='pik_rate'").iloc[0].cheap_status=='fail'
+    plain=frame.assign(src_transforms='interest_rate:rate_x100;pik_rate:rate_x100')
+    assert cheap_tier(holdings_df=plain).query("field=='pik_rate'").iloc[0].cheap_status=='fail'
+
+
 def test_a_fixed_coupon_tagged_as_a_spread_replays_from_the_spread_fact():
     # BCRED-style row printed '11.50% | 11.50%' with no reference rate: spread tag 0.115, no rate tag;
     # published as interest_rate 11.5 with no spread
