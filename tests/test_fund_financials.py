@@ -231,6 +231,35 @@ class TestExtractConceptSeries:
 
 class TestExtractBdcBalanceSheet:
 
+    def test_nav_aliases_fill_all_missing_dates_without_replacing_existing(self):
+        facts = _make_facts({
+            "StockholdersEquity": [{"end": "2025-12-31", "val": 100}],
+            "AssetsNet": [
+                {"end": "2025-12-31", "val": 999},
+                {"end": "2026-03-31", "val": 218052984},
+            ],
+            "MembersEquity": [
+                {"end": "2026-03-31", "val": 218053000},
+                {"end": "2026-06-30", "val": 120},
+            ],
+        })
+        rows = _extract_bdc_balance_sheet("42", facts)
+        assert {r["report_date"]: r["net_assets"] for r in rows} == {
+            "2025-12-31": 100, "2026-03-31": 218052984, "2026-06-30": 120,
+        }
+
+    def test_nav_alias_does_not_read_duration_per_share_or_similar_concept(self):
+        facts = _make_facts({
+            "Assets": [{"end": "2026-03-31", "val": 1000}],
+            "AssetsNet": [{"start": "2026-01-01", "end": "2026-03-31", "val": 800}],
+            "MembersEquityPerShare": [{"end": "2026-03-31", "val": 20}],
+        })
+        facts["facts"]["us-gaap"]["MembersEquity"] = {
+            "units": {"USD/shares": [{"end": "2026-03-31", "val": 25}]},
+        }
+        row = _extract_bdc_balance_sheet("42", facts)[0]
+        assert row["net_assets"] is None
+
     def test_complete_json(self):
         facts = {
             "facts": {
@@ -1033,7 +1062,9 @@ class TestConceptSelectionExactMatch:
             ],
         })
         rows = _extract_bdc_balance_sheet("1234", facts)
-        assert rows == []
+        assert len(rows) == 2
+        assert all(row["total_assets"] is None for row in rows)
+        assert [row["net_assets"] for row in rows] == [960_000_000, 970_000_000]
 
     def test_total_assets_fallback_used_when_assets_absent(self):
         """'TotalAssets' remains a valid total_assets fallback."""
@@ -1064,9 +1095,11 @@ class TestConceptSelectionExactMatch:
             },
         }
         rows = _extract_bdc_balance_sheet("1234", facts)
-        # Should use Assets (exact), not AssetsNet (fallback with more points)
-        assert len(rows) == 1
+        # AssetsNet supplies NAV dates but must never become total_assets.
+        assert len(rows) == 3
         assert rows[0]["total_assets"] == 1_000_000_000
+        assert all(row["total_assets"] is None for row in rows[1:])
+        assert [row["net_assets"] for row in rows] == [600_000_000, 700_000_000, 800_000_000]
 
     def test_no_duration_facts_in_instant_search(self):
         """Duration facts (with start date) excluded from instant search."""

@@ -288,6 +288,10 @@ _BALANCE_SHEET_CONCEPTS = {
     "net_assets": {
         "exact": ["StockholdersEquity", "NetAssetsOrNetAssets",
                   "MembersCapital", "PartnersCapital"],
+        # Fill missing dates only; preserve the existing concept choice where
+        # reported. Filers can switch tags between quarters. AssetsNet precedes
+        # MembersEquity because it can retain unrounded schedule-dollar values.
+        "missing_date_concepts": ["AssetsNet", "MembersEquity"],
         "fallback": [],
         "unit": "USD", "instant": True,
     },
@@ -484,6 +488,11 @@ def _extract_bdc_balance_sheet(cik: str, facts: dict) -> list[dict]:
             series = _extract_concept_series(
                 facts, spec["fallback"], spec["unit"], spec["instant"],
             )
+        for concept in spec.get("missing_date_concepts", []):
+            additional = _extract_concept_series(
+                facts, [concept], spec["unit"], spec["instant"],
+            )
+            series.update({day: value for day, value in additional.items() if day not in series})
         concept_series[field] = series
 
     # Extended concepts (distributions, performance, income, portfolio)
