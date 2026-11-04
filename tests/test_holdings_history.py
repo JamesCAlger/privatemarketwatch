@@ -8,6 +8,29 @@ from pipeline.holdings_finalizer import project_artifact
 from tests.test_holdings_finalizer import holdings
 
 
+def test_history_supports_exact_pre_acquisition_date_release(tmp_path):
+    hp=tmp_path/"private_markets_holdings.csv"
+    frame=project_artifact(holdings(),"private_markets_holdings.csv")
+    frame.drop(columns=["bdc_acquisition_date"]).to_csv(hp,index=False)
+    before=hp.read_bytes()
+    with duckdb.connect() as con:
+        manifest=export_history(con,hp,tmp_path/"history",cohort={"0000000123"},release_id="R")
+    assert manifest["accessible_holdings_difference"]==0
+    payload=json.loads((tmp_path/"history/0000000123/2026-03-31.json").read_text())
+    assert "bdc_acquisition_date" not in payload["rows"][0]
+    assert hp.read_bytes()==before
+
+
+@pytest.mark.parametrize("missing",["fair_value","position_id"])
+def test_history_rejects_other_legacy_schema_gaps(tmp_path,missing):
+    from pipeline.programme.core import ContractError
+    hp=tmp_path/"private_markets_holdings.csv"
+    frame=project_artifact(holdings(),"private_markets_holdings.csv")
+    frame.drop(columns=["bdc_acquisition_date",missing]).to_csv(hp,index=False)
+    with duckdb.connect() as con, pytest.raises(ContractError,match="Wrong ordered CSV columns"):
+        export_history(con,hp,tmp_path/"history",cohort={"0000000123"},release_id="R")
+
+
 def test_history_preserves_all_positions_signed_zero_and_complete_ids(tmp_path):
     hp=tmp_path/"private_markets_holdings.csv"
     frame=holdings([dict(row_id="R1",position_id="P1",cik="0000000123",fair_value="100"),

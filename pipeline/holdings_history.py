@@ -1,5 +1,6 @@
 """Complete cohort observation history for a pinned static frontend release."""
 from __future__ import annotations
+import csv
 import json
 from pathlib import Path
 
@@ -27,6 +28,14 @@ def export_history(con,holdings_file,output_dir,*,cohort,start="2023-03-31",end=
         if p and Path(p).is_file()}
     release=release_id or "holdings-"+source_hash
     schema=OUTPUT_SCHEMAS["private_markets_holdings.csv"]
+    # Finalized releases before acquisition-date extraction have this exact
+    # older schema. Preserve their fields rather than requiring a new rebuild
+    # merely to re-export their unchanged history. All other drift still fails.
+    legacy_schema={name:kind for name,kind in schema.items() if name!="bdc_acquisition_date"}
+    with holdings_file.open(newline="",encoding="utf-8-sig") as stream:
+        header=next(csv.reader(stream),None)
+    if header==list(legacy_schema):
+        schema=legacy_schema
     con.execute("""CREATE OR REPLACE TEMP TABLE history AS SELECT * FROM ("""+
         typed_query(holdings_file,schema)+") WHERE cik IN (SELECT unnest(?)) AND report_date BETWEEN ?::DATE AND ?::DATE"
         " AND "+PUBLISHED_ROWS_WHERE_SQL,
