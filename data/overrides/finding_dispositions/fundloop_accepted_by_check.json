@@ -1241,6 +1241,29 @@
    "decided_on": "2026-10-09"
   },
   {
+   "disposition_id": "DS-FUNDLOOP-F28-1901037",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "ciks": [
+    "0001901037"
+   ],
+   "quarters": [
+    "2022-03-31",
+    "2022-06-30"
+   ],
+   "statement": "Fund-level figures exist for these quarters but the cache holds no position schedule before the fund's first structured filing, so there are no holdings to compare.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Sandbox stpe: the fund's first quarter with published holdings is 2022-09-30; each quarter listed is earlier."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/cohort_by_size.py",
+   "decided_by": "check passed on sandbox stpe; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
    "disposition_id": "DS-FUNDLOOP-F28-2008748",
    "class": "not_applicable",
    "engine": "fund_financials",
@@ -1929,6 +1952,29 @@
    ],
    "rerun": "python scripts/v05_evidence/issue_shape.py fcxa X06 3",
    "decided_by": "check passed on sandbox fcxa; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
+   "decided_on": "2026-10-09"
+  },
+  {
+   "disposition_id": "DS-FUNDLOOP-X06-1901037",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X06",
+   "ciks": [
+    "0001901037"
+   ],
+   "quarters": [
+    "2023-12-31",
+    "2025-12-31"
+   ],
+   "statement": "Principal far above fair value on partly drawn commitments (principal is the commitment) and on positions the fund has marked down, as filed.",
+   "evidence": [
+    {
+     "source": "query",
+     "quote": "Check values_as_filed passed on sandbox stpe for each quarter listed: 2 flagged rows tested, none failing."
+    }
+   ],
+   "rerun": "python scripts/v05_evidence/issue_shape.py stpe X06 3",
+   "decided_by": "check passed on sandbox stpe; accepted under the owner's standing instruction of 2026-10-09 (D-073)",
    "decided_on": "2026-10-09"
   },
   {
