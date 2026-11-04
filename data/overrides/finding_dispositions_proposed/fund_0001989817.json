@@ -4,9 +4,10 @@
  "dispositions": [
   {
    "disposition_id": "PD-F27-1989817-1",
-   "class": "false_alarm",
+   "class": "as_filed",
    "engine": "fund_financials",
    "rule_name": "F27",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001989817 0001989817-24-000055 \"Ratio of net investment income to average net assets (5) 13.77 %\" 1 74 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-24-000055 \"Total Investments - Non-Controlled/Non-Affiliated \\$ 703,871 \\$ 707,902 126.15 %\" 1 88 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-25-000023 \"Ratio of net investment income to average net assets (5) 12.83 %\" 1 74 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-25-000023 \"Total Investments - Non-Controlled/Non-Affiliated \\$ 982,565 \\$ 984,954 151.10 %\" 1 88 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-25-000065 \"Ratio of net investment income to average net assets (5) 12.57 %\" 1 74 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-25-000065 \"Total Investment Portfolio \\$ 1,632,151 \\$ 1,646,959 169.34 %\" 1 69",
    "reason_key": "f27-income-over-net-assets-of-a-levered-fund",
    "ciks": [
     "0001989817"
@@ -62,6 +63,7 @@
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "C107",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001989817 0001989817-24-000032 \"WorkWave Intermediate II, LLC (4)(6)(9) 6/29/2027 10,847 ( 156 ) ( 62 )\" 1 81 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-24-000032 \"American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - -\" 1 69 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-24-000055 \"NTH Degree Purchaser, Inc (4)(6)(10) 9/10/2030 3,422 ( 68 ) ( 68 )\" 1 76 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-24-000055 \"American Academy Holdings, LLC (4)(6)(13) 6/30/2027 160 - ( 3 )\" 1 73",
    "reason_key": "undrawn-line-negative-cost-from-unamortized-fees",
    "ciks": [
     "0001989817"
@@ -108,6 +110,7 @@
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "X02",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001989817 0001628280-26-035294 \"AVSC Holding Corp. (4)(6)(9)(22) SF + 5.00 % 8.67 % 12/5/2029 962 159 173\" 1 83 && python scripts/v05_evidence/page_line.py 0001989817 0001628280-26-035294 \"Axiom Buyer, LLC (4)(6)(10) 1/14/2030 1,905 ( 40 ) ( 27 )\" 1 67 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-25-000085 \"Alp CFO 2025, L.P. (4)(5)(19) - Subordinated Note 7/15/2037 4,000 4,000 4,000\" 1 87 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-25-000085 \"Saga Mid Co Limited (4)(5)(6)(10) 2/27/2031 GBP 8,364 ( 250 ) 22\" 1 74 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-25-000085 \"IDF 9 Financeco, LLC (4)(6)(19)(20) - Series B Units 1,055,303 966 1,041\" 1 82 && python scripts/v05_evidence/page_line.py 0001989817 0001628280-26-035294 \"Constellation Wealth Capital Fund-A-Blocker (LIDO), LLC (4) 2/1/2038 \\$ 48 \\$ - \\$ -\" 1 91 && python scripts/v05_evidence/page_line.py 0001989817 0001989817-25-000085 \"Constellation Wealth Capital Fund-A-Blocker (Lido), LLC (4) 2/1/2038 46 46 46\" 1 87",
    "reason_key": "x02-no-rate-printed-on-the-row",
    "ciks": [
     "0001989817"
@@ -171,6 +174,7 @@
    "class": "as_filed",
    "engine": "row_validation",
    "rule_name": "PP02",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001989817 0001628280-26-056793 \"Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206 Behavox Ltd (4)(5)(21) - Class V Shares 3,120 206 206 Total Software 412 412 0.03 %\" 1 147",
    "reason_key": "pp02-twin-lines-printed-separately",
    "ciks": [
     "0001989817"
@@ -194,6 +198,7 @@
    "class": "as_filed",
    "engine": "weak",
    "rule_name": "maturity_not_past",
+   "rerun": "python scripts/v05_evidence/page_line.py 0001989817 0001628280-26-056793 \"Distributed Solar Development LLC (4)(13)(24) SF + 12.50 % PIK 16.17 % 5/30/2026 2,384 2,384 2,366\" 1 108",
    "reason_key": "maturity-not-past-loan-held-past-printed-maturity",
    "ciks": [
     "0001989817"
