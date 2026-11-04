@@ -6,6 +6,8 @@ for the year. Subtracting the previous period gave -0.54 pct, -0.29 pct and 0.11
 Of the 60 cohort funds that file the ratio, 39 always annualise it and 14 nearly always
 (scratch scan of the cached companyfacts, 2026-10-06). Real filed values.
 """
+import pytest
+
 from pipeline.extract_companyfacts import _extract_duration_series
 
 CONCEPT = "InvestmentCompanyInvestmentIncomeLossRatio"
@@ -28,17 +30,72 @@ def test_annualised_year_to_date_ratio_is_kept_as_filed():
     assert result == {"2025-03-31": 0.1096, "2025-06-30": 0.1042, "2025-09-30": 0.1013, "2025-12-31": 0.1024}
 
 
-def test_ratio_filed_as_a_running_total_is_still_split_by_quarter():
-    running = [
-        {"start": "2025-01-01", "end": "2025-03-31", "val": 0.025},
-        {"start": "2025-01-01", "end": "2025-06-30", "val": 0.051},
-        {"start": "2025-01-01", "end": "2025-09-30", "val": 0.078},
-        {"start": "2025-01-01", "end": "2025-12-31", "val": 0.102},
+# Owner queue f16-income-ratio-printed-not-annualised. CIK 1702510 2025, real filed values; its 10-Qs say
+# "(4) These ratios to average net assets attributable to Common Stockholders have not been annualized".
+# The split published 2.42 / 2.42 / 2.31 for Q2 to Q4 (one quarter, not annualised) beside funds that
+# publish an annualised ratio; F16 compares it with an annualised distribution rate.
+RUNNING_2025 = [
+    {"start": "2025-01-01", "end": "2025-03-31", "val": 0.0233},
+    {"start": "2025-01-01", "end": "2025-06-30", "val": 0.0475},
+    {"start": "2025-01-01", "end": "2025-09-30", "val": 0.0717},
+    {"start": "2025-01-01", "end": "2025-12-31", "val": 0.0948},
+]
+
+
+def test_ratio_filed_as_a_running_total_is_annualised_not_split():
+    result = _extract_duration_series(_facts(RUNNING_2025), [CONCEPT], "pure", ratio=True)
+    assert result["2025-03-31"] == pytest.approx(0.0233 * 4)
+    assert result["2025-06-30"] == pytest.approx(0.0475 * 2)
+    assert result["2025-09-30"] == pytest.approx(0.0717 * 4 / 3)
+
+
+def test_the_years_ratio_from_a_10k_is_kept_as_filed_on_either_basis():
+    running = _extract_duration_series(_facts(RUNNING_2025), [CONCEPT], "pure", ratio=True)
+    annualised = _extract_duration_series(_facts(ARES_2025), [CONCEPT], "pure", ratio=True)
+    assert running["2025-12-31"] == 0.0948
+    assert annualised["2025-12-31"] == 0.1024
+    # a 10-K-only filer: the year's ratio is not spread over four quarters
+    year_only = _extract_duration_series(_facts([ARES_2025[-1]]), [CONCEPT], "pure", ratio=True)
+    assert year_only == {"2025-12-31": 0.1024}
+
+
+def test_a_three_month_ratio_inside_a_running_total_year_is_annualised():
+    # CIK 2012139 2026: "Income and expenses have not been annualized in calculating these ratios"; the
+    # 10-Q for 2026-06-30 files the quarter (0.023) beside the six months (0.046).
+    filed = [
+        {"start": "2026-01-01", "end": "2026-03-31", "val": 0.022},
+        {"start": "2026-01-01", "end": "2026-06-30", "val": 0.046},
+        {"start": "2026-04-01", "end": "2026-06-30", "val": 0.023},
+    ] + RUNNING_2025
+    result = _extract_duration_series(_facts(filed), [CONCEPT], "pure", ratio=True)
+    assert result["2026-03-31"] == pytest.approx(0.088)
+    assert result["2026-06-30"] == pytest.approx(0.092)
+
+
+def test_one_sharp_rise_in_an_annualised_ratio_is_not_read_as_a_running_total():
+    # TCW Direct Lending VII (CIK 1603480) 2022, real filed values: 5.42 for three months, then 8.55 for six
+    # months (1.58x, past the 1.5x cut), 7.63 for nine and 7.67 for the year; both 10-Qs print annualised
+    # ratios. The old split published 3.13 for 2022-06-30, a figure the filing does not print.
+    tcw = [
+        {"start": "2022-01-01", "end": "2022-03-31", "val": 0.0542},
+        {"start": "2022-01-01", "end": "2022-06-30", "val": 0.0855},
+        {"start": "2022-01-01", "end": "2022-09-30", "val": 0.0763},
+        {"start": "2022-01-01", "end": "2022-12-31", "val": 0.0767},
     ]
-    result = _extract_duration_series(_facts(running), [CONCEPT], "pure", ratio=True)
-    assert abs(result["2025-06-30"] - 0.026) < 1e-9
-    assert abs(result["2025-09-30"] - 0.027) < 1e-9
-    assert abs(result["2025-12-31"] - 0.024) < 1e-9
+    result = _extract_duration_series(_facts(tcw + ARES_2025), [CONCEPT], "pure", ratio=True)
+    assert result["2022-06-30"] == 0.0855
+    assert result["2022-03-31"] == 0.0542
+    assert result["2025-06-30"] == 0.1042
+
+
+def test_a_fund_with_a_single_running_vote_is_kept_as_filed():
+    # one six-month figure 1.6x the quarter and nothing else to vote: too little to call a basis
+    lone = [
+        {"start": "2024-01-01", "end": "2024-03-31", "val": 0.050},
+        {"start": "2024-01-01", "end": "2024-06-30", "val": 0.080},
+    ]
+    result = _extract_duration_series(_facts(lone), [CONCEPT], "pure", ratio=True)
+    assert result == {"2024-03-31": 0.050, "2024-06-30": 0.080}
 
 
 def test_amounts_are_split_by_quarter_whatever_their_growth():
