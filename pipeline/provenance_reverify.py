@@ -44,6 +44,17 @@ _RATE_FIELDS = ("interest_rate", "basis_spread", "pik_rate", "pct_of_net_assets"
 _FROM_PIK_EVENT = {"interest_rate": "interest_rate:pik_only", "basis_spread": "basis_spread:pik_margin"}
 # A fixed coupon the filer tagged as a spread, published as the rate (bdc_xbrl_html_bridge overlay).
 _FROM_SPREAD_EVENT = "interest_rate:from_spread_tag"
+# A whole-coupon PIK loan (D-232, pipeline/whole_coupon_pik.py): pik_rate is published as the rate tag.
+_PIK_FROM_RATE_EVENT = "pik_rate:whole_coupon_printed"
+def _try_float(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return float("nan")
+
+
+# (event, published field) -> the field whose fact is re-read
+_REPLAY_EVENTS = {("interest_rate", _FROM_SPREAD_EVENT): "basis_spread", ("pik_rate", _PIK_FROM_RATE_EVENT): "interest_rate"}
 # A unit count the filer tagged with the principal concept (equity printed under a fund's reviewed label).
 _UNITS_FROM_PRINCIPAL_EVENT = "shares_held:from_principal_tag"
 # The reverse: a loan's par tagged with the share-count concept (source_encodings.par_tagged_as_units).
@@ -145,15 +156,17 @@ def _field_sql(field: str, source_col: str) -> str:
         expected = f"(CASE WHEN {ev} LIKE '%{from_pik}%' THEN TRY_CAST(pik_rate AS DOUBLE) ELSE {expected} END)"
     # A rate taken from the spread tag (a fixed coupon the filer tagged as a spread) replays the spread fact;
     # the spread itself is not published, so the fact is read from src_facts.
-    from_spread = _FROM_SPREAD_EVENT if field == 'interest_rate' else ''
+    # The same for a whole-coupon PIK rate published as the rate tag (replays the interest_rate fact).
+    from_spread = {'interest_rate': _FROM_SPREAD_EVENT, 'pik_rate': _PIK_FROM_RATE_EVENT}.get(field, '')
     if from_spread:
-        spread_x = "json_extract_string(NULLIF(CAST(src_facts AS VARCHAR), ''), '$.basis_spread.x')"
+        src = _REPLAY_EVENTS[(field, from_spread)]
+        spread_x = f"json_extract_string(NULLIF(CAST(src_facts AS VARCHAR), ''), '$.{src}.x')"
         spread_replay = (
-            "(TRY_CAST(json_extract_string(NULLIF(CAST(src_facts AS VARCHAR), ''), '$.basis_spread.r') AS DOUBLE)"
+            f"(TRY_CAST(json_extract_string(NULLIF(CAST(src_facts AS VARCHAR), ''), '$.{src}.r') AS DOUBLE)"
             f" * (CASE WHEN {spread_x} LIKE '%decimals_rescale:10^%' THEN POWER(10.0, TRY_CAST("
             f"regexp_extract({spread_x}, 'decimals_rescale:10\\^(-?\\d+)', 1) AS INTEGER)) ELSE 1.0 END)"
-            f" * (CASE WHEN {ev} LIKE '%basis_spread:rate_x100%' THEN 100.0 ELSE 1.0 END)"
-            f" * (CASE WHEN {ev} LIKE '%basis_spread:rate_div100%' THEN 0.01 ELSE 1.0 END))")
+            f" * (CASE WHEN {ev} LIKE '%{src}:rate_x100%' THEN 100.0 ELSE 1.0 END)"
+            f" * (CASE WHEN {ev} LIKE '%{src}:rate_div100%' THEN 0.01 ELSE 1.0 END))")
         expected = f"(CASE WHEN {ev} LIKE '%{from_spread}%' THEN {spread_replay} ELSE {expected} END)"
     unresolved_coupon = (
         f"WHEN {ev} LIKE '%interest_rate:coupon_unresolved%' THEN CASE WHEN {published} IS NULL THEN 'unresolved_coupon' ELSE 'fail' END"
@@ -526,6 +539,11 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                     field_sf = sf.get('shares_held') or {}
                     declared_c = str(field_sf.get('c') or '').lower()
                     x_events = list(field_sf.get('x') or [])
+                elif field == 'pik_rate' and _PIK_FROM_RATE_EVENT in str(r.get('declared_events') or ''):
+                    anchor_field = 'interest_rate'
+                    field_sf = sf.get('interest_rate') or {}
+                    declared_c = str(field_sf.get('c') or '').lower()
+                    x_events = list(field_sf.get('x') or [])
                 elif field == 'interest_rate' and _FROM_SPREAD_EVENT in str(r.get('declared_events') or ''):
                     anchor_field = 'basis_spread'
                     field_sf = sf.get('basis_spread') or {}
@@ -632,6 +650,9 @@ def full_tier(cheap_df: pd.DataFrame, xml_loader=None,
                     continue
 
                 declared_raw = r.get("declared_raw")
+                if anchor_field == 'interest_rate' and field == 'pik_rate':
+                    # a whole-coupon PIK rate is anchored on the rate fact; its own PIK fact is the margin
+                    declared_raw = _try_float(field_sf.get('r'))
                 if pd.isna(declared_raw) or _numbers_close(float(declared_raw),
                                                             float(instance_raw)):
                     out.at[i, "full_status"] = "raw_match"
