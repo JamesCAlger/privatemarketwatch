@@ -455,8 +455,19 @@ _PIK_NOT_A_FIGURE = r"(?i)\b(class|series|tranche|notes?)\s+[0-9]+"
 # ones the HTML bridge reads from an Index column (pipeline/bdc_xbrl_html_bridge._BENCHMARK_CODE).
 _BENCH_CODES = "|".join(sorted(_BENCHMARK_CODE, key=lambda c: (-len(c), c)))
 # The page reader joins cells with ' | ' ('S + | 6.25% PIK | 11.35%').
-_PIK_AFTER_BENCHMARK = (r"(?i)(?:^|[^a-z0-9])(?:" + _BENCH_CODES + r")[\s|]*(?:\(\s*[a-z0-9]{1,3}\s*\)[\s|]*)?\+[\s|]*"
-                        + _PIK_NUMBER + r"\s*%\s*PIK\b")
+_BENCH_PLUS = r"(?i)(?:^|[^a-z0-9])(?:" + _BENCH_CODES + r")[\s|]*(?:\(\s*[a-z0-9]{1,3}\s*\)[\s|]*)?\+[\s|]*"
+_PIK_AFTER_BENCHMARK = _BENCH_PLUS + _PIK_NUMBER + r"\s*%\s*PIK\b"
+# REQ-rfcr-1 / REQ-rfbn-1 (owner 2026-11-04): the margin in basis points ('S + 1075 PIK', 'E + 1000 PIK (100
+# Floor)'; read as percent below 25, as _PIK_BARE), and a benchmark printed in a cell of its own with the
+# PIK margin in a later cell and no '+' ('EURIBOR | 10.00% PIK | 13.25%', 'SONIA | - | 10.00% PIK'). A
+# cell between them may hold only a dash. Continental Battery ('First Lien Debt | 7.00% PIK') has no
+# benchmark on the row and is not read.
+_PIK_BPS_AFTER_BENCHMARK = _BENCH_PLUS + r"([0-9]+(?:\.[0-9]+)?)\s*PIK\b"
+_PIK_AFTER_BENCHMARK_CELL = (r"(?i)(?:^|\|)\s*(?:" + _BENCH_CODES + r")\s*(?:\|\s*[-\x{2013}\x{2014}]*\s*)*\|\s*"
+                             + _PIK_NUMBER + r"\s*%\s*PIK\b")
+# REQ-rfbn-1 floating PIK leg (D-218, VardimanBlack): '<benchmark> + a % PIK + f % [Fixed] R %': the PIK
+# leg floats at benchmark + a, the cash leg is the fixed f, so pik_rate = R - f. Captures f.
+_PIK_LEG_FIXED = _BENCH_PLUS + r"(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)\s*%\s*PIK[\s|]*\+[\s|]*" + _PIK_NUMBER + r"\s*%"
 _PERCENT_FIGURE = _PIK_NUMBER + r"\s*%"
 
 
@@ -477,6 +488,10 @@ def pik_printed_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand
     rounded to fewer decimals (3.8 for 3.83) passes. D-232 (owner 2026-10-25): a whole-coupon PIK row printed
     '<benchmark> [(tenor)] + m % PIK <coupon> %' passes when pik_rate is a printed percent figure on that row,
     not a PIK figure and above m (the coupon); without the benchmark code ('7.00 % PIK 11.29 %') it does not.
+    Owner 2026-11-04 (REQ-rfcr-1 / REQ-rfbn-1): m may be printed in basis points ('S + 1075 PIK 15.66 %') or
+    after a benchmark printed in its own cell ('EURIBOR | 10.00% PIK | 13.25%'); a floating PIK leg with a
+    fixed cash leg ('SOFR + 2.00 % PIK + 5.00 % Fixed 12.30 %', D-218) passes when pik_rate = R - f (7.30),
+    and is not treated as a whole coupon (12.30 still flags).
     """
     def clean(expr: str) -> str:
         return (f"regexp_replace(regexp_replace(coalesce({expr}, ''), '([0-9]) \\| %', '\\1 %', 'g'), "
@@ -503,15 +518,32 @@ def pik_printed_not_published(con: duckdb.DuckDBPyConnection, table: str = "cand
                                  '(?i)[0-9]\\s*%?\\s*\\)?\\s*PIK\\b')),
         g0 AS (SELECT *, {figures('printed_row')} AS page_figs, {figures('bdc_investment_identifier')} AS member_figs,
                       -- D-232: m in '<benchmark> + m % PIK', and every percent figure on the printed row
-                      list_max(list_transform(regexp_extract_all({clean('printed_row')}, '{_PIK_AFTER_BENCHMARK}', 1),
-                                              x -> TRY_CAST(x AS DOUBLE))) AS bench_pik,
+                      -- (percent, basis points, or a benchmark cell of its own; REQ-rfcr-1 / REQ-rfbn-1)
+                      list_max(list_concat(
+                          list_transform(regexp_extract_all({clean('printed_row')}, '{_PIK_AFTER_BENCHMARK}', 1),
+                                         x -> TRY_CAST(x AS DOUBLE)),
+                          list_transform(regexp_extract_all({clean('printed_row')}, '{_PIK_BPS_AFTER_BENCHMARK}', 1),
+                                         x -> CASE WHEN TRY_CAST(x AS DOUBLE) >= 25 THEN TRY_CAST(x AS DOUBLE) / 100.0
+                                                   ELSE TRY_CAST(x AS DOUBLE) END),
+                          list_transform(regexp_extract_all({clean('printed_row')}, '{_PIK_AFTER_BENCHMARK_CELL}', 1),
+                                         x -> TRY_CAST(x AS DOUBLE)))) AS bench_pik,
+                      -- f in '<benchmark> + a % PIK + f %' (floating PIK leg, fixed cash leg f)
+                      list_max(list_transform(regexp_extract_all({clean('printed_row')}, '{_PIK_LEG_FIXED}', 1),
+                                              x -> TRY_CAST(x AS DOUBLE))) AS pik_leg_fixed,
                       list_filter(list_transform(regexp_extract_all({clean('printed_row')}, '{_PERCENT_FIGURE}', 1),
                                                  x -> TRY_CAST(x AS DOUBLE)), x -> x IS NOT NULL) AS page_pcts
                FROM b),
-        g AS (SELECT *, bench_pik IS NOT NULL AND pik_rate > bench_pik
+        g AS (SELECT *,
+                     -- whole coupon: pik_rate is a printed percent above m that is not itself a PIK figure.
+                     -- Not when a fixed cash leg follows the PIK margin: that coupon is not all PIK.
+                     (bench_pik IS NOT NULL AND pik_leg_fixed IS NULL AND pik_rate > bench_pik
                         AND coalesce(list_bool_or(list_transform(page_pcts,
                                 c -> c > bench_pik AND abs(pik_rate - c) <= 0.011
-                                     AND NOT coalesce(list_bool_or(list_transform(page_figs, p -> abs(c - p) <= 0.011)), false))), false)
+                                     AND NOT coalesce(list_bool_or(list_transform(page_figs, p -> abs(c - p) <= 0.011)), false))), false))
+                     -- floating PIK leg: pik_rate is a printed rate R above a + f, less the fixed cash leg f
+                     OR (bench_pik IS NOT NULL AND pik_leg_fixed IS NOT NULL
+                        AND coalesce(list_bool_or(list_transform(page_pcts,
+                                c -> c > bench_pik + pik_leg_fixed AND abs(pik_rate - (c - pik_leg_fixed)) <= 0.011)), false))
                         AS whole_coupon_pik
               FROM g0),
         k AS (

@@ -331,6 +331,58 @@ def test_pik_whole_coupon_d232_false_positives():
         "floor": "pik_value_mismatch"}
 
 
+def test_pik_whole_coupon_basis_points_and_benchmark_cell_pass():
+    # REQ-rfcr-1 / REQ-rfbn-1 (owner 2026-11-04): rows as the page reader joins them in the accepted sandboxes
+    out = _run(cr.pik_printed_not_published, [
+        # Crescent Mario Purchaser last-out 2023-03-31 (rfcrf)
+        {"row_id": "mario", "pik_rate": 15.66, "printed_row": "Mario Purchaser, LLC (10) | Unitranche First Lien - Last Out "
+                                                              "Term Loan | S + 1075 PIK | 15.66% | 04/2032 | 3,207 | 3,103 | 0.4 | 3,107"},
+        # Crescent AX VI second lien, euro benchmark
+        {"row_id": "axvi", "pik_rate": 13.23, "printed_row": "AX VI INV2 Holding AB (Voff) (6)(11) | Senior Secured Second Lien "
+                                                             "Term Loan | E + 1000 PIK | 13.23% | 08/2030 | 1,931 | 1,902"},
+        # Crescent Integro, floor after PIK
+        {"row_id": "integro", "pik_rate": 16.83, "printed_row": "Integro Parent, Inc. (11) | Senior Secured First Lien Term Loan | "
+                                                                "S + 1225 PIK (100 Floor) | 16.83% | 706 | 706 | 0.1 | 706"},
+        # 0001899017 Masco: benchmark in its own cell, no '+'
+        {"row_id": "masco", "pik_rate": 13.25, "printed_row": "Masco (6)(15)(17)(21) | Subordinated Debt | EURIBOR | 10.00% PIK | "
+                                                              "13.25 | % | 10/4/2032 | 5,000 | 5,348 | 5,102"},
+        # 0001899017 Cube 2026-06-30: a dash cell between the benchmark and the margin
+        {"row_id": "cube", "pik_rate": 13.73, "printed_row": "First Lien Senior Secured Loan - Delayed Draw | SONIA | — | "
+                                                             "10.00% PIK | 13.73% | 5/22/2032 | 2,334 | 3,190 | 3,098"},
+        # Commonwealth VardimanBlack 2024-09-30 / 2024-12-31 (D-218): pik_rate = R - 5.00
+        {"row_id": "vard", "pik_rate": 7.3, "printed_row": "VardimanBlack Holdings, LLC - Term Loan | Health Care Equipment & "
+                                                           "Services | SOFR + 2.00% PIK + 5.00% | 12.30% | 3/18/2027 | 19,825"},
+        {"row_id": "vard_fixed", "pik_rate": 6.65, "printed_row": "VardimanBlack Holdings, LLC | Health Care Equipment & Services | "
+                                                                 "SOFR + 2.00% PIK + 5.00% Fixed | 11.65% | 3/18/2027 | 20,173"},
+    ])
+    assert out.empty, out[["row_id", "kind", "printed"]]
+
+
+def test_pik_whole_coupon_basis_points_false_positives():
+    out = _run(cr.pik_printed_not_published, [
+        # Continental Battery 2025-09-30: no benchmark on the row; stays for its own ruling
+        {"row_id": "cont", "pik_rate": 11.29, "printed_row": " Battery Company | (5) (11) (12) (13) | First Lien Debt | 7.00% PIK | "
+                                                            "11.29% | 07/20/2028 | 6,473 | 6,415 | 1,992 | 0.18"},
+        # a bps margin with a pik_rate that is no printed figure
+        {"row_id": "bps_other", "pik_rate": 14.0, "printed_row": "Mario Purchaser, LLC | Last Out Term Loan | S + 1075 PIK | 15.66% | 04/2032"},
+        # a partial PIK printed in basis points: the PIK part is inside the bracket, not after the benchmark
+        {"row_id": "bps_partial", "pik_rate": 11.36, "printed_row": "Lighthouse | Term Loan | S + 650 (100 Floor) (Including 75 PIK) | 11.36% | 1,000"},
+        # MidCap HomeRenew: pik_rate holds the floor
+        {"row_id": "floor", "pik_rate": 2.5, "printed_row": "HomeRenew Buyer, Inc. | First Lien Secured Debt - Term Loan | "
+                                                            "SOFR+650 PIK, 2.50% Floor | 04/14/30 | 3,192"},
+        # benchmark cell with a cash margin and a separate PIK cell is not a whole coupon
+        {"row_id": "cell_partial", "pik_rate": 9.5, "printed_row": "Acme | SOFR | 5.00% | 2.00% PIK | 9.50% | 1,000"},
+        # VardimanBlack with the whole printed rate as pik_rate: the 5.00 fixed leg is cash (D-218)
+        {"row_id": "vard_whole", "pik_rate": 12.3, "printed_row": "VardimanBlack Holdings, LLC - Term Loan | Health Care Equipment & "
+                                                                 "Services | SOFR + 2.00% PIK + 5.00% | 12.30% | 3/18/2027 | 19,825"},
+        # VardimanBlack with a pik_rate that is R less the wrong leg
+        {"row_id": "vard_other", "pik_rate": 10.3, "printed_row": "VardimanBlack Holdings, LLC - Term Loan | Health Care Equipment & "
+                                                                 "Services | SOFR + 2.00% PIK + 5.00% | 12.30% | 3/18/2027 | 19,825"},
+    ])
+    assert dict(zip(out["row_id"], out["kind"])) == {k: "pik_value_mismatch" for k in (
+        "cont", "bps_other", "bps_partial", "floor", "cell_partial", "vard_whole", "vard_other")}
+
+
 def test_pik_figure_with_no_leading_zero_reads_as_a_fraction():
     # Varagon (CIK 1784700) prints a PIK figure as '( .50 % PIK)', which the rule read as 50.
     # '.50', '0.50' and '5.0' must each read as printed.
