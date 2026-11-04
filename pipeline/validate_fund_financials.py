@@ -380,9 +380,61 @@ def validate_fund_source(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=RESULT_COLUMNS)
 
 
+def _gav_rescue_source(fund_df: pd.DataFrame) -> pd.DataFrame:
+    """Raw BDC source rows for the fund-quarters whose filed investments line is under 10 pct or
+    over 5x of total assets, the only quarters where the canonical GAV reconciliation reads the
+    source numerator to choose its comparison (validate_holdings.check_gav_reconciliation:
+    a suspect investments figure stands unless same-scope raw source FV corroborates it).
+
+    F20 rebuilt that reconciliation without any source rows, so such a quarter fell back to
+    total assets and failed although the canonical row passed (owner ruling 2026-11-04,
+    f20-canonical-gav-reads-total-assets-where-investments-line-printed; Bain Capital Private
+    Credit 2023-09-30: investments 1,215,000 printed, total assets 31,021,803, mostly escrowed
+    cash before operations). Read with DuckDB, eight columns, these CIK-quarters only."""
+    from pipeline.config import BDC_HOLDINGS_FILE, BDC_HOLDINGS_PARQUET_FILE
+    columns = ["cik", "report_date", "period", "fair_value", "investment_identifier",
+               "accession_number", "form_type", "filing_date"]
+    empty = pd.DataFrame(columns=columns)
+    if fund_df is None or fund_df.empty or not {"investments_at_fair_value", "total_assets"} <= set(fund_df.columns):
+        return empty
+    inv = pd.to_numeric(fund_df["investments_at_fair_value"], errors="coerce")
+    assets = pd.to_numeric(fund_df["total_assets"], errors="coerce")
+    suspect = (inv > 0) & (assets > 0) & ((inv / assets < 0.1) | (inv / assets > 5))
+    if not suspect.any():
+        return empty
+    pairs = pd.DataFrame({
+        "cik": fund_df.loc[suspect, "cik"].astype(str).str.replace(r"\D", "", regex=True).str.zfill(10),
+        "report_date": fund_df.loc[suspect, "report_date"].astype(str).str.slice(0, 10),
+    }).drop_duplicates()
+    if BDC_HOLDINGS_PARQUET_FILE.exists():
+        source = f"read_parquet('{BDC_HOLDINGS_PARQUET_FILE.as_posix()}')"
+    elif BDC_HOLDINGS_FILE.exists():
+        source = f"read_csv('{BDC_HOLDINGS_FILE.as_posix()}', all_varchar=true, sample_size=-1)"
+    else:
+        return empty
+    select = ", ".join(
+        f"substr(CAST(b.{c} AS VARCHAR), 1, 10) AS {c}" if c in ("report_date", "period", "filing_date")
+        else (f"lpad(regexp_replace(CAST(b.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') AS cik" if c == "cik"
+              else f"CAST(b.{c} AS VARCHAR) AS {c}")
+        for c in columns)
+    try:
+        with duckdb.connect() as con:
+            con.register("pairs", pairs)
+            return con.execute(f"""
+                SELECT {select} FROM {source} b
+                JOIN pairs p
+                  ON lpad(regexp_replace(CAST(b.cik AS VARCHAR), '[^0-9]', '', 'g'), 10, '0') = p.cik
+                 AND substr(CAST(b.report_date AS VARCHAR), 1, 10) = p.report_date
+            """).fetchdf()
+    except Exception as exc:  # a missing column in an old file: F20 reads as before
+        logger.warning("F20 GAV source rows unavailable: %s", exc)
+        return empty
+
+
 def validate_cross_level(
     fund_df: pd.DataFrame,
     holdings_df: Optional[pd.DataFrame] = None,
+    bdc_source_df: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
     """Validate fund-level values against unified holdings aggregates.
 
@@ -505,7 +557,8 @@ def validate_cross_level(
             unified_df=gav_holdings,
             fund_financials_df=fund_df,
             nport_fund_info_df=pd.DataFrame(),
-            bdc_source_df=pd.DataFrame(),
+            # Raw source rows (see _gav_rescue_source): None or empty reads as before.
+            bdc_source_df=bdc_source_df if bdc_source_df is not None else pd.DataFrame(),
         )
     except Exception as exc:
         logger.warning("F20 canonical GAV reconciliation unavailable: %s", exc)
@@ -717,6 +770,9 @@ def validate_fund_financials(
 ) -> dict[str, pd.DataFrame]:
     """Run fund-level validation and optionally write output artifacts."""
     del universe_df  # Reserved for F39/F40 implementation.
+    # The build's own run (fund financials read from the file) also reads the raw source rows
+    # F20's canonical GAV row needs; a caller passing its own frames gets the previous reading.
+    load_gav_source = fund_df is None
     if fund_df is None:
         if not FUND_FINANCIALS_FILE.exists():
             logger.error("Fund financials file not found: %s", FUND_FINANCIALS_FILE)
@@ -728,7 +784,9 @@ def validate_fund_financials(
         fund_df = pd.read_csv(FUND_FINANCIALS_FILE, dtype=str)
 
     source_results = validate_fund_source(fund_df)
-    cross_results = validate_cross_level(fund_df, holdings_df=holdings_df)
+    cross_results = validate_cross_level(
+        fund_df, holdings_df=holdings_df,
+        bdc_source_df=_gav_rescue_source(fund_df) if load_gav_source else None)
     all_results = pd.concat(
         [df for df in [source_results, cross_results] if not df.empty],
         ignore_index=True,
