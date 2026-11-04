@@ -90,9 +90,10 @@ def test_addends_are_empty_for_a_filer_without_the_key(tmp_path):
 
 
 def _engine_case(monkeypatch, tmp_path, *, cash_row, filed_cash, extra, value_column="fair_value",
-                 cost_split=False, loans=862914087.0):
+                 cost_split=False, loans=862914087.0, fv_declared=True, inside=False):
     import scripts.shadow_conservation_engine as sce
-    monkeypatch.setattr(sce, "cash_outside_total_ciks", lambda: ["0000000001"])
+    monkeypatch.setattr(sce, "cash_outside_total_ciks", lambda: ["0000000001"] if fv_declared else [])
+    monkeypatch.setattr(sce, "cash_inside_total_ciks", lambda: ["0000000001"] if inside else [])
     monkeypatch.setattr(sce, "filed_cash_addend_rows",
                         lambda: [("0000000001", "2023-09-30", extra)] if extra else [])
     monkeypatch.setattr(sce, "cost_split_ciks", lambda: ["0000000001"] if cost_split else [])
@@ -157,9 +158,47 @@ def test_cost_rule_splits_cash_for_a_declared_filer(monkeypatch, tmp_path):
     assert (used, status, cash_status, compared) == ("ff_investments_at_cost", "reconciles", "", 869289348.0)
 
 
-def test_cost_rule_unchanged_without_the_key(monkeypatch, tmp_path):
+def test_cost_rule_without_the_key_detects_the_basis_of_an_ex_cash_investments_filer(monkeypatch, tmp_path):
+    # Owner ruling 2026-11-04 (cost-conservation-cash-rows-against-ex-cash-cost-total): the
+    # wrapper says the investments line leaves the cash rows out; with them cost is 10.6 pct
+    # over, without them it ties: the cash rows' cost is taken out. (Before: overshoot.)
     assert _engine_case(monkeypatch, tmp_path, cash_row=92114292.0, filed_cash=49900000, extra=None,
-                        value_column="cost", cost_split=False, loans=869289348.0)[1] == "overshoot"
+                        value_column="cost", cost_split=False, loans=869289348.0)[1:] == (
+        "reconciles", "", 869289348.0)
+
+
+def test_cost_rule_without_any_evidence_is_unchanged(monkeypatch, tmp_path):
+    # No wrapper declaration and the cash rows (92.1M) do not equal the filed cash (49.9M).
+    assert _engine_case(monkeypatch, tmp_path, cash_row=92114292.0, filed_cash=49900000, extra=None,
+                        value_column="cost", cost_split=False, loans=869289348.0,
+                        fv_declared=False)[1] == "overshoot"
+
+
+def test_cost_rule_detects_an_undeclared_filer_whose_cash_rows_equal_filed_cash(monkeypatch, tmp_path):
+    # Silver Capital 2025-09-30 shape: the money fund (fair value = filed cash equivalents).
+    assert _engine_case(monkeypatch, tmp_path, cash_row=92114292.0, filed_cash=92114292, extra=None,
+                        value_column="cost", cost_split=False, loans=869289348.0,
+                        fv_declared=False)[1:] == ("reconciles", "", 869289348.0)
+
+
+def test_cost_rule_detection_never_for_a_filer_whose_line_holds_cash(monkeypatch, tmp_path):
+    assert _engine_case(monkeypatch, tmp_path, cash_row=92114292.0, filed_cash=92114292, extra=None,
+                        value_column="cost", cost_split=False, loans=869289348.0,
+                        fv_declared=False, inside=True)[1] == "overshoot"
+
+
+def test_cost_rule_detection_still_fails_non_cash_cost_that_is_off(monkeypatch, tmp_path):
+    # False-positive guard: non-cash cost 19 pct short; neither basis ties, nothing is taken out.
+    assert _engine_case(monkeypatch, tmp_path, cash_row=92114292.0, filed_cash=92114292, extra=None,
+                        value_column="cost", cost_split=False, loans=700000000.0)[1:] == (
+        "undershoot", "", 700000000.0 + 92114292.0)
+
+
+def test_cost_rule_keeps_small_cash_rows_where_the_total_with_them_ties(monkeypatch, tmp_path):
+    # Cash row 1M inside the 5 pct band: the with-cash total ties, so it is not split.
+    assert _engine_case(monkeypatch, tmp_path, cash_row=1000000.0, filed_cash=1000000, extra=None,
+                        value_column="cost", cost_split=False, loans=869289348.0)[1:] == (
+        "reconciles", "", 869289348.0 + 1000000.0)
 
 
 def test_cost_rule_split_still_fails_non_cash_cost_that_is_off(monkeypatch, tmp_path):
