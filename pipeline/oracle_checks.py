@@ -417,6 +417,16 @@ def check_B01_leaf_completeness(
     df = source_detail_df.copy()
     leaf_mask = _col_str(df, "source_wrapper_disposition").str.endswith("_position_leaf")
     leaves = df[leaf_mask]
+    # Positions of the quarter only (owner ruling 2026-11-04, reason
+    # b01-leaves-without-value-are-the-comparative-schedule): a filing also prints the prior
+    # year-end schedule, whose undrawn and nil lines carry no value and are not this quarter's
+    # positions; and a context whose only fact is the acquisition date (a duration context beside
+    # the valued instant one) is not a position. A leaf with no period is kept.
+    if "period" in leaves.columns:
+        period = _col_str(leaves, "period").str.strip().str[:10]
+        leaves = leaves[period.eq("") | period.eq(_col_str(leaves, "report_date").str[:10])]
+    if "concept_names" in leaves.columns:
+        leaves = leaves[_col_str(leaves, "concept_names").str.strip().ne("InvestmentAcquisitionDate")]
 
     if leaves.empty:
         return [_make_result("B01", "global", "skip", 0, 0, "No leaf rows found")]

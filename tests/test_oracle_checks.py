@@ -417,7 +417,7 @@ class TestB01LeafCompleteness:
         assert results[0].status == "skip"
 
     def test_a_date_only_twin_of_a_valued_context_is_not_a_leaf_without_value(self):
-        twin = {"accession_number": "a1", "period": "2026-03-31"}
+        twin = {"accession_number": "a1", "period": "2026-03-31", "report_date": "2026-03-31"}
         detail = _source_detail([
             {**twin, "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": "5000000"},
             {**twin, "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": ""},
@@ -429,16 +429,47 @@ class TestB01LeafCompleteness:
         assert "2/2 leaves" in results[0].message
 
     def test_a_context_without_value_and_without_a_valued_twin_still_counts(self):
-        twin = {"accession_number": "a1", "period": "2026-03-31"}
+        twin = {"accession_number": "a1", "period": "2026-03-31", "report_date": "2026-03-31"}
         detail = _source_detail([
             {**twin, "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": "5000000"},
             {**twin, "raw_investment_identifier": "Hippo first-lien loan", "source_fair_value": ""},
-            # the same member in another period is not a twin
-            {"accession_number": "a1", "period": "2025-12-31", "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": ""},
+            # the same member in another period is not a twin (and, being the comparative
+            # schedule, is not counted at all)
+            {"accession_number": "a1", "period": "2025-12-31", "report_date": "2026-03-31",
+             "raw_investment_identifier": "Acme first-lien loan", "source_fair_value": ""},
         ])
         results = check_B01_leaf_completeness(detail)
         assert [r.status for r in results] == ["fail"]
-        assert "1/3 leaves" in results[0].message
+        assert "1/2 leaves" in results[0].message
+
+    def test_comparative_schedule_and_acquisition_date_only_contexts_are_not_counted(self):
+        """Owner ruling 2026-11-04 (b01-leaves-without-value-are-the-comparative-schedule):
+        Silver Capital 2023-09-30 counted 19 prior year-end contexts (undrawn and nil lines of the
+        2022-12-31 schedule); Sixth Street counted contexts carrying only an acquisition date."""
+        cur = {"accession_number": "a1", "period": "2023-09-30", "report_date": "2023-09-30"}
+        comp = {**cur, "period": "2022-12-31"}
+        rows = [{**cur, "raw_investment_identifier": f"Loan {i}", "source_fair_value": "1000000"} for i in range(20)]
+        rows += [{**comp, "raw_investment_identifier": f"Old revolver {i}", "source_fair_value": ""} for i in range(19)]
+        rows += [{**cur, "raw_investment_identifier": f"Acquired {i}", "source_fair_value": "",
+                  "concept_names": "InvestmentAcquisitionDate"} for i in range(5)]
+        results = check_B01_leaf_completeness(_source_detail(rows))
+        assert [r.status for r in results] == ["pass"]
+        assert "20/20 leaves" in results[0].message
+
+    def test_current_leaves_without_value_fail_even_beside_a_valued_comparative_schedule(self):
+        """False-positive guard (and the old dilution): 2 of 20 current lines without a value fail,
+        however many valued comparative rows the filing also prints; a current context with an
+        acquisition date and a rate is still a leaf."""
+        cur = {"accession_number": "a1", "period": "2023-09-30", "report_date": "2023-09-30"}
+        rows = [{**cur, "raw_investment_identifier": f"Loan {i}", "source_fair_value": "1000000"} for i in range(18)]
+        rows += [{**cur, "raw_investment_identifier": "Unvalued A", "source_fair_value": "",
+                  "concept_names": "InvestmentAcquisitionDate|InvestmentInterestRate"},
+                 {**cur, "raw_investment_identifier": "Unvalued B", "source_fair_value": ""}]
+        rows += [{**cur, "period": "2022-12-31", "raw_investment_identifier": f"Old {i}", "source_fair_value": "5"}
+                 for i in range(40)]
+        results = check_B01_leaf_completeness(_source_detail(rows))
+        assert [r.status for r in results] == ["fail"]
+        assert "18/20 leaves" in results[0].message
 
 
 class TestB02UniquePositionKeys:
