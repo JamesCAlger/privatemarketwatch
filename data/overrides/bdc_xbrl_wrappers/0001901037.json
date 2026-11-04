@@ -7,6 +7,9 @@
   "dispatch": {
     "rule_prefix": "STELLUS_PRIVATE_CREDIT",
     "prefix_rules": {},
+    "issuer_name_strip_re": "(?:(?:(?<=\\bLLC)|(?<=\\bL L C)|(?<=\\bLLC\\.)|(?<=\\bInc)|(?<=\\bInc\\.)|(?<=\\bCorp)|(?<=\\bCorp\\.)|(?<=\\bCorporation)|(?<=\\bLimited)|(?<=\\bL\\.P\\.)|(?<=\\bLP))(?![a-z])(?:\\s*[,\\-]\\s*|\\s+|(?=[A-Z]))[A-Za-z0-9].*\\b(?:LLC|L L C|Inc\\.?|Corp\\.?|Corporation|L\\.?P\\.?|Ltd\\.?|Limited)$|\\s*T\\s?erm Loan(?: \\(PBDC SPV\\))?$)",
+    "issuer_name_strip_to_instrument": true,
+    "instrument_description_strip_re": "(?i)(?:,?\\s+Equity)?(?:,?\\s+(?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|\\d{1,2})|(?<=Loan)\\d{1,2})$|,?\\s+Equity$",
     "leaf_markers_by_family": {
       "debt": [
         "type of investment",
@@ -268,6 +271,104 @@
     "unclassified_rate": {
       "max_pct": 0.05
     }
+  },
+  "source_encodings": {
+    "filed_rate_reading": [
+      "all_in"
+    ],
+    "reference_rate_columns": [
+      "Coupon"
+    ],
+    "untagged_pik": [
+      "none"
+    ],
+    "foreign_unit_values": [
+      "reported_in_usd"
+    ],
+    "principal_usd_reference": [
+      "fred_h10"
+    ],
+    "par_tagged_as_units": [
+      "rows_near_cost"
+    ],
+    "units_tagged_as_par": [
+      "0001558370-22-016375",
+      "0001558370-23-002790",
+      "0001558370-23-009440",
+      "0001558370-23-014613",
+      "0001558370-23-018509",
+      "0001558370-24-002907",
+      "0001558370-24-007800",
+      "0001558370-24-011725",
+      "0001558370-24-015088",
+      "0001558370-25-002420",
+      "0001558370-25-007719",
+      "0001558370-25-010898",
+      "0001104659-25-112365",
+      "0001104659-26-027592",
+      "0001104659-26-059217",
+      "0001104659-26-094771"
+    ],
+    "untagged_values": [
+      "0001558370-23-014613 As_Of_6_30_2023_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_CerebroBuyerLLCCerebroHoldingsPartnershipL.p.SeriesBPartnerInterests_7zcS4B6XC0qunGzLXUiMWw fair_value 0",
+      "0001558370-24-011725 As_Of_6_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_FiscalnoteBoardsLlcFcpConnectHoldingsLlcClassCommonShares_RmP4EtHR4024tazu9_rAVw fair_value 0",
+      "0001558370-24-011725 As_Of_6_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_FiscalnoteBoardsLlcFcpConnectHoldingsLlcClassCommonShares_RmP4EtHR4024tazu9_rAVw cost 0",
+      "0001558370-24-011725 As_Of_6_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_ImpactHomeServicesLlcImpactHoldingsGeorgiaLlcClassUnits_M1nUjlKdW0KdcvZYQeM0MA fair_value 0",
+      "0001558370-24-011725 As_Of_6_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_SaidIntermediateLlcFcpSaidHoldingsLlcSeriesPreferredShares_zE4KFBLy40-ZkKrpU_16yA fair_value 0",
+      "0001558370-24-011725 As_Of_6_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_SaidIntermediateLlcFcpSaidHoldingsLlcSeriesPreferredShares_zE4KFBLy40-ZkKrpU_16yA cost 0",
+      "0001558370-24-015088 As_Of_9_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_FiscalnoteBoardsLlcFcpConnectHoldingsLlcClassCommonShares_irLeDz0S-Umz4ut7ngLazw fair_value 0",
+      "0001558370-24-015088 As_Of_9_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_FiscalnoteBoardsLlcFcpConnectHoldingsLlcClassCommonShares_irLeDz0S-Umz4ut7ngLazw cost 0",
+      "0001558370-24-015088 As_Of_9_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_ImpactHomeServicesLlcImpactHoldingsGeorgiaLlcClassUnits_SDVK3EI3806tFi5wjxqPZA fair_value 0",
+      "0001558370-24-015088 As_Of_9_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_SaidIntermediateLlcFcpSaidHoldingsLlcSeriesPreferredShares_8kEdDqp1KkGxwXMxVibnAw fair_value 0",
+      "0001558370-24-015088 As_Of_9_30_2024_us-gaap_InvestmentIdentifierAxis_spcbdc_cnst_string_SaidIntermediateLlcFcpSaidHoldingsLlcSeriesPreferredShares_8kEdDqp1KkGxwXMxVibnAw cost 0",
+      "0001558370-25-002420 As_Of_12_31_2024_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCPConnectHoldingsLLCClassACommonShares_neMyB_JHa0CVsT_Mhaqefg fair_value 0",
+      "0001558370-25-002420 As_Of_12_31_2024_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCPConnectHoldingsLLCClassACommonShares_neMyB_JHa0CVsT_Mhaqefg cost 0",
+      "0001558370-25-002420 As_Of_12_31_2024_us-gaap_InvestmentIdentifierAxis_ImpactHomeServicesLLCImpactHoldingsGeorgiaLLCClassAUnits_SOQpV8ytik20rVvxC7yF_w fair_value 0",
+      "0001558370-25-002420 As_Of_12_31_2024_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_ANZFP9MHvE69CyeUIn3cnQ fair_value 0",
+      "0001558370-25-002420 As_Of_12_31_2024_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_ANZFP9MHvE69CyeUIn3cnQ cost 0",
+      "0001558370-25-007719 As_Of_3_31_2025_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_hqDlUX5PeUC_Ws9Dm6Mz3Q fair_value 0",
+      "0001558370-25-007719 As_Of_3_31_2025_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_hqDlUX5PeUC_Ws9Dm6Mz3Q cost 0",
+      "0001558370-25-007719 As_Of_3_31_2025_us-gaap_InvestmentIdentifierAxis_ImpactHomeServicesLLCImpactHoldingsGeorgiaLLCClassAUnits_RK8Kn1V4CU6DiVzbK806vg fair_value 0",
+      "0001558370-25-007719 As_Of_3_31_2025_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_AdFRCWO2MEy_2CXBZfH7bw fair_value 0",
+      "0001558370-25-007719 As_Of_3_31_2025_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_AdFRCWO2MEy_2CXBZfH7bw cost 0",
+      "0001558370-25-010898 As_Of_6_30_2025_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_JEWfsXggeU-cUN3MmBrsOA fair_value 0",
+      "0001558370-25-010898 As_Of_6_30_2025_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_JEWfsXggeU-cUN3MmBrsOA cost 0",
+      "0001558370-25-010898 As_Of_6_30_2025_us-gaap_InvestmentIdentifierAxis_ImpactHomeServicesLLCImpactHoldingsGeorgiaLLCClassAUnits__1HkCZgn-0mfFHyALaLQRg fair_value 0",
+      "0001558370-25-010898 As_Of_6_30_2025_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_DepTM94LKkmAWGgxz-Raig fair_value 0",
+      "0001558370-25-010898 As_Of_6_30_2025_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_DepTM94LKkmAWGgxz-Raig cost 0",
+      "0001104659-25-112365 As_Of_9_30_2025_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_flruRf1-F0GIrvLMj7Jurw fair_value 0",
+      "0001104659-25-112365 As_Of_9_30_2025_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_flruRf1-F0GIrvLMj7Jurw cost 0",
+      "0001104659-25-112365 As_Of_9_30_2025_us-gaap_InvestmentIdentifierAxis_ImpactHomeServicesLLCImpactHoldingsGeorgiaLLCClassAUnits_Rzd1Pinq2E6kbSelpjairA fair_value 0",
+      "0001104659-25-112365 As_Of_9_30_2025_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_yp_d8Yp74UO3a8DIHad1Uw fair_value 0",
+      "0001104659-25-112365 As_Of_9_30_2025_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_yp_d8Yp74UO3a8DIHad1Uw cost 0",
+      "0001104659-26-027592 As_Of_12_31_2025_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_jsYUy24JVkOmKzLHGOs8CQ fair_value 0",
+      "0001104659-26-027592 As_Of_12_31_2025_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_jsYUy24JVkOmKzLHGOs8CQ cost 0",
+      "0001104659-26-027592 As_Of_12_31_2025_us-gaap_InvestmentIdentifierAxis_ImpactHomeServicesLLCImpactHoldingsGeorgiaLLCClassAUnits_W6oEoT3SEEGvJZTxVbOXiA fair_value 0",
+      "0001104659-26-027592 As_Of_12_31_2025_us-gaap_InvestmentIdentifierAxis_RechargedOpcoLLCRechargedHoldingsLLCCommonUnits_AJc1OsukPUmLzfooqDragg fair_value 0",
+      "0001104659-26-027592 As_Of_12_31_2025_us-gaap_InvestmentIdentifierAxis_RechargedOpcoLLCRechargedHoldingsLLCCommonUnits_AJc1OsukPUmLzfooqDragg cost 0",
+      "0001104659-26-027592 As_Of_12_31_2025_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_5ZWTyPnOb0Ge1p4oxbCejw fair_value 0",
+      "0001104659-26-027592 As_Of_12_31_2025_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_5ZWTyPnOb0Ge1p4oxbCejw cost 0",
+      "0001104659-26-059217 As_Of_3_31_2026_us-gaap_InvestmentIdentifierAxis_BartampAssociatesLLCBampAPartnersHoldingLLCSeriesBPreferredUnits_WNp4UYQqH0a1BT2zKdrAkA fair_value 0",
+      "0001104659-26-059217 As_Of_3_31_2026_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCPConnectHoldingsLLCClassACommonShares_i-FqKcacwUWSHJ6AWKE25A fair_value 0",
+      "0001104659-26-059217 As_Of_3_31_2026_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCPConnectHoldingsLLCClassACommonShares_i-FqKcacwUWSHJ6AWKE25A cost 0",
+      "0001104659-26-059217 As_Of_3_31_2026_us-gaap_InvestmentIdentifierAxis_ImpactHomeServicesLLCImpactHoldingsGeorgiaLLCClassAUnits_qPXZaHHhvkKu2LehKAmxLQ fair_value 0",
+      "0001104659-26-059217 As_Of_3_31_2026_us-gaap_InvestmentIdentifierAxis_RechargedOpcoLLCRechargedHoldingsLLCCommonUnits_71CFG219HkK8RlGWcXX4OQ fair_value 0",
+      "0001104659-26-059217 As_Of_3_31_2026_us-gaap_InvestmentIdentifierAxis_RechargedOpcoLLCRechargedHoldingsLLCCommonUnits_71CFG219HkK8RlGWcXX4OQ cost 0",
+      "0001104659-26-059217 As_Of_3_31_2026_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_GqnlQFIF40WsqTCcauJixQ fair_value 0",
+      "0001104659-26-059217 As_Of_3_31_2026_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_GqnlQFIF40WsqTCcauJixQ cost 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_ExigoLLCGaugeExigoCoinvestLLCCommonUnits_GXlAUxaqPkeRJMR1AgfJDg fair_value 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_9KqCCALeUU2NWbleQxSOfQ fair_value 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_FiscalNoteBoardsLLCFCP-ConnectHoldingsLLCClassACommonShares_9KqCCALeUU2NWbleQxSOfQ cost 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_ImpactHomeServicesLLCImpactHoldingsGeorgiaLLCClassAUnits_95fjBF8to06vCM_S4KmG5g fair_value 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_RechargedOpcoLLCRechargedHoldingsLLCCommonUnits_MRSdsWhMHUO-w_MT9Y6xSQ fair_value 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_RechargedOpcoLLCRechargedHoldingsLLCCommonUnits_MRSdsWhMHUO-w_MT9Y6xSQ cost 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_oyslZxua2ESdC5ZaOTs2lA fair_value 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_SaidIntermediateLLCFCP-SaidHoldingsLLCClassACommonShares_oyslZxua2ESdC5ZaOTs2lA cost 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_WattersonRenewalcoHoldingsLLCWattersonRenewalcoHoldingsLLCCommonUnits__zIaJSfpCEOK2tTgVJH0-Q fair_value 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_WattersonRenewalcoHoldingsLLCWattersonRenewalcoHoldingsLLCCommonUnits__zIaJSfpCEOK2tTgVJH0-Q cost 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_WattersonRenewalcoHoldingsLLCWattersonRenewalcoHoldingsLLCCommonUnitsPBDCSPV_khRvrQSBJEGfLBhCzKwYww fair_value 0",
+      "0001104659-26-094771 As_Of_6_30_2026_us-gaap_InvestmentIdentifierAxis_WattersonRenewalcoHoldingsLLCWattersonRenewalcoHoldingsLLCCommonUnitsPBDCSPV_khRvrQSBJEGfLBhCzKwYww cost 0"
+    ]
   },
   "known_edge_cases": [
     {

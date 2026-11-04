@@ -1,0 +1,367 @@
+{
+ "status": "PROPOSED, not accepted. The findings ledger does not read this directory.",
+ "sandbox": "stpe",
+ "dispositions": [
+  {
+   "disposition_id": "PD-PCT-1901037-1",
+   "class": "informational",
+   "engine": "identity",
+   "rule_name": "pct_of_net_assets_identity",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2025-09-30",
+    "2026-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "pct-tag-scale-zero-printed-percent-read-as-ratio",
+   "statement": "Not a disposition of a correct value: the published percent of net assets is wrong on 10 rows (2024-09-30 two, 2025-03-31 one, 2025-06-30 two, 2025-09-30 one, 2026-03-31 one, 2026-06-30 three). The filer tagged the printed percent ('0.20 %') with scale 0 instead of -2, so the fact is 0.20 and the shared rule reads it as a ratio and publishes 20.0. Taken at fair value over net assets every quarter's percent sum equals the printed total and no row exceeds 4.43 pct. No wrapper key or correctable field can set pct_of_net_assets for one context (row corrections do not accept the field); orchestrator request SPC-R1 asks for one. Proposed as informational until SPC-R1 is decided; the owner may instead hold these findings open.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001558370-24-015088",
+     "verbatim": "Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %",
+     "quote": "'Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %': printed 0.20 %; the context's InvestmentOwnedPercentOfNetAssets is tagged 0.20 with scale 0 (other rows: scale -2), so the build publishes 20.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001558370-25-007719",
+     "verbatim": "Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %",
+     "quote": "'Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %': printed 0.27 %; published 27.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %",
+     "quote": "'Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %': printed 0.47 %; published 47.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Total Investments $ 410,125,150 $ 419,527,201 200.59 %",
+     "quote": "'Total Investments $ 410,125,150 $ 419,527,201 200.59 %': printed total 200.59 % of net assets; published row percents sum to 291.66 with the three mis-scaled rows, 200.57 with them at fair value over net assets"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "PROPOSED by stellus-private-credit-fund-agent-2026-10-20 (fund-clearing loop, sandbox stpe); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-F23-1901037-1",
+   "class": "informational",
+   "engine": "fund_financials",
+   "rule_name": "F23",
+   "quarters": [
+    "2024-09-30",
+    "2025-03-31",
+    "2025-06-30",
+    "2026-06-30"
+   ],
+   "reason_key": "pct-tag-scale-zero-printed-percent-read-as-ratio",
+   "statement": "F23 compares the published percent sum with fair value over net assets. The difference in these quarters is the mis-scaled rows of PD-PCT-1901037-1 (sums 223.02 / 228.97 / 227.74 / 291.66 against 180.45 / 202.24 / 200.02 / 200.59; with those rows at fair value over net assets the sums equal the computed figure). Not a disposition of a correct value: the published percent of net assets is wrong on 10 rows (2024-09-30 two, 2025-03-31 one, 2025-06-30 two, 2025-09-30 one, 2026-03-31 one, 2026-06-30 three). The filer tagged the printed percent ('0.20 %') with scale 0 instead of -2, so the fact is 0.20 and the shared rule reads it as a ratio and publishes 20.0. Taken at fair value over net assets every quarter's percent sum equals the printed total and no row exceeds 4.43 pct. No wrapper key or correctable field can set pct_of_net_assets for one context (row corrections do not accept the field); orchestrator request SPC-R1 asks for one. Proposed as informational until SPC-R1 is decided; the owner may instead hold these findings open.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001558370-24-015088",
+     "verbatim": "Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %",
+     "quote": "'Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %': printed 0.20 %; the context's InvestmentOwnedPercentOfNetAssets is tagged 0.20 with scale 0 (other rows: scale -2), so the build publishes 20.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001558370-25-007719",
+     "verbatim": "Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %",
+     "quote": "'Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %': printed 0.27 %; published 27.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %",
+     "quote": "'Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %': printed 0.47 %; published 47.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Total Investments $ 410,125,150 $ 419,527,201 200.59 %",
+     "quote": "'Total Investments $ 410,125,150 $ 419,527,201 200.59 %': printed total 200.59 % of net assets; published row percents sum to 291.66 with the three mis-scaled rows, 200.57 with them at fair value over net assets"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "PROPOSED by stellus-private-credit-fund-agent-2026-10-20 (fund-clearing loop, sandbox stpe); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-A07-1901037-1",
+   "class": "informational",
+   "engine": "oracle",
+   "rule_name": "A07",
+   "quarters": [
+    "2025-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "pct-tag-scale-zero-printed-percent-read-as-ratio",
+   "statement": "A07 fails on the mis-scaled rows of PD-PCT-1901037-1: 2025-03-31 Amika OpCo Term Loan (PBDC SPV) published 27.0 (printed 0.27 %); 2026-06-30 percent sum 291.66 above the band (printed total 200.59 %). Not a disposition of a correct value: the published percent of net assets is wrong on 10 rows (2024-09-30 two, 2025-03-31 one, 2025-06-30 two, 2025-09-30 one, 2026-03-31 one, 2026-06-30 three). The filer tagged the printed percent ('0.20 %') with scale 0 instead of -2, so the fact is 0.20 and the shared rule reads it as a ratio and publishes 20.0. Taken at fair value over net assets every quarter's percent sum equals the printed total and no row exceeds 4.43 pct. No wrapper key or correctable field can set pct_of_net_assets for one context (row corrections do not accept the field); orchestrator request SPC-R1 asks for one. Proposed as informational until SPC-R1 is decided; the owner may instead hold these findings open.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001558370-24-015088",
+     "verbatim": "Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %",
+     "quote": "'Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %': printed 0.20 %; the context's InvestmentOwnedPercentOfNetAssets is tagged 0.20 with scale 0 (other rows: scale -2), so the build publishes 20.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001558370-25-007719",
+     "verbatim": "Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %",
+     "quote": "'Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %': printed 0.27 %; published 27.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %",
+     "quote": "'Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %': printed 0.47 %; published 47.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Total Investments $ 410,125,150 $ 419,527,201 200.59 %",
+     "quote": "'Total Investments $ 410,125,150 $ 419,527,201 200.59 %': printed total 200.59 % of net assets; published row percents sum to 291.66 with the three mis-scaled rows, 200.57 with them at fair value over net assets"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "PROPOSED by stellus-private-credit-fund-agent-2026-10-20 (fund-clearing loop, sandbox stpe); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-CONC-1901037-1",
+   "class": "informational",
+   "engine": "weak",
+   "rule_name": "pct_position_concentration",
+   "quarters": [
+    "2025-03-31",
+    "2026-06-30"
+   ],
+   "reason_key": "pct-tag-scale-zero-printed-percent-read-as-ratio",
+   "statement": "The rows above a quarter of net assets are the mis-scaled rows of PD-PCT-1901037-1 (Amika 27.0 at 2025-03-31; Watterson Renewalco Term Loan (PBDC SPV) 47.0 and Recharged Opco Priority Revolver 28.0 at 2026-06-30); the largest row at fair value over net assets is 4.22 and 3.43 pct. Not a disposition of a correct value: the published percent of net assets is wrong on 10 rows (2024-09-30 two, 2025-03-31 one, 2025-06-30 two, 2025-09-30 one, 2026-03-31 one, 2026-06-30 three). The filer tagged the printed percent ('0.20 %') with scale 0 instead of -2, so the fact is 0.20 and the shared rule reads it as a ratio and publishes 20.0. Taken at fair value over net assets every quarter's percent sum equals the printed total and no row exceeds 4.43 pct. No wrapper key or correctable field can set pct_of_net_assets for one context (row corrections do not accept the field); orchestrator request SPC-R1 asks for one. Proposed as informational until SPC-R1 is decided; the owner may instead hold these findings open.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001558370-24-015088",
+     "verbatim": "Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %",
+     "quote": "'Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %': printed 0.20 %; the context's InvestmentOwnedPercentOfNetAssets is tagged 0.20 with scale 0 (other rows: scale -2), so the build publishes 20.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001558370-25-007719",
+     "verbatim": "Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %",
+     "quote": "'Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %': printed 0.27 %; published 27.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %",
+     "quote": "'Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %': printed 0.47 %; published 47.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Total Investments $ 410,125,150 $ 419,527,201 200.59 %",
+     "quote": "'Total Investments $ 410,125,150 $ 419,527,201 200.59 %': printed total 200.59 % of net assets; published row percents sum to 291.66 with the three mis-scaled rows, 200.57 with them at fair value over net assets"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "PROPOSED by stellus-private-credit-fund-agent-2026-10-20 (fund-clearing loop, sandbox stpe); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-PCT01-1901037-1",
+   "class": "informational",
+   "engine": "row_validation",
+   "rule_name": "PCT01",
+   "quarters": [
+    "2026-06-30"
+   ],
+   "reason_key": "pct-tag-scale-zero-printed-percent-read-as-ratio",
+   "statement": "PCT01 high_pct_sum at 2026-06-30: 291.66 against the printed 200.59 %; the excess is the three mis-scaled rows of PD-PCT-1901037-1 (47.0 + 28.0 + 17.0 for printed 0.47 + 0.28 + 0.17). Not a disposition of a correct value: the published percent of net assets is wrong on 10 rows (2024-09-30 two, 2025-03-31 one, 2025-06-30 two, 2025-09-30 one, 2026-03-31 one, 2026-06-30 three). The filer tagged the printed percent ('0.20 %') with scale 0 instead of -2, so the fact is 0.20 and the shared rule reads it as a ratio and publishes 20.0. Taken at fair value over net assets every quarter's percent sum equals the printed total and no row exceeds 4.43 pct. No wrapper key or correctable field can set pct_of_net_assets for one context (row corrections do not accept the field); orchestrator request SPC-R1 asks for one. Proposed as informational until SPC-R1 is decided; the owner may instead hold these findings open.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001558370-24-015088",
+     "verbatim": "Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %",
+     "quote": "'Revolver (5) First Lien 3M SOFR+ 6.50 % 2.00 % 11.10 % 6/5/2023 6/5/2028 284,855 284,855 283,431 0.20 %': printed 0.20 %; the context's InvestmentOwnedPercentOfNetAssets is tagged 0.20 with scale 0 (other rows: scale -2), so the build publishes 20.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001558370-25-007719",
+     "verbatim": "Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %",
+     "quote": "'Term Loan (PBDC SPV) (5) First Lien 6M SOFR+ 5.75 % 0.75 % 10.33 % 12/5/2023 7/1/2029 443,843 436,561 443,843 0.27 %': printed 0.27 %; published 27.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %",
+     "quote": "'Term Loan (PBDC SPV) First Lien 6.0 % 0.00 % 6.00 % 6/30/2026 7/2/2029 978,748 978,748 . 978,748 0.47 %': printed 0.47 %; published 47.0"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "Total Investments $ 410,125,150 $ 419,527,201 200.59 %",
+     "quote": "'Total Investments $ 410,125,150 $ 419,527,201 200.59 %': printed total 200.59 % of net assets; published row percents sum to 291.66 with the three mis-scaled rows, 200.57 with them at fair value over net assets"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "PROPOSED by stellus-private-credit-fund-agent-2026-10-20 (fund-clearing loop, sandbox stpe); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-PP02-1901037-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "PP02",
+   "quarters": [
+    "2025-09-30",
+    "2026-03-31"
+   ],
+   "reason_key": "pp02-twin-lines-printed-separately",
+   "statement": "The duplicate-identity candidates are separate printed lines of one borrower with the same par, cost and value, each on its own context: 2025-09-30 MacKenzie-Childs two revolvers of 307,294 (printed at 9.96 % and 9.57 %) and WER Holdings three revolvers of 55,856 (9.69 %, 9.66 %, 9.82 %); 2026-03-31 USDTL two revolvers of 269,194 (both 8.95 %, two contexts, two printed lines). The members number them ('Revolver One', 'Two'); the page prints 'Revolver' on each, and the build now publishes the printed instrument, so the rule sees one identity. Both lines stay as rows (D-219).",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001104659-25-112365",
+     "verbatim": "Revolver (5) 1st Lien 3M SOFR+ 5.50 % 1.00 % 9.96 % 9/2/2022 9/2/2027 307,294 307,294 307,294 0.16 %",
+     "quote": "'Revolver (5) 1st Lien 3M SOFR+ 5.50 % 1.00 % 9.96 % 9/2/2022 9/2/2027 307,294 307,294 307,294 0.16 %': first MacKenzie-Childs revolver of 307,294"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-25-112365",
+     "verbatim": "Revolver (5) 1st Lien 3M SOFR+ 5.50 % 1.00 % 9.57 % 9/2/2022 9/2/2027 307,294 307,294 307,294 0.16 %",
+     "quote": "'Revolver (5) 1st Lien 3M SOFR+ 5.50 % 1.00 % 9.57 % 9/2/2022 9/2/2027 307,294 307,294 307,294 0.16 %': second MacKenzie-Childs revolver of 307,294, printed at another rate"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-26-059217",
+     "verbatim": "Revolver (5) First Lien 3M SOFR+ 5.25 % 1.50 % 8.95 % 5/30/2025 12/9/2030 269,194 269,194 263,810 0.13 % Revolver (5) First Lien 3M SOFR+ 5.25 % 1.50 % 8.95 % 5/30/2025 12/9/2030 269,194 269,194 263,810 0.13 %",
+     "quote": "'Revolver (5) First Lien 3M SOFR+ 5.25 % 1.50 % 8.95 % 5/30/2025 12/9/2030 269,194 269,194 263,810 0.13 % Revolver (5) First Lien 3M SOFR+ 5.25 % 1.50 % 8.95 % 5/30/2025 12/9/2030 269,194 269,194 263,810 0.13 %': USDTL: two lines printed, each tagged on its own context"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "PROPOSED by stellus-private-credit-fund-agent-2026-10-20 (fund-clearing loop, sandbox stpe); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-CONV-1901037-1",
+   "class": "as_filed",
+   "engine": "provenance_reverify",
+   "rule_name": "financial_convention_unresolved",
+   "quarters": [
+    "2025-03-31",
+    "2025-09-30"
+   ],
+   "reason_key": "convention-printed-pik-above-printed-rate",
+   "statement": "One Sapphire Aggregator convertible bond per quarter (fair value 41,533 and 42,848) prints a coupon below its PIK rate: '7.80 %' (2025-03-31) and '7.760 %' (2025-09-30) in the coupon column with cash 0.00 % and PIK 8.00 %. The filer tags the coupon 0.078 / 0.0776 with the plain rate concept and PIK 0.08; under the fund's all-in reading a PIK above the coupon is unresolved, so no rate is published. The sibling bonds print 8.0 % / 8.00 %. Which printed figure is the accruing rate cannot be told from the page; no correction is made.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001558370-25-007719",
+     "verbatim": "Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.80 % 0.00 % 0.00 % 8.00 % 3/1/2024 6/30/2025 EUR 38,787 42,111 41,533 0.03 %",
+     "quote": "'Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.80 % 0.00 % 0.00 % 8.00 % 3/1/2024 6/30/2025 EUR 38,787 42,111 41,533 0.03 %': coupon 7.80 % printed below PIK 8.00 %"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-25-112365",
+     "verbatim": "Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.760 % 0.00 % 0.00 % 8.00 % 9/30/2024 12/21/2025 EUR 36,840 41,187 42,848 0.02 %",
+     "quote": "'Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.760 % 0.00 % 0.00 % 8.00 % 9/30/2024 12/21/2025 EUR 36,840 41,187 42,848 0.02 %': coupon 7.760 % printed below PIK 8.00 %"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "PROPOSED by stellus-private-credit-fund-agent-2026-10-20 (fund-clearing loop, sandbox stpe); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-X02-1901037-1",
+   "class": "as_filed",
+   "engine": "row_validation",
+   "rule_name": "X02",
+   "quarters": [
+    "2025-03-31",
+    "2025-09-30"
+   ],
+   "reason_key": "convention-printed-pik-above-printed-rate",
+   "statement": "X02 flags the same two Sapphire Aggregator convertible bonds as PD-CONV-1901037-1: no interest rate is published because the printed coupon (7.80 %, 7.760 %) is below the printed PIK rate (8.00 %) and the reading is unresolved; the PIK rate 8.0 is published. Fixed coupon, so no spread.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001558370-25-007719",
+     "verbatim": "Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.80 % 0.00 % 0.00 % 8.00 % 3/1/2024 6/30/2025 EUR 38,787 42,111 41,533 0.03 %",
+     "quote": "'Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.80 % 0.00 % 0.00 % 8.00 % 3/1/2024 6/30/2025 EUR 38,787 42,111 41,533 0.03 %': coupon 7.80 % printed below PIK 8.00 %"
+    },
+    {
+     "source": "filing",
+     "accession": "0001104659-25-112365",
+     "verbatim": "Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.760 % 0.00 % 0.00 % 8.00 % 9/30/2024 12/21/2025 EUR 36,840 41,187 42,848 0.02 %",
+     "quote": "'Sapphire Aggregator S.a r.l. Convertible Bonds (13) Unsecured 7.760 % 0.00 % 0.00 % 8.00 % 9/30/2024 12/21/2025 EUR 36,840 41,187 42,848 0.02 %': coupon 7.760 % printed below PIK 8.00 %"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "PROPOSED by stellus-private-credit-fund-agent-2026-10-20 (fund-clearing loop, sandbox stpe); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  },
+  {
+   "disposition_id": "PD-F28-1901037-1",
+   "class": "not_applicable",
+   "engine": "fund_financials",
+   "rule_name": "F28",
+   "quarters": [
+    "2026-08-12"
+   ],
+   "reason_key": "f28-cover-page-unit-count-date-not-a-quarter",
+   "statement": "The fund-level row dated 2026-08-12 holds only the share count from the cover page of the 10-Q for 2026-06-30; it is not a quarter and has no schedule.",
+   "evidence": [
+    {
+     "source": "filing",
+     "accession": "0001104659-26-094771",
+     "verbatim": "outstanding as of August 12, 2026 was 13,721,863",
+     "quote": "'outstanding as of August 12, 2026 was 13,721,863': cover page share count, the only figure on the 2026-08-12 row (shares_outstanding 13,721,863)"
+    }
+   ],
+   "ciks": [
+    "0001901037"
+   ],
+   "basis": "read",
+   "rerun": "see docs/investigations/v05_readings/reports/0001901037.json",
+   "decided_by": "PROPOSED by stellus-private-credit-fund-agent-2026-10-20 (fund-clearing loop, sandbox stpe); not accepted by the owner",
+   "decided_on": "2026-10-20"
+  }
+ ]
+}

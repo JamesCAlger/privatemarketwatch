@@ -1,0 +1,37 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0001901037",
+ "entity_name": "Stellus Private Credit BDC",
+ "version": 1,
+ "income_concept_suppress": [
+  "investmentcompanyannualizedratioofnetinvestmentincometoweightedaveragenetassets",
+  "investmentcompanyannualizedratioofinterestexpenseandotherfeestoweightedaveragenetassets"
+ ],
+ "figure_corrections": [
+  {
+   "report_date": "2022-09-30",
+   "field": "distribution_per_share",
+   "value": 0.19,
+   "evidence": "0001558370-23-018509 (10-Q, 2023-09-30) statement of operations, comparative columns: 'Distributions Per Share - basic and diluted $ 0.48 $ 0.19 $ 1.36 $ 0.23' (three months 2023, 2022; nine months 2023, 2022). The 2022-09-30 10-Q (0001558370-22-016375) prints no per-share line; its note 3 reads 'declared aggregate distributions of $0.21 and $0.21 per share' (declared basis). The weighted-average basis of every other quarter is used. Published 0.115."
+  },
+  {
+   "report_date": "2023-09-30",
+   "field": "distribution_per_share",
+   "value": 0.48,
+   "evidence": "0001558370-23-018509 (10-Q, 2023-09-30): 'Distributions Per Share - basic and diluted $ 0.48 $ 0.19 $ 1.36 $ 0.23'. Published 0.49 (nine months 1.36 less six months 0.87, which on a weighted-average basis is not the quarter)."
+  },
+  {
+   "report_date": "2024-12-31",
+   "field": "distribution_per_share",
+   "value": 0.47,
+   "evidence": "0001558370-25-002420 (10-K, 2024-12-31): 'Distributions Per Share - basic and diluted $ 1.96 $ 1.88'; 0001558370-24-015088 (10-Q, 2024-09-30): 'Distributions Per Share - basic and diluted $ 0.50 $ 0.48 $ 1.49 $ 1.36'. Fourth quarter 1.96 - 1.49 = 0.47. Published 0.44."
+  },
+  {
+   "report_date": "2025-12-31",
+   "field": "distribution_per_share",
+   "value": 0.36,
+   "evidence": "0001104659-26-027592 (10-K, 2025-12-31): 'Distributions Per Share - basic and diluted $ 1.46 $ 1.96'; 0001104659-25-112365 (10-Q, 2025-09-30): 'Distributions Per Share - basic and diluted $ 0.38 $ 0.50 $ 1.10 $ 1.49'. Fourth quarter 1.46 - 1.10 = 0.36. Published 0.34."
+  }
+ ],
+ "notes": "Fund-clearing loop 2026-10-20 (stp). 10-K 2022-12-31 (0001558370-23-002790): the fund commenced operations on February 1, 2022 and the filer tags two annualised ratios, spcbdc:InvestmentCompanyAnnualizedRatioOfNetInvestmentIncomeToWeightedAverageNetAssets 0.0450 and ...InterestExpenseAndOtherFeesToWeightedAverageNetAssets 0.0439, on a 2022-02-01 to 2022-12-31 context; the income map read them as dollars (published 2022-12-31 net investment income 0.01125 and interest expense 0.010975, total investment income blank). Suppressed, the year's dollar facts on the 2022-01-01 to 2022-12-31 context are read: printed 'Total Investment Income $ 7,956,956', 'Interest expense and other fees 2,312,701', 'Net Investment Income $ 4,197,751'; nine months to 2022-09-30 printed 4,277,283, 1,050,096 and 2,315,459, so the fourth quarter is 3,679,673, 1,262,605 and 1,882,292."
+}
