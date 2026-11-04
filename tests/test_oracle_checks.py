@@ -234,11 +234,13 @@ class TestA01SubtotalArithmetic:
         with no period in their name. Each subtotal must meet its own period's rows."""
         def rollup(period, value):
             return {"source_wrapper_disposition": "debt_issuer_rollup", "source_wrapper_parent_key": "debt investments",
-                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period}
+                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period,
+                    "report_date": "2023-12-31"}
 
         def leaf(period, value, name):
             return {"source_wrapper_disposition": "debt_position_leaf", "source_wrapper_parent_key": "debt investments " + name,
-                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period}
+                    "source_wrapper_family": "debt", "source_fair_value": value, "period": period,
+                    "report_date": "2023-12-31"}
         rows = [rollup("2023-12-31", "3000"), rollup("2022-12-31", "800000"),
                 leaf("2023-12-31", "1000", "a"), leaf("2023-12-31", "2000", "b"), leaf("2022-12-31", "800000", "a")]
         assert all(r.status == "pass" for r in check_A01_subtotal_arithmetic(_source_detail(rows)))
@@ -247,6 +249,40 @@ class TestA01SubtotalArithmetic:
         short[0] = rollup("2023-12-31", "3000000")
         short[2] = leaf("2023-12-31", "1000000", "a")
         assert any(r.status == "fail" for r in check_A01_subtotal_arithmetic(_source_detail(short)))
+
+    def test_the_comparative_schedule_subtotal_is_not_checked_in_the_later_quarter(self):
+        """Sixth Street 2023-03-31: the 10-Q prints the 2022-12-31 schedule too; its debt subtotal
+        2,568,814 met comparative rows tagged on an older member format. Only the quarter's own
+        subtotals are compared (owner ruling 2026-11-04)."""
+        base = {"report_date": "2023-03-31", "source_wrapper_family": "debt"}
+        rows = [
+            {**base, "period": "2023-03-31", "source_wrapper_disposition": "debt_category_rollup",
+             "source_wrapper_parent_key": "debt investments", "source_fair_value": "2707407000"},
+            {**base, "period": "2023-03-31", "source_wrapper_disposition": "debt_position_leaf",
+             "source_wrapper_parent_key": "debt investments a", "source_fair_value": "2707407000"},
+            {**base, "period": "2022-12-31", "source_wrapper_disposition": "debt_category_rollup",
+             "source_wrapper_parent_key": "debt investments", "source_fair_value": "2568814000"},
+            {**base, "period": "2022-12-31", "source_wrapper_disposition": "debt_position_leaf",
+             "source_wrapper_parent_key": "debt investments a", "source_fair_value": "2164017534"},
+        ]
+        results = check_A01_subtotal_arithmetic(_source_detail(rows))
+        assert [r.status for r in results] == ["pass"]
+        assert "1/1 rollups" in results[0].message
+
+    def test_a_current_subtotal_that_does_not_tie_still_fails_beside_a_comparative_one(self):
+        """False-positive guard: dropping comparative subtotals must not hide a current mismatch."""
+        base = {"report_date": "2023-03-31", "source_wrapper_family": "debt"}
+        rows = [
+            {**base, "period": "2023-03-31", "source_wrapper_disposition": "debt_category_rollup",
+             "source_wrapper_parent_key": "debt investments", "source_fair_value": "3000000000"},
+            {**base, "period": "2023-03-31", "source_wrapper_disposition": "debt_position_leaf",
+             "source_wrapper_parent_key": "debt investments a", "source_fair_value": "2707407000"},
+            {**base, "period": "2022-12-31", "source_wrapper_disposition": "debt_category_rollup",
+             "source_wrapper_parent_key": "debt investments", "source_fair_value": "2707407000"},
+        ]
+        results = check_A01_subtotal_arithmetic(_source_detail(rows))
+        assert [r.status for r in results] == ["fail"]
+        assert results[0].detail["rollup_fv"].tolist() == [3000000000.0]
 
 
 class TestA04GavReconciliation:

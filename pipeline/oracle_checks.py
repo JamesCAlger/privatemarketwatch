@@ -172,6 +172,15 @@ def check_A01_subtotal_arithmetic(
 
     rollups = df[rollup_mask].copy()
     leaves = df[leaf_mask].copy()
+    # Only the quarter's own subtotals. A filing also prints the prior year-end schedule; its
+    # subtotals are that period's figures and are checked as current in the filing for that
+    # period. Compared here they failed against the comparative rows, which are often tagged on
+    # an older member format (Sixth Street 2,568,814 at 2023-03-31 is the 2022-12-31 column;
+    # owner ruling 2026-11-04, reason a01-subtotal-of-the-comparative-schedule). A rollup with no
+    # period is kept.
+    if "period" in rollups.columns:
+        rollup_period = _col_str(rollups, "period").str.strip().str[:10]
+        rollups = rollups[rollup_period.eq("") | rollup_period.eq(_col_str(rollups, "report_date").str[:10])]
 
     for group_key, group in rollups.groupby(
         ["cik", "report_date", "accession_number"], dropna=False
