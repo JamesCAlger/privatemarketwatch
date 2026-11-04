@@ -155,6 +155,7 @@ def _extract_duration_series(
     unit_key: str = "USD",
     ratio: bool = False,
     quarter_only: bool = False,
+    ratio_as_filed_from: str | None = None,
 ) -> dict[str, float]:
     """Extract quarterly values from duration concepts.
 
@@ -170,6 +171,10 @@ def _extract_duration_series(
     kept as filed. A filer that prints it for the period, not annualised (it grows like a
     running total, see ``_running_ratio_periods``), has it annualised: times four over the
     period's quarters, so the year's figure in a 10-K is unchanged.
+
+    ``ratio_as_filed_from`` (a fund's highlights wrapper, ``income_ratio_as_filed``): figures
+    whose period starts on or after this date are kept as filed whatever the votes say, for a
+    filer whose annualised ratio climbs like a running total (a new fund's first year).
 
     ``quarter_only`` drops a date whose only figure covers several quarters and cannot be
     split (step 4): the field then has no value there instead of an average.
@@ -239,7 +244,8 @@ def _extract_duration_series(
 
         if ratio:
             # A rate, not an amount: annualise a running-total filer's figure, keep the rest as filed.
-            if _ratio_is_running(best_start, end_date, running, default):
+            forced = ratio_as_filed_from is not None and best_start >= ratio_as_filed_from
+            if not forced and _ratio_is_running(best_start, end_date, running, default):
                 # _months_between counts month ends (2 for a calendar quarter), so go by quarters
                 result[end_date] = best_value * 4 / max(1, round(span / 3))
             else:
@@ -547,6 +553,7 @@ def _extract_bdc_balance_sheet(cik: str, facts: dict) -> list[dict]:
     """Extract balance-sheet + extended time series from one CIK's companyfacts."""
     if not facts:
         return []
+    from pipeline.fund_highlights_wrapper import income_ratio_as_filed_from
 
     # Extract each concept series (exact match first, then fallback)
     concept_series: dict[str, dict[str, float]] = {}
@@ -580,14 +587,15 @@ def _extract_bdc_balance_sheet(cik: str, facts: dict) -> list[dict]:
                     )
             else:
                 # Duration concepts: use YTD -> quarterly conversion
+                as_filed_from = income_ratio_as_filed_from(cik) if spec.get("ratio") else None
                 series = _extract_duration_series(
                     facts, spec["exact"], spec["unit"], ratio=bool(spec.get("ratio")),
-                    quarter_only=bool(spec.get("quarter_only")),
+                    quarter_only=bool(spec.get("quarter_only")), ratio_as_filed_from=as_filed_from,
                 )
                 if not series and spec.get("fallback"):
                     series = _extract_duration_series(
                         facts, spec["fallback"], spec["unit"], ratio=bool(spec.get("ratio")),
-                        quarter_only=bool(spec.get("quarter_only")),
+                        quarter_only=bool(spec.get("quarter_only")), ratio_as_filed_from=as_filed_from,
                     )
             concept_series[field] = series
 

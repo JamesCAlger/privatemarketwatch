@@ -1,0 +1,25 @@
+{
+ "schema_version": "fund-highlights-wrapper.v1",
+ "cik": "0000017313",
+ "entity_name": "CAPITAL SOUTHWEST CORPORATION",
+ "version": 1,
+ "notes": "Owner queue f16-income-ratio-printed-not-annualised (owner ruling 2026-11-04: income_yield_pct is the annualised year-to-date ratio). Fiscal year ends March 31. The 10-Qs to 2022-12-31 print the ratio not annualised (footnote '4 Not annualized'); from the 10-Q for 2023-06-30 the ratio is annualised and the comparative columns of fiscal 2023 (from 2022-04-01) are restated annualised. Company facts keep both: for 2022-09-30 and 2022-12-31 the three-month facts are the old unannualised ones (3.15, 3.71), the year-to-date facts are the restated annualised ones. Fiscal 2022 (from 2021-04-01) and earlier stay with the running-total vote (annualised there).",
+ "income_ratio_as_filed": {
+  "from_period_start": "2022-04-01",
+  "evidence": "0000017313-23-000125 (10-Q, 2023-09-30) financial highlights: 'Ratio of net investment income to average net assets 4 16.15 % 12.07 %' with footnote '4 The ratios reflect an annualized amount'; the earlier 0000017313-22-000097 (10-Q, 2022-09-30) footnote reads '4 Not annualized'. From fiscal 2023 the filed ratio is annualised; 2022-06-30 publishes 11.48 as filed, not 45.92."
+ },
+ "figure_corrections": [
+  {
+   "report_date": "2022-09-30",
+   "field": "income_yield_pct",
+   "value": 12.07,
+   "evidence": "0000017313-23-000125 (10-Q, 2023-09-30) financial highlights, comparative column for the six months ended September 30, 2022: 'Ratio of net investment income to average net assets 4 16.15 % 12.07 %', footnote '4 The ratios reflect an annualized amount'. The build reads the three-month fact 0.0315 of 0000017313-22-000097, printed '4 Not annualized'."
+  },
+  {
+   "report_date": "2022-12-31",
+   "field": "income_yield_pct",
+   "value": 13.03,
+   "evidence": "0000017313-24-000006 (10-Q, 2023-12-31) financial highlights, comparative column for the nine months ended December 31, 2022: 'Ratio of net investment income to average net assets 4 16.25 % 13.03 %' (annualised, footnote 4). The build reads the three-month fact 0.0371 of 0000017313-23-000006, whose ratios are printed not annualised ('3.71 % 3.08 % 9.78 % 8.31 %')."
+  }
+ ]
+}

@@ -4,6 +4,9 @@
  "entity_name": "KKR FS Income Trust",
  "version": 1,
  "notes": "Fund-clearing loop 2026-10-15 (kfx sandboxes). The 10-Q for 2026-03-31 files its own per-share concept kfit:InvestmentCompanyDistributionToShareholderFromNetInvestmentIncome (0.67) ahead of the dollar net investment income (us-gaap:InvestmentIncomeOperatingAfterExpenseAndTax 37,079,000); the income extractor read 0.67 as the quarter's net investment income. The 2023 income ratios were published as fractions of the printed annualised ratios.",
+ "income_ratio_as_filed": {
+  "evidence": "0001930679-23-000010 (10-Q, 2023-09-30) financial highlights: 'Ratio of net investment income to average net assets (6) 8.05 %', footnote (6): 'Annualized ratios for the nine months ended September 30, 2023 are not necessarily indicative of the ratios that may be expected for the year ending December 31, 2023'. The first-year climb 4.60 / 8.05 / 9.59 is an annualised ratio rising, not a running total (owner queue f16-income-ratio-printed-not-annualised); the figure corrections below are the printed annualised ratios and agree with this basis."
+ },
  "income_concept_suppress": [
   "investmentcompanydistributiontoshareholderfromnetinvestmentincome"
  ],
